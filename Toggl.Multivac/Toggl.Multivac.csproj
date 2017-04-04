@@ -3,12 +3,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B4E4943F-0574-4BEF-9ADC-B19102458754}</ProjectGuid>
+    <ProjectGuid>{4A9CF7CD-8EB4-435D-958B-98A9FFC14876}</ProjectGuid>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UseMSBuildEngine>true</UseMSBuildEngine>
     <OutputType>Library</OutputType>
-    <RootNamespace>Toggl.Ultrawave</RootNamespace>
-    <AssemblyName>Toggl.Ultrawave</AssemblyName>
+    <RootNamespace>Toggl.Multivac</RootNamespace>
+    <AssemblyName>Toggl.Multivac</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
   </PropertyGroup>
@@ -29,12 +29,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">
-      <Project>{4A9CF7CD-8EB4-435D-958B-98A9FFC14876}</Project>
-      <Name>Toggl.Multivac</Name>
-    </ProjectReference>
+    <Compile Include="Ensure.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
