@@ -54,6 +54,12 @@
     <Compile Include="Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">
+      <Project>{B4E4943F-0574-4BEF-9ADC-B19102458754}</Project>
+      <Name>Toggl.Ultrawave</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
