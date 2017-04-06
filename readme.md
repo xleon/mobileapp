@@ -18,3 +18,9 @@ Specifically there are:
 - [Pull Request Etiquette](https://github.com/toggl/mobile-docs/blob/develop/pull-request-etiquette.md "Pull Request Etiquette")
 - [Commit Guidelines](https://github.com/toggl/mobile-docs/blob/develop/commit-guidelines.md "Commit Guidelines") 
 - [SuperFlow](https://github.com/toggl/mobile-docs/blob/develop/superflow.md "SuperFlow: Toggl Mobile's branching work flow") - our branching and release model
+
+## Toggl Mobile specific guidelines
+
+### Code formatting guidelines
+
+Please refer to [this document](https://github.com/toggl/mobileapp/blob/develop/docs/style-guide.md "Toggl Mobile's code formatting guidelines").
