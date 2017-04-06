@@ -29,6 +29,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Network\ErrorMessage.cs" />
+    <Compile Include="Network\Interface\IApiClient.cs" />
+    <Compile Include="Network\Interface\IApiResponse.cs" />
+    <Compile Include="Network\Interface\ICall.cs" />
+    <Compile Include="Network\Interface\IJsonSerializer.cs" />
+    <Compile Include="Network\Interface\IRequest.cs" />
+    <Compile Include="Network\Interface\IResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">
