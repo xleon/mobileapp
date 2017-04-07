@@ -36,12 +36,21 @@
     <Compile Include="Network\Interface\IJsonSerializer.cs" />
     <Compile Include="Network\Interface\IRequest.cs" />
     <Compile Include="Network\Interface\IResponse.cs" />
+    <Compile Include="Network\JsonSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">
       <Project>{4A9CF7CD-8EB4-435D-958B-98A9FFC14876}</Project>
       <Name>Toggl.Multivac</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\portable-net45+win8+wpa81+wp8\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
