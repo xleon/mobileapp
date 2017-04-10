@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
+using Fody;
 
 // Information about this assembly is defined by the following attributes. 
 // Change them to the values specific to your project.
@@ -15,6 +16,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Toggl.Ultrawave.Tests")]
 [assembly: InternalsVisibleTo("Toggl.Ultrawave.Tests.Integration")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
+[assembly: ConfigureAwait(false)]
 
 // The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
