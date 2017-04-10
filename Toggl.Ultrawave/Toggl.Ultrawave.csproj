@@ -36,7 +36,11 @@
     <Compile Include="Network\Interface\IJsonSerializer.cs" />
     <Compile Include="Network\Interface\IRequest.cs" />
     <Compile Include="Network\Interface\IResponse.cs" />
+    <Compile Include="Network\ApiClient.cs" />
+    <Compile Include="Network\JsonContent.cs" />
+    <Compile Include="Network\Response.cs" />
     <Compile Include="Network\JsonSerializer.cs" />
+    <Compile Include="Extensions\HttpExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">

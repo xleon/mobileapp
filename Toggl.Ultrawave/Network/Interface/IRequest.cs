@@ -10,8 +10,6 @@ namespace Toggl.Ultrawave.Network
 
         Uri Endpoint { get; }
 
-        string ContentType { get; }
-
         HttpMethod HttpMethod { get; }
 
         Dictionary<string, string> Headers { get; }
