@@ -63,11 +63,16 @@
   <ItemGroup>
     <Compile Include="Network\JsonSerializerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Network\CallTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">
       <Project>{B4E4943F-0574-4BEF-9ADC-B19102458754}</Project>
       <Name>Toggl.Ultrawave</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">
+      <Project>{4A9CF7CD-8EB4-435D-958B-98A9FFC14876}</Project>
+      <Name>Toggl.Multivac</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

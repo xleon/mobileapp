@@ -59,6 +59,9 @@
     <Compile Include="Extensions\HttpExtensions.cs" />
     <Compile Include="ApiEnvironment.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
+    <Compile Include="Network\Call.cs" />
+    <Compile Include="Network\BaseCall.cs" />
+    <Compile Include="Network\ApiResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">

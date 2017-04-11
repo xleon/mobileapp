@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Toggl.Multivac;
+﻿using Toggl.Multivac;
 
 namespace Toggl.Ultrawave.Network
 {

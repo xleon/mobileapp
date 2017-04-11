@@ -7,10 +7,6 @@ namespace Toggl.Ultrawave.Network
     {
         bool Executed { get; }
 
-        TimeSpan Timeout { get; }
-
         Task<IApiResponse<T>> Execute();
-
-        ICall<T> WithTimeout(TimeSpan retryCount);
     }
 }
