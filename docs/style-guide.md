@@ -93,6 +93,19 @@ class Foo
 }
 ```
 
+Classes should be sealed by default, unless they are specifically meant to be inherited from.
+```csharp
+// Do
+internal sealed class Foo
+{
+}
+
+// Don't
+internal class Foo
+{
+}
+```
+
 Only use fields privately
 ```csharp
 // Do
