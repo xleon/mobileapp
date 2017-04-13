@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using Toggl.Multivac;
 
 namespace Toggl.Ultrawave.Network
 {
     internal interface IRequest
     {
-        object Body { get; }
+        Either<string, byte[]> Body { get; }
 
         Uri Endpoint { get; }
 
         HttpMethod HttpMethod { get; }
 
-        Dictionary<string, string> Headers { get; }
+        IEnumerable<HttpHeader> Headers { get; }
     }
 }

@@ -40,16 +40,9 @@ namespace Toggl.Ultrawave.Network
 
             var requestMessage = new HttpRequestMessage(request.HttpMethod, request.Endpoint);
             requestMessage.Headers.AddRange(request.Headers);
-
-            switch (request.Body)
-            {
-                case string json:
-                    requestMessage.Content = new JsonContent(json);
-                    break;
-                case byte[] bytes:
-                    requestMessage.Content = new ByteArrayContent(bytes);
-                    break;
-            }
+            requestMessage.Content = 
+                request.Body.Match<HttpContent>(json => new JsonContent(json), 
+                                                bytes => new ByteArrayContent(bytes));
 
             return requestMessage;
         }

@@ -5,11 +5,11 @@ namespace Toggl.Ultrawave.Extensions
 {
     internal static class HttpExtensions
     {
-        public static void AddRange(this HttpRequestHeaders self, IDictionary<string, string> headers)
+        public static void AddRange(this HttpRequestHeaders self, IEnumerable<HttpHeader> headers)
         {
             foreach (var header in headers)
             {
-                self.Add(header.Key, header.Value);
+                self.Add(header.Name, header.Value);
             }
         }
     }
