@@ -13,5 +13,12 @@ namespace Toggl.Multivac
             throw new ArgumentNullException(argumentName);
         }
 
+        public static void UriIsAbsolute(Uri uri, string argumentName)
+        {
+            if (uri.IsAbsoluteUri)
+                return;
+
+            throw new ArgumentException("Uri must be absolute.", argumentName);
+        }
     }
 }

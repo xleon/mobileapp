@@ -1,15 +1,15 @@
 ﻿using Toggl.Ultrawave.Clients;
-using static Toggl.Ultrawave.Helpers.ApiUrls;
+using Toggl.Ultrawave.Network;
 
 namespace Toggl.Ultrawave
 {
     public sealed class TogglClient : ITogglClient
     {
-        private readonly string baseUrl;
+        private readonly Endpoints endpoints;
 
         internal TogglClient(ApiEnvironment apiEnvironment)
         {
-            baseUrl = apiEnvironment == ApiEnvironment.Production ? ProductionBaseUrl : StagingBaseUrl;
+            endpoints = new Endpoints(apiEnvironment);
 
             Tags = new TagsClient();
             User = new UserClient();
