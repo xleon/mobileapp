@@ -62,6 +62,7 @@
     <Compile Include="Network\Call.cs" />
     <Compile Include="Network\BaseCall.cs" />
     <Compile Include="Network\ApiResponse.cs" />
+    <Compile Include="Clients\BaseClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">
