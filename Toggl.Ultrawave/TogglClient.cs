@@ -1,6 +1,8 @@
 ﻿using System.Net.Http;
+using ModernHttpClient;
 using Toggl.Ultrawave.Clients;
 using Toggl.Ultrawave.Network;
+using static System.Net.DecompressionMethods;
 
 namespace Toggl.Ultrawave
 {
@@ -8,9 +10,10 @@ namespace Toggl.Ultrawave
     {
         private readonly Endpoints endpoints;
 
-        internal TogglClient(ApiEnvironment apiEnvironment)
+        internal TogglClient(ApiEnvironment apiEnvironment, HttpClientHandler handler = null)
         {
-            var httpClient = new HttpClient();
+            var httpHandler = handler ?? new NativeMessageHandler { AutomaticDecompression = GZip | Deflate };
+            var httpClient = new HttpClient(httpHandler);
 
             var serializer = new JsonSerializer();
             var apiClient = new ApiClient(httpClient);
