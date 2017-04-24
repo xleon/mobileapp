@@ -68,7 +68,7 @@
     <Compile Include="Network\Request.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Clients\BaseClient.cs" />
-    <Compile Include="Network\Header.cs" />
+    <Compile Include="Network\HttpHeader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">

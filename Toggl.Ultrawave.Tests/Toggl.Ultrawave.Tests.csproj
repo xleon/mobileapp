@@ -66,6 +66,7 @@
     <Compile Include="Network\CallTests.cs" />
     <Compile Include="Models\UserTests.cs" />
     <Compile Include="Helpers\Fail.cs" />
+    <Compile Include="Clients\UserClientTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">
@@ -79,6 +80,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Clients\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

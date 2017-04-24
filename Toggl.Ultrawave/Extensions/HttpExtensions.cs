@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http.Headers;
+using Toggl.Ultrawave.Network;
+using static Toggl.Ultrawave.Network.HttpHeader.HeaderType;
 
 namespace Toggl.Ultrawave.Extensions
 {
@@ -9,7 +11,15 @@ namespace Toggl.Ultrawave.Extensions
         {
             foreach (var header in headers)
             {
-                self.Add(header.Name, header.Value);
+                switch (header.Type)
+                {
+                    case Auth:
+                        self.Authorization = new AuthenticationHeaderValue("Basic", header.Value);
+                        break;
+                    default:
+                        self.Add(header.Name, header.Value);
+                        break;
+                }
             }
         }
     }

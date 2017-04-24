@@ -1,4 +1,5 @@
-﻿using Toggl.Ultrawave.Clients;
+﻿using System.Net.Http;
+using Toggl.Ultrawave.Clients;
 using Toggl.Ultrawave.Network;
 
 namespace Toggl.Ultrawave
@@ -9,10 +10,14 @@ namespace Toggl.Ultrawave
 
         internal TogglClient(ApiEnvironment apiEnvironment)
         {
+            var httpClient = new HttpClient();
+
+            var serializer = new JsonSerializer();
+            var apiClient = new ApiClient(httpClient);
             endpoints = new Endpoints(apiEnvironment);
 
             Tags = new TagsClient();
-            User = new UserClient();
+            User = new UserClient(endpoints.User, apiClient, serializer);
             Tasks = new TasksClient();
             Clients = new ClientsClient();
             Projects = new ProjectsClient();
