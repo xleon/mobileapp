@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Toggl.Ultrawave.Helpers;
 
 namespace Toggl.Ultrawave.Network
@@ -8,6 +8,7 @@ namespace Toggl.Ultrawave.Network
         private readonly Uri baseUrl;
 
         public UserEndpoints User => new UserEndpoints(baseUrl);
+        public WorkspaceEndpoints Workspaces => new WorkspaceEndpoints(baseUrl);
 
         public Endpoints(ApiEnvironment environment)
         {

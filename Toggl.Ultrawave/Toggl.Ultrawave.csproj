@@ -68,6 +68,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Clients\BaseClient.cs" />
     <Compile Include="Network\HttpHeader.cs" />
+    <Compile Include="Network\Endpoints\WorkspaceEndpoints.cs" />
     <Compile Include="Models\Workspace.cs" />
   </ItemGroup>
   <ItemGroup>
