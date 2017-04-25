@@ -18,7 +18,7 @@ namespace Toggl.Ultrawave.Network
 
         public ApiResponse(ErrorMessage errorMessage)
         {
-            Success = true;
+            Success = false;
             Data = Either<T, ErrorMessage>.Right(errorMessage);
         }
 
