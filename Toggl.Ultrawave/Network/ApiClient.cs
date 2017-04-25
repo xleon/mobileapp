@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Toggl.Multivac;
 using Toggl.Ultrawave.Extensions;
@@ -40,8 +41,8 @@ namespace Toggl.Ultrawave.Network
 
             var requestMessage = new HttpRequestMessage(request.HttpMethod, request.Endpoint);
             requestMessage.Headers.AddRange(request.Headers);
-            requestMessage.Content = 
-                request.Body.Match<HttpContent>(json => new JsonContent(json), 
+            requestMessage.Content =
+                request.Body.Match<HttpContent>(json => new StringContent(json, Encoding.UTF8, "application/json"),
                                                 bytes => new ByteArrayContent(bytes));
 
             return requestMessage;
