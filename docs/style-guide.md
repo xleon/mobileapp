@@ -179,13 +179,11 @@ Prefer early returning over nesting
 // Do
 public void Foo(int bar)
 {
-    if (bar < 0)
-        return;
+    if (bar < 0) return;
 
     var baz = Baz(bar)
 
-    if (baz < 0)
-        return;
+    if (baz < 0) return;
 
     // ..
 }
@@ -203,6 +201,26 @@ public void Foo(int bar)
         }
     }
 }
+```
+
+Return early in single line, if the condition is short and there is no return value.
+```csharp
+// Do
+if (condition) return;
+
+if (condition && anotherOne || maybeThis || thatOtherThing)
+    return;
+
+if (condition)
+    return foo;
+
+// Don't
+if (condition)
+    return;
+
+if (condition && anotherOne || maybeThis || thatOtherThing) return;
+
+if (condition) return foo;
 ```
 
 Prefer expression bodies for single statement members
@@ -228,4 +246,87 @@ public void Baz(int newFoo)
 {
     foo = newFoo;
 }
+```
+
+Do not add spaces around parentheses.
+```csharp
+// Do
+public void Foo()
+{
+    bar(baz());
+}
+
+// Don't
+public void Foo ( )
+{
+    bar ( baz ( ) ) ;
+}
+```
+
+Add spaces after, but not before commas.
+```csharp
+// Do
+foo(bar, baz);
+
+// Don't
+foo(bar , baz);
+foo(bar ,baz);
+```
+
+Add spaces around all operators (except `.` and `?.`, never add spaces here).
+```csharp
+// Do
+(foo + bar) * baz
+foo ? bar : baz
+foo && bar || baz
+foo.Bar?.Baz ?? 0
+
+// Don't
+(foo+bar)* baz
+foo ? bar:baz
+foo&&bar || baz
+foo. Bar ?.Baz?? 0
+```
+
+When splitting statements into multiple lines, do so by starting new lines with operators, and using an additional level of indentation.
+```csharp
+// Do
+myLongExpression
+    .Foo()
+    .Bar
+    + 5
+
+myLongCondition
+    ? foo
+    : bar
+
+// Don't
+myLongExpression.
+    Foo().
+    Bar +
+    5
+
+myLongCondition ?
+    foo :
+    bar
+
+```
+
+Do not use unnecessary parentheses or braces for lambda expressions.
+```csharp
+// Do
+Action foo = Foo;
+
+Action<int> bar = Bar;
+Action<int> bar = x => Bar(x * 2);
+
+Func<int, int> baz = x => x * 2;
+
+// Don't
+Action foo = () => { Foo(); };
+
+Action<int> bar = (x) => { Bar(x); };
+Action<int> bar = (x) => { Bar(x * 2); };
+
+Func<int, int> baz = (x) => { return x * 2; };
 ```
