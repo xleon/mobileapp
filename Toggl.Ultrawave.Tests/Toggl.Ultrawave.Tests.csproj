@@ -67,6 +67,7 @@
     <Compile Include="Models\UserTests.cs" />
     <Compile Include="Helpers\Fail.cs" />
     <Compile Include="Clients\UserClientTests.cs" />
+    <Compile Include="Models\WorkspaceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">
