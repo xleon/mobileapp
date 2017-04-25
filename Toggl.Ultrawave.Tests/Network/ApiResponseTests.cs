@@ -1,5 +1,4 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Toggl.Ultrawave.Network;
 using Xunit;
 
@@ -16,12 +15,7 @@ namespace Toggl.Ultrawave.Tests
                 var response = new ApiResponse<string>(responseText);
 
                 response.Success.Should().BeTrue();
-
-                Action<string> left = arg => arg.Should().Be(responseText);
-                Action<ErrorMessage> right = arg => Fail.On<string>();
-
-                response.Data.Match(left, right);
-                
+                response.Data.Left.Should().Be(responseText);
             }
 
             [Fact]
@@ -31,11 +25,7 @@ namespace Toggl.Ultrawave.Tests
                 var response = new ApiResponse<string>(errorMessage);
 
                 response.Success.Should().BeFalse();
-
-                Action<string> left = Fail.On<string>();
-                Action<ErrorMessage> right = arg => arg.Should().Be(errorMessage);
-
-                response.Data.Match(left, right);
+                response.Data.Right.Should().Be(errorMessage);
             }
         }
     }

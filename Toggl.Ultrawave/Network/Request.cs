@@ -22,7 +22,7 @@ namespace Toggl.Ultrawave.Network
             Ensure.ArgumentIsNotNull(headers, nameof(headers));
             Ensure.ArgumentIsNotNull(endpoint, nameof(endpoint));
 
-            Body = Either<string, byte[]>.Left(body);
+            Body = Either<string, byte[]>.WithLeft(body);
             Headers = headers.ToList();
             Endpoint = endpoint;
             HttpMethod = httpMethod;

@@ -6,7 +6,15 @@ namespace Toggl.Multivac
     {
         private readonly bool useLeft;
         private readonly TLeft left;
-        private readonly TRight right;
+        private readonly TRight right;  
+
+        public bool IsLeft => useLeft;
+
+        public bool IsRight => !useLeft;
+
+        public TLeft Left => useLeft ? left : throw new InvalidOperationException("Cannot use the Right property in an Either object created with a left value");
+
+        public TRight Right => useLeft ? throw new InvalidOperationException("Cannot use the Left property in an Either object created with a right value") : right;
 
         private Either(TLeft left)
         {
@@ -42,10 +50,10 @@ namespace Toggl.Multivac
             return useLeft ? leftAction(left) : rightFunc(right);
         }
 
-        public static Either<TLeft, TRight> Left(TLeft left)
+        public static Either<TLeft, TRight> WithLeft(TLeft left)
             => new Either<TLeft, TRight>(left);
 
-        public static Either<TLeft, TRight> Right(TRight right)
+        public static Either<TLeft, TRight> WithRight(TRight right)
             => new Either<TLeft, TRight>(right);
     }
 }

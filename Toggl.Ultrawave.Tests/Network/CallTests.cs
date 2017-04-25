@@ -49,7 +49,7 @@ namespace Toggl.Ultrawave.Tests.Network
                 var call = new Call<Foo>(request, apiClient, serializer);
                 var result = await call.Execute();
 
-                result.Data.Match(foo => foo.Should().Be(deserializedJson), failOn<ErrorMessage>());
+                result.Data.Left.Should().Be(deserializedJson);
             }
 
             [Fact]
@@ -63,10 +63,8 @@ namespace Toggl.Ultrawave.Tests.Network
                 var call = new Call<Foo>(request, apiClient, serializer);
                 var result = await call.Execute();
 
-                result.Data.Match(failOn<Foo>(), errorMessage => errorMessage.ToString().Should().Be(error));
+                result.Data.Right.ToString().Should().Be(error);
             }
-
-            private Action<T> failOn<T>() => _ => Assert.True(false);
         }
     }
 }

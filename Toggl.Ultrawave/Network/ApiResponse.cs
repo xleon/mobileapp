@@ -13,13 +13,13 @@ namespace Toggl.Ultrawave.Network
             Ensure.ArgumentIsNotNull(data, nameof(data));
 
             Success = true;
-            Data = Either<T, ErrorMessage>.Left(data);
+            Data = Either<T, ErrorMessage>.WithLeft(data);
         }
 
         public ApiResponse(ErrorMessage errorMessage)
         {
             Success = false;
-            Data = Either<T, ErrorMessage>.Right(errorMessage);
+            Data = Either<T, ErrorMessage>.WithRight(errorMessage);
         }
 
         public static IApiResponse<T> FromErrorMessage(ErrorMessage errorMessage)
