@@ -70,6 +70,7 @@
     <Compile Include="Network\HttpHeader.cs" />
     <Compile Include="Network\Endpoints\WorkspaceEndpoints.cs" />
     <Compile Include="Models\Workspace.cs" />
+    <Compile Include="Models\Tag.cs" />
     <Compile Include="Network\Endpoints\ProjectEndpoints.cs" />
     <Compile Include="Network\Endpoints\TaskEndpoints.cs" />
     <Compile Include="Network\Endpoints\TimeEntryEndpoints.cs" />
