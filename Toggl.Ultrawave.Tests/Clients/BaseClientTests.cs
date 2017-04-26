@@ -1,14 +1,13 @@
-﻿
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
-using Toggl.Ultrawave.Clients;
+using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Network;
 using Xunit;
 
-namespace Toggl.Ultrawave.Tests
+namespace Toggl.Ultrawave.Tests.Clients
 {
-    public class UserClientTests
+    public class BaseClientTests
     {
         public class TheGetMethod
         {
@@ -22,8 +21,8 @@ namespace Toggl.Ultrawave.Tests
                 const string password = "theirobotmoviesucked123";
                 const string expectedHeader = "c3VzYW5jYWx2aW5AcHN5Y2hvaGlzdG9yaWFuLm11c2V1bTp0aGVpcm9ib3Rtb3ZpZXN1Y2tlZDEyMw==";
 
-                var userEndpoints = new Endpoints(ApiEnvironment.Staging).User;
-                var client = new UserClient(userEndpoints, apiClient, serializer);
+                var endpoint = Endpoint.Get(ApiUrls.ForEnvironment(ApiEnvironment.Staging), "");
+                var client = new TestClient(endpoint, apiClient, serializer);
 
                 await client.Get(username, password).Execute();
                 await apiClient.Received().Send(Arg.Is<Request>(request => verifyAuthHeader(request, expectedHeader)));
@@ -38,6 +37,6 @@ namespace Toggl.Ultrawave.Tests
 
                 return true;
             }
-       }
+        }
     }
 }
