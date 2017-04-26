@@ -9,6 +9,7 @@ namespace Toggl.Ultrawave.Network
 
         public UserEndpoints User => new UserEndpoints(baseUrl);
         public WorkspaceEndpoints Workspaces => new WorkspaceEndpoints(baseUrl);
+        public TagEndpoints Tags => new TagEndpoints(baseUrl);
 
         public Endpoints(ApiEnvironment environment)
         {
