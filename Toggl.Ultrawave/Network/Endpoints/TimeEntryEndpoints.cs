@@ -7,7 +7,7 @@ namespace Toggl.Ultrawave.Network
 
         public TimeEntryEndpoints(Uri baseUrl)
         {
-        	this.baseUrl = baseUrl;
+            this.baseUrl = baseUrl;
         }
 
         public Endpoint Get => Endpoint.Get(baseUrl, "me/time_entries");

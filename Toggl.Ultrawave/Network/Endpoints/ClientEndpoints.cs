@@ -9,7 +9,7 @@ namespace Toggl.Ultrawave
 
         public ClientEndpoints(Uri baseUrl)
         {
-        	this.baseUrl = baseUrl;
+            this.baseUrl = baseUrl;
         }
 
         public Endpoint Get => Endpoint.Get(baseUrl, "me/clients");

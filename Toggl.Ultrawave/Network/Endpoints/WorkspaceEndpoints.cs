@@ -8,7 +8,7 @@ namespace Toggl.Ultrawave.Network
 
         public WorkspaceEndpoints(Uri baseUrl)
         {
-        	this.baseUrl = baseUrl;
+            this.baseUrl = baseUrl;
         }
 
         public Endpoint Get => Endpoint.Get(baseUrl, "me/workspaces");

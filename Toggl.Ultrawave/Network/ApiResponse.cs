@@ -23,7 +23,7 @@ namespace Toggl.Ultrawave.Network
         }
 
         public static IApiResponse<T> FromErrorMessage(ErrorMessage errorMessage)
-			=> new ApiResponse<T>(errorMessage);
+            => new ApiResponse<T>(errorMessage);
     }
 
     internal static class ApiResponse
