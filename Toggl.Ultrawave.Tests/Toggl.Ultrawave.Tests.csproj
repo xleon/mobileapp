@@ -68,6 +68,7 @@
     <Compile Include="Clients\UserClientTests.cs" />
     <Compile Include="Network\ApiResponseTests.cs" />
     <Compile Include="Models\WorkspaceTests.cs" />
+    <Compile Include="Models\ClientTests.cs" />
     <Compile Include="Models\BaseModelTests.cs" />
     <Compile Include="Models\TagTests.cs" />
   </ItemGroup>
