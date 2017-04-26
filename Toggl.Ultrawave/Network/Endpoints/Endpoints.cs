@@ -9,6 +9,7 @@ namespace Toggl.Ultrawave.Network
 
         public UserEndpoints User => new UserEndpoints(baseUrl);
         public WorkspaceEndpoints Workspaces => new WorkspaceEndpoints(baseUrl);
+        public ClientEndpoints Clients => new ClientEndpoints(baseUrl);
         public ProjectEndpoints Projects => new ProjectEndpoints(baseUrl);
         public TaskEndpoints Tasks => new TaskEndpoints(baseUrl);
         public TimeEntryEndpoints TimeEntries => new TimeEntryEndpoints(baseUrl);
