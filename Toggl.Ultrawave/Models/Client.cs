@@ -2,7 +2,7 @@
 
 namespace Toggl.Ultrawave
 {
-    public class Client
+    public sealed class Client
     {
         public int Id { get; set; }
 

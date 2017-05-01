@@ -1,9 +1,8 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Toggl.Ultrawave
 {
-    public class Workspace
+    public sealed class Workspace
     {
         public int Id { get; set; }
 

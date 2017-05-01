@@ -4,7 +4,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Toggl.Ultrawave.Network
 {
-    internal class JsonSerializer : IJsonSerializer
+    internal sealed class JsonSerializer : IJsonSerializer
     {
         private readonly JsonSerializerSettings settings;
 

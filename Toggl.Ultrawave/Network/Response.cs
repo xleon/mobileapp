@@ -3,7 +3,7 @@ using Toggl.Multivac;
 
 namespace Toggl.Ultrawave.Network
 {
-    internal class Response : IResponse
+    internal sealed class Response : IResponse
     {
         public string RawData { get; }
         public bool IsSuccess { get; }
