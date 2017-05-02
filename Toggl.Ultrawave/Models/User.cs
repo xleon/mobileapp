@@ -7,8 +7,7 @@ namespace Toggl.Ultrawave
         public int Id { get; set; }
 
         public string ApiToken { get; set; }
-
-        [JsonProperty("default_wid")]
+        
         public int DefaultWorkspaceId { get; set; }
 
         public string Email { get; set; }
