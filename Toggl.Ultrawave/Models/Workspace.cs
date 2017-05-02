@@ -21,7 +21,7 @@ namespace Toggl.Ultrawave
 
         public string ServerDeletedAt { get; set; }
 
-        public int DefaultHourlyRate { get; set; }
+        public double DefaultHourlyRate { get; set; }
 
         public string DefaultCurrency { get; set; }
 
