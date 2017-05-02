@@ -12,8 +12,6 @@ namespace Toggl.Ultrawave.Clients
         public UserClient(UserEndpoints endPoints, IApiClient apiClient, IJsonSerializer serializer)
             : base(apiClient, serializer)
         {
-            Ensure.ArgumentIsNotNull(endPoints, nameof(endPoints));
-
             this.endPoints = endPoints;
         }
 
