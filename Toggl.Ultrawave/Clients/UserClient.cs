@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using Toggl.Multivac;
+﻿using Toggl.Multivac;
 using Toggl.Ultrawave.Network;
+using Toggl.Ultrawave.Serialization;
 
 namespace Toggl.Ultrawave.Clients
 {

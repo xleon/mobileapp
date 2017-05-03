@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
-using Toggl.Ultrawave.Network;
+using Toggl.Ultrawave.Serialization;
 using Xunit;
 
 namespace Toggl.Ultrawave.Tests
 {
     public abstract class BaseModelTests<T>
     {
-        private readonly IJsonSerializer serializer = new JsonSerializer();
+        private readonly JsonSerializer serializer = new JsonSerializer();
 
         protected abstract string ValidJson { get; }
 

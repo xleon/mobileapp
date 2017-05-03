@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Toggl.Ultrawave.Network;
+using Toggl.Ultrawave.Serialization;
 using Toggl.Multivac;
 
 namespace Toggl.Ultrawave.Clients

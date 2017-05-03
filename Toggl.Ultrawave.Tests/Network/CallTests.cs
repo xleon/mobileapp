@@ -4,6 +4,7 @@ using Xunit;
 using NSubstitute;
 using FluentAssertions;
 using Toggl.Ultrawave.Network;
+using Toggl.Ultrawave.Serialization;
 using System.Net;
 
 namespace Toggl.Ultrawave.Tests.Network

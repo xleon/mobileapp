@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Toggl.Ultrawave.Serialization;
 using Toggl.Multivac;
 
 namespace Toggl.Ultrawave.Network

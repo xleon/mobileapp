@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Network;
+using Toggl.Ultrawave.Serialization;
 using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Clients

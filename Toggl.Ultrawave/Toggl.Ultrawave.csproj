@@ -52,12 +52,10 @@
     <Compile Include="Network\Interface\IApiClient.cs" />
     <Compile Include="Network\Interface\IApiResponse.cs" />
     <Compile Include="Network\Interface\ICall.cs" />
-    <Compile Include="Network\Interface\IJsonSerializer.cs" />
     <Compile Include="Network\Interface\IRequest.cs" />
     <Compile Include="Network\Interface\IResponse.cs" />
     <Compile Include="Network\ApiClient.cs" />
     <Compile Include="Network\Response.cs" />
-    <Compile Include="Network\JsonSerializer.cs" />
     <Compile Include="Extensions\HttpExtensions.cs" />
     <Compile Include="ApiEnvironment.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
@@ -77,6 +75,13 @@
     <Compile Include="Network\Endpoints\TaskEndpoints.cs" />
     <Compile Include="Network\Endpoints\TimeEntryEndpoints.cs" />
     <Compile Include="Network\Endpoints\TagEndpoints.cs" />
+    <Compile Include="Serialization\IgnoreAttributeContractResolver.cs" />
+    <Compile Include="Serialization\SerializerSettings.cs" />
+    <Compile Include="Serialization\IJsonSerializer.cs" />
+    <Compile Include="Serialization\JsonSerializer.cs" />
+    <Compile Include="Serialization\Attributes\IgnoreOnPostAttribute.cs" />
+    <Compile Include="Serialization\Attributes\IgnoreSerializationAttribute.cs" />
+    <Compile Include="Serialization\SerializationReason.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">
@@ -106,6 +111,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Helpers\" />
+    <Folder Include="Serialization\" />
+    <Folder Include="Serialization\Attributes\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

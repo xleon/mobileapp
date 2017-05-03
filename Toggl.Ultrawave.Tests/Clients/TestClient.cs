@@ -1,6 +1,7 @@
 ﻿using Toggl.Multivac;
 using Toggl.Ultrawave.Clients;
 using Toggl.Ultrawave.Network;
+using Toggl.Ultrawave.Serialization;
 
 namespace Toggl.Ultrawave.Tests.Clients
 {

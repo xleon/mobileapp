@@ -1,0 +1,60 @@
+﻿using System.Threading.Tasks;
+using FluentAssertions;
+using Toggl.Ultrawave.Serialization;
+using Xunit;
+
+namespace Toggl.Ultrawave.Tests.Serialization
+{
+    public class JsonSerializerTests
+    {
+        private class TestModel
+        {
+            public string FooBar { get; set; }
+
+            [IgnoreWhenPosting]
+            public string IgnoredWhenPosting { get; set; }
+        }
+
+        public class TheSerializeMethod
+        {
+            [Fact]
+            public async Task CreatesSnakeCasedJson()
+            {
+                var testObject = new TestModel { FooBar = "Foo", IgnoredWhenPosting = "Baz" };
+                const string expectedJson = "{\"foo_bar\":\"Foo\",\"ignored_when_posting\":\"Baz\"}";
+
+                var jsonSerializer = new JsonSerializer();
+                var actual = await jsonSerializer.Serialize(testObject);
+
+                actual.Should().Be(expectedJson);
+            }
+
+            [Fact]
+            public async Task IgnoresPropertiesWithTheIgnoreWhenPostingAttribute()
+            {
+                var testObject = new TestModel { FooBar = "Foo", IgnoredWhenPosting = "Baz" };
+                const string expectedJson = "{\"foo_bar\":\"Foo\"}";
+
+                var jsonSerializer = new JsonSerializer();
+                var actual = await jsonSerializer.Serialize(testObject, SerializationReason.Post);
+
+                actual.Should().Be(expectedJson);
+            }
+        }
+
+        public class TheDeserializeMethod
+        {
+            [Fact]
+            public async Task ExpectsSnakeCasedJson()
+            {
+                const string testJson = "{\"foo_bar\":\"Foo\",\"ignored_when_posting\":\"Baz\"}";
+                var expectedObject = new TestModel { FooBar = "Foo", IgnoredWhenPosting = "Baz" };
+
+                var jsonSerializer = new JsonSerializer();
+                var actual = await jsonSerializer.Deserialize<TestModel>(testJson);
+
+                actual.FooBar.Should().Be(expectedObject.FooBar);
+            }
+        }
+    }
+}

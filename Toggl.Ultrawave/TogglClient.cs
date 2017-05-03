@@ -2,6 +2,7 @@
 using ModernHttpClient;
 using Toggl.Ultrawave.Clients;
 using Toggl.Ultrawave.Network;
+using Toggl.Ultrawave.Serialization;
 using static System.Net.DecompressionMethods;
 
 namespace Toggl.Ultrawave
