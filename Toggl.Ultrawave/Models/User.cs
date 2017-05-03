@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
+using Toggl.Multivac.Models;
 
 namespace Toggl.Ultrawave
 {
-    public sealed class User
+    public sealed class User : IUser
     {
         public int Id { get; set; }
 
@@ -22,32 +23,24 @@ namespace Toggl.Ultrawave
 
         public bool StoreStartAndStopTime { get; set; }
 
-        //TODO: Map to an Enum?
         public int BeginningOfWeek { get; set; }
 
         public string Language { get; set; }
 
-        //TODO: Is this even needed
         public string ImageUrl { get; set; }
 
-        //TODO: ?
         public bool SidebarPiechart { get; set; }
 
         public string At { get; set; } 
-            
-        //TODO: ?
+           
         public int Retention { get; set; }
-        
-        //TODO: ?
+
         public bool RecordTimeline { get; set; }
-        
-        //TODO: ?
+
         public bool RenderTimeline { get; set; }
-        
-        //TODO: ?
+
         public bool TimelineEnabled { get; set; }
-        
-        //TODO: ?
+
         public bool TimelineExperiment { get; set; }
     }
 }

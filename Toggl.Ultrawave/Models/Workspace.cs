@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
+using Toggl.Multivac.Models;
 
 namespace Toggl.Ultrawave
 {
-    public sealed class Workspace
+    public sealed class Workspace : IWorkspace
     {
         public int Id { get; set; }
 
