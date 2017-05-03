@@ -48,10 +48,7 @@
     <Compile Include="Clients\Interfaces\ITimeEntriesClient.cs" />
     <Compile Include="Clients\Interfaces\IUserClient.cs" />
     <Compile Include="Clients\Interfaces\IWorkspacesClient.cs" />
-    <Compile Include="Network\ErrorMessage.cs" />
     <Compile Include="Network\Interface\IApiClient.cs" />
-    <Compile Include="Network\Interface\IApiResponse.cs" />
-    <Compile Include="Network\Interface\ICall.cs" />
     <Compile Include="Network\Interface\IRequest.cs" />
     <Compile Include="Network\Interface\IResponse.cs" />
     <Compile Include="Network\ApiClient.cs" />
@@ -59,9 +56,6 @@
     <Compile Include="Extensions\HttpExtensions.cs" />
     <Compile Include="ApiEnvironment.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
-    <Compile Include="Network\Call.cs" />
-    <Compile Include="Network\BaseCall.cs" />
-    <Compile Include="Network\ApiResponse.cs" />
     <Compile Include="Network\Request.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Clients\BaseClient.cs" />
@@ -75,6 +69,7 @@
     <Compile Include="Network\Endpoints\TaskEndpoints.cs" />
     <Compile Include="Network\Endpoints\TimeEntryEndpoints.cs" />
     <Compile Include="Network\Endpoints\TagEndpoints.cs" />
+    <Compile Include="Exceptions\ApiException.cs" />
     <Compile Include="Serialization\IgnoreAttributeContractResolver.cs" />
     <Compile Include="Serialization\SerializerSettings.cs" />
     <Compile Include="Serialization\IJsonSerializer.cs" />
@@ -111,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Helpers\" />
+    <Folder Include="Exceptions\" />
     <Folder Include="Serialization\" />
     <Folder Include="Serialization\Attributes\" />
   </ItemGroup>

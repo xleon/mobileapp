@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿﻿using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
 using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
 using Xunit;
+using static System.Net.HttpStatusCode;
 
 namespace Toggl.Ultrawave.Tests.Clients
 {
@@ -16,8 +18,10 @@ namespace Toggl.Ultrawave.Tests.Clients
             private readonly IJsonSerializer serializer = Substitute.For<IJsonSerializer>();
 
             [Fact]
-            public async Task CreatesACallWithAppropriateHeaders()
+            public async Task CreatesRequestWithAppropriateHeaders()
             {
+                apiClient.Send(Arg.Any<Request>()).Returns(x => new Response("It lives", true, "text/plain", OK));
+
                 const string username = "susancalvin@psychohistorian.museum";
                 const string password = "theirobotmoviesucked123";
                 const string expectedHeader = "c3VzYW5jYWx2aW5AcHN5Y2hvaGlzdG9yaWFuLm11c2V1bTp0aGVpcm9ib3Rtb3ZpZXN1Y2tlZDEyMw==";
@@ -25,7 +29,7 @@ namespace Toggl.Ultrawave.Tests.Clients
                 var endpoint = Endpoint.Get(ApiUrls.ForEnvironment(ApiEnvironment.Staging), "");
                 var client = new TestClient(endpoint, apiClient, serializer);
 
-                await client.Get(username, password).Execute();
+                client.Get(username, password).Wait();
                 await apiClient.Received().Send(Arg.Is<Request>(request => verifyAuthHeader(request, expectedHeader)));
             }
 

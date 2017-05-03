@@ -1,9 +1,9 @@
-﻿using Toggl.Ultrawave.Network;
+﻿using System;
 
 namespace Toggl.Ultrawave.Clients
 {
     public interface IUserClient
     {
-        ICall<User> Get(string username, string password);
+        IObservable<User> Get(string username, string password);
     }
 }

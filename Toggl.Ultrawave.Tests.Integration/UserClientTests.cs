@@ -1,7 +1,9 @@
-﻿using System;
+﻿﻿using System;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Ultrawave.Clients;
+using Toggl.Ultrawave.Exceptions;
 using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Integration
@@ -17,17 +19,26 @@ namespace Toggl.Ultrawave.Tests.Integration
             {
                 var (email, password) = await User.Create();
 
-                var response = await userClient.Get(email, password).Execute();
+                Action tryingToLoginWithValidCredentials = 
+                    () => userClient.Get(email, password).Wait();
 
-                response.Success.Should().BeTrue();
+                tryingToLoginWithValidCredentials
+                    .ShouldNotThrow<ApiException>();
+                
+                //TODO: Include check for returned data
             }
 
             [Fact]
-            public async Task FailsForNonExistingEmails()
+            public void FailsForNonExistingEmails()
             {
-                var response = await userClient.Get($"some-non-existing-email-{Guid.NewGuid()}@ironicmocks.toggl.com", "123456789").Execute();
+                var email = $"non-existing-email-{Guid.NewGuid()}@ironicmocks.toggl.com";
 
-                response.Success.Should().BeFalse();
+                Action tryingToLoginWithNonExistingCredential = 
+                    () => userClient.Get(email, "123456789").Wait();
+
+                tryingToLoginWithNonExistingCredential
+                    .ShouldThrow<ApiException>();
+                
                 //TODO: Include check expected error message/code
             }
 
@@ -36,9 +47,11 @@ namespace Toggl.Ultrawave.Tests.Integration
             {
                 var (email, password) = await User.Create();
 
-                var response = await userClient.Get(email, "123457").Execute();
+                Action tryingToLoginWithWrongPassword = 
+                    () => userClient.Get(email, "123457").Wait();
 
-                response.Success.Should().BeFalse();
+                tryingToLoginWithWrongPassword
+                    .ShouldThrow<ApiException>();
                 //TODO: Include check expected error message/code
             }
         }

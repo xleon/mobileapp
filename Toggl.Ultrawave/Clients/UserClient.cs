@@ -1,4 +1,5 @@
-﻿using Toggl.Multivac;
+﻿using System;
+using Toggl.Multivac;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
 
@@ -14,11 +15,11 @@ namespace Toggl.Ultrawave.Clients
             this.endPoints = endPoints;
         }
 
-        public ICall<User> Get(string username, string password)
+        public IObservable<User> Get(string username, string password)
         {
             var header = GetAuthHeader(username, password);
-            var call = CreateCall<User>(endPoints.Get, header);
-            return call;
+            var observable = CreateObservable<User>(endPoints.Get, header);
+            return observable;
         }
    }
 }
