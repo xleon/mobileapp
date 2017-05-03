@@ -1,4 +1,6 @@
-﻿namespace Toggl.Ultrawave.Tests.Models
+﻿using System;
+
+namespace Toggl.Ultrawave.Tests.Models
 {
     public class WorkspaceTests
     {
@@ -15,8 +17,8 @@
                 Premium = false,
                 BusinessWs = false,
                 Admin = true,
-                SuspendedAt = "2018-04-24T12:16:48+00:00",
-                ServerDeletedAt = "2017-04-20T12:16:48+00:00",
+                SuspendedAt = new DateTimeOffset(2018, 4, 24, 12, 16, 48, TimeSpan.Zero),
+                ServerDeletedAt = new DateTimeOffset(2017, 4, 20, 12, 16, 48, TimeSpan.Zero),
                 DefaultHourlyRate = 0,
                 DefaultCurrency = "USD",
                 OnlyAdminsMayCreateProjects = false,
@@ -25,7 +27,7 @@
                 ProjectsBillableByDefault = true,
                 Rounding = 0,
                 RoundingMinutes = 0,
-                At = "2017-04-24T12:16:48+00:00",
+                At = new DateTimeOffset(2017, 4, 24, 12, 16, 48, TimeSpan.Zero),
                 LogoUrl = "https://assets.toggl.com/images/workspace.jpg"
             };
         }

@@ -1,4 +1,6 @@
-﻿namespace Toggl.Multivac.Models
+﻿using System;
+
+namespace Toggl.Multivac.Models
 {
     public interface IClient : IBaseModel
     {
@@ -6,6 +8,6 @@
 
         string Name { get; }
 
-        string At { get; }
+        DateTimeOffset At { get; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Toggl.Multivac.Models
+﻿using System;
+
+namespace Toggl.Multivac.Models
 {
     public interface IWorkspace : IBaseModel
     {
@@ -12,9 +14,9 @@
 
         bool Admin { get; }
 
-        string SuspendedAt { get; }
+        DateTimeOffset SuspendedAt { get; }
 
-        string ServerDeletedAt { get; }
+        DateTimeOffset ServerDeletedAt { get; }
 
         double DefaultHourlyRate { get; }
 
@@ -32,7 +34,7 @@
 
         int RoundingMinutes { get; }
 
-        string At { get; }
+        DateTimeOffset At { get; }
 
         string LogoUrl { get; }
     }

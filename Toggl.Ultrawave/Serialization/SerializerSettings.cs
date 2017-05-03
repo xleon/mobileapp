@@ -13,7 +13,8 @@ namespace Toggl.Ultrawave.Serialization
                 ContractResolver = new TContractResolver
                 {
                     NamingStrategy = new SnakeCaseNamingStrategy()    
-                }
+                },
+                DateFormatString = @"yyyy-MM-dd\THH:mm:ssK"
             };
         }
     }

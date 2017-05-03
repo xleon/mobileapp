@@ -1,4 +1,6 @@
-﻿namespace Toggl.Ultrawave.Tests.Models
+﻿using System;
+
+namespace Toggl.Ultrawave.Tests.Models
 {
     public class UserTests
     {
@@ -21,7 +23,7 @@
                 Language = "en_US",
                 ImageUrl = "https://www.toggl.com/system/avatars/9000/small/open-uri20121116-2767-b1qr8l.png",
                 SidebarPiechart = false,
-                At = "2013-03-06T12:18:42+00:00",
+                At = new DateTimeOffset(2013, 3, 6, 12, 18,42, TimeSpan.Zero),
                 Retention = 9,
                 RecordTimeline = true,
                 RenderTimeline = true,

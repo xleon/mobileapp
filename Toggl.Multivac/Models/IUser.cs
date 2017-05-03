@@ -1,4 +1,6 @@
-﻿namespace Toggl.Multivac.Models
+﻿using System;
+
+namespace Toggl.Multivac.Models
 {
     public interface IUser : IBaseModel
     {
@@ -27,7 +29,7 @@
         //TODO: ?
         bool SidebarPiechart { get; }
 
-        string At { get; }
+        DateTimeOffset At { get; }
 
         //TODO: ?
         int Retention { get; }

@@ -1,3 +1,5 @@
+using System;
+
 namespace Toggl.Ultrawave.Tests.Models
 {
     public class ClientTests
@@ -12,7 +14,7 @@ namespace Toggl.Ultrawave.Tests.Models
                 Id = 23741667,
                 WorkspaceId = 1427273,
                 Name = "Test",
-                At = "2014-04-25T10:10:13+00:00"
+                At = new DateTimeOffset(2014, 04, 25, 10, 10, 13, TimeSpan.Zero)
             };
         }
     }

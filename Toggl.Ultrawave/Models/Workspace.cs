@@ -1,3 +1,4 @@
+﻿using System;
 ﻿using Newtonsoft.Json;
 using Toggl.Multivac.Models;
 
@@ -18,9 +19,9 @@ namespace Toggl.Ultrawave
         public bool Admin { get; set; }
 
         [JsonProperty("SuspendedAt")]
-        public string SuspendedAt { get; set; }
+        public DateTimeOffset SuspendedAt { get; set; }
 
-        public string ServerDeletedAt { get; set; }
+        public DateTimeOffset ServerDeletedAt { get; set; }
 
         public double DefaultHourlyRate { get; set; }
 
@@ -38,7 +39,7 @@ namespace Toggl.Ultrawave
 
         public int RoundingMinutes { get; set; }
 
-        public string At { get; set; }
+        public DateTimeOffset At { get; set; }
 
         public string LogoUrl { get; set; }
     }
