@@ -75,8 +75,40 @@ Task("Ultrawave.Tests.Run")
     .IsDependentOn("Ultrawave.Tests.Unit.Run")
     .IsDependentOn("Ultrawave.Tests.Integration.Run");
 
+//PrimeRadiant Core
+Task("PrimeRadiant.Nuget")
+    .IsDependentOn("Ultrawave.Nuget")
+    .Does(RestoreNuget("./Toggl.PrimeRadiant/packages.config"));
+
+Task("PrimeRadiant.Build")
+    .IsDependentOn("PrimeRadiant.Nuget")
+    .Does(BuildProject("./Toggl.PrimeRadiant/Toggl.PrimeRadiant.csproj"));
+
+//PrimeRadiant Unit Tests
+Task("PrimeRadiant.Tests.Unit.Nuget")
+    .IsDependentOn("PrimeRadiant.Nuget")
+    .Does(RestoreNuget("./Toggl.PrimeRadiant.Tests/packages.config"));
+
+Task("PrimeRadiant.Tests.Unit.Build")
+    .IsDependentOn("PrimeRadiant.Tests.Unit.Nuget")
+    .Does(BuildProject("./Toggl.PrimeRadiant.Tests/Toggl.PrimeRadiant.Tests.csproj"));
+
+Task("PrimeRadiant.Tests.Unit.Run")
+    .IsDependentOn("PrimeRadiant.Tests.Unit.Build")
+    .Does(Test("./bin/Release/*.PrimeRadiant.Tests.dll"));
+
+//All Unit Tests
+Task("Tests.Unit")
+    .IsDependentOn("Ultrawave.Tests.Unit.Run")
+    .IsDependentOn("PrimeRadiant.Tests.Unit.Run");
+
+// All Tests
+Task("Tests")
+    .IsDependentOn("Ultrawave.Tests.Run")
+    .IsDependentOn("PrimeRadiant.Tests.Unit.Run");
+
 //Default Operation
 Task("Default")
-    .IsDependentOn("Ultrawave.Tests.Unit.Run");
+    .IsDependentOn("Tests.Unit");
 
 RunTarget(target);
