@@ -35,6 +35,9 @@
     <Compile Include="Models\ITag.cs" />
     <Compile Include="Models\IClient.cs" />
     <Compile Include="Models\IWorkspace.cs" />
+    <Compile Include="Models\ITask.cs" />
+    <Compile Include="Models\IProject.cs" />
+    <Compile Include="Models\ITimeEntry.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
