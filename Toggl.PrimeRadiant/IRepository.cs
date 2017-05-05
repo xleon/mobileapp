@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reactive;
 using Toggl.Multivac.Models;
 
-namespace Toggl.PrimeRadiant.Repositories
+namespace Toggl.PrimeRadiant
 {
     public interface IRepository<TModel>
         where TModel: IBaseModel
