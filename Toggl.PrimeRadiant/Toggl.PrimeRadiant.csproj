@@ -32,6 +32,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ITogglDatabase.cs" />
     <Compile Include="IRepository.cs" />
+    <Compile Include="Models\DatabaseSyncable.cs" />
+    <Compile Include="Models\DatabaseInterfaces.cs">
+      <DependentUpon>DatabaseInterfaces.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">
@@ -56,6 +60,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Models\DatabaseInterfaces.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DatabaseInterfaces.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Choose>

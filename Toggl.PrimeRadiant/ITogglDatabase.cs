@@ -1,15 +1,15 @@
-﻿using Toggl.Multivac.Models;
+﻿using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.PrimeRadiant
 {
     public interface ITogglDatabase
     {
-        IRepository<IUser> User { get; }
-        IRepository<IClient> Clients { get; }
-        IRepository<IProject> Projects { get; }
-        IRepository<ITag> Tags { get; }
-        IRepository<ITask> Tasks { get; }
-        IRepository<ITimeEntry> TimeEntries { get; }
-        IRepository<IWorkspace> Workspaces { get; }
+        IRepository<IDatabaseUser> User { get; }
+        IRepository<IDatabaseClient> Clients { get; }
+        IRepository<IDatabaseProject> Projects { get; }
+        IRepository<IDatabaseTag> Tags { get; }
+        IRepository<IDatabaseTask> Tasks { get; }
+        IRepository<IDatabaseTimeEntry> TimeEntries { get; }
+        IRepository<IDatabaseWorkspace> Workspaces { get; }
     }
 }

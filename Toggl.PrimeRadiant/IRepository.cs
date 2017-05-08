@@ -6,7 +6,7 @@ using Toggl.Multivac.Models;
 namespace Toggl.PrimeRadiant
 {
     public interface IRepository<TModel>
-        where TModel: IBaseModel
+        where TModel: IBaseModel, IDatabaseSyncable
     {
         IObservable<TModel> GetLast();
         IObservable<TModel> GetById(int id);
