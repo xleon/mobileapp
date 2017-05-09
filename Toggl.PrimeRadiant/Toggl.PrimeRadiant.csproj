@@ -36,6 +36,8 @@
     <Compile Include="Models\DatabaseInterfaces.cs">
       <DependentUpon>DatabaseInterfaces.tt</DependentUpon>
     </Compile>
+    <Compile Include="Exceptions\DatabaseException.cs" />
+    <Compile Include="Exceptions\EntityNotFoundException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">
@@ -67,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Choose>
