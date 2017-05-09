@@ -38,24 +38,21 @@ namespace Toggl.Ultrawave.Clients
         protected IObservable<T> CreateObservable<T>(Endpoint endpoint, IEnumerable<HttpHeader> headers, string body = "")
         {
             var request = new Request(body, endpoint.Url, headers, endpoint.Method);
-            var observable = Observable.Create<T>(async observer =>
+            return Observable.Create<T>(async observer =>
             {
                 var response = await apiClient.Send(request).ConfigureAwait(false);
                 if (response.IsSuccess)
                 {
                     var data = await serializer.Deserialize<T>(response.RawData).ConfigureAwait(false);
                     observer.OnNext(data);
+                    observer.OnCompleted();
                 }
                 else
                 {
                     //TODO: Treat different error responses here. We need to check those as we create our clients.
                     observer.OnError(new ApiException(response.RawData));
                 }
-
-                observer.OnCompleted();
             });
-
-            return observable;
         }
     }
 }
