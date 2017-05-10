@@ -7,6 +7,9 @@ namespace Toggl.Ultrawave.Helpers
         private const string productionBaseUrl = "https://toggl.com/api/v9/";
         private const string stagingBaseUrl = "https://toggl.space/api/v9/";
 
+        //TODO: Update to v9 once backend finishes the endpoint
+        public static Uri StatusUrl = new Uri("https://toggl.com/api/v8/status");
+
         public static Uri ForEnvironment(ApiEnvironment environment)
         {
             switch (environment)

@@ -77,6 +77,10 @@
     <Compile Include="Serialization\Attributes\IgnoreOnPostAttribute.cs" />
     <Compile Include="Serialization\Attributes\IgnoreSerializationAttribute.cs" />
     <Compile Include="Serialization\SerializationReason.cs" />
+    <Compile Include="Exceptions\NoConnectionException.cs" />
+    <Compile Include="Clients\Interfaces\IStatusClient.cs" />
+    <Compile Include="Clients\StatusClient.cs" />
+    <Compile Include="Exceptions\EndpointUnreachableException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">

@@ -23,6 +23,7 @@ namespace Toggl.Ultrawave
             Tags = new TagsClient();
             User = new UserClient(endpoints.User, apiClient, serializer);
             Tasks = new TasksClient();
+            Status = new StatusClient(apiClient);
             Clients = new ClientsClient();
             Projects = new ProjectsClient();
             Workspaces = new WorkspacesClient();
@@ -32,6 +33,7 @@ namespace Toggl.Ultrawave
         public ITagsClient Tags { get; }
         public IUserClient User { get; }
         public ITasksClient Tasks { get; }
+        public IStatusClient Status { get; }
         public IClientsClient Clients { get; }
         public IProjectsClient Projects { get; }
         public IWorkspacesClient Workspaces { get; }
