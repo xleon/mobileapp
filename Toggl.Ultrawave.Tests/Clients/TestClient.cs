@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Toggl.Multivac;
 using Toggl.Ultrawave.Clients;
 using Toggl.Ultrawave.Network;
@@ -17,6 +18,9 @@ namespace Toggl.Ultrawave.Tests.Clients
 
             this.endpoint = endpoint;
         }
+
+        public IObservable<T> TestCreateObservable<T>(Endpoint endpoint, IEnumerable<HttpHeader> headers, string body = "")
+            => CreateObservable<T>(endpoint, headers, body);
 
         public IObservable<string> Get(string username, string password)
         {

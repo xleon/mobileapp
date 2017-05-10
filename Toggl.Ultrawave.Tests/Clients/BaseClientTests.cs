@@ -12,21 +12,21 @@ namespace Toggl.Ultrawave.Tests.Clients
 {
     public class BaseClientTests
     {
-        public class TheGetMethod
+        public class TheGetAuthHeaderMethod
         {
-            private readonly IApiClient apiClient = Substitute.For<IApiClient>();
-            private readonly IJsonSerializer serializer = Substitute.For<IJsonSerializer>();
-
             [Fact]
             public async Task CreatesRequestWithAppropriateHeaders()
             {
+                var apiClient = Substitute.For<IApiClient>();
+                var serializer = Substitute.For<IJsonSerializer>();
+                var endpoint = Endpoint.Get(ApiUrls.ForEnvironment(ApiEnvironment.Staging), "");
+                
                 apiClient.Send(Arg.Any<Request>()).Returns(x => new Response("It lives", true, "text/plain", OK));
 
                 const string username = "susancalvin@psychohistorian.museum";
                 const string password = "theirobotmoviesucked123";
                 const string expectedHeader = "c3VzYW5jYWx2aW5AcHN5Y2hvaGlzdG9yaWFuLm11c2V1bTp0aGVpcm9ib3Rtb3ZpZXN1Y2tlZDEyMw==";
 
-                var endpoint = Endpoint.Get(ApiUrls.ForEnvironment(ApiEnvironment.Staging), "");
                 var client = new TestClient(endpoint, apiClient, serializer);
 
                 client.Get(username, password).Wait();
@@ -41,6 +41,24 @@ namespace Toggl.Ultrawave.Tests.Clients
                 if (authHeader.Value != expectedHeader) return false;
 
                 return true;
+            }
+        }
+
+        public class TheCreateObservableMethod
+        {
+            [Fact]
+            public void CreatesAnObservableThatReturnsASingleValue()
+            {
+                var apiClient = Substitute.For<IApiClient>();
+                var serializer = Substitute.For<IJsonSerializer>();
+
+                apiClient.Send(Arg.Any<Request>()).Returns(x => new Response("It lives", true, "text/plain", OK));
+
+                var endpoint = Endpoint.Get(ApiUrls.ForEnvironment(ApiEnvironment.Staging), "");
+                var client = new TestClient(endpoint, apiClient, serializer);
+
+                var observable = client.TestCreateObservable<string>(endpoint, Enumerable.Empty<HttpHeader>(), "");
+                observable.SingleAsync().Wait();
             }
         }
     }
