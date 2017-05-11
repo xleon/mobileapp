@@ -2,16 +2,6 @@
 
 var target = Argument("target", "Default");
 
-private Action RestoreNuget(string packageFile)
-{
-    var nuggetSettings = new NuGetRestoreSettings
-    {
-        PackagesDirectory = "./packages"
-    };
-
-    return () => NuGetRestore(packageFile, nuggetSettings);
-}
-
 private Action Test(string testFiles)
 {
     var testSettings = new XUnit2Settings
@@ -25,111 +15,45 @@ private Action Test(string testFiles)
     return () => XUnit2(GetFiles(testFiles), testSettings);
 }
 
-private Action BuildProject(string targetProject)
+private Action BuildSolution(string targetProject)
 {
     var buildSettings = new MSBuildSettings 
     {
-        Verbosity = Verbosity.Minimal,
+        Verbosity = Bitrise.IsRunningOnBitrise ? Verbosity.Verbose : Verbosity.Minimal,
         Configuration = "Release"
     };
 
     return () => MSBuild(targetProject, buildSettings);
 }
 
-//Ultrawave Core
-Task("Ultrawave.Nuget")
-    .Does(RestoreNuget("./Toggl.Ultrawave/packages.config"));
+//Build
+Task("Nuget")
+    .Does(() => NuGetRestore("./Toggl.sln"));
 
-Task("Ultrawave.Build")
-    .IsDependentOn("Ultrawave.Nuget")
-    .Does(BuildProject("./Toggl.Ultrawave/Toggl.Ultrawave.csproj"));
+Task("Build")
+    .IsDependentOn("Nuget")
+    .Does(BuildSolution("./Toggl.sln"));
 
-//Ultrawave Unit Tests
-Task("Ultrawave.Tests.Unit.Nuget")
-    .IsDependentOn("Ultrawave.Nuget")
-    .Does(RestoreNuget("./Toggl.Ultrawave.Tests/packages.config"));
-
-Task("Ultrawave.Tests.Unit.Build")
-    .IsDependentOn("Ultrawave.Tests.Unit.Nuget")
-    .Does(BuildProject("./Toggl.Ultrawave.Tests/Toggl.Ultrawave.Tests.csproj"));
-
-Task("Ultrawave.Tests.Unit.Run")
-    .IsDependentOn("Ultrawave.Tests.Unit.Build")
-    .Does(Test("./bin/Release/*.Ultrawave.Tests.dll"));
-
-//Ultrawave Integration Tests
-Task("Ultrawave.Tests.Integration.Nuget")
-    .IsDependentOn("Ultrawave.Nuget")
-    .Does(RestoreNuget("./Toggl.Ultrawave.Tests.Integration/packages.config"));
-
-Task("Ultrawave.Tests.Integration.Build")
-    .IsDependentOn("Ultrawave.Tests.Integration.Nuget")
-    .Does(BuildProject("./Toggl.Ultrawave.Tests.Integration/Toggl.Ultrawave.Tests.Integration.csproj"));
-
-Task("Ultrawave.Tests.Integration.Run")
-    .IsDependentOn("Ultrawave.Tests.Integration.Build")
-    .Does(Test("./bin/Release/*.Ultrawave.Tests.Integration.dll"));
-
-//Ultrawave All Tests
-Task("Ultrawave.Tests.Run")
-    .IsDependentOn("Ultrawave.Tests.Unit.Run")
-    .IsDependentOn("Ultrawave.Tests.Integration.Run");
-
-//PrimeRadiant Core
-Task("PrimeRadiant.Nuget")
-    .IsDependentOn("Ultrawave.Nuget")
-    .Does(RestoreNuget("./Toggl.PrimeRadiant/packages.config"));
-
-Task("PrimeRadiant.Build")
-    .IsDependentOn("PrimeRadiant.Nuget")
-    .Does(BuildProject("./Toggl.PrimeRadiant/Toggl.PrimeRadiant.csproj"));
-
-//PrimeRadiant Unit Tests
-Task("PrimeRadiant.Tests.Unit.Nuget")
-    .IsDependentOn("PrimeRadiant.Nuget")
-    .Does(RestoreNuget("./Toggl.PrimeRadiant.Tests/packages.config"));
-
-Task("PrimeRadiant.Tests.Unit.Build")
-    .IsDependentOn("PrimeRadiant.Tests.Unit.Nuget")
-    .Does(BuildProject("./Toggl.PrimeRadiant.Tests/Toggl.PrimeRadiant.Tests.csproj"));
-
-Task("PrimeRadiant.Tests.Unit.Run")
-    .IsDependentOn("PrimeRadiant.Tests.Unit.Build")
-    .Does(Test("./bin/Release/*.PrimeRadiant.Tests.dll"));
-
-//Foundation Core
-Task("Foundation.Nuget")
-    .IsDependentOn("PrimeRadiant.Nuget")
-    .Does(RestoreNuget("./Toggl.Foundation/packages.config"));
-
-Task("Foundation.Build")
-    .IsDependentOn("Foundation.Nuget")
-    .Does(BuildProject("./Toggl.Foundation/Toggl.Foundation.csproj"));
-
-//Foundation Unit Tests
-Task("Foundation.Tests.Unit.Nuget")
-    .IsDependentOn("Foundation.Nuget")
-    .Does(RestoreNuget("./Toggl.Foundation.Tests/packages.config"));
-
-Task("Foundation.Tests.Unit.Build")
-    .IsDependentOn("Foundation.Tests.Unit.Nuget")
-    .Does(BuildProject("./Toggl.Foundation.Tests/Toggl.Foundation.Tests.csproj"));
-
-Task("Foundation.Tests.Unit.Run")
-    .IsDependentOn("Foundation.Tests.Unit.Build")
-    .Does(Test("./bin/Release/*.Foundation.Tests.dll"));
-
-//All Unit Tests
+//Unit Tests
 Task("Tests.Unit")
-    .IsDependentOn("Ultrawave.Tests.Unit.Run")
-    .IsDependentOn("PrimeRadiant.Tests.Unit.Run")
-    .IsDependentOn("Foundation.Tests.Unit.Run");
+    .IsDependentOn("Build")
+    .Does(Test("./bin/Release/*.Tests.dll"));
+
+//Integration Tests
+Task("Tests.Integration")
+    .IsDependentOn("Build")
+    .Does(Test("./bin/Release/*.Tests.Integration.dll"));
+
+//UI Tests
+Task("Tests.UI")
+    .IsDependentOn("Build")
+    .Does(Test("./bin/Release/*.Tests.UI.dll"));
 
 // All Tests
 Task("Tests")
-    .IsDependentOn("Ultrawave.Tests.Run")
-    .IsDependentOn("PrimeRadiant.Tests.Unit.Run")
-    .IsDependentOn("Foundation.Tests.Unit.Run");
+    .IsDependentOn("Tests.Unit")
+    .IsDependentOn("Tests.Integration")
+    .IsDependentOn("Tests.UI");
 
 //Default Operation
 Task("Default")
