@@ -26,7 +26,7 @@ namespace Toggl.Ultrawave
             Status = new StatusClient(apiClient);
             Clients = new ClientsClient();
             Projects = new ProjectsClient();
-            Workspaces = new WorkspacesClient();
+            Workspaces = new WorkspacesClient(endpoints.Workspaces, apiClient, serializer);
             TimeEntries = new TimeEntriesClient();
         }
 

@@ -19,11 +19,11 @@ namespace Toggl.Ultrawave
         public bool Admin { get; set; }
 
         [JsonProperty("SuspendedAt")]
-        public DateTimeOffset SuspendedAt { get; set; }
+        public DateTimeOffset? SuspendedAt { get; set; }
 
-        public DateTimeOffset ServerDeletedAt { get; set; }
+        public DateTimeOffset? ServerDeletedAt { get; set; }
 
-        public double DefaultHourlyRate { get; set; }
+        public double? DefaultHourlyRate { get; set; }
 
         public string DefaultCurrency { get; set; }
 
@@ -39,7 +39,7 @@ namespace Toggl.Ultrawave
 
         public int RoundingMinutes { get; set; }
 
-        public DateTimeOffset At { get; set; }
+        public DateTimeOffset? At { get; set; }
 
         public string LogoUrl { get; set; }
     }

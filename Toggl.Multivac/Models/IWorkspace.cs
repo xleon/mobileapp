@@ -14,11 +14,11 @@ namespace Toggl.Multivac.Models
 
         bool Admin { get; }
 
-        DateTimeOffset SuspendedAt { get; }
+        DateTimeOffset? SuspendedAt { get; }
 
-        DateTimeOffset ServerDeletedAt { get; }
+        DateTimeOffset? ServerDeletedAt { get; }
 
-        double DefaultHourlyRate { get; }
+        double? DefaultHourlyRate { get; }
 
         string DefaultCurrency { get; }
 
@@ -34,7 +34,7 @@ namespace Toggl.Multivac.Models
 
         int RoundingMinutes { get; }
 
-        DateTimeOffset At { get; }
+        DateTimeOffset? At { get; }
 
         string LogoUrl { get; }
     }
