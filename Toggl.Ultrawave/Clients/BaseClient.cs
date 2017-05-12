@@ -1,4 +1,4 @@
-﻿﻿﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Toggl.Ultrawave.Network;
@@ -6,6 +6,7 @@ using Toggl.Ultrawave.Serialization;
 using Toggl.Multivac;
 using System.Reactive.Linq;
 using Toggl.Ultrawave.Exceptions;
+using System.Threading.Tasks;
 
 namespace Toggl.Ultrawave.Clients
 {
@@ -43,7 +44,7 @@ namespace Toggl.Ultrawave.Clients
                 var response = await apiClient.Send(request).ConfigureAwait(false);
                 if (response.IsSuccess)
                 {
-                    var data = await serializer.Deserialize<T>(response.RawData).ConfigureAwait(false);
+                    var data = await Task.Run(() => serializer.Deserialize<T>(response.RawData)).ConfigureAwait(false);
                     observer.OnNext(data);
                     observer.OnCompleted();
                 }

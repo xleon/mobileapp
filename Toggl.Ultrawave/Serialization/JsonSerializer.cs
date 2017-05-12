@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using static Toggl.Ultrawave.Serialization.SerializationReason;
 
@@ -12,11 +11,11 @@ namespace Toggl.Ultrawave.Serialization
         private readonly JsonSerializerSettings postSettings = 
             SerializerSettings.For<IgnoreAttributeContractResolver<IgnoreWhenPostingAttribute>>();
 
-        public Task<T> Deserialize<T>(string json)
-            => Task.Run(() => JsonConvert.DeserializeObject<T>(json, defaultSettings));
+        public T Deserialize<T>(string json)
+            => JsonConvert.DeserializeObject<T>(json, defaultSettings);
 
-        public Task<string> Serialize<T>(T data, SerializationReason reason = Default)
-            => Task.Run(() => JsonConvert.SerializeObject(data, Formatting.None, getSettings(reason)));
+        public string Serialize<T>(T data, SerializationReason reason = Default)
+            => JsonConvert.SerializeObject(data, Formatting.None, getSettings(reason));
 
         private JsonSerializerSettings getSettings(SerializationReason reason)
         {

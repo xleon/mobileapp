@@ -14,18 +14,18 @@ namespace Toggl.Ultrawave.Tests
         protected abstract T ValidObject { get; }
 
         [Fact]
-        public async Task CanBeDeserialized()
+        public void CanBeDeserialized()
         {
-            var actual = await serializer.Deserialize<T>(ValidJson);
+            var actual = serializer.Deserialize<T>(ValidJson);
 
             actual.Should().NotBeNull();
             actual.ShouldBeEquivalentTo(ValidObject);
         }
 
         [Fact]
-        public async Task CanBeSerialized()
+        public void CanBeSerialized()
         {
-            var actualJson = await serializer.Serialize(ValidObject);
+            var actualJson = serializer.Serialize(ValidObject);
 
             actualJson.Should().Be(ValidJson);
         }
