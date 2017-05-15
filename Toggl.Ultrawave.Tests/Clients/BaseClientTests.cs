@@ -23,13 +23,13 @@ namespace Toggl.Ultrawave.Tests.Clients
                 
                 apiClient.Send(Arg.Any<Request>()).Returns(x => new Response("It lives", true, "text/plain", OK));
 
-                const string username = "susancalvin@psychohistorian.museum";
-                const string password = "theirobotmoviesucked123";
+                var credentials = Credentials.WithPassword("susancalvin@psychohistorian.museum", "theirobotmoviesucked123");
                 const string expectedHeader = "c3VzYW5jYWx2aW5AcHN5Y2hvaGlzdG9yaWFuLm11c2V1bTp0aGVpcm9ib3Rtb3ZpZXN1Y2tlZDEyMw==";
 
-                var client = new TestClient(endpoint, apiClient, serializer);
+                var client = new TestClient(endpoint, apiClient, serializer, credentials);
 
-                client.Get(username, password).Wait();
+                client.Get().Wait();
+
                 await apiClient.Received().Send(Arg.Is<Request>(request => verifyAuthHeader(request, expectedHeader)));
             }
 
@@ -51,11 +51,12 @@ namespace Toggl.Ultrawave.Tests.Clients
             {
                 var apiClient = Substitute.For<IApiClient>();
                 var serializer = Substitute.For<IJsonSerializer>();
+                var credentials = Credentials.WithPassword("", "");
 
                 apiClient.Send(Arg.Any<Request>()).Returns(x => new Response("It lives", true, "text/plain", OK));
 
                 var endpoint = Endpoint.Get(ApiUrls.ForEnvironment(ApiEnvironment.Staging), "");
-                var client = new TestClient(endpoint, apiClient, serializer);
+                var client = new TestClient(endpoint, apiClient, serializer, credentials);
 
                 var observable = client.TestCreateObservable<string>(endpoint, Enumerable.Empty<HttpHeader>(), "");
                 observable.SingleAsync().Wait();

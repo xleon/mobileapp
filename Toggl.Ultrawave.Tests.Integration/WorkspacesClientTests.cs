@@ -13,20 +13,16 @@ namespace Toggl.Ultrawave.Tests.Integration
     {
         public class TheGetMethod : AuthenticatedEndpointBaseTests<List<Workspace>>
         {
-            private readonly TogglClient togglClient = new TogglClient(ApiEnvironment.Staging);
-
-            protected override IObservable<List<Workspace>> CallEndpointWith(
-                (string email, string password) credentials)
-                => togglClient.Workspaces.GetAll(credentials.email, credentials.password);
+            protected override IObservable<List<Workspace>> CallEndpointWith(ITogglClient togglClient)
+                => togglClient.Workspaces.GetAll();
 
             [Fact]
             public async Task ReturnsAllWorkspaces()
             {
-                var credentials = await User.Create();
-                var user = await togglClient.User.Get(credentials.email, credentials.password);
-                var secondWorkspace = await WorkspaceHelper.Create(credentials);
+                var (togglClient, user) = await SetupTestUser();
+                var secondWorkspace = await WorkspaceHelper.CreateFor(user);
 
-                var workspaces = CallEndpointWith(credentials).Wait();
+                var workspaces = CallEndpointWith(togglClient).Wait();
 
                 workspaces.Should().HaveCount(2);
                 workspaces.Should().Contain(ws => ws.Id == user.DefaultWorkspaceId);
@@ -36,22 +32,18 @@ namespace Toggl.Ultrawave.Tests.Integration
 
         public class TheGetByIdMethod : AuthenticatedEndpointWithParameterBaseTests<Workspace, int>
         {
-            private readonly TogglClient togglClient = new TogglClient(ApiEnvironment.Staging);
-
-            protected override int GetDefaultParameter(Ultrawave.User user, (string email, string password) credentials)
+            protected override int GetDefaultParameter(Ultrawave.User user, ITogglClient togglClient)
                 => user.DefaultWorkspaceId;
 
-            protected override IObservable<Workspace> CallEndpointWith(
-                (string email, string password) credentials, int id)
-                => togglClient.Workspaces.GetById(credentials.email, credentials.password, id);
+            protected override IObservable<Workspace> CallEndpointWith(ITogglClient togglClient, int id)
+                => togglClient.Workspaces.GetById(id);
 
             [Fact]
             public async Task ReturnsDefaultWorkspace()
             {
-                var credentials = await User.Create();
-                var user = await togglClient.User.Get(credentials.email, credentials.password);
+                var (togglClient, user) = await SetupTestUser();
 
-                var workspace = CallEndpointWith(credentials, user.DefaultWorkspaceId).Wait();
+                var workspace = CallEndpointWith(togglClient, user.DefaultWorkspaceId).Wait();
 
                 workspace.Id.Should().Be(user.DefaultWorkspaceId);
             }
@@ -59,10 +51,10 @@ namespace Toggl.Ultrawave.Tests.Integration
             [Fact]
             public async Task ReturnsCreatedWorkspace()
             {
-                var credentials = await User.Create();
-                var secondWorkspace = await WorkspaceHelper.Create(credentials);
+                var (togglClient, user) = await SetupTestUser();
+                var secondWorkspace = await WorkspaceHelper.CreateFor(user);
 
-                var workspace = CallEndpointWith(credentials, secondWorkspace.Id).Wait();
+                var workspace = CallEndpointWith(togglClient, secondWorkspace.Id).Wait();
 
                 workspace.Id.Should().Be(secondWorkspace.Id);
                 workspace.Name.Should().Be(secondWorkspace.Name);
@@ -71,10 +63,9 @@ namespace Toggl.Ultrawave.Tests.Integration
             [Fact]
             public async Task FailsForWrongWorkspaceId()
             {
-                var credentials = await User.Create();
-                var user = await togglClient.User.Get(credentials.email, credentials.password);
+                var (togglClient, user) = await SetupTestUser();
 
-                CallingEndpointWith(credentials, user.DefaultWorkspaceId - 1).ShouldThrow<ApiException>();
+                CallingEndpointWith(togglClient, user.DefaultWorkspaceId - 1).ShouldThrow<ApiException>();
             }
         }
     }

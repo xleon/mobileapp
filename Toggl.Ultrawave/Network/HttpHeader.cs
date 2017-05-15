@@ -4,6 +4,7 @@ namespace Toggl.Ultrawave.Network
     {
         public enum HeaderType
         {
+            None = 0,
             Auth,
             Other
         }
@@ -20,5 +21,7 @@ namespace Toggl.Ultrawave.Network
             Name = name;
             Value = value;
         }
+
+        public static HttpHeader None => new HttpHeader(null, null, HeaderType.None);
     }
 }

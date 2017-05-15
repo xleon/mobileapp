@@ -9,24 +9,23 @@ namespace Toggl.Ultrawave.Clients
     {
         private readonly WorkspaceEndpoints endPoints;
 
-        public WorkspacesClient(WorkspaceEndpoints endPoints, IApiClient apiClient, IJsonSerializer serializer)
-            : base(apiClient, serializer)
+        public WorkspacesClient(WorkspaceEndpoints endPoints, IApiClient apiClient, IJsonSerializer serializer,
+            Credentials credentials)
+            : base(apiClient, serializer, credentials)
         {
             this.endPoints = endPoints;
         }
 
-        public IObservable<List<Workspace>> GetAll(string username, string password)
+        public IObservable<List<Workspace>> GetAll()
         {
-            var header = GetAuthHeader(username, password);
-            var observable = CreateObservable<List<Workspace>>(endPoints.Get, header);
+            var observable = CreateObservable<List<Workspace>>(endPoints.Get, AuthHeader);
             return observable;
         }
 
-        public IObservable<Workspace> GetById(string username, string password, int id)
+        public IObservable<Workspace> GetById(int id)
         {
-            var header = GetAuthHeader(username, password);
             var endpoint = endPoints.GetById(id);
-            var observable = CreateObservable<Workspace>(endpoint, header);
+            var observable = CreateObservable<Workspace>(endpoint, AuthHeader);
             return observable;
         }
     }

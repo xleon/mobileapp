@@ -5,7 +5,7 @@ namespace Toggl.Ultrawave.Clients
 {
     public interface IWorkspacesClient
     {
-        IObservable<List<Workspace>> GetAll(string username, string password);
-        IObservable<Workspace> GetById(string username, string password, int id);
+        IObservable<List<Workspace>> GetAll();
+        IObservable<Workspace> GetById(int id);
     }
 }

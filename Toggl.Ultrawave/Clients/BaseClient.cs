@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
 using Toggl.Multivac;
@@ -15,22 +14,17 @@ namespace Toggl.Ultrawave.Clients
         private readonly IApiClient apiClient;
         private readonly IJsonSerializer serializer;
 
-        protected BaseClient(IApiClient apiClient, IJsonSerializer serializer)
+        protected HttpHeader AuthHeader { get; }
+
+        protected BaseClient(IApiClient apiClient, IJsonSerializer serializer, Credentials credentials)
         {
             Ensure.ArgumentIsNotNull(apiClient, nameof(apiClient));
             Ensure.ArgumentIsNotNull(serializer, nameof(serializer));
+            Ensure.ArgumentIsNotNull(credentials, nameof(credentials));
 
             this.apiClient = apiClient;
             this.serializer = serializer;
-        }
-
-        protected HttpHeader GetAuthHeader(string username, string password)
-        {
-            var authString = $"{username}:{password}";
-            var authStringBytes = Encoding.UTF8.GetBytes(authString);
-            var authHeader = Convert.ToBase64String(authStringBytes);
-                                    
-            return new HttpHeader("Authorization", authHeader, HttpHeader.HeaderType.Auth);
+            this.AuthHeader = credentials.Header;
         }
 
         protected IObservable<T> CreateObservable<T>(Endpoint endpoint, HttpHeader header, string body = "")

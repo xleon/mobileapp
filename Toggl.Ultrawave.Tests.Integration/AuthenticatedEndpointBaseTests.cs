@@ -3,32 +3,33 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Ultrawave.Exceptions;
+using Toggl.Ultrawave.Network;
 using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
-    public abstract class AuthenticatedEndpointBaseTests<T>
+    public abstract class AuthenticatedEndpointBaseTests<T> : EndpointTestBase
     {
-        protected abstract IObservable<T> CallEndpointWith((string email, string password) credentials);
+        protected abstract IObservable<T> CallEndpointWith(ITogglClient togglClient);
 
-        protected Action CallingEndpointWith((string email, string password) credentials)
-            => () => CallEndpointWith(credentials).Wait();
+        protected Action CallingEndpointWith(ITogglClient togglClient)
+            => () => CallEndpointWith(togglClient).Wait();
 
         [Fact]
         public async Task WorksForExistingUser()
         {
             var credentials = await User.Create();
 
-            CallingEndpointWith(credentials).ShouldNotThrow();
+            CallingEndpointWith(TogglClientWith(credentials)).ShouldNotThrow();
         }
 
         [Fact]
         public void FailsForNonExistingUser()
         {
             var email = $"non-existing-email-{Guid.NewGuid()}@ironicmocks.toggl.com";
-            var wrongCredentials = (email, "123456789");
+            var wrongCredentials = Credentials.WithPassword(email, "123456789");
 
-            CallingEndpointWith(wrongCredentials).ShouldThrow<ApiException>();
+            CallingEndpointWith(TogglClientWith(wrongCredentials)).ShouldThrow<ApiException>();
 
             // TODO: check for error code
         }
@@ -36,10 +37,10 @@ namespace Toggl.Ultrawave.Tests.Integration
         [Fact]
         public async Task FailsIfUsingTheWrongPassword()
         {
-            var (email, password) = await User.Create();
-            var wrongCredentials = (email, $"{password}1");
+            var (email, password) = await User.CreateEmailPassword();
+            var wrongCredentials = Credentials.WithPassword(email, $"{password}1");
 
-            CallingEndpointWith(wrongCredentials).ShouldThrow<ApiException>();
+            CallingEndpointWith(TogglClientWith(wrongCredentials)).ShouldThrow<ApiException>();
 
             // TODO: check for error code
         }

@@ -3,12 +3,20 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Toggl.Ultrawave.Network;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
     internal static class User
     {
-        public static async Task<(string email, string password)> Create()
+        public static async Task<Credentials> Create()
+        {
+            var (email, password) = await CreateEmailPassword();
+
+            return Credentials.WithPassword(email, password);
+        }
+
+        public static async Task<(string email, string password)> CreateEmailPassword()
         {
             ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
 

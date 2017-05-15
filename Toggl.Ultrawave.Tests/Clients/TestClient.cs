@@ -11,8 +11,9 @@ namespace Toggl.Ultrawave.Tests.Clients
     {
         private readonly Endpoint endpoint;
 
-        public TestClient(Endpoint endpoint, IApiClient apiClient, IJsonSerializer serializer)
-            : base(apiClient, serializer)
+        public TestClient(Endpoint endpoint, IApiClient apiClient, IJsonSerializer serializer,
+            Credentials credentials)
+            : base(apiClient, serializer, credentials)
         {
             Ensure.ArgumentIsNotNull(endpoint, nameof(endpoint));
 
@@ -22,10 +23,9 @@ namespace Toggl.Ultrawave.Tests.Clients
         public IObservable<T> TestCreateObservable<T>(Endpoint endpoint, IEnumerable<HttpHeader> headers, string body = "")
             => CreateObservable<T>(endpoint, headers, body);
 
-        public IObservable<string> Get(string username, string password)
+        public IObservable<string> Get()
         {
-            var header = GetAuthHeader(username, password);
-            var observable = CreateObservable<string>(endpoint, header);
+            var observable = CreateObservable<string>(endpoint, AuthHeader);
             return observable;
         }
     }

@@ -13,6 +13,8 @@ namespace Toggl.Ultrawave.Extensions
             {
                 switch (header.Type)
                 {
+                    case None:
+                        break;
                     case Auth:
                         self.Authorization = new AuthenticationHeaderValue("Basic", header.Value);
                         break;

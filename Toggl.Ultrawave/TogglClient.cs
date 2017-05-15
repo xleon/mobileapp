@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using ModernHttpClient;
+using Toggl.Multivac;
 using Toggl.Ultrawave.Clients;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
@@ -11,8 +12,11 @@ namespace Toggl.Ultrawave
     {
         private readonly Endpoints endpoints;
 
-        internal TogglClient(ApiEnvironment apiEnvironment, HttpClientHandler handler = null)
+        public TogglClient(ApiEnvironment apiEnvironment, Credentials credentials,
+            HttpClientHandler handler = null)
         {
+            Ensure.ArgumentIsNotNull(credentials, nameof(credentials));
+
             var httpHandler = handler ?? new NativeMessageHandler { AutomaticDecompression = GZip | Deflate };
             var httpClient = new HttpClient(httpHandler);
 
@@ -21,12 +25,12 @@ namespace Toggl.Ultrawave
             endpoints = new Endpoints(apiEnvironment);
 
             Tags = new TagsClient();
-            User = new UserClient(endpoints.User, apiClient, serializer);
+            User = new UserClient(endpoints.User, apiClient, serializer, credentials);
             Tasks = new TasksClient();
             Status = new StatusClient(apiClient);
             Clients = new ClientsClient();
             Projects = new ProjectsClient();
-            Workspaces = new WorkspacesClient(endpoints.Workspaces, apiClient, serializer);
+            Workspaces = new WorkspacesClient(endpoints.Workspaces, apiClient, serializer, credentials);
             TimeEntries = new TimeEntriesClient();
         }
 
@@ -38,7 +42,5 @@ namespace Toggl.Ultrawave
         public IProjectsClient Projects { get; }
         public IWorkspacesClient Workspaces { get; }
         public ITimeEntriesClient TimeEntries { get; }
-
-        public static ITogglClient WithBaseUrl(ApiEnvironment apiEnvironment) => new TogglClient(apiEnvironment);
     }
 }
