@@ -7,7 +7,7 @@ namespace Toggl.Foundation.DataSources
 {
     public sealed class TogglDataSource : ITogglDataSource
     {
-        private TogglDataSource(ITogglDatabase database, ITogglClient api)
+        public TogglDataSource(ITogglDatabase database, ITogglClient api)
         {
             Ensure.ArgumentIsNotNull(api, nameof(api));
             Ensure.ArgumentIsNotNull(database, nameof(database));
@@ -18,7 +18,7 @@ namespace Toggl.Foundation.DataSources
         public ITasksSource Tasks => throw new NotImplementedException();
         public IClientsSource Clients => throw new NotImplementedException();
         public IProjectsSource Projects => throw new NotImplementedException();
-		public IWorkspacesSource Workspaces => throw new NotImplementedException();
+        public IWorkspacesSource Workspaces => throw new NotImplementedException();
         public ITimeEntriesSource TimeEntries => throw new NotImplementedException();
     }
 }
