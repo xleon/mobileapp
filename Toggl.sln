@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Daneel.Tests.UI", "To
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.PrimeRadiant.Realm", "Toggl.PrimeRadiant.Realm\Toggl.PrimeRadiant.Realm.csproj", "{64A8727E-5D39-4EFB-80FA-4510147796BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Foundation.MvvmCross", "Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj", "{543829A3-F1D5-41CE-9F20-2A5B8474EF7E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -173,6 +175,18 @@ Global
 		{64A8727E-5D39-4EFB-80FA-4510147796BB}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{64A8727E-5D39-4EFB-80FA-4510147796BB}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{64A8727E-5D39-4EFB-80FA-4510147796BB}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{543829A3-F1D5-41CE-9F20-2A5B8474EF7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{543829A3-F1D5-41CE-9F20-2A5B8474EF7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{543829A3-F1D5-41CE-9F20-2A5B8474EF7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{543829A3-F1D5-41CE-9F20-2A5B8474EF7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{543829A3-F1D5-41CE-9F20-2A5B8474EF7E}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{543829A3-F1D5-41CE-9F20-2A5B8474EF7E}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{543829A3-F1D5-41CE-9F20-2A5B8474EF7E}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{543829A3-F1D5-41CE-9F20-2A5B8474EF7E}.Release|iPhone.Build.0 = Release|Any CPU
+		{543829A3-F1D5-41CE-9F20-2A5B8474EF7E}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{543829A3-F1D5-41CE-9F20-2A5B8474EF7E}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{543829A3-F1D5-41CE-9F20-2A5B8474EF7E}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{543829A3-F1D5-41CE-9F20-2A5B8474EF7E}.Debug|iPhone.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B4E4943F-0574-4BEF-9ADC-B19102458754} = {0BA4407E-0470-4496-A80B-DE311A40A385}
@@ -185,5 +199,6 @@ Global
 		{8CE4E64C-5719-4660-96AC-CF2ABA3A335E} = {4796CD10-F5B5-4843-AD7A-2691438E5A6C}
 		{C23A5DDD-D0EA-4198-88A0-89A43EBF67B6} = {4796CD10-F5B5-4843-AD7A-2691438E5A6C}
 		{64A8727E-5D39-4EFB-80FA-4510147796BB} = {F8D36062-5AD3-4F2D-8E64-9ACB91C0BB50}
+		{543829A3-F1D5-41CE-9F20-2A5B8474EF7E} = {B55DCFC1-9EA2-4289-B3EE-8979E0A9AB2E}
 	EndGlobalSection
 EndGlobal
