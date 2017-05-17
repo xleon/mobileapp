@@ -28,8 +28,7 @@ namespace Toggl.Ultrawave.Tests.Clients
 
                 var client = new TestClient(endpoint, apiClient, serializer, credentials);
 
-                client.Get().Wait();
-
+                await client.Get();
                 await apiClient.Received().Send(Arg.Is<Request>(request => verifyAuthHeader(request, expectedHeader)));
             }
 
@@ -39,7 +38,6 @@ namespace Toggl.Ultrawave.Tests.Clients
 
                 if (authHeader.Type != HttpHeader.HeaderType.Auth) return false;
                 if (authHeader.Value != expectedHeader) return false;
-
                 return true;
             }
         }
@@ -47,7 +45,7 @@ namespace Toggl.Ultrawave.Tests.Clients
         public class TheCreateObservableMethod
         {
             [Fact]
-            public void CreatesAnObservableThatReturnsASingleValue()
+            public async Task CreatesAnObservableThatReturnsASingleValue()
             {
                 var apiClient = Substitute.For<IApiClient>();
                 var serializer = Substitute.For<IJsonSerializer>();
@@ -59,7 +57,7 @@ namespace Toggl.Ultrawave.Tests.Clients
                 var client = new TestClient(endpoint, apiClient, serializer, credentials);
 
                 var observable = client.TestCreateObservable<string>(endpoint, Enumerable.Empty<HttpHeader>(), "");
-                observable.SingleAsync().Wait();
+                await observable.SingleAsync();
             }
         }
     }

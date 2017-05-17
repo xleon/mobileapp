@@ -1,10 +1,9 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Serialization;
 using Xunit;
 using static System.Net.HttpStatusCode;
 
@@ -24,7 +23,7 @@ namespace Toggl.Ultrawave.Tests.Clients
             }
 
             [Fact]
-            public void NeverThrows()
+            public async Task NeverThrows()
             {
                 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
                 apiClient
@@ -32,34 +31,30 @@ namespace Toggl.Ultrawave.Tests.Clients
                     .Returns(async x => throw new WebException());
                 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
-                statusClient.Get().Wait().Should().BeFalse();
+                var status = await statusClient.Get();
+                status.Should().BeFalse();
             }
 
             [Fact]
-            public void ReturnsASingleValueForWorkingApiCalls()
+            public async Task ReturnsASingleValueForWorkingApiCalls()
             {
                 apiClient
                     .Send(Arg.Any<IRequest>())
                     .Returns(x => new Response("OK", true, "text/plain", OK));
 
-                statusClient.Get()
-                            .Do(Console.WriteLine)
-                            .SingleAsync()
-                            .Wait()
-                            .Should().BeTrue();
+                var status = await statusClient.Get().SingleAsync();
+                status.Should().BeTrue();
             }
 
             [Fact]
-            public void ReturnsASingleValueForFailingApiCalls()
+            public async Task ReturnsASingleValueForFailingApiCalls()
             {
                 apiClient
                     .Send(Arg.Any<IRequest>())
                     .Returns(x => new Response("PANIC", false, "text/plain", InternalServerError));
 
-                statusClient.Get()
-                            .SingleAsync()
-                            .Wait()
-                            .Should().BeFalse();
+                var status = await statusClient.Get().SingleAsync();
+                status.Should().BeFalse();
             }
         }
     }

@@ -22,7 +22,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 var secondWorkspace = await WorkspaceHelper.CreateFor(user);
 
-                var workspaces = CallEndpointWith(togglClient).Wait();
+                var workspaces = await CallEndpointWith(togglClient);
 
                 workspaces.Should().HaveCount(2);
                 workspaces.Should().Contain(ws => ws.Id == user.DefaultWorkspaceId);
@@ -43,7 +43,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             {
                 var (togglClient, user) = await SetupTestUser();
 
-                var workspace = CallEndpointWith(togglClient, user.DefaultWorkspaceId).Wait();
+                var workspace = await CallEndpointWith(togglClient, user.DefaultWorkspaceId);
 
                 workspace.Id.Should().Be(user.DefaultWorkspaceId);
             }
@@ -54,7 +54,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 var secondWorkspace = await WorkspaceHelper.CreateFor(user);
 
-                var workspace = CallEndpointWith(togglClient, secondWorkspace.Id).Wait();
+                var workspace = await CallEndpointWith(togglClient, secondWorkspace.Id);
 
                 workspace.Id.Should().Be(secondWorkspace.Id);
                 workspace.Name.Should().Be(secondWorkspace.Name);

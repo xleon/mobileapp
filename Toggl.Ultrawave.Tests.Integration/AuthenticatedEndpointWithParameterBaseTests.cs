@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Ultrawave.Network;
 
 namespace Toggl.Ultrawave.Tests.Integration
@@ -14,19 +15,21 @@ namespace Toggl.Ultrawave.Tests.Integration
         protected IObservable<T> CallEndpointWith(Credentials credentials, TParameter parameter)
             => CallEndpointWith(new TogglClient(ApiEnvironment.Staging, credentials), parameter);
 
-        protected Action CallingEndpointWith(ITogglClient togglClient, TParameter parameter)
-            => () => CallEndpointWith(togglClient, parameter).Wait();
+        protected Func<Task> CallingEndpointWith(ITogglClient togglClient, TParameter parameter)
+            => async () => await CallEndpointWith(togglClient, parameter);
 
-        protected Action CallingEndpointWith(Credentials credentials, TParameter parameter)
-            => () => CallEndpointWith(credentials, parameter).Wait();
+        protected Func<Task> CallingEndpointWith(Credentials credentials, TParameter parameter)
+            => async () => await CallEndpointWith(credentials, parameter);
 
         protected sealed override IObservable<T> CallEndpointWith(ITogglClient togglClient)
         {
-            var user = togglClient.User.Get().Wait();
-
-            var parameter = GetDefaultParameter(user, togglClient);
-
-            return CallEndpointWith(togglClient, parameter);
+            return Observable.Defer(async () =>
+            {
+                var user = await togglClient.User.Get();
+                var parameter = GetDefaultParameter(user, togglClient);
+                
+                return CallEndpointWith(togglClient, parameter);
+            });
         }
     }
 }

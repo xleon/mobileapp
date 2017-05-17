@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Toggl.Ultrawave.Serialization;
 using Xunit;
 

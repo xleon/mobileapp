@@ -12,8 +12,8 @@ namespace Toggl.Ultrawave.Tests.Integration
     {
         protected abstract IObservable<T> CallEndpointWith(ITogglClient togglClient);
 
-        protected Action CallingEndpointWith(ITogglClient togglClient)
-            => () => CallEndpointWith(togglClient).Wait();
+        protected Func<Task> CallingEndpointWith(ITogglClient togglClient)
+            => async () => await CallEndpointWith(togglClient);
 
         [Fact]
         public async Task WorksWithPassword()
