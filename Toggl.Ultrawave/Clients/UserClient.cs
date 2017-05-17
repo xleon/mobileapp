@@ -16,9 +16,9 @@ namespace Toggl.Ultrawave.Clients
         }
 
         public IObservable<User> Get()
-        {
-            var observable = CreateObservable<User>(endPoints.Get, AuthHeader);
-            return observable;
-        }
-   }
+            => CreateObservable<User>(endPoints.Get, AuthHeader);
+
+        public IObservable<User> Get(Credentials credentials)
+            => CreateObservable<User>(endPoints.Get, credentials.Header);
+    }
 }

@@ -80,6 +80,7 @@
     <Compile Include="Models\TagTests.cs" />
     <Compile Include="Serialization\JsonSerializerTests.cs" />
     <Compile Include="Clients\StatusClientTests.cs" />
+    <Compile Include="Clients\UserClientTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">
