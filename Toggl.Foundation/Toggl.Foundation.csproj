@@ -38,10 +38,14 @@
     <Compile Include="DataSources\Interfaces\IUserSource.cs" />
     <Compile Include="DataSources\Interfaces\IWorkspacesSource.cs" />
     <Compile Include="DataSources\TogglDataSource.cs" />
+    <Compile Include="Models\FoundationModels.cs">
+      <DependentUpon>FoundationModels.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataSources\" />
     <Folder Include="DataSources\Interfaces\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">
@@ -70,6 +74,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Models\FoundationModels.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>FoundationModels.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
