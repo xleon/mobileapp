@@ -39,6 +39,7 @@
     <Compile Include="Exceptions\DatabaseException.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="ISingleObjectStorage.cs" />
+    <Compile Include="Exceptions\EntityAlreadyExistsException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">

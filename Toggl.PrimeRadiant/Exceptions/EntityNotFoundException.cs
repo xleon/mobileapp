@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Toggl.PrimeRadiant.Exceptions
+﻿namespace Toggl.PrimeRadiant.Exceptions
 {
     public class EntityNotFoundException : DatabaseException
     {
@@ -13,11 +11,6 @@ namespace Toggl.PrimeRadiant.Exceptions
 
         public EntityNotFoundException(string message)
             : base(message)
-        {
-        }
-
-        public EntityNotFoundException(InvalidOperationException ex)
-            : base(defaultErrorMessage, ex)
         {
         }
     }

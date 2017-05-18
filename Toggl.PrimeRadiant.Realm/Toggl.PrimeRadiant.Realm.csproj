@@ -41,6 +41,11 @@
     <Compile Include="Models\RealmClient.cs" />
     <Compile Include="Models\RealmTimeEntry.cs" />
     <Compile Include="Models\RealmProject.cs" />
+    <Compile Include="Database.cs" />
+    <Compile Include="RealmAdapter.cs" />
+    <Compile Include="Repository.cs" />
+    <Compile Include="BaseStorage.cs" />
+    <Compile Include="SingleObjectStorage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">

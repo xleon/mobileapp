@@ -38,6 +38,10 @@
     <Compile Include="Models\ITask.cs" />
     <Compile Include="Models\IProject.cs" />
     <Compile Include="Models\ITimeEntry.cs" />
+    <Compile Include="Extensions\FunctionalExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
