@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Ultrawave
+namespace Toggl.Ultrawave.Clients
 {
     public interface IStatusClient
     {

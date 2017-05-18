@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Network;
 
-namespace Toggl.Ultrawave
+namespace Toggl.Ultrawave.Clients
 {
     internal sealed class StatusClient : IStatusClient
     {

@@ -3,13 +3,13 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
+using Toggl.Ultrawave.Clients;
 using Toggl.Ultrawave.Network;
 using Xunit;
 using static System.Net.HttpStatusCode;
 
 namespace Toggl.Ultrawave.Tests.Clients
 {
-
     public class StatusClientTests
     {
         public class TheGetMethod
