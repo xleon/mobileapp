@@ -2,8 +2,7 @@
 <#@ assembly name="System.Core" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
-using System;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.Models
 {
@@ -23,20 +22,31 @@ namespace Toggl.Foundation.Models
         if (!isFirstClass)
             WriteLine("");
 
-        WriteLine($"    internal partial class {className} : IDatabase{className}");
+        WriteLine($"    internal partial class {className}");
         WriteLine( "    {");
-        WriteLine( "        public int Id { get; }\n");
+        WriteLine($"        private {className}({interfaceName} entity, bool isDirty)");
+        WriteLine( "        {");
+        WriteLine( "            Id = entity.Id;");
 
         foreach(var line in File.ReadAllLines(modelFile))
         {
             var isProperty = line.Contains("get;");
             if (!isProperty) continue;
 
-            WriteLine($"        public {line.Trim()}\n");
+            var trimmedLine = line.Trim();
+            var indexOfPropName = trimmedLine.IndexOf(" ") + 1;
+            var propName = trimmedLine.Substring(indexOfPropName, trimmedLine.Length - 9 - indexOfPropName);
+
+            WriteLine($"            {propName} = entity.{propName};");
         }
 
-        WriteLine("        public bool IsDirty { get; }");
-        WriteLine("    }");
+        WriteLine( "            IsDirty = isDirty;");
+        WriteLine( "        }\n");
+        WriteLine($"        public static {className} Clean({interfaceName} entity)");
+        WriteLine($"            => new {className}(entity, false);\n");
+        WriteLine($"        public static {className} Dirty({interfaceName} entity)");
+        WriteLine($"            => new {className}(entity, true);");
+        WriteLine( "    }");
 
         isFirstClass = false;
     }

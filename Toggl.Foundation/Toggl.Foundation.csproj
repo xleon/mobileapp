@@ -41,6 +41,9 @@
     <Compile Include="Models\FoundationModels.cs">
       <DependentUpon>FoundationModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FoundationConstructors.cs">
+      <DependentUpon>FoundationConstructors.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataSources\" />
@@ -77,6 +80,10 @@
     <None Include="Models\FoundationModels.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>FoundationModels.cs</LastGenOutput>
+    </None>
+    <None Include="Models\FoundationConstructors.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>FoundationConstructors.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

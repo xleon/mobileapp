@@ -3,130 +3,130 @@ using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Models
 {
-    internal class FoundationClient : IDatabaseClient
+    internal partial class Client : IDatabaseClient
     {
-        public int Id { get; set; }
+        public int Id { get; }
 
-        public int WorkspaceId { get; set; }
+        public int WorkspaceId { get; }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public DateTimeOffset At { get; set; }
+        public DateTimeOffset At { get; }
 
-        public bool IsDirty { get; set; }
+        public bool IsDirty { get; }
     }
 
-    internal class FoundationProject : IDatabaseProject
+    internal partial class Project : IDatabaseProject
     {
-        public int Id { get; set; }
+        public int Id { get; }
 
-        public bool IsDirty { get; set; }
+        public bool IsDirty { get; }
     }
 
-    internal class FoundationTag : IDatabaseTag
+    internal partial class Tag : IDatabaseTag
     {
-        public int Id { get; set; }
+        public int Id { get; }
 
-        public int WorkspaceId { get; set; }
+        public int WorkspaceId { get; }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public bool IsDirty { get; set; }
+        public bool IsDirty { get; }
     }
 
-    internal class FoundationTask : IDatabaseTask
+    internal partial class Task : IDatabaseTask
     {
-        public int Id { get; set; }
+        public int Id { get; }
 
-        public bool IsDirty { get; set; }
+        public bool IsDirty { get; }
     }
 
-    internal class FoundationTimeEntry : IDatabaseTimeEntry
+    internal partial class TimeEntry : IDatabaseTimeEntry
     {
-        public int Id { get; set; }
+        public int Id { get; }
 
-        public bool IsDirty { get; set; }
+        public bool IsDirty { get; }
     }
 
-    internal class FoundationUser : IDatabaseUser
+    internal partial class User : IDatabaseUser
     {
-        public int Id { get; set; }
+        public int Id { get; }
 
-        public string ApiToken { get; set; }
+        public string ApiToken { get; }
 
-        public int DefaultWorkspaceId { get; set; }
+        public int DefaultWorkspaceId { get; }
 
-        public string Email { get; set; }
+        public string Email { get; }
 
-        public string Fullname { get; set; }
+        public string Fullname { get; }
 
-        public string TimeOfDayFormat { get; set; }
+        public string TimeOfDayFormat { get; }
 
-        public string DateFormat { get; set; }
+        public string DateFormat { get; }
 
-        public bool StoreStartAndStopTime { get; set; }
+        public bool StoreStartAndStopTime { get; }
 
-        public int BeginningOfWeek { get; set; }
+        public int BeginningOfWeek { get; }
 
-        public string Language { get; set; }
+        public string Language { get; }
 
-        public string ImageUrl { get; set; }
+        public string ImageUrl { get; }
 
-        public bool SidebarPiechart { get; set; }
+        public bool SidebarPiechart { get; }
 
-        public DateTimeOffset At { get; set; }
+        public DateTimeOffset At { get; }
 
-        public int Retention { get; set; }
+        public int Retention { get; }
 
-        public bool RecordTimeline { get; set; }
+        public bool RecordTimeline { get; }
 
-        public bool RenderTimeline { get; set; }
+        public bool RenderTimeline { get; }
 
-        public bool TimelineEnabled { get; set; }
+        public bool TimelineEnabled { get; }
 
-        public bool TimelineExperiment { get; set; }
+        public bool TimelineExperiment { get; }
 
-        public bool IsDirty { get; set; }
+        public bool IsDirty { get; }
     }
 
-    internal class FoundationWorkspace : IDatabaseWorkspace
+    internal partial class Workspace : IDatabaseWorkspace
     {
-        public int Id { get; set; }
+        public int Id { get; }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public int Profile { get; set; }
+        public int Profile { get; }
 
-        public bool Premium { get; set; }
+        public bool Premium { get; }
 
-        public bool BusinessWs { get; set; }
+        public bool BusinessWs { get; }
 
-        public bool Admin { get; set; }
+        public bool Admin { get; }
 
-        public DateTimeOffset? SuspendedAt { get; set; }
+        public DateTimeOffset? SuspendedAt { get; }
 
-        public DateTimeOffset? ServerDeletedAt { get; set; }
+        public DateTimeOffset? ServerDeletedAt { get; }
 
-        public double? DefaultHourlyRate { get; set; }
+        public double? DefaultHourlyRate { get; }
 
-        public string DefaultCurrency { get; set; }
+        public string DefaultCurrency { get; }
 
-        public bool OnlyAdminsMayCreateProjects { get; set; }
+        public bool OnlyAdminsMayCreateProjects { get; }
 
-        public bool OnlyAdminsSeeBillableRates { get; set; }
+        public bool OnlyAdminsSeeBillableRates { get; }
 
-        public bool OnlyAdminsSeeTeamDashboard { get; set; }
+        public bool OnlyAdminsSeeTeamDashboard { get; }
 
-        public bool ProjectsBillableByDefault { get; set; }
+        public bool ProjectsBillableByDefault { get; }
 
-        public int Rounding { get; set; }
+        public int Rounding { get; }
 
-        public int RoundingMinutes { get; set; }
+        public int RoundingMinutes { get; }
 
-        public DateTimeOffset? At { get; set; }
+        public DateTimeOffset? At { get; }
 
-        public string LogoUrl { get; set; }
+        public string LogoUrl { get; }
 
-        public bool IsDirty { get; set; }
+        public bool IsDirty { get; }
     }
 }
