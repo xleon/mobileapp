@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DataSources\UserDataSourceTests.cs" />
     <Compile Include="MvvmCross\ViewModels\LoginViewModelTests.cs" />
     <Compile Include="MvvmCross\ViewModels\BaseViewModelTests.cs" />
   </ItemGroup>

@@ -5,8 +5,6 @@ namespace Toggl.Foundation.DataSources
 {
     public interface IUserSource
     {
-        bool IsLoggedIn { get; }
-
         IObservable<IUser> Login(string username, string password);
     }
 }
