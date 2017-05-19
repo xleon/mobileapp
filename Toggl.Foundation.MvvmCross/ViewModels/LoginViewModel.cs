@@ -11,35 +11,36 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     {
         private IDisposable loginDisposable;
 
-        public LoginViewModel()
-        {
-            LoginCommand = new MvxCommand(login, loginCanExecute);
-        }
-
         public string Email { get; set; }
 
         public string Password { get; set; }
 
         public IMvxCommand LoginCommand { get; }
 
+        public LoginViewModel()
+        {
+            LoginCommand = new MvxCommand(login, loginCanExecute);
+        }
+
         private void login()
         {
             loginDisposable =
                 DataSource.User
                           .Login(Email, Password)
-                          .Subscribe(OnUser, OnError);
+                          .Subscribe(onUser, onError);
 
             LoginCommand.RaiseCanExecuteChanged();
         }
 
         private bool loginCanExecute() => loginDisposable == null;
 
-        private void OnUser(IUser user)
+        private void onUser(IUser user)
         {
-            
+            loginDisposable = null;
+            LoginCommand.RaiseCanExecuteChanged();
         }
 
-        private void OnError(Exception ex)
+        private void onError(Exception ex)
         {
             loginDisposable = null;
             LoginCommand.RaiseCanExecuteChanged();
