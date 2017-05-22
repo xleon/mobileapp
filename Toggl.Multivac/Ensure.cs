@@ -15,6 +15,8 @@ namespace Toggl.Multivac
 
         public static void UriIsAbsolute(Uri uri, string argumentName)
         {
+            ArgumentIsNotNull(uri, argumentName);
+            
             if (uri.IsAbsoluteUri)
                 return;
 
