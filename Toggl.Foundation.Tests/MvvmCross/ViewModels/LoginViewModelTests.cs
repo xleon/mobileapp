@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
@@ -92,10 +92,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public void RegistersANewApiWithTheReturnedUserToken()
             {
-                var expectedClient = Substitute.For<ITogglClient>();
-
-                ApiFactory.CreateApiWith(Arg.Any<Credentials>())
-                          .Returns(expectedClient);
+                var oldClient = Ioc.Resolve<ITogglDataSource>();
 
                 DataSource.User
                     .Login(Arg.Any<string>(), Arg.Any<string>())
@@ -104,7 +101,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.LoginCommand.Execute();
 
                 var actualClient = Ioc.Resolve<ITogglClient>();
-                actualClient.Should().Be(expectedClient);
+                actualClient.Should().NotBe(oldClient);
             }
 
             [Fact]
