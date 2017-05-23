@@ -34,6 +34,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="App.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="Services\IApiFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MvvmCross.Platform">

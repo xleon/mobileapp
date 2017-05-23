@@ -8,6 +8,9 @@ using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Exceptions;
 using Xunit;
 using Microsoft.Reactive.Testing;
+using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Ultrawave.Network;
+using Toggl.Foundation.DataSources;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -15,9 +18,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         public abstract class LoginViewModelTest : BaseViewModelTests<LoginViewModel>
         {
+            protected IUser User { get; } = new User { Id = 10, ApiToken = "1337" };
             protected TestScheduler TestScheduler { get; } = new TestScheduler();
+            protected IApiFactory ApiFactory { get; } = Substitute.For<IApiFactory>();
 
-            protected IUser User { get; } = new User { Id = 10 };
+            protected override void AdditionalSetup()
+            {
+                base.AdditionalSetup();
+
+                Ioc.RegisterSingleton(ApiFactory);
+            }
         }
 
         public class TheLoginCommand : LoginViewModelTest
@@ -52,14 +62,63 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void CanBeExecutedAgainIfTheObservableFails()
             {
                 DataSource.User
-                          .Login(Arg.Any<string>(), Arg.Any<string>())
-                          .Returns(Observable.Throw<IUser>(new ApiException(""))
-                                             .SubscribeOn(TestScheduler));
+                    .Login(Arg.Any<string>(), Arg.Any<string>())
+                    .Returns(Observable.Throw<IUser>(new ApiException(""))
+                        .SubscribeOn(TestScheduler));
 
                 ViewModel.LoginCommand.Execute();
                 TestScheduler.Start();
 
                 ViewModel.LoginCommand.CanExecute().Should().BeTrue();
+            }
+
+            [Fact]
+            public void CreatesANewApiWithTheReturnedUserToken()
+            {
+                var expectedHeader = Credentials.WithApiToken(User.ApiToken).Header;
+
+                DataSource.User
+                    .Login(Arg.Any<string>(), Arg.Any<string>())
+                    .Returns(Observable.Return(User));
+
+                ViewModel.LoginCommand.Execute();
+
+                ApiFactory.Received()
+                          .CreateApiWith(Arg.Is<Credentials>(
+                              credentials => credentials.Header.Value == expectedHeader.Value)
+                          );
+            }
+
+            [Fact]
+            public void RegistersANewApiWithTheReturnedUserToken()
+            {
+                var expectedClient = Substitute.For<ITogglClient>();
+
+                ApiFactory.CreateApiWith(Arg.Any<Credentials>())
+                          .Returns(expectedClient);
+
+                DataSource.User
+                    .Login(Arg.Any<string>(), Arg.Any<string>())
+                    .Returns(Observable.Return(User));
+
+                ViewModel.LoginCommand.Execute();
+
+                var actualClient = Ioc.Resolve<ITogglClient>();
+                actualClient.Should().Be(expectedClient);
+            }
+
+            [Fact]
+            public void RegisterANewDataSourceWithTheReturnedUserToken()
+            {
+                var oldDataSource = Ioc.Resolve<ITogglDataSource>();
+                DataSource.User
+                    .Login(Arg.Any<string>(), Arg.Any<string>())
+                    .Returns(Observable.Return(User));
+
+                ViewModel.LoginCommand.Execute();
+
+                var newDataSource = Ioc.Resolve<ITogglDataSource>();
+                newDataSource.Should().NotBe(oldDataSource);
             }
         }
     }

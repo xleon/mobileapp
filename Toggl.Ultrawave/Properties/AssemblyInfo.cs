@@ -14,6 +14,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCulture("")]
 [assembly: InternalsVisibleTo("Toggl.Ultrawave.Tests")]
 [assembly: InternalsVisibleTo("Toggl.Ultrawave.Tests.Integration")]
+[assembly: InternalsVisibleTo("Toggl.Foundation.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
 // The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".

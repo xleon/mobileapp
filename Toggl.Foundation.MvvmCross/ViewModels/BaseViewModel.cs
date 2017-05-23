@@ -6,7 +6,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     public class BaseViewModel : MvxViewModel
     {
-        private ITogglDataSource dataSource;
-        protected ITogglDataSource DataSource => dataSource ?? (dataSource = Mvx.Resolve<ITogglDataSource>());
+        protected ITogglDataSource DataSource => Mvx.Resolve<ITogglDataSource>();
     }
 }

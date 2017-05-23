@@ -2,6 +2,8 @@
 using NSubstitute;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.PrimeRadiant;
+using Toggl.Ultrawave;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -17,9 +19,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         protected TViewModel ViewModel { get; }
 
+        protected ITogglClient Api { get; } = Substitute.For<ITogglClient>();
+        protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
         protected ITogglDataSource DataSource { get; } = Substitute.For<ITogglDataSource>();
 
         protected override void AdditionalSetup()
-            => Ioc.RegisterSingleton(DataSource);
+        {
+            Ioc.RegisterSingleton(Api);
+            Ioc.RegisterSingleton(Database);
+            Ioc.RegisterSingleton(DataSource);
+        }
      }
 }
