@@ -6,6 +6,7 @@ using FluentAssertions;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Tests.Integration.Helper;
 using Xunit;
+using Toggl.Ultrawave.Tests.Integration.BaseTests;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
@@ -30,12 +31,19 @@ namespace Toggl.Ultrawave.Tests.Integration
             }
         }
 
-        public class TheGetByIdMethod : AuthenticatedEndpointWithParameterBaseTests<Workspace, int>
+        public class TheGetByIdMethod : AuthenticatedGetEndpointBaseTests<Workspace>
         {
-            protected override int GetDefaultParameter(Ultrawave.User user, ITogglClient togglClient)
-                => user.DefaultWorkspaceId;
+            protected override IObservable<Workspace> CallEndpointWith(ITogglClient togglClient)
+                => Observable.Defer(async () =>
+                {
+                    var user = await togglClient.User.Get();
+                    return CallEndpointWith(togglClient, user.DefaultWorkspaceId);
+                });
 
-            protected override IObservable<Workspace> CallEndpointWith(ITogglClient togglClient, int id)
+            private Func<Task> CallingEndpointWith(ITogglClient togglClient, int id)
+                => async () => await CallEndpointWith(togglClient, id);
+
+            private IObservable<Workspace> CallEndpointWith(ITogglClient togglClient, int id)
                 => togglClient.Workspaces.GetById(id);
 
             [Fact]

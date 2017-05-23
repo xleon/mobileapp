@@ -1,5 +1,6 @@
 ﻿﻿using System;
 using Toggl.Multivac.Models;
+using Toggl.Ultrawave.Tests.Integration.BaseTests;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
