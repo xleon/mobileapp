@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Toggl.Multivac;
 using Toggl.Ultrawave.Network;
 
 namespace Toggl.Ultrawave.Tests.Integration
@@ -16,7 +17,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             return Credentials.WithPassword(email, password);
         }
 
-        public static async Task<(string email, string password)> CreateEmailPassword()
+        public static async Task<(Email email, string password)> CreateEmailPassword()
         {
             ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
 
@@ -32,7 +33,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 await client.PostAsync(url, content);
             }
 
-            return (email, password);
+            return (Email.FromString(email), password);
         }
     }
 }

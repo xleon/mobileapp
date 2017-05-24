@@ -15,10 +15,11 @@ namespace Toggl.Ultrawave.Network
 
         public static Credentials None => new Credentials(HttpHeader.None);
 
-        public static Credentials WithPassword(string email, string password)
+        public static Credentials WithPassword(Email email, string password)
         {
-            Ensure.ArgumentIsNotNull(email, nameof(password));
             Ensure.ArgumentIsNotNull(password, nameof(password));
+            if (!email.IsValid)
+                throw new ArgumentException("A valid email must be provided when creating credentials");
 
             var header = authorizationHeaderWithValue($"{email}:{password}");
 

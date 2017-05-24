@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
+using Toggl.Multivac.Extensions;
 using Toggl.Foundation.DataSources;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
@@ -34,21 +35,21 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public async Task ShouldCreateCredentialsInsteadOfUsingTheOnesTheUserClientHas()
             {
-                await userSource.Login("susancalvin@psychohistorian.museum", "theirobotmoviesucked123");
+                await userSource.Login("susancalvin@psychohistorian.museum".ToEmail(), "theirobotmoviesucked123");
                 await userClient.Received().Get(Arg.Any<Credentials>());
             }
 
             [Fact]
             public async Task ShouldPersistTheUserToTheDatabase()
             {
-                await userSource.Login("susancalvin@psychohistorian.museum", "theirobotmoviesucked123");
+                await userSource.Login("susancalvin@psychohistorian.museum".ToEmail(), "theirobotmoviesucked123");
                 await storage.Received().Create(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.Id == user.Id));
             }
 
             [Fact]
             public async Task ShouldAlwaysReturnASingleResult()
             {
-                var actualUser = await userSource.Login("susancalvin@psychohistorian.museum", "theirobotmoviesucked123")
+                var actualUser = await userSource.Login("susancalvin@psychohistorian.museum".ToEmail(), "theirobotmoviesucked123")
                                                  .SingleAsync();
 
                 actualUser.Should().Be(user);

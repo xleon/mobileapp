@@ -25,7 +25,7 @@ namespace Toggl.Foundation.DataSources
             this.userClient = userClient;
         }
 
-        public IObservable<IUser> Login(string username, string password)
+        public IObservable<IUser> Login(Email username, string password)
             => Credentials.WithPassword(username, password)
                           .Apply(userClient.Get)
                           .Do(persist);

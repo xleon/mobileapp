@@ -39,6 +39,8 @@
     <Compile Include="Models\IProject.cs" />
     <Compile Include="Models\ITimeEntry.cs" />
     <Compile Include="Extensions\FunctionalExtensions.cs" />
+    <Compile Include="Email.cs" />
+    <Compile Include="Extensions\EmailExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />

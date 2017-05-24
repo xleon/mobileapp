@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Toggl.Multivac.Extensions;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using Xunit;
@@ -35,7 +36,7 @@ namespace Toggl.Ultrawave.Tests.Integration.BaseTests
         [Fact]
         public void FailsForNonExistingUser()
         {
-            var email = $"non-existing-email-{Guid.NewGuid()}@ironicmocks.toggl.com";
+            var email = $"non-existing-email-{Guid.NewGuid()}@ironicmocks.toggl.com".ToEmail();
             var wrongCredentials = Credentials.WithPassword(email, "123456789");
 
             CallingEndpointWith(TogglClientWith(wrongCredentials)).ShouldThrow<ApiException>();
