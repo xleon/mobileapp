@@ -28,7 +28,7 @@ namespace Toggl.Ultrawave
             User = new UserClient(endpoints.User, apiClient, serializer, credentials);
             Tasks = new TasksClient();
             Status = new StatusClient(apiClient);
-            Clients = new ClientsClient();
+            Clients = new ClientsClient(endpoints.Clients, apiClient, serializer, credentials);
             Projects = new ProjectsClient();
             Workspaces = new WorkspacesClient(endpoints.Workspaces, apiClient, serializer, credentials);
             TimeEntries = new TimeEntriesClient();

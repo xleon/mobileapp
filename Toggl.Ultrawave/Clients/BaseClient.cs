@@ -27,6 +27,11 @@ namespace Toggl.Ultrawave.Clients
             this.AuthHeader = credentials.Header;
         }
 
+        protected IObservable<T> CreateObservable<T>(Endpoint endpoint, HttpHeader header, T entity, SerializationReason serializationReason) {
+            var body = serializer.Serialize<T>(entity, serializationReason);
+            return CreateObservable<T>(endpoint, header, body);
+        }
+        
         protected IObservable<T> CreateObservable<T>(Endpoint endpoint, HttpHeader header, string body = "")
             => CreateObservable<T>(endpoint, new [] { header }, body);
 
