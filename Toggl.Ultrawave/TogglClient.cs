@@ -31,7 +31,7 @@ namespace Toggl.Ultrawave
             Clients = new ClientsClient(endpoints.Clients, apiClient, serializer, credentials);
             Projects = new ProjectsClient();
             Workspaces = new WorkspacesClient(endpoints.Workspaces, apiClient, serializer, credentials);
-            TimeEntries = new TimeEntriesClient();
+            TimeEntries = new TimeEntriesClient(endpoints.TimeEntries, apiClient, serializer, credentials);
         }
 
         public ITagsClient Tags { get; }

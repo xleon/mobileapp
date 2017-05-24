@@ -79,6 +79,7 @@
     <Compile Include="BaseTests\AuthenticatedEndpointBaseTests.cs" />
     <Compile Include="StatusClientTests.cs" />
     <Compile Include="UserClientTests.cs" />
+    <Compile Include="TimeEntriesClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helper\User.cs" />
     <Compile Include="WorkspacesClientTests.cs" />
