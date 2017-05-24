@@ -1,4 +1,5 @@
-﻿﻿using System;
+﻿using System;
+using System.Collections.Generic;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Models
@@ -44,6 +45,34 @@ namespace Toggl.Foundation.Models
     internal partial class TimeEntry : IDatabaseTimeEntry
     {
         public int Id { get; }
+
+        public int WorkspaceId { get; }
+
+        public int? ProjectId { get; }
+
+        public int? TaskId { get; }
+
+        public bool Billable { get; }
+
+        public DateTimeOffset Start { get; }
+
+        public DateTimeOffset? Stop { get; }
+
+        public int Duration { get; }
+
+        public string Description { get; }
+
+        public IList<string> Tags { get; }
+
+        public IList<int> TagIds { get; }
+
+        public DateTimeOffset At { get; }
+
+        public DateTimeOffset? ServerDeletedAt { get; }
+
+        public int UserId { get; }
+
+        public string CreatedWith { get; }
 
         public bool IsDirty { get; }
     }

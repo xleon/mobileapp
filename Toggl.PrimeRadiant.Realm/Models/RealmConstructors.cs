@@ -1,4 +1,4 @@
-﻿﻿using Realms;
+﻿using Realms;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant.Models;
 
@@ -115,6 +115,20 @@ namespace Toggl.PrimeRadiant.Realm
         public RealmTimeEntry(ITimeEntry entity)
         {
             Id = entity.Id;
+            WorkspaceId = entity.WorkspaceId;
+            ProjectId = entity.ProjectId;
+            TaskId = entity.TaskId;
+            Billable = entity.Billable;
+            Start = entity.Start;
+            Stop = entity.Stop;
+            Duration = entity.Duration;
+            Description = entity.Description;
+            Tags = entity.Tags;
+            TagIds = entity.TagIds;
+            At = entity.At;
+            ServerDeletedAt = entity.ServerDeletedAt;
+            UserId = entity.UserId;
+            CreatedWith = entity.CreatedWith;
             IsDirty = true;
         }
     }
