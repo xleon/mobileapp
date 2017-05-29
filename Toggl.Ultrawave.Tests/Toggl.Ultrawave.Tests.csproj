@@ -75,6 +75,7 @@
     <Compile Include="Models\UserTests.cs" />
     <Compile Include="Models\WorkspaceTests.cs" />
     <Compile Include="Models\ClientTests.cs" />
+    <Compile Include="Models\SerializationHelper.cs" />
     <Compile Include="Models\BaseModelTests.cs" />
     <Compile Include="Clients\TestClient.cs" />
     <Compile Include="Clients\BaseClientTests.cs" />
