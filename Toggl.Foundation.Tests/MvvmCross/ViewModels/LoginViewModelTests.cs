@@ -128,7 +128,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public void RegistersANewApiWithTheReturnedUserToken()
             {
-                var oldClient = Ioc.Resolve<ITogglDataSource>();
+                var oldApi = Ioc.Resolve<ITogglApi>();
 
                 DataSource.User
                     .Login(Arg.Any<Email>(), Arg.Any<string>())
@@ -136,8 +136,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.LoginCommand.Execute();
 
-                var actualClient = Ioc.Resolve<ITogglClient>();
-                actualClient.Should().NotBe(oldClient);
+                var actualApi = Ioc.Resolve<ITogglApi>();
+                actualApi.Should().NotBe(oldApi);
             }
 
             [Fact]

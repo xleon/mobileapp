@@ -37,8 +37,8 @@ namespace Toggl.Ultrawave.Tests.Integration
                     && entry.UserId == user.Id);
             }
 
-            protected override IObservable<List<TimeEntry>> CallEndpointWith(ITogglClient togglClient)
-                => togglClient.TimeEntries.GetAll();
+            protected override IObservable<List<TimeEntry>> CallEndpointWith(ITogglApi togglApi)
+                => togglApi.TimeEntries.GetAll();
 
             private TimeEntry createTimeEntry(Ultrawave.User user) => new TimeEntry
             {
@@ -73,16 +73,16 @@ namespace Toggl.Ultrawave.Tests.Integration
                 persistedTimeEntry.TaskId.Should().BeNull();
             }
             
-            protected override IObservable<TimeEntry> CallEndpointWith(ITogglClient togglClient)
+            protected override IObservable<TimeEntry> CallEndpointWith(ITogglApi togglApi)
                 => Observable.Defer(async () =>
                 {
-                    var user = await togglClient.User.Get();
+                    var user = await togglApi.User.Get();
                     var timeEntry = createTimeEntry(user);
-                    return CallEndpointWith(togglClient, timeEntry);
+                    return CallEndpointWith(togglApi, timeEntry);
                 });
 
-            private IObservable<TimeEntry> CallEndpointWith(ITogglClient togglClient, TimeEntry client)
-                => togglClient.TimeEntries.Create(client);
+            private IObservable<TimeEntry> CallEndpointWith(ITogglApi togglApi, TimeEntry client)
+                => togglApi.TimeEntries.Create(client);
 
             private TimeEntry createTimeEntry(Ultrawave.User user) => new TimeEntry
             {

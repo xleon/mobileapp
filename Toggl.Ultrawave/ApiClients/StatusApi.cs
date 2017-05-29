@@ -5,13 +5,13 @@ using System.Reactive.Linq;
 using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Network;
 
-namespace Toggl.Ultrawave.Clients
+namespace Toggl.Ultrawave.ApiClients
 {
-    internal sealed class StatusClient : IStatusClient
+    internal sealed class StatusApi : IStatusApi
     {
         private readonly IApiClient apiClient;
 
-        public StatusClient(IApiClient apiClient)
+        public StatusApi(IApiClient apiClient)
         {
             this.apiClient = apiClient;
         }

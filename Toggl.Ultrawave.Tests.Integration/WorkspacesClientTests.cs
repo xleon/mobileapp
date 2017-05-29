@@ -14,8 +14,8 @@ namespace Toggl.Ultrawave.Tests.Integration
     {
         public class TheGetMethod : AuthenticatedEndpointBaseTests<List<Workspace>>
         {
-            protected override IObservable<List<Workspace>> CallEndpointWith(ITogglClient togglClient)
-                => togglClient.Workspaces.GetAll();
+            protected override IObservable<List<Workspace>> CallEndpointWith(ITogglApi togglApi)
+                => togglApi.Workspaces.GetAll();
 
             [Fact]
             public async Task ReturnsAllWorkspaces()
@@ -33,18 +33,18 @@ namespace Toggl.Ultrawave.Tests.Integration
 
         public class TheGetByIdMethod : AuthenticatedGetEndpointBaseTests<Workspace>
         {
-            protected override IObservable<Workspace> CallEndpointWith(ITogglClient togglClient)
+            protected override IObservable<Workspace> CallEndpointWith(ITogglApi togglApi)
                 => Observable.Defer(async () =>
                 {
-                    var user = await togglClient.User.Get();
-                    return CallEndpointWith(togglClient, user.DefaultWorkspaceId);
+                    var user = await togglApi.User.Get();
+                    return CallEndpointWith(togglApi, user.DefaultWorkspaceId);
                 });
 
-            private Func<Task> CallingEndpointWith(ITogglClient togglClient, int id)
-                => async () => await CallEndpointWith(togglClient, id);
+            private Func<Task> CallingEndpointWith(ITogglApi togglApi, int id)
+                => async () => await CallEndpointWith(togglApi, id);
 
-            private IObservable<Workspace> CallEndpointWith(ITogglClient togglClient, int id)
-                => togglClient.Workspaces.GetById(id);
+            private IObservable<Workspace> CallEndpointWith(ITogglApi togglApi, int id)
+                => togglApi.Workspaces.GetById(id);
 
             [Fact]
             public async Task ReturnsDefaultWorkspace()

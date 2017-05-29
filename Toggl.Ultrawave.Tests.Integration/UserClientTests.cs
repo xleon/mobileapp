@@ -8,8 +8,8 @@ namespace Toggl.Ultrawave.Tests.Integration
     {
         public class TheGetMethod : AuthenticatedEndpointBaseTests<IUser>
         {
-            protected override IObservable<IUser> CallEndpointWith(ITogglClient togglClient)
-                => togglClient.User.Get();
+            protected override IObservable<IUser> CallEndpointWith(ITogglApi togglApi)
+                => togglApi.User.Get();
 
             // TODO: check that expected data is returned
         }

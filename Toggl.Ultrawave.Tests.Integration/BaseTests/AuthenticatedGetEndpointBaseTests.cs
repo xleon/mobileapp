@@ -13,7 +13,7 @@ namespace Toggl.Ultrawave.Tests.Integration.BaseTests
         public async Task ReturnsTheSameWhetherUsingPasswordOrApiToken()
         {
             var (passwordClient, user) = await SetupTestUser();
-            var apiTokenClient = TogglClientWith(Credentials.WithApiToken(user.ApiToken));
+            var apiTokenClient = TogglApiWith(Credentials.WithApiToken(user.ApiToken));
             
             var passwordReturn = await CallEndpointWith(passwordClient);
             var apiTokenReturn = await CallEndpointWith(apiTokenClient);

@@ -9,9 +9,9 @@ using Toggl.Ultrawave.Serialization;
 using Xunit;
 using static System.Net.HttpStatusCode;
 
-namespace Toggl.Ultrawave.Tests.Clients
+namespace Toggl.Ultrawave.Tests.ApiClients
 {
-    public class BaseClientTests
+    public class BaseApiTests
     {
         public class TheGetAuthHeaderMethod
         {
@@ -27,9 +27,9 @@ namespace Toggl.Ultrawave.Tests.Clients
                 var credentials = Credentials.WithPassword("susancalvin@psychohistorian.museum".ToEmail(), "theirobotmoviesucked123");
                 const string expectedHeader = "c3VzYW5jYWx2aW5AcHN5Y2hvaGlzdG9yaWFuLm11c2V1bTp0aGVpcm9ib3Rtb3ZpZXN1Y2tlZDEyMw==";
 
-                var client = new TestClient(endpoint, apiClient, serializer, credentials);
+                var testApi = new TestApi(endpoint, apiClient, serializer, credentials);
 
-                await client.Get();
+                await testApi.Get();
                 await apiClient.Received().Send(Arg.Is<Request>(request => verifyAuthHeader(request, expectedHeader)));
             }
 
@@ -55,9 +55,9 @@ namespace Toggl.Ultrawave.Tests.Clients
                 apiClient.Send(Arg.Any<Request>()).Returns(x => new Response("It lives", true, "text/plain", OK));
 
                 var endpoint = Endpoint.Get(ApiUrls.ForEnvironment(ApiEnvironment.Staging), "");
-                var client = new TestClient(endpoint, apiClient, serializer, credentials);
+                var testApi = new TestApi(endpoint, apiClient, serializer, credentials);
 
-                var observable = client.TestCreateObservable<string>(endpoint, Enumerable.Empty<HttpHeader>(), "");
+                var observable = testApi.TestCreateObservable<string>(endpoint, Enumerable.Empty<HttpHeader>(), "");
                 await observable.SingleAsync();
             }
         }

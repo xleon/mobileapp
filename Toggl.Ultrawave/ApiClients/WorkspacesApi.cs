@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
 
-namespace Toggl.Ultrawave.Clients
+namespace Toggl.Ultrawave.ApiClients
 {
-    internal sealed class WorkspacesClient : BaseClient, IWorkspacesClient
+    internal sealed class WorkspacesApi : BaseApi, IWorkspacesApi
     {
         private readonly WorkspaceEndpoints endPoints;
 
-        public WorkspacesClient(WorkspaceEndpoints endPoints, IApiClient apiClient, IJsonSerializer serializer,
+        public WorkspacesApi(WorkspaceEndpoints endPoints, IApiClient apiClient, IJsonSerializer serializer,
             Credentials credentials)
             : base(apiClient, serializer, credentials)
         {

@@ -1,9 +1,9 @@
 ﻿using System;
 using Toggl.Ultrawave.Network;
 
-namespace Toggl.Ultrawave.Clients
+namespace Toggl.Ultrawave.ApiClients
 {
-    public interface IUserClient
+    public interface IUserApi
     {
         IObservable<User> Get();
 

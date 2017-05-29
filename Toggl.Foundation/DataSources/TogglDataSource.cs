@@ -7,12 +7,12 @@ namespace Toggl.Foundation.DataSources
 {
     public sealed class TogglDataSource : ITogglDataSource
     {
-        public TogglDataSource(ITogglDatabase database, ITogglClient client)
+        public TogglDataSource(ITogglDatabase database, ITogglApi api)
         {
-            Ensure.ArgumentIsNotNull(client, nameof(client));
+            Ensure.ArgumentIsNotNull(api, nameof(api));
             Ensure.ArgumentIsNotNull(database, nameof(database));
 
-            User = new UserDataSource(database.User, client.User);
+            User = new UserDataSource(database.User, api.User);
         }
 
         public IUserSource User { get; }

@@ -7,7 +7,7 @@ using Toggl.Foundation.DataSources;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Ultrawave;
-using Toggl.Ultrawave.Clients;
+using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.Network;
 using Xunit;
 
@@ -19,7 +19,7 @@ namespace Toggl.Foundation.Tests.DataSources
         {
             private readonly User user = new User { Id = 10 } ;
 
-            private readonly IUserClient userClient = Substitute.For<IUserClient>();
+            private readonly IUserApi userApi = Substitute.For<IUserApi>();
             private readonly ISingleObjectStorage<IDatabaseUser> storage =
                 Substitute.For<ISingleObjectStorage<IDatabaseUser>>();
 
@@ -27,16 +27,16 @@ namespace Toggl.Foundation.Tests.DataSources
 
             public TheLoginMethod()
             {
-                userSource = new UserDataSource(storage, userClient);
+                userSource = new UserDataSource(storage, userApi);
 
-                userClient.Get(Arg.Any<Credentials>()).Returns(Observable.Return(user));
+                userApi.Get(Arg.Any<Credentials>()).Returns(Observable.Return(user));
             }
 
             [Fact]
             public async Task ShouldCreateCredentialsInsteadOfUsingTheOnesTheUserClientHas()
             {
                 await userSource.Login("susancalvin@psychohistorian.museum".ToEmail(), "theirobotmoviesucked123");
-                await userClient.Received().Get(Arg.Any<Credentials>());
+                await userApi.Received().Get(Arg.Any<Credentials>());
             }
 
             [Fact]

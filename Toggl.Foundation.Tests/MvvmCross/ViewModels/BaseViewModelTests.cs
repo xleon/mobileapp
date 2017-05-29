@@ -19,7 +19,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         protected TViewModel ViewModel { get; }
 
-        protected ITogglClient Api { get; } = Substitute.For<ITogglClient>();
+        protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
         protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
         protected ITogglDataSource DataSource { get; } = Substitute.For<ITogglDataSource>();
 

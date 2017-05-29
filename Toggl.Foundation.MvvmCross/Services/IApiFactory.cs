@@ -5,6 +5,6 @@ namespace Toggl.Foundation.MvvmCross.Services
 {
     public interface IApiFactory
     {
-        ITogglClient CreateApiWith(Credentials credentials);
+        ITogglApi CreateApiWith(Credentials credentials);
     }
 }

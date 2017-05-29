@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Toggl.Ultrawave.Clients
+namespace Toggl.Ultrawave.ApiClients
 {
-    public interface ITimeEntriesClient
+    public interface ITimeEntriesApi
     {
         IObservable<List<TimeEntry>> GetAll();
         IObservable<TimeEntry> Create(TimeEntry timeEntry);

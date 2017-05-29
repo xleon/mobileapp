@@ -3,7 +3,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Ultrawave.Clients;
+using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.Network;
 using Xunit;
 using static System.Net.HttpStatusCode;
@@ -14,12 +14,12 @@ namespace Toggl.Ultrawave.Tests.Clients
     {
         public class TheGetMethod
         {
-            private readonly StatusClient statusClient;
+            private readonly StatusApi statusApi;
             private readonly IApiClient apiClient = Substitute.For<IApiClient>();
 
             public TheGetMethod()
             {
-                statusClient = new StatusClient(apiClient);
+                statusApi = new StatusApi(apiClient);
             }
 
             [Fact]
@@ -31,7 +31,7 @@ namespace Toggl.Ultrawave.Tests.Clients
                     .Returns(async x => throw new WebException());
                 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
-                var status = await statusClient.Get();
+                var status = await statusApi.Get();
                 status.Should().BeFalse();
             }
 
@@ -42,7 +42,7 @@ namespace Toggl.Ultrawave.Tests.Clients
                     .Send(Arg.Any<IRequest>())
                     .Returns(x => new Response("OK", true, "text/plain", OK));
 
-                var status = await statusClient.Get().SingleAsync();
+                var status = await statusApi.Get().SingleAsync();
                 status.Should().BeTrue();
             }
 
@@ -53,7 +53,7 @@ namespace Toggl.Ultrawave.Tests.Clients
                     .Send(Arg.Any<IRequest>())
                     .Returns(x => new Response("PANIC", false, "text/plain", InternalServerError));
 
-                var status = await statusClient.Get().SingleAsync();
+                var status = await statusApi.Get().SingleAsync();
                 status.Should().BeFalse();
             }
         }

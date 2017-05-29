@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
 
-namespace Toggl.Ultrawave.Clients
+namespace Toggl.Ultrawave.ApiClients
 {
-    internal sealed class ClientsClient : BaseClient, IClientsClient
+    internal sealed class ClientsApi : BaseApi, IClientsApi
     {
         private readonly ClientEndpoints endPoints;
 
-        public ClientsClient(ClientEndpoints endPoints, IApiClient apiClient, IJsonSerializer serializer, Credentials credentials)
+        public ClientsApi(ClientEndpoints endPoints, IApiClient apiClient, IJsonSerializer serializer, Credentials credentials)
             : base(apiClient, serializer, credentials)
         {
             this.endPoints = endPoints;

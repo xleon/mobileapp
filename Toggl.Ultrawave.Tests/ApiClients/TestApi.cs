@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using Toggl.Multivac;
-using Toggl.Ultrawave.Clients;
+using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
 
-namespace Toggl.Ultrawave.Tests.Clients
+namespace Toggl.Ultrawave.Tests.ApiClients
 {
-    internal sealed class TestClient : BaseClient
+    internal sealed class TestApi : BaseApi
     {
         private readonly Endpoint endpoint;
 
-        public TestClient(Endpoint endpoint, IApiClient apiClient, IJsonSerializer serializer,
+        public TestApi(Endpoint endpoint, IApiClient apiClient, IJsonSerializer serializer,
             Credentials credentials)
             : base(apiClient, serializer, credentials)
         {

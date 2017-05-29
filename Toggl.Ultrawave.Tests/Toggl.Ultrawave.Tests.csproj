@@ -77,12 +77,12 @@
     <Compile Include="Models\ClientTests.cs" />
     <Compile Include="Models\SerializationHelper.cs" />
     <Compile Include="Models\BaseModelTests.cs" />
-    <Compile Include="Clients\TestClient.cs" />
-    <Compile Include="Clients\BaseClientTests.cs" />
+    <Compile Include="ApiClients\TestApi.cs" />
+    <Compile Include="ApiClients\BaseApiTests.cs" />
     <Compile Include="Models\TagTests.cs" />
     <Compile Include="Serialization\JsonSerializerTests.cs" />
-    <Compile Include="Clients\StatusClientTests.cs" />
-    <Compile Include="Clients\UserClientTests.cs" />
+    <Compile Include="ApiClients\StatusApiTests.cs" />
+    <Compile Include="ApiClients\UserApiTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">
@@ -98,7 +98,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Clients\" />
+    <Folder Include="ApiClients\" />
     <Folder Include="Serialization\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

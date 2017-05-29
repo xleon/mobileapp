@@ -75,7 +75,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var database = Mvx.Resolve<ITogglDatabase>();
             var dataSource = new TogglDataSource(database, api);
 
-            Mvx.RegisterSingleton<ITogglClient>(api);
+            Mvx.RegisterSingleton<ITogglApi>(api);
             Mvx.RegisterSingleton<ITogglDataSource>(dataSource);
         }
 

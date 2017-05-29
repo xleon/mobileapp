@@ -14,8 +14,8 @@ namespace Toggl.Ultrawave.Tests.Integration
     {
         public class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<Client>>
         {
-            protected override IObservable<List<Client>> CallEndpointWith(ITogglClient togglClient)
-                => togglClient.Clients.GetAll();
+            protected override IObservable<List<Client>> CallEndpointWith(ITogglApi togglApi)
+                => togglApi.Clients.GetAll();
 
             [Fact]
             public async Task ReturnsAllClients()
@@ -41,16 +41,16 @@ namespace Toggl.Ultrawave.Tests.Integration
 
         public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<Client>
         {
-            protected override IObservable<Client> CallEndpointWith(ITogglClient togglClient)
+            protected override IObservable<Client> CallEndpointWith(ITogglApi togglApi)
                 => Observable.Defer(async () =>
                 {
-                    var user = await togglClient.User.Get();
+                    var user = await togglApi.User.Get();
                     var client = new Client { Name = Guid.NewGuid().ToString(), WorkspaceId = user.DefaultWorkspaceId };
-                    return CallEndpointWith(togglClient, client);
+                    return CallEndpointWith(togglApi, client);
                 });
 
-            private IObservable<Client> CallEndpointWith(ITogglClient togglClient, Client client)
-                => togglClient.Clients.Create(client);
+            private IObservable<Client> CallEndpointWith(ITogglApi togglApi, Client client)
+                => togglApi.Clients.Create(client);
 
             [Fact]
             public async Task CreatesNewClient()
