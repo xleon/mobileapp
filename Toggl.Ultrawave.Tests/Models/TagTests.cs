@@ -1,4 +1,6 @@
 ﻿using System;
+using Toggl.Ultrawave.Models;
+
 namespace Toggl.Ultrawave.Tests.Models
 {
     public class TagTests : BaseModelTests<Tag>

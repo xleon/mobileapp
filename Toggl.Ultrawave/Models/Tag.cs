@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Toggl.Multivac.Models;
 
-namespace Toggl.Ultrawave
+namespace Toggl.Ultrawave.Models
 {
     public sealed class Tag : ITag
     {

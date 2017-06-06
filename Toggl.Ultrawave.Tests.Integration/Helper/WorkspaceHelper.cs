@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
 
@@ -10,7 +11,7 @@ namespace Toggl.Ultrawave.Tests.Integration.Helper
 {
     internal static class WorkspaceHelper
     {
-        public static async Task<Workspace> CreateFor(Ultrawave.User user)
+        public static async Task<Workspace> CreateFor(Models.User user)
         {
             ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
 

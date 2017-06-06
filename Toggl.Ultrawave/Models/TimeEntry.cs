@@ -1,9 +1,8 @@
 ﻿using System;
-using Newtonsoft.Json;
 using Toggl.Multivac.Models;
 using System.Collections.Generic;
 
-namespace Toggl.Ultrawave
+namespace Toggl.Ultrawave.Models
 {
     public sealed class TimeEntry : ITimeEntry
     {

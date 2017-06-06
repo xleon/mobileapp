@@ -1,9 +1,9 @@
-﻿using NSubstitute;
-using Toggl.Ultrawave;
+﻿using Microsoft.Reactive.Testing;
+using NSubstitute;
+using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac.Models;
-using Microsoft.Reactive.Testing;
-using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Ultrawave.Models;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {

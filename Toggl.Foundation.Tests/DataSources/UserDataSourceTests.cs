@@ -6,7 +6,7 @@ using Toggl.Multivac.Extensions;
 using Toggl.Foundation.DataSources;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
-using Toggl.Ultrawave;
+using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.Network;
 using Xunit;

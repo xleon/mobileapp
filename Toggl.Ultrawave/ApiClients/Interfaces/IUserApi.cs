@@ -1,4 +1,5 @@
 ﻿using System;
+using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.Network;
 
 namespace Toggl.Ultrawave.ApiClients

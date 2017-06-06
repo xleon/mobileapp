@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Toggl.Ultrawave.Models;
 using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Models

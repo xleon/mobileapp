@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.Tests.Integration.BaseTests;
 using Toggl.Ultrawave.Tests.Integration.Helper;
 using Xunit;
@@ -40,7 +41,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             protected override IObservable<List<TimeEntry>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.TimeEntries.GetAll();
 
-            private TimeEntry createTimeEntry(Ultrawave.User user) => new TimeEntry
+            private TimeEntry createTimeEntry(Models.User user) => new TimeEntry
             {
                 WorkspaceId = user.DefaultWorkspaceId,
                 Billable = false,
@@ -84,7 +85,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             private IObservable<TimeEntry> CallEndpointWith(ITogglApi togglApi, TimeEntry client)
                 => togglApi.TimeEntries.Create(client);
 
-            private TimeEntry createTimeEntry(Ultrawave.User user) => new TimeEntry
+            private TimeEntry createTimeEntry(Models.User user) => new TimeEntry
             {
                 WorkspaceId = user.DefaultWorkspaceId,
                 Billable = false,
