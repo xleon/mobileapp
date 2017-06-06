@@ -72,17 +72,17 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientsClientTests.cs" />
+    <Compile Include="ClientsApiTests.cs" />
     <Compile Include="BaseTests\EndpointTestBase.cs" />
     <Compile Include="BaseTests\AuthenticatedPostEndpointBaseTests.cs" />
     <Compile Include="BaseTests\AuthenticatedGetEndpointBaseTests.cs" />
     <Compile Include="BaseTests\AuthenticatedEndpointBaseTests.cs" />
-    <Compile Include="StatusClientTests.cs" />
-    <Compile Include="UserClientTests.cs" />
-    <Compile Include="TimeEntriesClientTests.cs" />
+    <Compile Include="StatusApiTests.cs" />
+    <Compile Include="UserApiTests.cs" />
+    <Compile Include="TimeEntriesApiTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helper\User.cs" />
-    <Compile Include="WorkspacesClientTests.cs" />
+    <Compile Include="WorkspacesApiTests.cs" />
     <Compile Include="Helper\WorkspaceHelper.cs" />
     <Compile Include="Helper\AuthorizedRequestBuilder.cs" />
   </ItemGroup>

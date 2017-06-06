@@ -11,7 +11,7 @@ using Toggl.Ultrawave.Models;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
-    public class WorkspacesClientTests
+    public class WorkspacesApiTests
     {
         public class TheGetMethod : AuthenticatedEndpointBaseTests<List<Workspace>>
         {

@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Tests.Integration.Helper;
 using Toggl.Ultrawave.Tests.Integration.BaseTests;
 using Xunit;
 using Toggl.Ultrawave.Models;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
-    public class ClientsClientTests
+    public class ClientsApiTests
     {
         public class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<Client>>
         {

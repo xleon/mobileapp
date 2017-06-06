@@ -7,7 +7,7 @@ using Toggl.Ultrawave.Tests.Integration.BaseTests;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
-    public class StatusClientTests
+    public class StatusApiTests
     {
         public class TheGetMethod : EndpointTestBase
         {
