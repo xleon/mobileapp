@@ -12,6 +12,7 @@ using Toggl.PrimeRadiant;
 using Toggl.Daneel.Services;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Ultrawave;
+using Foundation;
 
 namespace Toggl.Daneel
 {
@@ -41,11 +42,16 @@ namespace Toggl.Daneel
         {
             base.InitializeLastChance();
 
+            var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"];
+            var userAgent = new UserAgent("Daneel", version.ToString());
+
+            var apiConfiguration = new ApiConfiguration(environment, Credentials.None, userAgent);
+
             Mvx.RegisterType<ITogglDatabase, Database>();
             Mvx.RegisterType<ITogglDataSource, TogglDataSource>();
-            Mvx.RegisterSingleton<IApiFactory>(new ApiFactory(environment));
+            Mvx.RegisterSingleton<ITogglApi>(new TogglApi(apiConfiguration));
             Mvx.RegisterSingleton<IMvxCommandHelper>(new MvxStrongCommandHelper());
-            Mvx.RegisterSingleton<ITogglApi>(new TogglApi(environment, Credentials.None));
+            Mvx.RegisterSingleton<IApiFactory>(new ApiFactory(environment, userAgent));
         }
     }
 }

@@ -13,12 +13,20 @@ namespace Toggl.Multivac
             throw new ArgumentNullException(argumentName);
         }
 
+        public static void ArgumentIsNotNullOrWhiteSpace(string value, string argumentName)
+        {
+            ArgumentIsNotNull(value, argumentName);
+
+            if (!string.IsNullOrWhiteSpace(value)) return;
+
+            throw new ArgumentException("String cannot be empty.", argumentName);
+        }
+
         public static void UriIsAbsolute(Uri uri, string argumentName)
         {
             ArgumentIsNotNull(uri, argumentName);
-            
-            if (uri.IsAbsoluteUri)
-                return;
+
+            if (uri.IsAbsoluteUri) return;
 
             throw new ArgumentException("Uri must be absolute.", argumentName);
         }

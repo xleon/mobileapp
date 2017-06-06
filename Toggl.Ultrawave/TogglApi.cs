@@ -10,17 +10,17 @@ namespace Toggl.Ultrawave
 {
     public sealed class TogglApi : ITogglApi
     {
-        public TogglApi(ApiEnvironment apiEnvironment, Credentials credentials,
-            HttpClientHandler handler = null)
+        public TogglApi(ApiConfiguration configuration, HttpClientHandler handler = null)
         {
-            Ensure.ArgumentIsNotNull(credentials, nameof(credentials));
+            Ensure.ArgumentIsNotNull(configuration, nameof(configuration));
 
             var httpHandler = handler ?? new NativeMessageHandler { AutomaticDecompression = GZip | Deflate };
             var httpClient = new HttpClient(httpHandler);
 
+            var credentials = configuration.Credentials;
             var serializer = new JsonSerializer();
-            var apiClient = new ApiClient(httpClient);
-            var endpoints = new Endpoints(apiEnvironment);
+            var apiClient = new ApiClient(httpClient, configuration.UserAgent);
+            var endpoints = new Endpoints(configuration.Environment);
 
             Tags = new TagsApi();
             User = new UserApi(endpoints.User, apiClient, serializer, credentials);

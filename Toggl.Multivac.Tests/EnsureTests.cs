@@ -40,6 +40,53 @@ namespace Toggl.Multivac.Tests
             }
         }
 
+        public class TheArgumentIsNotNullOrWhiteSpaceMethod
+        {
+            [Fact]
+            public void ThrowsWhenTheArgumentIsAnEmptyString()
+            {
+                Action whenTheCalledArgumentIsNull =
+                    () => Ensure.ArgumentIsNotNullOrWhiteSpace("", "argument");
+
+                whenTheCalledArgumentIsNull
+                    .ShouldThrow<ArgumentException>()
+                    .WithMessage("String cannot be empty.\nParameter name: argument");
+            }
+
+            [Fact]
+            public void ThrowsWhenTheArgumentIsABlankString()
+            {
+                Action whenTheCalledArgumentIsNull =
+                    () => Ensure.ArgumentIsNotNullOrWhiteSpace(" ", "argument");
+
+                whenTheCalledArgumentIsNull
+                    .ShouldThrow<ArgumentException>()
+                    .WithMessage("String cannot be empty.\nParameter name: argument");
+            }
+
+            [Fact]
+            public void ThrowsWhenTheArgumentIsNull()
+            {
+                const string argumentName = "argument";
+
+                Action whenTheCalledArgumentIsNull =
+                    () => Ensure.ArgumentIsNotNullOrWhiteSpace(null, argumentName);
+
+                whenTheCalledArgumentIsNull
+                    .ShouldThrow<ArgumentException>()
+                    .WithMessage("Value cannot be null.\nParameter name: argument");
+            }
+
+            [Fact]
+            public void DoesNotThrowWhenTheArgumentIsNotNull()
+            {
+                Action whenTheCalledArgumentIsNull =
+                    () => Ensure.ArgumentIsNotNullOrWhiteSpace("something", "argument");
+
+                whenTheCalledArgumentIsNull.ShouldNotThrow();
+            }
+        }
+
         public class TheUriIsAbsoluteMethod
         {
             [Fact]

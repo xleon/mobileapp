@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Toggl.Multivac;
@@ -12,11 +13,13 @@ namespace Toggl.Ultrawave.Network
 
         private readonly HttpClient httpClient;
         
-        public ApiClient(HttpClient httpClient)
+        public ApiClient(HttpClient httpClient, UserAgent userAgent)
         {
+            Ensure.ArgumentIsNotNull(userAgent, nameof(userAgent));
             Ensure.ArgumentIsNotNull(httpClient, nameof(httpClient));
 
             this.httpClient = httpClient;
+            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent.ToString());
         }
 
         public async Task<IResponse> Send(IRequest request)

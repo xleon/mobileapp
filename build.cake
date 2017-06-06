@@ -2,6 +2,18 @@
 
 var target = Argument("target", "Default");
 
+private string GetCommitHash()
+{   
+    IEnumerable<string> redirectedOutput;
+    StartProcess("git", new ProcessSettings
+    {
+        Arguments = "rev-parse HEAD",
+        RedirectStandardOutput = true
+    }, out redirectedOutput);
+
+    return redirectedOutput.Last();
+}
+
 private Action Test(string testFiles)
 {
     var testSettings = new XUnit2Settings
@@ -25,6 +37,16 @@ private Action BuildSolution(string targetProject)
 
     return () => MSBuild(targetProject, buildSettings);
 }
+
+const string path = "Toggl.Ultrawave.Tests.Integration/BaseTests/EndpointTestBase.cs";
+var commitHash = GetCommitHash(); 
+var filePath = GetFiles(path).Single();
+
+var oldFile = TransformTextFile(filePath).ToString();
+var newFile = oldFile.Replace("{CAKE_COMMIT_HASH}", commitHash);
+
+Setup(context => System.IO.File.WriteAllText(path, newFile));
+Teardown(context => System.IO.File.WriteAllText(path, oldFile));
 
 //Build
 Task("Nuget")
