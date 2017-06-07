@@ -11,7 +11,7 @@ namespace Toggl.Ultrawave.Tests.Integration
     {
         public class TheGetMethod : EndpointTestBase
         {
-            [Fact]
+            [Fact, LogTestInfo]
             public async Task ShouldSucceedWithoutCredentials()
             {
                 var togglClient = TogglApiWith(Credentials.None);

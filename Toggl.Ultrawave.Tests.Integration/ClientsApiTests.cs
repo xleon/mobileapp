@@ -16,7 +16,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             protected override IObservable<List<Client>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Clients.GetAll();
 
-            [Fact]
+            [Fact, LogTestInfo]
             public async Task ReturnsAllClients()
             {
                 var (togglClient, user) = await SetupTestUser();
@@ -51,7 +51,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             private IObservable<Client> CallEndpointWith(ITogglApi togglApi, Client client)
                 => togglApi.Clients.Create(client);
 
-            [Fact]
+            [Fact, LogTestInfo]
             public async Task CreatesNewClient()
             {
                 var (togglClient, user) = await SetupTestUser();

@@ -18,7 +18,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             protected override IObservable<List<Workspace>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Workspaces.GetAll();
 
-            [Fact]
+            [Fact, LogTestInfo]
             public async Task ReturnsAllWorkspaces()
             {
                 var (togglClient, user) = await SetupTestUser();
@@ -47,7 +47,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             private IObservable<Workspace> CallEndpointWith(ITogglApi togglApi, int id)
                 => togglApi.Workspaces.GetById(id);
 
-            [Fact]
+            [Fact, LogTestInfo]
             public async Task ReturnsDefaultWorkspace()
             {
                 var (togglClient, user) = await SetupTestUser();
@@ -57,7 +57,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 workspace.Id.Should().Be(user.DefaultWorkspaceId);
             }
 
-            [Fact]
+            [Fact, LogTestInfo]
             public async Task ReturnsCreatedWorkspace()
             {
                 var (togglClient, user) = await SetupTestUser();
@@ -69,7 +69,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 workspace.Name.Should().Be(secondWorkspace.Name);
             }
 
-            [Fact]
+            [Fact, LogTestInfo]
             public async Task FailsForWrongWorkspaceId()
             {
                 var (togglClient, user) = await SetupTestUser();

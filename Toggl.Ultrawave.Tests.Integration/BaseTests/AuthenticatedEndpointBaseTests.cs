@@ -16,7 +16,7 @@ namespace Toggl.Ultrawave.Tests.Integration.BaseTests
         protected Func<Task> CallingEndpointWith(ITogglApi togglApi)
             => async () => await CallEndpointWith(togglApi);
 
-        [Fact]
+        [Fact, LogTestInfo]
         public async Task WorksWithPassword()
         {
             var credentials = await User.Create();
@@ -24,7 +24,7 @@ namespace Toggl.Ultrawave.Tests.Integration.BaseTests
             CallingEndpointWith(TogglApiWith(credentials)).ShouldNotThrow();
         }
 
-        [Fact]
+        [Fact, LogTestInfo]
         public async Task WorksWithApiToken()
         {
             var (_, user) = await SetupTestUser();
@@ -33,7 +33,7 @@ namespace Toggl.Ultrawave.Tests.Integration.BaseTests
             CallingEndpointWith(TogglApiWith(apiTokenCredentials)).ShouldNotThrow();
         }
 
-        [Fact]
+        [Fact, LogTestInfo]
         public void FailsForNonExistingUser()
         {
             var email = $"non-existing-email-{Guid.NewGuid()}@ironicmocks.toggl.com".ToEmail();
@@ -42,7 +42,7 @@ namespace Toggl.Ultrawave.Tests.Integration.BaseTests
             CallingEndpointWith(TogglApiWith(wrongCredentials)).ShouldThrow<ApiException>();
         }
 
-        [Fact]
+        [Fact, LogTestInfo]
         public async Task FailsWithWrongPassword()
         {
             var (email, password) = await User.CreateEmailPassword();
@@ -51,7 +51,7 @@ namespace Toggl.Ultrawave.Tests.Integration.BaseTests
             CallingEndpointWith(TogglApiWith(wrongCredentials)).ShouldThrow<ApiException>();
         }
 
-        [Fact]
+        [Fact, LogTestInfo]
         public void FailsWithWrongApiToken()
         {
             var wrongApiToken = Guid.NewGuid().ToString("N");
@@ -60,7 +60,7 @@ namespace Toggl.Ultrawave.Tests.Integration.BaseTests
             CallingEndpointWith(TogglApiWith(wrongApiTokenCredentials)).ShouldThrow<ApiException>();
         }
 
-        [Fact]
+        [Fact, LogTestInfo]
         public void FailsWithoutCredentials()
         {
             CallingEndpointWith(TogglApiWith(Credentials.None)).ShouldThrow<ApiException>();

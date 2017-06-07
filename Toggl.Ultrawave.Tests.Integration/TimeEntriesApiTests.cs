@@ -13,7 +13,7 @@ namespace Toggl.Ultrawave.Tests.Integration
     {
         public class TheGetAllMethod : AuthenticatedGetEndpointBaseTests<List<TimeEntry>>
         {
-            [Fact]
+            [Fact, LogTestInfo]
             public async Task ReturnsAllTimeEntries()
             {
                 var (togglClient, user) = await SetupTestUser();
@@ -57,7 +57,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
         public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<TimeEntry>
         {
-            [Fact]
+            [Fact, LogTestInfo]
             public async Task CreatesNewClient()
             {
                 var (togglClient, user) = await SetupTestUser();

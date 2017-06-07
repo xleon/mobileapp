@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Ultrawave.Network;
@@ -9,7 +8,7 @@ namespace Toggl.Ultrawave.Tests.Integration.BaseTests
 {
     public abstract class AuthenticatedGetEndpointBaseTests<T> : AuthenticatedEndpointBaseTests<T>
     {
-        [Fact]
+        [Fact, LogTestInfo]
         public async Task ReturnsTheSameWhetherUsingPasswordOrApiToken()
         {
             var (passwordClient, user) = await SetupTestUser();
