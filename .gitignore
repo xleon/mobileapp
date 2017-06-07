@@ -286,3 +286,6 @@ tools/**
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+# macOS Finder creates this in every folder opened
+.DS_STORE
