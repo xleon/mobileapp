@@ -4,6 +4,9 @@ This is the codebase of the Toggl Mobile App.
 
 This document is meant to help new contributors submit changes to the project.
 
+**For help and support with Toggl or the Toggl mobile apps, please check our [support page](https://support.toggl.com/ "Toggl Help & Support") or contact support@toggl.com**
+
+
 ## Getting started
 
 1. Fork this repository,
