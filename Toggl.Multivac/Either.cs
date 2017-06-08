@@ -30,8 +30,8 @@ namespace Toggl.Multivac
 
         public void Match(Action<TLeft> leftAction, Action<TRight> rightAction)
         {
-            Ensure.ArgumentIsNotNull(leftAction, nameof(leftAction));
-            Ensure.ArgumentIsNotNull(rightAction, nameof(rightAction));
+            Ensure.Argument.IsNotNull(leftAction, nameof(leftAction));
+            Ensure.Argument.IsNotNull(rightAction, nameof(rightAction));
 
             if (useLeft)
             {
@@ -44,8 +44,8 @@ namespace Toggl.Multivac
 
         public T Match<T>(Func<TLeft, T> leftAction, Func<TRight, T> rightFunc)
         {
-            Ensure.ArgumentIsNotNull(leftAction, nameof(leftAction));
-            Ensure.ArgumentIsNotNull(rightFunc, nameof(rightFunc));
+            Ensure.Argument.IsNotNull(leftAction, nameof(leftAction));
+            Ensure.Argument.IsNotNull(rightFunc, nameof(rightFunc));
 
             return useLeft ? leftAction(left) : rightFunc(right);
         }

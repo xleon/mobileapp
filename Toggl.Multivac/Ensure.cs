@@ -4,31 +4,34 @@ namespace Toggl.Multivac
 {
     public static class Ensure
     {
-        public static void ArgumentIsNotNull<T>(T value, string argumentName)
+        public static class Argument
         {
-            #pragma warning disable RECS0017 // Possible compare of value type with 'null'
-            if (value != null) return;
-            #pragma warning restore RECS0017 // Possible compare of value type with 'null'
+            public static void IsNotNull<T>(T value, string argumentName)
+            {
+                #pragma warning disable RECS0017 // Possible compare of value type with 'null'
+                if (value != null) return;
+                #pragma warning restore RECS0017 // Possible compare of value type with 'null'
 
-            throw new ArgumentNullException(argumentName);
-        }
+                throw new ArgumentNullException(argumentName);
+            }
 
-        public static void ArgumentIsNotNullOrWhiteSpace(string value, string argumentName)
-        {
-            ArgumentIsNotNull(value, argumentName);
+            public static void IsNotNullOrWhiteSpaceString(string value, string argumentName)
+            {
+                IsNotNull(value, argumentName);
 
-            if (!string.IsNullOrWhiteSpace(value)) return;
+                if (!string.IsNullOrWhiteSpace(value)) return;
 
-            throw new ArgumentException("String cannot be empty.", argumentName);
-        }
+                throw new ArgumentException("String cannot be empty.", argumentName);
+            }
 
-        public static void UriIsAbsolute(Uri uri, string argumentName)
-        {
-            ArgumentIsNotNull(uri, argumentName);
+            public static void IsAbsoluteUri(Uri uri, string argumentName)
+            {
+                IsNotNull(uri, argumentName);
 
-            if (uri.IsAbsoluteUri) return;
+                if (uri.IsAbsoluteUri) return;
 
-            throw new ArgumentException("Uri must be absolute.", argumentName);
+                throw new ArgumentException("Uri must be absolute.", argumentName);
+            }
         }
     }
 }

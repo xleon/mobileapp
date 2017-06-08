@@ -17,7 +17,7 @@ namespace Toggl.Ultrawave.Network
 
         public static Credentials WithPassword(Email email, string password)
         {
-            Ensure.ArgumentIsNotNull(password, nameof(password));
+            Ensure.Argument.IsNotNull(password, nameof(password));
             if (!email.IsValid)
                 throw new ArgumentException("A valid email must be provided when creating credentials");
 
@@ -28,7 +28,7 @@ namespace Toggl.Ultrawave.Network
 
         public static Credentials WithApiToken(string apiToken)
         {
-            Ensure.ArgumentIsNotNull(apiToken, nameof(apiToken));
+            Ensure.Argument.IsNotNull(apiToken, nameof(apiToken));
 
             var header = authorizationHeaderWithValue($"{apiToken}:api_token");
 
@@ -37,7 +37,7 @@ namespace Toggl.Ultrawave.Network
 
         private static HttpHeader authorizationHeaderWithValue(string authString)
         {
-            Ensure.ArgumentIsNotNull(authString, nameof(authString));
+            Ensure.Argument.IsNotNull(authString, nameof(authString));
 
             var authStringBytes = Encoding.UTF8.GetBytes(authString);
             var authHeader = Convert.ToBase64String(authStringBytes);

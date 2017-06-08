@@ -11,8 +11,8 @@ namespace Toggl.Ultrawave
 
         public ApiConfiguration(ApiEnvironment apiEnvironment, Credentials credentials, UserAgent userAgent)
         {
-            Ensure.ArgumentIsNotNull(userAgent, nameof(userAgent));
-            Ensure.ArgumentIsNotNull(credentials, nameof(credentials));
+            Ensure.Argument.IsNotNull(userAgent, nameof(userAgent));
+            Ensure.Argument.IsNotNull(credentials, nameof(credentials));
 
             UserAgent = userAgent;
             Credentials = credentials;

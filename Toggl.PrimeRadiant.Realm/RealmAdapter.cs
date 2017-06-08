@@ -26,7 +26,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmAdapter(Func<TModel, TRealmEntity> convertToRealm)
         {
-            Ensure.ArgumentIsNotNull(convertToRealm, nameof(convertToRealm));
+            Ensure.Argument.IsNotNull(convertToRealm, nameof(convertToRealm));
 
             this.convertToRealm = convertToRealm;
         }
@@ -49,7 +49,7 @@ namespace Toggl.PrimeRadiant.Realm
         private TRealmEntity doTransaction(
             TModel entity, Func<Realms.Realm, TRealmEntity, TRealmEntity> transactionAction, bool checkExistance)
         {
-            Ensure.ArgumentIsNotNull(entity, nameof(entity));
+            Ensure.Argument.IsNotNull(entity, nameof(entity));
 
             var realm = Realms.Realm.GetInstance();
             var realmEntity = convertToRealm(entity);

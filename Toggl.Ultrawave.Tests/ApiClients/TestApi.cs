@@ -15,7 +15,7 @@ namespace Toggl.Ultrawave.Tests.ApiClients
             Credentials credentials)
             : base(apiClient, serializer, credentials)
         {
-            Ensure.ArgumentIsNotNull(endpoint, nameof(endpoint));
+            Ensure.Argument.IsNotNull(endpoint, nameof(endpoint));
 
             this.endpoint = endpoint;
         }

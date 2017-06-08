@@ -12,7 +12,7 @@ namespace Toggl.Ultrawave
     {
         public TogglApi(ApiConfiguration configuration, HttpClientHandler handler = null)
         {
-            Ensure.ArgumentIsNotNull(configuration, nameof(configuration));
+            Ensure.Argument.IsNotNull(configuration, nameof(configuration));
 
             var httpHandler = handler ?? new NativeMessageHandler { AutomaticDecompression = GZip | Deflate };
             var httpClient = new HttpClient(httpHandler);

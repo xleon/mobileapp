@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
@@ -9,8 +9,8 @@ namespace Toggl.Foundation.DataSources
     {
         public TogglDataSource(ITogglDatabase database, ITogglApi api)
         {
-            Ensure.ArgumentIsNotNull(api, nameof(api));
-            Ensure.ArgumentIsNotNull(database, nameof(database));
+            Ensure.Argument.IsNotNull(api, nameof(api));
+            Ensure.Argument.IsNotNull(database, nameof(database));
 
             User = new UserDataSource(database.User, api.User);
         }

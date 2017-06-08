@@ -12,8 +12,8 @@ namespace Toggl.Ultrawave.Network
 
         public Response(string rawData, bool isSuccess, string contentType, HttpStatusCode statusCode)
         {
-            Ensure.ArgumentIsNotNull(rawData, nameof(rawData));
-            Ensure.ArgumentIsNotNull(contentType, nameof(contentType));
+            Ensure.Argument.IsNotNull(rawData, nameof(rawData));
+            Ensure.Argument.IsNotNull(contentType, nameof(contentType));
 
             RawData = rawData;
             IsSuccess = isSuccess;

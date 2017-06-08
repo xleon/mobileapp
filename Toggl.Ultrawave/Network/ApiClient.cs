@@ -15,8 +15,8 @@ namespace Toggl.Ultrawave.Network
         
         public ApiClient(HttpClient httpClient, UserAgent userAgent)
         {
-            Ensure.ArgumentIsNotNull(userAgent, nameof(userAgent));
-            Ensure.ArgumentIsNotNull(httpClient, nameof(httpClient));
+            Ensure.Argument.IsNotNull(userAgent, nameof(userAgent));
+            Ensure.Argument.IsNotNull(httpClient, nameof(httpClient));
 
             this.httpClient = httpClient;
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent.ToString());
@@ -24,7 +24,7 @@ namespace Toggl.Ultrawave.Network
 
         public async Task<IResponse> Send(IRequest request)
         {
-            Ensure.ArgumentIsNotNull(request, nameof(request));
+            Ensure.Argument.IsNotNull(request, nameof(request));
 
             var requestMessage = createRequestMessage(request);
             var responseMessage = await httpClient.SendAsync(requestMessage).ConfigureAwait(false);
@@ -40,7 +40,7 @@ namespace Toggl.Ultrawave.Network
 
         private HttpRequestMessage createRequestMessage(IRequest request)
         {
-            Ensure.ArgumentIsNotNull(request, nameof(request));
+            Ensure.Argument.IsNotNull(request, nameof(request));
 
             var requestMessage = new HttpRequestMessage(request.HttpMethod, request.Endpoint);
             requestMessage.Headers.AddRange(request.Headers);
@@ -58,7 +58,7 @@ namespace Toggl.Ultrawave.Network
 
         private async Task<IResponse> createResponse(HttpResponseMessage responseMessage)
         {
-            Ensure.ArgumentIsNotNull(responseMessage, nameof(responseMessage));
+            Ensure.Argument.IsNotNull(responseMessage, nameof(responseMessage));
 
             var rawResponseString = "";
             var isSuccess = responseMessage.IsSuccessStatusCode;

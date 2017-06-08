@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Reactive.Linq;
 using Toggl.Multivac.Extensions;
 using Toggl.Foundation.Models;
@@ -18,8 +18,8 @@ namespace Toggl.Foundation.DataSources
 
         public UserDataSource(ISingleObjectStorage<IDatabaseUser> storage, IUserApi userApi)
         {
-            Ensure.ArgumentIsNotNull(storage, nameof(storage));
-            Ensure.ArgumentIsNotNull(userApi, nameof(userApi));
+            Ensure.Argument.IsNotNull(storage, nameof(storage));
+            Ensure.Argument.IsNotNull(userApi, nameof(userApi));
 
             this.storage = storage;
             this.userApi = userApi;

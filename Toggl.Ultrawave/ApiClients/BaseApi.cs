@@ -18,9 +18,9 @@ namespace Toggl.Ultrawave.ApiClients
 
         protected BaseApi(IApiClient apiClient, IJsonSerializer serializer, Credentials credentials)
         {
-            Ensure.ArgumentIsNotNull(apiClient, nameof(apiClient));
-            Ensure.ArgumentIsNotNull(serializer, nameof(serializer));
-            Ensure.ArgumentIsNotNull(credentials, nameof(credentials));
+            Ensure.Argument.IsNotNull(apiClient, nameof(apiClient));
+            Ensure.Argument.IsNotNull(serializer, nameof(serializer));
+            Ensure.Argument.IsNotNull(credentials, nameof(credentials));
 
             this.apiClient = apiClient;
             this.serializer = serializer;

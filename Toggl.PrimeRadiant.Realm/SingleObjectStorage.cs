@@ -17,7 +17,7 @@ namespace Toggl.PrimeRadiant.Realm
         
         public IObservable<TModel> Create(TModel entity)
         {
-            Ensure.ArgumentIsNotNull(entity, nameof(entity));
+            Ensure.Argument.IsNotNull(entity, nameof(entity));
 
             return Observable.Defer(() =>
             {

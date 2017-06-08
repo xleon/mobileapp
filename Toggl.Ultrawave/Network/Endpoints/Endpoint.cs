@@ -18,8 +18,8 @@ namespace Toggl.Ultrawave.Network
 
         private Endpoint(Uri url, HttpMethod method)
         {
-            Ensure.ArgumentIsNotNull(url, nameof(url));
-            Ensure.UriIsAbsolute(url, nameof(url));
+            Ensure.Argument.IsNotNull(url, nameof(url));
+            Ensure.Argument.IsAbsoluteUri(url, nameof(url));
 
             Url = url;
             Method = method;

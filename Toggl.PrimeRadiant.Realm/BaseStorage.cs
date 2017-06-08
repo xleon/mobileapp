@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
@@ -22,14 +22,14 @@ namespace Toggl.PrimeRadiant.Realm
 
         public IObservable<TModel> Update(TModel entity)
         {
-            Ensure.ArgumentIsNotNull(entity, nameof(entity));
+            Ensure.Argument.IsNotNull(entity, nameof(entity));
 
             return CreateObservable(() => Adapter.Update(entity));
         }
 
         public IObservable<Unit> Delete(TModel entity)
         {
-            Ensure.ArgumentIsNotNull(entity, nameof(entity));
+            Ensure.Argument.IsNotNull(entity, nameof(entity));
 
             return CreateObservable(() =>
             {
@@ -40,7 +40,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public IObservable<IEnumerable<TModel>> GetAll(Func<TModel, bool> predicate)
         {
-            Ensure.ArgumentIsNotNull(predicate, nameof(predicate));
+            Ensure.Argument.IsNotNull(predicate, nameof(predicate));
 
             return CreateObservable(() => Adapter.GetAll().Where(predicate));
         }

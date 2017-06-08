@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿﻿using System;
 using FluentAssertions;
 using Xunit;
 
@@ -14,7 +14,7 @@ namespace Toggl.Multivac.Tests
                 const string argumentName = "argument";
 
                 Action whenTheCalledArgumentIsNull =
-                    () => Ensure.ArgumentIsNotNull<string>(null, argumentName);
+                    () => Ensure.Argument.IsNotNull<string>(null, argumentName);
 
                 whenTheCalledArgumentIsNull
                     .ShouldThrow<ArgumentException>()
@@ -25,7 +25,7 @@ namespace Toggl.Multivac.Tests
             public void DoesNotThrowWhenTheArgumentIsNotNull()
             {
                 Action whenTheCalledArgumentIsNull =
-                    () => Ensure.ArgumentIsNotNull("something", "argument");
+                    () => Ensure.Argument.IsNotNull("something", "argument");
 
                 whenTheCalledArgumentIsNull.ShouldNotThrow();
             }
@@ -34,7 +34,7 @@ namespace Toggl.Multivac.Tests
             public void WorksForValueTypes()
             {
                 Action whenTheCalledArgumentIsNull =
-                    () => Ensure.ArgumentIsNotNull(0, "argument");
+                    () => Ensure.Argument.IsNotNull(0, "argument");
 
                 whenTheCalledArgumentIsNull.ShouldNotThrow();
             }
@@ -46,7 +46,7 @@ namespace Toggl.Multivac.Tests
             public void ThrowsWhenTheArgumentIsAnEmptyString()
             {
                 Action whenTheCalledArgumentIsNull =
-                    () => Ensure.ArgumentIsNotNullOrWhiteSpace("", "argument");
+                    () => Ensure.Argument.IsNotNullOrWhiteSpaceString("", "argument");
 
                 whenTheCalledArgumentIsNull
                     .ShouldThrow<ArgumentException>()
@@ -57,7 +57,7 @@ namespace Toggl.Multivac.Tests
             public void ThrowsWhenTheArgumentIsABlankString()
             {
                 Action whenTheCalledArgumentIsNull =
-                    () => Ensure.ArgumentIsNotNullOrWhiteSpace(" ", "argument");
+                    () => Ensure.Argument.IsNotNullOrWhiteSpaceString(" ", "argument");
 
                 whenTheCalledArgumentIsNull
                     .ShouldThrow<ArgumentException>()
@@ -70,7 +70,7 @@ namespace Toggl.Multivac.Tests
                 const string argumentName = "argument";
 
                 Action whenTheCalledArgumentIsNull =
-                    () => Ensure.ArgumentIsNotNullOrWhiteSpace(null, argumentName);
+                    () => Ensure.Argument.IsNotNullOrWhiteSpaceString(null, argumentName);
 
                 whenTheCalledArgumentIsNull
                     .ShouldThrow<ArgumentException>()
@@ -81,7 +81,7 @@ namespace Toggl.Multivac.Tests
             public void DoesNotThrowWhenTheArgumentIsNotNull()
             {
                 Action whenTheCalledArgumentIsNull =
-                    () => Ensure.ArgumentIsNotNullOrWhiteSpace("something", "argument");
+                    () => Ensure.Argument.IsNotNullOrWhiteSpaceString("something", "argument");
 
                 whenTheCalledArgumentIsNull.ShouldNotThrow();
             }
@@ -95,7 +95,7 @@ namespace Toggl.Multivac.Tests
                 const string argumentName = "argument";
 
                 Action whenTheCalledArgumentIsNull =
-                    () => Ensure.UriIsAbsolute(new Uri("/something", UriKind.Relative), argumentName);
+                    () => Ensure.Argument.IsAbsoluteUri(new Uri("/something", UriKind.Relative), argumentName);
                 
                 whenTheCalledArgumentIsNull
                     .ShouldThrow<ArgumentException>()
@@ -106,7 +106,7 @@ namespace Toggl.Multivac.Tests
             public void DoesNotThrowWhenUriIsAbsolute()
             {
                 Action whenTheCalledArgumentIsNull =
-                    () => Ensure.UriIsAbsolute(new Uri("http://www.toggl.com", UriKind.Absolute), "argument");
+                    () => Ensure.Argument.IsAbsoluteUri(new Uri("http://www.toggl.com", UriKind.Absolute), "argument");
 
                 whenTheCalledArgumentIsNull.ShouldNotThrow();
             }
@@ -115,7 +115,7 @@ namespace Toggl.Multivac.Tests
             public void ThrowsIfTheUriIsNull()
             {
                 Action whenTheCalledArgumentIsNull =
-                    () => Ensure.UriIsAbsolute(null, "argument");
+                    () => Ensure.Argument.IsAbsoluteUri(null, "argument");
 
                 whenTheCalledArgumentIsNull
                     .ShouldThrow<ArgumentException>()

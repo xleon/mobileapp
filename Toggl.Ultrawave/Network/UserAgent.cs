@@ -9,8 +9,8 @@ namespace Toggl.Ultrawave.Network
 
         public UserAgent(string agentName, string version)
         {
-            Ensure.ArgumentIsNotNullOrWhiteSpace(version, nameof(version));
-            Ensure.ArgumentIsNotNullOrWhiteSpace(agentName, nameof(agentName));
+            Ensure.Argument.IsNotNullOrWhiteSpaceString(version, nameof(version));
+            Ensure.Argument.IsNotNullOrWhiteSpaceString(agentName, nameof(agentName));
 
             this.version = version;
             this.agentName = agentName;

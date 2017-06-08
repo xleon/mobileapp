@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -18,9 +18,9 @@ namespace Toggl.Ultrawave.Network
 
         public Request(string body, Uri endpoint, IEnumerable<HttpHeader> headers, HttpMethod httpMethod)
         {
-            Ensure.ArgumentIsNotNull(body, nameof(body));
-            Ensure.ArgumentIsNotNull(headers, nameof(headers));
-            Ensure.ArgumentIsNotNull(endpoint, nameof(endpoint));
+            Ensure.Argument.IsNotNull(body, nameof(body));
+            Ensure.Argument.IsNotNull(headers, nameof(headers));
+            Ensure.Argument.IsNotNull(endpoint, nameof(endpoint));
 
             Body = Either<string, byte[]>.WithLeft(body);
             Headers = headers.ToList();
