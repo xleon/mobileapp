@@ -38,7 +38,7 @@ private Action BuildSolution(string targetProject)
     return () => MSBuild(targetProject, buildSettings);
 }
 
-const string path = "Toggl.Ultrawave.Tests.Integration/BaseTests/EndpointTestBase.cs";
+const string path = "Toggl.Ultrawave.Tests.Integration/Configuration.cs";
 var commitHash = GetCommitHash(); 
 var filePath = GetFiles(path).Single();
 

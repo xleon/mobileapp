@@ -1,13 +1,12 @@
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Ultrawave.Network;
+using Toggl.Ultrawave.Tests.Integration.Helper;
 
 namespace Toggl.Ultrawave.Tests.Integration.BaseTests
 {
     public abstract class EndpointTestBase
     {
-        private static readonly UserAgent userAgent = new UserAgent("MobileIntegrationTests", "d7be465f099633a0dfaf741ba10d54dafb4a5bf7");
-
         protected async Task<(ITogglApi togglClient, Models.User user)> SetupTestUser()
         {
             var credentials = await User.Create();
@@ -21,6 +20,6 @@ namespace Toggl.Ultrawave.Tests.Integration.BaseTests
             => new TogglApi(configurationFor(credentials));
 
         private ApiConfiguration configurationFor(Credentials credentials)
-            => new ApiConfiguration(ApiEnvironment.Staging, credentials, userAgent);
+            => new ApiConfiguration(ApiEnvironment.Staging, credentials, Configuration.UserAgent);
     }
 }

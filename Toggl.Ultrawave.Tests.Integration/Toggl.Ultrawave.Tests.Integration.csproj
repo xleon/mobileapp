@@ -149,6 +149,7 @@
     <Compile Include="BaseTests\AuthenticatedPostEndpointBaseTests.cs" />
     <Compile Include="BaseTests\AuthenticatedGetEndpointBaseTests.cs" />
     <Compile Include="BaseTests\AuthenticatedEndpointBaseTests.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="StatusApiTests.cs" />
     <Compile Include="UserApiTests.cs" />
     <Compile Include="TimeEntriesApiTests.cs" />
