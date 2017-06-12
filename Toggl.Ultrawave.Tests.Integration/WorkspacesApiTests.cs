@@ -4,10 +4,10 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Ultrawave.Exceptions;
+using Toggl.Ultrawave.Tests.Integration.BaseTests;
 using Toggl.Ultrawave.Tests.Integration.Helper;
 using Xunit;
-using Toggl.Ultrawave.Tests.Integration.BaseTests;
-using Toggl.Ultrawave.Models;
+using Workspace = Toggl.Ultrawave.Models.Workspace;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {

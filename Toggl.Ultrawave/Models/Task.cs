@@ -1,17 +1,22 @@
 ﻿using System;
-using Realms;
-using Toggl.PrimeRadiant.Models;
+using Newtonsoft.Json;
+using Toggl.Multivac.Models;
 
-namespace Toggl.PrimeRadiant.Realm
+namespace Toggl.Ultrawave.Models
 {
-    internal partial class RealmTask : RealmObject, IDatabaseTask
+    public class Task : ITask
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
+        [JsonProperty("pid")]
         public int ProjectId { get; set; }
 
+        [JsonProperty("wid")]
         public int WorkspaceId { get; set; }
 
+        [JsonProperty("uid")]
         public int? UserId { get; set; }
 
         public int? EstimatedSeconds { get; set; }

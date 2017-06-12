@@ -72,6 +72,22 @@ namespace Toggl.Foundation.Models
         public int Id { get; }
 
         public bool IsDirty { get; }
+
+        public string Name { get; set; }
+
+        public int ProjectId { get; set; }
+
+        public int WorkspaceId { get; set; }
+
+        public int? UserId { get; set; }
+
+        public int? EstimatedSeconds { get; set; }
+
+        public bool Active { get; set; }
+
+        public DateTimeOffset At { get; set; }
+
+        public int TrackedSeconds { get; set; }
     }
 
     internal partial class TimeEntry : IDatabaseTimeEntry

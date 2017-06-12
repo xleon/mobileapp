@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.Tests.Integration.BaseTests;
 using Xunit;
+using TimeEntry = Toggl.Ultrawave.Models.TimeEntry;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {

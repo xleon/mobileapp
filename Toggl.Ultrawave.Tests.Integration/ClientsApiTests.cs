@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Ultrawave.Tests.Integration.BaseTests;
 using Xunit;
-using Toggl.Ultrawave.Models;
+using Client = Toggl.Ultrawave.Models.Client;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {

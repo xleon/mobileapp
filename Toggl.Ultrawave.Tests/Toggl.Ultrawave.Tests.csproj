@@ -88,6 +88,7 @@
     <Compile Include="Network\ApiClientTests.cs" />
     <Compile Include="ApiClients\StatusApiTests.cs" />
     <Compile Include="ApiClients\UserApiTests.cs" />
+    <Compile Include="Models\TaskTests.cs" />
     <Compile Include="Models\ProjectTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,14 +2,14 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Multivac.Extensions;
 using Toggl.Foundation.DataSources;
+using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
-using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.Network;
 using Xunit;
+using User = Toggl.Ultrawave.Models.User;
 
 namespace Toggl.Foundation.Tests.DataSources
 {
