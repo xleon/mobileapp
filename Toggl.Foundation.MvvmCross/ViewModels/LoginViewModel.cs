@@ -2,8 +2,6 @@ using System.Reactive.Linq;
 using MvvmCross.Core.ViewModels;
 using Toggl.Multivac.Models;
 using System;
-using PropertyChanged;
-using Toggl.Multivac;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Ultrawave.Network;
 using MvvmCross.Platform;
@@ -14,7 +12,6 @@ using EmailType = Toggl.Multivac.Email;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
-    [ImplementPropertyChanged]
     public class LoginViewModel : BaseViewModel
     {
         private IDisposable loginDisposable;
