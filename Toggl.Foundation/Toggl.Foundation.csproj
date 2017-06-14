@@ -45,6 +45,9 @@
       <DependentUpon>FoundationConstructors.tt</DependentUpon>
     </Compile>
     <Compile Include="DataSources\UserDataSource.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="DataSources\TimeEntriesDataSource.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +90,12 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>FoundationConstructors.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

@@ -168,6 +168,7 @@
     <Compile Include="DataSources\UserDataSourceTests.cs" />
     <Compile Include="MvvmCross\ViewModels\LoginViewModelTests.cs" />
     <Compile Include="MvvmCross\ViewModels\BaseViewModelTests.cs" />
+    <Compile Include="MvvmCross\ViewModels\OnboardingViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataSources\" />
