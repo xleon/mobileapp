@@ -45,6 +45,9 @@ namespace Toggl.PrimeRadiant.Realm
             return CreateObservable(() => Adapter.GetAll().Where(predicate));
         }
 
+        public IObservable<IEnumerable<TModel>> GetAll()
+            => CreateObservable(() => Adapter.GetAll());
+
         protected static IObservable<T> CreateObservable<T>(Func<T> getFunction)
         {
             return Observable.Create<T>(observer =>
