@@ -45,6 +45,7 @@
       <DependentUpon>FoundationConstructors.tt</DependentUpon>
     </Compile>
     <Compile Include="DataSources\UserDataSource.cs" />
+    <Compile Include="DataSources\TimeEntriesDataSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataSources\" />
