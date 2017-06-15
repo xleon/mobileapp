@@ -158,6 +158,7 @@
     <Compile Include="WorkspacesApiTests.cs" />
     <Compile Include="Helper\WorkspaceHelper.cs" />
     <Compile Include="Helper\AuthorizedRequestBuilder.cs" />
+    <Compile Include="TagsApiTests.cs" />
     <Compile Include="LogTestInfoAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -22,7 +22,7 @@ namespace Toggl.Ultrawave
             var apiClient = new ApiClient(httpClient, configuration.UserAgent);
             var endpoints = new Endpoints(configuration.Environment);
 
-            Tags = new TagsApi();
+            Tags = new TagsApi(endpoints.Tags, apiClient, serializer, credentials);
             User = new UserApi(endpoints.User, apiClient, serializer, credentials);
             Tasks = new TasksApi();
             Status = new StatusApi(apiClient);
