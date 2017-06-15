@@ -12,9 +12,6 @@ namespace Toggl.Ultrawave.Network
 
         public Endpoint Get => Endpoint.Get(baseUrl, "me/time_entries");
 
-        public Endpoint GetForWorkspace(int workspaceId)
-            => Endpoint.Get(baseUrl, $"workspaces/{ workspaceId }/time_entries");
-
         public Endpoint Post(int workspaceId)
             => Endpoint.Post(baseUrl, $"workspaces/{ workspaceId }/time_entries");
     }

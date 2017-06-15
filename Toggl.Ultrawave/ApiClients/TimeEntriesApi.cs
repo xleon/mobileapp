@@ -25,7 +25,7 @@ namespace Toggl.Ultrawave.ApiClients
         public IObservable<TimeEntry> Create(TimeEntry timeEntry)
         {
             var endPoint = endPoints.Post(timeEntry.WorkspaceId);
-            var observable = CreateObservable<TimeEntry>(endPoint, AuthHeader, timeEntry, SerializationReason.Post);
+            var observable = CreateObservable(endPoint, AuthHeader, timeEntry, SerializationReason.Post);
             return observable;
         }
     }
