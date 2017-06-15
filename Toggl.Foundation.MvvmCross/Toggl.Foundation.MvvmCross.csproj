@@ -36,6 +36,7 @@
     <Compile Include="Services\IApiFactory.cs" />
     <Compile Include="ViewModels\OnboardingViewModel.cs" />
     <Compile Include="Helper\Color.cs" />
+    <Compile Include="Helper\Animation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">
