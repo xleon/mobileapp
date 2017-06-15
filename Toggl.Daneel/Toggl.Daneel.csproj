@@ -200,6 +200,7 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Services\" />
+    <Folder Include="Startup\" />
     <Folder Include="Extensions\" />
   </ItemGroup>
   <ItemGroup>
@@ -210,16 +211,30 @@
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml" />
+    <None Include="Startup\SetupTargetFactories.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SetupTargetFactories.cs</LastGenOutput>
+    </None>
+    <None Include="Extensions\ViewBindingExtensions.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ViewBindingExtensions.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
-    <Compile Include="AppDelegate.cs" />
-    <Compile Include="Setup.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
-    <Compile Include="DebugTrace.cs" />
     <Compile Include="Services\ApiFactory.cs" />
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
+    <Compile Include="Startup\Setup.cs" />
+    <Compile Include="Startup\SetupTargetFactories.cs">
+      <DependentUpon>SetupTargetFactories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\ViewBindingExtensions.cs">
+      <DependentUpon>ViewBindingExtensions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AppDelegate.cs" />
+    <Compile Include="DebugTrace.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Extensions\AnimationExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

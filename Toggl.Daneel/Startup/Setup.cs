@@ -16,7 +16,7 @@ using Foundation;
 
 namespace Toggl.Daneel
 {
-    public class Setup : MvxIosSetup
+    public partial class Setup : MvxIosSetup
     {
         #if DEBUG
         private const ApiEnvironment environment = ApiEnvironment.Staging;
