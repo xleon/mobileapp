@@ -236,6 +236,7 @@
     <Compile Include="DebugTrace.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Extensions\AnimationExtensions.cs" />
+    <Compile Include="Binding\ScrollViewCurrentPageTargetBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

@@ -4,6 +4,7 @@
 #><#@ import namespace="System.Linq"
 #>using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.iOS.Platform;
+using Toggl.Daneel.Binding;
 using UIKit;
 
 namespace Toggl.Daneel
