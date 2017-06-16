@@ -19,6 +19,6 @@ namespace Toggl.Foundation.DataSources
         }
 
         public IObservable<IEnumerable<ITimeEntry>> GetAll()
-            => repository.GetAll(_ => true);
+            => repository.GetAll();
     }
 }
