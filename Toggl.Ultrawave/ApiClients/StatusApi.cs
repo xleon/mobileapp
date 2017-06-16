@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Linq;
-using System.Net.Http;
 using System.Reactive.Linq;
-using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Network;
 
 namespace Toggl.Ultrawave.ApiClients
 {
     internal sealed class StatusApi : IStatusApi
     {
+        private readonly StatusEndpoints endpoints;
         private readonly IApiClient apiClient;
 
-        public StatusApi(IApiClient apiClient)
+        public StatusApi(StatusEndpoints endpoints, IApiClient apiClient)
         {
+            this.endpoints = endpoints;
             this.apiClient = apiClient;
         }
 
@@ -22,7 +22,8 @@ namespace Toggl.Ultrawave.ApiClients
             {
                 try
                 {
-                    var request = new Request("", ApiUrls.StatusUrl, Enumerable.Empty<HttpHeader>(), HttpMethod.Get);
+                    var endpoint = endpoints.Get;
+                    var request = new Request("", endpoint.Url, Enumerable.Empty<HttpHeader>(), endpoint.Method);
                     var response = await apiClient.Send(request).ConfigureAwait(false);
 
                     observer.OnNext(response.IsSuccess);

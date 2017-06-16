@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Ultrawave.ApiClients;
+using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Network;
 using Xunit;
 using static System.Net.HttpStatusCode;
@@ -19,7 +20,8 @@ namespace Toggl.Ultrawave.Tests.Clients
 
             public TheGetMethod()
             {
-                statusApi = new StatusApi(apiClient);
+                var endpoints = new StatusEndpoints(ApiUrls.ForEnvironment(ApiEnvironment.Staging));
+                statusApi = new StatusApi(endpoints, apiClient);
             }
 
             [Fact]
