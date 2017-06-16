@@ -1,5 +1,4 @@
-﻿using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant.Models;
+﻿using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.PrimeRadiant
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using MvvmCross.Platform.UI;
+﻿using MvvmCross.Platform.UI;
 
 namespace Toggl.Foundation.MvvmCross.Helper
 {

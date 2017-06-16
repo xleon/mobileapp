@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using FluentAssertions;
-using Toggl.Multivac.Extensions;
+﻿using FluentAssertions;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Xunit;
 

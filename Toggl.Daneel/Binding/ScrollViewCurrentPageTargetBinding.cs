@@ -2,8 +2,6 @@
 using CoreGraphics;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Platform;
 using UIKit;
 
 namespace Toggl.Daneel.Binding

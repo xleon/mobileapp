@@ -1,4 +1,3 @@
-using System.Reactive.Linq;
 using MvvmCross.Core.ViewModels;
 using Toggl.Multivac.Models;
 using System;
