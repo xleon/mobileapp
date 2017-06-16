@@ -42,6 +42,7 @@
     <Compile Include="Extensions\FunctionalExtensions.cs" />
     <Compile Include="Email.cs" />
     <Compile Include="Extensions\EmailExtensions.cs" />
+    <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />
