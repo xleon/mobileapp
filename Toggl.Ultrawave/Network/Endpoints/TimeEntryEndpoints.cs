@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Toggl.Ultrawave.Network
 {
     internal struct TimeEntryEndpoints

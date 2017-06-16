@@ -1,5 +1,4 @@
-﻿using System;
-using Toggl.Ultrawave.Models;
+﻿using Toggl.Ultrawave.Models;
 
 namespace Toggl.Ultrawave.Tests.Models
 {

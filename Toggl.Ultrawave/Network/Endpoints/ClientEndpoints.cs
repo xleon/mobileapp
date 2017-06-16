@@ -1,7 +1,6 @@
 ﻿using System;
-using Toggl.Ultrawave.Network;
 
-namespace Toggl.Ultrawave
+namespace Toggl.Ultrawave.Network
 {
     internal struct ClientEndpoints
     {
