@@ -13,6 +13,7 @@ using Toggl.Daneel.Services;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Ultrawave;
 using Foundation;
+using Toggl.Daneel.Presentation;
 
 namespace Toggl.Daneel
 {
@@ -25,7 +26,7 @@ namespace Toggl.Daneel
         #endif
 
         public Setup(MvxApplicationDelegate applicationDelegate, UIWindow window)
-            : base(applicationDelegate, window)
+            : this(applicationDelegate, new TogglPresenter(applicationDelegate, window))
         {
         }
 

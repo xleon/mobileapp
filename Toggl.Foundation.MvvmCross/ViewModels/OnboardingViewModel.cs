@@ -1,12 +1,16 @@
-﻿using MvvmCross.Core.ViewModels;
+﻿using System;
+using System.Threading.Tasks;
+using MvvmCross.Core.Navigation;
+using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.UI;
 using PropertyChanged;
 using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Foundation.MvvmCross.Parameters;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [ImplementPropertyChanged]
-    public class OnboardingViewModel : BaseViewModel
+    public sealed class OnboardingViewModel : BaseViewModel
     {
         public const int TrackPage = 0;
         public const int LogPage = 1;
@@ -20,6 +24,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             (Color.Onboarding.SummaryPageBackgroundColor, Color.Onboarding.SummaryPageBorderColor),
             (Color.Onboarding.LoginPageBackgroundColor, MvxColors.Transparent)
         };
+
+        private readonly IMvxNavigationService navigationService;
 
         private int currentPage = TrackPage;
         public int CurrentPage 
@@ -38,10 +44,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         [DependsOn(nameof(CurrentPage))]
-        public bool IsNextVisible => nextCanExecute();
+        public bool IsFirstPage => CurrentPage == 0;
 
         [DependsOn(nameof(CurrentPage))]
-        public bool IsPreviousVisible => previousCanExecute();
+        public bool IsLastPage => CurrentPage == NumberOfPages - 1;
 
         [DependsOn(nameof(CurrentPage))]
         public MvxColor BorderColor => PageInfo[CurrentPage].BorderColor;
@@ -55,23 +61,35 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand PreviousCommand { get; }
 
+        public IMvxAsyncCommand LoginCommand { get; }
+
+        public IMvxAsyncCommand SignUpCommand { get; }
+
         public int NumberOfPages => PageInfo.Length;
 
-        public OnboardingViewModel()
+        public OnboardingViewModel(IMvxNavigationService navigationService)
         {
+            this.navigationService = navigationService;
+
             SkipCommand = new MvxCommand(skip);
             NextCommand = new MvxCommand(next, nextCanExecute);
+            LoginCommand = new MvxAsyncCommand(login);
+            SignUpCommand = new MvxAsyncCommand(signup);
             PreviousCommand = new MvxCommand(previous, previousCanExecute);
         }
+
+        private Task login()
+            => navigationService.Navigate<LoginViewModel, LoginParameter>(LoginParameter.Login);
+
+        private Task signup()
+            => navigationService.Navigate<LoginViewModel, LoginParameter>(LoginParameter.Signup);
 
         private void skip()
             => CurrentPage = LoginPage;
 
-        private bool nextCanExecute()
-            => CurrentPage < NumberOfPages - 1;
+        private bool nextCanExecute() => !IsLastPage;
 
-        private bool previousCanExecute()
-            => CurrentPage > TrackPage;
+        private bool previousCanExecute() => !IsFirstPage;
 
         private void next() => CurrentPage++;
 

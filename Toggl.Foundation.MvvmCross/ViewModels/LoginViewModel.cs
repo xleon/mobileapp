@@ -1,17 +1,19 @@
-using MvvmCross.Core.ViewModels;
-using Toggl.Multivac.Models;
 using System;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Ultrawave.Network;
+using System.Threading.Tasks;
+using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.MvvmCross.Parameters;
+using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
+using Toggl.Ultrawave.Network;
 using EmailType = Toggl.Multivac.Email;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
-    public class LoginViewModel : BaseViewModel
+    public class LoginViewModel : BaseViewModel<LoginParameter>
     {
         private IDisposable loginDisposable;
 
@@ -46,6 +48,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             LoginCommand = new MvxCommand(login, loginCanExecute);
         }
 
+        public override Task Initialize(LoginParameter parameter)
+            => Task.FromResult(0);
+       
         public bool EmailIsValid => userEmail.IsValid;
 
         private void login()

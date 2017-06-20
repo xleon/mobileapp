@@ -15,6 +15,11 @@ namespace Toggl.Daneel
                 ScrollViewCurrentPageTargetBinding.BindingName,
                 view => new ScrollViewCurrentPageTargetBinding(view)
             );
+
+            registry.RegisterCustomBindingFactory<UIView>(
+                ViewAnimatedBackgroundTargetBinding.BindingName,
+                view => new ViewAnimatedBackgroundTargetBinding(view)
+            );
         }
     }
 }

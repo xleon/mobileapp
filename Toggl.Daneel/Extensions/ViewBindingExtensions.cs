@@ -8,5 +8,8 @@ namespace Toggl.Daneel.Extensions
 
         public static string BindCurrentPage(this UIScrollView self)
             => ScrollViewCurrentPageTargetBinding.BindingName;
+
+        public static string BindAnimatedBackground(this UIView self)
+            => ViewAnimatedBackgroundTargetBinding.BindingName;
     }
 }

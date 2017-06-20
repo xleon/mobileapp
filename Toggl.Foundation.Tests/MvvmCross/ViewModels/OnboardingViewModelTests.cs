@@ -1,6 +1,9 @@
-﻿using FluentAssertions;
+using FluentAssertions;
+﻿using System.Threading.Tasks;
+using NSubstitute;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Xunit;
+using Toggl.Foundation.MvvmCross.Parameters;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -30,35 +33,35 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheIsNextVisibleProperty : BaseViewModelTests<OnboardingViewModel>
+        public class TheIsFirstPageProperty : BaseViewModelTests<OnboardingViewModel>
         {
             [Theory]
             [InlineData(OnboardingViewModel.TrackPage)]
             [InlineData(OnboardingViewModel.LogPage)]
             [InlineData(OnboardingViewModel.SummaryPage)]
             [InlineData(OnboardingViewModel.LoginPage)]
-            public void ReturnsTrueInAllPagesButTheLastOne(int page)
+            public void OnlyReturnsTrueForTheFirstPage(int page)
             {
                 ViewModel.CurrentPage = page;
 
-                var expected = page != ViewModel.NumberOfPages - 1;
-                ViewModel.IsNextVisible.Should().Be(expected);
+                var expected = page == 0;
+                ViewModel.IsFirstPage.Should().Be(expected);
             }
         }
 
-        public class TheIsPreviousVisibleProperty : BaseViewModelTests<OnboardingViewModel>
+        public class TheIsLastPageProperty : BaseViewModelTests<OnboardingViewModel>
         {
             [Theory]
             [InlineData(OnboardingViewModel.TrackPage)]
             [InlineData(OnboardingViewModel.LogPage)]
             [InlineData(OnboardingViewModel.SummaryPage)]
             [InlineData(OnboardingViewModel.LoginPage)]
-            public void ReturnsTrueInAllPagesButTheFirstOne(int page)
+            public void OnlyReturnsTrueInThePageWhoseIndexEqualsToTheNumberOfPagesMinusOne(int page)
             {
                 ViewModel.CurrentPage = page;
 
-                var expected = page != 0;
-                ViewModel.IsPreviousVisible.Should().Be(expected);
+                var expected = page == ViewModel.NumberOfPages - 1;
+                ViewModel.IsLastPage.Should().Be(expected);
             }
         }
 
@@ -112,6 +115,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.CurrentPage = OnboardingViewModel.TrackPage;
 
                 ViewModel.PreviousCommand.CanExecute().Should().BeFalse();
+            }
+        }
+
+        public class TheLoginCommand : BaseViewModelTests<OnboardingViewModel>
+        {
+            [Fact]
+            public async Task RequestsTheLoginViewModelFromTheNavigationService()
+            {
+                await ViewModel.LoginCommand.ExecuteAsync();
+
+                await NavigationService.Received().Navigate<LoginViewModel, LoginParameter>(Arg.Any<LoginParameter>());
             }
         }
     }
