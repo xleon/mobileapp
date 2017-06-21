@@ -16,7 +16,6 @@ namespace Toggl.Ultrawave.Models
 
         public string Fullname { get; set; }
 
-        //BACKEND Y U STEP ON SNEK??
         [JsonProperty("timeofday_format")]
         public string TimeOfDayFormat { get; set; }
 

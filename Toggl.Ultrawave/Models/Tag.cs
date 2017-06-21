@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using Toggl.Multivac.Models;
 
 namespace Toggl.Ultrawave.Models
@@ -10,5 +11,7 @@ namespace Toggl.Ultrawave.Models
         public int WorkspaceId { get; set; }
 
         public string Name { get; set; }
+
+        public DateTimeOffset At { get; set; }
     }
 }

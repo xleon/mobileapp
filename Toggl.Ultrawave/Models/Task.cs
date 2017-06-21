@@ -19,7 +19,7 @@ namespace Toggl.Ultrawave.Models
         [JsonProperty("uid")]
         public int? UserId { get; set; }
 
-        public int? EstimatedSeconds { get; set; }
+        public int EstimatedSeconds { get; set; }
 
         public bool Active { get; set; }
 

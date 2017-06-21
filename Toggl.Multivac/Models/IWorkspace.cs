@@ -6,12 +6,6 @@ namespace Toggl.Multivac.Models
     {
         string Name { get; }
 
-        int Profile { get; }
-
-        bool Premium { get; }
-
-        bool BusinessWs { get; }
-
         bool Admin { get; }
 
         DateTimeOffset? SuspendedAt { get; }

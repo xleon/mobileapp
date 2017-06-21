@@ -14,7 +14,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public int? UserId { get; set; }
 
-        public int? EstimatedSeconds { get; set; }
+        public int EstimatedSeconds { get; set; }
 
         public bool Active { get; set; }
 

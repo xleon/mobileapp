@@ -8,12 +8,6 @@ namespace Toggl.PrimeRadiant.Realm
     {
         public string Name { get; set; }
 
-        public int Profile { get; set; }
-
-        public bool Premium { get; set; }
-
-        public bool BusinessWs { get; set; }
-
         public bool Admin { get; set; }
 
         public DateTimeOffset? SuspendedAt { get; set; }

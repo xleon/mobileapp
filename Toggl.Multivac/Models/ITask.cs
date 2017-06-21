@@ -12,7 +12,7 @@ namespace Toggl.Multivac.Models
 
         int? UserId { get; }
 
-        int? EstimatedSeconds { get; }
+        int EstimatedSeconds { get; }
 
         bool Active { get; }
 

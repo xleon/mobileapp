@@ -1,4 +1,4 @@
-﻿using Realms;
+﻿﻿using Realms;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant.Models;
 
@@ -25,6 +25,7 @@ namespace Toggl.PrimeRadiant.Realm
             WorkspaceId = entity.WorkspaceId;
             Name = entity.Name;
             At = entity.At;
+            ServerDeletedAt = entity.ServerDeletedAt;
             IsDirty = true;
         }
     }
@@ -47,6 +48,22 @@ namespace Toggl.PrimeRadiant.Realm
         public RealmProject(IProject entity)
         {
             Id = entity.Id;
+            WorkspaceId = entity.WorkspaceId;
+            ClientId = entity.ClientId;
+            Name = entity.Name;
+            IsPrivate = entity.IsPrivate;
+            Active = entity.Active;
+            At = entity.At;
+            CreatedAt = entity.CreatedAt;
+            ServerDeletedAt = entity.ServerDeletedAt;
+            Color = entity.Color;
+            Billable = entity.Billable;
+            Template = entity.Template;
+            AutoEstimates = entity.AutoEstimates;
+            EstimatedHours = entity.EstimatedHours;
+            Rate = entity.Rate;
+            Currency = entity.Currency;
+            ActualHours = entity.ActualHours;
             IsDirty = true;
         }
     }
@@ -71,6 +88,7 @@ namespace Toggl.PrimeRadiant.Realm
             Id = entity.Id;
             WorkspaceId = entity.WorkspaceId;
             Name = entity.Name;
+            At = entity.At;
             IsDirty = true;
         }
     }
@@ -93,6 +111,14 @@ namespace Toggl.PrimeRadiant.Realm
         public RealmTask(ITask entity)
         {
             Id = entity.Id;
+            Name = entity.Name;
+            ProjectId = entity.ProjectId;
+            WorkspaceId = entity.WorkspaceId;
+            UserId = entity.UserId;
+            EstimatedSeconds = entity.EstimatedSeconds;
+            Active = entity.Active;
+            At = entity.At;
+            TrackedSeconds = entity.TrackedSeconds;
             IsDirty = true;
         }
     }
@@ -191,9 +217,6 @@ namespace Toggl.PrimeRadiant.Realm
         {
             Id = entity.Id;
             Name = entity.Name;
-            Profile = entity.Profile;
-            Premium = entity.Premium;
-            BusinessWs = entity.BusinessWs;
             Admin = entity.Admin;
             SuspendedAt = entity.SuspendedAt;
             ServerDeletedAt = entity.ServerDeletedAt;

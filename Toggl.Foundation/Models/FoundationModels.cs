@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using Toggl.PrimeRadiant.Models;
 
@@ -14,6 +14,8 @@ namespace Toggl.Foundation.Models
 
         public DateTimeOffset At { get; }
 
+        public DateTimeOffset? ServerDeletedAt { get; }
+
         public bool IsDirty { get; }
     }
 
@@ -21,39 +23,39 @@ namespace Toggl.Foundation.Models
     {
         public int Id { get; }
 
+        public int WorkspaceId { get; }
+
+        public int? ClientId { get; }
+
+        public string Name { get; }
+
+        public bool IsPrivate { get; }
+
+        public bool Active { get; }
+
+        public DateTimeOffset At { get; }
+
+        public DateTimeOffset CreatedAt { get; }
+
+        public DateTimeOffset? ServerDeletedAt { get; }
+
+        public string Color { get; }
+
+        public bool Billable { get; }
+
+        public bool Template { get; }
+
+        public bool AutoEstimates { get; }
+
+        public int? EstimatedHours { get; }
+
+        public int? Rate { get; }
+
+        public string Currency { get; }
+
+        public int ActualHours { get; }
+
         public bool IsDirty { get; }
-
-        public int WorkspaceId { get; set; }
-
-        public int? ClientId { get; set; }
-
-        public string Name { get; set; }
-
-        public bool IsPrivate { get; set; }
-
-        public bool Active { get; set; }
-
-        public DateTimeOffset At { get; set; }
-
-        public DateTimeOffset CreatedAt { get; set; }
-
-        public DateTimeOffset? ServerDeletedAt { get; set; }
-
-        public string Color { get; set; }
-
-        public bool Billable { get; set; }
-
-        public bool Template { get; set; }
-
-        public bool AutoEstimates { get; set; }
-
-        public int? EstimatedHours { get; set; }
-
-        public int? Rate { get; set; }
-
-        public string Currency { get; set; }
-
-        public int ActualHours { get; set; }
     }
 
     internal partial class Tag : IDatabaseTag
@@ -64,6 +66,8 @@ namespace Toggl.Foundation.Models
 
         public string Name { get; }
 
+        public DateTimeOffset At { get; }
+
         public bool IsDirty { get; }
     }
 
@@ -71,23 +75,23 @@ namespace Toggl.Foundation.Models
     {
         public int Id { get; }
 
+        public string Name { get; }
+
+        public int ProjectId { get; }
+
+        public int WorkspaceId { get; }
+
+        public int? UserId { get; }
+
+        public int EstimatedSeconds { get; }
+
+        public bool Active { get; }
+
+        public DateTimeOffset At { get; }
+
+        public int TrackedSeconds { get; }
+
         public bool IsDirty { get; }
-
-        public string Name { get; set; }
-
-        public int ProjectId { get; set; }
-
-        public int WorkspaceId { get; set; }
-
-        public int? UserId { get; set; }
-
-        public int? EstimatedSeconds { get; set; }
-
-        public bool Active { get; set; }
-
-        public DateTimeOffset At { get; set; }
-
-        public int TrackedSeconds { get; set; }
     }
 
     internal partial class TimeEntry : IDatabaseTimeEntry
@@ -171,12 +175,6 @@ namespace Toggl.Foundation.Models
         public int Id { get; }
 
         public string Name { get; }
-
-        public int Profile { get; }
-
-        public bool Premium { get; }
-
-        public bool BusinessWs { get; }
 
         public bool Admin { get; }
 
