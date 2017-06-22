@@ -18,8 +18,7 @@ namespace Toggl.Multivac.Models
 
         bool StoreStartAndStopTime { get; }
 
-        //TODO: Map to an Enum?
-        int BeginningOfWeek { get; }
+        BeginningOfWeek BeginningOfWeek { get; }
 
         string Language { get; }
 

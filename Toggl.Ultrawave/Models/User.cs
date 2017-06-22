@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using Toggl.Multivac;
 using Toggl.Multivac.Models;
 
 namespace Toggl.Ultrawave.Models
@@ -23,7 +24,7 @@ namespace Toggl.Ultrawave.Models
 
         public bool StoreStartAndStopTime { get; set; }
 
-        public int BeginningOfWeek { get; set; }
+        public BeginningOfWeek BeginningOfWeek { get; set; }
 
         public string Language { get; set; }
 

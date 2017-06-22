@@ -1,5 +1,6 @@
 ﻿using System;
 using Realms;
+using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.PrimeRadiant.Realm
@@ -10,12 +11,20 @@ namespace Toggl.PrimeRadiant.Realm
 
         public DateTimeOffset At { get; set; }
 
-        public int BeginningOfWeek { get; set; }
-
         public string DateFormat { get; set; }
 
         public int DefaultWorkspaceId { get; set; }
 
+        //Realm doesn't support enums 
+        [Ignored]
+        public BeginningOfWeek BeginningOfWeek
+        {
+            get => (BeginningOfWeek)BeginningOfWeekInt;
+            set => BeginningOfWeekInt = (int)value;
+        }
+
+        public int BeginningOfWeekInt { get; set; }
+        
         public string Email { get; set; }
 
         public string Fullname { get; set; }

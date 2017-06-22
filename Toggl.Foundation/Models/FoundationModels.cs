@@ -1,5 +1,6 @@
 ﻿﻿using System;
 using System.Collections.Generic;
+using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Models
@@ -147,7 +148,7 @@ namespace Toggl.Foundation.Models
 
         public bool StoreStartAndStopTime { get; }
 
-        public int BeginningOfWeek { get; }
+        public BeginningOfWeek BeginningOfWeek { get; }
 
         public string Language { get; }
 
