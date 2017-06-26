@@ -1,4 +1,7 @@
-﻿using Toggl.PrimeRadiant.Models;
+﻿using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.PrimeRadiant.Realm
 {
@@ -22,5 +25,8 @@ namespace Toggl.PrimeRadiant.Realm
         public ISingleObjectStorage<IDatabaseUser> User { get; }
         public IRepository<IDatabaseTimeEntry> TimeEntries { get; }
         public IRepository<IDatabaseWorkspace> Workspaces { get; }
+
+        public IObservable<Unit> Clear()
+            => Observable.Start(Realms.Realm.GetInstance().RemoveAll);
     }
 }

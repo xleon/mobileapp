@@ -1,4 +1,6 @@
-﻿using Toggl.PrimeRadiant.Models;
+﻿using System;
+using System.Reactive;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.PrimeRadiant
 {
@@ -11,5 +13,7 @@ namespace Toggl.PrimeRadiant
         IRepository<IDatabaseTask> Tasks { get; }
         IRepository<IDatabaseTimeEntry> TimeEntries { get; }
         IRepository<IDatabaseWorkspace> Workspaces { get; }
+
+        IObservable<Unit> Clear();
     }
 }
