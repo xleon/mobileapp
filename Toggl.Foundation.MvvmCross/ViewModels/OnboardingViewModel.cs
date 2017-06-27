@@ -6,6 +6,7 @@ using MvvmCross.Platform.UI;
 using PropertyChanged;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Parameters;
+using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -69,6 +70,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public OnboardingViewModel(IMvxNavigationService navigationService)
         {
+            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
+
             this.navigationService = navigationService;
 
             SkipCommand = new MvxCommand(skip);

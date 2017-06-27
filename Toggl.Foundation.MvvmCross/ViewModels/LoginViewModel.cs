@@ -5,6 +5,7 @@ using MvvmCross.Platform;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
@@ -15,6 +16,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     public class LoginViewModel : BaseViewModel<LoginParameter>
     {
+        private readonly ITogglDataSource dataSource;
+
         private IDisposable loginDisposable;
 
         private EmailType userEmail = EmailType.Invalid;
@@ -42,9 +45,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand LoginCommand { get; }
 
-        public LoginViewModel(IApiFactory apiFactory)
+        public LoginViewModel(IApiFactory apiFactory, ITogglDataSource dataSource)
         {
+            Ensure.Argument.IsNotNull(apiFactory, nameof(apiFactory));
+            Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+
+            this.dataSource = dataSource;
             this.apiFactory = apiFactory;
+
             LoginCommand = new MvxCommand(login, loginCanExecute);
         }
 
@@ -56,7 +64,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void login()
         {
             loginDisposable =
-                DataSource.User
+                dataSource.User
                           .Login(userEmail, Password)
                           .Subscribe(onUser, onError);
 
@@ -74,10 +82,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var credentials = Credentials.WithApiToken(user.ApiToken);
             var api = apiFactory.CreateApiWith(credentials);
             var database = Mvx.Resolve<ITogglDatabase>();
-            var dataSource = new TogglDataSource(database, api);
+            var newDataSource = new TogglDataSource(database, api);
 
             Mvx.RegisterSingleton<ITogglApi>(api);
-            Mvx.RegisterSingleton<ITogglDataSource>(dataSource);
+            Mvx.RegisterSingleton<ITogglDataSource>(newDataSource);
         }
 
         private void onError(Exception ex)

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Reactive.Disposables;
+﻿using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -13,7 +13,26 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
     public class TimeEntriesViewModelTests
     {
-        public class TheTimeEntriesProperty : BaseViewModelTests<TimeEntriesViewModel>
+        public abstract class TimeEntriesViewModelTest : BaseViewModelTests<TimeEntriesViewModel>
+        {
+            protected override TimeEntriesViewModel CreateViewModel()
+                => new TimeEntriesViewModel(DataSource);
+        }
+
+        public class TheConstructor
+        {
+            [Fact]
+            public void ThrowsIfTheArgumentsIsNull()
+            {
+                Action tryingToConstructWithEmptyParameters =
+                    () => new TimeEntriesViewModel(null);
+
+                tryingToConstructWithEmptyParameters
+                    .ShouldThrow<ArgumentNullException>();
+            }
+        }
+
+        public class TheTimeEntriesProperty : TimeEntriesViewModelTest
         {
             [Fact]
             public async Task ReturnsAllTimeEntries()

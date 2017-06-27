@@ -1,4 +1,5 @@
-﻿using MvvmCross.Core;
+﻿using System;
+using MvvmCross.Core;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.Platform;
 using MvvmCross.Core.ViewModels;
@@ -27,17 +28,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             MvxSingleton<IMvxIoCProvider>.Instance.RegisterSingleton<IMvxSettings>(new MvxSettings());
 
             MvxTrace.Initialize();
-
-            MvxSingleton<IMvxIoCProvider>.Instance.RegisterSingleton(Api);
-            MvxSingleton<IMvxIoCProvider>.Instance.RegisterSingleton(Database);
-            MvxSingleton<IMvxIoCProvider>.Instance.RegisterSingleton(DataSource);
-            MvxSingleton<IMvxIoCProvider>.Instance.RegisterSingleton(NavigationService);
         }
-
-        protected static ITogglApi Api { get; } = Substitute.For<ITogglApi>();
-        protected static ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
-        protected static ITogglDataSource DataSource { get; } = Substitute.For<ITogglDataSource>();
-        protected static IMvxNavigationService NavigationService { get; } = Substitute.For<IMvxNavigationService>();
     }
 
     public abstract class BaseViewModelTests<TViewModel> : BaseViewModelTests
@@ -45,20 +36,27 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         protected IMvxIoCProvider Ioc { get; private set; }
 
+        protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
+        protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
+        protected ITogglDataSource DataSource { get; } = Substitute.For<ITogglDataSource>();
+        protected IMvxNavigationService NavigationService { get; } = Substitute.For<IMvxNavigationService>();
+
+        protected TViewModel ViewModel { get; private set; }
+
         protected BaseViewModelTests()
         {
             Setup();
-
-            ViewModel = Ioc.IoCConstruct<TViewModel>();
         }
 
-        protected TViewModel ViewModel { get; }
+        protected abstract TViewModel CreateViewModel();
 
         private void Setup()
         {
             Ioc = MvxSingleton<IMvxIoCProvider>.Instance;
 
             AdditionalSetup();
+
+            ViewModel = CreateViewModel();
         }
 
         protected virtual void AdditionalSetup()

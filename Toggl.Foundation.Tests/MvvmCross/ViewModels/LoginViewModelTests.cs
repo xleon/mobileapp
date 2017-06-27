@@ -1,9 +1,13 @@
-﻿using Microsoft.Reactive.Testing;
+﻿using System;
+using FluentAssertions;
+using Microsoft.Reactive.Testing;
 using NSubstitute;
+using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Models;
+using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -24,7 +28,31 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 Ioc.RegisterSingleton(ApiFactory);
             }
+
+            protected override LoginViewModel CreateViewModel()
+                => new LoginViewModel(ApiFactory, DataSource);
+        }
+
+        public class TheConstructor : LoginViewModelTests
+        {
+            private static readonly IApiFactory ApiFactory = Substitute.For<IApiFactory>();
+            private static readonly ITogglDataSource DataSource = Substitute.For<ITogglDataSource>();
+            
+            [Theory]
+            [InlineData(true, false)]
+            [InlineData(false, true)]
+            [InlineData(false, false)]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useApiFactory, bool useDataSource)
+            {
+                var apiFactory = useApiFactory ? ApiFactory : null;
+                var dataSource = useDataSource ? DataSource : null;
+
+                Action tryingToConstructWithEmptyParameters =
+                    () => new LoginViewModel(apiFactory, dataSource);
+
+                tryingToConstructWithEmptyParameters
+                    .ShouldThrow<ArgumentNullException>();
+            }
         }
     }
 }
-    
