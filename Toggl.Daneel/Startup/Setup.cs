@@ -5,25 +5,23 @@ using MvvmCross.iOS.Views.Presenters;
 using MvvmCross.Platform.Platform;
 using MvvmCross.Platform;
 using Toggl.Foundation.MvvmCross;
-using Toggl.Foundation.DataSources;
 using Toggl.Ultrawave.Network;
 using Toggl.PrimeRadiant.Realm;
-using Toggl.PrimeRadiant;
-using Toggl.Daneel.Services;
-using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Ultrawave;
 using Foundation;
 using Toggl.Daneel.Presentation;
+using Toggl.Foundation.Login;
+using Toggl.Daneel.Services;
 
 namespace Toggl.Daneel
 {
     public partial class Setup : MvxIosSetup
     {
-        #if DEBUG
-        private const ApiEnvironment environment = ApiEnvironment.Staging;
-        #else
-        private const ApiEnvironment environment = ApiEnvironment.Production;
-        #endif
+#if DEBUG
+        private const ApiEnvironment Environment = ApiEnvironment.Staging;
+#else
+        private const ApiEnvironment Environment = ApiEnvironment.Production;
+#endif
 
         public Setup(MvxApplicationDelegate applicationDelegate, UIWindow window)
             : this(applicationDelegate, new TogglPresenter(applicationDelegate, window))
@@ -39,20 +37,17 @@ namespace Toggl.Daneel
 
         protected override IMvxTrace CreateDebugTrace() => new DebugTrace();
 
-        protected override void InitializeLastChance()
+        protected override void InitializeFirstChance()
         {
-            base.InitializeLastChance();
+            base.InitializeFirstChance();
 
             var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"];
             var userAgent = new UserAgent("Daneel", version.ToString());
 
-            var apiConfiguration = new ApiConfiguration(environment, Credentials.None, userAgent);
+            var apiFactory = new ApiFactory(Environment, userAgent);
+            var loginManager = new LoginManager(apiFactory, () => new Database());
 
-            Mvx.RegisterType<ITogglDatabase, Database>();
-            Mvx.RegisterType<ITogglDataSource, TogglDataSource>();
-            Mvx.RegisterSingleton<ITogglApi>(new TogglApi(apiConfiguration));
-            Mvx.RegisterSingleton<IMvxCommandHelper>(new MvxStrongCommandHelper());
-            Mvx.RegisterSingleton<IApiFactory>(new ApiFactory(environment, userAgent));
+            Mvx.RegisterSingleton<ILoginManager>(loginManager);
         }
     }
 }

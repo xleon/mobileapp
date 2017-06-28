@@ -235,11 +235,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="Services\" />
     <Folder Include="Startup\" />
     <Folder Include="Extensions\" />
     <Folder Include="Presentation\" />
     <Folder Include="Resources\Images.xcassets\togglLogoWhite.imageset\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -261,7 +261,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LinkerPleaseInclude.cs" />
-    <Compile Include="Services\ApiFactory.cs" />
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Startup\Setup.cs" />
@@ -282,6 +281,7 @@
     </Compile>
     <Compile Include="Presentation\TogglPresenter.cs" />
     <Compile Include="Binding\ViewAnimatedBackgroundTargetBinding.cs" />
+    <Compile Include="Services\ApiFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
@@ -303,6 +303,10 @@
     <ProjectReference Include="..\Toggl.PrimeRadiant.Realm\Toggl.PrimeRadiant.Realm.csproj">
       <Project>{64A8727E-5D39-4EFB-80FA-4510147796BB}</Project>
       <Name>Toggl.PrimeRadiant.Realm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">
+      <Project>{4A9CF7CD-8EB4-435D-958B-98A9FFC14876}</Project>
+      <Name>Toggl.Multivac</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

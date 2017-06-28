@@ -1,7 +1,7 @@
 ﻿using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
 
-namespace Toggl.Foundation.MvvmCross.Services
+namespace Toggl.Foundation.Login
 {
     public interface IApiFactory
     {

@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
-using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Models;
@@ -20,17 +20,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             protected TestScheduler TestScheduler { get; } = new TestScheduler();
             protected IUser User { get; } = new User { Id = 10, ApiToken = "1337" };
-            protected IApiFactory ApiFactory { get; } = Substitute.For<IApiFactory>();
+
+            protected ILoginManager LoginManager { get; } = Substitute.For<ILoginManager>();
 
             protected override void AdditionalSetup()
             {
                 base.AdditionalSetup();
 
-                Ioc.RegisterSingleton(ApiFactory);
+                Ioc.RegisterSingleton(LoginManager);
             }
 
             protected override LoginViewModel CreateViewModel()
-                => new LoginViewModel(ApiFactory, DataSource);
+                => new LoginViewModel(LoginManager);
         }
 
         public class TheConstructor : LoginViewModelTests
@@ -38,17 +39,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             private static readonly IApiFactory ApiFactory = Substitute.For<IApiFactory>();
             private static readonly ITogglDataSource DataSource = Substitute.For<ITogglDataSource>();
             
-            [Theory]
-            [InlineData(true, false)]
-            [InlineData(false, true)]
-            [InlineData(false, false)]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useApiFactory, bool useDataSource)
+            [Fact]
+            public void ThrowsIfTheArgumentIsNull()
             {
-                var apiFactory = useApiFactory ? ApiFactory : null;
-                var dataSource = useDataSource ? DataSource : null;
-
                 Action tryingToConstructWithEmptyParameters =
-                    () => new LoginViewModel(apiFactory, dataSource);
+                    () => new LoginViewModel(null);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();

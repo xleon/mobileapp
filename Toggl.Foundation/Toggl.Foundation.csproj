@@ -49,11 +49,14 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="DataSources\TimeEntriesDataSource.cs" />
+    <Compile Include="Login\IApiFactory.cs" />
+    <Compile Include="Login\LoginManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataSources\" />
     <Folder Include="DataSources\Interfaces\" />
     <Folder Include="Models\" />
+    <Folder Include="Login\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">

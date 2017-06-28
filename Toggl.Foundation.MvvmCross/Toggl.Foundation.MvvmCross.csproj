@@ -33,7 +33,6 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="App.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="Services\IApiFactory.cs" />
     <Compile Include="ViewModels\TimeEntriesViewModel.cs" />
     <Compile Include="ViewModels\OnboardingViewModel.cs" />
     <Compile Include="Helper\Color.cs" />

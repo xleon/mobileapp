@@ -1,21 +1,25 @@
-﻿﻿using Toggl.Foundation.MvvmCross.Services;
+﻿using Toggl.Foundation.Login;
+using Toggl.Multivac;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
 
 namespace Toggl.Daneel.Services
 {
-    public class ApiFactory : IApiFactory
+    public sealed class ApiFactory : IApiFactory
     {
-        private readonly UserAgent userAgent;
-        private readonly ApiEnvironment environment;
+        public UserAgent UserAgent { get; }
 
-        public ApiFactory(ApiEnvironment environment, UserAgent userAgent)
+        public ApiEnvironment Environment { get; }
+
+        public ApiFactory(ApiEnvironment apiEnvironment, UserAgent userAgent)
         {
-            this.userAgent = userAgent;
-            this.environment = environment;
+            Ensure.Argument.IsNotNull(userAgent, nameof(userAgent));
+
+            UserAgent = userAgent;
+            Environment = apiEnvironment;
         }
 
         public ITogglApi CreateApiWith(Credentials credentials)
-            => new TogglApi(new ApiConfiguration(environment, credentials, userAgent));
+            => new TogglApi(new ApiConfiguration(Environment, credentials, UserAgent));
     }
 }

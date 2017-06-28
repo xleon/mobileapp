@@ -18,8 +18,5 @@ namespace Toggl.Ultrawave.ApiClients
 
         public IObservable<User> Get()
             => CreateObservable<User>(endPoints.Get, AuthHeader);
-
-        public IObservable<User> Get(Credentials credentials)
-            => CreateObservable<User>(endPoints.Get, credentials.Header);
     }
 }

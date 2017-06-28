@@ -18,7 +18,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public TimeEntriesViewModel(ITogglDataSource dataSource)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            
+
             this.dataSource = dataSource;
         }
 

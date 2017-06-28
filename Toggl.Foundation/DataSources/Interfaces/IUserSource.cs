@@ -6,6 +6,5 @@ namespace Toggl.Foundation.DataSources
 {
     public interface IUserSource
     {
-        IObservable<IUser> Login(Email username, string password);
     }
 }

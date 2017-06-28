@@ -3,25 +3,20 @@ using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
-using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant;
-using Toggl.Ultrawave;
-using Toggl.Ultrawave.Network;
 using EmailType = Toggl.Multivac.Email;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     public class LoginViewModel : BaseViewModel<LoginParameter>
     {
-        private readonly ITogglDataSource dataSource;
+        private readonly ILoginManager loginManager;
 
         private IDisposable loginDisposable;
 
         private EmailType userEmail = EmailType.Invalid;
-        private readonly IApiFactory apiFactory;
 
         private string email = "";
         public string Email 
@@ -45,13 +40,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand LoginCommand { get; }
 
-        public LoginViewModel(IApiFactory apiFactory, ITogglDataSource dataSource)
+        public LoginViewModel(ILoginManager loginManager)
         {
-            Ensure.Argument.IsNotNull(apiFactory, nameof(apiFactory));
-            Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(loginManager, nameof(loginManager));
 
-            this.dataSource = dataSource;
-            this.apiFactory = apiFactory;
+            this.loginManager = loginManager;
 
             LoginCommand = new MvxCommand(login, loginCanExecute);
         }
@@ -64,9 +57,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void login()
         {
             loginDisposable =
-                dataSource.User
-                          .Login(userEmail, Password)
-                          .Subscribe(onUser, onError);
+                loginManager
+                    .Login(userEmail, Password)
+                    .Subscribe(onDataSource, onError);
 
             LoginCommand.RaiseCanExecuteChanged();
         }
@@ -74,18 +67,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private bool loginCanExecute() 
             => loginDisposable == null && EmailIsValid;
 
-        private void onUser(IUser user)
+        private void onDataSource(ITogglDataSource dataSource)
         {
             loginDisposable = null;
-            LoginCommand.RaiseCanExecuteChanged();
+            LoginCommand.RaiseCanExecuteChanged();  
 
-            var credentials = Credentials.WithApiToken(user.ApiToken);
-            var api = apiFactory.CreateApiWith(credentials);
-            var database = Mvx.Resolve<ITogglDatabase>();
-            var newDataSource = new TogglDataSource(database, api);
-
-            Mvx.RegisterSingleton<ITogglApi>(api);
-            Mvx.RegisterSingleton<ITogglDataSource>(newDataSource);
+            Mvx.RegisterSingleton(dataSource);
         }
 
         private void onError(Exception ex)
