@@ -170,11 +170,13 @@
     <Compile Include="MvvmCross\ViewModels\BaseViewModelTests.cs" />
     <Compile Include="MvvmCross\ViewModels\TimeEntriesViewModelTests.cs" />
     <Compile Include="MvvmCross\ViewModels\OnboardingViewModelTests.cs" />
+    <Compile Include="MvvmCross\Converters\SecondsToDurationValueConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Login\" />
     <Folder Include="MvvmCross\" />
     <Folder Include="MvvmCross\ViewModels\" />
+    <Folder Include="MvvmCross\Converters\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -38,6 +38,7 @@
     <Compile Include="Helper\Color.cs" />
     <Compile Include="Helper\Animation.cs" />
     <Compile Include="Parameters\LoginParameter.cs" />
+    <Compile Include="Converters\SecondsToDurationValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">
@@ -98,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Parameters\" />
+    <Folder Include="Converters\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Fody.2.0.6\build\portable-net+sl+win+wpa+wp\Fody.targets" Condition="Exists('..\packages\Fody.2.0.6\build\portable-net+sl+win+wpa+wp\Fody.targets')" />
