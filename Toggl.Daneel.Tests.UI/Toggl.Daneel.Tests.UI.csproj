@@ -34,10 +34,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tests.cs" />
+    <Compile Include="OnboardingTests.cs" />
+    <Compile Include="IosAccessibilityNames.cs" />
+    <Compile Include="Extensions\OnboardingExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Toggl.Daneel\Toggl.Daneel.csproj">
+      <Project>{8CE4E64C-5719-4660-96AC-CF2ABA3A335E}</Project>
+      <Name>Toggl.Daneel</Name>
+      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

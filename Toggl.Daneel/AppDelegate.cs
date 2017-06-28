@@ -1,4 +1,4 @@
-﻿using MvvmCross.Core.ViewModels;
+﻿﻿using MvvmCross.Core.ViewModels;
 using MvvmCross.iOS.Platform;
 using MvvmCross.Platform;
 using Foundation;
@@ -22,6 +22,10 @@ namespace Toggl.Daneel
             startup.Start();
 
             Window.MakeKeyAndVisible();
+
+            #if ENABLE_TEST_CLOUD
+            Xamarin.Calabash.Start();
+            #endif
 
             return true;
         }

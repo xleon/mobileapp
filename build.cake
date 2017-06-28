@@ -79,16 +79,10 @@ Task("Tests.Integration")
     .IsDependentOn(buildAll ? "Build.Tests.All" : "Build.Tests.Integration")
     .Does(Test("./bin/Debug/*.Tests.Integration.dll"));
 
-//UI Tests
-Task("Tests.UI")
-    .IsDependentOn("Build.Tests.All")
-    .Does(Test("./bin/Debug/*.Tests.UI.dll"));
-
 // All Tests
 Task("Tests")
     .IsDependentOn("Tests.Unit")
-    .IsDependentOn("Tests.Integration")
-    .IsDependentOn("Tests.UI");
+    .IsDependentOn("Tests.Integration");
 
 //Default Operation
 Task("Default")

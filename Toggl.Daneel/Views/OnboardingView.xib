@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
@@ -30,10 +30,10 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="2">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hCB-nj-krh">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hCB-nj-krh" misplaced="YES">
                     <rect key="frame" x="52" y="49" width="271" height="482"/>
                     <color key="backgroundColor" red="0.054901960784313725" green="0.58823529411764708" blue="0.83529411764705885" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <userDefinedRuntimeAttributes>
@@ -42,7 +42,7 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cBN-Dd-JYx">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cBN-Dd-JYx" misplaced="YES">
                     <rect key="frame" x="65" y="71" width="245" height="438"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
@@ -90,6 +90,7 @@ START TRACKING</string>
                                     <integer key="value" value="8"/>
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
+                            <accessibility key="accessibilityConfiguration" label="OnboardingLogin"/>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="notebook" translatesAutoresizingMaskIntoConstraints="NO" id="1nu-tH-SkB">
                             <rect key="frame" x="0.0" y="154" width="96" height="83"/>
@@ -124,26 +125,29 @@ START TRACKING</string>
                         <constraint firstItem="1nu-tH-SkB" firstAttribute="leading" secondItem="YG4-AY-v9P" secondAttribute="leading" id="zgh-z8-m4I"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1ic-Bm-3e0">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1ic-Bm-3e0" misplaced="YES">
                     <rect key="frame" x="329" y="16" width="30" height="26"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="11"/>
                     <state key="normal" title="SKIP">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <accessibility key="accessibilityConfiguration" label="OnboardingSkip"/>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="crr-oI-9sA">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="crr-oI-9sA" misplaced="YES">
                     <rect key="frame" x="328" y="611" width="31" height="26"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11"/>
                     <state key="normal" title="NEXT">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <accessibility key="accessibilityConfiguration" label="OnboardingNext"/>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QOR-SE-Mpp">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QOR-SE-Mpp" misplaced="YES">
                     <rect key="frame" x="16" y="611" width="31" height="26"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11"/>
                     <state key="normal" title="BACK">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <accessibility key="accessibilityConfiguration" label="OnboardingPrevious"/>
                 </button>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" bounces="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3BO-Ic-74A">
                     <rect key="frame" x="-1" y="551" width="376" height="60"/>
@@ -151,23 +155,26 @@ START TRACKING</string>
                         <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4cy-rr-Z3l">
                             <rect key="frame" x="0.0" y="0.0" width="1501" height="60"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0bW-s1-SME" userLabel="FirstPageLabel">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0bW-s1-SME" userLabel="FirstPageLabel" misplaced="YES">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
+                                    <accessibility key="accessibilityConfiguration" label="OnboardingFirstLabel"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Meo-nQ-q5D" userLabel="SecondPageLabel">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Meo-nQ-q5D" userLabel="SecondPageLabel" misplaced="YES">
                                     <rect key="frame" x="375" y="0.0" width="375" height="60"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
+                                    <accessibility key="accessibilityConfiguration" label="OnboardingSecondLabel"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G9v-ES-Yia" userLabel="ThirdPageLabel">
                                     <rect key="frame" x="729" y="19" width="42" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
+                                    <accessibility key="accessibilityConfiguration" label="OnboardingThirdLabel"/>
                                 </label>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -197,7 +204,7 @@ START TRACKING</string>
                         <constraint firstAttribute="bottom" secondItem="4cy-rr-Z3l" secondAttribute="bottom" id="nr7-hF-7Ya"/>
                     </constraints>
                 </scrollView>
-                <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="KBd-Lu-7wr">
+                <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="KBd-Lu-7wr" misplaced="YES">
                     <rect key="frame" x="168" y="606" width="39" height="37"/>
                 </pageControl>
             </subviews>
@@ -241,5 +248,23 @@ START TRACKING</string>
         <image name="notebook" width="95" height="85"/>
         <image name="togglCronometer" width="126" height="140"/>
         <image name="togglLogoWhite" width="111" height="35"/>
+        <image name="backgroundPixel" width="1" height="1"/>
+        <image name="transparentPixel" width="1" height="1"/>
+        <image name="icArrowUp" width="10" height="6"/>
+        <image name="icBillable" width="8" height="16"/>
+        <image name="icClose" width="10" height="10"/>
+        <image name="icContinue" width="10" height="11"/>
+        <image name="icDatetime" width="14" height="14"/>
+        <image name="icDone" width="16" height="12"/>
+        <image name="icDownS" width="8" height="5"/>
+        <image name="icProjects" width="16" height="12"/>
+        <image name="icRefresh" width="20" height="14"/>
+        <image name="icReports" width="16" height="18"/>
+        <image name="icSettings" width="16" height="16"/>
+        <image name="icSyncerror" width="16" height="16"/>
+        <image name="icTags" width="14" height="13"/>
+        <image name="icUpS" width="8" height="5"/>
+        <image name="playIcon" width="50" height="50"/>
+        <image name="stopIcon" width="34" height="34"/>
     </resources>
 </document>
