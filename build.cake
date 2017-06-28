@@ -1,6 +1,7 @@
 #tool "nuget:?package=xunit.runner.console"
 
 var target = Argument("target", "Default");
+var buildAll = Argument("buildall", Bitrise.IsRunningOnBitrise);
 
 private string GetCommitHash()
 {   
@@ -27,12 +28,12 @@ private Action Test(string testFiles)
     return () => XUnit2(GetFiles(testFiles), testSettings);
 }
 
-private Action BuildSolution(string targetProject)
+private Action BuildSolution(string targetProject, string configuration = "Release")
 {
     var buildSettings = new MSBuildSettings 
     {
         Verbosity = Bitrise.IsRunningOnBitrise ? Verbosity.Verbose : Verbosity.Minimal,
-        Configuration = "Release"
+        Configuration = configuration
     };
 
     return () => MSBuild(targetProject, buildSettings);
@@ -49,27 +50,39 @@ Setup(context => System.IO.File.WriteAllText(path, newFile));
 Teardown(context => System.IO.File.WriteAllText(path, oldFile));
 
 //Build
+Task("Clean")
+    .Does(() => CleanDirectory("./bin"));
+
 Task("Nuget")
+    .IsDependentOn("Clean")
     .Does(() => NuGetRestore("./Toggl.sln"));
 
-Task("Build")
+Task("Build.Tests.All")
     .IsDependentOn("Nuget")
-    .Does(BuildSolution("./Toggl.sln"));
+    .Does(BuildSolution("./Toggl.sln", "Debug"));
+
+Task("Build.Tests.Unit")
+    .IsDependentOn("Nuget")
+    .Does(BuildSolution("./Toggl.sln", "UnitTests"));
+
+Task("Build.Tests.Integration")
+    .IsDependentOn("Nuget")
+    .Does(BuildSolution("./Toggl.sln", "ApiTests"));
 
 //Unit Tests
 Task("Tests.Unit")
-    .IsDependentOn("Build")
-    .Does(Test("./bin/Release/*.Tests.dll"));
+    .IsDependentOn(buildAll ? "Build.Tests.All" : "Build.Tests.Unit")
+    .Does(Test("./bin/Debug/*.Tests.dll"));
 
 //Integration Tests
 Task("Tests.Integration")
-    .IsDependentOn("Build")
-    .Does(Test("./bin/Release/*.Tests.Integration.dll"));
+    .IsDependentOn(buildAll ? "Build.Tests.All" : "Build.Tests.Integration")
+    .Does(Test("./bin/Debug/*.Tests.Integration.dll"));
 
 //UI Tests
 Task("Tests.UI")
-    .IsDependentOn("Build")
-    .Does(Test("./bin/Release/*.Tests.UI.dll"));
+    .IsDependentOn("Build.Tests.All")
+    .Does(Test("./bin/Debug/*.Tests.UI.dll"));
 
 // All Tests
 Task("Tests")
