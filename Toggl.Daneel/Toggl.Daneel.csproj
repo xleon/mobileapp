@@ -246,7 +246,7 @@
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
-    <InterfaceDefinition Include="Views\OnboardingView.xib" />
+    <InterfaceDefinition Include="ViewController\OnboardingViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -278,9 +278,9 @@
     <Compile Include="Main.cs" />
     <Compile Include="Extensions\AnimationExtensions.cs" />
     <Compile Include="Binding\ScrollViewCurrentPageTargetBinding.cs" />
-    <Compile Include="Views\OnboardingView.cs" />
-    <Compile Include="Views\OnboardingView.designer.cs">
-        <DependentUpon> OnboardingView.cs </DependentUpon>
+    <Compile Include="ViewController\OnboardingViewController.cs" />
+    <Compile Include="ViewController\OnboardingViewController.designer.cs">
+        <DependentUpon>OnboardingViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentation\TogglPresenter.cs" />
     <Compile Include="Binding\ViewAnimatedBackgroundTargetBinding.cs" />

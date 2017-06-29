@@ -9,10 +9,10 @@ using System;
 using System.CodeDom.Compiler;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.Daneel.ViewControllers
 {
     [Register ("OnboardingView")]
-    partial class OnboardingView
+    partial class OnboardingViewController
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]

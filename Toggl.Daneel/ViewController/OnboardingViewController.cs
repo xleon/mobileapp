@@ -8,13 +8,13 @@ using Toggl.Daneel.Extensions;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.ViewModels;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.Daneel.ViewControllers
 {
     [MvxRootPresentation(WrapInNavigationController = false)]
-    public sealed partial class OnboardingView : MvxViewController<OnboardingViewModel>
+    public sealed partial class OnboardingViewController : MvxViewController<OnboardingViewModel>
     {
-        public OnboardingView() 
-            : base("OnboardingView", null)
+        public OnboardingViewController() 
+            : base(nameof(OnboardingViewController), null)
         {
         }
 
@@ -30,7 +30,7 @@ namespace Toggl.Daneel.Views
             var visibilityConverter = new MvxVisibilityValueConverter();
             var invertedVisibilityConverter = new MvxInvertedVisibilityValueConverter();
             var colorConverter = new MvxNativeColorValueConverter();
-            var bindingSet = this.CreateBindingSet<OnboardingView, OnboardingViewModel>();
+            var bindingSet = this.CreateBindingSet<OnboardingViewController, OnboardingViewModel>();
 
             //Commands
             bindingSet.Bind(Skip).To(vm => vm.SkipCommand);
