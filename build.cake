@@ -51,7 +51,11 @@ Teardown(context => System.IO.File.WriteAllText(path, oldFile));
 
 //Build
 Task("Clean")
-    .Does(() => CleanDirectory("./bin"));
+    .Does(() => 
+        {
+            CleanDirectory("./bin");
+            CleanDirectories("./**/obj");
+        });
 
 Task("Nuget")
     .IsDependentOn("Clean")
