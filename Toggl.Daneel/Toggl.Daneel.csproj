@@ -247,10 +247,11 @@
     <Folder Include="Presentation\" />
     <Folder Include="Resources\Images.xcassets\togglLogoWhite.imageset\" />
     <Folder Include="Services\" />
+    <Folder Include="ViewControllers\Navigation\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
-    <InterfaceDefinition Include="ViewController\OnboardingViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\OnboardingViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -282,13 +283,14 @@
     <Compile Include="Main.cs" />
     <Compile Include="Extensions\AnimationExtensions.cs" />
     <Compile Include="Binding\ScrollViewCurrentPageTargetBinding.cs" />
-    <Compile Include="ViewController\OnboardingViewController.cs" />
-    <Compile Include="ViewController\OnboardingViewController.designer.cs">
+    <Compile Include="ViewControllers\OnboardingViewController.cs" />
+    <Compile Include="ViewControllers\OnboardingViewController.designer.cs">
         <DependentUpon>OnboardingViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentation\TogglPresenter.cs" />
     <Compile Include="Binding\ViewAnimatedBackgroundTargetBinding.cs" />
     <Compile Include="Services\ApiFactory.cs" />
+    <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationViewController.cs" />
     <Compile Include="Binding\BarButtonAnimatedTintColorTargetBinding.cs" />
     <Compile Include="Binding\BarButtonCommandTargetBinding.cs" />
     <Compile Include="Binding\BarButtonEnabledTargetBinding.cs" />

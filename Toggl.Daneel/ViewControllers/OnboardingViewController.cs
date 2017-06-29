@@ -10,7 +10,7 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 
 namespace Toggl.Daneel.ViewControllers
 {
-    [MvxRootPresentation(WrapInNavigationController = false)]
+    [MvxRootPresentation(WrapInNavigationController = true)]
     public sealed partial class OnboardingViewController : MvxViewController<OnboardingViewModel>
     {
         public OnboardingViewController() 
@@ -92,5 +92,14 @@ namespace Toggl.Daneel.ViewControllers
 
             bindingSet.Apply();
         }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            NavigationController.NavigationBar.UserInteractionEnabled = false;
+        }
+
+        public override bool PrefersStatusBarHidden()
+            => true;
     }
 }

@@ -1,8 +1,10 @@
-﻿using CoreAnimation;
+﻿﻿using CoreAnimation;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters;
 using MvvmCross.iOS.Views.Presenters.Attributes;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.ViewControllers.Navigation;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
@@ -35,5 +37,8 @@ namespace Toggl.Daneel.Presentation
             MasterNavigationController.NavigationController.View.Layer.AddAnimation(transition, CALayer.Transition);
             MasterNavigationController.PushViewController(viewController, false);
         }
+
+        protected override MvxNavigationController CreateNavigationController(UIViewController viewController)
+            => new OnboardingFlowNavigationController(viewController);
     }
 }
