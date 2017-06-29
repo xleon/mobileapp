@@ -51,6 +51,7 @@
     <Compile Include="DataSources\TimeEntriesDataSource.cs" />
     <Compile Include="Login\IApiFactory.cs" />
     <Compile Include="Login\LoginManager.cs" />
+    <Compile Include="DataSources\ProjectsDataSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataSources\" />

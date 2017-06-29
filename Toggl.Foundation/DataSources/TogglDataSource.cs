@@ -13,6 +13,7 @@ namespace Toggl.Foundation.DataSources
             Ensure.Argument.IsNotNull(database, nameof(database));
 
             User = new UserDataSource(database.User, api.User);
+            Projects = new ProjectsDataSource(database.Projects);
             TimeEntries = new TimeEntriesDataSource(database.TimeEntries);
         }
 
@@ -20,7 +21,7 @@ namespace Toggl.Foundation.DataSources
         public ITagsSource Tags => throw new NotImplementedException();
         public ITasksSource Tasks => throw new NotImplementedException();
         public IClientsSource Clients => throw new NotImplementedException();
-        public IProjectsSource Projects => throw new NotImplementedException();
+        public IProjectsSource Projects { get; }
         public IWorkspacesSource Workspaces => throw new NotImplementedException();
         public ITimeEntriesSource TimeEntries { get; }
     }
