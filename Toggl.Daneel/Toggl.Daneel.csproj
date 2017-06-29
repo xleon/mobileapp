@@ -289,6 +289,10 @@
     <Compile Include="Presentation\TogglPresenter.cs" />
     <Compile Include="Binding\ViewAnimatedBackgroundTargetBinding.cs" />
     <Compile Include="Services\ApiFactory.cs" />
+    <Compile Include="Binding\BarButtonAnimatedTintColorTargetBinding.cs" />
+    <Compile Include="Binding\BarButtonCommandTargetBinding.cs" />
+    <Compile Include="Binding\BarButtonEnabledTargetBinding.cs" />
+    <Compile Include="Binding\ViewAnimatedVisibilityTargetBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
