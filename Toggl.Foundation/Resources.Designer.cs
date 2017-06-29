@@ -64,5 +64,47 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("OnboardingSummaryPageCopy", resourceCulture);
             }
         }
+        
+        public static string LoginTitle {
+            get {
+                return ResourceManager.GetString("LoginTitle", resourceCulture);
+            }
+        }
+        
+        public static string LoginSignUpEmailPlaceholder {
+            get {
+                return ResourceManager.GetString("LoginSignUpEmailPlaceholder", resourceCulture);
+            }
+        }
+        
+        public static string LoginSignUpPasswordPlaceholder {
+            get {
+                return ResourceManager.GetString("LoginSignUpPasswordPlaceholder", resourceCulture);
+            }
+        }
+        
+        public static string LoginNextButton {
+            get {
+                return ResourceManager.GetString("LoginNextButton", resourceCulture);
+            }
+        }
+        
+        public static string LoginBackButton {
+            get {
+                return ResourceManager.GetString("LoginBackButton", resourceCulture);
+            }
+        }
+        
+        public static string SignUpTitle {
+            get {
+                return ResourceManager.GetString("SignUpTitle", resourceCulture);
+            }
+        }
+        
+        public static string LoginForgotPassword {
+            get {
+                return ResourceManager.GetString("LoginForgotPassword", resourceCulture);
+            }
+        }
     }
 }

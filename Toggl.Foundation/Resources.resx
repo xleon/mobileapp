@@ -24,4 +24,25 @@ time entries first</value>
         <value>See a daily summary of
 your time usage</value>
     </data>
+    <data name="LoginTitle">
+        <value>Log in</value>
+    </data>
+    <data name="LoginSignUpEmailPlaceholder">
+        <value>Email Address</value>
+    </data>
+    <data name="LoginSignUpPasswordPlaceholder">
+        <value>Password</value>
+    </data>
+    <data name="LoginNextButton">
+        <value>Next</value>
+    </data>
+    <data name="LoginBackButton">
+        <value>Back</value>
+    </data>
+    <data name="SignUpTitle">
+        <value>Sign up</value>
+    </data>
+    <data name="LoginForgotPassword">
+        <value>Forgot your password?</value>
+    </data>
 </root>

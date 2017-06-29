@@ -235,6 +235,10 @@
     <ImageAsset Include="Resources\Images.xcassets\togglCronometer.imageset\illustration2.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglCronometer.imageset\illustration2%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglCronometer.imageset\illustration2%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icPassword.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icPassword.imageset\icPassword.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icPassword.imageset\icPassword%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icPassword.imageset\icPassword%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
