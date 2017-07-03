@@ -26,7 +26,16 @@ namespace Toggl.PrimeRadiant.Realm
         public IRepository<IDatabaseTimeEntry> TimeEntries { get; }
         public IRepository<IDatabaseWorkspace> Workspaces { get; }
 
-        public IObservable<Unit> Clear()
-            => Observable.Start(Realms.Realm.GetInstance().RemoveAll);
+        public IObservable<Unit> Clear() => 
+            Observable.Start(() =>
+            {
+                var realm = Realms.Realm.GetInstance();
+
+                using (var transaction = realm.BeginWrite())
+                {
+                    realm.RemoveAll();
+                    transaction.Commit();
+                }
+            });
     }
 }
