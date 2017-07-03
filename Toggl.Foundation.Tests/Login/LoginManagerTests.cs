@@ -34,7 +34,7 @@ namespace Toggl.Foundation.Tests.Login
                 var databaseFactory = useDatabaseFactory ? DatabaseFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new LoginManager(null, null);
+                    () => new LoginManager(apiFactory, databaseFactory);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
