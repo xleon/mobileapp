@@ -85,7 +85,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             => navigationService.Navigate<LoginViewModel, LoginParameter>(LoginParameter.Login);
 
         private Task signup()
-            => navigationService.Navigate<LoginViewModel, LoginParameter>(LoginParameter.Signup);
+            => navigationService.Navigate<LoginViewModel, LoginParameter>(LoginParameter.SignUp);
 
         private void skip()
             => CurrentPage = LoginPage;

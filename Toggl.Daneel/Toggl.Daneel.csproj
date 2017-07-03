@@ -241,17 +241,9 @@
     <ImageAsset Include="Resources\Images.xcassets\icPassword.imageset\icPassword%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
-    <Folder Include="Startup\" />
-    <Folder Include="Extensions\" />
-    <Folder Include="Presentation\" />
-    <Folder Include="Resources\Images.xcassets\togglLogoWhite.imageset\" />
-    <Folder Include="Services\" />
-    <Folder Include="ViewControllers\Navigation\" />
-  </ItemGroup>
-  <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="ViewControllers\OnboardingViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\LoginViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -291,10 +283,15 @@
     <Compile Include="Binding\ViewAnimatedBackgroundTargetBinding.cs" />
     <Compile Include="Services\ApiFactory.cs" />
     <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationViewController.cs" />
-    <Compile Include="Binding\BarButtonAnimatedTintColorTargetBinding.cs" />
     <Compile Include="Binding\BarButtonCommandTargetBinding.cs" />
-    <Compile Include="Binding\BarButtonEnabledTargetBinding.cs" />
     <Compile Include="Binding\ViewAnimatedVisibilityTargetBinding.cs" />
+    <Compile Include="ViewControllers\LoginViewController.cs" />
+    <Compile Include="ViewControllers\LoginViewController.designer.cs">
+        <DependentUpon>LoginViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Binding\TextFieldSecureTextEntryTargetBinding.cs" />
+    <Compile Include="Binding\BarButtonAnimatedEnabledTargetBinding.cs" />
+    <Compile Include="Binding\TextFieldFocusTargetBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

@@ -13,6 +13,14 @@ namespace Toggl.Daneel.Presentation
 {
     public class TogglPresenter : MvxIosViewPresenter
     {
+        private static readonly CATransition FadeAnimation = new CATransition
+        {
+            Duration = Animation.Timings.EnterTiming,
+            Type = CAAnimation.TransitionFade,
+            Subtype = CAAnimation.TransitionFromTop,
+            TimingFunction = Animation.Curves.SharpCurve.ToMediaTimingFunction()
+        };
+
         public TogglPresenter(IUIApplicationDelegate applicationDelegate, UIWindow window)
             : base(applicationDelegate, window)
         {
@@ -20,22 +28,26 @@ namespace Toggl.Daneel.Presentation
 
         protected override void ShowChildViewController(UIViewController viewController, MvxChildPresentationAttribute attribute, MvxViewModelRequest request)
         {
-            if (request.ViewModelType != typeof(LoginViewModel))
+            if (request.ViewModelType == typeof(LoginViewModel))
             {
-                base.ShowChildViewController(viewController, attribute, request);
+                MasterNavigationController.View.Layer.AddAnimation(FadeAnimation, CALayer.Transition);
+                MasterNavigationController.PushViewController(viewController, false);
                 return;
             }
 
-            var transition = new CATransition
-            {
-                Duration = Animation.Timings.EnterTiming,
-                Type = CAAnimation.TransitionFade,
-                Subtype = CAAnimation.TransitionFromTop,
-                TimingFunction = Animation.Curves.SharpCurve.ToMediaTimingFunction()
-            };
+            base.ShowChildViewController(viewController, attribute, request);
+        }
 
-            MasterNavigationController.NavigationController.View.Layer.AddAnimation(transition, CALayer.Transition);
-            MasterNavigationController.PushViewController(viewController, false);
+        public override void Close(IMvxViewModel toClose)
+        {
+            if (toClose.GetType() == typeof(LoginViewModel))
+            {
+                MasterNavigationController.View.Window.Layer.AddAnimation(FadeAnimation, CALayer.Transition);
+                MasterNavigationController.PopViewController(false);
+                return;
+            }
+
+            base.Close(toClose);
         }
 
         protected override MvxNavigationController CreateNavigationController(UIViewController viewController)

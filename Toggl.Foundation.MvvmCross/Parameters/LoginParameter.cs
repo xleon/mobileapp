@@ -12,7 +12,7 @@ namespace Toggl.Foundation.MvvmCross.Parameters
 
         public static LoginParameter Login { get; } = new LoginParameter { Type = LoginType.Login };
 
-        public static LoginParameter Signup { get; } = new LoginParameter { Type = LoginType.SignUp };
+        public static LoginParameter SignUp { get; } = new LoginParameter { Type = LoginType.SignUp };
 
         public LoginType Type { get; set; }
     }

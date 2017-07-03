@@ -1,84 +1,132 @@
 using System;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
+using PropertyChanged;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 using EmailType = Toggl.Multivac.Email;
+using LoginType = Toggl.Foundation.MvvmCross.Parameters.LoginParameter.LoginType;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
+    [ImplementPropertyChanged]
     public class LoginViewModel : BaseViewModel<LoginParameter>
     {
+        public const int EmailPage = 0;
+        public const int PasswordPage = 1;
+
         private readonly ILoginManager loginManager;
+        private readonly IMvxNavigationService navigationService;
 
         private IDisposable loginDisposable;
+        private EmailType email = EmailType.Invalid;
 
-        private EmailType userEmail = EmailType.Invalid;
+        public string Email { get; set; } = "";
 
-        private string email = "";
-        public string Email 
-        {     
-            get { return email; }
-            set
-            {
-                if (email == value) return;
+        public string Password { get; set; } = "";
 
-                email = value;
-                userEmail = EmailType.FromString(value);
+        public int CurrentPage { get; private set; } = EmailPage;
 
-                LoginCommand.RaiseCanExecuteChanged();
+        public bool IsLoading { get; private set; } = false;
 
-                RaisePropertyChanged(nameof(Email));
-                RaisePropertyChanged(nameof(EmailIsValid));
-            }
-        }
+        public bool IsPasswordMasked { get; private set; } = true;
 
-        public string Password { get; set; }
+        public LoginType LoginType { get; set; }
 
-        public IMvxCommand LoginCommand { get; }
+        public IMvxCommand NextCommand { get; }
 
-        public LoginViewModel(ILoginManager loginManager)
+        public IMvxCommand BackCommand { get; }
+
+        public IMvxCommand TogglePasswordVisibilityCommand { get; }
+
+        [DependsOn(nameof(CurrentPage))]
+        public bool IsEmailPage => CurrentPage == EmailPage;
+
+        [DependsOn(nameof(CurrentPage))]
+        public bool IsPasswordPage => CurrentPage == PasswordPage;
+
+        [DependsOn(nameof(CurrentPage), nameof(Email), nameof(Password))]
+        public bool NextIsEnabled
+            => IsEmailPage ? email.IsValid : (Password.Length > 0 && !IsLoading);
+
+        public LoginViewModel(ILoginManager loginManager, IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(loginManager, nameof(loginManager));
+            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.loginManager = loginManager;
+            this.navigationService = navigationService;
 
-            LoginCommand = new MvxCommand(login, loginCanExecute);
+            BackCommand = new MvxCommand(back);
+            NextCommand = new MvxCommand(next);
+            TogglePasswordVisibilityCommand = new MvxCommand(togglePasswordVisibility);
         }
 
         public override Task Initialize(LoginParameter parameter)
-            => Task.FromResult(0);
-       
-        public bool EmailIsValid => userEmail.IsValid;
+        {
+            LoginType = parameter.Type;
+            Title = LoginType == LoginType.Login ? Resources.LoginTitle : Resources.SignUpTitle;
+
+            return base.Initialize();
+        }
+
+        private void OnEmailChanged()
+            => email = EmailType.FromString(Email);
+
+        private void next()
+        {
+            if (!NextIsEnabled) return;
+
+            if (IsPasswordPage) login();
+
+            CurrentPage = PasswordPage;
+        }
+
+        private void back()
+        {
+            if (IsEmailPage)
+                navigationService.Close(this);
+
+            CurrentPage = EmailPage;
+        }
+
+        private void togglePasswordVisibility()
+            => IsPasswordMasked = !IsPasswordMasked;
 
         private void login()
         {
-            loginDisposable =
+            IsLoading = true;
+            
+            loginDisposable = 
                 loginManager
-                    .Login(userEmail, Password)
-                    .Subscribe(onDataSource, onError);
-
-            LoginCommand.RaiseCanExecuteChanged();
+                    .Login(email, Password)
+                    .Subscribe(onDataSource, onError, onCompleted);
         }
-
-        private bool loginCanExecute() 
-            => loginDisposable == null && EmailIsValid;
 
         private void onDataSource(ITogglDataSource dataSource)
         {
-            loginDisposable = null;
-            LoginCommand.RaiseCanExecuteChanged();  
-
             Mvx.RegisterSingleton(dataSource);
+
+            navigationService.Navigate<TimeEntriesViewModel>();
         }
 
         private void onError(Exception ex)
         {
+            IsLoading = false;
+            loginDisposable?.Dispose();
             loginDisposable = null;
-            LoginCommand.RaiseCanExecuteChanged();
+        }
+
+        private void onCompleted()
+        {
+            IsLoading = false;
+            loginDisposable?.Dispose();
+            loginDisposable = null;
         }
     }
 }

@@ -12,8 +12,8 @@ namespace Toggl.Daneel
             base.FillTargetFactories(registry);
 
             registry.RegisterCustomBindingFactory<UIBarButtonItem>(
-                BarButtonAnimatedTintColorTargetBinding.BindingName,
-                view => new BarButtonAnimatedTintColorTargetBinding(view)
+                BarButtonAnimatedEnabledTargetBinding.BindingName,
+                view => new BarButtonAnimatedEnabledTargetBinding(view)
             );
 
             registry.RegisterCustomBindingFactory<UIBarButtonItem>(
@@ -21,14 +21,19 @@ namespace Toggl.Daneel
                 view => new BarButtonCommandTargetBinding(view)
             );
 
-            registry.RegisterCustomBindingFactory<UIBarButtonItem>(
-                BarButtonEnabledTargetBinding.BindingName,
-                view => new BarButtonEnabledTargetBinding(view)
-            );
-
             registry.RegisterCustomBindingFactory<UIScrollView>(
                 ScrollViewCurrentPageTargetBinding.BindingName,
                 view => new ScrollViewCurrentPageTargetBinding(view)
+            );
+
+            registry.RegisterCustomBindingFactory<UITextField>(
+                TextFieldFocusTargetBinding.BindingName,
+                view => new TextFieldFocusTargetBinding(view)
+            );
+
+            registry.RegisterCustomBindingFactory<UITextField>(
+                TextFieldSecureTextEntryTargetBinding.BindingName,
+                view => new TextFieldSecureTextEntryTargetBinding(view)
             );
 
             registry.RegisterCustomBindingFactory<UIView>(
