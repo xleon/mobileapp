@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -93,7 +93,11 @@ namespace Toggl.Foundation.Tests.Login
             {
                 await loginManager.Login(Email, Password);
 
-                await database.Received().Clear();
+                Received.InOrder(async () =>
+                {
+                    await database.Clear();
+                    await api.User.Get();
+                });
             }
 
             [Fact]
@@ -113,7 +117,7 @@ namespace Toggl.Foundation.Tests.Login
             }
 
             [Fact]
-            public async Task TheUserToBePersistedShouldNotHaveIsDirtySetToFalse()
+            public async Task TheUserToBePersistedShouldHaveIsDirtySetToFalse()
             {
                 await loginManager.Login(Email, Password);
 
