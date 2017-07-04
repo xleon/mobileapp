@@ -45,7 +45,7 @@ namespace Toggl.Daneel
             var userAgent = new UserAgent("Daneel", version.ToString());
 
             var apiFactory = new ApiFactory(Environment, userAgent);
-            var loginManager = new LoginManager(apiFactory, () => new Database());
+            var loginManager = new LoginManager(apiFactory, new Database());
 
             Mvx.RegisterSingleton<ILoginManager>(loginManager);
         }

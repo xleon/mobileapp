@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -12,55 +12,56 @@ using Toggl.PrimeRadiant.Models;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
 using Xunit;
-using static Toggl.Foundation.Login.LoginManager;
 using User = Toggl.Ultrawave.Models.User;
+using FoundationUser = Toggl.Foundation.Models.User;    
 
 namespace Toggl.Foundation.Tests.Login
 {
     public class LoginManagerTests
     {
-        public class Constructor
+        public abstract class LoginManagerTest
         {
-            private static readonly IApiFactory ApiFactory = Substitute.For<IApiFactory>();
-            private static readonly DatabaseFactory DatabaseFactory = () => Substitute.For<ITogglDatabase>();
+            protected const string Password = "theirobotmoviesucked123";
+            protected static readonly Email Email = "susancalvin@psychohistorian.museum".ToEmail();
+            
+            protected readonly User User = new User { Id = 10, ApiToken = "ABCDEFG" };
+            protected readonly ITogglApi Api = Substitute.For<ITogglApi>();
+            protected readonly IApiFactory ApiFactory = Substitute.For<IApiFactory>();
+            protected readonly ITogglDatabase Database = Substitute.For<ITogglDatabase>();
 
+            protected readonly ILoginManager LoginManager;
+
+            protected LoginManagerTest()
+            {
+                LoginManager = new LoginManager(ApiFactory, Database);
+
+                Api.User.Get().Returns(Observable.Return(User));
+                ApiFactory.CreateApiWith(Arg.Any<Credentials>()).Returns(Api);
+                Database.Clear().Returns(Observable.Return(Unit.Default));
+            }
+        }
+
+        public class Constructor : LoginManagerTest
+        {
             [Theory]
             [InlineData(true, false)]
             [InlineData(false, true)]
             [InlineData(false, false)]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useApiFactory, bool useDatabaseFactory)
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useApiFactory, bool useDatabase)
             {
+                var database = useDatabase ? Database : null;
                 var apiFactory = useApiFactory ? ApiFactory : null;
-                var databaseFactory = useDatabaseFactory ? DatabaseFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new LoginManager(apiFactory, databaseFactory);
+                    () => new LoginManager(apiFactory, database);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
             }
         }
 
-        public class TheLoginMethod
+        public class TheLoginMethod : LoginManagerTest
         {
-            private const string Password = "theirobotmoviesucked123";
-            private static readonly Email Email = "susancalvin@psychohistorian.museum".ToEmail();
-
-            private readonly LoginManager loginManager;
-            private readonly User user = new User { Id = 10 };
-            private readonly ITogglApi api = Substitute.For<ITogglApi>();
-            private readonly IApiFactory apiFactory = Substitute.For<IApiFactory>();
-            private readonly ITogglDatabase database = Substitute.For<ITogglDatabase>();
-
-            public TheLoginMethod()
-            {
-                loginManager = new LoginManager(apiFactory, () => database);
-
-                api.User.Get().Returns(Observable.Return(user));
-                apiFactory.CreateApiWith(Arg.Any<Credentials>()).Returns(api);
-                database.Clear().Returns(Observable.Return(Unit.Default));
-            }
-
             [Theory]
             [InlineData("susancalvin@psychohistorian.museum", null)]
             [InlineData("susancalvin@psychohistorian.museum", "")]
@@ -82,7 +83,7 @@ namespace Toggl.Foundation.Tests.Login
                 var actualEmail = Email.FromString(email);
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => loginManager.Login(actualEmail, password).Wait();
+                    () => LoginManager.Login(actualEmail, password).Wait();
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentException>();
@@ -91,45 +92,70 @@ namespace Toggl.Foundation.Tests.Login
             [Fact]
             public async Task EmptiesTheDatabaseBeforeTryingToLogin()
             {
-                await loginManager.Login(Email, Password);
+                await LoginManager.Login(Email, Password);
 
                 Received.InOrder(async () =>
                 {
-                    await database.Clear();
-                    await api.User.Get();
+                    await Database.Clear();
+                    await Api.User.Get();
                 });
             }
 
             [Fact]
             public async Task CallsTheGetMethodOfTheUserApi()
             {
-                await loginManager.Login(Email, Password);
+                await LoginManager.Login(Email, Password);
 
-                await api.User.Received().Get();
+                await Api.User.Received().Get();
             }
 
             [Fact]
             public async Task ShouldPersistTheUserToTheDatabase()
             {
-                await loginManager.Login(Email, Password);
+                await LoginManager.Login(Email, Password);
 
-                await database.User.Received().Create(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.Id == user.Id));
+                await Database.User.Received().Create(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.Id == User.Id));
             }
 
             [Fact]
             public async Task TheUserToBePersistedShouldHaveIsDirtySetToFalse()
             {
-                await loginManager.Login(Email, Password);
+                await LoginManager.Login(Email, Password);
 
-                await database.User.Received().Create(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.IsDirty == false));
+                await Database.User.Received().Create(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.IsDirty == false));
             }
 
             [Fact]
             public async Task ShouldAlwaysReturnASingleResult()
             {
-                await loginManager
+                await LoginManager
                         .Login(Email, Password)
                         .SingleAsync();
+            }
+        }
+
+        public class TheGetDataSourceIfLoggedInInMethod : LoginManagerTest
+        {
+            [Fact]
+            public void ReturnsNullIfTheDatabaseHasNoUsers()
+            {
+                var observable = Observable.Throw<IDatabaseUser>(new InvalidOperationException());
+                Database.User.Single().Returns(observable);
+
+                var result = LoginManager.GetDataSourceIfLoggedIn();
+
+                result.Should().BeNull();
+            }
+
+            [Fact]
+            public void ReturnsADataSourceIfTheUserExistsInTheDatabase()
+            {
+                var observable = Observable.Return<IDatabaseUser>(FoundationUser.Clean(User));
+                Database.User.Single().Returns(observable);
+
+                var result = LoginManager.GetDataSourceIfLoggedIn();
+
+                result.Should().NotBeNull();
             }
         }
     }

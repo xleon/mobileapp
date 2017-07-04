@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Threading;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Models;
 using Toggl.Multivac;
+using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.Network;
 
@@ -10,23 +12,22 @@ namespace Toggl.Foundation.Login
 {
     public interface ILoginManager
     {
+        ITogglDataSource GetDataSourceIfLoggedIn();
         IObservable<ITogglDataSource> Login(Email email, string password);
     }
 
     public class LoginManager : ILoginManager
     {
-        public delegate ITogglDatabase DatabaseFactory();
-
         private readonly IApiFactory apiFactory;
-        private readonly DatabaseFactory databaseFactory;
+        private readonly ITogglDatabase database;
 
-        public LoginManager(IApiFactory apiFactory, DatabaseFactory databaseFactory)
+        public LoginManager(IApiFactory apiFactory, ITogglDatabase database)
         {
+            Ensure.Argument.IsNotNull(database, nameof(database));
             Ensure.Argument.IsNotNull(apiFactory, nameof(apiFactory));
-            Ensure.Argument.IsNotNull(databaseFactory, nameof(databaseFactory));
 
+            this.database = database;
             this.apiFactory = apiFactory;
-            this.databaseFactory = databaseFactory;
         }
 
         public IObservable<ITogglDataSource> Login(Email email, string password)
@@ -35,7 +36,6 @@ namespace Toggl.Foundation.Login
                 throw new ArgumentException("A valid email must be provided when trying to Login");
             Ensure.Argument.IsNotNullOrWhiteSpaceString(password, nameof(password));
 
-            var database = databaseFactory();
             var credentials = Credentials.WithPassword(email, password);
 
             return database
@@ -50,6 +50,23 @@ namespace Toggl.Foundation.Login
 
                         return new TogglDataSource(database, api);
                     });
+        }
+
+        public ITogglDataSource GetDataSourceIfLoggedIn()
+        {
+            return database.User
+                       .Single()
+                       .Select(dataSourceFromUser)
+                       .Catch(Observable.Return<ITogglDataSource>(null))
+                       .Wait();
+        }
+
+        private ITogglDataSource dataSourceFromUser(IUser user)
+        {
+            var newCredentials = Credentials.WithApiToken(user.ApiToken);
+            var api = apiFactory.CreateApiWith(newCredentials);
+
+            return new TogglDataSource(database, api);
         }
     }
 }
