@@ -244,6 +244,7 @@
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="ViewControllers\OnboardingViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\LoginViewController.xib" />
+    <InterfaceDefinition Include="Views\TimeEntryViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -285,6 +286,10 @@
     <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationViewController.cs" />
     <Compile Include="Binding\BarButtonCommandTargetBinding.cs" />
     <Compile Include="Binding\ViewAnimatedVisibilityTargetBinding.cs" />
+    <Compile Include="Views\TimeEntryViewCell.cs" />
+    <Compile Include="Views\TimeEntryViewCell.designer.cs">
+      <DependentUpon>TimeEntryViewCell.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\LoginViewController.cs" />
     <Compile Include="ViewControllers\LoginViewController.designer.cs">
         <DependentUpon>LoginViewController.cs</DependentUpon>
