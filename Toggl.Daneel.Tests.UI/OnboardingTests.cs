@@ -88,5 +88,14 @@ namespace Toggl.Daneel.Tests.UI
 
             app.Screenshot("Login or Sign up page.");
         }
+
+        [Test]
+        public void TheLoginButtonOpensTheLoginScreen()
+        {
+            app.SkipToLastOnboardingPage();
+            app.OpenLoginFromOnboardingLastPage();
+
+            app.Screenshot("Login screen.");
+        }
     }
 }

@@ -37,6 +37,8 @@
     <Compile Include="OnboardingTests.cs" />
     <Compile Include="IosAccessibilityNames.cs" />
     <Compile Include="Extensions\OnboardingExtensions.cs" />
+    <Compile Include="LoginTests.cs" />
+    <Compile Include="Extensions\LoginExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

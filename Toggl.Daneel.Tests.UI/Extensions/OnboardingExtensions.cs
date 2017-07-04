@@ -78,5 +78,11 @@ namespace Toggl.Daneel.Tests.UI.Extensions
             app.Tap(Onboarding.SkipButton);
             app.WaitForElement(Onboarding.LoginButton);
         }
+
+        public static void OpenLoginFromOnboardingLastPage(this IApp app)
+        {
+            app.Tap(Onboarding.LoginButton);
+            app.WaitForElement(Login.EmailText);
+        }
     }
 }
