@@ -1,22 +1,23 @@
-using UIKit;
+using Foundation;
+using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.iOS.Platform;
 using MvvmCross.iOS.Views.Presenters;
 using MvvmCross.Platform.Platform;
-using MvvmCross.Platform;
+using Toggl.Daneel.Presentation;
+using Toggl.Daneel.Services;
+using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross;
-using Toggl.Ultrawave.Network;
 using Toggl.PrimeRadiant.Realm;
 using Toggl.Ultrawave;
-using Foundation;
-using Toggl.Daneel.Presentation;
-using Toggl.Foundation.Login;
-using Toggl.Daneel.Services;
+using Toggl.Ultrawave.Network;
+using UIKit;
 
 namespace Toggl.Daneel
 {
     public partial class Setup : MvxIosSetup
     {
+        private IMvxNavigationService navigationService;
 #if DEBUG
         private const ApiEnvironment Environment = ApiEnvironment.Staging;
 #else
@@ -33,11 +34,13 @@ namespace Toggl.Daneel
         {
         }
 
-        protected override IMvxApplication CreateApp() => new App();
+        protected override IMvxNavigationService InitializeNavigationService()
+        {
+            navigationService = base.InitializeNavigationService();
+            return navigationService;
+        }
 
-        protected override IMvxTrace CreateDebugTrace() => new DebugTrace();
-
-        protected override void InitializeFirstChance()
+        protected override IMvxApplication CreateApp()
         {
             base.InitializeFirstChance();
 
@@ -47,7 +50,9 @@ namespace Toggl.Daneel
             var apiFactory = new ApiFactory(Environment, userAgent);
             var loginManager = new LoginManager(apiFactory, new Database());
 
-            Mvx.RegisterSingleton<ILoginManager>(loginManager);
+            return new App(loginManager, navigationService);
         }
+
+        protected override IMvxTrace CreateDebugTrace() => new DebugTrace();
     }
 }

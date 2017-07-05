@@ -184,6 +184,7 @@
     <Compile Include="MvvmCross\ViewModels\OnboardingViewModelTests.cs" />
     <Compile Include="MvvmCross\Converters\SecondsToDurationValueConverterTests.cs" />
     <Compile Include="MvvmCross\BaseMvvmCrossTests.cs" />
+    <Compile Include="MvvmCross\AppStartTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Login\" />
