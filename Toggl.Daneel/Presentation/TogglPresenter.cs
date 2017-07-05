@@ -4,6 +4,7 @@ using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters;
 using MvvmCross.iOS.Views.Presenters.Attributes;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.ViewControllers;
 using Toggl.Daneel.ViewControllers.Navigation;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -51,6 +52,11 @@ namespace Toggl.Daneel.Presentation
         }
 
         protected override MvxNavigationController CreateNavigationController(UIViewController viewController)
-            => new OnboardingFlowNavigationController(viewController);
+        {
+            if (viewController is OnboardingViewController)
+                return new OnboardingFlowNavigationController(viewController);
+
+            return new TogglNavigationController(viewController);
+        }
     }
 }

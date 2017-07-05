@@ -1,10 +1,9 @@
-﻿using System;
-using MvvmCross.iOS.Views;
+﻿using MvvmCross.iOS.Views;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers.Navigation
 {
-    public class OnboardingFlowNavigationController : MvxNavigationController
+    public sealed class OnboardingFlowNavigationController : MvxNavigationController
     {
         public OnboardingFlowNavigationController(UIViewController viewController)
             : base(viewController)

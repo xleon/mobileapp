@@ -242,6 +242,10 @@
     <ImageAsset Include="Resources\Images.xcassets\icPassword.imageset\icPassword.png" />
     <ImageAsset Include="Resources\Images.xcassets\icPassword.imageset\icPassword%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icPassword.imageset\icPassword%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogo.png" />
+    <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogo%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogo%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -282,10 +286,9 @@
     <Compile Include="ViewControllers\OnboardingViewController.designer.cs">
         <DependentUpon>OnboardingViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Presentation\TogglPresenter.cs" />
     <Compile Include="Binding\ViewAnimatedBackgroundTargetBinding.cs" />
     <Compile Include="Services\ApiFactory.cs" />
-    <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationViewController.cs" />
+    <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationController.cs" />
     <Compile Include="Binding\BarButtonCommandTargetBinding.cs" />
     <Compile Include="Binding\ViewAnimatedVisibilityTargetBinding.cs" />
     <Compile Include="Views\TimeEntryViewCell.cs" />
@@ -299,6 +302,8 @@
     <Compile Include="Binding\TextFieldSecureTextEntryTargetBinding.cs" />
     <Compile Include="Binding\BarButtonAnimatedEnabledTargetBinding.cs" />
     <Compile Include="Binding\TextFieldFocusTargetBinding.cs" />
+    <Compile Include="Presentation\TogglPresenter.cs" />
+    <Compile Include="ViewControllers\Navigation\TogglNavigationController.cs" />
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Views\TimeEntryLogHeaderViewCell.cs" />

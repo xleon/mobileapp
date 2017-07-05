@@ -2,7 +2,7 @@
 
 namespace Toggl.Foundation.MvvmCross.Helper
 {
-    internal static class Color
+    public static class Color
     {
         internal static class Onboarding
         {
@@ -17,6 +17,10 @@ namespace Toggl.Foundation.MvvmCross.Helper
 
             internal static readonly MvxColor LoginPageBackgroundColor = new MvxColor(219, 40, 46);
         }
+
+        public static class NavigationBar
+        {
+            public static readonly MvxColor BackgroundColor = new MvxColor(250, 251, 252);
+        }
     }
-    
 }
