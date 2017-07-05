@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.UI;
@@ -10,7 +9,6 @@ using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
-    [ImplementPropertyChanged]
     public sealed class OnboardingViewModel : BaseViewModel
     {
         public const int TrackPage = 0;
