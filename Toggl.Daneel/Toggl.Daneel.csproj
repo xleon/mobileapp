@@ -155,10 +155,6 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\backgroundPixel.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\backgroundPixel.imageset\Pixel-1.png" />
-    <ImageAsset Include="Resources\Images.xcassets\backgroundPixel.imageset\Pixel-2.png" />
-    <ImageAsset Include="Resources\Images.xcassets\backgroundPixel.imageset\Pixel.png" />
     <ImageAsset Include="Resources\Images.xcassets\icArrowUp.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\icBillable.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\icClose.imageset\Contents.json" />
@@ -175,10 +171,6 @@
     <ImageAsset Include="Resources\Images.xcassets\icUpS.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\playIcon.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\stopIcon.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\transparentPixel.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\transparentPixel.imageset\TransparentPixel-1.png" />
-    <ImageAsset Include="Resources\Images.xcassets\transparentPixel.imageset\TransparentPixel-2.png" />
-    <ImageAsset Include="Resources\Images.xcassets\transparentPixel.imageset\TransparentPixel.png" />
     <ImageAsset Include="Resources\Images.xcassets\icArrowUp.imageset\icArrowUp.png" />
     <ImageAsset Include="Resources\Images.xcassets\icArrowUp.imageset\icArrowUp%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icArrowUp.imageset\icArrowUp%403x.png" />
