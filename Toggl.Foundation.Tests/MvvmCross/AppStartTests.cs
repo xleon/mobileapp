@@ -62,7 +62,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
 
                 AppStart.Start();
 
-                NavigationService.Received().Navigate<TimeEntriesViewModel>();
+                NavigationService.Received().Navigate<TimeEntriesLogViewModel>();
             }
         }
     }

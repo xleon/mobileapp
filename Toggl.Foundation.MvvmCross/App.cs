@@ -48,7 +48,7 @@ namespace Toggl.Foundation.MvvmCross
             else
             {
                 Mvx.RegisterSingleton(dataSource);
-                navigationService.Navigate<TimeEntriesViewModel>();
+                navigationService.Navigate<TimeEntriesLogViewModel>();
             }
         }
     }

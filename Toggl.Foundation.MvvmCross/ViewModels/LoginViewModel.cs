@@ -111,7 +111,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             Mvx.RegisterSingleton(dataSource);
 
-            navigationService.Navigate<TimeEntriesViewModel>();
+            navigationService.Navigate<TimeEntriesLogViewModel>();
         }
 
         private void onError(Exception ex)
