@@ -183,6 +183,7 @@
     <Compile Include="MvvmCross\ViewModels\TimeEntriesLogViewModelTests.cs" />
     <Compile Include="MvvmCross\ViewModels\OnboardingViewModelTests.cs" />
     <Compile Include="MvvmCross\Converters\SecondsToDurationValueConverterTests.cs" />
+    <Compile Include="Suggestions\MostUsedTimeEntryProviderTests.cs" />
     <Compile Include="MvvmCross\BaseMvvmCrossTests.cs" />
     <Compile Include="MvvmCross\AppStartTests.cs" />
     <Compile Include="Generators\ViewModelGenerators.cs" />
@@ -192,6 +193,7 @@
     <Folder Include="MvvmCross\" />
     <Folder Include="MvvmCross\ViewModels\" />
     <Folder Include="MvvmCross\Converters\" />
+    <Folder Include="Suggestions\" />
     <Folder Include="Generators\" />
   </ItemGroup>
   <ItemGroup>

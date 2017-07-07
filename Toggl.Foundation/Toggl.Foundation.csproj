@@ -52,12 +52,15 @@
     <Compile Include="Login\IApiFactory.cs" />
     <Compile Include="Login\LoginManager.cs" />
     <Compile Include="DataSources\ProjectsDataSource.cs" />
+    <Compile Include="Suggestions\ISuggestionProvider.cs" />
+    <Compile Include="Suggestions\MostUsedTimeEntryProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataSources\" />
     <Folder Include="DataSources\Interfaces\" />
     <Folder Include="Models\" />
     <Folder Include="Login\" />
+    <Folder Include="Suggestions\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">
