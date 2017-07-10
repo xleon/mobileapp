@@ -11,6 +11,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
     public class TimeEntriesLogViewModelTests
     {
+        public class TimeEntriesLogViewModelTest : BaseViewModelTests<TimeEntriesLogViewModel>
+        {
+            protected override TimeEntriesLogViewModel CreateViewModel()
+                => new TimeEntriesLogViewModel(DataSource);
+        }
+
         public class TheConstructor
         {
             [Fact]
@@ -21,6 +27,44 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
+            }
+        }
+
+        public class TheEmptyStateTitleProperty : TimeEntriesLogViewModelTest
+        {
+            [Fact]
+            public void ReturnsTheWelcomeStringIfTheIsWelcomePropertyIsTrue()
+            {
+                ViewModel.IsWelcome = true;
+
+                ViewModel.EmptyStateTitle.Should().Be(Resources.TimeEntriesLogEmptyStateWelcomeTitle);
+            }
+
+            [Fact]
+            public void ReturnsTheDefaultStringIfTheIsWelcomePropertyIsFalse()
+            {
+                ViewModel.IsWelcome = false;
+
+                ViewModel.EmptyStateTitle.Should().Be(Resources.TimeEntriesLogEmptyStateTitle);
+            }
+        }
+
+        public class TheEmptyStateTextProperty : TimeEntriesLogViewModelTest
+        {
+            [Fact]
+            public void ReturnsTheWelcomeStringIfTheIsWelcomePropertyIsTrue()
+            {
+                ViewModel.IsWelcome = true;
+
+                ViewModel.EmptyStateText.Should().Be(Resources.TimeEntriesLogEmptyStateWelcomeText);
+            }
+
+            [Fact]
+            public void ReturnsTheDefaultStringIfTheIsWelcomePropertyIsFalse()
+            {
+                ViewModel.IsWelcome = false;
+
+                ViewModel.EmptyStateText.Should().Be(Resources.TimeEntriesLogEmptyStateText);
             }
         }
 

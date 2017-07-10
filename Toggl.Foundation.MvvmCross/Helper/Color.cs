@@ -22,5 +22,10 @@ namespace Toggl.Foundation.MvvmCross.Helper
         {
             public static readonly MvxColor BackgroundColor = new MvxColor(250, 251, 252);
         }
+
+        public static class TimeEntriesLog
+        {
+            public static readonly MvxColor ButtonBorder = new MvxColor(243, 243, 243);
+        }
     }
 }

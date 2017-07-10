@@ -25,8 +25,10 @@ namespace Toggl.Daneel.ViewControllers.Navigation
         {
             base.PushViewController(viewController, animated);
 
+            NavigationBar.ShadowImage = new UIImage();
             NavigationBar.BarTintColor = NavigationBarColor;
             viewController.NavigationItem.TitleView = titleImage;
+            NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             viewController.NavigationItem.RightBarButtonItems = new[]
             {
                 new UIBarButtonItem(UIBarButtonSystemItem.FixedSpace) { Width = -10 },
