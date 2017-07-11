@@ -187,6 +187,7 @@
     <Compile Include="MvvmCross\BaseMvvmCrossTests.cs" />
     <Compile Include="MvvmCross\AppStartTests.cs" />
     <Compile Include="Generators\ViewModelGenerators.cs" />
+    <Compile Include="Suggestions\SuggestionProviderContainerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Login\" />
