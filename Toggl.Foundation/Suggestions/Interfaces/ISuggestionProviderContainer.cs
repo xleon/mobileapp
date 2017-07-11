@@ -1,9 +1,9 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.ObjectModel;
 
 namespace Toggl.Foundation.Suggestions
 {
     public interface ISuggestionProviderContainer
     {
-        ImmutableList<ISuggestionProvider> Providers { get; }
+        ReadOnlyCollection<ISuggestionProvider> Providers { get; }
     }
 }

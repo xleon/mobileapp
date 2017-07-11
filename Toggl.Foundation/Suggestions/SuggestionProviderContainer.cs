@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Immutable;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Toggl.Multivac;
 
 namespace Toggl.Foundation.Suggestions
 {
     public class SuggestionProviderContainer : ISuggestionProviderContainer
     {
-        public ImmutableList<ISuggestionProvider> Providers { get; }
+        public ReadOnlyCollection<ISuggestionProvider> Providers { get; }
 
         public SuggestionProviderContainer(params ISuggestionProvider[] providers)
         {
@@ -14,7 +15,7 @@ namespace Toggl.Foundation.Suggestions
             if (providers.Length == 0)
                 throw new ArgumentException("At least one ISuggestionProvider is required", nameof(providers));
 
-            Providers = ImmutableList.Create(providers);
+            Providers = new ReadOnlyCollection<ISuggestionProvider>(providers.ToList());
         }
     }
 }
