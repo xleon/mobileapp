@@ -250,6 +250,7 @@
     <InterfaceDefinition Include="ViewControllers\LoginViewController.xib" />
     <InterfaceDefinition Include="Views\TimeEntryViewCell.xib" />
     <InterfaceDefinition Include="Views\TimeEntryLogHeaderViewCell.xib" />
+    <InterfaceDefinition Include="Views\TimerSuggestionCell.xib" />
     <InterfaceDefinition Include="ViewControllers\TimeEntriesLogViewController.xib" />
   </ItemGroup>
   <ItemGroup>
@@ -308,6 +309,10 @@
     <Compile Include="Views\TimeEntryLogHeaderViewCell.designer.cs">
       <DependentUpon>TimeEntryLogHeaderViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\TimerSuggestionCell.cs" />
+    <Compile Include="Views\TimerSuggestionCell.designer.cs">
+      <DependentUpon>TimerSuggestionCell.cs</DependentUpon>
+	</Compile>
     <Compile Include="ViewControllers\TimeEntriesLogViewController.cs" />
     <Compile Include="ViewControllers\TimeEntriesLogViewController.designer.cs">
       <DependentUpon>TimeEntriesLogViewController.cs</DependentUpon>
