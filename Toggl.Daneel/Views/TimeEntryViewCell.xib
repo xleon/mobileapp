@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="cZE-iV-UFb" customClass="TimeEntryViewCell">
+        <tableViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="cZE-iV-UFb" customClass="TimeEntryViewCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -70,7 +70,6 @@
                     </imageView>
                 </subviews>
             </view>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="Re8-uD-vpm" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="4" id="7Q6-dj-iIh"/>
                 <constraint firstItem="pqJ-Ao-2Sj" firstAttribute="leading" secondItem="fJh-Bz-nNB" secondAttribute="trailing" constant="4" id="CCd-Z6-Cyr"/>
@@ -89,36 +88,15 @@
                 <constraint firstItem="fIi-Jg-bLZ" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="17" id="tTP-8e-5Oq"/>
             </constraints>
             <connections>
+                <outlet property="ContinueButton" destination="Re8-uD-vpm" id="name-outlet-Re8-uD-vpm"/>
                 <outlet property="DescriptionLabel" destination="fIi-Jg-bLZ" id="name-outlet-fIi-Jg-bLZ"/>
                 <outlet property="ProjectLabel" destination="pqJ-Ao-2Sj" id="name-outlet-pqJ-Ao-2Sj"/>
-                <outlet property="ContinueButton" destination="Re8-uD-vpm" id="name-outlet-Re8-uD-vpm"/>
                 <outlet property="TaskLabel" destination="wgA-CX-wym" id="name-outlet-wgA-CX-wym"/>
                 <outlet property="TimeLabel" destination="Y3e-98-yuY" id="name-outlet-Y3e-98-yuY"/>
             </connections>
-        </collectionViewCell>
+        </tableViewCell>
     </objects>
     <resources>
         <image name="icContinue" width="10" height="11"/>
-        <image name="backgroundPixel" width="1" height="1"/>
-        <image name="transparentPixel" width="1" height="1"/>
-        <image name="icArrowUp" width="10" height="6"/>
-        <image name="icBillable" width="8" height="16"/>
-        <image name="icClose" width="10" height="10"/>
-        <image name="icDatetime" width="14" height="14"/>
-        <image name="icDone" width="16" height="12"/>
-        <image name="icDownS" width="8" height="5"/>
-        <image name="icProjects" width="16" height="12"/>
-        <image name="icRefresh" width="20" height="14"/>
-        <image name="icReports" width="16" height="18"/>
-        <image name="icSettings" width="16" height="16"/>
-        <image name="icSyncerror" width="16" height="16"/>
-        <image name="icTags" width="14" height="13"/>
-        <image name="icUpS" width="8" height="5"/>
-        <image name="playIcon" width="50" height="50"/>
-        <image name="stopIcon" width="34" height="34"/>
-        <image name="togglLogoWhite" width="111" height="35"/>
-        <image name="notebook" width="95" height="85"/>
-        <image name="togglCronometer" width="126" height="140"/>
-        <image name="icPassword" width="15" height="10"/>
     </resources>
 </document>

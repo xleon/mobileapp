@@ -15,7 +15,7 @@
                 <outlet property="EmptyStateButton" destination="Hdc-qP-y2l" id="name-outlet-Hdc-qP-y2l"/>
                 <outlet property="EmptyStateTextLabel" destination="cxZ-cI-I7t" id="name-outlet-cxZ-cI-I7t"/>
                 <outlet property="EmptyStateTitleLabel" destination="bsW-BH-Xlw" id="name-outlet-bsW-BH-Xlw"/>
-                <outlet property="TimeEntries" destination="W7w-8Y-kke" id="name-outlet-W7w-8Y-kke"/>
+                <outlet property="TimeEntriesTableView" destination="W7w-8Y-kke" id="name-outlet-W7w-8Y-kke"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
         </placeholder>

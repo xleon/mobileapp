@@ -36,7 +36,7 @@ namespace Toggl.Daneel.ViewControllers
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITableView TimeEntries { get; set; }
+        UIKit.UITableView TimeEntriesTableView { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
@@ -65,9 +65,9 @@ namespace Toggl.Daneel.ViewControllers
                 EmptyStateView = null;
             }
 
-            if (TimeEntries != null) {
-                TimeEntries.Dispose ();
-                TimeEntries = null;
+            if (TimeEntriesTableView != null) {
+                TimeEntriesTableView.Dispose ();
+                TimeEntriesTableView = null;
             }
         }
     }
