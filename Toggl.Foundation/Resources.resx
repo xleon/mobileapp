@@ -63,4 +63,10 @@ will appear here.</value>
         <value>Start the timer and your time entry log
 will appear here.</value>
     </data>
+    <data name="Today">
+        <value>Today</value>
+    </data>
+    <data name="Yesterday">
+        <value>Yesterday</value>
+    </data>
 </root>

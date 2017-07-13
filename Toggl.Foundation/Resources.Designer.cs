@@ -136,5 +136,17 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("TimeEntriesLogEmptyStateWelcomeText", resourceCulture);
             }
         }
+        
+        public static string Today {
+            get {
+                return ResourceManager.GetString("Today", resourceCulture);
+            }
+        }
+        
+        public static string Yesterday {
+            get {
+                return ResourceManager.GetString("Yesterday", resourceCulture);
+            }
+        }
     }
 }

@@ -189,6 +189,7 @@
     <Compile Include="Generators\ViewModelGenerators.cs" />
     <Compile Include="MvvmCross\ViewModels\SuggestionsViewModelTests.cs" />
     <Compile Include="Suggestions\SuggestionProviderContainerTests.cs" />
+    <Compile Include="MvvmCross\Converters\DateToTitleStringValueConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Login\" />

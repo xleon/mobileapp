@@ -39,6 +39,7 @@
     <Compile Include="Helper\Animation.cs" />
     <Compile Include="Parameters\LoginParameter.cs" />
     <Compile Include="Converters\SecondsToDurationValueConverter.cs" />
+    <Compile Include="Converters\DateToTitleStringValueConverter.cs" />
     <Compile Include="ViewModels\SuggestionsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
