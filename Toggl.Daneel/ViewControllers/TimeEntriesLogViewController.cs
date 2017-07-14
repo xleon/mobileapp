@@ -34,7 +34,7 @@ namespace Toggl.Daneel.ViewControllers
 
             //TableView config
             var source = new GroupBindingTableViewSource<DateTime, ITimeEntry>(
-                TimeEntriesTableView, nameof(TimeEntryLogHeaderViewCell), nameof(TimeEntryViewCell)
+                TimeEntriesTableView, nameof(TimeEntriesLogHeaderViewCell), nameof(TimeEntriesLogViewCell)
             );
             TimeEntriesTableView.Source = source;
 

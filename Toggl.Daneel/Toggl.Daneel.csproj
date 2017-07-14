@@ -248,9 +248,9 @@
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="ViewControllers\OnboardingViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\LoginViewController.xib" />
-    <InterfaceDefinition Include="Views\TimeEntryViewCell.xib" />
-    <InterfaceDefinition Include="Views\TimeEntryLogHeaderViewCell.xib" />
-    <InterfaceDefinition Include="Views\TimerSuggestionCell.xib" />
+    <InterfaceDefinition Include="Views\TimeEntriesLogViewCell.xib" />
+    <InterfaceDefinition Include="Views\TimeEntriesLogHeaderViewCell.xib" />
+    <InterfaceDefinition Include="Views\SuggestionsViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\TimeEntriesLogViewController.xib" />
   </ItemGroup>
   <ItemGroup>
@@ -290,9 +290,9 @@
     <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationController.cs" />
     <Compile Include="Binding\BarButtonCommandTargetBinding.cs" />
     <Compile Include="Binding\ViewAnimatedVisibilityTargetBinding.cs" />
-    <Compile Include="Views\TimeEntryViewCell.cs" />
-    <Compile Include="Views\TimeEntryViewCell.designer.cs">
-      <DependentUpon>TimeEntryViewCell.cs</DependentUpon>
+    <Compile Include="Views\TimeEntriesLogViewCell.cs" />
+    <Compile Include="Views\TimeEntriesLogViewCell.designer.cs">
+      <DependentUpon>TimeEntriesLogViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\LoginViewController.cs" />
     <Compile Include="ViewControllers\LoginViewController.designer.cs">
@@ -305,13 +305,13 @@
     <Compile Include="ViewControllers\Navigation\TogglNavigationController.cs" />
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
-    <Compile Include="Views\TimeEntryLogHeaderViewCell.cs" />
-    <Compile Include="Views\TimeEntryLogHeaderViewCell.designer.cs">
-      <DependentUpon>TimeEntryLogHeaderViewCell.cs</DependentUpon>
+    <Compile Include="Views\TimeEntriesLogHeaderViewCell.cs" />
+    <Compile Include="Views\TimeEntriesLogHeaderViewCell.designer.cs">
+      <DependentUpon>TimeEntriesLogHeaderViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\TimerSuggestionCell.cs" />
-    <Compile Include="Views\TimerSuggestionCell.designer.cs">
-      <DependentUpon>TimerSuggestionCell.cs</DependentUpon>
+    <Compile Include="Views\SuggestionsViewCell.cs" />
+    <Compile Include="Views\SuggestionsViewCell.designer.cs">
+      <DependentUpon>SuggestionsViewCell.cs</DependentUpon>
 	</Compile>
     <Compile Include="ViewControllers\TimeEntriesLogViewController.cs" />
     <Compile Include="ViewControllers\TimeEntriesLogViewController.designer.cs">

@@ -10,8 +10,8 @@ using System.CodeDom.Compiler;
 
 namespace Toggl.Daneel.Views
 {
-    [Register ("TimeEntryViewCell")]
-    partial class TimeEntryViewCell
+    [Register ("TimeEntriesLogViewCell")]
+    partial class TimeEntriesLogViewCell
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
