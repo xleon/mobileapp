@@ -36,8 +36,6 @@ namespace Toggl.Foundation.Models
 
         public DateTimeOffset At { get; }
 
-        public DateTimeOffset CreatedAt { get; }
-
         public DateTimeOffset? ServerDeletedAt { get; }
 
         public string Color { get; }

@@ -18,8 +18,6 @@ namespace Toggl.PrimeRadiant.Realm
 
         public DateTimeOffset At { get; set; }
 
-        public DateTimeOffset CreatedAt { get; set; }
-
         public DateTimeOffset? ServerDeletedAt { get; set; }
 
         public string Color { get; set; }

@@ -32,7 +32,6 @@ namespace Toggl.Foundation.Models
             IsPrivate = entity.IsPrivate;
             Active = entity.Active;
             At = entity.At;
-            CreatedAt = entity.CreatedAt;
             ServerDeletedAt = entity.ServerDeletedAt;
             Color = entity.Color;
             Billable = entity.Billable;

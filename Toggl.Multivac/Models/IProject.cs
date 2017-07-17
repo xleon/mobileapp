@@ -16,8 +16,6 @@ namespace Toggl.Multivac.Models
 
         DateTimeOffset At { get; }
 
-        DateTimeOffset CreatedAt { get; }
-
         DateTimeOffset? ServerDeletedAt { get; }
 
         string Color { get; }
