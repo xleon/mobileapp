@@ -287,7 +287,6 @@
         <DependentUpon>OnboardingViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Binding\ViewAnimatedBackgroundTargetBinding.cs" />
-    <Compile Include="Services\ApiFactory.cs" />
     <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationController.cs" />
     <Compile Include="Binding\BarButtonCommandTargetBinding.cs" />
     <Compile Include="Binding\ViewAnimatedVisibilityTargetBinding.cs" />

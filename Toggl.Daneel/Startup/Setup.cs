@@ -5,7 +5,6 @@ using MvvmCross.iOS.Platform;
 using MvvmCross.iOS.Views.Presenters;
 using MvvmCross.Platform.Platform;
 using Toggl.Daneel.Presentation;
-using Toggl.Daneel.Services;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross;
 using Toggl.PrimeRadiant.Realm;

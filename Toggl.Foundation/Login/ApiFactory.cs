@@ -1,9 +1,8 @@
-﻿using Toggl.Foundation.Login;
-using Toggl.Multivac;
+﻿using Toggl.Multivac;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.Foundation.Login
 {
     public sealed class ApiFactory : IApiFactory
     {

@@ -56,6 +56,8 @@
     <Compile Include="Suggestions\Interfaces\ISuggestionProvider.cs" />
     <Compile Include="Suggestions\Interfaces\ISuggestionProviderContainer.cs" />
     <Compile Include="Suggestions\SuggestionProviderContainer.cs" />
+    <Compile Include="Login\ApiFactory.cs" />
+    <Compile Include="Login\ILoginManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataSources\" />

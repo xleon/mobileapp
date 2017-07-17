@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reactive.Linq;
-using System.Threading;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Models;
 using Toggl.Multivac;
@@ -10,12 +9,6 @@ using Toggl.Ultrawave.Network;
 
 namespace Toggl.Foundation.Login
 {
-    public interface ILoginManager
-    {
-        ITogglDataSource GetDataSourceIfLoggedIn();
-        IObservable<ITogglDataSource> Login(Email email, string password);
-    }
-
     public class LoginManager : ILoginManager
     {
         private readonly IApiFactory apiFactory;
