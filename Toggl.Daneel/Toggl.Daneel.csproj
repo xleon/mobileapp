@@ -253,6 +253,7 @@
     <InterfaceDefinition Include="Views\SuggestionsViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\TimeEntriesLogViewController.xib" />
     <InterfaceDefinition Include="Views\SuggestionsEmptyViewCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\SuggestionsViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -321,6 +322,11 @@
     <Compile Include="Views\SuggestionsEmptyViewCell.cs" />
     <Compile Include="Views\SuggestionsEmptyViewCell.designer.cs">
         <DependentUpon>SuggestionsEmptyViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSources\SuggestionsTableViewSource.cs" />
+    <Compile Include="ViewControllers\SuggestionsViewController.cs" />
+    <Compile Include="ViewControllers\SuggestionsViewController.designer.cs">
+        <DependentUpon>SuggestionsViewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SuggestionsViewController">
+            <connections>
+                <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
+                <outlet property="SuggestionsTableView" destination="pTb-lb-7NH" id="name-outlet-pTb-lb-7NH"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="2">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="pTb-lb-7NH" misplaced="YES" scrollEnabled="NO" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="pTb-lb-7NH" secondAttribute="bottom" id="3x3-XB-cNc"/>
+                <constraint firstItem="pTb-lb-7NH" firstAttribute="top" secondItem="2" secondAttribute="top" id="5yB-R5-wV9"/>
+                <constraint firstItem="pTb-lb-7NH" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="CoZ-mh-DTd"/>
+                <constraint firstAttribute="trailing" secondItem="pTb-lb-7NH" secondAttribute="trailing" id="mNR-TR-LxZ"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <image name="icArrowUp" width="10" height="6"/>
+        <image name="icBillable" width="8" height="16"/>
+        <image name="icClose" width="10" height="10"/>
+        <image name="icContinue" width="10" height="11"/>
+        <image name="icDatetime" width="14" height="14"/>
+        <image name="icDone" width="16" height="12"/>
+        <image name="icDownS" width="8" height="5"/>
+        <image name="icProjects" width="16" height="12"/>
+        <image name="icRefresh" width="20" height="14"/>
+        <image name="icReports" width="16" height="18"/>
+        <image name="icSettings" width="16" height="16"/>
+        <image name="icSyncerror" width="16" height="16"/>
+        <image name="icTags" width="14" height="13"/>
+        <image name="icUpS" width="8" height="5"/>
+        <image name="playIcon" width="50" height="50"/>
+        <image name="stopIcon" width="34" height="34"/>
+        <image name="togglLogoWhite" width="111" height="35"/>
+        <image name="notebook" width="95" height="85"/>
+        <image name="togglCronometer" width="126" height="140"/>
+        <image name="icPassword" width="15" height="10"/>
+        <image name="togglLogo" width="63" height="19"/>
+        <image name="line" width="2" height="14"/>
+    </resources>
+</document>
