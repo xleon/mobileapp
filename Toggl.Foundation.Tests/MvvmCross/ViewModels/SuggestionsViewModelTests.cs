@@ -1,9 +1,10 @@
 ﻿using System;
-using Toggl.Multivac.Extensions;
-using System.Reactive.Disposables;
+using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Suggestions;
@@ -33,24 +34,31 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task WorksWithSeveralProviders()
             {
+                var scheduler = new TestScheduler();
                 var provider1 = Substitute.For<ISuggestionProvider>();
                 var provider2 = Substitute.For<ISuggestionProvider>();
-                var timeEntry1 = new TimeEntry { Description = "t1", TaskId = 12, ProjectId = 9 };
-                var timeEntry2 = new TimeEntry { Description = "t2", TaskId = 9, ProjectId = 12 };
-                provider1.GetSuggestion().Returns(Observable.Return(timeEntry1));
-                provider2.GetSuggestion().Returns(Observable.Return(timeEntry2));
+                var te1 = new TimeEntry { Description = "t1", TaskId = 12, ProjectId = 9 };
+                var te2 = new TimeEntry { Description = "t2", TaskId = 9, ProjectId = 12 };
+                var observable1 = scheduler
+                    .CreateColdObservable(new Recorded<Notification<ITimeEntry>>(0, Notification.CreateOnNext<ITimeEntry>(te1)));
+                var observable2 = scheduler
+                    .CreateColdObservable(new Recorded<Notification<ITimeEntry>>(1, Notification.CreateOnNext<ITimeEntry>(te2)));
+                provider1.GetSuggestion().Returns(observable1);
+                provider2.GetSuggestion().Returns(observable2);
                 var container = new SuggestionProviderContainer(provider1, provider2);
                 var viewModel = new SuggestionsViewModel(container);
 
                 await viewModel.Initialize();
+                scheduler.AdvanceTo(1);
 
                 viewModel.Suggestions.Should().HaveCount(2)
-                         .And.Contain(new[] { timeEntry1, timeEntry2 });
+                         .And.Contain(new[] { te1, te2 });
             }
 
             [Fact]
             public async Task WorksIfProviderHasMultipleSuggestions()
             {
+                var scheduler = new TestScheduler();
                 var provider = Substitute.For<ISuggestionProvider>();
                 var timeEntries = new[]
                 {
@@ -58,17 +66,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     new TimeEntry { Description = "te2" },
                     new TimeEntry { Description = "te3" }
                 };
-                var observable = Observable.Create((IObserver<ITimeEntry> observer) =>
-                {
-                    timeEntries.ForEach(observer.OnNext);
-                    observer.OnCompleted();
-                    return Disposable.Empty;
-                });
+                var observableContent = timeEntries
+                    .Select(te => new Recorded<Notification<ITimeEntry>>(1, Notification.CreateOnNext<ITimeEntry>(te)))
+                    .ToArray();
+                var observable = scheduler
+                    .CreateColdObservable(observableContent);
                 provider.GetSuggestion().Returns(observable);
                 var container = new SuggestionProviderContainer(provider);
                 var viewmodel = new SuggestionsViewModel(container);
 
                 await viewmodel.Initialize();
+                scheduler.AdvanceTo(1);
 
                 viewmodel.Suggestions.Should().HaveCount(timeEntries.Length)
                          .And.Contain(timeEntries);
