@@ -22,11 +22,11 @@ namespace Toggl.PrimeRadiant.Realm
 
         public string Color { get; set; }
 
-        public bool Billable { get; set; }
+        public bool? Billable { get; set; }
 
-        public bool Template { get; set; }
+        public bool? Template { get; set; }
 
-        public bool AutoEstimates { get; set; }
+        public bool? AutoEstimates { get; set; }
 
         public int? EstimatedHours { get; set; }
 
@@ -34,6 +34,6 @@ namespace Toggl.PrimeRadiant.Realm
 
         public string Currency { get; set; }
 
-        public int ActualHours { get; set; }
+        public int? ActualHours { get; set; }
     }
 }

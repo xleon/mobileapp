@@ -20,11 +20,11 @@ namespace Toggl.Multivac.Models
 
         string Color { get; }
 
-        bool Billable { get; }
+        bool? Billable { get; }
 
-        bool Template { get; }
+        bool? Template { get; }
 
-        bool AutoEstimates { get; }
+        bool? AutoEstimates { get; }
 
         int? EstimatedHours { get; }
 
@@ -32,6 +32,6 @@ namespace Toggl.Multivac.Models
 
         string Currency { get; }
 
-        int ActualHours { get; }
+        int? ActualHours { get; }
     }
 }
