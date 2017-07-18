@@ -29,12 +29,12 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var clients = await CallEndpointWith(togglClient);
 
                 clients.Should().HaveCount(2);
-                clients.Should().Contain(client => client.Id == firstClientPosted.Id);
-                clients.Should().Contain(client => client.Name == firstClientPosted.Name);
-                clients.Should().Contain(client => client.WorkspaceId == firstClientPosted.WorkspaceId);
-                clients.Should().Contain(client => client.Id == secondClientPosted.Id);
-                clients.Should().Contain(client => client.Name == secondClientPosted.Name);
-                clients.Should().Contain(client => client.WorkspaceId == secondClientPosted.WorkspaceId);
+
+                clients.Should().Contain(client =>
+                    client.Id == firstClientPosted.Id && client.Name == firstClientPosted.Name && client.WorkspaceId == firstClientPosted.WorkspaceId);
+
+                clients.Should().Contain(client =>
+                    client.Id == secondClientPosted.Id && client.Name == secondClientPosted.Name && client.WorkspaceId == secondClientPosted.WorkspaceId);
             }
         }
 
