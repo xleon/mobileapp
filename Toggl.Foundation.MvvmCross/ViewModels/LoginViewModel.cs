@@ -8,6 +8,7 @@ using PropertyChanged;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Parameters;
+using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
 using EmailType = Toggl.Multivac.Email;
 using LoginType = Toggl.Foundation.MvvmCross.Parameters.LoginParameter.LoginType;
@@ -21,8 +22,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private readonly ILoginManager loginManager;
         private readonly IMvxNavigationService navigationService;
+        private readonly IPasswordManagerService passwordManagerService;
 
         private IDisposable loginDisposable;
+        private IDisposable passwordManagerDisposable;
+
         private EmailType email = EmailType.Invalid;
 
         public string Email { get; set; } = "";
@@ -43,6 +47,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand TogglePasswordVisibilityCommand { get; }
 
+        public IMvxCommand StartPasswordManagerCommand { get; }
+
         [DependsOn(nameof(CurrentPage))]
         public bool IsEmailPage => CurrentPage == EmailPage;
 
@@ -53,16 +59,22 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public bool NextIsEnabled
             => IsEmailPage ? email.IsValid : (Password.Length > 0 && !IsLoading);
 
-        public LoginViewModel(ILoginManager loginManager, IMvxNavigationService navigationService)
+        public bool IsPasswordManagerAvailable
+            => passwordManagerService.IsAvailable;
+
+        public LoginViewModel(ILoginManager loginManager, IMvxNavigationService navigationService, IPasswordManagerService passwordManagerService)
         {
             Ensure.Argument.IsNotNull(loginManager, nameof(loginManager));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
+            Ensure.Argument.IsNotNull(passwordManagerService, nameof(passwordManagerService));
 
             this.loginManager = loginManager;
             this.navigationService = navigationService;
+            this.passwordManagerService = passwordManagerService;
 
             BackCommand = new MvxCommand(back);
             NextCommand = new MvxCommand(next);
+            StartPasswordManagerCommand = new MvxCommand(startPasswordManager);
             TogglePasswordVisibilityCommand = new MvxCommand(togglePasswordVisibility);
         }
 
@@ -103,11 +115,34 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void login()
         {
             IsLoading = true;
-            
-            loginDisposable = 
+
+            loginDisposable =
                 loginManager
                     .Login(email, Password)
                     .Subscribe(onDataSource, onError, onCompleted);
+        }
+
+        private void startPasswordManager()
+        {
+            if (!passwordManagerService.IsAvailable) return;
+            if (passwordManagerDisposable != null) return;
+
+            passwordManagerDisposable =
+                passwordManagerService
+                    .GetLoginInformation()
+                    .Subscribe(onLoginInfo, onError, onCompleted);
+        }
+
+        private void onLoginInfo(PasswordManagerResult loginInfo)
+        {
+            Email = loginInfo.Email;
+            if (!NextIsEnabled) return;
+ 
+            CurrentPage = PasswordPage;
+            Password = loginInfo.Password;
+            if (!NextIsEnabled) return;
+
+            login();
         }
 
         private void onDataSource(ITogglDataSource dataSource)
@@ -119,16 +154,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void onError(Exception ex)
         {
-            IsLoading = false;
-            loginDisposable?.Dispose();
-            loginDisposable = null;
+            onCompleted();
         }
 
         private void onCompleted()
         {
             IsLoading = false;
+
             loginDisposable?.Dispose();
+            passwordManagerDisposable?.Dispose();
+
             loginDisposable = null;
+            passwordManagerDisposable = null;
         }
     }
 }

@@ -2,6 +2,7 @@ using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using Toggl.Foundation.Login;
+using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac;
 
@@ -20,7 +21,11 @@ namespace Toggl.Foundation.MvvmCross
         }
 
         public override void Initialize()
-            => RegisterAppStart(appStart);
+        {
+            Mvx.RegisterSingleton<IPasswordManagerService>(new StubPasswordManagerService());
+
+            RegisterAppStart(appStart);
+        }
     }
 
     public class AppStart : IMvxAppStart

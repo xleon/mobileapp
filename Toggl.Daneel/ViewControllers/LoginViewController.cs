@@ -60,6 +60,10 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindTap())
                       .To(vm => vm.TogglePasswordVisibilityCommand);
 
+            bindingSet.Bind(PasswordManagerButton)
+                      .For(v => v.BindTap())
+                      .To(vm => vm.StartPasswordManagerCommand);
+
             //Enabled
             bindingSet.Bind(NavigationItem.RightBarButtonItem)
                       .For(v => v.BindAnimatedEnabled())
@@ -77,6 +81,17 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(ShowPassword)
                       .For(v => v.BindAnimatedVisibility())
                       .To(vm => vm.IsPasswordPage);
+
+            if (ViewModel.IsPasswordManagerAvailable)
+            {
+                bindingSet.Bind(PasswordManagerButton)
+                          .For(v => v.BindAnimatedVisibility())
+                          .To(vm => vm.IsEmailPage);
+            }
+            else
+            {
+                PasswordManagerButton.Hidden = true;
+            }
 
             //State
             bindingSet.Bind(Email)

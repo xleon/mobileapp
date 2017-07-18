@@ -141,6 +141,12 @@
     <Reference Include="MvvmCross.Plugins.Visibility.iOS">
       <HintPath>..\packages\MvvmCross.Plugin.Visibility.5.0.5\lib\Xamarin.iOS10\MvvmCross.Plugins.Visibility.iOS.dll</HintPath>
     </Reference>
+    <Reference Include="OnePasswordExtension">
+      <HintPath>..\packages\Xamarin.1PasswordExtension.1.8.4\lib\Xamarin.iOS10\OnePasswordExtension.dll</HintPath>
+    </Reference>
+    <Reference Include="Calabash">
+      <HintPath>..\packages\Xamarin.TestCloud.Agent.0.20.6\lib\Xamarin.iOS10\Calabash.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.3.0\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
@@ -231,6 +237,10 @@
     <ImageAsset Include="Resources\Images.xcassets\togglCronometer.imageset\illustration2.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglCronometer.imageset\illustration2%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglCronometer.imageset\illustration2%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icOnePassword.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icOnePassword.imageset\1password.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icOnePassword.imageset\1password%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icOnePassword.imageset\1password%403x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icPassword.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\icPassword.imageset\icPassword.png" />
     <ImageAsset Include="Resources\Images.xcassets\icPassword.imageset\icPassword%402x.png" />
@@ -288,6 +298,7 @@
         <DependentUpon>OnboardingViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Binding\ViewAnimatedBackgroundTargetBinding.cs" />
+    <Compile Include="Services\OnePasswordService.cs" />
     <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationController.cs" />
     <Compile Include="Binding\BarButtonCommandTargetBinding.cs" />
     <Compile Include="Binding\ViewAnimatedVisibilityTargetBinding.cs" />

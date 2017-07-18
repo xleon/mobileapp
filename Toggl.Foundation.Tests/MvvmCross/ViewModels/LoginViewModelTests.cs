@@ -7,7 +7,9 @@ using NSubstitute;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Parameters;
+using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.Tests.TestExtensions;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Xunit;
@@ -30,24 +32,30 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected IUser User { get; } = new User { Id = 10, ApiToken = "1337" };
 
             protected ILoginManager LoginManager { get; } = Substitute.For<ILoginManager>();
+            protected IPasswordManagerService PasswordManagerService { get; } = Substitute.For<IPasswordManagerService>();
 
             protected override LoginViewModel CreateViewModel()
-                => new LoginViewModel(LoginManager, NavigationService);
+                => new LoginViewModel(LoginManager, NavigationService, PasswordManagerService);
         }
 
         public class TheConstructor : LoginViewModelTest
         {
             [Theory]
-            [InlineData(false, false)]
-            [InlineData(true, false)]
-            [InlineData(false, false)]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool userLoginManager, bool userNavigationService)
+            [InlineData(false, false, false)]
+            [InlineData(false, false, true)]
+            [InlineData(false, true, false)]
+            [InlineData(false, true, true)]
+            [InlineData(true, false, false)]
+            [InlineData(true, false, true)]
+            [InlineData(true, true, false)]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool userLoginManager, bool userNavigationService, bool usePasswordManagerService)
             {
                 var loginManager = userLoginManager ? LoginManager : null;
                 var navigationService = userNavigationService ? NavigationService : null;
+                var passwordManagerService = usePasswordManagerService ? PasswordManagerService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new LoginViewModel(loginManager, navigationService);
+                    () => new LoginViewModel(loginManager, navigationService, passwordManagerService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -286,6 +294,174 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.BackCommand.Execute();
 
                 NavigationService.Received().Close(Arg.Is(ViewModel));
+            }
+        }
+        public class TheStartPasswordManagerCommandCommand : LoginViewModelTest
+        {
+            public TheStartPasswordManagerCommandCommand()
+            {
+                PasswordManagerService.IsAvailable.Returns(true);
+            }
+
+            [Fact]
+            public void DoesNotTryToCallThePasswordManagerServiceIfItIsNotAvailable()
+            {
+                PasswordManagerService.IsAvailable.Returns(false);
+
+                ViewModel.StartPasswordManagerCommand.Execute();
+
+                PasswordManagerService.DidNotReceive().GetLoginInformation();
+            }
+
+            [Fact]
+            public void CallsThePasswordManagerServiceWhenTheServiceIsAvailable()
+            {
+                PasswordManagerService.GetLoginInformation().Returns(Observable.Never<PasswordManagerResult>());
+
+                ViewModel.StartPasswordManagerCommand.Execute();
+
+                PasswordManagerService.Received().GetLoginInformation();
+            }
+
+            [Fact]
+            public void DoesNothingWhenCalledASecondTimeBeforeTheObservableFromTheFirstCallReturns()
+            {
+                var scheduler = new TestScheduler();
+                var never = Observable.Never<PasswordManagerResult>();
+                PasswordManagerService.GetLoginInformation().Returns(never);
+
+                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.Execute());
+                scheduler.Schedule(TimeSpan.FromTicks(40), () => ViewModel.StartPasswordManagerCommand.Execute());
+
+                scheduler.Start();
+
+                PasswordManagerService.Received(1).GetLoginInformation();
+            }
+
+            [Fact]
+            public void CallsTheLoginCommandWhenValidCredentialsAreProvided()
+            {
+                var scheduler = new TestScheduler();
+                var observable = arrangeCallToPasswordManagerWithValidCredentials();
+
+                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.Execute());
+
+                scheduler.Start(
+                    () => observable,
+                    created: 0,
+                    subscribed: 10,
+                    disposed: 100
+                );
+
+                LoginManager.Received().Login(Arg.Any<Email>(), Arg.Any<string>());
+            }
+
+            [Fact]
+            public void SetsTheEmailFieldWhenValidCredentialsAreProvided()
+            {
+                var scheduler = new TestScheduler();
+                var observable = arrangeCallToPasswordManagerWithValidCredentials();
+
+                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.Execute());
+
+                scheduler.Start(
+                    () => observable,
+                    created: 0,
+                    subscribed: 10,
+                    disposed: 100
+                );
+
+                ViewModel.Email.Should().Be(ValidEmail);
+            }
+
+            [Fact]
+            public void SetsTheEmailFieldWhenInvalidCredentialsAreProvided()
+            {
+                var scheduler = new TestScheduler();
+                var observable = arrangeCallToPasswordManagerWithInvalidCredentials();
+
+                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.Execute());
+
+                scheduler.Start(
+                    () => observable,
+                    created: 0,
+                    subscribed: 10,
+                    disposed: 100
+                );
+
+                ViewModel.Email.Should().Be(InvalidEmail);
+            }
+
+            [Fact]
+            public void SetsThePasswordFieldWhenValidCredentialsAreProvided()
+            {
+                var scheduler = new TestScheduler();
+                var observable = arrangeCallToPasswordManagerWithValidCredentials();
+
+                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.Execute());
+
+                scheduler.Start(
+                    () => observable,
+                    created: 0,
+                    subscribed: 10,
+                    disposed: 100
+                );
+
+                ViewModel.Password.Should().Be(ValidPassword);
+            }
+
+            [Fact]
+            public void DoesNotSetThePasswordFieldWhenInvalidCredentialsAreProvided()
+            {
+                var scheduler = new TestScheduler();
+                var observable = arrangeCallToPasswordManagerWithInvalidCredentials();
+
+                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.Execute());
+
+                scheduler.Start(
+                    () => observable,
+                    created: 0,
+                    subscribed: 10,
+                    disposed: 100
+                );
+
+                ViewModel.Password.Should().Be("");
+            }
+
+            [Fact]
+            public void DoesNothingWhenValidCredentialsAreNotProvided()
+            {
+                var scheduler = new TestScheduler();
+                var observable = arrangeCallToPasswordManagerWithInvalidCredentials();
+
+                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.Execute());
+
+                scheduler.Start(
+                    () => observable,
+                    created: 0,
+                    subscribed: 10,
+                    disposed: 100
+                );
+
+                LoginManager.DidNotReceive().Login(Arg.Any<Email>(), Arg.Any<string>());
+            }
+
+            private IObservable<PasswordManagerResult> arrangeCallToPasswordManagerWithValidCredentials()
+            {
+                var loginInfo = new PasswordManagerResult(ValidEmail, ValidPassword);
+                var observable = Observable.Return(loginInfo);
+                PasswordManagerService.GetLoginInformation().Returns(observable);
+
+                return observable;
+            }
+
+            private IObservable<PasswordManagerResult> arrangeCallToPasswordManagerWithInvalidCredentials()
+            {
+                var loginInfo = new PasswordManagerResult(InvalidEmail, InvalidPassword);
+                var observable = Observable.Return(loginInfo);
+                PasswordManagerService.GetLoginInformation().Returns(observable);
+
+                return observable;
             }
         }
     }

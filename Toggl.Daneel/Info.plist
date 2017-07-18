@@ -34,5 +34,9 @@
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>org-appextension-feature-password-management</string>
+	</array>
 </dict>
 </plist>

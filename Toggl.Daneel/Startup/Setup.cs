@@ -6,8 +6,10 @@ using MvvmCross.iOS.Views.Presenters;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Platform;
 using Toggl.Daneel.Presentation;
+using Toggl.Daneel.Services;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross;
+using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Suggestions;
 using Toggl.PrimeRadiant.Realm;
 using Toggl.Ultrawave;
@@ -62,5 +64,12 @@ namespace Toggl.Daneel
         }
 
         protected override IMvxTrace CreateDebugTrace() => new DebugTrace();
+
+        protected override void InitializeLastChance()
+        {
+            base.InitializeLastChance();
+
+            Mvx.RegisterSingleton<IPasswordManagerService>(new OnePasswordService());
+        }
     }
 }

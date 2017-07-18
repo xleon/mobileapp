@@ -32,6 +32,10 @@ namespace Toggl.Daneel.ViewControllers
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIImageView PasswordManagerButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIImageView ShowPassword { get; set; }
 
         void ReleaseDesignerOutlets ()
@@ -54,6 +58,11 @@ namespace Toggl.Daneel.ViewControllers
             if (Password != null) {
                 Password.Dispose ();
                 Password = null;
+            }
+
+            if (PasswordManagerButton != null) {
+                PasswordManagerButton.Dispose ();
+                PasswordManagerButton = null;
             }
 
             if (ShowPassword != null) {

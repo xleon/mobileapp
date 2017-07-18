@@ -11,11 +11,12 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginView">
             <connections>
                 <outlet property="BottomConstraint" destination="kx6-14-c06" id="name-outlet-kx6-14-c06"/>
+                <outlet property="Email" destination="WxQ-t5-Zte" id="name-outlet-WxQ-t5-Zte"/>
                 <outlet property="ForgotPassword" destination="8lc-P8-x4K" id="name-outlet-8lc-P8-x4K"/>
                 <outlet property="Password" destination="965-7g-Gu6" id="name-outlet-965-7g-Gu6"/>
                 <outlet property="ShowPassword" destination="IEZ-w2-ebJ" id="name-outlet-IEZ-w2-ebJ"/>
-                <outlet property="Email" destination="WxQ-t5-Zte" id="name-outlet-WxQ-t5-Zte"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
+                <outlet property="PasswordManagerButton" destination="zrB-CR-ZBC" id="name-outlet-zrB-CR-ZBC"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -32,39 +33,48 @@
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="965-7g-Gu6" misplaced="YES">
                     <rect key="frame" x="16" y="159" width="319" height="24"/>
+                    <accessibility key="accessibilityConfiguration" label="LoginPassword"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
-                    <accessibility key="accessibilityConfiguration" label="LoginPassword"/>
                 </textField>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8lc-P8-x4K" misplaced="YES">
-                    <rect key="frame" x="226" y="619" width="133" height="27"/>
-                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
-                    <state key="normal" title="Forgot your password?">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <accessibility key="accessibilityConfiguration" label="LoginForgotPassword"/>
-                </button>
                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icPassword" translatesAutoresizingMaskIntoConstraints="NO" id="IEZ-w2-ebJ" misplaced="YES">
                     <rect key="frame" x="335" y="159" width="24" height="24"/>
+                    <accessibility key="accessibilityConfiguration" label="LoginShowPassword"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="24" id="rK3-aW-F5C"/>
                         <constraint firstAttribute="height" constant="24" id="tyY-bM-TUk"/>
                     </constraints>
-                    <accessibility key="accessibilityConfiguration" label="LoginShowPassword"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8lc-P8-x4K" misplaced="YES">
+                    <rect key="frame" x="226" y="619" width="133" height="27"/>
+                    <accessibility key="accessibilityConfiguration" label="LoginForgotPassword"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                    <state key="normal" title="Forgot your password?">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icOnePassword" translatesAutoresizingMaskIntoConstraints="NO" id="zrB-CR-ZBC" misplaced="YES">
+                    <rect key="frame" x="335" y="159" width="24" height="24"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="24" id="JZo-wX-zs8"/>
+                        <constraint firstAttribute="width" constant="24" id="aaj-mV-LSy"/>
+                    </constraints>
                 </imageView>
             </subviews>
             <color key="backgroundColor" red="0.023529411764705882" green="0.66666666666666663" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="8lc-P8-x4K" secondAttribute="trailing" constant="16" id="0k3-pK-CqH"/>
+                <constraint firstItem="zrB-CR-ZBC" firstAttribute="centerY" secondItem="WxQ-t5-Zte" secondAttribute="centerY" id="0zi-N5-DYH"/>
+                <constraint firstItem="zrB-CR-ZBC" firstAttribute="leading" secondItem="WxQ-t5-Zte" secondAttribute="trailing" id="7xD-Gs-o2Y"/>
                 <constraint firstItem="965-7g-Gu6" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="CeJ-bb-SPH"/>
                 <constraint firstItem="965-7g-Gu6" firstAttribute="top" secondItem="2" secondAttribute="top" constant="159" id="D3H-zT-YZV"/>
                 <constraint firstItem="IEZ-w2-ebJ" firstAttribute="centerY" secondItem="965-7g-Gu6" secondAttribute="centerY" id="EGn-Lh-RBk"/>
+                <constraint firstAttribute="trailing" secondItem="zrB-CR-ZBC" secondAttribute="trailing" constant="16" id="Ydm-yz-dwx"/>
                 <constraint firstAttribute="trailing" secondItem="IEZ-w2-ebJ" secondAttribute="trailing" constant="16" id="YeE-vP-BMl"/>
                 <constraint firstAttribute="bottom" secondItem="8lc-P8-x4K" secondAttribute="bottom" constant="21" id="kx6-14-c06"/>
                 <constraint firstItem="WxQ-t5-Zte" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="mOc-SS-Q8l"/>
                 <constraint firstItem="IEZ-w2-ebJ" firstAttribute="leading" secondItem="965-7g-Gu6" secondAttribute="trailing" id="oYa-Uw-eN6"/>
-                <constraint firstItem="IEZ-w2-ebJ" firstAttribute="leading" secondItem="WxQ-t5-Zte" secondAttribute="trailing" id="puG-36-tcS"/>
                 <constraint firstItem="WxQ-t5-Zte" firstAttribute="top" secondItem="2" secondAttribute="top" constant="159" id="rkN-v1-V0i"/>
             </constraints>
             <point key="canvasLocation" x="-16" y="45"/>
@@ -72,8 +82,6 @@
     </objects>
     <resources>
         <image name="icPassword" width="15" height="10"/>
-        <image name="backgroundPixel" width="1" height="1"/>
-        <image name="transparentPixel" width="1" height="1"/>
         <image name="icArrowUp" width="10" height="6"/>
         <image name="icBillable" width="8" height="16"/>
         <image name="icClose" width="10" height="10"/>
@@ -93,5 +101,8 @@
         <image name="togglLogoWhite" width="111" height="35"/>
         <image name="notebook" width="95" height="85"/>
         <image name="togglCronometer" width="126" height="140"/>
+        <image name="icOnePassword" width="15" height="15"/>
+        <image name="togglLogo" width="63" height="19"/>
+        <image name="line" width="2" height="14"/>
     </resources>
 </document>
