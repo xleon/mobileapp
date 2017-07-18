@@ -49,7 +49,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         [DependsOn(nameof(CurrentPage))]
         public bool IsPasswordPage => CurrentPage == PasswordPage;
 
-        [DependsOn(nameof(CurrentPage), nameof(Email), nameof(Password))]
+        [DependsOn(nameof(CurrentPage), nameof(Password))]
         public bool NextIsEnabled
             => IsEmailPage ? email.IsValid : (Password.Length > 0 && !IsLoading);
 
@@ -75,7 +75,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private void OnEmailChanged()
-            => email = EmailType.FromString(Email);
+        {
+            email = EmailType.FromString(Email);
+            RaisePropertyChanged(nameof(NextIsEnabled));
+        }
 
         private void next()
         {
