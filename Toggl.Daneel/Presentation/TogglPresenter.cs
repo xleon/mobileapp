@@ -1,4 +1,5 @@
-﻿﻿using CoreAnimation;
+﻿using System.Linq;
+using CoreAnimation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters;
@@ -25,6 +26,25 @@ namespace Toggl.Daneel.Presentation
         public TogglPresenter(IUIApplicationDelegate applicationDelegate, UIWindow window)
             : base(applicationDelegate, window)
         {
+        }
+
+        protected override void RegisterAttributeTypes()
+        {
+            base.RegisterAttributeTypes();
+
+            _attributeTypesToShowMethodDictionary.Add(typeof(NestedPresentationAttribute), ShowNestedViewController);
+        }
+
+        protected virtual void ShowNestedViewController(UIViewController viewController, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
+        {
+            var mainViewController = MasterNavigationController.ViewControllers.OfType<MainViewController>().Single();
+            mainViewController.AddChildViewController(viewController);
+
+            var container = mainViewController.GetContainerFor(viewController);
+            viewController.View.Frame = new CoreGraphics.CGRect(0, 0, container.Frame.Width, container.Frame.Height);
+            container.AddSubview(viewController.View);
+
+            viewController.DidMoveToParentViewController(mainViewController);
         }
 
         protected override void ShowChildViewController(UIViewController viewController, MvxChildPresentationAttribute attribute, MvxViewModelRequest request)

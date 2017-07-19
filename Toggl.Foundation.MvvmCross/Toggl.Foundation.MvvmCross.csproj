@@ -42,6 +42,7 @@
     <Compile Include="Services\IPasswordManagerService.cs" />
     <Compile Include="Converters\DateToTitleStringValueConverter.cs" />
     <Compile Include="ViewModels\SuggestionsViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Services\PasswordManagerResult.cs" />
     <Compile Include="Services\StubPasswordManagerService.cs" />
   </ItemGroup>

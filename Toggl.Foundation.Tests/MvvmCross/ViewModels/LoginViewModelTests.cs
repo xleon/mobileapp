@@ -234,7 +234,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     ViewModel.NextCommand.Execute();
 
-                    NavigationService.Received().Navigate<TimeEntriesLogViewModel>();
+                    NavigationService.Received().Navigate<MainViewModel>();
                 }
 
                 [Fact]
@@ -270,7 +270,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     ViewModel.NextCommand.Execute();
 
-                    NavigationService.DidNotReceive().Navigate<TimeEntriesLogViewModel>();
+                    NavigationService.DidNotReceive().Navigate<MainViewModel>();
                 }
             }
         }

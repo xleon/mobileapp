@@ -1,12 +1,12 @@
 ﻿using MvvmCross.Binding.BindingContext;
 using MvvmCross.iOS.Views;
-using MvvmCross.iOS.Views.Presenters.Attributes;
+using Toggl.Daneel.Presentation;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.MvvmCross.ViewModels;
 
 namespace Toggl.Daneel.ViewControllers
 {
-    [MvxRootPresentation(WrapInNavigationController = true)]
+    [NestedPresentation]
     public partial class SuggestionsViewController : MvxViewController<SuggestionsViewModel>
     {
         public SuggestionsViewController() 

@@ -1,4 +1,4 @@
-﻿using CoreGraphics;
+﻿﻿using CoreGraphics;
 using MvvmCross.iOS.Views;
 using MvvmCross.Plugins.Color.iOS;
 using Toggl.Foundation.MvvmCross.Helper;
@@ -27,6 +27,7 @@ namespace Toggl.Daneel.ViewControllers.Navigation
 
             NavigationBar.ShadowImage = new UIImage();
             NavigationBar.BarTintColor = NavigationBarColor;
+            NavigationBar.BackgroundColor = NavigationBarColor;
             viewController.NavigationItem.TitleView = titleImage;
             NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             viewController.NavigationItem.RightBarButtonItems = new[]

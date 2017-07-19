@@ -2,9 +2,9 @@
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
-using MvvmCross.iOS.Views.Presenters.Attributes;
 using MvvmCross.Plugins.Color.iOS;
 using MvvmCross.Plugins.Visibility;
+using Toggl.Daneel.Presentation;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -15,7 +15,7 @@ using UIKit;
 
 namespace Toggl.Daneel.ViewControllers
 {
-    [MvxRootPresentation(WrapInNavigationController = true)]
+    [NestedPresentation]
     public partial class TimeEntriesLogViewController : MvxViewController<TimeEntriesLogViewModel>
     {
         public TimeEntriesLogViewController()
@@ -71,4 +71,3 @@ namespace Toggl.Daneel.ViewControllers
         }
     }
 }
-
