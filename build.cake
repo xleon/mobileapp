@@ -28,13 +28,18 @@ private Action Test(string testFiles)
     return () => XUnit2(GetFiles(testFiles), testSettings);
 }
 
-private Action BuildSolution(string targetProject, string configuration = "Release")
+private Action BuildSolution(string targetProject, string configuration = "Release", string platform = "")
 {
     var buildSettings = new MSBuildSettings 
     {
         Verbosity = Bitrise.IsRunningOnBitrise ? Verbosity.Verbose : Verbosity.Minimal,
         Configuration = configuration
     };
+
+    if (!string.IsNullOrEmpty(platform))
+    {
+        buildSettings = buildSettings.WithProperty("Platform", platform);
+    }
 
     return () => MSBuild(targetProject, buildSettings);
 }
@@ -72,6 +77,10 @@ Task("Build.Tests.Unit")
 Task("Build.Tests.Integration")
     .IsDependentOn("Nuget")
     .Does(BuildSolution("./Toggl.sln", "ApiTests"));
+
+Task("Build.Release.iOS")
+    .IsDependentOn("Nuget")
+    .Does(BuildSolution("./Toggl.sln", "Release", "iPhone"));
 
 //Unit Tests
 Task("Tests.Unit")
