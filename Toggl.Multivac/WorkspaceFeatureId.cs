@@ -20,5 +20,6 @@ namespace Toggl.Multivac
         ReportEmployeeProfitability = 59,
         ReportProjectProfitability = 60,
         ReportComparative = 61,
+        ReportDataTrends = 62
     }
 }
