@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F2104" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -14,9 +14,10 @@
                 <outlet property="Email" destination="WxQ-t5-Zte" id="name-outlet-WxQ-t5-Zte"/>
                 <outlet property="ForgotPassword" destination="8lc-P8-x4K" id="name-outlet-8lc-P8-x4K"/>
                 <outlet property="Password" destination="965-7g-Gu6" id="name-outlet-965-7g-Gu6"/>
+                <outlet property="PasswordManagerButton" destination="zrB-CR-ZBC" id="name-outlet-zrB-CR-ZBC"/>
                 <outlet property="ShowPassword" destination="IEZ-w2-ebJ" id="name-outlet-IEZ-w2-ebJ"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
-                <outlet property="PasswordManagerButton" destination="zrB-CR-ZBC" id="name-outlet-zrB-CR-ZBC"/>
+                <outlet property="ErrorLabel" destination="3Dj-pA-An9" id="name-outlet-3Dj-pA-An9"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -61,6 +62,12 @@
                         <constraint firstAttribute="width" constant="24" id="aaj-mV-LSy"/>
                     </constraints>
                 </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Incorrect email/password. Please try again." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Dj-pA-An9" numberOfLines="2">
+                    <rect key="frame" x="16" y="192" width="244" height="15"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" red="0.99121707677841187" green="0.99630099534988403" blue="0.99603599309921265" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="0.023529411764705882" green="0.66666666666666663" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -70,10 +77,12 @@
                 <constraint firstItem="965-7g-Gu6" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="CeJ-bb-SPH"/>
                 <constraint firstItem="965-7g-Gu6" firstAttribute="top" secondItem="2" secondAttribute="top" constant="159" id="D3H-zT-YZV"/>
                 <constraint firstItem="IEZ-w2-ebJ" firstAttribute="centerY" secondItem="965-7g-Gu6" secondAttribute="centerY" id="EGn-Lh-RBk"/>
+                <constraint firstItem="3Dj-pA-An9" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="FQL-QJ-siE"/>
                 <constraint firstAttribute="trailing" secondItem="zrB-CR-ZBC" secondAttribute="trailing" constant="16" id="Ydm-yz-dwx"/>
                 <constraint firstAttribute="trailing" secondItem="IEZ-w2-ebJ" secondAttribute="trailing" constant="16" id="YeE-vP-BMl"/>
                 <constraint firstAttribute="bottom" secondItem="8lc-P8-x4K" secondAttribute="bottom" constant="21" id="kx6-14-c06"/>
                 <constraint firstItem="WxQ-t5-Zte" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="mOc-SS-Q8l"/>
+                <constraint firstItem="3Dj-pA-An9" firstAttribute="top" secondItem="965-7g-Gu6" secondAttribute="bottom" constant="9" id="mVs-lk-n7E"/>
                 <constraint firstItem="IEZ-w2-ebJ" firstAttribute="leading" secondItem="965-7g-Gu6" secondAttribute="trailing" id="oYa-Uw-eN6"/>
                 <constraint firstItem="WxQ-t5-Zte" firstAttribute="top" secondItem="2" secondAttribute="top" constant="159" id="rkN-v1-V0i"/>
             </constraints>
@@ -81,6 +90,7 @@
         </view>
     </objects>
     <resources>
+        <image name="icOnePassword" width="15" height="15"/>
         <image name="icPassword" width="15" height="10"/>
         <image name="icArrowUp" width="10" height="6"/>
         <image name="icBillable" width="8" height="16"/>
@@ -101,7 +111,6 @@
         <image name="togglLogoWhite" width="111" height="35"/>
         <image name="notebook" width="95" height="85"/>
         <image name="togglCronometer" width="126" height="140"/>
-        <image name="icOnePassword" width="15" height="15"/>
         <image name="togglLogo" width="63" height="19"/>
         <image name="line" width="2" height="14"/>
     </resources>

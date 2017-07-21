@@ -88,6 +88,7 @@
     <Compile Include="Models\Project.cs" />
     <Compile Include="ApiConfiguration.cs" />
     <Compile Include="Network\UserAgent.cs" />
+    <Compile Include="Exceptions\NotAuthorizedException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">

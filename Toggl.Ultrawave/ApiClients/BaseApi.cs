@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Multivac;
@@ -49,8 +50,10 @@ namespace Toggl.Ultrawave.ApiClients
                 }
                 else
                 {
-                    //TODO: Treat different error responses here. We need to check those as we create our clients.
-                    observer.OnError(new ApiException(response.RawData));
+                    if (response.StatusCode == HttpStatusCode.Forbidden)
+                        observer.OnError(new NotAuthorizedException(response.RawData));
+                    else
+                        observer.OnError(new ApiException(response.RawData));
                 }
             });
         }

@@ -10,6 +10,7 @@ using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
+using Toggl.Ultrawave.Exceptions;
 using EmailType = Toggl.Multivac.Email;
 using LoginType = Toggl.Foundation.MvvmCross.Parameters.LoginParameter.LoginType;
 
@@ -32,6 +33,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public string Email { get; set; } = "";
 
         public string Password { get; set; } = "";
+
+        public string ErrorText { get; set; } = "";
+
+        [DependsOn(nameof(ErrorText))]
+        public bool HasError => !string.IsNullOrEmpty(ErrorText);
 
         public int CurrentPage { get; private set; } = EmailPage;
 
@@ -99,6 +105,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (IsPasswordPage) login();
 
             CurrentPage = PasswordPage;
+            ErrorText = "";
         }
 
         private void back()
@@ -107,6 +114,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 navigationService.Close(this);
 
             CurrentPage = EmailPage;
+            ErrorText = "";
         }
 
         private void togglePasswordVisibility()
@@ -154,6 +162,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void onError(Exception ex)
         {
+            ErrorText = ex is NotAuthorizedException ? Resources.IncorrectEmailOrPassword
+                                                     : Resources.GenericLoginError;
+
             onCompleted();
         }
 

@@ -1,4 +1,6 @@
 using System;
+using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -12,6 +14,7 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.TestExtensions;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
+using Toggl.Ultrawave.Exceptions;
 using Xunit;
 using static Toggl.Foundation.MvvmCross.Parameters.LoginParameter;
 using User = Toggl.Ultrawave.Models.User;
@@ -27,9 +30,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             protected const string ValidPassword = "123456";
             protected const string InvalidPassword = "";
-
-            protected TestScheduler TestScheduler { get; } = new TestScheduler();
-            protected IUser User { get; } = new User { Id = 10, ApiToken = "1337" };
 
             protected ILoginManager LoginManager { get; } = Substitute.For<ILoginManager>();
             protected IPasswordManagerService PasswordManagerService { get; } = Substitute.For<IPasswordManagerService>();
@@ -296,6 +296,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 NavigationService.Received().Close(Arg.Is(ViewModel));
             }
         }
+
         public class TheStartPasswordManagerCommandCommand : LoginViewModelTest
         {
             public TheStartPasswordManagerCommandCommand()
@@ -462,6 +463,97 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 PasswordManagerService.GetLoginInformation().Returns(observable);
 
                 return observable;
+            }
+        }
+
+        public class TheHasErrorProperty : LoginViewModelTest
+        {
+            [Fact]
+            public void IsFalseWhenLoginSucceeds()
+            {
+                LoginManager.Login(Arg.Any<Email>(), Arg.Any<string>())
+                            .Returns(Observable.Return(DataSource));
+                ViewModel.Email = ValidEmail;
+                ViewModel.NextCommand.Execute();
+                ViewModel.Password = ValidPassword;
+
+                ViewModel.NextCommand.Execute();
+
+                ViewModel.HasError.Should().BeFalse();
+            }
+
+            [Fact]
+            public void IsTrueWhenLoginFails()
+            {
+                var scheduler = new TestScheduler();
+                var notification = Notification.CreateOnError<ITogglDataSource>(new NotAuthorizedException(""));
+                var message = new Recorded<Notification<ITogglDataSource>>(0, notification);
+                var observable = scheduler.CreateColdObservable(message);
+                LoginManager.Login(Arg.Any<Email>(), Arg.Any<string>())
+                            .Returns(observable);
+                ViewModel.Email = ValidEmail;
+                ViewModel.NextCommand.Execute();
+                ViewModel.Password = ValidPassword;
+
+                ViewModel.NextCommand.Execute();
+                scheduler.AdvanceTo(1);
+
+                ViewModel.HasError.Should().BeTrue();
+            }
+        }
+
+        public class TheErrorTextProperty : LoginViewModelTest
+        {
+            [Fact]
+            public void IsEmptyWhenLoginSucceeds()
+            {
+                LoginManager.Login(Arg.Any<Email>(), Arg.Any<string>())
+                            .Returns(Observable.Return(DataSource));
+                ViewModel.Email = ValidEmail;
+                ViewModel.NextCommand.Execute();
+                ViewModel.Password = ValidPassword;
+
+                ViewModel.NextCommand.Execute();
+
+                ViewModel.ErrorText.Should().Be("");
+            }
+
+            [Fact]
+            public void IsWrongPasswordErrorWhenNotAuthorizedExceptionIsThrown()
+            {
+                var scheduler = new TestScheduler();
+                var notification = Notification.CreateOnError<ITogglDataSource>(new NotAuthorizedException(""));
+                var message = new Recorded<Notification<ITogglDataSource>>(0, notification);
+                var observable = scheduler.CreateColdObservable(message);
+                LoginManager.Login(Arg.Any<Email>(), Arg.Any<string>())
+                            .Returns(observable);
+                ViewModel.Email = ValidEmail;
+                ViewModel.NextCommand.Execute();
+                ViewModel.Password = ValidPassword;
+
+                ViewModel.NextCommand.Execute();
+                scheduler.AdvanceTo(1);
+
+                ViewModel.ErrorText.Should().Be(Resources.IncorrectEmailOrPassword);
+            }
+
+            [Fact]
+            public void IsGenericErrorWhenAnyOtherExceptionIsThrown()
+            {
+                var scheduler = new TestScheduler();
+                var notification = Notification.CreateOnError<ITogglDataSource>(new Exception());
+                var message = new Recorded<Notification<ITogglDataSource>>(0, notification);
+                var observable = scheduler.CreateColdObservable(message);
+                LoginManager.Login(Arg.Any<Email>(), Arg.Any<string>())
+                            .Returns(observable);
+                ViewModel.Email = ValidEmail;
+                ViewModel.NextCommand.Execute();
+                ViewModel.Password = ValidPassword;
+
+                ViewModel.NextCommand.Execute();
+                scheduler.AdvanceTo(1);
+
+                ViewModel.ErrorText.Should().Be(Resources.GenericLoginError);
             }
         }
     }

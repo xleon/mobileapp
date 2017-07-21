@@ -43,6 +43,7 @@ namespace Toggl.Daneel.ViewControllers
             //Text
             bindingSet.Bind(Email).To(vm => vm.Email);
             bindingSet.Bind(Password).To(vm => vm.Password);
+            bindingSet.Bind(ErrorLabel).To(vm => vm.ErrorText);
             bindingSet.Bind(Password)
                       .For(v => v.BindSecureTextEntry())
                       .To(vm => vm.IsPasswordMasked);
@@ -82,6 +83,10 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindAnimatedVisibility())
                       .To(vm => vm.IsPasswordPage);
 
+            bindingSet.Bind(ErrorLabel)
+                      .For(v => v.BindAnimatedVisibility())
+                      .To(vm => vm.HasError);
+
             if (ViewModel.IsPasswordManagerAvailable)
             {
                 bindingSet.Bind(PasswordManagerButton)
@@ -101,7 +106,7 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(Password)
                       .For(v => v.BindFocus())
                       .To(vm => vm.IsPasswordPage);
-            
+
             bindingSet.Apply();
 
             Email.BecomeFirstResponder();

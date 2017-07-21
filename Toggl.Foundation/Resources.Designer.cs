@@ -148,5 +148,17 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("Yesterday", resourceCulture);
             }
         }
+        
+        public static string IncorrectEmailOrPassword {
+            get {
+                return ResourceManager.GetString("IncorrectEmailOrPassword", resourceCulture);
+            }
+        }
+        
+        public static string GenericLoginError {
+            get {
+                return ResourceManager.GetString("GenericLoginError", resourceCulture);
+            }
+        }
     }
 }

@@ -24,6 +24,10 @@ namespace Toggl.Daneel.ViewControllers
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel ErrorLabel { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton ForgotPassword { get; set; }
 
         [Outlet]
@@ -48,6 +52,11 @@ namespace Toggl.Daneel.ViewControllers
             if (Email != null) {
                 Email.Dispose ();
                 Email = null;
+            }
+
+            if (ErrorLabel != null) {
+                ErrorLabel.Dispose ();
+                ErrorLabel = null;
             }
 
             if (ForgotPassword != null) {

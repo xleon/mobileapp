@@ -69,4 +69,11 @@ will appear here.</value>
     <data name="Yesterday">
         <value>Yesterday</value>
     </data>
+    <data name="IncorrectEmailOrPassword">
+        <value>Incorrect email/password. Please, try again.</value>
+    </data>
+    <data name="GenericLoginError">
+        <value>Sorry, we’re having trouble logging you in.
+Please try again.</value>
+    </data>
 </root>
