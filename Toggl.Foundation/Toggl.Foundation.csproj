@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -51,6 +51,12 @@
     <Compile Include="DataSources\TimeEntriesDataSource.cs" />
     <Compile Include="Login\IApiFactory.cs" />
     <Compile Include="Login\LoginManager.cs" />
+    <Compile Include="Sync\StateMachine\IStateMachine.cs" />
+    <Compile Include="Sync\StateMachine\ITransitionHandlerProvider.cs" />
+    <Compile Include="Sync\StateMachine\StateMachine.cs" />
+    <Compile Include="Sync\StateMachine\StateMachineEvent.cs" />
+    <Compile Include="Sync\StateMachine\StateResult.cs" />
+    <Compile Include="Sync\StateMachine\Transition.cs" />
     <Compile Include="DataSources\ProjectsDataSource.cs" />
     <Compile Include="Suggestions\MostUsedTimeEntryProvider.cs" />
     <Compile Include="Suggestions\Interfaces\ISuggestionProvider.cs" />
@@ -59,14 +65,7 @@
     <Compile Include="Login\ApiFactory.cs" />
     <Compile Include="Login\ILoginManager.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataSources\" />
-    <Folder Include="DataSources\Interfaces\" />
-    <Folder Include="Models\" />
-    <Folder Include="Login\" />
-    <Folder Include="Suggestions\" />
-    <Folder Include="Suggestions\Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">
       <Project>{4A9CF7CD-8EB4-435D-958B-98A9FFC14876}</Project>
