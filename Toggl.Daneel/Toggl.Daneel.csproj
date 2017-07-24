@@ -253,6 +253,10 @@
     <ImageAsset Include="Resources\Images.xcassets\line.imageset\line.png" />
     <ImageAsset Include="Resources\Images.xcassets\line.imageset\line%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\line.imageset\line%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icLoader.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icLoader.imageset\ic-spinner.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icLoader.imageset\ic-spinner%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icLoader.imageset\ic-spinner%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -345,6 +349,7 @@
     <Compile Include="ViewControllers\MainViewController.designer.cs">
       <DependentUpon>MainViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\ActivityIndicatorView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
@@ -374,6 +379,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Images.xcassets\line.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icLoader.imageset\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Fody.2.0.6\build\netstandard1.4\Fody.targets" Condition="Exists('..\packages\Fody.2.0.6\build\netstandard1.4\Fody.targets')" />
