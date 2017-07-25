@@ -5,6 +5,8 @@ using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters;
 using MvvmCross.iOS.Views.Presenters.Attributes;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Presentation.Attributes;
+using Toggl.Daneel.Presentation.Transition;
 using Toggl.Daneel.ViewControllers;
 using Toggl.Daneel.ViewControllers.Navigation;
 using Toggl.Foundation.MvvmCross.Helper;
@@ -15,7 +17,9 @@ namespace Toggl.Daneel.Presentation
 {
     public class TogglPresenter : MvxIosViewPresenter
     {
-        private static readonly CATransition FadeAnimation = new CATransition
+        private FromBottomTransitionDelegate FromBottomTransitionDelegate = new FromBottomTransitionDelegate();
+
+        private CATransition FadeAnimation = new CATransition
         {
             Duration = Animation.Timings.EnterTiming,
             Type = CAAnimation.TransitionFade,
@@ -33,6 +37,7 @@ namespace Toggl.Daneel.Presentation
             base.RegisterAttributeTypes();
 
             _attributeTypesToShowMethodDictionary.Add(typeof(NestedPresentationAttribute), ShowNestedViewController);
+            _attributeTypesToShowMethodDictionary.Add(typeof(ModalCardPresentationAttribute), ShowModalCardViewController);
         }
 
         protected virtual void ShowNestedViewController(UIViewController viewController, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
@@ -45,6 +50,14 @@ namespace Toggl.Daneel.Presentation
             container.AddSubview(viewController.View);
 
             viewController.DidMoveToParentViewController(mainViewController);
+        }
+
+        protected virtual void ShowModalCardViewController(UIViewController viewController, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
+        {
+            viewController.ModalPresentationStyle = UIModalPresentationStyle.Custom;
+            viewController.TransitioningDelegate = FromBottomTransitionDelegate; 
+            MasterNavigationController.PresentViewController(viewController, true, null);
+            FromBottomTransitionDelegate.WireToViewController(viewController);
         }
 
         protected override void ShowChildViewController(UIViewController viewController, MvxChildPresentationAttribute attribute, MvxViewModelRequest request)

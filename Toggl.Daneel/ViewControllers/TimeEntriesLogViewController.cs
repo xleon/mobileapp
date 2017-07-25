@@ -12,6 +12,7 @@ using Toggl.Daneel.Views;
 using Toggl.Daneel.ViewSources;
 using Toggl.Multivac.Models;
 using UIKit;
+using Toggl.Daneel.Presentation.Attributes;
 
 namespace Toggl.Daneel.ViewControllers
 {
