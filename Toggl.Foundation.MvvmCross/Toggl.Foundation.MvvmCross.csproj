@@ -45,6 +45,8 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Services\PasswordManagerResult.cs" />
     <Compile Include="Services\StubPasswordManagerService.cs" />
+    <Compile Include="ViewModels\StartTimeEntryViewModel.cs" />
+    <Compile Include="Parameters\DateParameter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">
@@ -102,10 +104,6 @@
       <Project>{B4E4943F-0574-4BEF-9ADC-B19102458754}</Project>
       <Name>Toggl.Ultrawave</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Parameters\" />
-    <Folder Include="Converters\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Fody.2.0.6\build\portable-net+sl+win+wpa+wp\Fody.targets" Condition="Exists('..\packages\Fody.2.0.6\build\portable-net+sl+win+wpa+wp\Fody.targets')" />

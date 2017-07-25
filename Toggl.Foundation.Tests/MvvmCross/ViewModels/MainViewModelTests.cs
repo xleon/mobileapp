@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Xunit;
 
@@ -43,6 +45,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Appeared();
 
                 NavigationService.Received().Navigate<TimeEntriesLogViewModel>();
+            }
+        }
+
+        public class TheStartTimeEntryCommand : MainViewModelTest
+        {
+            [Fact]
+            public async Task NavigatesToTheStartTimeEntryViewModel()
+            {
+                await ViewModel.StartTimeEntryCommand.ExecuteAsync();
+
+                await NavigationService.Received().Navigate<StartTimeEntryViewModel, DateParameter>(Arg.Any<DateParameter>());
             }
         }
     }

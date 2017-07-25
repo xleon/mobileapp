@@ -1,4 +1,8 @@
-﻿using MvvmCross.Core.Navigation;
+﻿using System;
+using System.Threading.Tasks;
+using MvvmCross.Core.Navigation;
+using MvvmCross.Core.ViewModels;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
@@ -7,11 +11,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     {
         private readonly IMvxNavigationService navigationService;
 
+        public IMvxAsyncCommand StartTimeEntryCommand { get; }
+
         public MainViewModel(IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.navigationService = navigationService;
+
+            StartTimeEntryCommand = new MvxAsyncCommand(startTimeEntry);
         }
 
         public override void Appeared()
@@ -19,6 +27,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             base.Appeared();
             navigationService.Navigate<SuggestionsViewModel>();
             navigationService.Navigate<TimeEntriesLogViewModel>();
+        }
+
+        private async Task startTimeEntry() {
+            await navigationService.Navigate<StartTimeEntryViewModel, DateParameter>(
+                DateParameter.WithDate(DateTime.UtcNow)
+            );
         }
     }
 }

@@ -193,6 +193,7 @@
     <Compile Include="Suggestions\SuggestionProviderContainerTests.cs" />
     <Compile Include="MvvmCross\Converters\DateToTitleStringValueConverterTests.cs" />
     <Compile Include="MvvmCross\ViewModels\MainViewModelTests.cs" />
+    <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
