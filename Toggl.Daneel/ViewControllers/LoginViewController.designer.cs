@@ -16,6 +16,10 @@ namespace Toggl.Daneel.ViewControllers
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        Toggl.Daneel.Views.ActivityIndicatorView ActivityIndicator { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.NSLayoutConstraint BottomConstraint { get; set; }
 
         [Outlet]
@@ -44,6 +48,11 @@ namespace Toggl.Daneel.ViewControllers
 
         void ReleaseDesignerOutlets ()
         {
+            if (ActivityIndicator != null) {
+                ActivityIndicator.Dispose ();
+                ActivityIndicator = null;
+            }
+
             if (BottomConstraint != null) {
                 BottomConstraint.Dispose ();
                 BottomConstraint = null;

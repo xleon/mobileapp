@@ -61,6 +61,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         [DependsOn(nameof(CurrentPage))]
         public bool IsPasswordPage => CurrentPage == PasswordPage;
 
+        [DependsOn(nameof(IsPasswordPage), nameof(IsLoading))]
+        public bool ShowPasswordButtonVisible => IsPasswordPage && !IsLoading;
+
         [DependsOn(nameof(CurrentPage), nameof(Password))]
         public bool NextIsEnabled
             => IsEmailPage ? email.IsValid : (Password.Length > 0 && !IsLoading);

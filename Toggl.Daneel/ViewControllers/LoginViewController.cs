@@ -81,11 +81,15 @@ namespace Toggl.Daneel.ViewControllers
 
             bindingSet.Bind(ShowPassword)
                       .For(v => v.BindAnimatedVisibility())
-                      .To(vm => vm.IsPasswordPage);
+                      .To(vm => vm.ShowPasswordButtonVisible);
 
             bindingSet.Bind(ErrorLabel)
                       .For(v => v.BindAnimatedVisibility())
                       .To(vm => vm.HasError);
+
+            bindingSet.Bind(ActivityIndicator)
+                      .For(v => v.BindVisible())
+                      .To(vm => vm.IsLoading);
 
             if (ViewModel.IsPasswordManagerAvailable)
             {
