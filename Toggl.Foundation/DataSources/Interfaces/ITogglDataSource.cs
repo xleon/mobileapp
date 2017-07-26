@@ -1,4 +1,7 @@
-﻿namespace Toggl.Foundation.DataSources
+﻿using System;
+using System.Reactive;
+
+namespace Toggl.Foundation.DataSources
 {
     public interface ITogglDataSource
     {
@@ -9,5 +12,7 @@
         IProjectsSource Projects { get; }
         IWorkspacesSource Workspaces { get; }
         ITimeEntriesSource TimeEntries { get; }
+
+        IObservable<Unit> Logout();
     }
 }

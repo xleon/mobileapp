@@ -194,6 +194,7 @@
     <Compile Include="MvvmCross\Converters\DateToTitleStringValueConverterTests.cs" />
     <Compile Include="MvvmCross\ViewModels\MainViewModelTests.cs" />
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />
+    <Compile Include="DataSources\TogglDataSourceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -219,6 +220,9 @@
       <Project>{B4E4943F-0574-4BEF-9ADC-B19102458754}</Project>
       <Name>Toggl.Ultrawave</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataSources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
