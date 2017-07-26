@@ -18,7 +18,7 @@ namespace Toggl.PrimeRadiant.Tests
             => Storage.Update(testModel);
 
         protected sealed override IObservable<Unit> Delete(TTestModel testModel)
-            => Storage.Delete(testModel);
+            => Storage.Delete();
 
         protected abstract ISingleObjectStorage<TTestModel> Storage { get; }
 

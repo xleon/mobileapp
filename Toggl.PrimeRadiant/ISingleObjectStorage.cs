@@ -8,7 +8,7 @@ namespace Toggl.PrimeRadiant
         where TModel : IBaseModel, IDatabaseSyncable
     {
         IObservable<TModel> Single();
-        IObservable<Unit> Delete(TModel entity);
+        IObservable<Unit> Delete();
         IObservable<TModel> Create(TModel entity);
         IObservable<TModel> Update(TModel entity);
     }

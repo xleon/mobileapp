@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using Realms;
 using Toggl.Multivac;
@@ -36,5 +37,8 @@ namespace Toggl.PrimeRadiant.Realm
         public static SingleObjectStorage<TModel> For<TRealmEntity>(Func<TModel, TRealmEntity> convertToRealm)
             where TRealmEntity : RealmObject, TModel
             => new SingleObjectStorage<TModel>(new RealmAdapter<TRealmEntity, TModel>(convertToRealm));
+
+        public IObservable<Unit> Delete()
+            => Single().SelectMany(Delete);
     }
 }
