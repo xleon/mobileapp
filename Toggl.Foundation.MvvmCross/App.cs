@@ -44,17 +44,17 @@ namespace Toggl.Foundation.MvvmCross
 
         public void Start(object hint = null)
         {
+            Mvx.RegisterSingleton(loginManager);
+
             var dataSource = loginManager.GetDataSourceIfLoggedIn();
             if (dataSource == null)
             {
-                Mvx.RegisterSingleton(loginManager);
                 navigationService.Navigate<OnboardingViewModel>();
+                return;
             }
-            else
-            {
-                Mvx.RegisterSingleton(dataSource);
-                navigationService.Navigate<MainViewModel>();
-            }
+
+            Mvx.RegisterSingleton(dataSource);
+            navigationService.Navigate<MainViewModel>();
         }
     }
 }

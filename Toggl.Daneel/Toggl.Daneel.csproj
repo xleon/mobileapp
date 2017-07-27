@@ -277,6 +277,7 @@
     <InterfaceDefinition Include="Views\SuggestionsEmptyViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SuggestionsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\MainViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\SettingsViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -363,6 +364,10 @@
     <Compile Include="Presentation\Transition\SwipeInteractionController.cs" />
     <Compile Include="Presentation\Transition\FromBottomTransitionDelegate.cs" />
     <Compile Include="Presentation\Transition\ModalPresentationController.cs" />
+    <Compile Include="ViewControllers\SettingsViewController.cs" />
+    <Compile Include="ViewControllers\SettingsViewController.designer.cs">
+      <DependentUpon>SettingsViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

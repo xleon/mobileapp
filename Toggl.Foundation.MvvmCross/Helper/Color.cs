@@ -27,5 +27,10 @@ namespace Toggl.Foundation.MvvmCross.Helper
         {
             public static readonly MvxColor ButtonBorder = new MvxColor(243, 243, 243);
         }
+
+        public static class Navigation
+        {
+            public static readonly MvxColor BackButton = new MvxColor(94, 91, 91);
+        }
     }
 }

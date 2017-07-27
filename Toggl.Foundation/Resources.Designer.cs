@@ -160,5 +160,11 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("GenericLoginError", resourceCulture);
             }
         }
+        
+        public static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
     }
 }

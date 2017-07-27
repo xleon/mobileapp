@@ -13,12 +13,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand StartTimeEntryCommand { get; }
 
+        public IMvxAsyncCommand OpenSettingsCommand { get; }
+
         public MainViewModel(IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.navigationService = navigationService;
 
+            OpenSettingsCommand = new MvxAsyncCommand(openSettings);
             StartTimeEntryCommand = new MvxAsyncCommand(startTimeEntry);
         }
 
@@ -29,10 +32,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             navigationService.Navigate<TimeEntriesLogViewModel>();
         }
 
-        private async Task startTimeEntry() {
-            await navigationService.Navigate<StartTimeEntryViewModel, DateParameter>(
+        private Task openSettings()
+            => navigationService.Navigate<SettingsViewModel>();
+
+        private Task startTimeEntry() =>
+            navigationService.Navigate<StartTimeEntryViewModel, DateParameter>(
                 DateParameter.WithDate(DateTime.UtcNow)
             );
-        }
     }
 }

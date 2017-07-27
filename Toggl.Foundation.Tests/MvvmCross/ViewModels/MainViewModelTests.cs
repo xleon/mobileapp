@@ -58,5 +58,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await NavigationService.Received().Navigate<StartTimeEntryViewModel, DateParameter>(Arg.Any<DateParameter>());
             }
         }
+
+        public class TheOpenSettingsCommand : MainViewModelTest
+        {
+            [Fact]
+            public async Task NavigatesToTheSettingsViewModel()
+            {
+                await ViewModel.OpenSettingsCommand.ExecuteAsync();
+
+                await NavigationService.Received().Navigate<SettingsViewModel>();
+            }
+        }
     }
 }

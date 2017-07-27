@@ -47,6 +47,7 @@
     <Compile Include="Services\StubPasswordManagerService.cs" />
     <Compile Include="ViewModels\StartTimeEntryViewModel.cs" />
     <Compile Include="Parameters\DateParameter.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">
