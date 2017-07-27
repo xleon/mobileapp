@@ -19,7 +19,7 @@ namespace Toggl.Daneel.ViewControllers.Navigation
             NavigationBar.ShadowImage = new UIImage();
             NavigationBar.BarTintColor = UIColor.Clear;
             NavigationBar.BackgroundColor = UIColor.Clear;
-            NavigationBar.TintColor = Color.Navigation.BackButton.ToNativeColor();
+            NavigationBar.TintColor = Color.NavigationBar.BackButton.ToNativeColor();
             NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
         }
     }

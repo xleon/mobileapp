@@ -25,6 +25,8 @@
             public static readonly CubicBezierCurve EaseIn = new CubicBezierCurve(0.4f, 0.0f, 1.0f, 1.0f);
             public static readonly CubicBezierCurve SharpCurve = new CubicBezierCurve(0.4f, 0.0f, 0.6f, 1.0f);
             public static readonly CubicBezierCurve Bounce = new CubicBezierCurve(0.175f, 0.885f, 0.32f, 1.375f);
+            public static readonly CubicBezierCurve CardInCurve = new CubicBezierCurve(0.23f, 1.0f, 0.32f, 1.0f);
+            public static readonly CubicBezierCurve CardOutCurve = new CubicBezierCurve(0.86f, 0.0f, 0.07f, 1.0f);
         }
 
         public static class Timings

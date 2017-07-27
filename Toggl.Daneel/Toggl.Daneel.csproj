@@ -277,6 +277,7 @@
     <InterfaceDefinition Include="Views\SuggestionsEmptyViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SuggestionsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\MainViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\StartTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SettingsViewController.xib" />
   </ItemGroup>
   <ItemGroup>
@@ -356,6 +357,10 @@
     <Compile Include="ViewControllers\MainViewController.cs" />
     <Compile Include="ViewControllers\MainViewController.designer.cs">
       <DependentUpon>MainViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\StartTimeEntryViewController.cs" />
+    <Compile Include="ViewControllers\StartTimeEntryViewController.designer.cs">
+      <DependentUpon>StartTimeEntryViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ActivityIndicatorView.cs" />
     <Compile Include="Presentation\Attributes\ModalCardPresentationAttribute.cs" />

@@ -29,8 +29,9 @@ namespace Toggl.Daneel.ViewControllers
 
             var bindingSet = this.CreateBindingSet<MainViewController, MainViewModel>();
 
+            bindingSet.Bind(StartTimeEntryButton).To(vm => vm.StartTimeEntryCommand);
             bindingSet.Bind(settingsButton).To(vm => vm.OpenSettingsCommand);
-
+            
             bindingSet.Apply();
         }
 

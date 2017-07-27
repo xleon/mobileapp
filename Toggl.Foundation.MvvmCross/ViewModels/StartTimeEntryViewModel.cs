@@ -19,7 +19,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         //Properties
         public string RawTimeEntryText { get; set; } = "";
 
-        public int CaretPosition { get; set; } = 0;
+        public int CursorPosition { get; set; } = 0;
 
         public bool IsBillable { get; private set; } = false;
 

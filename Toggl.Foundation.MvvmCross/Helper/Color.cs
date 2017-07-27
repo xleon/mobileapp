@@ -20,6 +20,7 @@ namespace Toggl.Foundation.MvvmCross.Helper
 
         public static class NavigationBar
         {
+            public static readonly MvxColor BackButton = new MvxColor(94, 91, 91);
             public static readonly MvxColor BackgroundColor = new MvxColor(250, 251, 252);
         }
 
@@ -28,9 +29,11 @@ namespace Toggl.Foundation.MvvmCross.Helper
             public static readonly MvxColor ButtonBorder = new MvxColor(243, 243, 243);
         }
 
-        public static class Navigation
+        public static class StartTimeEntry
         {
-            public static readonly MvxColor BackButton = new MvxColor(94, 91, 91);
+            public static readonly MvxColor Cursor = new MvxColor(76, 217, 100);
+
+            public static readonly MvxColor Placeholder = new MvxColor(206, 206, 206);
         }
     }
 }

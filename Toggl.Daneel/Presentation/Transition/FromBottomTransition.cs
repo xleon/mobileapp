@@ -16,7 +16,7 @@ namespace Toggl.Daneel.Presentation.Transition
         }
 
         public double TransitionDuration(IUIViewControllerContextTransitioning transitionContext)
-            => presenting ? 0.225 : 0.195;
+            => presenting ? Timings.EnterTiming : Timings.LeaveTiming;
 
         public void AnimateTransition(IUIViewControllerContextTransitioning transitionContext)
         {
@@ -35,7 +35,7 @@ namespace Toggl.Daneel.Presentation.Transition
                 toController.View.Frame = frame;
                 toController.View.Alpha = 0.5f;
 
-                AnimationExtensions.Animate(animationDuration, Curves.Bounce, () =>
+                AnimationExtensions.Animate(animationDuration, Curves.CardInCurve, () =>
                 {
                     toController.View.Frame = finalFrame;
                     toController.View.Alpha = 1.0f;
@@ -58,7 +58,7 @@ namespace Toggl.Daneel.Presentation.Transition
                 }
                 else
                 {
-                    AnimationExtensions.Animate(animationDuration, Curves.SharpCurve, () =>
+                    AnimationExtensions.Animate(animationDuration, Curves.CardOutCurve, () =>
                     {
                         fromController.View.Frame = finalFrame;
                         fromController.View.Alpha = 0.5f;

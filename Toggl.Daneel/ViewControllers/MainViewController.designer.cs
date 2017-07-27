@@ -16,6 +16,10 @@ namespace Toggl.Daneel.ViewControllers
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton StartTimeEntryButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIView SuggestionsContainer { get; set; }
 
         [Outlet]
@@ -28,6 +32,11 @@ namespace Toggl.Daneel.ViewControllers
 
         void ReleaseDesignerOutlets ()
         {
+            if (StartTimeEntryButton != null) {
+                StartTimeEntryButton.Dispose ();
+                StartTimeEntryButton = null;
+            }
+
             if (SuggestionsContainer != null) {
                 SuggestionsContainer.Dispose ();
                 SuggestionsContainer = null;
