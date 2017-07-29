@@ -56,7 +56,7 @@ namespace Toggl.Daneel.ViewControllers
             if (viewController is TimeEntriesLogViewController)
                 return TimeEntriesLogContainer;
 
-            throw new ArgumentOutOfRangeException("Received unexpected ViewController type");
+            throw new ArgumentOutOfRangeException(nameof(viewController), "Received unexpected ViewController type");
         }
     }
 }
