@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -29,7 +29,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheSuggestionsProperty
+        public class TheSuggestionsProperty : BaseMvvmCrossTests
         {
             [Fact]
             public async Task WorksWithSeveralProviders()
