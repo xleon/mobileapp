@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using Toggl.Foundation.MvvmCross.Parameters;
@@ -9,16 +8,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     public sealed class MainViewModel : BaseViewModel
     {
+        private readonly ITimeService timeService;
         private readonly IMvxNavigationService navigationService;
 
         public IMvxAsyncCommand StartTimeEntryCommand { get; }
 
         public IMvxAsyncCommand OpenSettingsCommand { get; }
 
-        public MainViewModel(IMvxNavigationService navigationService)
+        public MainViewModel(ITimeService timeService, IMvxNavigationService navigationService)
         {
+            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
+            this.timeService = timeService;
             this.navigationService = navigationService;
 
             OpenSettingsCommand = new MvxAsyncCommand(openSettings);
@@ -37,7 +39,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private Task startTimeEntry() =>
             navigationService.Navigate<StartTimeEntryViewModel, DateParameter>(
-                DateParameter.WithDate(DateTime.UtcNow)
+                DateParameter.WithDate(timeService.CurrentDateTime)
             );
     }
 }

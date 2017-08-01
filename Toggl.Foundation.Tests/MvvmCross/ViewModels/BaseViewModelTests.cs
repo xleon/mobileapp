@@ -10,6 +10,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         where TViewModel : MvxViewModel
     {
         protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
+        protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
         protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
         protected ITogglDataSource DataSource { get; } = Substitute.For<ITogglDataSource>();
 

@@ -68,6 +68,8 @@
     <Compile Include="Login\ApiFactory.cs" />
     <Compile Include="Login\ILoginManager.cs" />
     <Compile Include="Sync\SyncState.cs" />
+    <Compile Include="TimeService.cs" />
+    <Compile Include="ITimeService.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

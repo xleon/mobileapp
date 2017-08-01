@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.Suggestions;
 using Toggl.Multivac.Models;
@@ -17,28 +16,45 @@ namespace Toggl.Foundation.Tests.Suggestions
 {
     public class MostUsedTimeEntryProviderTests
     {
-        public class TheConstructor
+        public abstract class MostUsedTimeEntryProviderTest
         {
-            [Fact]
-            public void ThrowsIfArgumentIsNull()
+            protected MostUsedTimeEntryProvider Provider { get; }
+            protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
+            protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
+            
+            protected MostUsedTimeEntryProviderTest()
             {
+                Provider = new MostUsedTimeEntryProvider(Database, TimeService);
+
+                TimeService.CurrentDateTime.Returns(_ => DateTimeOffset.Now);
+            }
+        }
+
+        public class TheConstructor : MostUsedTimeEntryProviderTest
+        {
+            [Theory]
+            [InlineData(true, false)]
+            [InlineData(false, true)]
+            [InlineData(false, false)]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDatabase, bool useTimeService)
+            {
+                var database = useDatabase ? Database : null;
+                var timeService = useTimeService ? TimeService : null;
+
                 Action tryingToConstructWithEmptyParameters =
-                    () => new MostUsedTimeEntryProvider(null);
+                    () => new MostUsedTimeEntryProvider(database, timeService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
             }
         }
 
-        public class TheGetSuggestionMethod
+        public class TheGetSuggestionMethod : MostUsedTimeEntryProviderTest
         {
             [Fact]
             public void ReturnsEmptyObservableIfThereAreNoTimeEntries()
             {
-                var database = Substitute.For<ITogglDatabase>();
-                var provider = new MostUsedTimeEntryProvider(database);
-
-                var isEmpty = provider.GetSuggestion().IsEmpty().Wait();
+                var isEmpty = Provider.GetSuggestion().IsEmpty().Wait();
 
                 isEmpty.Should().BeTrue();
             }
@@ -55,11 +71,9 @@ namespace Toggl.Foundation.Tests.Suggestions
                     createTimeEntry("te1", 2, 2)
                 };
                 var observable = createObservable(timeEntries);
-                var database = Substitute.For<ITogglDatabase>();
-                database.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(observable);
-                var provider = new MostUsedTimeEntryProvider(database);
+                Database.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(observable);
 
-                var suggestion = await provider.GetSuggestion();
+                var suggestion = await Provider.GetSuggestion();
 
                 suggestion.Description.Should().Be("te0");
                 suggestion.TaskId.Should().Be(0);
@@ -68,7 +82,7 @@ namespace Toggl.Foundation.Tests.Suggestions
 
             private IObservable<IEnumerable<IDatabaseTimeEntry>> createObservable(ITimeEntry[] timeEntries)
             {
-                var databaseTimeEntries = timeEntries.Select(Foundation.Models.TimeEntry.Clean);
+                var databaseTimeEntries = timeEntries.Select(Models.TimeEntry.Clean);
                 return Observable.Return(databaseTimeEntries);
             }
 

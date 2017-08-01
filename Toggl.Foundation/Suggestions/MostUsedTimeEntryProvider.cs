@@ -12,12 +12,15 @@ namespace Toggl.Foundation.Suggestions
     public class MostUsedTimeEntryProvider : ISuggestionProvider
     {
         private readonly ITogglDatabase database;
+        private readonly ITimeService timeService;
 
-        public MostUsedTimeEntryProvider(ITogglDatabase database)
+        public MostUsedTimeEntryProvider(ITogglDatabase database, ITimeService timeService)
         {
             Ensure.Argument.IsNotNull(database, nameof(database));
+            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
 
             this.database = database;
+            this.timeService = timeService;
         }
 
         public IObservable<ITimeEntry> GetSuggestion()
@@ -29,7 +32,7 @@ namespace Toggl.Foundation.Suggestions
         private bool isInLastTwoWeeks(ITimeEntry timeEntry)
         {
             var twoWeeks = TimeSpan.FromDays(14);
-            var delta = DateTime.UtcNow - timeEntry.Start;
+            var delta = timeService.CurrentDateTime - timeEntry.Start;
             return delta <= twoWeeks;
         }
 

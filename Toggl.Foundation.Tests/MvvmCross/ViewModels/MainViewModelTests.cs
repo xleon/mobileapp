@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
@@ -13,16 +13,22 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public class MainViewModelTest : BaseViewModelTests<MainViewModel>
         {
             protected override MainViewModel CreateViewModel()
-                => new MainViewModel(NavigationService);
+                => new MainViewModel(TimeService, NavigationService);
         }
 
-        public class TheConstructor
+        public class TheConstructor : MainViewModelTest
         {
-            [Fact]
-            public void ThrowsIfTheArgumentIsNull()
+            [Theory]
+            [InlineData(true, false)]
+            [InlineData(false, true)]
+            [InlineData(false, false)]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useTimeService, bool useNavigationService)
             {
+                var timeService = useTimeService ? TimeService : null;
+                var navigationService = useNavigationService ? NavigationService : null;
+
                 Action tryingToConstructWithEmptyParameters =
-                    () => new MainViewModel(null);
+                    () => new MainViewModel(timeService, navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -56,6 +62,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.StartTimeEntryCommand.ExecuteAsync();
 
                 await NavigationService.Received().Navigate<StartTimeEntryViewModel, DateParameter>(Arg.Any<DateParameter>());
+            }
+
+            [Fact]
+            public async Task PassesTheCurrentDateToTheStartTimeEntryViewModel()
+            {
+                var date = DateTimeOffset.Now;
+                TimeService.CurrentDateTime.Returns(date);
+
+                await ViewModel.StartTimeEntryCommand.ExecuteAsync();
+
+                await NavigationService.Received().Navigate<StartTimeEntryViewModel, DateParameter>(
+                    Arg.Is<DateParameter>(parameter => parameter.DateString == date.ToString())
+                );
             }
         }
 

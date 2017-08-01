@@ -1,3 +1,4 @@
+using System.Reactive.Concurrency;
 using Foundation;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
@@ -7,6 +8,7 @@ using MvvmCross.Platform;
 using MvvmCross.Platform.Platform;
 using Toggl.Daneel.Presentation;
 using Toggl.Daneel.Services;
+using Toggl.Foundation;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.Services;
@@ -48,15 +50,17 @@ namespace Toggl.Daneel
             base.InitializeFirstChance();
 
             var database = new Database();
+            var timeService = new TimeService(Scheduler.Default);
             var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"];
             var userAgent = new UserAgent("Daneel", version.ToString());
 
             var apiFactory = new ApiFactory(Environment, userAgent);
             var loginManager = new LoginManager(apiFactory, database);
 
+            Mvx.RegisterSingleton<ITimeService>(timeService);
             Mvx.RegisterSingleton<ISuggestionProviderContainer>(
                 new SuggestionProviderContainer(
-                    new MostUsedTimeEntryProvider(database)
+                    new MostUsedTimeEntryProvider(database, timeService)
                 )
             );
 
