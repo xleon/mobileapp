@@ -183,6 +183,7 @@
     <Compile Include="MvvmCross\ViewModels\TimeEntriesLogViewModelTests.cs" />
     <Compile Include="MvvmCross\ViewModels\OnboardingViewModelTests.cs" />
     <Compile Include="MvvmCross\Converters\SecondsToDurationValueConverterTests.cs" />
+    <Compile Include="Sync\StateMachineOrchestratorTests.cs" />
     <Compile Include="Sync\StateMachineTests.cs" />
     <Compile Include="TestExtensions\ReactiveExtensions.cs" />
     <Compile Include="Suggestions\MostUsedTimeEntryProviderTests.cs" />

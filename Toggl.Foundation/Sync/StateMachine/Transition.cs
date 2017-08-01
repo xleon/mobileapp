@@ -5,7 +5,7 @@ namespace Toggl.Foundation.Sync
         IStateResult Result { get; }
     }
 
-    internal sealed class Transition : ITransition
+    public sealed class Transition : ITransition
     {
         public IStateResult Result { get; }
 
@@ -15,7 +15,7 @@ namespace Toggl.Foundation.Sync
         }
     }
 
-    internal sealed class Transition<T> : ITransition
+    public sealed class Transition<T> : ITransition
     {
         public IStateResult Result { get; }
         public T Parameter { get; }

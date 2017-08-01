@@ -2,7 +2,7 @@ namespace Toggl.Foundation.Sync
 {
     public interface IStateResult { }
 
-    internal sealed class StateResult : IStateResult
+    public sealed class StateResult : IStateResult
     {
         private readonly Transition singletonTransition;
 
@@ -14,7 +14,7 @@ namespace Toggl.Foundation.Sync
         public Transition Transition() => singletonTransition;
     }
 
-    internal sealed class StateResult<T> : IStateResult
+    public sealed class StateResult<T> : IStateResult
     {
         public Transition<T> Transition(T parameter) => new Transition<T>(this, parameter);
     }
