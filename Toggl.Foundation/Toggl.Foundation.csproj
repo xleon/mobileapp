@@ -70,6 +70,7 @@
     <Compile Include="Sync\SyncState.cs" />
     <Compile Include="TimeService.cs" />
     <Compile Include="ITimeService.cs" />
+    <Compile Include="Models\TimeEntry.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
