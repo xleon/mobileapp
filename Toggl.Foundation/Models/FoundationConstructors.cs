@@ -94,7 +94,7 @@ namespace Toggl.Foundation.Models
 
     internal partial class TimeEntry
     {
-        private TimeEntry(ITimeEntry entity, bool isDirty)
+        private TimeEntry(ITimeEntry entity, bool isDirty, bool isDeleted = false)
         {
             Id = entity.Id;
             WorkspaceId = entity.WorkspaceId;
@@ -112,6 +112,7 @@ namespace Toggl.Foundation.Models
             UserId = entity.UserId;
             CreatedWith = entity.CreatedWith;
             IsDirty = isDirty;
+            IsDeleted = isDeleted;
         }
 
         public static TimeEntry Clean(ITimeEntry entity)
@@ -119,6 +120,12 @@ namespace Toggl.Foundation.Models
 
         public static TimeEntry Dirty(ITimeEntry entity)
             => new TimeEntry(entity, true);
+
+        public static TimeEntry CleanDeleted(ITimeEntry entity)
+            => new TimeEntry(entity, false, true);
+
+        public static TimeEntry DirtyDeleted(ITimeEntry entity)
+            => new TimeEntry(entity, true, true);
     }
 
     internal partial class User

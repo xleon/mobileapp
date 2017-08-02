@@ -1,7 +1,7 @@
 ﻿﻿using System;
 using System.Collections.Generic;
-using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
+using Toggl.Multivac;
 
 namespace Toggl.Foundation.Models
 {
@@ -124,6 +124,8 @@ namespace Toggl.Foundation.Models
         public int UserId { get; }
 
         public string CreatedWith { get; }
+
+        public bool IsDeleted { get; }
 
         public bool IsDirty { get; }
     }

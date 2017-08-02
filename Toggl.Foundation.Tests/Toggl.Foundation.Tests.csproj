@@ -194,6 +194,16 @@
     <Compile Include="Suggestions\SuggestionProviderContainerTests.cs" />
     <Compile Include="MvvmCross\Converters\DateToTitleStringValueConverterTests.cs" />
     <Compile Include="MvvmCross\ViewModels\MainViewModelTests.cs" />
+    <Compile Include="DataSources\TimeEntriesDataSourceTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Login\" />
+    <Folder Include="MvvmCross\" />
+    <Folder Include="MvvmCross\ViewModels\" />
+    <Folder Include="MvvmCross\Converters\" />
+    <Folder Include="Suggestions\" />
+    <Folder Include="Generators\" />
+    <Folder Include="DataSources\" />
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />
     <Compile Include="DataSources\TogglDataSourceTests.cs" />
     <Compile Include="MvvmCross\ViewModels\SettingsViewModelTests.cs" />

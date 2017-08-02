@@ -33,13 +33,17 @@
     <Compile Include="ITogglDatabase.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Models\DatabaseSyncable.cs" />
-    <Compile Include="Models\DatabaseInterfaces.cs">
-      <DependentUpon>DatabaseInterfaces.tt</DependentUpon>
-    </Compile>
     <Compile Include="Exceptions\DatabaseException.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="ISingleObjectStorage.cs" />
     <Compile Include="Exceptions\EntityAlreadyExistsException.cs" />
+    <Compile Include="Models\IDatabaseClient.cs" />
+    <Compile Include="Models\IDatabaseProject.cs" />
+    <Compile Include="Models\IDatabaseTag.cs" />
+    <Compile Include="Models\IDatabaseTask.cs" />
+    <Compile Include="Models\IDatabaseTimeEntry.cs" />
+    <Compile Include="Models\IDatabaseUser.cs" />
+    <Compile Include="Models\IDatabaseWorkspace.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">
@@ -64,10 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Models\DatabaseInterfaces.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DatabaseInterfaces.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

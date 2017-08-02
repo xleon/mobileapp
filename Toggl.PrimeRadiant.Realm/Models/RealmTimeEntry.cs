@@ -34,5 +34,7 @@ namespace Toggl.PrimeRadiant.Realm
         public int UserId { get; }
 
         public string CreatedWith { get; }
+
+        public bool IsDeleted { get; }
     }
 }

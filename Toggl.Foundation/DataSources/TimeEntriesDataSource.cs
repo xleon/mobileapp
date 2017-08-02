@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive;
+using System.Reactive.Linq;
+using Toggl.Foundation.Models;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
@@ -19,6 +22,13 @@ namespace Toggl.Foundation.DataSources
         }
 
         public IObservable<IEnumerable<ITimeEntry>> GetAll()
-            => repository.GetAll();
+            => repository.GetAll(te => !te.IsDeleted);
+
+        public IObservable<Unit> Delete(int id)
+            => repository.GetById(id)
+                         .Select(TimeEntry.DirtyDeleted)
+                         .SelectMany(repository.Update)
+                         .IgnoreElements()
+                         .Cast<Unit>();
     }
 }

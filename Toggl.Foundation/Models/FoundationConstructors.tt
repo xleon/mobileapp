@@ -18,13 +18,16 @@ namespace Toggl.Foundation.Models
         if (interfaceName == "IBaseModel") continue;
 
         var className = interfaceName.Substring(1, interfaceName.Length - 1);
+        var isTimeEntry = className == "TimeEntry";
 
         if (!isFirstClass)
             WriteLine("");
 
         WriteLine($"    internal partial class {className}");
         WriteLine( "    {");
-        WriteLine($"        private {className}({interfaceName} entity, bool isDirty)");
+        var constructorName = isTimeEntry ? $"        private {className}({interfaceName} entity, bool isDirty, bool isDeleted = false)"
+                                          : $"        private {className}({interfaceName} entity, bool isDirty)";
+        WriteLine(constructorName);
         WriteLine( "        {");
         WriteLine( "            Id = entity.Id;");
 
@@ -41,13 +44,26 @@ namespace Toggl.Foundation.Models
         }
 
         WriteLine( "            IsDirty = isDirty;");
+        if (isTimeEntry)
+            WriteLine( "            IsDeleted = isDeleted;");
+
         WriteLine( "        }\n");
+        
         WriteLine($"        public static {className} Clean({interfaceName} entity)");
         WriteLine($"            => new {className}(entity, false);\n");
         WriteLine($"        public static {className} Dirty({interfaceName} entity)");
         WriteLine($"            => new {className}(entity, true);");
-        WriteLine( "    }");
 
+        if (isTimeEntry)
+        {
+            WriteLine("");
+            WriteLine($"        public static {className} CleanDeleted({interfaceName} entity)");
+            WriteLine($"            => new {className}(entity, false, true);\n");
+            WriteLine($"        public static {className} DirtyDeleted({interfaceName} entity)");
+            WriteLine($"            => new {className}(entity, true, true);");
+        }
+
+        WriteLine( "    }");
         isFirstClass = false;
     }
 #>}

@@ -5,13 +5,16 @@
 #>using System;
 using System.Collections.Generic;
 using Toggl.PrimeRadiant.Models;
+using Toggl.Multivac;
 
 namespace Toggl.Foundation.Models
 {
 <#
     var filePath = Path.GetDirectoryName(Host.TemplateFile);
     var solutionDirectory = Path.Combine(filePath, "../../Toggl.Multivac/Models/" );
+    var databaseModelDirectory = Path.Combine(filePath, "../../Toggl.PrimeRadiant/Models");
     var modelsToGenerate = Directory.GetFiles(solutionDirectory, "*.cs");
+    var databaseInterfaces = Directory.GetFiles(databaseModelDirectory, "I*.cs");
     var isFirstClass = true;
 
     foreach(var modelFile in modelsToGenerate)
@@ -34,6 +37,19 @@ namespace Toggl.Foundation.Models
             if (!isProperty) continue;
 
             WriteLine($"        public {line.Trim()}\n");
+        }
+
+        var expectedInterfaceFile = $"{ databaseModelDirectory }/IDatabase{ className }.cs";
+        var interfaceFile = databaseInterfaces.FirstOrDefault(i => i == expectedInterfaceFile);
+        if (interfaceFile != null)
+        {
+            foreach (var line in File.ReadAllLines(interfaceFile))
+            {
+                var isProperty = line.Contains("get;");
+                if (!isProperty) continue;
+
+                WriteLine($"        public {line.Trim()}\n");
+            }
         }
 
         WriteLine("        public bool IsDirty { get; }");
