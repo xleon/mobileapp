@@ -55,7 +55,7 @@ namespace Toggl.Daneel.Presentation
         protected virtual void ShowModalCardViewController(UIViewController viewController, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
         {
             viewController.ModalPresentationStyle = UIModalPresentationStyle.Custom;
-            viewController.TransitioningDelegate = FromBottomTransitionDelegate; 
+            viewController.TransitioningDelegate = FromBottomTransitionDelegate;
             MasterNavigationController.PresentViewController(viewController, true, null);
             FromBottomTransitionDelegate.WireToViewController(viewController);
         }
@@ -70,6 +70,23 @@ namespace Toggl.Daneel.Presentation
             }
 
             base.ShowChildViewController(viewController, attribute, request);
+        }
+
+        protected override void SetWindowRootViewController(UIViewController controller)
+        {
+            UIView.Transition(
+                _window,
+                Animation.Timings.EnterTiming,
+                UIViewAnimationOptions.TransitionCrossDissolve,
+                () => _window.RootViewController = controller,
+                () =>
+                {
+                    if (controller is TogglNavigationController navigation && 
+                        navigation.ViewControllers.FirstOrDefault() is MainViewController mainViewController)
+                        mainViewController.AnimatePlayButton();
+                }
+            );
+
         }
 
         public override void Close(IMvxViewModel toClose)

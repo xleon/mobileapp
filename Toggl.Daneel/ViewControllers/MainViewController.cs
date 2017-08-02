@@ -3,6 +3,8 @@ using CoreGraphics;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters.Attributes;
+using Toggl.Daneel.Extensions;
+using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
 
@@ -24,6 +26,7 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidLoad();
 
+            StartTimeEntryButton.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f);
             reportsButton.SetImage(UIImage.FromBundle("icReports"), UIControlState.Normal);
             settingsButton.SetImage(UIImage.FromBundle("icSettings"), UIControlState.Normal);
 
@@ -57,6 +60,15 @@ namespace Toggl.Daneel.ViewControllers
                 return TimeEntriesLogContainer;
 
             throw new ArgumentOutOfRangeException(nameof(viewController), "Received unexpected ViewController type");
+        }
+
+        internal void AnimatePlayButton()
+        {
+            AnimationExtensions.Animate(
+                Animation.Timings.EnterTiming,
+                Animation.Curves.EaseOut,
+                () => StartTimeEntryButton.Transform = CGAffineTransform.MakeScale(1f, 1f)
+            );
         }
     }
 }
