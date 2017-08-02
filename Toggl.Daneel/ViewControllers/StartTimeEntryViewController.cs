@@ -3,8 +3,10 @@ using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.iOS.Views;
 using MvvmCross.Plugins.Color.iOS;
+using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Foundation;
+using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
@@ -28,8 +30,10 @@ namespace Toggl.Daneel.ViewControllers
             UIKeyboard.Notifications.ObserveWillShow(keyboardWillShow);
             UIKeyboard.Notifications.ObserveWillHide(keyboardWillHide);
 
+            var timeSpanConverter = new TimeSpanToDurationValueConverter();
             var bindingSet = this.CreateBindingSet<StartTimeEntryViewController, StartTimeEntryViewModel>();
 
+            bindingSet.Bind(TimeLabel).To(vm => vm.ElapsedTime).WithConversion(timeSpanConverter);
             bindingSet.Bind(CloseButton).To(vm => vm.BackCommand);
 
             bindingSet.Apply();
@@ -43,6 +47,8 @@ namespace Toggl.Daneel.ViewControllers
 
         private void prepareTextFields()
         {
+            TimeLabel.Font = TimeLabel.Font.GetMonospacedDigitFont();
+
             var stringAttributes = new CTStringAttributes(
                 new UIStringAttributes { ForegroundColor = Color.StartTimeEntry.Placeholder.ToNativeColor() }.Dictionary
             );

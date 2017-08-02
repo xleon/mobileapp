@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
@@ -13,13 +14,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     public sealed class StartTimeEntryViewModel : BaseViewModel<DateParameter>
     {
         //Fields
+        private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
+
+        private IDisposable elapsedTimeDisposable;
 
         //Properties
         public string RawTimeEntryText { get; set; } = "";
 
         public int CursorPosition { get; set; } = 0;
+
+        public TimeSpan ElapsedTime { get; private set; } = TimeSpan.Zero;
 
         public bool IsBillable { get; private set; } = false;
 
@@ -35,12 +41,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand BackCommand { get; }
 
-        public StartTimeEntryViewModel(ITogglDataSource dataSource, IMvxNavigationService navigationService)
+        public StartTimeEntryViewModel(ITogglDataSource dataSource, ITimeService timeService, IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.dataSource = dataSource;
+            this.timeService = timeService;
             this.navigationService = navigationService;
 
             BackCommand = new MvxAsyncCommand(back);
@@ -51,6 +59,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             await Initialize();
 
             StartDate = parameter.GetDate();
+
+            elapsedTimeDisposable =
+                timeService.CurrentDateTimeObservable.Subscribe(currentTime => ElapsedTime = currentTime - StartDate);
         }
 
         private Task back()
