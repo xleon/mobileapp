@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 
 namespace Toggl.Foundation.Models
 {
@@ -26,7 +26,7 @@ namespace Toggl.Foundation.Models
                 return new TimeEntry(this);
             }
 
-            public Builder SetStartDate(DateTimeOffset start)
+            public Builder SetStart(DateTimeOffset start)
             {
                 Start = start;
                 return this;
