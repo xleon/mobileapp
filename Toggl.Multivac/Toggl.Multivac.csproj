@@ -45,6 +45,7 @@
     <Compile Include="BeginningOfWeek.cs" />
     <Compile Include="WorkspaceFeatureId.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
+    <Compile Include="Extensions\ObservableExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />
