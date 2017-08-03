@@ -13,7 +13,8 @@ using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
 using Xunit;
 using User = Toggl.Ultrawave.Models.User;
-using FoundationUser = Toggl.Foundation.Models.User;    
+using FoundationUser = Toggl.Foundation.Models.User;
+using Toggl.Foundation.Tests.Generators;
 
 namespace Toggl.Foundation.Tests.Login
 {
@@ -44,9 +45,7 @@ namespace Toggl.Foundation.Tests.Login
         public class Constructor : LoginManagerTest
         {
             [Theory]
-            [InlineData(true, false)]
-            [InlineData(false, true)]
-            [InlineData(false, false)]
+            [ClassData(typeof(TwoParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(bool useApiFactory, bool useDatabase)
             {
                 var database = useDatabase ? Database : null;

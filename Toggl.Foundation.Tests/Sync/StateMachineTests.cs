@@ -7,6 +7,7 @@ using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Foundation.Sync;
+using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac;
 using Xunit;
 
@@ -17,9 +18,7 @@ namespace Toggl.Foundation.Tests.Sync
         public class TheConstructor
         {
             [Theory]
-            [InlineData(true, false)]
-            [InlineData(false, true)]
-            [InlineData(false, false)]
+            [ClassData(typeof(TwoParameterConstructorTestData))]
             public void ThrowsIfAnyArgumentIsNull(bool useHandler, bool useScheduler)
             {
                 var handler = useHandler ? Substitute.For<ITransitionHandlerProvider>() : null;

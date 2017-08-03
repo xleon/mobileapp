@@ -5,6 +5,7 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.Tests.Generators;
 using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross
@@ -25,9 +26,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
         public class TheConstructor : AppStartTest
         {
             [Theory]
-            [InlineData(false, false)]
-            [InlineData(true, false)]
-            [InlineData(false, false)]
+            [ClassData(typeof(TwoParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(bool userLoginManager, bool userNavigationService)
             {
                 var loginManager = userLoginManager ? LoginManager : null;

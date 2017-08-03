@@ -4,6 +4,7 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.Tests.Generators;
 using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
@@ -19,13 +20,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public class TheConstructor : StartTimeEntryViewModelTest
         {
             [Theory]
-            [InlineData(false, false, false)]
-            [InlineData(false, false, true)]
-            [InlineData(false, true, false)]
-            [InlineData(false, true, true)]
-            [InlineData(true, false, false)]
-            [InlineData(true, false, true)]
-            [InlineData(true, true, false)]
+            [ClassData(typeof(ThreeParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useTimeService, bool useNavigationService)
             {
                 var dataSource = useDataSource ? DataSource : null;

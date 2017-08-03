@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.Tests.Generators;
 using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
@@ -18,9 +19,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public class TheConstructor : SettingsViewModelTest
         {
             [Theory]
-            [InlineData(true, false)]
-            [InlineData(false, true)]
-            [InlineData(false, false)]
+            [ClassData(typeof(TwoParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useNavigationService)
             {
                 var dataSource = useDataSource ? DataSource : null;

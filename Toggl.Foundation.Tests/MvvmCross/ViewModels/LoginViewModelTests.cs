@@ -1,6 +1,5 @@
 using System;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -11,13 +10,12 @@ using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.TestExtensions;
 using Toggl.Multivac;
-using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Exceptions;
 using Xunit;
 using static Toggl.Foundation.MvvmCross.Parameters.LoginParameter;
-using User = Toggl.Ultrawave.Models.User;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -41,13 +39,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public class TheConstructor : LoginViewModelTest
         {
             [Theory]
-            [InlineData(false, false, false)]
-            [InlineData(false, false, true)]
-            [InlineData(false, true, false)]
-            [InlineData(false, true, true)]
-            [InlineData(true, false, false)]
-            [InlineData(true, false, true)]
-            [InlineData(true, true, false)]
+            [ClassData(typeof(ThreeParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(bool userLoginManager, bool userNavigationService, bool usePasswordManagerService)
             {
                 var loginManager = userLoginManager ? LoginManager : null;

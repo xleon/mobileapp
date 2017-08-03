@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.Suggestions;
+using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
@@ -33,9 +34,7 @@ namespace Toggl.Foundation.Tests.Suggestions
         public class TheConstructor : MostUsedTimeEntryProviderTest
         {
             [Theory]
-            [InlineData(true, false)]
-            [InlineData(false, true)]
-            [InlineData(false, false)]
+            [ClassData(typeof(TwoParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDatabase, bool useTimeService)
             {
                 var database = useDatabase ? Database : null;

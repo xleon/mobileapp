@@ -5,6 +5,7 @@ using System.Reactive.Subjects;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.Sync;
+using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac;
 using Xunit;
 using static Toggl.Foundation.Sync.SyncState;
@@ -43,9 +44,7 @@ namespace Toggl.Foundation.Tests.Sync
         public class TheConstructor
         {
             [Theory]
-            [InlineData(true, false)]
-            [InlineData(false, true)]
-            [InlineData(false, false)]
+            [ClassData(typeof(TwoParameterConstructorTestData))]
             public void ThrowsIfAnyArgumentIsNull(bool useStateMachine, bool useEntryPoints)
             {
                 var stateMachine = useStateMachine ? Substitute.For<IStateMachine>() : null;
