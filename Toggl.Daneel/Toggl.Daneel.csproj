@@ -24,9 +24,10 @@
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <MtouchFastDev>true</MtouchFastDev>
     <IOSDebuggerPort>18450</IOSDebuggerPort>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>Full</MtouchLink>
     <MtouchArch>i386, x86_64</MtouchArch>
-    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <MtouchExtraArgs>--linkskip Toggl.Daneel --linkskip Toggl.Foundation.MvvmCross</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>pdbonly</DebugType>
@@ -42,6 +43,7 @@
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchUseLlvm>true</MtouchUseLlvm>
+    <MtouchExtraArgs>--linkskip Toggl.Daneel --linksip Toggl.Foundation.MvvmCross</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>pdbonly</DebugType>
@@ -295,7 +297,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Startup\Setup.cs" />
     <Compile Include="Startup\SetupTargetFactories.cs">
       <DependentUpon>SetupTargetFactories.tt</DependentUpon>
@@ -374,6 +375,7 @@
       <DependentUpon>SettingsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\FontExtensions.cs" />
+    <Compile Include="LinkerPleaseInclude.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

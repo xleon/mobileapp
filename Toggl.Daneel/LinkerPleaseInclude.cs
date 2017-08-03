@@ -1,8 +1,15 @@
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Windows.Input;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
+using MvvmCross.Binding.iOS.Target;
 using MvvmCross.iOS.Views;
+using MvvmCross.Platform.IoC;
+using MvvmCross.Platform.UI;
+using MvvmCross.Plugins.Color;
+using MvvmCross.Plugins.Color.iOS;
+using MvvmCross.Plugins.Visibility;
 using UIKit;
 
 namespace Toggl.Daneel
@@ -31,26 +38,35 @@ namespace Toggl.Daneel
                                  barButton.Title = barButton.Title + "";
         }
 
+        public void Include(UIView view)
+        {
+            view.Hidden = true;
+        }
+
         public void Include(UITextField textField)
         {
+            textField.Hidden = true;
             textField.Text = textField.Text + "";
             textField.EditingChanged += (sender, args) => { textField.Text = ""; };
         }
 
         public void Include(UITextView textView)
         {
+            textView.Hidden = true;
             textView.Text = textView.Text + "";
             textView.Changed += (sender, args) => { textView.Text = ""; };
         }
 
         public void Include(UILabel label)
         {
+            label.Hidden = true;
             label.Text = label.Text + "";
             label.AttributedText = new NSAttributedString(label.AttributedText.ToString() + "");
         }
 
         public void Include(UIImageView imageView)
         {
+            imageView.Hidden = true;
             imageView.Image = new UIImage(imageView.Image.CGImage);
         }
 
@@ -101,17 +117,50 @@ namespace Toggl.Daneel
 
         public void Include(ICommand command)
         {
-           command.CanExecuteChanged += (s, e) => { if (command.CanExecute(null)) command.Execute(null); };
+            command.CanExecuteChanged += (s, e) => { if (command.CanExecute(null)) command.Execute(null); };
         }
 
-        public void Include(MvvmCross.Platform.IoC.MvxPropertyInjector injector)
+        public void Include(MvxPropertyInjector injector)
         {
-            injector = new MvvmCross.Platform.IoC.MvxPropertyInjector();
-        } 
+            injector = new MvxPropertyInjector();
+        }
 
-        public void Include(System.ComponentModel.INotifyPropertyChanged changed)
+        public void Include(INotifyPropertyChanged changed)
         {
             changed.PropertyChanged += (sender, e) => { var test = e.PropertyName; };
+        }
+
+        public void Include(MvxUIPageControlCurrentPageTargetBinding binding)
+        {
+            binding = new MvxUIPageControlCurrentPageTargetBinding(null, null);
+        }
+
+        public void Include(MvxUIViewVisibilityTargetBinding binding)
+        {
+            binding = new MvxUIViewVisibilityTargetBinding(null);
+        }
+
+        public void Include(MvxVisibilityValueConverter converter)
+        {
+            converter.Convert(null, null, null, null);
+            converter.ConvertBack(null, null, null, null);
+        }
+
+        public void Include(MvxInvertedVisibilityValueConverter converter)
+        {
+            converter.Convert(null, null, null, null);
+            converter.ConvertBack(null, null, null, null);
+        }
+
+        public void Include(MvxNativeColorValueConverter converter)
+        {
+            converter.Convert(null, null, null, null);
+            converter.ConvertBack(null, null, null, null);
+        }
+
+        public void Include(MvxColor color)
+        {
+            color.ToNativeColor();
         }
     }
 }
