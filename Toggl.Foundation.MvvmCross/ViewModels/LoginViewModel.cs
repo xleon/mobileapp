@@ -165,8 +165,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void onError(Exception ex)
         {
-            ErrorText = ex is NotAuthorizedException ? Resources.IncorrectEmailOrPassword
-                                                     : Resources.GenericLoginError;
+            ErrorText = ex is ForbiddenException ? Resources.IncorrectEmailOrPassword
+                                                 : Resources.GenericLoginError;
 
             onCompleted();
         }

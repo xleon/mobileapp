@@ -486,7 +486,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void IsTrueWhenLoginFails()
             {
                 var scheduler = new TestScheduler();
-                var notification = Notification.CreateOnError<ITogglDataSource>(new NotAuthorizedException(""));
+                var notification = Notification.CreateOnError<ITogglDataSource>(new ForbiddenException(""));
                 var message = new Recorded<Notification<ITogglDataSource>>(0, notification);
                 var observable = scheduler.CreateColdObservable(message);
                 LoginManager.Login(Arg.Any<Email>(), Arg.Any<string>())
@@ -519,10 +519,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact]
-            public void IsWrongPasswordErrorWhenNotAuthorizedExceptionIsThrown()
+            public void IsWrongPasswordErrorWhenForbiddenExceptionIsThrown()
             {
                 var scheduler = new TestScheduler();
-                var notification = Notification.CreateOnError<ITogglDataSource>(new NotAuthorizedException(""));
+                var notification = Notification.CreateOnError<ITogglDataSource>(new ForbiddenException(""));
                 var message = new Recorded<Notification<ITogglDataSource>>(0, notification);
                 var observable = scheduler.CreateColdObservable(message);
                 LoginManager.Login(Arg.Any<Email>(), Arg.Any<string>())

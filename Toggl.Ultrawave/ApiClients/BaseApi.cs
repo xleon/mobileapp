@@ -4,7 +4,7 @@ using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Multivac;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
 
@@ -50,10 +50,8 @@ namespace Toggl.Ultrawave.ApiClients
                 }
                 else
                 {
-                    if (response.StatusCode == HttpStatusCode.Forbidden)
-                        observer.OnError(new NotAuthorizedException(response.RawData));
-                    else
-                        observer.OnError(new ApiException(response.RawData));
+                    var exception = ApiExceptions.ForResponse(response);
+                    observer.OnError(exception);
                 }
             });
         }
