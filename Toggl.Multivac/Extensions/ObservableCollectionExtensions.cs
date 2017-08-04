@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Toggl.Multivac
+namespace Toggl.Multivac.Extensions
 {
     public static class ObservableCollectionExtensions
     {

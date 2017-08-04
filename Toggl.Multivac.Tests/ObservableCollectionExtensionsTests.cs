@@ -1,6 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿
+
+using System.Collections.ObjectModel;
 using FluentAssertions;
 using Xunit;
+using static Toggl.Multivac.Extensions.ObservableCollectionExtensions;
 
 namespace Toggl.Multivac.Tests
 {
