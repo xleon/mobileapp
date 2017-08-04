@@ -52,6 +52,8 @@
     <Compile Include="Login\IApiFactory.cs" />
     <Compile Include="Login\LoginManager.cs" />
     <Compile Include="Sync\IStateMachineOrchestrator.cs" />
+    <Compile Include="Sync\ISyncManager.cs" />
+    <Compile Include="Sync\ISyncStateQueue.cs" />
     <Compile Include="Sync\StateMachineEntryPoints.cs" />
     <Compile Include="Sync\StateMachineOrchestrator.cs" />
     <Compile Include="Sync\StateMachine\IStateMachine.cs" />
@@ -67,7 +69,9 @@
     <Compile Include="Suggestions\SuggestionProviderContainer.cs" />
     <Compile Include="Login\ApiFactory.cs" />
     <Compile Include="Login\ILoginManager.cs" />
+    <Compile Include="Sync\SyncManager.cs" />
     <Compile Include="Sync\SyncState.cs" />
+    <Compile Include="Sync\SyncStateQueue.cs" />
     <Compile Include="TimeService.cs" />
     <Compile Include="ITimeService.cs" />
     <Compile Include="Models\TimeEntry.cs" />
