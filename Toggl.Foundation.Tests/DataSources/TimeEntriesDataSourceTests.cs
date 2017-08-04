@@ -21,56 +21,117 @@ namespace Toggl.Foundation.Tests.DataSources
 {
     public class TimeEntriesDataSourceTests
     {
-        public class TheDeleteMethod
+        public class TimeEntryDataSourceTest
         {
-            private (IRepository<IDatabaseTimeEntry>, TimeEntriesDataSource, ITimeEntry) setup()
+            protected ITimeEntriesSource TimeEntriesSource { get; }
+
+            protected string ValidDescription { get; } = "Testing software";
+
+            protected DateTimeOffset ValidTime { get; } = DateTimeOffset.Now;
+
+            protected IDatabaseTimeEntry TimeEntry { get; } = FoundationTimeEntry.Clean(new UltrawaveTimeEntry { Id = 13 });
+
+            protected IRepository<IDatabaseTimeEntry> Repository { get; } = Substitute.For<IRepository<IDatabaseTimeEntry>>();
+
+            public TimeEntryDataSourceTest()
             {
-                var repository = Substitute.For<IRepository<IDatabaseTimeEntry>>();
-                var timeEntry = FoundationTimeEntry.Clean(new UltrawaveTimeEntry { Id = 13 });
-                var observable = Observable.Return(timeEntry);
-                repository.GetById(Arg.Is(timeEntry.Id)).Returns(observable);
-                var dataSource = new TimeEntriesDataSource(repository);
-                return (repository, dataSource, timeEntry);
+                TimeEntriesSource = new TimeEntriesDataSource(Repository);
+                Repository.GetById(Arg.Is(TimeEntry.Id)).Returns(Observable.Return(TimeEntry));
+                Repository.Create(Arg.Any<IDatabaseTimeEntry>())
+                          .Returns(info => Observable.Return(info.Arg<IDatabaseTimeEntry>()));
+            }
+        }
+
+        public class TheStartMethod : TimeEntryDataSourceTest
+        {
+            [Fact]
+            public async Task CreatesANewTimeEntryInTheDatabase()
+            {
+                await TimeEntriesSource.Start(ValidTime, ValidDescription, true);
+
+                await Repository.Received().Create(Arg.Any<IDatabaseTimeEntry>());
             }
 
             [Fact]
+            public async Task CreatesADirtyTimeEntry()
+            {
+                await TimeEntriesSource.Start(ValidTime, ValidDescription, true);
+
+                await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.IsDirty));
+            }
+
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public async Task CreatesATimeEntryWithTheProvidedValueForBillable(bool billable)
+            {
+                await TimeEntriesSource.Start(ValidTime, ValidDescription, billable);
+
+                await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.Billable == billable));
+            }
+
+            [Fact]
+            public async Task CreatesATimeEntryWithTheProvidedValueForDescription()
+            {
+                await TimeEntriesSource.Start(ValidTime, ValidDescription, true);
+
+                await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.Description == ValidDescription));
+            }
+
+            [Fact]
+            public async Task CreatesATimeEntryWithTheProvidedValueForStartTime()
+            {
+                await TimeEntriesSource.Start(ValidTime, ValidDescription, true);
+
+                await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.Start == ValidTime));
+            }
+
+            [Fact]
+            public async Task SetstheCreatedTimeEntryAsTheCurrentlyRunningTimeEntry()
+            {
+                var observer = new TestScheduler().CreateObserver<ITimeEntry>();
+                TimeEntriesSource.CurrentlyRunningTimeEntry.Where(te => te != null).Subscribe(observer);
+
+                await TimeEntriesSource.Start(ValidTime, ValidDescription, true);
+
+                var currentlyRunningTimeEntry = observer.Messages.Single().Value.Value;
+                await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te == currentlyRunningTimeEntry));
+            }
+        }
+
+        public class TheDeleteMethod : TimeEntryDataSourceTest
+        {
+            [Fact]
             public async Task SetsTheDeletedFlag()
             {
-                var (repository, dataSource, timeEntry) = setup();
+                await TimeEntriesSource.Delete(TimeEntry.Id).LastOrDefaultAsync();
 
-                await dataSource.Delete(timeEntry.Id).LastOrDefaultAsync();
-
-                await repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.IsDeleted == true));
+                await Repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.IsDeleted == true));
             }
 
             [Fact]
             public async Task SetsTheDirtyFlag()
             {
-                var (repository, dataSource, timeEntry) = setup();
-
-                await dataSource.Delete(timeEntry.Id).LastOrDefaultAsync();
+                await TimeEntriesSource.Delete(TimeEntry.Id).LastOrDefaultAsync();
                
-                await repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.IsDirty == true));
+                await Repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.IsDirty == true));
             }
 
             [Fact]
             public async Task UpdatesTheCorrectTimeEntry()
             {
-                var (repository, dataSource, timeEntry) = setup();
+                await TimeEntriesSource.Delete(TimeEntry.Id).LastOrDefaultAsync();
 
-                await dataSource.Delete(timeEntry.Id).LastOrDefaultAsync();
-
-                await repository.Received().GetById(Arg.Is(timeEntry.Id));
-                await repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.Id == timeEntry.Id));
+                await Repository.Received().GetById(Arg.Is(TimeEntry.Id));
+                await Repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.Id == TimeEntry.Id));
             }
 
             [Fact]
             public void DoesNotEmitAnyElements()
             {
-                var (repository, dataSource, timeEntry) = setup();
                 var observer = Substitute.For<IObserver<Unit>>();
 
-                dataSource.Delete(timeEntry.Id).Subscribe(observer);
+                TimeEntriesSource.Delete(TimeEntry.Id).Subscribe(observer);
 
                 observer.DidNotReceive().OnNext(Arg.Any<Unit>());
                 observer.Received().OnCompleted();
@@ -79,16 +140,14 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public void PropagatesErrorIfUpdateFails()
             {
-                var repository = Substitute.For<IRepository<IDatabaseTimeEntry>>();
                 var timeEntry = FoundationTimeEntry.Clean(new UltrawaveTimeEntry { Id = 12 });
                 var timeEntryObservable = Observable.Return(timeEntry);
                 var errorObservable = Observable.Throw<IDatabaseTimeEntry>(new EntityNotFoundException());
-                repository.GetById(Arg.Is(timeEntry.Id)).Returns(timeEntryObservable);
-                repository.Update(Arg.Any<IDatabaseTimeEntry>()).Returns(errorObservable);
-                var dataSource = new TimeEntriesDataSource(repository);
+                Repository.GetById(Arg.Is(timeEntry.Id)).Returns(timeEntryObservable);
+                Repository.Update(Arg.Any<IDatabaseTimeEntry>()).Returns(errorObservable);
                 var observer = Substitute.For<IObserver<Unit>>();
 
-                dataSource.Delete(timeEntry.Id).Subscribe(observer);
+                TimeEntriesSource.Delete(timeEntry.Id).Subscribe(observer);
 
                 observer.Received().OnError(Arg.Any<EntityNotFoundException>());
             }
@@ -96,13 +155,11 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public void PropagatesErrorIfTimeEntryIsNotInRepository()
             {
-                var repository = Substitute.For<IRepository<IDatabaseTimeEntry>>();
-                var dataSource = new TimeEntriesDataSource(repository);
                 var observer = Substitute.For<IObserver<Unit>>();
-                repository.GetById(Arg.Any<int>())
+                Repository.GetById(Arg.Any<int>())
                           .Returns(Observable.Throw<IDatabaseTimeEntry>(new EntityNotFoundException()));
 
-                dataSource.Delete(12).Subscribe(observer);
+                TimeEntriesSource.Delete(12).Subscribe(observer);
 
                 observer.Received().OnError(Arg.Any<EntityNotFoundException>());
             }

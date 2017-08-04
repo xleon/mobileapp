@@ -209,7 +209,6 @@
     <Compile Include="MvvmCross\ViewModels\SettingsViewModelTests.cs" />
     <Compile Include="TimeServiceTests.cs" />
     <Compile Include="Generators\ConstructorTestData.cs" />
-    <Compile Include="DataSources\UserDataSourceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
