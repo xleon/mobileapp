@@ -95,7 +95,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 await TimeEntriesSource.Start(ValidTime, ValidDescription, true);
 
                 var currentlyRunningTimeEntry = observer.Messages.Single().Value.Value;
-                await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te == currentlyRunningTimeEntry));
+                await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te .Start == currentlyRunningTimeEntry.Start));
             }
         }
 

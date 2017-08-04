@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -51,12 +51,17 @@ namespace Toggl.Foundation.DataSources
                 .SetIsDirty(true)
                 .Build()
                 .Apply(repository.Create)
-                .Do(currentTimeEntrySubject.OnNext);
+                .Do(safeSetCurrentlyRunningTimeEntry);
 
         private bool runningTimeEntries(ITimeEntry timeEntry) => timeEntry.Stop == null;
 
         private void onRunningTimeEntry(IEnumerable<ITimeEntry> timeEntries)
-            => currentTimeEntrySubject.OnNext(timeEntries.SingleOrDefault());
-
+            => safeSetCurrentlyRunningTimeEntry(timeEntries.SingleOrDefault());
+            
+        private void safeSetCurrentlyRunningTimeEntry(ITimeEntry timeEntry)
+        {
+            var next = timeEntry == null ? null : TimeEntry.Clean(timeEntry);
+            currentTimeEntrySubject.OnNext(next);
+        }
     }
 }
