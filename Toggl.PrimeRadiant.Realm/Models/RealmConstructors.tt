@@ -28,7 +28,7 @@ namespace Toggl.PrimeRadiant.Realm
         WriteLine($"    internal partial class {realmClassName}");
         WriteLine( "    {");
         WriteLine( "        [PrimaryKey]");
-        WriteLine( "        public int Id { get; set; }\n");
+        WriteLine( "        public long Id { get; set; }\n");
         WriteLine( "        public bool IsDirty { get; set; }\n");
         WriteLine($"        public {realmClassName}() {{ }}\n");
         WriteLine($"        public {realmClassName}(IDatabase{className} entity)");

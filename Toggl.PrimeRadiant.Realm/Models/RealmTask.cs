@@ -8,11 +8,11 @@ namespace Toggl.PrimeRadiant.Realm
     {
         public string Name { get; set; }
 
-        public int ProjectId { get; set; }
+        public long ProjectId { get; set; }
 
-        public int WorkspaceId { get; set; }
+        public long WorkspaceId { get; set; }
 
-        public int? UserId { get; set; }
+        public long? UserId { get; set; }
 
         public int EstimatedSeconds { get; set; }
 

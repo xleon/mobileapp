@@ -6,7 +6,7 @@ namespace Toggl.Multivac.Models
     {
         string ApiToken { get; }
 
-        int DefaultWorkspaceId { get; }
+        long DefaultWorkspaceId { get; }
 
         string Email { get; }
 

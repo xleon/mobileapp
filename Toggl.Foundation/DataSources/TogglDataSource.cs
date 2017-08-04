@@ -19,7 +19,7 @@ namespace Toggl.Foundation.DataSources
 
             User = new UserDataSource(database.User, api.User);
             Projects = new ProjectsDataSource(database.Projects);
-            TimeEntries = new TimeEntriesDataSource(database.TimeEntries);
+            TimeEntries = new TimeEntriesDataSource(database.IdProvider, database.TimeEntries);
         }
 
         public IUserSource User { get; }

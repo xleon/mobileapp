@@ -13,7 +13,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public string DateFormat { get; set; }
 
-        public int DefaultWorkspaceId { get; set; }
+        public long DefaultWorkspaceId { get; set; }
 
         //Realm doesn't support enums 
         [Ignored]

@@ -6,7 +6,7 @@ namespace Toggl.PrimeRadiant.Realm
 {
     internal partial class RealmTag : RealmObject, IDatabaseTag
     {
-        public int WorkspaceId { get; set; }
+        public long WorkspaceId { get; set; }
 
         public string Name { get; set; }
 

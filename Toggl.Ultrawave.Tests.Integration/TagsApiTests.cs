@@ -48,7 +48,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 assertTags(returnedTags, tags2, otherWorkspace.Id);
             }
 
-            private void assertTags(List<Tag> returnedTags, string[] expectedTags, int expectedWorkspaceId)
+            private void assertTags(List<Tag> returnedTags, string[] expectedTags, long expectedWorkspaceId)
             {
                 foreach (var expectedTag in expectedTags)
                 {
@@ -56,7 +56,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 }
             }
 
-            private TimeEntry createTimeEntry(int userId, int workspaceId, string[] tags) => new TimeEntry
+            private TimeEntry createTimeEntry(long userId, long workspaceId, string[] tags) => new TimeEntry
             {
                 UserId = userId,
                 WorkspaceId = workspaceId,

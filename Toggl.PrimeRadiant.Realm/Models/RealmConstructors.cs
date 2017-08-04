@@ -7,7 +7,7 @@ namespace Toggl.PrimeRadiant.Realm
     internal partial class RealmClient
     {
         [PrimaryKey]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public bool IsDirty { get; set; }
 
@@ -33,7 +33,7 @@ namespace Toggl.PrimeRadiant.Realm
     internal partial class RealmProject
     {
         [PrimaryKey]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public bool IsDirty { get; set; }
 
@@ -70,7 +70,7 @@ namespace Toggl.PrimeRadiant.Realm
     internal partial class RealmTag
     {
         [PrimaryKey]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public bool IsDirty { get; set; }
 
@@ -95,7 +95,7 @@ namespace Toggl.PrimeRadiant.Realm
     internal partial class RealmTask
     {
         [PrimaryKey]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public bool IsDirty { get; set; }
 
@@ -125,7 +125,7 @@ namespace Toggl.PrimeRadiant.Realm
     internal partial class RealmTimeEntry
     {
         [PrimaryKey]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public bool IsDirty { get; set; }
 
@@ -161,7 +161,7 @@ namespace Toggl.PrimeRadiant.Realm
     internal partial class RealmUser
     {
         [PrimaryKey]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public bool IsDirty { get; set; }
 
@@ -200,7 +200,7 @@ namespace Toggl.PrimeRadiant.Realm
     internal partial class RealmWorkspace
     {
         [PrimaryKey]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public bool IsDirty { get; set; }
 

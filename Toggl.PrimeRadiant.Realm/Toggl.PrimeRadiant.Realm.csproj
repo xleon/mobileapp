@@ -46,6 +46,7 @@
     <Compile Include="Repository.cs" />
     <Compile Include="BaseStorage.cs" />
     <Compile Include="SingleObjectStorage.cs" />
+    <Compile Include="IdProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">

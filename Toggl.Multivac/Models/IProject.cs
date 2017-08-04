@@ -4,9 +4,9 @@ namespace Toggl.Multivac.Models
 {
     public interface IProject : IBaseModel
     {
-        int WorkspaceId { get; }
+        long WorkspaceId { get; }
 
-        int? ClientId { get; }
+        long? ClientId { get; }
 
         string Name { get; }
 

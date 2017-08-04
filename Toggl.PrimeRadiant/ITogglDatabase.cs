@@ -13,7 +13,7 @@ namespace Toggl.PrimeRadiant
         IRepository<IDatabaseTask> Tasks { get; }
         IRepository<IDatabaseTimeEntry> TimeEntries { get; }
         IRepository<IDatabaseWorkspace> Workspaces { get; }
-
+        IIdProvider IdProvider { get; }
         IObservable<Unit> Clear();
     }
 }

@@ -29,7 +29,7 @@ namespace Toggl.Foundation.Models
 
         WriteLine($"    internal partial class {className} : IDatabase{className}");
         WriteLine( "    {");
-        WriteLine( "        public int Id { get; }\n");
+        WriteLine( "        public long Id { get; }\n");
 
         foreach(var line in File.ReadAllLines(modelFile))
         {

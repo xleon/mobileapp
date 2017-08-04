@@ -23,7 +23,7 @@ namespace Toggl.Ultrawave.ApiClients
             return observable;
         }
 
-        public IObservable<Workspace> GetById(int id)
+        public IObservable<Workspace> GetById(long id)
         {
             var endpoint = endPoints.GetById(id);
             var observable = CreateObservable<Workspace>(endpoint, AuthHeader);

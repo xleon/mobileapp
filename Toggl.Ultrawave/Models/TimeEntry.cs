@@ -6,13 +6,13 @@ namespace Toggl.Ultrawave.Models
 {
     public sealed partial class TimeEntry : ITimeEntry
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
-        public int WorkspaceId { get; set; }
+        public long WorkspaceId { get; set; }
 
-        public int? ProjectId { get; set; }
+        public long? ProjectId { get; set; }
 
-        public int? TaskId { get; set; }
+        public long? TaskId { get; set; }
 
         public bool Billable { get; set; }
 
@@ -32,7 +32,7 @@ namespace Toggl.Ultrawave.Models
 
         public DateTimeOffset? ServerDeletedAt { get; set; }
         
-        public int UserId { get; set; }
+        public long UserId { get; set; }
 
         public string CreatedWith { get; set; }
     }

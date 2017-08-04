@@ -101,7 +101,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 }
             }
 
-            private static async Task<Project> createNewProject(ITogglApi togglClient, int workspaceID, bool isActive = true, bool createClient = false)
+            private static async Task<Project> createNewProject(ITogglApi togglClient, long workspaceID, bool isActive = true, bool createClient = false)
             {
                 Client client = null;
 

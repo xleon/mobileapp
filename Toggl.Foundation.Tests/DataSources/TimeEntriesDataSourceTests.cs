@@ -29,13 +29,17 @@ namespace Toggl.Foundation.Tests.DataSources
 
             protected DateTimeOffset ValidTime { get; } = DateTimeOffset.Now;
 
+            protected IIdProvider IdProvider { get; } = Substitute.For<IIdProvider>();
+
             protected IDatabaseTimeEntry TimeEntry { get; } = FoundationTimeEntry.Clean(new UltrawaveTimeEntry { Id = 13 });
 
             protected IRepository<IDatabaseTimeEntry> Repository { get; } = Substitute.For<IRepository<IDatabaseTimeEntry>>();
 
             public TimeEntryDataSourceTest()
             {
-                TimeEntriesSource = new TimeEntriesDataSource(Repository);
+                TimeEntriesSource = new TimeEntriesDataSource(IdProvider, Repository);
+
+                IdProvider.GetNextIdentifier().Returns(-1);
                 Repository.GetById(Arg.Is(TimeEntry.Id)).Returns(Observable.Return(TimeEntry));
                 Repository.Create(Arg.Any<IDatabaseTimeEntry>())
                           .Returns(info => Observable.Return(info.Arg<IDatabaseTimeEntry>()));
@@ -84,6 +88,14 @@ namespace Toggl.Foundation.Tests.DataSources
                 await TimeEntriesSource.Start(ValidTime, ValidDescription, true);
 
                 await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.Start == ValidTime));
+            }
+
+            [Fact]
+            public async Task CreatesATimeEntryWithAnIdProvidedByTheIdProvider()
+            {
+                await TimeEntriesSource.Start(ValidTime, ValidDescription, true);
+
+                await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.Id == -1));
             }
 
             [Fact]
@@ -156,7 +168,7 @@ namespace Toggl.Foundation.Tests.DataSources
             public void PropagatesErrorIfTimeEntryIsNotInRepository()
             {
                 var observer = Substitute.For<IObserver<Unit>>();
-                Repository.GetById(Arg.Any<int>())
+                Repository.GetById(Arg.Any<long>())
                           .Returns(Observable.Throw<IDatabaseTimeEntry>(new EntityNotFoundException()));
 
                 TimeEntriesSource.Delete(12).Subscribe(observer);

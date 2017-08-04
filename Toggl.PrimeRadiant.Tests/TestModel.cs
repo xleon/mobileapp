@@ -6,7 +6,7 @@ namespace Toggl.PrimeRadiant.Tests
 
     public sealed class TestModel : ITestModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public bool IsDirty { get; set; }
     }

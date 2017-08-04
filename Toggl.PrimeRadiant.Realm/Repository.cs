@@ -23,7 +23,7 @@ namespace Toggl.PrimeRadiant.Realm
                 .Catch<TModel, Exception>(ex => Observable.Throw<TModel>(new DatabaseException(ex)));
         }
 
-        public IObservable<TModel> GetById(int id)
+        public IObservable<TModel> GetById(long id)
             => CreateObservable(() => Adapter.GetAll().Single(x => x.Id == id));
 
         public static Repository<TModel> For<TRealmEntity>(Func<TModel, TRealmEntity> convertToRealm)

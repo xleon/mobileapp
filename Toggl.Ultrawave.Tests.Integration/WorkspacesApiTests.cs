@@ -41,10 +41,10 @@ namespace Toggl.Ultrawave.Tests.Integration
                     return CallEndpointWith(togglApi, user.DefaultWorkspaceId);
                 });
 
-            private Func<Task> CallingEndpointWith(ITogglApi togglApi, int id)
+            private Func<Task> CallingEndpointWith(ITogglApi togglApi, long id)
                 => async () => await CallEndpointWith(togglApi, id);
 
-            private IObservable<Workspace> CallEndpointWith(ITogglApi togglApi, int id)
+            private IObservable<Workspace> CallEndpointWith(ITogglApi togglApi, long id)
                 => togglApi.Workspaces.GetById(id);
 
             [Fact, LogTestInfo]

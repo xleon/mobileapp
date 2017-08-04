@@ -6,11 +6,11 @@ namespace Toggl.Multivac.Models
     {
         string Name { get; }
 
-        int ProjectId { get; }
+        long ProjectId { get; }
 
-        int WorkspaceId { get; }
+        long WorkspaceId { get; }
 
-        int? UserId { get; }
+        long? UserId { get; }
 
         int EstimatedSeconds { get; }
 

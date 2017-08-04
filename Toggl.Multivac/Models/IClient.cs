@@ -4,7 +4,7 @@ namespace Toggl.Multivac.Models
 {
     public interface IClient : IBaseModel
     {
-        int WorkspaceId { get; }
+        long WorkspaceId { get; }
 
         string Name { get; }
 

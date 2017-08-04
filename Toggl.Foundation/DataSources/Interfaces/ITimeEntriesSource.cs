@@ -13,6 +13,6 @@ namespace Toggl.Foundation.DataSources
 
         IObservable<ITimeEntry> Start(DateTimeOffset startTime, string description, bool billable);
 
-        IObservable<Unit> Delete(int id);
+        IObservable<Unit> Delete(long id);
     }
 }

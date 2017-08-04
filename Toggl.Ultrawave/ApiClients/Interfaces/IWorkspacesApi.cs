@@ -7,6 +7,6 @@ namespace Toggl.Ultrawave.ApiClients
     public interface IWorkspacesApi
     {
         IObservable<List<Workspace>> GetAll();
-        IObservable<Workspace> GetById(int id);
+        IObservable<Workspace> GetById(long id);
     }
 }

@@ -15,16 +15,18 @@ namespace Toggl.Foundation.DataSources
 {
     internal sealed class TimeEntriesDataSource : ITimeEntriesSource
     {
+        private readonly IIdProvider idProvider;
         private readonly IRepository<IDatabaseTimeEntry> repository;
         private readonly BehaviorSubject<ITimeEntry> currentTimeEntrySubject = new BehaviorSubject<ITimeEntry>(null);
 
         public IObservable<ITimeEntry> CurrentlyRunningTimeEntry { get; }
 
-        public TimeEntriesDataSource(IRepository<IDatabaseTimeEntry> repository)
+        public TimeEntriesDataSource(IIdProvider idProvider, IRepository<IDatabaseTimeEntry> repository)
         {
             Ensure.Argument.IsNotNull(repository, nameof(repository));
 
             this.repository = repository;
+            this.idProvider = idProvider;
 
             CurrentlyRunningTimeEntry = currentTimeEntrySubject.AsObservable().DistinctUntilChanged();
 
@@ -36,7 +38,7 @@ namespace Toggl.Foundation.DataSources
         public IObservable<IEnumerable<ITimeEntry>> GetAll()
             => repository.GetAll(te => !te.IsDeleted);
 
-        public IObservable<Unit> Delete(int id)
+        public IObservable<Unit> Delete(long id)
             => repository.GetById(id)
                          .Select(TimeEntry.DirtyDeleted)
                          .SelectMany(repository.Update)
@@ -44,7 +46,8 @@ namespace Toggl.Foundation.DataSources
                          .Cast<Unit>();
 
         public IObservable<ITimeEntry> Start(DateTimeOffset startTime, string description, bool billable)
-            => TimeEntry.Builder.Create()
+            => idProvider.GetNextIdentifier()
+                .Apply(TimeEntry.Builder.Create)
                 .SetStart(startTime)
                 .SetDescription(description)
                 .SetBillable(billable)
@@ -52,7 +55,7 @@ namespace Toggl.Foundation.DataSources
                 .Build()
                 .Apply(repository.Create)
                 .Do(safeSetCurrentlyRunningTimeEntry);
-
+    
         private bool runningTimeEntries(ITimeEntry timeEntry) => timeEntry.Stop == null;
 
         private void onRunningTimeEntry(IEnumerable<ITimeEntry> timeEntries)

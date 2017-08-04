@@ -8,7 +8,9 @@ namespace Toggl.Foundation.Models
         {
             private const string ErrorMessage = "You need to set the {0} before building a time entry";
 
-            public static Builder Create() => new Builder();
+            public static Builder Create(long id) => new Builder(id);
+
+            public long Id { get; }
 
             public bool IsDirty { get; private set; }
 
@@ -18,7 +20,10 @@ namespace Toggl.Foundation.Models
             
             public DateTimeOffset Start { get; private set; }
 
-            private Builder() { }
+            private Builder(long id) 
+            {
+                Id = id;
+            }
 
             public TimeEntry Build() 
             {
@@ -62,6 +67,7 @@ namespace Toggl.Foundation.Models
 
         private TimeEntry(Builder builder)
         {
+            Id = builder.Id;
             Start = builder.Start;
             IsDirty = builder.IsDirty;
             Billable = builder.Billable;

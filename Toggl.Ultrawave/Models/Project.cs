@@ -7,13 +7,13 @@ namespace Toggl.Ultrawave.Models
 {
     public sealed partial class Project : IProject
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [JsonProperty("wid")]
-        public int WorkspaceId { get; set; }
+        public long WorkspaceId { get; set; }
 
         [JsonProperty("cid")]
-        public int? ClientId { get; set; }
+        public long? ClientId { get; set; }
 
         public string Name { get; set; }
 
