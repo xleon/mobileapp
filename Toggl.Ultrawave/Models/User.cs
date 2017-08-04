@@ -5,7 +5,7 @@ using Toggl.Multivac.Models;
 
 namespace Toggl.Ultrawave.Models
 {
-    public sealed class User : IUser
+    public sealed partial class User : IUser
     {
         public int Id { get; set; }
 

@@ -4,7 +4,7 @@ using Toggl.Multivac.Models;
 
 namespace Toggl.Ultrawave.Models
 {
-    public class Task : ITask
+    public partial class Task : ITask
     {
         public int Id { get; set; }
 
