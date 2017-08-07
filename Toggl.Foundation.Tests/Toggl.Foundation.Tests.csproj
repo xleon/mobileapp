@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -22,15 +22,17 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\Toggl.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
-     <Optimize>true</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>..\bin\Release</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\Toggl.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -200,13 +202,6 @@
     <Compile Include="DataSources\TimeEntriesDataSourceTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Login\" />
-    <Folder Include="MvvmCross\" />
-    <Folder Include="MvvmCross\ViewModels\" />
-    <Folder Include="MvvmCross\Converters\" />
-    <Folder Include="Suggestions\" />
-    <Folder Include="Generators\" />
-    <Folder Include="DataSources\" />
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />
     <Compile Include="DataSources\TogglDataSourceTests.cs" />
     <Compile Include="MvvmCross\ViewModels\SettingsViewModelTests.cs" />
@@ -238,8 +233,10 @@
       <Name>Toggl.Ultrawave</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="DataSources\" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
