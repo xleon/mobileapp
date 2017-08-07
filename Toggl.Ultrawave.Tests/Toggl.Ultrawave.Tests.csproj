@@ -160,6 +160,7 @@
     <Compile Include="ApiClients\StatusApiTests.cs" />
     <Compile Include="Models\TaskTests.cs" />
     <Compile Include="Models\ProjectTests.cs" />
+    <Compile Include="Exceptions\ApiErrorResponsesTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">
