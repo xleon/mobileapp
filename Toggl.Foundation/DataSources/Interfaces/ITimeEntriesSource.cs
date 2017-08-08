@@ -12,6 +12,7 @@ namespace Toggl.Foundation.DataSources
         IObservable<IEnumerable<ITimeEntry>> GetAll();
 
         IObservable<ITimeEntry> Start(DateTimeOffset startTime, string description, bool billable);
+         IObservable<ITimeEntry> Stop(DateTimeOffset stopTime);
 
         IObservable<Unit> Delete(long id);
     }

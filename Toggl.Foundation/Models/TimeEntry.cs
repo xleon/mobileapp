@@ -1,4 +1,5 @@
-﻿﻿using System;
+﻿using System;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Models
 {
@@ -17,7 +18,7 @@ namespace Toggl.Foundation.Models
             public bool Billable { get; private set; }
 
             public string Description { get; private set; }
-            
+
             public DateTimeOffset Start { get; private set; }
 
             private Builder(long id) 
@@ -25,7 +26,7 @@ namespace Toggl.Foundation.Models
                 Id = id;
             }
 
-            public TimeEntry Build() 
+            public TimeEntry Build()
             {
                 ensureValidity();
                 return new TimeEntry(this);
@@ -65,6 +66,15 @@ namespace Toggl.Foundation.Models
             }
         }
 
+        public TimeEntry(IDatabaseTimeEntry timeEntry, DateTimeOffset stop)
+            : this(timeEntry, true)
+        {
+            if (Start > stop)
+                throw new ArgumentOutOfRangeException(nameof(stop), "The stop date must be equal to or greater than the start date");
+
+            Stop = stop;
+        }
+
         private TimeEntry(Builder builder)
         {
             Id = builder.Id;
@@ -73,5 +83,10 @@ namespace Toggl.Foundation.Models
             Billable = builder.Billable;
             Description = builder.Description;
         }
+    }
+
+    internal static class TimeEntryExtensions
+    {
+        public static TimeEntry With(this IDatabaseTimeEntry self, DateTimeOffset stop) => new TimeEntry(self, stop);
     }
 }

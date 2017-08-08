@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -31,7 +31,7 @@ namespace Toggl.Foundation.DataSources
             CurrentlyRunningTimeEntry = currentTimeEntrySubject.AsObservable().DistinctUntilChanged();
 
             repository
-                .GetAll(runningTimeEntries)
+                .GetAll(te => te.Stop == null)
                 .Subscribe(onRunningTimeEntry);
         }
 
@@ -55,9 +55,16 @@ namespace Toggl.Foundation.DataSources
                 .Build()
                 .Apply(repository.Create)
                 .Do(safeSetCurrentlyRunningTimeEntry);
-    
-        private bool runningTimeEntries(ITimeEntry timeEntry) => timeEntry.Stop == null;
-
+                
+        public IObservable<ITimeEntry> Stop(DateTimeOffset stopTime)
+            => repository
+                    .GetAll(te => te.Stop == null)
+                    .SelectMany(timeEntries =>
+                        timeEntries.Single()
+                            .With(stopTime)
+                            .Apply(repository.Update)
+                            .Do(_ => safeSetCurrentlyRunningTimeEntry(null)));
+        
         private void onRunningTimeEntry(IEnumerable<ITimeEntry> timeEntries)
             => safeSetCurrentlyRunningTimeEntry(timeEntries.SingleOrDefault());
             
