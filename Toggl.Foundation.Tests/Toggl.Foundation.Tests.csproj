@@ -205,6 +205,7 @@
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />
     <Compile Include="DataSources\TogglDataSourceTests.cs" />
     <Compile Include="MvvmCross\ViewModels\SettingsViewModelTests.cs" />
+    <Compile Include="MvvmCross\ViewModels\EditTimeEntryViewModelTests.cs" />
     <Compile Include="TimeServiceTests.cs" />
     <Compile Include="Generators\ConstructorTestData.cs" />
   </ItemGroup>

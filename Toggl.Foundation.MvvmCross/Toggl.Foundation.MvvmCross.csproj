@@ -49,6 +49,7 @@
     <Compile Include="ViewModels\StartTimeEntryViewModel.cs" />
     <Compile Include="Parameters\DateParameter.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\EditTimeEntryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">
