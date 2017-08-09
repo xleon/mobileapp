@@ -34,7 +34,7 @@ namespace Toggl.PrimeRadiant.Realm
         public IObservable<TModel> Single()
             => CreateObservable(() => Adapter.GetAll().Single());
 
-        public static SingleObjectStorage<TModel> For<TRealmEntity>(Func<TModel, TRealmEntity> convertToRealm)
+        public static SingleObjectStorage<TModel> For<TRealmEntity>(Func<TModel, Realms.Realm, TRealmEntity> convertToRealm)
             where TRealmEntity : RealmObject, TModel
             => new SingleObjectStorage<TModel>(new RealmAdapter<TRealmEntity, TModel>(convertToRealm));
 

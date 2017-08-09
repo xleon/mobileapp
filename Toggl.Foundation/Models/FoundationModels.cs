@@ -17,6 +17,8 @@ namespace Toggl.Foundation.Models
 
         public DateTimeOffset? ServerDeletedAt { get; }
 
+        public IDatabaseWorkspace Workspace { get; }
+
         public bool IsDirty { get; }
     }
 
@@ -54,6 +56,10 @@ namespace Toggl.Foundation.Models
 
         public int? ActualHours { get; }
 
+        public IDatabaseClient Client { get; }
+
+        public IDatabaseWorkspace Workspace { get; }
+
         public bool IsDirty { get; }
     }
 
@@ -66,6 +72,8 @@ namespace Toggl.Foundation.Models
         public string Name { get; }
 
         public DateTimeOffset At { get; }
+
+        public IDatabaseWorkspace Workspace { get; }
 
         public bool IsDirty { get; }
     }
@@ -89,6 +97,12 @@ namespace Toggl.Foundation.Models
         public DateTimeOffset At { get; }
 
         public int TrackedSeconds { get; }
+
+        public IDatabaseUser User { get; }
+
+        public IDatabaseProject Project { get; }
+
+        public IDatabaseWorkspace Workspace { get; }
 
         public bool IsDirty { get; }
     }
@@ -126,6 +140,14 @@ namespace Toggl.Foundation.Models
         public string CreatedWith { get; }
 
         public bool IsDeleted { get; }
+
+        public IDatabaseTask Task { get; }
+
+        public IDatabaseUser User { get; }
+
+        public IDatabaseProject Project { get; }
+
+        public IDatabaseWorkspace Workspace { get; }
 
         public bool IsDirty { get; }
     }

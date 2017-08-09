@@ -1,8 +1,10 @@
 ﻿﻿<#@ template language="C#" hostspecific="True"
 #><#@ assembly name="System.Core"
 #><#@ import namespace="System.IO"
+#><#@ import namespace="System.Text.RegularExpressions"
 #><#@ import namespace="System.Linq"
 #>using Realms;
+using System.Linq;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant.Models;
 
@@ -31,12 +33,12 @@ namespace Toggl.PrimeRadiant.Realm
         WriteLine( "        public long Id { get; set; }\n");
         WriteLine( "        public bool IsDirty { get; set; }\n");
         WriteLine($"        public {realmClassName}() {{ }}\n");
-        WriteLine($"        public {realmClassName}(IDatabase{className} entity)");
-        WriteLine($"            : this(entity as {interfaceName})");
+        WriteLine($"        public {realmClassName}(IDatabase{className} entity, Realms.Realm realm)");
+        WriteLine($"            : this(entity as {interfaceName}, realm)");
         WriteLine( "        {");
         WriteLine( "            IsDirty = entity.IsDirty;");
         WriteLine( "        }\n");
-        WriteLine($"        public {realmClassName}({interfaceName} entity)");
+        WriteLine($"        public {realmClassName}({interfaceName} entity, Realms.Realm realm)");
         WriteLine( "        {");
         WriteLine( "            Id = entity.Id;");
 
@@ -45,11 +47,20 @@ namespace Toggl.PrimeRadiant.Realm
             var isProperty = line.Contains("get;");
             if (!isProperty) continue;
 
+            var isRealmProperty = Regex.IsMatch(line, ".Id ") && !line.Contains("Default");
             var trimmedLine = line.Trim();
             var indexOfPropName = trimmedLine.IndexOf(" ") + 1;
             var propName = trimmedLine.Substring(indexOfPropName, trimmedLine.Length - 9 - indexOfPropName);
+            var assignment = $"entity.{propName}";
 
-            WriteLine($"            {propName} = entity.{propName};");
+            if (isRealmProperty)
+            {
+                var entityName = propName.Replace("Id", "");
+                propName = $"Realm{entityName}";
+                assignment = $"realm.All<{propName}>().Single(x => x.Id == {entityName}Id)";
+            }
+
+            WriteLine($"            {propName} = {assignment};");
         }
 
         WriteLine( "            IsDirty = true;");

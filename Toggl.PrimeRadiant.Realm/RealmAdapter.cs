@@ -22,9 +22,9 @@ namespace Toggl.PrimeRadiant.Realm
         where TRealmEntity : RealmObject, TModel
         where TModel: IBaseModel, IDatabaseSyncable
     {
-        private readonly Func<TModel, TRealmEntity> convertToRealm;
+        private readonly Func<TModel, Realms.Realm, TRealmEntity> convertToRealm;
 
-        public RealmAdapter(Func<TModel, TRealmEntity> convertToRealm)
+        public RealmAdapter(Func<TModel, Realms.Realm, TRealmEntity> convertToRealm)
         {
             Ensure.Argument.IsNotNull(convertToRealm, nameof(convertToRealm));
 
@@ -52,10 +52,9 @@ namespace Toggl.PrimeRadiant.Realm
             Ensure.Argument.IsNotNull(entity, nameof(entity));
 
             var realm = Realms.Realm.GetInstance();
-            var realmEntity = convertToRealm(entity);
-
             using (var transaction = realm.BeginWrite())
             {
+                var realmEntity = convertToRealm(entity, realm);
                 if (checkExistance)
                 {
                     // ReSharper disable once ReturnValueOfPureMethodIsNotUsed

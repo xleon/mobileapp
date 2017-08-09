@@ -7,12 +7,6 @@ namespace Toggl.PrimeRadiant.Realm
 {
     internal partial class RealmTimeEntry : RealmObject, IDatabaseTimeEntry
     {
-        public long WorkspaceId { get; set; }
-
-        public long? ProjectId { get; set; }
-
-        public long? TaskId { get; set; }
-
         public bool Billable { get; set; }
 
         public DateTimeOffset Start { get; set; }
@@ -31,10 +25,32 @@ namespace Toggl.PrimeRadiant.Realm
 
         public DateTimeOffset? ServerDeletedAt { get; set; }
 
-        public long UserId { get; set; }
-
         public string CreatedWith { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public RealmWorkspace RealmWorkspace { get; set; }
+
+        public long WorkspaceId => RealmWorkspace?.Id ?? 0;
+
+        public IDatabaseWorkspace Workspace => RealmWorkspace;
+
+        public RealmProject RealmProject { get; set; }
+
+        public long? ProjectId => RealmProject?.Id;
+
+        public IDatabaseProject Project => RealmProject;
+
+        public RealmTask RealmTask { get; set; }
+
+        public long? TaskId => RealmTask?.Id;
+
+        public IDatabaseTask Task => RealmTask;
+
+        public RealmUser RealmUser { get; set; }
+
+        public long UserId => RealmUser?.Id ?? 0;
+
+        public IDatabaseUser User => RealmUser;
     }
 }

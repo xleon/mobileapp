@@ -6,10 +6,14 @@ namespace Toggl.PrimeRadiant.Realm
 {
     internal partial class RealmTag : RealmObject, IDatabaseTag
     {
-        public long WorkspaceId { get; set; }
-
         public string Name { get; set; }
 
         public DateTimeOffset At { get; set; }
+        
+        public RealmWorkspace RealmWorkspace { get; set; }
+
+        public long WorkspaceId => RealmWorkspace?.Id ?? 0;
+        
+        public IDatabaseWorkspace Workspace => RealmWorkspace;
     }
 }

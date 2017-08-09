@@ -6,10 +6,6 @@ namespace Toggl.PrimeRadiant.Realm
 {
     internal partial class RealmProject : RealmObject, IDatabaseProject
     {
-        public long WorkspaceId { get; set; }
-
-        public long? ClientId { get; set; }
-
         public string Name { get; set; }
 
         public bool IsPrivate { get; set; }
@@ -35,5 +31,17 @@ namespace Toggl.PrimeRadiant.Realm
         public string Currency { get; set; }
 
         public int? ActualHours { get; set; }
+
+        public RealmWorkspace RealmWorkspace { get; set; }
+
+        public long WorkspaceId => RealmWorkspace?.Id ?? 0;
+
+        public IDatabaseWorkspace Workspace => RealmWorkspace;
+
+        public RealmClient RealmClient { get; set; }
+
+        public long? ClientId => RealmClient?.Id;
+
+        public IDatabaseClient Client => RealmClient;
     }
 }

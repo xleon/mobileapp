@@ -1,4 +1,5 @@
 ﻿﻿using Realms;
+using System.Linq;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant.Models;
 
@@ -13,16 +14,16 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmClient() { }
 
-        public RealmClient(IDatabaseClient entity)
-            : this(entity as IClient)
+        public RealmClient(IDatabaseClient entity, Realms.Realm realm)
+            : this(entity as IClient, realm)
         {
             IsDirty = entity.IsDirty;
         }
 
-        public RealmClient(IClient entity)
+        public RealmClient(IClient entity, Realms.Realm realm)
         {
             Id = entity.Id;
-            WorkspaceId = entity.WorkspaceId;
+            RealmWorkspace = realm.All<RealmWorkspace>().Single(x => x.Id == WorkspaceId);
             Name = entity.Name;
             At = entity.At;
             ServerDeletedAt = entity.ServerDeletedAt;
@@ -39,17 +40,17 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmProject() { }
 
-        public RealmProject(IDatabaseProject entity)
-            : this(entity as IProject)
+        public RealmProject(IDatabaseProject entity, Realms.Realm realm)
+            : this(entity as IProject, realm)
         {
             IsDirty = entity.IsDirty;
         }
 
-        public RealmProject(IProject entity)
+        public RealmProject(IProject entity, Realms.Realm realm)
         {
             Id = entity.Id;
-            WorkspaceId = entity.WorkspaceId;
-            ClientId = entity.ClientId;
+            RealmWorkspace = realm.All<RealmWorkspace>().Single(x => x.Id == WorkspaceId);
+            RealmClient = realm.All<RealmClient>().Single(x => x.Id == ClientId);
             Name = entity.Name;
             IsPrivate = entity.IsPrivate;
             Active = entity.Active;
@@ -76,16 +77,16 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmTag() { }
 
-        public RealmTag(IDatabaseTag entity)
-            : this(entity as ITag)
+        public RealmTag(IDatabaseTag entity, Realms.Realm realm)
+            : this(entity as ITag, realm)
         {
             IsDirty = entity.IsDirty;
         }
 
-        public RealmTag(ITag entity)
+        public RealmTag(ITag entity, Realms.Realm realm)
         {
             Id = entity.Id;
-            WorkspaceId = entity.WorkspaceId;
+            RealmWorkspace = realm.All<RealmWorkspace>().Single(x => x.Id == WorkspaceId);
             Name = entity.Name;
             At = entity.At;
             IsDirty = true;
@@ -101,19 +102,19 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmTask() { }
 
-        public RealmTask(IDatabaseTask entity)
-            : this(entity as ITask)
+        public RealmTask(IDatabaseTask entity, Realms.Realm realm)
+            : this(entity as ITask, realm)
         {
             IsDirty = entity.IsDirty;
         }
 
-        public RealmTask(ITask entity)
+        public RealmTask(ITask entity, Realms.Realm realm)
         {
             Id = entity.Id;
             Name = entity.Name;
-            ProjectId = entity.ProjectId;
-            WorkspaceId = entity.WorkspaceId;
-            UserId = entity.UserId;
+            RealmProject = realm.All<RealmProject>().Single(x => x.Id == ProjectId);
+            RealmWorkspace = realm.All<RealmWorkspace>().Single(x => x.Id == WorkspaceId);
+            RealmUser = realm.All<RealmUser>().Single(x => x.Id == UserId);
             EstimatedSeconds = entity.EstimatedSeconds;
             Active = entity.Active;
             At = entity.At;
@@ -131,18 +132,18 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmTimeEntry() { }
 
-        public RealmTimeEntry(IDatabaseTimeEntry entity)
-            : this(entity as ITimeEntry)
+        public RealmTimeEntry(IDatabaseTimeEntry entity, Realms.Realm realm)
+            : this(entity as ITimeEntry, realm)
         {
             IsDirty = entity.IsDirty;
         }
 
-        public RealmTimeEntry(ITimeEntry entity)
+        public RealmTimeEntry(ITimeEntry entity, Realms.Realm realm)
         {
             Id = entity.Id;
-            WorkspaceId = entity.WorkspaceId;
-            ProjectId = entity.ProjectId;
-            TaskId = entity.TaskId;
+            RealmWorkspace = realm.All<RealmWorkspace>().Single(x => x.Id == WorkspaceId);
+            RealmProject = realm.All<RealmProject>().Single(x => x.Id == ProjectId);
+            RealmTask = realm.All<RealmTask>().Single(x => x.Id == TaskId);
             Billable = entity.Billable;
             Start = entity.Start;
             Stop = entity.Stop;
@@ -152,7 +153,7 @@ namespace Toggl.PrimeRadiant.Realm
             TagIds = entity.TagIds;
             At = entity.At;
             ServerDeletedAt = entity.ServerDeletedAt;
-            UserId = entity.UserId;
+            RealmUser = realm.All<RealmUser>().Single(x => x.Id == UserId);
             CreatedWith = entity.CreatedWith;
             IsDirty = true;
         }
@@ -167,13 +168,13 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmUser() { }
 
-        public RealmUser(IDatabaseUser entity)
-            : this(entity as IUser)
+        public RealmUser(IDatabaseUser entity, Realms.Realm realm)
+            : this(entity as IUser, realm)
         {
             IsDirty = entity.IsDirty;
         }
 
-        public RealmUser(IUser entity)
+        public RealmUser(IUser entity, Realms.Realm realm)
         {
             Id = entity.Id;
             ApiToken = entity.ApiToken;
@@ -206,13 +207,13 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmWorkspace() { }
 
-        public RealmWorkspace(IDatabaseWorkspace entity)
-            : this(entity as IWorkspace)
+        public RealmWorkspace(IDatabaseWorkspace entity, Realms.Realm realm)
+            : this(entity as IWorkspace, realm)
         {
             IsDirty = entity.IsDirty;
         }
 
-        public RealmWorkspace(IWorkspace entity)
+        public RealmWorkspace(IWorkspace entity, Realms.Realm realm)
         {
             Id = entity.Id;
             Name = entity.Name;
