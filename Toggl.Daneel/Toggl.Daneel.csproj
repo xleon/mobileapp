@@ -269,6 +269,10 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-57x57.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-114x114.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-180x180.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icAdd.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icAdd.imageset\icAddS.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icAdd.imageset\icAddS%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icAdd.imageset\icAddS%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -281,6 +285,7 @@
     <InterfaceDefinition Include="Views\SuggestionsEmptyViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SuggestionsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\MainViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\EditTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\StartTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SettingsViewController.xib" />
   </ItemGroup>
@@ -372,6 +377,10 @@
     <Compile Include="Presentation\Transition\SwipeInteractionController.cs" />
     <Compile Include="Presentation\Transition\FromBottomTransitionDelegate.cs" />
     <Compile Include="Presentation\Transition\ModalPresentationController.cs" />
+    <Compile Include="ViewControllers\EditTimeEntryViewController.cs" />
+    <Compile Include="ViewControllers\EditTimeEntryViewController.designer.cs">
+      <DependentUpon>EditTimeEntryViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\SettingsViewController.cs" />
     <Compile Include="ViewControllers\SettingsViewController.designer.cs">
       <DependentUpon>SettingsViewController.cs</DependentUpon>
@@ -408,6 +417,7 @@
   <ItemGroup>
     <Folder Include="Resources\Images.xcassets\line.imageset\" />
     <Folder Include="Resources\Images.xcassets\icLoader.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icAdd.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
