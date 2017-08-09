@@ -6,7 +6,7 @@ using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
-    public sealed class MainViewModel : BaseViewModel
+    public sealed class MainViewModel : MvxViewModel
     {
         private readonly ITimeService timeService;
         private readonly IMvxNavigationService navigationService;

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Core.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation.DataSources;
 using Toggl.Multivac;
@@ -11,7 +12,7 @@ using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
-    public class TimeEntriesLogViewModel : BaseViewModel
+    public class TimeEntriesLogViewModel : MvxViewModel
     {
         private readonly ITogglDataSource dataSource;
 

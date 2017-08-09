@@ -34,7 +34,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="App.cs" />
-    <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\TimeEntriesLogViewModel.cs" />
     <Compile Include="ViewModels\OnboardingViewModel.cs" />
     <Compile Include="Helper\Color.cs" />

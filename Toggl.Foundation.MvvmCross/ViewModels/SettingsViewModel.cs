@@ -7,10 +7,12 @@ using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
-    public sealed class SettingsViewModel : BaseViewModel
+    public sealed class SettingsViewModel : MvxViewModel
     {
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
+
+        public string Title { get; private set; }
 
         public IMvxAsyncCommand LogoutCommand { get; }
 

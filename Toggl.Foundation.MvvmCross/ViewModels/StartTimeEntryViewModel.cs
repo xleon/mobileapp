@@ -11,7 +11,7 @@ using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
-    public sealed class StartTimeEntryViewModel : BaseViewModel<DateParameter>
+    public sealed class StartTimeEntryViewModel : MvxViewModel<DateParameter>
     {
         //Fields
         private readonly ITimeService timeService;

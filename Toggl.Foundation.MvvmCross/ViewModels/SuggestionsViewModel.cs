@@ -3,13 +3,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Core.ViewModels;
 using Toggl.Foundation.Suggestions;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
-    public sealed class SuggestionsViewModel : BaseViewModel
+    public sealed class SuggestionsViewModel : MvxViewModel
     {
         private readonly ISuggestionProviderContainer suggestionProviders;
 
