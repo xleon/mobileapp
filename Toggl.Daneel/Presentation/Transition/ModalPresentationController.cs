@@ -1,10 +1,13 @@
-﻿using CoreGraphics;
+﻿using System;
+using CoreGraphics;
 using UIKit;
 
 namespace Toggl.Daneel.Presentation.Transition
 {
     public class ModalPresentationController : UIPresentationController
     {
+        private readonly nfloat defaultHeight = UIScreen.MainScreen.Bounds.Height - 20;
+
         private readonly UIView dimmingView = new UIView
         {
             TranslatesAutoresizingMaskIntoConstraints = false,
@@ -65,7 +68,10 @@ namespace Toggl.Daneel.Presentation.Transition
         }
 
         public override CGSize GetSizeForChildContentContainer(IUIContentContainer contentContainer, CGSize parentContainerSize)
-            => new CGSize(parentContainerSize.Width, parentContainerSize.Height - 20);
+        {
+            var preferredHeight = PresentedViewController.PreferredContentSize.Height;
+            return new CGSize(parentContainerSize.Width, preferredHeight == 0 ? defaultHeight : preferredHeight);
+        }
 
         public override CGRect FrameOfPresentedViewInContainerView
         {
@@ -75,7 +81,7 @@ namespace Toggl.Daneel.Presentation.Transition
                 var frame = CGRect.Empty;
                 frame.Size = GetSizeForChildContentContainer(PresentedViewController, containerSize);
                 frame.X = 0;
-                frame.Y = 20;
+                frame.Y = containerSize.Height - frame.Size.Height;
                 return frame;
             }
         }
