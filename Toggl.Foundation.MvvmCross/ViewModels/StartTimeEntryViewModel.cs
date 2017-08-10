@@ -41,6 +41,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand BackCommand { get; }
 
+        public IMvxAsyncCommand DoneCommand { get; }
+
+        public IMvxCommand ToggleBillableCommand { get; }
+
         public StartTimeEntryViewModel(ITogglDataSource dataSource, ITimeService timeService, IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -52,8 +56,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.navigationService = navigationService;
 
             BackCommand = new MvxAsyncCommand(back);
+            DoneCommand = new MvxAsyncCommand(done);
+            ToggleBillableCommand = new MvxCommand(toggleBillable);
         }
-       
+
         public override async Task Initialize(DateParameter parameter)
         {
             await Initialize();
@@ -64,7 +70,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 timeService.CurrentDateTimeObservable.Subscribe(currentTime => ElapsedTime = currentTime - StartDate);
         }
 
-        private Task back()
-            => navigationService.Close(this);
+        private void toggleBillable() => IsBillable = !IsBillable;
+
+        private Task back() => navigationService.Close(this);
+
+        private async Task done()
+        {
+            await dataSource.TimeEntries.Start(StartDate, RawTimeEntryText, IsBillable);
+
+            await navigationService.Close(this);
+        }
     }
 }

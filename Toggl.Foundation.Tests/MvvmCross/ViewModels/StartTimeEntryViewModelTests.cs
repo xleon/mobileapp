@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
@@ -55,6 +56,48 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task ClosesTheViewModel()
             {
                 await ViewModel.BackCommand.ExecuteAsync();
+
+                await NavigationService.Received().Close(ViewModel);
+            }
+        }
+
+        public class TheToggleBillableCommand : StartTimeEntryViewModelTest
+        {
+            [Fact]
+            public void TogglesTheIsBillableProperty()
+            {
+                var expected = !ViewModel.IsBillable;
+
+                ViewModel.ToggleBillableCommand.Execute();
+
+                ViewModel.IsBillable.Should().Be(expected);
+            }
+        }
+
+        public class TheDoneCommand : StartTimeEntryViewModelTest
+        {
+            [Fact]
+            public async Task StartsANewTimeEntry()
+            {
+                var date = DateTimeOffset.UtcNow;
+                var description = "Testing Toggl apps";
+                var dateParameter = DateParameter.WithDate(date);
+
+                await ViewModel.Initialize(dateParameter);
+                ViewModel.RawTimeEntryText = description;
+                ViewModel.DoneCommand.Execute();
+
+                await DataSource.TimeEntries.Received().Start(
+                    Arg.Is(dateParameter.GetDate()), 
+                    Arg.Is(description),
+                    Arg.Is(false)
+                );
+            }
+
+            [Fact]
+            public async Task ClosesTheViewModel()
+            {
+                await ViewModel.DoneCommand.ExecuteAsync();
 
                 await NavigationService.Received().Close(ViewModel);
             }

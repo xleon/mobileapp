@@ -32,9 +32,15 @@ namespace Toggl.Daneel.ViewControllers
 
             var timeSpanConverter = new TimeSpanToDurationValueConverter();
             var bindingSet = this.CreateBindingSet<StartTimeEntryViewController, StartTimeEntryViewModel>();
-
+    
+            //Text
             bindingSet.Bind(TimeLabel).To(vm => vm.ElapsedTime).WithConversion(timeSpanConverter);
+            bindingSet.Bind(DescriptionTextField).To(vm => vm.RawTimeEntryText);
+
+            //Buttons
+            bindingSet.Bind(DoneButton).To(vm => vm.DoneCommand);
             bindingSet.Bind(CloseButton).To(vm => vm.BackCommand);
+            bindingSet.Bind(BillableButton).To(vm => vm.ToggleBillableCommand);
 
             bindingSet.Apply();
         }

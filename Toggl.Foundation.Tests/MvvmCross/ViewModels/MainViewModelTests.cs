@@ -1,11 +1,15 @@
-﻿﻿using System;
+﻿﻿﻿using System;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
+using Toggl.Multivac.Models;
 using Xunit;
+using TimeEntry = Toggl.Ultrawave.Models.TimeEntry;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -14,20 +18,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public class MainViewModelTest : BaseViewModelTests<MainViewModel>
         {
             protected override MainViewModel CreateViewModel()
-                => new MainViewModel(TimeService, NavigationService);
+                => new MainViewModel(DataSource, TimeService, NavigationService);
         }
 
         public class TheConstructor : MainViewModelTest
         {
             [Theory]
-            [ClassData(typeof(TwoParameterConstructorTestData))]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useTimeService, bool useNavigationService)
+            [ClassData(typeof(ThreeParameterConstructorTestData))]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useTimeService, bool useNavigationService)
             {
+                var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
                 var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new MainViewModel(timeService, navigationService);
+                    () => new MainViewModel(dataSource, timeService, navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -85,6 +90,44 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.OpenSettingsCommand.ExecuteAsync();
 
                 await NavigationService.Received().Navigate<SettingsViewModel>();
+            }
+        }
+           
+        public class TheStopTimeEntryCommand : MainViewModelTest
+        {
+            [Fact]
+            public async Task CallsTheStopMethodOnTheDataSource()
+            {
+                var date = DateTimeOffset.UtcNow;
+                TimeService.CurrentDateTime.Returns(date);
+
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+
+                await DataSource.TimeEntries.Received().Stop(date);
+            }
+
+            [Fact]
+            public async Task SetsTheElapsedTimeToZero()
+            {
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+
+                ViewModel.CurrentTimeEntryElapsedTime.Should().Be(TimeSpan.Zero);
+            }
+        }
+
+        public class TheCurrentlyRunningTimeEntryProperty : MainViewModelTest
+        {
+            [Fact]
+            public async Task UpdatesWhenTheTimeEntriesSourcesCurrentlyRunningTimeEntryEmitsANewTimeEntry()
+            {
+                var timeEntry = new TimeEntry();
+                var subject = new BehaviorSubject<ITimeEntry>(null);
+                DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(subject.AsObservable());
+
+                await ViewModel.Initialize();
+                subject.OnNext(timeEntry);
+
+                ViewModel.CurrentlyRunningTimeEntry.Should().Be(timeEntry);
             }
         }
     }

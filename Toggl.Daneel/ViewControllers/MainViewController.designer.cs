@@ -16,7 +16,27 @@ namespace Toggl.Daneel.ViewControllers
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView CurrentTimeEntryCard { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel CurrentTimeEntryDescriptionLabel { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel CurrentTimeEntryElapsedTimeLabel { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton EditTimeEntryButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton StartTimeEntryButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton StopTimeEntryButton { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -32,9 +52,34 @@ namespace Toggl.Daneel.ViewControllers
 
         void ReleaseDesignerOutlets ()
         {
+            if (CurrentTimeEntryCard != null) {
+                CurrentTimeEntryCard.Dispose ();
+                CurrentTimeEntryCard = null;
+            }
+
+            if (CurrentTimeEntryDescriptionLabel != null) {
+                CurrentTimeEntryDescriptionLabel.Dispose ();
+                CurrentTimeEntryDescriptionLabel = null;
+            }
+
+            if (CurrentTimeEntryElapsedTimeLabel != null) {
+                CurrentTimeEntryElapsedTimeLabel.Dispose ();
+                CurrentTimeEntryElapsedTimeLabel = null;
+            }
+
+            if (EditTimeEntryButton != null) {
+                EditTimeEntryButton.Dispose ();
+                EditTimeEntryButton = null;
+            }
+
             if (StartTimeEntryButton != null) {
                 StartTimeEntryButton.Dispose ();
                 StartTimeEntryButton = null;
+            }
+
+            if (StopTimeEntryButton != null) {
+                StopTimeEntryButton.Dispose ();
+                StopTimeEntryButton = null;
             }
 
             if (SuggestionsContainer != null) {
