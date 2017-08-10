@@ -172,5 +172,17 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("Settings", resourceCulture);
             }
         }
+        
+        public static string UnitMin {
+            get {
+                return ResourceManager.GetString("UnitMin", resourceCulture);
+            }
+        }
+        
+        public static string UnitSecond {
+            get {
+                return ResourceManager.GetString("UnitSecond", resourceCulture);
+            }
+        }
     }
 }

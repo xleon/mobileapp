@@ -200,6 +200,7 @@
     <Compile Include="MvvmCross\Converters\DateToTitleStringValueConverterTests.cs" />
     <Compile Include="MvvmCross\ViewModels\MainViewModelTests.cs" />
     <Compile Include="DataSources\TimeEntriesDataSourceTests.cs" />
+    <Compile Include="MvvmCross\Converters\TimeSpanToDurationWithUnitValueConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />

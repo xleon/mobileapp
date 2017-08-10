@@ -50,6 +50,7 @@
     <Compile Include="Parameters\DateParameter.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\EditTimeEntryViewModel.cs" />
+    <Compile Include="Converters\TimeSpanToDurationWithUnitValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">

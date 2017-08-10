@@ -82,4 +82,10 @@ Please try again.</value>
     <data name="Settings">
         <value>Settings</value>
     </data>
+    <data name="UnitMin">
+        <value>min</value>
+    </data>
+    <data name="UnitSecond">
+        <value>sec</value>
+    </data>
 </root>
