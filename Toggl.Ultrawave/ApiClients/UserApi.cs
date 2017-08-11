@@ -1,4 +1,5 @@
 ﻿using System;
+using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
@@ -16,7 +17,7 @@ namespace Toggl.Ultrawave.ApiClients
             this.endPoints = endPoints;
         }
 
-        public IObservable<User> Get()
+        public IObservable<IUser> Get()
             => CreateObservable<User>(endPoints.Get, AuthHeader);
     }
 }

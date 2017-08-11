@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
@@ -16,7 +17,7 @@ namespace Toggl.Ultrawave.ApiClients
             this.endPoints = endPoints;
         }
 
-        public IObservable<List<Tag>> GetAll()
-            => CreateObservable<List<Tag>>(endPoints.Get, AuthHeader);
+        public IObservable<List<ITag>> GetAll()
+            => CreateListObservable<Tag, ITag>(endPoints.Get, AuthHeader);
     }
 }

@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Tests.Integration.BaseTests;
 using Toggl.Ultrawave.Tests.Integration.Helper;
 using Xunit;
-using Workspace = Toggl.Ultrawave.Models.Workspace;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
     public class WorkspacesApiTests
     {
-        public class TheGetMethod : AuthenticatedEndpointBaseTests<List<Workspace>>
+        public class TheGetMethod : AuthenticatedEndpointBaseTests<List<IWorkspace>>
         {
-            protected override IObservable<List<Workspace>> CallEndpointWith(ITogglApi togglApi)
+            protected override IObservable<List<IWorkspace>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Workspaces.GetAll();
 
             [Fact, LogTestInfo]
@@ -32,9 +32,9 @@ namespace Toggl.Ultrawave.Tests.Integration
             }
         }
 
-        public class TheGetByIdMethod : AuthenticatedGetEndpointBaseTests<Workspace>
+        public class TheGetByIdMethod : AuthenticatedGetEndpointBaseTests<IWorkspace>
         {
-            protected override IObservable<Workspace> CallEndpointWith(ITogglApi togglApi)
+            protected override IObservable<IWorkspace> CallEndpointWith(ITogglApi togglApi)
                 => Observable.Defer(async () =>
                 {
                     var user = await togglApi.User.Get();
@@ -44,7 +44,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             private Func<Task> CallingEndpointWith(ITogglApi togglApi, long id)
                 => async () => await CallEndpointWith(togglApi, id);
 
-            private IObservable<Workspace> CallEndpointWith(ITogglApi togglApi, long id)
+            private IObservable<IWorkspace> CallEndpointWith(ITogglApi togglApi, long id)
                 => togglApi.Workspaces.GetById(id);
 
             [Fact, LogTestInfo]

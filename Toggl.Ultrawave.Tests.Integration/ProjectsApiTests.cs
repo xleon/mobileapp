@@ -1,9 +1,10 @@
-﻿using System;
+﻿﻿﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.Tests.Integration.BaseTests;
 using Xunit;
@@ -12,9 +13,9 @@ namespace Toggl.Ultrawave.Tests.Integration
 {
     public class ProjectsApiTests
     {
-        public class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<Project>>
+        public class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<IProject>>
         {
-            protected override IObservable<List<Project>> CallEndpointWith(ITogglApi togglApi)
+            protected override IObservable<List<IProject>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Projects.GetAll();
 
             [Fact, LogTestInfo]
@@ -73,9 +74,9 @@ namespace Toggl.Ultrawave.Tests.Integration
                 activeProjects.Should().BeNull();
             }
 
-            public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<Project>
+            public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<IProject>
             {
-                protected override IObservable<Project> CallEndpointWith(ITogglApi togglApi)
+                protected override IObservable<IProject> CallEndpointWith(ITogglApi togglApi)
                     => Observable.Defer(async () =>
                     {
                         var user = await togglApi.User.Get();
@@ -83,7 +84,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                         return CallEndpointWith(togglApi, project);
                     });
 
-                private IObservable<Project> CallEndpointWith(ITogglApi togglApi, Project project)
+                private IObservable<IProject> CallEndpointWith(ITogglApi togglApi, IProject project)
                     => togglApi.Projects.Create(project);
 
                 [Fact, LogTestInfo]
@@ -103,7 +104,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
             private static async Task<Project> createNewProject(ITogglApi togglClient, long workspaceID, bool isActive = true, bool createClient = false)
             {
-                Client client = null;
+                IClient client = null;
 
                 if (createClient)
                 {
@@ -127,7 +128,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 };
             }
 
-            private static bool isTheSameAs(Project a, Project b)
+            private static bool isTheSameAs(IProject a, IProject b)
                 => a.Id == b.Id
                 && a.Name == b.Name
                 && a.ClientId == b.ClientId

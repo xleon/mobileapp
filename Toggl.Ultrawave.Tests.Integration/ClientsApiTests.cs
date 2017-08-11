@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Tests.Integration.BaseTests;
 using Xunit;
 using Client = Toggl.Ultrawave.Models.Client;
@@ -11,9 +12,9 @@ namespace Toggl.Ultrawave.Tests.Integration
 {
     public class ClientsApiTests
     {
-        public class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<Client>>
+        public class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<IClient>>
         {
-            protected override IObservable<List<Client>> CallEndpointWith(ITogglApi togglApi)
+            protected override IObservable<List<IClient>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Clients.GetAll();
 
             [Fact, LogTestInfo]
@@ -38,9 +39,9 @@ namespace Toggl.Ultrawave.Tests.Integration
             }
         }
 
-        public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<Client>
+        public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<IClient>
         {
-            protected override IObservable<Client> CallEndpointWith(ITogglApi togglApi)
+            protected override IObservable<IClient> CallEndpointWith(ITogglApi togglApi)
                 => Observable.Defer(async () =>
                 {
                     var user = await togglApi.User.Get();
@@ -48,7 +49,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                     return CallEndpointWith(togglApi, client);
                 });
 
-            private IObservable<Client> CallEndpointWith(ITogglApi togglApi, Client client)
+            private IObservable<IClient> CallEndpointWith(ITogglApi togglApi, IClient client)
                 => togglApi.Clients.Create(client);
 
             [Fact, LogTestInfo]

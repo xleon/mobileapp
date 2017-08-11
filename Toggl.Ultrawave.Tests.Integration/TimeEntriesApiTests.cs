@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Tests.Integration.BaseTests;
 using Xunit;
 using TimeEntry = Toggl.Ultrawave.Models.TimeEntry;
@@ -11,7 +12,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 {
     public class TimeEntriesApiTests
     {
-        public class TheGetAllMethod : AuthenticatedGetEndpointBaseTests<List<TimeEntry>>
+        public class TheGetAllMethod : AuthenticatedGetEndpointBaseTests<List<ITimeEntry>>
         {
             [Fact, LogTestInfo]
             public async Task ReturnsAllTimeEntries()
@@ -37,10 +38,10 @@ namespace Toggl.Ultrawave.Tests.Integration
                     && entry.UserId == user.Id);
             }
 
-            protected override IObservable<List<TimeEntry>> CallEndpointWith(ITogglApi togglApi)
+            protected override IObservable<List<ITimeEntry>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.TimeEntries.GetAll();
 
-            private TimeEntry createTimeEntry(Models.User user) => new TimeEntry
+            private TimeEntry createTimeEntry(IUser user) => new TimeEntry
             {
                 WorkspaceId = user.DefaultWorkspaceId,
                 Billable = false,
@@ -55,7 +56,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             };
         }
 
-        public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<TimeEntry>
+        public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<ITimeEntry>
         {
             [Fact, LogTestInfo]
             public async Task CreatesNewClient()
@@ -73,7 +74,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 persistedTimeEntry.TaskId.Should().BeNull();
             }
             
-            protected override IObservable<TimeEntry> CallEndpointWith(ITogglApi togglApi)
+            protected override IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi)
                 => Observable.Defer(async () =>
                 {
                     var user = await togglApi.User.Get();
@@ -81,10 +82,10 @@ namespace Toggl.Ultrawave.Tests.Integration
                     return CallEndpointWith(togglApi, timeEntry);
                 });
 
-            private IObservable<TimeEntry> CallEndpointWith(ITogglApi togglApi, TimeEntry client)
+            private IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi, TimeEntry client)
                 => togglApi.TimeEntries.Create(client);
 
-            private TimeEntry createTimeEntry(Models.User user) => new TimeEntry
+            private TimeEntry createTimeEntry(IUser user) => new TimeEntry
             {
                 WorkspaceId = user.DefaultWorkspaceId,
                 Billable = false,

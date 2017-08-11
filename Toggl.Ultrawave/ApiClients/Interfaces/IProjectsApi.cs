@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Ultrawave.Models;
+using Toggl.Multivac.Models;
 
 namespace Toggl.Ultrawave.ApiClients
 {
     public interface IProjectsApi
     {
-        IObservable<List<Project>> GetAll();
-        IObservable<Project> Create(Project project);
+        IObservable<List<IProject>> GetAll();
+        IObservable<IProject> Create(IProject project);
     }
 }

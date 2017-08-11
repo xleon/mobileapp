@@ -15,6 +15,7 @@ using Xunit;
 using User = Toggl.Ultrawave.Models.User;
 using FoundationUser = Toggl.Foundation.Models.User;
 using Toggl.Foundation.Tests.Generators;
+using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.Tests.Login
 {
@@ -25,7 +26,7 @@ namespace Toggl.Foundation.Tests.Login
             protected const string Password = "theirobotmoviesucked123";
             protected static readonly Email Email = "susancalvin@psychohistorian.museum".ToEmail();
             
-            protected readonly User User = new User { Id = 10, ApiToken = "ABCDEFG" };
+            protected readonly IUser User = new User { Id = 10, ApiToken = "ABCDEFG" };
             protected readonly ITogglApi Api = Substitute.For<ITogglApi>();
             protected readonly IApiFactory ApiFactory = Substitute.For<IApiFactory>();
             protected readonly ITogglDatabase Database = Substitute.For<ITogglDatabase>();
