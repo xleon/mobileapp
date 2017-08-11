@@ -41,7 +41,7 @@ namespace Toggl.Ultrawave.Models
         public int? EstimatedHours { get; set; }
 
         [IgnoreWhenPosting]
-        public int? Rate { get; set; }
+        public double? Rate { get; set; }
 
         [IgnoreWhenPosting]
         public string Currency { get; set; }

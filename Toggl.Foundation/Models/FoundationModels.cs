@@ -50,7 +50,7 @@ namespace Toggl.Foundation.Models
 
         public int? EstimatedHours { get; }
 
-        public int? Rate { get; }
+        public double? Rate { get; }
 
         public string Currency { get; }
 

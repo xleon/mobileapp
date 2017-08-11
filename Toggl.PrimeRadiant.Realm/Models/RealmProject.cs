@@ -26,7 +26,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public int? EstimatedHours { get; set; }
 
-        public int? Rate { get; set; }
+        public double? Rate { get; set; }
 
         public string Currency { get; set; }
 

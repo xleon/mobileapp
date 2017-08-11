@@ -28,7 +28,7 @@ namespace Toggl.Multivac.Models
 
         int? EstimatedHours { get; }
 
-        int? Rate { get; }
+        double? Rate { get; }
 
         string Currency { get; }
 
