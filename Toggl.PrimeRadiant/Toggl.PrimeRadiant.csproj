@@ -47,6 +47,8 @@
     <Compile Include="Models\IDatabaseUser.cs" />
     <Compile Include="Models\IDatabaseWorkspace.cs" />
     <Compile Include="IIdProvider.cs" />
+    <Compile Include="ISinceParameterRepository.cs" />
+    <Compile Include="Models\ISinceParameters.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">

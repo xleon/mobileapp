@@ -49,6 +49,8 @@
     <Compile Include="BaseStorage.cs" />
     <Compile Include="SingleObjectStorage.cs" />
     <Compile Include="IdProvider.cs" />
+    <Compile Include="Models\RealmSinceParameters.cs" />
+    <Compile Include="SinceParameterStorage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">

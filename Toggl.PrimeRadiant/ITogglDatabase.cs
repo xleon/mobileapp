@@ -14,6 +14,7 @@ namespace Toggl.PrimeRadiant
         IRepository<IDatabaseTimeEntry> TimeEntries { get; }
         IRepository<IDatabaseWorkspace> Workspaces { get; }
         IIdProvider IdProvider { get; }
+        ISinceParameterRepository SinceParameters { get; }
         IObservable<Unit> Clear();
     }
 }
