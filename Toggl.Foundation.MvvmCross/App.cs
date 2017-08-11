@@ -10,21 +10,19 @@ namespace Toggl.Foundation.MvvmCross
 {
     public class App : MvxApplication
     {
-        private readonly AppStart appStart;
+        public override void Initialize()
+        {
+            
+        }
 
-        public App(ILoginManager loginManager, IMvxNavigationService navigationService)
+        public void Initialize(ILoginManager loginManager, IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(loginManager, nameof(loginManager));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
-            appStart = new AppStart(loginManager, navigationService);
-        }
-
-        public override void Initialize()
-        {
             Mvx.RegisterSingleton<IPasswordManagerService>(new StubPasswordManagerService());
 
-            RegisterAppStart(appStart);
+            RegisterAppStart(new AppStart(loginManager, navigationService));
         }
     }
 

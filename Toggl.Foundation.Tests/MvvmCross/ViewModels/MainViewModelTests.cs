@@ -39,12 +39,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheAppearedMethod : MainViewModelTest
+        public class TheViewAppearedMethod : MainViewModelTest
         {
             [Fact]
             public void RequestsTheSuggestionsViewModel()
             {
-                ViewModel.Appeared();
+                ViewModel.ViewAppeared();
 
                 NavigationService.Received().Navigate<SuggestionsViewModel>();
             }
@@ -52,7 +52,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public void RequestsTheLogTimeEntriesViewModel()
             {
-                ViewModel.Appeared();
+                ViewModel.ViewAppeared();
 
                 NavigationService.Received().Navigate<TimeEntriesLogViewModel>();
             }

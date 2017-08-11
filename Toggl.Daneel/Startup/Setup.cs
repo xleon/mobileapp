@@ -6,6 +6,7 @@ using MvvmCross.iOS.Platform;
 using MvvmCross.iOS.Views.Presenters;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Platform;
+using MvvmCross.Platform.Plugins;
 using Toggl.Daneel.Presentation;
 using Toggl.Daneel.Services;
 using Toggl.Foundation;
@@ -39,15 +40,23 @@ namespace Toggl.Daneel
         {
         }
 
-        protected override IMvxNavigationService InitializeNavigationService()
+        protected override void InitializeLastChance()
         {
-            navigationService = base.InitializeNavigationService();
-            return navigationService;
+            base.InitializeLastChance();
+
+            Mvx.RegisterSingleton<IPasswordManagerService>(new OnePasswordService());
         }
 
-        protected override IMvxApplication CreateApp()
+        protected override IMvxTrace CreateDebugTrace() => new DebugTrace();
+
+        protected override IMvxApplication CreateApp() => new App();
+
+        protected override IMvxNavigationService InitializeNavigationService(IMvxViewModelLocatorCollection collection)
+            => navigationService = base.InitializeNavigationService(collection);
+            
+        protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
         {
-            base.InitializeFirstChance();
+            base.InitializeApp(pluginManager, app);
 
             var database = new Database();
             var timeService = new TimeService(Scheduler.Default);
@@ -64,16 +73,8 @@ namespace Toggl.Daneel
                 )
             );
 
-            return new App(loginManager, navigationService);
-        }
-
-        protected override IMvxTrace CreateDebugTrace() => new DebugTrace();
-
-        protected override void InitializeLastChance()
-        {
-            base.InitializeLastChance();
-
-            Mvx.RegisterSingleton<IPasswordManagerService>(new OnePasswordService());
+            var togglApp = app as App;
+            togglApp.Initialize(loginManager, navigationService);
         }
     }
 }

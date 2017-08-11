@@ -36,8 +36,8 @@ namespace Toggl.Daneel.Presentation
         {
             base.RegisterAttributeTypes();
 
-            _attributeTypesToShowMethodDictionary.Add(typeof(NestedPresentationAttribute), ShowNestedViewController);
-            _attributeTypesToShowMethodDictionary.Add(typeof(ModalCardPresentationAttribute), ShowModalCardViewController);
+            AttributeTypesToShowMethodDictionary.Add(typeof(NestedPresentationAttribute), ShowNestedViewController);
+            AttributeTypesToShowMethodDictionary.Add(typeof(ModalCardPresentationAttribute), ShowModalCardViewController);
         }
 
         protected virtual void ShowNestedViewController(UIViewController viewController, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)

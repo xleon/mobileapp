@@ -65,9 +65,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             disposeBag.Add(currentlyRunningTimeEntryDisposable);
         }
 
-        public override void Appeared()
+        public override void ViewAppeared()
         {
-            base.Appeared();
+            base.ViewAppeared();
             navigationService.Navigate<SuggestionsViewModel>();
             navigationService.Navigate<TimeEntriesLogViewModel>();
         }
