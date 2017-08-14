@@ -1,4 +1,5 @@
-﻿using Toggl.Multivac;
+﻿using System;
+using Toggl.Multivac;
 using UIKit;
 using static UIKit.UIGestureRecognizerState;
 
@@ -6,16 +7,19 @@ namespace Toggl.Daneel.Presentation.Transition
 {
     public class SwipeInteractionController : UIPercentDrivenInteractiveTransition
     {
+        private Action onCompletedCallback;
         private UIViewController viewController;
         private bool shouldCompleteTransition = false;
 
         public bool InteractionInProgress { get; set; } = false;
 
-        public void WireToViewController(UIViewController viewController)
+        public void WireToViewController(UIViewController viewController, Action onCompletedCallback)
         {
             Ensure.Argument.IsNotNull(viewController, nameof(viewController));
+            Ensure.Argument.IsNotNull(onCompletedCallback, nameof(onCompletedCallback));
 
             this.viewController = viewController;
+            this.onCompletedCallback = onCompletedCallback;
             prepareGestureRecognizerInView(viewController.View);
         }
 
@@ -56,6 +60,7 @@ namespace Toggl.Daneel.Presentation.Transition
                     }
 
                     FinishInteractiveTransition();
+                    onCompletedCallback();
                     break;
             }
         }

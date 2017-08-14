@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿﻿using System.Linq;
 using CoreAnimation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.iOS.Views;
@@ -57,7 +57,10 @@ namespace Toggl.Daneel.Presentation
             viewController.ModalPresentationStyle = UIModalPresentationStyle.Custom;
             viewController.TransitioningDelegate = FromBottomTransitionDelegate;
             MasterNavigationController.PresentViewController(viewController, true, null);
-            FromBottomTransitionDelegate.WireToViewController(viewController);
+
+            ModalViewControllers.Add(viewController);
+
+            FromBottomTransitionDelegate.WireToViewController(viewController, () => ModalViewControllers.Remove(viewController));
         }
 
         protected override void ShowChildViewController(UIViewController viewController, MvxChildPresentationAttribute attribute, MvxViewModelRequest request)

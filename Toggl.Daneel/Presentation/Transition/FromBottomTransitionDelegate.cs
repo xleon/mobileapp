@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿using System;
+using Foundation;
 using UIKit;
 
 namespace Toggl.Daneel.Presentation.Transition
@@ -25,6 +26,7 @@ namespace Toggl.Daneel.Presentation.Transition
         public IUIViewControllerInteractiveTransitioning GetInteractionControllerForDismissal(IUIViewControllerAnimatedTransitioning animator)
             => swipeInteractionController.InteractionInProgress ? swipeInteractionController : null;
 
-        public void WireToViewController(UIViewController vc) => swipeInteractionController.WireToViewController(vc);
+        public void WireToViewController(UIViewController vc, Action onCompletedCallback)
+            => swipeInteractionController.WireToViewController(vc, onCompletedCallback);
     }
 }
