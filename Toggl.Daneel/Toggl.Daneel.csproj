@@ -45,7 +45,7 @@
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchUseLlvm>true</MtouchUseLlvm>
-    <MtouchExtraArgs>--linkskip Toggl.Daneel --linkskip Toggl.Foundation.MvvmCross</MtouchExtraArgs>
+    <MtouchExtraArgs>--linkskip Toggl.Daneel --linkskip Toggl.Foundation.MvvmCross --linkskip Toggl.Ultrawave</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>pdbonly</DebugType>
