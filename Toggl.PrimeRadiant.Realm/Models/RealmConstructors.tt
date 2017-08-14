@@ -40,10 +40,16 @@ namespace Toggl.PrimeRadiant.Realm
         WriteLine( "        }\n");
         WriteLine($"        public {realmClassName}({interfaceName} entity, Realms.Realm realm)");
         WriteLine( "        {");
-        WriteLine( "            Id = entity.Id;");
 
         foreach(var line in File.ReadAllLines(modelFile))
         {
+            var extendsIBaseModel = line.Contains(": IBaseModel");
+            if (extendsIBaseModel)
+            {
+                WriteLine("            Id = entity.Id;");
+                continue;
+            }
+
             var isProperty = line.Contains("get;");
             if (!isProperty) continue;
 

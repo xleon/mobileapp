@@ -29,10 +29,16 @@ namespace Toggl.Foundation.Models
 
         WriteLine($"    internal partial class {className} : IDatabase{className}");
         WriteLine( "    {");
-        WriteLine( "        public long Id { get; }\n");
 
         foreach(var line in File.ReadAllLines(modelFile))
         {
+            var extendsIBaseModel = line.Contains(": IBaseModel");
+            if (extendsIBaseModel)
+            {
+                WriteLine("        public long Id { get; }\n");
+                continue;
+            }
+        
             var isProperty = line.Contains("get;");
             if (!isProperty) continue;
 

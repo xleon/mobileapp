@@ -27,10 +27,16 @@ namespace Toggl.Ultrawave.Models
         WriteLine($"        public {className}() {{ }}\n");
         WriteLine($"        public {className}({interfaceName} entity)");
         WriteLine( "        {");
-        WriteLine( "            Id = entity.Id;");
 
         foreach(var line in File.ReadAllLines(modelFile))
         {
+            var extendsIBaseModel = line.Contains(": IBaseModel");
+            if (extendsIBaseModel)
+            {
+                WriteLine("            Id = entity.Id;");
+                continue;
+            }
+        
             var isProperty = line.Contains("get;");
             if (!isProperty) continue;
 
