@@ -1,4 +1,4 @@
-﻿﻿﻿using System;
+﻿﻿﻿﻿using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
@@ -7,9 +7,9 @@ using NSubstitute;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
-using Toggl.Multivac.Models;
+using Toggl.PrimeRadiant.Models;
 using Xunit;
-using TimeEntry = Toggl.Ultrawave.Models.TimeEntry;
+using TimeEntry = Toggl.Foundation.Models.TimeEntry;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -120,8 +120,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task UpdatesWhenTheTimeEntriesSourcesCurrentlyRunningTimeEntryEmitsANewTimeEntry()
             {
-                var timeEntry = new TimeEntry();
-                var subject = new BehaviorSubject<ITimeEntry>(null);
+                var timeEntry = TimeEntry.Builder.Create(13).SetStart(DateTimeOffset.Now).SetDescription("").Build();
+                var subject = new BehaviorSubject<IDatabaseTimeEntry>(null);
                 DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(subject.AsObservable());
 
                 await ViewModel.Initialize();

@@ -7,7 +7,7 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac.Extensions;
 using MonthPredicate = System.Func<int, bool>;
-using TimeEntry = Toggl.Ultrawave.Models.TimeEntry;
+using TimeEntry = Toggl.Foundation.Models.TimeEntry;
 
 namespace Toggl.Foundation.Tests.Generators
 {
@@ -19,24 +19,24 @@ namespace Toggl.Foundation.Tests.Generators
             var yearGenerator = Gen.Choose(2007, DateTime.UtcNow.Year);
 
             return Arb.Default
-                    .Array<DateTimeOffset>()
-                    .Generator
-                    .Select(dateTimes =>
-                    {
-                        var source = Substitute.For<ITogglDataSource>();
-                        var viewModel = new TimeEntriesLogViewModel(source);
+                .Array<DateTimeOffset>()
+                .Generator
+                .Select(dateTimes =>
+                {
+                    var source = Substitute.For<ITogglDataSource>();
+                    var viewModel = new TimeEntriesLogViewModel(source);
 
-                        var year = yearGenerator.Sample(0, 1).First();
+                    var year = yearGenerator.Sample(0, 1).First();
 
-                        var observable = dateTimes
-                            .Select(newDateWithGenerator(monthsGenerator, year))
-                            .Select(d => new TimeEntry { Start = d })
-                            .Apply(Observable.Return);
-                       
-                        source.TimeEntries.GetAll().Returns(observable);
+                    var observable = dateTimes
+                        .Select(newDateWithGenerator(monthsGenerator, year))
+                        .Select(d => TimeEntry.Builder.Create(-1).SetStart(d).SetDescription("").Build())
+                        .Apply(Observable.Return);
 
-                        return viewModel;
-                    });
+                    source.TimeEntries.GetAll().Returns(observable);
+
+                    return viewModel;
+                });
         }
 
         private static Func<DateTimeOffset, DateTimeOffset> newDateWithGenerator(Gen<int> monthGenerator, int year)
@@ -44,7 +44,7 @@ namespace Toggl.Foundation.Tests.Generators
             var month = monthGenerator.Sample(0, 1).First();
             var day = Gen.Choose(1, DateTime.DaysInMonth(year, month)).Sample(0, 1).First();
 
-            return dateTime => 
+            return dateTime =>
                 new DateTime(year, month, day, dateTime.Hour, dateTime.Minute, dateTime.Second);
         }
     }

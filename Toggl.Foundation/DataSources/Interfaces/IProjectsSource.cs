@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Toggl.Multivac.Models;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.DataSources
 {
     public interface IProjectsSource
     {
-        IObservable<IEnumerable<IProject>> GetAll();
-        IObservable<IProject> GetById(int id);
+        IObservable<IEnumerable<IDatabaseProject>> GetAll();
+        IObservable<IDatabaseProject> GetById(int id);
     }
 }

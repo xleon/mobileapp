@@ -6,16 +6,14 @@ using System.Reactive.Linq;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Models;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Models;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Exceptions;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 using ThreadingTask = System.Threading.Tasks.Task;
-using FoundationTimeEntry = Toggl.Foundation.Models.TimeEntry;
-using UltrawaveTimeEntry = Toggl.Ultrawave.Models.TimeEntry;
 
 namespace Toggl.Foundation.Tests.DataSources
 {
@@ -31,7 +29,13 @@ namespace Toggl.Foundation.Tests.DataSources
 
             protected IIdProvider IdProvider { get; } = Substitute.For<IIdProvider>();
 
-            protected IDatabaseTimeEntry TimeEntry { get; } = FoundationTimeEntry.Clean(new UltrawaveTimeEntry { Id = 13 });
+            protected IDatabaseTimeEntry DatabaseTimeEntry { get; } = 
+                TimeEntry.Builder
+                      .Create(13)
+                      .SetStart(DateTimeOffset.Now.AddHours(-2))
+                      .SetIsDirty(false)
+                      .SetDescription("")
+                      .Build();
 
             protected IRepository<IDatabaseTimeEntry> Repository { get; } = Substitute.For<IRepository<IDatabaseTimeEntry>>();
 
@@ -40,7 +44,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 TimeEntriesSource = new TimeEntriesDataSource(IdProvider, Repository);
 
                 IdProvider.GetNextIdentifier().Returns(-1);
-                Repository.GetById(Arg.Is(TimeEntry.Id)).Returns(Observable.Return(TimeEntry));
+                Repository.GetById(Arg.Is(DatabaseTimeEntry.Id)).Returns(Observable.Return(DatabaseTimeEntry));
                 Repository.Create(Arg.Any<IDatabaseTimeEntry>())
                           .Returns(info => Observable.Return(info.Arg<IDatabaseTimeEntry>()));
             }
@@ -117,10 +121,10 @@ namespace Toggl.Foundation.Tests.DataSources
             {
                 var timeEntries = new List<IDatabaseTimeEntry>
                 {
-                    TimeEntry,
-                    TimeEntry.With(DateTimeOffset.UtcNow),
-                    TimeEntry.With(DateTimeOffset.UtcNow),
-                    TimeEntry.With(DateTimeOffset.UtcNow)
+                    DatabaseTimeEntry,
+                    DatabaseTimeEntry.With(DateTimeOffset.UtcNow),
+                    DatabaseTimeEntry.With(DateTimeOffset.UtcNow),
+                    DatabaseTimeEntry.With(DateTimeOffset.UtcNow)
                 };
 
                 Repository
@@ -162,9 +166,9 @@ namespace Toggl.Foundation.Tests.DataSources
             {
                 var timeEntries = new List<IDatabaseTimeEntry>
                 {
-                    TimeEntry.With(DateTimeOffset.UtcNow),
-                    TimeEntry.With(DateTimeOffset.UtcNow),
-                    TimeEntry.With(DateTimeOffset.UtcNow)
+                    DatabaseTimeEntry.With(DateTimeOffset.UtcNow),
+                    DatabaseTimeEntry.With(DateTimeOffset.UtcNow),
+                    DatabaseTimeEntry.With(DateTimeOffset.UtcNow)
                 };
 
                 Repository
@@ -187,7 +191,7 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public async ThreadingTask SetsTheDeletedFlag()
             {
-                await TimeEntriesSource.Delete(TimeEntry.Id).LastOrDefaultAsync();
+                await TimeEntriesSource.Delete(DatabaseTimeEntry.Id).LastOrDefaultAsync();
 
                 await Repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.IsDeleted == true));
             }
@@ -195,7 +199,7 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public async ThreadingTask SetsTheDirtyFlag()
             {
-                await TimeEntriesSource.Delete(TimeEntry.Id).LastOrDefaultAsync();
+                await TimeEntriesSource.Delete(DatabaseTimeEntry.Id).LastOrDefaultAsync();
                
                 await Repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.IsDirty == true));
             }
@@ -203,10 +207,10 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public async ThreadingTask UpdatesTheCorrectTimeEntry()
             {
-                await TimeEntriesSource.Delete(TimeEntry.Id).LastOrDefaultAsync();
+                await TimeEntriesSource.Delete(DatabaseTimeEntry.Id).LastOrDefaultAsync();
 
-                await Repository.Received().GetById(Arg.Is(TimeEntry.Id));
-                await Repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.Id == TimeEntry.Id));
+                await Repository.Received().GetById(Arg.Is(DatabaseTimeEntry.Id));
+                await Repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.Id == DatabaseTimeEntry.Id));
             }
 
             [Fact]
@@ -214,7 +218,7 @@ namespace Toggl.Foundation.Tests.DataSources
             {
                 var observer = Substitute.For<IObserver<Unit>>();
 
-                TimeEntriesSource.Delete(TimeEntry.Id).Subscribe(observer);
+                TimeEntriesSource.Delete(DatabaseTimeEntry.Id).Subscribe(observer);
 
                 observer.DidNotReceive().OnNext(Arg.Any<Unit>());
                 observer.Received().OnCompleted();
@@ -223,7 +227,12 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public void PropagatesErrorIfUpdateFails()
             {
-                var timeEntry = FoundationTimeEntry.Clean(new UltrawaveTimeEntry { Id = 12 });
+                var timeEntry = TimeEntry.Builder.Create(12)
+                      .SetStart(DateTimeOffset.Now)
+                      .SetIsDirty(false)
+                      .SetDescription("")
+                      .Build();
+                
                 var timeEntryObservable = Observable.Return(timeEntry);
                 var errorObservable = Observable.Throw<IDatabaseTimeEntry>(new EntityNotFoundException());
                 Repository.GetById(Arg.Is(timeEntry.Id)).Returns(timeEntryObservable);

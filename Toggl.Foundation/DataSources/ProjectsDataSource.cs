@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Toggl.Multivac;
-using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
@@ -18,10 +17,10 @@ namespace Toggl.Foundation.DataSources
             this.repository = repository;
         }
 
-        public IObservable<IEnumerable<IProject>> GetAll()
+        public IObservable<IEnumerable<IDatabaseProject>> GetAll()
             => repository.GetAll();
 
-        public IObservable<IProject> GetById(int id)
+        public IObservable<IDatabaseProject> GetById(int id)
             => repository.GetById(id);
     }
 }

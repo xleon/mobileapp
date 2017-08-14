@@ -7,7 +7,6 @@ using System.Reactive.Subjects;
 using Toggl.Foundation.Models;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
@@ -17,9 +16,9 @@ namespace Toggl.Foundation.DataSources
     {
         private readonly IIdProvider idProvider;
         private readonly IRepository<IDatabaseTimeEntry> repository;
-        private readonly BehaviorSubject<ITimeEntry> currentTimeEntrySubject = new BehaviorSubject<ITimeEntry>(null);
+        private readonly BehaviorSubject<IDatabaseTimeEntry> currentTimeEntrySubject = new BehaviorSubject<IDatabaseTimeEntry>(null);
 
-        public IObservable<ITimeEntry> CurrentlyRunningTimeEntry { get; }
+        public IObservable<IDatabaseTimeEntry> CurrentlyRunningTimeEntry { get; }
 
         public TimeEntriesDataSource(IIdProvider idProvider, IRepository<IDatabaseTimeEntry> repository)
         {
@@ -35,7 +34,7 @@ namespace Toggl.Foundation.DataSources
                 .Subscribe(onRunningTimeEntry);
         }
 
-        public IObservable<IEnumerable<ITimeEntry>> GetAll()
+        public IObservable<IEnumerable<IDatabaseTimeEntry>> GetAll()
             => repository.GetAll(te => !te.IsDeleted);
 
         public IObservable<Unit> Delete(long id)
@@ -45,18 +44,18 @@ namespace Toggl.Foundation.DataSources
                          .IgnoreElements()
                          .Cast<Unit>();
 
-        public IObservable<ITimeEntry> Start(DateTimeOffset startTime, string description, bool billable)
+        public IObservable<IDatabaseTimeEntry> Start(DateTimeOffset startTime, string description, bool billable)
             => idProvider.GetNextIdentifier()
-                .Apply(TimeEntry.Builder.Create)
-                .SetStart(startTime)
-                .SetDescription(description)
-                .SetBillable(billable)
-                .SetIsDirty(true)
-                .Build()
-                .Apply(repository.Create)
-                .Do(safeSetCurrentlyRunningTimeEntry);
-                
-        public IObservable<ITimeEntry> Stop(DateTimeOffset stopTime)
+                  .Apply(TimeEntry.Builder.Create)
+                  .SetStart(startTime)
+                  .SetDescription(description)
+                  .SetBillable(billable)
+                  .SetIsDirty(true)
+                  .Build()
+                  .Apply(repository.Create)
+                  .Do(safeSetCurrentlyRunningTimeEntry);
+
+        public IObservable<IDatabaseTimeEntry> Stop(DateTimeOffset stopTime)
             => repository
                     .GetAll(te => te.Stop == null)
                     .SelectMany(timeEntries =>
@@ -65,10 +64,10 @@ namespace Toggl.Foundation.DataSources
                             .Apply(repository.Update)
                             .Do(_ => safeSetCurrentlyRunningTimeEntry(null)));
         
-        private void onRunningTimeEntry(IEnumerable<ITimeEntry> timeEntries)
+        private void onRunningTimeEntry(IEnumerable<IDatabaseTimeEntry> timeEntries)
             => safeSetCurrentlyRunningTimeEntry(timeEntries.SingleOrDefault());
             
-        private void safeSetCurrentlyRunningTimeEntry(ITimeEntry timeEntry)
+        private void safeSetCurrentlyRunningTimeEntry(IDatabaseTimeEntry timeEntry)
         {
             var next = timeEntry == null ? null : TimeEntry.Clean(timeEntry);
             currentTimeEntrySubject.OnNext(next);
