@@ -11,7 +11,7 @@ namespace Toggl.Foundation.DataSources
 
         IObservable<IEnumerable<IDatabaseTimeEntry>> GetAll();
 
-        IObservable<IDatabaseTimeEntry> GetById(int id);
+        IObservable<IDatabaseTimeEntry> GetById(long id);
 
         IObservable<IDatabaseTimeEntry> Start(DateTimeOffset startTime, string description, bool billable);
          IObservable<IDatabaseTimeEntry> Stop(DateTimeOffset stopTime);

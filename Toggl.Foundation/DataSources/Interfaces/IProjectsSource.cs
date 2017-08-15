@@ -7,6 +7,6 @@ namespace Toggl.Foundation.DataSources
     public interface IProjectsSource
     {
         IObservable<IEnumerable<IDatabaseProject>> GetAll();
-        IObservable<IDatabaseProject> GetById(int id);
+        IObservable<IDatabaseProject> GetById(long id);
     }
 }

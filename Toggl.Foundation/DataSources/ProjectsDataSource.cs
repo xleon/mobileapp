@@ -20,7 +20,7 @@ namespace Toggl.Foundation.DataSources
         public IObservable<IEnumerable<IDatabaseProject>> GetAll()
             => repository.GetAll();
 
-        public IObservable<IDatabaseProject> GetById(int id)
+        public IObservable<IDatabaseProject> GetById(long id)
             => repository.GetById(id);
     }
 }

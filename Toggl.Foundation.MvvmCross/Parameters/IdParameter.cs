@@ -2,9 +2,9 @@
 {
     public sealed class IdParameter
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
-        public static IdParameter WithId(int id) => new IdParameter
+        public static IdParameter WithId(long id) => new IdParameter
         {
             Id = id
         };
