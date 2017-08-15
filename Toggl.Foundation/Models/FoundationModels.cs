@@ -123,8 +123,6 @@ namespace Toggl.Foundation.Models
 
         public DateTimeOffset? Stop { get; }
 
-        public int Duration { get; }
-
         public string Description { get; }
 
         public IList<string> Tags { get; }

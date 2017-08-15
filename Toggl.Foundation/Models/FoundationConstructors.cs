@@ -103,7 +103,6 @@ namespace Toggl.Foundation.Models
             Billable = entity.Billable;
             Start = entity.Start;
             Stop = entity.Stop;
-            Duration = entity.Duration;
             Description = entity.Description;
             Tags = entity.Tags;
             TagIds = entity.TagIds;

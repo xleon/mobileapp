@@ -20,8 +20,6 @@ namespace Toggl.Ultrawave.Models
 
         public DateTimeOffset? Stop { get; set; }
 
-        public int Duration { get; set; }
-
         public string Description { get; set; }
 
         public IList<string> Tags { get; set; }
