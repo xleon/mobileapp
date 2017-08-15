@@ -16,9 +16,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.Converters
             public void ReturnsASpecialCaseStringForTheCurrentDay()
             {
                 var converter = new DateToTitleStringValueConverter();
-                var date = DateTime.UtcNow;
+                var date = DateTimeOffset.UtcNow;
 
-                var result = converter.Convert(date, typeof(DateTime), null, CultureInfo.CurrentCulture);
+                var result = converter.Convert(date, typeof(DateTimeOffset), null, CultureInfo.CurrentCulture);
 
                 result.Should().Be(Resources.Today);
             }
@@ -27,9 +27,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.Converters
             public void ReturnsASpecialCaseStringForThePreviousDay()
             {
                 var converter = new DateToTitleStringValueConverter();
-                var date = DateTime.UtcNow.AddDays(-1);
+                var date = DateTimeOffset.UtcNow.AddDays(-1);
 
-                var result = converter.Convert(date, typeof(DateTime), null, CultureInfo.CurrentCulture);
+                var result = converter.Convert(date, typeof(DateTimeOffset), null, CultureInfo.CurrentCulture);
 
                 result.Should().Be(Resources.Yesterday);
             }
@@ -37,13 +37,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.Converters
             [Property]
             public Property ReturnsAFormattedStringForAnyOtherDate()
             {
-                var arb = Arb.Default.DateTime().Filter(d => d < DateTime.UtcNow.AddDays(-1));
+                var arb = Arb.Default.DateTimeOffset().Filter(d => d < DateTime.UtcNow.AddDays(-1));
 
                 return Prop.ForAll(arb, date =>
                 {
                     var converter = new DateToTitleStringValueConverter();
 
-                    var result = converter.Convert(date, typeof(DateTime), null, CultureInfo.CurrentCulture);
+                    var result = converter.Convert(date, typeof(DateTimeOffset), null, CultureInfo.CurrentCulture);
 
                     result.Should().Be($"{date:ddd, dd MMM}");
                 });

@@ -37,6 +37,9 @@ namespace Toggl.Foundation.DataSources
         public IObservable<IEnumerable<IDatabaseTimeEntry>> GetAll()
             => repository.GetAll(te => !te.IsDeleted);
 
+        public IObservable<IDatabaseTimeEntry> GetById(int id)
+            => repository.GetById(id);
+
         public IObservable<Unit> Delete(long id)
             => repository.GetById(id)
                          .Select(TimeEntry.DirtyDeleted)

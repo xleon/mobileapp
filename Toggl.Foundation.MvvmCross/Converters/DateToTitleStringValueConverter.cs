@@ -4,9 +4,9 @@ using MvvmCross.Platform.Converters;
 
 namespace Toggl.Foundation.MvvmCross.Converters
 {
-    public class DateToTitleStringValueConverter : MvxValueConverter<DateTime, string>
+    public class DateToTitleStringValueConverter : MvxValueConverter<DateTimeOffset, string>
     {
-        protected override string Convert(DateTime value, Type targetType, object parameter, CultureInfo culture)
+        protected override string Convert(DateTimeOffset value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value.Date == DateTime.UtcNow.Date)
                 return Resources.Today;

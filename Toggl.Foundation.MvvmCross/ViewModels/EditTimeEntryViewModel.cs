@@ -7,31 +7,33 @@ using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
-using Toggl.Multivac.Models;
+using Toggl.PrimeRadiant.Models;
 using static Toggl.Multivac.Extensions.ObservableExtensions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
-    public class EditTimeEntryViewModel : MvxViewModel<ITimeEntry>
+    public class EditTimeEntryViewModel : MvxViewModel<IdParameter>
     {
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
         private readonly ITimeService timeService;
 
         private IDisposable deleteDisposable;
+        private IDisposable tickingDisposable;
 
         public long Id { get; set; }
 
         public string Description { get; set; }
 
-        [DependsOn(nameof(Description))]
-        public bool HasDescription => !string.IsNullOrEmpty(Description);
-
         public string Project { get; set; }
 
-        [DependsOn(nameof(Project))]
-        public bool HasProject => !string.IsNullOrEmpty(Project);
+        public string ProjectColor { get; set; }
+
+        public string Client { get; set; }
+
+        public string Task { get; set; }
 
         [DependsOn(nameof(StartTime), nameof(EndTime))]
         public TimeSpan Duration
@@ -39,12 +41,25 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public DateTimeOffset StartTime { get; set; }
 
-        public DateTimeOffset? EndTime { get; set; }
+        private DateTimeOffset? endTime;
+        public DateTimeOffset? EndTime
+        {
+            get => endTime;
+            set
+            {
+                if (endTime == value) return;
+                endTime = value;
+                if (endTime != null)
+                {
+                    tickingDisposable?.Dispose();
+                    tickingDisposable = null;
+                    return;
+                }
+                subscribeToTimeServiceTicks();
+            }
+        }
 
         public List<string> Tags { get; set; }
-
-        [DependsOn(nameof(Tags))]
-        public bool HasTags => Tags.Any();
 
         public bool Billable { get; set; }
 
@@ -69,21 +84,37 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             CloseCommand = new MvxAsyncCommand(close);
         }
 
-        public override async Task Initialize(ITimeEntry parameter)
+        public override async Task Initialize(IdParameter parameter)
         {
             await base.Initialize();
 
-            Id = parameter.Id;
-            Description = parameter.Description;
-            StartTime = parameter.Start;
-            EndTime = parameter.Stop;
-            Billable = parameter.Billable;
-            Tags = parameter.Tags.ToList();
+            var timeEntry = await dataSource.TimeEntries.GetById(parameter.Id);
 
-            if (parameter.ProjectId != null)
-                Project = (await dataSource.Projects.GetById((int)parameter.ProjectId)).Name;
+            Id = timeEntry.Id;
+            Description = timeEntry.Description;
+            StartTime = timeEntry.Start;
+            EndTime = timeEntry.Stop;
+            Billable = timeEntry.Billable;
+            Tags = timeEntry.Tags?.ToList() ?? new List<string>();
+            Project = timeEntry?.Project?.Name;
+            ProjectColor = timeEntry?.Project?.Color;
+            Task = timeEntry?.Task?.Name;
+            Client = timeEntry?.Project?.Client?.Name;
+        }
 
-            timeService.CurrentDateTimeObservable.Subscribe(_ => RaisePropertyChanged(nameof(Duration)));
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+
+            if (EndTime == null)
+                subscribeToTimeServiceTicks();
+        }
+
+        private void subscribeToTimeServiceTicks()
+        {
+            tickingDisposable = timeService
+                .CurrentDateTimeObservable
+                .Subscribe(_ => RaisePropertyChanged(nameof(Duration)));
         }
 
         private void delete()

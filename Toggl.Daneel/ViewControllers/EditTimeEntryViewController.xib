@@ -16,6 +16,7 @@
                 <outlet property="AddProjectAndTaskView" destination="tvM-Um-8oM" id="egs-nl-5L8"/>
                 <outlet property="AddTagsView" destination="Bfv-6Q-oRL" id="otb-aA-aza"/>
                 <outlet property="BillableSwitch" destination="vWw-JK-JJ7" id="Oe0-yM-fOT"/>
+                <outlet property="ClientLabel" destination="bvm-VU-mil" id="QuC-by-k1n"/>
                 <outlet property="CloseButton" destination="Pp0-YW-3Bg" id="saf-I0-QIJ"/>
                 <outlet property="ConfirmButton" destination="1PY-gD-iJQ" id="hzk-BQ-CGa"/>
                 <outlet property="DeleteButton" destination="iqc-QZ-Ds5" id="wUP-Jl-mPO"/>
@@ -25,7 +26,7 @@
                 <outlet property="ProjectLabel" destination="m05-Z5-Fo7" id="yYs-4S-4kv"/>
                 <outlet property="StartDateLabel" destination="y6q-c6-GFt" id="cbS-Nq-yxF"/>
                 <outlet property="StartTimeLabel" destination="aSd-9a-u9n" id="n7W-Gr-Fg5"/>
-                <outlet property="TaskLabel" destination="bvm-VU-mil" id="Mze-Cr-eKr"/>
+                <outlet property="TagsLabel" destination="CbI-xx-4Aq" id="nCm-54-GIU"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
         </placeholder>

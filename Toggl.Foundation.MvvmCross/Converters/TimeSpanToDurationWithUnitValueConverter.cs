@@ -28,7 +28,7 @@ namespace Toggl.Foundation.MvvmCross.Converters
 
         private string getUnitFor(TimeSpan timeSpan)
         {
-            if (timeSpan.Hours > 0)
+            if (timeSpan.TotalHours > 1)
                 return "";
             if (timeSpan.Minutes > 0)
                 return Resources.UnitMin;
