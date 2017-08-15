@@ -146,6 +146,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseTests\AuthenticatedGetSinceEndpointBaseTests.cs" />
     <Compile Include="ClientsApiTests.cs" />
     <Compile Include="BaseTests\EndpointTestBase.cs" />
     <Compile Include="BaseTests\AuthenticatedPostEndpointBaseTests.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -40,26 +41,30 @@ namespace Toggl.Ultrawave.Tests.Integration
 
             protected override IObservable<List<ITimeEntry>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.TimeEntries.GetAll();
+        }
 
-            private TimeEntry createTimeEntry(IUser user) => new TimeEntry
-            {
-                WorkspaceId = user.DefaultWorkspaceId,
-                Billable = false,
-                Start = new DateTimeOffset(DateTime.Now),
-                Duration = -1,
-                Description = Guid.NewGuid().ToString(),
-                Tags = new List<string>(),
-                TagIds = new List<int>(),
-                At = new DateTimeOffset(DateTime.Now),
-                UserId = user.Id,
-                CreatedWith = "Ultraware Integration Tests"
-            };
+        public class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<ITimeEntry>
+        {
+            protected override IObservable<List<ITimeEntry>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
+                => togglApi.TimeEntries.GetAllSince(threshold);
+
+            protected override DateTimeOffset AtDateOf(ITimeEntry model)
+                => model.At;
+
+            protected override ITimeEntry MakeUniqueModel(ITogglApi api, IUser user)
+                => createTimeEntry(user);
+
+            protected override IObservable<ITimeEntry> PostModelToApi(ITogglApi api, ITimeEntry model)
+                => api.TimeEntries.Create(model);
+
+            protected override Expression<Func<ITimeEntry, bool>> ModelWithSameAttributesAs(ITimeEntry model)
+                => te => te.Id == model.Id && te.Description == model.Description;
         }
 
         public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<ITimeEntry>
         {
             [Fact, LogTestInfo]
-            public async Task CreatesNewClient()
+            public async Task CreatesNewTimeEntry()
             {
                 var (togglClient, user) = await SetupTestUser();
                 var newTimeEntry = createTimeEntry(user);
@@ -69,7 +74,6 @@ namespace Toggl.Ultrawave.Tests.Integration
                 persistedTimeEntry.Description.Should().Be(newTimeEntry.Description);
                 persistedTimeEntry.WorkspaceId.Should().Be(newTimeEntry.WorkspaceId);
                 persistedTimeEntry.Billable.Should().Be(false);
-                persistedTimeEntry.Duration.Should().BeNegative();
                 persistedTimeEntry.ProjectId.Should().BeNull();
                 persistedTimeEntry.TaskId.Should().BeNull();
             }
@@ -84,21 +88,19 @@ namespace Toggl.Ultrawave.Tests.Integration
 
             private IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi, TimeEntry client)
                 => togglApi.TimeEntries.Create(client);
-
-            private TimeEntry createTimeEntry(IUser user) => new TimeEntry
-            {
-                WorkspaceId = user.DefaultWorkspaceId,
-                Billable = false,
-                Start = new DateTimeOffset(DateTime.Now),
-                Stop = null,
-                Duration = -1,
-                Description = Guid.NewGuid().ToString(),
-                Tags = new List<string>(),
-                TagIds = new List<int>(),
-                At = new DateTimeOffset(DateTime.Now),
-                UserId = user.Id,
-                CreatedWith = "Ultraware Integration Tests"
-            };
         }
+
+        private static TimeEntry createTimeEntry(IUser user) => new TimeEntry
+        {
+            WorkspaceId = user.DefaultWorkspaceId,
+            Billable = false,
+            Start = new DateTimeOffset(DateTime.Now - TimeSpan.FromMinutes(5)),
+            Stop = new DateTimeOffset(DateTime.Now),
+            Description = Guid.NewGuid().ToString(),
+            Tags = new List<string>(),
+            TagIds = new List<int>(),
+            UserId = user.Id,
+            CreatedWith = "Ultraware Integration Tests"
+        };
     }
 }

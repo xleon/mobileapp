@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -7,11 +8,15 @@ using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Tests.Integration.BaseTests;
 using Xunit;
 using Client = Toggl.Ultrawave.Models.Client;
+using UserModel = Toggl.Ultrawave.Models.User;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
     public class ClientsApiTests
     {
+        private static Expression<Func<IClient, bool>> clientWithSameIdNameAndWorkspaceAs(IClient client)
+            => c => c.Id == client.Id && c.Name == client.Name && c.WorkspaceId == client.WorkspaceId;
+
         public class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<IClient>>
         {
             protected override IObservable<List<IClient>> CallEndpointWith(ITogglApi togglApi)
@@ -30,13 +35,26 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var clients = await CallEndpointWith(togglClient);
 
                 clients.Should().HaveCount(2);
-
-                clients.Should().Contain(client =>
-                    client.Id == firstClientPosted.Id && client.Name == firstClientPosted.Name && client.WorkspaceId == firstClientPosted.WorkspaceId);
-
-                clients.Should().Contain(client =>
-                    client.Id == secondClientPosted.Id && client.Name == secondClientPosted.Name && client.WorkspaceId == secondClientPosted.WorkspaceId);
+                clients.Should().Contain(clientWithSameIdNameAndWorkspaceAs(firstClientPosted));
+                clients.Should().Contain(clientWithSameIdNameAndWorkspaceAs(secondClientPosted));
             }
+        }
+
+        public class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<IClient>
+        {
+            protected override IObservable<List<IClient>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
+                => togglApi.Clients.GetAllSince(threshold);
+
+            protected override DateTimeOffset AtDateOf(IClient model) => model.At;
+
+            protected override IClient MakeUniqueModel(ITogglApi api, IUser user)
+                => new Client {Name = Guid.NewGuid().ToString(), WorkspaceId = user.DefaultWorkspaceId};
+
+            protected override IObservable<IClient> PostModelToApi(ITogglApi api, IClient model)
+                => api.Clients.Create(model);
+
+            protected override Expression<Func<IClient, bool>> ModelWithSameAttributesAs(IClient model)
+                => clientWithSameIdNameAndWorkspaceAs(model);
         }
 
         public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<IClient>

@@ -1,6 +1,6 @@
 ﻿﻿﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -72,6 +72,24 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 noProjects.Should().BeNull();
                 activeProjects.Should().BeNull();
+            }
+
+            public class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<IProject>
+            {
+                protected override IObservable<List<IProject>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
+                    => togglApi.Projects.GetAllSince(threshold);
+
+                protected override DateTimeOffset AtDateOf(IProject model)
+                    => model.At;
+
+                protected override IProject MakeUniqueModel(ITogglApi api, IUser user)
+                    => new Project { Active = true, Name = Guid.NewGuid().ToString(), WorkspaceId = user.DefaultWorkspaceId };
+
+                protected override IObservable<IProject> PostModelToApi(ITogglApi api, IProject model)
+                    => api.Projects.Create(model);
+
+                protected override Expression<Func<IProject, bool>> ModelWithSameAttributesAs(IProject model)
+                    => p => isTheSameAs(model, p);
             }
 
             public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<IProject>

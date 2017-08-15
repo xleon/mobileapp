@@ -20,6 +20,9 @@ namespace Toggl.Ultrawave.ApiClients
         public IObservable<List<IProject>> GetAll()
             => CreateListObservable<Project, IProject>(endPoints.Get, AuthHeader);
 
+        public IObservable<List<IProject>> GetAllSince(DateTimeOffset threshold)
+            => CreateListObservable<Project, IProject>(endPoints.GetSince(threshold), AuthHeader);
+
         public IObservable<IProject> Create(IProject project)
         {
             var endPoint = endPoints.Post(project.WorkspaceId);
