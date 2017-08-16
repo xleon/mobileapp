@@ -16,6 +16,7 @@ using LoginType = Toggl.Foundation.MvvmCross.Parameters.LoginParameter.LoginType
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
+    [Preserve(AllMembers = true)]
     public class LoginViewModel : MvxViewModel<LoginParameter>
     {
         public const int EmailPage = 0;

@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross.Parameters
 {
+    [Preserve(AllMembers = true)]
     public sealed class LoginParameter
     {
         public enum LoginType

@@ -10,6 +10,7 @@ using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
+    [Preserve(AllMembers = true)]
     public sealed class SuggestionsViewModel : MvxViewModel
     {
         private readonly ISuggestionProviderContainer suggestionProviders;

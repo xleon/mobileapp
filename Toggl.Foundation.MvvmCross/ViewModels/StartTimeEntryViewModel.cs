@@ -11,6 +11,7 @@ using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
+    [Preserve(AllMembers = true)]
     public sealed class StartTimeEntryViewModel : MvxViewModel<DateParameter>
     {
         //Fields

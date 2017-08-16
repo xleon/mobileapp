@@ -9,11 +9,11 @@ using PropertyChanged;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
-using Toggl.PrimeRadiant.Models;
 using static Toggl.Multivac.Extensions.ObservableExtensions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
+    [Preserve(AllMembers = true)]
     public class EditTimeEntryViewModel : MvxViewModel<IdParameter>
     {
         private readonly ITogglDataSource dataSource;

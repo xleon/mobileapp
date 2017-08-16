@@ -49,6 +49,8 @@
     <Compile Include="WorkspaceFeatureId.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
     <Compile Include="Extensions\ObservableExtensions.cs" />
+    <Compile Include="LinkerSafeAttribute.cs" />
+    <Compile Include="PreserveAttribute.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -1,7 +1,10 @@
-﻿using Toggl.Multivac.Models;
+﻿using Toggl.Multivac;
+using Toggl.Multivac.Models;
+
 
 namespace Toggl.Ultrawave.Models
 {
+    [Preserve(AllMembers = true)]
     public sealed partial class Client
     {
         public Client() { }
@@ -16,6 +19,7 @@ namespace Toggl.Ultrawave.Models
         }
     }
 
+    [Preserve(AllMembers = true)]
     public sealed partial class Project
     {
         public Project() { }
@@ -41,6 +45,7 @@ namespace Toggl.Ultrawave.Models
         }
     }
 
+    [Preserve(AllMembers = true)]
     public sealed partial class Tag
     {
         public Tag() { }
@@ -54,6 +59,7 @@ namespace Toggl.Ultrawave.Models
         }
     }
 
+    [Preserve(AllMembers = true)]
     public sealed partial class Task
     {
         public Task() { }
@@ -72,6 +78,7 @@ namespace Toggl.Ultrawave.Models
         }
     }
 
+    [Preserve(AllMembers = true)]
     public sealed partial class TimeEntry
     {
         public TimeEntry() { }
@@ -95,6 +102,7 @@ namespace Toggl.Ultrawave.Models
         }
     }
 
+    [Preserve(AllMembers = true)]
     public sealed partial class User
     {
         public User() { }
@@ -122,6 +130,7 @@ namespace Toggl.Ultrawave.Models
         }
     }
 
+    [Preserve(AllMembers = true)]
     public sealed partial class Workspace
     {
         public Workspace() { }

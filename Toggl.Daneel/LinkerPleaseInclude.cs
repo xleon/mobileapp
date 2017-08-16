@@ -140,6 +140,11 @@ namespace Toggl.Daneel
             binding = new MvxUIViewVisibilityTargetBinding(null);
         }
 
+        public void Include(MvxUISwitchOnTargetBinding binding)
+        {
+            binding = new MvxUISwitchOnTargetBinding(null, null);
+        }
+
         public void Include(MvxVisibilityValueConverter converter)
         {
             converter.Convert(null, null, null, null);

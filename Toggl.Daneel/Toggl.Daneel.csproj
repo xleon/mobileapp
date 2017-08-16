@@ -28,7 +28,7 @@
     <MtouchLink>Full</MtouchLink>
     <MtouchArch>i386, x86_64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <MtouchExtraArgs>--linkskip Toggl.Daneel --linkskip Toggl.Foundation.MvvmCross --linkskip Toggl.Ultrawave</MtouchExtraArgs>
+    <MtouchExtraArgs>--linkskip Toggl.Daneel</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>pdbonly</DebugType>
@@ -45,7 +45,7 @@
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchUseLlvm>true</MtouchUseLlvm>
-    <MtouchExtraArgs>--linkskip Toggl.Daneel --linkskip Toggl.Foundation.MvvmCross --linkskip Toggl.Ultrawave</MtouchExtraArgs>
+    <MtouchExtraArgs>--linkskip Toggl.Daneel</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>pdbonly</DebugType>

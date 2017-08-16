@@ -12,6 +12,7 @@ using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
+    [Preserve(AllMembers = true)]
     public class TimeEntriesLogViewModel : MvxViewModel
     {
         private readonly ITogglDataSource dataSource;
@@ -35,7 +36,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             => IsWelcome
             ? Resources.TimeEntriesLogEmptyStateWelcomeText
             : Resources.TimeEntriesLogEmptyStateText;
-
+        
         public TimeEntriesLogViewModel(ITogglDataSource dataSource)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));

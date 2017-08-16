@@ -12,6 +12,7 @@ using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
+    [Preserve(AllMembers = true)]
     public sealed class MainViewModel : MvxViewModel
     {
         private CompositeDisposable disposeBag = new CompositeDisposable();
