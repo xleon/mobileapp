@@ -14,7 +14,7 @@ namespace Toggl.Daneel.ViewControllers
     [MvxChildPresentation]
     public partial class LoginViewController : MvxViewController<LoginViewModel>
     {
-        private const int ForgotPasswordLabelOffset = 27;
+        private const int forgotPasswordLabelOffset = 27;
 
         public LoginViewController() 
             : base(nameof(LoginViewController), null)
@@ -123,10 +123,10 @@ namespace Toggl.Daneel.ViewControllers
         }
 
         private void keyboardWillShow(object sender, UIKeyboardEventArgs e)
-            => BottomConstraint.Constant = e.FrameBegin.Height + ForgotPasswordLabelOffset;
+            => BottomConstraint.Constant = e.FrameBegin.Height + forgotPasswordLabelOffset;
 
         private void keyboardWillHide(object sender, UIKeyboardEventArgs e)
-            => BottomConstraint.Constant = ForgotPasswordLabelOffset;
+            => BottomConstraint.Constant = forgotPasswordLabelOffset;
 
         private void prepareTextFields()
         {

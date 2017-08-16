@@ -8,7 +8,7 @@ namespace Toggl.Ultrawave.Network
 {
     internal sealed class ApiClient : IApiClient
     {
-        private const string DefaultContentType = "text/plain";
+        private const string defaultContentType = "text/plain";
 
         private readonly HttpClient httpClient;
         
@@ -61,7 +61,7 @@ namespace Toggl.Ultrawave.Network
 
             var rawResponseString = "";
             var isSuccess = responseMessage.IsSuccessStatusCode;
-            var contentType = responseMessage.Content?.Headers?.ContentType?.MediaType ?? DefaultContentType;
+            var contentType = responseMessage.Content?.Headers?.ContentType?.MediaType ?? defaultContentType;
 
             using (var content = responseMessage.Content)
             {

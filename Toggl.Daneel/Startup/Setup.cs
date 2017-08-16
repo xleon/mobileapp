@@ -25,9 +25,9 @@ namespace Toggl.Daneel
     {
         private IMvxNavigationService navigationService;
 #if DEBUG
-        private const ApiEnvironment Environment = ApiEnvironment.Staging;
+        private const ApiEnvironment environment = ApiEnvironment.Staging;
 #else
-        private const ApiEnvironment Environment = ApiEnvironment.Production;
+        private const ApiEnvironment environment = ApiEnvironment.Production;
 #endif
 
         public Setup(MvxApplicationDelegate applicationDelegate, UIWindow window)
@@ -63,7 +63,7 @@ namespace Toggl.Daneel
             var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"];
             var userAgent = new UserAgent("Daneel", version.ToString());
 
-            var apiFactory = new ApiFactory(Environment, userAgent);
+            var apiFactory = new ApiFactory(environment, userAgent);
             var loginManager = new LoginManager(apiFactory, database);
 
             Mvx.RegisterSingleton<ITimeService>(timeService);

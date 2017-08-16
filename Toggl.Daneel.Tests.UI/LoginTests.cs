@@ -8,7 +8,7 @@ namespace Toggl.Daneel.Tests.UI
     [TestFixture]
     public class LoginTests
     {
-        private const string ValidEmail = "susancalvin@psychohistorian.museum";
+        private const string validEmail = "susancalvin@psychohistorian.museum";
 
         private iOSApp app;
 
@@ -26,7 +26,7 @@ namespace Toggl.Daneel.Tests.UI
         [Test]
         public void TheNextButtonShowsThePasswordField()
         {
-            app.EnterText(ValidEmail);
+            app.EnterText(validEmail);
 
             app.GoToPasswordScreen();
 
@@ -44,7 +44,7 @@ namespace Toggl.Daneel.Tests.UI
         [Test]
         public void TheBackButtonShowsTheEmailFieldIfThePasswordFieldIsVisible()
         {
-            app.EnterText(ValidEmail);
+            app.EnterText(validEmail);
             app.GoToPasswordScreen();
 
             app.GoBackToEmailScreen();

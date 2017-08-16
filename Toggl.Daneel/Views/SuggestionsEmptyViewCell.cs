@@ -8,12 +8,12 @@ namespace Toggl.Daneel.Views
     {
         private static readonly Random Random = new Random();
 
-        private const int MinTaskWidth = 74;
-        private const int MaxTaskWidth = 84;
-        private const int MinProjectWidth = 42;
-        private const int MaxProjectWidth = 84;
-        private const int MinDescriptionWidth = 74;
-        private const int MaxDescriptionWidth = 110;
+        private const int minTaskWidth = 74;
+        private const int maxTaskWidth = 84;
+        private const int minProjectWidth = 42;
+        private const int maxProjectWidth = 84;
+        private const int minDescriptionWidth = 74;
+        private const int maxDescriptionWidth = 110;
 
         private static readonly UIColor[] Colors =
         {
@@ -39,10 +39,10 @@ namespace Toggl.Daneel.Views
         {
             base.AwakeFromNib();
 
-            TaskWidth.Constant = Random.Next(MinTaskWidth, MaxTaskWidth);
-            ProjectWidth.Constant = Random.Next(MinProjectWidth, MaxProjectWidth);
+            TaskWidth.Constant = Random.Next(minTaskWidth, maxTaskWidth);
+            ProjectWidth.Constant = Random.Next(minProjectWidth, maxProjectWidth);
             ProjectView.BackgroundColor = Colors[Random.Next(0, Colors.Length)];
-            DescriptionWidth.Constant = Random.Next(MinDescriptionWidth, MaxDescriptionWidth);
+            DescriptionWidth.Constant = Random.Next(minDescriptionWidth, maxDescriptionWidth);
 
             SetNeedsLayout();
             SetNeedsUpdateConstraints();

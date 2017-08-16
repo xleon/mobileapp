@@ -7,7 +7,7 @@ namespace Toggl.Foundation.Models
     {
         internal sealed class Builder
         {
-            private const string ErrorMessage = "You need to set the {0} before building a time entry";
+            private const string errorMessage = "You need to set the {0} before building a time entry";
 
             public static Builder Create(long id) => new Builder(id);
 
@@ -59,10 +59,10 @@ namespace Toggl.Foundation.Models
             private void ensureValidity()
             {
                 if (Start == default(DateTimeOffset))
-                    throw new InvalidOperationException(string.Format(ErrorMessage, "start date"));
+                    throw new InvalidOperationException(string.Format(errorMessage, "start date"));
 
                 if (Description == null)
-                    throw new InvalidOperationException(string.Format(ErrorMessage, "description"));
+                    throw new InvalidOperationException(string.Format(errorMessage, "description"));
             }
         }
 
