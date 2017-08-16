@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
-using Toggl.Ultrawave.Models;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Suggestions
 {
@@ -23,7 +23,7 @@ namespace Toggl.Foundation.Suggestions
             this.timeService = timeService;
         }
 
-        public IObservable<ITimeEntry> GetSuggestion()
+        public IObservable<Suggestion> GetSuggestions()
             => database.TimeEntries
                        .GetAll(isInLastTwoWeeks)
                        .Select(mostUsedTimeEntry)
@@ -36,7 +36,7 @@ namespace Toggl.Foundation.Suggestions
             return delta <= twoWeeks;
         }
 
-        private ITimeEntry mostUsedTimeEntry(IEnumerable<ITimeEntry> timeEntries)
+        private Suggestion mostUsedTimeEntry(IEnumerable<IDatabaseTimeEntry> timeEntries)
         {
             var mostUsedGroup = timeEntries.GroupBy(te => new { te.Description, te.ProjectId, te.TaskId })
                                            .OrderByDescending(g => g.Count())
@@ -44,16 +44,11 @@ namespace Toggl.Foundation.Suggestions
 
             if (mostUsedGroup == null)
                 return null;
-
-            return new TimeEntry
-            {
-                Description = mostUsedGroup.Key.Description,
-                ProjectId = mostUsedGroup.Key.ProjectId,
-                TaskId = mostUsedGroup.Key.TaskId
-            };
+            
+            return new Suggestion(mostUsedGroup.First());
         }
 
-        private bool isNotNull(ITimeEntry timeEntry)
+        private bool isNotNull(Suggestion timeEntry)
             => timeEntry != null;
     }
 }

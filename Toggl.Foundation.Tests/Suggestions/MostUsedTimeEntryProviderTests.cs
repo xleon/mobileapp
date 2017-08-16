@@ -53,7 +53,7 @@ namespace Toggl.Foundation.Tests.Suggestions
             [Fact]
             public void ReturnsEmptyObservableIfThereAreNoTimeEntries()
             {
-                var isEmpty = Provider.GetSuggestion().IsEmpty().Wait();
+                var isEmpty = Provider.GetSuggestions().IsEmpty().Wait();
 
                 isEmpty.Should().BeTrue();
             }
@@ -72,7 +72,7 @@ namespace Toggl.Foundation.Tests.Suggestions
                 var observable = createObservable(timeEntries);
                 Database.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(observable);
 
-                var suggestion = await Provider.GetSuggestion();
+                var suggestion = await Provider.GetSuggestions();
 
                 suggestion.Description.Should().Be("te0");
                 suggestion.TaskId.Should().Be(0);

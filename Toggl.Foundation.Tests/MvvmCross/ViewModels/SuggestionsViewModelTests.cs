@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -11,6 +11,7 @@ using Toggl.Foundation.Suggestions;
 using Toggl.Multivac.Models;
 using Xunit;
 using TimeEntry = Toggl.Ultrawave.Models.TimeEntry;
+using FoundationTimeEntry = Toggl.Foundation.Models.TimeEntry;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -37,14 +38,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var scheduler = new TestScheduler();
                 var provider1 = Substitute.For<ISuggestionProvider>();
                 var provider2 = Substitute.For<ISuggestionProvider>();
-                var te1 = new TimeEntry { Description = "t1", TaskId = 12, ProjectId = 9 };
-                var te2 = new TimeEntry { Description = "t2", TaskId = 9, ProjectId = 12 };
-                var observable1 = scheduler
-                    .CreateColdObservable(new Recorded<Notification<ITimeEntry>>(0, Notification.CreateOnNext<ITimeEntry>(te1)));
-                var observable2 = scheduler
-                    .CreateColdObservable(new Recorded<Notification<ITimeEntry>>(1, Notification.CreateOnNext<ITimeEntry>(te2)));
-                provider1.GetSuggestion().Returns(observable1);
-                provider2.GetSuggestion().Returns(observable2);
+                var suggestion1 = createSuggestion("t1", 12, 9);
+                var suggestion2 = createSuggestion("t2", 9, 12);
+                var observable1 = scheduler.CreateColdObservable(createRecorded(0, suggestion1));
+                var observable2 = scheduler.CreateColdObservable(createRecorded(1, suggestion2));
+                provider1.GetSuggestions().Returns(observable1);
+                provider2.GetSuggestions().Returns(observable2);
                 var container = new SuggestionProviderContainer(provider1, provider2);
                 var viewModel = new SuggestionsViewModel(container);
 
@@ -52,7 +51,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 scheduler.AdvanceTo(1);
 
                 viewModel.Suggestions.Should().HaveCount(2)
-                         .And.Contain(new[] { te1, te2 });
+                         .And.Contain(new[] { suggestion1, suggestion2 });
             }
 
             [Fact]
@@ -60,26 +59,26 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var scheduler = new TestScheduler();
                 var provider = Substitute.For<ISuggestionProvider>();
-                var timeEntries = new[]
+                var suggestions = new[]
                 {
-                    new TimeEntry { Description = "te1" },
-                    new TimeEntry { Description = "te2" },
-                    new TimeEntry { Description = "te3" }
+                    createSuggestion("te1"),
+                    createSuggestion("te2"),
+                    createSuggestion("te3")
                 };
-                var observableContent = timeEntries
-                    .Select(te => new Recorded<Notification<ITimeEntry>>(1, Notification.CreateOnNext<ITimeEntry>(te)))
+                var observableContent = suggestions
+                    .Select(suggestion => createRecorded(1, suggestion))
                     .ToArray();
                 var observable = scheduler
                     .CreateColdObservable(observableContent);
-                provider.GetSuggestion().Returns(observable);
+                provider.GetSuggestions().Returns(observable);
                 var container = new SuggestionProviderContainer(provider);
                 var viewmodel = new SuggestionsViewModel(container);
 
                 await viewmodel.Initialize();
                 scheduler.AdvanceTo(1);
 
-                viewmodel.Suggestions.Should().HaveCount(timeEntries.Length)
-                         .And.Contain(timeEntries);
+                viewmodel.Suggestions.Should().HaveCount(suggestions.Length)
+                         .And.Contain(suggestions);
             }
 
             [Fact]
@@ -92,7 +91,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Substitute.For<ISuggestionProvider>()
                 };
                 foreach (var provider in providers)
-                    provider.GetSuggestion().Returns(Observable.Empty<ITimeEntry>());
+                    provider.GetSuggestions().Returns(Observable.Empty<Suggestion>());
                 var container = new SuggestionProviderContainer(providers);
                 var viewmodel = new SuggestionsViewModel(container);
 
@@ -100,6 +99,23 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 viewmodel.Suggestions.Should().HaveCount(0);
             }
+
+            private Suggestion createSuggestion(string description)
+                => new Suggestion(
+                    FoundationTimeEntry.Clean(
+                        new TimeEntry { Description = description }
+                    )
+                );
+
+            private Suggestion createSuggestion(string description, long taskId, long projectId)
+                => new Suggestion(
+                    FoundationTimeEntry.Clean(
+                        new TimeEntry { Description = description, TaskId = taskId, ProjectId = projectId }
+                    )
+                );
+
+            private Recorded<Notification<Suggestion>> createRecorded(int ticks, Suggestion suggestion)
+                => new Recorded<Notification<Suggestion>>(ticks, Notification.CreateOnNext(suggestion));
         }
     }
 }

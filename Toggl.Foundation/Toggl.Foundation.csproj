@@ -78,6 +78,7 @@
     <Compile Include="TimeService.cs" />
     <Compile Include="ITimeService.cs" />
     <Compile Include="Models\TimeEntry.cs" />
+    <Compile Include="Suggestions\Suggestion.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Sync\States\" />
