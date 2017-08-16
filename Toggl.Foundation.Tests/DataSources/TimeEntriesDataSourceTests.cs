@@ -21,7 +21,11 @@ namespace Toggl.Foundation.Tests.DataSources
     {
         public class TimeEntryDataSourceTest
         {
+            protected const long CurrentRunningId = 13; 
+            
             protected ITimeEntriesSource TimeEntriesSource { get; }
+
+            protected TestScheduler TestScheduler { get; } = new TestScheduler();
 
             protected string ValidDescription { get; } = "Testing software";
 
@@ -31,7 +35,7 @@ namespace Toggl.Foundation.Tests.DataSources
 
             protected IDatabaseTimeEntry DatabaseTimeEntry { get; } = 
                 TimeEntry.Builder
-                      .Create(13)
+                      .Create(CurrentRunningId)
                       .SetStart(DateTimeOffset.Now.AddHours(-2))
                       .SetIsDirty(false)
                       .SetDescription("")
@@ -45,7 +49,11 @@ namespace Toggl.Foundation.Tests.DataSources
 
                 IdProvider.GetNextIdentifier().Returns(-1);
                 Repository.GetById(Arg.Is(DatabaseTimeEntry.Id)).Returns(Observable.Return(DatabaseTimeEntry));
+
                 Repository.Create(Arg.Any<IDatabaseTimeEntry>())
+                          .Returns(info => Observable.Return(info.Arg<IDatabaseTimeEntry>()));
+
+                Repository.Update(Arg.Any<IDatabaseTimeEntry>())
                           .Returns(info => Observable.Return(info.Arg<IDatabaseTimeEntry>()));
             }
         }
@@ -105,13 +113,25 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public async ThreadingTask SetstheCreatedTimeEntryAsTheCurrentlyRunningTimeEntry()
             {
-                var observer = new TestScheduler().CreateObserver<ITimeEntry>();
+                var observer = TestScheduler.CreateObserver<ITimeEntry>();
                 TimeEntriesSource.CurrentlyRunningTimeEntry.Where(te => te != null).Subscribe(observer);
 
                 await TimeEntriesSource.Start(ValidTime, ValidDescription, true);
 
                 var currentlyRunningTimeEntry = observer.Messages.Single().Value.Value;
                 await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te .Start == currentlyRunningTimeEntry.Start));
+            }
+
+            [Fact]
+            public async ThreadingTask EmitsANewEventOnTheTimeEntryCreatedObservable()
+            {
+                var observer = TestScheduler.CreateObserver<ITimeEntry>();
+                TimeEntriesSource.TimeEntryCreated.Subscribe(observer);
+
+                await TimeEntriesSource.Start(ValidTime, ValidDescription, true);
+
+                observer.Messages.Single().Value.Value.Id.Should().Be(-1);
+                observer.Messages.Single().Value.Value.Start.Should().Be(ValidTime);
             }
         }
 
@@ -134,11 +154,12 @@ namespace Toggl.Foundation.Tests.DataSources
                              .Return(timeEntries)
                              .Select(x => x.Where(callInfo.Arg<Func<IDatabaseTimeEntry, bool>>())));
             }
-             
+
+            [Fact]
             public async ThreadingTask UpdatesTheTimeEntrySettingItsStopTime()
             {
                 await TimeEntriesSource.Stop(ValidTime); 
-                await Repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.Stop == ValidTime)); 
+                await Repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.Stop == ValidTime));
             }
 
             [Fact]
@@ -152,7 +173,7 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public async ThreadingTask SetsTheCurrentlyRunningTimeEntryToNull()
             {
-                var observer = new TestScheduler().CreateObserver<ITimeEntry>();
+                var observer = TestScheduler.CreateObserver<ITimeEntry>();
                 TimeEntriesSource.CurrentlyRunningTimeEntry.Subscribe(observer);
                 Repository.Update(Arg.Any<IDatabaseTimeEntry>()).Returns(callInfo => Observable.Return(callInfo.Arg<IDatabaseTimeEntry>()));
 
@@ -178,14 +199,25 @@ namespace Toggl.Foundation.Tests.DataSources
                              .Return(timeEntries)
                              .Select(x => x.Where(callInfo.Arg<Func<IDatabaseTimeEntry, bool>>())));
 
-                var observer = new TestScheduler().CreateObserver<ITimeEntry>();
+                var observer = TestScheduler.CreateObserver<ITimeEntry>();
                 var observable = TimeEntriesSource.Stop(ValidTime);
                 observable.Subscribe(observer);
 
                 observer.Messages.Single().Value.Exception.Should().BeOfType<InvalidOperationException>();
             }
-        } 
 
+            [Fact]
+            public async ThreadingTask EmitsANewEventOnTheTimeEntryUpdatedObservable()
+            {
+                var observer = TestScheduler.CreateObserver<ITimeEntry>();
+                TimeEntriesSource.TimeEntryUpdated.Subscribe(observer);
+
+                await TimeEntriesSource.Stop(ValidTime);
+               
+                observer.Messages.Single().Value.Value.Id.Should().Be(CurrentRunningId);
+                observer.Messages.Single().Value.Value.Stop.Should().Be(ValidTime);
+            }
+        } 
         public class TheDeleteMethod : TimeEntryDataSourceTest
         {
             [Fact]

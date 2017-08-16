@@ -9,6 +9,10 @@ namespace Toggl.Foundation.DataSources
     {
         IObservable<IDatabaseTimeEntry> CurrentlyRunningTimeEntry { get; }
 
+        IObservable<IDatabaseTimeEntry> TimeEntryCreated { get; }
+
+        IObservable<IDatabaseTimeEntry> TimeEntryUpdated { get; }
+
         IObservable<IEnumerable<IDatabaseTimeEntry>> GetAll();
 
         IObservable<IDatabaseTimeEntry> GetById(long id);

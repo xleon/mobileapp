@@ -16,9 +16,15 @@ namespace Toggl.Foundation.DataSources
     {
         private readonly IIdProvider idProvider;
         private readonly IRepository<IDatabaseTimeEntry> repository;
+        private readonly Subject<IDatabaseTimeEntry> timeEntryCreatedSubject = new Subject<IDatabaseTimeEntry>();
+        private readonly Subject<IDatabaseTimeEntry> timeEntryUpdatedSubject = new Subject<IDatabaseTimeEntry>();
         private readonly BehaviorSubject<IDatabaseTimeEntry> currentTimeEntrySubject = new BehaviorSubject<IDatabaseTimeEntry>(null);
 
         public IObservable<IDatabaseTimeEntry> CurrentlyRunningTimeEntry { get; }
+
+        public IObservable<IDatabaseTimeEntry> TimeEntryCreated { get; }
+
+        public IObservable<IDatabaseTimeEntry> TimeEntryUpdated { get; }
 
         public TimeEntriesDataSource(IIdProvider idProvider, IRepository<IDatabaseTimeEntry> repository)
         {
@@ -28,6 +34,8 @@ namespace Toggl.Foundation.DataSources
             this.idProvider = idProvider;
 
             CurrentlyRunningTimeEntry = currentTimeEntrySubject.AsObservable().DistinctUntilChanged();
+            TimeEntryUpdated = timeEntryUpdatedSubject.AsObservable();
+            TimeEntryCreated = timeEntryCreatedSubject.AsObservable().Merge(CurrentlyRunningTimeEntry.Where(te => te != null));
 
             repository
                 .GetAll(te => te.Stop == null)
@@ -44,6 +52,8 @@ namespace Toggl.Foundation.DataSources
             => repository.GetById(id)
                          .Select(TimeEntry.DirtyDeleted)
                          .SelectMany(repository.Update)
+                         .Select(TimeEntry.DirtyDeleted)
+                         .Do(timeEntryUpdatedSubject.OnNext)
                          .IgnoreElements()
                          .Cast<Unit>();
 
@@ -65,8 +75,14 @@ namespace Toggl.Foundation.DataSources
                         timeEntries.Single()
                             .With(stopTime)
                             .Apply(repository.Update)
-                            .Do(_ => safeSetCurrentlyRunningTimeEntry(null)));
-        
+                            .Do(onTimeEntryStopped));
+
+        private void onTimeEntryStopped(IDatabaseTimeEntry timeEntry)
+        {
+            timeEntryUpdatedSubject.OnNext(TimeEntry.Dirty(timeEntry));
+            safeSetCurrentlyRunningTimeEntry(null);
+        }
+
         private void onRunningTimeEntry(IEnumerable<IDatabaseTimeEntry> timeEntries)
             => safeSetCurrentlyRunningTimeEntry(timeEntries.SingleOrDefault());
             
