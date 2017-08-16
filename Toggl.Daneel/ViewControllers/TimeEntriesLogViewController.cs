@@ -1,16 +1,12 @@
-﻿using System;
-using MvvmCross.Binding.BindingContext;
+﻿using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
 using MvvmCross.Plugins.Color.iOS;
 using MvvmCross.Plugins.Visibility;
-using Toggl.Daneel.Presentation;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Daneel.Views;
 using Toggl.Daneel.ViewSources;
-using Toggl.Multivac.Models;
 using UIKit;
 using Toggl.Daneel.Presentation.Attributes;
 
@@ -34,9 +30,7 @@ namespace Toggl.Daneel.ViewControllers
             EmptyStateButton.SetTitle(Resources.TimeEntriesLogEmptyStateButton, UIControlState.Normal);
 
             //TableView config
-            var source = new GroupBindingTableViewSource<DateTime, ITimeEntry>(
-                TimeEntriesTableView, nameof(TimeEntriesLogHeaderViewCell), nameof(TimeEntriesLogViewCell)
-            );
+            var source = new TimeEntriesLogViewSource(TimeEntriesTableView);
             TimeEntriesTableView.Source = source;
 
             //Converters

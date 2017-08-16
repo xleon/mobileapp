@@ -14,16 +14,20 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public class TimeEntriesLogViewModelTest : BaseViewModelTests<TimeEntriesLogViewModel>
         {
             protected override TimeEntriesLogViewModel CreateViewModel()
-                => new TimeEntriesLogViewModel(DataSource);
+                => new TimeEntriesLogViewModel(DataSource, TimeService);
         }
 
-        public class TheConstructor
+        public class TheConstructor : TimeEntriesLogViewModelTest
         {
-            [Fact]
-            public void ThrowsIfTheArgumentsIsNull()
+            [Theory]
+            [ClassData(typeof(TwoParameterConstructorTestData))]
+            public void ThrowsIfTheArgumentsIsNull(bool useDataSource, bool useTimeService)
             {
+                var dataSource = useDataSource ? DataSource : null;
+                var timeService = useTimeService ? TimeService : null;
+
                 Action tryingToConstructWithEmptyParameters =
-                    () => new TimeEntriesLogViewModel(null);
+                    () => new TimeEntriesLogViewModel(dataSource, timeService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -80,8 +84,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     for (int i = 1; i < viewModel.TimeEntries.Count(); i++)
                     {
-                        var dateTime1 = viewModel.TimeEntries.ElementAt(i - 1).Key;
-                        var dateTime2 = viewModel.TimeEntries.ElementAt(i).Key;
+                        var dateTime1 = viewModel.TimeEntries.ElementAt(i - 1).Date;
+                        var dateTime2 = viewModel.TimeEntries.ElementAt(i).Date;
                         dateTime1.Should().BeAfter(dateTime2);
                     }
                 });

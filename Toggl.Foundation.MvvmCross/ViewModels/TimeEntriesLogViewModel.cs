@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -8,19 +7,19 @@ using PropertyChanged;
 using Toggl.Foundation.DataSources;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public class TimeEntriesLogViewModel : MvxViewModel
     {
+        private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
 
         public bool IsWelcome { get; set; }
 
-        public ObservableCollection<IGrouping<DateTime, ITimeEntry>> TimeEntries { get; }
-            = new ObservableCollection<IGrouping<DateTime, ITimeEntry>>();
+        public ObservableCollection<TimeEntryViewModelCollection> TimeEntries { get; }
+            = new ObservableCollection<TimeEntryViewModelCollection>();
 
         [DependsOn(nameof(TimeEntries))]
         public bool IsEmpty => !TimeEntries.Any();
@@ -36,12 +35,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             => IsWelcome
             ? Resources.TimeEntriesLogEmptyStateWelcomeText
             : Resources.TimeEntriesLogEmptyStateText;
-        
-        public TimeEntriesLogViewModel(ITogglDataSource dataSource)
+
+        public TimeEntriesLogViewModel(ITogglDataSource dataSource, ITimeService timeService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
 
             this.dataSource = dataSource;
+            this.timeService = timeService;
         }
 
         public async override Task Initialize()
@@ -53,6 +54,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             timeEntries
                 .OrderByDescending(te => te.Start)
                 .GroupBy(te => te.Start.Date)
+                .Select(grouping => new TimeEntryViewModelCollection(grouping, timeService))
                 .ForEach(TimeEntries.Add);
         }
     }

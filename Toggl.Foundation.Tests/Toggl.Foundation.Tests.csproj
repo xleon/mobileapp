@@ -201,6 +201,8 @@
     <Compile Include="MvvmCross\ViewModels\MainViewModelTests.cs" />
     <Compile Include="DataSources\TimeEntriesDataSourceTests.cs" />
     <Compile Include="MvvmCross\Converters\TimeSpanToDurationWithUnitValueConverterTests.cs" />
+    <Compile Include="MvvmCross\ViewModels\TimeEntryViewModelTests.cs" />
+    <Compile Include="MvvmCross\ViewModels\TimeEntryViewModelCollectionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />

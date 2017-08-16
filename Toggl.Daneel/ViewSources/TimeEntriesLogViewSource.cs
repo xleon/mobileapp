@@ -4,23 +4,26 @@ using System.Linq;
 using Foundation;
 using MvvmCross.Binding.ExtensionMethods;
 using MvvmCross.Binding.iOS.Views;
+using Toggl.Daneel.Views;
+using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
 
 namespace Toggl.Daneel.ViewSources
 {
-    public class GroupBindingTableViewSource<TKey, TType> : MvxSimpleTableViewSource
+    public class TimeEntriesLogViewSource : MvxTableViewSource
     {
-        private readonly string headerCellIdentifier;
+        private const string cellIdentifier = nameof(TimeEntriesLogViewCell);
+        private const string headerCellIdentifier = nameof(TimeEntriesLogHeaderViewCell);
+        
+        private IEnumerable<TimeEntryViewModelCollection> groupedItems
+            => ItemsSource as IEnumerable<TimeEntryViewModelCollection>;
 
-        private IEnumerable<IGrouping<TKey, TType>> GroupedItems
-            => ItemsSource as IEnumerable<IGrouping<TKey, TType>>;
-
-        public GroupBindingTableViewSource(UITableView tableView, string headerCellIdentifier, string cellIdentifier)
-            : base(tableView, cellIdentifier)
+        public TimeEntriesLogViewSource(UITableView tableView)
+            : base(tableView)
         {
-            this.headerCellIdentifier = headerCellIdentifier;
-
             tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+            tableView.RegisterNibForCellReuse(TimeEntriesLogViewCell.Nib, cellIdentifier);
+            tableView.RegisterNibForHeaderFooterViewReuse(TimeEntriesLogHeaderViewCell.Nib, headerCellIdentifier);
         }
 
         public override UIView GetViewForHeader(UITableView tableView, nint section)
@@ -53,17 +56,17 @@ namespace Toggl.Daneel.ViewSources
         public override nint RowsInSection(UITableView tableview, nint section)
             => GetGroupAt(section).Count();
 
-        protected virtual IGrouping<TKey, TType> GetGroupAt(nint section)
-            => GroupedItems.ElementAt((int)section);
+        protected virtual TimeEntryViewModelCollection GetGroupAt(nint section)
+            => groupedItems.ElementAt((int)section);
 
         protected override object GetItemAt(NSIndexPath indexPath)
-            => GroupedItems.ElementAt(indexPath.Section).ElementAt((int)indexPath.Item);
+            => groupedItems.ElementAt(indexPath.Section).ElementAt((int)indexPath.Item);
 
         protected UITableViewHeaderFooterView GetOrCreateHeaderViewFor(UITableView tableView)
             => tableView.DequeueReusableHeaderFooterView(headerCellIdentifier);
 
         protected override UITableViewCell GetOrCreateCellFor(UITableView tableView, NSIndexPath indexPath, object item)
-            => tableView.DequeueReusableCell(CellIdentifier, indexPath);
+            => tableView.DequeueReusableCell(cellIdentifier, indexPath);
 
         public override nfloat GetHeightForHeader(UITableView tableView, nint section) => 43;
 

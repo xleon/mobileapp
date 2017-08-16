@@ -352,7 +352,7 @@
     <Compile Include="ViewControllers\TimeEntriesLogViewController.designer.cs">
       <DependentUpon>TimeEntriesLogViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewSources\GroupBindingTableViewSource.cs" />
+    <Compile Include="ViewSources\TimeEntriesLogViewSource.cs" />
     <Compile Include="Views\SuggestionsEmptyViewCell.cs" />
     <Compile Include="Views\SuggestionsEmptyViewCell.designer.cs">
         <DependentUpon>SuggestionsEmptyViewCell.cs</DependentUpon>
