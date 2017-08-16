@@ -41,12 +41,14 @@ private void foo()
 {
 }
 private int baz => 0;
+private const int bar = 42;
 
 // Don't
 private void Foo()
 {
 }
 private int Baz => 0;
+private const int Bar = 42;
 ```
 
 Indentation is done with four spaces
