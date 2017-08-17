@@ -157,6 +157,8 @@
     <Compile Include="TimeEntriesApiTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helper\User.cs" />
+    <Compile Include="WorkspaceFeaturesApiTests.cs" />
+    <Compile Include="WorkspaceFeaturesEnumTests.cs" />
     <Compile Include="WorkspacesApiTests.cs" />
     <Compile Include="Helper\WorkspaceHelper.cs" />
     <Compile Include="Helper\AuthorizedRequestBuilder.cs" />

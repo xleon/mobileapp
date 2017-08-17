@@ -35,6 +35,10 @@
     <CodeAnalysisRuleSet>..\Toggl.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -151,6 +155,7 @@
     <Compile Include="ApiClients\TestApi.cs" />
     <Compile Include="ApiClients\BaseApiTests.cs" />
     <Compile Include="Models\TagTests.cs" />
+    <Compile Include="Serialization\ConcreteListTypeConverterTests.cs" />
     <Compile Include="Serialization\JsonSerializerTests.cs" />
     <Compile Include="Network\UserAgentTests.cs" />
     <Compile Include="ApiConfigurationTests.cs" />
@@ -159,6 +164,7 @@
     <Compile Include="Models\TaskTests.cs" />
     <Compile Include="Models\ProjectTests.cs" />
     <Compile Include="Exceptions\ApiErrorResponsesTests.cs" />
+    <Compile Include="Models\WorkspaceFeaturesTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">

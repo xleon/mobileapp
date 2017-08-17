@@ -15,6 +15,7 @@ namespace Toggl.Ultrawave.Network
         public TimeEntryEndpoints TimeEntries => new TimeEntryEndpoints(baseUrl);
         public TagEndpoints Tags => new TagEndpoints(baseUrl);
         public StatusEndpoints Status => new StatusEndpoints(baseUrl);
+        public WorkspaceFeaturesEndpoints WorkspaceFeatures => new WorkspaceFeaturesEndpoints(baseUrl);
 
         public Endpoints(ApiEnvironment environment)
         {

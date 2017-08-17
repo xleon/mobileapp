@@ -30,6 +30,8 @@
     <CodeAnalysisRuleSet>..\Toggl.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ApiClients\Interfaces\IWorkspaceFeaturesApi.cs" />
+    <Compile Include="ApiClients\WorkspaceFeaturesApi.cs" />
     <Compile Include="Exceptions\ApiDeprecatedException.cs" />
     <Compile Include="Exceptions\BadGatewayException.cs" />
     <Compile Include="Exceptions\ClientDeprecatedException.cs" />
@@ -49,13 +51,17 @@
     <Compile Include="Exceptions\UnknownApiErrorException.cs" />
     <Compile Include="Helpers\ApiExceptions.cs" />
     <Compile Include="Models\TimeEntry.cs" />
+    <Compile Include="Models\WorkspaceFeature.cs" />
+    <Compile Include="Models\WorkspaceFeatureCollection.cs" />
     <Compile Include="Network\Credentials.cs" />
     <Compile Include="Network\Endpoints\Endpoint.cs" />
     <Compile Include="Network\Endpoints\Endpoints.cs" />
     <Compile Include="Network\Endpoints\StatusEndpoints.cs" />
     <Compile Include="Network\Endpoints\UserEndpoints.cs" />
+    <Compile Include="Network\Endpoints\WorkspaceFeaturesEndpoints.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ITogglApi.cs" />
+    <Compile Include="Serialization\ConcreteListTypeConverter.cs" />
     <Compile Include="TogglApi.cs" />
     <Compile Include="ApiClients\TagsApi.cs" />
     <Compile Include="ApiClients\TasksApi.cs" />
@@ -134,6 +140,9 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\portable-net45+win8+wp8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
