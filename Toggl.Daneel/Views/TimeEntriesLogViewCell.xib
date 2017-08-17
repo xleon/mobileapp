@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -11,11 +11,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="cZE-iV-UFb" customClass="TimeEntriesLogViewCell">
+        <tableViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" selectionStyle="blue" indentationWidth="10" rowHeight="64" id="cZE-iV-UFb" customClass="TimeEntriesLogViewCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cZE-iV-UFb" id="FMY-EJ-tyu">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="63.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exporting assets" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fIi-Jg-bLZ">
@@ -62,34 +62,36 @@
                         </constraints>
                     </button>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icContinue" translatesAutoresizingMaskIntoConstraints="NO" id="2Q5-T6-UvK">
-                        <rect key="frame" x="288" y="38" width="11" height="10"/>
+                        <rect key="frame" x="289" y="37" width="10" height="11"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="11" id="9hs-iZ-5vV"/>
-                            <constraint firstAttribute="height" constant="10" id="uBL-9K-Hda"/>
+                            <constraint firstAttribute="width" constant="10" id="9hs-iZ-5vV"/>
+                            <constraint firstAttribute="height" constant="11" id="uBL-9K-Hda"/>
                         </constraints>
                     </imageView>
                 </subviews>
-            </view>
+            </tableViewCellContentView>
             <constraints>
-                <constraint firstItem="Re8-uD-vpm" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="4" id="7Q6-dj-iIh"/>
-                <constraint firstItem="pqJ-Ao-2Sj" firstAttribute="leading" secondItem="fJh-Bz-nNB" secondAttribute="trailing" constant="4" id="CCd-Z6-Cyr"/>
-                <constraint firstAttribute="trailing" secondItem="Re8-uD-vpm" secondAttribute="trailing" id="LK5-tu-tqF"/>
-                <constraint firstItem="wgA-CX-wym" firstAttribute="leading" secondItem="pqJ-Ao-2Sj" secondAttribute="trailing" constant="4" id="LaK-0q-3kt"/>
-                <constraint firstAttribute="bottom" secondItem="fJh-Bz-nNB" secondAttribute="bottom" constant="19" id="Oly-Gi-vwC"/>
-                <constraint firstItem="fIi-Jg-bLZ" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="14" id="Q5k-mS-6BM"/>
-                <constraint firstItem="wgA-CX-wym" firstAttribute="centerY" secondItem="pqJ-Ao-2Sj" secondAttribute="centerY" id="RBc-b9-2FR"/>
-                <constraint firstAttribute="trailing" secondItem="2Q5-T6-UvK" secondAttribute="trailing" constant="21" id="au7-T9-Fsx"/>
-                <constraint firstAttribute="bottom" secondItem="Re8-uD-vpm" secondAttribute="bottom" constant="4" id="cNH-5Y-5eV"/>
-                <constraint firstItem="Y3e-98-yuY" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="12" id="eIU-9b-ihu"/>
-                <constraint firstItem="pqJ-Ao-2Sj" firstAttribute="centerY" secondItem="fJh-Bz-nNB" secondAttribute="centerY" id="gxn-Cx-kZ6"/>
-                <constraint firstItem="fJh-Bz-nNB" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="17" id="ihz-92-MRL"/>
-                <constraint firstAttribute="trailing" secondItem="Y3e-98-yuY" secondAttribute="trailing" constant="15" id="lCH-z9-Rh1"/>
-                <constraint firstAttribute="bottom" secondItem="2Q5-T6-UvK" secondAttribute="bottom" constant="16" id="r3K-D4-cf7"/>
-                <constraint firstItem="fIi-Jg-bLZ" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="17" id="tTP-8e-5Oq"/>
+                <constraint firstAttribute="bottom" secondItem="fJh-Bz-nNB" secondAttribute="bottom" constant="19" id="3Py-wD-g0A"/>
+                <constraint firstItem="fIi-Jg-bLZ" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="14" id="3oh-LW-0AM"/>
+                <constraint firstItem="Y3e-98-yuY" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="12" id="4T5-Ji-akk"/>
+                <constraint firstAttribute="bottom" secondItem="Re8-uD-vpm" secondAttribute="bottom" constant="4" id="A45-Fh-xoP"/>
+                <constraint firstAttribute="bottom" secondItem="2Q5-T6-UvK" secondAttribute="bottom" constant="16" id="Ami-Am-KDO"/>
+                <constraint firstAttribute="trailing" secondItem="Y3e-98-yuY" secondAttribute="trailing" constant="15" id="RYD-Zl-6qg"/>
+                <constraint firstItem="wgA-CX-wym" firstAttribute="centerY" secondItem="pqJ-Ao-2Sj" secondAttribute="centerY" id="SnF-wg-gwa"/>
+                <constraint firstItem="wgA-CX-wym" firstAttribute="leading" secondItem="pqJ-Ao-2Sj" secondAttribute="trailing" constant="4" id="VtU-GA-mhO"/>
+                <constraint firstAttribute="trailing" secondItem="2Q5-T6-UvK" secondAttribute="trailing" constant="21" id="WWV-Op-5Ma"/>
+                <constraint firstItem="pqJ-Ao-2Sj" firstAttribute="centerY" secondItem="fJh-Bz-nNB" secondAttribute="centerY" id="cdt-Mw-9WT"/>
+                <constraint firstItem="pqJ-Ao-2Sj" firstAttribute="leading" secondItem="fJh-Bz-nNB" secondAttribute="trailing" constant="4" id="fgx-rl-1nm"/>
+                <constraint firstItem="Re8-uD-vpm" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="4" id="idY-kN-pF5"/>
+                <constraint firstAttribute="trailing" secondItem="Re8-uD-vpm" secondAttribute="trailing" id="ma5-yc-Thq"/>
+                <constraint firstItem="fJh-Bz-nNB" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="17" id="wbH-zc-c0V"/>
+                <constraint firstItem="fIi-Jg-bLZ" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="17" id="xvl-nH-8VK"/>
             </constraints>
             <connections>
                 <outlet property="ContinueButton" destination="Re8-uD-vpm" id="name-outlet-Re8-uD-vpm"/>
                 <outlet property="DescriptionLabel" destination="fIi-Jg-bLZ" id="name-outlet-fIi-Jg-bLZ"/>
+                <outlet property="DescriptionTopDistanceConstraint" destination="3oh-LW-0AM" id="nrc-hr-Lhq"/>
+                <outlet property="ProjectDotView" destination="fJh-Bz-nNB" id="name-outlet-fJh-Bz-nNB"/>
                 <outlet property="ProjectLabel" destination="pqJ-Ao-2Sj" id="name-outlet-pqJ-Ao-2Sj"/>
                 <outlet property="TaskLabel" destination="wgA-CX-wym" id="name-outlet-wgA-CX-wym"/>
                 <outlet property="TimeLabel" destination="Y3e-98-yuY" id="name-outlet-Y3e-98-yuY"/>
