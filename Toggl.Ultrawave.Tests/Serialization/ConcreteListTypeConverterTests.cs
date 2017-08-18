@@ -49,12 +49,12 @@ namespace Toggl.Ultrawave.Tests.Serialization
         private class OtherClass
         {
             [JsonConverter(typeof(ConcreteListTypeConverter<SomeClass, ISomeInterface>))]
-            public List<ISomeInterface> SomeItems;
+            public List<ISomeInterface> SomeItems { get; set; }
         }
 
         private class DifferentClass
         {
-            public List<ISomeInterface> SomeItems;
+            public List<ISomeInterface> SomeItems { get; set; }
         }
 
         private const string JsonArray = "{\"some_items\":[{\"some_name\":\"A\"},{\"some_name\":\"B\"}]}";
