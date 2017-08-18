@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Models;
@@ -66,5 +68,58 @@ namespace Toggl.Ultrawave.Tests.Integration
                 Tags = new List<string>(tags)
             };
         }
+        
+
+        public class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<ITag>
+        {
+            protected override IObservable<List<ITag>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
+                => togglApi.Tags.GetAllSince(threshold);
+
+            protected override DateTimeOffset AtDateOf(ITag model)
+                => model.At;
+
+            protected override ITag MakeUniqueModel(ITogglApi api, IUser user)
+                => new Tag { Name = Guid.NewGuid().ToString(), WorkspaceId = user.DefaultWorkspaceId };
+
+            protected override IObservable<ITag> PostModelToApi(ITogglApi api, ITag model)
+                => api.Tags.Create(model);
+
+            protected override Expression<Func<ITag, bool>> ModelWithSameAttributesAs(ITag model)
+                => t => isTheSameAs(model, t);
+        }
+    
+        public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<ITag>
+        {
+            protected override IObservable<ITag> CallEndpointWith(ITogglApi togglApi)
+                => Observable.Defer(async () =>
+                {
+                    var user = await togglApi.User.Get();
+                    var tag = await createNewTag(user.DefaultWorkspaceId);
+                    return CallEndpointWith(togglApi, tag);
+                });
+
+            private IObservable<ITag> CallEndpointWith(ITogglApi togglApi, ITag tag)
+                => togglApi.Tags.Create(tag);
+
+            [Fact, LogTestInfo]
+            public async System.Threading.Tasks.Task CreatesNewTag()
+            {
+                var (togglClient, user) = await SetupTestUser();
+
+                var tag = await createNewTag(user.DefaultWorkspaceId);
+                var persistedTag = await CallEndpointWith(togglClient, tag);
+
+                persistedTag.Name.Should().Be(tag.Name);
+                persistedTag.WorkspaceId.Should().Be(user.DefaultWorkspaceId);
+            }
+        }
+
+        private static async Task<Tag> createNewTag(long workspaceID)
+            => new Tag { Name = Guid.NewGuid().ToString(), WorkspaceId = workspaceID };
+
+        private static bool isTheSameAs(ITag a, ITag b)
+            => a.Id == b.Id
+            && a.Name == b.Name
+            && a.WorkspaceId == b.WorkspaceId;
     }
 }
