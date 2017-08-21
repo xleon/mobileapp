@@ -65,7 +65,7 @@ namespace Toggl.PrimeRadiant.Realm
                 WriteLine($"            var skip{entityName}Fetch = entity?.{entityName}Id == null || entity.{entityName}Id == 0;");
 
                 propName = $"Realm{entityName}";
-                assignment = $"skip{entityName}Fetch ? null :realm.All<{propName}>().Single(x => x.Id == entity.{entityName}Id)";
+                assignment = $"skip{entityName}Fetch ? null : realm.All<{propName}>().Single(x => x.Id == entity.{entityName}Id)";
             }
 
             WriteLine($"            {propName} = {assignment};");

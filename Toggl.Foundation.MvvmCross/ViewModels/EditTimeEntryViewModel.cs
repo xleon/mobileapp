@@ -129,7 +129,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             close();
         }
 
-        private void onDeleteError(Exception exception){}
+        private void onDeleteError(Exception exception) { }
 
         private void confirm()
         {

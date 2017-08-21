@@ -122,7 +122,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             [Fact]
             public void ReturnsSinceParametersFromDatabase()
             {
-                var transition = (Transition<FetchObservables>) state.Start().SingleAsync().Wait();
+                var transition = (Transition<FetchObservables>)state.Start().SingleAsync().Wait();
 
                 transition.Parameter.SinceParameters.Should().Be(database.SinceParameters.Get());
             }

@@ -48,7 +48,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             protected override DateTimeOffset AtDateOf(IClient model) => model.At;
 
             protected override IClient MakeUniqueModel(ITogglApi api, IUser user)
-                => new Client {Name = Guid.NewGuid().ToString(), WorkspaceId = user.DefaultWorkspaceId};
+                => new Client { Name = Guid.NewGuid().ToString(), WorkspaceId = user.DefaultWorkspaceId };
 
             protected override IObservable<IClient> PostModelToApi(ITogglApi api, IClient model)
                 => api.Clients.Create(model);

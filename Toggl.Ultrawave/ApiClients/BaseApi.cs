@@ -38,7 +38,7 @@ namespace Toggl.Ultrawave.ApiClients
 
         protected IObservable<List<TInterface>> CreateListObservable<TModel, TInterface>(Endpoint endpoint, HttpHeader header, string body = "")
             where TModel : class, TInterface
-            => CreateListObservable<TModel, TInterface>(endpoint, new [] { header }, body);
+            => CreateListObservable<TModel, TInterface>(endpoint, new[] { header }, body);
 
 
         protected IObservable<List<TInterface>> CreateListObservable<TModel, TInterface>(Endpoint endpoint, IEnumerable<HttpHeader> headers, string body = "")
@@ -54,7 +54,7 @@ namespace Toggl.Ultrawave.ApiClients
         }
         
         protected IObservable<T> CreateObservable<T>(Endpoint endpoint, HttpHeader header, string body = "")
-            => CreateObservable<T>(endpoint, new [] { header }, body);
+            => CreateObservable<T>(endpoint, new[] { header }, body);
 
         protected IObservable<T> CreateObservable<T>(Endpoint endpoint, IEnumerable<HttpHeader> headers, string body = "")
         {

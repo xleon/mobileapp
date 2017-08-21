@@ -20,7 +20,7 @@ namespace Toggl.PrimeRadiant.Realm
 
     internal sealed class RealmAdapter<TRealmEntity, TModel> : IRealmAdapter<TModel>
         where TRealmEntity : RealmObject, TModel
-        where TModel: IBaseModel, IDatabaseSyncable
+        where TModel : IBaseModel, IDatabaseSyncable
     {
         private readonly Func<TModel, Realms.Realm, TRealmEntity> convertToRealm;
 

@@ -173,7 +173,7 @@ namespace Toggl.Foundation.Tests.Sync
             public void ReportsErrorIfTheStateCompletesWithMoreThanOneTransition()
             {
                 var transition = MakeTransitionSubstitute(
-                    _ => new [] { MakeTransitionSubstitute(), MakeTransitionSubstitute() }.ToObservable()
+                    _ => new[] { MakeTransitionSubstitute(), MakeTransitionSubstitute() }.ToObservable()
                     );
 
                 StateMachine.Start(transition);

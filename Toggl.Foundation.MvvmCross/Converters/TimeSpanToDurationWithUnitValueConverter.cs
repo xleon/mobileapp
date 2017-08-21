@@ -21,7 +21,7 @@ namespace Toggl.Foundation.MvvmCross.Converters
             durationBuilder.Append(value.Seconds.ToString("00"));
             
             if (!string.IsNullOrEmpty(unit))
-                durationBuilder.Append($" { unit }");
+                durationBuilder.Append($" {unit}");
 
             return durationBuilder.ToString();
         }

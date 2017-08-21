@@ -94,6 +94,6 @@ namespace Toggl.Ultrawave.Tests.Exceptions
         public static IEnumerable<object[]> UnknownErrorsList
             => Enumerable.Range(400, 200)
                 .Where(code => !IsKnownError(code))
-                .Select(code => new object[] { (HttpStatusCode) code });
+                .Select(code => new object[] { (HttpStatusCode)code });
     }
 }

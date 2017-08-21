@@ -16,7 +16,7 @@ namespace Toggl.Multivac.Tests
             {
                 int[] initialItems = { 1, 2 };
                 int[] newItems = { 3, 4, 5 };
-                var collection = new ObservableCollection<int> (initialItems);
+                var collection = new ObservableCollection<int>(initialItems);
 
                 collection.AddRange(newItems);
 

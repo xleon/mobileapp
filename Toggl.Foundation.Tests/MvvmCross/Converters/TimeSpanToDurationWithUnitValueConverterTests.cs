@@ -27,7 +27,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Converters
             {
                 var converter = new TimeSpanToDurationWithUnitValueConverter();
                 var timeSpan = new TimeSpan(0, 43, 59);
-                var expected = $"43:59 { Resources.UnitMin }";
+                var expected = $"43:59 {Resources.UnitMin}";
 
                 var actual = converter.Convert(timeSpan, typeof(string), null, CultureInfo.CurrentCulture);
 
@@ -39,7 +39,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Converters
             {
                 var converter = new TimeSpanToDurationWithUnitValueConverter();
                 var timeSpan = new TimeSpan(0, 0, 42);
-                var expected = $"42 { Resources.UnitSecond }";
+                var expected = $"42 {Resources.UnitSecond}";
 
                 var actual = converter.Convert(timeSpan, typeof(string), null, CultureInfo.CurrentCulture);
 
@@ -63,7 +63,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Converters
             {
                 var converter = new TimeSpanToDurationWithUnitValueConverter();
                 var timeSpan = new TimeSpan(0, 6, 12);
-                var expected = $"06:12 { Resources.UnitMin }";
+                var expected = $"06:12 {Resources.UnitMin}";
 
                 var actual = converter.Convert(timeSpan, typeof(string), null, CultureInfo.CurrentCulture);
 

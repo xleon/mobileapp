@@ -20,7 +20,7 @@ namespace Toggl.Multivac.Extensions
             public void OnError(Exception error)
                 => onError(error);
 
-            public void OnNext(T value) {}
+            public void OnNext(T value) { }
         }
 
         public static IDisposable Subscribe<T>(this IObservable<T> observable, Action<Exception> onError, Action onCompleted)
