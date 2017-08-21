@@ -65,7 +65,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 WorkspaceId = workspaceId,
                 Start = new DateTimeOffset(DateTime.Now),
                 CreatedWith = Configuration.UserAgent.ToString(),
-                Tags = new List<string>(tags)
+                TagNames = new List<string>(tags)
             };
         }
         

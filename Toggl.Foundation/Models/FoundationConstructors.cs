@@ -104,7 +104,7 @@ namespace Toggl.Foundation.Models
             Start = entity.Start;
             Stop = entity.Stop;
             Description = entity.Description;
-            Tags = entity.Tags;
+            TagNames = entity.TagNames;
             TagIds = entity.TagIds;
             At = entity.At;
             ServerDeletedAt = entity.ServerDeletedAt;

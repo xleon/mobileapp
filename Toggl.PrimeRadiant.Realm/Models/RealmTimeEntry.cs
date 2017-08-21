@@ -17,9 +17,9 @@ namespace Toggl.PrimeRadiant.Realm
 
         public string Description { get; set; }
 
-        public IList<string> Tags { get; set; }
+        public IList<string> TagNames { get; set; }
 
-        public IList<int> TagIds { get; set; }
+        public IList<long> TagIds { get; set; }
 
         public DateTimeOffset At { get; set; }
 

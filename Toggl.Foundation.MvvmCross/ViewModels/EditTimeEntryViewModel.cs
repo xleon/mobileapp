@@ -95,7 +95,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             StartTime = timeEntry.Start;
             EndTime = timeEntry.Stop;
             Billable = timeEntry.Billable;
-            Tags = timeEntry.Tags?.ToList() ?? new List<string>();
+            Tags = timeEntry.TagNames?.ToList() ?? new List<string>();
             Project = timeEntry?.Project?.Name;
             ProjectColor = timeEntry?.Project?.Color;
             Task = timeEntry?.Task?.Name;
