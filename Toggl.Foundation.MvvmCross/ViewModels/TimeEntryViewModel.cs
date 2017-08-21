@@ -7,7 +7,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     public class TimeEntryViewModel : MvxNotifyPropertyChanged
     {
-        private readonly IDisposable timeDisposable;
+        public long Id { get; }
 
         public string Description { get; } = "";
 
@@ -17,30 +17,27 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public DateTimeOffset Start { get; }
 
-        public TimeSpan Duration { get; private set; }
+        public TimeSpan Duration { get; }
 
         public string ProjectColor { get; } = "#00000000";
 
         public bool HasProject { get; }
 
-        public TimeEntryViewModel(IDatabaseTimeEntry timeEntry, ITimeService timeService)
+        public TimeEntryViewModel(IDatabaseTimeEntry timeEntry)
         {
             Ensure.Argument.IsNotNull(timeEntry, nameof(timeEntry));
-            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
 
+            Id = timeEntry.Id;
             Start = timeEntry.Start;
             Description = timeEntry.Description;
             HasProject = timeEntry.Project != null;
-            Duration = (timeEntry.Stop ?? timeService.CurrentDateTime) - Start;
+            Duration = timeEntry.Stop.Value - Start;
 
             if (HasProject)
             {
                 ProjectName = timeEntry.Project.Name;
                 ProjectColor = timeEntry.Project.Color;
             }
-
-            if (timeEntry.Stop != null) return;
-            timeDisposable = timeService.CurrentDateTimeObservable.Subscribe(currentTime => Duration = currentTime - Start);
         }
     }
 }

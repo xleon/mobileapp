@@ -25,7 +25,7 @@ namespace Toggl.Foundation.Tests.Generators
                 {
                     var source = Substitute.For<ITogglDataSource>();
                     var timeService = Substitute.For<ITimeService>();
-                    var viewModel = new TimeEntriesLogViewModel(source, timeService);
+                    var viewModel = new TimeEntriesLogViewModel(source);
 
                     var year = yearGenerator.Sample(0, 1).First();
 
