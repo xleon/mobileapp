@@ -25,12 +25,14 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidLoad();
 
-            prepareTextFields();
+            prepareViews();
 
             UIKeyboard.Notifications.ObserveWillShow(keyboardWillShow);
             UIKeyboard.Notifications.ObserveWillHide(keyboardWillHide);
 
             var timeSpanConverter = new TimeSpanToDurationValueConverter();
+            var buttonColorConverter = new BoolToUIColorConverter(Color.StartTimeEntry.ActiveButton, Color.StartTimeEntry.InactiveButton);
+
             var bindingSet = this.CreateBindingSet<StartTimeEntryViewController, StartTimeEntryViewModel>();
     
             //Text
@@ -38,6 +40,12 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(DescriptionTextField).To(vm => vm.RawTimeEntryText);
 
             //Buttons
+            bindingSet.Bind(BillableButton)
+                      .For(v => v.TintColor)
+                      .To(vm => vm.IsBillable)
+                      .WithConversion(buttonColorConverter);
+
+            //Commands
             bindingSet.Bind(DoneButton).To(vm => vm.DoneCommand);
             bindingSet.Bind(CloseButton).To(vm => vm.BackCommand);
             bindingSet.Bind(BillableButton).To(vm => vm.ToggleBillableCommand);
@@ -51,8 +59,15 @@ namespace Toggl.Daneel.ViewControllers
         private void keyboardWillHide(object sender, UIKeyboardEventArgs e)
             => BottomDistanceConstraint.Constant = 0;
 
-        private void prepareTextFields()
+        private void prepareViews()
         {
+            //This is needed for the ImageView.TintColor bindings to work
+            BillableButton.SetImage(
+                BillableButton.ImageForState(UIControlState.Normal)
+                              .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), 
+                UIControlState.Normal
+            );
+
             TimeLabel.Font = TimeLabel.Font.GetMonospacedDigitFont();
 
             var stringAttributes = new CTStringAttributes(

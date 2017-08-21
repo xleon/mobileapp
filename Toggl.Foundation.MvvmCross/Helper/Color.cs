@@ -45,6 +45,10 @@ namespace Toggl.Foundation.MvvmCross.Helper
             public static readonly MvxColor Cursor = lightishGreen;
 
             public static readonly MvxColor Placeholder = pinkishGrey;
+
+            public static readonly MvxColor ActiveButton = lightishGreen;
+
+            public static readonly MvxColor InactiveButton = new MvxColor(181, 188, 192);
         }
     }
 }
