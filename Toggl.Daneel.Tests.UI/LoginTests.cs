@@ -51,5 +51,29 @@ namespace Toggl.Daneel.Tests.UI
 
             app.Screenshot("Login email page.");
         }
+
+        [Test]
+        public void TheNextButtonAfterInputtingAnInvalidPasswordShowsTheErrorLabel()
+        {
+            app.EnterText(Credentials.Username);
+            app.GoToPasswordScreen();
+
+            app.EnterText($"{Credentials.Password}123456");
+            app.TryLoginAndFail();
+
+            app.Screenshot("Login email page.");
+        }
+
+        [Test]
+        public void TheNextButtonAfterInputtingAValidPasswordShowsTheMainScreen()
+        {
+            app.EnterText(Credentials.Username);
+            app.GoToPasswordScreen();
+
+            app.EnterText(Credentials.Password);
+            app.LoginSuccesfully();
+
+            app.Screenshot("Login email page.");
+        }
     }
 }

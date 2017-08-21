@@ -28,5 +28,19 @@ namespace Toggl.Daneel.Tests.UI.Extensions
             app.Tap(Login.BackButton);
             app.WaitForElement(Login.EmailText);
         }
+
+        public static void TryLoginAndFail(this IApp app)
+        {
+            app.Tap(Login.NextButton);
+
+            app.WaitForElement(Login.ErrorLabel);
+        }
+
+        public static void LoginSuccesfully(this IApp app)
+        {
+            app.Tap(Login.NextButton);
+
+            app.WaitForElement(Main.StartTimeEntryButton);
+        }
     }
 }

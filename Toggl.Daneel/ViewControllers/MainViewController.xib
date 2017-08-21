@@ -120,6 +120,7 @@ TO SEE THE LOG</string>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Kk-Hz-RBS">
                     <rect key="frame" x="309" y="601" width="50" height="50"/>
+                    <accessibility key="accessibilityConfiguration" label="MainStartTimeEntry"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="50" id="ZPS-gP-0Ab"/>
                         <constraint firstAttribute="width" constant="50" id="eb6-9a-GbS"/>

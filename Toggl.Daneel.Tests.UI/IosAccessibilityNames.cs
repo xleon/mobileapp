@@ -17,10 +17,16 @@ namespace Toggl.Daneel.Tests.UI
     public static class Login
     {
         public const string EmailText = "LoginEmail";
+        public const string ErrorLabel = "LoginError";
         public const string PasswordText = "LoginPassword";
         public const string ShowPasswordButton = "LoginShowPassword";
         public const string ForgotPasswordButton = "LoginForgotPassword";
         public static readonly Func<AppQuery, AppQuery> BackButton = x => x.Text("Back");
         public static readonly Func<AppQuery, AppQuery> NextButton = x => x.Text("Next");
+    }
+
+    public static class Main
+    {
+        public const string StartTimeEntryButton = "MainStartTimeEntry";
     }
 }
