@@ -1,6 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -82,6 +82,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (viewModel == null) return;
 
             collection.Remove(viewModel);
+            RaisePropertyChanged(nameof(IsEmpty));
         }
 
         private void onTimeEntryCreated(IDatabaseTimeEntry timeEntry)
@@ -101,6 +102,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var foundIndex = TimeEntries.IndexOf(TimeEntries.FirstOrDefault(x => x.Date < indexDate));
             var indexToInsert = foundIndex == -1 ? TimeEntries.Count : foundIndex;
             TimeEntries.Insert(indexToInsert, newCollection);
+
+            RaisePropertyChanged(nameof(IsEmpty));
         }
 
         private bool isNotRunning(IDatabaseTimeEntry timeEntry) => timeEntry.Stop != null;
