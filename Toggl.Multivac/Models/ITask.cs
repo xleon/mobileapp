@@ -12,12 +12,12 @@ namespace Toggl.Multivac.Models
 
         long? UserId { get; }
 
-        int EstimatedSeconds { get; }
+        long EstimatedSeconds { get; }
 
         bool Active { get; }
 
         DateTimeOffset At { get; }
 
-        int TrackedSeconds { get; }
+        long TrackedSeconds { get; }
     }
 }

@@ -19,12 +19,12 @@ namespace Toggl.Ultrawave.Models
         [JsonProperty("uid")]
         public long? UserId { get; set; }
 
-        public int EstimatedSeconds { get; set; }
+        public long EstimatedSeconds { get; set; }
 
         public bool Active { get; set; }
 
         public DateTimeOffset At { get; set; }
 
-        public int TrackedSeconds { get; set; }
+        public long TrackedSeconds { get; set; }
     }
 }
