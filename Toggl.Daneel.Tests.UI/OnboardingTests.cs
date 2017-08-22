@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Xamarin.UITest;
 using Xamarin.UITest.iOS;
 using static Toggl.Daneel.Tests.UI.Extensions.OnboardingExtensions;
 
@@ -13,10 +12,7 @@ namespace Toggl.Daneel.Tests.UI
         [SetUp]
         public void BeforeEachTest()
         {
-            app = ConfigureApp
-                .iOS
-                .EnableLocalScreenshots()
-                .StartApp();
+            app = Configuration.GetApp();
 
             app.WaitForOnboardingScreen();
         }

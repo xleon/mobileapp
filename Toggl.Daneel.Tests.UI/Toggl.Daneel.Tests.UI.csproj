@@ -41,6 +41,7 @@
     <Compile Include="Extensions\OnboardingExtensions.cs" />
     <Compile Include="LoginTests.cs" />
     <Compile Include="Extensions\LoginExtensions.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Credentials.cs" />
   </ItemGroup>
   <ItemGroup>
