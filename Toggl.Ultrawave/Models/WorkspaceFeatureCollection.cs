@@ -7,7 +7,7 @@ using Toggl.Ultrawave.Serialization;
 
 namespace Toggl.Ultrawave.Models
 {
-    public sealed partial class WorkspaceFeatureCollection : IWorkspaceFeatureCollection
+    internal sealed partial class WorkspaceFeatureCollection : IWorkspaceFeatureCollection
     {
         public long WorkspaceId { get; set; }
 

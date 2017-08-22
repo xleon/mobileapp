@@ -1,16 +1,18 @@
 ﻿using System;
+using FluentAssertions;
 using Toggl.Ultrawave.Models;
+using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Models
 {
     public class UserTests
     {
-        public class TheUserModel : BaseModelTests<User>
+        public sealed class TheUserModel
         {
-            protected override string ValidJson =>
+            private string validJson =>
                 "{\"id\":9000,\"api_token\":\"1971800d4d82861d8f2c1651fea4d212\",\"default_workspace_id\":777,\"email\":\"johnt@swift.com\",\"fullname\":\"John Swift\",\"timeofday_format\":\"h:mm A\",\"date_format\":\"MM/DD/YYYY\",\"store_start_and_stop_time\":true,\"beginning_of_week\":0,\"language\":\"en_US\",\"image_url\":\"https://www.toggl.com/system/avatars/9000/small/open-uri20121116-2767-b1qr8l.png\",\"sidebar_piechart\":false,\"at\":\"2013-03-06T12:18:42+00:00\",\"retention\":9,\"record_timeline\":true,\"render_timeline\":true,\"timeline_enabled\":true,\"timeline_experiment\":true}";
 
-            protected override User ValidObject => new User
+            private User validUser => new User
             {
                 Id = 9000,
                 ApiToken = "1971800d4d82861d8f2c1651fea4d212",
@@ -31,6 +33,27 @@ namespace Toggl.Ultrawave.Tests.Models
                 TimelineEnabled = true,
                 TimelineExperiment = true
             };
+
+            [Fact]
+            public void HasConstructorWhichCopiesValuesFromInterfaceToTheNewInstance()
+            {
+                var clonedObject = new User(validUser);
+
+                clonedObject.Should().NotBeSameAs(validUser);
+                clonedObject.ShouldBeEquivalentTo(validUser, options => options.IncludingProperties());
+            }
+
+            [Fact]
+            public void CanBeDeserialized()
+            {
+                SerializationHelper.CanBeDeserialized(validJson, validUser);
+            }
+
+            [Fact]
+            public void CanBeSerialized()
+            {
+                SerializationHelper.CanBeSerialized(validJson, validUser);
+            }
         }
     }
 }

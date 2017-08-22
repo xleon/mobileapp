@@ -1,14 +1,16 @@
 ﻿using System;
+using FluentAssertions;
 using Toggl.Ultrawave.Models;
+using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Models
 {
-    public class ProjectTests : BaseModelTests<Project>
+    public sealed class ProjectTests
     {
-        protected override string ValidJson
+        private string validJson
             => "{\"id\":64261173,\"wid\":376665,\"cid\":null,\"name\":\"Test project\",\"is_private\":false,\"active\":true,\"at\":\"2016-05-20T17:28:00+00:00\",\"server_deleted_at\":null,\"color\":\"#f61d38\",\"billable\":false,\"template\":false,\"auto_estimates\":false,\"estimated_hours\":null,\"rate\":null,\"currency\":null,\"actual_hours\":277}";
 
-        protected override Project ValidObject => new Project
+        private Project validProject => new Project
         {
             Id = 64261173,
             WorkspaceId = 376665,
@@ -22,5 +24,26 @@ namespace Toggl.Ultrawave.Tests.Models
             AutoEstimates = false,
             ActualHours = 277
         };
+
+        [Fact]
+        public void HasConstructorWhichCopiesValuesFromInterfaceToTheNewInstance()
+        {
+            var clonedObject = new Project(validProject);
+
+            clonedObject.Should().NotBeSameAs(validProject);
+            clonedObject.ShouldBeEquivalentTo(validProject, options => options.IncludingProperties());
+        }
+
+        [Fact]
+        public void CanBeDeserialized()
+        {
+            SerializationHelper.CanBeDeserialized(validJson, validProject);
+        }
+
+        [Fact]
+        public void CanBeSerialized()
+        {
+            SerializationHelper.CanBeSerialized(validJson, validProject);
+        }
     }
 }

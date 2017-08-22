@@ -25,7 +25,7 @@ namespace Toggl.Ultrawave.Models
             WriteLine("");
 
         WriteLine($"    [Preserve(AllMembers = true)]");
-        WriteLine($"    public sealed partial class {className}");
+        WriteLine($"    internal sealed partial class {className}");
         WriteLine( "    {");
         WriteLine($"        public {className}() {{ }}\n");
         WriteLine($"        public {className}({interfaceName} entity)");

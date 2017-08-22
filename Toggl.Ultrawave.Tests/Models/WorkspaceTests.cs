@@ -31,16 +31,18 @@ namespace Toggl.Ultrawave.Tests.Models
 
             [Theory]
             [MemberData("SerializationCases")]
-            public void CanBeSerialized(string validJson, Workspace validObject)
+            public void CanBeSerialized(string validJson, object validObject)
             {
-                SerializationHelper.CanBeSerialized(validJson, validObject);
+                var validWorkspace = (Workspace)validObject;
+                SerializationHelper.CanBeSerialized(validJson, validWorkspace);
             }
             
             [Theory]
             [MemberData("DeserializationCases")]
-            public void CanBeDeserialized(string validJson, Workspace validObject)
+            public void CanBeDeserialized(string validJson, object validObject)
             {
-                SerializationHelper.CanBeDeserialized(validJson, validObject);
+                var validWorkspace = (Workspace)validObject;
+                SerializationHelper.CanBeDeserialized(validJson, validWorkspace);
             }
 
             public static IEnumerable<object[]> SerializationCases

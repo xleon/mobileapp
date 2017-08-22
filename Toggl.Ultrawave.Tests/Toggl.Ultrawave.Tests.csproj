@@ -151,7 +151,6 @@
     <Compile Include="Models\WorkspaceTests.cs" />
     <Compile Include="Models\ClientTests.cs" />
     <Compile Include="Models\SerializationHelper.cs" />
-    <Compile Include="Models\BaseModelTests.cs" />
     <Compile Include="ApiClients\TestApi.cs" />
     <Compile Include="ApiClients\BaseApiTests.cs" />
     <Compile Include="Models\TagTests.cs" />

@@ -1,14 +1,16 @@
 ﻿using System;
+using FluentAssertions;
 using Toggl.Ultrawave.Models;
+using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Models
 {
-    public class TaskTests : BaseModelTests<Task>
+    public sealed class TaskTests
     {
-        protected override string ValidJson
+        private string validJson
             => "{\"id\":79,\"name\":\"new task\",\"pid\":1,\"wid\":56,\"uid\":null,\"estimated_seconds\":13,\"active\":true,\"at\":\"2017-01-01T02:03:00+00:00\",\"tracked_seconds\":12}";
 
-        protected override Task ValidObject => new Task
+        private Task validTask => new Task
         {
             Id = 79,
             Name = "new task",
@@ -20,5 +22,26 @@ namespace Toggl.Ultrawave.Tests.Models
             At = new DateTimeOffset(2017, 1, 1, 2, 3, 0, TimeSpan.Zero),
             TrackedSeconds = 12
         };
+
+        [Fact]
+        public void HasConstructorWhichCopiesValuesFromInterfaceToTheNewInstance()
+        {
+            var clonedObject = new Task(validTask);
+
+            clonedObject.Should().NotBeSameAs(validTask);
+            clonedObject.ShouldBeEquivalentTo(validTask, options => options.IncludingProperties());
+        }
+
+        [Fact]
+        public void CanBeDeserialized()
+        {
+            SerializationHelper.CanBeDeserialized(validJson, validTask);
+        }
+
+        [Fact]
+        public void CanBeSerialized()
+        {
+            SerializationHelper.CanBeSerialized(validJson, validTask);
+        }
     }
 }

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Toggl.Ultrawave.Models
 {
-    public sealed partial class Tag : ITag
+    internal sealed partial class Tag : ITag
     {
         public long Id { get; set; }
 
