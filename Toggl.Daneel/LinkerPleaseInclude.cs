@@ -46,6 +46,7 @@ namespace Toggl.Daneel
         public void Include(UITextField textField)
         {
             textField.Hidden = true;
+            textField.TextColor = UIColor.White;
             textField.Text = textField.Text + "";
             textField.EditingChanged += (sender, args) => { textField.Text = ""; };
         }
@@ -61,6 +62,7 @@ namespace Toggl.Daneel
         {
             label.Hidden = true;
             label.Text = label.Text + "";
+            label.TextColor = UIColor.White;
             label.AttributedText = new NSAttributedString(label.AttributedText.ToString() + "");
         }
 

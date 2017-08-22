@@ -7,7 +7,7 @@ using MvvmCross.Core.ViewModels;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
-using Toggl.Multivac.Models;
+using Toggl.Multivac.Extensions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -38,7 +38,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public DateTimeOffset? EndDate { get; private set; }
 
-        public ObservableCollection<IBaseModel> Suggestions { get; } = new ObservableCollection<IBaseModel>();
+        public ObservableCollection<ITimeEntrySuggestionViewModel> Suggestions { get; }
+            = new ObservableCollection<ITimeEntrySuggestionViewModel>();
 
         public IMvxAsyncCommand BackCommand { get; }
 

@@ -55,6 +55,9 @@
     <Compile Include="ViewModels\TimeEntryViewModelCollection.cs" />
     <Compile Include="Converters\DateTimeToTimeConverter.cs" />
     <Compile Include="Parameters\IdParameter.cs" />
+    <Compile Include="Converters\TaskCountConverter.cs" />
+    <Compile Include="ViewModels\ITimeEntrySuggestionViewModel.cs" />
+    <Compile Include="ViewModels\ProjectSuggestionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">

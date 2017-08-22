@@ -48,6 +48,10 @@ namespace Toggl.Daneel.ViewControllers
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITableView SuggestionsTableView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton TagsButton { get; set; }
 
         [Outlet]
@@ -94,6 +98,11 @@ namespace Toggl.Daneel.ViewControllers
             if (ProjectsButton != null) {
                 ProjectsButton.Dispose ();
                 ProjectsButton = null;
+            }
+
+            if (SuggestionsTableView != null) {
+                SuggestionsTableView.Dispose ();
+                SuggestionsTableView = null;
             }
 
             if (TagsButton != null) {

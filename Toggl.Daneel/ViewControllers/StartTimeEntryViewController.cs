@@ -5,6 +5,7 @@ using MvvmCross.iOS.Views;
 using MvvmCross.Plugins.Color.iOS;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
+using Toggl.Daneel.ViewSources;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
@@ -30,11 +31,17 @@ namespace Toggl.Daneel.ViewControllers
             UIKeyboard.Notifications.ObserveWillShow(keyboardWillShow);
             UIKeyboard.Notifications.ObserveWillHide(keyboardWillHide);
 
+            var source = new StartTimeEntryTableViewSource(SuggestionsTableView);
+            SuggestionsTableView.Source = source;
+
             var timeSpanConverter = new TimeSpanToDurationValueConverter();
             var buttonColorConverter = new BoolToUIColorConverter(Color.StartTimeEntry.ActiveButton, Color.StartTimeEntry.InactiveButton);
 
             var bindingSet = this.CreateBindingSet<StartTimeEntryViewController, StartTimeEntryViewModel>();
-    
+
+            //TableView
+            bindingSet.Bind(source).To(vm => vm.Suggestions);
+
             //Text
             bindingSet.Bind(TimeLabel).To(vm => vm.ElapsedTime).WithConversion(timeSpanConverter);
             bindingSet.Bind(DescriptionTextField).To(vm => vm.RawTimeEntryText);
