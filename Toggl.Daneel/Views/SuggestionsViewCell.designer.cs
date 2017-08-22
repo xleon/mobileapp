@@ -15,15 +15,15 @@ namespace Toggl.Daneel.Views
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIView BottomRowView { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel DescriptionLabel { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIView ProjectDot { get; set; }
+        UIKit.NSLayoutConstraint DescriptionTopDistanceConstraint { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView ProjectDotView { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -39,19 +39,19 @@ namespace Toggl.Daneel.Views
 
         void ReleaseDesignerOutlets ()
         {
-            if (BottomRowView != null) {
-                BottomRowView.Dispose ();
-                BottomRowView = null;
-            }
-
             if (DescriptionLabel != null) {
                 DescriptionLabel.Dispose ();
                 DescriptionLabel = null;
             }
 
-            if (ProjectDot != null) {
-                ProjectDot.Dispose ();
-                ProjectDot = null;
+            if (DescriptionTopDistanceConstraint != null) {
+                DescriptionTopDistanceConstraint.Dispose ();
+                DescriptionTopDistanceConstraint = null;
+            }
+
+            if (ProjectDotView != null) {
+                ProjectDotView.Dispose ();
+                ProjectDotView = null;
             }
 
             if (ProjectLabel != null) {

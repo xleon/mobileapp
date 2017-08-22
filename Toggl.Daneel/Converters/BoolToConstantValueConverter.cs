@@ -3,7 +3,7 @@ using System.Globalization;
 using MvvmCross.Platform.Converters;
 using Toggl.Multivac;
 
-namespace Toggl.Foundation.MvvmCross.Converters
+namespace Toggl.Daneel.Converters
 {
     public class BoolToConstantValueConverter<T> : MvxValueConverter<bool, T>
     {

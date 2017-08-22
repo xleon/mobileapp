@@ -16,6 +16,8 @@ namespace Toggl.Foundation.Suggestions
 
         public string TaskName { get; } = "";
 
+        public bool HasProject { get; } = false;
+
         internal Suggestion(IDatabaseTimeEntry timeEntry)
         {
             TaskId = timeEntry.TaskId;
@@ -24,6 +26,7 @@ namespace Toggl.Foundation.Suggestions
 
             if (timeEntry.Project == null) return;
 
+            HasProject = true;
             ProjectName = timeEntry.Project.Name;
             ProjectColor = timeEntry.Project.Color;
 

@@ -1,29 +1,22 @@
 ﻿using System;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.Binding.iOS.Views;
-using MvvmCross.Plugins.Visibility;
-using Toggl.Foundation.MvvmCross.ViewModels;
 using MvvmCross.Binding.iOS;
-using UIKit;
+using MvvmCross.Binding.iOS.Views;
+using MvvmCross.Plugins.Color;
+using MvvmCross.Plugins.Visibility;
+using Toggl.Daneel.Converters;
 using Toggl.Daneel.Extensions;
 using Toggl.Foundation.MvvmCross.Converters;
-using MvvmCross.Plugins.Color;
-using MvvmCross.Platform.Converters;
-using System.Globalization;
+using Toggl.Foundation.MvvmCross.ViewModels;
+using UIKit;
 
 namespace Toggl.Daneel.Views
 {
     public partial class TimeEntriesLogViewCell : MvxTableViewCell
     {
-        private class DescriptionTopDistanceValueConverter : MvxValueConverter<bool, nfloat>
-        {
-            private const float NoProjectDistance = 24;
-            private const float HasProjectDistance = 14;
-
-            protected override nfloat Convert(bool value, Type targetType, object parameter, CultureInfo culture)
-                => value ? HasProjectDistance : NoProjectDistance;
-        }
+        private const float NoProjectDistance = 24;
+        private const float HasProjectDistance = 14;
 
         public static readonly NSString Key = new NSString(nameof(TimeEntriesLogViewCell));
         public static readonly UINib Nib;
@@ -49,7 +42,7 @@ namespace Toggl.Daneel.Views
                 var colorConverter = new MvxRGBValueConverter();
                 var visibilityConverter = new MvxVisibilityValueConverter();
                 var timeSpanConverter = new TimeSpanToDurationValueConverter();
-                var descriptionTopDistanceValueConverter = new DescriptionTopDistanceValueConverter();
+                var descriptionTopDistanceValueConverter = new BoolToConstantValueConverter<nfloat>(HasProjectDistance, NoProjectDistance);
                 
                 var bindingSet = this.CreateBindingSet<TimeEntriesLogViewCell, TimeEntryViewModel>();
 
