@@ -35,7 +35,10 @@ namespace Toggl.Daneel.ViewControllers
             SuggestionsTableView.Source = source;
 
             var timeSpanConverter = new TimeSpanToDurationValueConverter();
-            var buttonColorConverter = new BoolToUIColorConverter(Color.StartTimeEntry.ActiveButton, Color.StartTimeEntry.InactiveButton);
+            var buttonColorConverter = new BoolToConstantValueConverter<UIColor>(
+                Color.StartTimeEntry.ActiveButton.ToNativeColor(),
+                Color.StartTimeEntry.InactiveButton.ToNativeColor()
+            );
 
             var bindingSet = this.CreateBindingSet<StartTimeEntryViewController, StartTimeEntryViewModel>();
 
