@@ -275,6 +275,14 @@
     <ImageAsset Include="Resources\Images.xcassets\icAdd.imageset\icAddS.png" />
     <ImageAsset Include="Resources\Images.xcassets\icAdd.imageset\icAddS%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icAdd.imageset\icAddS%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationTimer.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationTimer.imageset\icIllustrationTimer.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationTimer.imageset\icIllustrationTimer%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationTimer.imageset\icIllustrationTimer%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationPaws.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationPaws.imageset\icIllustrationPaws.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationPaws.imageset\icIllustrationPaws%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationPaws.imageset\icIllustrationPaws%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />

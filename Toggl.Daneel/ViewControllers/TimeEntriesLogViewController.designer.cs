@@ -16,11 +16,11 @@ namespace Toggl.Daneel.ViewControllers
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIImageView CenterImageView { get; set; }
+        UIKit.UIButton EmptyStateButton { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton EmptyStateButton { get; set; }
+        UIKit.UIImageView EmptyStateImageView { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -38,16 +38,20 @@ namespace Toggl.Daneel.ViewControllers
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITableView TimeEntriesTableView { get; set; }
 
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIImageView WelcomeImageView { get; set; }
+
         void ReleaseDesignerOutlets ()
         {
-            if (CenterImageView != null) {
-                CenterImageView.Dispose ();
-                CenterImageView = null;
-            }
-
             if (EmptyStateButton != null) {
                 EmptyStateButton.Dispose ();
                 EmptyStateButton = null;
+            }
+
+            if (EmptyStateImageView != null) {
+                EmptyStateImageView.Dispose ();
+                EmptyStateImageView = null;
             }
 
             if (EmptyStateTextLabel != null) {
@@ -68,6 +72,11 @@ namespace Toggl.Daneel.ViewControllers
             if (TimeEntriesTableView != null) {
                 TimeEntriesTableView.Dispose ();
                 TimeEntriesTableView = null;
+            }
+
+            if (WelcomeImageView != null) {
+                WelcomeImageView.Dispose ();
+                WelcomeImageView = null;
             }
         }
     }
