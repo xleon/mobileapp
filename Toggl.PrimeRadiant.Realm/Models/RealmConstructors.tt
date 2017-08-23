@@ -1,4 +1,4 @@
-﻿﻿﻿<#@ template language="C#" hostspecific="True"
+﻿<#@ template language="C#" hostspecific="True"
 #><#@ assembly name="System.Core"
 #><#@ import namespace="System.IO"
 #><#@ import namespace="System.Text.RegularExpressions"
@@ -27,33 +27,55 @@ namespace Toggl.PrimeRadiant.Realm
         if (!isFirst)
             WriteLine("");
 
-        WriteLine($"    internal partial class {realmClassName}");
-        WriteLine( "    {");
-        WriteLine( "        [PrimaryKey]");
-        WriteLine( "        public long Id { get; set; }\n");
-        WriteLine( "        public bool IsDirty { get; set; }\n");
-        WriteLine($"        public {realmClassName}() {{ }}\n");
-        WriteLine($"        public {realmClassName}(IDatabase{className} entity, Realms.Realm realm)");
-        WriteLine($"            : this(entity as {interfaceName}, realm)");
-        WriteLine( "        {");
-        WriteLine( "            IsDirty = entity.IsDirty;");
-        WriteLine( "        }\n");
-        WriteLine($"        public {realmClassName}({interfaceName} entity, Realms.Realm realm)");
-        WriteLine( "        {");
-
         foreach(var line in File.ReadAllLines(modelFile))
         {
-            var extendsIBaseModel = line.Contains(": IBaseModel");
-            if (extendsIBaseModel)
+            var isStartOfClass = line.Contains($" interface {interfaceName}");
+            if (isStartOfClass)
             {
-                WriteLine("            Id = entity.Id;");
+                var extendsIBaseModel = line.Contains(": IBaseModel");
+
+                WriteLine($"    internal partial class {realmClassName}");
+                WriteLine( "    {");
+
+                if (extendsIBaseModel)
+                {
+                    WriteLine( "        [PrimaryKey]");
+                    WriteLine( "        public long Id { get; set; }\n");
+                }
+
+                WriteLine( "        public bool IsDirty { get; set; }\n");
+                WriteLine($"        public {realmClassName}() {{ }}\n");
+                
+                var databaseInterfaceName = $"IDatabase{className}";
+                var databaseInterfaceFileName = Path.Combine(filePath, "../../Toggl.PrimeRadiant/Models/", databaseInterfaceName + ".cs");
+                var databaseInterfaceExists = File.Exists(databaseInterfaceFileName);
+
+                if (databaseInterfaceExists)
+                {
+                    WriteLine($"        public {realmClassName}({databaseInterfaceName} entity, Realms.Realm realm)");
+                    WriteLine($"            : this(entity as {interfaceName}, realm)");
+                    WriteLine( "        {");
+                    WriteLine( "            IsDirty = entity.IsDirty;");
+                    WriteLine( "        }\n");
+                }
+
+                WriteLine($"        public {realmClassName}({interfaceName} entity, Realms.Realm realm)");
+                WriteLine( "        {");
+
+                if (extendsIBaseModel)
+                {
+                    WriteLine("            Id = entity.Id;");
+                }
+
                 continue;
             }
 
             var isProperty = line.Contains("get;");
             if (!isProperty) continue;
 
-            var isRealmProperty = Regex.IsMatch(line, ".Id ") && !line.Contains("Default");
+            var isRealmProperty = Regex.IsMatch(line, ".Id ")
+                && !Regex.IsMatch(line, "^[ ]*[^ ]+Id ") // the type itself (the first token) must not end with "Id"
+                && !line.Contains("Default");
             var trimmedLine = line.Trim();
             var indexOfPropName = trimmedLine.IndexOf(" ") + 1;
             var propName = trimmedLine.Substring(indexOfPropName, trimmedLine.Length - 9 - indexOfPropName);
