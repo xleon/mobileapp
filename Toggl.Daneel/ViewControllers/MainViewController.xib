@@ -146,6 +146,7 @@ TO SEE THE LOG</string>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ddo-IW-xE3">
                             <rect key="frame" x="330" y="11" width="34" height="34"/>
+                            <accessibility key="accessibilityConfiguration" label="MainStopTimeEntry"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="34" id="cJZ-zk-6qM"/>
                                 <constraint firstAttribute="height" constant="34" id="urN-jP-06M"/>

@@ -28,5 +28,12 @@ namespace Toggl.Daneel.Tests.UI
     public static class Main
     {
         public const string StartTimeEntryButton = "MainStartTimeEntry";
+        public const string StopTimeEntryButton = "MainStopTimeEntry";
+    }
+
+    public static class StartTimeEntry
+    {
+        public const string DoneButton = "StartTimeEntryDone";
+        public const string DescriptionText = "StartTimeEntryDescription";
     }
 }

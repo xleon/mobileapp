@@ -43,6 +43,10 @@
     <Compile Include="Extensions\LoginExtensions.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Credentials.cs" />
+    <Compile Include="StartTimeEntryTests.cs" />
+    <Compile Include="Extensions\MainExtensions.cs" />
+    <Compile Include="Extensions\StartTimeEntryExtensions.cs" />
+    <Compile Include="MainTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

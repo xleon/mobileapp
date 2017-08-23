@@ -46,6 +46,7 @@
                 </label>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Meeting with @" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dfa-kW-sKf">
                     <rect key="frame" x="16" y="53" width="343" height="24"/>
+                    <accessibility key="accessibilityConfiguration" label="StartTimeEntryDescription"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="24" id="LcE-da-N2e"/>
                     </constraints>
@@ -69,6 +70,7 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xnc-Zt-xWV">
                             <rect key="frame" x="86" y="0.0" width="42" height="50"/>
+                            <accessibility key="accessibilityConfiguration" label="StartTimeEntryBillable"/>
                             <state key="normal" image="icBillable"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Tp-xX-rFB">
@@ -77,6 +79,7 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hya-nl-hcs">
                             <rect key="frame" x="325" y="0.0" width="50" height="50"/>
+                            <accessibility key="accessibilityConfiguration" label="StartTimeEntryDone"/>
                             <state key="normal" image="icDone"/>
                         </button>
                     </subviews>
