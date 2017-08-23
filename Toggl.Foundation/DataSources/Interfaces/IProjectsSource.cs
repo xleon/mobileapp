@@ -6,7 +6,8 @@ namespace Toggl.Foundation.DataSources
 {
     public interface IProjectsSource
     {
-        IObservable<IEnumerable<IDatabaseProject>> GetAll();
         IObservable<IDatabaseProject> GetById(long id);
+        IObservable<IEnumerable<IDatabaseProject>> GetAll();
+        IObservable<IEnumerable<IDatabaseProject>> GetAll(Func<IDatabaseProject, bool> predicate);
     }
 }

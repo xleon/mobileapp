@@ -135,6 +135,34 @@ namespace Toggl.Foundation.Tests.DataSources
             }
         }
 
+        public sealed class TheGetAllMethod : TimeEntryDataSourceTest
+        {
+            [Fact]
+            public async ThreadingTask NeverReturnsDeletedTimeEntries()
+            {
+                var result = Enumerable
+                    .Range(0, 20)
+                    .Select(i => 
+                    {
+                        var isDeleted = i % 2 == 0;
+                        var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                        timeEntry.Id.Returns(i);
+                        timeEntry.IsDeleted.Returns(isDeleted);
+                        return timeEntry;
+                    });
+                Repository
+                    .GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>())
+                    .Returns(callInfo =>
+                        Observable
+                             .Return(result)
+                             .Select(x => x.Where(callInfo.Arg<Func<IDatabaseTimeEntry, bool>>())));
+
+                var timeEntries = await TimeEntriesSource.GetAll(x => x.Id > 10);
+
+                timeEntries.Should().HaveCount(5);
+            }
+        }
+
         public class TheStopMethod : TimeEntryDataSourceTest
         {
             public TheStopMethod()

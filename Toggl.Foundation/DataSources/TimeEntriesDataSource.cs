@@ -45,6 +45,9 @@ namespace Toggl.Foundation.DataSources
         public IObservable<IEnumerable<IDatabaseTimeEntry>> GetAll()
             => repository.GetAll(te => !te.IsDeleted);
 
+        public IObservable<IEnumerable<IDatabaseTimeEntry>> GetAll(Func<IDatabaseTimeEntry, bool> predicate)
+            => repository.GetAll(predicate).Select(tes => tes.Where(te => !te.IsDeleted));
+
         public IObservable<IDatabaseTimeEntry> GetById(long id)
             => repository.GetById(id);
 
