@@ -2,6 +2,6 @@
 {
     public interface ITimeEntrySuggestionViewModel
     {
-
+        long Id { get; }
     }
 }

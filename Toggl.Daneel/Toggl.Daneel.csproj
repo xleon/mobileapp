@@ -299,6 +299,7 @@
     <InterfaceDefinition Include="ViewControllers\StartTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SettingsViewController.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntryProjectsViewCell.xib" />
+    <InterfaceDefinition Include="Views\StartTimeEntryViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -402,6 +403,10 @@
     <Compile Include="Views\StartTimeEntryProjectsViewCell.cs" />
     <Compile Include="Views\StartTimeEntryProjectsViewCell.designer.cs">
       <DependentUpon>StartTimeEntryProjectsViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StartTimeEntryViewCell.cs" />
+    <Compile Include="Views\StartTimeEntryViewCell.designer.cs">
+      <DependentUpon>StartTimeEntryViewCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
