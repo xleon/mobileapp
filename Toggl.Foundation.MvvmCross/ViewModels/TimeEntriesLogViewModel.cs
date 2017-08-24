@@ -10,6 +10,8 @@ using Toggl.Foundation.DataSources;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
+using MvvmCross.Core.Navigation;
+using Toggl.Foundation.MvvmCross.Parameters;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -19,6 +21,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IDisposable updateDisposable;
 
         private readonly ITogglDataSource dataSource;
+        private readonly IMvxNavigationService navigationService;
 
         public bool IsWelcome { get; set; }
 
@@ -40,11 +43,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ? Resources.TimeEntriesLogEmptyStateWelcomeText
             : Resources.TimeEntriesLogEmptyStateText;
 
-        public TimeEntriesLogViewModel(ITogglDataSource dataSource)
+        public MvxAsyncCommand<TimeEntryViewModel> EditCommand { get; }
+
+        public TimeEntriesLogViewModel(ITogglDataSource dataSource, IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.dataSource = dataSource;
+            this.navigationService = navigationService;
+
+            EditCommand = new MvxAsyncCommand<TimeEntryViewModel>(edit);
         }
 
         public async override Task Initialize()
@@ -107,5 +116,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private bool isNotRunning(IDatabaseTimeEntry timeEntry) => timeEntry.Stop != null;
+
+        private Task edit(TimeEntryViewModel timeEntryViewModel)
+            => navigationService.Navigate<EditTimeEntryViewModel, IdParameter>(IdParameter.WithId(timeEntryViewModel.Id));
     }
 }

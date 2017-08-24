@@ -72,6 +72,11 @@ namespace Toggl.Daneel.ViewControllers
                       .To($"{nameof(TimeEntriesLogViewModel.IsEmpty)}&&{nameof(TimeEntriesLogViewModel.IsWelcome)}")
                       .WithConversion(visibilityConverter);
 
+            //Commands
+            bindingSet.Bind(source)
+                      .For(s => s.SelectionChangedCommand)
+                      .To(vm => vm.EditCommand);
+
             bindingSet.Apply();
         }
     }

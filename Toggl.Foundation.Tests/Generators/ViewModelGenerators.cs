@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using FsCheck;
+using MvvmCross.Core.Navigation;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -25,7 +26,8 @@ namespace Toggl.Foundation.Tests.Generators
                 {
                     var source = Substitute.For<ITogglDataSource>();
                     var timeService = Substitute.For<ITimeService>();
-                    var viewModel = new TimeEntriesLogViewModel(source);
+                    var navigationService = Substitute.For<IMvxNavigationService>();
+                    var viewModel = new TimeEntriesLogViewModel(source, navigationService);
 
                     var year = yearGenerator.Sample(0, 1).First();
 

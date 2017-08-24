@@ -13,6 +13,7 @@ using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 using ThreadingTask = System.Threading.Tasks.Task;
+using Toggl.Foundation.MvvmCross.Parameters;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -21,16 +22,20 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public class TimeEntriesLogViewModelTest : BaseViewModelTests<TimeEntriesLogViewModel>
         {
             protected override TimeEntriesLogViewModel CreateViewModel()
-                => new TimeEntriesLogViewModel(DataSource);
+                => new TimeEntriesLogViewModel(DataSource, NavigationService);
         }
 
         public class TheConstructor : TimeEntriesLogViewModelTest
         {
-            [Fact]
-            public void ThrowsIfTheArgumentIsNull()
+            [Theory]
+            [ClassData(typeof(TwoParameterConstructorTestData))]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useNavigationService)
             {
+                var dataSource = useDataSource ? DataSource : null;
+                var navigationService = useNavigationService ? NavigationService : null;
+
                 Action tryingToConstructWithEmptyParameters =
-                    () => new TimeEntriesLogViewModel(null);
+                    () => new TimeEntriesLogViewModel(dataSource, navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -212,6 +217,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.TimeEntries.Any(c => c.Any(te => te.Id == 21)).Should().BeFalse();
                     ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries);
                 }
+            }
+        }
+
+        public class TheEditCommand : TimeEntriesLogViewModelTest
+        {
+            [Fact]
+            public async ThreadingTask NavigatesToTheEditTimeEntryViewModel()
+            {
+                var databaseTimeEntry = Substitute.For<IDatabaseTimeEntry>();
+                databaseTimeEntry.Stop.Returns(DateTimeOffset.Now);
+                var timeEntryViewModel = new TimeEntryViewModel(databaseTimeEntry);
+
+                await ViewModel.EditCommand.ExecuteAsync(timeEntryViewModel);
+
+                await NavigationService.Received().Navigate<EditTimeEntryViewModel, IdParameter>(Arg.Is<IdParameter>(p => p.Id == databaseTimeEntry.Id));
             }
         }
     }
