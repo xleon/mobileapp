@@ -45,11 +45,14 @@ namespace Toggl.Daneel.ViewControllers
 
             var bindingSet = this.CreateBindingSet<MainViewController, MainViewModel>();
 
-            //Buttons
+            //Commands
             bindingSet.Bind(settingsButton).To(vm => vm.OpenSettingsCommand);
-            bindingSet.Bind(EditTimeEntryButton).To(vm => vm.EditTimeEntryCommand);
             bindingSet.Bind(StopTimeEntryButton).To(vm => vm.StopTimeEntryCommand);
             bindingSet.Bind(StartTimeEntryButton).To(vm => vm.StartTimeEntryCommand);
+            bindingSet.Bind(EditTimeEntryButton).To(vm => vm.EditTimeEntryCommand);
+            bindingSet.Bind(CurrentTimeEntryCard)
+                      .For(v => v.BindTap())
+                      .To(vm => vm.EditTimeEntryCommand);
 
             //Visibility
             bindingSet.Bind(CurrentTimeEntryCard)

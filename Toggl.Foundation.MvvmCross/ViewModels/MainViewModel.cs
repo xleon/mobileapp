@@ -87,6 +87,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             CurrentTimeEntryElapsedTime = TimeSpan.Zero;
         }
 
-        private Task editTimeEntry() => throw new NotImplementedException();
+        private Task editTimeEntry()
+            => navigationService.Navigate<EditTimeEntryViewModel, IdParameter>(IdParameter.WithId(CurrentlyRunningTimeEntry.Id));
     }
 }
