@@ -6,6 +6,7 @@ using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Parameters;
+using Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 

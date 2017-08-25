@@ -7,6 +7,7 @@ using MvvmCross.Plugins.Color;
 using MvvmCross.Plugins.Visibility;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions;
 using UIKit;
 
 namespace Toggl.Daneel.Views

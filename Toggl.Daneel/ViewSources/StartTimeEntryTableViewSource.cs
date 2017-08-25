@@ -4,7 +4,7 @@ using MvvmCross.Binding.iOS.Views;
 using MvvmCross.Plugins.Color.iOS;
 using Toggl.Daneel.Views;
 using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions;
 using UIKit;
 
 namespace Toggl.Daneel.ViewSources

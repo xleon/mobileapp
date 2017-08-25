@@ -1,7 +1,7 @@
 ﻿using MvvmCross.Core.ViewModels;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions
 {
     public sealed class TimeEntrySuggestionViewModel : MvxNotifyPropertyChanged, ITimeEntrySuggestionViewModel
     {

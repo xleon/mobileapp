@@ -46,7 +46,6 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Services\PasswordManagerResult.cs" />
     <Compile Include="Services\StubPasswordManagerService.cs" />
-    <Compile Include="ViewModels\StartTimeEntryViewModel.cs" />
     <Compile Include="Parameters\DateParameter.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\EditTimeEntryViewModel.cs" />
@@ -56,10 +55,11 @@
     <Compile Include="Converters\DateTimeToTimeConverter.cs" />
     <Compile Include="Parameters\IdParameter.cs" />
     <Compile Include="Converters\TaskCountConverter.cs" />
-    <Compile Include="ViewModels\ITimeEntrySuggestionViewModel.cs" />
-    <Compile Include="ViewModels\ProjectSuggestionViewModel.cs" />
     <Compile Include="Converters\BoolToConstantValueConverter.cs" />
-    <Compile Include="ViewModels\TimeEntrySuggestionViewModel.cs" />
+    <Compile Include="ViewModels\StartTimeEntryViewModel.cs" />
+    <Compile Include="ViewModels\StartTimeEntrySuggestions\ProjectSuggestionViewModel.cs" />
+    <Compile Include="ViewModels\StartTimeEntrySuggestions\TimeEntrySuggestionViewModel.cs" />
+    <Compile Include="ViewModels\StartTimeEntrySuggestions\ITimeEntrySuggestionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">

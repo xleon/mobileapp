@@ -1,4 +1,4 @@
-﻿namespace Toggl.Foundation.MvvmCross.ViewModels
+﻿namespace Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions
 {
     public interface ITimeEntrySuggestionViewModel
     {
