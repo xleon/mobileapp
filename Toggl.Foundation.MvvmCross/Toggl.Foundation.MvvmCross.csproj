@@ -56,6 +56,7 @@
     <Compile Include="Parameters\IdParameter.cs" />
     <Compile Include="Converters\TaskCountConverter.cs" />
     <Compile Include="Converters\BoolToConstantValueConverter.cs" />
+    <Compile Include="ViewModels\StartTimeEntrySuggestions\TextFieldInfo.cs" />
     <Compile Include="ViewModels\StartTimeEntryViewModel.cs" />
     <Compile Include="ViewModels\StartTimeEntrySuggestions\ProjectSuggestionViewModel.cs" />
     <Compile Include="ViewModels\StartTimeEntrySuggestions\TimeEntrySuggestionViewModel.cs" />

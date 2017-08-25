@@ -36,6 +36,11 @@ namespace Toggl.Daneel
                 view => new TextFieldSecureTextEntryTargetBinding(view)
             );
 
+            registry.RegisterCustomBindingFactory<UITextField>(
+                TextFieldTextInfoTargetBinding.BindingName,
+                view => new TextFieldTextInfoTargetBinding(view)
+            );
+
             registry.RegisterCustomBindingFactory<UIView>(
                 ViewAnimatedBackgroundTargetBinding.BindingName,
                 view => new ViewAnimatedBackgroundTargetBinding(view)

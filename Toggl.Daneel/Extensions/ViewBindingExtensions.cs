@@ -21,6 +21,9 @@ namespace Toggl.Daneel.Extensions
         public static string BindSecureTextEntry(this UITextField self)
             => TextFieldSecureTextEntryTargetBinding.BindingName;
 
+        public static string BindTextFieldInfo(this UITextField self)
+            => TextFieldTextInfoTargetBinding.BindingName;
+
         public static string BindAnimatedBackground(this UIView self)
             => ViewAnimatedBackgroundTargetBinding.BindingName;
 

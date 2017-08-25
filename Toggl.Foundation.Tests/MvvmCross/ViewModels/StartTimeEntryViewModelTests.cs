@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.MvvmCross.Parameters;
+using Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
 using Xunit;
@@ -84,7 +85,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var dateParameter = DateParameter.WithDate(date);
 
                 await ViewModel.Initialize(dateParameter);
-                ViewModel.RawTimeEntryText = description;
+                ViewModel.TextFieldInfo = new TextFieldInfo(description, 0);
                 ViewModel.DoneCommand.Execute();
 
                 await DataSource.TimeEntries.Received().Start(

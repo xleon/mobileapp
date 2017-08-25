@@ -23,9 +23,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IDisposable elapsedTimeDisposable;
 
         //Properties
-        public string RawTimeEntryText { get; set; } = "";
-
-        public int CursorPosition { get; set; } = 0;
+        public TextFieldInfo TextFieldInfo { get; set; }
 
         public TimeSpan ElapsedTime { get; private set; } = TimeSpan.Zero;
 
@@ -79,7 +77,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task done()
         {
-            await dataSource.TimeEntries.Start(StartDate, RawTimeEntryText, IsBillable);
+            await dataSource.TimeEntries.Start(StartDate, TextFieldInfo.Text, IsBillable);
 
             await navigationService.Close(this);
         }

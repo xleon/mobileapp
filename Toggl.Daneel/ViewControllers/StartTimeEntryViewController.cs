@@ -46,8 +46,13 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(source).To(vm => vm.Suggestions);
 
             //Text
-            bindingSet.Bind(TimeLabel).To(vm => vm.ElapsedTime).WithConversion(timeSpanConverter);
-            bindingSet.Bind(DescriptionTextField).To(vm => vm.RawTimeEntryText);
+            bindingSet.Bind(TimeLabel)
+                      .To(vm => vm.ElapsedTime)
+                      .WithConversion(timeSpanConverter);
+
+            bindingSet.Bind(DescriptionTextField)
+                      .For(v => v.BindTextFieldInfo())
+                      .To(vm => vm.TextFieldInfo);
 
             //Buttons
             bindingSet.Bind(BillableButton)
