@@ -3,9 +3,7 @@
 #><#@ import namespace="System.IO"
 #><#@ import namespace="System.Text.RegularExpressions"
 #><#@ import namespace="System.Linq"
-#>using Realms;
-using System.Linq;
-using Toggl.Multivac.Models;
+#>using System.Linq;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.PrimeRadiant.Realm
@@ -24,6 +22,15 @@ namespace Toggl.PrimeRadiant.Realm
         var className = interfaceName.Substring(1, interfaceName.Length - 1);
         var realmClassName = $"Realm{className}";
 
+        var databaseInterfaceName = $"IDatabase{className}";
+        var databaseInterfaceFileName = Path.Combine(filePath, "../../Toggl.PrimeRadiant/Models/", databaseInterfaceName + ".cs");
+        var databaseInterfaceExists = File.Exists(databaseInterfaceFileName);
+
+        if (!databaseInterfaceExists)
+            break;
+
+        var updatesFromInterface = databaseInterfaceExists ? databaseInterfaceName : interfaceName;
+
         if (!isFirst)
             WriteLine("");
 
@@ -34,33 +41,29 @@ namespace Toggl.PrimeRadiant.Realm
             {
                 var extendsIBaseModel = line.Contains(": IBaseModel");
 
-                WriteLine($"    internal partial class {realmClassName}");
+                WriteLine($"    internal partial class {realmClassName} : IUpdatesFrom<{updatesFromInterface}>");
                 WriteLine( "    {");
 
                 if (extendsIBaseModel)
                 {
-                    WriteLine( "        [PrimaryKey]");
                     WriteLine( "        public long Id { get; set; }\n");
                 }
 
                 WriteLine( "        public bool IsDirty { get; set; }\n");
                 WriteLine($"        public {realmClassName}() {{ }}\n");
-                
-                var databaseInterfaceName = $"IDatabase{className}";
-                var databaseInterfaceFileName = Path.Combine(filePath, "../../Toggl.PrimeRadiant/Models/", databaseInterfaceName + ".cs");
-                var databaseInterfaceExists = File.Exists(databaseInterfaceFileName);
+
+                WriteLine($"        public {realmClassName}({updatesFromInterface} entity, Realms.Realm realm)");
+                WriteLine( "        {");
+                WriteLine( "            SetPropertiesFrom(entity, realm);");
+                WriteLine( "        }\n");
+
+                WriteLine($"        public void SetPropertiesFrom({updatesFromInterface} entity, Realms.Realm realm)");
+                WriteLine( "        {");
 
                 if (databaseInterfaceExists)
                 {
-                    WriteLine($"        public {realmClassName}({databaseInterfaceName} entity, Realms.Realm realm)");
-                    WriteLine($"            : this(entity as {interfaceName}, realm)");
-                    WriteLine( "        {");
                     WriteLine( "            IsDirty = entity.IsDirty;");
-                    WriteLine( "        }\n");
                 }
-
-                WriteLine($"        public {realmClassName}({interfaceName} entity, Realms.Realm realm)");
-                WriteLine( "        {");
 
                 if (extendsIBaseModel)
                 {
@@ -93,7 +96,6 @@ namespace Toggl.PrimeRadiant.Realm
             WriteLine($"            {propName} = {assignment};");
         }
 
-        WriteLine( "            IsDirty = true;");
         WriteLine("        }");
         WriteLine("    }");
 

@@ -19,7 +19,7 @@ namespace Toggl.PrimeRadiant.Realm
     }
 
     internal sealed class RealmAdapter<TRealmEntity, TModel> : IRealmAdapter<TModel>
-        where TRealmEntity : RealmObject, TModel
+        where TRealmEntity : RealmObject, TModel, IUpdatesFrom<TModel>
         where TModel : IBaseModel, IDatabaseSyncable
     {
         private readonly Func<TModel, Realms.Realm, TRealmEntity> convertToRealm;
@@ -35,38 +35,43 @@ namespace Toggl.PrimeRadiant.Realm
             => Realms.Realm.GetInstance().All<TRealmEntity>();
 
         public TModel Create(TModel entity)
-            => doTransaction(entity, (realm, model) => realm.Add(model), false);
-
-        public TModel Update(TModel entity)
-            => doTransaction(entity, (realm, model) => realm.Add(model, true), true);
-
-        public void Delete(TModel entity)
-            => doTransaction(entity, (realm, model) => realm.Remove(model), true);
-
-        private void doTransaction(TModel entity, Action<Realms.Realm, TRealmEntity> transactionAction, bool checkExistance)
-            => doTransaction(entity, (realm, model) => { transactionAction(realm, model); return null; }, checkExistance);
-
-        private TRealmEntity doTransaction(
-            TModel entity, Func<Realms.Realm, TRealmEntity, TRealmEntity> transactionAction, bool checkExistance)
         {
             Ensure.Argument.IsNotNull(entity, nameof(entity));
 
+            return doTransaction(realm => realm.Add(convertToRealm(entity, realm)));
+        }
+        
+        public TModel Update(TModel entity)
+        {
+            Ensure.Argument.IsNotNull(entity, nameof(entity));
+
+            return doModyfingTransaction(entity, (realm, realmEntity) => realmEntity.SetPropertiesFrom(entity, realm));
+        }
+
+        public void Delete(TModel entity)
+        {
+            Ensure.Argument.IsNotNull(entity, nameof(entity));
+
+            doModyfingTransaction(entity, (realm, realmEntity) => realm.Remove(realmEntity));
+        }
+
+        private static TModel doModyfingTransaction(TModel entity, Action<Realms.Realm, TRealmEntity> transact)
+            => doTransaction(realm =>
+            {
+                var realmEntity = realm.All<TRealmEntity>().Single(x => x.Id == entity.Id);
+                transact(realm, realmEntity);
+                return realmEntity;
+            });
+
+        private static TModel doTransaction(Func<Realms.Realm, TModel> transact)
+        {
             var realm = Realms.Realm.GetInstance();
             using (var transaction = realm.BeginWrite())
             {
-                var realmEntity = convertToRealm(entity, realm);
-                if (checkExistance)
-                {
-                    // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-                    realm.All<TRealmEntity>().Single(x => x.Id == entity.Id);
-                }
-
-                var returnValue = transactionAction(realm, realmEntity);
+                var returnValue = transact(realm);
                 transaction.Commit();
-
                 return returnValue;
             }
         }
-
     }
 }

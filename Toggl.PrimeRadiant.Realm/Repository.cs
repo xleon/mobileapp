@@ -27,7 +27,7 @@ namespace Toggl.PrimeRadiant.Realm
             => CreateObservable(() => Adapter.GetAll().Single(x => x.Id == id));
 
         public static Repository<TModel> For<TRealmEntity>(Func<TModel, Realms.Realm, TRealmEntity> convertToRealm)
-            where TRealmEntity : RealmObject, TModel
+            where TRealmEntity : RealmObject, TModel, IUpdatesFrom<TModel>
             => new Repository<TModel>(new RealmAdapter<TRealmEntity, TModel>(convertToRealm));
     }
 }

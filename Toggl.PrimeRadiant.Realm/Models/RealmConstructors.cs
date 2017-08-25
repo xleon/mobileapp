@@ -1,13 +1,10 @@
-﻿﻿using Realms;
-using System.Linq;
-using Toggl.Multivac.Models;
+﻿using System.Linq;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.PrimeRadiant.Realm
 {
-    internal partial class RealmClient
+    internal partial class RealmClient : IUpdatesFrom<IDatabaseClient>
     {
-        [PrimaryKey]
         public long Id { get; set; }
 
         public bool IsDirty { get; set; }
@@ -15,26 +12,24 @@ namespace Toggl.PrimeRadiant.Realm
         public RealmClient() { }
 
         public RealmClient(IDatabaseClient entity, Realms.Realm realm)
-            : this(entity as IClient, realm)
         {
-            IsDirty = entity.IsDirty;
+            SetPropertiesFrom(entity, realm);
         }
 
-        public RealmClient(IClient entity, Realms.Realm realm)
+        public void SetPropertiesFrom(IDatabaseClient entity, Realms.Realm realm)
         {
+            IsDirty = entity.IsDirty;
             Id = entity.Id;
             var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
             RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId);
             Name = entity.Name;
             At = entity.At;
             ServerDeletedAt = entity.ServerDeletedAt;
-            IsDirty = true;
         }
     }
 
-    internal partial class RealmProject
+    internal partial class RealmProject : IUpdatesFrom<IDatabaseProject>
     {
-        [PrimaryKey]
         public long Id { get; set; }
 
         public bool IsDirty { get; set; }
@@ -42,13 +37,13 @@ namespace Toggl.PrimeRadiant.Realm
         public RealmProject() { }
 
         public RealmProject(IDatabaseProject entity, Realms.Realm realm)
-            : this(entity as IProject, realm)
         {
-            IsDirty = entity.IsDirty;
+            SetPropertiesFrom(entity, realm);
         }
 
-        public RealmProject(IProject entity, Realms.Realm realm)
+        public void SetPropertiesFrom(IDatabaseProject entity, Realms.Realm realm)
         {
+            IsDirty = entity.IsDirty;
             Id = entity.Id;
             var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
             RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId);
@@ -67,13 +62,11 @@ namespace Toggl.PrimeRadiant.Realm
             Rate = entity.Rate;
             Currency = entity.Currency;
             ActualHours = entity.ActualHours;
-            IsDirty = true;
         }
     }
 
-    internal partial class RealmTag
+    internal partial class RealmTag : IUpdatesFrom<IDatabaseTag>
     {
-        [PrimaryKey]
         public long Id { get; set; }
 
         public bool IsDirty { get; set; }
@@ -81,25 +74,23 @@ namespace Toggl.PrimeRadiant.Realm
         public RealmTag() { }
 
         public RealmTag(IDatabaseTag entity, Realms.Realm realm)
-            : this(entity as ITag, realm)
         {
-            IsDirty = entity.IsDirty;
+            SetPropertiesFrom(entity, realm);
         }
 
-        public RealmTag(ITag entity, Realms.Realm realm)
+        public void SetPropertiesFrom(IDatabaseTag entity, Realms.Realm realm)
         {
+            IsDirty = entity.IsDirty;
             Id = entity.Id;
             var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
             RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId);
             Name = entity.Name;
             At = entity.At;
-            IsDirty = true;
         }
     }
 
-    internal partial class RealmTask
+    internal partial class RealmTask : IUpdatesFrom<IDatabaseTask>
     {
-        [PrimaryKey]
         public long Id { get; set; }
 
         public bool IsDirty { get; set; }
@@ -107,13 +98,13 @@ namespace Toggl.PrimeRadiant.Realm
         public RealmTask() { }
 
         public RealmTask(IDatabaseTask entity, Realms.Realm realm)
-            : this(entity as ITask, realm)
         {
-            IsDirty = entity.IsDirty;
+            SetPropertiesFrom(entity, realm);
         }
 
-        public RealmTask(ITask entity, Realms.Realm realm)
+        public void SetPropertiesFrom(IDatabaseTask entity, Realms.Realm realm)
         {
+            IsDirty = entity.IsDirty;
             Id = entity.Id;
             Name = entity.Name;
             var skipProjectFetch = entity?.ProjectId == null || entity.ProjectId == 0;
@@ -126,13 +117,11 @@ namespace Toggl.PrimeRadiant.Realm
             Active = entity.Active;
             At = entity.At;
             TrackedSeconds = entity.TrackedSeconds;
-            IsDirty = true;
         }
     }
 
-    internal partial class RealmTimeEntry
+    internal partial class RealmTimeEntry : IUpdatesFrom<IDatabaseTimeEntry>
     {
-        [PrimaryKey]
         public long Id { get; set; }
 
         public bool IsDirty { get; set; }
@@ -140,13 +129,13 @@ namespace Toggl.PrimeRadiant.Realm
         public RealmTimeEntry() { }
 
         public RealmTimeEntry(IDatabaseTimeEntry entity, Realms.Realm realm)
-            : this(entity as ITimeEntry, realm)
         {
-            IsDirty = entity.IsDirty;
+            SetPropertiesFrom(entity, realm);
         }
 
-        public RealmTimeEntry(ITimeEntry entity, Realms.Realm realm)
+        public void SetPropertiesFrom(IDatabaseTimeEntry entity, Realms.Realm realm)
         {
+            IsDirty = entity.IsDirty;
             Id = entity.Id;
             var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
             RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId);
@@ -165,13 +154,11 @@ namespace Toggl.PrimeRadiant.Realm
             var skipUserFetch = entity?.UserId == null || entity.UserId == 0;
             RealmUser = skipUserFetch ? null : realm.All<RealmUser>().Single(x => x.Id == entity.UserId);
             CreatedWith = entity.CreatedWith;
-            IsDirty = true;
         }
     }
 
-    internal partial class RealmUser
+    internal partial class RealmUser : IUpdatesFrom<IDatabaseUser>
     {
-        [PrimaryKey]
         public long Id { get; set; }
 
         public bool IsDirty { get; set; }
@@ -179,13 +166,13 @@ namespace Toggl.PrimeRadiant.Realm
         public RealmUser() { }
 
         public RealmUser(IDatabaseUser entity, Realms.Realm realm)
-            : this(entity as IUser, realm)
         {
-            IsDirty = entity.IsDirty;
+            SetPropertiesFrom(entity, realm);
         }
 
-        public RealmUser(IUser entity, Realms.Realm realm)
+        public void SetPropertiesFrom(IDatabaseUser entity, Realms.Realm realm)
         {
+            IsDirty = entity.IsDirty;
             Id = entity.Id;
             ApiToken = entity.ApiToken;
             DefaultWorkspaceId = entity.DefaultWorkspaceId;
@@ -204,13 +191,11 @@ namespace Toggl.PrimeRadiant.Realm
             RenderTimeline = entity.RenderTimeline;
             TimelineEnabled = entity.TimelineEnabled;
             TimelineExperiment = entity.TimelineExperiment;
-            IsDirty = true;
         }
     }
 
-    internal partial class RealmWorkspace
+    internal partial class RealmWorkspace : IUpdatesFrom<IDatabaseWorkspace>
     {
-        [PrimaryKey]
         public long Id { get; set; }
 
         public bool IsDirty { get; set; }
@@ -218,13 +203,13 @@ namespace Toggl.PrimeRadiant.Realm
         public RealmWorkspace() { }
 
         public RealmWorkspace(IDatabaseWorkspace entity, Realms.Realm realm)
-            : this(entity as IWorkspace, realm)
         {
-            IsDirty = entity.IsDirty;
+            SetPropertiesFrom(entity, realm);
         }
 
-        public RealmWorkspace(IWorkspace entity, Realms.Realm realm)
+        public void SetPropertiesFrom(IDatabaseWorkspace entity, Realms.Realm realm)
         {
+            IsDirty = entity.IsDirty;
             Id = entity.Id;
             Name = entity.Name;
             Admin = entity.Admin;
@@ -240,7 +225,6 @@ namespace Toggl.PrimeRadiant.Realm
             RoundingMinutes = entity.RoundingMinutes;
             At = entity.At;
             LogoUrl = entity.LogoUrl;
-            IsDirty = true;
         }
     }
 }
