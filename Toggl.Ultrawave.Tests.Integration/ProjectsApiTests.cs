@@ -56,7 +56,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             }
 
             [Fact, LogTestInfo]
-            public async System.Threading.Tasks.Task ReturnsNullOnEmptyResultSet()
+            public async System.Threading.Tasks.Task ReturnsEmptyListWhenThereAreNoActiveProjects()
             {
                 var (togglClient, user) = await SetupTestUser();
 
@@ -70,8 +70,8 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 var activeProjects = await CallEndpointWith(togglClient);
 
-                noProjects.Should().BeNull();
-                activeProjects.Should().BeNull();
+                noProjects.Should().HaveCount(0);
+                activeProjects.Should().HaveCount(0);
             }
 
             public class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<IProject>
