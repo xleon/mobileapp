@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Toggl.PrimeRadiant.Realm;
 
 namespace Toggl.PrimeRadiant.Tests.Realm
@@ -40,6 +41,11 @@ namespace Toggl.PrimeRadiant.Tests.Realm
             if (worked) return;
 
             throw new InvalidOperationException();
+        }
+
+        public IEnumerable<TestModel> BatchUpdate(IEnumerable<TestModel> entities, Func<TestModel, Expression<Func<TestModel, bool>>> matchEntity, Func<TestModel, TestModel, ConflictResolutionMode> conflictResolution)
+        {
+            throw new NotImplementedException();
         }
     }
 }

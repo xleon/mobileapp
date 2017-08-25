@@ -49,6 +49,7 @@
     <Compile Include="IIdProvider.cs" />
     <Compile Include="ISinceParameterRepository.cs" />
     <Compile Include="Models\ISinceParameters.cs" />
+    <Compile Include="ConflictResolutionMode.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">
