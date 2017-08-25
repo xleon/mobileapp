@@ -13,9 +13,6 @@ namespace Toggl.Daneel.ViewControllers
 	partial class EditTimeEntryViewController
 	{
 		[Outlet]
-		UIKit.UIStackView AddDescriptionView { get; set; }
-
-		[Outlet]
 		UIKit.UIStackView AddProjectAndTaskView { get; set; }
 
 		[Outlet]
@@ -37,7 +34,7 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIButton DeleteButton { get; set; }
 
 		[Outlet]
-		UIKit.UILabel DescriptionLabel { get; set; }
+		UIKit.UITextField DescriptionTextField { get; set; }
 
 		[Outlet]
 		UIKit.UILabel DurationLabel { get; set; }
@@ -59,16 +56,6 @@ namespace Toggl.Daneel.ViewControllers
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (ClientLabel != null) {
-				ClientLabel.Dispose ();
-				ClientLabel = null;
-			}
-
-			if (AddDescriptionView != null) {
-				AddDescriptionView.Dispose ();
-				AddDescriptionView = null;
-			}
-
 			if (AddProjectAndTaskView != null) {
 				AddProjectAndTaskView.Dispose ();
 				AddProjectAndTaskView = null;
@@ -82,6 +69,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (BillableSwitch != null) {
 				BillableSwitch.Dispose ();
 				BillableSwitch = null;
+			}
+
+			if (ClientLabel != null) {
+				ClientLabel.Dispose ();
+				ClientLabel = null;
 			}
 
 			if (CloseButton != null) {
@@ -99,9 +91,9 @@ namespace Toggl.Daneel.ViewControllers
 				DeleteButton = null;
 			}
 
-			if (DescriptionLabel != null) {
-				DescriptionLabel.Dispose ();
-				DescriptionLabel = null;
+			if (DescriptionTextField != null) {
+				DescriptionTextField.Dispose ();
+				DescriptionTextField = null;
 			}
 
 			if (DurationLabel != null) {

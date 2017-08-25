@@ -1,13 +1,16 @@
 ﻿using CoreGraphics;
-using Toggl.Daneel.Extensions;
+using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
+using MvvmCross.Plugins.Color;
 using MvvmCross.Plugins.Visibility;
+using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
+using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using MvvmCross.Plugins.Color;
+using UIKit;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -24,11 +27,7 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidLoad();
 
-            DurationLabel.Font = DurationLabel.Font.GetMonospacedDigitFont();
-
-            PreferredContentSize = View.Frame.Size;
-
-            resizeSwitch();
+            prepareViews();
 
             var durationConverter = new TimeSpanToDurationWithUnitValueConverter();
             var dateConverter = new DateToTitleStringValueConverter();
@@ -40,7 +39,7 @@ namespace Toggl.Daneel.ViewControllers
             var bindingSet = this.CreateBindingSet<EditTimeEntryViewController, EditTimeEntryViewModel>();
             
             //Text
-            bindingSet.Bind(DescriptionLabel).To(vm => vm.Description);
+            bindingSet.Bind(DescriptionTextField).To(vm => vm.Description);
             bindingSet.Bind(ProjectLabel).To(vm => vm.Project);
             bindingSet.Bind(ClientLabel).To(vm => vm.Client);
             bindingSet.Bind(BillableSwitch).To(vm => vm.Billable);
@@ -59,17 +58,6 @@ namespace Toggl.Daneel.ViewControllers
             //Commands
             bindingSet.Bind(CloseButton).To(vm => vm.CloseCommand);
             bindingSet.Bind(DeleteButton).To(vm => vm.DeleteCommand);
-
-            //Description visibility
-            bindingSet.Bind(AddDescriptionView)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.Description)
-                      .WithConversion(visibilityConverter);
-            
-            bindingSet.Bind(DescriptionLabel)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.Description)
-                      .WithConversion(inverterVisibilityConverter);
 
             //Project visibility
             bindingSet.Bind(AddProjectAndTaskView)
@@ -107,10 +95,37 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Apply();
         }
 
+        private void prepareViews()
+        {
+            DurationLabel.Font = DurationLabel.Font.GetMonospacedDigitFont();
+            PreferredContentSize = View.Frame.Size;
+            resizeSwitch();
+            prepareDescriptionField();
+        }
+
         private void resizeSwitch()
         {
             var scale = switchHeight / BillableSwitch.Frame.Height;
             BillableSwitch.Transform = CGAffineTransform.MakeScale(scale, scale);
+        }
+
+        private void prepareDescriptionField()
+        {
+            var placeholderAttributes = new UIStringAttributes
+            {
+                //This should be the same as Color.pinkishGrey (206, 206, 206),
+                //but iOS makes the color a bit darker, when applied to
+                //UITextField.AttributedPlaceholder, so this is made a bit
+                //lighter than the actual color.
+                ForegroundColor = UIColor.FromRGB(215, 215, 215)
+            };
+            DescriptionTextField.AttributedPlaceholder = new NSAttributedString(Resources.AddDescription, placeholderAttributes);
+
+            DescriptionTextField.ShouldReturn += (textField) =>
+            {
+                DescriptionTextField.ResignFirstResponder();
+                return true; 
+            };
         }
     }
 }
