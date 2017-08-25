@@ -53,6 +53,7 @@
     <Compile Include="Models\IWorkspaceFeature.cs" />
     <Compile Include="LinkerSafeAttribute.cs" />
     <Compile Include="PreserveAttribute.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
