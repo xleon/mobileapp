@@ -53,6 +53,13 @@
     <Compile Include="DataSources\TimeEntriesDataSource.cs" />
     <Compile Include="Login\IApiFactory.cs" />
     <Compile Include="Login\LoginManager.cs" />
+    <Compile Include="Sync\ConflictResolution\IConflictResolver.cs" />
+    <Compile Include="Sync\ConflictResolution\Selectors\ClientSyncSelector.cs" />
+    <Compile Include="Sync\ConflictResolution\Selectors\ISyncSelector.cs" />
+    <Compile Include="Sync\ConflictResolution\Selectors\ProjectSyncSelector.cs" />
+    <Compile Include="Sync\ConflictResolution\Selectors\TagSyncSelector.cs" />
+    <Compile Include="Sync\ConflictResolution\Selectors\TaskSyncSelector.cs" />
+    <Compile Include="Sync\ConflictResolution\Selectors\WorkspaceSyncSelector.cs" />
     <Compile Include="Sync\IStateMachineOrchestrator.cs" />
     <Compile Include="Sync\ISyncManager.cs" />
     <Compile Include="Sync\ISyncStateQueue.cs" />
@@ -81,6 +88,7 @@
     <Compile Include="ITimeService.cs" />
     <Compile Include="Models\TimeEntry.cs" />
     <Compile Include="Suggestions\Suggestion.cs" />
+    <Compile Include="Sync\ConflictResolution\PreferNewer.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -129,5 +137,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
