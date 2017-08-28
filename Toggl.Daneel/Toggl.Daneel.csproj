@@ -275,6 +275,10 @@
     <ImageAsset Include="Resources\Images.xcassets\icAdd.imageset\icAddS.png" />
     <ImageAsset Include="Resources\Images.xcassets\icAdd.imageset\icAddS%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icAdd.imageset\icAddS%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icProjectDot.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icProjectDot.imageset\icProjectDot.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icProjectDot.imageset\icProjectDot%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icProjectDot.imageset\icProjectDot%403x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationTimer.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationTimer.imageset\icIllustrationTimer.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationTimer.imageset\icIllustrationTimer%402x.png" />
@@ -408,6 +412,8 @@
     <Compile Include="Views\StartTimeEntryViewCell.designer.cs">
       <DependentUpon>StartTimeEntryViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProjectTaskClientValueCombiner.cs" />
+    <Compile Include="Startup\TogglIosBindingBuilder.cs" />
     <Compile Include="Binding\TextFieldTextInfoTargetBinding.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -440,6 +446,7 @@
     <Folder Include="Resources\Images.xcassets\line.imageset\" />
     <Folder Include="Resources\Images.xcassets\icLoader.imageset\" />
     <Folder Include="Resources\Images.xcassets\icAdd.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icProjectDot.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />

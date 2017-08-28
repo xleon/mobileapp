@@ -10,6 +10,7 @@ using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using MvvmCross.Plugins.Color;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers
@@ -34,19 +35,19 @@ namespace Toggl.Daneel.ViewControllers
             var timeConverter = new DateTimeToTimeConverter();
             var visibilityConverter = new MvxVisibilityValueConverter();
             var inverterVisibilityConverter = new MvxInvertedVisibilityValueConverter();
-            var colorConverter = new MvxRGBValueConverter();
 
             var bindingSet = this.CreateBindingSet<EditTimeEntryViewController, EditTimeEntryViewModel>();
             
             //Text
             bindingSet.Bind(DescriptionTextField).To(vm => vm.Description);
-            bindingSet.Bind(ProjectLabel).To(vm => vm.Project);
-            bindingSet.Bind(ClientLabel).To(vm => vm.Client);
             bindingSet.Bind(BillableSwitch).To(vm => vm.Billable);
             bindingSet.Bind(DurationLabel)
                       .To(vm => vm.Duration)
                       .WithConversion(durationConverter);
             
+            bindingSet.Bind(ProjectTaskClientLabel, $"AttributedText ProjectTaskClient(Project, Task, Client, {ProjectTaskClientLabel.Font.CapHeight}, ProjectColor)")
+                      .For(v => v.AttributedText); 
+
             bindingSet.Bind(StartDateLabel)
                       .To(vm => vm.StartTime)
                       .WithConversion(dateConverter);
@@ -65,12 +66,7 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.Project)
                       .WithConversion(visibilityConverter);
             
-            bindingSet.Bind(ProjectLabel)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.Project)
-                      .WithConversion(inverterVisibilityConverter);
-            
-            bindingSet.Bind(ProjectDot)
+            bindingSet.Bind(ProjectTaskClientLabel)
                       .For(v => v.BindVisible())
                       .To(vm => vm.Project)
                       .WithConversion(inverterVisibilityConverter);
@@ -85,13 +81,7 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindVisible())
                       .To(vm => vm.Tags)
                       .WithConversion(inverterVisibilityConverter);
-
-            //Colors
-            bindingSet.Bind(ProjectDot)
-                      .For(v => v.BackgroundColor)
-                      .To(vm => vm.ProjectColor)
-                      .WithConversion(colorConverter);
-
+            
             bindingSet.Apply();
         }
 

@@ -1,5 +1,6 @@
 using System.Reactive.Concurrency;
 using Foundation;
+using MvvmCross.Binding;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.iOS.Platform;
@@ -9,6 +10,7 @@ using MvvmCross.Platform.Platform;
 using MvvmCross.Platform.Plugins;
 using Toggl.Daneel.Presentation;
 using Toggl.Daneel.Services;
+using Toggl.Daneel.Startup;
 using Toggl.Foundation;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross;
@@ -76,5 +78,8 @@ namespace Toggl.Daneel
             var togglApp = app as App;
             togglApp.Initialize(loginManager, navigationService);
         }
+
+        protected override MvxBindingBuilder CreateBindingBuilder()
+            => new TogglIosBindingBuilder();
     }
 }

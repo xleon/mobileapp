@@ -22,9 +22,6 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UISwitch BillableSwitch { get; set; }
 
 		[Outlet]
-		UIKit.UILabel ClientLabel { get; set; }
-
-		[Outlet]
 		UIKit.UIButton CloseButton { get; set; }
 
 		[Outlet]
@@ -40,10 +37,7 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UILabel DurationLabel { get; set; }
 
 		[Outlet]
-		UIKit.UIView ProjectDot { get; set; }
-
-		[Outlet]
-		UIKit.UILabel ProjectLabel { get; set; }
+		UIKit.UILabel ProjectTaskClientLabel { get; set; }
 
 		[Outlet]
 		UIKit.UILabel StartDateLabel { get; set; }
@@ -71,11 +65,6 @@ namespace Toggl.Daneel.ViewControllers
 				BillableSwitch = null;
 			}
 
-			if (ClientLabel != null) {
-				ClientLabel.Dispose ();
-				ClientLabel = null;
-			}
-
 			if (CloseButton != null) {
 				CloseButton.Dispose ();
 				CloseButton = null;
@@ -101,14 +90,9 @@ namespace Toggl.Daneel.ViewControllers
 				DurationLabel = null;
 			}
 
-			if (ProjectDot != null) {
-				ProjectDot.Dispose ();
-				ProjectDot = null;
-			}
-
-			if (ProjectLabel != null) {
-				ProjectLabel.Dispose ();
-				ProjectLabel = null;
+			if (ProjectTaskClientLabel != null) {
+				ProjectTaskClientLabel.Dispose ();
+				ProjectTaskClientLabel = null;
 			}
 
 			if (StartDateLabel != null) {
