@@ -5,7 +5,7 @@ using static Toggl.Daneel.Tests.UI.Extensions.LoginExtensions;
 namespace Toggl.Daneel.Tests.UI
 {
     [TestFixture]
-    public class LoginTests
+    public sealed class LoginTests
     {
         private const string validEmail = "susancalvin@psychohistorian.museum";
 

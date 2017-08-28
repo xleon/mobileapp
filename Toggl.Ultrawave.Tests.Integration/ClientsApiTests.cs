@@ -12,12 +12,12 @@ using UserModel = Toggl.Ultrawave.Models.User;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
-    public class ClientsApiTests
+    public sealed class ClientsApiTests
     {
         private static Expression<Func<IClient, bool>> clientWithSameIdNameAndWorkspaceAs(IClient client)
             => c => c.Id == client.Id && c.Name == client.Name && c.WorkspaceId == client.WorkspaceId;
 
-        public class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<IClient>>
+        public sealed class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<IClient>>
         {
             protected override IObservable<List<IClient>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Clients.GetAll();
@@ -40,7 +40,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             }
         }
 
-        public class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<IClient>
+        public sealed class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<IClient>
         {
             protected override IObservable<List<IClient>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
                 => togglApi.Clients.GetAllSince(threshold);
@@ -57,7 +57,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 => clientWithSameIdNameAndWorkspaceAs(model);
         }
 
-        public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<IClient>
+        public sealed class TheCreateMethod : AuthenticatedPostEndpointBaseTests<IClient>
         {
             protected override IObservable<IClient> CallEndpointWith(ITogglApi togglApi)
                 => Observable.Defer(async () =>

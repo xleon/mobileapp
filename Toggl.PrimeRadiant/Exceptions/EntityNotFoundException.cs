@@ -1,6 +1,6 @@
 ﻿namespace Toggl.PrimeRadiant.Exceptions
 {
-    public class EntityNotFoundException : DatabaseException
+    public sealed class EntityNotFoundException : DatabaseException
     {
         private const string defaultErrorMessage = "Entity not found in database";
 

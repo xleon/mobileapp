@@ -9,7 +9,7 @@ using Toggl.Ultrawave.Network;
 
 namespace Toggl.Foundation.Login
 {
-    public class LoginManager : ILoginManager
+    public sealed class LoginManager : ILoginManager
     {
         private readonly IApiFactory apiFactory;
         private readonly ITogglDatabase database;

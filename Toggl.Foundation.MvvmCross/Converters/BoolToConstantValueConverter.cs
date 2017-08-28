@@ -5,7 +5,7 @@ using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross.Converters
 {
-    public class BoolToConstantValueConverter<T> : MvxValueConverter<bool, T>
+    public sealed class BoolToConstantValueConverter<T> : MvxValueConverter<bool, T>
     {
         private readonly T onValue;
         private readonly T offValue;

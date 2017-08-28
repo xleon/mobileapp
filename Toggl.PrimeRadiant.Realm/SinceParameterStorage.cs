@@ -5,7 +5,7 @@ using Toggl.PrimeRadiant.Realm.Models;
 
 namespace Toggl.PrimeRadiant.Realm
 {
-    public class SinceParameterStorage : ISinceParameterRepository
+    public sealed class SinceParameterStorage : ISinceParameterRepository
     {
         public ISinceParameters Get()
         {

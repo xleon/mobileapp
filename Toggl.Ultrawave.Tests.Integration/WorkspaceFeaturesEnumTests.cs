@@ -9,7 +9,7 @@ using Toggl.Ultrawave.Models;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
-    public class WorkspaceFeaturesIdEnumTests : EndpointTestBase
+    public sealed class WorkspaceFeaturesIdEnumTests : EndpointTestBase
     {
         [Fact, LogTestInfo]
         public async void EnumValuesMatchBackendResponse()

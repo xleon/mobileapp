@@ -9,7 +9,7 @@ using UIKit;
 
 namespace Toggl.Daneel.Binding
 {
-    public class ViewAnimatedBackgroundTargetBinding : MvxTargetBinding<UIView, UIColor>
+    public sealed class ViewAnimatedBackgroundTargetBinding : MvxTargetBinding<UIView, UIColor>
     {
         public const string BindingName = "AnimatedBackground";
 

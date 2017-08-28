@@ -7,7 +7,7 @@ using UIKit;
 
 namespace Toggl.Daneel.Binding
 {
-    public class TextFieldTextInfoTargetBinding : MvxTargetBinding<UITextField, TextFieldInfo>
+    public sealed class TextFieldTextInfoTargetBinding : MvxTargetBinding<UITextField, TextFieldInfo>
     {
         public const string BindingName = "TextFieldInfo";
 

@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Models
 {
-    public class TimeEntryTests
+    public sealed class TimeEntryTests
     {
         public sealed class TheTimeEntryModel
         {

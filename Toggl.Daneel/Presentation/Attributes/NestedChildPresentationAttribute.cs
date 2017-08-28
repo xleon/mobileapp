@@ -2,7 +2,7 @@
 
 namespace Toggl.Daneel.Presentation.Attributes
 {
-    public class NestedPresentationAttribute : MvxBasePresentationAttribute
+    public sealed class NestedPresentationAttribute : MvxBasePresentationAttribute
     {
     }
 }

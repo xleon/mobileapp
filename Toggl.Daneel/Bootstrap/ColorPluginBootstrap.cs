@@ -1,8 +1,8 @@
-using MvvmCross.Platform.Plugins;
+﻿using MvvmCross.Platform.Plugins;
 
 namespace Toggl.Daneel.Bootstrap
 {
-    public class ColorPluginBootstrap
+    public sealed class ColorPluginBootstrap
         : MvxLoaderPluginBootstrapAction<MvvmCross.Plugins.Color.PluginLoader, MvvmCross.Plugins.Color.iOS.Plugin>
     {
     }

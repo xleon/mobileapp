@@ -11,9 +11,9 @@ using static System.Net.HttpStatusCode;
 
 namespace Toggl.Ultrawave.Tests.Clients
 {
-    public class StatusClientTests
+    public sealed class StatusClientTests
     {
-        public class TheGetMethod
+        public sealed class TheGetMethod
         {
             private readonly StatusApi statusApi;
             private readonly IApiClient apiClient = Substitute.For<IApiClient>();

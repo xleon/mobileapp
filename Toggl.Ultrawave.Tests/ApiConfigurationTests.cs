@@ -7,9 +7,9 @@ using static Toggl.Ultrawave.Network.Credentials;
 
 namespace Toggl.Ultrawave.Tests
 {
-    public class ApiConfigurationTests
+    public sealed class ApiConfigurationTests
     {
-        public class TheConstructor
+        public sealed class TheConstructor
         {
             private static readonly UserAgent correctUserAgent = new UserAgent("Test", "1.0");
 

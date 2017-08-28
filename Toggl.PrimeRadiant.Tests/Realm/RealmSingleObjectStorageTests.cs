@@ -2,7 +2,7 @@
 
 namespace Toggl.PrimeRadiant.Tests.Realm
 {
-    public class RealmSingleObjectStorageTests : SingleObjectStorageTests<TestModel>
+    public sealed class RealmSingleObjectStorageTests : SingleObjectStorageTests<TestModel>
     {
         protected override ISingleObjectStorage<TestModel> Storage { get; } 
             = new SingleObjectStorage<TestModel>(new TestAdapter());

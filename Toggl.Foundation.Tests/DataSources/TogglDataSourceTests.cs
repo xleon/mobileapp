@@ -6,9 +6,9 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.DataSources
 {
-    public class TogglDataSourceTests
+    public sealed class TogglDataSourceTests
     {
-        public class TogglDataSourceTest
+        public abstract class TogglDataSourceTest
         {
             protected ITogglDataSource DataSource { get; }
             protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
@@ -20,7 +20,7 @@ namespace Toggl.Foundation.Tests.DataSources
             }
         }
 
-        public class TheLogoutMethod : TogglDataSourceTest
+        public sealed class TheLogoutMethod : TogglDataSourceTest
         {
             [Fact]
             public void ClearsTheDatabase()

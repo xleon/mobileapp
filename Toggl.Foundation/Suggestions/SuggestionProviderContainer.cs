@@ -5,7 +5,7 @@ using Toggl.Multivac;
 
 namespace Toggl.Foundation.Suggestions
 {
-    public class SuggestionProviderContainer : ISuggestionProviderContainer
+    public sealed class SuggestionProviderContainer : ISuggestionProviderContainer
     {
         public ReadOnlyCollection<ISuggestionProvider> Providers { get; }
 

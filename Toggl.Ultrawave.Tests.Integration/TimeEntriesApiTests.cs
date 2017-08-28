@@ -11,9 +11,9 @@ using TimeEntry = Toggl.Ultrawave.Models.TimeEntry;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
-    public class TimeEntriesApiTests
+    public sealed class TimeEntriesApiTests
     {
-        public class TheGetAllMethod : AuthenticatedGetEndpointBaseTests<List<ITimeEntry>>
+        public sealed class TheGetAllMethod : AuthenticatedGetEndpointBaseTests<List<ITimeEntry>>
         {
             [Fact, LogTestInfo]
             public async Task ReturnsAllTimeEntries()
@@ -43,7 +43,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 => togglApi.TimeEntries.GetAll();
         }
       
-        public class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<ITimeEntry>
+        public sealed class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<ITimeEntry>
         {
             protected override IObservable<List<ITimeEntry>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
                 => togglApi.TimeEntries.GetAllSince(threshold);
@@ -61,7 +61,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 => te => te.Id == model.Id && te.Description == model.Description;
         }
 
-        public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<ITimeEntry>
+        public sealed class TheCreateMethod : AuthenticatedPostEndpointBaseTests<ITimeEntry>
         {
             [Fact, LogTestInfo]
             public async Task CreatesNewTimeEntry()

@@ -4,7 +4,7 @@ using UIKit;
 
 namespace Toggl.Daneel.Presentation.Transition
 {
-    public class FromBottomTransitionDelegate : NSObject, IUIViewControllerTransitioningDelegate
+    public sealed class FromBottomTransitionDelegate : NSObject, IUIViewControllerTransitioningDelegate
     {
         private readonly SwipeInteractionController swipeInteractionController = new SwipeInteractionController();
 

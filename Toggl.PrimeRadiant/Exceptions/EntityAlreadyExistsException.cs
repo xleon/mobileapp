@@ -1,6 +1,6 @@
 ﻿namespace Toggl.PrimeRadiant.Exceptions
 {
-    public class EntityAlreadyExistsException : DatabaseException
+    public sealed class EntityAlreadyExistsException : DatabaseException
     {
         private const string defaultErrorMessage = "Entity already exists in database";
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
-    public class OnboardingViewModelTests
+    public sealed class OnboardingViewModelTests
     {
         public abstract class OnboardingViewModelTest : BaseViewModelTests<OnboardingViewModel>
         {
@@ -16,7 +16,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 => new OnboardingViewModel(NavigationService);
         }
 
-        public class TheConstructor
+        public sealed class TheConstructor
         {
             [Fact]
             public void ThrowsIfTheArgumentsIsNull()
@@ -29,7 +29,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheCurrentPageProperty : OnboardingViewModelTest
+        public sealed class TheCurrentPageProperty : OnboardingViewModelTest
         {
             [Fact]
             public void DoesNotAllowUsersToSetItsValueToAValueGreaterThanTheNumberOfPagesMinusOne()
@@ -53,7 +53,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheIsFirstPageProperty : OnboardingViewModelTest
+        public sealed class TheIsFirstPageProperty : OnboardingViewModelTest
         {
             [Theory]
             [InlineData(OnboardingViewModel.TrackPage)]
@@ -69,7 +69,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheIsLastPageProperty : OnboardingViewModelTest
+        public sealed class TheIsLastPageProperty : OnboardingViewModelTest
         {
             [Theory]
             [InlineData(OnboardingViewModel.TrackPage)]
@@ -85,7 +85,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheSkipCommand : OnboardingViewModelTest
+        public sealed class TheSkipCommand : OnboardingViewModelTest
         {
             [Fact]
             public void GoesStraightToTheLastPage()
@@ -96,7 +96,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheNextCommand : OnboardingViewModelTest
+        public sealed class TheNextCommand : OnboardingViewModelTest
         {
             [Fact]
             public void AdvancesToTheNextPage()
@@ -117,7 +117,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class ThePreviousCommand : OnboardingViewModelTest
+        public sealed class ThePreviousCommand : OnboardingViewModelTest
         {
             [Fact]
             public void ReturnsToThePreviousPage()
@@ -138,7 +138,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheLoginCommand : OnboardingViewModelTest
+        public sealed class TheLoginCommand : OnboardingViewModelTest
         {
             [Fact]
             public async Task RequestsTheLoginViewModelFromTheNavigationService()

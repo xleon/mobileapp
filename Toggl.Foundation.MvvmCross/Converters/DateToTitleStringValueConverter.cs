@@ -4,7 +4,7 @@ using MvvmCross.Platform.Converters;
 
 namespace Toggl.Foundation.MvvmCross.Converters
 {
-    public class DateToTitleStringValueConverter : MvxValueConverter<DateTimeOffset, string>
+    public sealed class DateToTitleStringValueConverter : MvxValueConverter<DateTimeOffset, string>
     {
         protected override string Convert(DateTimeOffset value, Type targetType, object parameter, CultureInfo culture)
         {

@@ -2,7 +2,7 @@
 
 namespace Toggl.PrimeRadiant.Tests.Realm
 {
-    public class RealmRepositoryTests : RepositoryTests<TestModel>
+    public sealed class RealmRepositoryTests : RepositoryTests<TestModel>
     {
         protected override IRepository<TestModel> Repository { get; } = new Repository<TestModel>(new TestAdapter());
 

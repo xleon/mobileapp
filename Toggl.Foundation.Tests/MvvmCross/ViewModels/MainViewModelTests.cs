@@ -1,4 +1,4 @@
-﻿﻿﻿﻿using System;
+﻿﻿﻿using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
@@ -13,15 +13,15 @@ using TimeEntry = Toggl.Foundation.Models.TimeEntry;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
-    public class MainViewModelTests
+    public sealed class MainViewModelTests
     {
-        public class MainViewModelTest : BaseViewModelTests<MainViewModel>
+        public abstract class MainViewModelTest : BaseViewModelTests<MainViewModel>
         {
             protected override MainViewModel CreateViewModel()
                 => new MainViewModel(DataSource, TimeService, NavigationService);
         }
 
-        public class TheConstructor : MainViewModelTest
+        public sealed class TheConstructor : MainViewModelTest
         {
             [Theory]
             [ClassData(typeof(ThreeParameterConstructorTestData))]
@@ -39,7 +39,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheViewAppearedMethod : MainViewModelTest
+        public sealed class TheViewAppearedMethod : MainViewModelTest
         {
             [Fact]
             public void RequestsTheSuggestionsViewModel()
@@ -58,7 +58,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheStartTimeEntryCommand : MainViewModelTest
+        public sealed class TheStartTimeEntryCommand : MainViewModelTest
         {
             [Fact]
             public async Task NavigatesToTheStartTimeEntryViewModel()
@@ -82,7 +82,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheOpenSettingsCommand : MainViewModelTest
+        public sealed class TheOpenSettingsCommand : MainViewModelTest
         {
             [Fact]
             public async Task NavigatesToTheSettingsViewModel()
@@ -93,7 +93,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
            
-        public class TheStopTimeEntryCommand : MainViewModelTest
+        public sealed class TheStopTimeEntryCommand : MainViewModelTest
         {
             [Fact]
             public async Task CallsTheStopMethodOnTheDataSource()
@@ -115,7 +115,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheCurrentlyRunningTimeEntryProperty : MainViewModelTest
+        public sealed class TheCurrentlyRunningTimeEntryProperty : MainViewModelTest
         {
             [Fact]
             public async Task UpdatesWhenTheTimeEntriesSourcesCurrentlyRunningTimeEntryEmitsANewTimeEntry()

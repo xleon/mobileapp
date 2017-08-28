@@ -11,9 +11,9 @@ using static System.Net.HttpStatusCode;
 
 namespace Toggl.Ultrawave.Tests.ApiClients
 {
-    public class BaseApiTests
+    public sealed class BaseApiTests
     {
-        public class TheGetAuthHeaderMethod
+        public sealed class TheGetAuthHeaderMethod
         {
             [Fact]
             public async Task CreatesRequestWithAppropriateHeaders()
@@ -43,7 +43,7 @@ namespace Toggl.Ultrawave.Tests.ApiClients
             }
         }
 
-        public class TheCreateObservableMethod
+        public sealed class TheCreateObservableMethod
         {
             [Fact]
             public async Task CreatesAnObservableThatReturnsASingleValue()

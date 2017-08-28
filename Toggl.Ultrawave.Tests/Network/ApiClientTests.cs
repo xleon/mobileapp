@@ -6,9 +6,9 @@ using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Network
 {
-    public class ApiClientTests
+    public sealed class ApiClientTests
     {
-        public class TheConstructor
+        public sealed class TheConstructor
         {
             [Fact]
             public void AddsTheUserAgentToTheProvidedHttpClient()

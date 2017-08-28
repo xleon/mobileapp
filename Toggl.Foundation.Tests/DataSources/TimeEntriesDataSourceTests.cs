@@ -17,9 +17,9 @@ using ThreadingTask = System.Threading.Tasks.Task;
 
 namespace Toggl.Foundation.Tests.DataSources
 {
-    public class TimeEntriesDataSourceTests
+    public sealed class TimeEntriesDataSourceTests
     {
-        public class TimeEntryDataSourceTest
+        public abstract class TimeEntryDataSourceTest
         {
             protected const long CurrentRunningId = 13; 
             
@@ -58,7 +58,7 @@ namespace Toggl.Foundation.Tests.DataSources
             }
         }
 
-        public class TheStartMethod : TimeEntryDataSourceTest
+        public sealed class TheStartMethod : TimeEntryDataSourceTest
         {
             [Fact]
             public async ThreadingTask CreatesANewTimeEntryInTheDatabase()
@@ -163,7 +163,7 @@ namespace Toggl.Foundation.Tests.DataSources
             }
         }
 
-        public class TheStopMethod : TimeEntryDataSourceTest
+        public sealed class TheStopMethod : TimeEntryDataSourceTest
         {
             public TheStopMethod()
             {
@@ -246,7 +246,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 observer.Messages.Single().Value.Value.Stop.Should().Be(ValidTime);
             }
         } 
-        public class TheDeleteMethod : TimeEntryDataSourceTest
+        public sealed class TheDeleteMethod : TimeEntryDataSourceTest
         {
             [Fact]
             public async ThreadingTask SetsTheDeletedFlag()

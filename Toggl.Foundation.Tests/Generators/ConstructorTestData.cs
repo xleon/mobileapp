@@ -32,19 +32,19 @@ namespace Toggl.Foundation.Tests.Generators
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
-    public class TwoParameterConstructorTestData : ConstructorTestData
+    public sealed class TwoParameterConstructorTestData : ConstructorTestData
     {
         public TwoParameterConstructorTestData() : base(2) { }
     }
 
-    public class ThreeParameterConstructorTestData : ConstructorTestData
+    public sealed class ThreeParameterConstructorTestData : ConstructorTestData
     {
         public ThreeParameterConstructorTestData() : base(3) { }
     }
 
-    public class ConstructorTestDataTests
+    public sealed class ConstructorTestDataTests
     {
-        public class TheGeneratedSequence
+        public sealed class TheGeneratedSequence
         {
             [Theory]
             [InlineData(typeof(TwoParameterConstructorTestData))]

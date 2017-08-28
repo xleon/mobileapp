@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.Sync
 {
-    public class SyncStateQueueTests
+    public sealed class SyncStateQueueTests
     {
         private class OrchestratorMock : IStateMachineOrchestrator
         {
@@ -28,7 +28,7 @@ namespace Toggl.Foundation.Tests.Sync
             public void GoToSleep() => calls.Add(Sleep);
         }
 
-        public class TheStartNextQueuedStateMethod
+        public sealed class TheStartNextQueuedStateMethod
         {
             private readonly SyncStateQueue queue = new SyncStateQueue();
             private readonly List<SyncState> orchestratorCalls = new List<SyncState>();

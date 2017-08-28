@@ -1,4 +1,4 @@
-using MvvmCross.Core.Navigation;
+﻿using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using Toggl.Foundation.Login;
@@ -8,7 +8,7 @@ using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross
 {
-    public class App : MvxApplication
+    public sealed class App : MvxApplication
     {
         public override void Initialize()
         {
@@ -26,7 +26,7 @@ namespace Toggl.Foundation.MvvmCross
         }
     }
 
-    public class AppStart : IMvxAppStart
+    public sealed class AppStart : IMvxAppStart
     {
         private readonly ILoginManager loginManager;
         private readonly IMvxNavigationService navigationService;

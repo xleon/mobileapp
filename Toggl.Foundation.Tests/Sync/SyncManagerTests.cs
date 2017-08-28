@@ -14,7 +14,7 @@ using static Toggl.Foundation.Sync.SyncState;
 
 namespace Toggl.Foundation.Tests.Sync
 {
-    public class SyncManagerTests
+    public sealed class SyncManagerTests
     {
         public abstract class SyncManagerTestBase
         {
@@ -32,7 +32,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
         }
 
-        public class TheConstuctor : SyncManagerTestBase
+        public sealed class TheConstuctor : SyncManagerTestBase
         {
             [Theory]
             [ClassData(typeof(TwoParameterConstructorTestData))]
@@ -48,7 +48,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
         }
 
-        public class TheStateProperty : SyncManagerTestBase
+        public sealed class TheStateProperty : SyncManagerTestBase
         {
             [Property]
             public void ShouldReturnStateFromOrchestrator(int stateValue)
@@ -59,7 +59,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
         }
 
-        public class TheStateObservable : SyncManagerTestBase
+        public sealed class TheStateObservable : SyncManagerTestBase
         {
             [Fact]
             public void ShouldReturnObservableFromOrchestrator()
@@ -172,7 +172,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
         }
 
-        public class TheOrchestratorCompleteObservable : ThreadSafeQueingMethodTests
+        public sealed class TheOrchestratorCompleteObservable : ThreadSafeQueingMethodTests
         {
             protected override void CallMethod()
                 => OrchestratorSyncComplete.OnNext(0);
@@ -303,7 +303,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
         }
 
-        public class ThePushSyncMethod : SyncMethodTests
+        public sealed class ThePushSyncMethod : SyncMethodTests
         {
             protected override IObservable<SyncState> CallSyncMethod()
                 => SyncManager.PushSync();
@@ -321,7 +321,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
         }
 
-        public class TheForceFullSyncMethod : SyncMethodTests
+        public sealed class TheForceFullSyncMethod : SyncMethodTests
         {
             protected override IObservable<SyncState> CallSyncMethod()
                 => SyncManager.ForceFullSync();

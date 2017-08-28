@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
@@ -17,7 +17,7 @@ using LoginType = Toggl.Foundation.MvvmCross.Parameters.LoginParameter.LoginType
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public class LoginViewModel : MvxViewModel<LoginParameter>
+    public sealed class LoginViewModel : MvxViewModel<LoginParameter>
     {
         public const int EmailPage = 0;
         public const int PasswordPage = 1;

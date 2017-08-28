@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
@@ -15,7 +15,7 @@ using TimeEntry = Toggl.Ultrawave.Models.TimeEntry;
 
 namespace Toggl.Foundation.Tests.Suggestions
 {
-    public class MostUsedTimeEntryProviderTests
+    public sealed class MostUsedTimeEntryProviderTests
     {
         public abstract class MostUsedTimeEntryProviderTest
         {
@@ -31,7 +31,7 @@ namespace Toggl.Foundation.Tests.Suggestions
             }
         }
 
-        public class TheConstructor : MostUsedTimeEntryProviderTest
+        public sealed class TheConstructor : MostUsedTimeEntryProviderTest
         {
             [Theory]
             [ClassData(typeof(TwoParameterConstructorTestData))]
@@ -48,7 +48,7 @@ namespace Toggl.Foundation.Tests.Suggestions
             }
         }
 
-        public class TheGetSuggestionMethod : MostUsedTimeEntryProviderTest
+        public sealed class TheGetSuggestionMethod : MostUsedTimeEntryProviderTest
         {
             [Fact]
             public void ReturnsEmptyObservableIfThereAreNoTimeEntries()

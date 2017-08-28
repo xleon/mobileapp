@@ -9,9 +9,9 @@ using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
-    public class UserApiTests
+    public sealed class UserApiTests
     {
-        public class TheGetMethod : AuthenticatedEndpointBaseTests<IUser>
+        public sealed class TheGetMethod : AuthenticatedEndpointBaseTests<IUser>
         {
             protected override IObservable<IUser> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.User.Get();

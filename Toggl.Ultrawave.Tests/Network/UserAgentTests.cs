@@ -5,9 +5,9 @@ using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Network
 {
-    public class UserAgentTests
+    public sealed class UserAgentTests
     {
-        public class TheConstructor
+        public sealed class TheConstructor
         {
             [Fact]
             public void ThrowsWhenTheAgentParameterIsEmpty()
@@ -50,7 +50,7 @@ namespace Toggl.Ultrawave.Tests.Network
             }
         }
 
-        public class TheToStringMethod
+        public sealed class TheToStringMethod
         {
             [Fact]
             public void ReturnsAProperlyFormattedString()

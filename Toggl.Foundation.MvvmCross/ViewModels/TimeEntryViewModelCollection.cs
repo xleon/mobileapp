@@ -7,7 +7,7 @@ using Toggl.Multivac.Extensions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
-    public class TimeEntryViewModelCollection : ObservableCollection<TimeEntryViewModel>
+    public sealed class TimeEntryViewModelCollection : ObservableCollection<TimeEntryViewModel>
     {
         public DateTimeOffset Date { get; }
 

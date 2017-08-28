@@ -5,9 +5,9 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests
 {
-    public class TimeServiceTests
+    public sealed class TimeServiceTests
     {
-        public class TheCurrentTimeObservableProperty
+        public sealed class TheCurrentTimeObservableProperty
         {
             private readonly TimeService timeService;
             private readonly TestScheduler testScheduler = new TestScheduler();

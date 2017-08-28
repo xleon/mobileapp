@@ -6,9 +6,9 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.Converters
 {
-    public class TimeSpanToDurationValueConverterTests
+    public sealed class TimeSpanToDurationValueConverterTests
     {
-        public class TheConvertMethod
+        public sealed class TheConvertMethod
         {
             [Fact]
             public void WorksWithZero()

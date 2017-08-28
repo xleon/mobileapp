@@ -6,7 +6,7 @@ using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.DataSources
 {
-    public class ProjectsDataSource : IProjectsSource
+    public sealed class ProjectsDataSource : IProjectsSource
     {
         private readonly IRepository<IDatabaseProject> repository;
 

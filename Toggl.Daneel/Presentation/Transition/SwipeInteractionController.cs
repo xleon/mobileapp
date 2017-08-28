@@ -5,7 +5,7 @@ using static UIKit.UIGestureRecognizerState;
 
 namespace Toggl.Daneel.Presentation.Transition
 {
-    public class SwipeInteractionController : UIPercentDrivenInteractiveTransition
+    public sealed class SwipeInteractionController : UIPercentDrivenInteractiveTransition
     {
         private Action onCompletedCallback;
         private UIViewController viewController;

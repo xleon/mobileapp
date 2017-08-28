@@ -4,19 +4,19 @@ using Xunit;
 
 namespace Toggl.Multivac.Tests
 {
-    public class NewTests
+    public sealed class NewTests
     {
-        public class TheValueOrMethodForIntegers : TheValueOrMethodBase<int>
+        public sealed class TheValueOrMethodForIntegers : TheValueOrMethodBase<int>
         {
             public TheValueOrMethodForIntegers() : base(1, 2) { }
         }
 
-        public class TheValueOrMethodForNullableIntegers : TheValueOrMethodBase<int?>
+        public sealed class TheValueOrMethodForNullableIntegers : TheValueOrMethodBase<int?>
         {
             public TheValueOrMethodForNullableIntegers() : base(1, 2) { }
         }
 
-        public class TheValueOrMethodForStrings : TheValueOrMethodBase<string>
+        public sealed class TheValueOrMethodForStrings : TheValueOrMethodBase<string>
         {
             public TheValueOrMethodForStrings() : base("hello", "this is test") { }
         }

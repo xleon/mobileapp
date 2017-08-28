@@ -7,7 +7,7 @@ using UIKit;
 namespace Toggl.Daneel.Views
 {
     [Register(nameof(ActivityIndicatorView))]
-    public class ActivityIndicatorView : UIImageView
+    public sealed class ActivityIndicatorView : UIImageView
     {
         private readonly CABasicAnimation animation
             = CABasicAnimation.FromKeyPath("transform.rotation.z");

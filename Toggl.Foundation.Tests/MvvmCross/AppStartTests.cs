@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross
 {
-    public class AppStartTests
+    public sealed class AppStartTests
     {
         public abstract class AppStartTest : BaseMvvmCrossTests
         {
@@ -23,7 +23,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
             }
         }
 
-        public class TheConstructor : AppStartTest
+        public sealed class TheConstructor : AppStartTest
         {
             [Theory]
             [ClassData(typeof(TwoParameterConstructorTestData))]
@@ -40,7 +40,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
             }
         }
 
-        public class TheStartMethod : AppStartTest
+        public sealed class TheStartMethod : AppStartTest
         {
             [Fact]
             public void ShowsTheOnboardingViewModelIfTheUserHasNotLoggedInPreviously()

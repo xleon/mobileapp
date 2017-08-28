@@ -16,7 +16,7 @@ using Toggl.Foundation.MvvmCross.Parameters;
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public class TimeEntriesLogViewModel : MvxViewModel
+    public sealed class TimeEntriesLogViewModel : MvxViewModel
     {
         private IDisposable updateDisposable;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Toggl.Foundation.MvvmCross.Services
 {
-    public class StubPasswordManagerService : IPasswordManagerService
+    public sealed class StubPasswordManagerService : IPasswordManagerService
     {
         public bool IsAvailable => false;
 

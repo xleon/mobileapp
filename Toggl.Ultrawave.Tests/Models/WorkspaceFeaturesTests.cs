@@ -9,9 +9,9 @@ using Toggl.Ultrawave.Models;
 
 namespace Toggl.Ultrawave.Tests.Models
 {
-    public class WorkspaceFeaturesTests
+    public sealed class WorkspaceFeaturesTests
     {
-        public class TheWorkspaceFeaturesModel
+        public sealed class TheWorkspaceFeaturesModel
         {
             [Fact]
             public void DeserializationOfOneWorkspace()

@@ -5,7 +5,7 @@ using static Toggl.Daneel.Tests.UI.Extensions.OnboardingExtensions;
 namespace Toggl.Daneel.Tests.UI
 {
     [TestFixture]
-    public class OnboardingTests
+    public sealed class OnboardingTests
     {
         private iOSApp app;
 

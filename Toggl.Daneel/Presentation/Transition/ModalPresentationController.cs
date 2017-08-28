@@ -4,7 +4,7 @@ using UIKit;
 
 namespace Toggl.Daneel.Presentation.Transition
 {
-    public class ModalPresentationController : UIPresentationController
+    public sealed class ModalPresentationController : UIPresentationController
     {
         private readonly nfloat defaultHeight = UIScreen.MainScreen.Bounds.Height - 20;
 

@@ -13,9 +13,9 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.Sync
 {
-    public class StateMachineTests
+    public sealed class StateMachineTests
     {
-        public class TheConstructor
+        public sealed class TheConstructor
         {
             [Theory]
             [ClassData(typeof(TwoParameterConstructorTestData))]
@@ -72,7 +72,7 @@ namespace Toggl.Foundation.Tests.Sync
             protected StateMachineEvent Error => new StateMachineError(null);
         }
 
-        public class TheStartTransitionMethod : StateMachineTestBase
+        public sealed class TheStartTransitionMethod : StateMachineTestBase
         {
             [Fact]
             public void ThrowsIfArgumentIsNull()
@@ -141,7 +141,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
         }
 
-        public class TheStateTransitionsObservable : StateMachineTestBase
+        public sealed class TheStateTransitionsObservable : StateMachineTestBase
         {
             [Fact]
             public void ReportsErrorIfTheStateErrors()

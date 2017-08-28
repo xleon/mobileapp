@@ -4,9 +4,9 @@ using Xunit;
 
 namespace Toggl.Multivac.Tests
 {
-    public class EitherTests
+    public sealed class EitherTests
     {
-        public class TheLeftProperty
+        public sealed class TheLeftProperty
         {
             [Fact]
             public void CannotBeAccessedInAnObjectConstructedWithRight()
@@ -32,7 +32,7 @@ namespace Toggl.Multivac.Tests
             }
         }
 
-        public class TheIsLeftProperty
+        public sealed class TheIsLeftProperty
         {
             [Fact]
             public void ShouldBeTrueForAnObjectCreatedWithLeft()
@@ -51,7 +51,7 @@ namespace Toggl.Multivac.Tests
             }
         }
 
-        public class TheRightProperty
+        public sealed class TheRightProperty
         {
             [Fact]
             public void CannotBeAccessedInAnObjectConstructedWithLeft()
@@ -77,7 +77,7 @@ namespace Toggl.Multivac.Tests
             }
         }
 
-        public class TheIsRightProperty
+        public sealed class TheIsRightProperty
         {
             [Fact]
             public void ShouldBeTrueForAnObjectCreatedWithRight()

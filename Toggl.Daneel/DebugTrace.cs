@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using MvvmCross.Platform.Platform;
 
 namespace Toggl.Daneel
 {
-    public class DebugTrace : IMvxTrace
+    public sealed class DebugTrace : IMvxTrace
     {
         public void Trace(MvxTraceLevel level, string tag, Func<string> message)
             => Debug.WriteLine(tag + ":" + level + ":" + message());

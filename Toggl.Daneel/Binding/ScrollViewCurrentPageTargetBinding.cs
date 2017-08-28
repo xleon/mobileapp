@@ -6,7 +6,7 @@ using UIKit;
 
 namespace Toggl.Daneel.Binding
 {
-    public class ScrollViewCurrentPageTargetBinding : MvxTargetBinding<UIScrollView, int>
+    public sealed class ScrollViewCurrentPageTargetBinding : MvxTargetBinding<UIScrollView, int>
     {
         public const string BindingName = "CurrentPage";
 

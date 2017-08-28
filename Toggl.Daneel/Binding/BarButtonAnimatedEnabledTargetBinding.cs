@@ -7,7 +7,7 @@ using UIKit;
 
 namespace Toggl.Daneel.Binding
 {
-    public class BarButtonAnimatedEnabledTargetBinding : MvxTargetBinding<UIBarButtonItem, bool>
+    public sealed class BarButtonAnimatedEnabledTargetBinding : MvxTargetBinding<UIBarButtonItem, bool>
     {
         public const string BindingName = "AnimatedEnabled";
 

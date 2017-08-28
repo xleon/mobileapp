@@ -17,15 +17,15 @@ using Toggl.Foundation.MvvmCross.Parameters;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
-    public class TimeEntriesLogViewModelTests
+    public sealed class TimeEntriesLogViewModelTests
     {
-        public class TimeEntriesLogViewModelTest : BaseViewModelTests<TimeEntriesLogViewModel>
+        public abstract class TimeEntriesLogViewModelTest : BaseViewModelTests<TimeEntriesLogViewModel>
         {
             protected override TimeEntriesLogViewModel CreateViewModel()
                 => new TimeEntriesLogViewModel(DataSource, NavigationService);
         }
 
-        public class TheConstructor : TimeEntriesLogViewModelTest
+        public sealed class TheConstructor : TimeEntriesLogViewModelTest
         {
             [Theory]
             [ClassData(typeof(TwoParameterConstructorTestData))]
@@ -42,7 +42,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheEmptyStateTitleProperty : TimeEntriesLogViewModelTest
+        public sealed class TheEmptyStateTitleProperty : TimeEntriesLogViewModelTest
         {
             [Fact]
             public void ReturnsTheWelcomeStringIfTheIsWelcomePropertyIsTrue()
@@ -61,7 +61,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheEmptyStateTextProperty : TimeEntriesLogViewModelTest
+        public sealed class TheEmptyStateTextProperty : TimeEntriesLogViewModelTest
         {
             [Fact]
             public void ReturnsTheWelcomeStringIfTheIsWelcomePropertyIsTrue()
@@ -80,7 +80,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheTimeEntriesProperty
+        public sealed class TheTimeEntriesProperty
         {
             [Property]
             public Property ShouldBeOrderedAfterInitialization()
@@ -164,7 +164,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 }
             }
 
-            public class WhenReceivingAnEventFromTheTimeEntryCreatedObservable : TimeEntryDataSourceObservableTest
+            public sealed class WhenReceivingAnEventFromTheTimeEntryCreatedObservable : TimeEntryDataSourceObservableTest
             {
                 [Fact]
                 public async ThreadingTask AddsTheCreatedTimeEntryToTheList()
@@ -190,7 +190,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 }
             }
 
-            public class WhenReceivingAnEventFromTheTimeEntryUpdatedObservable : TimeEntryDataSourceObservableTest
+            public sealed class WhenReceivingAnEventFromTheTimeEntryUpdatedObservable : TimeEntryDataSourceObservableTest
             {
                 [Fact]
                 //This can happen, for example, if the time entry was just stopped
@@ -220,7 +220,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheEditCommand : TimeEntriesLogViewModelTest
+        public sealed class TheEditCommand : TimeEntriesLogViewModelTest
         {
             [Fact]
             public async ThreadingTask NavigatesToTheEditTimeEntryViewModel()

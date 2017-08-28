@@ -1,12 +1,12 @@
-﻿﻿﻿using System;
+﻿﻿using System;
 using FluentAssertions;
 using Xunit;
 
 namespace Toggl.Multivac.Tests
 {
-    public class EnsureTests
+    public sealed class EnsureTests
     {
-        public class TheArgumentIsNotNullMethod
+        public sealed class TheArgumentIsNotNullMethod
         {
             [Fact]
             public void ThrowsWhenTheArgumentIsNull()
@@ -40,7 +40,7 @@ namespace Toggl.Multivac.Tests
             }
         }
 
-        public class TheArgumentIsNotNullOrWhiteSpaceMethod
+        public sealed class TheArgumentIsNotNullOrWhiteSpaceMethod
         {
             [Fact]
             public void ThrowsWhenTheArgumentIsAnEmptyString()
@@ -87,7 +87,7 @@ namespace Toggl.Multivac.Tests
             }
         }
 
-        public class TheUriIsAbsoluteMethod
+        public sealed class TheUriIsAbsoluteMethod
         {
             [Fact]
             public void ThrowsWhenTheUriIsNotAbsolute()

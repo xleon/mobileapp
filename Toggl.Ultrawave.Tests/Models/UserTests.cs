@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Models
 {
-    public class UserTests
+    public sealed class UserTests
     {
         public sealed class TheUserModel
         {

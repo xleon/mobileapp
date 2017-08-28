@@ -6,9 +6,9 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.Suggestions
 {
-    public class SuggestionProviderContainerTests
+    public sealed class SuggestionProviderContainerTests
     {
-        public class TheConstructor
+        public sealed class TheConstructor
         {
             [Fact]
             public void ThrowsIfArgumentIsNull()

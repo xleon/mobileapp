@@ -8,9 +8,9 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.Converters
 {
-    public class DateToTitleStringValueConverterTests
+    public sealed class DateToTitleStringValueConverterTests
     {
-        public class TheConvertMethod
+        public sealed class TheConvertMethod
         {
             [Fact]
             public void ReturnsASpecialCaseStringForTheCurrentDay()

@@ -4,7 +4,7 @@ using static Toggl.Ultrawave.Serialization.SerializationReason;
 
 namespace Toggl.Ultrawave.Serialization
 {
-    internal class JsonSerializer : IJsonSerializer
+    internal sealed class JsonSerializer : IJsonSerializer
     {
         private readonly JsonSerializerSettings defaultSettings = SerializerSettings.For<DefaultContractResolver>();
 

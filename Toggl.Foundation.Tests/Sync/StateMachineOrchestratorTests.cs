@@ -12,7 +12,7 @@ using static Toggl.Foundation.Sync.SyncState;
 
 namespace Toggl.Foundation.Tests.Sync
 {
-    public class StateMachineOrchestratorTests
+    public sealed class StateMachineOrchestratorTests
     {
         public abstract class StateMachineOrchestratorBaseTests
         {
@@ -41,7 +41,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
         }
 
-        public class TheConstructor
+        public sealed class TheConstructor
         {
             [Theory]
             [ClassData(typeof(TwoParameterConstructorTestData))]
@@ -70,7 +70,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
         }
 
-        public class TheStateProperty : StateMachineOrchestratorBaseTests
+        public sealed class TheStateProperty : StateMachineOrchestratorBaseTests
         {
             [Fact]
             public void StartsWithSleep()
@@ -218,21 +218,21 @@ namespace Toggl.Foundation.Tests.Sync
             }
         }
 
-        public class TheStartPullSyncMethod : PullPushSyncMethodTests
+        public sealed class TheStartPullSyncMethod : PullPushSyncMethodTests
         {
             protected override SyncState ExpectedState => Pull;
             protected override StateResult EntryPoint => EntryPoints.StartPullSync;
             protected override void CallMethod() => Orchestrator.StartPullSync();
         }
 
-        public class TheStartPushSyncMethod : PullPushSyncMethodTests
+        public sealed class TheStartPushSyncMethod : PullPushSyncMethodTests
         {
             protected override SyncState ExpectedState => Push;
             protected override StateResult EntryPoint => EntryPoints.StartPushSync;
             protected override void CallMethod() => Orchestrator.StartPushSync();
         }
 
-        public class ThGoToSleepMethod : StateChangeMethodTests
+        public sealed class ThGoToSleepMethod : StateChangeMethodTests
         {
             protected override SyncState ExpectedState => Sleep;
             protected override void CallMethod() => Orchestrator.GoToSleep();

@@ -5,7 +5,7 @@ using Toggl.Ultrawave.ApiClients;
 
 namespace Toggl.Foundation.DataSources
 {
-    public class UserDataSource : IUserSource
+    public sealed class UserDataSource : IUserSource
     {
         private readonly IUserApi userApi;
         private readonly ISingleObjectStorage<IDatabaseUser> storage;

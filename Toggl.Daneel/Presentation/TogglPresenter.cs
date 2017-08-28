@@ -1,4 +1,4 @@
-﻿﻿using System.Linq;
+﻿using System.Linq;
 using CoreAnimation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.iOS.Views;
@@ -15,7 +15,7 @@ using UIKit;
 
 namespace Toggl.Daneel.Presentation
 {
-    public class TogglPresenter : MvxIosViewPresenter
+    public sealed class TogglPresenter : MvxIosViewPresenter
     {
         private FromBottomTransitionDelegate FromBottomTransitionDelegate = new FromBottomTransitionDelegate();
 
@@ -36,11 +36,11 @@ namespace Toggl.Daneel.Presentation
         {
             base.RegisterAttributeTypes();
 
-            AttributeTypesToShowMethodDictionary.Add(typeof(NestedPresentationAttribute), ShowNestedViewController);
-            AttributeTypesToShowMethodDictionary.Add(typeof(ModalCardPresentationAttribute), ShowModalCardViewController);
+            AttributeTypesToShowMethodDictionary.Add(typeof(NestedPresentationAttribute), showNestedViewController);
+            AttributeTypesToShowMethodDictionary.Add(typeof(ModalCardPresentationAttribute), showModalCardViewController);
         }
 
-        protected virtual void ShowNestedViewController(UIViewController viewController, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
+        private void showNestedViewController(UIViewController viewController, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
         {
             var mainViewController = MasterNavigationController.ViewControllers.OfType<MainViewController>().Single();
             mainViewController.AddChildViewController(viewController);
@@ -52,7 +52,7 @@ namespace Toggl.Daneel.Presentation
             viewController.DidMoveToParentViewController(mainViewController);
         }
 
-        protected virtual void ShowModalCardViewController(UIViewController viewController, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
+        private void showModalCardViewController(UIViewController viewController, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
         {
             viewController.ModalPresentationStyle = UIModalPresentationStyle.Custom;
             viewController.TransitioningDelegate = FromBottomTransitionDelegate;

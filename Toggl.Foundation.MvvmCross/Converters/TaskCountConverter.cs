@@ -4,7 +4,7 @@ using MvvmCross.Platform.Converters;
 
 namespace Toggl.Foundation.MvvmCross.Converters
 {
-    public class TaskCountConverter : MvxValueConverter<int, string>
+    public sealed class TaskCountConverter : MvxValueConverter<int, string>
     {
         protected override string Convert(int value, Type targetType, object parameter, CultureInfo culture)
         {

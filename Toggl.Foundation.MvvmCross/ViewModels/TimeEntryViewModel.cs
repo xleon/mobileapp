@@ -5,7 +5,7 @@ using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
-    public class TimeEntryViewModel : MvxNotifyPropertyChanged
+    public sealed class TimeEntryViewModel : MvxNotifyPropertyChanged
     {
         public long Id { get; }
 

@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.Sync
 {
-    public class TransitionHandlerProviderTests
+    public sealed class TransitionHandlerProviderTests
     {
         public abstract class ConfigureTransitionMethodTests<TStateResult, TStateFactory>
             where TStateResult : class, new()
@@ -53,7 +53,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
         }
 
-        public class TheConfigureTransitionMethod
+        public sealed class TheConfigureTransitionMethod
             : ConfigureTransitionMethodTests<StateResult, Func<IObservable<ITransition>>>
         {
             protected override void CallMethod(StateResult result, Func<IObservable<ITransition>> factory)
@@ -63,7 +63,7 @@ namespace Toggl.Foundation.Tests.Sync
                 => () => { action(); return null; };
         }
 
-        public class TheGenericConfigureTransitionMethod
+        public sealed class TheGenericConfigureTransitionMethod
             : ConfigureTransitionMethodTests<StateResult<object>, Func<object, IObservable<ITransition>>>
         {
             protected override void CallMethod(StateResult<object> result, Func<object, IObservable<ITransition>> factory)
@@ -73,7 +73,7 @@ namespace Toggl.Foundation.Tests.Sync
                 => _ => { action(); return null; };
         }
 
-        public class TheGetTransitionHandlerMethod
+        public sealed class TheGetTransitionHandlerMethod
         {
             private TransitionHandlerProvider provider { get; } = new TransitionHandlerProvider();
 

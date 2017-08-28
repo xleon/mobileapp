@@ -10,15 +10,15 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
-    public class EditTimeEntryViewModelTests
+    public sealed class EditTimeEntryViewModelTests
     {
-        public class EditTimeEntryViewModelTest : BaseViewModelTests<EditTimeEntryViewModel>
+        public abstract class EditTimeEntryViewModelTest : BaseViewModelTests<EditTimeEntryViewModel>
         {
             protected override EditTimeEntryViewModel CreateViewModel()
                 => new EditTimeEntryViewModel(DataSource, NavigationService, TimeService);
         }
 
-        public class TheConstructor : EditTimeEntryViewModelTest
+        public sealed class TheConstructor : EditTimeEntryViewModelTest
         {
             [Theory]
             [ClassData(typeof(ThreeParameterConstructorTestData))]
@@ -35,7 +35,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheCloseCommand : EditTimeEntryViewModelTest
+        public sealed class TheCloseCommand : EditTimeEntryViewModelTest
         {
             [Fact]
             public async Task ClosesTheViewModel()
@@ -46,7 +46,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheDeleteCommand : EditTimeEntryViewModelTest
+        public sealed class TheDeleteCommand : EditTimeEntryViewModelTest
         {
             [Fact]
             public void CallsDeleteOnDataSource()

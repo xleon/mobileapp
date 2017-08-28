@@ -4,7 +4,7 @@ using UIKit;
 
 namespace Toggl.Daneel.Binding
 {
-    public class TextFieldFocusTargetBinding : MvxTargetBinding<UITextField, bool>
+    public sealed class TextFieldFocusTargetBinding : MvxTargetBinding<UITextField, bool>
     {
         public const string BindingName = "Focus";
 

@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -11,7 +11,7 @@ using LoginHandler = AgileBits.OnePasswordLoginDictionaryCompletionBlock;
 
 namespace Toggl.Daneel.Services
 {
-    public class OnePasswordService : NSObject, IPasswordManagerService
+    public sealed class OnePasswordService : NSObject, IPasswordManagerService
     {
         public bool IsAvailable => OnePasswordExtension.SharedExtension.IsAppExtensionAvailable;
 

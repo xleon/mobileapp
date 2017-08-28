@@ -5,7 +5,7 @@ using System.Reactive.Subjects;
 
 namespace Toggl.Foundation
 {
-    public class TimeService : ITimeService
+    public sealed class TimeService : ITimeService
     {
         private readonly IDisposable disposable;
 

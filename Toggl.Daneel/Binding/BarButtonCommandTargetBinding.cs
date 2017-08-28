@@ -6,7 +6,7 @@ using UIKit;
 
 namespace Toggl.Daneel.Binding
 {
-    public class BarButtonCommandTargetBinding : MvxTargetBinding<UIBarButtonItem, IMvxCommand>
+    public sealed class BarButtonCommandTargetBinding : MvxTargetBinding<UIBarButtonItem, IMvxCommand>
     {
         public const string BindingName = "Command";
 

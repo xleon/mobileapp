@@ -9,7 +9,7 @@ using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Suggestions
 {
-    public class MostUsedTimeEntryProvider : ISuggestionProvider
+    public sealed class MostUsedTimeEntryProvider : ISuggestionProvider
     {
         private readonly ITogglDatabase database;
         private readonly ITimeService timeService;

@@ -6,9 +6,9 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.Converters
 {
-    public class TimeSpanToDurationWithUnitValueConverterTests
+    public sealed class TimeSpanToDurationWithUnitValueConverterTests
     {
-        public class TheConvertMethod
+        public sealed class TheConvertMethod
         {
             [Fact]
             public void DoesNotAppendUnitIfTimeSpanIsLongerThanOneHour()

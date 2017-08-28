@@ -12,9 +12,9 @@ using Toggl.Ultrawave.Tests.Integration.Helper;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
-    public class WorkspaceFeaturesApiTests
+    public sealed class WorkspaceFeaturesApiTests
     {
-        public class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<IWorkspaceFeatureCollection>>
+        public sealed class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<IWorkspaceFeatureCollection>>
         {
             protected override IObservable<List<IWorkspaceFeatureCollection>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.WorkspaceFeatures.GetAll();

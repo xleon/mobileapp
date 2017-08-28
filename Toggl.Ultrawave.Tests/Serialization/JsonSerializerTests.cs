@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Serialization
 {
-    public class JsonSerializerTests
+    public sealed class JsonSerializerTests
     {
         private class TestModel
         {
@@ -14,7 +14,7 @@ namespace Toggl.Ultrawave.Tests.Serialization
             public string IgnoredWhenPosting { get; set; }
         }
 
-        public class TheSerializeMethod
+        public sealed class TheSerializeMethod
         {
             [Fact]
             public void CreatesSnakeCasedJson()
@@ -41,7 +41,7 @@ namespace Toggl.Ultrawave.Tests.Serialization
             }
         }
 
-        public class TheDeserializeMethod
+        public sealed class TheDeserializeMethod
         {
             [Fact]
             public void ExpectsSnakeCasedJson()

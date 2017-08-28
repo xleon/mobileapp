@@ -3,9 +3,9 @@ using Xunit;
 
 namespace Toggl.Multivac.Tests
 {
-    public class EmailTests
+    public sealed class EmailTests
     {
-        public class TheFromStringMethod
+        public sealed class TheFromStringMethod
         {
             [Fact]
             public void ReturnsInvalidEmailIfTheProvidedEmailIsNotValid()
@@ -24,7 +24,7 @@ namespace Toggl.Multivac.Tests
             }
         }
 
-        public class TheIsValidProperty
+        public sealed class TheIsValidProperty
         {
             [Fact]
             public void ReturnsFalseIfTheEmailWasCreatedUsingTheDefaultConstructor()
@@ -59,7 +59,7 @@ namespace Toggl.Multivac.Tests
             }
         }
 
-        public class TheToStringMethod
+        public sealed class TheToStringMethod
         {
             [Fact]
             public void ReturnsNullWhenTheEmailIsInvalid()

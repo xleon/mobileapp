@@ -15,9 +15,9 @@ using FoundationTimeEntry = Toggl.Foundation.Models.TimeEntry;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
-    public class SuggestionsViewModelTests
+    public sealed class SuggestionsViewModelTests
     {
-        public class TheConstructor
+        public sealed class TheConstructor
         {
             [Fact]
             public void ThrowsIfTheArgumentsIsNull()
@@ -30,7 +30,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheSuggestionsProperty : BaseMvvmCrossTests
+        public sealed class TheSuggestionsProperty : BaseMvvmCrossTests
         {
             [Fact]
             public async Task WorksWithSeveralProviders()

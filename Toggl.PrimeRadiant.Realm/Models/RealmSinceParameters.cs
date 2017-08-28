@@ -4,7 +4,7 @@ using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.PrimeRadiant.Realm.Models
 {
-    internal class RealmSinceParameters : RealmObject, ISinceParameters
+    internal sealed class RealmSinceParameters : RealmObject, ISinceParameters
     {
         public void SetValuesFrom(ISinceParameters parameters)
         {

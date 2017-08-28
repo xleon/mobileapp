@@ -11,9 +11,9 @@ using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
-    public class WorkspacesApiTests
+    public sealed class WorkspacesApiTests
     {
-        public class TheGetMethod : AuthenticatedEndpointBaseTests<List<IWorkspace>>
+        public sealed class TheGetMethod : AuthenticatedEndpointBaseTests<List<IWorkspace>>
         {
             protected override IObservable<List<IWorkspace>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Workspaces.GetAll();
@@ -32,7 +32,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             }
         }
 
-        public class TheGetByIdMethod : AuthenticatedGetEndpointBaseTests<IWorkspace>
+        public sealed class TheGetByIdMethod : AuthenticatedGetEndpointBaseTests<IWorkspace>
         {
             protected override IObservable<IWorkspace> CallEndpointWith(ITogglApi togglApi)
                 => Observable.Defer(async () =>

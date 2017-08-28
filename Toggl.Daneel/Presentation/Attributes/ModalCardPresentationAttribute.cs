@@ -2,7 +2,7 @@
 
 namespace Toggl.Daneel.Presentation.Attributes
 {
-    public class ModalCardPresentationAttribute : MvxBasePresentationAttribute
+    public sealed class ModalCardPresentationAttribute : MvxBasePresentationAttribute
     {
     }
 }

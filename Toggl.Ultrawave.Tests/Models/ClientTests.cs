@@ -7,7 +7,7 @@ namespace Toggl.Ultrawave.Tests.Models
 {
     public sealed class ClientTests
     {
-        public class TheClientModel
+        public sealed class TheClientModel
         {
             private string validJson
                 => "{\"id\":23741667,\"wid\":1427273,\"name\":\"Test\",\"at\":\"2014-04-25T10:10:13+00:00\",\"server_deleted_at\":null}";

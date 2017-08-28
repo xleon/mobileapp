@@ -8,15 +8,15 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
-    public class SettingsViewModelTests
+    public sealed class SettingsViewModelTests
     {
-        public class SettingsViewModelTest : BaseViewModelTests<SettingsViewModel>
+        public abstract class SettingsViewModelTest : BaseViewModelTests<SettingsViewModel>
         {
             protected override SettingsViewModel CreateViewModel()
                 => new SettingsViewModel(DataSource, NavigationService);
         }
 
-        public class TheConstructor : SettingsViewModelTest
+        public sealed class TheConstructor : SettingsViewModelTest
         {
             [Theory]
             [ClassData(typeof(TwoParameterConstructorTestData))]
@@ -33,7 +33,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheLogoutCommand : SettingsViewModelTest
+        public sealed class TheLogoutCommand : SettingsViewModelTest
         {
             [Fact]
             public async Task CallsLogoutOnTheDataSource()
@@ -52,7 +52,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheBackCommand : SettingsViewModelTest
+        public sealed class TheBackCommand : SettingsViewModelTest
         {
             [Fact]
             public async Task ClosesTheViewModel()

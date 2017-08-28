@@ -7,7 +7,7 @@ using UIKit;
 namespace Toggl.Daneel
 {
     [Register("AppDelegate")]
-    public class AppDelegate : MvxApplicationDelegate
+    public sealed class AppDelegate : MvxApplicationDelegate
     {
         public override UIWindow Window { get; set; }
 

@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
-    public class TimeEntryViewModelCollectionTests
+    public sealed class TimeEntryViewModelCollectionTests
     {
         public abstract class TimeEntryViewModelCollectionTest : BaseMvvmCrossTests
         {
@@ -40,7 +40,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheConstructor : TimeEntryViewModelCollectionTest
+        public sealed class TheConstructor : TimeEntryViewModelCollectionTest
         {
             [Fact]
             public void ThrowsIfTheArgumentIsNull()
@@ -53,7 +53,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheCollection : TimeEntryViewModelCollectionTest
+        public sealed class TheCollection : TimeEntryViewModelCollectionTest
         {
             [Fact]
             public void HasTheSameAmountOfItemsAsThePassedGrouping()
@@ -62,7 +62,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheTotalTimeProperty : TimeEntryViewModelCollectionTest
+        public sealed class TheTotalTimeProperty : TimeEntryViewModelCollectionTest
         {
             [Fact]
             public void EqualsTheSumOfTheDurationOfAllTimeEntries()

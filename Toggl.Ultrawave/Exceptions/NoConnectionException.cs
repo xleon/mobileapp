@@ -1,6 +1,6 @@
 ﻿namespace Toggl.Ultrawave.Exceptions
 {
-    public class NoConnectionException : EndpointUnreachableException
+    public sealed class NoConnectionException : EndpointUnreachableException
     {
         private const string defaultErrorMessage = "No connection found.";
 

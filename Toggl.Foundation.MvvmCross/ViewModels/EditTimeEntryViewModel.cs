@@ -14,7 +14,7 @@ using static Toggl.Multivac.Extensions.ObservableExtensions;
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public class EditTimeEntryViewModel : MvxViewModel<IdParameter>
+    public sealed class EditTimeEntryViewModel : MvxViewModel<IdParameter>
     {
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;

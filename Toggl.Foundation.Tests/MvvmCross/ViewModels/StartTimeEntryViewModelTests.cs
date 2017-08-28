@@ -11,15 +11,15 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
-    public class StartTimeEntryViewModelTests
+    public sealed class StartTimeEntryViewModelTests
     {
-        public class StartTimeEntryViewModelTest : BaseViewModelTests<StartTimeEntryViewModel>
+        public abstract class StartTimeEntryViewModelTest : BaseViewModelTests<StartTimeEntryViewModel>
         {
             protected override StartTimeEntryViewModel CreateViewModel()
                 => new StartTimeEntryViewModel(DataSource, TimeService, NavigationService);
         }
 
-        public class TheConstructor : StartTimeEntryViewModelTest
+        public sealed class TheConstructor : StartTimeEntryViewModelTest
         {
             [Theory]
             [ClassData(typeof(ThreeParameterConstructorTestData))]
@@ -37,7 +37,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheInitializeMethod : StartTimeEntryViewModelTest
+        public sealed class TheInitializeMethod : StartTimeEntryViewModelTest
         {
             [Fact]
             public async Task SetsTheDateAccordingToTheDateParameterReceived()
@@ -51,7 +51,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheBackCommand : StartTimeEntryViewModelTest
+        public sealed class TheBackCommand : StartTimeEntryViewModelTest
         {
             [Fact]
             public async Task ClosesTheViewModel()
@@ -62,7 +62,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheToggleBillableCommand : StartTimeEntryViewModelTest
+        public sealed class TheToggleBillableCommand : StartTimeEntryViewModelTest
         {
             [Fact]
             public void TogglesTheIsBillableProperty()
@@ -75,7 +75,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheDoneCommand : StartTimeEntryViewModelTest
+        public sealed class TheDoneCommand : StartTimeEntryViewModelTest
         {
             [Fact]
             public async Task StartsANewTimeEntry()

@@ -7,9 +7,9 @@ using static Toggl.Multivac.Extensions.ObservableCollectionExtensions;
 
 namespace Toggl.Multivac.Tests
 {
-    public class ObservableCollectionExtensionsTests
+    public sealed class ObservableCollectionExtensionsTests
     {
-        public class TheAddRangeMethod
+        public sealed class TheAddRangeMethod
         {
             [Fact]
             public void AddsAllItems()

@@ -9,9 +9,9 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
-    public class TimeEntryViewModelTests
+    public sealed class TimeEntryViewModelTests
     {
-        public class TimeEntryViewModelTest : BaseMvvmCrossTests
+        public abstract class TimeEntryViewModelTest : BaseMvvmCrossTests
         {
             protected IDatabaseProject Project = Substitute.For<IDatabaseProject>();
             protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
@@ -27,7 +27,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheConstructor : TimeEntryViewModelTest
+        public sealed class TheConstructor : TimeEntryViewModelTest
         {
             [Fact]
             public void ThrowsIfTheArgumentIsNull()
@@ -40,7 +40,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheHasProjectProperty : TimeEntryViewModelTest
+        public sealed class TheHasProjectProperty : TimeEntryViewModelTest
         {
             [Theory]
             [InlineData(true)]

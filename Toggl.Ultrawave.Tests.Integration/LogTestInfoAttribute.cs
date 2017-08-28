@@ -6,7 +6,7 @@ using Xunit.Sdk;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
-    public class LogTestInfoAttribute : BeforeAfterTestAttribute
+    public sealed class LogTestInfoAttribute : BeforeAfterTestAttribute
     {
         private string formattedTestName;
         private readonly Stopwatch stopwatch = new Stopwatch();

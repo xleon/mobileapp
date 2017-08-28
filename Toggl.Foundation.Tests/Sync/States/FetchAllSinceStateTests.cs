@@ -13,9 +13,9 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {
-    public class FetchAllSinceStateTests
+    public sealed class FetchAllSinceStateTests
     {
-        public class TheStartMethod
+        public sealed class TheStartMethod
         {
             private readonly ITogglDatabase database;
             private readonly ITogglApi api;

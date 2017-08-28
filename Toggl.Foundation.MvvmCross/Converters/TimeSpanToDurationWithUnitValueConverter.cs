@@ -5,7 +5,7 @@ using MvvmCross.Platform.Converters;
 
 namespace Toggl.Foundation.MvvmCross.Converters
 {
-    public class TimeSpanToDurationWithUnitValueConverter : MvxValueConverter<TimeSpan, string>
+    public sealed class TimeSpanToDurationWithUnitValueConverter : MvxValueConverter<TimeSpan, string>
     {
         protected override string Convert(TimeSpan value, Type targetType, object parameter, CultureInfo culture)
         {

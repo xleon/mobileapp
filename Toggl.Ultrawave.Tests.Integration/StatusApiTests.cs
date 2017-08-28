@@ -7,9 +7,9 @@ using Toggl.Ultrawave.Tests.Integration.BaseTests;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
-    public class StatusApiTests
+    public sealed class StatusApiTests
     {
-        public class TheGetMethod : EndpointTestBase
+        public sealed class TheGetMethod : EndpointTestBase
         {
             [Fact, LogTestInfo]
             public async Task ShouldSucceedWithoutCredentials()

@@ -19,7 +19,7 @@ using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.Tests.Login
 {
-    public class LoginManagerTests
+    public sealed class LoginManagerTests
     {
         public abstract class LoginManagerTest
         {
@@ -43,7 +43,7 @@ namespace Toggl.Foundation.Tests.Login
             }
         }
 
-        public class Constructor : LoginManagerTest
+        public sealed class Constructor : LoginManagerTest
         {
             [Theory]
             [ClassData(typeof(TwoParameterConstructorTestData))]
@@ -60,7 +60,7 @@ namespace Toggl.Foundation.Tests.Login
             }
         }
 
-        public class TheLoginMethod : LoginManagerTest
+        public sealed class TheLoginMethod : LoginManagerTest
         {
             [Theory]
             [InlineData("susancalvin@psychohistorian.museum", null)]
@@ -134,7 +134,7 @@ namespace Toggl.Foundation.Tests.Login
             }
         }
 
-        public class TheGetDataSourceIfLoggedInInMethod : LoginManagerTest
+        public sealed class TheGetDataSourceIfLoggedInInMethod : LoginManagerTest
         {
             [Fact]
             public void ReturnsNullIfTheDatabaseHasNoUsers()

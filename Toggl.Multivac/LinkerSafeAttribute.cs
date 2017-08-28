@@ -2,5 +2,5 @@
 
 namespace Toggl.Multivac
 {
-    public class LinkerSafeAttribute : Attribute { }
+    public sealed class LinkerSafeAttribute : Attribute { }
 }

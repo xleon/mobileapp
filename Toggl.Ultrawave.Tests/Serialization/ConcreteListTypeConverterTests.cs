@@ -8,7 +8,7 @@ using JsonSerializer = Toggl.Ultrawave.Serialization.JsonSerializer;
 
 namespace Toggl.Ultrawave.Tests.Serialization
 {
-    public class ConcreteListTypeConverterTests
+    public sealed class ConcreteListTypeConverterTests
     {
         [Fact]
         public void SerializationMustUseTheConverter()

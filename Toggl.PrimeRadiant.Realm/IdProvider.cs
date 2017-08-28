@@ -3,7 +3,7 @@ using Realms;
 
 namespace Toggl.PrimeRadiant.Realm
 {
-    public class RealmIdProvider : RealmObject
+    public sealed class RealmIdProvider : RealmObject
     {
         [PrimaryKey]
         public int Key { get; set; }

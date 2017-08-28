@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -19,7 +19,7 @@ using static Toggl.Foundation.MvvmCross.Parameters.LoginParameter;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
-    public class LoginViewModelTests
+    public sealed class LoginViewModelTests
     {
         public abstract class LoginViewModelTest : BaseViewModelTests<LoginViewModel>
         {
@@ -36,7 +36,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 => new LoginViewModel(LoginManager, NavigationService, PasswordManagerService);
         }
 
-        public class TheConstructor : LoginViewModelTest
+        public sealed class TheConstructor : LoginViewModelTest
         {
             [Theory]
             [ClassData(typeof(ThreeParameterConstructorTestData))]
@@ -54,9 +54,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheNextIsEnabledProperty
+        public sealed class TheNextIsEnabledProperty
         {
-            public class WhenInTheEmailPage : LoginViewModelTest
+            public sealed class WhenInTheEmailPage : LoginViewModelTest
             {
                 [Fact]
                 public void ReturnsFalseIfTheEmailIsInvalid()
@@ -75,7 +75,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 }
             }
 
-            public class WhenInThePasswordPage : LoginViewModelTest
+            public sealed class WhenInThePasswordPage : LoginViewModelTest
             {
                 public WhenInThePasswordPage()
                 {
@@ -115,7 +115,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheInitializeMethod : LoginViewModelTest
+        public sealed class TheInitializeMethod : LoginViewModelTest
         {
             [Fact]
             public async Task SetsTheLoginType()
@@ -149,9 +149,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheNextCommand
+        public sealed class TheNextCommand
         {
-            public class WhenInTheEmailPage : LoginViewModelTest
+            public sealed class WhenInTheEmailPage : LoginViewModelTest
             {
                 [Fact]
                 public void DoesNothingWhenTheEmailIsInvalid()
@@ -174,7 +174,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 }
             }
 
-            public class WhenInThePasswordPage : LoginViewModelTest
+            public sealed class WhenInThePasswordPage : LoginViewModelTest
             {
                 public WhenInThePasswordPage()
                 {
@@ -267,7 +267,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class ThePreviousCommand : LoginViewModelTest
+        public sealed class ThePreviousCommand : LoginViewModelTest
         {
             [Fact]
             public void ReturnsToTheEmailPage()
@@ -289,7 +289,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheStartPasswordManagerCommandCommand : LoginViewModelTest
+        public sealed class TheStartPasswordManagerCommandCommand : LoginViewModelTest
         {
             public TheStartPasswordManagerCommandCommand()
             {
@@ -458,7 +458,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheHasErrorProperty : LoginViewModelTest
+        public sealed class TheHasErrorProperty : LoginViewModelTest
         {
             [Fact]
             public void IsFalseWhenLoginSucceeds()
@@ -494,7 +494,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public class TheErrorTextProperty : LoginViewModelTest
+        public sealed class TheErrorTextProperty : LoginViewModelTest
         {
             [Fact]
             public void IsEmptyWhenLoginSucceeds()

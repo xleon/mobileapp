@@ -8,7 +8,7 @@ using UIKit;
 
 namespace Toggl.Daneel.Binding
 {
-    public class ViewAnimatedVisibilityTargetBinding : MvxTargetBinding<UIView, bool>
+    public sealed class ViewAnimatedVisibilityTargetBinding : MvxTargetBinding<UIView, bool>
     {
         public const string BindingName = "AnimatedVisibility";
 

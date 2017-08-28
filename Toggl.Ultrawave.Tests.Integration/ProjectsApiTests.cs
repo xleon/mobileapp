@@ -1,4 +1,4 @@
-﻿﻿﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
@@ -11,9 +11,9 @@ using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
-    public class ProjectsApiTests
+    public sealed class ProjectsApiTests
     {
-        public class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<IProject>>
+        public sealed class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<IProject>>
         {
             protected override IObservable<List<IProject>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Projects.GetAll();
@@ -74,7 +74,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 activeProjects.Should().HaveCount(0);
             }
 
-            public class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<IProject>
+            public sealed class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<IProject>
             {
                 protected override IObservable<List<IProject>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
                     => togglApi.Projects.GetAllSince(threshold);
@@ -92,7 +92,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                     => p => isTheSameAs(model, p);
             }
 
-            public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<IProject>
+            public sealed class TheCreateMethod : AuthenticatedPostEndpointBaseTests<IProject>
             {
                 protected override IObservable<IProject> CallEndpointWith(ITogglApi togglApi)
                     => Observable.Defer(async () =>

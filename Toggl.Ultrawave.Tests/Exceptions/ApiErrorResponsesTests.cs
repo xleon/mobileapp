@@ -12,9 +12,9 @@ using NotImplementedException = Toggl.Ultrawave.Exceptions.NotImplementedExcepti
 
 namespace Toggl.Ultrawave.Tests.Exceptions
 {
-    public class ApiErrorResponsesTests
+    public sealed class ApiErrorResponsesTests
     {
-        public class ClientErrors
+        public sealed class ClientErrors
         {
             [Theory]
             [MemberData(nameof(ClientErrorsList), MemberType = typeof(ApiErrorResponsesTests))]
@@ -28,7 +28,7 @@ namespace Toggl.Ultrawave.Tests.Exceptions
             }
         }
         
-        public class ServerErrors
+        public sealed class ServerErrors
         {
             [Theory]
             [MemberData(nameof(ServerErrorsList), MemberType = typeof(ApiErrorResponsesTests))]
@@ -42,7 +42,7 @@ namespace Toggl.Ultrawave.Tests.Exceptions
             }
         }
 
-        public class UnknownErrors
+        public sealed class UnknownErrors
         {
             [Theory]
             [MemberData(nameof(UnknownErrorsList), MemberType = typeof(ApiErrorResponsesTests))]

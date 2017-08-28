@@ -6,7 +6,7 @@ using UIKit;
 
 namespace Toggl.Daneel.Binding
 {
-    public class TextFieldSecureTextEntryTargetBinding : MvxTargetBinding<UITextField, bool>
+    public sealed class TextFieldSecureTextEntryTargetBinding : MvxTargetBinding<UITextField, bool>
     {
         public const string BindingName = "SecureTextEntry";
 

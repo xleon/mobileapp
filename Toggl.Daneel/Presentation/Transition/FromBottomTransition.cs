@@ -6,7 +6,7 @@ using static Toggl.Foundation.MvvmCross.Helper.Animation;
 
 namespace Toggl.Daneel.Presentation.Transition
 {
-    public class FromBottomTransition : NSObject, IUIViewControllerAnimatedTransitioning
+    public sealed class FromBottomTransition : NSObject, IUIViewControllerAnimatedTransitioning
     {
         private readonly bool presenting;
 

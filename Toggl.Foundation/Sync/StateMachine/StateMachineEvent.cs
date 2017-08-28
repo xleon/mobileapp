@@ -7,7 +7,7 @@ namespace Toggl.Foundation.Sync
         public abstract override string ToString();
     }
 
-    internal class StateMachineTransition : StateMachineEvent
+    internal sealed class StateMachineTransition : StateMachineEvent
     {
         public ITransition Transition { get; }
 
@@ -19,7 +19,7 @@ namespace Toggl.Foundation.Sync
         public override string ToString() => "State machine is transitioning to new state.";
     }
 
-    internal class StateMachineDeadEnd : StateMachineEvent
+    internal sealed class StateMachineDeadEnd : StateMachineEvent
     {
         public ITransition Transition { get; }
 
@@ -31,7 +31,7 @@ namespace Toggl.Foundation.Sync
         public override string ToString() => "State machine reached dead end.";
     }
 
-    internal class StateMachineError : StateMachineEvent
+    internal sealed class StateMachineError : StateMachineEvent
     {
         public Exception Exception { get; }
 

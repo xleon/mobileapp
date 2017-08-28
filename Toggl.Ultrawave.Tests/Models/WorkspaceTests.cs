@@ -7,9 +7,9 @@ using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Models
 {
-    public class WorkspaceTests
+    public sealed class WorkspaceTests
     {
-        public class TheWorkspaceModel
+        public sealed class TheWorkspaceModel
         {
             [Fact]
             public void HasPublicParameterlessConstructorForSeliasaition()

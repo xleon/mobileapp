@@ -2,7 +2,7 @@
 
 namespace Toggl.Daneel
 {
-    public class Application
+    public sealed class Application
     {
         public static void Main(string[] args)
             => UIApplication.Main(args, null, "AppDelegate");

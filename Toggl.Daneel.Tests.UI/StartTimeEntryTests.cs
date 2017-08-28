@@ -6,7 +6,7 @@ using static Toggl.Daneel.Tests.UI.Extensions.StartTimeEntryExtensions;
 namespace Toggl.Daneel.Tests.UI
 {
     [TestFixture]
-    public class StartTimeEntryTests
+    public sealed class StartTimeEntryTests
     {
         private const string validEmail = "susancalvin@psychohistorian.museum";
 

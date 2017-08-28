@@ -13,9 +13,9 @@ using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
-    public class TagsApiTests
+    public sealed class TagsApiTests
     {
-        public class TheGetAllMethod : AuthenticatedGetEndpointBaseTests<List<ITag>>
+        public sealed class TheGetAllMethod : AuthenticatedGetEndpointBaseTests<List<ITag>>
         {
             protected override IObservable<List<ITag>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Tags.GetAll();
@@ -70,7 +70,7 @@ namespace Toggl.Ultrawave.Tests.Integration
         }
         
 
-        public class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<ITag>
+        public sealed class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<ITag>
         {
             protected override IObservable<List<ITag>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
                 => togglApi.Tags.GetAllSince(threshold);
@@ -88,7 +88,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 => t => isTheSameAs(model, t);
         }
     
-        public class TheCreateMethod : AuthenticatedPostEndpointBaseTests<ITag>
+        public sealed class TheCreateMethod : AuthenticatedPostEndpointBaseTests<ITag>
         {
             protected override IObservable<ITag> CallEndpointWith(ITogglApi togglApi)
                 => Observable.Defer(async () =>

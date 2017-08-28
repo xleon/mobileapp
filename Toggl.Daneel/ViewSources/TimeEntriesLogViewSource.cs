@@ -10,7 +10,7 @@ using UIKit;
 
 namespace Toggl.Daneel.ViewSources
 {
-    public class TimeEntriesLogViewSource : MvxTableViewSource
+    public sealed class TimeEntriesLogViewSource : MvxTableViewSource
     {
         private const string cellIdentifier = nameof(TimeEntriesLogViewCell);
         private const string headerCellIdentifier = nameof(TimeEntriesLogHeaderViewCell);
@@ -28,9 +28,9 @@ namespace Toggl.Daneel.ViewSources
 
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
-            var grouping = GetGroupAt(section);
+            var grouping = getGroupAt(section);
 
-            var cell = GetOrCreateHeaderViewFor(tableView);
+            var cell = getOrCreateHeaderViewFor(tableView);
             if (cell is IMvxBindable bindable)
                 bindable.DataContext = grouping;
             
@@ -54,15 +54,15 @@ namespace Toggl.Daneel.ViewSources
             => ItemsSource.Count();
 
         public override nint RowsInSection(UITableView tableview, nint section)
-            => GetGroupAt(section).Count();
+            => getGroupAt(section).Count();
 
-        protected virtual TimeEntryViewModelCollection GetGroupAt(nint section)
+        private TimeEntryViewModelCollection getGroupAt(nint section)
             => groupedItems.ElementAt((int)section);
 
         protected override object GetItemAt(NSIndexPath indexPath)
             => groupedItems.ElementAt(indexPath.Section).ElementAt((int)indexPath.Item);
 
-        protected UITableViewHeaderFooterView GetOrCreateHeaderViewFor(UITableView tableView)
+        private UITableViewHeaderFooterView getOrCreateHeaderViewFor(UITableView tableView)
             => tableView.DequeueReusableHeaderFooterView(headerCellIdentifier);
 
         protected override UITableViewCell GetOrCreateCellFor(UITableView tableView, NSIndexPath indexPath, object item)
