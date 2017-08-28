@@ -77,10 +77,16 @@ To facilitate this, unit tests are run on every commit automatically.
 
 Ultrawave has extensive integration tests, which tests all endpoints against Toggl's staging api.
 
-These tests are currently not run automatically, however this will change in the future.
+These tests are run nightly on the `develop` branch.
 
 ### :art: UI Tests
 
 Daneel has UI Tests, which test all UI components for correct behaviour.
 
-These tests are currently not run automatically, however this will change in the future.
+These tests are run nightly on the `develop` branch.
+
+### :calling: Test builds
+
+To enable every member of the team, and others inside Toggl to test the current state of the app easily, we create automatic AdHoc builds every night automatically.
+
+The builds, as well as the results of the integration and UI tests are posted to Slack for easy access.
