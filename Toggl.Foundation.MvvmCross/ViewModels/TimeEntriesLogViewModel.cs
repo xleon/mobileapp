@@ -106,7 +106,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 TimeEntries.Remove(collection);
             }
 
-            var newCollection = new TimeEntryViewModelCollection(indexDate, timeEntriesInDay.OrderBy(te => te.Start));
+            var newCollection = new TimeEntryViewModelCollection(indexDate, timeEntriesInDay.OrderByDescending(te => te.Start));
 
             var foundIndex = TimeEntries.IndexOf(TimeEntries.FirstOrDefault(x => x.Date < indexDate));
             var indexToInsert = foundIndex == -1 ? TimeEntries.Count : foundIndex;
