@@ -57,5 +57,10 @@ namespace Toggl.Foundation.MvvmCross.Helper
         {
             public static readonly MvxColor ClientText = new MvxColor(94, 91, 91);
         }
+
+        public static class ModalDialog
+        {
+            public static readonly MvxColor BackgroundOverlay = new MvxColor(181, 188, 192);
+        }
     }
 }

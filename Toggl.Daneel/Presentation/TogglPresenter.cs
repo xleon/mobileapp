@@ -18,6 +18,7 @@ namespace Toggl.Daneel.Presentation
     public sealed class TogglPresenter : MvxIosViewPresenter
     {
         private FromBottomTransitionDelegate FromBottomTransitionDelegate = new FromBottomTransitionDelegate();
+        private ModalTransitionDelegate modalTransitionDelegate = new ModalTransitionDelegate();
 
         private CATransition FadeAnimation = new CATransition
         {
@@ -38,6 +39,7 @@ namespace Toggl.Daneel.Presentation
 
             AttributeTypesToShowMethodDictionary.Add(typeof(NestedPresentationAttribute), showNestedViewController);
             AttributeTypesToShowMethodDictionary.Add(typeof(ModalCardPresentationAttribute), showModalCardViewController);
+            AttributeTypesToShowMethodDictionary.Add(typeof(ModalDialogPresentationAttribute), showModalDialogViewController);
         }
 
         private void showNestedViewController(UIViewController viewController, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
@@ -61,6 +63,15 @@ namespace Toggl.Daneel.Presentation
             ModalViewControllers.Add(viewController);
 
             FromBottomTransitionDelegate.WireToViewController(viewController, () => ModalViewControllers.Remove(viewController));
+        }
+
+        private void showModalDialogViewController(UIViewController viewController, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
+        {
+            viewController.ModalPresentationStyle = UIModalPresentationStyle.Custom;
+            viewController.TransitioningDelegate = modalTransitionDelegate;
+            MasterNavigationController.PresentViewController(viewController, true, null);
+
+            ModalViewControllers.Add(viewController);
         }
 
         protected override void ShowChildViewController(UIViewController viewController, MvxChildPresentationAttribute attribute, MvxViewModelRequest request)
