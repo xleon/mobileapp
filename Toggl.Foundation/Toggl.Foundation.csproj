@@ -80,15 +80,21 @@
     <Compile Include="Login\ILoginManager.cs" />
     <Compile Include="Sync\States\FetchAllSinceState.cs" />
     <Compile Include="Sync\States\FetchObservables.cs" />
+    <Compile Include="Sync\States\PersistClientsState.cs" />
+    <Compile Include="Sync\States\PersistProjectsState.cs" />
+    <Compile Include="Sync\States\BasePersistState.cs" />
+    <Compile Include="Sync\States\PersistWorkspacesState.cs" />
     <Compile Include="Sync\TransitionHandlerProvider.cs" />
     <Compile Include="Sync\SyncManager.cs" />
     <Compile Include="Sync\SyncState.cs" />
     <Compile Include="Sync\SyncStateQueue.cs" />
     <Compile Include="TimeService.cs" />
     <Compile Include="ITimeService.cs" />
+    <Compile Include="Models\SinceParameters.cs" />
     <Compile Include="Models\TimeEntry.cs" />
     <Compile Include="Suggestions\Suggestion.cs" />
     <Compile Include="Sync\ConflictResolution\PreferNewer.cs" />
+    <Compile Include="Sync\ConflictResolution\Resolver.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

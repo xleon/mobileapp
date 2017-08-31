@@ -13,6 +13,11 @@ namespace Toggl.Foundation.Sync.States
         public IObservable<List<IProject>> Projects { get; }
         public IObservable<List<ITimeEntry>> TimeEntries { get; }
 
+        public FetchObservables(FetchObservables old, ISinceParameters sinceParameters)
+            : this(sinceParameters, old.Workspaces, old.Clients, old.Projects, old.TimeEntries)
+        {
+        }
+
         public FetchObservables(ISinceParameters sinceParameters,
             IObservable<List<IWorkspace>> workspaces, IObservable<List<IClient>> clients,
             IObservable<List<IProject>> projects, IObservable<List<ITimeEntry>> timeEntries

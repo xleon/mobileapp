@@ -187,7 +187,11 @@
     <Compile Include="MvvmCross\Converters\TimeSpanToDurationValueConverterTests.cs" />
     <Compile Include="Sync\StateMachineOrchestratorTests.cs" />
     <Compile Include="Sync\StateMachineTests.cs" />
+    <Compile Include="Sync\States\PersistClientsStateTests.cs" />
+    <Compile Include="Sync\States\PersistProjectsStateTests.cs" />
+    <Compile Include="Sync\States\PersistWorkspacesStateTests.cs" />
     <Compile Include="Sync\States\FetchAllSinceStateTests.cs" />
+    <Compile Include="Sync\States\PersistStateTests.cs" />
     <Compile Include="Sync\StateTreeTests.cs" />
     <Compile Include="Sync\SyncManagerTests.cs" />
     <Compile Include="Sync\SyncStateQueueTests.cs" />
@@ -205,6 +209,7 @@
     <Compile Include="MvvmCross\ViewModels\TimeEntryViewModelTests.cs" />
     <Compile Include="MvvmCross\ViewModels\TimeEntryViewModelCollectionTests.cs" />
     <Compile Include="Sync\ConflictResolution\PreferNewerTests.cs" />
+    <Compile Include="Sync\States\TestException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />

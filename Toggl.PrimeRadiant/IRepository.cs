@@ -11,6 +11,7 @@ namespace Toggl.PrimeRadiant
         IObservable<TModel> GetById(long id);
         IObservable<TModel> Create(TModel entity);
         IObservable<TModel> Update(TModel entity);
+        IObservable<IEnumerable<TModel>> BatchUpdate(IEnumerable<TModel> entities, Func<TModel, TModel, ConflictResolutionMode> conflictResolution);
         IObservable<Unit> Delete(TModel entity);
         IObservable<IEnumerable<TModel>> GetAll();
         IObservable<IEnumerable<TModel>> GetAll(Func<TModel, bool> predicate);
