@@ -19,11 +19,9 @@ namespace Toggl.Foundation.Sync.States
             this.database = database;
         }
 
-        public IObservable<ITransition> Start(Transition<FetchObservables> transition)
+        public IObservable<ITransition> Start(FetchObservables fetch)
         {
-            var fetch = transition.Parameter;
             var since = fetch.SinceParameters;
-
             return FetchObservable(fetch)
                 .SingleAsync()
                 .Select(entities => entities.Select(ConvertToDatabaseEntity).ToList())

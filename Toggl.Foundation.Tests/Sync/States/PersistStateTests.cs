@@ -94,9 +94,9 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void EmitsTransitionToPersistFinished()
             {
-                var fetchTransition = CreateTransition();
+                var observables = CreateObservables();
 
-                var transition = state.Start(fetchTransition).SingleAsync().Wait();
+                var transition = state.Start(observables).SingleAsync().Wait();
 
                 transition.Result.Should().Be(state.FinishedPersisting);
             }
@@ -104,9 +104,8 @@ namespace Toggl.Foundation.Tests.Sync.States
             public void ThrowsIfFetchObservablePublishesTwice()
             {
                 var fetchObservables = CreateObservablesWhichFetchesTwice();
-                var fetchTransition = new Transition<FetchObservables>(new StateResult<FetchObservables>(), fetchObservables);
 
-                Action fetchTwice = () => state.Start(fetchTransition).Wait();
+                Action fetchTwice = () => state.Start(fetchObservables).Wait();
 
                 fetchTwice.ShouldThrow<InvalidOperationException>();
             }
@@ -115,19 +114,19 @@ namespace Toggl.Foundation.Tests.Sync.States
             {
                 var at = new DateTimeOffset(2017, 09, 01, 12, 34, 56, TimeSpan.Zero);
                 var entities = CreateComplexListWhereTheLastUpdateEntityIsDeleted(at);
-                var fetchTransition = CreateTransition(null, entities);
+                var observables = CreateObservables(null, entities);
 
-                state.Start(fetchTransition).SingleAsync().Wait();
+                state.Start(observables).SingleAsync().Wait();
 
                 AssertBatchUpdateWasCalled(database, entities);
             }
 
             public void ThrowsWhenBatchUpdateThrows()
             {
-                var fetchTransition = CreateTransition();
+                var observables = CreateObservables();
                 SetupDatabaseBatchUpdateToThrow(database, () => new TestException());
 
-                Action startingState = () => state.Start(fetchTransition).SingleAsync().Wait();
+                Action startingState = () => state.Start(observables).SingleAsync().Wait();
 
                 startingState.ShouldThrow<TestException>();
             }
@@ -144,9 +143,9 @@ namespace Toggl.Foundation.Tests.Sync.States
                     tasks: at.AddDays(4),
                     timeEntries: at.AddDays(5)
                 );
-                var fetchTransition = CreateTransition(oldSinceParameters);
+                var observables = CreateObservables(oldSinceParameters);
 
-                state.Start(fetchTransition).SingleAsync().Wait();
+                state.Start(observables).SingleAsync().Wait();
 
                 database.SinceParameters.Received().Set(Arg.Is<ISinceParameters>(
                     newSinceParameters =>
@@ -163,10 +162,10 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var newAt = new DateTimeOffset(2017, 10, 01, 12, 34, 56, TimeSpan.Zero);
                 var oldSinceParameters = new SinceParameters(null, oldAt);
                 var entities = CreateListWithOneItem(newAt);
-                var fetchTransition = CreateTransition(oldSinceParameters, entities);
+                var observables = CreateObservables(oldSinceParameters, entities);
                 SetupDatabaseBatchUpdateMocksToReturnDatabaseEntitiesAndFilterOutDeletedEntities(database, entities);
 
-                state.Start(fetchTransition).SingleAsync().Wait();
+                state.Start(observables).SingleAsync().Wait();
 
                 database.SinceParameters.Received().Set(Arg.Is<ISinceParameters>(
                     newSinceParameters => OtherSinceDatesDidntChange(oldSinceParameters, newSinceParameters, newAt)));
@@ -177,10 +176,10 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var at = new DateTimeOffset(2017, 09, 01, 12, 34, 56, TimeSpan.Zero);
                 var oldSinceParameters = new SinceParameters(null, at.AddMonths(-1));
                 var entities = CreateComplexListWhereTheLastUpdateEntityIsDeleted(at);
-                var fetchTransition = CreateTransition(oldSinceParameters, entities);
+                var observables = CreateObservables(oldSinceParameters, entities);
                 SetupDatabaseBatchUpdateMocksToReturnDatabaseEntitiesAndFilterOutDeletedEntities(database, entities);
 
-                state.Start(fetchTransition).SingleAsync().Wait();
+                state.Start(observables).SingleAsync().Wait();
 
                 database.SinceParameters.Received().Set(Arg.Is<ISinceParameters>(
                     (newSinceParameters) => OtherSinceDatesDidntChange(oldSinceParameters, newSinceParameters, at)));
@@ -191,12 +190,12 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var at = new DateTimeOffset(2017, 09, 01, 12, 34, 56, TimeSpan.Zero);
                 var oldSinceParameters = new SinceParameters(null, at);
                 var entities = CreateComplexListWhereTheLastUpdateEntityIsDeleted(at);
-                var fetchTransition = CreateTransition(oldSinceParameters, entities);
+                var observables = CreateObservables(oldSinceParameters, entities);
                 SetupDatabaseBatchUpdateToThrow(database, () => new TestException());
 
                 try
                 {
-                    state.Start(fetchTransition).SingleAsync().Wait();
+                    state.Start(observables).SingleAsync().Wait();
                 }
                 catch (TestException) { }
 
@@ -208,10 +207,10 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var at = new DateTimeOffset(2017, 09, 01, 12, 34, 56, TimeSpan.Zero);
                 var oldSinceParameters = new SinceParameters(null, at);
                 var entities = CreateComplexListWhereTheLastUpdateEntityIsDeleted(at);
-                var fetchTransition = CreateTransition(oldSinceParameters, entities);
+                var observables = CreateObservables(oldSinceParameters, entities);
                 SetupDatabaseBatchUpdateMocksToReturnDatabaseEntitiesAndFilterOutDeletedEntities(database, entities);
 
-                var transition = (Transition<FetchObservables>)state.Start(fetchTransition).SingleAsync().Wait();
+                var transition = (Transition<FetchObservables>)state.Start(observables).SingleAsync().Wait();
 
                 transition.Parameter.SinceParameters.Should()
                     .Match((ISinceParameters newSinceParameters) => OtherSinceDatesDidntChange(oldSinceParameters, newSinceParameters, at));
@@ -240,7 +239,7 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             protected abstract bool OtherSinceDatesDidntChange(ISinceParameters old, ISinceParameters next, DateTimeOffset at);
 
-            protected abstract Transition<FetchObservables> CreateTransition(ISinceParameters since = null, List<TInterface> entities = null);
+            protected abstract FetchObservables CreateObservables(ISinceParameters since = null, List<TInterface> entities = null);
 
             protected abstract void SetupDatabaseBatchUpdateMocksToReturnDatabaseEntitiesAndFilterOutDeletedEntities(ITogglDatabase database, List<TInterface> entities = null);
 

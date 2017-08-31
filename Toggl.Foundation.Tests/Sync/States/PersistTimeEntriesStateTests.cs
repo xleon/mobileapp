@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using NSubstitute;
 using Toggl.Foundation.Models;
-using Toggl.Foundation.Sync;
 using Toggl.Foundation.Sync.States;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
@@ -49,20 +48,15 @@ namespace Toggl.Foundation.Tests.Sync.States
                    && next.Tasks == old.Tasks
                    && next.TimeEntries == at;
 
-            protected override Transition<FetchObservables> CreateTransition(
+            protected override FetchObservables CreateObservables(
                 ISinceParameters since = null,
                 List<ITimeEntry> timeEntries = null)
-            {
-                var fetchObservables = new FetchObservables(
+            => new FetchObservables(
                     since ?? new SinceParameters(null),
                     Observable.Return(new List<IWorkspace>()),
                     Observable.Return(new List<IClient>()),
                     Observable.Return(new List<IProject>()),
                     Observable.Return(timeEntries ?? new List<ITimeEntry>()));
-                var fetchTransition = new Transition<FetchObservables>(new StateResult<FetchObservables>(), fetchObservables);
-
-                return fetchTransition;
-            }
 
             protected override List<ITimeEntry> CreateComplexListWhereTheLastUpdateEntityIsDeleted(DateTimeOffset? at)
                 => createComplexList(at ?? DateTimeOffset.Now);
