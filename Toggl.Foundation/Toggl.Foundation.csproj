@@ -96,6 +96,7 @@
     <Compile Include="Sync\ConflictResolution\PreferNewer.cs" />
     <Compile Include="Sync\ConflictResolution\Selectors\TimeEntrySyncSelector.cs" />
     <Compile Include="Sync\ConflictResolution\Resolver.cs" />
+    <Compile Include="Sync\States\PersistTimeEntriesState.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

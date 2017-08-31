@@ -210,6 +210,7 @@
     <Compile Include="MvvmCross\ViewModels\TimeEntryViewModelCollectionTests.cs" />
     <Compile Include="Sync\ConflictResolution\PreferNewerTests.cs" />
     <Compile Include="Sync\States\TestException.cs" />
+    <Compile Include="Sync\States\PersistTimeEntriesStateTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />
