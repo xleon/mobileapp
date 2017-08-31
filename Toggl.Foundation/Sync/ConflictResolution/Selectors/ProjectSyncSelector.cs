@@ -8,6 +8,9 @@ namespace Toggl.Foundation.Sync.ConflictResolution.Selectors
         public DateTimeOffset LastModified(IDatabaseProject model)
             => model.At;
 
+        public bool IsDirty(IDatabaseProject model)
+            => model.IsDirty;
+
         public bool IsDeleted(IDatabaseProject model)
             => model.ServerDeletedAt.HasValue;
     }

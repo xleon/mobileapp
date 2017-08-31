@@ -1,4 +1,5 @@
-﻿using Toggl.Foundation.Sync.ConflictResolution.Selectors;
+﻿using System;
+using Toggl.Foundation.Sync.ConflictResolution.Selectors;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Sync.ConflictResolution
@@ -19,5 +20,8 @@ namespace Toggl.Foundation.Sync.ConflictResolution
 
         public static PreferNewer<IDatabaseTag> ForTags()
             => new PreferNewer<IDatabaseTag>(new TagSyncSelector());
+
+        public static PreferNewer<IDatabaseTimeEntry> ForTimeEntries()
+            => new PreferNewer<IDatabaseTimeEntry>(new TimeEntrySyncSelector(), TimeSpan.FromSeconds(5));
     }
 }

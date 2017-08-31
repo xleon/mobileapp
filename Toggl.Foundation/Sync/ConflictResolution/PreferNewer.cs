@@ -2,17 +2,28 @@
 using Toggl.PrimeRadiant;
 using Toggl.Multivac;
 using static Toggl.PrimeRadiant.ConflictResolutionMode;
+using System;
 
 namespace Toggl.Foundation.Sync.ConflictResolution
 {
     internal sealed class PreferNewer<T> : IConflictResolver<T>
+        where T : class
     {
+        public TimeSpan MarginOfError { get; }
+
         private ISyncSelector<T> selector { get; }
 
         public PreferNewer(ISyncSelector<T> selector)
+            : this(selector, TimeSpan.Zero)
         {
+        }
+
+        public PreferNewer(ISyncSelector<T> selector, TimeSpan marginOfError)
+        {
+            Ensure.Argument.IsNotNull(marginOfError, nameof(marginOfError));
             Ensure.Argument.IsNotNull(selector, nameof(selector));
 
+            this.MarginOfError = marginOfError;
             this.selector = selector;
         }
 
@@ -26,7 +37,10 @@ namespace Toggl.Foundation.Sync.ConflictResolution
             if (localEntity == null)
                 return Create;
 
-            var receivedDataIsOutdated = selector.LastModified(localEntity) > selector.LastModified(serverEntity);
+            if (selector.IsDirty(localEntity) == false)
+                return Update;
+
+            var receivedDataIsOutdated = selector.LastModified(localEntity) > selector.LastModified(serverEntity).Subtract(MarginOfError);
             if (receivedDataIsOutdated)
                 return Ignore;
 

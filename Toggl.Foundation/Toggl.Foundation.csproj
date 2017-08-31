@@ -94,6 +94,7 @@
     <Compile Include="Models\TimeEntry.cs" />
     <Compile Include="Suggestions\Suggestion.cs" />
     <Compile Include="Sync\ConflictResolution\PreferNewer.cs" />
+    <Compile Include="Sync\ConflictResolution\Selectors\TimeEntrySyncSelector.cs" />
     <Compile Include="Sync\ConflictResolution\Resolver.cs" />
   </ItemGroup>
   <ItemGroup />
