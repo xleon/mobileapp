@@ -1,11 +1,16 @@
-﻿using MvvmCross.Core.ViewModels;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions
 {
-    public sealed class ProjectSuggestionViewModel : MvxNotifyPropertyChanged, ITimeEntrySuggestionViewModel
+    public sealed class ProjectSuggestionViewModel : BaseTimeEntrySuggestionViewModel
     {
-        public long Id { get; }
+        internal static IEnumerable<ProjectSuggestionViewModel> FromProjects(
+            IEnumerable<IDatabaseProject> projects
+        ) => projects.Select(p => new ProjectSuggestionViewModel(p));
+
+        public long ProjectId { get; }
 
         public int NumberOfTasks { get; } = 0;
 
@@ -17,13 +22,23 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions
 
         public ProjectSuggestionViewModel(IDatabaseProject project)
         {
-            Id = project.Id;
+            ProjectId = project.Id;
             ProjectName = project.Name;
             ProjectColor = project.Color;
 
             if (project.Client == null) return;
 
             ClientName = project.Client.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (ProjectName.GetHashCode() * 397) ^
+                       (ProjectColor.GetHashCode() * 397) ^
+                       ClientName.GetHashCode();
+            }
         }
     }
 }
