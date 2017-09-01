@@ -6,9 +6,20 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions
 {
     public sealed class ProjectSuggestionViewModel : BaseTimeEntrySuggestionViewModel
     {
+        private static readonly ProjectSuggestionViewModel empty = new ProjectSuggestionViewModel();
+
         internal static IEnumerable<ProjectSuggestionViewModel> FromProjects(
             IEnumerable<IDatabaseProject> projects
         ) => projects.Select(p => new ProjectSuggestionViewModel(p));
+
+        internal static IEnumerable<ProjectSuggestionViewModel> FromProjectsPrependingEmpty(
+            IEnumerable<IDatabaseProject> projects) 
+        {
+            yield return empty;
+
+            foreach (var project in projects)
+                yield return new ProjectSuggestionViewModel(project);
+        }
 
         public long ProjectId { get; }
 
@@ -20,7 +31,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions
 
         public string ProjectColor { get; }
 
-        public ProjectSuggestionViewModel(IDatabaseProject project)
+        private ProjectSuggestionViewModel()
+        {
+            ProjectId = 0;
+            ProjectName = Resources.NoProject;
+            ProjectColor = "#A3A3A3";
+        }
+
+        private ProjectSuggestionViewModel(IDatabaseProject project)
         {
             ProjectId = project.Id;
             ProjectName = project.Name;

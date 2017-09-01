@@ -142,13 +142,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IObservable<IEnumerable<BaseTimeEntrySuggestionViewModel>> querySuggestions(
             (IEnumerable<string> WordsToQuery, SuggestionType SuggestionType) tuple)
         {
-            if (!tuple.WordsToQuery.Any())
-                return Observable.Return(Enumerable.Empty<BaseTimeEntrySuggestionViewModel>());
+            var queryListIsEmpty = !tuple.WordsToQuery.Any();
 
             if (tuple.SuggestionType == SuggestionType.Projects)
+            {
+                if (queryListIsEmpty)
+                    return dataSource.Projects.GetAll()
+                        .Select(ProjectSuggestionViewModel.FromProjectsPrependingEmpty);
+
                 return tuple.WordsToQuery
                     .Aggregate(dataSource.Projects.GetAll(), (obs, word) => obs.Select(filterProjectsByWord(word)))
                     .Select(ProjectSuggestionViewModel.FromProjects);
+            }
+
+            if (queryListIsEmpty)
+                return Observable.Return(Enumerable.Empty<BaseTimeEntrySuggestionViewModel>());
 
             return tuple.WordsToQuery
                .Aggregate(dataSource.TimeEntries.GetAll(), (obs, word) => obs.Select(filterTimeEntriesByWord(word)))

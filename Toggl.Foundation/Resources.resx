@@ -94,4 +94,7 @@ Please try again.</value>
     <data name="AddDescription">
         <value>Add description</value>
     </data>
+    <data name="NoProject">
+        <value>No Project</value>
+    </data>
 </root>

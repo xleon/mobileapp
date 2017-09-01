@@ -196,5 +196,11 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("AddDescription", resourceCulture);
             }
         }
+        
+        public static string NoProject {
+            get {
+                return ResourceManager.GetString("NoProject", resourceCulture);
+            }
+        }
     }
 }

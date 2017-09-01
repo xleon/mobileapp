@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
+using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions;
@@ -307,6 +308,24 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             public sealed class ForProjects : QueryMechanismTest
             {
+
+                [Fact]
+                public async Task SuggestsNoProjectWhenThereIsNoStringToSearch()
+                {
+                    const string description = "@";
+                    var textFieldInfo = new TextFieldInfo(description, 1);
+
+                    await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                    ViewModel.TextFieldInfo = textFieldInfo;
+
+                    await DataSource.Projects.Received().GetAll();
+                    ViewModel.Suggestions.Should().HaveCount(11)
+                        .And.AllBeOfType<ProjectSuggestionViewModel>();
+
+                    ViewModel.Suggestions.Cast<ProjectSuggestionViewModel>().First()
+                        .ProjectName.Should().Be(Resources.NoProject);
+                }
+
                 [Fact]
                 public async Task SearchesTheName()
                 {
