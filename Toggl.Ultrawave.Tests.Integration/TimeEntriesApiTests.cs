@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Multivac.Models;
+using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Tests.Integration.BaseTests;
 using Xunit;
 using TimeEntry = Toggl.Ultrawave.Models.TimeEntry;
@@ -77,7 +78,19 @@ namespace Toggl.Ultrawave.Tests.Integration
                 persistedTimeEntry.ProjectId.Should().BeNull();
                 persistedTimeEntry.TaskId.Should().BeNull();
             }
-            
+
+            [Fact, LogTestInfo]
+            public async Task ThrowsWhenTagIdsIsNull()
+            {
+                var (togglClient, user) = await SetupTestUser();
+                var timeEntry = createTimeEntry(user);
+                timeEntry.TagIds = null;
+
+                Action post = () => togglClient.TimeEntries.Create(timeEntry).Wait();
+
+                post.ShouldThrow<BadRequestException>();
+            }
+
             protected override IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi)
                 => Observable.Defer(async () =>
                 {

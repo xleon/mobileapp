@@ -9,7 +9,7 @@ using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.Tests.Integration.BaseTests;
 using Toggl.Ultrawave.Tests.Integration.Helper;
 using Xunit;
-
+using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Ultrawave.Tests.Integration
 {
@@ -35,14 +35,13 @@ namespace Toggl.Ultrawave.Tests.Integration
             };
 
             [Fact, LogTestInfo]
-            public async System.Threading.Tasks.Task ReturnsTagsForAllWorkspaces()
+            public async Task ReturnsTagsForAllWorkspaces()
             {
-                var(togglApi, user) = await SetupTestUser();
+                var (togglApi, user) = await SetupTestUser();
                 var otherWorkspace = await WorkspaceHelper.CreateFor(user);
-                var timeEntry1 = createTimeEntry(user.Id, user.DefaultWorkspaceId, tags1);
-                var timeEntry2 = createTimeEntry(user.Id, otherWorkspace.Id, tags2);
-                await togglApi.TimeEntries.Create(timeEntry1);
-                await togglApi.TimeEntries.Create(timeEntry2);
+
+                await pushTags(togglApi, tags1, user.DefaultWorkspaceId);
+                await pushTags(togglApi, tags2, otherWorkspace.Id);
 
                 var returnedTags = await CallEndpointWith(togglApi);
 
@@ -59,14 +58,14 @@ namespace Toggl.Ultrawave.Tests.Integration
                 }
             }
 
-            private TimeEntry createTimeEntry(long userId, long workspaceId, string[] tags) => new TimeEntry
+            private async Task pushTags(ITogglApi togglApi, string[] tags, long workspaceId)
             {
-                UserId = userId,
-                WorkspaceId = workspaceId,
-                Start = new DateTimeOffset(DateTime.Now),
-                CreatedWith = Configuration.UserAgent.ToString(),
-                TagNames = new List<string>(tags)
-            };
+                foreach (var tagName in tags)
+                {
+                    var tag = new Tag { Name = tagName, WorkspaceId = workspaceId };
+                    await togglApi.Tags.Create(tag);
+                }
+            }
         }
         
 
@@ -102,7 +101,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 => togglApi.Tags.Create(tag);
 
             [Fact, LogTestInfo]
-            public async System.Threading.Tasks.Task CreatesNewTag()
+            public async Task CreatesNewTag()
             {
                 var (togglClient, user) = await SetupTestUser();
 
