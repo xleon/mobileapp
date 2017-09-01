@@ -17,6 +17,8 @@ namespace Toggl.Foundation.Models
 
             public bool Billable { get; private set; }
 
+            public long? ProjectId { get; private set; }
+
             public string Description { get; private set; }
 
             public DateTimeOffset Start { get; private set; }
@@ -52,7 +54,13 @@ namespace Toggl.Foundation.Models
 
             public Builder SetBillable(bool billable)
             {
-                Billable = billable;
+                Billable = billable; 
+                return this;
+            }
+
+            internal Builder SetProjectId(long? projectId)
+            {
+                ProjectId = projectId;
                 return this;
             }
 
@@ -81,6 +89,7 @@ namespace Toggl.Foundation.Models
             Start = builder.Start;
             IsDirty = builder.IsDirty;
             Billable = builder.Billable;
+            ProjectId = builder.ProjectId;
             Description = builder.Description;
         }
     }

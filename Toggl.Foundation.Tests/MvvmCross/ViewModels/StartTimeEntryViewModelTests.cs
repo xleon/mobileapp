@@ -95,7 +95,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await DataSource.TimeEntries.Received().Start(
                     Arg.Is(dateParameter.GetDate()),
                     Arg.Is(description),
-                    Arg.Is(false)
+                    Arg.Is(false),
+                    Arg.Is<long?>(x => x == null)
                 );
             }
 

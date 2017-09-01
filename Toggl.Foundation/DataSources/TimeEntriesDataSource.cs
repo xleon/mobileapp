@@ -60,12 +60,14 @@ namespace Toggl.Foundation.DataSources
                          .IgnoreElements()
                          .Cast<Unit>();
 
-        public IObservable<IDatabaseTimeEntry> Start(DateTimeOffset startTime, string description, bool billable)
+        public IObservable<IDatabaseTimeEntry> Start(DateTimeOffset startTime, string description, bool billable, 
+            long? projectId)
             => idProvider.GetNextIdentifier()
                   .Apply(TimeEntry.Builder.Create)
                   .SetStart(startTime)
                   .SetDescription(description)
                   .SetBillable(billable)
+                  .SetProjectId(projectId)
                   .SetIsDirty(true)
                   .Build()
                   .Apply(repository.Create)

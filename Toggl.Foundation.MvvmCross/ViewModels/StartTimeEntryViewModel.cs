@@ -115,7 +115,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task done()
         {
-            await dataSource.TimeEntries.Start(StartDate, TextFieldInfo.Text, IsBillable);
+            await dataSource.TimeEntries.Start(StartDate, TextFieldInfo.Text, IsBillable, null);
 
             await navigationService.Close(this);
         }
