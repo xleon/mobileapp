@@ -15,6 +15,15 @@ namespace Toggl.Daneel.Binding
         public TextFieldSecureTextEntryTargetBinding(UITextField target)
             : base(target)
         {
+            target.EditingDidBegin += onEditingDidBegin;
+        }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            base.Dispose(isDisposing);
+
+            if (!isDisposing) return;
+            Target.EditingDidBegin -= onEditingDidBegin;
         }
 
         protected override void SetValue(bool value)
@@ -24,6 +33,12 @@ namespace Toggl.Daneel.Binding
             Target.SecureTextEntry = value;
 
             if (!value) return;
+            Target.InsertText(Target.Text);
+        }
+
+        private void onEditingDidBegin(object sender, EventArgs e)
+        {
+            if (!Target.SecureTextEntry) return;
             Target.InsertText(Target.Text);
         }
     }

@@ -67,6 +67,14 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.StartPasswordManagerCommand);
 
             //Enabled
+            bindingSet.Bind(EmailTextField)
+                      .For(v => v.BindShouldReturn())
+                      .To(vm => vm.NextCommand);
+            
+            bindingSet.Bind(PasswordTextField)
+                      .For(v => v.BindShouldReturn())
+                      .To(vm => vm.NextCommand);
+
             bindingSet.Bind(NavigationItem.RightBarButtonItem)
                       .For(v => v.BindAnimatedEnabled())
                       .To(vm => vm.NextIsEnabled);
