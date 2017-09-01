@@ -69,10 +69,16 @@ namespace Toggl.Daneel.ViewControllers
         }
 
         private void keyboardWillShow(object sender, UIKeyboardEventArgs e)
-            => BottomDistanceConstraint.Constant = e.FrameBegin.Height + 0;
+        {
+            BottomDistanceConstraint.Constant = e.FrameBegin.Height;
+            UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
+        }
 
         private void keyboardWillHide(object sender, UIKeyboardEventArgs e)
-            => BottomDistanceConstraint.Constant = 0;
+        {
+            BottomDistanceConstraint.Constant = 0;
+            UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
+        }
 
         private void prepareViews()
         {

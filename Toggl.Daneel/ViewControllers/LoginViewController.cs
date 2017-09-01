@@ -6,6 +6,7 @@ using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters.Attributes;
 using Toggl.Daneel.Extensions;
 using Toggl.Foundation;
+using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
 
@@ -123,10 +124,16 @@ namespace Toggl.Daneel.ViewControllers
         }
 
         private void keyboardWillShow(object sender, UIKeyboardEventArgs e)
-            => BottomConstraint.Constant = e.FrameBegin.Height + forgotPasswordLabelOffset;
+        {
+            BottomConstraint.Constant = e.FrameBegin.Height + forgotPasswordLabelOffset;
+            UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
+        }
 
         private void keyboardWillHide(object sender, UIKeyboardEventArgs e)
-            => BottomConstraint.Constant = forgotPasswordLabelOffset;
+        {
+            BottomConstraint.Constant = forgotPasswordLabelOffset;
+            UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
+        }
 
         private void prepareTextFields()
         {
