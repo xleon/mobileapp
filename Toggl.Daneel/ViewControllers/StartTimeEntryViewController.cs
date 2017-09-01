@@ -44,7 +44,10 @@ namespace Toggl.Daneel.ViewControllers
 
             //TableView
             bindingSet.Bind(source).To(vm => vm.Suggestions);
-
+            bindingSet.Bind(source)
+                      .For(v => v.SelectionChangedCommand)
+                      .To(vm => vm.SelectSuggestionCommand);
+            
             //Text
             bindingSet.Bind(TimeLabel)
                       .To(vm => vm.ElapsedTime)

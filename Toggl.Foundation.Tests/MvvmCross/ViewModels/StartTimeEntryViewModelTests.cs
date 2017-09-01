@@ -109,6 +109,41 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
+        public sealed class TheSelectSuggestionCommand
+        {
+            public sealed class WhenSelectingATimeEntrySuggestion : StartTimeEntryViewModelTest
+            {
+                [Fact]
+                public void SetsTheTextFieldInfoTextToTheValueOfTheSuggestedDescription()
+                {
+                    const string description = "Testing Toggl mobile apps";
+                    var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                    timeEntry.Description.Returns(description);
+                    var suggestion = new TimeEntrySuggestionViewModel(timeEntry);
+
+                    ViewModel.SelectSuggestionCommand.Execute(suggestion);
+
+                    ViewModel.TextFieldInfo.Text.Should().Be(description);
+                }
+
+                [Fact]
+                public void SetsTheProjectIdToTheSuggestedProjectId()
+                {
+                    const long projectId = 10;
+                    var project = Substitute.For<IDatabaseProject>();
+                    project.Id.Returns(projectId);
+                    var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                    timeEntry.Description.Returns("");
+                    timeEntry.Project.Returns(project);
+                    var suggestion = new TimeEntrySuggestionViewModel(timeEntry);
+
+                    ViewModel.SelectSuggestionCommand.Execute(suggestion);
+
+                    ViewModel.ProjectId.Should().Be(projectId);
+                }
+            }
+        }
+
         public sealed class TheTextFieldInfoProperty
         {
             public sealed class QueriesTheDatabaseForTimeEntries : StartTimeEntryViewModelTest

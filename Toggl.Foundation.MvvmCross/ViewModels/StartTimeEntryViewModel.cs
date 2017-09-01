@@ -32,6 +32,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IDisposable elapsedTimeDisposable;
 
         //Properties
+        public long? ProjectId { get; private set; }
+
         public TextFieldInfo TextFieldInfo { get; set; }
 
         public TimeSpan ElapsedTime { get; private set; } = TimeSpan.Zero;
@@ -55,6 +57,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand ToggleBillableCommand { get; }
 
+        public IMvxCommand<BaseTimeEntrySuggestionViewModel> SelectSuggestionCommand { get; }
+
         public StartTimeEntryViewModel(ITogglDataSource dataSource, ITimeService timeService, IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -68,6 +72,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             BackCommand = new MvxAsyncCommand(back);
             DoneCommand = new MvxAsyncCommand(done);
             ToggleBillableCommand = new MvxCommand(toggleBillable);
+            SelectSuggestionCommand = new MvxCommand<BaseTimeEntrySuggestionViewModel>(selectSuggestion);
+        }
+
+        private void selectSuggestion(BaseTimeEntrySuggestionViewModel suggestion)
+        {
+            switch (suggestion)
+            {
+                case TimeEntrySuggestionViewModel timeEntrySuggestion:
+                    
+                    var description = timeEntrySuggestion.Description;
+
+                    ProjectId = timeEntrySuggestion.ProjectId;
+                    TextFieldInfo = new TextFieldInfo(description, description.Length);
+                    break;
+            }
         }
 
         public override async Task Initialize(DateParameter parameter)
@@ -115,7 +134,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task done()
         {
-            await dataSource.TimeEntries.Start(StartDate, TextFieldInfo.Text, IsBillable, null);
+            await dataSource.TimeEntries.Start(StartDate, TextFieldInfo.Text, IsBillable, ProjectId);
 
             await navigationService.Close(this);
         }
