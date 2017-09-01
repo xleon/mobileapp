@@ -163,6 +163,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             Mvx.RegisterSingleton(dataSource);
 
+            dataSource.SyncManager.ForceFullSync();
+
             navigationService.Navigate<MainViewModel>();
         }
 

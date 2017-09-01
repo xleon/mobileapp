@@ -3,6 +3,8 @@ using Toggl.Foundation.DataSources;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
 using Xunit;
+using System.Reactive.Concurrency;
+using Microsoft.Reactive.Testing;
 
 namespace Toggl.Foundation.Tests.DataSources
 {
@@ -13,10 +15,11 @@ namespace Toggl.Foundation.Tests.DataSources
             protected ITogglDataSource DataSource { get; }
             protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
             protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
+            protected IScheduler Scheduler { get; } = new TestScheduler();
 
             public TogglDataSourceTest()
             {
-                DataSource = new TogglDataSource(Database, Api);
+                DataSource = new TogglDataSource(Database, Api, Scheduler);
             }
         }
 

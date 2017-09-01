@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Models;
@@ -13,14 +14,17 @@ namespace Toggl.Foundation.Login
     {
         private readonly IApiFactory apiFactory;
         private readonly ITogglDatabase database;
+        private readonly IScheduler scheduler;
 
-        public LoginManager(IApiFactory apiFactory, ITogglDatabase database)
+        public LoginManager(IApiFactory apiFactory, ITogglDatabase database, IScheduler scheduler)
         {
             Ensure.Argument.IsNotNull(database, nameof(database));
             Ensure.Argument.IsNotNull(apiFactory, nameof(apiFactory));
+            Ensure.Argument.IsNotNull(scheduler, nameof(scheduler));
 
             this.database = database;
             this.apiFactory = apiFactory;
+            this.scheduler = scheduler;
         }
 
         public IObservable<ITogglDataSource> Login(Email email, string password)
@@ -41,7 +45,7 @@ namespace Toggl.Foundation.Login
                         var newCredentials = Credentials.WithApiToken(user.ApiToken);
                         var api = apiFactory.CreateApiWith(newCredentials);
 
-                        return new TogglDataSource(database, api);
+                        return new TogglDataSource(database, api, scheduler);
                     });
         }
 
@@ -59,7 +63,7 @@ namespace Toggl.Foundation.Login
             var newCredentials = Credentials.WithApiToken(user.ApiToken);
             var api = apiFactory.CreateApiWith(newCredentials);
 
-            return new TogglDataSource(database, api);
+            return new TogglDataSource(database, api, scheduler);
         }
     }
 }

@@ -25,7 +25,10 @@ namespace Toggl.Foundation.Sync.States
             return FetchObservable(fetch)
                 .SingleAsync()
                 .Select(entities => entities.Select(ConvertToDatabaseEntity).ToList())
-                .Do(databaseEntities => BatchUpdate(database, databaseEntities))
+                .SelectMany(databaseEntities => 
+                    BatchUpdate(database, databaseEntities)
+                        .IgnoreElements()
+                        .Concat(Observable.Return(databaseEntities)))
                 .Select(databaseEntities => LastUpdated(since, databaseEntities))
                 .Select(lastUpdated => UpdateSinceParameters(since, lastUpdated))
                 .Do(database.SinceParameters.Set)

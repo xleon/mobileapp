@@ -66,7 +66,7 @@ namespace Toggl.Daneel
             var userAgent = new UserAgent("Daneel", version.ToString());
 
             var apiFactory = new ApiFactory(environment, userAgent);
-            var loginManager = new LoginManager(apiFactory, database);
+            var loginManager = new LoginManager(apiFactory, database, TaskPoolScheduler.Default);
 
             Mvx.RegisterSingleton<ITimeService>(timeService);
             Mvx.RegisterSingleton<ISuggestionProviderContainer>(

@@ -16,6 +16,7 @@ using User = Toggl.Ultrawave.Models.User;
 using FoundationUser = Toggl.Foundation.Models.User;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac.Models;
+using Microsoft.Reactive.Testing;
 
 namespace Toggl.Foundation.Tests.Login
 {
@@ -35,7 +36,7 @@ namespace Toggl.Foundation.Tests.Login
 
             protected LoginManagerTest()
             {
-                LoginManager = new LoginManager(ApiFactory, Database);
+                LoginManager = new LoginManager(ApiFactory, Database, new TestScheduler());
 
                 Api.User.Get().Returns(Observable.Return(User));
                 ApiFactory.CreateApiWith(Arg.Any<Credentials>()).Returns(Api);
@@ -53,7 +54,7 @@ namespace Toggl.Foundation.Tests.Login
                 var apiFactory = useApiFactory ? ApiFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new LoginManager(apiFactory, database);
+                    () => new LoginManager(apiFactory, database, new TestScheduler());
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive;
+using Toggl.Foundation.Sync;
 
 namespace Toggl.Foundation.DataSources
 {
@@ -12,6 +13,8 @@ namespace Toggl.Foundation.DataSources
         IProjectsSource Projects { get; }
         IWorkspacesSource Workspaces { get; }
         ITimeEntriesSource TimeEntries { get; }
+
+        ISyncManager SyncManager { get; }
 
         IObservable<Unit> Logout();
     }

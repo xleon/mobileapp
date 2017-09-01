@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using Toggl.Foundation.Models;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
 
@@ -20,7 +21,8 @@ namespace Toggl.Foundation.Sync.States
 
         public IObservable<ITransition> Start() => Observable.Create<ITransition>(observer =>
         {
-            var sinceDates = database.SinceParameters.Get();
+            var databaseSinceDates = database.SinceParameters.Get();
+            var sinceDates = new SinceParameters(databaseSinceDates);
 
             var observables = new FetchObservables(sinceDates,
                 connectedReplayed(api.Workspaces.GetAll()),

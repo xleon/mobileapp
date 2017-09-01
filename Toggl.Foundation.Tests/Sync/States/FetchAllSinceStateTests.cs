@@ -124,7 +124,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             {
                 var transition = (Transition<FetchObservables>)state.Start().SingleAsync().Wait();
 
-                transition.Parameter.SinceParameters.Should().Be(database.SinceParameters.Get());
+                transition.Parameter.SinceParameters.ShouldBeEquivalentTo(database.SinceParameters.Get(), options => options.IncludingProperties());
             }
         }
     }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reactive;
+using System.Reactive.Concurrency;
+using Toggl.Foundation.Sync;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
@@ -10,7 +12,7 @@ namespace Toggl.Foundation.DataSources
     {
         private readonly ITogglDatabase database;
 
-        public TogglDataSource(ITogglDatabase database, ITogglApi api)
+        public TogglDataSource(ITogglDatabase database, ITogglApi api, IScheduler scheduler)
         {
             Ensure.Argument.IsNotNull(api, nameof(api));
             Ensure.Argument.IsNotNull(database, nameof(database));
@@ -20,6 +22,7 @@ namespace Toggl.Foundation.DataSources
             User = new UserDataSource(database.User, api.User);
             Projects = new ProjectsDataSource(database.Projects);
             TimeEntries = new TimeEntriesDataSource(database.IdProvider, database.TimeEntries);
+            SyncManager = TogglSyncManager.CreateSyncManager(database, api, scheduler);
         }
 
         public IUserSource User { get; }
@@ -29,6 +32,8 @@ namespace Toggl.Foundation.DataSources
         public IProjectsSource Projects { get; }
         public IWorkspacesSource Workspaces => throw new NotImplementedException();
         public ITimeEntriesSource TimeEntries { get; }
+
+        public ISyncManager SyncManager { get; }
 
         public IObservable<Unit> Logout() => database.Clear();
     }

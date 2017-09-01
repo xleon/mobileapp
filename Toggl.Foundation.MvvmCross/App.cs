@@ -51,6 +51,8 @@ namespace Toggl.Foundation.MvvmCross
                 return;
             }
 
+            dataSource.SyncManager.ForceFullSync();
+
             Mvx.RegisterSingleton(dataSource);
             navigationService.Navigate<MainViewModel>();
         }
