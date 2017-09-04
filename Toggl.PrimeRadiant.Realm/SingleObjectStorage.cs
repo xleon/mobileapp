@@ -38,7 +38,10 @@ namespace Toggl.PrimeRadiant.Realm
             where TRealmEntity : RealmObject, TModel, IUpdatesFrom<TModel>
             => new SingleObjectStorage<TModel>(new RealmAdapter<TRealmEntity, TModel>(convertToRealm));
 
+        public IObservable<TModel> Update(TModel entity)
+            => Update(entity.Id, entity);
+
         public IObservable<Unit> Delete()
-            => Single().SelectMany(Delete);
+            => Single().SelectMany(entity => Delete(entity.Id));
     }
 }

@@ -20,9 +20,9 @@ namespace Toggl.PrimeRadiant.Tests.Realm
             return entity;
         }
 
-        public TestModel Update(TestModel entity)
+        public TestModel Update(long id, TestModel entity)
         {
-            var index = list.FindIndex(e => e.Id == entity.Id);
+            var index = list.FindIndex(e => e.Id == id);
 
             if (index == -1)
                 throw new InvalidOperationException();
@@ -35,8 +35,9 @@ namespace Toggl.PrimeRadiant.Tests.Realm
         public IQueryable<TestModel> GetAll()
             => list.AsQueryable();
 
-        public void Delete(TestModel entity)
+        public void Delete(long id)
         {
+            var entity = list.Find(e => e.Id == id);
             var worked = list.Remove(entity);
             if (worked) return;
 

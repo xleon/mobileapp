@@ -13,11 +13,11 @@ namespace Toggl.PrimeRadiant.Realm
     {
         IQueryable<TModel> GetAll();
 
-        void Delete(TModel entity);
+        void Delete(long id);
 
         TModel Create(TModel entity);
 
-        TModel Update(TModel entity);
+        TModel Update(long id, TModel entity);
 
         IEnumerable<TModel> BatchUpdate(IEnumerable<TModel> entities, Func<TModel, Expression<Func<TModel, bool>>> matchEntity, Func<TModel, TModel, ConflictResolutionMode> conflictResolution);
     }
@@ -45,11 +45,11 @@ namespace Toggl.PrimeRadiant.Realm
             return doTransaction(realm => realm.Add(convertToRealm(entity, realm)));
         }
         
-        public TModel Update(TModel entity)
+        public TModel Update(long id, TModel entity)
         {
             Ensure.Argument.IsNotNull(entity, nameof(entity));
 
-            return doModyfingTransaction(entity, (realm, realmEntity) => realmEntity.SetPropertiesFrom(entity, realm));
+            return doModyfingTransaction(id, (realm, realmEntity) => realmEntity.SetPropertiesFrom(entity, realm));
         }
 
         public IEnumerable<TModel> BatchUpdate(IEnumerable<TModel> entities, Func<TModel, Expression<Func<TModel, bool>>> matchEntity, Func<TModel, TModel, ConflictResolutionMode> conflictResolution)
@@ -83,17 +83,15 @@ namespace Toggl.PrimeRadiant.Realm
             return resolvedEntities;
         }
 
-        public void Delete(TModel entity)
+        public void Delete(long id)
         {
-            Ensure.Argument.IsNotNull(entity, nameof(entity));
-
-            doModyfingTransaction(entity, (realm, realmEntity) => realm.Remove(realmEntity));
+            doModyfingTransaction(id, (realm, realmEntity) => realm.Remove(realmEntity));
         }
 
-        private static TModel doModyfingTransaction(TModel entity, Action<Realms.Realm, TRealmEntity> transact)
+        private static TModel doModyfingTransaction(long id, Action<Realms.Realm, TRealmEntity> transact)
             => doTransaction(realm =>
             {
-                var realmEntity = realm.All<TRealmEntity>().Single(x => x.Id == entity.Id);
+                var realmEntity = realm.All<TRealmEntity>().Single(x => x.Id == id);
                 transact(realm, realmEntity);
                 return realmEntity;
             });

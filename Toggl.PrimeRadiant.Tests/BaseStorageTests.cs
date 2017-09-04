@@ -12,8 +12,8 @@ namespace Toggl.PrimeRadiant.Tests
         where TTestModel : class, ITestModel, IDatabaseSyncable, new()
     {
         protected abstract IObservable<TTestModel> Create(TTestModel testModel);
-        protected abstract IObservable<TTestModel> Update(TTestModel testModel);
-        protected abstract IObservable<Unit> Delete(TTestModel testModel);
+        protected abstract IObservable<TTestModel> Update(long id, TTestModel testModel);
+        protected abstract IObservable<Unit> Delete(long id);
 
         protected abstract TTestModel GetModelWith(int id);
 
@@ -21,7 +21,7 @@ namespace Toggl.PrimeRadiant.Tests
         public void TheUpdateMethodThrowsIfThereIsNoEntityWithThatIdInTheRepository()
         {
             Func<Task> callingUpdateInAnEmptyRepository =
-                async () => await Update(new TTestModel());
+                async () => await Update(12345, new TTestModel());
 
             callingUpdateInAnEmptyRepository
                 .ShouldThrow<EntityNotFoundException>();
@@ -30,10 +30,10 @@ namespace Toggl.PrimeRadiant.Tests
         [Fact]
         public async Task TheUpdateMethodAlwaysReturnsASingleElement()
         {
-            var testEntity = new TTestModel();
+            var testEntity = GetModelWith(12345);
             await Create(testEntity);
 
-            var element = await Update(testEntity).SingleAsync();
+            var element = await Update(testEntity.Id, testEntity).SingleAsync();
             element.Should().Be(testEntity);
         }
 
@@ -41,7 +41,7 @@ namespace Toggl.PrimeRadiant.Tests
         public void TheDeleteMethodThrowsIfThereIsNoEntityWithThatIdInTheRepository()
         {
             Func<Task> callingDeleteInAnEmptyRepository =
-                async () => await Delete(new TTestModel());
+                async () => await Delete(12345);
 
             callingDeleteInAnEmptyRepository
                 .ShouldThrow<EntityNotFoundException>();

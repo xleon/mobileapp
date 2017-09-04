@@ -20,23 +20,19 @@ namespace Toggl.PrimeRadiant.Realm
             Adapter = adapter;
         }
 
-        public IObservable<TModel> Update(TModel entity)
+        public IObservable<TModel> Update(long id, TModel entity)
         {
             Ensure.Argument.IsNotNull(entity, nameof(entity));
 
-            return CreateObservable(() => Adapter.Update(entity));
+            return CreateObservable(() => Adapter.Update(id, entity));
         }
 
-        public IObservable<Unit> Delete(TModel entity)
-        {
-            Ensure.Argument.IsNotNull(entity, nameof(entity));
-
-            return CreateObservable(() =>
+        public IObservable<Unit> Delete(long id)
+            => CreateObservable(() =>
             {
-                Adapter.Delete(entity);
+                Adapter.Delete(id);
                 return Unit.Default;
             });
-        }
 
         public IObservable<IEnumerable<TModel>> GetAll(Func<TModel, bool> predicate)
         {

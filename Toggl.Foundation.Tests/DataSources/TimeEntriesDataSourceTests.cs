@@ -56,7 +56,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 Repository.Create(Arg.Any<IDatabaseTimeEntry>())
                           .Returns(info => Observable.Return(info.Arg<IDatabaseTimeEntry>()));
 
-                Repository.Update(Arg.Any<IDatabaseTimeEntry>())
+                Repository.Update(Arg.Any<long>(), Arg.Any<IDatabaseTimeEntry>())
                           .Returns(info => Observable.Return(info.Arg<IDatabaseTimeEntry>()));
             }
         }
@@ -198,7 +198,7 @@ namespace Toggl.Foundation.Tests.DataSources
             public async ThreadingTask UpdatesTheTimeEntrySettingItsStopTime()
             {
                 await TimeEntriesSource.Stop(ValidTime); 
-                await Repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.Stop == ValidTime));
+                await Repository.Received().Update(Arg.Any<long>(), Arg.Is<IDatabaseTimeEntry>(te => te.Stop == ValidTime));
             }
 
             [Fact]
@@ -206,7 +206,7 @@ namespace Toggl.Foundation.Tests.DataSources
             {
                 await TimeEntriesSource.Stop(ValidTime);
 
-                await Repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.IsDirty));
+                await Repository.Received().Update(Arg.Any<long>(), Arg.Is<IDatabaseTimeEntry>(te => te.IsDirty));
             }
 
             [Fact]
@@ -214,7 +214,7 @@ namespace Toggl.Foundation.Tests.DataSources
             {
                 var observer = TestScheduler.CreateObserver<ITimeEntry>();
                 TimeEntriesSource.CurrentlyRunningTimeEntry.Subscribe(observer);
-                Repository.Update(Arg.Any<IDatabaseTimeEntry>()).Returns(callInfo => Observable.Return(callInfo.Arg<IDatabaseTimeEntry>()));
+                Repository.Update(Arg.Any<long>(), Arg.Any<IDatabaseTimeEntry>()).Returns(callInfo => Observable.Return(callInfo.Arg<IDatabaseTimeEntry>()));
 
                 await TimeEntriesSource.Stop(ValidTime);
 
@@ -264,7 +264,7 @@ namespace Toggl.Foundation.Tests.DataSources
             {
                 await TimeEntriesSource.Delete(DatabaseTimeEntry.Id).LastOrDefaultAsync();
 
-                await Repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.IsDeleted == true));
+                await Repository.Received().Update(Arg.Is(DatabaseTimeEntry.Id), Arg.Is<IDatabaseTimeEntry>(te => te.IsDeleted == true));
             }
 
             [Fact]
@@ -272,7 +272,7 @@ namespace Toggl.Foundation.Tests.DataSources
             {
                 await TimeEntriesSource.Delete(DatabaseTimeEntry.Id).LastOrDefaultAsync();
                
-                await Repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.IsDirty == true));
+                await Repository.Received().Update(Arg.Is(DatabaseTimeEntry.Id), Arg.Is<IDatabaseTimeEntry>(te => te.IsDirty == true));
             }
 
             [Fact]
@@ -281,7 +281,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 await TimeEntriesSource.Delete(DatabaseTimeEntry.Id).LastOrDefaultAsync();
 
                 await Repository.Received().GetById(Arg.Is(DatabaseTimeEntry.Id));
-                await Repository.Received().Update(Arg.Is<IDatabaseTimeEntry>(te => te.Id == DatabaseTimeEntry.Id));
+                await Repository.Received().Update(Arg.Is(DatabaseTimeEntry.Id), Arg.Is<IDatabaseTimeEntry>(te => te.Id == DatabaseTimeEntry.Id));
             }
 
             [Fact]
@@ -307,7 +307,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 var timeEntryObservable = Observable.Return(timeEntry);
                 var errorObservable = Observable.Throw<IDatabaseTimeEntry>(new EntityNotFoundException());
                 Repository.GetById(Arg.Is(timeEntry.Id)).Returns(timeEntryObservable);
-                Repository.Update(Arg.Any<IDatabaseTimeEntry>()).Returns(errorObservable);
+                Repository.Update(Arg.Any<long>(), Arg.Any<IDatabaseTimeEntry>()).Returns(errorObservable);
                 var observer = Substitute.For<IObserver<Unit>>();
 
                 TimeEntriesSource.Delete(timeEntry.Id).Subscribe(observer);

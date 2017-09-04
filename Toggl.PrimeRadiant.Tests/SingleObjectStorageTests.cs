@@ -14,10 +14,10 @@ namespace Toggl.PrimeRadiant.Tests
         protected sealed override IObservable<TTestModel> Create(TTestModel testModel)
             => Storage.Create(testModel);
 
-        protected sealed override IObservable<TTestModel> Update(TTestModel testModel)
+        protected sealed override IObservable<TTestModel> Update(long id, TTestModel testModel)
             => Storage.Update(testModel);
 
-        protected sealed override IObservable<Unit> Delete(TTestModel testModel)
+        protected sealed override IObservable<Unit> Delete(long id)
             => Storage.Delete();
 
         protected abstract ISingleObjectStorage<TTestModel> Storage { get; }

@@ -16,11 +16,11 @@ namespace Toggl.PrimeRadiant.Tests
         protected sealed override IObservable<TTestModel> Create(TTestModel testModel)
             => Repository.Create(testModel);
 
-        protected sealed override IObservable<TTestModel> Update(TTestModel testModel)
-            => Repository.Update(testModel);
+        protected sealed override IObservable<TTestModel> Update(long id, TTestModel testModel)
+            => Repository.Update(id, testModel);
 
-        protected sealed override IObservable<Unit> Delete(TTestModel testModel)
-            => Repository.Delete(testModel);
+        protected sealed override IObservable<Unit> Delete(long id)
+            => Repository.Delete(id);
 
         protected abstract IRepository<TTestModel> Repository { get; }
 
@@ -63,6 +63,36 @@ namespace Toggl.PrimeRadiant.Tests
             
             var entities = await Repository.GetAll(_ => true);
             entities.Count().Should().Be(numberOfItems);
+        }
+
+        [Fact]
+        public async Task TheUpdateCanChangeId()
+        {
+            var oldTestEntity = GetModelWith(123);
+            var nextTestEntity = GetModelWith(456);
+            await Create(oldTestEntity);
+
+            await Update(oldTestEntity.Id, nextTestEntity).SingleAsync();
+            Func<Task> gettingTheEntityByOldId =
+                async () => await Repository.GetById(oldTestEntity.Id);
+
+            gettingTheEntityByOldId
+                .ShouldThrow<EntityNotFoundException>();
+        }
+
+        [Fact]
+        public async Task TheUpdateFailsIfCalledWithTheOldIdForTheSecondTimeWhenIdChanges()
+        {
+            var oldTestEntity = GetModelWith(123);
+            var nextTestEntity = GetModelWith(456);
+            await Create(oldTestEntity);
+
+            await Update(oldTestEntity.Id, nextTestEntity).SingleAsync();
+            Func<Task> tringToChangeTheOldEntity =
+                async () => await Repository.Update(oldTestEntity.Id, nextTestEntity);
+
+            tringToChangeTheOldEntity
+                .ShouldThrow<EntityNotFoundException>();
         }
     }
 }
