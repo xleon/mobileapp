@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using Toggl.Multivac.Extensions;
 using Toggl.Foundation.Models;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
@@ -25,10 +26,10 @@ namespace Toggl.Foundation.Sync.States
             var sinceDates = new SinceParameters(databaseSinceDates);
 
             var observables = new FetchObservables(sinceDates,
-                connectedReplayed(api.Workspaces.GetAll()),
-                connectedReplayed(getSinceOrAll(sinceDates.Clients, api.Clients.GetAllSince, api.Clients.GetAll)),
-                connectedReplayed(getSinceOrAll(sinceDates.Projects, api.Projects.GetAllSince, api.Projects.GetAll)),
-                connectedReplayed(getSinceOrAll(sinceDates.TimeEntries, api.TimeEntries.GetAllSince, api.TimeEntries.GetAll))
+                api.Workspaces.GetAll().ConnectedReplay(),
+                getSinceOrAll(sinceDates.Clients, api.Clients.GetAllSince, api.Clients.GetAll).ConnectedReplay(),
+                getSinceOrAll(sinceDates.Projects, api.Projects.GetAllSince, api.Projects.GetAll).ConnectedReplay(),
+                getSinceOrAll(sinceDates.TimeEntries, api.TimeEntries.GetAllSince, api.TimeEntries.GetAll).ConnectedReplay()
             );
 
             observer.OnNext(FetchStarted.Transition(observables));
@@ -36,13 +37,6 @@ namespace Toggl.Foundation.Sync.States
 
             return () => { };
         });
-
-        private static IObservable<T> connectedReplayed<T>(IObservable<T> observable)
-        {
-            var replayed = observable.Replay();
-            replayed.Connect();
-            return replayed;
-        }
 
         private static IObservable<T> getSinceOrAll<T>(DateTimeOffset? threshold,
             Func<DateTimeOffset, IObservable<T>> since, Func<IObservable<T>> all)

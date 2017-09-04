@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reactive.Linq;
+
 namespace Toggl.Multivac.Extensions
 {
     public static class ObservableExtensions
@@ -27,6 +29,13 @@ namespace Toggl.Multivac.Extensions
         {
             var observer = new Observer<T>(onError, onCompleted);
             return observable.Subscribe(observer);
+        }
+        
+        public static IObservable<T> ConnectedReplay<T>(this IObservable<T> observable)
+        {
+            var replayed = observable.Replay();
+            replayed.Connect();
+            return replayed;
         }
     }
 }

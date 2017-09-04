@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using static Toggl.Foundation.Sync.SyncState;
 
 namespace Toggl.Foundation.Sync
@@ -69,12 +70,8 @@ namespace Toggl.Foundation.Sync
         }
 
         private IObservable<SyncState> syncStatesUntilAndIncludingSleep()
-        {
-            var observable = StateObservable.TakeWhile(s => s != Sleep)
+            => StateObservable.TakeWhile(s => s != Sleep)
                 .Concat(Observable.Return(Sleep))
-                .Replay();
-            observable.Connect();
-            return observable;
-        }
+                .ConnectedReplay();
     }
 }
