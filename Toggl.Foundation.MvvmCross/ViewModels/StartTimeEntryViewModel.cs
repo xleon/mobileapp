@@ -34,7 +34,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         //Properties
         public long? ProjectId { get; private set; }
 
-        public TextFieldInfo TextFieldInfo { get; set; }
+        public bool IsSuggestingProjects { get; set; }
+
+        public TextFieldInfo TextFieldInfo { get; set; } = new TextFieldInfo("", 0);
 
         public TimeSpan ElapsedTime { get; private set; } = TimeSpan.Zero;
 
@@ -57,6 +59,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand ToggleBillableCommand { get; }
 
+        public IMvxCommand ToggleProjectSuggestionsCommand { get; }
+
         public IMvxCommand<BaseTimeEntrySuggestionViewModel> SelectSuggestionCommand { get; }
 
         public StartTimeEntryViewModel(ITogglDataSource dataSource, ITimeService timeService, IMvxNavigationService navigationService)
@@ -72,6 +76,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             BackCommand = new MvxAsyncCommand(back);
             DoneCommand = new MvxAsyncCommand(done);
             ToggleBillableCommand = new MvxCommand(toggleBillable);
+            ToggleProjectSuggestionsCommand = new MvxCommand(toggleProjectSuggestions);
             SelectSuggestionCommand = new MvxCommand<BaseTimeEntrySuggestionViewModel>(selectSuggestion);
         }
 
@@ -106,8 +111,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         
         private void OnTextFieldInfoChanged()
         {
-            if (string.IsNullOrEmpty(TextFieldInfo.Text)) return;
-
             var (queryText, suggestionType) = parseQuery(TextFieldInfo.Text);
 
             var wordsToQuery = queryText.Split(' ').Where(word => !string.IsNullOrEmpty(word)).Distinct();
@@ -116,6 +119,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private (string, SuggestionType) parseQuery(string text)
         {
+            if (string.IsNullOrEmpty(TextFieldInfo.Text)) 
+                return (text, SuggestionType.TimeEntries);
+
             var stringToSearch = text.Substring(0, TextFieldInfo.CursorPosition);
             var indexOfQuerySymbol = stringToSearch.LastIndexOfAny(querySymbols);
             if (indexOfQuerySymbol >= 0)
@@ -128,6 +134,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             return (text, SuggestionType.TimeEntries);
         }
 
+        private void toggleProjectSuggestions()
+        {
+            if (IsSuggestingProjects)
+            {
+                removeProjectQueryFromDescriptionIfNeeded();
+                return;
+            }
+            
+            var newText = TextFieldInfo.Text.Insert(TextFieldInfo.CursorPosition, "@");
+            TextFieldInfo = new TextFieldInfo(newText, TextFieldInfo.CursorPosition + 1);
+        }
+
         private void toggleBillable() => IsBillable = !IsBillable;
 
         private Task back() => navigationService.Close(this);
@@ -138,6 +156,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             await navigationService.Close(this);
         }
+
+        private void removeProjectQueryFromDescriptionIfNeeded()
+        {
+            var indexOfProjectQuerySymbol = TextFieldInfo.Text.IndexOf(projectQuerySymbol);
+            if (indexOfProjectQuerySymbol < 0) 
+            {
+                OnTextFieldInfoChanged();
+                return;
+            }
+
+            var newText = TextFieldInfo.Text.Substring(0, indexOfProjectQuerySymbol);
+            TextFieldInfo = new TextFieldInfo(newText, newText.Length);
+        }
         
         private IObservable<IEnumerable<BaseTimeEntrySuggestionViewModel>> querySuggestions(
             (IEnumerable<string> WordsToQuery, SuggestionType SuggestionType) tuple)
@@ -146,6 +177,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             if (tuple.SuggestionType == SuggestionType.Projects)
             {
+                IsSuggestingProjects = true;
+
                 if (queryListIsEmpty)
                     return dataSource.Projects.GetAll()
                         .Select(ProjectSuggestionViewModel.FromProjectsPrependingEmpty);
@@ -154,6 +187,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     .Aggregate(dataSource.Projects.GetAll(), (obs, word) => obs.Select(filterProjectsByWord(word)))
                     .Select(ProjectSuggestionViewModel.FromProjects);
             }
+
+            IsSuggestingProjects = false;
 
             if (queryListIsEmpty)
                 return Observable.Return(Enumerable.Empty<BaseTimeEntrySuggestionViewModel>());

@@ -1,4 +1,5 @@
-﻿using CoreText;
+﻿using System.Collections.Generic;
+using CoreText;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.iOS.Views;
@@ -47,7 +48,7 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(source)
                       .For(v => v.SelectionChangedCommand)
                       .To(vm => vm.SelectSuggestionCommand);
-            
+
             //Text
             bindingSet.Bind(TimeLabel)
                       .To(vm => vm.ElapsedTime)
@@ -62,11 +63,17 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.TintColor)
                       .To(vm => vm.IsBillable)
                       .WithConversion(buttonColorConverter);
+            
+            bindingSet.Bind(ProjectsButton)
+                      .For(v => v.TintColor)
+                      .To(vm => vm.IsSuggestingProjects)
+                      .WithConversion(buttonColorConverter);
 
             //Commands
             bindingSet.Bind(DoneButton).To(vm => vm.DoneCommand);
             bindingSet.Bind(CloseButton).To(vm => vm.BackCommand);
             bindingSet.Bind(BillableButton).To(vm => vm.ToggleBillableCommand);
+            bindingSet.Bind(ProjectsButton).To(vm => vm.ToggleProjectSuggestionsCommand);
 
             bindingSet.Apply();
         }
@@ -86,11 +93,14 @@ namespace Toggl.Daneel.ViewControllers
         private void prepareViews()
         {
             //This is needed for the ImageView.TintColor bindings to work
-            BillableButton.SetImage(
-                BillableButton.ImageForState(UIControlState.Normal)
-                              .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), 
-                UIControlState.Normal
-            );
+            foreach (var button in getButtons())
+            {
+                button.SetImage(
+                    button.ImageForState(UIControlState.Normal)
+                          .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate),
+                    UIControlState.Normal
+                );
+            }
 
             TimeLabel.Font = TimeLabel.Font.GetMonospacedDigitFont();
 
@@ -103,6 +113,12 @@ namespace Toggl.Daneel.ViewControllers
                 new NSAttributedString(Resources.StartTimeEntryPlaceholder, stringAttributes);
 
             DescriptionTextField.BecomeFirstResponder();
+        }
+
+        private IEnumerable<UIButton> getButtons()
+        {
+            yield return ProjectsButton;
+            yield return BillableButton;
         }
     }
 }

@@ -80,6 +80,79 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
+        public sealed class TheToggleProjectSuggestionsCommandCommand : StartTimeEntryViewModelTest
+        {
+            [Fact]
+            public async Task SetsTheIsSuggestingProjectsPropertyToTrueIfNotInProjectSuggestionMode()
+            {
+                await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
+
+                ViewModel.ToggleProjectSuggestionsCommand.Execute();
+
+                ViewModel.IsSuggestingProjects.Should().BeTrue();
+            }
+
+            [Fact]
+            public async Task AddsAnAtSymbolAtTheEndOfTheQueryInOrderToStartProjectSuggestionMode()
+            {
+                const string description = "Testing Toggl Apps";
+                var expected = $"{description}@";
+                await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                ViewModel.TextFieldInfo = new TextFieldInfo(description, description.Length);
+
+                ViewModel.ToggleProjectSuggestionsCommand.Execute();
+
+                ViewModel.TextFieldInfo.Text.Should().Be(expected);
+            }
+
+            [Theory]
+            [InlineData("@")]
+            [InlineData("@somequery")]
+            [InlineData("@some query")]
+            [InlineData("@some query@query")]
+            [InlineData("Testing Toggl Apps @")]
+            [InlineData("Testing Toggl Apps @somequery")]
+            [InlineData("Testing Toggl Apps @some query")]
+            [InlineData("Testing Toggl Apps @some query@query")]
+            [InlineData("Testing Toggl Apps@")]
+            [InlineData("Testing Toggl Apps@somequery")]
+            [InlineData("Testing Toggl Apps@some query")]
+            [InlineData("Testing Toggl Apps@some query@query")]
+            public async Task SetsTheIsSuggestingProjectsPropertyToFalseIfInProjectSuggestionMode(string description)
+            {
+                await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                ViewModel.TextFieldInfo = new TextFieldInfo(description, description.Length);
+
+                ViewModel.ToggleProjectSuggestionsCommand.Execute();
+
+                ViewModel.IsSuggestingProjects.Should().BeFalse();
+            }
+
+            [Theory]
+            [InlineData("@", "")]
+            [InlineData("@somequery", "")]
+            [InlineData("@some query", "")]
+            [InlineData("@some query@query", "")]
+            [InlineData("Testing Toggl Apps @", "Testing Toggl Apps ")]
+            [InlineData("Testing Toggl Apps @somequery", "Testing Toggl Apps ")]
+            [InlineData("Testing Toggl Apps @some query", "Testing Toggl Apps ")]
+            [InlineData("Testing Toggl Apps @some query@query", "Testing Toggl Apps ")]
+            [InlineData("Testing Toggl Apps@", "Testing Toggl Apps")]
+            [InlineData("Testing Toggl Apps@somequery", "Testing Toggl Apps")]
+            [InlineData("Testing Toggl Apps@some query", "Testing Toggl Apps")]
+            [InlineData("Testing Toggl Apps@some query@query", "Testing Toggl Apps")]
+            public async Task RemovesTheAtSymbolFromTheDescriptionTextIfAlreadyInProjectSuggestionMode(
+                string description, string expected)
+            {
+                await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                ViewModel.TextFieldInfo = new TextFieldInfo(description, description.Length);
+
+                ViewModel.ToggleProjectSuggestionsCommand.Execute();
+
+                ViewModel.TextFieldInfo.Text.Should().Be(expected);
+            }
+        }
+
         public sealed class TheDoneCommand : StartTimeEntryViewModelTest
         {
             [Fact]
