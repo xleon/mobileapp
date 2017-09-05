@@ -120,7 +120,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task UpdatesWhenTheTimeEntriesSourcesCurrentlyRunningTimeEntryEmitsANewTimeEntry()
             {
-                var timeEntry = TimeEntry.Builder.Create(13).SetStart(DateTimeOffset.Now).SetDescription("").Build();
+                var timeEntry = TimeEntry.Builder
+                                         .Create(13)
+                                         .SetDescription("")
+                                         .SetAt(DateTimeOffset.Now)
+                                         .SetStart(DateTimeOffset.Now)
+                                         .Build();
                 var subject = new BehaviorSubject<IDatabaseTimeEntry>(null);
                 DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(subject.AsObservable());
 

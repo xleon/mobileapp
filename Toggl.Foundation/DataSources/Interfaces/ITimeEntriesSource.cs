@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive;
+using Toggl.Foundation.DTOs;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.DataSources
@@ -23,5 +24,7 @@ namespace Toggl.Foundation.DataSources
          IObservable<IDatabaseTimeEntry> Stop(DateTimeOffset stopTime);
 
         IObservable<Unit> Delete(long id);
+
+        IObservable<IDatabaseTimeEntry> Update(EditTimeEntryDto dto);
     }
 }

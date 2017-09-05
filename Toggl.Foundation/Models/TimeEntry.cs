@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Models
@@ -23,7 +24,29 @@ namespace Toggl.Foundation.Models
 
             public DateTimeOffset Start { get; private set; }
 
-            private Builder(long id) 
+            public DateTimeOffset? Stop { get; private set; }
+
+            public long WorkspaceId { get; private set; }
+
+            public long? TaskId { get; private set; }
+
+            public List<string> TagNames { get; private set; }
+                = new List<string>();
+
+            public List<long> TagIds { get; private set; }
+                = new List<long>();
+
+            public DateTimeOffset? At { get; private set; }
+
+            public DateTimeOffset? ServerDeletedAt { get; private set; }
+
+            public long UserId { get; private set; }
+
+            public string CreatedWith { get; private set; }
+
+            public bool IsDeleted { get; private set; }
+
+            private Builder(long id)
             {
                 Id = id;
             }
@@ -64,6 +87,70 @@ namespace Toggl.Foundation.Models
                 return this;
             }
 
+            public Builder SetStop(DateTimeOffset? stop)
+            {
+                Stop = stop;
+                return this;
+            }
+
+            public Builder SetWorkspaceId(long workspaceId)
+            {
+                WorkspaceId = workspaceId;
+                return this;
+            }
+
+            public Builder SetTaskId(long? taskId)
+            {
+                TaskId = taskId;
+                return this;
+            }
+
+            public Builder SetTagNames(IEnumerable<string> tagNames)
+            {
+                if (tagNames == null) return this;
+                TagNames.Clear();
+                TagNames.AddRange(tagNames);
+                return this;
+            }
+
+            public Builder SetTagIds(IEnumerable<long> tagIds)
+            {
+                if (tagIds == null) return this;
+                TagIds.Clear();
+                TagIds.AddRange(tagIds);
+                return this;
+            }
+
+            public Builder SetAt(DateTimeOffset at)
+            {
+                At = at;
+                return this;
+            }
+
+            public Builder SetServerDeletedAt(DateTimeOffset? serverDeleteAt)
+            {
+                ServerDeletedAt = serverDeleteAt;
+                return this;
+            }
+
+            public Builder SetUserId(long userId)
+            {
+                UserId = userId;
+                return this;
+            }
+
+            public Builder SetCreatedWith(string createdWith)
+            {
+                CreatedWith = createdWith;
+                return this;
+            }
+
+            public Builder SetIsDeleted(bool isDeleted)
+            {
+                IsDeleted = isDeleted;
+                return this;
+            }
+
             private void ensureValidity()
             {
                 if (Start == default(DateTimeOffset))
@@ -71,6 +158,9 @@ namespace Toggl.Foundation.Models
 
                 if (Description == null)
                     throw new InvalidOperationException(string.Format(errorMessage, "description"));
+
+                if (At == null)
+                    throw new InvalidOperationException(string.Format(errorMessage, nameof(At)));
             }
         }
 
@@ -91,6 +181,17 @@ namespace Toggl.Foundation.Models
             Billable = builder.Billable;
             ProjectId = builder.ProjectId;
             Description = builder.Description;
+            Stop = builder.Stop;
+            WorkspaceId = builder.WorkspaceId;
+            TaskId = builder.TaskId;
+            ProjectId = builder.ProjectId;
+            TagNames = builder.TagNames;
+            TagIds = builder.TagIds;
+            At = builder.At.Value;
+            ServerDeletedAt = builder.ServerDeletedAt;
+            UserId = builder.UserId;
+            CreatedWith = builder.CreatedWith;
+            IsDeleted = builder.IsDeleted;
         }
     }
 

@@ -15,11 +15,12 @@ namespace Toggl.Foundation.Tests.DataSources
             protected ITogglDataSource DataSource { get; }
             protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
             protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
+            protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
             protected IScheduler Scheduler { get; } = new TestScheduler();
-
+          
             public TogglDataSourceTest()
             {
-                DataSource = new TogglDataSource(Database, Api, Scheduler);
+                DataSource = new TogglDataSource(Database, Api, TimeService, Scheduler);
             }
         }
 

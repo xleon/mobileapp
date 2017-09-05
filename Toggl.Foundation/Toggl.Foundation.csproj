@@ -88,6 +88,7 @@
     <Compile Include="Models\TimeEntry.cs" />
     <Compile Include="Suggestions\Suggestion.cs" />
     <Compile Include="Sync\ConflictResolution\PreferNewer.cs" />
+    <Compile Include="DTOs\EditTimeEntryDto.cs" />
     <Compile Include="Sync\ConflictResolution\Selectors\TimeEntrySyncSelector.cs" />
     <Compile Include="Sync\ConflictResolution\Resolver.cs" />
     <Compile Include="TogglSyncManagerFactory.cs" />
@@ -148,5 +149,8 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="DTOs\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

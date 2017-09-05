@@ -146,6 +146,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     TimeEntry.Builder.Create(21)
                              .SetStart(DateTimeOffset.UtcNow)
                              .SetDescription("")
+                             .SetAt(DateTimeOffset.Now)
                              .Build();
 
                 protected TimeEntryDataSourceObservableTest()
@@ -154,7 +155,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     var observable = Enumerable.Range(1, InitialAmountOfTimeEntries)
                               .Select(i => TimeEntry.Builder.Create(i))
-                              .Select(builder => builder.SetStart(startTime).SetDescription("").Build())
+                              .Select(builder => builder.SetStart(startTime).SetDescription("").SetAt(DateTimeOffset.Now).Build())
                               .Select(te => te.With(startTime.AddHours(2)))
                               .Apply(Observable.Return);
 

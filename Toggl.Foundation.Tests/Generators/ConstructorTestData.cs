@@ -42,6 +42,11 @@ namespace Toggl.Foundation.Tests.Generators
         public ThreeParameterConstructorTestData() : base(3) { }
     }
 
+    public sealed class FourParameterConstructorTestData : ConstructorTestData
+    {
+        public FourParameterConstructorTestData() : base(4) { }
+    }
+
     public sealed class ConstructorTestDataTests
     {
         public sealed class TheGeneratedSequence
@@ -49,6 +54,7 @@ namespace Toggl.Foundation.Tests.Generators
             [Theory]
             [InlineData(typeof(TwoParameterConstructorTestData))]
             [InlineData(typeof(ThreeParameterConstructorTestData))]
+            [InlineData(typeof(FourParameterConstructorTestData))]
             public void NeverReturnsASequenceWhereAllElementsAreTrue(Type contructorTestDataType)
             {
                 var testData = Activator.CreateInstance(contructorTestDataType) as ConstructorTestData;

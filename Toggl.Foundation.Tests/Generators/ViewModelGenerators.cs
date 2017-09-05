@@ -33,7 +33,7 @@ namespace Toggl.Foundation.Tests.Generators
 
                     var observable = dateTimes
                         .Select(newDateWithGenerator(monthsGenerator, year))
-                        .Select(d => TimeEntry.Builder.Create(-1).SetStart(d).SetDescription("").Build())
+                        .Select(d => TimeEntry.Builder.Create(-1).SetStart(d).SetDescription("").SetAt(DateTimeOffset.Now).Build())
                         .Apply(Observable.Return);
 
                     source.TimeEntries.GetAll().Returns(observable);

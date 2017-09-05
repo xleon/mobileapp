@@ -14,16 +14,19 @@ namespace Toggl.Foundation.Login
     {
         private readonly IApiFactory apiFactory;
         private readonly ITogglDatabase database;
+        private readonly ITimeService timeService;
         private readonly IScheduler scheduler;
 
-        public LoginManager(IApiFactory apiFactory, ITogglDatabase database, IScheduler scheduler)
+        public LoginManager(IApiFactory apiFactory, ITogglDatabase database, ITimeService timeService, IScheduler scheduler)
         {
             Ensure.Argument.IsNotNull(database, nameof(database));
             Ensure.Argument.IsNotNull(apiFactory, nameof(apiFactory));
+            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(scheduler, nameof(scheduler));
 
             this.database = database;
             this.apiFactory = apiFactory;
+            this.timeService = timeService;
             this.scheduler = scheduler;
         }
 
@@ -44,8 +47,7 @@ namespace Toggl.Foundation.Login
                     {
                         var newCredentials = Credentials.WithApiToken(user.ApiToken);
                         var api = apiFactory.CreateApiWith(newCredentials);
-
-                        return new TogglDataSource(database, api, scheduler);
+                        return new TogglDataSource(database, api, timeService, scheduler);
                     });
         }
 
@@ -62,8 +64,7 @@ namespace Toggl.Foundation.Login
         {
             var newCredentials = Credentials.WithApiToken(user.ApiToken);
             var api = apiFactory.CreateApiWith(newCredentials);
-
-            return new TogglDataSource(database, api, scheduler);
+            return new TogglDataSource(database, api, timeService, scheduler);
         }
     }
 }

@@ -7,6 +7,7 @@ using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DTOs;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 using static Toggl.Multivac.Extensions.ObservableExtensions;
@@ -22,6 +23,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private IDisposable deleteDisposable;
         private IDisposable tickingDisposable;
+        private IDisposable confirmDisposable;
 
         public long Id { get; set; }
 
@@ -133,7 +135,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void confirm()
         {
-            throw new NotImplementedException();
+            var dto = new EditTimeEntryDto { Id = Id, Description = Description };
+            confirmDisposable = dataSource.TimeEntries
+                                          .Update(dto)
+                                          .Subscribe((Exception ex) => close(), () => close());
         }
 
         private Task close()

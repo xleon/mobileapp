@@ -12,16 +12,18 @@ namespace Toggl.Foundation.DataSources
     {
         private readonly ITogglDatabase database;
 
-        public TogglDataSource(ITogglDatabase database, ITogglApi api, IScheduler scheduler)
+        public TogglDataSource(ITogglDatabase database, ITogglApi api, ITimeService timeService, IScheduler scheduler)
         {
             Ensure.Argument.IsNotNull(api, nameof(api));
             Ensure.Argument.IsNotNull(database, nameof(database));
+            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(scheduler, nameof(scheduler));
 
             this.database = database;
 
             User = new UserDataSource(database.User, api.User);
             Projects = new ProjectsDataSource(database.Projects);
-            TimeEntries = new TimeEntriesDataSource(database.IdProvider, database.TimeEntries);
+            TimeEntries = new TimeEntriesDataSource(database.IdProvider, database.TimeEntries, timeService);
             SyncManager = TogglSyncManager.CreateSyncManager(database, api, scheduler);
         }
 

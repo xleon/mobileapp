@@ -17,6 +17,7 @@ using FoundationUser = Toggl.Foundation.Models.User;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac.Models;
 using Microsoft.Reactive.Testing;
+using System.Reactive.Concurrency;
 
 namespace Toggl.Foundation.Tests.Login
 {
@@ -31,12 +32,14 @@ namespace Toggl.Foundation.Tests.Login
             protected readonly ITogglApi Api = Substitute.For<ITogglApi>();
             protected readonly IApiFactory ApiFactory = Substitute.For<IApiFactory>();
             protected readonly ITogglDatabase Database = Substitute.For<ITogglDatabase>();
+            protected readonly ITimeService TimeService = Substitute.For<ITimeService>();
+            protected readonly IScheduler Scheduler = new TestScheduler();
 
             protected readonly ILoginManager LoginManager;
 
             protected LoginManagerTest()
             {
-                LoginManager = new LoginManager(ApiFactory, Database, new TestScheduler());
+                LoginManager = new LoginManager(ApiFactory, Database, TimeService, Scheduler);
 
                 Api.User.Get().Returns(Observable.Return(User));
                 ApiFactory.CreateApiWith(Arg.Any<Credentials>()).Returns(Api);
@@ -47,14 +50,16 @@ namespace Toggl.Foundation.Tests.Login
         public sealed class Constructor : LoginManagerTest
         {
             [Theory]
-            [ClassData(typeof(TwoParameterConstructorTestData))]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useApiFactory, bool useDatabase)
+            [ClassData(typeof(FourParameterConstructorTestData))]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useApiFactory, bool useDatabase, bool useTimeService, bool useScheduler)
             {
                 var database = useDatabase ? Database : null;
                 var apiFactory = useApiFactory ? ApiFactory : null;
+                var timeService = useTimeService ? TimeService : null;
+                var scheduler = useScheduler ? Scheduler : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new LoginManager(apiFactory, database, new TestScheduler());
+                    () => new LoginManager(apiFactory, database, timeService, scheduler);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
