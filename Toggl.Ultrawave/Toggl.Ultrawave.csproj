@@ -118,6 +118,7 @@
     <Compile Include="Models\ModelConstructors.cs">
       <DependentUpon>ModelConstructors.tt</DependentUpon>
     </Compile>
+    <Compile Include="Exceptions\DeserializationException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">

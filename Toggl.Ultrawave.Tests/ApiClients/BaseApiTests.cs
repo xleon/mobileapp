@@ -1,8 +1,11 @@
-﻿﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using NSubstitute;
 using Toggl.Multivac.Extensions;
+using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
@@ -45,20 +48,42 @@ namespace Toggl.Ultrawave.Tests.ApiClients
 
         public sealed class TheCreateObservableMethod
         {
+            private IApiClient apiClient = Substitute.For<IApiClient>();
+            private IJsonSerializer serializer = Substitute.For<IJsonSerializer>();
+
             [Fact]
             public async Task CreatesAnObservableThatReturnsASingleValue()
             {
-                var apiClient = Substitute.For<IApiClient>();
-                var serializer = Substitute.For<IJsonSerializer>();
-                var credentials = Credentials.WithPassword("susancalvin@psychohistorian.museum".ToEmail(), "theirobotmoviesucked123");
-
                 apiClient.Send(Arg.Any<Request>()).Returns(x => new Response("It lives", true, "text/plain", OK));
 
+                var credentials = Credentials.WithPassword("susancalvin@psychohistorian.museum".ToEmail(), "theirobotmoviesucked123");
                 var endpoint = Endpoint.Get(ApiUrls.ForEnvironment(ApiEnvironment.Staging), "");
                 var testApi = new TestApi(endpoint, apiClient, serializer, credentials);
 
                 var observable = testApi.TestCreateObservable<string>(endpoint, Enumerable.Empty<HttpHeader>(), "");
+
                 await observable.SingleAsync();
+            }
+
+            [Fact]
+            public async Task EmitsADeserializationErrorIfTheJsonSerializerThrowsAnException()
+            {
+                const string rawResponse = "It lives";
+                serializer.Deserialize<string>(Arg.Any<string>()).Returns(_ => throw new Exception());
+                apiClient.Send(Arg.Any<Request>()).Returns(x => new Response(rawResponse, true, "text/plain", OK));
+
+                var credentials = Credentials.WithPassword("susancalvin@psychohistorian.museum".ToEmail(), "theirobotmoviesucked123");
+                var endpoint = Endpoint.Get(ApiUrls.ForEnvironment(ApiEnvironment.Staging), "");
+                var testApi = new TestApi(endpoint, apiClient, serializer, credentials);
+
+                var observable = testApi.TestCreateObservable<string>(endpoint, Enumerable.Empty<HttpHeader>(), "");
+
+                Func<Task> theObservableReturnedWhenTheApiFails =
+                    async () => await observable;
+
+                theObservableReturnedWhenTheApiFails
+                    .ShouldThrow<DeserializationException<string>>()
+                    .Which.Json.Should().Be(rawResponse);
             }
         }
     }
