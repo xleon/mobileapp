@@ -4,6 +4,7 @@
 #><#@ import namespace="System.Linq"
 #>using System;
 using System.Collections.Generic;
+using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Multivac;
 
@@ -58,7 +59,7 @@ namespace Toggl.Foundation.Models
             }
         }
 
-        WriteLine("        public bool IsDirty { get; }");
+        WriteLine("        public SyncStatus SyncStatus { get; }\n");
         WriteLine("    }");
 
         isFirstClass = false;

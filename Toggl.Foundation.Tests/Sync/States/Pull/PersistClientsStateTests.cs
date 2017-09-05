@@ -84,7 +84,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             }
 
             private Func<IDatabaseClient, bool> shouldBePersistedAndIsClean(List<IClient> clients)
-                => persisted => persisted.IsDirty == false && clients.Any(w => w.Name == persisted.Name);
+                => persisted => persisted.SyncStatus == SyncStatus.InSync && clients.Any(w => w.Name == persisted.Name);
         }
     }
 }

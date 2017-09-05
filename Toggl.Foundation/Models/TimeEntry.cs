@@ -1,4 +1,5 @@
 ﻿using System;
+using Toggl.PrimeRadiant;
 using System.Collections.Generic;
 using Toggl.PrimeRadiant.Models;
 
@@ -14,7 +15,7 @@ namespace Toggl.Foundation.Models
 
             public long Id { get; }
 
-            public bool IsDirty { get; private set; }
+            public SyncStatus SyncStatus { get; private set; }
 
             public bool Billable { get; private set; }
 
@@ -63,9 +64,9 @@ namespace Toggl.Foundation.Models
                 return this;
             }
 
-            public Builder SetIsDirty(bool isDirty)
+            public Builder SetSyncStatus(SyncStatus syncStatus)
             {
-                IsDirty = isDirty;
+                SyncStatus = syncStatus;
                 return this;
             }
 
@@ -165,7 +166,7 @@ namespace Toggl.Foundation.Models
         }
 
         public TimeEntry(IDatabaseTimeEntry timeEntry, DateTimeOffset stop)
-            : this(timeEntry, true)
+            : this(timeEntry, SyncStatus.SyncNeeded)
         {
             if (Start > stop)
                 throw new ArgumentOutOfRangeException(nameof(stop), "The stop date must be equal to or greater than the start date");
@@ -177,7 +178,7 @@ namespace Toggl.Foundation.Models
         {
             Id = builder.Id;
             Start = builder.Start;
-            IsDirty = builder.IsDirty;
+            SyncStatus = builder.SyncStatus;
             Billable = builder.Billable;
             ProjectId = builder.ProjectId;
             Description = builder.Description;

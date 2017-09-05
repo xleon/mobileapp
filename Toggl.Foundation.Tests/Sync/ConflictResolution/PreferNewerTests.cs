@@ -27,7 +27,7 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
         {
             if (existing <= incoming)
                 (existing, incoming) = (incoming, existing);
-            var existingEntity = new TestModel(existing, dirty: true);
+            var existingEntity = new TestModel(existing, syncStatus: SyncStatus.SyncNeeded);
             var incomingEntity = new TestModel(incoming);
 
             var mode = resolver.Resolve(existingEntity, incomingEntity);
@@ -59,7 +59,7 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
         [Property]
         public void DeleteWhenTheIncomingDataHasSomeServerDeletedAtEvenWhenLocalEntityIsDirty(DateTimeOffset existing, DateTimeOffset incoming, DateTimeOffset serverDeletedAt)
         {
-            var existingEntity = new TestModel(existing, dirty: true);
+            var existingEntity = new TestModel(existing, syncStatus: SyncStatus.SyncNeeded);
             var incomingEntity = new TestModel(incoming, serverDeletedAt);
 
             var mode = resolver.Resolve(existingEntity, incomingEntity);
@@ -81,7 +81,7 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
         public void ThrowAwayIncommingIfUserMadeChangesLocally(DateTimeOffset existing, int seed)
         {
             DateTimeOffset incoming = existing.Add(randomTimeSpan(seed, resolver.MarginOfError.TotalSeconds));
-            var existingEntity = new TestModel(existing, dirty: true);
+            var existingEntity = new TestModel(existing, syncStatus: SyncStatus.SyncNeeded);
             var incomingEntity = new TestModel(incoming);
 
             var mode = resolver.Resolve(existingEntity, incomingEntity);
@@ -94,7 +94,7 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
         {
             if (existing > incoming)
                 (existing, incoming) = (incoming, existing);
-            var existingEntity = new TestModel(existing, dirty: true);
+            var existingEntity = new TestModel(existing, syncStatus: SyncStatus.SyncNeeded);
             var incomingEntity = new TestModel(incoming);
 
             var mode = resolver.Resolve(existingEntity, incomingEntity);
@@ -107,7 +107,7 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
         {
             if (existing > incoming.Subtract(resolver.MarginOfError))
                 (existing, incoming) = (incoming, existing);
-            var existingEntity = new TestModel(existing, dirty: true);
+            var existingEntity = new TestModel(existing, syncStatus: SyncStatus.SyncNeeded);
             var incomingEntity = new TestModel(incoming);
 
             var mode = resolver.Resolve(existingEntity, incomingEntity);
@@ -119,7 +119,7 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
         public void UpdateIfUserMadeChangesLocallyRecentlyButThereIsNoMarginOfError(DateTimeOffset existing, int seed)
         {
             DateTimeOffset incoming = existing.Add(randomTimeSpan(seed, 1));
-            var existingEntity = new TestModel(existing, dirty: true);
+            var existingEntity = new TestModel(existing, syncStatus: SyncStatus.SyncNeeded);
             var incomingEntity = new TestModel(incoming);
 
             var mode = zeroMarginOfErrorResolver.Resolve(existingEntity, incomingEntity);
@@ -133,7 +133,7 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
             if (existing <= incoming)
                 (existing, incoming) = (incoming, existing);
 
-            var existingEntity = new TestModel(existing, dirty: false);
+            var existingEntity = new TestModel(existing, syncStatus: SyncStatus.InSync);
             var incomingEntity = new TestModel(incoming, deleted: null);
 
             var mode = resolver.Resolve(existingEntity, incomingEntity);
@@ -143,15 +143,15 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
 
         private sealed class TestModel : IDatabaseSyncable
         {
-            public bool IsDirty { get; }
+            public SyncStatus SyncStatus { get; }
             public DateTimeOffset At { get; }
             public DateTimeOffset? ServerDeletedAt { get; }
 
-            public TestModel(DateTimeOffset? at = null, DateTimeOffset? deleted = null, bool dirty = false)
+            public TestModel(DateTimeOffset? at = null, DateTimeOffset? deleted = null, SyncStatus syncStatus = SyncStatus.InSync)
             {
                 At = at ?? DateTimeOffset.Now;
                 ServerDeletedAt = deleted;
-                IsDirty = dirty;
+                SyncStatus = syncStatus;
             }
         }
 
@@ -160,8 +160,8 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
             public DateTimeOffset LastModified(TestModel model)
                 => model.At;
 
-            public bool IsDirty(TestModel model)
-                => model.IsDirty;
+            public bool IsInSync(TestModel model)
+                => model.SyncStatus == SyncStatus.InSync;
 
             public bool IsDeleted(TestModel model)
                 => model.ServerDeletedAt.HasValue;

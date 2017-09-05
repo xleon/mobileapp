@@ -88,7 +88,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             }
 
             private Func<IDatabaseTimeEntry, bool> shouldBePersistedAndIsClean(List<ITimeEntry> timeEntries)
-                => persisted => persisted.IsDirty == false && timeEntries.Any(te => te.Description == persisted.Description);
+                => persisted => persisted.SyncStatus == SyncStatus.InSync && timeEntries.Any(te => te.Description == persisted.Description);
         }
     }
 }

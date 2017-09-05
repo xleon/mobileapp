@@ -50,6 +50,7 @@
     <Compile Include="ISinceParameterRepository.cs" />
     <Compile Include="Models\ISinceParameters.cs" />
     <Compile Include="ConflictResolutionMode.cs" />
+    <Compile Include="SyncStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">

@@ -1,4 +1,5 @@
 ﻿using System;
+using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Sync.ConflictResolution.Selectors
@@ -8,8 +9,8 @@ namespace Toggl.Foundation.Sync.ConflictResolution.Selectors
         public DateTimeOffset LastModified(IDatabaseProject model)
             => model.At;
 
-        public bool IsDirty(IDatabaseProject model)
-            => model.IsDirty;
+        public bool IsInSync(IDatabaseProject model)
+            => model.SyncStatus == SyncStatus.InSync;
 
         public bool IsDeleted(IDatabaseProject model)
             => model.ServerDeletedAt.HasValue;

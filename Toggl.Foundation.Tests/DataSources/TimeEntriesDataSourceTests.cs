@@ -23,10 +23,10 @@ namespace Toggl.Foundation.Tests.DataSources
     {
         public abstract class TimeEntryDataSourceTest
         {
-            protected const long ProjectId = 10; 
+            protected const long ProjectId = 10;
 
             protected const long CurrentRunningId = 13;
-            
+
             protected ITimeEntriesSource TimeEntriesSource { get; }
 
             protected TestScheduler TestScheduler { get; } = new TestScheduler();
@@ -41,7 +41,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 TimeEntry.Builder
                       .Create(CurrentRunningId)
                       .SetStart(DateTimeOffset.Now.AddHours(-2))
-                      .SetIsDirty(false)
+                      .SetSyncStatus(SyncStatus.InSync)
                       .SetDescription("")
                       .SetAt(DateTimeOffset.Now.AddDays(-1))
                       .Build();
@@ -94,11 +94,11 @@ namespace Toggl.Foundation.Tests.DataSources
             }
 
             [Fact]
-            public async ThreadingTask CreatesADirtyTimeEntry()
+            public async ThreadingTask CreatesASyncNeededTimeEntry()
             {
                 await TimeEntriesSource.Start(ValidTime, ValidDescription, true, ProjectId);
 
-                await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.IsDirty));
+                await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.SyncStatus == SyncStatus.SyncNeeded));
             }
 
             [Theory]
@@ -224,11 +224,11 @@ namespace Toggl.Foundation.Tests.DataSources
             }
 
             [Fact]
-            public async ThreadingTask UpdatesTheTimeEntryMakingItDirty()
+            public async ThreadingTask UpdatesTheTimeEntryMakingItSyncNeeded()
             {
                 await TimeEntriesSource.Stop(ValidTime);
 
-                await Repository.Received().Update(Arg.Any<long>(), Arg.Is<IDatabaseTimeEntry>(te => te.IsDirty));
+                await Repository.Received().Update(Arg.Any<long>(), Arg.Is<IDatabaseTimeEntry>(te => te.SyncStatus == SyncStatus.SyncNeeded));
             }
 
             [Fact]
@@ -290,11 +290,11 @@ namespace Toggl.Foundation.Tests.DataSources
             }
 
             [Fact]
-            public async ThreadingTask SetsTheDirtyFlag()
+            public async ThreadingTask SetsTheSyncNeededStatus()
             {
                 await TimeEntriesSource.Delete(DatabaseTimeEntry.Id).LastOrDefaultAsync();
 
-                await Repository.Received().Update(Arg.Is(DatabaseTimeEntry.Id), Arg.Is<IDatabaseTimeEntry>(te => te.IsDirty));
+                await Repository.Received().Update(Arg.Is(DatabaseTimeEntry.Id), Arg.Is<IDatabaseTimeEntry>(te => te.SyncStatus == SyncStatus.SyncNeeded));
             }
 
             [Fact]
@@ -322,7 +322,7 @@ namespace Toggl.Foundation.Tests.DataSources
             {
                 var timeEntry = TimeEntry.Builder.Create(12)
                       .SetStart(DateTimeOffset.Now)
-                      .SetIsDirty(false)
+                      .SetSyncStatus(SyncStatus.InSync)
                       .SetDescription("")
                       .SetAt(DateTimeOffset.Now)
                       .Build();
@@ -379,13 +379,13 @@ namespace Toggl.Foundation.Tests.DataSources
             }
 
             [Fact]
-            public async ThreadingTask UpdatesTheIsDirtyProperty()
+            public async ThreadingTask UpdatesTheSyncStatusProperty()
             {
                 var dto = prepareTest();
 
                 await TimeEntriesSource.Update(dto);
 
-                await Repository.Received().Update(Arg.Is(dto.Id), Arg.Is<IDatabaseTimeEntry>(te => te.IsDirty));
+                await Repository.Received().Update(Arg.Is(dto.Id), Arg.Is<IDatabaseTimeEntry>(te => te.SyncStatus == SyncStatus.SyncNeeded));
             }
 
             [Fact]

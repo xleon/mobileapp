@@ -1,29 +1,33 @@
 ﻿﻿using Toggl.Multivac.Models;
+using Toggl.PrimeRadiant;
 
 namespace Toggl.Foundation.Models
 {
     internal partial class Client
     {
-        private Client(IClient entity, bool isDirty)
+        private Client(IClient entity, SyncStatus syncStatus)
         {
             Id = entity.Id;
             WorkspaceId = entity.WorkspaceId;
             Name = entity.Name;
             At = entity.At;
             ServerDeletedAt = entity.ServerDeletedAt;
-            IsDirty = isDirty;
+            SyncStatus = syncStatus;
         }
 
         public static Client Clean(IClient entity)
-            => new Client(entity, false);
+            => new Client(entity, SyncStatus.InSync);
 
         public static Client Dirty(IClient entity)
-            => new Client(entity, true);
+            => new Client(entity, SyncStatus.SyncNeeded);
+
+        public static Client Unsyncable(IClient entity)
+            => new Client(entity, SyncStatus.SyncFailed);
     }
 
     internal partial class Project
     {
-        private Project(IProject entity, bool isDirty)
+        private Project(IProject entity, SyncStatus syncStatus)
         {
             Id = entity.Id;
             WorkspaceId = entity.WorkspaceId;
@@ -41,37 +45,43 @@ namespace Toggl.Foundation.Models
             Rate = entity.Rate;
             Currency = entity.Currency;
             ActualHours = entity.ActualHours;
-            IsDirty = isDirty;
+            SyncStatus = syncStatus;
         }
 
         public static Project Clean(IProject entity)
-            => new Project(entity, false);
+            => new Project(entity, SyncStatus.InSync);
 
         public static Project Dirty(IProject entity)
-            => new Project(entity, true);
+            => new Project(entity, SyncStatus.SyncNeeded);
+
+        public static Project Unsyncable(IProject entity)
+            => new Project(entity, SyncStatus.SyncFailed);
     }
 
     internal partial class Tag
     {
-        private Tag(ITag entity, bool isDirty)
+        private Tag(ITag entity, SyncStatus syncStatus)
         {
             Id = entity.Id;
             WorkspaceId = entity.WorkspaceId;
             Name = entity.Name;
             At = entity.At;
-            IsDirty = isDirty;
+            SyncStatus = syncStatus;
         }
 
         public static Tag Clean(ITag entity)
-            => new Tag(entity, false);
+            => new Tag(entity, SyncStatus.InSync);
 
         public static Tag Dirty(ITag entity)
-            => new Tag(entity, true);
+            => new Tag(entity, SyncStatus.SyncNeeded);
+
+        public static Tag Unsyncable(ITag entity)
+            => new Tag(entity, SyncStatus.SyncFailed);
     }
 
     internal partial class Task
     {
-        private Task(ITask entity, bool isDirty)
+        private Task(ITask entity, SyncStatus syncStatus)
         {
             Id = entity.Id;
             Name = entity.Name;
@@ -82,19 +92,22 @@ namespace Toggl.Foundation.Models
             Active = entity.Active;
             At = entity.At;
             TrackedSeconds = entity.TrackedSeconds;
-            IsDirty = isDirty;
+            SyncStatus = syncStatus;
         }
 
         public static Task Clean(ITask entity)
-            => new Task(entity, false);
+            => new Task(entity, SyncStatus.InSync);
 
         public static Task Dirty(ITask entity)
-            => new Task(entity, true);
+            => new Task(entity, SyncStatus.SyncNeeded);
+
+        public static Task Unsyncable(ITask entity)
+            => new Task(entity, SyncStatus.SyncFailed);
     }
 
     internal partial class TimeEntry
     {
-        private TimeEntry(ITimeEntry entity, bool isDirty, bool isDeleted = false)
+        private TimeEntry(ITimeEntry entity, SyncStatus syncStatus, bool isDeleted = false)
         {
             Id = entity.Id;
             WorkspaceId = entity.WorkspaceId;
@@ -110,26 +123,32 @@ namespace Toggl.Foundation.Models
             ServerDeletedAt = entity.ServerDeletedAt;
             UserId = entity.UserId;
             CreatedWith = entity.CreatedWith;
-            IsDirty = isDirty;
+            SyncStatus = syncStatus;
             IsDeleted = isDeleted;
         }
 
         public static TimeEntry Clean(ITimeEntry entity)
-            => new TimeEntry(entity, false);
+            => new TimeEntry(entity, SyncStatus.InSync);
 
         public static TimeEntry Dirty(ITimeEntry entity)
-            => new TimeEntry(entity, true);
+            => new TimeEntry(entity, SyncStatus.SyncNeeded);
+
+        public static TimeEntry Unsyncable(ITimeEntry entity)
+            => new TimeEntry(entity, SyncStatus.SyncFailed);
 
         public static TimeEntry CleanDeleted(ITimeEntry entity)
-            => new TimeEntry(entity, false, true);
+            => new TimeEntry(entity, SyncStatus.InSync, true);
 
         public static TimeEntry DirtyDeleted(ITimeEntry entity)
-            => new TimeEntry(entity, true, true);
+            => new TimeEntry(entity, SyncStatus.SyncNeeded, true);
+
+        public static TimeEntry UnsyncableDeleted(ITimeEntry entity)
+            => new TimeEntry(entity, SyncStatus.SyncFailed, true);
     }
 
     internal partial class User
     {
-        private User(IUser entity, bool isDirty)
+        private User(IUser entity, SyncStatus syncStatus)
         {
             Id = entity.Id;
             ApiToken = entity.ApiToken;
@@ -149,19 +168,22 @@ namespace Toggl.Foundation.Models
             RenderTimeline = entity.RenderTimeline;
             TimelineEnabled = entity.TimelineEnabled;
             TimelineExperiment = entity.TimelineExperiment;
-            IsDirty = isDirty;
+            SyncStatus = syncStatus;
         }
 
         public static User Clean(IUser entity)
-            => new User(entity, false);
+            => new User(entity, SyncStatus.InSync);
 
         public static User Dirty(IUser entity)
-            => new User(entity, true);
+            => new User(entity, SyncStatus.SyncNeeded);
+
+        public static User Unsyncable(IUser entity)
+            => new User(entity, SyncStatus.SyncFailed);
     }
 
     internal partial class Workspace
     {
-        private Workspace(IWorkspace entity, bool isDirty)
+        private Workspace(IWorkspace entity, SyncStatus syncStatus)
         {
             Id = entity.Id;
             Name = entity.Name;
@@ -178,13 +200,16 @@ namespace Toggl.Foundation.Models
             RoundingMinutes = entity.RoundingMinutes;
             At = entity.At;
             LogoUrl = entity.LogoUrl;
-            IsDirty = isDirty;
+            SyncStatus = syncStatus;
         }
 
         public static Workspace Clean(IWorkspace entity)
-            => new Workspace(entity, false);
+            => new Workspace(entity, SyncStatus.InSync);
 
         public static Workspace Dirty(IWorkspace entity)
-            => new Workspace(entity, true);
+            => new Workspace(entity, SyncStatus.SyncNeeded);
+
+        public static Workspace Unsyncable(IWorkspace entity)
+            => new Workspace(entity, SyncStatus.SyncFailed);
     }
 }

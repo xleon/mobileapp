@@ -84,7 +84,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             }
 
             private Func<IDatabaseProject, bool> shouldBePersistedAndIsClean(List<IProject> projects)
-                => persisted => persisted.IsDirty == false && projects.Any(w => w.Name == persisted.Name);
+                => persisted => persisted.SyncStatus == SyncStatus.InSync && projects.Any(w => w.Name == persisted.Name);
         }
     }
 }

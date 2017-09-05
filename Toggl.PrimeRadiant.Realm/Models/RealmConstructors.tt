@@ -4,6 +4,7 @@
 #><#@ import namespace="System.Text.RegularExpressions"
 #><#@ import namespace="System.Linq"
 #>using System.Linq;
+using Realms;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.PrimeRadiant.Realm
@@ -49,7 +50,14 @@ namespace Toggl.PrimeRadiant.Realm
                     WriteLine( "        public long Id { get; set; }\n");
                 }
 
-                WriteLine( "        public bool IsDirty { get; set; }\n");
+                WriteLine( "        public int SyncStatusInt { get; set; }\n");
+                WriteLine( "        [Ignored]");
+                WriteLine( "        public SyncStatus SyncStatus");
+                WriteLine( "        {");
+                WriteLine( "            get { return (SyncStatus)SyncStatusInt; }");
+                WriteLine( "            set { SyncStatusInt = (int)value; }");
+                WriteLine( "        }\n");
+
                 WriteLine($"        public {realmClassName}() {{ }}\n");
 
                 WriteLine($"        public {realmClassName}({updatesFromInterface} entity, Realms.Realm realm)");
@@ -62,7 +70,7 @@ namespace Toggl.PrimeRadiant.Realm
 
                 if (databaseInterfaceExists)
                 {
-                    WriteLine( "            IsDirty = entity.IsDirty;");
+                    WriteLine( "            SyncStatus = entity.SyncStatus;");
                 }
 
                 if (extendsIBaseModel)

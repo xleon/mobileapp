@@ -37,7 +37,7 @@ namespace Toggl.Foundation.Sync.ConflictResolution
             if (localEntity == null)
                 return Create;
 
-            if (selector.IsDirty(localEntity) == false)
+            if (selector.IsInSync(localEntity))
                 return Update;
 
             var receivedDataIsOutdated = selector.LastModified(localEntity) > selector.LastModified(serverEntity).Subtract(MarginOfError);

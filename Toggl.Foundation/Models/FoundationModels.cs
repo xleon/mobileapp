@@ -1,5 +1,6 @@
 ﻿﻿﻿using System;
 using System.Collections.Generic;
+using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Multivac;
 
@@ -19,7 +20,8 @@ namespace Toggl.Foundation.Models
 
         public IDatabaseWorkspace Workspace { get; }
 
-        public bool IsDirty { get; }
+        public SyncStatus SyncStatus { get; }
+
     }
 
     internal partial class Project : IDatabaseProject
@@ -60,7 +62,8 @@ namespace Toggl.Foundation.Models
 
         public IDatabaseWorkspace Workspace { get; }
 
-        public bool IsDirty { get; }
+        public SyncStatus SyncStatus { get; }
+
     }
 
     internal partial class Tag : IDatabaseTag
@@ -75,7 +78,8 @@ namespace Toggl.Foundation.Models
 
         public IDatabaseWorkspace Workspace { get; }
 
-        public bool IsDirty { get; }
+        public SyncStatus SyncStatus { get; }
+
     }
 
     internal partial class Task : IDatabaseTask
@@ -104,7 +108,8 @@ namespace Toggl.Foundation.Models
 
         public IDatabaseWorkspace Workspace { get; }
 
-        public bool IsDirty { get; }
+        public SyncStatus SyncStatus { get; }
+
     }
 
     internal partial class TimeEntry : IDatabaseTimeEntry
@@ -147,7 +152,8 @@ namespace Toggl.Foundation.Models
 
         public IDatabaseWorkspace Workspace { get; }
 
-        public bool IsDirty { get; }
+        public SyncStatus SyncStatus { get; }
+
     }
 
     internal partial class User : IDatabaseUser
@@ -188,7 +194,8 @@ namespace Toggl.Foundation.Models
 
         public bool TimelineExperiment { get; }
 
-        public bool IsDirty { get; }
+        public SyncStatus SyncStatus { get; }
+
     }
 
     internal partial class Workspace : IDatabaseWorkspace
@@ -223,6 +230,7 @@ namespace Toggl.Foundation.Models
 
         public string LogoUrl { get; }
 
-        public bool IsDirty { get; }
+        public SyncStatus SyncStatus { get; }
+
     }
 }

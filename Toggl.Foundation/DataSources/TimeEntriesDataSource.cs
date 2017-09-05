@@ -74,7 +74,7 @@ namespace Toggl.Foundation.DataSources
                   .SetAt(timeService.CurrentDateTime)
                   .SetBillable(billable)
                   .SetProjectId(projectId)
-                  .SetIsDirty(true)
+                  .SetSyncStatus(SyncStatus.SyncNeeded)
                   .Build()
                   .Apply(repository.Create)
                   .Do(safeSetCurrentlyRunningTimeEntry);
@@ -125,7 +125,7 @@ namespace Toggl.Foundation.DataSources
                         .SetWorkspaceId(timeEntry.WorkspaceId)
                         .SetServerDeletedAt(timeEntry.ServerDeletedAt)
                         .SetAt(timeService.CurrentDateTime)
-                        .SetIsDirty(true)
+                        .SetSyncStatus(SyncStatus.SyncNeeded)
                         .Build();
     }
 }

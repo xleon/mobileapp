@@ -8,6 +8,6 @@ namespace Toggl.PrimeRadiant.Tests
     {
         public long Id { get; set; }
 
-        public bool IsDirty { get; set; }
+        public SyncStatus SyncStatus { get; set; }
     }
 }

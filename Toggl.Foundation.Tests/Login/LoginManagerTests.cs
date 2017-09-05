@@ -124,11 +124,11 @@ namespace Toggl.Foundation.Tests.Login
             }
 
             [Fact]
-            public async Task TheUserToBePersistedShouldHaveIsDirtySetToFalse()
+            public async Task TheUserToBePersistedShouldHaveSyncStatusSetToInSync()
             {
                 await LoginManager.Login(Email, Password);
 
-                await Database.User.Received().Create(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.IsDirty == false));
+                await Database.User.Received().Create(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.SyncStatus == SyncStatus.InSync));
             }
 
             [Fact]

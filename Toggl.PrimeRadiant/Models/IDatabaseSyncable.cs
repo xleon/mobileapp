@@ -2,6 +2,6 @@
 {
     public interface IDatabaseSyncable
     {
-        bool IsDirty { get; }
+        SyncStatus SyncStatus { get; }
     }
 }

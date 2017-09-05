@@ -84,7 +84,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             }
 
             private Func<IDatabaseWorkspace, bool> shouldBePersistedAndIsClean(List<IWorkspace> workspaces)
-                => persisted => persisted.IsDirty == false && workspaces.Any(w => w.Name == persisted.Name);
+                => persisted => persisted.SyncStatus == SyncStatus.InSync && workspaces.Any(w => w.Name == persisted.Name);
         }
     }
 }

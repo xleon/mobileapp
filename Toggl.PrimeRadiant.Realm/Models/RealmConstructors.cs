@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Realms;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.PrimeRadiant.Realm
@@ -7,7 +8,14 @@ namespace Toggl.PrimeRadiant.Realm
     {
         public long Id { get; set; }
 
-        public bool IsDirty { get; set; }
+        public int SyncStatusInt { get; set; }
+
+        [Ignored]
+        public SyncStatus SyncStatus
+        {
+            get { return (SyncStatus)SyncStatusInt; }
+            set { SyncStatusInt = (int)value; }
+        }
 
         public RealmClient() { }
 
@@ -18,7 +26,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public void SetPropertiesFrom(IDatabaseClient entity, Realms.Realm realm)
         {
-            IsDirty = entity.IsDirty;
+            SyncStatus = entity.SyncStatus;
             Id = entity.Id;
             var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
             RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId);
@@ -32,7 +40,14 @@ namespace Toggl.PrimeRadiant.Realm
     {
         public long Id { get; set; }
 
-        public bool IsDirty { get; set; }
+        public int SyncStatusInt { get; set; }
+
+        [Ignored]
+        public SyncStatus SyncStatus
+        {
+            get { return (SyncStatus)SyncStatusInt; }
+            set { SyncStatusInt = (int)value; }
+        }
 
         public RealmProject() { }
 
@@ -43,7 +58,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public void SetPropertiesFrom(IDatabaseProject entity, Realms.Realm realm)
         {
-            IsDirty = entity.IsDirty;
+            SyncStatus = entity.SyncStatus;
             Id = entity.Id;
             var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
             RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId);
@@ -69,7 +84,14 @@ namespace Toggl.PrimeRadiant.Realm
     {
         public long Id { get; set; }
 
-        public bool IsDirty { get; set; }
+        public int SyncStatusInt { get; set; }
+
+        [Ignored]
+        public SyncStatus SyncStatus
+        {
+            get { return (SyncStatus)SyncStatusInt; }
+            set { SyncStatusInt = (int)value; }
+        }
 
         public RealmTag() { }
 
@@ -80,7 +102,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public void SetPropertiesFrom(IDatabaseTag entity, Realms.Realm realm)
         {
-            IsDirty = entity.IsDirty;
+            SyncStatus = entity.SyncStatus;
             Id = entity.Id;
             var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
             RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId);
@@ -93,7 +115,14 @@ namespace Toggl.PrimeRadiant.Realm
     {
         public long Id { get; set; }
 
-        public bool IsDirty { get; set; }
+        public int SyncStatusInt { get; set; }
+
+        [Ignored]
+        public SyncStatus SyncStatus
+        {
+            get { return (SyncStatus)SyncStatusInt; }
+            set { SyncStatusInt = (int)value; }
+        }
 
         public RealmTask() { }
 
@@ -104,7 +133,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public void SetPropertiesFrom(IDatabaseTask entity, Realms.Realm realm)
         {
-            IsDirty = entity.IsDirty;
+            SyncStatus = entity.SyncStatus;
             Id = entity.Id;
             Name = entity.Name;
             var skipProjectFetch = entity?.ProjectId == null || entity.ProjectId == 0;
@@ -124,7 +153,14 @@ namespace Toggl.PrimeRadiant.Realm
     {
         public long Id { get; set; }
 
-        public bool IsDirty { get; set; }
+        public int SyncStatusInt { get; set; }
+
+        [Ignored]
+        public SyncStatus SyncStatus
+        {
+            get { return (SyncStatus)SyncStatusInt; }
+            set { SyncStatusInt = (int)value; }
+        }
 
         public RealmTimeEntry() { }
 
@@ -135,7 +171,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public void SetPropertiesFrom(IDatabaseTimeEntry entity, Realms.Realm realm)
         {
-            IsDirty = entity.IsDirty;
+            SyncStatus = entity.SyncStatus;
             Id = entity.Id;
             var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
             RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId);
@@ -161,7 +197,14 @@ namespace Toggl.PrimeRadiant.Realm
     {
         public long Id { get; set; }
 
-        public bool IsDirty { get; set; }
+        public int SyncStatusInt { get; set; }
+
+        [Ignored]
+        public SyncStatus SyncStatus
+        {
+            get { return (SyncStatus)SyncStatusInt; }
+            set { SyncStatusInt = (int)value; }
+        }
 
         public RealmUser() { }
 
@@ -172,7 +215,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public void SetPropertiesFrom(IDatabaseUser entity, Realms.Realm realm)
         {
-            IsDirty = entity.IsDirty;
+            SyncStatus = entity.SyncStatus;
             Id = entity.Id;
             ApiToken = entity.ApiToken;
             DefaultWorkspaceId = entity.DefaultWorkspaceId;
@@ -198,7 +241,14 @@ namespace Toggl.PrimeRadiant.Realm
     {
         public long Id { get; set; }
 
-        public bool IsDirty { get; set; }
+        public int SyncStatusInt { get; set; }
+
+        [Ignored]
+        public SyncStatus SyncStatus
+        {
+            get { return (SyncStatus)SyncStatusInt; }
+            set { SyncStatusInt = (int)value; }
+        }
 
         public RealmWorkspace() { }
 
@@ -209,7 +259,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public void SetPropertiesFrom(IDatabaseWorkspace entity, Realms.Realm realm)
         {
-            IsDirty = entity.IsDirty;
+            SyncStatus = entity.SyncStatus;
             Id = entity.Id;
             Name = entity.Name;
             Admin = entity.Admin;
