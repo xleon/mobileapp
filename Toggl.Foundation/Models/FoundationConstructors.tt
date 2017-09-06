@@ -19,16 +19,13 @@ namespace Toggl.Foundation.Models
         if (interfaceName == "IBaseModel") continue;
 
         var className = interfaceName.Substring(1, interfaceName.Length - 1);
-        var isTimeEntry = className == "TimeEntry";
 
         if (!isFirstClass)
             WriteLine("");
 
         WriteLine($"    internal partial class {className}");
         WriteLine( "    {");
-        var constructorName = isTimeEntry ? $"        private {className}({interfaceName} entity, SyncStatus syncStatus, bool isDeleted = false)"
-                                          : $"        private {className}({interfaceName} entity, SyncStatus syncStatus)";
-        WriteLine(constructorName);
+        WriteLine($"        private {className}({interfaceName} entity, SyncStatus syncStatus, bool isDeleted = false)");
         WriteLine( "        {");
 
         foreach(var line in File.ReadAllLines(modelFile))
@@ -51,8 +48,7 @@ namespace Toggl.Foundation.Models
         }
 
         WriteLine( "            SyncStatus = syncStatus;");
-        if (isTimeEntry)
-            WriteLine( "            IsDeleted = isDeleted;");
+        WriteLine( "            IsDeleted = isDeleted;");
 
         WriteLine( "        }\n");
         
@@ -63,16 +59,13 @@ namespace Toggl.Foundation.Models
         WriteLine($"        public static {className} Unsyncable({interfaceName} entity)");
         WriteLine($"            => new {className}(entity, SyncStatus.SyncFailed);");
 
-        if (isTimeEntry)
-        {
-            WriteLine("");
-            WriteLine($"        public static {className} CleanDeleted({interfaceName} entity)");
-            WriteLine($"            => new {className}(entity, SyncStatus.InSync, true);\n");
-            WriteLine($"        public static {className} DirtyDeleted({interfaceName} entity)");
-            WriteLine($"            => new {className}(entity, SyncStatus.SyncNeeded, true);\n");
-            WriteLine($"        public static {className} UnsyncableDeleted({interfaceName} entity)");
-            WriteLine($"            => new {className}(entity, SyncStatus.SyncFailed, true);");
-        }
+        WriteLine("");
+        WriteLine($"        public static {className} CleanDeleted({interfaceName} entity)");
+        WriteLine($"            => new {className}(entity, SyncStatus.InSync, true);\n");
+        WriteLine($"        public static {className} DirtyDeleted({interfaceName} entity)");
+        WriteLine($"            => new {className}(entity, SyncStatus.SyncNeeded, true);\n");
+        WriteLine($"        public static {className} UnsyncableDeleted({interfaceName} entity)");
+        WriteLine($"            => new {className}(entity, SyncStatus.SyncFailed, true);");
 
         WriteLine( "    }");
         isFirstClass = false;

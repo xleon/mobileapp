@@ -102,6 +102,7 @@
     <Compile Include="Sync\States\Pull\PersistProjectsState.cs" />
     <Compile Include="Sync\States\Pull\PersistTimeEntriesState.cs" />
     <Compile Include="Sync\States\Pull\PersistWorkspacesState.cs" />
+    <Compile Include="Sync\States\Push\PushOneEntityState.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -9,5 +9,7 @@ namespace Toggl.PrimeRadiant.Tests
         public long Id { get; set; }
 
         public SyncStatus SyncStatus { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

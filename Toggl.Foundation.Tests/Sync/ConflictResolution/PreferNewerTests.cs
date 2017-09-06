@@ -146,6 +146,7 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
             public SyncStatus SyncStatus { get; }
             public DateTimeOffset At { get; }
             public DateTimeOffset? ServerDeletedAt { get; }
+            public bool IsDeleted => throw new NotImplementedException();
 
             public TestModel(DateTimeOffset? at = null, DateTimeOffset? deleted = null, SyncStatus syncStatus = SyncStatus.InSync)
             {

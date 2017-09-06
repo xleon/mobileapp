@@ -8,6 +8,8 @@ namespace Toggl.PrimeRadiant.Realm
     {
         public long Id { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public int SyncStatusInt { get; set; }
 
         [Ignored]
@@ -39,6 +41,8 @@ namespace Toggl.PrimeRadiant.Realm
     internal partial class RealmProject : IUpdatesFrom<IDatabaseProject>
     {
         public long Id { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         public int SyncStatusInt { get; set; }
 
@@ -84,6 +88,8 @@ namespace Toggl.PrimeRadiant.Realm
     {
         public long Id { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public int SyncStatusInt { get; set; }
 
         [Ignored]
@@ -114,6 +120,8 @@ namespace Toggl.PrimeRadiant.Realm
     internal partial class RealmTask : IUpdatesFrom<IDatabaseTask>
     {
         public long Id { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         public int SyncStatusInt { get; set; }
 
@@ -152,6 +160,8 @@ namespace Toggl.PrimeRadiant.Realm
     internal partial class RealmTimeEntry : IUpdatesFrom<IDatabaseTimeEntry>
     {
         public long Id { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         public int SyncStatusInt { get; set; }
 
@@ -197,6 +207,8 @@ namespace Toggl.PrimeRadiant.Realm
     {
         public long Id { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public int SyncStatusInt { get; set; }
 
         [Ignored]
@@ -240,6 +252,8 @@ namespace Toggl.PrimeRadiant.Realm
     internal partial class RealmWorkspace : IUpdatesFrom<IDatabaseWorkspace>
     {
         public long Id { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         public int SyncStatusInt { get; set; }
 

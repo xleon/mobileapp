@@ -20,8 +20,9 @@ namespace Toggl.Foundation.Models
 
         public IDatabaseWorkspace Workspace { get; }
 
-        public SyncStatus SyncStatus { get; }
+        public bool IsDeleted { get; }
 
+        public SyncStatus SyncStatus { get; }
     }
 
     internal partial class Project : IDatabaseProject
@@ -62,8 +63,9 @@ namespace Toggl.Foundation.Models
 
         public IDatabaseWorkspace Workspace { get; }
 
-        public SyncStatus SyncStatus { get; }
+        public bool IsDeleted { get; }
 
+        public SyncStatus SyncStatus { get; }
     }
 
     internal partial class Tag : IDatabaseTag
@@ -78,8 +80,9 @@ namespace Toggl.Foundation.Models
 
         public IDatabaseWorkspace Workspace { get; }
 
-        public SyncStatus SyncStatus { get; }
+        public bool IsDeleted { get; }
 
+        public SyncStatus SyncStatus { get; }
     }
 
     internal partial class Task : IDatabaseTask
@@ -108,8 +111,9 @@ namespace Toggl.Foundation.Models
 
         public IDatabaseWorkspace Workspace { get; }
 
-        public SyncStatus SyncStatus { get; }
+        public bool IsDeleted { get; }
 
+        public SyncStatus SyncStatus { get; }
     }
 
     internal partial class TimeEntry : IDatabaseTimeEntry
@@ -142,8 +146,6 @@ namespace Toggl.Foundation.Models
 
         public string CreatedWith { get; }
 
-        public bool IsDeleted { get; }
-
         public IDatabaseTask Task { get; }
 
         public IDatabaseUser User { get; }
@@ -152,8 +154,9 @@ namespace Toggl.Foundation.Models
 
         public IDatabaseWorkspace Workspace { get; }
 
-        public SyncStatus SyncStatus { get; }
+        public bool IsDeleted { get; }
 
+        public SyncStatus SyncStatus { get; }
     }
 
     internal partial class User : IDatabaseUser
@@ -194,8 +197,9 @@ namespace Toggl.Foundation.Models
 
         public bool TimelineExperiment { get; }
 
-        public SyncStatus SyncStatus { get; }
+        public bool IsDeleted { get; }
 
+        public SyncStatus SyncStatus { get; }
     }
 
     internal partial class Workspace : IDatabaseWorkspace
@@ -230,7 +234,8 @@ namespace Toggl.Foundation.Models
 
         public string LogoUrl { get; }
 
-        public SyncStatus SyncStatus { get; }
+        public bool IsDeleted { get; }
 
+        public SyncStatus SyncStatus { get; }
     }
 }

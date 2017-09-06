@@ -50,6 +50,7 @@ namespace Toggl.PrimeRadiant.Realm
                     WriteLine( "        public long Id { get; set; }\n");
                 }
 
+                WriteLine( "        public bool IsDeleted { get; set; }\n");
                 WriteLine( "        public int SyncStatusInt { get; set; }\n");
                 WriteLine( "        [Ignored]");
                 WriteLine( "        public SyncStatus SyncStatus");
