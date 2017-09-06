@@ -92,6 +92,8 @@
     <Compile Include="Sync\ConflictResolution\Selectors\TimeEntrySyncSelector.cs" />
     <Compile Include="Sync\ConflictResolution\Resolver.cs" />
     <Compile Include="TogglSyncManagerFactory.cs" />
+    <Compile Include="Sync\States\Push\BasePushState.cs" />
+    <Compile Include="Sync\States\Push\PushTimeEntriesState.cs" />
     <Compile Include="IRepositoryExtensions.cs" />
     <Compile Include="Sync\States\Pull\BasePersistState.cs" />
     <Compile Include="Sync\States\Pull\FetchAllSinceState.cs" />

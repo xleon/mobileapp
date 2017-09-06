@@ -205,6 +205,8 @@
     <Compile Include="MvvmCross\ViewModels\TimeEntryViewModelCollectionTests.cs" />
     <Compile Include="Sync\ConflictResolution\PreferNewerTests.cs" />
     <Compile Include="Sync\States\TestException.cs" />
+    <Compile Include="Sync\States\Push\BasePushStateTests.cs" />
+    <Compile Include="Sync\States\Push\PushTimeEntriesStateTests.cs" />
     <Compile Include="Sync\States\Pull\FetchAllSinceStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistClientsStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistProjectsStateTests.cs" />
@@ -251,6 +253,9 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Sync\States\Push\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
