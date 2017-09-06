@@ -1,22 +1,26 @@
-﻿﻿<#@ template language="C#" hostspecific="True"
+﻿<#@ template language="C#" hostspecific="True"
 #><#@ assembly name="System.Core"
 #><#@ import namespace="System.IO"
 #><#@ import namespace="System.Linq"
 #>using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Models
 {
 <#
     var filePath = Path.GetDirectoryName(Host.TemplateFile);
     var solutionDirectory = Path.Combine(filePath, "../../Toggl.Multivac/Models/" );
+    var databaseModelPath = Path.Combine(filePath, $"../../Toggl.PrimeRadiant/Models/");
     var modelsToGenerate = Directory.GetFiles(solutionDirectory, "*.cs");
     var isFirstClass = true;
 
     foreach(var modelFile in modelsToGenerate)
     {
         var interfaceName = Path.GetFileName(modelFile).Replace(".cs", "");
-        if (interfaceName == "IBaseModel") continue;
+        if (interfaceName == "IBaseModel" 
+         || interfaceName == "IWorkspaceFeature"
+         || interfaceName == "IWorkspaceFeatureCollection") continue;
 
         var className = interfaceName.Substring(1, interfaceName.Length - 1);
 
@@ -25,6 +29,39 @@ namespace Toggl.Foundation.Models
 
         WriteLine($"    internal partial class {className}");
         WriteLine( "    {");
+
+        var databaseModel = Directory.GetFiles(databaseModelPath, $"*{className}.cs").SingleOrDefault();
+        if (databaseModel != null)
+        {
+            WriteLine($"        private {className}(IDatabase{className} entity)");
+            WriteLine($"            : this(entity as {interfaceName}, entity.SyncStatus, entity.IsDeleted)");
+            WriteLine( "        {");
+
+            foreach(var line in File.ReadAllLines(databaseModel))
+            {
+                var isProperty = line.Contains("get;");
+                if (!isProperty) continue;
+
+                var trimmedLine = line.Trim();
+                var indexOfPropName = trimmedLine.IndexOf(" ") + 1;
+                var propName = trimmedLine.Substring(indexOfPropName, trimmedLine.Length - 9 - indexOfPropName);
+
+                var requiresWrapping = line.Contains("IDatabase");
+                var assignment = requiresWrapping ? $"entity.{propName} == null ? null : Models.{propName}.From(entity.{propName})" : $"entity.{propName}";
+
+                WriteLine($"            {propName} = {assignment};");
+            }
+
+        	WriteLine( "            SyncStatus = entity.SyncStatus;");
+        	WriteLine( "            IsDeleted = entity.IsDeleted;");
+
+            WriteLine( "        }\n");
+        
+        	WriteLine($"        public static {className} From(IDatabase{className} entity)");
+        	WriteLine($"            => new {className}(entity);\n");
+        }
+
+
         WriteLine($"        private {className}({interfaceName} entity, SyncStatus syncStatus, bool isDeleted = false)");
         WriteLine( "        {");
 

@@ -1,10 +1,22 @@
-﻿﻿using Toggl.Multivac.Models;
+﻿using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Models
 {
     internal partial class Client
     {
+        private Client(IDatabaseClient entity)
+            : this(entity as IClient, entity.SyncStatus, entity.IsDeleted)
+        {
+            Workspace = entity.Workspace == null ? null : Models.Workspace.From(entity.Workspace);
+            SyncStatus = entity.SyncStatus;
+            IsDeleted = entity.IsDeleted;
+        }
+
+        public static Client From(IDatabaseClient entity)
+            => new Client(entity);
+
         private Client(IClient entity, SyncStatus syncStatus, bool isDeleted = false)
         {
             Id = entity.Id;
@@ -37,6 +49,18 @@ namespace Toggl.Foundation.Models
 
     internal partial class Project
     {
+        private Project(IDatabaseProject entity)
+            : this(entity as IProject, entity.SyncStatus, entity.IsDeleted)
+        {
+            Client = entity.Client == null ? null : Models.Client.From(entity.Client);
+            Workspace = entity.Workspace == null ? null : Models.Workspace.From(entity.Workspace);
+            SyncStatus = entity.SyncStatus;
+            IsDeleted = entity.IsDeleted;
+        }
+
+        public static Project From(IDatabaseProject entity)
+            => new Project(entity);
+
         private Project(IProject entity, SyncStatus syncStatus, bool isDeleted = false)
         {
             Id = entity.Id;
@@ -80,6 +104,17 @@ namespace Toggl.Foundation.Models
 
     internal partial class Tag
     {
+        private Tag(IDatabaseTag entity)
+            : this(entity as ITag, entity.SyncStatus, entity.IsDeleted)
+        {
+            Workspace = entity.Workspace == null ? null : Models.Workspace.From(entity.Workspace);
+            SyncStatus = entity.SyncStatus;
+            IsDeleted = entity.IsDeleted;
+        }
+
+        public static Tag From(IDatabaseTag entity)
+            => new Tag(entity);
+
         private Tag(ITag entity, SyncStatus syncStatus, bool isDeleted = false)
         {
             Id = entity.Id;
@@ -111,6 +146,19 @@ namespace Toggl.Foundation.Models
 
     internal partial class Task
     {
+        private Task(IDatabaseTask entity)
+            : this(entity as ITask, entity.SyncStatus, entity.IsDeleted)
+        {
+            User = entity.User == null ? null : Models.User.From(entity.User);
+            Project = entity.Project == null ? null : Models.Project.From(entity.Project);
+            Workspace = entity.Workspace == null ? null : Models.Workspace.From(entity.Workspace);
+            SyncStatus = entity.SyncStatus;
+            IsDeleted = entity.IsDeleted;
+        }
+
+        public static Task From(IDatabaseTask entity)
+            => new Task(entity);
+
         private Task(ITask entity, SyncStatus syncStatus, bool isDeleted = false)
         {
             Id = entity.Id;
@@ -147,6 +195,20 @@ namespace Toggl.Foundation.Models
 
     internal partial class TimeEntry
     {
+        private TimeEntry(IDatabaseTimeEntry entity)
+            : this(entity as ITimeEntry, entity.SyncStatus, entity.IsDeleted)
+        {
+            Task = entity.Task == null ? null : Models.Task.From(entity.Task);
+            User = entity.User == null ? null : Models.User.From(entity.User);
+            Project = entity.Project == null ? null : Models.Project.From(entity.Project);
+            Workspace = entity.Workspace == null ? null : Models.Workspace.From(entity.Workspace);
+            SyncStatus = entity.SyncStatus;
+            IsDeleted = entity.IsDeleted;
+        }
+
+        public static TimeEntry From(IDatabaseTimeEntry entity)
+            => new TimeEntry(entity);
+
         private TimeEntry(ITimeEntry entity, SyncStatus syncStatus, bool isDeleted = false)
         {
             Id = entity.Id;
@@ -188,6 +250,16 @@ namespace Toggl.Foundation.Models
 
     internal partial class User
     {
+        private User(IDatabaseUser entity)
+            : this(entity as IUser, entity.SyncStatus, entity.IsDeleted)
+        {
+            SyncStatus = entity.SyncStatus;
+            IsDeleted = entity.IsDeleted;
+        }
+
+        public static User From(IDatabaseUser entity)
+            => new User(entity);
+
         private User(IUser entity, SyncStatus syncStatus, bool isDeleted = false)
         {
             Id = entity.Id;
@@ -233,6 +305,16 @@ namespace Toggl.Foundation.Models
 
     internal partial class Workspace
     {
+        private Workspace(IDatabaseWorkspace entity)
+            : this(entity as IWorkspace, entity.SyncStatus, entity.IsDeleted)
+        {
+            SyncStatus = entity.SyncStatus;
+            IsDeleted = entity.IsDeleted;
+        }
+
+        public static Workspace From(IDatabaseWorkspace entity)
+            => new Workspace(entity);
+
         private Workspace(IWorkspace entity, SyncStatus syncStatus, bool isDeleted = false)
         {
             Id = entity.Id;
