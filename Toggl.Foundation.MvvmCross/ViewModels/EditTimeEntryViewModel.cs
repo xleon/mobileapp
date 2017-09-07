@@ -71,6 +71,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand CloseCommand { get; }
 
+        public IMvxAsyncCommand SelectStartDateTimeCommand { get; }
+
         public EditTimeEntryViewModel(ITogglDataSource dataSource, IMvxNavigationService navigationService, ITimeService timeService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -84,6 +86,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             DeleteCommand = new MvxCommand(delete);
             ConfirmCommand = new MvxCommand(confirm);
             CloseCommand = new MvxAsyncCommand(close);
+            SelectStartDateTimeCommand = new MvxAsyncCommand(selectStartDateTime);
         }
 
         public override async Task Initialize(IdParameter parameter)
@@ -143,5 +146,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private Task close()
             => navigationService.Close(this);
+
+        private Task selectStartDateTime()
+            => navigationService.Navigate<SelectDateTimeDialogViewModel, DateParameter>(DateParameter.WithDate(StartTime));
     }
 }

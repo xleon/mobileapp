@@ -43,6 +43,9 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UILabel StartDateLabel { get; set; }
 
 		[Outlet]
+		UIKit.UIStackView StartDateTimeView { get; set; }
+
+		[Outlet]
 		UIKit.UILabel StartTimeLabel { get; set; }
 
 		[Outlet]
@@ -108,6 +111,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (TagsLabel != null) {
 				TagsLabel.Dispose ();
 				TagsLabel = null;
+			}
+
+			if (StartDateTimeView != null) {
+				StartDateTimeView.Dispose ();
+				StartDateTimeView = null;
 			}
 		}
 	}

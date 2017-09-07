@@ -3,14 +3,12 @@ using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
-using MvvmCross.Plugins.Color;
 using MvvmCross.Plugins.Visibility;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using MvvmCross.Plugins.Color;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers
@@ -60,6 +58,9 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(CloseButton).To(vm => vm.CloseCommand);
             bindingSet.Bind(DeleteButton).To(vm => vm.DeleteCommand);
             bindingSet.Bind(ConfirmButton).To(vm => vm.ConfirmCommand);
+            bindingSet.Bind(StartDateTimeView)
+                      .For(v => v.BindTap())
+                      .To(vm => vm.SelectStartDateTimeCommand);
 
             //Project visibility
             bindingSet.Bind(AddProjectAndTaskView)

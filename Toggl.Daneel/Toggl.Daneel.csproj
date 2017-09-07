@@ -307,6 +307,7 @@
     <InterfaceDefinition Include="ViewControllers\SettingsViewController.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntryProjectsViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntryViewCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\SelectDateTimeDialogViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -421,6 +422,10 @@
     <Compile Include="Presentation\Attributes\ModalDialogPresentationAttribute.cs" />
     <Compile Include="Presentation\Transition\ModalDialogPresentationController.cs" />
     <Compile Include="Presentation\Transition\ModalDialogTransitionDelegate.cs" />
+    <Compile Include="ViewControllers\SelectDateTimeDialogViewController.cs" />
+    <Compile Include="ViewControllers\SelectDateTimeDialogViewController.designer.cs">
+      <DependentUpon>SelectDateTimeDialogViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\TextExtensions.cs" />
     <Compile Include="Views\TimeEntryTagsTextView.cs" />
   </ItemGroup>

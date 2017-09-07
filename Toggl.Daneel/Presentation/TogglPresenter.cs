@@ -69,7 +69,11 @@ namespace Toggl.Daneel.Presentation
         {
             viewController.ModalPresentationStyle = UIModalPresentationStyle.Custom;
             viewController.TransitioningDelegate = modalTransitionDelegate;
-            MasterNavigationController.PresentViewController(viewController, true, null);
+
+            if (MasterNavigationController.PresentedViewController == null)
+                MasterNavigationController.PresentViewController(viewController, true, null);
+            else
+                MasterNavigationController.PresentedViewController.PresentViewController(viewController, true, null);
 
             ModalViewControllers.Add(viewController);
         }

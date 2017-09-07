@@ -22,6 +22,7 @@
                 <outlet property="DurationLabel" destination="Fuj-TX-k2d" id="wg2-LM-CRu"/>
                 <outlet property="ProjectTaskClientLabel" destination="hhk-MD-ce8" id="K8D-9n-qvT"/>
                 <outlet property="StartDateLabel" destination="y6q-c6-GFt" id="cbS-Nq-yxF"/>
+                <outlet property="StartDateTimeView" destination="20a-lH-1QG" id="qlw-kW-3hO"/>
                 <outlet property="StartTimeLabel" destination="aSd-9a-u9n" id="n7W-Gr-Fg5"/>
                 <outlet property="TagsLabel" destination="CbI-xx-4Aq" id="nCm-54-GIU"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>

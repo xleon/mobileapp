@@ -169,5 +169,10 @@ namespace Toggl.Daneel
         {
             color.ToNativeColor();
         }
+
+        public void Include(MvxUIDatePickerDateTargetBinding binding)
+        {
+            binding = new MvxUIDatePickerDateTargetBinding(null, null);
+        }
     }
 }
