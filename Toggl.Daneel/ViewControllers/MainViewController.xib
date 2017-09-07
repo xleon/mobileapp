@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -145,11 +146,11 @@ TO SEE THE LOG</string>
                             <state key="normal" image="icArrowUp"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ddo-IW-xE3">
-                            <rect key="frame" x="330" y="11" width="34" height="34"/>
+                            <rect key="frame" x="319" y="0.0" width="56" height="56"/>
                             <accessibility key="accessibilityConfiguration" label="MainStopTimeEntry"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="34" id="cJZ-zk-6qM"/>
-                                <constraint firstAttribute="height" constant="34" id="urN-jP-06M"/>
+                                <constraint firstAttribute="width" constant="56" id="cJZ-zk-6qM"/>
+                                <constraint firstAttribute="height" constant="56" id="urN-jP-06M"/>
                             </constraints>
                             <state key="normal" image="stopIcon"/>
                         </button>
@@ -164,7 +165,7 @@ TO SEE THE LOG</string>
                     <constraints>
                         <constraint firstItem="qpc-Yb-DcP" firstAttribute="centerY" secondItem="vou-B4-go4" secondAttribute="centerY" constant="-4" id="3oY-17-nBu"/>
                         <constraint firstItem="0J7-Pj-geT" firstAttribute="top" secondItem="vou-B4-go4" secondAttribute="top" constant="12" id="E1E-1G-lz6"/>
-                        <constraint firstAttribute="trailing" secondItem="Ddo-IW-xE3" secondAttribute="trailing" constant="11" id="I2f-56-ZfV"/>
+                        <constraint firstAttribute="trailing" secondItem="Ddo-IW-xE3" secondAttribute="trailing" id="I2f-56-ZfV"/>
                         <constraint firstItem="qpc-Yb-DcP" firstAttribute="leading" secondItem="vou-B4-go4" secondAttribute="leading" id="JQx-SZ-5dm"/>
                         <constraint firstItem="Ddo-IW-xE3" firstAttribute="centerY" secondItem="vou-B4-go4" secondAttribute="centerY" constant="-4" id="bLM-7i-XMM"/>
                         <constraint firstItem="edS-73-7O7" firstAttribute="centerX" secondItem="vou-B4-go4" secondAttribute="centerX" id="bhV-fd-XD9"/>
