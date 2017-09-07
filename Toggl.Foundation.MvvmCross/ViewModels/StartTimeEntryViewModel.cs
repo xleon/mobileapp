@@ -89,7 +89,24 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     var description = timeEntrySuggestion.Description;
 
                     ProjectId = timeEntrySuggestion.ProjectId;
-                    TextFieldInfo = new TextFieldInfo(description, description.Length);
+                    TextFieldInfo = new TextFieldInfo(
+                        description,
+                        description.Length,
+                        timeEntrySuggestion.ProjectName,
+                        timeEntrySuggestion.ProjectColor
+                    );
+
+                    break;
+
+                case ProjectSuggestionViewModel projectSuggestion:
+                    
+                    removeProjectQueryFromDescriptionIfNeeded();
+
+                    ProjectId = projectSuggestion.ProjectId;
+                    TextFieldInfo = TextFieldInfo.WithProjectInfo(
+                        projectSuggestion.ProjectName, 
+                        projectSuggestion.ProjectColor
+                    );
                     break;
             }
         }
@@ -111,27 +128,30 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         
         private void OnTextFieldInfoChanged()
         {
-            var (queryText, suggestionType) = parseQuery(TextFieldInfo.Text);
+            if (string.IsNullOrEmpty(TextFieldInfo.ProjectName))
+                ProjectId = null;
+
+            var (queryText, suggestionType) = parseQuery(TextFieldInfo);
 
             var wordsToQuery = queryText.Split(' ').Where(word => !string.IsNullOrEmpty(word)).Distinct();
             querySubject.OnNext((wordsToQuery, suggestionType));
         }
 
-        private (string, SuggestionType) parseQuery(string text)
+        private (string, SuggestionType) parseQuery(TextFieldInfo info)
         {
-            if (string.IsNullOrEmpty(TextFieldInfo.Text)) 
-                return (text, SuggestionType.TimeEntries);
+            if (string.IsNullOrEmpty(TextFieldInfo.Text) || ProjectId != null) 
+                return (info.Text, SuggestionType.TimeEntries);
 
-            var stringToSearch = text.Substring(0, TextFieldInfo.CursorPosition);
+            var stringToSearch = info.Text.Substring(0, info.DescriptionCursorPosition);
             var indexOfQuerySymbol = stringToSearch.LastIndexOfAny(querySymbols);
             if (indexOfQuerySymbol >= 0)
             {
                 var startingIndex = indexOfQuerySymbol + 1;
-                var stringLength = TextFieldInfo.Text.Length - indexOfQuerySymbol - 1;
-                return (text.Substring(startingIndex, stringLength), SuggestionType.Projects);
+                var stringLength = info.Text.Length - indexOfQuerySymbol - 1;
+                return (info.Text.Substring(startingIndex, stringLength), SuggestionType.Projects);
             }
 
-            return (text, SuggestionType.TimeEntries);
+            return (info.Text, SuggestionType.TimeEntries);
         }
 
         private void toggleProjectSuggestions()
@@ -141,7 +161,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 removeProjectQueryFromDescriptionIfNeeded();
                 return;
             }
-            
+
+            if (ProjectId != null)
+            {
+                querySubject.OnNext((Enumerable.Empty<string>(), SuggestionType.Projects));
+                return;
+            }
+
             var newText = TextFieldInfo.Text.Insert(TextFieldInfo.CursorPosition, "@");
             TextFieldInfo = new TextFieldInfo(newText, TextFieldInfo.CursorPosition + 1);
         }

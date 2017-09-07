@@ -54,7 +54,7 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.ElapsedTime)
                       .WithConversion(timeSpanConverter);
 
-            bindingSet.Bind(DescriptionTextField)
+            bindingSet.Bind(DescriptionTextView)
                       .For(v => v.BindTextFieldInfo())
                       .To(vm => vm.TextFieldInfo);
 
@@ -108,11 +108,8 @@ namespace Toggl.Daneel.ViewControllers
                 new UIStringAttributes { ForegroundColor = Color.StartTimeEntry.Placeholder.ToNativeColor() }.Dictionary
             );
 
-            DescriptionTextField.TintColor = Color.StartTimeEntry.Cursor.ToNativeColor();
-            DescriptionTextField.AttributedPlaceholder =
-                new NSAttributedString(Resources.StartTimeEntryPlaceholder, stringAttributes);
-
-            DescriptionTextField.BecomeFirstResponder();
+            DescriptionTextView.TintColor = Color.StartTimeEntry.Cursor.ToNativeColor();
+            DescriptionTextView.BecomeFirstResponder();
         }
 
         private IEnumerable<UIButton> getButtons()

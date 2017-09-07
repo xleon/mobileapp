@@ -36,7 +36,7 @@ namespace Toggl.Daneel.ViewControllers
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField DescriptionTextField { get; set; }
+        Toggl.Daneel.Views.TimeEntryTagsTextView DescriptionTextView { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -85,9 +85,9 @@ namespace Toggl.Daneel.ViewControllers
                 DateTimeButton = null;
             }
 
-            if (DescriptionTextField != null) {
-                DescriptionTextField.Dispose ();
-                DescriptionTextField = null;
+            if (DescriptionTextView != null) {
+                DescriptionTextView.Dispose ();
+                DescriptionTextView = null;
             }
 
             if (DoneButton != null) {

@@ -38,7 +38,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions
             ProjectColor = "#A3A3A3";
         }
 
-        private ProjectSuggestionViewModel(IDatabaseProject project)
+        public ProjectSuggestionViewModel(IDatabaseProject project)
         {
             ProjectId = project.Id;
             ProjectName = project.Name;

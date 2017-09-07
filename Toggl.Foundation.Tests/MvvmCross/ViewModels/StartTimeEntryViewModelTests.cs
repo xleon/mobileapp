@@ -20,8 +20,23 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         public abstract class StartTimeEntryViewModelTest : BaseViewModelTests<StartTimeEntryViewModel>
         {
+            protected const long ProjectId = 10;
+            protected const string ProjectName = "Toggl";
+            protected const string ProjectColor = "#F41F19";
+            protected const string Description = "Testing Toggl mobile apps";
+
             protected override StartTimeEntryViewModel CreateViewModel()
                 => new StartTimeEntryViewModel(DataSource, TimeService, NavigationService);
+
+            protected void SelectProjectViaSuggestion()
+            {
+                var project = Substitute.For<IDatabaseProject>();
+                project.Id.Returns(ProjectId);
+                project.Name.Returns(ProjectName);
+                project.Color.Returns(ProjectColor);
+                var suggestion = new ProjectSuggestionViewModel(project);
+                ViewModel.SelectSuggestionCommand.Execute(suggestion);
+            }
         }
 
         public sealed class TheConstructor : StartTimeEntryViewModelTest
@@ -82,6 +97,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheToggleProjectSuggestionsCommandCommand : StartTimeEntryViewModelTest
         {
+            [Fact]
+            public async Task StartProjectSuggestionEvenIfTheProjectHasAlreadyBeenSelected()
+            {
+                await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                SelectProjectViaSuggestion();
+
+                ViewModel.ToggleProjectSuggestionsCommand.Execute();
+
+                ViewModel.IsSuggestingProjects.Should().BeTrue();
+                await DataSource.Projects.Received().GetAll();
+            }
+
             [Fact]
             public async Task SetsTheIsSuggestingProjectsPropertyToTrueIfNotInProjectSuggestionMode()
             {
@@ -185,41 +212,126 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheSelectSuggestionCommand
         {
-            public sealed class WhenSelectingATimeEntrySuggestion : StartTimeEntryViewModelTest
+            public abstract class SelectSuggestionTest<TSuggestion> : StartTimeEntryViewModelTest
+                where TSuggestion : BaseTimeEntrySuggestionViewModel
             {
+                protected IDatabaseProject Project { get; }
+                protected IDatabaseTimeEntry TimeEntry { get; }
+
+                protected abstract TSuggestion Suggestion { get; }
+
+                protected SelectSuggestionTest()
+                {
+                    Project = Substitute.For<IDatabaseProject>();
+                    Project.Id.Returns(ProjectId);
+                    Project.Name.Returns(ProjectName);
+                    Project.Color.Returns(ProjectColor);
+                    TimeEntry = Substitute.For<IDatabaseTimeEntry>();
+                    TimeEntry.Description.Returns(Description);
+                    TimeEntry.Project.Returns(Project);
+                }
+            }
+
+            public sealed class WhenSelectingATimeEntrySuggestion : SelectSuggestionTest<TimeEntrySuggestionViewModel>
+            {
+                protected override TimeEntrySuggestionViewModel Suggestion { get; }
+
+                public WhenSelectingATimeEntrySuggestion()
+                {
+                    Suggestion = new TimeEntrySuggestionViewModel(TimeEntry);
+                }
+
                 [Fact]
                 public void SetsTheTextFieldInfoTextToTheValueOfTheSuggestedDescription()
                 {
-                    const string description = "Testing Toggl mobile apps";
-                    var timeEntry = Substitute.For<IDatabaseTimeEntry>();
-                    timeEntry.Description.Returns(description);
-                    var suggestion = new TimeEntrySuggestionViewModel(timeEntry);
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
 
-                    ViewModel.SelectSuggestionCommand.Execute(suggestion);
-
-                    ViewModel.TextFieldInfo.Text.Should().Be(description);
+                    ViewModel.TextFieldInfo.Text.Should().Be(Description);
                 }
 
                 [Fact]
                 public void SetsTheProjectIdToTheSuggestedProjectId()
                 {
-                    const long projectId = 10;
-                    var project = Substitute.For<IDatabaseProject>();
-                    project.Id.Returns(projectId);
-                    var timeEntry = Substitute.For<IDatabaseTimeEntry>();
-                    timeEntry.Description.Returns("");
-                    timeEntry.Project.Returns(project);
-                    var suggestion = new TimeEntrySuggestionViewModel(timeEntry);
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
 
-                    ViewModel.SelectSuggestionCommand.Execute(suggestion);
+                    ViewModel.ProjectId.Should().Be(ProjectId);
+                }
 
-                    ViewModel.ProjectId.Should().Be(projectId);
+                [Fact]
+                public void SetsTheProjectNameToTheSuggestedProjectName()
+                {
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.TextFieldInfo.ProjectName.Should().Be(ProjectName);
+                }
+
+                [Fact]
+                public void SetsTheProjectColorToTheSuggestedProjectColor()
+                {
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.TextFieldInfo.ProjectColor.Should().Be(ProjectColor);
+                }
+            }
+
+            public sealed class WhenSelectingAProjectSuggestion : SelectSuggestionTest<ProjectSuggestionViewModel>
+            {
+                protected override ProjectSuggestionViewModel Suggestion { get; }
+
+                public WhenSelectingAProjectSuggestion()
+                {
+                    Suggestion = new ProjectSuggestionViewModel(Project);
+
+                    ViewModel.TextFieldInfo = new TextFieldInfo("Something @togg", 15);
+                }
+
+                [Fact]
+                public void RemovesTheProjectQueryFromTheTextFieldInfo()
+                {
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.TextFieldInfo.Text.Should().Be("Something ");
+                }
+
+                [Fact]
+                public void SetsTheProjectIdToTheSuggestedProjectId()
+                {
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.ProjectId.Should().Be(ProjectId);
+                }
+
+                [Fact]
+                public void SetsTheProjectNameToTheSuggestedProjectName()
+                {
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.TextFieldInfo.ProjectName.Should().Be(ProjectName);
+                }
+
+                [Fact]
+                public void SetsTheProjectColorToTheSuggestedProjectColor()
+                {
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.TextFieldInfo.ProjectColor.Should().Be(ProjectColor);
                 }
             }
         }
 
-        public sealed class TheTextFieldInfoProperty
+        public sealed class TheTextFieldInfoProperty : StartTimeEntryViewModelTest
         {
+            [Fact]
+            public async Task RemovesTheProjectIdWhenTheProjectNameIsDeletedFromTheTextField()
+            {
+                await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                SelectProjectViaSuggestion();
+
+                ViewModel.TextFieldInfo = ViewModel.TextFieldInfo.WithProjectInfo("", "");
+
+                ViewModel.ProjectId.Should().BeNull();
+            }
+
             public sealed class QueriesTheDatabaseForTimeEntries : StartTimeEntryViewModelTest
             {
                 [Theory]
@@ -228,8 +340,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 public async Task WhenTheUserBeginsTypingADescription(string description)
                 {
                     var textFieldInfo = new TextFieldInfo(description, 0);
-
                     await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
+
                     ViewModel.TextFieldInfo = textFieldInfo;
 
                     await DataSource.TimeEntries.Received().GetAll();
@@ -246,6 +358,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
                     ViewModel.TextFieldInfo = textFieldInfo;
+
+                    await DataSource.TimeEntries.Received().GetAll();
+                }
+
+                [Fact]
+                public async Task WhenTheUserHasAlreadySelectedAProjectAndTypesTheAtSymbol()
+                {
+                    await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                    SelectProjectViaSuggestion();
+                    var description = $"Testing Mobile Apps @toggl";
+
+                    ViewModel.TextFieldInfo = 
+                        ViewModel.TextFieldInfo.WithTextAndCursor(description, description.Length);
 
                     await DataSource.TimeEntries.Received().GetAll();
                 }
