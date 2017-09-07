@@ -1,0 +1,22 @@
+﻿using System;
+using System.Reactive.Linq;
+using Toggl.Foundation.Models;
+using Toggl.PrimeRadiant;
+using Toggl.PrimeRadiant.Models;
+using Toggl.Ultrawave;
+
+namespace Toggl.Foundation.Sync.States
+{
+    internal sealed class CreateTimeEntryState : BaseCreateEntityState<IDatabaseTimeEntry>
+    {
+        public CreateTimeEntryState(ITogglApi api, ITogglDatabase database) : base(api, database)
+        {
+        }
+
+        protected override IObservable<IDatabaseTimeEntry> Create(ITogglApi api, IDatabaseTimeEntry entity)
+            => api.TimeEntries.Create(entity).Select(TimeEntry.Clean);
+
+        protected override IRepository<IDatabaseTimeEntry> GetRepository(ITogglDatabase database)
+            => database.TimeEntries;
+    }
+}

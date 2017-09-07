@@ -213,6 +213,8 @@
     <Compile Include="Sync\States\Pull\PersistStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistTimeEntriesStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistWorkspacesStateTests.cs" />
+    <Compile Include="Sync\States\Push\BaseCreateEntityStateTests.cs" />
+    <Compile Include="Sync\States\Push\CreateTimeEntryTests.cs" />
     <Compile Include="Sync\States\Push\BasePushEntityStateTests.cs" />
     <Compile Include="Sync\States\Push\TestModel.cs" />
   </ItemGroup>
