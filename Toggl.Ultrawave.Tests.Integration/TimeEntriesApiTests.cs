@@ -103,6 +103,137 @@ namespace Toggl.Ultrawave.Tests.Integration
                 => togglApi.TimeEntries.Create(client);
         }
 
+        public sealed class TheUpdateMethod : AuthenticatedPutEndpointBaseTests<ITimeEntry>
+        {
+            [Fact(Skip = "A bug in staging API which causes BadRequest 400: 'Invalid tag_ids'"), LogTestInfo] // TODO: when removing this test skip, also fix "CallEndpointWith"
+            public async Task UpdatesExistingTimeEntry()
+            {
+                var (togglClient, user) = await SetupTestUser();
+                var timeEntry = createTimeEntry(user);
+                var persistedTimeEntry = await togglClient.TimeEntries.Create(timeEntry);
+                var timeEntryWithUpdates = new Ultrawave.Models.TimeEntry
+                {
+                    Id = persistedTimeEntry.Id,
+                    Description = Guid.NewGuid().ToString(),
+                    WorkspaceId = persistedTimeEntry.WorkspaceId,
+                    Billable = persistedTimeEntry.Billable,
+                    Start = persistedTimeEntry.Start,
+                    Stop = persistedTimeEntry.Stop,
+                    TagIds = persistedTimeEntry.TagIds,
+                    UserId = persistedTimeEntry.UserId,
+                    CreatedWith = persistedTimeEntry.CreatedWith
+                };
+
+                var updatedTimeEntry = await togglClient.TimeEntries.Update(timeEntryWithUpdates);
+
+                updatedTimeEntry.Id.Should().Be(persistedTimeEntry.Id);
+                updatedTimeEntry.Description.Should().Be(timeEntryWithUpdates.Description);
+                updatedTimeEntry.WorkspaceId.Should().Be(persistedTimeEntry.WorkspaceId);
+                updatedTimeEntry.Billable.Should().Be(false);
+                updatedTimeEntry.ProjectId.Should().BeNull();
+                updatedTimeEntry.TaskId.Should().BeNull();
+            }
+
+            [Fact, LogTestInfo]
+            public async Task UpdatingFailsWhenWorkspaceHasNoTags()
+            {
+                var (togglClient, user) = await SetupTestUser();
+                var timeEntry = createTimeEntry(user);
+                var persistedTimeEntry = await togglClient.TimeEntries.Create(timeEntry);
+                var timeEntryWithUpdates = new TimeEntry
+                {
+                    Id = persistedTimeEntry.Id,
+                    Description = Guid.NewGuid().ToString(),
+                    WorkspaceId = persistedTimeEntry.WorkspaceId,
+                    Billable = persistedTimeEntry.Billable,
+                    Start = persistedTimeEntry.Start,
+                    Stop = persistedTimeEntry.Stop,
+                    TagIds = new List<long>(),
+                    UserId = persistedTimeEntry.UserId,
+                    CreatedWith = persistedTimeEntry.CreatedWith
+                };
+
+                Action tryToUpdate = () => togglClient.TimeEntries.Update(timeEntryWithUpdates).SingleAsync().Wait();
+
+                tryToUpdate.ShouldThrow<BadRequestException>();
+            }
+
+            [Fact, LogTestInfo]
+            public async Task AddTagsToAnExistingTimeEntry()
+            {
+                var (togglClient, user) = await SetupTestUser();
+                var timeEntry = createTimeEntry(user);
+                var persistedTimeEntry = await togglClient.TimeEntries.Create(timeEntry);
+                var tag = await togglClient.Tags.Create(new Models.Tag { Name = Guid.NewGuid().ToString(), WorkspaceId = user.DefaultWorkspaceId });
+                var timeEntryWithUpdates = new TimeEntry
+                {
+                    Id = persistedTimeEntry.Id,
+                    Description = Guid.NewGuid().ToString(),
+                    WorkspaceId = persistedTimeEntry.WorkspaceId,
+                    Billable = persistedTimeEntry.Billable,
+                    Start = persistedTimeEntry.Start,
+                    Stop = persistedTimeEntry.Stop,
+                    TagIds = new List<long> { tag.Id },
+                    UserId = persistedTimeEntry.UserId,
+                    CreatedWith = persistedTimeEntry.CreatedWith
+                };
+
+                var updatedTimeEntry = await togglClient.TimeEntries.Update(timeEntryWithUpdates);
+
+                updatedTimeEntry.Id.Should().Be(persistedTimeEntry.Id);
+                updatedTimeEntry.Description.Should().Be(timeEntryWithUpdates.Description);
+                updatedTimeEntry.WorkspaceId.Should().Be(persistedTimeEntry.WorkspaceId);
+                updatedTimeEntry.Billable.Should().Be(false);
+                updatedTimeEntry.ProjectId.Should().BeNull();
+                updatedTimeEntry.TaskId.Should().BeNull();
+                updatedTimeEntry.TagIds.Count.Should().Be(1);
+                updatedTimeEntry.TagIds[0].Should().Be(tag.Id);
+                updatedTimeEntry.TagNames.Count.Should().Be(1);
+                updatedTimeEntry.TagNames[0].Should().Be(tag.Name);
+            }
+
+            [Fact, LogTestInfo]
+            public async Task ThrowsWhenTagIdsIsNull()
+            {
+                var (togglClient, user) = await SetupTestUser();
+                var timeEntry = createTimeEntry(user);
+                var persistedTimeEntry = await togglClient.TimeEntries.Create(timeEntry);
+                timeEntry.Id = persistedTimeEntry.Id;
+                timeEntry.TagIds = null;
+
+                Action put = () => togglClient.TimeEntries.Update(timeEntry).Wait();
+
+                put.ShouldThrow<BadRequestException>();
+            }
+
+            protected override IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi)
+                => Observable.Defer(async () =>
+                {
+                    var user = await togglApi.User.Get();
+                    var timeEntry = createTimeEntry(user);
+                    var persistedTimeEntry = await togglApi.TimeEntries.Create(timeEntry);
+                    var timeEntryWithUpdates = new TimeEntry
+                    {
+                        Id = persistedTimeEntry.Id,
+                        Description = Guid.NewGuid().ToString(),
+                        WorkspaceId = persistedTimeEntry.WorkspaceId,
+                        Billable = persistedTimeEntry.Billable,
+                        Start = persistedTimeEntry.Start,
+                        Stop = persistedTimeEntry.Stop,
+                        TagIds = persistedTimeEntry.TagIds,
+                        UserId = persistedTimeEntry.UserId,
+                        CreatedWith = persistedTimeEntry.CreatedWith
+                    };
+
+                    await togglApi.Tags.Create(new Ultrawave.Models.Tag { WorkspaceId = persistedTimeEntry.WorkspaceId, Name = "hack" });  // TODO: remove when the API bug is fixed
+
+                    return CallEndpointWith(togglApi, timeEntryWithUpdates);
+                });
+
+            private IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi, TimeEntry timeEntry)
+                => togglApi.TimeEntries.Update(timeEntry);
+        }
+
         private static TimeEntry createTimeEntry(IUser user) => new TimeEntry
         {
             WorkspaceId = user.DefaultWorkspaceId,

@@ -24,10 +24,15 @@ namespace Toggl.Ultrawave.ApiClients
             => CreateListObservable<TimeEntry, ITimeEntry>(endPoints.GetSince(threshold), AuthHeader);
 
         public IObservable<ITimeEntry> Create(ITimeEntry timeEntry)
+            => pushTimeEntry(endPoints.Post(timeEntry.WorkspaceId), timeEntry, SerializationReason.Post);
+
+        public IObservable<ITimeEntry> Update(ITimeEntry timeEntry)
+            => pushTimeEntry(endPoints.Put(timeEntry.WorkspaceId, timeEntry.Id), timeEntry, SerializationReason.Default);
+
+        private IObservable<ITimeEntry> pushTimeEntry(Endpoint endPoint, ITimeEntry timeEntry, SerializationReason reason)
         {
-            var endPoint = endPoints.Post(timeEntry.WorkspaceId);
             var timeEntryCopy = timeEntry as TimeEntry ?? new TimeEntry(timeEntry);
-            var observable = CreateObservable(endPoint, AuthHeader, timeEntryCopy, SerializationReason.Post);
+            var observable = CreateObservable(endPoint, AuthHeader, timeEntryCopy, reason);
             return observable;
         }
     }

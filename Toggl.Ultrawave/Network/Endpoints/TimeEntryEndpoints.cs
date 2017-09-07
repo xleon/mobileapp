@@ -19,5 +19,8 @@ namespace Toggl.Ultrawave.Network
 
         public Endpoint Post(long workspaceId)
             => Endpoint.Post(baseUrl, $"workspaces/{workspaceId}/time_entries");
+
+        public Endpoint Put(long workspaceId, long timeEntryId)
+            => Endpoint.Put(baseUrl, $"workspaces/{workspaceId}/time_entries/{timeEntryId}");
     }
 }

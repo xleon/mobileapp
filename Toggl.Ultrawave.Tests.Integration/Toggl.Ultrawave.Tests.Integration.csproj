@@ -165,6 +165,7 @@
     <Compile Include="LogTestInfoAttribute.cs" />
     <Compile Include="Helper\Configuration.cs" />
     <Compile Include="Helper\TestUserCredentials.cs" />
+    <Compile Include="BaseTests\AuthenticatedPutEndpointBaseTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">
