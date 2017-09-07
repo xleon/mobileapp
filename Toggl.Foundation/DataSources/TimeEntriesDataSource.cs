@@ -96,7 +96,7 @@ namespace Toggl.Foundation.DataSources
 
         private void onTimeEntryStopped(IDatabaseTimeEntry timeEntry)
         {
-            timeEntryUpdatedSubject.OnNext(TimeEntry.Dirty(timeEntry));
+            timeEntryUpdatedSubject.OnNext(timeEntry);
             safeSetCurrentlyRunningTimeEntry(null);
         }
 
@@ -105,7 +105,7 @@ namespace Toggl.Foundation.DataSources
             
         private void safeSetCurrentlyRunningTimeEntry(IDatabaseTimeEntry timeEntry)
         {
-            var next = timeEntry == null ? null : TimeEntry.Clean(timeEntry);
+            var next = timeEntry == null ? null : TimeEntry.From(timeEntry);
             currentTimeEntrySubject.OnNext(next);
         }
 
