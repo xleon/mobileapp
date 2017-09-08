@@ -48,7 +48,7 @@ namespace Toggl.Foundation.Models
             WriteLine($"        public {line.Trim()}\n");
         }
 
-        var expectedInterfaceFile = $"{ databaseModelDirectory }/IDatabase{ className }.cs";
+        var expectedInterfaceFile = Path.Combine(databaseModelDirectory, $"IDatabase{className}.cs");
         var interfaceFile = databaseInterfaces.FirstOrDefault(i => i == expectedInterfaceFile);
         if (interfaceFile != null)
         {
