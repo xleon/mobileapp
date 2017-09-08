@@ -80,7 +80,7 @@ namespace Toggl.Foundation.Tests.Sync.States
         }
 
         internal abstract class TheStartMethod<TState, TInterface, TDatabaseInterface> : ITheStartMethodHelper
-            where TDatabaseInterface : TInterface
+            where TDatabaseInterface : TInterface, IBaseModel
             where TState : BasePersistState<TInterface, TDatabaseInterface>
         {
             private readonly ITogglDatabase database;

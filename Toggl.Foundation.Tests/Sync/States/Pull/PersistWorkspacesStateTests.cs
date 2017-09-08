@@ -78,8 +78,8 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             protected override void AssertBatchUpdateWasCalled(ITogglDatabase database, List<IWorkspace> workspaces = null)
             {
-                database.Workspaces.Received().BatchUpdate(Arg.Is<IEnumerable<IDatabaseWorkspace>>(
-                        list => list.Count() == workspaces.Count && list.All(shouldBePersistedAndIsClean(workspaces))),
+                database.Workspaces.Received().BatchUpdate(Arg.Is<IEnumerable<(long, IDatabaseWorkspace Workspace)>>(
+                        list => list.Count() == workspaces.Count && list.Select(pair => pair.Workspace).All(shouldBePersistedAndIsClean(workspaces))),
                     Arg.Any<Func<IDatabaseWorkspace, IDatabaseWorkspace, ConflictResolutionMode>>());
             }
 

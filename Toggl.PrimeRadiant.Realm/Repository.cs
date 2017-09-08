@@ -25,7 +25,7 @@ namespace Toggl.PrimeRadiant.Realm
                 .Catch<TModel, Exception>(ex => Observable.Throw<TModel>(new DatabaseException(ex)));
         }
         
-        public IObservable<IEnumerable<TModel>> BatchUpdate(IEnumerable<TModel> entities, Func<TModel, TModel, ConflictResolutionMode> conflictResolution)
+        public IObservable<IEnumerable<TModel>> BatchUpdate(IEnumerable<(long Id, TModel Entity)> entities, Func<TModel, TModel, ConflictResolutionMode> conflictResolution)
         {
             Ensure.Argument.IsNotNull(entities, nameof(entities));
             Ensure.Argument.IsNotNull(conflictResolution, nameof(conflictResolution));
@@ -40,7 +40,7 @@ namespace Toggl.PrimeRadiant.Realm
             where TRealmEntity : RealmObject, TModel, IUpdatesFrom<TModel>
             => new Repository<TModel>(new RealmAdapter<TRealmEntity, TModel>(convertToRealm));
 
-        private static Expression<Func<TModel, bool>> matchById(TModel model)
-            => x => x.Id == model.Id;
+        private static Expression<Func<TModel, bool>> matchById((long Id, TModel _) update)
+            => x => x.Id == update.Id;
     }
 }

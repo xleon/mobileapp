@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Sync.States
 {
     internal abstract class BasePersistState<TInterface, TDatabaseInterface>
-        where TDatabaseInterface : TInterface
+        where TDatabaseInterface : TInterface, IBaseModel
     {
         private readonly ITogglDatabase database;
 
@@ -26,7 +27,7 @@ namespace Toggl.Foundation.Sync.States
                 .SingleAsync()
                 .Select(entities => entities.Select(ConvertToDatabaseEntity).ToList())
                 .SelectMany(databaseEntities => 
-                    BatchUpdate(database, databaseEntities)
+                    BatchUpdate(database, databaseEntities.Select(entity => (entity.Id, entity)))
                         .IgnoreElements()
                         .Concat(Observable.Return(databaseEntities)))
                 .Select(databaseEntities => LastUpdated(since, databaseEntities))
@@ -40,7 +41,7 @@ namespace Toggl.Foundation.Sync.States
 
         protected abstract TDatabaseInterface ConvertToDatabaseEntity(TInterface entity);
 
-        protected abstract IObservable<IEnumerable<TDatabaseInterface>> BatchUpdate(ITogglDatabase database, IEnumerable<TDatabaseInterface> entities);
+        protected abstract IObservable<IEnumerable<TDatabaseInterface>> BatchUpdate(ITogglDatabase database, IEnumerable<(long, TDatabaseInterface)> entities);
 
         protected abstract DateTimeOffset? LastUpdated(ISinceParameters old, IEnumerable<TDatabaseInterface> entities);
 

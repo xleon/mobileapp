@@ -82,8 +82,8 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             protected override void AssertBatchUpdateWasCalled(ITogglDatabase database, List<ITimeEntry> timeEntries = null)
             {
-                database.TimeEntries.Received().BatchUpdate(Arg.Is<IEnumerable<IDatabaseTimeEntry>>(
-                        list => list.Count() == timeEntries.Count && list.All(shouldBePersistedAndIsClean(timeEntries))),
+                database.TimeEntries.Received().BatchUpdate(Arg.Is<IEnumerable<(long, IDatabaseTimeEntry TimeEntry)>>(
+                        list => list.Count() == timeEntries.Count && list.Select(pair => pair.TimeEntry).All(shouldBePersistedAndIsClean(timeEntries))),
                     Arg.Any<Func<IDatabaseTimeEntry, IDatabaseTimeEntry, ConflictResolutionMode>>());
             }
 

@@ -19,7 +19,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         TModel Update(long id, TModel entity);
 
-        IEnumerable<TModel> BatchUpdate(IEnumerable<TModel> entities, Func<TModel, Expression<Func<TModel, bool>>> matchEntity, Func<TModel, TModel, ConflictResolutionMode> conflictResolution);
+        IEnumerable<TModel> BatchUpdate(IEnumerable<(long Id, TModel Entity)> batch, Func<(long Id, TModel Entity), Expression<Func<TModel, bool>>> matchEntity, Func<TModel, TModel, ConflictResolutionMode> conflictResolution);
     }
 
     internal sealed class RealmAdapter<TRealmEntity, TModel> : IRealmAdapter<TModel>
@@ -52,9 +52,9 @@ namespace Toggl.PrimeRadiant.Realm
             return doModyfingTransaction(id, (realm, realmEntity) => realmEntity.SetPropertiesFrom(entity, realm));
         }
 
-        public IEnumerable<TModel> BatchUpdate(IEnumerable<TModel> entities, Func<TModel, Expression<Func<TModel, bool>>> matchEntity, Func<TModel, TModel, ConflictResolutionMode> conflictResolution)
+        public IEnumerable<TModel> BatchUpdate(IEnumerable<(long Id, TModel Entity)> batch, Func<(long Id, TModel Entity), Expression<Func<TModel, bool>>> matchEntity, Func<TModel, TModel, ConflictResolutionMode> conflictResolution)
         {
-            Ensure.Argument.IsNotNull(entities, nameof(entities));
+            Ensure.Argument.IsNotNull(batch, nameof(batch));
             Ensure.Argument.IsNotNull(matchEntity, nameof(matchEntity));
             Ensure.Argument.IsNotNull(conflictResolution, nameof(conflictResolution));
 
@@ -65,11 +65,11 @@ namespace Toggl.PrimeRadiant.Realm
             {
                 var realmEntities = realm.All<TRealmEntity>();
 
-                foreach (var entity in entities)
+                foreach (var updated in batch)
                 {
-                    var oldEntity = (TRealmEntity)realmEntities.SingleOrDefault(matchEntity(entity));
-                    var resolveMode = conflictResolution(oldEntity, entity);
-                    var resolvedEntity = resolveEntity(realm, oldEntity, entity, resolveMode);
+                    var oldEntity = (TRealmEntity)realmEntities.SingleOrDefault(matchEntity(updated));
+                    var resolveMode = conflictResolution(oldEntity, updated.Entity);
+                    var resolvedEntity = resolveEntity(realm, oldEntity, updated.Entity, resolveMode);
 
                     if (resolvedEntity != null)
                     {

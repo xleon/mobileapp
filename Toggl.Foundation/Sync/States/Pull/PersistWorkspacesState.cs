@@ -22,7 +22,7 @@ namespace Toggl.Foundation.Sync.States
         protected override IDatabaseWorkspace ConvertToDatabaseEntity(IWorkspace entity)
             => Workspace.Clean(entity);
 
-        protected override IObservable<IEnumerable<IDatabaseWorkspace>> BatchUpdate(ITogglDatabase database, IEnumerable<IDatabaseWorkspace> entities)
+        protected override IObservable<IEnumerable<IDatabaseWorkspace>> BatchUpdate(ITogglDatabase database, IEnumerable<(long, IDatabaseWorkspace)> entities)
             => database.Workspaces.BatchUpdate(entities, Resolver.ForWorkspaces().Resolve);
 
         protected override DateTimeOffset? LastUpdated(ISinceParameters old, IEnumerable<IDatabaseWorkspace> entities)
