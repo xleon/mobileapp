@@ -58,6 +58,7 @@ namespace Toggl.PrimeRadiant.Realm
                 WriteLine( "            get { return (SyncStatus)SyncStatusInt; }");
                 WriteLine( "            set { SyncStatusInt = (int)value; }");
                 WriteLine( "        }\n");
+				WriteLine( "        public string LastSyncErrorMessage { get; set; }\n");
 
                 WriteLine($"        public {realmClassName}() {{ }}\n");
 
@@ -72,6 +73,7 @@ namespace Toggl.PrimeRadiant.Realm
                 if (databaseInterfaceExists)
                 {
                     WriteLine( "            SyncStatus = entity.SyncStatus;");
+					WriteLine( "            LastSyncErrorMessage = entity.LastSyncErrorMessage;");
                 }
 
                 if (extendsIBaseModel)

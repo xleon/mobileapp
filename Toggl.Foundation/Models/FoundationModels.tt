@@ -62,7 +62,8 @@ namespace Toggl.Foundation.Models
         }
 
         WriteLine("        public bool IsDeleted { get; }\n");
-        WriteLine("        public SyncStatus SyncStatus { get; }");
+        WriteLine("        public SyncStatus SyncStatus { get; }\n");
+        WriteLine("        public string LastSyncErrorMessage { get; }");
         WriteLine("    }");
 
         isFirstClass = false;

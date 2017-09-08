@@ -166,7 +166,7 @@ namespace Toggl.Foundation.Models
         }
 
         public TimeEntry(IDatabaseTimeEntry timeEntry, DateTimeOffset stop)
-            : this(timeEntry, SyncStatus.SyncNeeded)
+            : this(timeEntry, SyncStatus.SyncNeeded, null)
         {
             if (Start > stop)
                 throw new ArgumentOutOfRangeException(nameof(stop), "The stop date must be equal to or greater than the start date");

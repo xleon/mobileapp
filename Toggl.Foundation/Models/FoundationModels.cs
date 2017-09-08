@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
@@ -23,6 +23,8 @@ namespace Toggl.Foundation.Models
         public bool IsDeleted { get; }
 
         public SyncStatus SyncStatus { get; }
+
+        public string LastSyncErrorMessage { get; }
     }
 
     internal partial class Project : IDatabaseProject
@@ -66,6 +68,8 @@ namespace Toggl.Foundation.Models
         public bool IsDeleted { get; }
 
         public SyncStatus SyncStatus { get; }
+
+        public string LastSyncErrorMessage { get; }
     }
 
     internal partial class Tag : IDatabaseTag
@@ -83,6 +87,8 @@ namespace Toggl.Foundation.Models
         public bool IsDeleted { get; }
 
         public SyncStatus SyncStatus { get; }
+
+        public string LastSyncErrorMessage { get; }
     }
 
     internal partial class Task : IDatabaseTask
@@ -114,6 +120,8 @@ namespace Toggl.Foundation.Models
         public bool IsDeleted { get; }
 
         public SyncStatus SyncStatus { get; }
+
+        public string LastSyncErrorMessage { get; }
     }
 
     internal partial class TimeEntry : IDatabaseTimeEntry
@@ -157,6 +165,8 @@ namespace Toggl.Foundation.Models
         public bool IsDeleted { get; }
 
         public SyncStatus SyncStatus { get; }
+
+        public string LastSyncErrorMessage { get; }
     }
 
     internal partial class User : IDatabaseUser
@@ -200,6 +210,8 @@ namespace Toggl.Foundation.Models
         public bool IsDeleted { get; }
 
         public SyncStatus SyncStatus { get; }
+
+        public string LastSyncErrorMessage { get; }
     }
 
     internal partial class Workspace : IDatabaseWorkspace
@@ -237,5 +249,7 @@ namespace Toggl.Foundation.Models
         public bool IsDeleted { get; }
 
         public SyncStatus SyncStatus { get; }
+
+        public string LastSyncErrorMessage { get; }
     }
 }

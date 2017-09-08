@@ -7,17 +7,18 @@ namespace Toggl.Foundation.Models
     internal partial class Client
     {
         private Client(IDatabaseClient entity)
-            : this(entity as IClient, entity.SyncStatus, entity.IsDeleted)
+            : this(entity as IClient, entity.SyncStatus, entity.LastSyncErrorMessage, entity.IsDeleted)
         {
             Workspace = entity.Workspace == null ? null : Models.Workspace.From(entity.Workspace);
             SyncStatus = entity.SyncStatus;
+            LastSyncErrorMessage = entity.LastSyncErrorMessage;
             IsDeleted = entity.IsDeleted;
         }
 
         public static Client From(IDatabaseClient entity)
             => new Client(entity);
 
-        private Client(IClient entity, SyncStatus syncStatus, bool isDeleted = false)
+        private Client(IClient entity, SyncStatus syncStatus, string lastSyncErrorMessage, bool isDeleted = false)
         {
             Id = entity.Id;
             WorkspaceId = entity.WorkspaceId;
@@ -29,39 +30,40 @@ namespace Toggl.Foundation.Models
         }
 
         public static Client Clean(IClient entity)
-            => new Client(entity, SyncStatus.InSync);
+            => new Client(entity, SyncStatus.InSync, null);
 
         public static Client Dirty(IClient entity)
-            => new Client(entity, SyncStatus.SyncNeeded);
+            => new Client(entity, SyncStatus.SyncNeeded, null);
 
-        public static Client Unsyncable(IClient entity)
-            => new Client(entity, SyncStatus.SyncFailed);
+        public static Client Unsyncable(IClient entity, string errorMessage)
+            => new Client(entity, SyncStatus.SyncFailed, errorMessage);
 
         public static Client CleanDeleted(IClient entity)
-            => new Client(entity, SyncStatus.InSync, true);
+            => new Client(entity, SyncStatus.InSync, null, true);
 
         public static Client DirtyDeleted(IClient entity)
-            => new Client(entity, SyncStatus.SyncNeeded, true);
+            => new Client(entity, SyncStatus.SyncNeeded, null, true);
 
-        public static Client UnsyncableDeleted(IClient entity)
-            => new Client(entity, SyncStatus.SyncFailed, true);
+        public static Client UnsyncableDeleted(IClient entity, string errorMessage)
+            => new Client(entity, SyncStatus.SyncFailed, errorMessage, true);
     }
 
     internal partial class Project
     {
         private Project(IDatabaseProject entity)
-            : this(entity as IProject, entity.SyncStatus, entity.IsDeleted)
+            : this(entity as IProject, entity.SyncStatus, entity.LastSyncErrorMessage, entity.IsDeleted)
         {
             Client = entity.Client == null ? null : Models.Client.From(entity.Client);
             Workspace = entity.Workspace == null ? null : Models.Workspace.From(entity.Workspace);
             SyncStatus = entity.SyncStatus;
+            LastSyncErrorMessage = entity.LastSyncErrorMessage;
             IsDeleted = entity.IsDeleted;
         }
 
         public static Project From(IDatabaseProject entity)
             => new Project(entity);
 
-        private Project(IProject entity, SyncStatus syncStatus, bool isDeleted = false)
+        private Project(IProject entity, SyncStatus syncStatus, string lastSyncErrorMessage, bool isDeleted = false)
         {
             Id = entity.Id;
             WorkspaceId = entity.WorkspaceId;
@@ -84,38 +86,39 @@ namespace Toggl.Foundation.Models
         }
 
         public static Project Clean(IProject entity)
-            => new Project(entity, SyncStatus.InSync);
+            => new Project(entity, SyncStatus.InSync, null);
 
         public static Project Dirty(IProject entity)
-            => new Project(entity, SyncStatus.SyncNeeded);
+            => new Project(entity, SyncStatus.SyncNeeded, null);
 
-        public static Project Unsyncable(IProject entity)
-            => new Project(entity, SyncStatus.SyncFailed);
+        public static Project Unsyncable(IProject entity, string errorMessage)
+            => new Project(entity, SyncStatus.SyncFailed, errorMessage);
 
         public static Project CleanDeleted(IProject entity)
-            => new Project(entity, SyncStatus.InSync, true);
+            => new Project(entity, SyncStatus.InSync, null, true);
 
         public static Project DirtyDeleted(IProject entity)
-            => new Project(entity, SyncStatus.SyncNeeded, true);
+            => new Project(entity, SyncStatus.SyncNeeded, null, true);
 
-        public static Project UnsyncableDeleted(IProject entity)
-            => new Project(entity, SyncStatus.SyncFailed, true);
+        public static Project UnsyncableDeleted(IProject entity, string errorMessage)
+            => new Project(entity, SyncStatus.SyncFailed, errorMessage, true);
     }
 
     internal partial class Tag
     {
         private Tag(IDatabaseTag entity)
-            : this(entity as ITag, entity.SyncStatus, entity.IsDeleted)
+            : this(entity as ITag, entity.SyncStatus, entity.LastSyncErrorMessage, entity.IsDeleted)
         {
             Workspace = entity.Workspace == null ? null : Models.Workspace.From(entity.Workspace);
             SyncStatus = entity.SyncStatus;
+            LastSyncErrorMessage = entity.LastSyncErrorMessage;
             IsDeleted = entity.IsDeleted;
         }
 
         public static Tag From(IDatabaseTag entity)
             => new Tag(entity);
 
-        private Tag(ITag entity, SyncStatus syncStatus, bool isDeleted = false)
+        private Tag(ITag entity, SyncStatus syncStatus, string lastSyncErrorMessage, bool isDeleted = false)
         {
             Id = entity.Id;
             WorkspaceId = entity.WorkspaceId;
@@ -126,40 +129,41 @@ namespace Toggl.Foundation.Models
         }
 
         public static Tag Clean(ITag entity)
-            => new Tag(entity, SyncStatus.InSync);
+            => new Tag(entity, SyncStatus.InSync, null);
 
         public static Tag Dirty(ITag entity)
-            => new Tag(entity, SyncStatus.SyncNeeded);
+            => new Tag(entity, SyncStatus.SyncNeeded, null);
 
-        public static Tag Unsyncable(ITag entity)
-            => new Tag(entity, SyncStatus.SyncFailed);
+        public static Tag Unsyncable(ITag entity, string errorMessage)
+            => new Tag(entity, SyncStatus.SyncFailed, errorMessage);
 
         public static Tag CleanDeleted(ITag entity)
-            => new Tag(entity, SyncStatus.InSync, true);
+            => new Tag(entity, SyncStatus.InSync, null, true);
 
         public static Tag DirtyDeleted(ITag entity)
-            => new Tag(entity, SyncStatus.SyncNeeded, true);
+            => new Tag(entity, SyncStatus.SyncNeeded, null, true);
 
-        public static Tag UnsyncableDeleted(ITag entity)
-            => new Tag(entity, SyncStatus.SyncFailed, true);
+        public static Tag UnsyncableDeleted(ITag entity, string errorMessage)
+            => new Tag(entity, SyncStatus.SyncFailed, errorMessage, true);
     }
 
     internal partial class Task
     {
         private Task(IDatabaseTask entity)
-            : this(entity as ITask, entity.SyncStatus, entity.IsDeleted)
+            : this(entity as ITask, entity.SyncStatus, entity.LastSyncErrorMessage, entity.IsDeleted)
         {
             User = entity.User == null ? null : Models.User.From(entity.User);
             Project = entity.Project == null ? null : Models.Project.From(entity.Project);
             Workspace = entity.Workspace == null ? null : Models.Workspace.From(entity.Workspace);
             SyncStatus = entity.SyncStatus;
+            LastSyncErrorMessage = entity.LastSyncErrorMessage;
             IsDeleted = entity.IsDeleted;
         }
 
         public static Task From(IDatabaseTask entity)
             => new Task(entity);
 
-        private Task(ITask entity, SyncStatus syncStatus, bool isDeleted = false)
+        private Task(ITask entity, SyncStatus syncStatus, string lastSyncErrorMessage, bool isDeleted = false)
         {
             Id = entity.Id;
             Name = entity.Name;
@@ -175,41 +179,42 @@ namespace Toggl.Foundation.Models
         }
 
         public static Task Clean(ITask entity)
-            => new Task(entity, SyncStatus.InSync);
+            => new Task(entity, SyncStatus.InSync, null);
 
         public static Task Dirty(ITask entity)
-            => new Task(entity, SyncStatus.SyncNeeded);
+            => new Task(entity, SyncStatus.SyncNeeded, null);
 
-        public static Task Unsyncable(ITask entity)
-            => new Task(entity, SyncStatus.SyncFailed);
+        public static Task Unsyncable(ITask entity, string errorMessage)
+            => new Task(entity, SyncStatus.SyncFailed, errorMessage);
 
         public static Task CleanDeleted(ITask entity)
-            => new Task(entity, SyncStatus.InSync, true);
+            => new Task(entity, SyncStatus.InSync, null, true);
 
         public static Task DirtyDeleted(ITask entity)
-            => new Task(entity, SyncStatus.SyncNeeded, true);
+            => new Task(entity, SyncStatus.SyncNeeded, null, true);
 
-        public static Task UnsyncableDeleted(ITask entity)
-            => new Task(entity, SyncStatus.SyncFailed, true);
+        public static Task UnsyncableDeleted(ITask entity, string errorMessage)
+            => new Task(entity, SyncStatus.SyncFailed, errorMessage, true);
     }
 
     internal partial class TimeEntry
     {
         private TimeEntry(IDatabaseTimeEntry entity)
-            : this(entity as ITimeEntry, entity.SyncStatus, entity.IsDeleted)
+            : this(entity as ITimeEntry, entity.SyncStatus, entity.LastSyncErrorMessage, entity.IsDeleted)
         {
             Task = entity.Task == null ? null : Models.Task.From(entity.Task);
             User = entity.User == null ? null : Models.User.From(entity.User);
             Project = entity.Project == null ? null : Models.Project.From(entity.Project);
             Workspace = entity.Workspace == null ? null : Models.Workspace.From(entity.Workspace);
             SyncStatus = entity.SyncStatus;
+            LastSyncErrorMessage = entity.LastSyncErrorMessage;
             IsDeleted = entity.IsDeleted;
         }
 
         public static TimeEntry From(IDatabaseTimeEntry entity)
             => new TimeEntry(entity);
 
-        private TimeEntry(ITimeEntry entity, SyncStatus syncStatus, bool isDeleted = false)
+        private TimeEntry(ITimeEntry entity, SyncStatus syncStatus, string lastSyncErrorMessage, bool isDeleted = false)
         {
             Id = entity.Id;
             WorkspaceId = entity.WorkspaceId;
@@ -230,37 +235,38 @@ namespace Toggl.Foundation.Models
         }
 
         public static TimeEntry Clean(ITimeEntry entity)
-            => new TimeEntry(entity, SyncStatus.InSync);
+            => new TimeEntry(entity, SyncStatus.InSync, null);
 
         public static TimeEntry Dirty(ITimeEntry entity)
-            => new TimeEntry(entity, SyncStatus.SyncNeeded);
+            => new TimeEntry(entity, SyncStatus.SyncNeeded, null);
 
-        public static TimeEntry Unsyncable(ITimeEntry entity)
-            => new TimeEntry(entity, SyncStatus.SyncFailed);
+        public static TimeEntry Unsyncable(ITimeEntry entity, string errorMessage)
+            => new TimeEntry(entity, SyncStatus.SyncFailed, errorMessage);
 
         public static TimeEntry CleanDeleted(ITimeEntry entity)
-            => new TimeEntry(entity, SyncStatus.InSync, true);
+            => new TimeEntry(entity, SyncStatus.InSync, null, true);
 
         public static TimeEntry DirtyDeleted(ITimeEntry entity)
-            => new TimeEntry(entity, SyncStatus.SyncNeeded, true);
+            => new TimeEntry(entity, SyncStatus.SyncNeeded, null, true);
 
-        public static TimeEntry UnsyncableDeleted(ITimeEntry entity)
-            => new TimeEntry(entity, SyncStatus.SyncFailed, true);
+        public static TimeEntry UnsyncableDeleted(ITimeEntry entity, string errorMessage)
+            => new TimeEntry(entity, SyncStatus.SyncFailed, errorMessage, true);
     }
 
     internal partial class User
     {
         private User(IDatabaseUser entity)
-            : this(entity as IUser, entity.SyncStatus, entity.IsDeleted)
+            : this(entity as IUser, entity.SyncStatus, entity.LastSyncErrorMessage, entity.IsDeleted)
         {
             SyncStatus = entity.SyncStatus;
+            LastSyncErrorMessage = entity.LastSyncErrorMessage;
             IsDeleted = entity.IsDeleted;
         }
 
         public static User From(IDatabaseUser entity)
             => new User(entity);
 
-        private User(IUser entity, SyncStatus syncStatus, bool isDeleted = false)
+        private User(IUser entity, SyncStatus syncStatus, string lastSyncErrorMessage, bool isDeleted = false)
         {
             Id = entity.Id;
             ApiToken = entity.ApiToken;
@@ -285,37 +291,38 @@ namespace Toggl.Foundation.Models
         }
 
         public static User Clean(IUser entity)
-            => new User(entity, SyncStatus.InSync);
+            => new User(entity, SyncStatus.InSync, null);
 
         public static User Dirty(IUser entity)
-            => new User(entity, SyncStatus.SyncNeeded);
+            => new User(entity, SyncStatus.SyncNeeded, null);
 
-        public static User Unsyncable(IUser entity)
-            => new User(entity, SyncStatus.SyncFailed);
+        public static User Unsyncable(IUser entity, string errorMessage)
+            => new User(entity, SyncStatus.SyncFailed, errorMessage);
 
         public static User CleanDeleted(IUser entity)
-            => new User(entity, SyncStatus.InSync, true);
+            => new User(entity, SyncStatus.InSync, null, true);
 
         public static User DirtyDeleted(IUser entity)
-            => new User(entity, SyncStatus.SyncNeeded, true);
+            => new User(entity, SyncStatus.SyncNeeded, null, true);
 
-        public static User UnsyncableDeleted(IUser entity)
-            => new User(entity, SyncStatus.SyncFailed, true);
+        public static User UnsyncableDeleted(IUser entity, string errorMessage)
+            => new User(entity, SyncStatus.SyncFailed, errorMessage, true);
     }
 
     internal partial class Workspace
     {
         private Workspace(IDatabaseWorkspace entity)
-            : this(entity as IWorkspace, entity.SyncStatus, entity.IsDeleted)
+            : this(entity as IWorkspace, entity.SyncStatus, entity.LastSyncErrorMessage, entity.IsDeleted)
         {
             SyncStatus = entity.SyncStatus;
+            LastSyncErrorMessage = entity.LastSyncErrorMessage;
             IsDeleted = entity.IsDeleted;
         }
 
         public static Workspace From(IDatabaseWorkspace entity)
             => new Workspace(entity);
 
-        private Workspace(IWorkspace entity, SyncStatus syncStatus, bool isDeleted = false)
+        private Workspace(IWorkspace entity, SyncStatus syncStatus, string lastSyncErrorMessage, bool isDeleted = false)
         {
             Id = entity.Id;
             Name = entity.Name;
@@ -337,21 +344,21 @@ namespace Toggl.Foundation.Models
         }
 
         public static Workspace Clean(IWorkspace entity)
-            => new Workspace(entity, SyncStatus.InSync);
+            => new Workspace(entity, SyncStatus.InSync, null);
 
         public static Workspace Dirty(IWorkspace entity)
-            => new Workspace(entity, SyncStatus.SyncNeeded);
+            => new Workspace(entity, SyncStatus.SyncNeeded, null);
 
-        public static Workspace Unsyncable(IWorkspace entity)
-            => new Workspace(entity, SyncStatus.SyncFailed);
+        public static Workspace Unsyncable(IWorkspace entity, string errorMessage)
+            => new Workspace(entity, SyncStatus.SyncFailed, errorMessage);
 
         public static Workspace CleanDeleted(IWorkspace entity)
-            => new Workspace(entity, SyncStatus.InSync, true);
+            => new Workspace(entity, SyncStatus.InSync, null, true);
 
         public static Workspace DirtyDeleted(IWorkspace entity)
-            => new Workspace(entity, SyncStatus.SyncNeeded, true);
+            => new Workspace(entity, SyncStatus.SyncNeeded, null, true);
 
-        public static Workspace UnsyncableDeleted(IWorkspace entity)
-            => new Workspace(entity, SyncStatus.SyncFailed, true);
+        public static Workspace UnsyncableDeleted(IWorkspace entity, string errorMessage)
+            => new Workspace(entity, SyncStatus.SyncFailed, errorMessage, true);
     }
 }

@@ -144,6 +144,7 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
         private sealed class TestModel : IDatabaseSyncable
         {
             public SyncStatus SyncStatus { get; }
+            public string LastSyncErrorMessage { get; }
             public DateTimeOffset At { get; }
             public DateTimeOffset? ServerDeletedAt { get; }
             public bool IsDeleted => throw new NotImplementedException();

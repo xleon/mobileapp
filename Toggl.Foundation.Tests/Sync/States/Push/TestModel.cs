@@ -10,6 +10,8 @@ namespace Toggl.Foundation.Tests.Sync.States
 
         public SyncStatus SyncStatus { get; set; }
 
+        public string LastSyncErrorMessage { get; set; }
+
         public bool IsDeleted { get; set; }
 
         public TestModel(long id, SyncStatus status, bool deleted = false)

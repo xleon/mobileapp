@@ -10,6 +10,8 @@ namespace Toggl.PrimeRadiant.Tests
 
         public SyncStatus SyncStatus { get; set; }
 
+        public string LastSyncErrorMessage { get; set; }
+
         public bool IsDeleted { get; set; }
     }
 }
