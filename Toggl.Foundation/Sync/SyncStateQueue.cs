@@ -21,41 +21,37 @@ namespace Toggl.Foundation.Sync
         public SyncState StartNextQueuedState(IStateMachineOrchestrator orchestrator)
         {
             if (pulledLast)
-            {
-                startPush(orchestrator);
-                return Push;
-            }
+                return startPush(orchestrator);
+            
             if (pullSyncQueued)
-            {
-                startPull(orchestrator);
-                return Pull;
-            }
+                return startPull(orchestrator);
+           
             if (pushSyncQueued)
-            {
-                startPush(orchestrator);
-                return Push;
-            }
-            startSleep(orchestrator);
-            return Sleep;
+                return startPush(orchestrator);
+            
+            return startSleep(orchestrator);
         }
 
-        private void startPull(IStateMachineOrchestrator orchestrator)
+        private SyncState startPull(IStateMachineOrchestrator orchestrator)
         {
             pullSyncQueued = false;
             pulledLast = true;
             orchestrator.StartPullSync();
+            return Pull;
         }
 
-        private void startPush(IStateMachineOrchestrator orchestrator)
+        private SyncState startPush(IStateMachineOrchestrator orchestrator)
         {
             pushSyncQueued = false;
             pulledLast = false;
             orchestrator.StartPushSync();
+            return Push;
         }
 
-        private static void startSleep(IStateMachineOrchestrator orchestrator)
+        private static SyncState startSleep(IStateMachineOrchestrator orchestrator)
         {
             orchestrator.GoToSleep();
+            return Sleep;
         }
     }
 }
