@@ -187,6 +187,7 @@
     <Compile Include="MvvmCross\Converters\TimeSpanToDurationValueConverterTests.cs" />
     <Compile Include="Sync\StateMachineOrchestratorTests.cs" />
     <Compile Include="Sync\StateMachineTests.cs" />
+    <Compile Include="Sync\States\Pull\PersistTagsStateTests.cs" />
     <Compile Include="Sync\StateTreeTests.cs" />
     <Compile Include="Sync\SyncManagerTests.cs" />
     <Compile Include="Sync\SyncStateQueueTests.cs" />

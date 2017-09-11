@@ -46,7 +46,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                    && next.Projects == old.Projects
                    && next.Clients == at
                    && next.Tags == old.Tags
-                   && next.Tasks == old.Tasks;
+                   && next.Tasks == old.Tasks
+                   && next.TimeEntries == old.TimeEntries;
 
             protected override FetchObservables CreateObservables(
                 ISinceParameters since = null,
@@ -56,7 +57,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                 Observable.Return(new List<IWorkspace>()),
                 Observable.Return(clients ?? new List<IClient>()),
                 Observable.Return(new List<IProject>()),
-                Observable.Return(new List<ITimeEntry>()));
+                Observable.Return(new List<ITimeEntry>()),
+                Observable.Return(new List<ITag>()));
 
             protected override List<IClient> CreateComplexListWhereTheLastUpdateEntityIsDeleted(DateTimeOffset? at)
                 => new List<IClient>

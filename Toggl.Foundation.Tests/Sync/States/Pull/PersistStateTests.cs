@@ -174,7 +174,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             public void SelectsTheLatestAtValue()
             {
                 var at = new DateTimeOffset(2017, 09, 01, 12, 34, 56, TimeSpan.Zero);
-                var oldSinceParameters = new SinceParameters(null, at.AddMonths(-1));
+                var oldSinceParameters = new SinceParameters(null);
                 var entities = CreateComplexListWhereTheLastUpdateEntityIsDeleted(at);
                 var observables = CreateObservables(oldSinceParameters, entities);
                 SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(database, entities);
@@ -219,13 +219,15 @@ namespace Toggl.Foundation.Tests.Sync.States
             protected FetchObservables CreateFetchObservables(
                 FetchObservables old, ISinceParameters sinceParameters,
                 IObservable<List<IWorkspace>> workspaces = null, IObservable<List<IClient>> clients = null,
-                IObservable<List<IProject>> projects = null, IObservable<List<ITimeEntry>> timeEntries = null)
+                IObservable<List<IProject>> projects = null, IObservable<List<ITimeEntry>> timeEntries = null,
+                IObservable<List<ITag>> tags = null)
             => new FetchObservables(
                 old?.SinceParameters ?? sinceParameters,
                 old?.Workspaces ?? workspaces,
                 old?.Clients ?? clients,
                 old?.Projects ?? projects,
-                old?.TimeEntries ?? timeEntries);
+                old?.TimeEntries ?? timeEntries,
+                old?.Tags ?? tags);
 
             protected abstract TState CreateState(ITogglDatabase database);
 
