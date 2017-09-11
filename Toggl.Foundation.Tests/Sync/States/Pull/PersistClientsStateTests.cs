@@ -9,6 +9,7 @@ using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Client = Toggl.Ultrawave.Models.Client;
+using static Toggl.PrimeRadiant.ConflictResolutionMode;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {
@@ -66,9 +67,11 @@ namespace Toggl.Foundation.Tests.Sync.States
                     new Client { At = at?.AddDays(-2) ?? DateTimeOffset.Now, Name = Guid.NewGuid().ToString() }
                 };
 
-            protected override void SetupDatabaseBatchUpdateMocksToReturnDatabaseEntitiesAndFilterOutDeletedEntities(ITogglDatabase database, List<IClient> clients = null)
+            protected override void SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(ITogglDatabase database, List<IClient> clients = null)
             {
-                var foundationClients = clients?.Where(client => client.ServerDeletedAt == null).Select(Models.Client.Clean);
+                var foundationClients = clients?.Select(client => client.ServerDeletedAt.HasValue
+                    ? (Delete, null)
+                    : (Update, (IDatabaseClient)Models.Client.Clean(client)));
                 database.Clients.BatchUpdate(null, null)
                     .ReturnsForAnyArgs(Observable.Return(foundationClients));
             }

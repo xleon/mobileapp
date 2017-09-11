@@ -19,7 +19,10 @@ namespace Toggl.PrimeRadiant.Realm
 
         TModel Update(long id, TModel entity);
 
-        IEnumerable<TModel> BatchUpdate(IEnumerable<(long Id, TModel Entity)> batch, Func<(long Id, TModel Entity), Expression<Func<TModel, bool>>> matchEntity, Func<TModel, TModel, ConflictResolutionMode> conflictResolution);
+        IEnumerable<(ConflictResolutionMode ResolutionMode, TModel Entity)> BatchUpdate(
+            IEnumerable<(long Id, TModel Entity)> batch,
+            Func<(long Id, TModel Entity), Expression<Func<TModel, bool>>> matchEntity,
+            Func<TModel, TModel, ConflictResolutionMode> conflictResolution);
     }
 
     internal sealed class RealmAdapter<TRealmEntity, TModel> : IRealmAdapter<TModel>
@@ -52,35 +55,29 @@ namespace Toggl.PrimeRadiant.Realm
             return doModyfingTransaction(id, (realm, realmEntity) => realmEntity.SetPropertiesFrom(entity, realm));
         }
 
-        public IEnumerable<TModel> BatchUpdate(IEnumerable<(long Id, TModel Entity)> batch, Func<(long Id, TModel Entity), Expression<Func<TModel, bool>>> matchEntity, Func<TModel, TModel, ConflictResolutionMode> conflictResolution)
+        public IEnumerable<(ConflictResolutionMode ResolutionMode, TModel Entity)> BatchUpdate(
+            IEnumerable<(long Id, TModel Entity)> batch,
+            Func<(long Id, TModel Entity), Expression<Func<TModel, bool>>> matchEntity,
+            Func<TModel, TModel, ConflictResolutionMode> conflictResolution)
         {
             Ensure.Argument.IsNotNull(batch, nameof(batch));
             Ensure.Argument.IsNotNull(matchEntity, nameof(matchEntity));
             Ensure.Argument.IsNotNull(conflictResolution, nameof(conflictResolution));
 
-            var resolvedEntities = new List<TRealmEntity>();
-
             var realm = Realms.Realm.GetInstance();
             using (var transaction = realm.BeginWrite())
             {
                 var realmEntities = realm.All<TRealmEntity>();
-
-                foreach (var updated in batch)
+                var resolvedEntities = batch.Select(updated =>
                 {
                     var oldEntity = (TRealmEntity)realmEntities.SingleOrDefault(matchEntity(updated));
                     var resolveMode = conflictResolution(oldEntity, updated.Entity);
                     var resolvedEntity = resolveEntity(realm, oldEntity, updated.Entity, resolveMode);
-
-                    if (resolvedEntity != null)
-                    {
-                        resolvedEntities.Add(resolvedEntity);
-                    }
-                }
-
+                    return (resolveMode, (TModel)resolvedEntity);
+                });
                 transaction.Commit();
+                return resolvedEntities;
             }
-
-            return resolvedEntities;
         }
 
         public void Delete(long id)

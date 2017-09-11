@@ -9,6 +9,7 @@ using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Project = Toggl.Ultrawave.Models.Project;
+using static Toggl.PrimeRadiant.ConflictResolutionMode;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {
@@ -66,9 +67,11 @@ namespace Toggl.Foundation.Tests.Sync.States
                     new Project { At = at?.AddDays(-2) ?? DateTimeOffset.Now, Name = Guid.NewGuid().ToString() }
                 };
 
-            protected override void SetupDatabaseBatchUpdateMocksToReturnDatabaseEntitiesAndFilterOutDeletedEntities(ITogglDatabase database, List<IProject> workspaces = null)
+            protected override void SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(ITogglDatabase database, List<IProject> workspaces = null)
             {
-                var foundationWorkspaces = workspaces?.Where(project => project.ServerDeletedAt == null).Select(Models.Project.Clean);
+                var foundationWorkspaces = workspaces?.Select(project => project.ServerDeletedAt.HasValue
+                    ? (Delete, null)
+                    : (Update, (IDatabaseProject)Models.Project.Clean(project)));
                 database.Projects.BatchUpdate(null, null)
                     .ReturnsForAnyArgs(Observable.Return(foundationWorkspaces));
             }

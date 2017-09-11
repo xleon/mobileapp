@@ -28,6 +28,7 @@ namespace Toggl.Foundation.Sync.States
                 .Select(entities => entities.Select(ConvertToDatabaseEntity).ToList())
                 .SelectMany(databaseEntities => 
                     BatchUpdate(database, databaseEntities.Select(entity => (entity.Id, entity)))
+                        .Select(results => results.Select(result => result.Item2))
                         .IgnoreElements()
                         .Concat(Observable.Return(databaseEntities)))
                 .Select(databaseEntities => LastUpdated(since, databaseEntities))
@@ -41,7 +42,7 @@ namespace Toggl.Foundation.Sync.States
 
         protected abstract TDatabaseInterface ConvertToDatabaseEntity(TInterface entity);
 
-        protected abstract IObservable<IEnumerable<TDatabaseInterface>> BatchUpdate(ITogglDatabase database, IEnumerable<(long, TDatabaseInterface)> entities);
+        protected abstract IObservable<IEnumerable<(ConflictResolutionMode, TDatabaseInterface)>> BatchUpdate(ITogglDatabase database, IEnumerable<(long, TDatabaseInterface)> entities);
 
         protected abstract DateTimeOffset? LastUpdated(ISinceParameters old, IEnumerable<TDatabaseInterface> entities);
 

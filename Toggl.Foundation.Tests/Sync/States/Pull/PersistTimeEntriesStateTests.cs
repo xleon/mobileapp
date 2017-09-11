@@ -9,6 +9,7 @@ using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using TimeEntry = Toggl.Ultrawave.Models.TimeEntry;
+using static Toggl.PrimeRadiant.ConflictResolutionMode;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {
@@ -70,9 +71,11 @@ namespace Toggl.Foundation.Tests.Sync.States
                     new TimeEntry { At = at.AddDays(-2), Description = Guid.NewGuid().ToString() }
                 };
 
-            protected override void SetupDatabaseBatchUpdateMocksToReturnDatabaseEntitiesAndFilterOutDeletedEntities(ITogglDatabase database, List<ITimeEntry> timeEntries = null)
+            protected override void SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(ITogglDatabase database, List<ITimeEntry> timeEntries = null)
             {
-                var foundationTimeEntries = timeEntries?.Where(timeEntry => timeEntry.ServerDeletedAt == null).Select(Models.TimeEntry.Clean);
+                var foundationTimeEntries = timeEntries?.Select(timeEntry => timeEntry.ServerDeletedAt.HasValue
+                        ? (Delete, null)
+                        : (Update, (IDatabaseTimeEntry)Models.TimeEntry.Clean(timeEntry)));
                 database.TimeEntries.BatchUpdate(null, null)
                     .ReturnsForAnyArgs(Observable.Return(foundationTimeEntries));
             }

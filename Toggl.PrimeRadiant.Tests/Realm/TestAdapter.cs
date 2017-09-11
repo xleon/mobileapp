@@ -44,7 +44,10 @@ namespace Toggl.PrimeRadiant.Tests.Realm
             throw new InvalidOperationException();
         }
 
-        public IEnumerable<TestModel> BatchUpdate(IEnumerable<(long Id, TestModel Entity)> entities, Func<(long Id, TestModel Entity), Expression<Func<TestModel, bool>>> matchEntity, Func<TestModel, TestModel, ConflictResolutionMode> conflictResolution)
+        public IEnumerable<(ConflictResolutionMode ResolutionMode, TestModel Entity)> BatchUpdate(
+            IEnumerable<(long Id, TestModel Entity)> entities,
+            Func<(long Id, TestModel Entity), Expression<Func<TestModel, bool>>> matchEntity,
+            Func<TestModel, TestModel, ConflictResolutionMode> conflictResolution)
         {
             throw new NotImplementedException();
         }

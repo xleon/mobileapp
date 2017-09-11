@@ -25,7 +25,9 @@ namespace Toggl.PrimeRadiant.Realm
                 .Catch<TModel, Exception>(ex => Observable.Throw<TModel>(new DatabaseException(ex)));
         }
         
-        public IObservable<IEnumerable<TModel>> BatchUpdate(IEnumerable<(long Id, TModel Entity)> entities, Func<TModel, TModel, ConflictResolutionMode> conflictResolution)
+        public IObservable<IEnumerable<(ConflictResolutionMode ResolutionMode, TModel Entity)>> BatchUpdate(
+            IEnumerable<(long Id, TModel Entity)> entities,
+            Func<TModel, TModel, ConflictResolutionMode> conflictResolution)
         {
             Ensure.Argument.IsNotNull(entities, nameof(entities));
             Ensure.Argument.IsNotNull(conflictResolution, nameof(conflictResolution));

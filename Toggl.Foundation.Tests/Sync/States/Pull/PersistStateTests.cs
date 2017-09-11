@@ -163,7 +163,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var oldSinceParameters = new SinceParameters(null, oldAt);
                 var entities = CreateListWithOneItem(newAt);
                 var observables = CreateObservables(oldSinceParameters, entities);
-                SetupDatabaseBatchUpdateMocksToReturnDatabaseEntitiesAndFilterOutDeletedEntities(database, entities);
+                SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(database, entities);
 
                 state.Start(observables).SingleAsync().Wait();
 
@@ -177,7 +177,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var oldSinceParameters = new SinceParameters(null, at.AddMonths(-1));
                 var entities = CreateComplexListWhereTheLastUpdateEntityIsDeleted(at);
                 var observables = CreateObservables(oldSinceParameters, entities);
-                SetupDatabaseBatchUpdateMocksToReturnDatabaseEntitiesAndFilterOutDeletedEntities(database, entities);
+                SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(database, entities);
 
                 state.Start(observables).SingleAsync().Wait();
 
@@ -208,7 +208,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var oldSinceParameters = new SinceParameters(null, at);
                 var entities = CreateComplexListWhereTheLastUpdateEntityIsDeleted(at);
                 var observables = CreateObservables(oldSinceParameters, entities);
-                SetupDatabaseBatchUpdateMocksToReturnDatabaseEntitiesAndFilterOutDeletedEntities(database, entities);
+                SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(database, entities);
 
                 var transition = (Transition<FetchObservables>)state.Start(observables).SingleAsync().Wait();
 
@@ -241,7 +241,7 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             protected abstract FetchObservables CreateObservables(ISinceParameters since = null, List<TInterface> entities = null);
 
-            protected abstract void SetupDatabaseBatchUpdateMocksToReturnDatabaseEntitiesAndFilterOutDeletedEntities(ITogglDatabase database, List<TInterface> entities = null);
+            protected abstract void SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(ITogglDatabase database, List<TInterface> entities = null);
 
             protected abstract void SetupDatabaseBatchUpdateToThrow(ITogglDatabase database, Func<Exception> exceptionFactory);
 
