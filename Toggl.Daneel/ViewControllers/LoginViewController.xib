@@ -27,25 +27,25 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WxQ-t5-Zte">
-                    <rect key="frame" x="16" y="159" width="319" height="24"/>
+                    <rect key="frame" x="16" y="159" width="303" height="24"/>
                     <accessibility key="accessibilityConfiguration" label="LoginEmail"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="965-7g-Gu6">
-                    <rect key="frame" x="16" y="159" width="319" height="24"/>
+                    <rect key="frame" x="16" y="159" width="303" height="24"/>
                     <accessibility key="accessibilityConfiguration" label="LoginPassword"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
                 </textField>
                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icPassword" translatesAutoresizingMaskIntoConstraints="NO" id="IEZ-w2-ebJ">
-                    <rect key="frame" x="335" y="159" width="24" height="24"/>
+                    <rect key="frame" x="319" y="143" width="56" height="56"/>
                     <accessibility key="accessibilityConfiguration" label="LoginShowPassword"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="24" id="rK3-aW-F5C"/>
-                        <constraint firstAttribute="height" constant="24" id="tyY-bM-TUk"/>
+                        <constraint firstAttribute="width" constant="56" id="rK3-aW-F5C"/>
+                        <constraint firstAttribute="height" constant="56" id="tyY-bM-TUk"/>
                     </constraints>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8lc-P8-x4K">
@@ -57,10 +57,10 @@
                     </state>
                 </button>
                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icOnePassword" translatesAutoresizingMaskIntoConstraints="NO" id="zrB-CR-ZBC">
-                    <rect key="frame" x="335" y="159" width="24" height="24"/>
+                    <rect key="frame" x="319" y="143" width="56" height="56"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="24" id="JZo-wX-zs8"/>
-                        <constraint firstAttribute="width" constant="24" id="aaj-mV-LSy"/>
+                        <constraint firstAttribute="height" constant="56" id="JZo-wX-zs8"/>
+                        <constraint firstAttribute="width" constant="56" id="aaj-mV-LSy"/>
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Incorrect email/password. Please try again." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Dj-pA-An9">
@@ -71,7 +71,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l7S-as-iux" customClass="ActivityIndicatorView">
-                    <rect key="frame" x="335" y="139" width="24" height="24"/>
+                    <rect key="frame" x="335" y="159" width="24" height="24"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="24" id="Zzj-Z7-HWz"/>
@@ -87,16 +87,16 @@
                 <constraint firstItem="965-7g-Gu6" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="CeJ-bb-SPH"/>
                 <constraint firstItem="965-7g-Gu6" firstAttribute="top" secondItem="2" secondAttribute="top" constant="159" id="D3H-zT-YZV"/>
                 <constraint firstItem="IEZ-w2-ebJ" firstAttribute="centerY" secondItem="965-7g-Gu6" secondAttribute="centerY" id="EGn-Lh-RBk"/>
-                <constraint firstItem="l7S-as-iux" firstAttribute="centerY" secondItem="965-7g-Gu6" secondAttribute="centerY" constant="-20" id="Ese-8m-eJL"/>
                 <constraint firstItem="3Dj-pA-An9" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="FQL-QJ-siE"/>
-                <constraint firstAttribute="trailing" secondItem="zrB-CR-ZBC" secondAttribute="trailing" constant="16" id="Ydm-yz-dwx"/>
-                <constraint firstAttribute="trailing" secondItem="IEZ-w2-ebJ" secondAttribute="trailing" constant="16" id="YeE-vP-BMl"/>
+                <constraint firstAttribute="trailing" secondItem="zrB-CR-ZBC" secondAttribute="trailing" id="Ydm-yz-dwx"/>
+                <constraint firstAttribute="trailing" secondItem="IEZ-w2-ebJ" secondAttribute="trailing" id="YeE-vP-BMl"/>
+                <constraint firstItem="l7S-as-iux" firstAttribute="centerY" secondItem="IEZ-w2-ebJ" secondAttribute="centerY" id="k2I-EZ-o9O"/>
                 <constraint firstAttribute="bottom" secondItem="8lc-P8-x4K" secondAttribute="bottom" constant="21" id="kx6-14-c06"/>
                 <constraint firstItem="WxQ-t5-Zte" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="mOc-SS-Q8l"/>
                 <constraint firstItem="3Dj-pA-An9" firstAttribute="top" secondItem="965-7g-Gu6" secondAttribute="bottom" constant="9" id="mVs-lk-n7E"/>
                 <constraint firstItem="IEZ-w2-ebJ" firstAttribute="leading" secondItem="965-7g-Gu6" secondAttribute="trailing" id="oYa-Uw-eN6"/>
                 <constraint firstItem="WxQ-t5-Zte" firstAttribute="top" secondItem="2" secondAttribute="top" constant="159" id="rkN-v1-V0i"/>
-                <constraint firstItem="l7S-as-iux" firstAttribute="leading" secondItem="965-7g-Gu6" secondAttribute="trailing" id="vnn-4f-cIP"/>
+                <constraint firstItem="l7S-as-iux" firstAttribute="centerX" secondItem="IEZ-w2-ebJ" secondAttribute="centerX" id="woL-n6-PzQ"/>
             </constraints>
             <point key="canvasLocation" x="-16" y="45"/>
         </view>

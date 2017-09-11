@@ -1,4 +1,5 @@
-﻿using CoreText;
+﻿using System;
+using CoreText;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
@@ -29,15 +30,10 @@ namespace Toggl.Daneel.ViewControllers
             Title = ViewModel.Title;
 
             prepareTextFields();
+            prepareNavigationBar();
 
             UIKeyboard.Notifications.ObserveWillShow(keyboardWillShow);
             UIKeyboard.Notifications.ObserveWillHide(keyboardWillHide);
-
-            NavigationItem.LeftBarButtonItem = 
-                new UIBarButtonItem { Title = Resources.LoginBackButton, TintColor = UIColor.White };
-
-            NavigationItem.RightBarButtonItem =
-                new UIBarButtonItem { Title = Resources.LoginNextButton, TintColor = UIColor.White };
             
             var bindingSet = this.CreateBindingSet<LoginViewController, LoginViewModel>();
 
@@ -158,6 +154,22 @@ namespace Toggl.Daneel.ViewControllers
                 new NSAttributedString(Resources.LoginSignUpPasswordPlaceholder, stringAttributes);
 
             ForgotPasswordButton.SetTitle(Resources.LoginForgotPassword, UIControlState.Normal);
+        }
+
+        private void prepareNavigationBar()
+        {
+            var attributes = new UITextAttributes { Font = UIFont.SystemFontOfSize(14, UIFontWeight.Medium) };
+
+            var spaceFix = new UIBarButtonItem(UIBarButtonSystemItem.FixedSpace) { Width = 8 };
+
+            NavigationItem.LeftBarButtonItems = new[] { spaceFix,
+                new UIBarButtonItem { Title = Resources.LoginBackButton, TintColor = UIColor.White } };
+
+            NavigationItem.RightBarButtonItems = new[] { spaceFix, 
+                new UIBarButtonItem { Title = Resources.LoginNextButton, TintColor = UIColor.White } };
+
+            NavigationItem.LeftBarButtonItem.SetTitleTextAttributes(attributes, UIControlState.Normal);
+            NavigationItem.RightBarButtonItem.SetTitleTextAttributes(attributes, UIControlState.Normal);
         }
     }
 }

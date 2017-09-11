@@ -21,7 +21,11 @@ namespace Toggl.Daneel.ViewControllers.Navigation
             navBar.ShadowImage = new UIImage();
             navBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
-            navBar.TitleTextAttributes = new UIStringAttributes { ForegroundColor = UIColor.White };
+            navBar.TitleTextAttributes = new UIStringAttributes
+            {
+                ForegroundColor = UIColor.White,
+                Font = UIFont.SystemFontOfSize(14, UIFontWeight.Medium)
+            };
         }
     }
 }
