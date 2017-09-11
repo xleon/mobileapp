@@ -3,8 +3,8 @@ using Foundation;
 using MvvmCross.Platform.UI;
 using MvvmCross.Plugins.Color;
 using MvvmCross.Plugins.Color.iOS;
+using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions;
 using UIKit;
 
 namespace Toggl.Daneel.Extensions

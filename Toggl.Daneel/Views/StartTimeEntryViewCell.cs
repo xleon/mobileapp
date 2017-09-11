@@ -5,9 +5,8 @@ using MvvmCross.Binding.iOS;
 using MvvmCross.Binding.iOS.Views;
 using MvvmCross.Plugins.Color;
 using MvvmCross.Plugins.Visibility;
+using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.MvvmCross.Converters;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions;
 using UIKit;
 
 namespace Toggl.Daneel.Views
@@ -41,7 +40,7 @@ namespace Toggl.Daneel.Views
                 var timeSpanConverter = new TimeSpanToDurationValueConverter();
                 var descriptionTopDistanceValueConverter = new BoolToConstantValueConverter<nfloat>(HasProjectDistance, NoProjectDistance);
 
-                var bindingSet = this.CreateBindingSet<StartTimeEntryViewCell, TimeEntrySuggestionViewModel>();
+                var bindingSet = this.CreateBindingSet<StartTimeEntryViewCell, TimeEntrySuggestion>();
 
                 //Text
                 bindingSet.Bind(ProjectLabel).To(vm => vm.ProjectName);

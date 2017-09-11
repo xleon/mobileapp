@@ -1,12 +1,14 @@
 ﻿using System;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions
+namespace Toggl.Foundation.Autocomplete
 {
     public struct TextFieldInfo : IEquatable<TextFieldInfo>
     {
         public string Text { get; }
 
         public int CursorPosition { get; }
+
+        public long? ProjectId { get; }
 
         public string ProjectColor { get; }
 
@@ -16,23 +18,33 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions
             => Math.Min(CursorPosition, Text.Length);
 
         public TextFieldInfo(string text, int cursorPosition)
-            : this(text, cursorPosition, "", "")
+            : this(text, cursorPosition, null, "", "")
         {
         }
 
-        public TextFieldInfo(string text, int cursorPosition, string projectName, string projectColor)
+        public TextFieldInfo(string text, int cursorPosition, long? projectId, string projectName, string projectColor)
         {
             Text = text;
+            ProjectId = projectId;
             ProjectName = projectName;
             ProjectColor = projectColor;
             CursorPosition = cursorPosition;
         }
 
         public TextFieldInfo WithTextAndCursor(string text, int cursorPosition)
-           => new TextFieldInfo(text, cursorPosition, ProjectName, ProjectColor);
+           => new TextFieldInfo(text, cursorPosition, ProjectId, ProjectName, ProjectColor);
 
-        public TextFieldInfo WithProjectInfo(string name, string color)
-           => new TextFieldInfo(Text, CursorPosition, name, color);
+        public TextFieldInfo WithProjectInfo(long id, string name, string color)
+           => new TextFieldInfo(Text, CursorPosition, id, name, color);
+
+        public TextFieldInfo RemoveProjectQueryFromDescriptionIfNeeded()
+        {
+            var indexOfProjectQuerySymbol = Text.IndexOf(QuerySymbols.Project);
+            if (indexOfProjectQuerySymbol < 0) return this;
+
+            var newText = Text.Substring(0, indexOfProjectQuerySymbol);
+            return new TextFieldInfo(newText, newText.Length);
+        }
 
         public static bool operator ==(TextFieldInfo left, TextFieldInfo right)
             => left.Equals(right);

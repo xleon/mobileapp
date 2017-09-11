@@ -5,9 +5,8 @@ using MvvmCross.Binding.iOS;
 using MvvmCross.Binding.iOS.Views;
 using MvvmCross.Plugins.Color;
 using MvvmCross.Plugins.Visibility;
+using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.MvvmCross.Converters;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions;
 using UIKit;
 
 namespace Toggl.Daneel.Views
@@ -40,7 +39,7 @@ namespace Toggl.Daneel.Views
                 var taskCountConverter = new TaskCountConverter();
                 var visibilityConverter = new MvxVisibilityValueConverter();
 
-                var bindingSet = this.CreateBindingSet<StartTimeEntryProjectsViewCell, ProjectSuggestionViewModel>();
+                var bindingSet = this.CreateBindingSet<StartTimeEntryProjectsViewCell, ProjectSuggestion>();
 
                 //Text
                 bindingSet.Bind(ProjectNameLabel).To(vm => vm.ProjectName);

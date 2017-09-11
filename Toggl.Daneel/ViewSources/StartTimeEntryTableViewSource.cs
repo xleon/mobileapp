@@ -3,8 +3,8 @@ using Foundation;
 using MvvmCross.Binding.iOS.Views;
 using MvvmCross.Plugins.Color.iOS;
 using Toggl.Daneel.Views;
+using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions;
 using UIKit;
 
 namespace Toggl.Daneel.ViewSources
@@ -44,7 +44,7 @@ namespace Toggl.Daneel.ViewSources
 
         private string getIdentifier(object item)
         {
-            if (item is ProjectSuggestionViewModel)
+            if (item is ProjectSuggestion)
                 return projectCellIdentifier;
 
             return timeEntryCellIdentifier;

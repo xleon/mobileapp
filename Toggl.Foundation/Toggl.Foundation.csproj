@@ -105,6 +105,15 @@
     <Compile Include="Sync\States\Push\BaseCreateEntityState.cs" />
     <Compile Include="Sync\States\Push\CreateTimeEntryState.cs" />
     <Compile Include="Sync\States\Push\PushOneEntityState.cs" />
+    <Compile Include="Autocomplete\TextFieldInfo.cs" />
+    <Compile Include="Autocomplete\Suggestions\AutocompleteSuggestion.cs" />
+    <Compile Include="Autocomplete\Suggestions\AutocompleteSuggestionComparer.cs" />
+    <Compile Include="Autocomplete\Suggestions\AutocompleteSuggestionType.cs" />
+    <Compile Include="Autocomplete\Suggestions\ProjectSuggestion.cs" />
+    <Compile Include="Autocomplete\Suggestions\TimeEntrySuggestion.cs" />
+    <Compile Include="Autocomplete\IAutocompleteProvider.cs" />
+    <Compile Include="Autocomplete\AutocompleteProvider.cs" />
+    <Compile Include="Autocomplete\QuerySymbols.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -159,6 +168,7 @@
   <ItemGroup />
   <ItemGroup>
     <Folder Include="DTOs\" />
+    <Folder Include="Autocomplete\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

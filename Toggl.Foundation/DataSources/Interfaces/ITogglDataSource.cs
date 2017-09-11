@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive;
+using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Sync;
 
 namespace Toggl.Foundation.DataSources
@@ -15,6 +16,7 @@ namespace Toggl.Foundation.DataSources
         ITimeEntriesSource TimeEntries { get; }
 
         ISyncManager SyncManager { get; }
+        IAutocompleteProvider AutocompleteProvider { get; }
 
         IObservable<Unit> Logout();
     }

@@ -2,13 +2,13 @@
 using System.Linq;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions
+namespace Toggl.Foundation.Autocomplete.Suggestions
 {
-    public sealed class TimeEntrySuggestionViewModel : BaseTimeEntrySuggestionViewModel
+    public sealed class TimeEntrySuggestion : AutocompleteSuggestion
     {
-        internal static IEnumerable<TimeEntrySuggestionViewModel> FromTimeEntries(
+        public static IEnumerable<TimeEntrySuggestion> FromTimeEntries(
             IEnumerable<IDatabaseTimeEntry> timeEntries
-        ) => timeEntries.Select(te => new TimeEntrySuggestionViewModel(te));
+        ) => timeEntries.Select(te => new TimeEntrySuggestion(te));
 
         public string Description { get; } = "";
 
@@ -22,7 +22,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions
 
         public string ClientName { get; } = "";
 
-        public TimeEntrySuggestionViewModel(IDatabaseTimeEntry timeEntry)
+        public TimeEntrySuggestion(IDatabaseTimeEntry timeEntry)
         {
             Description = timeEntry.Description;
 

@@ -6,7 +6,7 @@ using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
 using MvvmCross.Platform.Core;
 using Toggl.Daneel.Extensions;
-using Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions;
+using Toggl.Foundation.Autocomplete;
 using UIKit;
 
 namespace Toggl.Daneel.Binding

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant;
@@ -24,6 +25,8 @@ namespace Toggl.Foundation.DataSources
             User = new UserDataSource(database.User, api.User);
             Projects = new ProjectsDataSource(database.Projects);
             TimeEntries = new TimeEntriesDataSource(database.IdProvider, database.TimeEntries, timeService);
+
+            AutocompleteProvider = new AutocompleteProvider(database);
             SyncManager = TogglSyncManager.CreateSyncManager(database, api, scheduler);
         }
 
@@ -36,6 +39,7 @@ namespace Toggl.Foundation.DataSources
         public ITimeEntriesSource TimeEntries { get; }
 
         public ISyncManager SyncManager { get; }
+        public IAutocompleteProvider AutocompleteProvider { get; }
 
         public IObservable<Unit> Logout() => database.Clear();
     }

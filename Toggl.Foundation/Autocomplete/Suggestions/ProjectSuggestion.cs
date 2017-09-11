@@ -2,23 +2,23 @@
 using System.Linq;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions
+namespace Toggl.Foundation.Autocomplete.Suggestions
 {
-    public sealed class ProjectSuggestionViewModel : BaseTimeEntrySuggestionViewModel
+    public sealed class ProjectSuggestion : AutocompleteSuggestion
     {
-        private static readonly ProjectSuggestionViewModel empty = new ProjectSuggestionViewModel();
+        private static readonly ProjectSuggestion empty = new ProjectSuggestion();
 
-        internal static IEnumerable<ProjectSuggestionViewModel> FromProjects(
+        public static IEnumerable<ProjectSuggestion> FromProjects(
             IEnumerable<IDatabaseProject> projects
-        ) => projects.Select(p => new ProjectSuggestionViewModel(p));
+        ) => projects.Select(p => new ProjectSuggestion(p));
 
-        internal static IEnumerable<ProjectSuggestionViewModel> FromProjectsPrependingEmpty(
+        public static IEnumerable<ProjectSuggestion> FromProjectsPrependingEmpty(
             IEnumerable<IDatabaseProject> projects) 
         {
             yield return empty;
 
             foreach (var project in projects)
-                yield return new ProjectSuggestionViewModel(project);
+                yield return new ProjectSuggestion(project);
         }
 
         public long ProjectId { get; }
@@ -31,14 +31,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.StartTimeEntrySuggestions
 
         public string ProjectColor { get; }
 
-        private ProjectSuggestionViewModel()
+        private ProjectSuggestion()
         {
             ProjectId = 0;
             ProjectName = Resources.NoProject;
             ProjectColor = "#A3A3A3";
         }
 
-        public ProjectSuggestionViewModel(IDatabaseProject project)
+        public ProjectSuggestion(IDatabaseProject project)
         {
             ProjectId = project.Id;
             ProjectName = project.Name;

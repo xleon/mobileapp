@@ -217,6 +217,8 @@
     <Compile Include="Sync\States\Push\CreateTimeEntryTests.cs" />
     <Compile Include="Sync\States\Push\BasePushEntityStateTests.cs" />
     <Compile Include="Sync\States\Push\TestModel.cs" />
+    <Compile Include="Autocomplete\AutocompleteProviderTests.cs" />
+    <Compile Include="Autocomplete\TextFieldInfoTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />

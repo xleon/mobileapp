@@ -56,14 +56,8 @@
     <Compile Include="Parameters\IdParameter.cs" />
     <Compile Include="Converters\TaskCountConverter.cs" />
     <Compile Include="Converters\BoolToConstantValueConverter.cs" />
-    <Compile Include="ViewModels\StartTimeEntrySuggestions\TextFieldInfo.cs" />
     <Compile Include="ViewModels\StartTimeEntryViewModel.cs" />
-    <Compile Include="ViewModels\StartTimeEntrySuggestions\ProjectSuggestionViewModel.cs" />
-    <Compile Include="ViewModels\StartTimeEntrySuggestions\TimeEntrySuggestionViewModel.cs" />
     <Compile Include="ViewModels\SelectDateTimeDialogViewModel.cs" />
-    <Compile Include="ViewModels\StartTimeEntrySuggestions\BaseTimeEntrySuggestionViewModel.cs" />
-    <Compile Include="ViewModels\StartTimeEntrySuggestions\SuggestionComparer.cs" />
-    <Compile Include="ViewModels\StartTimeEntrySuggestions\SuggestionType.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">
