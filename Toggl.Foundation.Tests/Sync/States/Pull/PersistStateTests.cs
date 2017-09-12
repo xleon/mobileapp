@@ -43,6 +43,10 @@ namespace Toggl.Foundation.Tests.Sync.States
             => testHelper.UpdatesSinceParametersOfTheFetchedEntity();
 
         [Fact]
+        public void HandlesNullValueReceivedFromTheServerAsAnEmptyList()
+            => testHelper.HandlesNullValueReceivedFromTheServerAsAnEmptyList();
+
+        [Fact]
         public void SelectsTheLatestAtValue()
             => testHelper.SelectsTheLatestAtValue();
 
@@ -71,6 +75,8 @@ namespace Toggl.Foundation.Tests.Sync.States
             void DoesNotUpdateSinceParametersWhenNothingIsFetched();
 
             void UpdatesSinceParametersOfTheFetchedEntity();
+
+            void HandlesNullValueReceivedFromTheServerAsAnEmptyList();
 
             void SelectsTheLatestAtValue();
 
@@ -169,6 +175,18 @@ namespace Toggl.Foundation.Tests.Sync.States
 
                 database.SinceParameters.Received().Set(Arg.Is<ISinceParameters>(
                     newSinceParameters => OtherSinceDatesDidntChange(oldSinceParameters, newSinceParameters, newAt)));
+            }
+
+            public void HandlesNullValueReceivedFromTheServerAsAnEmptyList()
+            {
+                var oldSinceParameters = new SinceParameters(null);
+                List<TInterface> entities = null;
+                var observables = CreateObservables(oldSinceParameters, entities);
+
+                var transition = (Transition<FetchObservables>)state.Start(observables).SingleAsync().Wait();
+
+                transition.Result.Should().Be(state.FinishedPersisting);
+                AssertBatchUpdateWasCalled(database, new List<TInterface>());
             }
 
             public void SelectsTheLatestAtValue()

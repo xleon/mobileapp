@@ -56,7 +56,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 since ?? new SinceParameters(null),
                 Observable.Return(new List<IWorkspace>()),
                 Observable.Return(new List<IClient>()),
-                Observable.Return(projects ?? new List<IProject>()),
+                Observable.Return(projects),
                 Observable.Return(new List<ITimeEntry>()),
                 Observable.Return(new List<ITag>()));
 

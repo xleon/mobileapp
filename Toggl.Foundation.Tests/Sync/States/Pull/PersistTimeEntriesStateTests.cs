@@ -57,7 +57,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                     Observable.Return(new List<IWorkspace>()),
                     Observable.Return(new List<IClient>()),
                     Observable.Return(new List<IProject>()),
-                    Observable.Return(timeEntries ?? new List<ITimeEntry>()),
+                    Observable.Return(timeEntries),
                     Observable.Return(new List<ITag>()));
 
             protected override List<ITimeEntry> CreateComplexListWhereTheLastUpdateEntityIsDeleted(DateTimeOffset? at)

@@ -25,6 +25,7 @@ namespace Toggl.Foundation.Sync.States
             var since = fetch.SinceParameters;
             return FetchObservable(fetch)
                 .SingleAsync()
+                .Select(entities => entities ?? new List<TInterface>())
                 .Select(entities => entities.Select(ConvertToDatabaseEntity).ToList())
                 .SelectMany(databaseEntities => 
                     BatchUpdate(database, databaseEntities.Select(entity => (entity.Id, entity)))

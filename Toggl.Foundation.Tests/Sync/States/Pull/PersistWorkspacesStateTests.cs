@@ -54,7 +54,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 List<IWorkspace> workspaces = null)
             => new FetchObservables(
                 since ?? new SinceParameters(null),
-                Observable.Return(workspaces ?? new List<IWorkspace>()),
+                Observable.Return(workspaces),
                 Observable.Return(new List<IClient>()),
                 Observable.Return(new List<IProject>()),
                 Observable.Return(new List<ITimeEntry>()),
