@@ -66,7 +66,7 @@ namespace Toggl.Ultrawave.Tests.ApiClients
             }
 
             [Fact]
-            public async Task EmitsADeserializationErrorIfTheJsonSerializerThrowsAnException()
+            public void EmitsADeserializationErrorIfTheJsonSerializerThrowsAnException()
             {
                 const string rawResponse = "It lives";
                 serializer.Deserialize<string>(Arg.Any<string>()).Returns(_ => throw new Exception());
