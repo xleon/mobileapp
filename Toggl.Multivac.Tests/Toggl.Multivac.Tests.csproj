@@ -172,6 +172,7 @@
     <Compile Include="EmailTests.cs" />
     <Compile Include="ObservableCollectionExtensionsTests.cs" />
     <Compile Include="StringExtensionTests.cs" />
+    <Compile Include="ClampExtensionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">

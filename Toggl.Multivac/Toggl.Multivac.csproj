@@ -54,6 +54,7 @@
     <Compile Include="LinkerSafeAttribute.cs" />
     <Compile Include="PreserveAttribute.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\ClampExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

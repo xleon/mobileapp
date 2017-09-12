@@ -6,6 +6,6 @@ namespace Toggl.Foundation.MvvmCross.Converters
     public sealed class DateTimeToTimeConverter : MvxValueConverter<DateTimeOffset, string>
     {
         protected override string Convert(DateTimeOffset value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-            => value.ToString("t");
+            => value.ToString("HH:mm");
     }
 }

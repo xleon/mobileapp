@@ -1,12 +1,15 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Reactive.Linq;
 using FluentAssertions;
 using MvvmCross.Core.Navigation;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Models;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
 using Xunit;
+using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -54,6 +57,31 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.DeleteCommand.Execute();
 
                 DataSource.TimeEntries.Received().Delete(Arg.Is(ViewModel.Id));
+            }
+        }
+
+        public sealed class TheEditDurationCommand : EditTimeEntryViewModelTest
+        {
+            [Fact]
+            public async Task NavigatesToTheEditDurationViewModel()
+            {
+                var start = DateTimeOffset.Now.AddHours(-2);
+                var stop = DateTimeOffset.Now;
+                var timeEntry = TimeEntry.Builder
+                    .Create(12)
+                    .SetStart(start)
+                    .SetStop(stop)
+                    .SetAt(DateTimeOffset.Now)
+                    .SetDescription("Test")
+                    .Build();
+                DataSource.TimeEntries.GetById(Arg.Is(timeEntry.Id)).Returns(Observable.Return(timeEntry));
+                await ViewModel.Initialize(IdParameter.WithId(12));
+
+                await ViewModel.EditDurationCommand.ExecuteAsync();
+
+                await NavigationService.Received().Navigate<EditDurationViewModel, DurationParameter>(
+                    Arg.Is<DurationParameter>(parameter => parameter.Start == start && parameter.Stop == stop)
+                );
             }
         }
     }

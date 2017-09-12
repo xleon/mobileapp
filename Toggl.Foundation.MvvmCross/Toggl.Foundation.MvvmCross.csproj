@@ -58,6 +58,8 @@
     <Compile Include="Converters\BoolToConstantValueConverter.cs" />
     <Compile Include="ViewModels\StartTimeEntryViewModel.cs" />
     <Compile Include="ViewModels\SelectDateTimeDialogViewModel.cs" />
+    <Compile Include="ViewModels\EditDurationViewModel.cs" />
+    <Compile Include="Parameters\DurationParameter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">

@@ -307,6 +307,7 @@
     <InterfaceDefinition Include="ViewControllers\SettingsViewController.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntryProjectsViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntryViewCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\EditDurationViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectDateTimeDialogViewController.xib" />
   </ItemGroup>
   <ItemGroup>
@@ -422,12 +423,18 @@
     <Compile Include="Presentation\Attributes\ModalDialogPresentationAttribute.cs" />
     <Compile Include="Presentation\Transition\ModalDialogPresentationController.cs" />
     <Compile Include="Presentation\Transition\ModalDialogTransitionDelegate.cs" />
+    <Compile Include="ViewControllers\EditDurationViewController.cs" />
+    <Compile Include="ViewControllers\EditDurationViewController.designer.cs">
+      <DependentUpon>EditDurationViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\TimeSpanToViewHeightConverter.cs" />
     <Compile Include="ViewControllers\SelectDateTimeDialogViewController.cs" />
     <Compile Include="ViewControllers\SelectDateTimeDialogViewController.designer.cs">
       <DependentUpon>SelectDateTimeDialogViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\TextExtensions.cs" />
     <Compile Include="Views\TimeEntryTagsTextView.cs" />
+    <Compile Include="Views\ResizableView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
@@ -460,6 +467,7 @@
     <Folder Include="Resources\Images.xcassets\icLoader.imageset\" />
     <Folder Include="Resources\Images.xcassets\icAdd.imageset\" />
     <Folder Include="Resources\Images.xcassets\icProjectDot.imageset\" />
+    <Folder Include="Converters\" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
