@@ -65,7 +65,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (isRunning)
                 StartTime = StopTime.Subtract(duration);
             else
-                StopTime = StartTime.Add(Duration);
+                StopTime = StartTime.Add(duration);
         }
     }
 }

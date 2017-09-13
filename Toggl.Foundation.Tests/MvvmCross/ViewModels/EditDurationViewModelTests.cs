@@ -3,6 +3,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using FluentAssertions;
+using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -39,14 +40,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheDurationProperty : EditDurationViewModelTest
         {
-            [Fact]
-            public async Task WhenChangedWhileUpdatingTheRunningTimeEntryTriggersTheUpdateOfTheStartTime()
+            [Property]
+            public void WhenChangedWhileUpdatingTheRunningTimeEntryTriggersTheUpdateOfTheStartTime(DateTimeOffset now)
             {
-                var now = DateTimeOffset.Now;
                 var start = now.AddHours(-2);
                 var parameter = DurationParameter.WithStartAndStop(start, null);
                 TimeService.CurrentDateTime.Returns(now);
-                await ViewModel.Initialize(parameter);
+                ViewModel.Initialize(parameter).Wait();
                 
                 ViewModel.Duration = TimeSpan.FromHours(4);
 
@@ -54,14 +54,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.StartTime.Should().BeSameDateAs(expectedStart);
             }
 
-            [Fact]
-            public async Task WhenChangedWhileUpdatingFinishedTimeEntryTriggersTheUpdateOfTheStopTime()
+            [Property]
+            public void WhenChangedWhileUpdatingFinishedTimeEntryTriggersTheUpdateOfTheStopTime(DateTimeOffset now)
             {
-                var now = DateTimeOffset.Now;
                 var start = now.AddHours(-2);
                 var parameter = DurationParameter.WithStartAndStop(start, now);
                 TimeService.CurrentDateTime.Returns(now);
-                await ViewModel.Initialize(parameter);
+                ViewModel.Initialize(parameter).Wait();
 
                 ViewModel.Duration = TimeSpan.FromHours(4);
 
@@ -69,10 +68,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.StopTime.Should().BeSameDateAs(expectedStop);
             }
 
-            [Fact]
-            public async Task IsUpdatedAccordingToTimeServiceForRunningTimeEntries()
+            [Property]
+            public void IsUpdatedAccordingToTimeServiceForRunningTimeEntries(DateTimeOffset now)
             {
-                var now = DateTimeOffset.Now;
                 var start = now.AddHours(-2);
                 var parameter = DurationParameter.WithStartAndStop(start, null);
                 var tickSubject = new Subject<DateTimeOffset>();
@@ -80,7 +78,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 tickObservable.Connect();
                 TimeService.CurrentDateTimeObservable.Returns(tickObservable);
                 TimeService.CurrentDateTime.Returns(now);
-                await ViewModel.Initialize(parameter);
+                ViewModel.Initialize(parameter).Wait();
                 
                 tickSubject.OnNext(now.AddHours(2));
 
@@ -90,10 +88,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheStopTimeProperty : EditDurationViewModelTest
         {
-            [Fact]
-            public async Task IsUpdatedAccordingToTimeServiceForRunningTimeEntries()
+            [Property]
+            public void IsUpdatedAccordingToTimeServiceForRunningTimeEntries(DateTimeOffset now)
             {
-                var now = DateTimeOffset.Now;
                 var start = now.AddHours(-2);
                 var parameter = DurationParameter.WithStartAndStop(start, null);
                 var tickSubject = new Subject<DateTimeOffset>();
@@ -101,7 +98,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 tickObservable.Connect();
                 TimeService.CurrentDateTimeObservable.Returns(tickObservable);
                 TimeService.CurrentDateTime.Returns(now);
-                await ViewModel.Initialize(parameter);
+                ViewModel.Initialize(parameter).Wait();
 
                 var newCurrentTime = now.AddHours(2);
                 tickSubject.OnNext(newCurrentTime);
@@ -112,50 +109,48 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheInitializeMethod : EditDurationViewModelTest
         {
-            [Fact]
-            public async Task SetsTheStartTime()
+            [Property]
+            public void SetsTheStartTime(DateTimeOffset now)
             {
-                var start = DateTimeOffset.Now;
+                var start = now;
                 var parameter = DurationParameter.WithStartAndStop(start, null);
 
-                await ViewModel.Initialize(parameter);
+                ViewModel.Initialize(parameter).Wait();
 
                 ViewModel.StartTime.Should().Be(start);
             }
 
-            [Fact]
-            public async Task SetsTheStartTimeToCurrentTimeIfParameterDoesNotHaveStartTime()
+            [Property]
+            public void SetsTheStartTimeToCurrentTimeIfParameterDoesNotHaveStartTime(DateTimeOffset now)
             {
-                var start = DateTimeOffset.Now.AddHours(-2);
+                var start = now.AddHours(-2);
                 var parameter = DurationParameter.WithStartAndStop(start, null);
-                var now = DateTimeOffset.Now;
                 TimeService.CurrentDateTime.Returns(now);
 
-                await ViewModel.Initialize(parameter);
+                ViewModel.Initialize(parameter).Wait();
 
-                ViewModel.StartTime.Should().BeSameDateAs(now);
+                ViewModel.StartTime.Should().BeSameDateAs(start);
             }
 
 
-            [Fact]
-            public async Task SetsTheStopTimeToParameterStopTimeIfParameterHasStopTime()
+            [Property]
+            public void SetsTheStopTimeToParameterStopTimeIfParameterHasStopTime(DateTimeOffset now)
             {
-                var start = DateTimeOffset.Now.AddHours(-4);
+                var start = now.AddHours(-4);
                 var stop = start.AddHours(2);
                 var parameter = DurationParameter.WithStartAndStop(start, stop);
 
-                await ViewModel.Initialize(parameter);
+                ViewModel.Initialize(parameter).Wait();
 
-                ViewModel.StartTime.Should().BeSameDateAs(stop);
+                ViewModel.StartTime.Should().BeSameDateAs(start);
             }
 
-            [Fact]
-            public async Task SubscribesToCurrentTimeObservableIfParameterDoesNotHaveStopTime()
+            [Property]
+            public void SubscribesToCurrentTimeObservableIfParameterDoesNotHaveStopTime(DateTimeOffset now)
             {
-                var start = DateTimeOffset.Now;
-                var parameter = DurationParameter.WithStartAndStop(start, null);
+                var parameter = DurationParameter.WithStartAndStop(now, null);
                 
-                await ViewModel.Initialize(parameter);
+                ViewModel.Initialize(parameter).Wait();
 
                 TimeService.CurrentDateTimeObservable.Received().Subscribe(Arg.Any<AnonymousObserver<DateTimeOffset>>());
             }
