@@ -1,5 +1,4 @@
-﻿using System;
-using CoreText;
+﻿using CoreText;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
@@ -18,6 +17,12 @@ namespace Toggl.Daneel.ViewControllers
     {
         private const int forgotPasswordLabelOffset = 27;
 
+        private readonly UIBarButtonItem backButton =
+            new UIBarButtonItem { Title = Resources.LoginBackButton, TintColor = UIColor.White };
+        
+        private readonly UIBarButtonItem nextButton =
+            new UIBarButtonItem { Title = Resources.LoginNextButton, TintColor = UIColor.White };
+    
         public LoginViewController() 
             : base(nameof(LoginViewController), null)
         {
@@ -46,11 +51,11 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.IsPasswordMasked);
 
             //Commands
-            bindingSet.Bind(NavigationItem.LeftBarButtonItem)
+            bindingSet.Bind(backButton)
                       .For(v => v.BindCommand())
                       .To(vm => vm.BackCommand);
 
-            bindingSet.Bind(NavigationItem.RightBarButtonItem)
+            bindingSet.Bind(nextButton)
                       .For(v => v.BindCommand())
                       .To(vm => vm.NextCommand);
 
@@ -71,7 +76,7 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindShouldReturn())
                       .To(vm => vm.NextCommand);
 
-            bindingSet.Bind(NavigationItem.RightBarButtonItem)
+            bindingSet.Bind(nextButton)
                       .For(v => v.BindAnimatedEnabled())
                       .To(vm => vm.NextIsEnabled);
 
@@ -159,17 +164,13 @@ namespace Toggl.Daneel.ViewControllers
         private void prepareNavigationBar()
         {
             var attributes = new UITextAttributes { Font = UIFont.SystemFontOfSize(14, UIFontWeight.Medium) };
-
             var spaceFix = new UIBarButtonItem(UIBarButtonSystemItem.FixedSpace) { Width = 8 };
 
-            NavigationItem.LeftBarButtonItems = new[] { spaceFix,
-                new UIBarButtonItem { Title = Resources.LoginBackButton, TintColor = UIColor.White } };
+            NavigationItem.LeftBarButtonItems = new[] { spaceFix, backButton };
+            NavigationItem.RightBarButtonItems = new[] { spaceFix, nextButton };
 
-            NavigationItem.RightBarButtonItems = new[] { spaceFix, 
-                new UIBarButtonItem { Title = Resources.LoginNextButton, TintColor = UIColor.White } };
-
-            NavigationItem.LeftBarButtonItem.SetTitleTextAttributes(attributes, UIControlState.Normal);
-            NavigationItem.RightBarButtonItem.SetTitleTextAttributes(attributes, UIControlState.Normal);
+            backButton.SetTitleTextAttributes(attributes, UIControlState.Normal);
+            nextButton.SetTitleTextAttributes(attributes, UIControlState.Normal);
         }
     }
 }
