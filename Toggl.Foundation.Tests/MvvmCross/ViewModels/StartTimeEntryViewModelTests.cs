@@ -54,15 +54,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public sealed class TheInitializeMethod : StartTimeEntryViewModelTest
+        public sealed class ThePrepareMethod : StartTimeEntryViewModelTest
         {
             [Fact]
-            public async Task SetsTheDateAccordingToTheDateParameterReceived()
+            public void SetsTheDateAccordingToTheDateParameterReceived()
             {
                 var date = DateTimeOffset.UtcNow;
                 var parameter = DateParameter.WithDate(date);
 
-                await ViewModel.Initialize(parameter);
+                ViewModel.Prepare(parameter);
 
                 ViewModel.StartDate.Should().BeSameDateAs(date);
             }
@@ -103,9 +103,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact]
-            public async Task StartProjectSuggestionEvenIfTheProjectHasAlreadyBeenSelected()
+            public void StartProjectSuggestionEvenIfTheProjectHasAlreadyBeenSelected()
             {
-                await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                ViewModel.Prepare(DateParameter.WithDate(DateTimeOffset.UtcNow));
                 ViewModel.TextFieldInfo = new TextFieldInfo(
                     Description, Description.Length,
                     ProjectId, ProjectName, ProjectColor);
@@ -116,9 +116,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact]
-            public async Task SetsTheIsSuggestingProjectsPropertyToTrueIfNotInProjectSuggestionMode()
+            public void SetsTheIsSuggestingProjectsPropertyToTrueIfNotInProjectSuggestionMode()
             {
-                await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                ViewModel.Prepare(DateParameter.WithDate(DateTimeOffset.UtcNow));
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
 
@@ -126,11 +126,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact]
-            public async Task AddsAnAtSymbolAtTheEndOfTheQueryInOrderToStartProjectSuggestionMode()
+            public void AddsAnAtSymbolAtTheEndOfTheQueryInOrderToStartProjectSuggestionMode()
             {
                 const string description = "Testing Toggl Apps";
                 var expected = $"{description}@";
-                await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                ViewModel.Prepare(DateParameter.WithDate(DateTimeOffset.UtcNow));
                 ViewModel.TextFieldInfo = new TextFieldInfo(description, description.Length);
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
@@ -151,9 +151,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [InlineData("Testing Toggl Apps@somequery")]
             [InlineData("Testing Toggl Apps@some query")]
             [InlineData("Testing Toggl Apps@some query@query")]
-            public async Task SetsTheIsSuggestingProjectsPropertyToFalseIfInProjectSuggestionMode(string description)
+            public void SetsTheIsSuggestingProjectsPropertyToFalseIfInProjectSuggestionMode(string description)
             {
-                await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                ViewModel.Prepare(DateParameter.WithDate(DateTimeOffset.UtcNow));
                 ViewModel.TextFieldInfo = new TextFieldInfo(description, description.Length);
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
@@ -174,10 +174,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [InlineData("Testing Toggl Apps@somequery", "Testing Toggl Apps")]
             [InlineData("Testing Toggl Apps@some query", "Testing Toggl Apps")]
             [InlineData("Testing Toggl Apps@some query@query", "Testing Toggl Apps")]
-            public async Task RemovesTheAtSymbolFromTheDescriptionTextIfAlreadyInProjectSuggestionMode(
+            public void RemovesTheAtSymbolFromTheDescriptionTextIfAlreadyInProjectSuggestionMode(
                 string description, string expected)
             {
-                await ViewModel.Initialize(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                ViewModel.Prepare(DateParameter.WithDate(DateTimeOffset.UtcNow));
                 ViewModel.TextFieldInfo = new TextFieldInfo(description, description.Length);
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
@@ -195,7 +195,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var description = "Testing Toggl apps";
                 var dateParameter = DateParameter.WithDate(date);
 
-                await ViewModel.Initialize(dateParameter);
+                ViewModel.Prepare(dateParameter);
                 ViewModel.TextFieldInfo = new TextFieldInfo(description, 0);
                 ViewModel.DoneCommand.Execute();
 

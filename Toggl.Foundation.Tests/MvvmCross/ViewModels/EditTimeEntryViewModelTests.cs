@@ -3,7 +3,6 @@ using System.Reactive.Linq;
 using FluentAssertions;
 using MvvmCross.Core.Navigation;
 using NSubstitute;
-using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -75,7 +74,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .SetDescription("Test")
                     .Build();
                 DataSource.TimeEntries.GetById(Arg.Is(timeEntry.Id)).Returns(Observable.Return(timeEntry));
-                await ViewModel.Initialize(IdParameter.WithId(12));
+                ViewModel.Prepare(IdParameter.WithId(12));
+                await ViewModel.Initialize();
 
                 await ViewModel.EditDurationCommand.ExecuteAsync();
 

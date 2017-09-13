@@ -48,7 +48,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
-                await NavigationService.Received().Navigate<OnboardingViewModel>();
+                await NavigationService.Received().Navigate(typeof(OnboardingViewModel));
             }
         }
 

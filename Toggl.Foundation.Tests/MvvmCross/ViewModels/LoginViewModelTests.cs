@@ -115,35 +115,35 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public sealed class TheInitializeMethod : LoginViewModelTest
+        public sealed class ThePrepareMethod : LoginViewModelTest
         {
             [Fact]
-            public async Task SetsTheLoginType()
+            public void SetsTheLoginType()
             {
                 ViewModel.LoginType = (LoginType)1000;
                 var parameter = LoginParameter.Login;
 
-                await ViewModel.Initialize(parameter);
+                ViewModel.Prepare(parameter);
 
                 ViewModel.LoginType.Should().Be(LoginType.Login);
             }
 
             [Fact]
-            public async Task SetsTheTitleToLoginWhenThePassedParameterIsLogin()
+            public void SetsTheTitleToLoginWhenThePassedParameterIsLogin()
             {
                 var parameter = LoginParameter.Login;
 
-                await ViewModel.Initialize(parameter);
+                ViewModel.Prepare(parameter);
 
                 ViewModel.Title.Should().Be(Resources.LoginTitle);
             }
 
             [Fact]
-            public async Task SetsTheTitleToSignupWhenThePassedParameterIsLogin()
+            public void SetsTheTitleToSignupWhenThePassedParameterIsLogin()
             {
-                var parameter = LoginParameter.SignUp;
+                var parameter = SignUp;
 
-                await ViewModel.Initialize(parameter);
+                ViewModel.Prepare(parameter);
 
                 ViewModel.Title.Should().Be(Resources.SignUpTitle);
             }
@@ -226,7 +226,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     ViewModel.NextCommand.Execute();
 
-                    NavigationService.Received().Navigate<MainViewModel>();
+                    NavigationService.Received().Navigate(typeof(MainViewModel));
                 }
 
                 [Fact]
@@ -262,7 +262,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     ViewModel.NextCommand.Execute();
 
-                    NavigationService.DidNotReceive().Navigate<MainViewModel>();
+                    NavigationService.DidNotReceive().Navigate(typeof(MainViewModel));
                 }
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using CoreAnimation;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Core.Views;
 using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters;
 using MvvmCross.iOS.Views.Presenters.Attributes;

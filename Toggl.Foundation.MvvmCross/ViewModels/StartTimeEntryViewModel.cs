@@ -104,10 +104,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
         }
 
-        public override async Task Initialize(DateParameter parameter)
+        public override void Prepare(DateParameter parameter)
         {
-            await Initialize();
-
             StartDate = parameter.GetDate();
 
             elapsedTimeDisposable =

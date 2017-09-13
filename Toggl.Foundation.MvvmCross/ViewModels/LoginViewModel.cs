@@ -90,12 +90,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             TogglePasswordVisibilityCommand = new MvxCommand(togglePasswordVisibility);
         }
 
-        public override Task Initialize(LoginParameter parameter)
+        public override void Prepare(LoginParameter parameter)
         {
             LoginType = parameter.Type;
             Title = LoginType == LoginType.Login ? Resources.LoginTitle : Resources.SignUpTitle;
-
-            return base.Initialize();
         }
 
         private void OnEmailChanged()

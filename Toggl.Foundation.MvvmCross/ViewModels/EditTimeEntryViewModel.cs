@@ -92,13 +92,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SelectStartDateTimeCommand = new MvxAsyncCommand(selectStartDateTime);
         }
 
-        public override async Task Initialize(IdParameter parameter)
+        public override void Prepare(IdParameter parameter)
         {
-            await base.Initialize();
+            Id = parameter.Id;
+        }
 
-            var timeEntry = await dataSource.TimeEntries.GetById(parameter.Id);
+        public override async Task Initialize()
+        {
+            var timeEntry = await dataSource.TimeEntries.GetById(Id);
 
-            Id = timeEntry.Id;
             Description = timeEntry.Description;
             StartTime = timeEntry.Start;
             EndTime = timeEntry.Stop;
@@ -108,11 +110,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ProjectColor = timeEntry?.Project?.Color;
             Task = timeEntry?.Task?.Name;
             Client = timeEntry?.Project?.Client?.Name;
-        }
-
-        public override async Task Initialize()
-        {
-            await base.Initialize();
 
             if (EndTime == null)
                 subscribeToTimeServiceTicks();

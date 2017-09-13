@@ -40,10 +40,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SaveCommand = new MvxAsyncCommand(save);
         }
 
-        public override async Task Initialize(DurationParameter parameter)
+        public override void Prepare(DurationParameter parameter)
         {
-            await base.Initialize();
-
             isRunning = parameter.Stop == null;
             if (isRunning)
             {

@@ -50,7 +50,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
 
                 AppStart.Start();
 
-                NavigationService.Received().Navigate<OnboardingViewModel>();
+                NavigationService.Received().Navigate(typeof(OnboardingViewModel));
             }
 
             [Fact]
@@ -61,7 +61,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
 
                 AppStart.Start();
 
-                NavigationService.Received().Navigate<MainViewModel>();
+                NavigationService.Received().Navigate(typeof(MainViewModel));
             }
         }
     }

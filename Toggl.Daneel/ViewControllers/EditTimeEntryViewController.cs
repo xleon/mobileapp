@@ -4,6 +4,7 @@ using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
 using MvvmCross.Plugins.Visibility;
+using Toggl.Daneel.Combiners;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Foundation;
@@ -32,6 +33,7 @@ namespace Toggl.Daneel.ViewControllers
             var dateConverter = new DateToTitleStringValueConverter();
             var timeConverter = new DateTimeToTimeConverter();
             var visibilityConverter = new MvxVisibilityValueConverter();
+            var projectTaskClientCombiner = new ProjectTaskClientValueCombiner();
             var inverterVisibilityConverter = new MvxInvertedVisibilityValueConverter();
 
             var bindingSet = this.CreateBindingSet<EditTimeEntryViewController, EditTimeEntryViewModel>();
@@ -43,8 +45,14 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.Duration)
                       .WithConversion(durationConverter);
             
-            bindingSet.Bind(ProjectTaskClientLabel, $"AttributedText ProjectTaskClient(Project, Task, Client, {ProjectTaskClientLabel.Font.CapHeight}, ProjectColor)")
-                      .For(v => v.AttributedText); 
+            bindingSet.Bind(ProjectTaskClientLabel)
+                      .For(v => v.AttributedText)
+                      .ByCombining(projectTaskClientCombiner,
+                          nameof(EditTimeEntryViewModel.Project),
+                          nameof(EditTimeEntryViewModel.Task),
+                          nameof(EditTimeEntryViewModel.Client),
+                          ProjectTaskClientLabel.Font.CapHeight.ToString(),
+                          nameof(EditTimeEntryViewModel.ProjectColor)); 
 
             bindingSet.Bind(StartDateLabel)
                       .To(vm => vm.StartTime)

@@ -33,9 +33,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SaveCommand = new MvxCommand(save);
         }
         
-        public override async Task Initialize(DateParameter parameter)
+        public override void Prepare(DateParameter parameter)
         {
-            await base.Initialize();
             DateTime = parameter.GetDate().LocalDateTime;
         }
 

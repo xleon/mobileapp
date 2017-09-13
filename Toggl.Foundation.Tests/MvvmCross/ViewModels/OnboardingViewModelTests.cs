@@ -145,7 +145,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.LoginCommand.ExecuteAsync();
 
-                await NavigationService.Received().Navigate<LoginViewModel, LoginParameter>(Arg.Any<LoginParameter>());
+                await NavigationService.Received().Navigate(typeof(LoginViewModel), Arg.Any<LoginParameter>());
             }
         }
     }

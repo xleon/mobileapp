@@ -232,7 +232,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.EditCommand.ExecuteAsync(timeEntryViewModel);
 
-                await NavigationService.Received().Navigate<EditTimeEntryViewModel, IdParameter>(Arg.Is<IdParameter>(p => p.Id == databaseTimeEntry.Id));
+                await NavigationService.Received().Navigate(typeof(EditTimeEntryViewModel),  Arg.Is<IdParameter>(p => p.Id == databaseTimeEntry.Id));
             }
         }
     }

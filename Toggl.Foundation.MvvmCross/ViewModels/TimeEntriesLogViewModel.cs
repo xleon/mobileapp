@@ -25,8 +25,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public bool IsWelcome { get; set; }
 
-        public ObservableCollection<TimeEntryViewModelCollection> TimeEntries { get; }
-            = new ObservableCollection<TimeEntryViewModelCollection>();
+        public MvxObservableCollection<TimeEntryViewModelCollection> TimeEntries { get; }
+            = new MvxObservableCollection<TimeEntryViewModelCollection>();
 
         [DependsOn(nameof(TimeEntries))]
         public bool IsEmpty => !TimeEntries.Any();
@@ -68,7 +68,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Select(te => new TimeEntryViewModel(te))
                 .GroupBy(te => te.Start.Date)
                 .Select(grouping => new TimeEntryViewModelCollection(grouping.Key, grouping))
-                .ForEach(TimeEntries.Add);
+                .ForEach(addTimeEntries);
 
             var updateObservable =
                 dataSource.TimeEntries.TimeEntryUpdated
@@ -80,6 +80,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     .Where(isNotRunning)
                     .Merge(updateObservable)
                     .Subscribe(onTimeEntryCreated);
+        }
+
+        private void addTimeEntries(TimeEntryViewModelCollection collection)
+        {
+            TimeEntries.Add(collection);
+            
+            RaisePropertyChanged(nameof(IsEmpty));
         }
 
         private void onTimeEntryUpdated(IDatabaseTimeEntry timeEntry)

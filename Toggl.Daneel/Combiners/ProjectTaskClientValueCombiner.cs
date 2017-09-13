@@ -13,13 +13,11 @@ using MvvmCross.Plugins.Color;
 using Toggl.Foundation.MvvmCross.Helper;
 using MvvmCross.Plugins.Color.iOS;
 
-namespace Toggl.Daneel
+namespace Toggl.Daneel.Combiners
 {
     public sealed class ProjectTaskClientValueCombiner : MvxFormatValueCombiner
     {
         private const string projectDotImageResource = "icProjectDot";
-
-        private readonly MvxRGBValueConverter colorConverter = new MvxRGBValueConverter();
 
         public override bool TryGetValue(IEnumerable<IMvxSourceStep> steps, out object value)
         {
@@ -81,7 +79,7 @@ namespace Toggl.Daneel
         private void setProjectDotColor(NSMutableAttributedString text, string hexColor)
         {
             var range = new NSRange(0, 1);
-            var color = (UIColor)colorConverter.Convert(hexColor, typeof(MvxColor), null, CultureInfo.CurrentCulture);
+            var color = MvxColor.ParseHexString(hexColor).ToNativeColor();
             var attributes = new UIStringAttributes { ForegroundColor = color };
             text.AddAttributes(attributes, range);
         }

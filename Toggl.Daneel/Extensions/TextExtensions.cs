@@ -12,7 +12,6 @@ namespace Toggl.Daneel.Extensions
     public static class TextExtensions
     {
         private static readonly NSParagraphStyle paragraphStyle;
-        private static readonly MvxRGBValueConverter converter = new MvxRGBValueConverter();
         private static readonly UIColor strokeColor = Color.StartTimeEntry.ProjectTokenBorder.ToNativeColor();
 
         static TextExtensions()
@@ -52,7 +51,7 @@ namespace Toggl.Daneel.Extensions
                 return result;
 
             var hexColor = self.ProjectColor;
-            var color = (UIColor)converter.Convert(hexColor, typeof(MvxColor), null, CultureInfo.CurrentCulture);
+            var color = MvxColor.ParseHexString(hexColor).ToNativeColor();
             result.AddAttributes(new UIStringAttributes
             {
                 BaselineOffset = 7,

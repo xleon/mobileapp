@@ -46,7 +46,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ViewModel.ViewAppeared();
 
-                NavigationService.Received().Navigate<SuggestionsViewModel>();
+                NavigationService.Received().Navigate(typeof(SuggestionsViewModel));
             }
 
             [Fact]
@@ -54,7 +54,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ViewModel.ViewAppeared();
 
-                NavigationService.Received().Navigate<TimeEntriesLogViewModel>();
+                NavigationService.Received().Navigate(typeof(TimeEntriesLogViewModel));
             }
         }
 
@@ -65,7 +65,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.StartTimeEntryCommand.ExecuteAsync();
 
-                await NavigationService.Received().Navigate<StartTimeEntryViewModel, DateParameter>(Arg.Any<DateParameter>());
+                await NavigationService.Received().Navigate(typeof(StartTimeEntryViewModel), Arg.Any<DateParameter>());
             }
 
             [Fact]
@@ -76,7 +76,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.StartTimeEntryCommand.ExecuteAsync();
 
-                await NavigationService.Received().Navigate<StartTimeEntryViewModel, DateParameter>(
+                await NavigationService.Received().Navigate(
+                    typeof(StartTimeEntryViewModel),
                     Arg.Is<DateParameter>(parameter => parameter.DateString == date.ToString())
                 );
             }
@@ -89,7 +90,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.OpenSettingsCommand.ExecuteAsync();
 
-                await NavigationService.Received().Navigate<SettingsViewModel>();
+                await NavigationService.Received().Navigate(typeof(SettingsViewModel));
             }
         }
            
