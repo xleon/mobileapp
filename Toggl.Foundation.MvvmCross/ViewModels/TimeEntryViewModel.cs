@@ -5,6 +5,7 @@ using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
+    [Preserve(AllMembers = true)]
     public sealed class TimeEntryViewModel : MvxNotifyPropertyChanged
     {
         public long Id { get; }
@@ -12,6 +13,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public string Description { get; } = "";
 
         public string ProjectName { get; } = "";
+
+        public string ClientName { get; } = "";
 
         public string TaskName { get; } = "";
 
@@ -33,11 +36,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             HasProject = timeEntry.Project != null;
             Duration = timeEntry.Stop.Value - Start;
 
-            if (HasProject)
-            {
-                ProjectName = timeEntry.Project.Name;
-                ProjectColor = timeEntry.Project.Color;
-            }
+            if (!HasProject) return;
+
+            ProjectName = timeEntry.Project.Name;
+            ProjectColor = timeEntry.Project.Color;
+
+            ClientName = timeEntry.Project.Client?.Name ?? "";
         }
     }
 }

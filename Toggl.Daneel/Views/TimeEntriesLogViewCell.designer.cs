@@ -27,15 +27,7 @@ namespace Toggl.Daneel.Views
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIView ProjectDotView { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel ProjectLabel { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel TaskLabel { get; set; }
+        UIKit.UILabel ProjectTaskClientLabel { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -58,19 +50,9 @@ namespace Toggl.Daneel.Views
                 DescriptionTopDistanceConstraint = null;
             }
 
-            if (ProjectDotView != null) {
-                ProjectDotView.Dispose ();
-                ProjectDotView = null;
-            }
-
-            if (ProjectLabel != null) {
-                ProjectLabel.Dispose ();
-                ProjectLabel = null;
-            }
-
-            if (TaskLabel != null) {
-                TaskLabel.Dispose ();
-                TaskLabel = null;
+            if (ProjectTaskClientLabel != null) {
+                ProjectTaskClientLabel.Dispose ();
+                ProjectTaskClientLabel = null;
             }
 
             if (TimeLabel != null) {

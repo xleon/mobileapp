@@ -31,29 +31,54 @@ namespace Toggl.Daneel.Combiners
             var fontHeight = (double)stepList[3].GetValue();
             var projectColor = stepList[4].GetValue().ToString();
 
-            var text = buildString(project, task, client);
-
-            var image = UIImage.FromBundle(projectDotImageResource).ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-            var dot = new NSTextAttachment { Image = image };
-            //There neeeds to be a space before the dot, otherwise the colors don't work
-            var attributedString = new NSMutableAttributedString(" ");
-            attributedString.Append(NSAttributedString.FromAttachment(dot));
-            attributedString.Append(new NSAttributedString(text));
-
-            verticallyCenterProjectDot(dot, fontHeight);
-
-            if (!string.IsNullOrEmpty(projectColor))
-                setProjectDotColor(attributedString, projectColor);
-
-            if (!string.IsNullOrEmpty(client))
-                setClientTextColor(attributedString, client);
-
-            value = attributedString;
+            value = buildAttributedString(project, task, client, projectColor, fontHeight);
 
             return true;
         }
 
-        private string buildString(string project, string task, string client)
+        private static NSMutableAttributedString buildAttributedString(string project, string task, string client, 
+                                                                       string projectColor, double fontHeight)
+        {
+            var dot = createDot(fontHeight, projectColor);
+            var projectInfo = buildString(project, task, client);
+            dot.Append(projectInfo);
+            return dot;
+        }
+
+        private static NSMutableAttributedString createDot(double fontHeight, string hexColor)
+        {
+            var dot = new NSTextAttachment
+            {
+                Image = UIImage.FromBundle(projectDotImageResource)
+                               .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+            };
+
+            var imageSize = dot.Image.Size;
+            var y = (fontHeight - imageSize.Height) / 2;
+            dot.Bounds = new CGRect(0, y, imageSize.Width, imageSize.Height);
+
+            //There neeeds to be a space before the dot, otherwise the colors don't work
+            var dotString = new NSMutableAttributedString(" ");
+            var attachment = NSAttributedString.FromAttachment(dot);
+            dotString.Append(attachment);
+
+            return tryAddColorToDot(dotString, hexColor);
+        }
+
+        private static NSMutableAttributedString tryAddColorToDot(NSMutableAttributedString dotString, string hexColor)
+        {
+            if (string.IsNullOrEmpty(hexColor))
+                return dotString;
+            
+            var range = new NSRange(0, 1);
+            var color = MvxColor.ParseHexString(hexColor).ToNativeColor();
+            var attributes = new UIStringAttributes { ForegroundColor = color };
+            dotString.AddAttributes(attributes, range);
+
+            return dotString;
+        }
+
+        private static NSAttributedString buildString(string project, string task, string client)
         {
             var builder = new StringBuilder();
 
@@ -65,30 +90,21 @@ namespace Toggl.Daneel.Combiners
             
             if (!string.IsNullOrEmpty(client))
                 builder.Append($" {client}");
-
-            return builder.ToString();
+            
+            return tryAddColorToClient(builder.ToString(), client);
         }
 
-        private void verticallyCenterProjectDot(NSTextAttachment dot, double fontHeight)
+        private static NSAttributedString tryAddColorToClient(string text, string client)
         {
-            var imageSize = dot.Image.Size;
-            var y = (fontHeight - imageSize.Height) / 2;
-            dot.Bounds = new CGRect(0, y, imageSize.Width, imageSize.Height);
-        }
+            var result = new NSMutableAttributedString(text);
+            if (string.IsNullOrEmpty(client))
+                return result;
 
-        private void setProjectDotColor(NSMutableAttributedString text, string hexColor)
-        {
-            var range = new NSRange(0, 1);
-            var color = MvxColor.ParseHexString(hexColor).ToNativeColor();
-            var attributes = new UIStringAttributes { ForegroundColor = color };
-            text.AddAttributes(attributes, range);
-        }
-
-        private void setClientTextColor(NSMutableAttributedString text, string client)
-        {
             var range = new NSRange(text.Length - client.Length, client.Length);
             var attributes = new UIStringAttributes { ForegroundColor = Color.EditTimeEntry.ClientText.ToNativeColor() };
-            text.AddAttributes(attributes, range);
+            result.AddAttributes(attributes, range);
+
+            return result;
         }
     }
 }

@@ -5,6 +5,7 @@ using MvvmCross.Binding.iOS;
 using MvvmCross.Binding.iOS.Views;
 using MvvmCross.Plugins.Color;
 using MvvmCross.Plugins.Visibility;
+using Toggl.Daneel.Combiners;
 using Toggl.Daneel.Extensions;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -14,8 +15,8 @@ namespace Toggl.Daneel.Views
 {
     public partial class TimeEntriesLogViewCell : MvxTableViewCell
     {
-        private const float NoProjectDistance = 24;
-        private const float HasProjectDistance = 14;
+        private const float noProjectDistance = 24;
+        private const float hasProjectDistance = 14;
 
         public static readonly NSString Key = new NSString(nameof(TimeEntriesLogViewCell));
         public static readonly UINib Nib;
@@ -41,25 +42,31 @@ namespace Toggl.Daneel.Views
                 var colorConverter = new MvxRGBValueConverter();
                 var visibilityConverter = new MvxVisibilityValueConverter();
                 var timeSpanConverter = new TimeSpanToDurationValueConverter();
-                var descriptionTopDistanceValueConverter = new BoolToConstantValueConverter<nfloat>(HasProjectDistance, NoProjectDistance);
+                var projectTaskClientCombiner = new ProjectTaskClientValueCombiner();
+                var descriptionTopDistanceValueConverter = 
+                    new BoolToConstantValueConverter<nfloat>(hasProjectDistance, noProjectDistance);
                 
                 var bindingSet = this.CreateBindingSet<TimeEntriesLogViewCell, TimeEntryViewModel>();
 
                 //Text
-                bindingSet.Bind(ProjectLabel).To(vm => vm.ProjectName);
                 bindingSet.Bind(DescriptionLabel).To(vm => vm.Description);
+                bindingSet.Bind(ProjectTaskClientLabel)
+                          .For(v => v.AttributedText)
+                          .ByCombining(projectTaskClientCombiner, 
+                              nameof(TimeEntryViewModel.ProjectName),
+                              nameof(TimeEntryViewModel.TaskName),
+                              nameof(TimeEntryViewModel.ClientName),
+                              ProjectTaskClientLabel.Font.CapHeight.ToString(), 
+                              nameof(TimeEntryViewModel.ProjectColor));
+
                 bindingSet.Bind(TimeLabel)
                           .To(vm => vm.Duration)
                           .WithConversion(timeSpanConverter);
 
                 //Color
-                bindingSet.Bind(ProjectLabel)
+                //TextColor only changes the color of attributed text that doesn't have a ForegroundColor
+                bindingSet.Bind(ProjectTaskClientLabel)
                           .For(v => v.TextColor)
-                          .To(vm => vm.ProjectColor)
-                          .WithConversion(colorConverter);
-
-                bindingSet.Bind(ProjectDotView)
-                          .For(v => v.BackgroundColor)
                           .To(vm => vm.ProjectColor)
                           .WithConversion(colorConverter);
 
@@ -69,17 +76,7 @@ namespace Toggl.Daneel.Views
                           .To(vm => vm.HasProject)
                           .WithConversion(descriptionTopDistanceValueConverter);
                 
-                bindingSet.Bind(ProjectLabel)
-                          .For(v => v.BindVisibility())
-                          .To(vm => vm.HasProject)
-                          .WithConversion(visibilityConverter);
-
-                bindingSet.Bind(ProjectDotView)
-                          .For(v => v.BindVisibility())
-                          .To(vm => vm.HasProject)
-                          .WithConversion(visibilityConverter);
-
-                bindingSet.Bind(TaskLabel)
+                bindingSet.Bind(ProjectTaskClientLabel)
                           .For(v => v.BindVisibility())
                           .To(vm => vm.HasProject)
                           .WithConversion(visibilityConverter);
