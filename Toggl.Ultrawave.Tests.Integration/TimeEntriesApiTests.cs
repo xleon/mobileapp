@@ -105,7 +105,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
         public sealed class TheUpdateMethod : AuthenticatedPutEndpointBaseTests<ITimeEntry>
         {
-            [Fact(Skip = "A bug in staging API which causes BadRequest 400: 'Invalid tag_ids'"), LogTestInfo] // TODO: when removing this test skip, also fix "CallEndpointWith"
+            [Fact, LogTestInfo]
             public async Task UpdatesExistingTimeEntry()
             {
                 var (togglClient, user) = await SetupTestUser();
@@ -132,30 +132,6 @@ namespace Toggl.Ultrawave.Tests.Integration
                 updatedTimeEntry.Billable.Should().Be(false);
                 updatedTimeEntry.ProjectId.Should().BeNull();
                 updatedTimeEntry.TaskId.Should().BeNull();
-            }
-
-            [Fact, LogTestInfo]
-            public async Task UpdatingFailsWhenWorkspaceHasNoTags()
-            {
-                var (togglClient, user) = await SetupTestUser();
-                var timeEntry = createTimeEntry(user);
-                var persistedTimeEntry = await togglClient.TimeEntries.Create(timeEntry);
-                var timeEntryWithUpdates = new TimeEntry
-                {
-                    Id = persistedTimeEntry.Id,
-                    Description = Guid.NewGuid().ToString(),
-                    WorkspaceId = persistedTimeEntry.WorkspaceId,
-                    Billable = persistedTimeEntry.Billable,
-                    Start = persistedTimeEntry.Start,
-                    Stop = persistedTimeEntry.Stop,
-                    TagIds = new List<long>(),
-                    UserId = persistedTimeEntry.UserId,
-                    CreatedWith = persistedTimeEntry.CreatedWith
-                };
-
-                Action tryToUpdate = () => togglClient.TimeEntries.Update(timeEntryWithUpdates).SingleAsync().Wait();
-
-                tryToUpdate.ShouldThrow<BadRequestException>();
             }
 
             [Fact, LogTestInfo]
@@ -224,8 +200,6 @@ namespace Toggl.Ultrawave.Tests.Integration
                         UserId = persistedTimeEntry.UserId,
                         CreatedWith = persistedTimeEntry.CreatedWith
                     };
-
-                    await togglApi.Tags.Create(new Ultrawave.Models.Tag { WorkspaceId = persistedTimeEntry.WorkspaceId, Name = "hack" });  // TODO: remove when the API bug is fixed
 
                     return CallEndpointWith(togglApi, timeEntryWithUpdates);
                 });
