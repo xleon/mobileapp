@@ -23,10 +23,7 @@ namespace Toggl.Ultrawave.Models
 
         public string Description { get; set; }
 
-        [JsonProperty("tags")]
-        public IList<string> TagNames { get; set; }
-
-        public IList<long> TagIds { get; set; }
+        public IEnumerable<long> TagIds { get; set; }
 
         public DateTimeOffset At { get; set; }
 

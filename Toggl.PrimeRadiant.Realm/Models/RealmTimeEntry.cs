@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Realms;
 using Toggl.PrimeRadiant.Models;
 using System.Collections.Generic;
@@ -17,9 +18,11 @@ namespace Toggl.PrimeRadiant.Realm
 
         public string Description { get; set; }
 
-        public IList<string> TagNames { get; set; }
+        public IList<RealmTag> RealmTags { get; }
 
-        public IList<long> TagIds { get; set; }
+        public IEnumerable<long> TagIds => RealmTags?.Select(tag => tag.Id).ToList();
+
+        public IEnumerable<IDatabaseTag> Tags => RealmTags;
 
         public DateTimeOffset At { get; set; }
 

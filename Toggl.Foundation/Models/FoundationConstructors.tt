@@ -2,7 +2,9 @@
 #><#@ assembly name="System.Core"
 #><#@ import namespace="System.IO"
 #><#@ import namespace="System.Linq"
-#>using Toggl.Multivac.Models;
+#><#@ import namespace="System.Text.RegularExpressions"
+#>using System.Linq;
+using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
@@ -46,8 +48,23 @@ namespace Toggl.Foundation.Models
                 var indexOfPropName = trimmedLine.IndexOf(" ") + 1;
                 var propName = trimmedLine.Substring(indexOfPropName, trimmedLine.Length - 9 - indexOfPropName);
 
+                var wrapping = "";
                 var requiresWrapping = line.Contains("IDatabase");
-                var assignment = requiresWrapping ? $"entity.{propName} == null ? null : Models.{propName}.From(entity.{propName})" : $"entity.{propName}";
+                if (requiresWrapping)
+                {
+                    var isList = line.Contains(" IEnumerable<");
+                    if (isList)
+                    {
+                        var foundationClassName = Regex.Match(line, "IEnumerable<IDatabase(?<class>[^>]+?)>").Groups["class"].Value;
+                        wrapping = $"entity.{propName}.Select(Models.{foundationClassName}.From)";
+                    }
+                    else
+                    {
+                        wrapping = $"Models.{propName}.From(entity.{propName})";
+                    }
+                }
+                
+                var assignment = requiresWrapping ? $"entity.{propName} == null ? null : {wrapping}" : $"entity.{propName}";
 
                 WriteLine($"            {propName} = {assignment};");
             }

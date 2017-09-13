@@ -31,9 +31,6 @@ namespace Toggl.Foundation.Models
 
             public long? TaskId { get; private set; }
 
-            public List<string> TagNames { get; private set; }
-                = new List<string>();
-
             public List<long> TagIds { get; private set; }
                 = new List<long>();
 
@@ -103,14 +100,6 @@ namespace Toggl.Foundation.Models
             public Builder SetTaskId(long? taskId)
             {
                 TaskId = taskId;
-                return this;
-            }
-
-            public Builder SetTagNames(IEnumerable<string> tagNames)
-            {
-                if (tagNames == null) return this;
-                TagNames.Clear();
-                TagNames.AddRange(tagNames);
                 return this;
             }
 
@@ -186,7 +175,6 @@ namespace Toggl.Foundation.Models
             WorkspaceId = builder.WorkspaceId;
             TaskId = builder.TaskId;
             ProjectId = builder.ProjectId;
-            TagNames = builder.TagNames;
             TagIds = builder.TagIds;
             At = builder.At.Value;
             ServerDeletedAt = builder.ServerDeletedAt;

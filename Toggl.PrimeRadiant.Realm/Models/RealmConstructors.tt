@@ -104,6 +104,20 @@ namespace Toggl.PrimeRadiant.Realm
                 assignment = $"skip{entityName}Fetch ? null : realm.All<{propName}>().Single(x => x.Id == entity.{entityName}Id)";
             }
 
+            var isListOfRealmProperties = Regex.IsMatch(line, "Ids ") && line.Contains(" IEnumerable<") && !line.Contains("Default");
+            if (isListOfRealmProperties)
+            {
+                var entityName = propName.Replace("Ids", "");
+
+                var realmModelName = $"Realm{entityName}";
+                var realmPropName = $"Realm{entityName}s";
+                WriteLine($"            {realmPropName}.Clear();");
+                WriteLine($"            var all{realmPropName} = entity.{propName}.Select(id => realm.All<{realmModelName}>().Single(x => x.Id == id));");
+                WriteLine($"            foreach (var oneOf{realmPropName} in all{realmPropName})");
+                WriteLine($"                {realmPropName}.Add(oneOf{realmPropName});");
+                continue;
+            }
+
             WriteLine($"            {propName} = {assignment};");
         }
 

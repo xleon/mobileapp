@@ -19,9 +19,7 @@ namespace Toggl.Multivac.Models
 
         string Description { get; }
 
-        IList<string> TagNames { get; }
-
-        IList<long> TagIds { get; }
+        IEnumerable<long> TagIds { get; }
 
         DateTimeOffset At { get; }
 

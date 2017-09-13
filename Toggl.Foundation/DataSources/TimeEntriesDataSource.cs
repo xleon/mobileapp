@@ -118,7 +118,6 @@ namespace Toggl.Foundation.DataSources
                         .SetTaskId(timeEntry.TaskId)
                         .SetUserId(timeEntry.UserId)
                         .SetBillable(timeEntry.Billable)
-                        .SetTagNames(timeEntry.TagNames)
                         .SetIsDeleted(timeEntry.IsDeleted)
                         .SetProjectId(timeEntry.ProjectId)
                         .SetCreatedWith(timeEntry.CreatedWith)

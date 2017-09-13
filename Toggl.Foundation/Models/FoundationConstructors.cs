@@ -1,4 +1,5 @@
-﻿using Toggl.Multivac.Models;
+﻿using System.Linq;
+using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
@@ -206,6 +207,7 @@ namespace Toggl.Foundation.Models
             User = entity.User == null ? null : Models.User.From(entity.User);
             Project = entity.Project == null ? null : Models.Project.From(entity.Project);
             Workspace = entity.Workspace == null ? null : Models.Workspace.From(entity.Workspace);
+            Tags = entity.Tags == null ? null : entity.Tags.Select(Models.Tag.From);
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
             IsDeleted = entity.IsDeleted;
@@ -224,7 +226,6 @@ namespace Toggl.Foundation.Models
             Start = entity.Start;
             Stop = entity.Stop;
             Description = entity.Description;
-            TagNames = entity.TagNames;
             TagIds = entity.TagIds;
             At = entity.At;
             ServerDeletedAt = entity.ServerDeletedAt;

@@ -208,8 +208,10 @@ namespace Toggl.PrimeRadiant.Realm
             Start = entity.Start;
             Stop = entity.Stop;
             Description = entity.Description;
-            TagNames = entity.TagNames;
-            TagIds = entity.TagIds;
+            RealmTags.Clear();
+            var allRealmTags = entity.TagIds.Select(id => realm.All<RealmTag>().Single(x => x.Id == id));
+            foreach (var oneOfRealmTags in allRealmTags)
+                RealmTags.Add(oneOfRealmTags);
             At = entity.At;
             ServerDeletedAt = entity.ServerDeletedAt;
             var skipUserFetch = entity?.UserId == null || entity.UserId == 0;

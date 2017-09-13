@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -162,10 +163,8 @@ namespace Toggl.Ultrawave.Tests.Integration
                 updatedTimeEntry.Billable.Should().Be(false);
                 updatedTimeEntry.ProjectId.Should().BeNull();
                 updatedTimeEntry.TaskId.Should().BeNull();
-                updatedTimeEntry.TagIds.Count.Should().Be(1);
-                updatedTimeEntry.TagIds[0].Should().Be(tag.Id);
-                updatedTimeEntry.TagNames.Count.Should().Be(1);
-                updatedTimeEntry.TagNames[0].Should().Be(tag.Name);
+                updatedTimeEntry.TagIds.Count().Should().Be(1);
+                updatedTimeEntry.TagIds.First().Should().Be(tag.Id);
             }
 
             [Fact, LogTestInfo]
@@ -215,7 +214,6 @@ namespace Toggl.Ultrawave.Tests.Integration
             Start = new DateTimeOffset(DateTime.Now - TimeSpan.FromMinutes(5)),
             Stop = new DateTimeOffset(DateTime.Now),
             Description = Guid.NewGuid().ToString(),
-            TagNames = new List<string>(),
             TagIds = new List<long>(),
             UserId = user.Id,
             CreatedWith = "Ultraware Integration Tests"
