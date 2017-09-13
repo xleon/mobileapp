@@ -106,6 +106,8 @@
     <Compile Include="Sync\States\Push\BaseCreateEntityState.cs" />
     <Compile Include="Sync\States\Push\CreateTimeEntryState.cs" />
     <Compile Include="Sync\States\Push\PushOneEntityState.cs" />
+    <Compile Include="Sync\States\Push\UpdateTimeEntryState.cs" />
+    <Compile Include="Sync\States\Push\BaseUpdateEntityState.cs" />
     <Compile Include="Autocomplete\TextFieldInfo.cs" />
     <Compile Include="Autocomplete\Suggestions\AutocompleteSuggestion.cs" />
     <Compile Include="Autocomplete\Suggestions\AutocompleteSuggestionComparer.cs" />
