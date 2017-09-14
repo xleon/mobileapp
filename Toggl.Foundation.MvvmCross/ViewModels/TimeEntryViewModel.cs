@@ -10,9 +10,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     {
         public long Id { get; }
 
+        public bool Billable { get; }
+
         public string Description { get; } = "";
 
+        public long? ProjectId { get; }
+
         public string ProjectName { get; } = "";
+
+        public string ProjectColor { get; } = "#00000000";
 
         public string ClientName { get; } = "";
 
@@ -22,8 +28,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public TimeSpan Duration { get; }
 
-        public string ProjectColor { get; } = "#00000000";
-
         public bool HasProject { get; }
 
         public TimeEntryViewModel(IDatabaseTimeEntry timeEntry)
@@ -32,12 +36,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             Id = timeEntry.Id;
             Start = timeEntry.Start;
+            Billable = timeEntry.Billable;
             Description = timeEntry.Description;
             HasProject = timeEntry.Project != null;
             Duration = timeEntry.Stop.Value - Start;
 
             if (!HasProject) return;
 
+            ProjectId = timeEntry.Project.Id;
             ProjectName = timeEntry.Project.Name;
             ProjectColor = timeEntry.Project.Color;
 

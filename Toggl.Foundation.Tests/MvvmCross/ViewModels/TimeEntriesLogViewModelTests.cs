@@ -6,14 +6,14 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
+using Toggl.Foundation.Models;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Models;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 using ThreadingTask = System.Threading.Tasks.Task;
-using Toggl.Foundation.MvvmCross.Parameters;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -22,20 +22,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public abstract class TimeEntriesLogViewModelTest : BaseViewModelTests<TimeEntriesLogViewModel>
         {
             protected override TimeEntriesLogViewModel CreateViewModel()
-                => new TimeEntriesLogViewModel(DataSource, NavigationService);
+                => new TimeEntriesLogViewModel(DataSource, TimeService, NavigationService);
         }
 
         public sealed class TheConstructor : TimeEntriesLogViewModelTest
         {
             [Theory]
-            [ClassData(typeof(TwoParameterConstructorTestData))]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useNavigationService)
+            [ClassData(typeof(ThreeParameterConstructorTestData))]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useTimeService, bool useNavigationService)
             {
                 var dataSource = useDataSource ? DataSource : null;
+                var timeService = useTimeService ? TimeService : null;
                 var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new TimeEntriesLogViewModel(dataSource, navigationService);
+                    () => new TimeEntriesLogViewModel(dataSource, timeService, navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -233,6 +234,74 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.EditCommand.ExecuteAsync(timeEntryViewModel);
 
                 await NavigationService.Received().Navigate(typeof(EditTimeEntryViewModel),  Arg.Is<IdParameter>(p => p.Id == databaseTimeEntry.Id));
+            }
+        }
+
+        public sealed class TheContinueTimeEntryCommand : TimeEntriesLogViewModelTest
+        {
+            [Fact]
+            public async ThreadingTask CallsStopBeforeStartingANewTimeEntry()
+            {
+                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                timeEntry.Stop.Returns(DateTimeOffset.Now);
+                var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
+
+                await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
+
+                Received.InOrder(async () =>
+                {
+                    await DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>());
+                    await DataSource.TimeEntries.Start(
+                        Arg.Any<DateTimeOffset>(),
+                        Arg.Any<string>(),
+                        Arg.Any<bool>(),
+                        Arg.Any<long?>()
+                    );
+                });
+            }
+
+            [Fact]
+            public async ThreadingTask StartsATimeEntryEvenIfTheStopMethodThrowsBecauseThereWasNoRunningTimeEntry()
+            {
+                DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>())
+                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new Exception()));
+                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                timeEntry.Stop.Returns(DateTimeOffset.Now);
+                var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
+
+                await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
+
+                await DataSource.TimeEntries.Received().Start(
+                    Arg.Any<DateTimeOffset>(),
+                    Arg.Any<string>(),
+                    Arg.Any<bool>(),
+                    Arg.Any<long?>()
+                );
+            }
+
+            [Property]
+            public void StartATimeEntryWithTheSameValuesOfTheSelectedTimeEntry(string description,
+                long projectId, bool billable)
+            {
+                if (description == null || projectId == 0) return;
+
+                var project = Substitute.For<IDatabaseProject>();
+                project.Id.Returns(projectId);
+                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                timeEntry.Description.Returns(description);
+                timeEntry.Billable.Returns(billable);
+                timeEntry.Project.Returns(project);
+                timeEntry.Stop.Returns(DateTimeOffset.Now);
+                var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
+
+                ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel).Wait();
+
+                DataSource.TimeEntries.Received().Start(
+                    Arg.Any<DateTimeOffset>(),
+                    Arg.Is(description),
+                    Arg.Is(billable),
+                    Arg.Is((long?)projectId)
+                ).Wait();
             }
         }
     }

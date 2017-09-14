@@ -4,6 +4,7 @@ using System.Linq;
 using Foundation;
 using MvvmCross.Binding.ExtensionMethods;
 using MvvmCross.Binding.iOS.Views;
+using MvvmCross.Core.ViewModels;
 using Toggl.Daneel.Views;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
@@ -17,6 +18,8 @@ namespace Toggl.Daneel.ViewSources
         
         private IEnumerable<TimeEntryViewModelCollection> groupedItems
             => ItemsSource as IEnumerable<TimeEntryViewModelCollection>;
+
+        public IMvxAsyncCommand<TimeEntryViewModel> ContinueTimeEntryCommand { get; set; }
 
         public TimeEntriesLogViewSource(UITableView tableView)
             : base(tableView)
@@ -42,8 +45,11 @@ namespace Toggl.Daneel.ViewSources
             var item = GetItemAt(indexPath);
 
             var cell = GetOrCreateCellFor(tableView, indexPath, item);
-            if (cell is IMvxBindable bindable)
+            if (cell is TimeEntriesLogViewCell bindable)
+            {
                 bindable.DataContext = item;
+                bindable.ContinueTimeEntryCommand = ContinueTimeEntryCommand;
+            }
             
             cell.SelectionStyle = UITableViewCellSelectionStyle.None;
 

@@ -3,6 +3,7 @@ using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
 using MvvmCross.Binding.iOS.Views;
+using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Color;
 using MvvmCross.Plugins.Visibility;
 using Toggl.Daneel.Combiners;
@@ -21,6 +22,8 @@ namespace Toggl.Daneel.Views
         public static readonly NSString Key = new NSString(nameof(TimeEntriesLogViewCell));
         public static readonly UINib Nib;
 
+        public IMvxAsyncCommand<TimeEntryViewModel> ContinueTimeEntryCommand { get; set; }
+
         static TimeEntriesLogViewCell()
         {
             Nib = UINib.FromName(nameof(TimeEntriesLogViewCell), NSBundle.MainBundle);
@@ -36,6 +39,7 @@ namespace Toggl.Daneel.Views
             base.AwakeFromNib();
 
             TimeLabel.Font = TimeLabel.Font.GetMonospacedDigitFont();
+            ContinueButton.TouchUpInside += onContinueButtonTap;
 
             this.DelayBind(() =>
             {
@@ -84,5 +88,16 @@ namespace Toggl.Daneel.Views
                 bindingSet.Apply();
             });
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (!disposing) return;
+            ContinueButton.TouchUpInside -= onContinueButtonTap;
+        }
+
+        private async void onContinueButtonTap(object sender, EventArgs e)
+            => await ContinueTimeEntryCommand.ExecuteAsync((TimeEntryViewModel)DataContext);
     }
 }
