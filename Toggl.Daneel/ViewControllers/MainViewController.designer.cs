@@ -32,6 +32,10 @@ namespace Toggl.Daneel.ViewControllers
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIImageView SpiderBroImageView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton StartTimeEntryButton { get; set; }
 
         [Outlet]
@@ -70,6 +74,11 @@ namespace Toggl.Daneel.ViewControllers
             if (EditTimeEntryButton != null) {
                 EditTimeEntryButton.Dispose ();
                 EditTimeEntryButton = null;
+            }
+
+            if (SpiderBroImageView != null) {
+                SpiderBroImageView.Dispose ();
+                SpiderBroImageView = null;
             }
 
             if (StartTimeEntryButton != null) {

@@ -21,6 +21,8 @@ namespace Toggl.Foundation.DataSources
         private readonly Subject<IDatabaseTimeEntry> timeEntryCreatedSubject = new Subject<IDatabaseTimeEntry>();
         private readonly Subject<IDatabaseTimeEntry> timeEntryUpdatedSubject = new Subject<IDatabaseTimeEntry>();
         private readonly BehaviorSubject<IDatabaseTimeEntry> currentTimeEntrySubject = new BehaviorSubject<IDatabaseTimeEntry>(null);
+        
+        public IObservable<bool> IsEmpty { get; }
 
         public IObservable<IDatabaseTimeEntry> CurrentlyRunningTimeEntry { get; }
 
@@ -41,6 +43,14 @@ namespace Toggl.Foundation.DataSources
             CurrentlyRunningTimeEntry = currentTimeEntrySubject.AsObservable().DistinctUntilChanged();
             TimeEntryUpdated = timeEntryUpdatedSubject.AsObservable();
             TimeEntryCreated = timeEntryCreatedSubject.AsObservable().Merge(CurrentlyRunningTimeEntry.Where(te => te != null));
+
+            IsEmpty =
+                Observable.Return(default(IDatabaseTimeEntry))
+                    .StartWith()
+                    .Merge(TimeEntryUpdated)
+                    .Merge(TimeEntryCreated)
+                    .SelectMany(_ => GetAll())
+                    .Select(timeEntries => !timeEntries.Any());
 
             repository
                 .GetAll(te => te.Stop == null)

@@ -290,6 +290,10 @@
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationPaws.imageset\icIllustrationPaws.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationPaws.imageset\icIllustrationPaws%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationPaws.imageset\icIllustrationPaws%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationSpider.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationSpider.imageset\icIllustrationSpider.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationSpider.imageset\icIllustrationSpider%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationSpider.imageset\icIllustrationSpider%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />

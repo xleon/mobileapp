@@ -16,6 +16,7 @@
                 <outlet property="CurrentTimeEntryDescriptionLabel" destination="edS-73-7O7" id="name-outlet-edS-73-7O7"/>
                 <outlet property="CurrentTimeEntryElapsedTimeLabel" destination="0J7-Pj-geT" id="name-outlet-0J7-Pj-geT"/>
                 <outlet property="EditTimeEntryButton" destination="qpc-Yb-DcP" id="name-outlet-qpc-Yb-DcP"/>
+                <outlet property="SpiderBroImageView" destination="mpU-UI-dLB" id="name-outlet-mpU-UI-dLB"/>
                 <outlet property="StartTimeEntryButton" destination="4Kk-Hz-RBS" id="name-outlet-4Kk-Hz-RBS"/>
                 <outlet property="StopTimeEntryButton" destination="Ddo-IW-xE3" id="name-outlet-Ddo-IW-xE3"/>
                 <outlet property="SuggestionsContainer" destination="5K9-cC-7E8" id="name-outlet-5K9-cC-7E8"/>
@@ -69,6 +70,13 @@ TO SEE THE LOG</string>
                                                 <constraint firstAttribute="width" constant="2" id="idT-K9-PUV"/>
                                             </constraints>
                                         </imageView>
+                                        <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icIllustrationSpider" translatesAutoresizingMaskIntoConstraints="NO" id="mpU-UI-dLB">
+                                            <rect key="frame" x="157.5" y="-22" width="60" height="205"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="60" id="OFT-Lr-yz0"/>
+                                                <constraint firstAttribute="height" constant="205" id="sSY-Bb-Ekc"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
@@ -77,14 +85,16 @@ TO SEE THE LOG</string>
                                         <constraint firstItem="wKL-ZP-Ff4" firstAttribute="top" secondItem="5K9-cC-7E8" secondAttribute="bottom" constant="24" id="HTG-8h-Hsb"/>
                                         <constraint firstAttribute="bottom" secondItem="LV7-Bw-hnV" secondAttribute="bottom" id="MCj-Yu-VUE"/>
                                         <constraint firstItem="5K9-cC-7E8" firstAttribute="top" secondItem="tGg-Dk-cfk" secondAttribute="bottom" constant="12" id="S2B-dA-cpO"/>
+                                        <constraint firstItem="mpU-UI-dLB" firstAttribute="top" secondItem="EzU-Pd-V8e" secondAttribute="top" constant="-22" id="Wd6-Ev-wuH"/>
+                                        <constraint firstItem="mpU-UI-dLB" firstAttribute="centerX" secondItem="EzU-Pd-V8e" secondAttribute="centerX" id="aUE-VX-PjY"/>
                                         <constraint firstItem="tGg-Dk-cfk" firstAttribute="top" secondItem="EzU-Pd-V8e" secondAttribute="top" constant="80" id="ceS-NM-2xh"/>
                                         <constraint firstItem="LV7-Bw-hnV" firstAttribute="centerX" secondItem="EzU-Pd-V8e" secondAttribute="centerX" id="fWo-Ty-Iln"/>
                                         <constraint firstItem="tGg-Dk-cfk" firstAttribute="centerX" secondItem="EzU-Pd-V8e" secondAttribute="centerX" id="fxy-X1-Jl8"/>
                                         <constraint firstItem="wKL-ZP-Ff4" firstAttribute="centerX" secondItem="LV7-Bw-hnV" secondAttribute="centerX" id="ref-rY-xle"/>
                                     </constraints>
                                 </view>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="faz-Sa-kEe">
-                                    <rect key="frame" x="-0.5" y="667" width="375" height="667"/>
+                                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="faz-Sa-kEe">
+                                    <rect key="frame" x="-1" y="667" width="376" height="667"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                             </subviews>
@@ -195,6 +205,7 @@ TO SEE THE LOG</string>
     </objects>
     <resources>
         <image name="icArrowUp" width="10" height="6"/>
+        <image name="icIllustrationSpider" width="60" height="205"/>
         <image name="line" width="2" height="14"/>
         <image name="playIcon" width="50" height="50"/>
         <image name="stopIcon" width="34" height="34"/>

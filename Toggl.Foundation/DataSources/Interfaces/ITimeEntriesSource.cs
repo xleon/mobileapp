@@ -14,6 +14,8 @@ namespace Toggl.Foundation.DataSources
 
         IObservable<IDatabaseTimeEntry> TimeEntryUpdated { get; }
 
+        IObservable<bool> IsEmpty { get; }
+
         IObservable<IEnumerable<IDatabaseTimeEntry>> GetAll();
 
         IObservable<IEnumerable<IDatabaseTimeEntry>> GetAll(Func<IDatabaseTimeEntry, bool> predicate);

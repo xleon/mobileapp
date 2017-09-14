@@ -202,5 +202,17 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("NoProject", resourceCulture);
             }
         }
+        
+        public static string SuggestionsEmptyStateTitle {
+            get {
+                return ResourceManager.GetString("SuggestionsEmptyStateTitle", resourceCulture);
+            }
+        }
+        
+        public static string SuggestionsEmptyStateText {
+            get {
+                return ResourceManager.GetString("SuggestionsEmptyStateText", resourceCulture);
+            }
+        }
     }
 }

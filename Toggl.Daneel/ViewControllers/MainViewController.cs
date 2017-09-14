@@ -4,19 +4,20 @@ using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters.Attributes;
-using Toggl.Daneel.Extensions;
-using Toggl.Foundation.MvvmCross.Helper;
+using MvvmCross.Plugins.Color.iOS;
 using MvvmCross.Plugins.Visibility;
+using Toggl.Daneel.Extensions;
+using Toggl.Foundation.MvvmCross.Converters;
+using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
-using Toggl.Foundation.MvvmCross.Converters;
-using MvvmCross.Plugins.Color.iOS;
 
 namespace Toggl.Daneel.ViewControllers
 {
     [MvxRootPresentation(WrapInNavigationController = true)]
     public partial class MainViewController : MvxViewController<MainViewModel>
     {
+        private const float animationAngle = 0.1f;
         private readonly UIButton reportsButton = new UIButton(new CGRect(0, 0, 40, 40));
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 40));
         private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
@@ -30,6 +31,8 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidLoad();
 
+            SpiderBroImageView.Layer.AnchorPoint = new CGPoint(0.5f, 0);
+            animateSpider();
             CurrentTimeEntryCard.Layer.BorderWidth = 1;
             CurrentTimeEntryCard.Layer.CornerRadius = 8;
             CurrentTimeEntryCard.Layer.BorderColor = Color.TimeEntriesLog.ButtonBorder.ToNativeColor().CGColor;
@@ -64,6 +67,11 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindVisibility())
                       .To(vm => vm.CurrentlyRunningTimeEntry)
                       .WithConversion(invertedVisibilityConverter);
+
+            bindingSet.Bind(SpiderBroImageView)
+                      .For(v => v.BindVisibility())
+                      .To(vm => vm.SpiderIsVisible)
+                      .WithConversion(visibilityConverter);
 
             //Text
             bindingSet.Bind(CurrentTimeEntryDescriptionLabel).To(vm => vm.CurrentlyRunningTimeEntry.Description);
@@ -106,6 +114,14 @@ namespace Toggl.Daneel.ViewControllers
                 Animation.Curves.EaseOut,
                 () => StartTimeEntryButton.Transform = CGAffineTransform.MakeScale(1f, 1f)
             );
+        }
+
+        private void animateSpider()
+        {
+            SpiderBroImageView.Transform = CGAffineTransform.MakeRotation(-animationAngle);
+
+            UIView.Animate(Animation.Timings.SpiderBro, 0, UIViewAnimationOptions.Autoreverse | UIViewAnimationOptions.Repeat, 
+                () => SpiderBroImageView.Transform = CGAffineTransform.MakeRotation(animationAngle), animateSpider);
         }
     }
 }

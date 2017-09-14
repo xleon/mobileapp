@@ -1,4 +1,5 @@
-﻿﻿using System;
+﻿using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -9,12 +10,14 @@ using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class MainViewModel : MvxViewModel
     {
+        private bool isWelcome = false;
         private CompositeDisposable disposeBag = new CompositeDisposable();
 
         private readonly ITimeService timeService;
@@ -32,6 +35,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxAsyncCommand EditTimeEntryCommand { get; }
 
         public IMvxAsyncCommand OpenSettingsCommand { get; }
+
+        public bool SpiderIsVisible { get; set; } = true;
 
         public MainViewModel(ITogglDataSource dataSource, ITimeService timeService, IMvxNavigationService navigationService)
         {
@@ -57,12 +62,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .CurrentDateTimeObservable
                 .Where(_ => CurrentlyRunningTimeEntry != null)
                 .Subscribe(currentTime => CurrentTimeEntryElapsedTime = currentTime - CurrentlyRunningTimeEntry.Start);
-            
+
             var currentlyRunningTimeEntryDisposable = dataSource.TimeEntries
                 .CurrentlyRunningTimeEntry
                 .Subscribe(te => CurrentlyRunningTimeEntry = te);
 
+            var spiderDisposable =
+                dataSource.TimeEntries.IsEmpty
+                    .Subscribe(isEmpty => SpiderIsVisible = !isWelcome && isEmpty);
+
             disposeBag.Add(tickDisposable);
+            disposeBag.Add(spiderDisposable);
             disposeBag.Add(currentlyRunningTimeEntryDisposable);
         }
 
