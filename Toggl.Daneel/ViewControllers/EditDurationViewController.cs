@@ -32,6 +32,7 @@ namespace Toggl.Daneel.ViewControllers
             var bindingSet = this.CreateBindingSet<EditDurationViewController, EditDurationViewModel>();
 
             //Commands
+            bindingSet.Bind(SaveButton).To(vm => vm.SaveCommand);
             bindingSet.Bind(CloseButton).To(vm => vm.CloseCommand);
 
             //Text

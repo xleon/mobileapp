@@ -8,11 +8,13 @@ using Toggl.Multivac;
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class EditDurationViewModel : MvxViewModel<DurationParameter>
+    public sealed class EditDurationViewModel : MvxViewModel<DurationParameter, DurationParameter>
     {
-        private readonly IMvxNavigationService navigationService;
         private readonly ITimeService timeService;
+        private readonly IMvxNavigationService navigationService;
+
         private bool isRunning;
+        private DurationParameter defaultResult;
 
         public DateTimeOffset StartTime { get; private set; }
 
@@ -24,24 +26,26 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             set => onDurationChanged(value);
         }
 
-        public IMvxAsyncCommand CloseCommand { get; }
-
         public IMvxAsyncCommand SaveCommand { get; }
+
+        public IMvxAsyncCommand CloseCommand { get; }
 
         public EditDurationViewModel(IMvxNavigationService navigationService, ITimeService timeService)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
 
-            this.navigationService = navigationService;
             this.timeService = timeService;
+            this.navigationService = navigationService;
 
-            CloseCommand = new MvxAsyncCommand(close);
             SaveCommand = new MvxAsyncCommand(save);
+            CloseCommand = new MvxAsyncCommand(close);
         }
 
         public override void Prepare(DurationParameter parameter)
         {
+            defaultResult = parameter;
+
             isRunning = parameter.Stop == null;
             if (isRunning)
             {
@@ -54,9 +58,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Duration = StopTime - StartTime;
         }
 
-        private Task close() => navigationService.Close(this);
+        private Task close()
+            => navigationService.Close(this, defaultResult);
 
-        private Task save() => throw new NotImplementedException();
+        private Task save()
+            => navigationService.Close(this, DurationParameter.WithStartAndStop(StartTime, StopTime));
 
         private void onDurationChanged(TimeSpan duration)
         {

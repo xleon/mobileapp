@@ -154,7 +154,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TimeService.CurrentDateTimeObservable.Received().Subscribe(Arg.Any<AnonymousObserver<DateTimeOffset>>());
             }
         }
-        
+
         public sealed class TheCloseCommand : EditDurationViewModelTest
         {
             [Fact]
@@ -162,7 +162,47 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.CloseCommand.ExecuteAsync();
 
-                await NavigationService.Received().Close(Arg.Is(ViewModel));
+                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<DurationParameter>());
+            }
+            [Fact]
+            public async Task ReturnsTheDefaultParameter()
+            {
+                var parameter = DurationParameter.WithStartAndStop(DateTimeOffset.UtcNow, null);
+                ViewModel.Prepare(parameter);
+
+                await ViewModel.CloseCommand.ExecuteAsync();
+
+                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Is(parameter));
+            }
+        }
+
+        public sealed class TheSaveCommand : EditDurationViewModelTest
+        {
+            [Fact]
+            public async Task ClosesTheViewModel()
+            {
+                await ViewModel.SaveCommand.ExecuteAsync();
+
+                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<DurationParameter>());
+            }
+
+            [Property]
+            public void ReturnsAValueThatReflectsTheChangesToDuration(DateTimeOffset start, DateTimeOffset? stop)
+            {
+                if (start >= stop) return;
+
+                var now = DateTimeOffset.UtcNow;
+                TimeService.CurrentDateTime.Returns(now);
+                if (stop == null && start >= now) return;
+
+                ViewModel.Prepare(DurationParameter.WithStartAndStop(start, stop));
+                ViewModel.Duration = TimeSpan.FromMinutes(10);
+
+                ViewModel.SaveCommand.ExecuteAsync().Wait();
+
+                NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Is<DurationParameter>(
+                    p => p.Start == ViewModel.StartTime && p.Stop == ViewModel.StopTime
+                )).Wait();
             }
         }
     }
