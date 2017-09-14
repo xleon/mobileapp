@@ -27,6 +27,7 @@ namespace Toggl.Foundation.Models
             At = entity.At;
             ServerDeletedAt = entity.ServerDeletedAt;
             SyncStatus = syncStatus;
+            LastSyncErrorMessage = lastSyncErrorMessage;
             IsDeleted = isDeleted;
         }
 
@@ -83,6 +84,7 @@ namespace Toggl.Foundation.Models
             Currency = entity.Currency;
             ActualHours = entity.ActualHours;
             SyncStatus = syncStatus;
+            LastSyncErrorMessage = lastSyncErrorMessage;
             IsDeleted = isDeleted;
         }
 
@@ -126,6 +128,7 @@ namespace Toggl.Foundation.Models
             Name = entity.Name;
             At = entity.At;
             SyncStatus = syncStatus;
+            LastSyncErrorMessage = lastSyncErrorMessage;
             IsDeleted = isDeleted;
         }
 
@@ -176,6 +179,7 @@ namespace Toggl.Foundation.Models
             At = entity.At;
             TrackedSeconds = entity.TrackedSeconds;
             SyncStatus = syncStatus;
+            LastSyncErrorMessage = lastSyncErrorMessage;
             IsDeleted = isDeleted;
         }
 
@@ -232,6 +236,7 @@ namespace Toggl.Foundation.Models
             UserId = entity.UserId;
             CreatedWith = entity.CreatedWith;
             SyncStatus = syncStatus;
+            LastSyncErrorMessage = lastSyncErrorMessage;
             IsDeleted = isDeleted;
         }
 
@@ -288,6 +293,7 @@ namespace Toggl.Foundation.Models
             TimelineEnabled = entity.TimelineEnabled;
             TimelineExperiment = entity.TimelineExperiment;
             SyncStatus = syncStatus;
+            LastSyncErrorMessage = lastSyncErrorMessage;
             IsDeleted = isDeleted;
         }
 
@@ -341,6 +347,7 @@ namespace Toggl.Foundation.Models
             At = entity.At;
             LogoUrl = entity.LogoUrl;
             SyncStatus = syncStatus;
+            LastSyncErrorMessage = lastSyncErrorMessage;
             IsDeleted = isDeleted;
         }
 

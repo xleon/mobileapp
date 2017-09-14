@@ -103,6 +103,7 @@ namespace Toggl.Foundation.Models
         }
 
         WriteLine( "            SyncStatus = syncStatus;");
+        WriteLine( "            LastSyncErrorMessage = lastSyncErrorMessage;");
         WriteLine( "            IsDeleted = isDeleted;");
 
         WriteLine( "        }\n");

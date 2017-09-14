@@ -206,6 +206,8 @@
     <Compile Include="Sync\DeadlockTests.cs" />
     <Compile Include="Sync\StateMachineOrchestratorTests.cs" />
     <Compile Include="Sync\StateMachineTests.cs" />
+    <Compile Include="Sync\States\Push\BaseUnsyncableEntityStateTests.cs" />
+    <Compile Include="Sync\States\Push\UnsyncableTimeEntryStateTests.cs" />
     <Compile Include="Sync\States\Push\BaseUpdateEntityStateTests.cs" />
     <Compile Include="Sync\States\Push\UpdateTimeEntryStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistTagsStateTests.cs" />
