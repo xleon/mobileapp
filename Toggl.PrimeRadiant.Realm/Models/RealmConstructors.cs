@@ -209,9 +209,12 @@ namespace Toggl.PrimeRadiant.Realm
             Stop = entity.Stop;
             Description = entity.Description;
             RealmTags.Clear();
-            var allRealmTags = entity.TagIds.Select(id => realm.All<RealmTag>().Single(x => x.Id == id));
-            foreach (var oneOfRealmTags in allRealmTags)
-                RealmTags.Add(oneOfRealmTags);
+            if (entity.TagIds != null)
+            {
+                var allRealmTags = entity.TagIds.Select(id => realm.All<RealmTag>().Single(x => x.Id == id));
+                foreach (var oneOfRealmTags in allRealmTags)
+                    RealmTags.Add(oneOfRealmTags);
+            }
             At = entity.At;
             ServerDeletedAt = entity.ServerDeletedAt;
             var skipUserFetch = entity?.UserId == null || entity.UserId == 0;

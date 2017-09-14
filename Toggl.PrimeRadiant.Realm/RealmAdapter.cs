@@ -74,7 +74,7 @@ namespace Toggl.PrimeRadiant.Realm
                     var resolveMode = conflictResolution(oldEntity, updated.Entity);
                     var resolvedEntity = resolveEntity(realm, oldEntity, updated.Entity, resolveMode);
                     return (resolveMode, (TModel)resolvedEntity);
-                });
+                }).ToList();
                 transaction.Commit();
                 return resolvedEntities;
             }
