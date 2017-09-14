@@ -10,34 +10,10 @@ namespace Toggl.Foundation.Tests.Sync
 {
     public sealed class SyncStateQueueTests
     {
-        private class OrchestratorMock : IStateMachineOrchestrator
-        {
-            private readonly List<SyncState> calls;
-
-            public SyncState State => throw new NotImplementedException();
-            public IObservable<SyncState> StateObservable => throw new NotImplementedException();
-            public IObservable<SyncState> SyncCompleteObservable => throw new NotImplementedException();
-
-            public OrchestratorMock(List<SyncState> calls)
-            {
-                this.calls = calls;
-            }
-
-            public void StartPushSync() => calls.Add(Push);
-            public void StartPullSync() => calls.Add(Pull);
-            public void GoToSleep() => calls.Add(Sleep);
-        }
-
         public sealed class TheStartNextQueuedStateMethod
         {
             private readonly SyncStateQueue queue = new SyncStateQueue();
-            private readonly List<SyncState> orchestratorCalls = new List<SyncState>();
-            private readonly IStateMachineOrchestrator orchestrator;
-
-            public TheStartNextQueuedStateMethod()
-            {
-                orchestrator = new OrchestratorMock(orchestratorCalls);
-            }
+            private readonly List<SyncState> dequeuedStates = new List<SyncState>();
 
             private void queueSyncs(params SyncState[] states)
             {
@@ -57,7 +33,9 @@ namespace Toggl.Foundation.Tests.Sync
 
             private SyncState callMethod()
             {
-                return queue.StartNextQueuedState(orchestrator);
+                var state = queue.Dequeue();
+                dequeuedStates.Add(state);
+                return state;
             }
 
             private List<SyncState> callMethodUntilSleep()
@@ -68,7 +46,7 @@ namespace Toggl.Foundation.Tests.Sync
                 {
                     returnValues.Add(callMethod());
 
-                    if (orchestratorCalls.Last() == Sleep)
+                    if (dequeuedStates.Last() == Sleep)
                         break;
                 }
 
@@ -80,7 +58,7 @@ namespace Toggl.Foundation.Tests.Sync
             {
                 callMethod();
 
-                orchestratorCalls.ShouldBeSameEventsAs(
+                dequeuedStates.ShouldBeSameEventsAs(
                     Sleep
                 );
             }
@@ -92,7 +70,7 @@ namespace Toggl.Foundation.Tests.Sync
 
                 callMethod();
 
-                orchestratorCalls.ShouldBeSameEventsAs(
+                dequeuedStates.ShouldBeSameEventsAs(
                     Pull
                 );
             }
@@ -104,7 +82,7 @@ namespace Toggl.Foundation.Tests.Sync
 
                 callMethod();
 
-                orchestratorCalls.ShouldBeSameEventsAs(
+                dequeuedStates.ShouldBeSameEventsAs(
                     Push
                 );
             }
@@ -112,20 +90,20 @@ namespace Toggl.Foundation.Tests.Sync
             [Property]
             public void AlwaysReturnsTheStateItRuns(bool[] pushPull)
             {
-                orchestratorCalls.Clear();
+                dequeuedStates.Clear();
                 var states = (pushPull ?? Enumerable.Empty<bool>())
                     .Select(b => b ? Push : Pull).ToArray();
                 queueSyncs(states);
 
                 var returnValues = callMethodUntilSleep();
 
-                returnValues.ShouldBeSameEventsAs(orchestratorCalls.ToArray());
+                returnValues.ShouldBeSameEventsAs(dequeuedStates.ToArray());
             }
 
             [Property]
             public void RunsFullCycleOnceNoMatterWhatIsQueuedIfPullIsQueued(bool[] pushPull)
             {
-                orchestratorCalls.Clear();
+                dequeuedStates.Clear();
                 var states = (pushPull ?? Enumerable.Empty<bool>())
                     .Select(b => b ? Push : Pull).ToArray();
                 queueSyncs(states);
@@ -134,7 +112,7 @@ namespace Toggl.Foundation.Tests.Sync
 
                 callMethodUntilSleep();
 
-                orchestratorCalls.ShouldBeSameEventsAs(
+                dequeuedStates.ShouldBeSameEventsAs(
                     Pull, Push, Sleep
                 );
             }
@@ -148,7 +126,7 @@ namespace Toggl.Foundation.Tests.Sync
 
                 callMethodUntilSleep();
 
-                orchestratorCalls.ShouldBeSameEventsAs(
+                dequeuedStates.ShouldBeSameEventsAs(
                     Push, Pull, Push, Sleep
                 );
             }
@@ -162,7 +140,7 @@ namespace Toggl.Foundation.Tests.Sync
 
                 callMethodUntilSleep();
 
-                orchestratorCalls.ShouldBeSameEventsAs(
+                dequeuedStates.ShouldBeSameEventsAs(
                     Pull, Push, Pull, Push, Sleep
                 );
             }

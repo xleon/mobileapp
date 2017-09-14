@@ -32,6 +32,24 @@ namespace Toggl.Foundation.Sync
             stateMachine.StateTransitions.Subscribe(onStateEvent);
         }
 
+        public void Start(SyncState state)
+        {
+            switch (state)
+            {
+                case SyncState.Pull:
+                    startSync(SyncState.Pull, entryPoints.StartPullSync);
+                    break;
+                case SyncState.Push:
+                    startSync(SyncState.Push, entryPoints.StartPushSync);
+                    break;
+                case SyncState.Sleep:
+                    goToSleep();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(state));
+            }
+        }
+
         private void onStateEvent(StateMachineEvent @event)
         {
             if (@event is StateMachineDeadEnd || @event is StateMachineError)
@@ -44,16 +62,6 @@ namespace Toggl.Foundation.Sync
             syncComplete.OnNext(State);
         }
 
-        public void StartPushSync()
-        {
-            startSync(SyncState.Push, entryPoints.StartPushSync);
-        }
-
-        public void StartPullSync()
-        {
-            startSync(SyncState.Pull, entryPoints.StartPullSync);
-        }
-
         private void startSync(SyncState newState, StateResult entryPoint)
         {
             ensureNotSyncing();
@@ -63,7 +71,7 @@ namespace Toggl.Foundation.Sync
             stateMachine.Start(entryPoint.Transition());
         }
 
-        public void GoToSleep()
+        private void goToSleep()
         {
             ensureNotSyncing();
 

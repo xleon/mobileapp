@@ -5,6 +5,6 @@
         void QueuePushSync();
         void QueuePullSync();
 
-        SyncState StartNextQueuedState(IStateMachineOrchestrator orchestrator);
+        SyncState Dequeue();
     }
 }

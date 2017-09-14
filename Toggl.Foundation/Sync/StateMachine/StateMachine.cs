@@ -16,7 +16,7 @@ namespace Toggl.Foundation.Sync
         private readonly ITransitionHandlerProvider transitionHandlerProvider;
         private readonly IScheduler scheduler;
 
-        private IDisposable currentState;
+        private bool isRunning;
 
         public StateMachine(ITransitionHandlerProvider transitionHandlerProvider, IScheduler scheduler)
         {
@@ -33,9 +33,10 @@ namespace Toggl.Foundation.Sync
         {
             Ensure.Argument.IsNotNull(transition, nameof(transition));
             
-            if (currentState != null)
+            if (isRunning)
                 throw new InvalidOperationException("Cannot start state machine if it is already running.");
 
+            isRunning = true;
             onTransition(transition);
         }
 
@@ -43,7 +44,7 @@ namespace Toggl.Foundation.Sync
         {
             stateTransitions.OnNext(new StateMachineTransition(transition));
 
-            currentState = transitionHandler(transition)
+            transitionHandler(transition)
                 .SingleAsync()
                 .Timeout(scheduler.Now + stateTimeout, scheduler)
                 .Subscribe(onTransition, onError);
@@ -55,7 +56,7 @@ namespace Toggl.Foundation.Sync
 
             if (transitionHandler == null)
             {
-                currentState = null;
+                isRunning = false;
                 reachDeadEnd(transition);
                 return;
             }
@@ -65,7 +66,7 @@ namespace Toggl.Foundation.Sync
 
         private void onError(Exception exception)
         {
-            currentState = null;
+            isRunning = false;
             reportError(exception);
         }
 

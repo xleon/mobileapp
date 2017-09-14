@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using FluentAssertions;
+using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
@@ -95,7 +96,7 @@ namespace Toggl.Foundation.Tests.Sync
             [Fact]
             public void DoesNotThrowIfSleepWasCalledLast()
             {
-                Orchestrator.GoToSleep();
+                Orchestrator.Start(Sleep);
 
                 callingMethod.ShouldNotThrow();
             }
@@ -103,7 +104,7 @@ namespace Toggl.Foundation.Tests.Sync
             [Fact]
             public void ShouldThrowIfPullSyncing()
             {
-                Orchestrator.StartPullSync();
+                Orchestrator.Start(Pull);
 
                 callingMethod.ShouldThrow<InvalidOperationException>();
             }
@@ -111,7 +112,7 @@ namespace Toggl.Foundation.Tests.Sync
             [Fact]
             public void ShouldThrowIfPushSyncing()
             {
-                Orchestrator.StartPushSync();
+                Orchestrator.Start(Push);
 
                 callingMethod.ShouldThrow<InvalidOperationException>();
             }
@@ -119,7 +120,7 @@ namespace Toggl.Foundation.Tests.Sync
             [Fact]
             public void ShouldNotThrowIfPullSyncingCompleted()
             {
-                Orchestrator.StartPullSync();
+                Orchestrator.Start(Pull);
                 SendStateMachineEvent(new StateMachineDeadEnd(null));
 
                 callingMethod.ShouldNotThrow();
@@ -128,7 +129,7 @@ namespace Toggl.Foundation.Tests.Sync
             [Fact]
             public void ShouldNotThrowIfPushSyncingCompleted()
             {
-                Orchestrator.StartPushSync();
+                Orchestrator.Start(Push);
                 SendStateMachineEvent(new StateMachineDeadEnd(null));
 
                 callingMethod.ShouldNotThrow();
@@ -137,7 +138,7 @@ namespace Toggl.Foundation.Tests.Sync
             [Fact]
             public void ShouldNotThrowIfPullSyncingFailed()
             {
-                Orchestrator.StartPullSync();
+                Orchestrator.Start(Pull);
                 SendStateMachineEvent(new StateMachineError(null));
 
                 callingMethod.ShouldNotThrow();
@@ -146,7 +147,7 @@ namespace Toggl.Foundation.Tests.Sync
             [Fact]
             public void ShouldNotThrowIfPushSyncingFailed()
             {
-                Orchestrator.StartPushSync();
+                Orchestrator.Start(Push);
                 SendStateMachineEvent(new StateMachineError(null));
 
                 callingMethod.ShouldNotThrow();
@@ -218,31 +219,47 @@ namespace Toggl.Foundation.Tests.Sync
             }
         }
 
-        public sealed class TheStartPullSyncMethod : PullPushSyncMethodTests
+        public sealed class TheStartMethod
         {
-            protected override SyncState ExpectedState => Pull;
-            protected override StateResult EntryPoint => EntryPoints.StartPullSync;
-            protected override void CallMethod() => Orchestrator.StartPullSync();
-        }
-
-        public sealed class TheStartPushSyncMethod : PullPushSyncMethodTests
-        {
-            protected override SyncState ExpectedState => Push;
-            protected override StateResult EntryPoint => EntryPoints.StartPushSync;
-            protected override void CallMethod() => Orchestrator.StartPushSync();
-        }
-
-        public sealed class ThGoToSleepMethod : StateChangeMethodTests
-        {
-            protected override SyncState ExpectedState => Sleep;
-            protected override void CallMethod() => Orchestrator.GoToSleep();
-            
-            [Fact]
-            public void ShouldNotStartStateMachine()
+            public sealed class TheStartPull : PullPushSyncMethodTests
             {
-                CallMethod();
+                protected override SyncState ExpectedState => Pull;
+                protected override StateResult EntryPoint => EntryPoints.StartPullSync;
+                protected override void CallMethod() => Orchestrator.Start(Pull);
+            }
 
-                StateMachine.DidNotReceive().Start(Arg.Any<ITransition>());
+            public sealed class TheStartPush : PullPushSyncMethodTests
+            {
+                protected override SyncState ExpectedState => Push;
+                protected override StateResult EntryPoint => EntryPoints.StartPushSync;
+                protected override void CallMethod() => Orchestrator.Start(Push);
+            }
+
+            public sealed class TheStartSleep : StateChangeMethodTests
+            {
+                protected override SyncState ExpectedState => Sleep;
+                protected override void CallMethod() => Orchestrator.Start(Sleep);
+
+                [Fact]
+                public void ShouldNotStartStateMachine()
+                {
+                    CallMethod();
+
+                    StateMachine.DidNotReceive().Start(Arg.Any<ITransition>());
+                }
+            }
+            
+            public sealed class TheStartUnknown : StateMachineOrchestratorBaseTests
+            {
+                [Property]
+                public void ThrowsWhenUnknownSyncStateIsPassedToTheStartMethod(int state)
+                {
+                    if (Enum.IsDefined(typeof(SyncState), state)) return;
+
+                    Action callingStartWithUnknownState = () => Orchestrator.Start((SyncState)state);
+
+                    callingStartWithUnknownState.ShouldThrow<ArgumentOutOfRangeException>();
+                }
             }
         }
     }

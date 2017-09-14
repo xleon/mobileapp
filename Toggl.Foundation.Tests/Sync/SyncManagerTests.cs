@@ -78,29 +78,29 @@ namespace Toggl.Foundation.Tests.Sync
             [Fact]
             public void AgainTellsQueueToStartSyncAfterCompletingPreviousFullSync()
             {
-                Queue.StartNextQueuedState(Orchestrator).Returns(Pull);
+                Queue.Dequeue().Returns(Pull);
                 SyncManager.ForceFullSync();
-                Queue.StartNextQueuedState(Orchestrator).Returns(Sleep);
+                Queue.Dequeue().Returns(Sleep);
                 OrchestratorSyncComplete.OnNext(Pull);
                 Queue.ClearReceivedCalls();
 
                 CallMethod();
 
-                Queue.Received().StartNextQueuedState(Orchestrator);
+                Queue.Received().Dequeue();
             }
 
             [Fact]
             public void AgainTellsQueueToStartSyncAfterCompletingPreviousPushSync()
             {
-                Queue.StartNextQueuedState(Orchestrator).Returns(Pull);
+                Queue.Dequeue().Returns(Pull);
                 SyncManager.PushSync();
-                Queue.StartNextQueuedState(Orchestrator).Returns(Sleep);
+                Queue.Dequeue().Returns(Sleep);
                 OrchestratorSyncComplete.OnNext(Push);
                 Queue.ClearReceivedCalls();
 
                 CallMethod();
 
-                Queue.Received().StartNextQueuedState(Orchestrator);
+                Queue.Received().Dequeue();
             }
 
             [Fact]
@@ -128,7 +128,7 @@ namespace Toggl.Foundation.Tests.Sync
                 var startedSecondCall = new AutoResetEvent(false);
                 var endedSecondCall = new AutoResetEvent(false);
                 var isFirstCall = true;
-                Queue.StartNextQueuedState(Orchestrator).Returns(Sleep).AndDoes(_ =>
+                Queue.Dequeue().Returns(Sleep).AndDoes(_ =>
                 {
                     // the second time we call this we don't want to do anything
                     if (!isFirstCall) return;
@@ -182,7 +182,7 @@ namespace Toggl.Foundation.Tests.Sync
             {
                 CallMethod();
 
-                Queue.Received().StartNextQueuedState(Orchestrator);
+                Queue.Received().Dequeue();
             }
 
             [Fact]
@@ -204,38 +204,38 @@ namespace Toggl.Foundation.Tests.Sync
             [Fact]
             public void TellsQueueToStartOrchestratorWhenAlreadyRunningFullSync()
             {
-                Queue.StartNextQueuedState(Orchestrator).Returns(Pull);
+                Queue.Dequeue().Returns(Pull);
                 SyncManager.ForceFullSync();
                 Queue.ClearReceivedCalls();
 
                 CallMethod();
 
-                Queue.Received().StartNextQueuedState(Orchestrator);
+                Queue.Received().Dequeue();
             }
 
             [Fact]
             public void TellsQueueToStartOrchestratorWhenAlreadyRunningPushSync()
             {
-                Queue.StartNextQueuedState(Orchestrator).Returns(Pull);
+                Queue.Dequeue().Returns(Pull);
                 SyncManager.PushSync();
                 Queue.ClearReceivedCalls();
 
                 CallMethod();
 
-                Queue.Received().StartNextQueuedState(Orchestrator);
+                Queue.Received().Dequeue();
             }
 
             [Fact]
             public void TellsQueueToStartOrchestratorWhenInSecondPartOfMultiPhaseSync()
             {
-                Queue.StartNextQueuedState(Orchestrator).Returns(Pull);
+                Queue.Dequeue().Returns(Pull);
                 SyncManager.ForceFullSync();
                 OrchestratorSyncComplete.OnNext(Push);
                 Queue.ClearReceivedCalls();
 
                 CallMethod();
 
-                Queue.Received().StartNextQueuedState(Orchestrator);
+                Queue.Received().Dequeue();
             }
         }
 
@@ -268,38 +268,38 @@ namespace Toggl.Foundation.Tests.Sync
             [Fact]
             public void DoesNotTellQueueToStartOrchestratorWhenAlreadyRunningFullSync()
             {
-                Queue.StartNextQueuedState(Orchestrator).Returns(Pull);
+                Queue.Dequeue().Returns(Pull);
                 SyncManager.ForceFullSync();
                 Queue.ClearReceivedCalls();
 
                 CallMethod();
 
-                Queue.DidNotReceive().StartNextQueuedState(Orchestrator);
+                Queue.DidNotReceive().Dequeue();
             }
 
             [Fact]
             public void DoesNotTellQueueToStartOrchestratorWhenAlreadyRunningPushSync()
             {
-                Queue.StartNextQueuedState(Orchestrator).Returns(Pull);
+                Queue.Dequeue().Returns(Pull);
                 SyncManager.PushSync();
                 Queue.ClearReceivedCalls();
 
                 CallMethod();
 
-                Queue.DidNotReceive().StartNextQueuedState(Orchestrator);
+                Queue.DidNotReceive().Dequeue();
             }
             
             [Fact]
             public void DoesNotTellQueueToStartOrchestratorWhenInSecondPartOfMultiPhaseSync()
             {
-                Queue.StartNextQueuedState(Orchestrator).Returns(Pull);
+                Queue.Dequeue().Returns(Pull);
                 SyncManager.ForceFullSync();
                 OrchestratorSyncComplete.OnNext(Push);
                 Queue.ClearReceivedCalls();
 
                 CallMethod();
 
-                Queue.DidNotReceive().StartNextQueuedState(Orchestrator);
+                Queue.DidNotReceive().Dequeue();
             }
         }
 
@@ -316,7 +316,7 @@ namespace Toggl.Foundation.Tests.Sync
                 Received.InOrder(() =>
                 {
                     Queue.QueuePushSync();
-                    Queue.StartNextQueuedState(Orchestrator);
+                    Queue.Dequeue();
                 });
             }
         }
@@ -334,7 +334,7 @@ namespace Toggl.Foundation.Tests.Sync
                 Received.InOrder(() =>
                 {
                     Queue.QueuePullSync();
-                    Queue.StartNextQueuedState(Orchestrator);
+                    Queue.Dequeue();
                 });
             }
         }
