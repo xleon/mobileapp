@@ -11,7 +11,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     public class SelectDateTimeDialogViewModel : MvxViewModel<DateParameter, DateParameter>
     {
         private IMvxNavigationService navigationService;
-
+        private DateParameter defaultResult;
+            
         private DateTime dateTime;
         public DateTime DateTime
         {
@@ -21,7 +22,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand CloseCommand { get; }
 
-        public IMvxCommand SaveCommand { get; set; }
+        public IMvxAsyncCommand SaveCommand { get; set; }
 
         public SelectDateTimeDialogViewModel(IMvxNavigationService navigationService)
         {
@@ -30,17 +31,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.navigationService = navigationService;
 
             CloseCommand = new MvxAsyncCommand(close);
-            SaveCommand = new MvxCommand(save);
+            SaveCommand = new MvxAsyncCommand(save);
         }
         
         public override void Prepare(DateParameter parameter)
         {
-            DateTime = parameter.GetDate().LocalDateTime;
+            DateTime = parameter.GetDate().UtcDateTime;
+            defaultResult = parameter;
         }
 
-        private Task close() => navigationService.Close(this);
+        private Task close() => navigationService.Close(this, defaultResult);
 
-        private void save()
-            => throw new NotImplementedException();
+        private Task save() => navigationService.Close(this, DateParameter.WithDate(DateTime));
     }
 }

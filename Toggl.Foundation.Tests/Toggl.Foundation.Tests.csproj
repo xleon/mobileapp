@@ -35,6 +35,9 @@
     <CodeAnalysisRuleSet>..\Toggl.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MvvmCross.Core, Version=5.2.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\MvvmCross.Core.5.2.0\lib\Xamarin.iOS10\MvvmCross.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -192,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MvvmCross\ViewModels\EditDurationViewModelTests.cs" />
+    <Compile Include="MvvmCross\ViewModels\SelectDateTimeDialogViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Login\LoginManagerTests.cs" />
     <Compile Include="MvvmCross\ViewModels\LoginViewModelTests.cs" />

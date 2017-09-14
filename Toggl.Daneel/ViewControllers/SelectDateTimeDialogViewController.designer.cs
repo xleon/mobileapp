@@ -19,26 +19,26 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIDatePicker DatePicker { get; set; }
 
 		[Outlet]
-		UIKit.UIButton SaveLabel { get; set; }
+		UIKit.UIButton SaveButton { get; set; }
 
 		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (DatePicker != null) {
-				DatePicker.Dispose ();
-				DatePicker = null;
-			}
-
 			if (CloseButton != null) {
 				CloseButton.Dispose ();
 				CloseButton = null;
 			}
 
-			if (SaveLabel != null) {
-				SaveLabel.Dispose ();
-				SaveLabel = null;
+			if (SaveButton != null) {
+				SaveButton.Dispose ();
+				SaveButton = null;
+			}
+
+			if (DatePicker != null) {
+				DatePicker.Dispose ();
+				DatePicker = null;
 			}
 
 			if (TitleLabel != null) {

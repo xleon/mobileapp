@@ -13,7 +13,7 @@
             <connections>
                 <outlet property="CloseButton" destination="ya7-Po-8Hb" id="ITp-sr-Eki"/>
                 <outlet property="DatePicker" destination="QEi-MW-14c" id="aUo-rA-ltv"/>
-                <outlet property="SaveLabel" destination="DEC-hC-BX6" id="LqK-88-dQk"/>
+                <outlet property="SaveButton" destination="DEC-hC-BX6" id="8cv-VT-RJV"/>
                 <outlet property="TitleLabel" destination="snj-9f-zwe" id="06e-JV-RFt"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>

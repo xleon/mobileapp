@@ -27,8 +27,10 @@ namespace Toggl.Daneel.ViewControllers
                 .For(v => v.Date)
                 .To(vm => vm.DateTime);
 
+            //Commands
             bindingSet.Bind(CloseButton).To(vm => vm.CloseCommand);
-
+            bindingSet.Bind(SaveButton).To(vm => vm.SaveCommand);
+            
             bindingSet.Apply();
         }
 
