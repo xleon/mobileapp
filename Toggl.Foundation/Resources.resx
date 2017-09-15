@@ -54,7 +54,7 @@ Start the timer and your time entry log
 will appear here.</value>
     </data>
     <data name="TimeEntriesLogEmptyStateButton">
-        <value> Load older entries </value>
+        <value> See older entries </value>
     </data>
     <data name="TimeEntriesLogEmptyStateWelcomeTitle">
         <value>Nothing here yet</value>
