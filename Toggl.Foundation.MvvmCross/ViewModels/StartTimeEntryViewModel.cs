@@ -29,9 +29,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IDisposable elapsedTimeDisposable;
 
         //Properties
+        public bool IsEditingDuration { get; private set; }
+
         public bool IsEditingStartDate { get; private set; }
 
-        public bool IsSuggestingProjects { get; private set; }
+        public bool IsSuggestingProjects { get; set; }
 
         public TextFieldInfo TextFieldInfo { get; set; } = new TextFieldInfo("", 0);
 
@@ -54,6 +56,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand DoneCommand { get; }
 
+        public IMvxAsyncCommand ChangeDurationCommand { get; }
+        
         public IMvxAsyncCommand ChangeStartTimeCommand { get; }
 
         public IMvxCommand ToggleBillableCommand { get; }
@@ -76,6 +80,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             BackCommand = new MvxAsyncCommand(back);
             DoneCommand = new MvxAsyncCommand(done);
             ToggleBillableCommand = new MvxCommand(toggleBillable);
+            ChangeDurationCommand = new MvxAsyncCommand(changeDuration);
             ChangeStartTimeCommand = new MvxAsyncCommand(changeStartTime);
             ToggleProjectSuggestionsCommand = new MvxCommand(toggleProjectSuggestions);
             SelectSuggestionCommand = new MvxCommand<AutocompleteSuggestion>(selectSuggestion);
@@ -162,6 +167,20 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private Task back() => navigationService.Close(this);
+
+        private async Task changeDuration()
+        {
+            IsEditingDuration = true;
+
+            var currentDuration = DurationParameter.WithStartAndStop(StartDate, null);
+            var selectedDuration = await navigationService
+                .Navigate<EditDurationViewModel, DurationParameter, DurationParameter>(currentDuration)
+                .ConfigureAwait(false);
+
+            StartDate = selectedDuration.Start;
+
+            IsEditingDuration = false;
+        }
 
         private async Task done()
         {

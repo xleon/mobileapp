@@ -61,12 +61,17 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.TintColor)
                       .To(vm => vm.IsBillable)
                       .WithConversion(buttonColorConverter);
-            
+
             bindingSet.Bind(ProjectsButton)
                       .For(v => v.TintColor)
                       .To(vm => vm.IsSuggestingProjects)
                       .WithConversion(buttonColorConverter);
 
+            bindingSet.Bind(DurationButton)
+                      .For(v => v.TintColor)
+                      .To(vm => vm.IsEditingDuration)
+                      .WithConversion(buttonColorConverter);
+                      
             bindingSet.Bind(DateTimeButton)
                       .For(v => v.TintColor)
                       .To(vm => vm.IsEditingStartDate)
@@ -75,6 +80,7 @@ namespace Toggl.Daneel.ViewControllers
             //Commands
             bindingSet.Bind(DoneButton).To(vm => vm.DoneCommand);
             bindingSet.Bind(CloseButton).To(vm => vm.BackCommand);
+            bindingSet.Bind(DurationButton).To(vm => vm.ChangeDurationCommand);
             bindingSet.Bind(BillableButton).To(vm => vm.ToggleBillableCommand);
             bindingSet.Bind(DateTimeButton).To(vm => vm.ChangeStartTimeCommand);
             bindingSet.Bind(ProjectsButton).To(vm => vm.ToggleProjectSuggestionsCommand);
@@ -120,6 +126,7 @@ namespace Toggl.Daneel.ViewControllers
         {
             yield return ProjectsButton;
             yield return BillableButton;
+            yield return DurationButton;
             yield return DateTimeButton;
         }
     }

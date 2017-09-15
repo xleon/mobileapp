@@ -290,6 +290,10 @@
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationPaws.imageset\icIllustrationPaws.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationPaws.imageset\icIllustrationPaws%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationPaws.imageset\icIllustrationPaws%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\duration.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\duration.imageset\duration.png" />
+    <ImageAsset Include="Resources\Images.xcassets\duration.imageset\duration%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\duration.imageset\duration%403x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationSpider.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationSpider.imageset\icIllustrationSpider.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationSpider.imageset\icIllustrationSpider%402x.png" />

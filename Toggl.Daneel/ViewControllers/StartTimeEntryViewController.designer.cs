@@ -44,6 +44,10 @@ namespace Toggl.Daneel.ViewControllers
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton DurationButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton ProjectsButton { get; set; }
 
         [Outlet]
@@ -93,6 +97,11 @@ namespace Toggl.Daneel.ViewControllers
             if (DoneButton != null) {
                 DoneButton.Dispose ();
                 DoneButton = null;
+            }
+
+            if (DurationButton != null) {
+                DurationButton.Dispose ();
+                DurationButton = null;
             }
 
             if (ProjectsButton != null) {

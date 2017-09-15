@@ -224,6 +224,43 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
+        public sealed class TheChangeDurationCommandCommand : StartTimeEntryViewModelTest
+        {
+            [Fact]
+            public async Task SetsTheStartDateToTheValueReturnedByTheSelectDateTimeDialogViewModel()
+            {
+                var now = DateTimeOffset.UtcNow;
+                var parameterToReturn = DurationParameter.WithStartAndStop(now.AddHours(-2), null);
+                NavigationService
+                    .Navigate<DurationParameter, DurationParameter>(typeof(EditDurationViewModel), Arg.Any<DurationParameter>())
+                    .Returns(parameterToReturn);
+                ViewModel.Prepare(DateParameter.WithDate(now));
+
+                await ViewModel.ChangeDurationCommand.ExecuteAsync();
+
+                ViewModel.StartDate.Should().Be(parameterToReturn.Start);
+            }
+
+            [Fact]
+            public async Task SetsTheIsEditingDurationDateToTrueWhileTheViewDoesNotReturnAndThenSetsItBackToFalse()
+            {
+                var now = DateTimeOffset.UtcNow;
+                var parameterToReturn = DurationParameter.WithStartAndStop(now.AddHours(-2), null);
+                var tcs = new TaskCompletionSource<DurationParameter>();
+                NavigationService
+                    .Navigate<DurationParameter, DurationParameter>(typeof(EditDurationViewModel), Arg.Any<DurationParameter>())
+                    .Returns(tcs.Task);
+                ViewModel.Prepare(DateParameter.WithDate(now));
+
+                var toWait = ViewModel.ChangeDurationCommand.ExecuteAsync();
+                ViewModel.IsEditingDuration.Should().BeTrue();
+                tcs.SetResult(parameterToReturn);
+                await toWait;
+
+                ViewModel.IsEditingDuration.Should().BeFalse();
+            }
+        }
+
         public sealed class TheDoneCommand : StartTimeEntryViewModelTest
         {
             [Fact]
