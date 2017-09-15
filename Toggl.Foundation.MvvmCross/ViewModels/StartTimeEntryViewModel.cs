@@ -29,7 +29,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IDisposable elapsedTimeDisposable;
 
         //Properties
-        public bool IsSuggestingProjects { get; set; }
+        public bool IsEditingStartDate { get; private set; }
+
+        public bool IsSuggestingProjects { get; private set; }
 
         public TextFieldInfo TextFieldInfo { get; set; } = new TextFieldInfo("", 0);
 
@@ -52,6 +54,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand DoneCommand { get; }
 
+        public IMvxAsyncCommand ChangeStartTimeCommand { get; }
+
         public IMvxCommand ToggleBillableCommand { get; }
 
         public IMvxCommand ToggleProjectSuggestionsCommand { get; }
@@ -72,6 +76,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             BackCommand = new MvxAsyncCommand(back);
             DoneCommand = new MvxAsyncCommand(done);
             ToggleBillableCommand = new MvxCommand(toggleBillable);
+            ChangeStartTimeCommand = new MvxAsyncCommand(changeStartTime);
             ToggleProjectSuggestionsCommand = new MvxCommand(toggleProjectSuggestions);
             SelectSuggestionCommand = new MvxCommand<AutocompleteSuggestion>(selectSuggestion);
         }
@@ -141,6 +146,20 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private void toggleBillable() => IsBillable = !IsBillable;
+
+        private async Task changeStartTime()
+        {
+            IsEditingStartDate = true;
+
+            var currentlySelectedDate = DateParameter.WithDate(StartDate);
+            var selectedDate = await navigationService
+                .Navigate<SelectDateTimeDialogViewModel, DateParameter, DateParameter>(currentlySelectedDate)
+                .ConfigureAwait(false);
+            
+            StartDate = selectedDate.GetDate();
+
+            IsEditingStartDate = false;
+        }
 
         private Task back() => navigationService.Close(this);
 

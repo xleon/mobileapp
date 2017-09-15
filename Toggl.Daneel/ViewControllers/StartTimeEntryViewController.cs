@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using CoreText;
-using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.iOS.Views;
 using MvvmCross.Plugins.Color.iOS;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
-using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -69,10 +67,16 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.IsSuggestingProjects)
                       .WithConversion(buttonColorConverter);
 
+            bindingSet.Bind(DateTimeButton)
+                      .For(v => v.TintColor)
+                      .To(vm => vm.IsEditingStartDate)
+                      .WithConversion(buttonColorConverter);
+
             //Commands
             bindingSet.Bind(DoneButton).To(vm => vm.DoneCommand);
             bindingSet.Bind(CloseButton).To(vm => vm.BackCommand);
             bindingSet.Bind(BillableButton).To(vm => vm.ToggleBillableCommand);
+            bindingSet.Bind(DateTimeButton).To(vm => vm.ChangeStartTimeCommand);
             bindingSet.Bind(ProjectsButton).To(vm => vm.ToggleProjectSuggestionsCommand);
 
             bindingSet.Apply();
@@ -116,6 +120,7 @@ namespace Toggl.Daneel.ViewControllers
         {
             yield return ProjectsButton;
             yield return BillableButton;
+            yield return DateTimeButton;
         }
     }
 }

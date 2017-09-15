@@ -93,6 +93,43 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
+        public sealed class TheChangeStartTimeCommand : StartTimeEntryViewModelTest
+        {
+            [Fact]
+            public async Task SetsTheStartDateToTheValueReturnedByTheSelectDateTimeDialogViewModel()
+            {
+                var now = DateTimeOffset.UtcNow;
+                var parameterToReturn = DateParameter.WithDate(now.AddHours(-2));
+                NavigationService
+                    .Navigate<DateParameter, DateParameter>(typeof(SelectDateTimeDialogViewModel), Arg.Any<DateParameter>())
+                    .Returns(parameterToReturn);
+                ViewModel.Prepare(DateParameter.WithDate(now));
+
+                await ViewModel.ChangeStartTimeCommand.ExecuteAsync();
+
+                ViewModel.StartDate.Should().Be(parameterToReturn.GetDate());
+            }
+
+            [Fact]
+            public async Task SetsTheIsEditingStartDateToTrueWhileTheViewDoesNotReturnAndThenSetsItBackToFalse()
+            {
+                var now = DateTimeOffset.UtcNow;
+                var parameterToReturn = DateParameter.WithDate(now.AddHours(-2));
+                var tcs = new TaskCompletionSource<DateParameter>();
+                NavigationService
+                    .Navigate<DateParameter, DateParameter>(typeof(SelectDateTimeDialogViewModel), Arg.Any<DateParameter>())
+                    .Returns(tcs.Task);
+                ViewModel.Prepare(DateParameter.WithDate(now));
+
+                var toWait = ViewModel.ChangeStartTimeCommand.ExecuteAsync();
+                ViewModel.IsEditingStartDate.Should().BeTrue();
+                tcs.SetResult(parameterToReturn);
+                await toWait;
+
+                ViewModel.IsEditingStartDate.Should().BeFalse();
+            }
+        }   
+
         public sealed class TheToggleProjectSuggestionsCommandCommand : StartTimeEntryViewModelTest
         {
             public TheToggleProjectSuggestionsCommandCommand()
