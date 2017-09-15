@@ -61,7 +61,7 @@ namespace Toggl.PrimeRadiant.Realm
                 WriteLine( "            get { return (SyncStatus)SyncStatusInt; }");
                 WriteLine( "            set { SyncStatusInt = (int)value; }");
                 WriteLine( "        }\n");
-				WriteLine( "        public string LastSyncErrorMessage { get; set; }\n");
+                WriteLine( "        public string LastSyncErrorMessage { get; set; }\n");
 
                 WriteLine($"        public {realmClassName}() {{ }}\n");
 
@@ -73,10 +73,10 @@ namespace Toggl.PrimeRadiant.Realm
                 WriteLine($"        public void SetPropertiesFrom({updatesFromInterface} entity, Realms.Realm realm)");
                 WriteLine( "        {");
 
-                if (databaseInterfaceExists)
+                if (implementsIDatabaseSyncable)
                 {
                     WriteLine( "            SyncStatus = entity.SyncStatus;");
-					WriteLine( "            LastSyncErrorMessage = entity.LastSyncErrorMessage;");
+                    WriteLine( "            LastSyncErrorMessage = entity.LastSyncErrorMessage;");
                 }
 
                 if (extendsIBaseModel)
@@ -93,7 +93,8 @@ namespace Toggl.PrimeRadiant.Realm
             if (!isProperty) continue;
 
             var isEnumerable = trimmedLine.StartsWith("IEnumerable<");
-            if (isEnumerable) continue;
+            var isListOfRealmProperties = isEnumerable && Regex.IsMatch(line, "Ids ") && !line.Contains("Default");
+            if (isEnumerable && !isListOfRealmProperties) continue;
 
             var isRealmProperty = Regex.IsMatch(line, ".Id ")
                 && !Regex.IsMatch(line, "^[ ]*[^ ]+Id ") // the type itself (the first token) must not end with "Id"
@@ -111,7 +112,6 @@ namespace Toggl.PrimeRadiant.Realm
                 assignment = $"skip{entityName}Fetch ? null : realm.All<{propName}>().Single(x => x.Id == entity.{entityName}Id)";
             }
 
-            var isListOfRealmProperties = Regex.IsMatch(line, "Ids ") && line.Contains(" IEnumerable<") && !line.Contains("Default");
             if (isListOfRealmProperties)
             {
                 var entityName = propName.Replace("Ids", "");
