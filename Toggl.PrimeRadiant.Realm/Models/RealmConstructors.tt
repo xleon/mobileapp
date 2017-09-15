@@ -27,6 +27,9 @@ namespace Toggl.PrimeRadiant.Realm
         var databaseInterfaceFileName = Path.Combine(filePath, "../../Toggl.PrimeRadiant/Models/", databaseInterfaceName + ".cs");
         var databaseInterfaceExists = File.Exists(databaseInterfaceFileName);
 
+        var implementsIDatabaseSyncable = databaseInterfaceExists
+            && File.ReadAllLines(databaseInterfaceFileName).Any(l => l.Contains("IDatabaseSyncable"));
+
         if (!databaseInterfaceExists)
             break;
 
@@ -84,13 +87,17 @@ namespace Toggl.PrimeRadiant.Realm
                 continue;
             }
 
+            var trimmedLine = line.Trim();
+
             var isProperty = line.Contains("get;");
             if (!isProperty) continue;
+
+            var isEnumerable = trimmedLine.StartsWith("IEnumerable<");
+            if (isEnumerable) continue;
 
             var isRealmProperty = Regex.IsMatch(line, ".Id ")
                 && !Regex.IsMatch(line, "^[ ]*[^ ]+Id ") // the type itself (the first token) must not end with "Id"
                 && !line.Contains("Default");
-            var trimmedLine = line.Trim();
             var indexOfPropName = trimmedLine.IndexOf(" ") + 1;
             var propName = trimmedLine.Substring(indexOfPropName, trimmedLine.Length - 9 - indexOfPropName);
             var assignment = $"entity.{propName}";

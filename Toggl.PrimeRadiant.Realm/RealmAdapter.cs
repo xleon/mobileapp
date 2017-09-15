@@ -9,7 +9,6 @@ using Toggl.Multivac.Models;
 namespace Toggl.PrimeRadiant.Realm
 {
     internal interface IRealmAdapter<TModel>
-        where TModel : IBaseModel, IDatabaseSyncable
     {
         IQueryable<TModel> GetAll();
 

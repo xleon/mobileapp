@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Multivac;
+using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.Models
 {
@@ -21,11 +22,16 @@ namespace Toggl.Foundation.Models
     foreach(var modelFile in modelsToGenerate)
     {
         var interfaceName = Path.GetFileName(modelFile).Replace(".cs", "");
-        if (interfaceName == "IBaseModel"
-         || interfaceName == "IWorkspaceFeature"
-         || interfaceName == "IWorkspaceFeatureCollection") continue;
+        if (interfaceName == "IBaseModel") continue;
 
         var className = interfaceName.Substring(1, interfaceName.Length - 1);
+        
+        var databaseInterfaceName = $"IDatabase{className}";
+        var databaseInterfaceFileName = Path.Combine(filePath, "../../Toggl.PrimeRadiant/Models/", databaseInterfaceName + ".cs");
+        var databaseInterfaceExists = File.Exists(databaseInterfaceFileName);
+
+        var implementsIDatabaseSyncable = databaseInterfaceExists
+            && File.ReadAllLines(databaseInterfaceFileName).Any(l => l.Contains("IDatabaseSyncable"));
 
         if (!isFirstClass)
             WriteLine("");
@@ -61,9 +67,12 @@ namespace Toggl.Foundation.Models
             }
         }
 
-        WriteLine("        public bool IsDeleted { get; }\n");
-        WriteLine("        public SyncStatus SyncStatus { get; }\n");
-        WriteLine("        public string LastSyncErrorMessage { get; }");
+        if (implementsIDatabaseSyncable)
+        {
+            WriteLine("        public bool IsDeleted { get; }\n");
+            WriteLine("        public SyncStatus SyncStatus { get; }\n");
+            WriteLine("        public string LastSyncErrorMessage { get; }");
+        }
         WriteLine("    }");
 
         isFirstClass = false;

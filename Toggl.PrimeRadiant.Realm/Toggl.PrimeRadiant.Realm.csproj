@@ -37,6 +37,8 @@
     <Compile Include="Models\RealmUser.cs" />
     <Compile Include="Models\RealmConstructors.cs">
       <DependentUpon>RealmConstructors.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Models\RealmTask.cs" />
     <Compile Include="Models\RealmWorkspace.cs" />
@@ -52,6 +54,8 @@
     <Compile Include="IdProvider.cs" />
     <Compile Include="Models\RealmSinceParameters.cs" />
     <Compile Include="SinceParameterStorage.cs" />
+    <Compile Include="Models\RealmWorkspaceFeature.cs" />
+    <Compile Include="Models\RealmWorkspaceFeatureCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">
@@ -94,7 +98,9 @@
       <HintPath>..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />

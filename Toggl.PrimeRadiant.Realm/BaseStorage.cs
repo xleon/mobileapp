@@ -11,7 +11,6 @@ using Toggl.PrimeRadiant.Exceptions;
 namespace Toggl.PrimeRadiant.Realm
 {
     internal abstract class BaseStorage<TModel>
-        where TModel : IBaseModel, IDatabaseSyncable
     {
         protected IRealmAdapter<TModel> Adapter { get; }
 

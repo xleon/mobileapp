@@ -49,6 +49,8 @@
     <Compile Include="IIdProvider.cs" />
     <Compile Include="ISinceParameterRepository.cs" />
     <Compile Include="Models\ISinceParameters.cs" />
+    <Compile Include="Models\IDatabaseWorkspaceFeature.cs" />
+    <Compile Include="Models\IDatabaseWorkspaceFeatureCollection.cs" />
     <Compile Include="ConflictResolutionMode.cs" />
     <Compile Include="SyncStatus.cs" />
   </ItemGroup>

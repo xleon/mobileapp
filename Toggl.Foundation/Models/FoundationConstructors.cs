@@ -369,4 +369,42 @@ namespace Toggl.Foundation.Models
         public static Workspace UnsyncableDeleted(IWorkspace entity, string errorMessage)
             => new Workspace(entity, SyncStatus.SyncFailed, errorMessage, true);
     }
+
+    internal partial class WorkspaceFeature
+    {
+        private WorkspaceFeature(IDatabaseWorkspaceFeature entity)
+            : this(entity as IWorkspaceFeature)
+        {
+        }
+
+        public static WorkspaceFeature From(IDatabaseWorkspaceFeature entity)
+            => new WorkspaceFeature(entity);
+
+        private WorkspaceFeature(IWorkspaceFeature entity)
+        {
+            FeatureId = entity.FeatureId;
+            Enabled = entity.Enabled;
+        }
+
+    }
+
+    internal partial class WorkspaceFeatureCollection
+    {
+        private WorkspaceFeatureCollection(IDatabaseWorkspaceFeatureCollection entity)
+            : this(entity as IWorkspaceFeatureCollection)
+        {
+            Workspace = entity.Workspace == null ? null : Models.Workspace.From(entity.Workspace);
+            DatabaseFeatures = entity.DatabaseFeatures == null ? null : entity.DatabaseFeatures.Select(Models.WorkspaceFeature.From);
+        }
+
+        public static WorkspaceFeatureCollection From(IDatabaseWorkspaceFeatureCollection entity)
+            => new WorkspaceFeatureCollection(entity);
+
+        private WorkspaceFeatureCollection(IWorkspaceFeatureCollection entity)
+        {
+            WorkspaceId = entity.WorkspaceId;
+            Features = entity.Features;
+        }
+
+    }
 }

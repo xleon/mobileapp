@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Multivac;
+using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.Models
 {
@@ -251,5 +252,25 @@ namespace Toggl.Foundation.Models
         public SyncStatus SyncStatus { get; }
 
         public string LastSyncErrorMessage { get; }
+    }
+
+    internal partial class WorkspaceFeature : IDatabaseWorkspaceFeature
+    {
+        public WorkspaceFeatureId FeatureId { get; }
+
+        public bool Enabled { get; }
+
+    }
+
+    internal partial class WorkspaceFeatureCollection : IDatabaseWorkspaceFeatureCollection
+    {
+        public long WorkspaceId { get; }
+
+        public IEnumerable<IWorkspaceFeature> Features { get; }
+
+        public IDatabaseWorkspace Workspace { get; }
+
+        public IEnumerable<IDatabaseWorkspaceFeature> DatabaseFeatures { get; }
+
     }
 }

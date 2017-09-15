@@ -317,4 +317,62 @@ namespace Toggl.PrimeRadiant.Realm
             LogoUrl = entity.LogoUrl;
         }
     }
+
+    internal partial class RealmWorkspaceFeature : IUpdatesFrom<IDatabaseWorkspaceFeature>
+    {
+        public bool IsDeleted { get; set; }
+
+        public int SyncStatusInt { get; set; }
+
+        [Ignored]
+        public SyncStatus SyncStatus
+        {
+            get { return (SyncStatus)SyncStatusInt; }
+            set { SyncStatusInt = (int)value; }
+        }
+
+        public string LastSyncErrorMessage { get; set; }
+
+        public RealmWorkspaceFeature() { }
+
+        public RealmWorkspaceFeature(IDatabaseWorkspaceFeature entity, Realms.Realm realm)
+        {
+            SetPropertiesFrom(entity, realm);
+        }
+
+        public void SetPropertiesFrom(IDatabaseWorkspaceFeature entity, Realms.Realm realm)
+        {
+            FeatureId = entity.FeatureId;
+            Enabled = entity.Enabled;
+        }
+    }
+
+    internal partial class RealmWorkspaceFeatureCollection : IUpdatesFrom<IDatabaseWorkspaceFeatureCollection>
+    {
+        public bool IsDeleted { get; set; }
+
+        public int SyncStatusInt { get; set; }
+
+        [Ignored]
+        public SyncStatus SyncStatus
+        {
+            get { return (SyncStatus)SyncStatusInt; }
+            set { SyncStatusInt = (int)value; }
+        }
+
+        public string LastSyncErrorMessage { get; set; }
+
+        public RealmWorkspaceFeatureCollection() { }
+
+        public RealmWorkspaceFeatureCollection(IDatabaseWorkspaceFeatureCollection entity, Realms.Realm realm)
+        {
+            SetPropertiesFrom(entity, realm);
+        }
+
+        public void SetPropertiesFrom(IDatabaseWorkspaceFeatureCollection entity, Realms.Realm realm)
+        {
+            var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
+            RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId);
+        }
+    }
 }

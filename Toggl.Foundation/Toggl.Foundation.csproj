@@ -42,9 +42,13 @@
     <Compile Include="DataSources\TogglDataSource.cs" />
     <Compile Include="Models\FoundationModels.cs">
       <DependentUpon>FoundationModels.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Models\FoundationConstructors.cs">
       <DependentUpon>FoundationConstructors.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="DataSources\UserDataSource.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -90,6 +94,7 @@
     <Compile Include="Models\SinceParameters.cs" />
     <Compile Include="Models\TimeEntry.cs" />
     <Compile Include="Suggestions\Suggestion.cs" />
+    <Compile Include="Models\WorkspaceFeatureCollection.cs" />
     <Compile Include="Sync\ConflictResolution\PreferNewer.cs" />
     <Compile Include="DTOs\EditTimeEntryDto.cs" />
     <Compile Include="Sync\ConflictResolution\Selectors\TimeEntrySyncSelector.cs" />
@@ -121,7 +126,9 @@
     <Compile Include="Autocomplete\QuerySymbols.cs" />
     <Compile Include="DTOs\StartTimeEntryDTO.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">
       <Project>{4A9CF7CD-8EB4-435D-958B-98A9FFC14876}</Project>
@@ -172,9 +179,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="DTOs\" />
-    <Folder Include="Autocomplete\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
