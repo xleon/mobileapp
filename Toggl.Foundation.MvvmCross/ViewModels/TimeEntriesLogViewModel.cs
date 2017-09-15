@@ -150,7 +150,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     ProjectId = timeEntryViewModel.ProjectId,
                     Description = timeEntryViewModel.Description
                 })
-                .Select(dataSource.TimeEntries.Start);
+                .SelectMany(dataSource.TimeEntries.Start);
         }
     }
 }

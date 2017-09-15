@@ -156,7 +156,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     ProjectId = TextFieldInfo.ProjectId,
                     WorkspaceId = user.DefaultWorkspaceId
                 })
-                .Select(dataSource.TimeEntries.Start);
+                .SelectMany(dataSource.TimeEntries.Start);
 
             await navigationService.Close(this);
         }
