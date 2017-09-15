@@ -1,22 +1,31 @@
-﻿using Toggl.Multivac;
+﻿using System;
+using System.Reactive.Linq;
+using Toggl.Foundation.Models;
+using Toggl.Multivac;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
-using Toggl.Ultrawave.ApiClients;
 
 namespace Toggl.Foundation.DataSources
 {
     public sealed class UserDataSource : IUserSource
     {
-        private readonly IUserApi userApi;
+        private IDatabaseUser cachedUser;
+
         private readonly ISingleObjectStorage<IDatabaseUser> storage;
 
-        public UserDataSource(ISingleObjectStorage<IDatabaseUser> storage, IUserApi userApi)
+        public UserDataSource(ISingleObjectStorage<IDatabaseUser> storage)
         {
             Ensure.Argument.IsNotNull(storage, nameof(storage));
-            Ensure.Argument.IsNotNull(userApi, nameof(userApi));
 
             this.storage = storage;
-            this.userApi = userApi;
         }
+
+        public IObservable<IDatabaseUser> Current() => Observable.Defer(() =>
+        {
+            if (cachedUser != null)
+                return Observable.Return(cachedUser);
+            
+            return storage.Single().Select(User.From).Do(user => cachedUser = user);
+        });
     }
 }

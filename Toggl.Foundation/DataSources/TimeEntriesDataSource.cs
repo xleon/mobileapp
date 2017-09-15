@@ -75,19 +75,20 @@ namespace Toggl.Foundation.DataSources
                          .IgnoreElements()
                          .Cast<Unit>();
 
-        public IObservable<IDatabaseTimeEntry> Start(DateTimeOffset startTime, string description, bool billable, 
-            long? projectId)
+        public IObservable<IDatabaseTimeEntry> Start(StartTimeEntryDTO dto)
             => idProvider.GetNextIdentifier()
-                  .Apply(TimeEntry.Builder.Create)
-                  .SetStart(startTime)
-                  .SetDescription(description)
-                  .SetAt(timeService.CurrentDateTime)
-                  .SetBillable(billable)
-                  .SetProjectId(projectId)
-                  .SetSyncStatus(SyncStatus.SyncNeeded)
-                  .Build()
-                  .Apply(repository.Create)
-                  .Do(safeSetCurrentlyRunningTimeEntry);
+                .Apply(TimeEntry.Builder.Create)
+                .SetUserId(dto.UserId)
+                .SetStart(dto.StartTime)
+                .SetBillable(dto.Billable)
+                .SetProjectId(dto.ProjectId)
+                .SetDescription(dto.Description)
+                .SetWorkspaceId(dto.WorkspaceId)
+                .SetAt(timeService.CurrentDateTime)
+                .SetSyncStatus(SyncStatus.SyncNeeded)
+                .Build()
+                .Apply(repository.Create)
+                .Do(safeSetCurrentlyRunningTimeEntry);
 
         public IObservable<IDatabaseTimeEntry> Stop(DateTimeOffset stopTime)
             => repository

@@ -9,11 +9,14 @@ namespace Toggl.Ultrawave.ApiClients
 {
     internal sealed class TimeEntriesApi : BaseApi, ITimeEntriesApi
     {
+        private readonly UserAgent userAgent;
         private readonly TimeEntryEndpoints endPoints;
 
-        public TimeEntriesApi(TimeEntryEndpoints endPoints, IApiClient apiClient, IJsonSerializer serializer, Credentials credentials)
+        public TimeEntriesApi(TimeEntryEndpoints endPoints, IApiClient apiClient, IJsonSerializer serializer, 
+            Credentials credentials, UserAgent userAgent)
             : base(apiClient, serializer, credentials)
         {
+            this.userAgent = userAgent;
             this.endPoints = endPoints;
         }
 
@@ -32,6 +35,11 @@ namespace Toggl.Ultrawave.ApiClients
         private IObservable<ITimeEntry> pushTimeEntry(Endpoint endPoint, ITimeEntry timeEntry, SerializationReason reason)
         {
             var timeEntryCopy = timeEntry as TimeEntry ?? new TimeEntry(timeEntry);
+            if (reason == SerializationReason.Post)
+            {
+                timeEntryCopy.CreatedWith = userAgent.ToString();
+            }
+
             var observable = CreateObservable(endPoint, AuthHeader, timeEntryCopy, reason);
             return observable;
         }

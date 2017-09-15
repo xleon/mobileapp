@@ -27,7 +27,7 @@ namespace Toggl.Foundation.Models
 
             public DateTimeOffset? Stop { get; private set; }
 
-            public long WorkspaceId { get; private set; }
+            public long? WorkspaceId { get; private set; }
 
             public long? TaskId { get; private set; }
 
@@ -38,7 +38,7 @@ namespace Toggl.Foundation.Models
 
             public DateTimeOffset? ServerDeletedAt { get; private set; }
 
-            public long UserId { get; private set; }
+            public long? UserId { get; private set; }
 
             public string CreatedWith { get; private set; }
 
@@ -149,8 +149,17 @@ namespace Toggl.Foundation.Models
                 if (Description == null)
                     throw new InvalidOperationException(string.Format(errorMessage, "description"));
 
+                if (WorkspaceId == null || WorkspaceId == 0)
+                    throw new InvalidOperationException(string.Format(errorMessage, "workspace id"));
+
+                if (UserId == null || UserId == 0)
+                    throw new InvalidOperationException(string.Format(errorMessage, "user id"));
+
                 if (At == null)
-                    throw new InvalidOperationException(string.Format(errorMessage, nameof(At)));
+                    throw new InvalidOperationException(string.Format(errorMessage, "at"));
+
+                if (Start > Stop)
+                    throw new InvalidOperationException("The stop date must be equal to or greater than the start date");
             }
         }
 
@@ -166,21 +175,20 @@ namespace Toggl.Foundation.Models
         private TimeEntry(Builder builder)
         {
             Id = builder.Id;
-            Start = builder.Start;
-            SyncStatus = builder.SyncStatus;
-            Billable = builder.Billable;
-            ProjectId = builder.ProjectId;
-            Description = builder.Description;
             Stop = builder.Stop;
-            WorkspaceId = builder.WorkspaceId;
-            TaskId = builder.TaskId;
-            ProjectId = builder.ProjectId;
-            TagIds = builder.TagIds;
             At = builder.At.Value;
-            ServerDeletedAt = builder.ServerDeletedAt;
-            UserId = builder.UserId;
-            CreatedWith = builder.CreatedWith;
+            Start = builder.Start;
+            TagIds = builder.TagIds;
+            TaskId = builder.TaskId;
+            Billable = builder.Billable;
+            UserId = builder.UserId.Value;
             IsDeleted = builder.IsDeleted;
+            ProjectId = builder.ProjectId;
+            SyncStatus = builder.SyncStatus;
+            CreatedWith = builder.CreatedWith;
+            Description = builder.Description;
+            WorkspaceId = builder.WorkspaceId.Value;
+            ServerDeletedAt = builder.ServerDeletedAt;
         }
     }
 

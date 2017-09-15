@@ -25,6 +25,10 @@ namespace Toggl.Foundation.Tests.DataSources
         {
             protected const long ProjectId = 10;
 
+            protected const long WorkspaceId = 11;
+
+            protected const long UserId = 12;
+
             protected const long CurrentRunningId = 13;
 
             protected ITimeEntriesSource TimeEntriesSource { get; }
@@ -39,12 +43,14 @@ namespace Toggl.Foundation.Tests.DataSources
 
             protected IDatabaseTimeEntry DatabaseTimeEntry { get; } =
                 TimeEntry.Builder
-                      .Create(CurrentRunningId)
-                      .SetStart(DateTimeOffset.Now.AddHours(-2))
-                      .SetSyncStatus(SyncStatus.InSync)
-                      .SetDescription("")
-                      .SetAt(DateTimeOffset.Now.AddDays(-1))
-                      .Build();
+                    .Create(CurrentRunningId)
+                    .SetUserId(UserId)
+                    .SetDescription("")
+                    .SetWorkspaceId(WorkspaceId)
+                    .SetSyncStatus(SyncStatus.InSync)
+                    .SetAt(DateTimeOffset.Now.AddDays(-1))
+                    .SetStart(DateTimeOffset.Now.AddHours(-2))
+                    .Build();
 
             protected IRepository<IDatabaseTimeEntry> Repository { get; } = Substitute.For<IRepository<IDatabaseTimeEntry>>();
 
@@ -63,6 +69,17 @@ namespace Toggl.Foundation.Tests.DataSources
                 Repository.Update(Arg.Any<long>(), Arg.Any<IDatabaseTimeEntry>())
                           .Returns(info => Observable.Return(info.Arg<IDatabaseTimeEntry>()));
             }
+
+            protected StartTimeEntryDTO CreateDto(DateTimeOffset startTime, string description, bool billable,
+                long? projectId) => new StartTimeEntryDTO
+                {
+                    UserId = UserId,
+                    WorkspaceId = WorkspaceId,
+                    StartTime = startTime,
+                    Description = description,
+                    Billable = billable,
+                    ProjectId = projectId
+                };
         }
 
         public sealed class TheConstructor : TimeEntryDataSourceTest
@@ -88,7 +105,7 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public async ThreadingTask CreatesANewTimeEntryInTheDatabase()
             {
-                await TimeEntriesSource.Start(ValidTime, ValidDescription, true, ProjectId);
+                await TimeEntriesSource.Start(CreateDto(ValidTime, ValidDescription, true, ProjectId));
 
                 await Repository.Received().Create(Arg.Any<IDatabaseTimeEntry>());
             }
@@ -96,7 +113,7 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public async ThreadingTask CreatesASyncNeededTimeEntry()
             {
-                await TimeEntriesSource.Start(ValidTime, ValidDescription, true, ProjectId);
+                await TimeEntriesSource.Start(CreateDto(ValidTime, ValidDescription, true, ProjectId));
 
                 await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.SyncStatus == SyncStatus.SyncNeeded));
             }
@@ -106,7 +123,7 @@ namespace Toggl.Foundation.Tests.DataSources
             [InlineData(false)]
             public async ThreadingTask CreatesATimeEntryWithTheProvidedValueForBillable(bool billable)
             {
-                await TimeEntriesSource.Start(ValidTime, ValidDescription, billable, ProjectId);
+                await TimeEntriesSource.Start(CreateDto(ValidTime, ValidDescription, billable, ProjectId));
 
                 await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.Billable == billable));
             }
@@ -114,7 +131,7 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public async ThreadingTask CreatesATimeEntryWithTheProvidedValueForDescription()
             {
-                await TimeEntriesSource.Start(ValidTime, ValidDescription, true, ProjectId);
+                await TimeEntriesSource.Start(CreateDto(ValidTime, ValidDescription, true, ProjectId));
 
                 await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.Description == ValidDescription));
             }
@@ -122,7 +139,7 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public async ThreadingTask CreatesATimeEntryWithTheProvidedValueForStartTime()
             {
-                await TimeEntriesSource.Start(ValidTime, ValidDescription, true, ProjectId);
+                await TimeEntriesSource.Start(CreateDto(ValidTime, ValidDescription, true, ProjectId));
 
                 await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.Start == ValidTime));
             }
@@ -130,15 +147,31 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public async ThreadingTask CreatesATimeEntryWithTheProvidedValueForProjectId()
             {
-                await TimeEntriesSource.Start(ValidTime, ValidDescription, true, ProjectId);
+                await TimeEntriesSource.Start(CreateDto(ValidTime, ValidDescription, true, ProjectId));
 
                 await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.ProjectId == ProjectId));
             }
 
             [Fact]
+            public async ThreadingTask CreatesATimeEntryWithTheProvidedValueForUserId()
+            {
+                await TimeEntriesSource.Start(CreateDto(ValidTime, ValidDescription, true, ProjectId));
+
+                await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.UserId == UserId));
+            }
+
+            [Fact]
+            public async ThreadingTask CreatesATimeEntryWithTheProvidedValueForWorkspaceId()
+            {
+                await TimeEntriesSource.Start(CreateDto(ValidTime, ValidDescription, true, ProjectId));
+
+                await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.WorkspaceId == WorkspaceId));
+            }
+
+            [Fact]
             public async ThreadingTask CreatesATimeEntryWithAnIdProvidedByTheIdProvider()
             {
-                await TimeEntriesSource.Start(ValidTime, ValidDescription, true, ProjectId);
+                await TimeEntriesSource.Start(CreateDto(ValidTime, ValidDescription, true, ProjectId));
 
                 await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.Id == -1));
             }
@@ -149,7 +182,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 var observer = TestScheduler.CreateObserver<ITimeEntry>();
                 TimeEntriesSource.CurrentlyRunningTimeEntry.Where(te => te != null).Subscribe(observer);
 
-                await TimeEntriesSource.Start(ValidTime, ValidDescription, true, ProjectId);
+                await TimeEntriesSource.Start(CreateDto(ValidTime, ValidDescription, true, ProjectId));
 
                 var currentlyRunningTimeEntry = observer.Messages.Single().Value.Value;
                 await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.Start == currentlyRunningTimeEntry.Start));
@@ -161,7 +194,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 var observer = TestScheduler.CreateObserver<ITimeEntry>();
                 TimeEntriesSource.TimeEntryCreated.Subscribe(observer);
 
-                await TimeEntriesSource.Start(ValidTime, ValidDescription, true, ProjectId);
+                await TimeEntriesSource.Start(CreateDto(ValidTime, ValidDescription, true, ProjectId));
 
                 observer.Messages.Single().Value.Value.Id.Should().Be(-1);
                 observer.Messages.Single().Value.Value.Start.Should().Be(ValidTime);
@@ -324,6 +357,8 @@ namespace Toggl.Foundation.Tests.DataSources
                       .SetStart(DateTimeOffset.Now)
                       .SetSyncStatus(SyncStatus.InSync)
                       .SetDescription("")
+                      .SetUserId(11)
+                      .SetWorkspaceId(10)
                       .SetAt(DateTimeOffset.Now)
                       .Build();
 

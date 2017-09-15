@@ -6,6 +6,7 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Suggestions;
+using Toggl.Foundation.DTOs;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
@@ -199,12 +200,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.TextFieldInfo = new TextFieldInfo(description, 0);
                 ViewModel.DoneCommand.Execute();
 
-                await DataSource.TimeEntries.Received().Start(
-                    Arg.Is(dateParameter.GetDate()),
-                    Arg.Is(description),
-                    Arg.Is(false),
-                    Arg.Is<long?>(x => x == null)
-                );
+                await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
+                    dto.StartTime == dateParameter.GetDate() &&
+                    dto.Description == description &&
+                    dto.Billable == false &&
+                    dto.ProjectId == null
+                ));
             }
 
             [Fact]

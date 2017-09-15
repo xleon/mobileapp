@@ -70,6 +70,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Create(12)
                     .SetStart(start)
                     .SetStop(stop)
+                    .SetWorkspaceId(11)
+                    .SetUserId(10)
                     .SetAt(DateTimeOffset.Now)
                     .SetDescription("Test")
                     .Build();

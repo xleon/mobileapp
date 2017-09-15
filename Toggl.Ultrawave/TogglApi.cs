@@ -17,9 +17,10 @@ namespace Toggl.Ultrawave
             var httpHandler = handler ?? new NativeMessageHandler { AutomaticDecompression = GZip | Deflate };
             var httpClient = new HttpClient(httpHandler);
 
+            var userAgent = configuration.UserAgent;
             var credentials = configuration.Credentials;
             var serializer = new JsonSerializer();
-            var apiClient = new ApiClient(httpClient, configuration.UserAgent);
+            var apiClient = new ApiClient(httpClient, userAgent);
             var endpoints = new Endpoints(configuration.Environment);
 
             Tags = new TagsApi(endpoints.Tags, apiClient, serializer, credentials);
@@ -29,7 +30,7 @@ namespace Toggl.Ultrawave
             Clients = new ClientsApi(endpoints.Clients, apiClient, serializer, credentials);
             Projects = new ProjectsApi(endpoints.Projects, apiClient, serializer, credentials);
             Workspaces = new WorkspacesApi(endpoints.Workspaces, apiClient, serializer, credentials);
-            TimeEntries = new TimeEntriesApi(endpoints.TimeEntries, apiClient, serializer, credentials);
+            TimeEntries = new TimeEntriesApi(endpoints.TimeEntries, apiClient, serializer, credentials, userAgent);
             WorkspaceFeatures = new WorkspaceFeaturesApi(endpoints.WorkspaceFeatures, apiClient, serializer, credentials);
         }
 

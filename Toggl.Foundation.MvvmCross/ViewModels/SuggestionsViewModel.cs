@@ -18,7 +18,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ITogglDataSource dataSource;
         private readonly ISuggestionProviderContainer suggestionProviders;
 
-        private IDisposable suggestionsDisposable;
         private IDisposable emptyDatabaseDisposable;
 
         public MvxObservableCollection<Suggestion> Suggestions { get; }

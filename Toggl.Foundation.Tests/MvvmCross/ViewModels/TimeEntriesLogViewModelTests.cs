@@ -6,6 +6,7 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
+using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -145,9 +146,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 protected Subject<IDatabaseTimeEntry> TimeEntryUpdatedSubject = new Subject<IDatabaseTimeEntry>();
                 protected IDatabaseTimeEntry NewTimeEntry =
                     TimeEntry.Builder.Create(21)
-                             .SetStart(DateTimeOffset.UtcNow)
+                             .SetUserId(10)
+                             .SetWorkspaceId(12)
                              .SetDescription("")
                              .SetAt(DateTimeOffset.Now)
+                             .SetStart(DateTimeOffset.UtcNow)
                              .Build();
 
                 protected TimeEntryDataSourceObservableTest()
@@ -155,10 +158,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     var startTime = DateTimeOffset.UtcNow.AddHours(-2);
 
                     var observable = Enumerable.Range(1, InitialAmountOfTimeEntries)
-                              .Select(i => TimeEntry.Builder.Create(i))
-                              .Select(builder => builder.SetStart(startTime).SetDescription("").SetAt(DateTimeOffset.Now).Build())
-                              .Select(te => te.With(startTime.AddHours(2)))
-                              .Apply(Observable.Return);
+                        .Select(i => TimeEntry.Builder.Create(i))
+                        .Select(builder => builder
+                            .SetStart(startTime)
+                            .SetUserId(11)
+                            .SetWorkspaceId(12)
+                            .SetDescription("")
+                            .SetAt(DateTimeOffset.Now)
+                            .Build())
+                      .Select(te => te.With(startTime.AddHours(2)))
+                      .Apply(Observable.Return);
 
                     DataSource.TimeEntries.GetAll().Returns(observable);
                     DataSource.TimeEntries.TimeEntryCreated.Returns(TimeEntryCreatedSubject.AsObservable());
@@ -251,12 +260,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 Received.InOrder(async () =>
                 {
                     await DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>());
-                    await DataSource.TimeEntries.Start(
-                        Arg.Any<DateTimeOffset>(),
-                        Arg.Any<string>(),
-                        Arg.Any<bool>(),
-                        Arg.Any<long?>()
-                    );
+                    await DataSource.TimeEntries.Start(Arg.Any<StartTimeEntryDTO>());
                 });
             }
 
@@ -271,12 +275,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
 
-                await DataSource.TimeEntries.Received().Start(
-                    Arg.Any<DateTimeOffset>(),
-                    Arg.Any<string>(),
-                    Arg.Any<bool>(),
-                    Arg.Any<long?>()
-                );
+                await DataSource.TimeEntries.Start(Arg.Any<StartTimeEntryDTO>());
             }
 
             [Property]
@@ -296,12 +295,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel).Wait();
 
-                DataSource.TimeEntries.Received().Start(
-                    Arg.Any<DateTimeOffset>(),
-                    Arg.Is(description),
-                    Arg.Is(billable),
-                    Arg.Is((long?)projectId)
-                ).Wait();
+                DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
+                    dto.Description == description &&
+                    dto.Billable == billable &&
+                    dto.ProjectId == projectId
+                )).Wait();
             }
         }
     }

@@ -9,8 +9,7 @@ using NSubstitute;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Suggestions;
 using Xunit;
-using TimeEntry = Toggl.Ultrawave.Models.TimeEntry;
-using FoundationTimeEntry = Toggl.Foundation.Models.TimeEntry;
+using TimeEntry = Toggl.Foundation.Models.TimeEntry;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -106,20 +105,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Suggestions.Should().HaveCount(0);
             }
 
-            private Suggestion createSuggestion(int index) => new Suggestion(
-                FoundationTimeEntry.Builder.Create(0)
-                    .SetDescription($"te{index}")
+            private Suggestion createSuggestion(int index) => createSuggestion($"te{index}", 0, 0);
+
+            private Suggestion createSuggestion(string description, long taskId, long projectId) => new Suggestion(
+                TimeEntry.Builder.Create(0)
+                    .SetDescription(description)
                     .SetStart(DateTimeOffset.UtcNow)
                     .SetAt(DateTimeOffset.UtcNow)
+                    .SetTaskId(taskId)
+                    .SetProjectId(projectId)
+                    .SetWorkspaceId(11)
+                    .SetUserId(12)
                     .Build()
             );
-
-            private Suggestion createSuggestion(string description, long taskId, long projectId)
-                => new Suggestion(
-                    FoundationTimeEntry.Clean(
-                        new TimeEntry { Description = description, TaskId = taskId, ProjectId = projectId }
-                    )
-                );
 
             private Recorded<Notification<Suggestion>> createRecorded(int ticks, Suggestion suggestion)
                 => new Recorded<Notification<Suggestion>>(ticks, Notification.CreateOnNext(suggestion));

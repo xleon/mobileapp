@@ -9,6 +9,7 @@ using MvvmCross.Core.ViewModels;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DTOs;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
@@ -145,7 +146,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task done()
         {
-            await dataSource.TimeEntries.Start(StartDate, TextFieldInfo.Text, IsBillable, TextFieldInfo.ProjectId);
+            await dataSource.User.Current()
+                .Select(user => new StartTimeEntryDTO
+                {
+                    UserId = user.Id,
+                    StartTime = StartDate,
+                    Billable = IsBillable,
+                    Description = TextFieldInfo.Text,
+                    ProjectId = TextFieldInfo.ProjectId,
+                    WorkspaceId = user.DefaultWorkspaceId
+                })
+                .Select(dataSource.TimeEntries.Start);
 
             await navigationService.Close(this);
         }

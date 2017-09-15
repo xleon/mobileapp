@@ -119,6 +119,7 @@
     <Compile Include="Autocomplete\IAutocompleteProvider.cs" />
     <Compile Include="Autocomplete\AutocompleteProvider.cs" />
     <Compile Include="Autocomplete\QuerySymbols.cs" />
+    <Compile Include="DTOs\StartTimeEntryDTO.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

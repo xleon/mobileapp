@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using PropertyChanged;
+using Toggl.Foundation.DTOs;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
@@ -138,12 +139,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             await dataSource.TimeEntries.Stop(timeService.CurrentDateTime)
                             .OnErrorResumeNext(Observable.Return(default(IDatabaseTimeEntry)));
 
-            await dataSource.TimeEntries.Start(
-                timeService.CurrentDateTime, 
-                timeEntryViewModel.Description,
-                timeEntryViewModel.Billable,
-                timeEntryViewModel.ProjectId
-            );
+            await dataSource.User
+                .Current()
+                .Select(user => new StartTimeEntryDTO
+                {
+                    UserId = user.Id,
+                    WorkspaceId = user.DefaultWorkspaceId,
+                    Billable = timeEntryViewModel.Billable,
+                    StartTime = timeService.CurrentDateTime, 
+                    ProjectId = timeEntryViewModel.ProjectId,
+                    Description = timeEntryViewModel.Description
+                })
+                .Select(dataSource.TimeEntries.Start);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Toggl.Foundation.DataSources
 
             this.database = database;
 
-            User = new UserDataSource(database.User, api.User);
+            User = new UserDataSource(database.User);
             Projects = new ProjectsDataSource(database.Projects);
             TimeEntries = new TimeEntriesDataSource(database.IdProvider, database.TimeEntries, timeService);
 
