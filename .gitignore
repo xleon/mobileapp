@@ -289,3 +289,9 @@ tools/**
 
 # macOS Finder creates this in every folder opened
 .DS_STORE
+
+Toggl.Daneel/Views/TimeEntryTagsTextView.designer.cs
+
+Toggl.Daneel/Views/ResizableView.designer.cs
+
+Toggl.Daneel/Views/ActivityIndicatorView.designer.cs

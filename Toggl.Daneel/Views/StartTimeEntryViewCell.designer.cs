@@ -10,7 +10,7 @@ using System.CodeDom.Compiler;
 
 namespace Toggl.Daneel.Views
 {
-    [Register("StartTimeEntryViewCell")]
+    [Register ("StartTimeEntryViewCell")]
     partial class StartTimeEntryViewCell
     {
         [Outlet]
