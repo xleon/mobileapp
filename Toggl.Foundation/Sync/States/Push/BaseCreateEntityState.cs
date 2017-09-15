@@ -31,7 +31,7 @@ namespace Toggl.Foundation.Sync.States
         private IObservable<TModel> create(TModel entity)
             => entity == null
                 ? Observable.Throw<TModel>(new ArgumentNullException(nameof(entity)))
-                : Create(api, entity);
+                : Create(api, entity).Select(CopyFrom);
 
         private Func<TModel, IObservable<TModel>> overwrite(TModel entity)
             => createdEntity => GetRepository(database).Update(entity.Id, createdEntity);
@@ -42,5 +42,7 @@ namespace Toggl.Foundation.Sync.States
         protected abstract IObservable<TModel> Create(ITogglApi api, TModel entity);
 
         protected abstract IRepository<TModel> GetRepository(ITogglDatabase database);
+
+        protected abstract TModel CopyFrom(TModel entity);
     }
 }

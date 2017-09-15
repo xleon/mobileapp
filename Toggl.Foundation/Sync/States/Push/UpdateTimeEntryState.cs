@@ -21,5 +21,8 @@ namespace Toggl.Foundation.Sync.States
 
         protected override IObservable<IDatabaseTimeEntry> Update(ITogglApi api, IDatabaseTimeEntry entity)
             => api.TimeEntries.Update(entity).Select(TimeEntry.Clean);
+
+        protected override IDatabaseTimeEntry CopyFrom(IDatabaseTimeEntry entity)
+            => TimeEntry.From(entity);
     }
 }

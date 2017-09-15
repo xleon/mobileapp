@@ -27,7 +27,7 @@ namespace Toggl.Foundation.Sync.States
                 .SelectMany(tryOverwrite(entity))
                 .SelectMany(result => result.Mode == ConflictResolutionMode.Ignore
                     ? entityChanged(entity)
-                    : succeeded(result.UpdatedEntity))
+                    : succeeded(CopyFrom(result.UpdatedEntity)))
                 .Catch(fail(entity));
 
         private IObservable<TModel> update(TModel entity)
@@ -58,5 +58,7 @@ namespace Toggl.Foundation.Sync.States
         protected abstract bool HasChanged(TModel original, TModel updated);
 
         protected abstract IObservable<TModel> Update(ITogglApi api, TModel entity);
+
+        protected abstract TModel CopyFrom(TModel entity);
     }
 }

@@ -18,5 +18,8 @@ namespace Toggl.Foundation.Tests.Sync.States
 
         protected override IDatabaseTimeEntry CreateUnsyncableFrom(IDatabaseTimeEntry entity, string reason)
             => TimeEntry.Unsyncable(entity, reason);
+
+        protected override IDatabaseTimeEntry CopyFrom(IDatabaseTimeEntry entity)
+            => TimeEntry.From(entity);
     }
 }

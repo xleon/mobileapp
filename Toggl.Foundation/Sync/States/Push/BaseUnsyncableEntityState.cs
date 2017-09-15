@@ -39,7 +39,7 @@ namespace Toggl.Foundation.Tests.Sync.States
         private IObservable<ITransition> markAsUnsyncable(TModel entity, string reason)
             => GetRepository(database)
                 .UpdateWithConflictResolution(entity.Id, CreateUnsyncableFrom(entity, reason), overwriteIfLocalEntityDidNotChange(entity))
-                .Select(list => MarkedAsUnsyncable.Transition(list.Entity));
+                .Select(updated => MarkedAsUnsyncable.Transition(CopyFrom(updated.Entity)));
         
         private Func<TModel, TModel, ConflictResolutionMode> overwriteIfLocalEntityDidNotChange(TModel local)
             => (currentLocal, _) => HasChanged(local, currentLocal)
@@ -51,5 +51,7 @@ namespace Toggl.Foundation.Tests.Sync.States
         protected abstract IRepository<TModel> GetRepository(ITogglDatabase database);
 
         protected abstract TModel CreateUnsyncableFrom(TModel entity, string reson);
+
+        protected abstract TModel CopyFrom(TModel entity);
     }
 }

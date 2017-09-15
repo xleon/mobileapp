@@ -162,7 +162,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var parameter = ((Transition<TModel>)transition).Parameter;
 
                 transition.Result.Should().Be(state.UpdatingSucceeded);
-                parameter.Should().Be(updatedEntity);
+                parameter.ShouldBeEquivalentTo(updatedEntity, options => options.IncludingProperties());
                 GetRepository(database).Received().BatchUpdate(
                     Arg.Is<IEnumerable<(long Id, TModel Entity)>>(
                         x => x.First().Id == entity.Id && x.First().Entity.Id == serverEntity.Id),

@@ -18,5 +18,8 @@ namespace Toggl.Foundation.Sync.States
 
         protected override IRepository<IDatabaseTimeEntry> GetRepository(ITogglDatabase database)
             => database.TimeEntries;
+
+        protected override IDatabaseTimeEntry CopyFrom(IDatabaseTimeEntry entity)
+            => TimeEntry.From(entity);
     }
 }
