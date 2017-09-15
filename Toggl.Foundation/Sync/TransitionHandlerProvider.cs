@@ -9,7 +9,7 @@ namespace Toggl.Foundation.Sync
         private readonly Dictionary<IStateResult, TransitionHandler> transitionHandlers
             = new Dictionary<IStateResult, TransitionHandler>();
         
-        public void ConfigureTransition(StateResult result, Func<IObservable<ITransition>> stateFactory)
+        public void ConfigureTransition(IStateResult result, Func<IObservable<ITransition>> stateFactory)
         {
             Ensure.Argument.IsNotNull(result, nameof(result));
             Ensure.Argument.IsNotNull(stateFactory, nameof(stateFactory));

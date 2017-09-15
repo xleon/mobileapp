@@ -23,8 +23,7 @@ namespace Toggl.Foundation.Sync.States
 
         public IObservable<ITransition> Start(TModel entity)
             => create(entity)
-                .Select(overwrite(entity))
-                .SelectMany(persistedEntity => persistedEntity)
+                .SelectMany(overwrite(entity))
                 .Select(CreatingFinished.Transition)
                 .Catch(fail(entity));
 

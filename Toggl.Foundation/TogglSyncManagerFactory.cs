@@ -1,9 +1,11 @@
-﻿using System;
-using Toggl.Foundation.Sync;
+﻿using Toggl.Foundation.Sync;
 using Toggl.Foundation.Sync.States;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
 using System.Reactive.Concurrency;
+using Toggl.Foundation.Tests.Sync.States;
+using Toggl.Multivac.Models;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation
 {
@@ -24,6 +26,7 @@ namespace Toggl.Foundation
         public static void ConfigureTransitions(TransitionHandlerProvider transitions, ITogglDatabase database, ITogglApi api, StateMachineEntryPoints entryPoints)
         {
             configurePullTransitions(transitions, database, api, entryPoints.StartPullSync);
+            configurePushTransitions(transitions, database, api, entryPoints.StartPushSync);
         }
 
         private static void configurePullTransitions(TransitionHandlerProvider transitions, ITogglDatabase database, ITogglApi api, StateResult entryPoint)
@@ -41,6 +44,44 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(persistTags.FinishedPersisting, persistClients.Start);
             transitions.ConfigureTransition(persistClients.FinishedPersisting, persistProjects.Start);
             transitions.ConfigureTransition(persistProjects.FinishedPersisting, persistTimeEntries.Start);
+        }
+        
+        private static void configurePushTransitions(TransitionHandlerProvider transitions, ITogglDatabase database, ITogglApi api, StateResult entryPoint)
+        {
+            configurePushTransitionsForTimeEntries(transitions, database, api, entryPoint);
+        }
+
+        private static IStateResult configurePushTransitionsForTimeEntries(TransitionHandlerProvider transitions, ITogglDatabase database, ITogglApi api, StateResult entryPoint)
+        {
+            var push = new PushTimeEntriesState(database);
+            var pushOne = new PushOneEntityState<IDatabaseTimeEntry>();
+            var create = new CreateTimeEntryState(api, database);
+            var update = new UpdateTimeEntryState(api, database);
+            var unsyncable = new UnsyncableTimeEntryState(database);
+
+            return configurePush(transitions, entryPoint, push, pushOne, create, update, unsyncable);
+        }
+
+        private static IStateResult configurePush<T>(
+            TransitionHandlerProvider transitions,
+            IStateResult entryPoint,
+            BasePushState<T> push,
+            PushOneEntityState<T> pushOne,
+            BaseCreateEntityState<T> create,
+            BaseUpdateEntityState<T> update,
+            BaseUnsyncableEntityState<T> markUnsyncable)
+            where T : class, IBaseModel, IDatabaseSyncable
+        {
+            transitions.ConfigureTransition(entryPoint, push.Start);
+            transitions.ConfigureTransition(push.PushEntity, pushOne.Start);
+            transitions.ConfigureTransition(pushOne.CreateEntity, create.Start);
+            transitions.ConfigureTransition(pushOne.UpdateEntity, update.Start);
+            transitions.ConfigureTransition(create.CreatingFinished, push.Start);
+            transitions.ConfigureTransition(create.CreatingFailed, markUnsyncable.Start);
+            transitions.ConfigureTransition(update.UpdatingSucceeded, push.Start);
+            transitions.ConfigureTransition(update.UpdatingFailed, markUnsyncable.Start);
+
+            return push.NothingToPush;
         }
     }
 }
