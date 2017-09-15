@@ -203,6 +203,30 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string SyncCompleted {
+            get {
+                return ResourceManager.GetString("SyncCompleted", resourceCulture);
+            }
+        }
+        
+        public static string Syncing {
+            get {
+                return ResourceManager.GetString("Syncing", resourceCulture);
+            }
+        }
+        
+        public static string PullDownToRefresh {
+            get {
+                return ResourceManager.GetString("PullDownToRefresh", resourceCulture);
+            }
+        }
+        
+        public static string ReleaseToRefresh {
+            get {
+                return ResourceManager.GetString("ReleaseToRefresh", resourceCulture);
+            }
+        }
+        
         public static string SuggestionsEmptyStateTitle {
             get {
                 return ResourceManager.GetString("SuggestionsEmptyStateTitle", resourceCulture);

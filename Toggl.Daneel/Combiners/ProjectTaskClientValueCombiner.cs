@@ -12,6 +12,7 @@ using CoreGraphics;
 using MvvmCross.Plugins.Color;
 using Toggl.Foundation.MvvmCross.Helper;
 using MvvmCross.Plugins.Color.iOS;
+using Toggl.Daneel.Extensions;
 
 namespace Toggl.Daneel.Combiners
 {
@@ -47,20 +48,7 @@ namespace Toggl.Daneel.Combiners
 
         private static NSMutableAttributedString createDot(double fontHeight, string hexColor)
         {
-            var dot = new NSTextAttachment
-            {
-                Image = UIImage.FromBundle(projectDotImageResource)
-                               .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-            };
-
-            var imageSize = dot.Image.Size;
-            var y = (fontHeight - imageSize.Height) / 2;
-            dot.Bounds = new CGRect(0, y, imageSize.Width, imageSize.Height);
-
-            //There neeeds to be a space before the dot, otherwise the colors don't work
-            var dotString = new NSMutableAttributedString(" ");
-            var attachment = NSAttributedString.FromAttachment(dot);
-            dotString.Append(attachment);
+            var dotString = projectDotImageResource.GetAttachmentString(fontHeight);
 
             return tryAddColorToDot(dotString, hexColor);
         }

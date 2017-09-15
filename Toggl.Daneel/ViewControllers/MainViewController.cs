@@ -1,12 +1,18 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using CoreGraphics;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters.Attributes;
+using MvvmCross.Platform.WeakSubscription;
+using MvvmCross.Plugins.Color;
 using MvvmCross.Plugins.Color.iOS;
 using MvvmCross.Plugins.Visibility;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Views;
+using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -18,11 +24,12 @@ namespace Toggl.Daneel.ViewControllers
     public partial class MainViewController : MvxViewController<MainViewModel>
     {
         private const float animationAngle = 0.1f;
+
         private readonly UIButton reportsButton = new UIButton(new CGRect(0, 0, 40, 40));
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 40));
         private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
 
-        public MainViewController() 
+        public MainViewController()
             : base(nameof(MainViewController), null)
         {
         }
@@ -31,17 +38,9 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidLoad();
 
-            SpiderBroImageView.Layer.AnchorPoint = new CGPoint(0.5f, 0);
-            animateSpider();
-            CurrentTimeEntryCard.Layer.BorderWidth = 1;
-            CurrentTimeEntryCard.Layer.CornerRadius = 8;
-            CurrentTimeEntryCard.Layer.BorderColor = Color.TimeEntriesLog.ButtonBorder.ToNativeColor().CGColor;
-            CurrentTimeEntryElapsedTimeLabel.Font = CurrentTimeEntryElapsedTimeLabel.Font.GetMonospacedDigitFont();
+            prepareViews();
 
-            StartTimeEntryButton.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f);
-            reportsButton.SetImage(UIImage.FromBundle("icReports"), UIControlState.Normal);
-            settingsButton.SetImage(UIImage.FromBundle("icSettings"), UIControlState.Normal);
-           
+            var colorConverter = new MvxNativeColorValueConverter();
             var visibilityConverter = new MvxVisibilityValueConverter();
             var timeSpanConverter = new TimeSpanToDurationValueConverter();
             var invertedVisibilityConverter = new MvxInvertedVisibilityValueConverter();
@@ -53,6 +52,10 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(StopTimeEntryButton).To(vm => vm.StopTimeEntryCommand);
             bindingSet.Bind(StartTimeEntryButton).To(vm => vm.StartTimeEntryCommand);
             bindingSet.Bind(EditTimeEntryButton).To(vm => vm.EditTimeEntryCommand);
+            bindingSet.Bind(MainPagedScrollView)
+                      .For(v => v.RefreshCommand)
+                      .To(vm => vm.RefreshCommand);
+
             bindingSet.Bind(CurrentTimeEntryCard)
                       .For(v => v.BindTap())
                       .To(vm => vm.EditTimeEntryCommand);
@@ -73,20 +76,28 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.SpiderIsVisible)
                       .WithConversion(visibilityConverter);
 
+            bindingSet.Bind(SyncIndicatorView)
+                      .For(v => v.BindVisibility())
+                      .To(vm => vm.IsSyncing)
+                      .WithConversion(visibilityConverter);
+
+            bindingSet.Bind(MainPagedScrollView)
+                      .For(v => v.IsSyncing)
+                      .To(vm => vm.IsSyncing);
+
             //Text
             bindingSet.Bind(CurrentTimeEntryDescriptionLabel).To(vm => vm.CurrentlyRunningTimeEntry.Description);
-
             bindingSet.Bind(CurrentTimeEntryElapsedTimeLabel)
                       .To(vm => vm.CurrentTimeEntryElapsedTime)
                       .WithConversion(timeSpanConverter);
-
+            
             bindingSet.Apply();
         }
 
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-    
+
             NavigationItem.TitleView = titleImage;
             NavigationItem.RightBarButtonItems = new[]
             {
@@ -100,7 +111,7 @@ namespace Toggl.Daneel.ViewControllers
         {
             if (viewController is SuggestionsViewController)
                 return SuggestionsContainer;
-            
+
             if (viewController is TimeEntriesLogViewController)
                 return TimeEntriesLogContainer;
 
@@ -116,6 +127,36 @@ namespace Toggl.Daneel.ViewControllers
             );
         }
 
+        private void prepareViews()
+        {
+            //Prevent bounces in UIScrollView
+            AutomaticallyAdjustsScrollViewInsets = false;
+
+            //Pull to refresh
+            SyncIndicatorView.ContentMode = UIViewContentMode.ScaleAspectFit;
+            MainPagedScrollView.SyncStateView = SyncStateView;
+            MainPagedScrollView.SyncStateLabel = SyncStateLabel;
+            MainPagedScrollView.SetContentOffset(new CGPoint(0, 0), false);
+            MainPagedScrollView.ContentInset = new UIEdgeInsets(MainScrollView.SyncStateViewHeight * 2, 0, 0, 0);
+
+            //Spider animation
+            SpiderBroImageView.Layer.AnchorPoint = new CGPoint(0.5f, 0);
+            animateSpider();
+
+            //Card border
+            CurrentTimeEntryCard.Layer.BorderWidth = 1;
+            CurrentTimeEntryCard.Layer.CornerRadius = 8;
+            CurrentTimeEntryCard.Layer.BorderColor = Color.TimeEntriesLog.ButtonBorder.ToNativeColor().CGColor;
+            CurrentTimeEntryElapsedTimeLabel.Font = CurrentTimeEntryElapsedTimeLabel.Font.GetMonospacedDigitFont();
+
+            //Hide play button for later animating it
+            StartTimeEntryButton.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f);
+
+            //Prepare Navigation bar images
+            reportsButton.SetImage(UIImage.FromBundle("icReports"), UIControlState.Normal);
+            settingsButton.SetImage(UIImage.FromBundle("icSettings"), UIControlState.Normal);
+        }
+
         private void animateSpider()
         {
             SpiderBroImageView.Transform = CGAffineTransform.MakeRotation(-animationAngle);
@@ -125,4 +166,3 @@ namespace Toggl.Daneel.ViewControllers
         }
     }
 }
-

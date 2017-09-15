@@ -97,6 +97,18 @@ Please try again.</value>
     <data name="NoProject">
         <value>No Project</value>
     </data>
+    <data name="SyncCompleted">
+        <value>Synced</value>
+    </data>
+    <data name="Syncing">
+        <value>Syncing...</value>
+    </data>
+    <data name="PullDownToRefresh">
+        <value>Pull down to refresh</value>
+    </data>
+    <data name="ReleaseToRefresh">
+        <value>Release to Refresh</value>
+    </data>
     <data name="SuggestionsEmptyStateTitle">
         <value>Welcome back!</value>
     </data>

@@ -36,6 +36,8 @@
             public const float EnterTiming = 0.225f;
             public const float LeaveTiming = 0.195f;
             public const float LeaveTimingFaster = 0.145f;
+
+            public const int HideSyncStateViewDelay = 2000;
         }
     }
 }

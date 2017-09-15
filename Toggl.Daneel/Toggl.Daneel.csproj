@@ -294,6 +294,10 @@
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationSpider.imageset\icIllustrationSpider.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationSpider.imageset\icIllustrationSpider%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationSpider.imageset\icIllustrationSpider%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icDoneSmall.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icDoneSmall.imageset\icDone.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icDoneSmall.imageset\icDone%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icDoneSmall.imageset\icDone%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -436,6 +440,7 @@
     </Compile>
     <Compile Include="Extensions\TextExtensions.cs" />
     <Compile Include="Views\TimeEntryTagsTextView.cs" />
+    <Compile Include="Views\MainScrollView.cs" />
     <Compile Include="Views\ResizableView.cs" />
     <Compile Include="Combiners\ProjectTaskClientValueCombiner.cs" />
   </ItemGroup>

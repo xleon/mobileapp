@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using CoreGraphics;
 using Foundation;
 using MvvmCross.Platform.UI;
 using MvvmCross.Plugins.Color;
@@ -60,6 +61,40 @@ namespace Toggl.Daneel.Extensions
                 ParagraphStyle = paragraphStyle,
                 Font = UIFont.SystemFontOfSize(12, UIFontWeight.Regular),
             }, new NSRange(self.Text.Length, projectName.Length));
+
+            return result;
+        }
+
+        public static NSAttributedString EndingWithTick(this string self, double fontHeight)
+        {
+            var tick = GetAttachmentString("icDoneSmall", fontHeight);
+
+            var range = new NSRange(0, 1);
+            var attributes = new UIStringAttributes { ForegroundColor = UIColor.White };
+            tick.AddAttributes(attributes, range);
+
+            var result = new NSMutableAttributedString(self);
+            result.Append(tick);
+
+            return result;
+        }
+
+        public static NSMutableAttributedString GetAttachmentString(this string imageName, double fontHeight)
+        {
+            var attachment = new NSTextAttachment
+            {
+                Image = UIImage.FromBundle(imageName)
+                               .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+            };
+
+            var imageSize = attachment.Image.Size;
+            var y = (fontHeight - imageSize.Height) / 2;
+            attachment.Bounds = new CGRect(0, y, imageSize.Width, imageSize.Height);
+
+            //There neeeds to be a space before the dot, otherwise the colors don't work
+            var result = new NSMutableAttributedString(" ");
+            var attachmentString = NSAttributedString.FromAttachment(attachment);
+            result.Append(attachmentString);
 
             return result;
         }

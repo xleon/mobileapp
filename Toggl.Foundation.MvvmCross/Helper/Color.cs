@@ -33,6 +33,9 @@ namespace Toggl.Foundation.MvvmCross.Helper
         public static class Main
         {
             public static readonly MvxColor CardBorder = new MvxColor(232, 232, 232);
+
+            public static readonly MvxColor Syncing = new MvxColor(181, 188, 192);
+            public static readonly MvxColor SyncCompleted = lightishGreen;
         }
 
         public static class TimeEntriesLog

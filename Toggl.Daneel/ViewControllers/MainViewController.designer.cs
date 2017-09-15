@@ -32,6 +32,10 @@ namespace Toggl.Daneel.ViewControllers
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        Toggl.Daneel.Views.MainScrollView MainPagedScrollView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIImageView SpiderBroImageView { get; set; }
 
         [Outlet]
@@ -45,6 +49,18 @@ namespace Toggl.Daneel.ViewControllers
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIView SuggestionsContainer { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        Toggl.Daneel.Views.ActivityIndicatorView SyncIndicatorView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel SyncStateLabel { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView SyncStateView { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -76,6 +92,11 @@ namespace Toggl.Daneel.ViewControllers
                 EditTimeEntryButton = null;
             }
 
+            if (MainPagedScrollView != null) {
+                MainPagedScrollView.Dispose ();
+                MainPagedScrollView = null;
+            }
+
             if (SpiderBroImageView != null) {
                 SpiderBroImageView.Dispose ();
                 SpiderBroImageView = null;
@@ -94,6 +115,21 @@ namespace Toggl.Daneel.ViewControllers
             if (SuggestionsContainer != null) {
                 SuggestionsContainer.Dispose ();
                 SuggestionsContainer = null;
+            }
+
+            if (SyncIndicatorView != null) {
+                SyncIndicatorView.Dispose ();
+                SyncIndicatorView = null;
+            }
+
+            if (SyncStateLabel != null) {
+                SyncStateLabel.Dispose ();
+                SyncStateLabel = null;
+            }
+
+            if (SyncStateView != null) {
+                SyncStateView.Dispose ();
+                SyncStateView = null;
             }
 
             if (TimeEntriesLogContainer != null) {

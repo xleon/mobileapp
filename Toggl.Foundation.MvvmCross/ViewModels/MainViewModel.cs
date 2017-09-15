@@ -7,10 +7,10 @@ using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Parameters;
+using Toggl.Foundation.Sync;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -28,6 +28,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public ITimeEntry CurrentlyRunningTimeEntry { get; private set; }
 
+        public bool IsSyncing { get; private set; }
+
+        public bool SpiderIsVisible { get; set; } = true;
+
         public IMvxAsyncCommand StartTimeEntryCommand { get; }
 
         public IMvxAsyncCommand StopTimeEntryCommand { get; }
@@ -36,7 +40,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand OpenSettingsCommand { get; }
 
-        public bool SpiderIsVisible { get; set; } = true;
+        public IMvxCommand RefreshCommand { get; }
 
         public MainViewModel(ITogglDataSource dataSource, ITimeService timeService, IMvxNavigationService navigationService)
         {
@@ -48,6 +52,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.timeService = timeService;
             this.navigationService = navigationService;
 
+            RefreshCommand = new MvxCommand(refresh);
             OpenSettingsCommand = new MvxAsyncCommand(openSettings);
             EditTimeEntryCommand = new MvxAsyncCommand(editTimeEntry);
             StopTimeEntryCommand = new MvxAsyncCommand(stopTimeEntry);
@@ -67,12 +72,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .CurrentlyRunningTimeEntry
                 .Subscribe(te => CurrentlyRunningTimeEntry = te);
 
+            var syncManagerDisposable = 
+                dataSource.SyncManager.StateObservable
+                    .Subscribe(syncState => IsSyncing = syncState != SyncState.Sleep);
+            
             var spiderDisposable =
                 dataSource.TimeEntries.IsEmpty
                     .Subscribe(isEmpty => SpiderIsVisible = !isWelcome && isEmpty);
 
             disposeBag.Add(tickDisposable);
             disposeBag.Add(spiderDisposable);
+            disposeBag.Add(syncManagerDisposable);
             disposeBag.Add(currentlyRunningTimeEntryDisposable);
         }
 
@@ -81,6 +91,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             base.ViewAppeared();
             navigationService.Navigate<SuggestionsViewModel>();
             navigationService.Navigate<TimeEntriesLogViewModel>();
+        }
+
+        private void refresh()
+        {
+            dataSource.SyncManager.ForceFullSync();
         }
 
         private Task openSettings()
