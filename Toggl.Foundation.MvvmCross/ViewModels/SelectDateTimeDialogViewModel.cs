@@ -12,13 +12,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     {
         private readonly IMvxNavigationService navigationService;
         private DateParameter defaultResult;
-            
-        private DateTime dateTime;
-        public DateTime DateTime
-        {
-            get => dateTime;
-            set => dateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
-        }
+
+        public DateTimeOffset DateTimeOffset { get; set; }
 
         public IMvxAsyncCommand CloseCommand { get; }
 
@@ -31,17 +26,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.navigationService = navigationService;
 
             CloseCommand = new MvxAsyncCommand(close);
-            SaveCommand = new MvxAsyncCommand(save);
+            SaveCommand = new MvxAsyncCommand(save); 
         }
         
         public override void Prepare(DateParameter parameter)
         {
-            DateTime = parameter.GetDate().UtcDateTime;
+            DateTimeOffset = parameter.GetDate();
             defaultResult = parameter;
         }
 
         private Task close() => navigationService.Close(this, defaultResult);
 
-        private Task save() => navigationService.Close(this, DateParameter.WithDate(DateTime));
+        private Task save() => navigationService.Close(this, DateParameter.WithDate(DateTimeOffset));
     }
 }

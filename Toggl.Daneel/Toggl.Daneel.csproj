@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -333,6 +333,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Binding\DatePickerDateTimeOffsetTargetBinding.cs" />
     <Compile Include="Startup\Setup.cs" />
     <Compile Include="Startup\SetupTargetFactories.cs">
       <DependentUpon>SetupTargetFactories.tt</DependentUpon>
@@ -347,7 +348,7 @@
     <Compile Include="Binding\ScrollViewCurrentPageTargetBinding.cs" />
     <Compile Include="ViewControllers\OnboardingViewController.cs" />
     <Compile Include="ViewControllers\OnboardingViewController.designer.cs">
-        <DependentUpon>OnboardingViewController.cs</DependentUpon>
+      <DependentUpon>OnboardingViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Binding\ViewAnimatedBackgroundTargetBinding.cs" />
     <Compile Include="Services\OnePasswordService.cs" />
@@ -360,7 +361,7 @@
     </Compile>
     <Compile Include="ViewControllers\LoginViewController.cs" />
     <Compile Include="ViewControllers\LoginViewController.designer.cs">
-        <DependentUpon>LoginViewController.cs</DependentUpon>
+      <DependentUpon>LoginViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Binding\TextFieldSecureTextEntryTargetBinding.cs" />
     <Compile Include="Binding\BarButtonAnimatedEnabledTargetBinding.cs" />
@@ -374,7 +375,7 @@
     <Compile Include="Views\SuggestionsViewCell.cs" />
     <Compile Include="Views\SuggestionsViewCell.designer.cs">
       <DependentUpon>SuggestionsViewCell.cs</DependentUpon>
-	</Compile>
+    </Compile>
     <Compile Include="ViewControllers\TimeEntriesLogViewController.cs" />
     <Compile Include="ViewControllers\TimeEntriesLogViewController.designer.cs">
       <DependentUpon>TimeEntriesLogViewController.cs</DependentUpon>
@@ -382,12 +383,12 @@
     <Compile Include="ViewSources\TimeEntriesLogViewSource.cs" />
     <Compile Include="Views\SuggestionsEmptyViewCell.cs" />
     <Compile Include="Views\SuggestionsEmptyViewCell.designer.cs">
-        <DependentUpon>SuggestionsEmptyViewCell.cs</DependentUpon>
+      <DependentUpon>SuggestionsEmptyViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\SuggestionsTableViewSource.cs" />
     <Compile Include="ViewControllers\SuggestionsViewController.cs" />
     <Compile Include="ViewControllers\SuggestionsViewController.designer.cs">
-        <DependentUpon>SuggestionsViewController.cs</DependentUpon>
+      <DependentUpon>SuggestionsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\MainViewController.cs" />
     <Compile Include="ViewControllers\MainViewController.designer.cs">
@@ -486,3 +487,4 @@
   <Import Project="..\packages\Realm.Database.1.5.0\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.1.5.0\build\Realm.Database.targets')" />
   <Import Project="..\packages\Realm.1.5.0\build\Realm.targets" Condition="Exists('..\packages\Realm.1.5.0\build\Realm.targets')" />
 </Project>
+

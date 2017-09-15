@@ -2,6 +2,7 @@
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.iOS.Views;
+using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
@@ -24,8 +25,8 @@ namespace Toggl.Daneel.ViewControllers
             var bindingSet = this.CreateBindingSet<SelectDateTimeDialogViewController, SelectDateTimeDialogViewModel>();
 
             bindingSet.Bind(DatePicker)
-                .For(v => v.Date)
-                .To(vm => vm.DateTime);
+                .For(v => v.BindDateTimeOffset())
+                .To(vm => vm.DateTimeOffset);
 
             //Commands
             bindingSet.Bind(CloseButton).To(vm => vm.CloseCommand);

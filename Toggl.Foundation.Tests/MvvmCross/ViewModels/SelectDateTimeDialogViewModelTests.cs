@@ -65,7 +65,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void ReturnsAValueThatReflectsTheChangesToDuration(DateTimeOffset dateTimeOffset)
             {
                 ViewModel.Prepare(DateParameter.WithDate(DateTimeOffset.UtcNow));
-                ViewModel.DateTime = dateTimeOffset.UtcDateTime;
+                ViewModel.DateTimeOffset = dateTimeOffset;
 
                 ViewModel.SaveCommand.ExecuteAsync().Wait();
                 
