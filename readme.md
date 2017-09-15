@@ -29,3 +29,7 @@ Specifically there are:
 Please refer to [this document](https://github.com/toggl/mobileapp/blob/develop/docs/style-guide.md "Toggl Mobile's code formatting guidelines").
 
 We also have [an outline](https://github.com/toggl/mobileapp/blob/develop/docs/solution-outline.md "Toggl Mobile App Solution Outline") of the solution, so you can get an overview of what each project is responsible for.
+
+### Staging environment configuration
+
+[Install the certificate](https://github.com/toggl/mobileapp/blob/develop/docs/certificate.md "Certificate for staging") on your iOS simulator and your device.
