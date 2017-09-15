@@ -27,7 +27,7 @@ namespace Toggl.Foundation.Sync.States
                 .SingleAsync()
                 .Select(entity =>
                     entity != null
-                        ? (ITransition)PushEntity.Transition(entity)
+                        ? (ITransition)PushEntity.Transition(CopyFrom(entity))
                         : NothingToPush.Transition());
 
         private IObservable<TModel> getOldestUnsynced()
@@ -44,5 +44,7 @@ namespace Toggl.Foundation.Sync.States
 
         private bool syncNeeded(TModel entity)
             => entity.SyncStatus == SyncStatus.SyncNeeded;
+            
+        protected abstract TModel CopyFrom(TModel entity);
     }
 }

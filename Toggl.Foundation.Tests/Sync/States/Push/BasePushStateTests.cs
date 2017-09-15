@@ -82,9 +82,10 @@ namespace Toggl.Foundation.Tests.Sync.States
                 SetupRepositoryToReturn(database, new[] { entity });
 
                 var transition = state.Start().SingleAsync().Wait();
+                var parameter = ((Transition<TModel>)transition).Parameter;
 
                 transition.Result.Should().Be(state.PushEntity);
-                ((Transition<TModel>)transition).Parameter.Should().Be(entity);
+                parameter.ShouldBeEquivalentTo(entity, options => options.IncludingProperties());
             }
 
             public void ReturnsPushEntityTransitionWithTheOldestEntity()
@@ -100,7 +101,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var parameter = ((Transition<TModel>)transition).Parameter;
 
                 transition.Result.Should().Be(state.PushEntity);
-                parameter.Should().Be(entity2);
+                parameter.ShouldBeEquivalentTo(entity2, options => options.IncludingProperties());
             }
 
             public void ThrowsWhenRepositoryThrows()

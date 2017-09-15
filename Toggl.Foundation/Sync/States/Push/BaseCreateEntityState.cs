@@ -30,10 +30,10 @@ namespace Toggl.Foundation.Sync.States
         private IObservable<TModel> create(TModel entity)
             => entity == null
                 ? Observable.Throw<TModel>(new ArgumentNullException(nameof(entity)))
-                : Create(api, entity).Select(CopyFrom);
+                : Create(api, entity);
 
         private Func<TModel, IObservable<TModel>> overwrite(TModel entity)
-            => createdEntity => GetRepository(database).Update(entity.Id, createdEntity);
+            => createdEntity => GetRepository(database).Update(entity.Id, createdEntity).Select(CopyFrom);
 
         private Func<Exception, IObservable<ITransition>> fail(TModel entity)
             => e => Observable.Return(CreatingFailed.Transition((e, entity)));
