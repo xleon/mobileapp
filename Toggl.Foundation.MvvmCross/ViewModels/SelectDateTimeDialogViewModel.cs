@@ -10,7 +10,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     [Preserve(AllMembers = true)]
     public class SelectDateTimeDialogViewModel : MvxViewModel<DateParameter, DateParameter>
     {
-        private IMvxNavigationService navigationService;
+        private readonly IMvxNavigationService navigationService;
         private DateParameter defaultResult;
             
         private DateTime dateTime;
