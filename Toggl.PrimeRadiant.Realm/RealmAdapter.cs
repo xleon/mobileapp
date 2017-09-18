@@ -28,13 +28,13 @@ namespace Toggl.PrimeRadiant.Realm
         where TRealmEntity : RealmObject, TModel, IUpdatesFrom<TModel>
         where TModel : IBaseModel, IDatabaseSyncable
     {
-        private readonly Func<TModel, Realms.Realm, TRealmEntity> convertToRealm;
+        private readonly Func<TModel, Realms.Realm, TRealmEntity> clone;
 
-        public RealmAdapter(Func<TModel, Realms.Realm, TRealmEntity> convertToRealm)
+        public RealmAdapter(Func<TModel, Realms.Realm, TRealmEntity> clone)
         {
-            Ensure.Argument.IsNotNull(convertToRealm, nameof(convertToRealm));
+            Ensure.Argument.IsNotNull(clone, nameof(clone));
 
-            this.convertToRealm = convertToRealm;
+            this.clone = clone;
         }
 
         public IQueryable<TModel> GetAll()
@@ -84,6 +84,9 @@ namespace Toggl.PrimeRadiant.Realm
             doModyfingTransaction(id, (realm, realmEntity) => realm.Remove(realmEntity));
         }
 
+        private TRealmEntity convertToRealm(TModel entity, Realms.Realm realm)
+            => entity as TRealmEntity ?? clone(entity, realm);
+
         private static TModel doModyfingTransaction(long id, Action<Realms.Realm, TRealmEntity> transact)
             => doTransaction(realm =>
             {
@@ -111,8 +114,9 @@ namespace Toggl.PrimeRadiant.Realm
                     return realm.Add(convertToRealm(entity, realm));
 
                 case ConflictResolutionMode.Delete:
+                    var ghost = clone(old, realm);
                     realm.Remove(old);
-                    return null;
+                    return ghost;
 
                 case ConflictResolutionMode.Update:
                     old.SetPropertiesFrom(entity, realm);

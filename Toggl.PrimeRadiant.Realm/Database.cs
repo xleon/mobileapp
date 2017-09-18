@@ -11,13 +11,13 @@ namespace Toggl.PrimeRadiant.Realm
         {
             IdProvider = new IdProvider();
             SinceParameters = new SinceParameterStorage();
-            Tags = Repository<IDatabaseTag>.For((tag, realm) => tag as RealmTag ?? new RealmTag(tag, realm));
-            Tasks = Repository<IDatabaseTask>.For((task, realm) => task as RealmTask ?? new RealmTask(task, realm));
-            User = SingleObjectStorage<IDatabaseUser>.For((user, realm) => user as RealmUser ?? new RealmUser(user, realm));
-            Clients = Repository<IDatabaseClient>.For((client, realm) => client as RealmClient ?? new RealmClient(client, realm));
-            Projects = Repository<IDatabaseProject>.For((project, realm) => project as RealmProject ?? new RealmProject(project, realm));
-            TimeEntries = Repository<IDatabaseTimeEntry>.For((timeEntry, realm) => timeEntry as RealmTimeEntry ?? new RealmTimeEntry(timeEntry, realm));
-            Workspaces = Repository<IDatabaseWorkspace>.For((workspace, realm) => workspace as RealmWorkspace ?? new RealmWorkspace(workspace, realm));
+            Tags = Repository<IDatabaseTag>.For((tag, realm) => new RealmTag(tag, realm));
+            Tasks = Repository<IDatabaseTask>.For((task, realm) => new RealmTask(task, realm));
+            User = SingleObjectStorage<IDatabaseUser>.For((user, realm) => new RealmUser(user, realm));
+            Clients = Repository<IDatabaseClient>.For((client, realm) => new RealmClient(client, realm));
+            Projects = Repository<IDatabaseProject>.For((project, realm) => new RealmProject(project, realm));
+            TimeEntries = Repository<IDatabaseTimeEntry>.For((timeEntry, realm) => new RealmTimeEntry(timeEntry, realm));
+            Workspaces = Repository<IDatabaseWorkspace>.For((workspace, realm) => new RealmWorkspace(workspace, realm));
         }
 
         public IIdProvider IdProvider { get; }
