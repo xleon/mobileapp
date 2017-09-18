@@ -53,15 +53,18 @@ namespace Toggl.PrimeRadiant.Realm
                     WriteLine( "        public long Id { get; set; }\n");
                 }
 
-                WriteLine( "        public bool IsDeleted { get; set; }\n");
-                WriteLine( "        public int SyncStatusInt { get; set; }\n");
-                WriteLine( "        [Ignored]");
-                WriteLine( "        public SyncStatus SyncStatus");
-                WriteLine( "        {");
-                WriteLine( "            get { return (SyncStatus)SyncStatusInt; }");
-                WriteLine( "            set { SyncStatusInt = (int)value; }");
-                WriteLine( "        }\n");
-                WriteLine( "        public string LastSyncErrorMessage { get; set; }\n");
+                if (implementsIDatabaseSyncable)
+                {
+                    WriteLine( "        public bool IsDeleted { get; set; }\n");
+                    WriteLine( "        public int SyncStatusInt { get; set; }\n");
+                    WriteLine( "        [Ignored]");
+                    WriteLine( "        public SyncStatus SyncStatus");
+                    WriteLine( "        {");
+                    WriteLine( "            get { return (SyncStatus)SyncStatusInt; }");
+                    WriteLine( "            set { SyncStatusInt = (int)value; }");
+                    WriteLine( "        }\n");
+                    WriteLine( "        public string LastSyncErrorMessage { get; set; }\n");
+                }
 
                 WriteLine($"        public {realmClassName}() {{ }}\n");
 
@@ -75,8 +78,9 @@ namespace Toggl.PrimeRadiant.Realm
 
                 if (implementsIDatabaseSyncable)
                 {
-                    WriteLine( "            SyncStatus = entity.SyncStatus;");
-                    WriteLine( "            LastSyncErrorMessage = entity.LastSyncErrorMessage;");
+                    WriteLine("            IsDeleted = entity.IsDeleted;");
+                    WriteLine("            SyncStatus = entity.SyncStatus;");
+                    WriteLine("            LastSyncErrorMessage = entity.LastSyncErrorMessage;");
                 }
 
                 if (extendsIBaseModel)

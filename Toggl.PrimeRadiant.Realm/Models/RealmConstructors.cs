@@ -30,6 +30,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public void SetPropertiesFrom(IDatabaseClient entity, Realms.Realm realm)
         {
+            IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
             Id = entity.Id;
@@ -67,6 +68,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public void SetPropertiesFrom(IDatabaseProject entity, Realms.Realm realm)
         {
+            IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
             Id = entity.Id;
@@ -116,6 +118,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public void SetPropertiesFrom(IDatabaseTag entity, Realms.Realm realm)
         {
+            IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
             Id = entity.Id;
@@ -152,6 +155,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public void SetPropertiesFrom(IDatabaseTask entity, Realms.Realm realm)
         {
+            IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
             Id = entity.Id;
@@ -195,6 +199,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public void SetPropertiesFrom(IDatabaseTimeEntry entity, Realms.Realm realm)
         {
+            IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
             Id = entity.Id;
@@ -249,6 +254,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public void SetPropertiesFrom(IDatabaseUser entity, Realms.Realm realm)
         {
+            IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
             Id = entity.Id;
@@ -298,6 +304,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public void SetPropertiesFrom(IDatabaseWorkspace entity, Realms.Realm realm)
         {
+            IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
             Id = entity.Id;
@@ -320,19 +327,6 @@ namespace Toggl.PrimeRadiant.Realm
 
     internal partial class RealmWorkspaceFeature : IUpdatesFrom<IDatabaseWorkspaceFeature>
     {
-        public bool IsDeleted { get; set; }
-
-        public int SyncStatusInt { get; set; }
-
-        [Ignored]
-        public SyncStatus SyncStatus
-        {
-            get { return (SyncStatus)SyncStatusInt; }
-            set { SyncStatusInt = (int)value; }
-        }
-
-        public string LastSyncErrorMessage { get; set; }
-
         public RealmWorkspaceFeature() { }
 
         public RealmWorkspaceFeature(IDatabaseWorkspaceFeature entity, Realms.Realm realm)
@@ -349,19 +343,6 @@ namespace Toggl.PrimeRadiant.Realm
 
     internal partial class RealmWorkspaceFeatureCollection : IUpdatesFrom<IDatabaseWorkspaceFeatureCollection>
     {
-        public bool IsDeleted { get; set; }
-
-        public int SyncStatusInt { get; set; }
-
-        [Ignored]
-        public SyncStatus SyncStatus
-        {
-            get { return (SyncStatus)SyncStatusInt; }
-            set { SyncStatusInt = (int)value; }
-        }
-
-        public string LastSyncErrorMessage { get; set; }
-
         public RealmWorkspaceFeatureCollection() { }
 
         public RealmWorkspaceFeatureCollection(IDatabaseWorkspaceFeatureCollection entity, Realms.Realm realm)
