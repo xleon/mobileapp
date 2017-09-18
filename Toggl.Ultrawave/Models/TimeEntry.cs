@@ -20,6 +20,14 @@ namespace Toggl.Ultrawave.Models
 
         public DateTimeOffset? Stop { get; set; }
 
+        private int runningTimeEntryDuration => -1;
+
+        public int Duration
+        {
+            get => Stop.HasValue ? (int)(Stop.Value - Start).TotalSeconds : runningTimeEntryDuration;
+            set { }
+        }
+
         public string Description { get; set; }
 
         public IEnumerable<long> TagIds { get; set; }
