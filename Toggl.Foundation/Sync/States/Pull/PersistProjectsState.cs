@@ -11,8 +11,8 @@ namespace Toggl.Foundation.Sync.States
 {
     class PersistProjectsState : BasePersistState<IProject, IDatabaseProject>
     {
-        public PersistProjectsState(ITogglDatabase database)
-            : base(database)
+        public PersistProjectsState(IRepository<IDatabaseProject> repository, ISinceParameterRepository sinceParameterRepository)
+            : base(repository, sinceParameterRepository, Resolver.ForProjects())
         {
         }
 
@@ -21,9 +21,6 @@ namespace Toggl.Foundation.Sync.States
 
         protected override IDatabaseProject ConvertToDatabaseEntity(IProject entity)
             => Project.Clean(entity);
-
-        protected override IObservable<IEnumerable<(ConflictResolutionMode, IDatabaseProject)>> BatchUpdate(ITogglDatabase database, IEnumerable<(long, IDatabaseProject)> entities)
-            => database.Projects.BatchUpdate(entities, Resolver.ForProjects().Resolve);
 
         protected override DateTimeOffset? LastUpdated(ISinceParameters old, IEnumerable<IDatabaseProject> entities)
             => entities.Select(p => p?.At).Where(d => d.HasValue).DefaultIfEmpty(old.Projects).Max();

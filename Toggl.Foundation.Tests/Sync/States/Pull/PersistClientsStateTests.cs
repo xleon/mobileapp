@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using NSubstitute;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Sync.States;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Client = Toggl.Ultrawave.Models.Client;
-using static Toggl.PrimeRadiant.ConflictResolutionMode;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {
@@ -23,10 +21,8 @@ namespace Toggl.Foundation.Tests.Sync.States
         private sealed class TheStartMethod
             : TheStartMethod<PersistClientsState, IClient, IDatabaseClient>
         {
-            protected override PersistClientsState CreateState(ITogglDatabase database)
-                => new PersistClientsState(database);
-
-            protected override List<IClient> CreateEmptyList() => new List<IClient>();
+            protected override PersistClientsState CreateState(IRepository<IDatabaseClient> repository, ISinceParameterRepository sinceParameterRepository)
+                => new PersistClientsState(repository, sinceParameterRepository);
 
             protected override List<IClient> CreateListWithOneItem(DateTimeOffset? at = null)
                 => new List<IClient> { new Client { At = at ?? DateTimeOffset.Now, Name = Guid.NewGuid().ToString() } };
@@ -36,8 +32,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                     null, new SinceParameters(null),
                     clients: Observable.Create<List<IClient>>(observer =>
                     {
-                        observer.OnNext(CreateEmptyList());
-                        observer.OnNext(CreateEmptyList());
+                        observer.OnNext(new List<IClient>());
+                        observer.OnNext(new List<IClient>());
                         return () => { };
                     }));
 
@@ -60,6 +56,10 @@ namespace Toggl.Foundation.Tests.Sync.States
                 Observable.Return(new List<ITimeEntry>()),
                 Observable.Return(new List<ITag>()));
 
+            protected override bool IsDeletedOnServer(IClient entity) => entity.ServerDeletedAt.HasValue;
+
+            protected override IDatabaseClient Clean(IClient entity) => Models.Client.Clean(entity);
+
             protected override List<IClient> CreateComplexListWhereTheLastUpdateEntityIsDeleted(DateTimeOffset? at)
                 => new List<IClient>
                 {
@@ -69,26 +69,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                     new Client { At = at?.AddDays(-2) ?? DateTimeOffset.Now, Name = Guid.NewGuid().ToString() }
                 };
 
-            protected override void SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(ITogglDatabase database, List<IClient> clients = null)
-            {
-                var foundationClients = clients?.Select(client => client.ServerDeletedAt.HasValue
-                    ? (Delete, null)
-                    : (Update, (IDatabaseClient)Models.Client.Clean(client)));
-                database.Clients.BatchUpdate(null, null)
-                    .ReturnsForAnyArgs(Observable.Return(foundationClients));
-            }
-
-            protected override void SetupDatabaseBatchUpdateToThrow(ITogglDatabase database, Func<Exception> exceptionFactory)
-                => database.Clients.BatchUpdate(null, null).ReturnsForAnyArgs(_ => throw exceptionFactory());
-
-            protected override void AssertBatchUpdateWasCalled(ITogglDatabase database, List<IClient> clients = null)
-            {
-                database.Clients.Received().BatchUpdate(Arg.Is<IEnumerable<(long, IDatabaseClient Client)>>(
-                        list => list.Count() == clients.Count && list.Select(pair => pair.Client).All(shouldBePersistedAndIsClean(clients))),
-                    Arg.Any<Func<IDatabaseClient, IDatabaseClient, ConflictResolutionMode>>());
-            }
-
-            private Func<IDatabaseClient, bool> shouldBePersistedAndIsClean(List<IClient> clients)
+            protected override Func<IDatabaseClient, bool> ArePersistedAndClean(List<IClient> clients)
                 => persisted => persisted.SyncStatus == SyncStatus.InSync && clients.Any(w => w.Name == persisted.Name);
         }
     }

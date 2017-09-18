@@ -4,16 +4,12 @@ using System.Linq;
 using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
-using NSubstitute.Exceptions;
 using Toggl.Foundation.Sync;
-using Toggl.Foundation.Sync.States;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
-using Toggl.Ultrawave;
 using Toggl.Ultrawave.Exceptions;
 using Xunit;
-using NotImplementedException = System.NotImplementedException;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {
@@ -69,18 +65,18 @@ namespace Toggl.Foundation.Tests.Sync.States
         internal abstract class TheStartMethod<TModel> : IStartMethodTestHelper
             where TModel : class, IBaseModel, IDatabaseSyncable
         {
-            private ITogglDatabase database;
+            private IRepository<TModel> repository;
 
             public TheStartMethod()
             {
-                database = Substitute.For<ITogglDatabase>();
+                repository = Substitute.For<IRepository<TModel>>();
             }
 
             public void ThrowsWhenArgumentsAreNull(bool hasEntity, bool hasReason)
             {
                 TModel entity = hasEntity ? CreateDirtyEntity() : null;
                 Exception reason = hasReason ? new ApiException("Test") : null;
-                var state = CreateState(database);
+                var state = CreateState(repository);
 
                 Action callingStart = () => state.Start((reason, entity)).SingleAsync().Wait();
 
@@ -89,8 +85,8 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void ThrowsWhenDatabaseOperationFails()
             {
-                var state = CreateState(database);
-                GetRepository(database)
+                var state = CreateState(repository);
+                repository
                     .BatchUpdate(null, null)
                     .ReturnsForAnyArgs(_ => throw new TestException());
 
@@ -102,7 +98,7 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void ThrowsWhenTheReasonExceptionIsNotAnApiException()
             {
-                var state = CreateState(database);
+                var state = CreateState(repository);
                 var exception = new TestException();
 
                 Action callingStart = () => state.Start(
@@ -115,7 +111,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             {
                 var entity = CreateDirtyEntity();
                 var reason = new ApiException(Guid.NewGuid().ToString());
-                var state = CreateState(database);
+                var state = CreateState(repository);
                 prepareBatchUpdate(entity);
 
                 var transition = state.Start((reason, entity)).SingleAsync().Wait();
@@ -127,7 +123,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             public void TheSyncStatusOfTheEntityChangesToSyncFailedWhenEverythingWorks()
             {
                 var entity = CreateDirtyEntity();
-                var state = CreateState(database);
+                var state = CreateState(repository);
                 prepareBatchUpdate(entity);
 
                 var transition = state.Start((new ApiException("test"), entity)).SingleAsync().Wait();
@@ -139,12 +135,12 @@ namespace Toggl.Foundation.Tests.Sync.States
             public void TheUpdatedEntityHasTheSameIdAsTheOriginalEntity()
             {
                 var entity = CreateDirtyEntity();
-                var state = CreateState(database);
+                var state = CreateState(repository);
                 prepareBatchUpdate(entity);
 
                 state.Start((new ApiException("test"), entity)).SingleAsync().Wait();
 
-                GetRepository(database)
+                repository
                     .Received()
                     .BatchUpdate(
                         Arg.Is<IEnumerable<(long Id, TModel)>>(entities => entities.First().Id == entity.Id),
@@ -155,7 +151,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             {
                 var entity = CreateDirtyEntity();
                 var reason = new ApiException(Guid.NewGuid().ToString());
-                var state = CreateState(database);
+                var state = CreateState(repository);
                 prepareBatchUpdate(entity);
 
                 var transition = state.Start((reason, entity)).SingleAsync().Wait();
@@ -169,7 +165,7 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             private void prepareBatchUpdate(TModel entity)
             {
-                GetRepository(database)
+                repository
                     .BatchUpdate(
                         Arg.Is<IEnumerable<(long Id, TModel Entity)>>(entities => entities.First().Id == entity.Id),
                         Arg.Any<Func<TModel, TModel, ConflictResolutionMode>>())
@@ -177,11 +173,9 @@ namespace Toggl.Foundation.Tests.Sync.States
                         (ConflictResolutionMode.Update, ((IEnumerable<(long, TModel Entity)>)args[0]).First().Entity) }));
             }
 
-            protected abstract BaseUnsyncableEntityState<TModel> CreateState(ITogglDatabase database);
+            protected abstract BaseUnsyncableEntityState<TModel> CreateState(IRepository<TModel> repository);
 
             protected abstract TModel CreateDirtyEntity();
-
-            protected abstract IRepository<TModel> GetRepository(ITogglDatabase database);
         }
     }
 }

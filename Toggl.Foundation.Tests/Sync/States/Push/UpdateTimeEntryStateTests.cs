@@ -18,12 +18,8 @@ namespace Toggl.Foundation.Tests.Sync.States
 
         private sealed class TheStartMethod : TheStartMethod<IDatabaseTimeEntry, ITimeEntry>
         {
-            protected override BaseUpdateEntityState<IDatabaseTimeEntry> CreateState(ITogglApi api,
-                ITogglDatabase database)
-                => new UpdateTimeEntryState(api, database);
-
-            protected override IRepository<IDatabaseTimeEntry> GetRepository(ITogglDatabase database)
-                => database.TimeEntries;
+            protected override BaseUpdateEntityState<IDatabaseTimeEntry> CreateState(ITogglApi api, IRepository<IDatabaseTimeEntry> repository)
+                => new UpdateTimeEntryState(api, repository);
 
             protected override Func<IDatabaseTimeEntry, IObservable<ITimeEntry>> GetUpdateFunction(ITogglApi api)
                 => api.TimeEntries.Update;

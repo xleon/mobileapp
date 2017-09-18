@@ -23,10 +23,8 @@ namespace Toggl.Foundation.Tests.Sync.States
         private sealed class TheStartMethod
             : TheStartMethod<PersistProjectsState, IProject, IDatabaseProject>
         {
-            protected override PersistProjectsState CreateState(ITogglDatabase database)
-                => new PersistProjectsState(database);
-
-            protected override List<IProject> CreateEmptyList() => new List<IProject>();
+            protected override PersistProjectsState CreateState(IRepository<IDatabaseProject> repository, ISinceParameterRepository sinceParameterRepository)
+                => new PersistProjectsState(repository, sinceParameterRepository);
 
             protected override List<IProject> CreateListWithOneItem(DateTimeOffset? at = null)
                 => new List<IProject> { new Project { At = at ?? DateTimeOffset.Now, Name = Guid.NewGuid().ToString() } };
@@ -36,8 +34,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                     null, new SinceParameters(null),
                     projects: Observable.Create<List<IProject>>(observer =>
                     {
-                        observer.OnNext(CreateEmptyList());
-                        observer.OnNext(CreateEmptyList());
+                        observer.OnNext(new List<IProject>());
+                        observer.OnNext(new List<IProject>());
                         return () => { };
                     }));
 
@@ -60,6 +58,10 @@ namespace Toggl.Foundation.Tests.Sync.States
                 Observable.Return(new List<ITimeEntry>()),
                 Observable.Return(new List<ITag>()));
 
+            protected override bool IsDeletedOnServer(IProject entity) => entity.ServerDeletedAt.HasValue;
+
+            protected override IDatabaseProject Clean(IProject entity) => Models.Project.Clean(entity);
+
             protected override List<IProject> CreateComplexListWhereTheLastUpdateEntityIsDeleted(DateTimeOffset? at)
                 => new List<IProject>
                 {
@@ -69,26 +71,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                     new Project { At = at?.AddDays(-2) ?? DateTimeOffset.Now, Name = Guid.NewGuid().ToString() }
                 };
 
-            protected override void SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(ITogglDatabase database, List<IProject> workspaces = null)
-            {
-                var foundationWorkspaces = workspaces?.Select(project => project.ServerDeletedAt.HasValue
-                    ? (Delete, null)
-                    : (Update, (IDatabaseProject)Models.Project.Clean(project)));
-                database.Projects.BatchUpdate(null, null)
-                    .ReturnsForAnyArgs(Observable.Return(foundationWorkspaces));
-            }
-
-            protected override void SetupDatabaseBatchUpdateToThrow(ITogglDatabase database, Func<Exception> exceptionFactory)
-                => database.Projects.BatchUpdate(null, null).ReturnsForAnyArgs(_ => throw exceptionFactory());
-
-            protected override void AssertBatchUpdateWasCalled(ITogglDatabase database, List<IProject> projects = null)
-            {
-                database.Projects.Received().BatchUpdate(Arg.Is<IEnumerable<(long, IDatabaseProject Project)>>(
-                        list => list.Count() == projects.Count && list.Select(pair => pair.Project).All(shouldBePersistedAndIsClean(projects))),
-                    Arg.Any<Func<IDatabaseProject, IDatabaseProject, ConflictResolutionMode>>());
-            }
-
-            private Func<IDatabaseProject, bool> shouldBePersistedAndIsClean(List<IProject> projects)
+            protected override Func<IDatabaseProject, bool> ArePersistedAndClean(List<IProject> projects)
                 => persisted => persisted.SyncStatus == SyncStatus.InSync && projects.Any(w => w.Name == persisted.Name);
         }
     }

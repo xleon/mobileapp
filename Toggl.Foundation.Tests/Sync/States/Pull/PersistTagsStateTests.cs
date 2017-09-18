@@ -1,15 +1,13 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using NSubstitute;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Sync.States;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Tag = Toggl.Ultrawave.Models.Tag;
-using static Toggl.PrimeRadiant.ConflictResolutionMode;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {
@@ -23,10 +21,8 @@ namespace Toggl.Foundation.Tests.Sync.States
         private sealed class TheStartMethod
             : TheStartMethod<PersistTagsState, ITag, IDatabaseTag>
         {
-            protected override PersistTagsState CreateState(ITogglDatabase database)
-                => new PersistTagsState(database);
-
-            protected override List<ITag> CreateEmptyList() => new List<ITag>();
+            protected override PersistTagsState CreateState(IRepository<IDatabaseTag> repository, ISinceParameterRepository sinceParameterRepository)
+                => new PersistTagsState(repository, sinceParameterRepository);
 
             protected override List<ITag> CreateListWithOneItem(DateTimeOffset? at = null)
                 => new List<ITag> { new Tag { At = at ?? DateTimeOffset.Now, Name = Guid.NewGuid().ToString() } };
@@ -36,8 +32,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                     null, new SinceParameters(null),
                     tags: Observable.Create<List<ITag>>(observer =>
                     {
-                        observer.OnNext(CreateEmptyList());
-                        observer.OnNext(CreateEmptyList());
+                        observer.OnNext(new List<ITag>());
+                        observer.OnNext(new List<ITag>());
                         return () => { };
                     }));
 
@@ -60,36 +56,23 @@ namespace Toggl.Foundation.Tests.Sync.States
                     Observable.Return(new List<ITimeEntry>()),
                     Observable.Return(tags));
 
-            protected override List<ITag> CreateComplexListWhereTheLastUpdateEntityIsDeleted(DateTimeOffset? at)
-                => createComplexList(at ?? DateTimeOffset.Now);
+            protected override bool IsDeletedOnServer(ITag entity) => false;
 
-            private List<ITag> createComplexList(DateTimeOffset at)
-                => new List<ITag>
+            protected override IDatabaseTag Clean(ITag entity) => Models.Tag.Clean(entity);
+
+            protected override List<ITag> CreateComplexListWhereTheLastUpdateEntityIsDeleted(DateTimeOffset? maybeAt)
+            {
+                var at = maybeAt ?? DateTimeOffset.Now;
+                return new List<ITag>
                 {
                     new Tag { At = at.AddDays(-1), Name = Guid.NewGuid().ToString() },
                     new Tag { At = at.AddDays(-3), Name = Guid.NewGuid().ToString() },
                     new Tag { At = at, Name = Guid.NewGuid().ToString() },
                     new Tag { At = at.AddDays(-2), Name = Guid.NewGuid().ToString() }
                 };
+            }   
 
-            protected override void SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(ITogglDatabase database, List<ITag> tags = null)
-            {
-                var foundationTags = tags?.Select(tag => (Update, (IDatabaseTag)Models.Tag.Clean(tag)));
-                database.Tags.BatchUpdate(null, null)
-                    .ReturnsForAnyArgs(Observable.Return(foundationTags));
-            }
-
-            protected override void SetupDatabaseBatchUpdateToThrow(ITogglDatabase database, Func<Exception> exceptionFactory)
-                => database.Tags.BatchUpdate(null, null).ReturnsForAnyArgs(_ => throw exceptionFactory());
-
-            protected override void AssertBatchUpdateWasCalled(ITogglDatabase database, List<ITag> tags = null)
-            {
-                database.Tags.Received().BatchUpdate(Arg.Is<IEnumerable<(long, IDatabaseTag Tag)>>(
-                        list => list.Count() == tags.Count && list.Select(pair => pair.Tag).All(shouldBePersistedAndIsClean(tags))),
-                    Arg.Any<Func<IDatabaseTag, IDatabaseTag, ConflictResolutionMode>>());
-            }
-
-            private Func<IDatabaseTag, bool> shouldBePersistedAndIsClean(List<ITag> tags)
+            protected override Func<IDatabaseTag, bool> ArePersistedAndClean(List<ITag> tags)
                 => persisted => persisted.SyncStatus == SyncStatus.InSync && tags.Any(te => te.Name == persisted.Name);
         }
     }

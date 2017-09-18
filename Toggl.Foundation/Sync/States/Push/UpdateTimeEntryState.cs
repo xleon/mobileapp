@@ -9,12 +9,9 @@ namespace Toggl.Foundation.Sync.States
 {
     internal sealed class UpdateTimeEntryState : BaseUpdateEntityState<IDatabaseTimeEntry>
     {
-        public UpdateTimeEntryState(ITogglApi api, ITogglDatabase database) : base(api, database)
+        public UpdateTimeEntryState(ITogglApi api, IRepository<IDatabaseTimeEntry> repository) : base(api, repository)
         {
         }
-
-        protected override IRepository<IDatabaseTimeEntry> GetRepository(ITogglDatabase database)
-            => database.TimeEntries;
 
         protected override bool HasChanged(IDatabaseTimeEntry original, IDatabaseTimeEntry current)
             => original.At < current.At;

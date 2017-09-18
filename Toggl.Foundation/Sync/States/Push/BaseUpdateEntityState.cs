@@ -10,16 +10,16 @@ namespace Toggl.Foundation.Sync.States
         where TModel : class, IBaseModel, IDatabaseSyncable
     {
         private readonly ITogglApi api;
-        private readonly ITogglDatabase database;
+        private readonly IRepository<TModel> repository;
 
         public StateResult<(Exception, TModel)> UpdatingFailed { get; } = new StateResult<(Exception, TModel)>();
         public StateResult<TModel> EntityChanged { get; } = new StateResult<TModel>();
         public StateResult<TModel> UpdatingSucceeded { get; } = new StateResult<TModel>();
 
-        public BaseUpdateEntityState(ITogglApi api, ITogglDatabase database)
+        public BaseUpdateEntityState(ITogglApi api, IRepository<TModel> repository)
         {
             this.api = api;
-            this.database = database;
+            this.repository = repository;
         }
 
         public IObservable<ITransition> Start(TModel entity)
@@ -39,8 +39,7 @@ namespace Toggl.Foundation.Sync.States
             => Observable.Return(EntityChanged.Transition(entity));
 
         private Func<TModel, IObservable<(ConflictResolutionMode Mode, TModel UpdatedEntity)>> tryOverwrite(TModel entity)
-            => updatedEntity => GetRepository(database)
-                .UpdateWithConflictResolution(entity.Id, updatedEntity, overwriteIfLocalEntityDidNotChange(entity));
+            => updatedEntity => repository.UpdateWithConflictResolution(entity.Id, updatedEntity, overwriteIfLocalEntityDidNotChange(entity));
 
         private Func<TModel, TModel, ConflictResolutionMode> overwriteIfLocalEntityDidNotChange(TModel local)
             => (currentLocal, _) => HasChanged(local, currentLocal)
@@ -52,8 +51,6 @@ namespace Toggl.Foundation.Sync.States
 
         private IObservable<ITransition> succeeded(TModel entity)
             => Observable.Return((ITransition)UpdatingSucceeded.Transition(entity));
-
-        protected abstract IRepository<TModel> GetRepository(ITogglDatabase database);
 
         protected abstract bool HasChanged(TModel original, TModel updated);
 

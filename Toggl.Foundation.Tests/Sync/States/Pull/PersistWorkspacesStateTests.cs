@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using NSubstitute;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Sync.States;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Workspace = Toggl.Ultrawave.Models.Workspace;
-using static Toggl.PrimeRadiant.ConflictResolutionMode;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {
@@ -23,10 +21,8 @@ namespace Toggl.Foundation.Tests.Sync.States
         private sealed class TheStartMethod
             : TheStartMethod<PersistWorkspacesState, IWorkspace, IDatabaseWorkspace>
         {
-            protected override PersistWorkspacesState CreateState(ITogglDatabase database)
-                => new PersistWorkspacesState(database);
-
-            protected override List<IWorkspace> CreateEmptyList() => new List<IWorkspace>();
+            protected override PersistWorkspacesState CreateState(IRepository<IDatabaseWorkspace> repository, ISinceParameterRepository sinceParameterRepository)
+                => new PersistWorkspacesState(repository, sinceParameterRepository);
 
             protected override List<IWorkspace> CreateListWithOneItem(DateTimeOffset? at = null)
                 => new List<IWorkspace> { new Workspace { At = at, Name = Guid.NewGuid().ToString() } };
@@ -36,8 +32,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                     null, new SinceParameters(null),
                     Observable.Create<List<IWorkspace>>(observer =>
                     {
-                        observer.OnNext(CreateEmptyList());
-                        observer.OnNext(CreateEmptyList());
+                        observer.OnNext(new List<IWorkspace>());
+                        observer.OnNext(new List<IWorkspace>());
                         return () => { };
                     }));
 
@@ -69,26 +65,11 @@ namespace Toggl.Foundation.Tests.Sync.States
                     new Workspace { At = at?.AddDays(-2), Name = Guid.NewGuid().ToString() }
                 };
 
-            protected override void SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(ITogglDatabase database, List<IWorkspace> workspaces = null)
-            {
-                var foundationWorkspaces = workspaces?.Select(workspace => workspace.ServerDeletedAt.HasValue
-                        ? (Delete, null)
-                        : (Update, (IDatabaseWorkspace)Models.Workspace.Clean(workspace)));
-                database.Workspaces.BatchUpdate(null, null)
-                    .ReturnsForAnyArgs(Observable.Return(foundationWorkspaces));
-            }
+            protected override bool IsDeletedOnServer(IWorkspace entity) => entity.ServerDeletedAt.HasValue;
 
-            protected override void SetupDatabaseBatchUpdateToThrow(ITogglDatabase database, Func<Exception> exceptionFactory)
-                => database.Workspaces.BatchUpdate(null, null).ReturnsForAnyArgs(_ => throw exceptionFactory());
+            protected override IDatabaseWorkspace Clean(IWorkspace workspace) => Models.Workspace.Clean(workspace);
 
-            protected override void AssertBatchUpdateWasCalled(ITogglDatabase database, List<IWorkspace> workspaces = null)
-            {
-                database.Workspaces.Received().BatchUpdate(Arg.Is<IEnumerable<(long, IDatabaseWorkspace Workspace)>>(
-                        list => list.Count() == workspaces.Count && list.Select(pair => pair.Workspace).All(shouldBePersistedAndIsClean(workspaces))),
-                    Arg.Any<Func<IDatabaseWorkspace, IDatabaseWorkspace, ConflictResolutionMode>>());
-            }
-
-            private Func<IDatabaseWorkspace, bool> shouldBePersistedAndIsClean(List<IWorkspace> workspaces)
+            protected override Func<IDatabaseWorkspace, bool> ArePersistedAndClean(List<IWorkspace> workspaces)
                 => persisted => persisted.SyncStatus == SyncStatus.InSync && workspaces.Any(w => w.Name == persisted.Name);
         }
     }

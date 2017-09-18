@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac.Models;
@@ -11,13 +10,13 @@ namespace Toggl.Foundation.Tests.Sync.States
     internal abstract class BaseUnsyncableEntityState<TModel>
         where TModel : IBaseModel, IDatabaseSyncable
     {
-        private ITogglDatabase database;
+        private IRepository<TModel> repository;
 
         public StateResult<TModel> MarkedAsUnsyncable { get; } = new StateResult<TModel>();
 
-        public BaseUnsyncableEntityState(ITogglDatabase database)
+        public BaseUnsyncableEntityState(IRepository<TModel> repository)
         {
-            this.database = database;
+            this.repository = repository;
         }
 
         public IObservable<ITransition> Start((Exception Reason, TModel Entity) failedPush)
@@ -37,7 +36,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             => Observable.Throw<Transition<TModel>>(reason);
 
         private IObservable<ITransition> markAsUnsyncable(TModel entity, string reason)
-            => GetRepository(database)
+            => repository
                 .UpdateWithConflictResolution(entity.Id, CreateUnsyncableFrom(entity, reason), overwriteIfLocalEntityDidNotChange(entity))
                 .Select(updated => MarkedAsUnsyncable.Transition(CopyFrom(updated.Entity)));
         
@@ -47,8 +46,6 @@ namespace Toggl.Foundation.Tests.Sync.States
                 : ConflictResolutionMode.Update;
 
         protected abstract bool HasChanged(TModel original, TModel current);
-
-        protected abstract IRepository<TModel> GetRepository(ITogglDatabase database);
 
         protected abstract TModel CreateUnsyncableFrom(TModel entity, string reson);
 

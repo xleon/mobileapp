@@ -11,8 +11,8 @@ namespace Toggl.Foundation.Sync.States
 {
     class PersistTagsState : BasePersistState<ITag, IDatabaseTag>
     {
-        public PersistTagsState(ITogglDatabase database)
-            : base(database)
+        public PersistTagsState(IRepository<IDatabaseTag> repository, ISinceParameterRepository sinceParameterRepository)
+            : base(repository, sinceParameterRepository, Resolver.ForTags())
         {
         }
 
@@ -22,9 +22,6 @@ namespace Toggl.Foundation.Sync.States
         protected override IDatabaseTag ConvertToDatabaseEntity(ITag entity)
             => Tag.Clean(entity);
 
-        protected override IObservable<IEnumerable<(ConflictResolutionMode, IDatabaseTag)>> BatchUpdate(ITogglDatabase database, IEnumerable<(long, IDatabaseTag)> entities)
-            => database.Tags.BatchUpdate(entities, Resolver.ForTags().Resolve);
-
         protected override DateTimeOffset? LastUpdated(ISinceParameters old, IEnumerable<IDatabaseTag> entities)
             => entities.Select(p => p?.At).Where(d => d.HasValue).DefaultIfEmpty(old.Tags).Max();
 
@@ -32,3 +29,4 @@ namespace Toggl.Foundation.Sync.States
             => new SinceParameters(old, tags: lastUpdated);
     }
 }
+

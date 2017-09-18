@@ -11,8 +11,8 @@ namespace Toggl.Foundation.Sync.States
 {
     class PersistTimeEntriesState : BasePersistState<ITimeEntry, IDatabaseTimeEntry>
     {
-        public PersistTimeEntriesState(ITogglDatabase database)
-            : base(database)
+        public PersistTimeEntriesState(IRepository<IDatabaseTimeEntry> repository, ISinceParameterRepository sinceParameterRepository)
+            : base(repository, sinceParameterRepository, Resolver.ForTimeEntries())
         {
         }
 
@@ -21,9 +21,6 @@ namespace Toggl.Foundation.Sync.States
 
         protected override IDatabaseTimeEntry ConvertToDatabaseEntity(ITimeEntry entity)
             => TimeEntry.Clean(entity);
-
-        protected override IObservable<IEnumerable<(ConflictResolutionMode, IDatabaseTimeEntry)>> BatchUpdate(ITogglDatabase database, IEnumerable<(long, IDatabaseTimeEntry)> entities)
-            => database.TimeEntries.BatchUpdate(entities, Resolver.ForTimeEntries().Resolve);
 
         protected override DateTimeOffset? LastUpdated(ISinceParameters old, IEnumerable<IDatabaseTimeEntry> entities)
             => entities.Select(p => p?.At).Where(d => d.HasValue).DefaultIfEmpty(old.TimeEntries).Max();

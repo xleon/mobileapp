@@ -61,17 +61,17 @@ namespace Toggl.Foundation.Tests.Sync.States
             where TApiModel : class
         {
             private ITogglApi api;
-            private ITogglDatabase database;
+            private IRepository<TModel> repository;
 
             public TheStartMethod()
             {
                 this.api = Substitute.For<ITogglApi>();
-                this.database = Substitute.For<ITogglDatabase>();
+                this.repository = Substitute.For<IRepository<TModel>>();
             }
 
             public void ReturnsTheFailTransitionWhenEntityIsNull()
             {
-                var state = CreateState(api, database);
+                var state = CreateState(api, repository);
                 var transition = state.Start(null).SingleAsync().Wait();
                 var parameter = ((Transition<(Exception Reason, TModel)>)transition).Parameter;
 
@@ -81,7 +81,7 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void ReturnsTheFailTransitionWhenHttpFails()
             {
-                var state = CreateState(api, database);
+                var state = CreateState(api, repository);
                 var entity = CreateDirtyEntity(1);
                 GetUpdateFunction(api)(Arg.Any<TModel>())
                     .Returns(_ => Observable.Throw<TApiModel>(new TestException()));
@@ -95,9 +95,9 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void ReturnsTheFailTransitionWhenDatabaseOperationFails()
             {
-                var state = CreateState(api, database);
+                var state = CreateState(api, repository);
                 var entity = CreateDirtyEntity(1);
-                GetRepository(database)
+                repository
                     .BatchUpdate(Arg.Any<IEnumerable<(long, TModel)>>(), Arg.Any<Func<TModel, TModel, ConflictResolutionMode>>())
                     .Returns(_ => Observable.Throw<IEnumerable<(ConflictResolutionMode, TModel)>>(new TestException()));
 
@@ -110,11 +110,11 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void UpdateApiCallIsCalledWithTheInputEntity()
             {
-                var state = CreateState(api, database);
+                var state = CreateState(api, repository);
                 var entity = CreateDirtyEntity(1);
                 GetUpdateFunction(api)(entity)
                     .Returns(Observable.Return(Substitute.For<TApiModel>()));
-                GetRepository(database)
+                repository
                     .BatchUpdate(Arg.Any<IEnumerable<(long, TModel)>>(), Arg.Any<Func<TModel, TModel, ConflictResolutionMode>>())
                     .Returns(Observable.Return(new[] { (ConflictResolutionMode.Update, entity) }));
 
@@ -125,12 +125,12 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void ReturnsTheEntityChangedTransitionWhenEntityChangesLocally()
             {
-                var state = CreateState(api, database);
+                var state = CreateState(api, repository);
                 var at = new DateTimeOffset(2017, 9, 1, 12, 34, 56, TimeSpan.Zero);
                 var entity = CreateDirtyEntity(1, at);
                 GetUpdateFunction(api)(Arg.Any<TModel>())
                     .Returns(Observable.Return(entity));
-                GetRepository(database)
+                repository
                     .BatchUpdate(Arg.Any<IEnumerable<(long, TModel)>>(), Arg.Any<Func<TModel, TModel, ConflictResolutionMode>>())
                     .Returns(Observable.Return(new[] { (ConflictResolutionMode.Ignore, entity) }));
 
@@ -143,7 +143,7 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void ReturnsTheUpdatingSuccessfulTransitionWhenEntityDoesNotChangeLocallyAndAllFunctionsAreCalledWithCorrectParameters()
             {
-                var state = CreateState(api, database);
+                var state = CreateState(api, repository);
                 var at = new DateTimeOffset(2017, 9, 1, 12, 34, 56, TimeSpan.Zero);
                 var entity = CreateDirtyEntity(1, at);
                 var serverEntity = CreateDirtyEntity(2, at);
@@ -151,10 +151,10 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var updatedEntity = CreateDirtyEntity(4, at);
                 GetUpdateFunction(api)(entity)
                     .Returns(Observable.Return(serverEntity));
-                GetRepository(database)
+                repository
                     .GetById(entity.Id)
                     .Returns(Observable.Return(localEntity));
-                GetRepository(database)
+                repository
                     .BatchUpdate(Arg.Any<IEnumerable<(long, TModel)>>(), Arg.Any<Func<TModel, TModel, ConflictResolutionMode>>())
                     .Returns(Observable.Return(new[] { (ConflictResolutionMode.Update, updatedEntity) }));
 
@@ -163,15 +163,13 @@ namespace Toggl.Foundation.Tests.Sync.States
 
                 transition.Result.Should().Be(state.UpdatingSucceeded);
                 parameter.ShouldBeEquivalentTo(updatedEntity, options => options.IncludingProperties());
-                GetRepository(database).Received().BatchUpdate(
+                repository.Received().BatchUpdate(
                     Arg.Is<IEnumerable<(long Id, TModel Entity)>>(
                         x => x.First().Id == entity.Id && x.First().Entity.Id == serverEntity.Id),
                     Arg.Any<Func<TModel, TModel, ConflictResolutionMode>>());
             }
 
-            protected abstract BaseUpdateEntityState<TModel> CreateState(ITogglApi api, ITogglDatabase database);
-
-            protected abstract IRepository<TModel> GetRepository(ITogglDatabase database);
+            protected abstract BaseUpdateEntityState<TModel> CreateState(ITogglApi api, IRepository<TModel> repository);
 
             protected abstract Func<TModel, IObservable<TApiModel>> GetUpdateFunction(ITogglApi api);
 

@@ -10,15 +10,15 @@ namespace Toggl.Foundation.Sync.States
         where TModel : class, IBaseModel, IDatabaseSyncable
     {
         private readonly ITogglApi api;
-        private readonly ITogglDatabase database;
+        private readonly IRepository<TModel> repository;
 
         public StateResult<(Exception, TModel)> CreatingFailed { get; } = new StateResult<(Exception, TModel)>();
         public StateResult<TModel> CreatingFinished { get; } = new StateResult<TModel>();
 
-        public BaseCreateEntityState(ITogglApi api, ITogglDatabase database)
+        public BaseCreateEntityState(ITogglApi api, IRepository<TModel> repository)
         {
             this.api = api;
-            this.database = database;
+            this.repository = repository;
         }
 
         public IObservable<ITransition> Start(TModel entity)
@@ -33,14 +33,12 @@ namespace Toggl.Foundation.Sync.States
                 : Create(api, entity);
 
         private Func<TModel, IObservable<TModel>> overwrite(TModel entity)
-            => createdEntity => GetRepository(database).Update(entity.Id, createdEntity).Select(CopyFrom);
+            => createdEntity => repository.Update(entity.Id, createdEntity).Select(CopyFrom);
 
         private Func<Exception, IObservable<ITransition>> fail(TModel entity)
             => e => Observable.Return(CreatingFailed.Transition((e, entity)));
 
         protected abstract IObservable<TModel> Create(ITogglApi api, TModel entity);
-
-        protected abstract IRepository<TModel> GetRepository(ITogglDatabase database);
 
         protected abstract TModel CopyFrom(TModel entity);
     }

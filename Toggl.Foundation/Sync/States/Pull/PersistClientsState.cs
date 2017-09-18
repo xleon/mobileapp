@@ -11,8 +11,8 @@ namespace Toggl.Foundation.Sync.States
 {
     class PersistClientsState : BasePersistState<IClient, IDatabaseClient>
     {
-        public PersistClientsState(ITogglDatabase database)
-            : base(database)
+        public PersistClientsState(IRepository<IDatabaseClient> repository, ISinceParameterRepository sinceParameterRepository)
+            : base(repository, sinceParameterRepository, Resolver.ForClients())
         {
         }
 
@@ -21,9 +21,6 @@ namespace Toggl.Foundation.Sync.States
 
         protected override IDatabaseClient ConvertToDatabaseEntity(IClient entity)
             => Client.Clean(entity);
-
-        protected override IObservable<IEnumerable<(ConflictResolutionMode, IDatabaseClient)>> BatchUpdate(ITogglDatabase database, IEnumerable<(long, IDatabaseClient)> entities)
-            => database.Clients.BatchUpdate(entities, Resolver.ForClients().Resolve);
 
         protected override DateTimeOffset? LastUpdated(ISinceParameters old, IEnumerable<IDatabaseClient> entities)
             => entities.Select(p => p?.At).Where(d => d.HasValue).DefaultIfEmpty(old.Clients).Max();

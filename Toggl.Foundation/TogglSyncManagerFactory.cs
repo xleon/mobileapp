@@ -32,11 +32,11 @@ namespace Toggl.Foundation
         private static void configurePullTransitions(TransitionHandlerProvider transitions, ITogglDatabase database, ITogglApi api, StateResult entryPoint)
         {
             var fetchAllSince = new FetchAllSinceState(database, api);
-            var persistWorkspaces = new PersistWorkspacesState(database);
-            var persistTags = new PersistTagsState(database);
-            var persistClients = new PersistClientsState(database);
-            var persistProjects = new PersistProjectsState(database);
-            var persistTimeEntries = new PersistTimeEntriesState(database);
+            var persistWorkspaces = new PersistWorkspacesState(database.Workspaces, database.SinceParameters);
+            var persistTags = new PersistTagsState(database.Tags, database.SinceParameters);
+            var persistClients = new PersistClientsState(database.Clients, database.SinceParameters);
+            var persistProjects = new PersistProjectsState(database.Projects, database.SinceParameters);
+            var persistTimeEntries = new PersistTimeEntriesState(database.TimeEntries, database.SinceParameters);
 
             transitions.ConfigureTransition(entryPoint, fetchAllSince.Start);
             transitions.ConfigureTransition(fetchAllSince.FetchStarted, persistWorkspaces.Start);
@@ -55,9 +55,9 @@ namespace Toggl.Foundation
         {
             var push = new PushTimeEntriesState(database);
             var pushOne = new PushOneEntityState<IDatabaseTimeEntry>();
-            var create = new CreateTimeEntryState(api, database);
-            var update = new UpdateTimeEntryState(api, database);
-            var unsyncable = new UnsyncableTimeEntryState(database);
+            var create = new CreateTimeEntryState(api, database.TimeEntries);
+            var update = new UpdateTimeEntryState(api, database.TimeEntries);
+            var unsyncable = new UnsyncableTimeEntryState(database.TimeEntries);
 
             return configurePush(transitions, entryPoint, push, pushOne, create, update, unsyncable);
         }

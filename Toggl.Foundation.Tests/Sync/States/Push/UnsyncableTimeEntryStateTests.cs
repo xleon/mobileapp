@@ -14,14 +14,11 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
 
         private sealed class TheStartMethod : TheStartMethod<IDatabaseTimeEntry>
         {
-            protected override BaseUnsyncableEntityState<IDatabaseTimeEntry> CreateState(ITogglDatabase database)
-                => new UnsyncableTimeEntryState(database);
+            protected override BaseUnsyncableEntityState<IDatabaseTimeEntry> CreateState(IRepository<IDatabaseTimeEntry> repository)
+                => new UnsyncableTimeEntryState(repository);
 
             protected override IDatabaseTimeEntry CreateDirtyEntity()
                 => TimeEntry.Dirty(new Ultrawave.Models.TimeEntry { Description = Guid.NewGuid().ToString() });
-
-            protected override IRepository<IDatabaseTimeEntry> GetRepository(ITogglDatabase database)
-                => database.TimeEntries;
         }
     }
 }

@@ -26,11 +26,8 @@ namespace Toggl.Foundation.Tests.Sync.States
             protected override IDatabaseTimeEntry CreateCleanEntityFrom(IDatabaseTimeEntry entity)
                 => TimeEntry.Clean(entity);
 
-            protected override BaseCreateEntityState<IDatabaseTimeEntry> CreateState(ITogglApi api, ITogglDatabase database)
-                => new CreateTimeEntryState(api, database);
-
-            protected override IRepository<IDatabaseTimeEntry> GetRepository(ITogglDatabase database)
-                => database.TimeEntries;
+            protected override BaseCreateEntityState<IDatabaseTimeEntry> CreateState(ITogglApi api, IRepository<IDatabaseTimeEntry> repository)
+                => new CreateTimeEntryState(api, repository);
 
             protected override Func<IDatabaseTimeEntry, IObservable<ITimeEntry>> GetCreateFunction(ITogglApi api)
                 => api.TimeEntries.Create;

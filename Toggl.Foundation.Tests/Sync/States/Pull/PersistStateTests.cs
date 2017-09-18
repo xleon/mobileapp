@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
@@ -10,6 +11,7 @@ using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
+using static Toggl.PrimeRadiant.ConflictResolutionMode;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {
@@ -86,16 +88,18 @@ namespace Toggl.Foundation.Tests.Sync.States
         }
 
         internal abstract class TheStartMethod<TState, TInterface, TDatabaseInterface> : ITheStartMethodHelper
-            where TDatabaseInterface : TInterface, IBaseModel
+            where TDatabaseInterface : class, TInterface, IBaseModel, IDatabaseSyncable
             where TState : BasePersistState<TInterface, TDatabaseInterface>
         {
-            private readonly ITogglDatabase database;
+            private readonly IRepository<TDatabaseInterface> repository;
+            private readonly ISinceParameterRepository sinceParameterRepository;
             private readonly TState state;
 
             protected TheStartMethod()
             {
-                database = Substitute.For<ITogglDatabase>();
-                state = CreateState(database);
+                repository = Substitute.For<IRepository<TDatabaseInterface>>();
+                sinceParameterRepository = Substitute.For<ISinceParameterRepository>();
+                state = CreateState(repository, sinceParameterRepository);
             }
 
             public void EmitsTransitionToPersistFinished()
@@ -124,13 +128,13 @@ namespace Toggl.Foundation.Tests.Sync.States
 
                 state.Start(observables).SingleAsync().Wait();
 
-                AssertBatchUpdateWasCalled(database, entities);
+                assertBatchUpdateWasCalled(entities);
             }
 
             public void ThrowsWhenBatchUpdateThrows()
             {
                 var observables = CreateObservables();
-                SetupDatabaseBatchUpdateToThrow(database, () => new TestException());
+                setupBatchUpdateToThrow(new TestException());
 
                 Action startingState = () => state.Start(observables).SingleAsync().Wait();
 
@@ -153,7 +157,7 @@ namespace Toggl.Foundation.Tests.Sync.States
 
                 state.Start(observables).SingleAsync().Wait();
 
-                database.SinceParameters.Received().Set(Arg.Is<ISinceParameters>(
+                sinceParameterRepository.Received().Set(Arg.Is<ISinceParameters>(
                     newSinceParameters =>
                         newSinceParameters.Workspaces == oldSinceParameters.Workspaces
                         && newSinceParameters.Projects == oldSinceParameters.Projects
@@ -169,11 +173,11 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var oldSinceParameters = new SinceParameters(null, oldAt);
                 var entities = CreateListWithOneItem(newAt);
                 var observables = CreateObservables(oldSinceParameters, entities);
-                SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(database, entities);
+                setupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(entities);
 
                 state.Start(observables).SingleAsync().Wait();
 
-                database.SinceParameters.Received().Set(Arg.Is<ISinceParameters>(
+                sinceParameterRepository.Received().Set(Arg.Is<ISinceParameters>(
                     newSinceParameters => OtherSinceDatesDidntChange(oldSinceParameters, newSinceParameters, newAt)));
             }
 
@@ -186,7 +190,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var transition = (Transition<FetchObservables>)state.Start(observables).SingleAsync().Wait();
 
                 transition.Result.Should().Be(state.FinishedPersisting);
-                AssertBatchUpdateWasCalled(database, new List<TInterface>());
+                assertBatchUpdateWasCalled(new List<TInterface>());
             }
 
             public void SelectsTheLatestAtValue()
@@ -195,11 +199,11 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var oldSinceParameters = new SinceParameters(null);
                 var entities = CreateComplexListWhereTheLastUpdateEntityIsDeleted(at);
                 var observables = CreateObservables(oldSinceParameters, entities);
-                SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(database, entities);
+                setupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(entities);
 
                 state.Start(observables).SingleAsync().Wait();
 
-                database.SinceParameters.Received().Set(Arg.Is<ISinceParameters>(
+                sinceParameterRepository.Received().Set(Arg.Is<ISinceParameters>(
                     (newSinceParameters) => OtherSinceDatesDidntChange(oldSinceParameters, newSinceParameters, at)));
             }
 
@@ -209,7 +213,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var oldSinceParameters = new SinceParameters(null, at);
                 var entities = CreateComplexListWhereTheLastUpdateEntityIsDeleted(at);
                 var observables = CreateObservables(oldSinceParameters, entities);
-                SetupDatabaseBatchUpdateToThrow(database, () => new TestException());
+                setupBatchUpdateToThrow(new TestException());
 
                 try
                 {
@@ -217,7 +221,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 }
                 catch (TestException) { }
 
-                database.SinceParameters.DidNotReceiveWithAnyArgs().Set(null);
+                sinceParameterRepository.DidNotReceiveWithAnyArgs().Set(null);
             }
 
             public void PassesTheNewSinceParametersThroughTheTransition()
@@ -226,7 +230,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var oldSinceParameters = new SinceParameters(null, at);
                 var entities = CreateComplexListWhereTheLastUpdateEntityIsDeleted(at);
                 var observables = CreateObservables(oldSinceParameters, entities);
-                SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(database, entities);
+                setupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(entities);
 
                 var transition = (Transition<FetchObservables>)state.Start(observables).SingleAsync().Wait();
 
@@ -247,9 +251,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 old?.TimeEntries ?? timeEntries,
                 old?.Tags ?? tags);
 
-            protected abstract TState CreateState(ITogglDatabase database);
-
-            protected abstract List<TInterface> CreateEmptyList();
+            protected abstract TState CreateState(IRepository<TDatabaseInterface> repository, ISinceParameterRepository sinceParameterRepository);
 
             protected abstract List<TInterface> CreateListWithOneItem(DateTimeOffset? at = null);
 
@@ -261,11 +263,30 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             protected abstract FetchObservables CreateObservables(ISinceParameters since = null, List<TInterface> entities = null);
 
-            protected abstract void SetupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(ITogglDatabase database, List<TInterface> entities = null);
+            protected abstract bool IsDeletedOnServer(TInterface entity);
 
-            protected abstract void SetupDatabaseBatchUpdateToThrow(ITogglDatabase database, Func<Exception> exceptionFactory);
+            protected abstract TDatabaseInterface Clean(TInterface entity);
 
-            protected abstract void AssertBatchUpdateWasCalled(ITogglDatabase database, List<TInterface> entities = null);
+            protected abstract Func<TDatabaseInterface, bool> ArePersistedAndClean(List<TInterface> entities);
+
+            private void setupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(List<TInterface> entities = null)
+            {
+                var foundationEntities = entities?.Select(entity => IsDeletedOnServer(entity)
+                    ? (Delete, (TDatabaseInterface)null)
+                    : (Update, Clean(entity)));
+                repository.BatchUpdate(null, null)
+                    .ReturnsForAnyArgs(Observable.Return(foundationEntities));
+            }
+
+            private void setupBatchUpdateToThrow(Exception exception)
+                => repository.BatchUpdate(null, null).ReturnsForAnyArgs(_ => throw exception);
+
+            private void assertBatchUpdateWasCalled(List<TInterface> entities = null)
+            {
+                repository.Received().BatchUpdate(Arg.Is<IEnumerable<(long, TDatabaseInterface entity)>>(
+                        list => list.Count() == entities.Count && list.Select(pair => pair.Item2).All(ArePersistedAndClean(entities))),
+                    Arg.Any<Func<TDatabaseInterface, TDatabaseInterface, ConflictResolutionMode>>());
+            }
         }
     }
 }

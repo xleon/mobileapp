@@ -54,17 +54,17 @@ namespace Toggl.Foundation.Tests.Sync.States
             where TModel : class, IBaseModel, IDatabaseSyncable, TApiModel
         {
             private ITogglApi api;
-            private ITogglDatabase database;
+            private IRepository<TModel> repository;
 
             public TheStartMethod()
             {
                 api = Substitute.For<ITogglApi>();
-                database = Substitute.For<ITogglDatabase>();
+                repository = Substitute.For<IRepository<TModel>>();
             }
             
             public void ReturnsFailTransitionWhenEntityIsNull()
             {
-                var state = CreateState(api, database);
+                var state = CreateState(api, repository);
 
                 var transition = state.Start(null).SingleAsync().Wait();
                 var parameter = ((Transition<(Exception Reason, TModel)>)transition).Parameter;
@@ -75,7 +75,7 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void ReturnsFailTransitionWhenHttpFails()
             {
-                var state = CreateState(api, database);
+                var state = CreateState(api, repository);
                 var entity = CreateDirtyEntityWithNegativeId();
                 GetCreateFunction(api)(Arg.Any<TModel>())
                     .Returns(_ => Observable.Throw<TModel>(new TestException()));
@@ -89,9 +89,9 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void ReturnsFailTransitionWhenDatabaseOperationFails()
             {
-                var state = CreateState(api, database);
+                var state = CreateState(api, repository);
                 var entity = CreateDirtyEntityWithNegativeId();
-                GetRepository(database).Update(Arg.Any<long>(), Arg.Any<TModel>())
+                repository.Update(Arg.Any<long>(), Arg.Any<TModel>())
                     .Returns(_ => Observable.Throw<TModel>(new TestException()));
 
                 var transition = state.Start(entity).SingleAsync().Wait();
@@ -103,13 +103,13 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void ReturnsSuccessfulTransitionWhenEverythingWorks()
             {
-                var state = CreateState(api, database);
+                var state = CreateState(api, repository);
                 var entity = CreateDirtyEntityWithNegativeId();
                 var clean = CreateCleanEntityFrom(entity);
                 var withPositiveId = CreateCleanWithPositiveIdFrom(entity);
                 GetCreateFunction(api)(Arg.Any<TModel>())
                     .Returns(Observable.Return(withPositiveId));
-                GetRepository(database).Update(Arg.Any<long>(), Arg.Any<TModel>())
+                repository.Update(Arg.Any<long>(), Arg.Any<TModel>())
                     .Returns(x => Observable.Return((TModel)x[1]));
 
                 var transition = state.Start(entity).SingleAsync().Wait();
@@ -124,7 +124,7 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void UpdateIsCalledWithCorrectParameters()
             {
-                var state = CreateState(api, database);
+                var state = CreateState(api, repository);
                 var entity = CreateDirtyEntityWithNegativeId();
                 var withPositiveId = CreateCleanWithPositiveIdFrom(entity);
                 GetCreateFunction(api)(entity)
@@ -132,12 +132,12 @@ namespace Toggl.Foundation.Tests.Sync.States
 
                 state.Start(entity).SingleAsync().Wait();
 
-                GetRepository(database)
+                repository
                     .Received()
                     .Update(entity.Id, Arg.Is<TModel>(model => model.Id == withPositiveId.Id));
             }
 
-            protected abstract BaseCreateEntityState<TModel> CreateState(ITogglApi api, ITogglDatabase database);
+            protected abstract BaseCreateEntityState<TModel> CreateState(ITogglApi api, IRepository<TModel> repository);
 
             protected abstract TModel CreateDirtyEntityWithNegativeId();
 
@@ -146,8 +146,6 @@ namespace Toggl.Foundation.Tests.Sync.States
             protected abstract TModel CreateCleanEntityFrom(TModel entity);
 
             protected abstract Func<TModel, IObservable<TApiModel>> GetCreateFunction(ITogglApi api);
-
-            protected abstract IRepository<TModel> GetRepository(ITogglDatabase database);
 
             protected abstract bool EntitiesHaveSameImportantProperties(TModel a, TModel b);
         }

@@ -11,8 +11,8 @@ namespace Toggl.Foundation.Sync.States
 {
     class PersistWorkspacesState : BasePersistState<IWorkspace, IDatabaseWorkspace>
     {
-        public PersistWorkspacesState(ITogglDatabase database)
-            : base(database)
+        public PersistWorkspacesState(IRepository<IDatabaseWorkspace> repository, ISinceParameterRepository sinceParameterRepository)
+            : base(repository, sinceParameterRepository, Resolver.ForWorkspaces())
         {
         }
 
@@ -21,9 +21,6 @@ namespace Toggl.Foundation.Sync.States
 
         protected override IDatabaseWorkspace ConvertToDatabaseEntity(IWorkspace entity)
             => Workspace.Clean(entity);
-
-        protected override IObservable<IEnumerable<(ConflictResolutionMode, IDatabaseWorkspace)>> BatchUpdate(ITogglDatabase database, IEnumerable<(long, IDatabaseWorkspace)> entities)
-            => database.Workspaces.BatchUpdate(entities, Resolver.ForWorkspaces().Resolve);
 
         protected override DateTimeOffset? LastUpdated(ISinceParameters old, IEnumerable<IDatabaseWorkspace> entities)
             => entities.Select(p => p?.At).Where(d => d.HasValue).DefaultIfEmpty(old.Workspaces).Max();
