@@ -4,7 +4,6 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.PrimeRadiant.Models;
@@ -65,7 +64,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.StartTimeEntryCommand.ExecuteAsync();
 
-                await NavigationService.Received().Navigate(typeof(StartTimeEntryViewModel), Arg.Any<DateParameter>());
+                await NavigationService.Received().Navigate(typeof(StartTimeEntryViewModel), Arg.Any<DateTimeOffset>());
             }
 
             [Fact]
@@ -78,7 +77,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await NavigationService.Received().Navigate(
                     typeof(StartTimeEntryViewModel),
-                    Arg.Is<DateParameter>(parameter => parameter.DateString == date.ToString())
+                    Arg.Is<DateTimeOffset>(parameter => parameter == date)
                 );
             }
         }

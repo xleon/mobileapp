@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Login;
-using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
@@ -15,7 +13,6 @@ using Toggl.Foundation.Tests.TestExtensions;
 using Toggl.Multivac;
 using Toggl.Ultrawave.Exceptions;
 using Xunit;
-using static Toggl.Foundation.MvvmCross.Parameters.LoginParameter;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -121,7 +118,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void SetsTheLoginType()
             {
                 ViewModel.LoginType = (LoginType)1000;
-                var parameter = LoginParameter.Login;
+                var parameter = LoginType.Login;
 
                 ViewModel.Prepare(parameter);
 
@@ -131,7 +128,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public void SetsTheTitleToLoginWhenThePassedParameterIsLogin()
             {
-                var parameter = LoginParameter.Login;
+                var parameter = LoginType.Login;
 
                 ViewModel.Prepare(parameter);
 
@@ -141,7 +138,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public void SetsTheTitleToSignupWhenThePassedParameterIsLogin()
             {
-                var parameter = SignUp;
+                var parameter = LoginType.SignUp;
 
                 ViewModel.Prepare(parameter);
 

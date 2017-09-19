@@ -2,16 +2,15 @@
 using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
-using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public class SelectDateTimeDialogViewModel : MvxViewModel<DateParameter, DateParameter>
+    public class SelectDateTimeDialogViewModel : MvxViewModel<DateTimeOffset, DateTimeOffset>
     {
         private readonly IMvxNavigationService navigationService;
-        private DateParameter defaultResult;
+        private DateTimeOffset defaultResult;
 
         public DateTimeOffset DateTimeOffset { get; set; }
 
@@ -29,14 +28,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SaveCommand = new MvxAsyncCommand(save); 
         }
         
-        public override void Prepare(DateParameter parameter)
+        public override void Prepare(DateTimeOffset parameter)
         {
-            DateTimeOffset = parameter.GetDate();
-            defaultResult = parameter;
+            DateTimeOffset = defaultResult = parameter;
         }
 
         private Task close() => navigationService.Close(this, defaultResult);
 
-        private Task save() => navigationService.Close(this, DateParameter.WithDate(DateTimeOffset));
+        private Task save() => navigationService.Close(this, DateTimeOffset);
     }
 }

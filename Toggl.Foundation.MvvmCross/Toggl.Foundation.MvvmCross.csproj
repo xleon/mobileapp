@@ -38,7 +38,6 @@
     <Compile Include="ViewModels\OnboardingViewModel.cs" />
     <Compile Include="Helper\Color.cs" />
     <Compile Include="Helper\Animation.cs" />
-    <Compile Include="Parameters\LoginParameter.cs" />
     <Compile Include="Converters\TimeSpanToDurationValueConverter.cs" />
     <Compile Include="Services\IPasswordManagerService.cs" />
     <Compile Include="Converters\DateToTitleStringValueConverter.cs" />
@@ -46,14 +45,12 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Services\PasswordManagerResult.cs" />
     <Compile Include="Services\StubPasswordManagerService.cs" />
-    <Compile Include="Parameters\DateParameter.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\EditTimeEntryViewModel.cs" />
     <Compile Include="Converters\TimeSpanToDurationWithUnitValueConverter.cs" />
     <Compile Include="ViewModels\TimeEntryViewModel.cs" />
     <Compile Include="ViewModels\TimeEntryViewModelCollection.cs" />
     <Compile Include="Converters\DateTimeToTimeConverter.cs" />
-    <Compile Include="Parameters\IdParameter.cs" />
     <Compile Include="Converters\TaskCountConverter.cs" />
     <Compile Include="Converters\BoolToConstantValueConverter.cs" />
     <Compile Include="ViewModels\StartTimeEntryViewModel.cs" />

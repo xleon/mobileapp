@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using PropertyChanged;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Login;
-using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
 using Toggl.Ultrawave.Exceptions;
 using EmailType = Toggl.Multivac.Email;
-using LoginType = Toggl.Foundation.MvvmCross.Parameters.LoginParameter.LoginType;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class LoginViewModel : MvxViewModel<LoginParameter>
+    public sealed class LoginViewModel : MvxViewModel<LoginType>
     {
         public const int EmailPage = 0;
         public const int PasswordPage = 1;
@@ -90,9 +87,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             TogglePasswordVisibilityCommand = new MvxCommand(togglePasswordVisibility);
         }
 
-        public override void Prepare(LoginParameter parameter)
+        public override void Prepare(LoginType parameter)
         {
-            LoginType = parameter.Type;
+            LoginType = parameter;
             Title = LoginType == LoginType.Login ? Resources.LoginTitle : Resources.SignUpTitle;
         }
 

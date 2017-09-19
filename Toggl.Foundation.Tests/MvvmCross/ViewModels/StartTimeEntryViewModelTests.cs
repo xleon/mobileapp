@@ -61,9 +61,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void SetsTheDateAccordingToTheDateParameterReceived()
             {
                 var date = DateTimeOffset.UtcNow;
-                var parameter = DateParameter.WithDate(date);
 
-                ViewModel.Prepare(parameter);
+                ViewModel.Prepare(date);
 
                 ViewModel.StartDate.Should().BeSameDateAs(date);
             }
@@ -99,27 +98,27 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task SetsTheStartDateToTheValueReturnedByTheSelectDateTimeDialogViewModel()
             {
                 var now = DateTimeOffset.UtcNow;
-                var parameterToReturn = DateParameter.WithDate(now.AddHours(-2));
+                var parameterToReturn = now.AddHours(-2);
                 NavigationService
-                    .Navigate<DateParameter, DateParameter>(typeof(SelectDateTimeDialogViewModel), Arg.Any<DateParameter>())
+                    .Navigate<DateTimeOffset, DateTimeOffset>(typeof(SelectDateTimeDialogViewModel), Arg.Any<DateTimeOffset>())
                     .Returns(parameterToReturn);
-                ViewModel.Prepare(DateParameter.WithDate(now));
+                ViewModel.Prepare(now);
 
                 await ViewModel.ChangeStartTimeCommand.ExecuteAsync();
 
-                ViewModel.StartDate.Should().Be(parameterToReturn.GetDate());
+                ViewModel.StartDate.Should().Be(parameterToReturn);
             }
 
             [Fact]
             public async Task SetsTheIsEditingStartDateToTrueWhileTheViewDoesNotReturnAndThenSetsItBackToFalse()
             {
                 var now = DateTimeOffset.UtcNow;
-                var parameterToReturn = DateParameter.WithDate(now.AddHours(-2));
-                var tcs = new TaskCompletionSource<DateParameter>();
+                var parameterToReturn = now.AddHours(-2);
+                var tcs = new TaskCompletionSource<DateTimeOffset>();
                 NavigationService
-                    .Navigate<DateParameter, DateParameter>(typeof(SelectDateTimeDialogViewModel), Arg.Any<DateParameter>())
+                    .Navigate<DateTimeOffset, DateTimeOffset>(typeof(SelectDateTimeDialogViewModel), Arg.Any<DateTimeOffset>())
                     .Returns(tcs.Task);
-                ViewModel.Prepare(DateParameter.WithDate(now));
+                ViewModel.Prepare(now);
 
                 var toWait = ViewModel.ChangeStartTimeCommand.ExecuteAsync();
                 ViewModel.IsEditingStartDate.Should().BeTrue();
@@ -143,7 +142,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public void StartProjectSuggestionEvenIfTheProjectHasAlreadyBeenSelected()
             {
-                ViewModel.Prepare(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                ViewModel.Prepare(DateTimeOffset.UtcNow);
                 ViewModel.TextFieldInfo = new TextFieldInfo(
                     Description, Description.Length,
                     ProjectId, ProjectName, ProjectColor);
@@ -156,7 +155,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public void SetsTheIsSuggestingProjectsPropertyToTrueIfNotInProjectSuggestionMode()
             {
-                ViewModel.Prepare(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                ViewModel.Prepare(DateTimeOffset.UtcNow);
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
 
@@ -168,7 +167,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 const string description = "Testing Toggl Apps";
                 var expected = $"{description}@";
-                ViewModel.Prepare(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                ViewModel.Prepare(DateTimeOffset.UtcNow);
                 ViewModel.TextFieldInfo = new TextFieldInfo(description, description.Length);
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
@@ -191,7 +190,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [InlineData("Testing Toggl Apps@some query@query")]
             public void SetsTheIsSuggestingProjectsPropertyToFalseIfInProjectSuggestionMode(string description)
             {
-                ViewModel.Prepare(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                ViewModel.Prepare(DateTimeOffset.UtcNow);
                 ViewModel.TextFieldInfo = new TextFieldInfo(description, description.Length);
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
@@ -215,7 +214,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void RemovesTheAtSymbolFromTheDescriptionTextIfAlreadyInProjectSuggestionMode(
                 string description, string expected)
             {
-                ViewModel.Prepare(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                ViewModel.Prepare(DateTimeOffset.UtcNow);
                 ViewModel.TextFieldInfo = new TextFieldInfo(description, description.Length);
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
@@ -234,7 +233,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 NavigationService
                     .Navigate<DurationParameter, DurationParameter>(typeof(EditDurationViewModel), Arg.Any<DurationParameter>())
                     .Returns(parameterToReturn);
-                ViewModel.Prepare(DateParameter.WithDate(now));
+                ViewModel.Prepare(now);
 
                 await ViewModel.ChangeDurationCommand.ExecuteAsync();
 
@@ -250,7 +249,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 NavigationService
                     .Navigate<DurationParameter, DurationParameter>(typeof(EditDurationViewModel), Arg.Any<DurationParameter>())
                     .Returns(tcs.Task);
-                ViewModel.Prepare(DateParameter.WithDate(now));
+                ViewModel.Prepare(now);
 
                 var toWait = ViewModel.ChangeDurationCommand.ExecuteAsync();
                 ViewModel.IsEditingDuration.Should().BeTrue();
@@ -268,14 +267,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var date = DateTimeOffset.UtcNow;
                 var description = "Testing Toggl apps";
-                var dateParameter = DateParameter.WithDate(date);
 
-                ViewModel.Prepare(dateParameter);
+                ViewModel.Prepare(date);
                 ViewModel.TextFieldInfo = new TextFieldInfo(description, 0);
                 ViewModel.DoneCommand.Execute();
 
                 await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
-                    dto.StartTime == dateParameter.GetDate() &&
+                    dto.StartTime == date &&
                     dto.Description == description &&
                     dto.Billable == false &&
                     dto.ProjectId == null

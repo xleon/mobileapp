@@ -3,8 +3,8 @@ using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.UI;
 using PropertyChanged;
+using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
@@ -81,10 +81,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private Task login()
-            => navigationService.Navigate<LoginViewModel, LoginParameter>(LoginParameter.Login);
+            => navigationService.Navigate<LoginViewModel, LoginType>(LoginType.Login);
 
         private Task signup()
-            => navigationService.Navigate<LoginViewModel, LoginParameter>(LoginParameter.SignUp);
+            => navigationService.Navigate<LoginViewModel, LoginType>(LoginType.SignUp);
 
         private void skip()
             => CurrentPage = LoginPage;

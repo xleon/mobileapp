@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using Toggl.Foundation.DataSources;
-using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
@@ -102,9 +101,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             => navigationService.Navigate<SettingsViewModel>();
 
         private Task startTimeEntry() =>
-            navigationService.Navigate<StartTimeEntryViewModel, DateParameter>(
-                DateParameter.WithDate(timeService.CurrentDateTime)
-            );
+            navigationService.Navigate<StartTimeEntryViewModel, DateTimeOffset>(timeService.CurrentDateTime);
 
         private async Task stopTimeEntry()
         {
@@ -113,6 +110,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private Task editTimeEntry()
-            => navigationService.Navigate<EditTimeEntryViewModel, IdParameter>(IdParameter.WithId(CurrentlyRunningTimeEntry.Id));
+            => navigationService.Navigate<EditTimeEntryViewModel, long>(CurrentlyRunningTimeEntry.Id);
     }
 }

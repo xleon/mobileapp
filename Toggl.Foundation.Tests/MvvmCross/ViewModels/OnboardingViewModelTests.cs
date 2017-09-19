@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.MvvmCross.Parameters;
+using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Xunit;
 
@@ -145,7 +145,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.LoginCommand.ExecuteAsync();
 
-                await NavigationService.Received().Navigate(typeof(LoginViewModel), Arg.Any<LoginParameter>());
+                await NavigationService.Received().Navigate(typeof(LoginViewModel), Arg.Any<LoginType>());
             }
         }
     }

@@ -17,7 +17,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public abstract class EditTimeEntryViewModelTest : BaseViewModelTests<EditTimeEntryViewModel>
         {
             protected const long Id = 10;
-            protected IdParameter Parameter { get; } = IdParameter.WithId(Id);
 
             protected void ConfigureEditedTimeEntry(DateTimeOffset now)
             {
@@ -81,16 +80,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Property]
             public void SetsTheStartDateToTheValueReturnedByTheSelectDateTimeDialogViewModel(DateTimeOffset now)
             {
-                var parameterToReturn = DateParameter.WithDate(now.AddHours(-2));
+                var parameterToReturn = now.AddHours(-2);
                 NavigationService
-                    .Navigate<DateParameter, DateParameter>(typeof(SelectDateTimeDialogViewModel), Arg.Any<DateParameter>())
+                    .Navigate<DateTimeOffset, DateTimeOffset>(typeof(SelectDateTimeDialogViewModel), Arg.Any<DateTimeOffset>())
                     .Returns(parameterToReturn);
                 ConfigureEditedTimeEntry(now);
-                ViewModel.Prepare(Parameter);
+                ViewModel.Prepare(Id);
 
                 ViewModel.SelectStartDateTimeCommand.ExecuteAsync().Wait();
 
-                ViewModel.StartTime.Should().Be(parameterToReturn.GetDate());
+                ViewModel.StartTime.Should().Be(parameterToReturn);
             }
         }
 
@@ -104,7 +103,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Navigate<DurationParameter, DurationParameter>(typeof(EditDurationViewModel), Arg.Any<DurationParameter>())
                     .Returns(parameterToReturn);
                 ConfigureEditedTimeEntry(now);
-                ViewModel.Prepare(Parameter);
+                ViewModel.Prepare(Id);
 
                 ViewModel.EditDurationCommand.ExecuteAsync().Wait();
 
@@ -119,7 +118,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Navigate<DurationParameter, DurationParameter>(typeof(EditDurationViewModel), Arg.Any<DurationParameter>())
                     .Returns(parameterToReturn);
                 ConfigureEditedTimeEntry(now);
-                ViewModel.Prepare(Parameter);
+                ViewModel.Prepare(Id);
 
                 ViewModel.EditDurationCommand.ExecuteAsync().Wait();
 

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Xunit;
 
@@ -36,18 +35,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.CloseCommand.ExecuteAsync();
 
-                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<DateParameter>());
+                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<DateTimeOffset>());
             }
 
-            [Fact]
-            public async Task ReturnsTheDefaultParameter()
+            [Property]
+            public void ReturnsTheDefaultParameter(DateTimeOffset parameter)
             {
-                var parameter = DateParameter.WithDate(new DateTime(2017, 1, 2));
                 ViewModel.Prepare(parameter);
 
-                await ViewModel.CloseCommand.ExecuteAsync();
+                ViewModel.CloseCommand.ExecuteAsync().Wait();
 
-                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Is(parameter));
+                NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Is(parameter)).Wait();
             }
         }
 
@@ -58,19 +56,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.CloseCommand.ExecuteAsync();
 
-                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<DateParameter>());
+                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<DateTimeOffset>());
             }
 
             [Property]
             public void ReturnsAValueThatReflectsTheChangesToDuration(DateTimeOffset dateTimeOffset)
             {
-                ViewModel.Prepare(DateParameter.WithDate(DateTimeOffset.UtcNow));
+                ViewModel.Prepare(DateTimeOffset.UtcNow);
                 ViewModel.DateTimeOffset = dateTimeOffset;
 
                 ViewModel.SaveCommand.ExecuteAsync().Wait();
                 
                 NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Is<DateParameter>(p => p.GetDate() == dateTimeOffset))
+                    .Close(Arg.Is(ViewModel), Arg.Is<DateTimeOffset>(p => p == dateTimeOffset))
                     .Wait();
             }
         }

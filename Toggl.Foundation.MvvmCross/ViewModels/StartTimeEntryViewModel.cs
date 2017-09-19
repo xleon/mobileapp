@@ -17,7 +17,7 @@ using Toggl.Multivac.Extensions;
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class StartTimeEntryViewModel : MvxViewModel<DateParameter>
+    public sealed class StartTimeEntryViewModel : MvxViewModel<DateTimeOffset>
     {
         //Fields
         private readonly ITimeService timeService;
@@ -119,9 +119,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
         }
 
-        public override void Prepare(DateParameter parameter)
+        public override void Prepare(DateTimeOffset parameter)
         {
-            StartDate = parameter.GetDate();
+            StartDate = parameter;
 
             elapsedTimeDisposable =
                 timeService.CurrentDateTimeObservable.Subscribe(currentTime => ElapsedTime = currentTime - StartDate);
@@ -162,12 +162,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             IsEditingStartDate = true;
 
-            var currentlySelectedDate = DateParameter.WithDate(StartDate);
-            var selectedDate = await navigationService
-                .Navigate<SelectDateTimeDialogViewModel, DateParameter, DateParameter>(currentlySelectedDate)
+            var currentlySelectedDate = StartDate;
+            StartDate = await navigationService
+                .Navigate<SelectDateTimeDialogViewModel, DateTimeOffset, DateTimeOffset>(currentlySelectedDate)
                 .ConfigureAwait(false);
-            
-            StartDate = selectedDate.GetDate();
 
             IsEditingStartDate = false;
         }

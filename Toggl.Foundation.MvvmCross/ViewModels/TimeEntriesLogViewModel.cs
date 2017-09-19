@@ -8,7 +8,6 @@ using MvvmCross.Core.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.DataSources;
-using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
@@ -132,7 +131,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private bool isNotRunning(IDatabaseTimeEntry timeEntry) => timeEntry.Stop != null;
 
         private Task edit(TimeEntryViewModel timeEntryViewModel)
-            => navigationService.Navigate<EditTimeEntryViewModel, IdParameter>(IdParameter.WithId(timeEntryViewModel.Id));
+            => navigationService.Navigate<EditTimeEntryViewModel, long>(timeEntryViewModel.Id);
 
         private async Task continueTimeEntry(TimeEntryViewModel timeEntryViewModel)
         {

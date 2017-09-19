@@ -15,7 +15,7 @@ using static Toggl.Multivac.Extensions.ObservableExtensions;
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class EditTimeEntryViewModel : MvxViewModel<IdParameter>
+    public sealed class EditTimeEntryViewModel : MvxViewModel<long>
     {
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
@@ -92,9 +92,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SelectStartDateTimeCommand = new MvxAsyncCommand(selectStartDateTime);
         }
 
-        public override void Prepare(IdParameter parameter)
+        public override void Prepare(long parameter)
         {
-            Id = parameter.Id;
+            Id = parameter;
         }
 
         public override async Task Initialize()
@@ -156,12 +156,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task selectStartDateTime()
         {
-            var currentlySelectedDate = DateParameter.WithDate(StartTime);
-            var selectedDate = await navigationService
-                .Navigate<SelectDateTimeDialogViewModel, DateParameter, DateParameter>(currentlySelectedDate)
+            var currentlySelectedDate = StartTime;
+            StartTime = await navigationService
+                .Navigate<SelectDateTimeDialogViewModel, DateTimeOffset, DateTimeOffset>(currentlySelectedDate)
                 .ConfigureAwait(false);
-
-            StartTime = selectedDate.GetDate();
         }
 
         private async Task editDuration()
