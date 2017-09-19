@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive;
-using Toggl.Multivac.Models;
 
 namespace Toggl.PrimeRadiant
 {
     public interface IRepository<TModel>
-        where TModel : IBaseModel, IDatabaseSyncable
     {
         IObservable<TModel> GetById(long id);
         IObservable<TModel> Create(TModel entity);

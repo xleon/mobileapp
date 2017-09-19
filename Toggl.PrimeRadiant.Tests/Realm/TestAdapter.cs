@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Toggl.PrimeRadiant.Realm;
 
 namespace Toggl.PrimeRadiant.Tests.Realm
@@ -9,6 +8,9 @@ namespace Toggl.PrimeRadiant.Tests.Realm
     public sealed class TestAdapter : IRealmAdapter<TestModel>
     {
         private readonly List<TestModel> list = new List<TestModel>();
+
+        public TestModel Get(long id)
+            => list.Single(e => e.Id == id);
 
         public TestModel Create(TestModel entity)
         {
@@ -37,7 +39,7 @@ namespace Toggl.PrimeRadiant.Tests.Realm
 
         public void Delete(long id)
         {
-            var entity = list.Find(e => e.Id == id);
+            var entity = Get(id);
             var worked = list.Remove(entity);
             if (worked) return;
 
@@ -46,7 +48,6 @@ namespace Toggl.PrimeRadiant.Tests.Realm
 
         public IEnumerable<(ConflictResolutionMode ResolutionMode, TestModel Entity)> BatchUpdate(
             IEnumerable<(long Id, TestModel Entity)> entities,
-            Func<(long Id, TestModel Entity), Expression<Func<TestModel, bool>>> matchEntity,
             Func<TestModel, TestModel, ConflictResolutionMode> conflictResolution)
         {
             throw new NotImplementedException();

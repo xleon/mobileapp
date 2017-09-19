@@ -18,6 +18,7 @@ namespace Toggl.PrimeRadiant.Realm
             Projects = Repository<IDatabaseProject>.For((project, realm) => new RealmProject(project, realm));
             TimeEntries = Repository<IDatabaseTimeEntry>.For((timeEntry, realm) => new RealmTimeEntry(timeEntry, realm));
             Workspaces = Repository<IDatabaseWorkspace>.For((workspace, realm) => new RealmWorkspace(workspace, realm));
+            WorkspaceFeatures = Repository<IDatabaseWorkspaceFeatureCollection>.For((collection, realm) => new RealmWorkspaceFeatureCollection(collection, realm), id => x => x.WorkspaceId == id);
         }
 
         public IIdProvider IdProvider { get; }
@@ -29,6 +30,7 @@ namespace Toggl.PrimeRadiant.Realm
         public ISingleObjectStorage<IDatabaseUser> User { get; }
         public IRepository<IDatabaseTimeEntry> TimeEntries { get; }
         public IRepository<IDatabaseWorkspace> Workspaces { get; }
+        public IRepository<IDatabaseWorkspaceFeatureCollection> WorkspaceFeatures { get; }
 
         public IObservable<Unit> Clear() => 
             Observable.Start(() =>

@@ -98,7 +98,8 @@ namespace Toggl.PrimeRadiant.Realm
 
             var isEnumerable = trimmedLine.StartsWith("IEnumerable<");
             var isListOfRealmProperties = isEnumerable && Regex.IsMatch(line, "Ids ") && !line.Contains("Default");
-            if (isEnumerable && !isListOfRealmProperties) continue;
+            var isListOfNestedRealmEntities = isEnumerable && !Regex.IsMatch(line, "Ids ") && !line.Contains("Default");
+            if (isEnumerable && !isListOfRealmProperties && !isListOfNestedRealmEntities) continue;
 
             var isRealmProperty = Regex.IsMatch(line, ".Id ")
                 && !Regex.IsMatch(line, "^[ ]*[^ ]+Id ") // the type itself (the first token) must not end with "Id"
@@ -128,6 +129,20 @@ namespace Toggl.PrimeRadiant.Realm
                 WriteLine($"                var all{realmPropName} = entity.{propName}.Select(id => realm.All<{realmModelName}>().Single(x => x.Id == id));");
                 WriteLine($"                foreach (var oneOf{realmPropName} in all{realmPropName})");
                 WriteLine($"                    {realmPropName}.Add(oneOf{realmPropName});");
+                WriteLine( "            }");
+                continue;
+            }
+
+            if (isListOfNestedRealmEntities)
+            {
+                var ultrawaveClassName = Regex.Match(line, "IEnumerable<I(?<class>[^>]+?)>").Groups["class"].Value;
+                var collectionClassName = $"Realm{ultrawaveClassName}";
+                var databaseClassName = $"Foundation.Models.{ultrawaveClassName}";
+                var collectionPropName = $"{collectionClassName}s";
+                WriteLine($"            foreach (var oneOf{propName} in entity.Database{propName})");
+                WriteLine( "            {");
+                WriteLine($"                var oneOfRealm{propName} = {collectionClassName}.FindOrCreate(oneOf{propName}, realm);");
+                WriteLine($"                {collectionPropName}.Add(oneOfRealm{propName});");
                 WriteLine( "            }");
                 continue;
             }

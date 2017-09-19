@@ -11,7 +11,7 @@ using Xunit;
 namespace Toggl.PrimeRadiant.Tests
 {
     public abstract class RepositoryTests<TTestModel> : BaseStorageTests<TTestModel>
-        where TTestModel : class, ITestModel, IDatabaseSyncable, new()
+        where TTestModel : class, ITestModel, new()
     {
         protected sealed override IObservable<TTestModel> Create(TTestModel testModel)
             => Repository.Create(testModel);

@@ -354,6 +354,11 @@ namespace Toggl.PrimeRadiant.Realm
         {
             var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
             RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId);
+            foreach (var oneOfFeatures in entity.DatabaseFeatures)
+            {
+                var oneOfRealmFeatures = RealmWorkspaceFeature.FindOrCreate(oneOfFeatures, realm);
+                RealmWorkspaceFeatures.Add(oneOfRealmFeatures);
+            }
         }
     }
 }
