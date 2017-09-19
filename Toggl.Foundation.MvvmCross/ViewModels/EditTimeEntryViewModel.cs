@@ -37,21 +37,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public string Task { get; set; }
 
-        [DependsOn(nameof(StartTime), nameof(EndTime))]
+        [DependsOn(nameof(StartTime), nameof(StopTime))]
         public TimeSpan Duration
-            => (EndTime ?? timeService.CurrentDateTime) - StartTime;
+            => (StopTime ?? timeService.CurrentDateTime) - StartTime;
 
         public DateTimeOffset StartTime { get; set; }
 
-        private DateTimeOffset? endTime;
-        public DateTimeOffset? EndTime
+        private DateTimeOffset? stopTime;
+        public DateTimeOffset? StopTime
         {
-            get => endTime;
+            get => stopTime;
             set
             {
-                if (endTime == value) return;
-                endTime = value;
-                if (endTime != null)
+                if (stopTime == value) return;
+                stopTime = value;
+                if (stopTime != null)
                 {
                     tickingDisposable?.Dispose();
                     tickingDisposable = null;
@@ -103,7 +103,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             Description = timeEntry.Description;
             StartTime = timeEntry.Start;
-            EndTime = timeEntry.Stop;
+            StopTime = timeEntry.Stop;
             Billable = timeEntry.Billable;
             Tags = timeEntry.Tags?.Select(tag => tag.Name).ToList() ?? new List<string>();
             Project = timeEntry?.Project?.Name;
@@ -111,7 +111,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Task = timeEntry?.Task?.Name;
             Client = timeEntry?.Project?.Client?.Name;
 
-            if (EndTime == null)
+            if (StopTime == null)
                 subscribeToTimeServiceTicks();
         }
 
@@ -138,7 +138,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void confirm()
         {
-            var dto = new EditTimeEntryDto { Id = Id, Description = Description };
+            var dto = new EditTimeEntryDto
+            { 
+                Id = Id, 
+                Description = Description,
+                StartTime = StartTime,
+                StopTime = StopTime
+            };
+
             confirmDisposable = dataSource.TimeEntries
                                           .Update(dto)
                                           .Subscribe((Exception ex) => close(), () => close());
@@ -147,10 +154,25 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private Task close()
             => navigationService.Close(this);
 
-        private Task editDuration()
-            => navigationService.Navigate<EditDurationViewModel, DurationParameter>(DurationParameter.WithStartAndStop(StartTime, EndTime));
+        private async Task selectStartDateTime()
+        {
+            var currentlySelectedDate = DateParameter.WithDate(StartTime);
+            var selectedDate = await navigationService
+                .Navigate<SelectDateTimeDialogViewModel, DateParameter, DateParameter>(currentlySelectedDate)
+                .ConfigureAwait(false);
 
-        private Task selectStartDateTime()
-            => navigationService.Navigate<SelectDateTimeDialogViewModel, DateParameter>(DateParameter.WithDate(StartTime));
+            StartTime = selectedDate.GetDate();
+        }
+
+        private async Task editDuration()
+        {
+            var currentDuration = DurationParameter.WithStartAndStop(StartTime, StopTime);
+            var selectedDuration = await navigationService
+                .Navigate<EditDurationViewModel, DurationParameter, DurationParameter>(currentDuration)
+                .ConfigureAwait(false);
+            
+            StartTime = selectedDuration.Start;
+            StopTime = selectedDuration.Stop;
+        }
     }
 }

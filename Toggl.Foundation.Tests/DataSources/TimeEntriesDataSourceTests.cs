@@ -392,7 +392,12 @@ namespace Toggl.Foundation.Tests.DataSources
             {
                 var observable = Observable.Return(DatabaseTimeEntry);
                 Repository.GetById(Arg.Is(DatabaseTimeEntry.Id)).Returns(observable);
-                return new EditTimeEntryDto { Id = DatabaseTimeEntry.Id, Description = "New description" };
+                return new EditTimeEntryDto 
+                { 
+                    Id = DatabaseTimeEntry.Id, 
+                    Description = "New description", 
+                    StartTime = DateTimeOffset.UtcNow
+                };
             }
 
             private bool ensurePropertiesDidNotChange(IDatabaseTimeEntry timeEntry)
@@ -449,7 +454,7 @@ namespace Toggl.Foundation.Tests.DataSources
             {
                 var observable = Observable.Return(DatabaseTimeEntry);
                 Repository.GetById(Arg.Is(DatabaseTimeEntry.Id)).Returns(observable);
-                var dto = new EditTimeEntryDto { Id = DatabaseTimeEntry.Id, Description = "New description" };
+                var dto = new EditTimeEntryDto { Id = DatabaseTimeEntry.Id, Description = "New description", StartTime = DateTimeOffset.UtcNow };
                 var observer = Substitute.For<IObserver<IDatabaseTimeEntry>>();
                 TimeEntriesSource.TimeEntryUpdated.Subscribe(observer);
 

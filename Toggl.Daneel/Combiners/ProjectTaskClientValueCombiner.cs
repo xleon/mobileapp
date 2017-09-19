@@ -26,11 +26,11 @@ namespace Toggl.Daneel.Combiners
             if (stepList.Count < 5)
                 throw new ArgumentException($"{nameof(ProjectTaskClientValueCombiner)} needs at least 5 values to work - project, task, client, font's cap height and project color");
 
-            var project = stepList[0].GetValue().ToString();
+            var project = stepList[0].GetValue()?.ToString();
             var task = stepList[1].GetValue()?.ToString();
             var client = stepList[2].GetValue()?.ToString();
             var fontHeight = (double)stepList[3].GetValue();
-            var projectColor = stepList[4].GetValue().ToString();
+            var projectColor = stepList[4].GetValue()?.ToString();
 
             value = buildAttributedString(project, task, client, projectColor, fontHeight);
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using FluentAssertions;
-using MvvmCross.Core.Navigation;
+using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.MvvmCross.Parameters;
@@ -16,6 +16,23 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         public abstract class EditTimeEntryViewModelTest : BaseViewModelTests<EditTimeEntryViewModel>
         {
+            protected const long Id = 10;
+            protected IdParameter Parameter { get; } = IdParameter.WithId(Id);
+
+            protected void ConfigureEditedTimeEntry(DateTimeOffset now)
+            {
+                var observable = Observable.Return(TimeEntry.Builder.Create(Id)
+                    .SetDescription("Something")
+                    .SetStart(now.AddHours(-2))
+                    .SetStop(now.AddHours(-1))
+                    .SetAt(now.AddHours(-2))
+                    .SetWorkspaceId(11)
+                    .SetUserId(12)
+                    .Build());
+
+                DataSource.TimeEntries.GetById(Arg.Is(Id)).Returns(observable);
+            }
+
             protected override EditTimeEntryViewModel CreateViewModel()
                 => new EditTimeEntryViewModel(DataSource, NavigationService, TimeService);
         }
@@ -59,31 +76,54 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
+        public sealed class TheSelectStartDateTimeCommandCommand : EditTimeEntryViewModelTest
+        {
+            [Property]
+            public void SetsTheStartDateToTheValueReturnedByTheSelectDateTimeDialogViewModel(DateTimeOffset now)
+            {
+                var parameterToReturn = DateParameter.WithDate(now.AddHours(-2));
+                NavigationService
+                    .Navigate<DateParameter, DateParameter>(typeof(SelectDateTimeDialogViewModel), Arg.Any<DateParameter>())
+                    .Returns(parameterToReturn);
+                ConfigureEditedTimeEntry(now);
+                ViewModel.Prepare(Parameter);
+
+                ViewModel.SelectStartDateTimeCommand.ExecuteAsync().Wait();
+
+                ViewModel.StartTime.Should().Be(parameterToReturn.GetDate());
+            }
+        }
+
         public sealed class TheEditDurationCommand : EditTimeEntryViewModelTest
         {
-            [Fact]
-            public async Task NavigatesToTheEditDurationViewModel()
+            [Property]
+            public void SetsTheStartTimeToTheValueReturnedByTheSelectDateTimeDialogViewModelWhenEditingARunningTimeEntry(DateTimeOffset now)
             {
-                var start = DateTimeOffset.Now.AddHours(-2);
-                var stop = DateTimeOffset.Now;
-                var timeEntry = TimeEntry.Builder
-                    .Create(12)
-                    .SetStart(start)
-                    .SetStop(stop)
-                    .SetWorkspaceId(11)
-                    .SetUserId(10)
-                    .SetAt(DateTimeOffset.Now)
-                    .SetDescription("Test")
-                    .Build();
-                DataSource.TimeEntries.GetById(Arg.Is(timeEntry.Id)).Returns(Observable.Return(timeEntry));
-                ViewModel.Prepare(IdParameter.WithId(12));
-                await ViewModel.Initialize();
+                var parameterToReturn = DurationParameter.WithStartAndStop(now.AddHours(-3), null);
+                NavigationService
+                    .Navigate<DurationParameter, DurationParameter>(typeof(EditDurationViewModel), Arg.Any<DurationParameter>())
+                    .Returns(parameterToReturn);
+                ConfigureEditedTimeEntry(now);
+                ViewModel.Prepare(Parameter);
 
-                await ViewModel.EditDurationCommand.ExecuteAsync();
+                ViewModel.EditDurationCommand.ExecuteAsync().Wait();
 
-                await NavigationService.Received().Navigate<EditDurationViewModel, DurationParameter>(
-                    Arg.Is<DurationParameter>(parameter => parameter.Start == start && parameter.Stop == stop)
-                );
+                ViewModel.StartTime.Should().Be(parameterToReturn.Start);
+            }
+
+            [Property]
+            public void SetsTheStopTimeToTheValueReturnedByTheSelectDateTimeDialogViewModelWhenEditingACompletedTimeEntry(DateTimeOffset now)
+            {
+                var parameterToReturn = DurationParameter.WithStartAndStop(now.AddHours(-4), now.AddHours(-3));
+                NavigationService
+                    .Navigate<DurationParameter, DurationParameter>(typeof(EditDurationViewModel), Arg.Any<DurationParameter>())
+                    .Returns(parameterToReturn);
+                ConfigureEditedTimeEntry(now);
+                ViewModel.Prepare(Parameter);
+
+                ViewModel.EditDurationCommand.ExecuteAsync().Wait();
+
+                ViewModel.StopTime.Should().Be(parameterToReturn.Stop);
             }
         }
     }
