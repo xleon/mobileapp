@@ -453,6 +453,7 @@
     <Compile Include="Views\StartTimeEntryEmptyViewCell.designer.cs">
       <DependentUpon>StartTimeEntryEmptyViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\DateExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

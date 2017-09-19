@@ -1,8 +1,9 @@
-﻿using System;    
+﻿using System;
 using Foundation;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
 using UIKit;
+using Toggl.Daneel.Extensions;
 
 namespace Toggl.Daneel.Binding
 {
@@ -11,8 +12,6 @@ namespace Toggl.Daneel.Binding
         public const string BindingName = "DateTimeOffset";
         
         public override MvxBindingMode DefaultMode => MvxBindingMode.TwoWay;
-
-        private static readonly DateTimeOffset referenceDate = new DateTimeOffset(2001, 1, 1, 0, 0, 0, TimeSpan.Zero);
         
         public DatePickerDateTimeOffsetTargetBinding(UIDatePicker target) : base(target)
         {
@@ -20,7 +19,7 @@ namespace Toggl.Daneel.Binding
         } 
         
         protected override void SetValue(DateTimeOffset value)
-            => Target.Date = toNSDate(value);
+            => Target.Date = value.ToNSDate();
 
         protected override void Dispose(bool isDisposing)
         {
@@ -30,13 +29,7 @@ namespace Toggl.Daneel.Binding
             Target.ValueChanged -= onValueChanged;
         }
 
-        private NSDate toNSDate(DateTimeOffset dateTimeOffset)
-            => NSDate.FromTimeIntervalSinceReferenceDate((dateTimeOffset - referenceDate).TotalSeconds);
-
-        private DateTimeOffset toDateTimeOffset(NSDate nsDate)
-            => referenceDate.AddSeconds(nsDate.SecondsSinceReferenceDate);
-
         private void onValueChanged(object sender, EventArgs e)
-            => FireValueChanged(toDateTimeOffset(Target.Date));
+            => FireValueChanged(Target.Date.ToDateTimeOffset());
     }
 }
