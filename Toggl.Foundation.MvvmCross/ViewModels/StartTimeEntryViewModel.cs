@@ -90,6 +90,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             switch (suggestion)
             {
+                case QuerySymbolSuggestion querySymbolSuggestion:
+                    TextFieldInfo = new TextFieldInfo(querySymbolSuggestion.Symbol, 1);
+                    break;
+
                 case TimeEntrySuggestion timeEntrySuggestion:
                     
                     TextFieldInfo = new TextFieldInfo(
@@ -122,9 +126,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             elapsedTimeDisposable =
                 timeService.CurrentDateTimeObservable.Subscribe(currentTime => ElapsedTime = currentTime - StartDate);
 
-            queryDisposable = infoSubject.AsObservable()
-                .SelectMany(dataSource.AutocompleteProvider.Query)
-                .Subscribe(onSuggestions);
+            queryDisposable = 
+                Observable.Return(TextFieldInfo).StartWith()
+                    .Merge(infoSubject.AsObservable())
+                    .SelectMany(dataSource.AutocompleteProvider.Query)
+                    .Subscribe(onSuggestions);
         }
 
         private void OnTextFieldInfoChanged()
@@ -142,11 +148,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             if (TextFieldInfo.ProjectId != null)
             {
-                infoSubject.OnNext(new TextFieldInfo(QuerySymbols.ProjectString, 1));
+                infoSubject.OnNext(new TextFieldInfo(QuerySymbols.ProjectsString, 1));
                 return;
             }
 
-            var newText = TextFieldInfo.Text.Insert(TextFieldInfo.CursorPosition, QuerySymbols.ProjectString);
+            var newText = TextFieldInfo.Text.Insert(TextFieldInfo.CursorPosition, QuerySymbols.ProjectsString);
             TextFieldInfo = new TextFieldInfo(newText, TextFieldInfo.CursorPosition + 1);
         }
 

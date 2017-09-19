@@ -67,7 +67,7 @@ namespace Toggl.Foundation.Autocomplete
             }
 
             if (queryListIsEmpty)
-                return Observable.Return(Enumerable.Empty<AutocompleteSuggestion>());
+                return Observable.Return(QuerySymbolSuggestion.Suggestions);
 
             return wordsToQuery
                .Aggregate(database.TimeEntries.GetAll(), (obs, word) => obs.Select(filterTimeEntriesByWord(word)))

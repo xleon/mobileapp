@@ -254,6 +254,20 @@ namespace Toggl.Foundation.Tests.Autocomplete
                         .And.AllBeOfType<ProjectSuggestion>();
                 }
             }
+
+            public sealed class DoesNotQueryTheDatabase : AutocompleteProviderTest
+            {
+                [Fact]
+                public async Task WhenTheSearchStringIsEmpty()
+                {
+                    var textFieldInfo = new TextFieldInfo("", 0);
+
+                    var suggestions = await Provider.Query(textFieldInfo);
+
+                    suggestions.Should().HaveCount(1)
+                        .And.AllBeOfType<QuerySymbolSuggestion>();
+                }
+            }
         }
     }
 }

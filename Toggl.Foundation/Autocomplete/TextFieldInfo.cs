@@ -39,7 +39,7 @@ namespace Toggl.Foundation.Autocomplete
 
         public TextFieldInfo RemoveProjectQueryFromDescriptionIfNeeded()
         {
-            var indexOfProjectQuerySymbol = Text.IndexOf(QuerySymbols.Project);
+            var indexOfProjectQuerySymbol = Text.IndexOf(QuerySymbols.Projects);
             if (indexOfProjectQuerySymbol < 0) return this;
 
             var newText = Text.Substring(0, indexOfProjectQuerySymbol);

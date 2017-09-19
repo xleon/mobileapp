@@ -321,6 +321,7 @@
     <InterfaceDefinition Include="Views\StartTimeEntryViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\EditDurationViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectDateTimeDialogViewController.xib" />
+    <InterfaceDefinition Include="Views\StartTimeEntryEmptyViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -448,6 +449,10 @@
     <Compile Include="Views\MainScrollView.cs" />
     <Compile Include="Views\ResizableView.cs" />
     <Compile Include="Combiners\ProjectTaskClientValueCombiner.cs" />
+    <Compile Include="Views\StartTimeEntryEmptyViewCell.cs" />
+    <Compile Include="Views\StartTimeEntryEmptyViewCell.designer.cs">
+      <DependentUpon>StartTimeEntryEmptyViewCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

@@ -2,9 +2,9 @@
 {
     public static class QuerySymbols
     {
-        public const char Project = '@';
-        public const string ProjectString = "@";
+        public const char Projects = '@';
+        public const string ProjectsString = "@";
 
-        public static readonly char[] All = { Project };
+        public static readonly char[] All = { Projects };
     }
 }

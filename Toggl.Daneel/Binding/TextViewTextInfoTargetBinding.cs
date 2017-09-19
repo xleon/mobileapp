@@ -41,7 +41,6 @@ namespace Toggl.Daneel.Binding
 
             fireValueChangeDisposable = textFieldInfoSubject
                 .AsObservable()
-                .DistinctUntilChanged()
                 .Subscribe(onTextFieldInfoChanged);
         }
 

@@ -13,6 +13,7 @@ namespace Toggl.Daneel.ViewSources
     {
         private const string timeEntryCellIdentifier = nameof(StartTimeEntryViewCell);
         private const string projectCellIdentifier = nameof(StartTimeEntryProjectsViewCell);
+        private const string emptySuggestionIdentifier = nameof(StartTimeEntryEmptyViewCell);
 
         public StartTimeEntryTableViewSource(UITableView tableView)
             : base(tableView)
@@ -22,6 +23,7 @@ namespace Toggl.Daneel.ViewSources
             tableView.SeparatorColor = Color.StartTimeEntry.SeparatorColor.ToNativeColor();
             tableView.RegisterNibForCellReuse(StartTimeEntryViewCell.Nib, timeEntryCellIdentifier);
             tableView.RegisterNibForCellReuse(StartTimeEntryProjectsViewCell.Nib, projectCellIdentifier);
+            tableView.RegisterNibForCellReuse(StartTimeEntryEmptyViewCell.Nib, emptySuggestionIdentifier);
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -46,6 +48,9 @@ namespace Toggl.Daneel.ViewSources
         {
             if (item is ProjectSuggestion)
                 return projectCellIdentifier;
+
+            if (item is QuerySymbolSuggestion)
+                return emptySuggestionIdentifier;
 
             return timeEntryCellIdentifier;
         }

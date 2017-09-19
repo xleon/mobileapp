@@ -398,6 +398,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.TextFieldInfo.ProjectColor.Should().Be(ProjectColor);
                 }
             }
+
+            public sealed class WhenSelectingAQuerySymbolSuggestion : SelectSuggestionTest<QuerySymbolSuggestion>
+            {
+                protected override QuerySymbolSuggestion Suggestion { get; } = QuerySymbolSuggestion.Suggestions.First();
+
+                [Fact]
+                public void SetsTheTextToTheQuerySymbolSelected()
+                {
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.TextFieldInfo.Text.Should().Be(Suggestion.Symbol);
+                }
+            }
         }
 
         public sealed class TheSuggestionsProperty : StartTimeEntryViewModelTest
