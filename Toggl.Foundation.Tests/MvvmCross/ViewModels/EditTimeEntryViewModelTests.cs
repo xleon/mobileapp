@@ -82,7 +82,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var parameterToReturn = now.AddHours(-2);
                 NavigationService
-                    .Navigate<DateTimeOffset, DateTimeOffset>(typeof(SelectDateTimeDialogViewModel), Arg.Any<DateTimeOffset>())
+                    .Navigate<DateTimeOffset, DateTimeOffset>(typeof(SelectDateTimeViewModel), Arg.Any<DateTimeOffset>())
                     .Returns(parameterToReturn);
                 ConfigureEditedTimeEntry(now);
                 ViewModel.Prepare(Id);

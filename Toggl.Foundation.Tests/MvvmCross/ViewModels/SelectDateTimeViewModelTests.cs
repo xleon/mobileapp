@@ -8,12 +8,12 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
-    public class SelectDateTimeDialogViewModelTests
+    public class SelectDateTimeViewModelTests
     {
-        public class SelectDateTimeDialogViewModelTest : BaseViewModelTests<SelectDateTimeDialogViewModel>
+        public class SelectDateTimeDialogViewModelTest : BaseViewModelTests<SelectDateTimeViewModel>
         {
-            protected override SelectDateTimeDialogViewModel CreateViewModel()
-                => new SelectDateTimeDialogViewModel(NavigationService);
+            protected override SelectDateTimeViewModel CreateViewModel()
+                => new SelectDateTimeViewModel(NavigationService);
         }
 
         public class TheConstructor
@@ -22,7 +22,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void ThrowsIfTheArgumentIsNull()
             {
                 Action tryingToConstructWithEmptyParameter
-                    = () => new SelectDateTimeDialogViewModel(null);
+                    = () => new SelectDateTimeViewModel(null);
 
                 tryingToConstructWithEmptyParameter.ShouldThrow<ArgumentNullException>();
             }

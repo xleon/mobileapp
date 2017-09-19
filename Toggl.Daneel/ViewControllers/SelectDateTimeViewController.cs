@@ -10,9 +10,9 @@ using UIKit;
 namespace Toggl.Daneel.ViewControllers
 {
     [ModalDialogPresentation]
-    public partial class SelectDateTimeDialogViewController : MvxViewController<SelectDateTimeDialogViewModel>
+    public partial class SelectDateTimeViewController : MvxViewController<SelectDateTimeViewModel>
     {
-        public SelectDateTimeDialogViewController() : base(nameof(SelectDateTimeDialogViewController), null)
+        public SelectDateTimeViewController() : base(nameof(SelectDateTimeViewController), null)
         {
         }
 
@@ -22,7 +22,7 @@ namespace Toggl.Daneel.ViewControllers
 
             prepareDatePicker();
 
-            var bindingSet = this.CreateBindingSet<SelectDateTimeDialogViewController, SelectDateTimeDialogViewModel>();
+            var bindingSet = this.CreateBindingSet<SelectDateTimeViewController, SelectDateTimeViewModel>();
 
             bindingSet.Bind(DatePicker)
                 .For(v => v.BindDateTimeOffset())

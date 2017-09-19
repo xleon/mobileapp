@@ -11,7 +11,7 @@ using System.CodeDom.Compiler;
 namespace Toggl.Daneel.ViewControllers
 {
     [Register ("SelectDateDialog")]
-    partial class SelectDateTimeDialogViewController
+    partial class SelectDateTimeViewController
     {
         [Outlet]
         UIKit.UIButton CloseButton { get; set; }

@@ -164,7 +164,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             var currentlySelectedDate = StartDate;
             StartDate = await navigationService
-                .Navigate<SelectDateTimeDialogViewModel, DateTimeOffset, DateTimeOffset>(currentlySelectedDate)
+                .Navigate<SelectDateTimeViewModel, DateTimeOffset, DateTimeOffset>(currentlySelectedDate)
                 .ConfigureAwait(false);
 
             IsEditingStartDate = false;

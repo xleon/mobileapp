@@ -54,7 +54,7 @@
     <Compile Include="Converters\TaskCountConverter.cs" />
     <Compile Include="Converters\BoolToConstantValueConverter.cs" />
     <Compile Include="ViewModels\StartTimeEntryViewModel.cs" />
-    <Compile Include="ViewModels\SelectDateTimeDialogViewModel.cs" />
+    <Compile Include="ViewModels\SelectDateTimeViewModel.cs" />
     <Compile Include="ViewModels\EditDurationViewModel.cs" />
     <Compile Include="Parameters\DurationParameter.cs" />
   </ItemGroup>

@@ -320,7 +320,7 @@
     <InterfaceDefinition Include="Views\StartTimeEntryProjectsViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntryViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\EditDurationViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\SelectDateTimeDialogViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\SelectDateTimeViewController.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntryEmptyViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
@@ -440,9 +440,9 @@
       <DependentUpon>EditDurationViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Converters\TimeSpanToViewHeightConverter.cs" />
-    <Compile Include="ViewControllers\SelectDateTimeDialogViewController.cs" />
-    <Compile Include="ViewControllers\SelectDateTimeDialogViewController.designer.cs">
-      <DependentUpon>SelectDateTimeDialogViewController.cs</DependentUpon>
+    <Compile Include="ViewControllers\SelectDateTimeViewController.cs" />
+    <Compile Include="ViewControllers\SelectDateTimeViewController.designer.cs">
+      <DependentUpon>SelectDateTimeViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\TextExtensions.cs" />
     <Compile Include="Views\TimeEntryTagsTextView.cs" />

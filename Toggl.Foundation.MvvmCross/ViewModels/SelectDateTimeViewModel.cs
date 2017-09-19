@@ -7,7 +7,7 @@ using Toggl.Multivac;
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public class SelectDateTimeDialogViewModel : MvxViewModel<DateTimeOffset, DateTimeOffset>
+    public class SelectDateTimeViewModel : MvxViewModel<DateTimeOffset, DateTimeOffset>
     {
         private readonly IMvxNavigationService navigationService;
         private DateTimeOffset defaultResult;
@@ -18,7 +18,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand SaveCommand { get; set; }
 
-        public SelectDateTimeDialogViewModel(IMvxNavigationService navigationService)
+        public SelectDateTimeViewModel(IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 

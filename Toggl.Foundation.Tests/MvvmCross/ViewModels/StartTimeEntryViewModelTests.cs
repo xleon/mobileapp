@@ -100,7 +100,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var now = DateTimeOffset.UtcNow;
                 var parameterToReturn = now.AddHours(-2);
                 NavigationService
-                    .Navigate<DateTimeOffset, DateTimeOffset>(typeof(SelectDateTimeDialogViewModel), Arg.Any<DateTimeOffset>())
+                    .Navigate<DateTimeOffset, DateTimeOffset>(typeof(SelectDateTimeViewModel), Arg.Any<DateTimeOffset>())
                     .Returns(parameterToReturn);
                 ViewModel.Prepare(now);
 
@@ -116,7 +116,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var parameterToReturn = now.AddHours(-2);
                 var tcs = new TaskCompletionSource<DateTimeOffset>();
                 NavigationService
-                    .Navigate<DateTimeOffset, DateTimeOffset>(typeof(SelectDateTimeDialogViewModel), Arg.Any<DateTimeOffset>())
+                    .Navigate<DateTimeOffset, DateTimeOffset>(typeof(SelectDateTimeViewModel), Arg.Any<DateTimeOffset>())
                     .Returns(tcs.Task);
                 ViewModel.Prepare(now);
 
