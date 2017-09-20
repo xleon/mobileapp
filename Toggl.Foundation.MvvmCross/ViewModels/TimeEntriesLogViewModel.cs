@@ -11,13 +11,14 @@ using Toggl.Foundation.DataSources;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
+using System.Reactive.Disposables;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class TimeEntriesLogViewModel : MvxViewModel
     {
-        private IDisposable updateDisposable;
+        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
@@ -76,16 +77,23 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Select(grouping => new TimeEntryViewModelCollection(grouping.Key, grouping))
                 .ForEach(addTimeEntries);
 
+            var deleteDisposable = 
+                dataSource.TimeEntries.TimeEntryDeleted
+                          .Subscribe(onTimeEntryUpdated);
+
             var updateObservable =
                 dataSource.TimeEntries.TimeEntryUpdated
                           .Do(onTimeEntryUpdated)
                           .Where(x => !x.IsDeleted);
 
-            updateDisposable =
+            var updateDisposable =
                 dataSource.TimeEntries.TimeEntryCreated
                     .Where(isNotRunning)
                     .Merge(updateObservable)
                     .Subscribe(onTimeEntryCreated);
+
+            disposeBag.Add(deleteDisposable);
+            disposeBag.Add(updateDisposable);
         }
 
         private void addTimeEntries(TimeEntryViewModelCollection collection)

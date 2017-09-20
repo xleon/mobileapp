@@ -27,7 +27,7 @@ namespace Toggl.Foundation.DataSources
             TimeEntries = new TimeEntriesDataSource(database.IdProvider, database.TimeEntries, timeService);
 
             AutocompleteProvider = new AutocompleteProvider(database);
-            SyncManager = TogglSyncManager.CreateSyncManager(database, api, scheduler);
+            SyncManager = TogglSyncManager.CreateSyncManager(database, api, this, scheduler);
         }
 
         public IUserSource User { get; }

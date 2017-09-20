@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Reactive;
 using Toggl.Foundation.DTOs;
+using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.DataSources
 {
-    public interface ITimeEntriesSource
+    public interface ITimeEntriesSource : IRepository<IDatabaseTimeEntry>
     {
         IObservable<IDatabaseTimeEntry> CurrentlyRunningTimeEntry { get; }
 
@@ -14,18 +13,12 @@ namespace Toggl.Foundation.DataSources
 
         IObservable<IDatabaseTimeEntry> TimeEntryUpdated { get; }
 
+        IObservable<IDatabaseTimeEntry> TimeEntryDeleted { get; }
+
         IObservable<bool> IsEmpty { get; }
-
-        IObservable<IEnumerable<IDatabaseTimeEntry>> GetAll();
-
-        IObservable<IEnumerable<IDatabaseTimeEntry>> GetAll(Func<IDatabaseTimeEntry, bool> predicate);
-
-        IObservable<IDatabaseTimeEntry> GetById(long id);
 
         IObservable<IDatabaseTimeEntry> Start(StartTimeEntryDTO dto);
          IObservable<IDatabaseTimeEntry> Stop(DateTimeOffset stopTime);
-
-        IObservable<Unit> Delete(long id);
 
         IObservable<IDatabaseTimeEntry> Update(EditTimeEntryDto dto);
     }

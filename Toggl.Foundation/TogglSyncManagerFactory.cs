@@ -6,37 +6,50 @@ using System.Reactive.Concurrency;
 using Toggl.Foundation.Tests.Sync.States;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant.Models;
+using Toggl.Foundation.DataSources;
 
 namespace Toggl.Foundation
 {
     public static class TogglSyncManager
     {
-        public static ISyncManager CreateSyncManager(ITogglDatabase database, ITogglApi api, IScheduler scheduler)
+        public static ISyncManager CreateSyncManager(
+            ITogglDatabase database,
+            ITogglApi api,
+            ITogglDataSource dataSource,
+            IScheduler scheduler)
         {
             var queue = new SyncStateQueue();
             var entryPoints = new StateMachineEntryPoints();
             var transitions = new TransitionHandlerProvider();
-            ConfigureTransitions(transitions, database, api, entryPoints);
+            ConfigureTransitions(transitions, database, api, dataSource, entryPoints);
             var stateMachine = new StateMachine(transitions, scheduler);
             var orchestrator = new StateMachineOrchestrator(stateMachine, entryPoints);
 
             return new SyncManager(queue, orchestrator);
         }
 
-        public static void ConfigureTransitions(TransitionHandlerProvider transitions, ITogglDatabase database, ITogglApi api, StateMachineEntryPoints entryPoints)
+        public static void ConfigureTransitions(
+            TransitionHandlerProvider transitions,
+            ITogglDatabase database,
+            ITogglApi api, ITogglDataSource dataSource,
+            StateMachineEntryPoints entryPoints)
         {
-            configurePullTransitions(transitions, database, api, entryPoints.StartPullSync);
-            configurePushTransitions(transitions, database, api, entryPoints.StartPushSync);
+            configurePullTransitions(transitions, database, api, dataSource, entryPoints.StartPullSync);
+            configurePushTransitions(transitions, database, api, dataSource, entryPoints.StartPushSync);
         }
 
-        private static void configurePullTransitions(TransitionHandlerProvider transitions, ITogglDatabase database, ITogglApi api, StateResult entryPoint)
+        private static void configurePullTransitions(
+            TransitionHandlerProvider transitions,
+            ITogglDatabase database,
+            ITogglApi api, ITogglDataSource dataSource,
+            StateResult entryPoint)
         {
             var fetchAllSince = new FetchAllSinceState(database, api);
             var persistWorkspaces = new PersistWorkspacesState(database.Workspaces, database.SinceParameters);
             var persistTags = new PersistTagsState(database.Tags, database.SinceParameters);
             var persistClients = new PersistClientsState(database.Clients, database.SinceParameters);
             var persistProjects = new PersistProjectsState(database.Projects, database.SinceParameters);
-            var persistTimeEntries = new PersistTimeEntriesState(database.TimeEntries, database.SinceParameters);
+            var persistTimeEntries = new PersistTimeEntriesState(dataSource.TimeEntries, database.SinceParameters);
 
             transitions.ConfigureTransition(entryPoint, fetchAllSince.Start);
             transitions.ConfigureTransition(fetchAllSince.FetchStarted, persistWorkspaces.Start);
@@ -46,18 +59,28 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(persistProjects.FinishedPersisting, persistTimeEntries.Start);
         }
         
-        private static void configurePushTransitions(TransitionHandlerProvider transitions, ITogglDatabase database, ITogglApi api, StateResult entryPoint)
+        private static void configurePushTransitions(
+            TransitionHandlerProvider transitions,
+            ITogglDatabase database,
+            ITogglApi api,
+            ITogglDataSource dataSource,
+            StateResult entryPoint)
         {
-            configurePushTransitionsForTimeEntries(transitions, database, api, entryPoint);
+            configurePushTransitionsForTimeEntries(transitions, database, api, dataSource, entryPoint);
         }
 
-        private static IStateResult configurePushTransitionsForTimeEntries(TransitionHandlerProvider transitions, ITogglDatabase database, ITogglApi api, StateResult entryPoint)
+        private static IStateResult configurePushTransitionsForTimeEntries(
+            TransitionHandlerProvider transitions,
+            ITogglDatabase database,
+            ITogglApi api,
+            ITogglDataSource dataSource,
+            StateResult entryPoint)
         {
             var push = new PushTimeEntriesState(database);
             var pushOne = new PushOneEntityState<IDatabaseTimeEntry>();
-            var create = new CreateTimeEntryState(api, database.TimeEntries);
-            var update = new UpdateTimeEntryState(api, database.TimeEntries);
-            var unsyncable = new UnsyncableTimeEntryState(database.TimeEntries);
+            var create = new CreateTimeEntryState(api, dataSource.TimeEntries);
+            var update = new UpdateTimeEntryState(api, dataSource.TimeEntries);
+            var unsyncable = new UnsyncableTimeEntryState(dataSource.TimeEntries);
 
             return configurePush(transitions, entryPoint, push, pushOne, create, update, unsyncable);
         }
