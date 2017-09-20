@@ -2,17 +2,24 @@
 using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public class SelectDateTimeViewModel : MvxViewModel<DateTimeOffset, DateTimeOffset>
+    public class SelectDateTimeViewModel : MvxViewModel<DatePickerParameters, DateTimeOffset>
     {
-        private readonly IMvxNavigationService navigationService;
         private DateTimeOffset defaultResult;
 
-        public DateTimeOffset DateTimeOffset { get; set; }
+        private readonly IMvxNavigationService navigationService;
+
+        public DateTimeOffset CurrentDateTime { get; set; }
+
+        public DateTimeOffset MinDate { get; private set; }
+
+        public DateTimeOffset MaxDate { get; private set; }
 
         public IMvxAsyncCommand CloseCommand { get; }
 
@@ -25,16 +32,23 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.navigationService = navigationService;
 
             CloseCommand = new MvxAsyncCommand(close);
-            SaveCommand = new MvxAsyncCommand(save); 
+            SaveCommand = new MvxAsyncCommand(save);
         }
-        
-        public override void Prepare(DateTimeOffset parameter)
+
+        private void OnCurrentDateTimeChanged()
         {
-            DateTimeOffset = defaultResult = parameter;
+            CurrentDateTime = CurrentDateTime.Clamp(MinDate, MaxDate);
+        }
+
+        public override void Prepare(DatePickerParameters parameter)
+        {
+            MinDate = parameter.MinDate;
+            MaxDate = parameter.MaxDate;
+            CurrentDateTime = defaultResult = parameter.CurrentDate;
         }
 
         private Task close() => navigationService.Close(this, defaultResult);
 
-        private Task save() => navigationService.Close(this, DateTimeOffset);
+        private Task save() => navigationService.Close(this, CurrentDateTime);
     }
 }

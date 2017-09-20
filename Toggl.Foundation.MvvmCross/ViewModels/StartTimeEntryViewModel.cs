@@ -13,6 +13,7 @@ using Toggl.Foundation.DTOs;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
+using static Toggl.Foundation.MvvmCross.Helper.Constants;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -45,9 +46,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public bool IsEditingTags { get; private set; } = false;
 
-        public DateTimeOffset StartDate { get; private set; }
+        public DateTimeOffset StartTime { get; private set; }
 
-        public DateTimeOffset? EndDate { get; private set; }
+        public DateTimeOffset? StopTime { get; private set; }
 
         public MvxObservableCollection<AutocompleteSuggestion> Suggestions { get; }
             = new MvxObservableCollection<AutocompleteSuggestion>();
@@ -121,10 +122,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public override void Prepare(DateTimeOffset parameter)
         {
-            StartDate = parameter;
+            StartTime = parameter;
 
             elapsedTimeDisposable =
-                timeService.CurrentDateTimeObservable.Subscribe(currentTime => ElapsedTime = currentTime - StartDate);
+                timeService.CurrentDateTimeObservable.Subscribe(currentTime => ElapsedTime = currentTime - StartTime);
 
             queryDisposable = 
                 Observable.Return(TextFieldInfo).StartWith()
@@ -162,9 +163,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             IsEditingStartDate = true;
 
-            var currentlySelectedDate = StartDate;
-            StartDate = await navigationService
-                .Navigate<SelectDateTimeViewModel, DateTimeOffset, DateTimeOffset>(currentlySelectedDate)
+            var currentTime = timeService.CurrentDateTime;
+            var minDate = currentTime.AddHours(-MaxTimeEntryDurationInHours);
+
+            var parameters = DatePickerParameters.WithDates(StartTime, minDate, currentTime);
+            StartTime = await navigationService
+                .Navigate<SelectDateTimeViewModel, DatePickerParameters, DateTimeOffset>(parameters)
                 .ConfigureAwait(false);
 
             IsEditingStartDate = false;
@@ -176,12 +180,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             IsEditingDuration = true;
 
-            var currentDuration = DurationParameter.WithStartAndStop(StartDate, null);
+            var currentDuration = DurationParameter.WithStartAndStop(StartTime, null);
             var selectedDuration = await navigationService
                 .Navigate<EditDurationViewModel, DurationParameter, DurationParameter>(currentDuration)
                 .ConfigureAwait(false);
 
-            StartDate = selectedDuration.Start;
+            StartTime = selectedDuration.Start;
 
             IsEditingDuration = false;
         }
@@ -192,7 +196,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Select(user => new StartTimeEntryDTO
                 {
                     UserId = user.Id,
-                    StartTime = StartDate,
+                    StartTime = StartTime,
                     Billable = IsBillable,
                     Description = TextFieldInfo.Text,
                     ProjectId = TextFieldInfo.ProjectId,

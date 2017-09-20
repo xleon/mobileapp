@@ -24,9 +24,13 @@ namespace Toggl.Daneel.ViewControllers
 
             var bindingSet = this.CreateBindingSet<SelectDateTimeViewController, SelectDateTimeViewModel>();
 
+            //Dates
+            DatePicker.MinimumDate = ViewModel.MinDate.ToNSDate();
+            DatePicker.MaximumDate = ViewModel.MaxDate.ToNSDate();
+
             bindingSet.Bind(DatePicker)
-                .For(v => v.BindDateTimeOffset())
-                .To(vm => vm.DateTimeOffset);
+                      .For(v => v.BindDateTimeOffset())
+                      .To(vm => vm.CurrentDateTime);
 
             //Commands
             bindingSet.Bind(CloseButton).To(vm => vm.CloseCommand);

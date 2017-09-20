@@ -57,6 +57,8 @@
     <Compile Include="ViewModels\SelectDateTimeViewModel.cs" />
     <Compile Include="ViewModels\EditDurationViewModel.cs" />
     <Compile Include="Parameters\DurationParameter.cs" />
+    <Compile Include="Parameters\DatePickerParameters.cs" />
+    <Compile Include="Helper\Constants.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">

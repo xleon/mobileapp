@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Suggestions;
@@ -12,6 +13,7 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
+using static Toggl.Foundation.MvvmCross.Helper.Constants;
 using TextFieldInfo = Toggl.Foundation.Autocomplete.TextFieldInfo;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
@@ -64,7 +66,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.Prepare(date);
 
-                ViewModel.StartDate.Should().BeSameDateAs(date);
+                ViewModel.StartTime.Should().BeSameDateAs(date);
             }
         }
 
@@ -94,25 +96,77 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheChangeStartTimeCommand : StartTimeEntryViewModelTest
         {
-            [Fact]
-            public async Task SetsTheStartDateToTheValueReturnedByTheSelectDateTimeDialogViewModel()
+            [Property]
+            public void CallsTheSelectDateTimeViewModelWithAMinDateThatAllowsUpTo999HoursOfDuration(DateTimeOffset now)
             {
-                var now = DateTimeOffset.UtcNow;
+                if (DateTimeOffset.MinValue.AddHours(MaxTimeEntryDurationInHours) <= now ||
+                    DateTimeOffset.MaxValue.AddHours(-1) >= now) return;
+
+                TimeService.CurrentDateTime.Returns(now);
+
+                var parameterToReturn = now.AddHours(-2);
+                NavigationService
+                    .Navigate<DatePickerParameters, DateTimeOffset>(typeof(SelectDateTimeViewModel), Arg.Any<DatePickerParameters>())
+                    .Returns(parameterToReturn);
+                ViewModel.Prepare(now);
+
+                ViewModel.ChangeStartTimeCommand.ExecuteAsync().Wait();
+
+
+                NavigationService
+                    .Received()
+                    .Navigate<DatePickerParameters, DateTimeOffset>(
+                        typeof(SelectDateTimeViewModel),
+                        Arg.Is<DatePickerParameters>(p => p.MinDate == now.AddHours(-MaxTimeEntryDurationInHours)));
+            }
+
+            [Property]
+            public void CallsTheSelectDateTimeViewModelWithAMaxDateEqualToTheCurrentDate(DateTimeOffset now)
+            {
+                if (DateTimeOffset.MinValue.AddHours(MaxTimeEntryDurationInHours) <= now ||
+                    DateTimeOffset.MaxValue.AddHours(-1) >= now) return;
+
+                TimeService.CurrentDateTime.Returns(now);
+
+                var parameterToReturn = now.AddHours(-2);
+                NavigationService
+                    .Navigate<DatePickerParameters, DateTimeOffset>(typeof(SelectDateTimeViewModel), Arg.Any<DatePickerParameters>())
+                    .Returns(parameterToReturn);
+                ViewModel.Prepare(now);
+
+                ViewModel.ChangeStartTimeCommand.ExecuteAsync().Wait();
+
+
+                NavigationService
+                    .Received()
+                    .Navigate<DatePickerParameters, DateTimeOffset>(
+                        typeof(SelectDateTimeViewModel),
+                        Arg.Is<DatePickerParameters>(p => p.MaxDate == now));
+            }
+
+            [Property]
+            public void SetsTheStartDateToTheValueReturnedByTheSelectDateTimeDialogViewModel(DateTimeOffset now)
+            {
+                if (DateTimeOffset.MinValue.AddHours(MaxTimeEntryDurationInHours) <= now ||
+                    DateTimeOffset.MaxValue.AddHours(-1) >= now) return;
+
                 var parameterToReturn = now.AddHours(-2);
                 NavigationService
                     .Navigate<DateTimeOffset, DateTimeOffset>(typeof(SelectDateTimeViewModel), Arg.Any<DateTimeOffset>())
                     .Returns(parameterToReturn);
                 ViewModel.Prepare(now);
 
-                await ViewModel.ChangeStartTimeCommand.ExecuteAsync();
+                ViewModel.ChangeStartTimeCommand.ExecuteAsync().Wait();
 
-                ViewModel.StartDate.Should().Be(parameterToReturn);
+                ViewModel.StartTime.Should().Be(parameterToReturn);
             }
 
-            [Fact]
-            public async Task SetsTheIsEditingStartDateToTrueWhileTheViewDoesNotReturnAndThenSetsItBackToFalse()
+            [Property]
+            public void SetsTheIsEditingStartDateToTrueWhileTheViewDoesNotReturnAndThenSetsItBackToFalse(DateTimeOffset now)
             {
-                var now = DateTimeOffset.UtcNow;
+                if (DateTimeOffset.MinValue.AddHours(MaxTimeEntryDurationInHours) <= now ||
+                    DateTimeOffset.MaxValue.AddHours(-1) >= now) return;
+                
                 var parameterToReturn = now.AddHours(-2);
                 var tcs = new TaskCompletionSource<DateTimeOffset>();
                 NavigationService
@@ -123,7 +177,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var toWait = ViewModel.ChangeStartTimeCommand.ExecuteAsync();
                 ViewModel.IsEditingStartDate.Should().BeTrue();
                 tcs.SetResult(parameterToReturn);
-                await toWait;
+                toWait.Wait();
 
                 ViewModel.IsEditingStartDate.Should().BeFalse();
             }
@@ -237,7 +291,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.ChangeDurationCommand.ExecuteAsync();
 
-                ViewModel.StartDate.Should().Be(parameterToReturn.Start);
+                ViewModel.StartTime.Should().Be(parameterToReturn.Start);
             }
 
             [Fact]

@@ -11,6 +11,7 @@ using Toggl.Foundation.DTOs;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 using static Toggl.Multivac.Extensions.ObservableExtensions;
+using static Toggl.Foundation.MvvmCross.Helper.Constants;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -156,9 +157,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task selectStartDateTime()
         {
-            var currentlySelectedDate = StartTime;
+            var currentTime = timeService.CurrentDateTime;
+            var maxDate = StopTime == null 
+                        ? currentTime 
+                        : StopTime.Value > currentTime ? currentTime : StopTime.Value;
+            var minDate = maxDate.AddHours(-MaxTimeEntryDurationInHours);
+
+            var parameters = DatePickerParameters.WithDates(StartTime, minDate, maxDate);
             StartTime = await navigationService
-                .Navigate<SelectDateTimeViewModel, DateTimeOffset, DateTimeOffset>(currentlySelectedDate)
+                .Navigate<SelectDateTimeViewModel, DatePickerParameters, DateTimeOffset>(parameters)
                 .ConfigureAwait(false);
         }
 
