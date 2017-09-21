@@ -396,7 +396,8 @@ namespace Toggl.Foundation.Tests.DataSources
                 { 
                     Id = DatabaseTimeEntry.Id, 
                     Description = "New description", 
-                    StartTime = DateTimeOffset.UtcNow
+                    StartTime = DateTimeOffset.UtcNow,
+                    ProjectId = 13
                 };
             }
 
@@ -437,6 +438,16 @@ namespace Toggl.Foundation.Tests.DataSources
                 await TimeEntriesSource.Update(dto);
 
                 await Repository.Received().Update(Arg.Is(dto.Id), Arg.Is<IDatabaseTimeEntry>(te => te.At > DatabaseTimeEntry.At));
+            }
+
+            [Fact]
+            public async ThreadingTask UpdatesTheProjectId()
+            {
+                var dto = prepareTest();
+
+                await TimeEntriesSource.Update(dto);
+
+                await Repository.Received().Update(Arg.Is(dto.Id), Arg.Is<IDatabaseTimeEntry>(te => te.ProjectId == dto.ProjectId));
             }
 
             [Fact]

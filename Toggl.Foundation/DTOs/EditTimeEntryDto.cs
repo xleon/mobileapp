@@ -11,5 +11,7 @@ namespace Toggl.Foundation.DTOs
         public DateTimeOffset StartTime { get; set; }
 
         public DateTimeOffset? StopTime { get; set; }
+
+        public long? ProjectId { get; set; }
     }
 }

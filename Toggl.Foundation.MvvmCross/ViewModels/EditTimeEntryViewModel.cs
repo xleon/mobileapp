@@ -26,7 +26,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IDisposable tickingDisposable;
         private IDisposable confirmDisposable;
 
-        private long projectId;
+        private long? projectId;
 
         public long Id { get; set; }
 
@@ -150,7 +150,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 Id = Id, 
                 Description = Description,
                 StartTime = StartTime,
-                StopTime = StopTime
+                StopTime = StopTime,
+                ProjectId = projectId
             };
 
             confirmDisposable = dataSource.TimeEntries
@@ -177,19 +178,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task selectProject()
         {
-            var selectedProjectId = await navigationService.Navigate<SelectProjectViewModel, long, long>(projectId);
+            var selectedProjectId = await navigationService.Navigate<SelectProjectViewModel, long?, long?>(projectId);
 
             if (selectedProjectId == projectId) return;
 
             projectId = selectedProjectId;
 
-            if (projectId == 0)
+            if (projectId == null)
             {
                 Project = Task = Client = ProjectColor = "";
                 return;
             }
 
-            var project = await dataSource.Projects.GetById(projectId);
+            var project = await dataSource.Projects.GetById(projectId.Value);
             Project = project.Name;
             Client = project.Client?.Name;
             ProjectColor = project.Color;

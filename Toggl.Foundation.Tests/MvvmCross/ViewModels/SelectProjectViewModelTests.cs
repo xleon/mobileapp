@@ -47,7 +47,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.CloseCommand.ExecuteAsync();
 
-                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<long>());
+                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<long?>());
             }
 
             [Fact]
@@ -70,19 +70,28 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.SelectProjectCommand.ExecuteAsync(ProjectSuggestion.NoProject);
 
-                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<long>());
+                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<long?>());
             }
 
             [Fact]
-            public void ReturnsTheSelectedProjectId()
+            public async Task ReturnsTheSelectedProjectId()
             {
                 var project = Substitute.For<IDatabaseProject>();
                 project.Id.Returns(13);
                 var selectedProject = new ProjectSuggestion(project);
-                ViewModel.SelectProjectCommand.ExecuteAsync(selectedProject).Wait();
+                await ViewModel.SelectProjectCommand.ExecuteAsync(selectedProject);
 
-                NavigationService.Received()
+                await NavigationService.Received()
                     .Close(Arg.Is(ViewModel), Arg.Is(selectedProject.ProjectId));
+            }
+
+            [Fact] 
+            public async Task ReturnsNullIfNoProjectWasSelected()
+            {
+                await ViewModel.SelectProjectCommand.ExecuteAsync(ProjectSuggestion.NoProject);
+
+                await NavigationService.Received()
+                    .Close(Arg.Is(ViewModel), Arg.Is<long?>(id => id == null));
             }
         }
 

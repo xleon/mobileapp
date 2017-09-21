@@ -15,12 +15,12 @@ using Toggl.Multivac.Extensions;
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SelectProjectViewModel : MvxViewModel<long, long>
+    public sealed class SelectProjectViewModel : MvxViewModel<long?, long?>
     {
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
         private readonly Subject<string> infoSubject = new Subject<string>();
-        private long projectId;
+        private long? projectId;
 
         public string Text { get; set; } = "";
 
@@ -43,7 +43,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SelectProjectCommand = new MvxAsyncCommand<ProjectSuggestion>(selectProject);
         }
 
-        public override void Prepare(long parameter)
+        public override void Prepare(long? parameter)
             => projectId = parameter;
 
         public override async Task Initialize()
@@ -77,6 +77,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             => navigationService.Close(this, projectId);
 
         private Task selectProject(ProjectSuggestion project)
-            => navigationService.Close(this, project.ProjectId);
+        => navigationService.Close(this, project.ProjectId == 0 ? null : (long?)project.ProjectId);
     }
 }
