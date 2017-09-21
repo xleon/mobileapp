@@ -172,6 +172,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     DataSource.TimeEntries.GetAll().Returns(observable);
                     DataSource.TimeEntries.TimeEntryCreated.Returns(TimeEntryCreatedSubject.AsObservable());
                     DataSource.TimeEntries.TimeEntryUpdated.Returns(TimeEntryUpdatedSubject.AsObservable());
+                    DataSource.TimeEntries.TimeEntryDeleted.Returns(Observable.Empty<IDatabaseTimeEntry>());
                 }
             }
 
