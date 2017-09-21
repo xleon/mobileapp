@@ -57,6 +57,7 @@
     <Compile Include="DataSources\TimeEntriesDataSource.cs" />
     <Compile Include="Login\IApiFactory.cs" />
     <Compile Include="Login\LoginManager.cs" />
+    <Compile Include="Sync\ConflictResolution\AlwaysOverwrite.cs" />
     <Compile Include="Sync\ConflictResolution\IConflictResolver.cs" />
     <Compile Include="Sync\ConflictResolution\Selectors\ClientSyncSelector.cs" />
     <Compile Include="Sync\ConflictResolution\Selectors\ISyncSelector.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Suggestions\SuggestionProviderContainer.cs" />
     <Compile Include="Login\ApiFactory.cs" />
     <Compile Include="Login\ILoginManager.cs" />
+    <Compile Include="Sync\States\Pull\PersistWorkspaceFeaturesState.cs" />
     <Compile Include="Sync\States\Push\BaseUnsyncableEntityState.cs" />
     <Compile Include="Sync\States\Push\UnsyncableTimeEntryState.cs" />
     <Compile Include="Sync\States\Pull\PersistTagsState.cs" />

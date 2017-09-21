@@ -10,7 +10,7 @@ using Toggl.PrimeRadiant.Models;
 namespace Toggl.Foundation.Sync.States
 {
     internal abstract class BasePersistState<TInterface, TDatabaseInterface>
-        where TDatabaseInterface : TInterface, IBaseModel, IDatabaseSyncable
+        where TDatabaseInterface : TInterface
     {
         private readonly IRepository<TDatabaseInterface> repository;
 
@@ -34,8 +34,8 @@ namespace Toggl.Foundation.Sync.States
                 .SingleAsync()
                 .Select(entities => entities ?? new List<TInterface>())
                 .Select(entities => entities.Select(ConvertToDatabaseEntity).ToList())
-                .SelectMany(databaseEntities => 
-                    repository.BatchUpdate(databaseEntities.Select(entity => (entity.Id, entity)), conflictResolver.Resolve)
+                .SelectMany(databaseEntities =>
+                    repository.BatchUpdate(databaseEntities.Select(entity => (GetId(entity), entity)), conflictResolver.Resolve)
                         .Select(results => results.Select(result => result.Item2))
                         .IgnoreElements()
                         .Concat(Observable.Return(databaseEntities)))
@@ -45,6 +45,8 @@ namespace Toggl.Foundation.Sync.States
                 .Select(sinceParameters => new FetchObservables(fetch, sinceParameters))
                 .Select(FinishedPersisting.Transition);
         }
+
+        protected abstract long GetId(TDatabaseInterface entity);
 
         protected abstract IObservable<IEnumerable<TInterface>> FetchObservable(FetchObservables fetch);
 

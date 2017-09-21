@@ -88,7 +88,7 @@ namespace Toggl.Foundation.Tests.Sync.States
         }
 
         internal abstract class TheStartMethod<TState, TInterface, TDatabaseInterface> : ITheStartMethodHelper
-            where TDatabaseInterface : class, TInterface, IBaseModel, IDatabaseSyncable
+            where TDatabaseInterface : class, TInterface
             where TState : BasePersistState<TInterface, TDatabaseInterface>
         {
             private readonly IRepository<TDatabaseInterface> repository;
@@ -240,12 +240,13 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             protected FetchObservables CreateFetchObservables(
                 FetchObservables old, ISinceParameters sinceParameters,
-                IObservable<List<IWorkspace>> workspaces = null, IObservable<List<IClient>> clients = null,
-                IObservable<List<IProject>> projects = null, IObservable<List<ITimeEntry>> timeEntries = null,
-                IObservable<List<ITag>> tags = null)
+                IObservable<List<IWorkspace>> workspaces = null, IObservable<List<IWorkspaceFeatureCollection>> workspaceFeatures = null,
+                IObservable<List<IClient>> clients = null, IObservable<List<IProject>> projects = null,
+                IObservable<List<ITimeEntry>> timeEntries = null, IObservable<List<ITag>> tags = null)
             => new FetchObservables(
                 old?.SinceParameters ?? sinceParameters,
                 old?.Workspaces ?? workspaces,
+                old?.WorkspaceFeatures ?? workspaceFeatures,
                 old?.Clients ?? clients,
                 old?.Projects ?? projects,
                 old?.TimeEntries ?? timeEntries,

@@ -16,6 +16,8 @@ namespace Toggl.Foundation.Sync.States
         {
         }
 
+        protected override long GetId(IDatabaseTag entity) => entity.Id;
+
         protected override IObservable<IEnumerable<ITag>> FetchObservable(FetchObservables fetch)
             => fetch.Tags;
 

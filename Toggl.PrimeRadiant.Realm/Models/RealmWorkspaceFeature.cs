@@ -2,6 +2,7 @@
 using System.Linq;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
+using Toggl.Multivac.Models;
 
 namespace Toggl.PrimeRadiant.Realm
 {
@@ -18,14 +19,20 @@ namespace Toggl.PrimeRadiant.Realm
         
         public bool Enabled { get; set; }
 
-        public static RealmWorkspaceFeature FindOrCreate(IDatabaseWorkspaceFeature entity, Realms.Realm realm)
+        public RealmWorkspaceFeature(IWorkspaceFeature entity)
+        {
+            FeatureId = entity.FeatureId;
+            Enabled = entity.Enabled;
+        }
+
+        public static RealmWorkspaceFeature FindOrCreate(IWorkspaceFeature entity, Realms.Realm realm)
             => find(entity, realm) ?? create(entity, realm);
 
-        private static RealmWorkspaceFeature find(IDatabaseWorkspaceFeature entity, Realms.Realm realm)
+        private static RealmWorkspaceFeature find(IWorkspaceFeature entity, Realms.Realm realm)
             => realm.All<RealmWorkspaceFeature>()
                 .SingleOrDefault(x => x.FeatureIdInt == (int)entity.FeatureId && x.Enabled == entity.Enabled);
 
-        private static RealmWorkspaceFeature create(IDatabaseWorkspaceFeature entity, Realms.Realm realm)
-            => realm.Add(new RealmWorkspaceFeature(entity, realm));
+        private static RealmWorkspaceFeature create(IWorkspaceFeature entity, Realms.Realm realm)
+            => realm.Add(new RealmWorkspaceFeature(entity));
     }
 }

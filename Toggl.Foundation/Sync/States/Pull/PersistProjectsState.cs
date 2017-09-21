@@ -16,6 +16,8 @@ namespace Toggl.Foundation.Sync.States
         {
         }
 
+        protected override long GetId(IDatabaseProject entity) => entity.Id;
+
         protected override IObservable<IEnumerable<IProject>> FetchObservable(FetchObservables fetch)
             => fetch.Projects;
 

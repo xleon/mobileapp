@@ -16,6 +16,8 @@ namespace Toggl.Foundation.Sync.States
         {
         }
 
+        protected override long GetId(IDatabaseWorkspace entity) => entity.Id;
+
         protected override IObservable<IEnumerable<IWorkspace>> FetchObservable(FetchObservables fetch)
             => fetch.Workspaces;
 

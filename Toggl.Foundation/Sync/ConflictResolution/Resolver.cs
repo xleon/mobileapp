@@ -6,22 +6,25 @@ namespace Toggl.Foundation.Sync.ConflictResolution
 {
     internal static class Resolver
     {
-        public static PreferNewer<IDatabaseClient> ForClients()
+        public static IConflictResolver<IDatabaseClient> ForClients()
             => new PreferNewer<IDatabaseClient>(new ClientSyncSelector());
 
-        public static PreferNewer<IDatabaseProject> ForProjects()
+        public static IConflictResolver<IDatabaseProject> ForProjects()
             => new PreferNewer<IDatabaseProject>(new ProjectSyncSelector());
 
-        public static PreferNewer<IDatabaseWorkspace> ForWorkspaces()
+        public static IConflictResolver<IDatabaseWorkspace> ForWorkspaces()
             => new PreferNewer<IDatabaseWorkspace>(new WorkspaceSyncSelector());
 
-        public static PreferNewer<IDatabaseTask> ForTasks()
+        public static IConflictResolver<IDatabaseWorkspaceFeatureCollection> ForWorkspaceFeatures()
+            => new AlwaysOverwrite<IDatabaseWorkspaceFeatureCollection>();
+
+        public static IConflictResolver<IDatabaseTask> ForTasks()
             => new PreferNewer<IDatabaseTask>(new TaskSyncSelector());
 
-        public static PreferNewer<IDatabaseTag> ForTags()
+        public static IConflictResolver<IDatabaseTag> ForTags()
             => new PreferNewer<IDatabaseTag>(new TagSyncSelector());
 
-        public static PreferNewer<IDatabaseTimeEntry> ForTimeEntries()
+        public static IConflictResolver<IDatabaseTimeEntry> ForTimeEntries()
             => new PreferNewer<IDatabaseTimeEntry>(new TimeEntrySyncSelector(), TimeSpan.FromSeconds(5));
     }
 }

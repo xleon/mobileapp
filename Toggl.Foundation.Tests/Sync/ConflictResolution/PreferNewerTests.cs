@@ -175,10 +175,10 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
             return TimeSpan.FromSeconds(lessThanMarginOfErrorSeconds);
         }
 
-        private IConflictResolver<TestModel> resolver { get; }
+        private PreferNewer<TestModel> resolver { get; }
             = new PreferNewer<TestModel>(new TestModelSelector(), TimeSpan.FromSeconds(5));
 
-        private IConflictResolver<TestModel> zeroMarginOfErrorResolver { get; }
+        private PreferNewer<TestModel> zeroMarginOfErrorResolver { get; }
             = new PreferNewer<TestModel>(new TestModelSelector());
     }
 }

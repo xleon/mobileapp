@@ -9,9 +9,19 @@ namespace Toggl.PrimeRadiant.Realm
 {
     internal partial class RealmWorkspaceFeatureCollection : RealmObject, IDatabaseWorkspaceFeatureCollection
     {
-        public RealmWorkspace RealmWorkspace { get; set; }
+        [Ignored]
+        public RealmWorkspace RealmWorkspace
+        {
+            get => RealmWorkspaceInternal;
+            set
+            {
+                WorkspaceId = value.Id;
+                RealmWorkspaceInternal = value;
+            }
+        }
         
-        [PrimaryKey]
+        public RealmWorkspace RealmWorkspaceInternal { get; set; }
+
         public long WorkspaceId { get; set; }
         
         public IDatabaseWorkspace Workspace => RealmWorkspace;

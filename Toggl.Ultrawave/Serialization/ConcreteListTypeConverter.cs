@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Toggl.Multivac;
 
 namespace Toggl.Ultrawave.Serialization
 {
+    [Preserve(AllMembers=true)]
     class ConcreteListTypeConverter<TConcrete, TInterface> : JsonConverter
         where TConcrete : TInterface
     {
