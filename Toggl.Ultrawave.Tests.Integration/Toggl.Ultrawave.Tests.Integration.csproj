@@ -150,6 +150,7 @@
     <Compile Include="BaseTests\AuthenticatedPostEndpointBaseTests.cs" />
     <Compile Include="BaseTests\AuthenticatedGetEndpointBaseTests.cs" />
     <Compile Include="BaseTests\AuthenticatedEndpointBaseTests.cs" />
+    <Compile Include="PricingPlansTests.cs" />
     <Compile Include="ProjectsApiTests.cs" />
     <Compile Include="StatusApiTests.cs" />
     <Compile Include="UserApiTests.cs" />
@@ -166,6 +167,8 @@
     <Compile Include="Helper\Configuration.cs" />
     <Compile Include="Helper\TestUserCredentials.cs" />
     <Compile Include="BaseTests\AuthenticatedPutEndpointBaseTests.cs" />
+    <Compile Include="Helper\PricingPlans.cs" />
+    <Compile Include="TasksApiTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">
