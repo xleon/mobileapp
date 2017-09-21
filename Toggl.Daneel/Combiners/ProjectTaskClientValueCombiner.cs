@@ -29,7 +29,7 @@ namespace Toggl.Daneel.Combiners
             var project = stepList[0].GetValue()?.ToString();
             var task = stepList[1].GetValue()?.ToString();
             var client = stepList[2].GetValue()?.ToString();
-            var fontHeight = (double)stepList[3].GetValue();
+            var fontHeight = (double)stepList[3]?.GetValue();
             var projectColor = stepList[4].GetValue()?.ToString();
 
             value = buildAttributedString(project, task, client, projectColor, fontHeight);

@@ -34,7 +34,8 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\bin\iPhone\Release</OutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\Toggl.ruleset</CodeAnalysisRuleSet>
@@ -51,7 +52,8 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\bin\iPhoneSimulator\Release</OutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\Toggl.ruleset</CodeAnalysisRuleSet>
@@ -302,6 +304,10 @@
     <ImageAsset Include="Resources\Images.xcassets\icDoneSmall.imageset\icDone.png" />
     <ImageAsset Include="Resources\Images.xcassets\icDoneSmall.imageset\icDone%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icDoneSmall.imageset\icDone%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icSearch.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icSearch.imageset\search.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icSearch.imageset\search%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icSearch.imageset\search%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -317,9 +323,11 @@
     <InterfaceDefinition Include="ViewControllers\EditTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\StartTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SettingsViewController.xib" />
-    <InterfaceDefinition Include="Views\StartTimeEntryProjectsViewCell.xib" />
+    <InterfaceDefinition Include="Views\ProjectSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntryViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\EditDurationViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\SelectProjectViewController.xib" />
+    <InterfaceDefinition Include="Views\SelectProjectHeaderViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectDateTimeViewController.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntryEmptyViewCell.xib" />
   </ItemGroup>
@@ -360,6 +368,7 @@
     <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationController.cs" />
     <Compile Include="Binding\BarButtonCommandTargetBinding.cs" />
     <Compile Include="Binding\ViewAnimatedVisibilityTargetBinding.cs" />
+    <Compile Include="ViewSources\SelectProjectTableViewSource.cs" />
     <Compile Include="Views\TimeEntriesLogViewCell.cs" />
     <Compile Include="Views\TimeEntriesLogViewCell.designer.cs">
       <DependentUpon>TimeEntriesLogViewCell.cs</DependentUpon>
@@ -423,9 +432,9 @@
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="ViewSources\StartTimeEntryTableViewSource.cs" />
-    <Compile Include="Views\StartTimeEntryProjectsViewCell.cs" />
-    <Compile Include="Views\StartTimeEntryProjectsViewCell.designer.cs">
-      <DependentUpon>StartTimeEntryProjectsViewCell.cs</DependentUpon>
+    <Compile Include="Views\ProjectSuggestionViewCell.cs" />
+    <Compile Include="Views\ProjectSuggestionViewCell.designer.cs">
+      <DependentUpon>ProjectSuggestionViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\StartTimeEntryViewCell.cs" />
     <Compile Include="Views\StartTimeEntryViewCell.designer.cs">
@@ -448,6 +457,14 @@
     <Compile Include="Views\TimeEntryTagsTextView.cs" />
     <Compile Include="Views\MainScrollView.cs" />
     <Compile Include="Views\ResizableView.cs" />
+    <Compile Include="ViewControllers\SelectProjectViewController.cs" />
+    <Compile Include="ViewControllers\SelectProjectViewController.designer.cs">
+      <DependentUpon>SelectProjectViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectProjectHeaderViewCell.cs" />
+    <Compile Include="Views\SelectProjectHeaderViewCell.designer.cs">
+      <DependentUpon>SelectProjectHeaderViewCell.cs</DependentUpon>
+    </Compile>
     <Compile Include="Combiners\ProjectTaskClientValueCombiner.cs" />
     <Compile Include="Views\StartTimeEntryEmptyViewCell.cs" />
     <Compile Include="Views\StartTimeEntryEmptyViewCell.designer.cs">
@@ -487,6 +504,7 @@
     <Folder Include="Resources\Images.xcassets\icAdd.imageset\" />
     <Folder Include="Resources\Images.xcassets\icProjectDot.imageset\" />
     <Folder Include="Converters\" />
+    <Folder Include="Resources\Images.xcassets\icSearch.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
@@ -497,4 +515,3 @@
   <Import Project="..\packages\Realm.Database.1.5.0\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.1.5.0\build\Realm.Database.targets')" />
   <Import Project="..\packages\Realm.1.5.0\build\Realm.targets" Condition="Exists('..\packages\Realm.1.5.0\build\Realm.targets')" />
 </Project>
-

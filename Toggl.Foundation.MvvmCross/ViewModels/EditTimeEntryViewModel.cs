@@ -26,6 +26,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IDisposable tickingDisposable;
         private IDisposable confirmDisposable;
 
+        private long projectId;
+
         public long Id { get; set; }
 
         public string Description { get; set; }
@@ -76,6 +78,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand SelectStartDateTimeCommand { get; }
 
+        public IMvxAsyncCommand SelectProjectCommand { get; }
+
         public EditTimeEntryViewModel(ITogglDataSource dataSource, IMvxNavigationService navigationService, ITimeService timeService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -91,6 +95,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             CloseCommand = new MvxAsyncCommand(close);
             EditDurationCommand = new MvxAsyncCommand(editDuration);
             SelectStartDateTimeCommand = new MvxAsyncCommand(selectStartDateTime);
+            SelectProjectCommand = new MvxAsyncCommand(selectProject);
         }
 
         public override void Prepare(long parameter)
@@ -107,10 +112,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             StopTime = timeEntry.Stop;
             Billable = timeEntry.Billable;
             Tags = timeEntry.Tags?.Select(tag => tag.Name).ToList() ?? new List<string>();
-            Project = timeEntry?.Project?.Name;
-            ProjectColor = timeEntry?.Project?.Color;
-            Task = timeEntry?.Task?.Name;
-            Client = timeEntry?.Project?.Client?.Name;
+            Project = timeEntry.Project?.Name;
+            ProjectColor = timeEntry.Project?.Color;
+            Task = timeEntry.Task?.Name;
+            Client = timeEntry.Project?.Client?.Name;
+            projectId = timeEntry.Project?.Id ?? 0;
 
             if (StopTime == null)
                 subscribeToTimeServiceTicks();
@@ -169,6 +175,26 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .ConfigureAwait(false);
         }
 
+        private async Task selectProject()
+        {
+            var selectedProjectId = await navigationService.Navigate<SelectProjectViewModel, long, long>(projectId);
+
+            if (selectedProjectId == projectId) return;
+
+            projectId = selectedProjectId;
+
+            if (projectId == 0)
+            {
+                Project = Task = Client = ProjectColor = "";
+                return;
+            }
+
+            var project = await dataSource.Projects.GetById(projectId);
+            Project = project.Name;
+            Client = project.Client?.Name;
+            ProjectColor = project.Color;
+        }
+        
         private async Task editDuration()
         {
             var currentDuration = DurationParameter.WithStartAndStop(StartTime, StopTime);

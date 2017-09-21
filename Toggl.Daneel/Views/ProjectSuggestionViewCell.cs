@@ -11,17 +11,17 @@ using UIKit;
 
 namespace Toggl.Daneel.Views
 {
-    public partial class StartTimeEntryProjectsViewCell : MvxTableViewCell
+    public partial class ProjectSuggestionViewCell : MvxTableViewCell
     {
-        public static readonly NSString Key = new NSString(nameof(StartTimeEntryProjectsViewCell));
+        public static readonly NSString Key = new NSString(nameof(ProjectSuggestionViewCell));
         public static readonly UINib Nib;
 
-        static StartTimeEntryProjectsViewCell()
+        static ProjectSuggestionViewCell()
         {
-            Nib = UINib.FromName(nameof(StartTimeEntryProjectsViewCell), NSBundle.MainBundle);
+            Nib = UINib.FromName(nameof(ProjectSuggestionViewCell), NSBundle.MainBundle);
         }
 
-        protected StartTimeEntryProjectsViewCell(IntPtr handle) : base(handle)
+        protected ProjectSuggestionViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }
@@ -39,7 +39,7 @@ namespace Toggl.Daneel.Views
                 var taskCountConverter = new TaskCountConverter();
                 var visibilityConverter = new MvxVisibilityValueConverter();
 
-                var bindingSet = this.CreateBindingSet<StartTimeEntryProjectsViewCell, ProjectSuggestion>();
+                var bindingSet = this.CreateBindingSet<ProjectSuggestionViewCell, ProjectSuggestion>();
 
                 //Text
                 bindingSet.Bind(ProjectNameLabel).To(vm => vm.ProjectName);

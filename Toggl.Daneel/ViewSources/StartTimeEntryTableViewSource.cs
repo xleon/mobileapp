@@ -12,7 +12,7 @@ namespace Toggl.Daneel.ViewSources
     public sealed class StartTimeEntryTableViewSource : MvxTableViewSource
     {
         private const string timeEntryCellIdentifier = nameof(StartTimeEntryViewCell);
-        private const string projectCellIdentifier = nameof(StartTimeEntryProjectsViewCell);
+        private const string projectCellIdentifier = nameof(ProjectSuggestionViewCell);
         private const string emptySuggestionIdentifier = nameof(StartTimeEntryEmptyViewCell);
 
         public StartTimeEntryTableViewSource(UITableView tableView)
@@ -22,7 +22,7 @@ namespace Toggl.Daneel.ViewSources
             tableView.SeparatorStyle = UITableViewCellSeparatorStyle.SingleLine;
             tableView.SeparatorColor = Color.StartTimeEntry.SeparatorColor.ToNativeColor();
             tableView.RegisterNibForCellReuse(StartTimeEntryViewCell.Nib, timeEntryCellIdentifier);
-            tableView.RegisterNibForCellReuse(StartTimeEntryProjectsViewCell.Nib, projectCellIdentifier);
+            tableView.RegisterNibForCellReuse(ProjectSuggestionViewCell.Nib, projectCellIdentifier);
             tableView.RegisterNibForCellReuse(StartTimeEntryEmptyViewCell.Nib, emptySuggestionIdentifier);
         }
 

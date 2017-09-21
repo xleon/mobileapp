@@ -69,7 +69,15 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(DurationLabel)
                       .For(v => v.BindTap())
                       .To(vm => vm.EditDurationCommand);
+            
+            bindingSet.Bind(ProjectTaskClientLabel)
+                      .For(v => v.BindTap())
+                      .To(vm => vm.SelectProjectCommand);
 
+            bindingSet.Bind(AddProjectAndTaskView)
+                      .For(v => v.BindTap())
+                      .To(vm => vm.SelectProjectCommand);
+            
             bindingSet.Bind(StartDateTimeView)
                       .For(v => v.BindTap())
                       .To(vm => vm.SelectStartDateTimeCommand);

@@ -11,7 +11,7 @@ using System.CodeDom.Compiler;
 namespace Toggl.Daneel.Views
 {
     [Register ("StartTimeEntryProjectsViewCell")]
-    partial class StartTimeEntryProjectsViewCell
+    partial class ProjectSuggestionViewCell
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]

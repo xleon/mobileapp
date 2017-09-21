@@ -6,7 +6,7 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
 {
     public sealed class ProjectSuggestion : AutocompleteSuggestion
     {
-        private static readonly ProjectSuggestion empty = new ProjectSuggestion();
+        public static ProjectSuggestion NoProject { get; } = new ProjectSuggestion();
 
         public static IEnumerable<ProjectSuggestion> FromProjects(
             IEnumerable<IDatabaseProject> projects
@@ -15,7 +15,7 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
         public static IEnumerable<ProjectSuggestion> FromProjectsPrependingEmpty(
             IEnumerable<IDatabaseProject> projects) 
         {
-            yield return empty;
+            yield return NoProject;
 
             foreach (var project in projects)
                 yield return new ProjectSuggestion(project);
@@ -31,6 +31,8 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
 
         public string ProjectColor { get; }
 
+        public string Workspace { get; } = "";
+
         private ProjectSuggestion()
         {
             ProjectId = 0;
@@ -43,10 +45,8 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
             ProjectId = project.Id;
             ProjectName = project.Name;
             ProjectColor = project.Color;
-
-            if (project.Client == null) return;
-
-            ClientName = project.Client.Name;
+            Workspace = project.Workspace?.Name;
+            ClientName = project.Client?.Name;
         }
 
         public override int GetHashCode()

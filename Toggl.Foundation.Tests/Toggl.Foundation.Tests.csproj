@@ -243,6 +243,7 @@
     <Compile Include="Sync\States\Push\TestModel.cs" />
     <Compile Include="Autocomplete\AutocompleteProviderTests.cs" />
     <Compile Include="Autocomplete\TextFieldInfoTests.cs" />
+    <Compile Include="MvvmCross\ViewModels\SelectProjectViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />
