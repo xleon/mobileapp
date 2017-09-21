@@ -22,7 +22,7 @@ namespace Toggl.Daneel.Views
             set
             {
                 if (HeightConstant == value) return;
-                heightConstraint.Constant = value;
+                heightConstraint.Constant = value.Clamp(MinHeight, MaxHeight);
                 HeightConstantChanged.Raise(this);
             }
         }
@@ -62,7 +62,7 @@ namespace Toggl.Daneel.Views
             var point = panGestureRecognizer.TranslationInView(this);
             var newHeight = HeightConstant + point.Y - previousPointY;
 
-            HeightConstant = newHeight.Clamp(MinHeight, MaxHeight);
+            HeightConstant = newHeight;
 
             previousPointY = panGestureRecognizer.State == UIGestureRecognizerState.Ended ? 0 : point.Y;
         }
