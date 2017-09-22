@@ -187,13 +187,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Property]
-            public void ReturnsAValueThatReflectsTheChangesToDuration(DateTimeOffset start, DateTimeOffset? stop)
+            public void ReturnsAValueThatReflectsTheChangesToDurationForFinishedTimeEntries(DateTimeOffset start, DateTimeOffset stop)
             {
                 if (start >= stop) return;
 
                 var now = DateTimeOffset.UtcNow;
                 TimeService.CurrentDateTime.Returns(now);
-                if (stop == null && start >= now) return;
+                if (start >= now) return;
 
                 ViewModel.Prepare(DurationParameter.WithStartAndStop(start, stop));
                 ViewModel.Duration = TimeSpan.FromMinutes(10);
@@ -202,6 +202,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Is<DurationParameter>(
                     p => p.Start == ViewModel.StartTime && p.Stop == ViewModel.StopTime
+                )).Wait();
+            }
+
+            [Property]
+            public void ReturnsAValueThatReflectsTheChangesToDurationForRunningTimeEntries(DateTimeOffset start, DateTimeOffset now)
+            {
+                if (start > now) return;
+                TimeService.CurrentDateTime.Returns(now);
+                ViewModel.Prepare(DurationParameter.WithStartAndStop(start, null));
+                ViewModel.Duration = TimeSpan.FromMinutes(10);
+
+                ViewModel.SaveCommand.ExecuteAsync().Wait();
+
+                NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Is<DurationParameter>(
+                    p => p.Start == ViewModel.StartTime && p.Stop == null
                 )).Wait();
             }
         }

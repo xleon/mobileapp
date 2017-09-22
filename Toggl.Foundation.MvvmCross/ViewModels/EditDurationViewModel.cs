@@ -62,7 +62,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             => navigationService.Close(this, defaultResult);
 
         private Task save()
-            => navigationService.Close(this, DurationParameter.WithStartAndStop(StartTime, StopTime));
+        {
+            DateTimeOffset? stopTimeToBeReturned;
+            if (isRunning)
+                stopTimeToBeReturned = null;
+            else
+                stopTimeToBeReturned = StopTime;
+            return navigationService.Close(this, DurationParameter.WithStartAndStop(StartTime, stopTimeToBeReturned));
+        }
 
         private void onDurationChanged(TimeSpan duration)
         {
