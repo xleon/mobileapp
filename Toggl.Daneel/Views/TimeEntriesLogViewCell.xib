@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,6 +18,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="63.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BlD-YS-3Fa">
+                        <rect key="frame" x="0.0" y="63" width="320" height="1"/>
+                        <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="OWp-nB-0Xk"/>
+                        </constraints>
+                    </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exporting assets" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fIi-Jg-bLZ">
                         <rect key="frame" x="17" y="14" width="108" height="17"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -59,8 +65,11 @@
             <constraints>
                 <constraint firstItem="fIi-Jg-bLZ" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="14" id="3oh-LW-0AM"/>
                 <constraint firstItem="Y3e-98-yuY" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="12" id="4T5-Ji-akk"/>
+                <constraint firstAttribute="trailing" secondItem="BlD-YS-3Fa" secondAttribute="trailing" id="4WR-v9-ceH"/>
+                <constraint firstItem="BlD-YS-3Fa" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" id="7HY-ME-S5Z"/>
                 <constraint firstAttribute="bottom" secondItem="Re8-uD-vpm" secondAttribute="bottom" constant="4" id="A45-Fh-xoP"/>
                 <constraint firstAttribute="bottom" secondItem="2Q5-T6-UvK" secondAttribute="bottom" constant="16" id="Ami-Am-KDO"/>
+                <constraint firstAttribute="bottom" secondItem="BlD-YS-3Fa" secondAttribute="bottom" id="HbJ-AJ-7p0"/>
                 <constraint firstItem="pqJ-Ao-2Sj" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="17" id="ItS-Zm-qw1"/>
                 <constraint firstAttribute="trailing" secondItem="Y3e-98-yuY" secondAttribute="trailing" constant="15" id="RYD-Zl-6qg"/>
                 <constraint firstAttribute="trailing" secondItem="2Q5-T6-UvK" secondAttribute="trailing" constant="21" id="WWV-Op-5Ma"/>

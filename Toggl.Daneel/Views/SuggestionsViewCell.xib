@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,9 +15,16 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cZE-iV-UFb" id="zC9-sd-JSK">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="63"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="63.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cbq-5I-iL8">
+                        <rect key="frame" x="0.0" y="63" width="320" height="1"/>
+                        <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="mBj-AW-xKS"/>
+                        </constraints>
+                    </view>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0rR-jN-UwS">
                         <rect key="frame" x="264" y="4" width="56" height="56"/>
                         <constraints>
@@ -69,46 +76,25 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="0rR-jN-UwS" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="4" id="2BP-wK-rsw"/>
+                <constraint firstAttribute="trailing" secondItem="cbq-5I-iL8" secondAttribute="trailing" id="4IK-J2-zqm"/>
                 <constraint firstItem="Nae-xw-0DY" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="14" id="AOe-o4-TGF"/>
+                <constraint firstItem="cbq-5I-iL8" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" id="HU0-sY-pxU"/>
+                <constraint firstAttribute="bottom" secondItem="cbq-5I-iL8" secondAttribute="bottom" id="Ngk-22-ccj"/>
                 <constraint firstAttribute="bottom" secondItem="0rR-jN-UwS" secondAttribute="bottom" constant="4" id="Nuf-pp-Ldz"/>
                 <constraint firstItem="Nae-xw-0DY" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="16" id="eAe-gq-Scs"/>
                 <constraint firstAttribute="trailing" secondItem="0rR-jN-UwS" secondAttribute="trailing" id="vrW-TB-u1V"/>
             </constraints>
             <connections>
                 <outlet property="DescriptionLabel" destination="Nae-xw-0DY" id="name-outlet-Nae-xw-0DY"/>
+                <outlet property="DescriptionTopDistanceConstraint" destination="AOe-o4-TGF" id="name-outlet-AOe-o4-TGF"/>
                 <outlet property="ProjectDotView" destination="aEZ-h8-6cJ" id="name-outlet-aEZ-h8-6cJ"/>
                 <outlet property="ProjectLabel" destination="Oyi-iD-a4P" id="name-outlet-Oyi-iD-a4P"/>
                 <outlet property="StartButton" destination="0rR-jN-UwS" id="name-outlet-0rR-jN-UwS"/>
                 <outlet property="TaskLabel" destination="mpu-MG-rMe" id="name-outlet-mpu-MG-rMe"/>
-                <outlet property="DescriptionTopDistanceConstraint" destination="AOe-o4-TGF" id="name-outlet-AOe-o4-TGF"/>
             </connections>
         </tableViewCell>
     </objects>
     <resources>
         <image name="icContinue" width="10" height="11"/>
-        <image name="icArrowUp" width="10" height="6"/>
-        <image name="icBillable" width="8" height="16"/>
-        <image name="icClose" width="10" height="10"/>
-        <image name="icDatetime" width="14" height="14"/>
-        <image name="icDone" width="16" height="12"/>
-        <image name="icDownS" width="8" height="5"/>
-        <image name="icProjects" width="16" height="12"/>
-        <image name="icRefresh" width="20" height="14"/>
-        <image name="icReports" width="16" height="18"/>
-        <image name="icSettings" width="16" height="16"/>
-        <image name="icSyncerror" width="16" height="16"/>
-        <image name="icTags" width="14" height="13"/>
-        <image name="icUpS" width="8" height="5"/>
-        <image name="playIcon" width="50" height="50"/>
-        <image name="stopIcon" width="34" height="34"/>
-        <image name="togglLogoWhite" width="111" height="35"/>
-        <image name="notebook" width="95" height="85"/>
-        <image name="togglCronometer" width="126" height="140"/>
-        <image name="icOnePassword" width="15" height="15"/>
-        <image name="icPassword" width="15" height="10"/>
-        <image name="togglLogo" width="63" height="19"/>
-        <image name="line" width="2" height="14"/>
-        <image name="icLoader" width="24" height="24"/>
-        <image name="icAdd" width="10" height="10"/>
     </resources>
 </document>

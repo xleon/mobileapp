@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.ExtensionMethods;
 using MvvmCross.Binding.iOS.Views;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Plugins.Color.iOS;
 using Toggl.Daneel.Views;
+using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
 
@@ -38,6 +41,17 @@ namespace Toggl.Daneel.ViewSources
                 bindable.DataContext = grouping;
             
             return cell;
+        }
+
+        public override UIView GetViewForFooter(UITableView tableView, nint section)
+        {
+            var rect = new CGRect(0, 0, UIScreen.MainScreen.Bounds.Width, 24);
+            var footerView = new UIView(rect)
+            {
+                BackgroundColor = Color.TimeEntriesLog.SectionFooter.ToNativeColor()
+            };
+
+            return footerView;
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -76,6 +90,9 @@ namespace Toggl.Daneel.ViewSources
 
         public override nfloat GetHeightForHeader(UITableView tableView, nint section) => 43;
 
+        public override nfloat GetHeightForFooter(UITableView tableView, nint section) => 24;
+
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath) => 64;
+
     }
 }
