@@ -1,5 +1,7 @@
 ﻿using System;
 using CoreGraphics;
+using MvvmCross.Plugins.Color.iOS;
+using Toggl.Foundation.MvvmCross.Helper;
 using UIKit;
 
 namespace Toggl.Daneel.Presentation.Transition
@@ -10,9 +12,8 @@ namespace Toggl.Daneel.Presentation.Transition
 
         private readonly UIView dimmingView = new UIView
         {
-            TranslatesAutoresizingMaskIntoConstraints = false,
-            BackgroundColor = UIColor.FromWhiteAlpha(1.0f, 0.8f),
-            Alpha = 0.0f
+            BackgroundColor = Color.ModalDialog.BackgroundOverlay.ToNativeColor(),
+            Alpha = 0
         };
 
         public ModalPresentationController(UIViewController presentedViewController, UIViewController presentingViewController)
@@ -22,23 +23,19 @@ namespace Toggl.Daneel.Presentation.Transition
             dimmingView.AddGestureRecognizer(recognizer);
         }
 
-        private void dismiss()
-        {
-            PresentedViewController.DismissViewController(true, null);
-        }
-
         public override void PresentationTransitionWillBegin()
         {
-            ContainerView.InsertSubview(dimmingView, 0);
+            dimmingView.Frame = ContainerView.Bounds;
+            ContainerView.AddSubview(dimmingView);
 
             var coordinator = PresentedViewController.GetTransitionCoordinator();
             if (coordinator == null)
             {
-                dimmingView.Alpha = 1.0f;
+                dimmingView.Alpha = 0.8f;
                 return;
             }
 
-            coordinator.AnimateAlongsideTransition(_ => dimmingView.Alpha = 1.0f, null);
+            coordinator.AnimateAlongsideTransition(_ => dimmingView.Alpha = 0.8f, null);
         }
 
         public override void DismissalTransitionWillBegin()
@@ -84,6 +81,11 @@ namespace Toggl.Daneel.Presentation.Transition
                 frame.Y = containerSize.Height - frame.Size.Height;
                 return frame;
             }
+        }
+
+        private void dismiss()
+        {
+            PresentedViewController.DismissViewController(true, null);
         }
     }
 }
