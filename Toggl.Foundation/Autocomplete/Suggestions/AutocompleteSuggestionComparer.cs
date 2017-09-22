@@ -18,6 +18,9 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
 
                 case ProjectSuggestion pX:
                     return y is ProjectSuggestion pY && pX.ProjectId == pY.ProjectId;
+
+                case TagSuggestion tX:
+                    return y is TagSuggestion tY && tX.Name == tY.Name;
             }
 
             return x == y;

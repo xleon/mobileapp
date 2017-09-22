@@ -35,16 +35,23 @@ namespace Toggl.Foundation.Autocomplete
 
         private (string, AutocompleteSuggestionType) parseQuery(TextFieldInfo info)
         {
-            if (string.IsNullOrEmpty(info.Text) || info.ProjectId != null)
+            if (string.IsNullOrEmpty(info.Text))
                 return (info.Text, AutocompleteSuggestionType.TimeEntries);
 
+            var querySymbols = info.ProjectId != null ? QuerySymbols.ProjectSelected : QuerySymbols.All;
+
             var stringToSearch = info.Text.Substring(0, info.DescriptionCursorPosition);
-            var indexOfQuerySymbol = stringToSearch.LastIndexOfAny(QuerySymbols.All);
+            var indexOfQuerySymbol = stringToSearch.LastIndexOfAny(querySymbols);
             if (indexOfQuerySymbol >= 0)
             {
                 var startingIndex = indexOfQuerySymbol + 1;
                 var stringLength = info.Text.Length - indexOfQuerySymbol - 1;
-                return (info.Text.Substring(startingIndex, stringLength), AutocompleteSuggestionType.Projects);
+                var suggestion = 
+                    stringToSearch[indexOfQuerySymbol] == QuerySymbols.Projects 
+                    ? AutocompleteSuggestionType.Projects
+                    : AutocompleteSuggestionType.Tags;
+
+                return (info.Text.Substring(startingIndex, stringLength), suggestion);
             }
 
             return (info.Text, AutocompleteSuggestionType.TimeEntries);
@@ -55,15 +62,21 @@ namespace Toggl.Foundation.Autocomplete
         {
             var queryListIsEmpty = !wordsToQuery.Any();
 
-            if (suggestionType == AutocompleteSuggestionType.Projects)
+            switch (suggestionType)
             {
-                if (queryListIsEmpty)
+                case AutocompleteSuggestionType.Projects when queryListIsEmpty:
                     return database.Projects.GetAll()
                         .Select(ProjectSuggestion.FromProjectsPrependingEmpty);
 
-                return wordsToQuery
-                    .Aggregate(database.Projects.GetAll(), (obs, word) => obs.Select(filterProjectsByWord(word)))
-                    .Select(ProjectSuggestion.FromProjects);
+                case AutocompleteSuggestionType.Projects:
+                    return wordsToQuery
+                        .Aggregate(database.Projects.GetAll(), (obs, word) => obs.Select(filterProjectsByWord(word)))
+                        .Select(ProjectSuggestion.FromProjects);
+
+                case AutocompleteSuggestionType.Tags:
+                    return wordsToQuery
+                        .Aggregate(database.Tags.GetAll(), (obs, word) => obs.Select(filterTagsByWord(word)))
+                        .Select(TagSuggestion.FromTags);
             }
 
             if (queryListIsEmpty)
@@ -86,5 +99,9 @@ namespace Toggl.Foundation.Autocomplete
                 projects.Where(
                     p => p.Name.ContainsIgnoringCase(word)
                       || (p.Client != null && p.Client.Name.ContainsIgnoringCase(word)));
+
+
+        private Func<IEnumerable<IDatabaseTag>, IEnumerable<IDatabaseTag>> filterTagsByWord(string word)
+            => tags => tags.Where(t => t.Name.ContainsIgnoringCase(word));
     }
 }

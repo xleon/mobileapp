@@ -130,6 +130,7 @@
     <Compile Include="DTOs\StartTimeEntryDTO.cs" />
     <Compile Include="Autocomplete\Suggestions\QuerySymbolSuggestion.cs" />
     <Compile Include="Login\LoginType.cs" />
+    <Compile Include="Autocomplete\Suggestions\TagSuggestion.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -11,6 +11,7 @@ namespace Toggl.Daneel.ViewSources
 {
     public sealed class StartTimeEntryTableViewSource : MvxTableViewSource
     {
+        private const string tagCellIdentifier = nameof(TagSuggestionViewCell);
         private const string timeEntryCellIdentifier = nameof(StartTimeEntryViewCell);
         private const string projectCellIdentifier = nameof(ProjectSuggestionViewCell);
         private const string emptySuggestionIdentifier = nameof(StartTimeEntryEmptyViewCell);
@@ -21,6 +22,7 @@ namespace Toggl.Daneel.ViewSources
             tableView.TableFooterView = new UIView();
             tableView.SeparatorStyle = UITableViewCellSeparatorStyle.SingleLine;
             tableView.SeparatorColor = Color.StartTimeEntry.SeparatorColor.ToNativeColor();
+            tableView.RegisterNibForCellReuse(TagSuggestionViewCell.Nib, tagCellIdentifier);
             tableView.RegisterNibForCellReuse(StartTimeEntryViewCell.Nib, timeEntryCellIdentifier);
             tableView.RegisterNibForCellReuse(ProjectSuggestionViewCell.Nib, projectCellIdentifier);
             tableView.RegisterNibForCellReuse(StartTimeEntryEmptyViewCell.Nib, emptySuggestionIdentifier);
@@ -51,6 +53,9 @@ namespace Toggl.Daneel.ViewSources
 
             if (item is QuerySymbolSuggestion)
                 return emptySuggestionIdentifier;
+
+            if (item is TagSuggestion)
+                return tagCellIdentifier;
 
             return timeEntryCellIdentifier;
         }

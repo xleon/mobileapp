@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using Toggl.Foundation.Autocomplete.Suggestions;
+using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.Autocomplete
 {
     public struct TextFieldInfo : IEquatable<TextFieldInfo>
     {
+        public static TextFieldInfo Empty { get; } = new TextFieldInfo("", 0, null, "", "", new TagSuggestion[0]);
+
         public string Text { get; }
 
         public int CursorPosition { get; }
@@ -14,17 +19,21 @@ namespace Toggl.Foundation.Autocomplete
 
         public string ProjectName { get; }
 
+        public TagSuggestion[] Tags { get; }
+
         public int DescriptionCursorPosition
             => Math.Min(CursorPosition, Text.Length);
 
-        public TextFieldInfo(string text, int cursorPosition)
-            : this(text, cursorPosition, null, "", "")
-        {
-        }
-
-        public TextFieldInfo(string text, int cursorPosition, long? projectId, string projectName, string projectColor)
+        private TextFieldInfo(
+            string text, 
+            int cursorPosition, 
+            long? projectId, 
+            string projectName, 
+            string projectColor,
+            TagSuggestion[] tags)
         {
             Text = text;
+            Tags = tags;
             ProjectId = projectId;
             ProjectName = projectName;
             ProjectColor = projectColor;
@@ -32,10 +41,23 @@ namespace Toggl.Foundation.Autocomplete
         }
 
         public TextFieldInfo WithTextAndCursor(string text, int cursorPosition)
-           => new TextFieldInfo(text, cursorPosition, ProjectId, ProjectName, ProjectColor);
+           => new TextFieldInfo(text, cursorPosition, ProjectId, ProjectName, ProjectColor, Tags);
 
         public TextFieldInfo WithProjectInfo(long id, string name, string color)
-           => new TextFieldInfo(Text, CursorPosition, id, name, color);
+           => new TextFieldInfo(Text, CursorPosition, id, name, color, Tags);
+
+        public TextFieldInfo RemoveProjectInfo()
+            => new TextFieldInfo(Text, CursorPosition, null, "", "", Tags);
+
+
+        public TextFieldInfo RemoveTagQueryFromDescriptionIfNeeded()
+        {
+            var indexOfTagQuerySymbol = Text.IndexOf(QuerySymbols.Tags);
+            if (indexOfTagQuerySymbol < 0) return this;
+
+            var newText = Text.Substring(0, indexOfTagQuerySymbol);
+            return WithTextAndCursor(newText, newText.Length);
+        }
 
         public TextFieldInfo RemoveProjectQueryFromDescriptionIfNeeded()
         {
@@ -43,9 +65,16 @@ namespace Toggl.Foundation.Autocomplete
             if (indexOfProjectQuerySymbol < 0) return this;
 
             var newText = Text.Substring(0, indexOfProjectQuerySymbol);
-            return new TextFieldInfo(newText, newText.Length);
+            return WithTextAndCursor(newText, newText.Length);
         }
 
+        public TextFieldInfo AddTag(TagSuggestion tagSuggestion)
+        {
+            var tags = new List<TagSuggestion>(Tags) { tagSuggestion }.ToArray();
+            
+            return new TextFieldInfo(Text, CursorPosition, ProjectId, ProjectName, ProjectColor, tags);
+        }
+       
         public static bool operator ==(TextFieldInfo left, TextFieldInfo right)
             => left.Equals(right);
 

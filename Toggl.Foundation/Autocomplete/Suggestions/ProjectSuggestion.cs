@@ -36,6 +36,7 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
         private ProjectSuggestion()
         {
             ProjectId = 0;
+            ClientName = "";
             ProjectName = Resources.NoProject;
             ProjectColor = "#A3A3A3";
         }
@@ -45,8 +46,8 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
             ProjectId = project.Id;
             ProjectName = project.Name;
             ProjectColor = project.Color;
-            Workspace = project.Workspace?.Name;
-            ClientName = project.Client?.Name;
+            ClientName = project.Client?.Name ?? "";
+            Workspace = project.Workspace?.Name ?? "";
         }
 
         public override int GetHashCode()

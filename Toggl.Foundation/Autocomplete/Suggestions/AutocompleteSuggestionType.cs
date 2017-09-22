@@ -3,6 +3,7 @@
     public enum AutocompleteSuggestionType
     {
         TimeEntries,
-        Projects
+        Projects,
+        Tags
     }
 }

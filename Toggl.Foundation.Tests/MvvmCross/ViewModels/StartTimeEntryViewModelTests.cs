@@ -191,15 +191,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 AutocompleteProvider
                     .Query(Arg.Is<TextFieldInfo>(info => info.Text.Contains("@")))
                     .Returns(Observable.Return(items));
+                
+                AutocompleteProvider
+                    .Query(Arg.Any<string>(), Arg.Is(AutocompleteSuggestionType.Projects))
+                    .Returns(Observable.Return(items));
             }
 
             [Fact]
             public void StartProjectSuggestionEvenIfTheProjectHasAlreadyBeenSelected()
             {
                 ViewModel.Prepare(DateTimeOffset.UtcNow);
-                ViewModel.TextFieldInfo = new TextFieldInfo(
-                    Description, Description.Length,
-                    ProjectId, ProjectName, ProjectColor);
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty
+                    .WithTextAndCursor(Description, Description.Length)
+                    .WithProjectInfo(ProjectId, ProjectName, ProjectColor);
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
 
@@ -222,7 +226,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 const string description = "Testing Toggl Apps";
                 var expected = $"{description}@";
                 ViewModel.Prepare(DateTimeOffset.UtcNow);
-                ViewModel.TextFieldInfo = new TextFieldInfo(description, description.Length);
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, description.Length);
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
 
@@ -245,7 +249,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void SetsTheIsSuggestingProjectsPropertyToFalseIfInProjectSuggestionMode(string description)
             {
                 ViewModel.Prepare(DateTimeOffset.UtcNow);
-                ViewModel.TextFieldInfo = new TextFieldInfo(description, description.Length);
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, description.Length);
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
 
@@ -269,7 +273,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 string description, string expected)
             {
                 ViewModel.Prepare(DateTimeOffset.UtcNow);
-                ViewModel.TextFieldInfo = new TextFieldInfo(description, description.Length);
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, description.Length);
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
 
@@ -323,7 +327,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var description = "Testing Toggl apps";
 
                 ViewModel.Prepare(date);
-                ViewModel.TextFieldInfo = new TextFieldInfo(description, 0);
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
                 ViewModel.DoneCommand.Execute();
 
                 await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
@@ -415,7 +419,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 {
                     Suggestion = new ProjectSuggestion(Project);
 
-                    ViewModel.TextFieldInfo = new TextFieldInfo("Something @togg", 15);
+                    ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor("Something @togg", 15);
                 }
 
                 [Fact]
@@ -470,7 +474,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public void IsClearedWhenThereAreNoWordsToQuery()
             {
-                ViewModel.TextFieldInfo = new TextFieldInfo("", 0);
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor("", 0);
 
                 ViewModel.Suggestions.Should().HaveCount(0);
             }

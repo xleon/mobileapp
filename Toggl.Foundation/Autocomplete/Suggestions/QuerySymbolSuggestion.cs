@@ -6,7 +6,8 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
     {
         internal static QuerySymbolSuggestion[] Suggestions { get; } =
         {
-            new QuerySymbolSuggestion(QuerySymbols.ProjectsString, nameof(QuerySymbols.Projects))
+            new QuerySymbolSuggestion(QuerySymbols.ProjectsString, nameof(QuerySymbols.Projects)),
+            new QuerySymbolSuggestion(QuerySymbols.TagsString, nameof(QuerySymbols.Tags))
         };
 
         public string Symbol { get; }

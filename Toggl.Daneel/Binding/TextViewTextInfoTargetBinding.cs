@@ -80,7 +80,11 @@ namespace Toggl.Daneel.Binding
         private void onProjectDeleted(object sender, EventArgs e)
         {
             var description = Target.GetDescription(textFieldInfo);
-            textFieldInfoSubject.OnNext(new TextFieldInfo(description, description.Length));
+
+            textFieldInfoSubject.OnNext(
+                textFieldInfo
+                    .RemoveProjectInfo()
+                    .WithTextAndCursor(description, description.Length));
         }
 
         private void queueValueChange()

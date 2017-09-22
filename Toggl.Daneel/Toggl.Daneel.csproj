@@ -330,6 +330,7 @@
     <InterfaceDefinition Include="Views\SelectProjectHeaderViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectDateTimeViewController.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntryEmptyViewCell.xib" />
+    <InterfaceDefinition Include="Views\TagSuggestionViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -471,6 +472,10 @@
       <DependentUpon>StartTimeEntryEmptyViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\DateExtensions.cs" />
+    <Compile Include="Views\TagSuggestionViewCell.cs" />
+    <Compile Include="Views\TagSuggestionViewCell.designer.cs">
+      <DependentUpon>TagSuggestionViewCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

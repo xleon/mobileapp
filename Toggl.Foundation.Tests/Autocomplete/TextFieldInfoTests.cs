@@ -14,8 +14,9 @@ namespace Toggl.Foundation.Tests.Autocomplete
             protected const string ProjectColor = "#F41F19";
             protected const string Description = "Testing Toggl mobile apps";
 
-            protected TextFieldInfo CreateDefaultTextFieldInfo()
-                => new TextFieldInfo(Description, Description.Length, ProjectId, ProjectName, ProjectColor);
+            protected TextFieldInfo CreateDefaultTextFieldInfo() => TextFieldInfo.Empty
+                .WithTextAndCursor(Description, Description.Length)
+                .WithProjectInfo(ProjectId, ProjectName, ProjectColor);
         }
 
         public sealed class TheDescriptionCursorPositionProperty
@@ -25,7 +26,7 @@ namespace Toggl.Foundation.Tests.Autocomplete
             {
                 if (text == null) return;
 
-                var textFieldInfo = new TextFieldInfo(text, cursor);
+                var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(text, cursor);
 
                 textFieldInfo.DescriptionCursorPosition.Should().BeLessOrEqualTo(text.Length);
             }
@@ -37,10 +38,9 @@ namespace Toggl.Foundation.Tests.Autocomplete
             public void ChangesOnlyTheTextAndCursorPositionWhileMaintainingTheOtherFields()
             {
                 const string newDescription = "Some other text";
-                var expected = new TextFieldInfo(
-                    newDescription, newDescription.Length,
-                    ProjectId, ProjectName, ProjectColor
-                );
+                var expected = TextFieldInfo.Empty
+                    .WithTextAndCursor(newDescription, newDescription.Length)
+                    .WithProjectInfo(ProjectId, ProjectName, ProjectColor);
 
                 var textFieldInfo =
                     CreateDefaultTextFieldInfo()
@@ -58,10 +58,9 @@ namespace Toggl.Foundation.Tests.Autocomplete
                 const long newProjectId = 11;
                 const string newProjectName = "Some other project";
                 const string newProjectColor = "Some other project";
-                var expected = new TextFieldInfo(
-                    Description, Description.Length,
-                    newProjectId, newProjectName, newProjectColor
-                );
+                var expected = TextFieldInfo.Empty
+                    .WithTextAndCursor(Description, Description.Length)
+                    .WithProjectInfo(newProjectId, newProjectName, newProjectColor);
 
                 var textFieldInfo =
                     CreateDefaultTextFieldInfo()
@@ -78,9 +77,9 @@ namespace Toggl.Foundation.Tests.Autocomplete
             {
                 var newDescription = $"{Description}@something";
 
-                var textFieldInfo = new TextFieldInfo(
-                    newDescription, newDescription.Length,
-                    ProjectId, ProjectName, ProjectColor)
+                var textFieldInfo = TextFieldInfo.Empty
+                    .WithTextAndCursor(newDescription, newDescription.Length)
+                    .WithProjectInfo(ProjectId, ProjectName, ProjectColor)
                     .RemoveProjectQueryFromDescriptionIfNeeded();
 
                 textFieldInfo.Text.Should().Be(Description);
@@ -95,6 +94,50 @@ namespace Toggl.Foundation.Tests.Autocomplete
                     textFieldInfo.RemoveProjectQueryFromDescriptionIfNeeded();
 
                 textFieldInfo.Should().Be(newTextFieldInfo);
+            }
+        }
+
+        public sealed class RemoveTagQueryFromDescriptionIfNeeded : TextFieldInfoTest
+        {
+            [Fact]
+            public void RemovesTheProjectQueryIfAnyHashtagSymbolIsPresent()
+            {
+                var newDescription = $"{Description}#something";
+
+                var textFieldInfo = TextFieldInfo.Empty
+                    .WithTextAndCursor(newDescription, newDescription.Length)
+                    .RemoveTagQueryFromDescriptionIfNeeded();
+
+                textFieldInfo.Text.Should().Be(Description);
+            }
+
+            [Fact]
+            public void DoesNotChangeAnyPropertyIfThereIsNoProjectQueryInTheDescription()
+            {
+                var textFieldInfo = CreateDefaultTextFieldInfo();
+
+                var newTextFieldInfo =
+                    textFieldInfo.RemoveTagQueryFromDescriptionIfNeeded();
+
+                textFieldInfo.Should().Be(newTextFieldInfo);
+            }
+        }
+
+        public sealed class TheRemoveProjectInfoMethod : TextFieldInfoTest
+        {
+            [Fact]
+            public void RemovesAllProjectRelatedFields()
+            {
+                var newDescription = $"{Description}@something";
+
+                var textFieldInfo = TextFieldInfo.Empty
+                    .WithTextAndCursor(newDescription, newDescription.Length)
+                    .WithProjectInfo(ProjectId, ProjectName, ProjectColor)
+                    .RemoveProjectInfo();
+
+                textFieldInfo.ProjectId.Should().BeNull();
+                textFieldInfo.ProjectName.Should().BeEmpty();
+                textFieldInfo.ProjectColor.Should().BeEmpty();
             }
         }
     }

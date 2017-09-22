@@ -25,6 +25,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
         private readonly Subject<TextFieldInfo> infoSubject = new Subject<TextFieldInfo>();
+        private readonly Subject<AutocompleteSuggestionType> queryByTypeSubject = new Subject<AutocompleteSuggestionType>();
 
         private IDisposable queryDisposable;
         private IDisposable elapsedTimeDisposable;
@@ -36,7 +37,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public bool IsSuggestingProjects { get; set; }
 
-        public TextFieldInfo TextFieldInfo { get; set; } = new TextFieldInfo("", 0);
+        public TextFieldInfo TextFieldInfo { get; set; } = TextFieldInfo.Empty;
 
         public TimeSpan ElapsedTime { get; private set; } = TimeSpan.Zero;
 
@@ -92,18 +93,26 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             switch (suggestion)
             {
                 case QuerySymbolSuggestion querySymbolSuggestion:
-                    TextFieldInfo = new TextFieldInfo(querySymbolSuggestion.Symbol, 1);
+                    TextFieldInfo = TextFieldInfo.WithTextAndCursor(querySymbolSuggestion.Symbol, 1);
                     break;
 
                 case TimeEntrySuggestion timeEntrySuggestion:
-                    
-                    TextFieldInfo = new TextFieldInfo(
+
+                    TextFieldInfo = TextFieldInfo.WithTextAndCursor(
                         timeEntrySuggestion.Description,
-                        timeEntrySuggestion.Description.Length,
-                        timeEntrySuggestion.ProjectId,
-                        timeEntrySuggestion.ProjectName,
-                        timeEntrySuggestion.ProjectColor
-                    );
+                        timeEntrySuggestion.Description.Length);
+
+                    if (timeEntrySuggestion.ProjectId.HasValue)
+                    {
+                        TextFieldInfo = TextFieldInfo.WithProjectInfo(
+                            timeEntrySuggestion.ProjectId.Value,
+                            timeEntrySuggestion.ProjectName,
+                            timeEntrySuggestion.ProjectColor);
+                    }
+                    else
+                    {
+                        TextFieldInfo = TextFieldInfo.RemoveProjectInfo();
+                    }
 
                     break;
 
@@ -114,8 +123,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                         .WithProjectInfo(
                             projectSuggestion.ProjectId,
                             projectSuggestion.ProjectName, 
-                            projectSuggestion.ProjectColor
-                        );
+                            projectSuggestion.ProjectColor);
+                    break;
+
+                case TagSuggestion tagSuggestion:
+
+                    TextFieldInfo = TextFieldInfo
+                        .RemoveTagQueryFromDescriptionIfNeeded()
+                        .AddTag(tagSuggestion);
                     break;
             }
         }
@@ -127,10 +142,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             elapsedTimeDisposable =
                 timeService.CurrentDateTimeObservable.Subscribe(currentTime => ElapsedTime = currentTime - StartTime);
 
+            var queryByTypeObservable = 
+                queryByTypeSubject
+                    .AsObservable()
+                    .SelectMany(type => dataSource.AutocompleteProvider.Query("", type));
+
             queryDisposable = 
                 Observable.Return(TextFieldInfo).StartWith()
                     .Merge(infoSubject.AsObservable())
                     .SelectMany(dataSource.AutocompleteProvider.Query)
+                    .Merge(queryByTypeObservable)
                     .Subscribe(onSuggestions);
         }
 
@@ -149,12 +170,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             if (TextFieldInfo.ProjectId != null)
             {
-                infoSubject.OnNext(new TextFieldInfo(QuerySymbols.ProjectsString, 1));
+                queryByTypeSubject.OnNext(AutocompleteSuggestionType.Projects);
                 return;
             }
 
             var newText = TextFieldInfo.Text.Insert(TextFieldInfo.CursorPosition, QuerySymbols.ProjectsString);
-            TextFieldInfo = new TextFieldInfo(newText, TextFieldInfo.CursorPosition + 1);
+            TextFieldInfo = TextFieldInfo.WithTextAndCursor(newText, TextFieldInfo.CursorPosition + 1);
         }
 
         private void toggleBillable() => IsBillable = !IsBillable;
