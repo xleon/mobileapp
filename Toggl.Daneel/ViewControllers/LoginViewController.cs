@@ -171,6 +171,8 @@ namespace Toggl.Daneel.ViewControllers
 
             backButton.SetTitleTextAttributes(attributes, UIControlState.Normal);
             nextButton.SetTitleTextAttributes(attributes, UIControlState.Normal);
+            backButton.SetTitleTextAttributes(attributes, UIControlState.Disabled);
+            nextButton.SetTitleTextAttributes(attributes, UIControlState.Disabled);
         }
     }
 }
