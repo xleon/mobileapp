@@ -164,6 +164,7 @@
     <Compile Include="Models\ProjectTests.cs" />
     <Compile Include="Exceptions\ApiErrorResponsesTests.cs" />
     <Compile Include="Models\WorkspaceFeaturesTests.cs" />
+    <Compile Include="Serialization\RequiresFeatureAttributeSerializaitonTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">

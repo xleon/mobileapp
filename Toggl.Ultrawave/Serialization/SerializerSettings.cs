@@ -1,19 +1,19 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace Toggl.Ultrawave.Serialization
 {
     internal static class SerializerSettings
     {
-        public static JsonSerializerSettings For<TContractResolver>()
-            where TContractResolver : DefaultContractResolver, new()
+        public static JsonSerializerSettings For<TContractResolver>(TContractResolver contractResolver)
+            where TContractResolver : DefaultContractResolver
         {
+            contractResolver.NamingStrategy = new SnakeCaseNamingStrategy();
+
             return new JsonSerializerSettings
             {
-                ContractResolver = new TContractResolver
-                {
-                    NamingStrategy = new SnakeCaseNamingStrategy()    
-                },
+                ContractResolver = contractResolver,
                 DateFormatString = @"yyyy-MM-dd\THH:mm:ssK"
             };
         }

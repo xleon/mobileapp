@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Multivac;
+using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
@@ -30,10 +30,10 @@ namespace Toggl.Ultrawave.ApiClients
             this.AuthHeader = credentials.Header;
         }
 
-        protected IObservable<List<TInterface>> CreateListObservable<TModel, TInterface>(Endpoint endpoint, HttpHeader header, List<TModel> entities, SerializationReason serializationReason)
+        protected IObservable<List<TInterface>> CreateListObservable<TModel, TInterface>(Endpoint endpoint, HttpHeader header, List<TModel> entities, SerializationReason serializationReason, IWorkspaceFeatureCollection features = null)
             where TModel : class, TInterface
         {
-            var body = serializer.Serialize(entities, serializationReason);
+            var body = serializer.Serialize(entities, serializationReason, features);
             return CreateListObservable<TModel, TInterface>(endpoint, header, body);
         }
 
@@ -49,8 +49,8 @@ namespace Toggl.Ultrawave.ApiClients
             return observable.Select(items => items?.ToList<TInterface>());
         }
 
-        protected IObservable<T> CreateObservable<T>(Endpoint endpoint, HttpHeader header, T entity, SerializationReason serializationReason) {
-            var body = serializer.Serialize<T>(entity, serializationReason);
+        protected IObservable<T> CreateObservable<T>(Endpoint endpoint, HttpHeader header, T entity, SerializationReason serializationReason, IWorkspaceFeatureCollection features = null) {
+            var body = serializer.Serialize<T>(entity, serializationReason, features);
             return CreateObservable<T>(endpoint, header, body);
         }
         

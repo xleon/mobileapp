@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace Toggl.Ultrawave.Serialization
 {
-    internal sealed class IgnoreAttributeContractResolver<TIgnoredAttribute> : DefaultContractResolver
+    internal sealed class IgnoreAttributeFilter<TIgnoredAttribute> : IPropertiesFilter
         where TIgnoredAttribute : IgnoreSerializationAttribute
 {
-        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
+        public IList<JsonProperty> Filter(IList<JsonProperty> properties)
         {
-            IList<JsonProperty> properties = base.CreateProperties(type, memberSerialization);
             foreach (JsonProperty property in properties)
             {
                 var attributes = property.AttributeProvider.GetAttributes(typeof(TIgnoredAttribute), false);
@@ -20,6 +17,6 @@ namespace Toggl.Ultrawave.Serialization
             }
 
             return properties;
-        } 
+        }
     }
 }

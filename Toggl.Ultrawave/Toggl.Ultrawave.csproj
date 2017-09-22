@@ -61,7 +61,11 @@
     <Compile Include="Network\Endpoints\WorkspaceFeaturesEndpoints.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ITogglApi.cs" />
+    <Compile Include="Serialization\Attributes\RequiresFeatureAttribute.cs" />
     <Compile Include="Serialization\ConcreteListTypeConverter.cs" />
+    <Compile Include="Serialization\FilterPropertiesContractResolver.cs" />
+    <Compile Include="Serialization\PropertiesFilters\IPropertiesFilter.cs" />
+    <Compile Include="Serialization\PropertiesFilters\RequiresFeatureAttributeFilter.cs" />
     <Compile Include="TogglApi.cs" />
     <Compile Include="ApiClients\TagsApi.cs" />
     <Compile Include="ApiClients\TasksApi.cs" />
@@ -99,7 +103,7 @@
     <Compile Include="Network\Endpoints\TimeEntryEndpoints.cs" />
     <Compile Include="Network\Endpoints\TagEndpoints.cs" />
     <Compile Include="Exceptions\ApiException.cs" />
-    <Compile Include="Serialization\IgnoreAttributeContractResolver.cs" />
+    <Compile Include="Serialization\PropertiesFilters\IgnoreAttributeFilter.cs" />
     <Compile Include="Serialization\SerializerSettings.cs" />
     <Compile Include="Serialization\IJsonSerializer.cs" />
     <Compile Include="Serialization\JsonSerializer.cs" />
