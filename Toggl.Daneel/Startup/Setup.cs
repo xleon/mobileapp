@@ -74,7 +74,7 @@ namespace Toggl.Daneel
             Mvx.RegisterSingleton<ITimeService>(timeService);
             Mvx.RegisterSingleton<ISuggestionProviderContainer>(
                 new SuggestionProviderContainer(
-                    new MostUsedTimeEntryProvider(database, timeService)
+                    new MostUsedTimeEntrySuggestionProvider(database, timeService)
                 )
             );
 

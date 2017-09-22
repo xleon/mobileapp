@@ -77,7 +77,7 @@
     <Compile Include="Sync\StateMachine\StateResult.cs" />
     <Compile Include="Sync\StateMachine\Transition.cs" />
     <Compile Include="DataSources\ProjectsDataSource.cs" />
-    <Compile Include="Suggestions\MostUsedTimeEntryProvider.cs" />
+    <Compile Include="Suggestions\MostUsedTimeEntrySuggestionProvider.cs" />
     <Compile Include="Suggestions\Interfaces\ISuggestionProvider.cs" />
     <Compile Include="Suggestions\Interfaces\ISuggestionProviderContainer.cs" />
     <Compile Include="Suggestions\SuggestionProviderContainer.cs" />
