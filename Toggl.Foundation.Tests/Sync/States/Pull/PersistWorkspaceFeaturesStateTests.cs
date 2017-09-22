@@ -55,7 +55,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                 Observable.Return(new List<IClient>()),
                 Observable.Return(new List<IProject>()),
                 Observable.Return(new List<ITimeEntry>()),
-                Observable.Return(new List<ITag>()));
+                Observable.Return(new List<ITag>()),
+                Observable.Return(new List<ITask>()));
 
             protected override List<IWorkspaceFeatureCollection> CreateComplexListWhereTheLastUpdateEntityIsDeleted(DateTimeOffset? at)
                 => new List<IWorkspaceFeatureCollection>
@@ -68,8 +69,8 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             protected override IDatabaseWorkspaceFeatureCollection Clean(IWorkspaceFeatureCollection features) => Models.WorkspaceFeatureCollection.From(features);
 
-            protected override Func<IDatabaseWorkspaceFeatureCollection, bool> ArePersistedAndClean(List<IWorkspaceFeatureCollection> featureCollections)
-                => persisted => featureCollections.Any(w => w.WorkspaceId == persisted.WorkspaceId);
+            protected override Func<IDatabaseWorkspaceFeatureCollection, bool> ArePersistedAndClean(List<IWorkspaceFeatureCollection> entities)
+                => persisted => entities.Any(w => w.WorkspaceId == persisted.WorkspaceId);
         }
     }
 }

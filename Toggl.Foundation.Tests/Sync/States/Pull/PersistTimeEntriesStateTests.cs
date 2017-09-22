@@ -57,7 +57,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                     Observable.Return(new List<IClient>()),
                     Observable.Return(new List<IProject>()),
                     Observable.Return(timeEntries),
-                    Observable.Return(new List<ITag>()));
+                    Observable.Return(new List<ITag>()),
+                    Observable.Return(new List<ITask>()));
 
             protected override List<ITimeEntry> CreateComplexListWhereTheLastUpdateEntityIsDeleted(DateTimeOffset? maybeAt)
             {
@@ -75,8 +76,8 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             protected override IDatabaseTimeEntry Clean(ITimeEntry entry) => Models.TimeEntry.Clean(entry);
 
-            protected override Func<IDatabaseTimeEntry, bool> ArePersistedAndClean(List<ITimeEntry> timeEntries)
-                => persisted => persisted.SyncStatus == SyncStatus.InSync && timeEntries.Any(te => te.Description == persisted.Description);
+            protected override Func<IDatabaseTimeEntry, bool> ArePersistedAndClean(List<ITimeEntry> entities)
+                => persisted => persisted.SyncStatus == SyncStatus.InSync && entities.Any(te => te.Description == persisted.Description);
         }
     }
 }

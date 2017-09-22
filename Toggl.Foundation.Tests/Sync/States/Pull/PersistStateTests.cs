@@ -240,9 +240,13 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             protected FetchObservables CreateFetchObservables(
                 FetchObservables old, ISinceParameters sinceParameters,
-                IObservable<List<IWorkspace>> workspaces = null, IObservable<List<IWorkspaceFeatureCollection>> workspaceFeatures = null,
-                IObservable<List<IClient>> clients = null, IObservable<List<IProject>> projects = null,
-                IObservable<List<ITimeEntry>> timeEntries = null, IObservable<List<ITag>> tags = null)
+                IObservable<List<IWorkspace>> workspaces = null,
+                IObservable<List<IWorkspaceFeatureCollection>> workspaceFeatures = null,
+                IObservable<List<IClient>> clients = null,
+                IObservable<List<IProject>> projects = null,
+                IObservable<List<ITimeEntry>> timeEntries = null,
+                IObservable<List<ITag>> tags = null,
+                IObservable<List<ITask>> tasks = null)
             => new FetchObservables(
                 old?.SinceParameters ?? sinceParameters,
                 old?.Workspaces ?? workspaces,
@@ -250,7 +254,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                 old?.Clients ?? clients,
                 old?.Projects ?? projects,
                 old?.TimeEntries ?? timeEntries,
-                old?.Tags ?? tags);
+                old?.Tags ?? tags,
+                old?.Tasks ?? tasks);
 
             protected abstract TState CreateState(IRepository<TDatabaseInterface> repository, ISinceParameterRepository sinceParameterRepository);
 

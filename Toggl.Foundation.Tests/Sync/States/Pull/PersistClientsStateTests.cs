@@ -55,7 +55,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                 Observable.Return(clients),
                 Observable.Return(new List<IProject>()),
                 Observable.Return(new List<ITimeEntry>()),
-                Observable.Return(new List<ITag>()));
+                Observable.Return(new List<ITag>()),
+                Observable.Return(new List<ITask>()));
 
             protected override bool IsDeletedOnServer(IClient entity) => entity.ServerDeletedAt.HasValue;
 
@@ -70,8 +71,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                     new Client { At = at?.AddDays(-2) ?? DateTimeOffset.Now, Name = Guid.NewGuid().ToString() }
                 };
 
-            protected override Func<IDatabaseClient, bool> ArePersistedAndClean(List<IClient> clients)
-                => persisted => persisted.SyncStatus == SyncStatus.InSync && clients.Any(w => w.Name == persisted.Name);
+            protected override Func<IDatabaseClient, bool> ArePersistedAndClean(List<IClient> entities)
+                => persisted => persisted.SyncStatus == SyncStatus.InSync && entities.Any(w => w.Name == persisted.Name);
         }
     }
 }

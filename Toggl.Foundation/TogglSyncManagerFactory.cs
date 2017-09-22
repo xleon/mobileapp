@@ -51,6 +51,7 @@ namespace Toggl.Foundation
             var persistClients = new PersistClientsState(database.Clients, database.SinceParameters);
             var persistProjects = new PersistProjectsState(database.Projects, database.SinceParameters);
             var persistTimeEntries = new PersistTimeEntriesState(dataSource.TimeEntries, database.SinceParameters);
+            var persistTasks = new PersistTasksState(database.Tasks, database.SinceParameters);
 
             transitions.ConfigureTransition(entryPoint, fetchAllSince.Start);
             transitions.ConfigureTransition(fetchAllSince.FetchStarted, persistWorkspaces.Start);
@@ -58,7 +59,8 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(persistWorkspaceFeatures.FinishedPersisting, persistTags.Start);
             transitions.ConfigureTransition(persistTags.FinishedPersisting, persistClients.Start);
             transitions.ConfigureTransition(persistClients.FinishedPersisting, persistProjects.Start);
-            transitions.ConfigureTransition(persistProjects.FinishedPersisting, persistTimeEntries.Start);
+            transitions.ConfigureTransition(persistProjects.FinishedPersisting, persistTasks.Start);
+            transitions.ConfigureTransition(persistTasks.FinishedPersisting, persistTimeEntries.Start);
         }
         
         private static void configurePushTransitions(

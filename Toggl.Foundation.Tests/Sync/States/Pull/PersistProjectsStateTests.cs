@@ -57,7 +57,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                 Observable.Return(new List<IClient>()),
                 Observable.Return(projects),
                 Observable.Return(new List<ITimeEntry>()),
-                Observable.Return(new List<ITag>()));
+                Observable.Return(new List<ITag>()),
+                Observable.Return(new List<ITask>()));
 
             protected override bool IsDeletedOnServer(IProject entity) => entity.ServerDeletedAt.HasValue;
 
@@ -72,8 +73,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                     new Project { At = at?.AddDays(-2) ?? DateTimeOffset.Now, Name = Guid.NewGuid().ToString() }
                 };
 
-            protected override Func<IDatabaseProject, bool> ArePersistedAndClean(List<IProject> projects)
-                => persisted => persisted.SyncStatus == SyncStatus.InSync && projects.Any(w => w.Name == persisted.Name);
+            protected override Func<IDatabaseProject, bool> ArePersistedAndClean(List<IProject> entities)
+                => persisted => persisted.SyncStatus == SyncStatus.InSync && entities.Any(w => w.Name == persisted.Name);
         }
     }
 }

@@ -55,7 +55,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                     Observable.Return(new List<IClient>()),
                     Observable.Return(new List<IProject>()),
                     Observable.Return(new List<ITimeEntry>()),
-                    Observable.Return(tags));
+                    Observable.Return(tags),
+                    Observable.Return(new List<ITask>()));
 
             protected override bool IsDeletedOnServer(ITag entity) => false;
 
@@ -73,8 +74,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                 };
             }   
 
-            protected override Func<IDatabaseTag, bool> ArePersistedAndClean(List<ITag> tags)
-                => persisted => persisted.SyncStatus == SyncStatus.InSync && tags.Any(te => te.Name == persisted.Name);
+            protected override Func<IDatabaseTag, bool> ArePersistedAndClean(List<ITag> entities)
+                => persisted => persisted.SyncStatus == SyncStatus.InSync && entities.Any(te => te.Name == persisted.Name);
         }
     }
 }
