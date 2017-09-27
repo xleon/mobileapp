@@ -84,6 +84,16 @@ namespace Toggl.Daneel.Views
                           .To(vm => vm.HasProject)
                           .WithConversion(visibilityConverter);
 
+                bindingSet.Bind(AddDescriptionLabel)
+                          .For(v => v.BindVisibility())
+                          .To(vm => vm.HasDescription)
+                          .WithConversion(invertedVisibilityConverter);
+
+                bindingSet.Bind(AddDescriptionTopDistanceConstraint)
+                          .For(v => v.Constant)
+                          .To(vm => vm.HasProject)
+                          .WithConversion(descriptionTopDistanceValueConverter);
+
                 bindingSet.Bind(SyncErrorImageView)
                           .For(v => v.BindVisibility())
                           .To(vm => vm.CanSync)
