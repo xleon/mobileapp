@@ -16,12 +16,13 @@ namespace Toggl.Foundation
             ITogglDatabase database,
             ITogglApi api,
             ITogglDataSource dataSource,
+            ITimeService timeService,
             IScheduler scheduler)
         {
             var queue = new SyncStateQueue();
             var entryPoints = new StateMachineEntryPoints();
             var transitions = new TransitionHandlerProvider();
-            ConfigureTransitions(transitions, database, api, dataSource, entryPoints);
+            ConfigureTransitions(transitions, database, api, dataSource, timeService, entryPoints);
             var stateMachine = new StateMachine(transitions, scheduler);
             var orchestrator = new StateMachineOrchestrator(stateMachine, entryPoints);
 
@@ -31,20 +32,24 @@ namespace Toggl.Foundation
         public static void ConfigureTransitions(
             TransitionHandlerProvider transitions,
             ITogglDatabase database,
-            ITogglApi api, ITogglDataSource dataSource,
+            ITogglApi api,
+            ITogglDataSource dataSource,
+            ITimeService timeService,
             StateMachineEntryPoints entryPoints)
         {
-            configurePullTransitions(transitions, database, api, dataSource, entryPoints.StartPullSync);
+            configurePullTransitions(transitions, database, api, dataSource, timeService, entryPoints.StartPullSync);
             configurePushTransitions(transitions, database, api, dataSource, entryPoints.StartPushSync);
         }
 
         private static void configurePullTransitions(
             TransitionHandlerProvider transitions,
             ITogglDatabase database,
-            ITogglApi api, ITogglDataSource dataSource,
+            ITogglApi api,
+            ITogglDataSource dataSource,
+            ITimeService timeService,
             StateResult entryPoint)
         {
-            var fetchAllSince = new FetchAllSinceState(database, api);
+            var fetchAllSince = new FetchAllSinceState(database, api, timeService);
             var persistWorkspaces = new PersistWorkspacesState(database.Workspaces, database.SinceParameters);
             var persistWorkspaceFeatures = new PersistWorkspacesFeaturesState(database.WorkspaceFeatures, database.SinceParameters);
             var persistTags = new PersistTagsState(database.Tags, database.SinceParameters);
