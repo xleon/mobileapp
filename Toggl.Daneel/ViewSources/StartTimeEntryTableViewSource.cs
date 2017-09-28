@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Foundation;
 using MvvmCross.Binding.iOS.Views;
 using MvvmCross.Plugins.Color.iOS;
