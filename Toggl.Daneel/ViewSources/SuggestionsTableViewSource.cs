@@ -26,7 +26,7 @@ namespace Toggl.Daneel.ViewSources
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
             var totalWidth = UIScreen.MainScreen.Bounds.Width;
-            return new UIView(new CGRect(0, 0, totalWidth, 45))
+            var header = new UIView(new CGRect(0, 0, totalWidth, 45))
             {
                 new UILabel(new CGRect(16, 16, totalWidth - 16, 19))
                 {
@@ -34,6 +34,8 @@ namespace Toggl.Daneel.ViewSources
                     Text = Resources.SuggestionsHeader
                 }
             };
+            header.BackgroundColor = UIColor.White;
+            return header;
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
