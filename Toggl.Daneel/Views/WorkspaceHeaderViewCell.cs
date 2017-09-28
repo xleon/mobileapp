@@ -3,14 +3,13 @@ using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS.Views;
 using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
 
 namespace Toggl.Daneel.Views
 {
-    public sealed partial class SelectTagsHeaderViewCell : MvxTableViewHeaderFooterView
+    public sealed partial class WorkspaceHeaderViewCell : MvxTableViewHeaderFooterView
     {
-        public static readonly NSString Key = new NSString(nameof(SelectTagsHeaderViewCell));
+        public static readonly NSString Key = new NSString(nameof(WorkspaceHeaderViewCell));
         public static readonly UINib Nib;
 
         public bool TopSeparatorHidden
@@ -19,12 +18,12 @@ namespace Toggl.Daneel.Views
             set => TopSeparator.Hidden = value;
         }
 
-        static SelectTagsHeaderViewCell()
+        static WorkspaceHeaderViewCell()
         {
-            Nib = UINib.FromName(nameof(SelectTagsHeaderViewCell), NSBundle.MainBundle);
+            Nib = UINib.FromName(nameof(WorkspaceHeaderViewCell), NSBundle.MainBundle);
         }
 
-        public SelectTagsHeaderViewCell(IntPtr handle) : base(handle)
+        public WorkspaceHeaderViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }
@@ -35,7 +34,7 @@ namespace Toggl.Daneel.Views
 
             this.DelayBind(() =>
             {
-                var bindingSet = this.CreateBindingSet<SelectTagsHeaderViewCell, WorkspaceGroupedCollection<SelectableTagViewModel>>();
+                var bindingSet = this.CreateBindingSet<WorkspaceHeaderViewCell, WorkspaceGroupedCollection<object>>();
 
                 bindingSet.Bind(WorkspaceLabel).To(vm => vm.WorkspaceName);
 

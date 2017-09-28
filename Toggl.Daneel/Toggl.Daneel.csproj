@@ -339,13 +339,12 @@
     <InterfaceDefinition Include="Views\StartTimeEntryViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\EditDurationViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectProjectViewController.xib" />
-    <InterfaceDefinition Include="Views\SelectProjectHeaderViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectDateTimeViewController.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntryEmptyViewCell.xib" />
     <InterfaceDefinition Include="Views\TagSuggestionViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectTagsViewController.xib" />
     <InterfaceDefinition Include="Views\SelectableTagViewCell.xib" />
-    <InterfaceDefinition Include="Views\SelectTagsHeaderViewCell.xib" />
+    <InterfaceDefinition Include="Views\WorkspaceHeaderViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -477,10 +476,6 @@
     <Compile Include="ViewControllers\SelectProjectViewController.designer.cs">
       <DependentUpon>SelectProjectViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\SelectProjectHeaderViewCell.cs" />
-    <Compile Include="Views\SelectProjectHeaderViewCell.designer.cs">
-      <DependentUpon>SelectProjectHeaderViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Combiners\ProjectTaskClientValueCombiner.cs" />
     <Compile Include="Views\StartTimeEntryEmptyViewCell.cs" />
     <Compile Include="Views\StartTimeEntryEmptyViewCell.designer.cs">
@@ -500,10 +495,11 @@
       <DependentUpon>SelectableTagViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\SelectTagsTableViewSource.cs" />
-    <Compile Include="Views\SelectTagsHeaderViewCell.cs" />
-    <Compile Include="Views\SelectTagsHeaderViewCell.designer.cs">
-      <DependentUpon>SelectTagsHeaderViewCell.cs</DependentUpon>
+    <Compile Include="Views\WorkspaceHeaderViewCell.cs" />
+    <Compile Include="Views\WorkspaceHeaderViewCell.designer.cs">
+      <DependentUpon>WorkspaceHeaderViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewSources\GroupedCollectionTableViewSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

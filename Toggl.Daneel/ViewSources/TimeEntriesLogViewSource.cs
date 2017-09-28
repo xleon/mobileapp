@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Binding.ExtensionMethods;
-using MvvmCross.Binding.iOS.Views;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Color.iOS;
 using Toggl.Daneel.Views;
@@ -15,7 +12,7 @@ using UIKit;
 
 namespace Toggl.Daneel.ViewSources
 {
-    public sealed class TimeEntriesLogViewSource : MvxTableViewSource
+    public sealed class TimeEntriesLogViewSource : GroupedCollectionTableViewSource<TimeEntryViewModel>
     {
         private const string cellIdentifier = nameof(TimeEntriesLogViewCell);
         private const string headerCellIdentifier = nameof(TimeEntriesLogHeaderViewCell);
@@ -26,22 +23,11 @@ namespace Toggl.Daneel.ViewSources
         public IMvxAsyncCommand<TimeEntryViewModel> ContinueTimeEntryCommand { get; set; }
 
         public TimeEntriesLogViewSource(UITableView tableView)
-            : base(tableView)
+            : base(tableView, cellIdentifier, headerCellIdentifier)
         {
             tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             tableView.RegisterNibForCellReuse(TimeEntriesLogViewCell.Nib, cellIdentifier);
             tableView.RegisterNibForHeaderFooterViewReuse(TimeEntriesLogHeaderViewCell.Nib, headerCellIdentifier);
-        }
-
-        public override UIView GetViewForHeader(UITableView tableView, nint section)
-        {
-            var grouping = getGroupAt(section);
-
-            var cell = getOrCreateHeaderViewFor(tableView);
-            if (cell is IMvxBindable bindable)
-                bindable.DataContext = grouping;
-            
-            return cell;
         }
 
         public override UIView GetViewForFooter(UITableView tableView, nint section)
@@ -57,43 +43,18 @@ namespace Toggl.Daneel.ViewSources
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var item = GetItemAt(indexPath);
+            var cell = base.GetCell(tableView, indexPath);
 
-            var cell = GetOrCreateCellFor(tableView, indexPath, item);
-            if (cell is TimeEntriesLogViewCell bindable)
-            {
-                bindable.DataContext = item;
-                bindable.ContinueTimeEntryCommand = ContinueTimeEntryCommand;
-            }
-            
-            cell.SelectionStyle = UITableViewCellSelectionStyle.None;
+            if (cell is TimeEntriesLogViewCell logCell)
+                logCell.ContinueTimeEntryCommand = ContinueTimeEntryCommand;
 
             return cell;
         }
-
-        public override nint NumberOfSections(UITableView tableView)
-            => ItemsSource.Count();
-
-        public override nint RowsInSection(UITableView tableview, nint section)
-            => getGroupAt(section).Count();
-
-        private TimeEntryViewModelCollection getGroupAt(nint section)
-            => groupedItems.ElementAt((int)section);
-
-        protected override object GetItemAt(NSIndexPath indexPath)
-            => groupedItems.ElementAtOrDefault(indexPath.Section)?.ElementAtOrDefault((int)indexPath.Item);
-
-        private UITableViewHeaderFooterView getOrCreateHeaderViewFor(UITableView tableView)
-            => tableView.DequeueReusableHeaderFooterView(headerCellIdentifier);
-
-        protected override UITableViewCell GetOrCreateCellFor(UITableView tableView, NSIndexPath indexPath, object item)
-            => tableView.DequeueReusableCell(cellIdentifier, indexPath);
 
         public override nfloat GetHeightForHeader(UITableView tableView, nint section) => 43;
 
         public override nfloat GetHeightForFooter(UITableView tableView, nint section) => 24;
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath) => 64;
-
     }
 }

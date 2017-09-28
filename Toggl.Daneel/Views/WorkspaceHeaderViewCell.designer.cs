@@ -10,8 +10,8 @@ using System.CodeDom.Compiler;
 
 namespace Toggl.Daneel.Views
 {
-    [Register ("SelectTagsHeaderViewCell")]
-    partial class SelectTagsHeaderViewCell
+    [Register ("WorkspaceHeaderViewCell")]
+    partial class WorkspaceHeaderViewCell
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
