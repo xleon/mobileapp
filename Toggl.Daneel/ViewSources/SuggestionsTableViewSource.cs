@@ -6,14 +6,19 @@ using MvvmCross.Binding.ExtensionMethods;
 using MvvmCross.Binding.iOS.Views;
 using Toggl.Daneel.Views;
 using Toggl.Foundation;
+using Toggl.Multivac.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.ViewSources
 {
     public sealed class SuggestionsTableViewSource : MvxTableViewSource
     {
+        private const int rowHeight = 64;
+        private const int headerHeight = 45;
         private const string cellIdentifier = nameof(SuggestionsViewCell);
         private const string emptyCellIdentifier = nameof(SuggestionsEmptyViewCell);
+
+        private int maxNumberOfSuggestions;
 
         public SuggestionsTableViewSource(UITableView tableView)
             : base(tableView)
@@ -21,6 +26,12 @@ namespace Toggl.Daneel.ViewSources
             tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             tableView.RegisterNibForCellReuse(SuggestionsViewCell.Nib, cellIdentifier);
             tableView.RegisterNibForCellReuse(SuggestionsEmptyViewCell.Nib, emptyCellIdentifier);
+        }
+
+        public override void ReloadTableData()
+        {
+            maxNumberOfSuggestions = (int)(TableView.Bounds.Height - headerHeight) / rowHeight;
+            base.ReloadTableData();
         }
 
         public override UIView GetViewForHeader(UITableView tableView, nint section)
@@ -53,12 +64,7 @@ namespace Toggl.Daneel.ViewSources
         public override nint NumberOfSections(UITableView tableView) => 1;
 
         public override nint RowsInSection(UITableView tableview, nint section)
-        {
-            var count = ItemsSource.Count();
-            if (count == 0) return 3;
-
-            return count;
-        }
+            => ItemsSource.Count().Clamp(0, maxNumberOfSuggestions);
 
         protected override object GetItemAt(NSIndexPath indexPath)
         {
@@ -70,8 +76,8 @@ namespace Toggl.Daneel.ViewSources
         protected override UITableViewCell GetOrCreateCellFor(UITableView tableView, NSIndexPath indexPath, object item)
             => tableView.DequeueReusableCell(item == null ? emptyCellIdentifier : cellIdentifier, indexPath);
 
-        public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath) => 64;
+        public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath) => rowHeight;
 
-        public override nfloat GetHeightForHeader(UITableView tableView, nint section) => 45;
+        public override nfloat GetHeightForHeader(UITableView tableView, nint section) => headerHeight;
     }
 }

@@ -12,7 +12,7 @@ namespace Toggl.Foundation.Suggestions
     public sealed class MostUsedTimeEntrySuggestionProvider : ISuggestionProvider
     {
         private const int daysToQuery = 42;
-        private const int maxNumberOfSuggestions = 5;
+        private const int maxNumberOfSuggestions = 7;
         private readonly TimeSpan thresholdPeriod = TimeSpan.FromDays(daysToQuery);
 
         private readonly ITogglDatabase database;

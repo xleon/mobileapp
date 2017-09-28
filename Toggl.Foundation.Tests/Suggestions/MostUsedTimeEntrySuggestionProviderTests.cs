@@ -80,7 +80,7 @@ namespace Toggl.Foundation.Tests.Suggestions
             }
 
             [Fact]
-            public async Task ReturnsUpToFiveSuggestions()
+            public async Task ReturnsUpToSevenSuggestions()
             {
                 var timeEntries = getTimeEntries(2, 2, 2, 3, 3, 4, 5);
 
@@ -90,14 +90,14 @@ namespace Toggl.Foundation.Tests.Suggestions
 
                 var suggestions = await Provider.GetSuggestions().ToList();
 
-                suggestions.Should().HaveCount(5);
+                suggestions.Should().HaveCount(7);
             }
 
             [Fact]
             public async Task SortsTheSuggestionsByUsage()
             {
-                var timeEntries = getTimeEntries(5, 3, 2, 5, 4, 4, 5).ToArray();
-                var expectedDescriptions = new[] { 0, 3, 4, 5, 6 }.Select(i => $"te{i}");
+                var timeEntries = getTimeEntries(5, 3, 2, 5, 4, 4, 5, 4, 3).ToArray();
+                var expectedDescriptions = new[] { 0, 3, 6, 4, 5, 7, 1 }.Select(i => $"te{i}");
 
                 Database.TimeEntries
                         .GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>())
