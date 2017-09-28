@@ -29,12 +29,15 @@ namespace Toggl.Foundation.Suggestions
 
         public IObservable<Suggestion> GetSuggestions()
             => database.TimeEntries
-                       .GetAll(isWithinThreshold)
+                       .GetAll(isWithinThresholdAndHasDescription)
                        .SelectMany(mostUsedTimeEntry)
                        .Take(maxNumberOfSuggestions);
-        
-        private bool isWithinThreshold(ITimeEntry timeEntry)
+
+        private bool isWithinThresholdAndHasDescription(ITimeEntry timeEntry)
         {
+            if (string.IsNullOrEmpty(timeEntry.Description))
+                return false;
+
             var delta = timeService.CurrentDateTime - timeEntry.Start;
             return delta <= thresholdPeriod;
         }
