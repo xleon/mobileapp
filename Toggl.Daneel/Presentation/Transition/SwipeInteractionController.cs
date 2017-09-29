@@ -7,19 +7,19 @@ namespace Toggl.Daneel.Presentation.Transition
 {
     public sealed class SwipeInteractionController : UIPercentDrivenInteractiveTransition
     {
-        private Action onCompletedCallback;
+        private Action onDismissedCallback;
         private UIViewController viewController;
         private bool shouldCompleteTransition = false;
 
         public bool InteractionInProgress { get; set; } = false;
 
-        public void WireToViewController(UIViewController viewController, Action onCompletedCallback)
+        public void WireToViewController(UIViewController viewController, Action onDismissedCallback)
         {
             Ensure.Argument.IsNotNull(viewController, nameof(viewController));
-            Ensure.Argument.IsNotNull(onCompletedCallback, nameof(onCompletedCallback));
+            Ensure.Argument.IsNotNull(onDismissedCallback, nameof(onDismissedCallback));
 
             this.viewController = viewController;
-            this.onCompletedCallback = onCompletedCallback;
+            this.onDismissedCallback = onDismissedCallback;
             prepareGestureRecognizerInView(viewController.View);
         }
 
@@ -60,7 +60,7 @@ namespace Toggl.Daneel.Presentation.Transition
                     }
 
                     FinishInteractiveTransition();
-                    onCompletedCallback();
+                    onDismissedCallback();
                     break;
             }
         }
