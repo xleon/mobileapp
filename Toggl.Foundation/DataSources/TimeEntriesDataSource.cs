@@ -87,6 +87,7 @@ namespace Toggl.Foundation.DataSources
             => idProvider.GetNextIdentifier()
                 .Apply(TimeEntry.Builder.Create)
                 .SetUserId(dto.UserId)
+                .SetTagIds(dto.TagIds)
                 .SetStart(dto.StartTime)
                 .SetBillable(dto.Billable)
                 .SetProjectId(dto.ProjectId)

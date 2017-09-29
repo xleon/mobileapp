@@ -245,14 +245,24 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private async Task done()
         {
             await dataSource.User.Current()
-                .Select(user => new StartTimeEntryDTO
+                .SelectMany(user =>
                 {
-                    UserId = user.Id,
+                    if (TextFieldInfo.ProjectId == null)
+                        return Observable.Return((User: user, WorkspaceId: user.DefaultWorkspaceId));
+
+                    return dataSource.Projects
+                        .GetById(TextFieldInfo.ProjectId.Value)
+                        .Select(project => (User: user, WorkspaceId: project.WorkspaceId));
+                })
+                .Select(tuple => new StartTimeEntryDTO
+                {
                     StartTime = StartTime,
                     Billable = IsBillable,
+                    UserId = tuple.User.Id,
+                    WorkspaceId = tuple.WorkspaceId,
                     Description = TextFieldInfo.Text,
                     ProjectId = TextFieldInfo.ProjectId,
-                    WorkspaceId = user.DefaultWorkspaceId
+                    TagIds = TextFieldInfo.Tags.Select(t => t.TagId).Distinct().ToArray()
                 })
                 .SelectMany(dataSource.TimeEntries.Start);
 

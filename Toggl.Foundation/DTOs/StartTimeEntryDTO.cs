@@ -14,6 +14,8 @@ namespace Toggl.Foundation.DTOs
 
         public long WorkspaceId { get; set; }
 
+        public long[] TagIds { get; set; }
+
         public DateTimeOffset StartTime { get; set; }
     }
 }

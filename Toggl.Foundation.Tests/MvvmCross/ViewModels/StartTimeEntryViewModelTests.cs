@@ -47,7 +47,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         {
             [Theory]
             [ClassData(typeof(ThreeParameterConstructorTestData))]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useTimeService, 
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useTimeService,
                 bool useNavigationService)
             {
                 var dataSource = useDataSource ? DataSource : null;
@@ -192,7 +192,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 if (DateTimeOffset.MinValue.AddHours(MaxTimeEntryDurationInHours) <= now ||
                     DateTimeOffset.MaxValue.AddHours(-1) >= now) return;
-                
+
                 var parameterToReturn = now.AddHours(-2);
                 var tcs = new TaskCompletionSource<DateTimeOffset>();
                 NavigationService
@@ -430,22 +430,151 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheDoneCommand : StartTimeEntryViewModelTest
         {
-            [Fact]
-            public async Task StartsANewTimeEntry()
+            public sealed class StartsANewTimeEntry : StartTimeEntryViewModelTest
             {
-                var date = DateTimeOffset.UtcNow;
-                var description = "Testing Toggl apps";
+                private const long userId = 10;
+                private const long projectId = 11;
+                private const long defaultWorkspaceId = 12;
+                private const long projectWorkspaceId = 13;
+                private const string description = "Testing Toggl apps";
 
-                ViewModel.Prepare(date);
-                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
-                ViewModel.DoneCommand.Execute();
+                private readonly IDatabaseUser user = Substitute.For<IDatabaseUser>();
+                private readonly IDatabaseProject project = Substitute.For<IDatabaseProject>();
 
-                await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
-                    dto.StartTime == date &&
-                    dto.Description == description &&
-                    dto.Billable == false &&
-                    dto.ProjectId == null
-                ));
+                private readonly DateTimeOffset startDate = DateTimeOffset.UtcNow;
+
+                public StartsANewTimeEntry()
+                {
+                    user.Id.Returns(userId);
+                    user.DefaultWorkspaceId.Returns(defaultWorkspaceId);
+                    DataSource.User.Current()
+                        .Returns(Observable.Return(user));
+
+                    project.Id.Returns(projectId);
+                    project.WorkspaceId.Returns(projectWorkspaceId);
+                    DataSource.Projects
+                         .GetById(projectId)
+                         .Returns(Observable.Return(project));
+
+                    ViewModel.Prepare(startDate);
+                }
+
+                [Fact]
+                public async Task WithTheDatePassedWhenNavigatingToTheViewModel()
+                {
+                    ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
+
+                    ViewModel.DoneCommand.Execute();
+
+                    await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
+                        dto.StartTime == startDate
+                    ));
+                }
+
+                [Theory]
+                [InlineData(true)]
+                [InlineData(false)]
+                public async Task WithTheAppropriateValueForBillable(bool billable)
+                {
+                    ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
+                    if (billable != ViewModel.IsBillable)
+                        ViewModel.ToggleBillableCommand.Execute();
+
+                    ViewModel.DoneCommand.Execute();
+
+                    await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
+                        dto.Billable == billable
+                    ));
+                }
+
+                [Fact]
+                public async Task WithTheDefaultWorkspaceIfNoProjectIsProvided()
+                {
+                    ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
+
+                    ViewModel.DoneCommand.Execute();
+
+                    await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
+                        dto.WorkspaceId == defaultWorkspaceId
+                    ));
+                }
+
+                [Fact]
+                public async Task WithTheProjectWorkspaceIfAProjectIsProvided()
+                {
+                    ViewModel.TextFieldInfo = TextFieldInfo.Empty
+                        .WithTextAndCursor(description, 0)
+                        .WithProjectInfo(projectId, "Something", "#123123");
+
+                    ViewModel.DoneCommand.Execute();
+
+                    await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
+                        dto.WorkspaceId == projectWorkspaceId
+                    ));
+                }
+
+                [Fact]
+                public async Task WithTheCurrentUsersId()
+                {
+                    ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
+                    ViewModel.DoneCommand.Execute();
+
+                    await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
+                        dto.UserId == userId
+                    ));
+                }
+
+                [Fact]
+                public async Task WithTheAppropriateProjectId()
+                {
+                    ViewModel.TextFieldInfo = TextFieldInfo.Empty
+                        .WithTextAndCursor(description, 0)
+                        .WithProjectInfo(projectId, "Something", "#123123");
+
+                    ViewModel.DoneCommand.Execute();
+
+                    await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
+                        dto.ProjectId == projectId
+                    ));
+                }
+
+                [Fact]
+                public async Task WithTheAppropriateDescription()
+                {
+                    ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
+
+                    ViewModel.DoneCommand.Execute();
+
+                    await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
+                        dto.Description == description
+                    ));
+                }
+
+                [Fact]
+                public async Task WithTheSelectedTags()
+                {
+                    var tags = Enumerable.Range(0, 3).Select(tagSuggestionFromInt);
+                    var expectedTags = tags.Select(tag => tag.TagId).ToArray();
+                    ViewModel.TextFieldInfo =
+                        tags.Aggregate(TextFieldInfo.Empty.WithTextAndCursor(description, 0),
+                            (info, tag) => info.AddTag(tag));
+                    
+                    ViewModel.DoneCommand.Execute();
+
+                    await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
+                        dto.TagIds.Length == expectedTags.Length &&
+                        dto.TagIds.All(tagId => expectedTags.Contains(tagId))
+                    ));
+                }
+
+                private TagSuggestion tagSuggestionFromInt(int i)
+                {
+                    var tag = Substitute.For<IDatabaseTag>();
+                    tag.Id.Returns(i);
+                    tag.Name.Returns(i.ToString());
+
+                    return new TagSuggestion(tag);
+                }
             }
 
             [Fact]
