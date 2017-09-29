@@ -29,8 +29,10 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 var project = await createProject(togglClient, user.DefaultWorkspaceId);
                 WorkspaceHelper.SetSubscription(user, user.DefaultWorkspaceId, PricingPlans.StarterMonthly).Wait();
-                var taskA = await togglClient.Tasks.Create(randomTask(project, user.Id));
-                var taskB = await togglClient.Tasks.Create(randomTask(project, user.Id));
+                var taskA = randomTask(project, user.Id);
+                await togglClient.Tasks.Create(taskA);
+                var taskB = randomTask(project, user.Id);
+                await togglClient.Tasks.Create(taskB);
 
                 var tasks = await togglClient.Tasks.GetAll();
 
@@ -45,8 +47,10 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 var project = await createProject(togglClient, user.DefaultWorkspaceId);
                 WorkspaceHelper.SetSubscription(user, user.DefaultWorkspaceId, PricingPlans.StarterMonthly).Wait();
-                var task = await togglClient.Tasks.Create(randomTask(project, user.Id));
-                var inactiveTask = await togglClient.Tasks.Create(randomTask(project, user.Id, isActive: false));
+                var task = randomTask(project, user.Id);
+                await togglClient.Tasks.Create(task);
+                var inactiveTask = randomTask(project, user.Id, isActive: false);
+                await togglClient.Tasks.Create(inactiveTask);
 
                 var tasks = await togglClient.Tasks.GetAll();
 
@@ -186,8 +190,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             => togglApi.Tasks.Create(randomTask(project, userId));
 
         private static bool isTheSameAs(ITask a, ITask b)
-            => a.Id == b.Id
-               && a.Name == b.Name
+            => a.Name == b.Name
                && a.Active == b.Active
                && a.ProjectId == b.ProjectId
                && a.EstimatedSeconds == b.EstimatedSeconds
