@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CoreText;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.iOS.Views;
@@ -81,6 +82,12 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.TintColor)
                       .To(vm => vm.IsEditingStartDate)
                       .WithConversion(buttonColorConverter);
+
+            //Visibility
+            bindingSet.Bind(BillableButtonWidthConstraint)
+                      .For(v => v.Constant)
+                      .To(vm => vm.IsBillableAvailable)
+                      .WithConversion(new BoolToConstantValueConverter<nfloat>(42, 0));
 
             //Commands
             bindingSet.Bind(DoneButton).To(vm => vm.DoneCommand);
