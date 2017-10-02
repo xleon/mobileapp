@@ -13,6 +13,7 @@ using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
 using System.Reactive.Disposables;
 using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Foundation.Exceptions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -145,7 +146,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private async Task continueTimeEntry(TimeEntryViewModel timeEntryViewModel)
         {
             await dataSource.TimeEntries.Stop(timeService.CurrentDateTime)
-                            .OnErrorResumeNext(Observable.Return(default(IDatabaseTimeEntry)));
+                .Catch((NoRunningTimeEntryException e) => Observable.Return(default(IDatabaseTimeEntry)));
 
             await dataSource.User
                 .Current()

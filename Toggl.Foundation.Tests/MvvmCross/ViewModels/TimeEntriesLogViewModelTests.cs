@@ -7,6 +7,7 @@ using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.DTOs;
+using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -269,7 +270,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask StartsATimeEntryEvenIfTheStopMethodThrowsBecauseThereWasNoRunningTimeEntry()
             {
                 DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>())
-                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new Exception()));
+                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new NoRunningTimeEntryException()));
                 var timeEntry = Substitute.For<IDatabaseTimeEntry>();
                 timeEntry.Stop.Returns(DateTimeOffset.Now);
                 var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
@@ -277,6 +278,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
 
                 await DataSource.TimeEntries.Start(Arg.Any<StartTimeEntryDTO>());
+            }
+
+            [Fact]
+            public async ThreadingTask DoesNotStartATimeEntryWhenTheStopMethodThrowsBecauseOfOtherReasonThatThereWasNoRunningTimeEntry()
+            {
+                DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>())
+                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new InvalidOperationException()));
+                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                timeEntry.Stop.Returns(DateTimeOffset.Now);
+                var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
+
+                Action executingCommand = () => ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel).Wait();
+
+                executingCommand.ShouldThrow<InvalidOperationException>();
+                await DataSource.TimeEntries.DidNotReceive().Start(Arg.Any<StartTimeEntryDTO>());
             }
 
             [Property]

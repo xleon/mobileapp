@@ -10,6 +10,7 @@ using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Foundation.DTOs;
+using Toggl.Foundation.Exceptions;
 
 namespace Toggl.Foundation.DataSources
 {
@@ -101,10 +102,10 @@ namespace Toggl.Foundation.DataSources
         public IObservable<IDatabaseTimeEntry> Stop(DateTimeOffset stopTime)
             => repository
                     .GetAll(te => te.Stop == null)
-                    .SelectMany(timeEntries =>
-                        timeEntries.Single()
-                            .With(stopTime)
-                            .Apply(this.Update));
+                    .Select(timeEntries => timeEntries.SingleOrDefault() ?? throw new NoRunningTimeEntryException())
+                    .SelectMany(timeEntry => timeEntry
+                        .With(stopTime)
+                        .Apply(this.Update));
 
         public IObservable<IDatabaseTimeEntry> Update(EditTimeEntryDto dto)
             => repository.GetById(dto.Id)

@@ -8,6 +8,7 @@ using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DTOs;
+using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac.Models;
@@ -297,7 +298,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 var observable = TimeEntriesSource.Stop(ValidTime);
                 observable.Subscribe(observer);
 
-                observer.Messages.Single().Value.Exception.Should().BeOfType<InvalidOperationException>();
+                observer.Messages.Single().Value.Exception.Should().BeOfType<NoRunningTimeEntryException>();
             }
 
             [Fact]
