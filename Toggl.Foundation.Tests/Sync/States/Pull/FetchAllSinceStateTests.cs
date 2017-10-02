@@ -55,14 +55,14 @@ namespace Toggl.Foundation.Tests.Sync.States
             }
 
             [Property]
-            public void MakesCorrectCallsWithSinceThresholdsWhenSinceIsLessThanTwoMonthsInThePast(double val)
+            public void MakesCorrectCallsWithSinceThresholdsWhenSinceIsLessThanTwoMonthsInThePast(int seed)
             {
-                if (double.IsNaN(val) || double.IsInfinity(val))
-                    return;
+                var rnd = new Random(seed);
+                var percent = rnd.NextDouble();
 
                 var now = timeService.CurrentDateTime;
                 var twoMonths = (now.AddMonths(2) - now);
-                var seconds = twoMonths.TotalSeconds * (Math.Abs(val) / double.MaxValue);
+                var seconds = twoMonths.TotalSeconds * percent;
                 var since = now.AddSeconds(-seconds);
 
                 var sinceParameters = Substitute.For<ISinceParameters>();
