@@ -63,6 +63,7 @@
     <Compile Include="Collections\WorkspaceGroupedCollection.cs" />
     <Compile Include="Collections\TimeEntryViewModelCollection.cs" />
     <Compile Include="ViewModels\SelectableTagViewModel.cs" />
+    <Compile Include="Helper\AutocompleteExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">

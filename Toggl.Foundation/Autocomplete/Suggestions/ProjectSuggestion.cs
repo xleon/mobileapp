@@ -31,14 +31,12 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
 
         public string ProjectColor { get; }
 
-        public string Workspace { get; } = "";
-
         private ProjectSuggestion()
         {
             ProjectId = 0;
             ClientName = "";
-            ProjectName = Resources.NoProject;
             ProjectColor = "#A3A3A3";
+            ProjectName = Resources.NoProject;
         }
 
         public ProjectSuggestion(IDatabaseProject project)
@@ -47,7 +45,7 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
             ProjectName = project.Name;
             ProjectColor = project.Color;
             ClientName = project.Client?.Name ?? "";
-            Workspace = project.Workspace?.Name ?? "";
+            WorkspaceName = project.Workspace?.Name ?? "";
         }
 
         public override int GetHashCode()

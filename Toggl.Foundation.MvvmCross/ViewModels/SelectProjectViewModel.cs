@@ -9,6 +9,7 @@ using MvvmCross.Core.ViewModels;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 
@@ -28,8 +29,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand<ProjectSuggestion> SelectProjectCommand { get; }
 
-        public MvxObservableCollection<WorkspaceGroupedCollection<ProjectSuggestion>> Suggestions { get; }
-            = new MvxObservableCollection<WorkspaceGroupedCollection<ProjectSuggestion>>();
+        public MvxObservableCollection<WorkspaceGroupedCollection<AutocompleteSuggestion>> Suggestions { get; }
+            = new MvxObservableCollection<WorkspaceGroupedCollection<AutocompleteSuggestion>>();
 
         public SelectProjectViewModel(ITogglDataSource dataSource, IMvxNavigationService navigationService)
         {
@@ -67,18 +68,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Suggestions.Clear();
 
             suggestions
-                .Where(suggestion => !string.IsNullOrEmpty(suggestion.Workspace))
-                .GroupBy(suggestion => suggestion.Workspace)
-                .Select(collectionWithNoProject)
+                .GroupByWorkspaceAddingNoProject()
                 .ForEach(Suggestions.Add);
-        }
-
-        private WorkspaceGroupedCollection<ProjectSuggestion> collectionWithNoProject(
-            IGrouping<string, ProjectSuggestion> grouping)
-        {
-            var collection = new WorkspaceGroupedCollection<ProjectSuggestion>(grouping.Key, grouping);
-            collection.Insert(0, ProjectSuggestion.NoProject);
-            return collection;
         }
 
         private Task close()

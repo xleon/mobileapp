@@ -7,7 +7,6 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.PrimeRadiant.Models;
@@ -180,7 +179,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 foreach (var group in ViewModel.Suggestions)
                 {
-                    group.First().ProjectName.Should().Be(Resources.NoProject);
+                    group.Cast<ProjectSuggestion>().First().ProjectName.Should().Be(Resources.NoProject);
                 }
             }
 
@@ -204,11 +203,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Suggestions.Should().HaveCount(4);
                 foreach (var suggestionGroup in ViewModel.Suggestions)
                 {
-                    foreach (var suggestion in suggestionGroup)
+                    foreach (var suggestion in suggestionGroup.Cast<ProjectSuggestion>())
                     {
                         if (suggestion.ProjectName == Resources.NoProject)
                             continue;
-                        suggestion.Workspace.Should().Be(suggestionGroup.WorkspaceName);
+                        suggestion.WorkspaceName.Should().Be(suggestionGroup.WorkspaceName);
                     }
                 }
             }

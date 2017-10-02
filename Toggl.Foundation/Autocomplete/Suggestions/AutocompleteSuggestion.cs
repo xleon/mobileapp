@@ -2,6 +2,8 @@
 {
     public abstract class AutocompleteSuggestion 
     {
+        public string WorkspaceName { get; protected set; } = "";
+
         public abstract override int GetHashCode();
     }
 }

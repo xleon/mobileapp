@@ -10,6 +10,8 @@ using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DTOs;
+using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
@@ -32,6 +34,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IDisposable elapsedTimeDisposable;
 
         //Properties
+        public bool UseGrouping { get; set; }
+
         public bool IsEditingDuration { get; private set; }
 
         public bool IsEditingStartDate { get; private set; }
@@ -56,8 +60,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public DateTimeOffset? StopTime { get; private set; }
 
-        public MvxObservableCollection<AutocompleteSuggestion> Suggestions { get; }
-            = new MvxObservableCollection<AutocompleteSuggestion>();
+        public MvxObservableCollection<WorkspaceGroupedCollection<AutocompleteSuggestion>> Suggestions { get; }
+            = new MvxObservableCollection<WorkspaceGroupedCollection<AutocompleteSuggestion>>();
 
         public IMvxAsyncCommand BackCommand { get; }
 
@@ -276,7 +280,25 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IsSuggestingProjects = firstSuggestion is ProjectSuggestion;
 
             Suggestions.Clear();
-            Suggestions.AddRange(suggestions.Distinct(AutocompleteSuggestionComparer.Instance));
+
+            var groupedSuggestions = groupSuggestions(suggestions);
+
+            UseGrouping = groupedSuggestions.Count() > 1;
+            Suggestions.AddRange(groupedSuggestions);
+
+        }
+
+        private IEnumerable<WorkspaceGroupedCollection<AutocompleteSuggestion>> groupSuggestions(
+            IEnumerable<AutocompleteSuggestion> suggestions)
+        {
+            var firstSuggestion = suggestions.FirstOrDefault();
+            if (firstSuggestion is ProjectSuggestion)
+                return suggestions.GroupByWorkspaceAddingNoProject();
+           
+            return suggestions
+                .GroupBy(suggestion => suggestion.WorkspaceName)
+                .Select(grouping => new WorkspaceGroupedCollection<AutocompleteSuggestion>(
+                    grouping.Key, grouping.Distinct(AutocompleteSuggestionComparer.Instance)));
         }
 
         private async Task setBillableValues(long projectId)

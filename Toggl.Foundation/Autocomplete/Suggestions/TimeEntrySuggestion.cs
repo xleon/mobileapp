@@ -25,6 +25,7 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
         public TimeEntrySuggestion(IDatabaseTimeEntry timeEntry)
         {
             Description = timeEntry.Description;
+            WorkspaceName = timeEntry.Workspace?.Name ?? "";
 
             if (timeEntry.Project == null) return;
             HasProject = true;

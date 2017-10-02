@@ -45,6 +45,10 @@ namespace Toggl.Daneel.ViewControllers
             //TableView
             bindingSet.Bind(source).To(vm => vm.Suggestions);
             bindingSet.Bind(source)
+                      .For(v => v.UseGrouping)
+                      .To(vm => vm.UseGrouping);
+
+            bindingSet.Bind(source)
                       .For(v => v.SelectionChangedCommand)
                       .To(vm => vm.SelectSuggestionCommand);
 

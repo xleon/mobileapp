@@ -19,7 +19,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             Id = tagSuggestion.TagId;
             Name = tagSuggestion.Name;
-            Workspace = tagSuggestion.Workspace;
+            Workspace = tagSuggestion.WorkspaceName;
             Selected = selected;
         }
     }
