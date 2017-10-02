@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Toggl.Foundation.DTOs
 {
@@ -15,5 +16,7 @@ namespace Toggl.Foundation.DTOs
         public long? ProjectId { get; set; }
 
         public bool Billable { get; set; }
+
+        public IEnumerable<long> TagIds { get; set; }
     }
 }

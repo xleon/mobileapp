@@ -398,7 +398,8 @@ namespace Toggl.Foundation.Tests.DataSources
                     Description = "New description",
                     StartTime = DateTimeOffset.UtcNow,
                     ProjectId = 13,
-                    Billable = true
+                    Billable = true,
+                    TagIds = new long[] { 1, 10, 34, 42 }
                 };
             }
 
@@ -459,6 +460,16 @@ namespace Toggl.Foundation.Tests.DataSources
                 await TimeEntriesSource.Update(dto);
 
                 await Repository.Received().Update(Arg.Is(dto.Id), Arg.Is<IDatabaseTimeEntry>(te => te.Billable == dto.Billable));
+            }
+
+            [Fact]
+            public async ThreadingTask UpdatesTheTagIds()
+            {
+                var dto = prepareTest();
+
+                await TimeEntriesSource.Update(dto);
+
+                await Repository.Received().Update(Arg.Is(dto.Id), Arg.Is<IDatabaseTimeEntry>(te => te.TagIds.SequenceEqual(dto.TagIds)));
             }
 
             [Fact]

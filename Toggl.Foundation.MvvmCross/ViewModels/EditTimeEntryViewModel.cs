@@ -12,6 +12,8 @@ using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 using static Toggl.Multivac.Extensions.ObservableExtensions;
 using static Toggl.Foundation.MvvmCross.Helper.Constants;
+using Toggl.Multivac.Extensions;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -21,6 +23,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
         private readonly ITimeService timeService;
+
+        private readonly HashSet<long> tagIds = new HashSet<long>();
 
         private IDisposable deleteDisposable;
         private IDisposable tickingDisposable;
@@ -64,7 +68,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
         }
 
-        public List<string> Tags { get; set; }
+        public List<string> Tags { get; private set; }
 
         public bool Billable { get; set; }
 
@@ -120,6 +124,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Task = timeEntry.Task?.Name;
             Client = timeEntry.Project?.Client?.Name;
             projectId = timeEntry.Project?.Id ?? 0;
+            foreach (var tagId in timeEntry.TagIds)
+                tagIds.Add(tagId);
 
             if (StopTime == null)
                 subscribeToTimeServiceTicks();
@@ -149,13 +155,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void confirm()
         {
             var dto = new EditTimeEntryDto
-            { 
-                Id = Id, 
+            {
+                Id = Id,
                 Description = Description,
                 StartTime = StartTime,
                 StopTime = StopTime,
                 ProjectId = projectId,
-                Billable = Billable
+                Billable = Billable,
+                TagIds = new List<long>(tagIds)
             };
 
             confirmDisposable = dataSource.TimeEntries
@@ -211,6 +218,27 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             StopTime = selectedDuration.Stop;
         }
 
-        private Task selectTags() => navigationService.Navigate<SelectTagsViewModel>();
+        private async Task selectTags()
+        {
+            var tagsToPass = tagIds.ToArray();
+            var returnedTags = await navigationService.Navigate<SelectTagsViewModel, long[], long[]>(tagsToPass);
+
+            if (returnedTags.SequenceEqual(tagsToPass))
+                return;
+
+            Tags.Clear();
+            tagIds.Clear();
+
+            foreach (var tagId in returnedTags)
+                tagIds.Add(tagId);
+
+            dataSource.Tags
+                .GetAll(tag => tagIds.Contains(tag.Id))
+                .Subscribe(onTags);
+        }
+
+        private void onTags(IEnumerable<IDatabaseTag> tags)
+            => tags.Select(tag => tag.Name)
+                   .ForEach(Tags.Add);
     }
 }
