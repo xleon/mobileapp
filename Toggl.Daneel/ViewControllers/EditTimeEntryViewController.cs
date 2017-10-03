@@ -66,6 +66,10 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(StartTimeLabel)
                       .To(vm => vm.StartTime)
                       .WithConversion(timeConverter);
+
+            bindingSet.Bind(TagsLabel)
+                      .To(vm => vm.Tags)
+                      .WithConversion(new CollectionToStringValueConverter<string>());
             
             //Commands
             bindingSet.Bind(CloseButton).To(vm => vm.CloseCommand);
@@ -91,6 +95,10 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindTap())
                       .To(vm => vm.SelectTagsCommand);
 
+            bindingSet.Bind(AddTagsView)
+                      .For(v => v.BindTap())
+                      .To(vm => vm.SelectTagsCommand);
+
             //Project visibility
             bindingSet.Bind(AddProjectAndTaskView)
                       .For(v => v.BindVisible())
@@ -105,12 +113,12 @@ namespace Toggl.Daneel.ViewControllers
             //Tags visibility
             bindingSet.Bind(AddTagsView)
                       .For(v => v.BindVisible())
-                      .To(vm => vm.Tags)
+                      .To(vm => vm.HasTags)
                       .WithConversion(visibilityConverter);
             
             bindingSet.Bind(TagsLabel)
                       .For(v => v.BindVisible())
-                      .To(vm => vm.Tags)
+                      .To(vm => vm.HasTags)
                       .WithConversion(inverterVisibilityConverter);
             
             bindingSet.Apply();

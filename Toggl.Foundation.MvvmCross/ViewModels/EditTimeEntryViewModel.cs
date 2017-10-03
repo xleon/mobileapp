@@ -70,6 +70,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public List<string> Tags { get; private set; }
 
+        [DependsOn(nameof(Tags))]
+        public bool HasTags => Tags?.Any() ?? false;
+
         public bool Billable { get; set; }
 
         public IMvxCommand DeleteCommand { get; }
@@ -238,7 +241,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private void onTags(IEnumerable<IDatabaseTag> tags)
-            => tags.Select(tag => tag.Name)
+        {
+            tags.Select(tag => tag.Name)
                    .ForEach(Tags.Add);
+            RaisePropertyChanged(nameof(Tags));
+            RaisePropertyChanged(nameof(HasTags));
+        }
     }
 }
