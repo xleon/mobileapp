@@ -149,6 +149,7 @@ namespace Toggl.Daneel.ViewControllers
                 ForegroundColor = UIColor.FromRGB(215, 215, 215)
             };
             DescriptionTextField.AttributedPlaceholder = new NSAttributedString(Resources.AddDescription, placeholderAttributes);
+            DescriptionTextField.TintColor = Color.StartTimeEntry.Cursor.ToNativeColor();
 
             DescriptionTextField.ShouldReturn += (textField) =>
             {
