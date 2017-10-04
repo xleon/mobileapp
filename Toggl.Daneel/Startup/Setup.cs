@@ -24,11 +24,8 @@ namespace Toggl.Daneel
     public partial class Setup : MvxIosSetup
     {
         private IMvxNavigationService navigationService;
-#if DEBUG
+
         private const ApiEnvironment environment = ApiEnvironment.Staging;
-#else
-        private const ApiEnvironment environment = ApiEnvironment.Production;
-#endif
 
         public Setup(MvxApplicationDelegate applicationDelegate, UIWindow window)
             : this(applicationDelegate, new TogglPresenter(applicationDelegate, window))
@@ -58,10 +55,8 @@ namespace Toggl.Daneel
         {
             base.InitializeApp(pluginManager, app);
 
-            #if DEBUG
             System.Net.ServicePointManager.ServerCertificateValidationCallback
                   += (sender, certificate, chain, sslPolicyErrors) => true;
-            #endif
 
             var database = new Database();
             var timeService = new TimeService(Scheduler.Default);
