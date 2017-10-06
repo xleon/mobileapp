@@ -22,12 +22,11 @@ namespace Toggl.Daneel.Binding
 
         protected override void SetValue(UIColor value)
         {
-            CATransaction.Begin();
-            CATransaction.AnimationTimingFunction = Animation.Curves.SharpCurve.ToMediaTimingFunction();
-
-            UIView.Animate(Animation.Timings.EnterTiming, () => Target.BackgroundColor = value);
-
-            CATransaction.Commit();
+            AnimationExtensions.Animate(
+                Animation.Timings.EnterTiming,
+                Animation.Curves.SharpCurve,
+                () => Target.BackgroundColor = value
+            );
         }
     }
 }

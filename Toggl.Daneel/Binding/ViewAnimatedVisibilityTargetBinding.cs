@@ -23,16 +23,15 @@ namespace Toggl.Daneel.Binding
         {
             Target.Transform = CGAffineTransform.MakeTranslation(0, 0);
 
-            CATransaction.Begin();
-            CATransaction.AnimationTimingFunction = Animation.Curves.SharpCurve.ToMediaTimingFunction();
-
-            UIView.Animate(Animation.Timings.EnterTiming, () => 
-            {
-                Target.Hidden = !value;
-                Target.Transform = CGAffineTransform.MakeTranslation(0, -20);
-            });
-
-            CATransaction.Commit();
+            AnimationExtensions.Animate(
+                Animation.Timings.EnterTiming,
+                Animation.Curves.SharpCurve,
+                () => 
+                {
+                    Target.Hidden = !value;
+                    Target.Transform = CGAffineTransform.MakeTranslation(0, -20);
+                }
+            );
         }
     }
 }
