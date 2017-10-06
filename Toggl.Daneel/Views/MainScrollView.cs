@@ -102,7 +102,7 @@ namespace Toggl.Daneel.Views
         {
             if (!needsRefresh)
             {
-                SetContentOffset(CGPoint.Empty, true);
+                scrollToIfInFirstPage(CGPoint.Empty);
                 return;
             }
 
@@ -111,7 +111,7 @@ namespace Toggl.Daneel.Views
 
             if (IsSyncing)
             {
-                SetContentOffset(new CGPoint(0, -SyncStateViewHeight), true);
+                scrollToIfInFirstPage(new CGPoint(0, -SyncStateViewHeight));
                 return;
             }
 
@@ -128,7 +128,7 @@ namespace Toggl.Daneel.Views
                     SyncStateView.BackgroundColor = syncingColor;
                 });
 
-                SetContentOffset(new CGPoint(0, -SyncStateViewHeight), true);
+                scrollToIfInFirstPage(new CGPoint(0, -SyncStateViewHeight));
                 return;
             }
 
@@ -139,7 +139,14 @@ namespace Toggl.Daneel.Views
             });
 
             await Task.Delay(Animation.Timings.HideSyncStateViewDelay);
-            SetContentOffset(CGPoint.Empty, true);
+            scrollToIfInFirstPage(CGPoint.Empty);
+        }
+
+        private void scrollToIfInFirstPage(CGPoint offset)
+        {
+            if (ContentOffset.Y > 0) return;
+
+            SetContentOffset(offset, true);
         }
     }
 }
