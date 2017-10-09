@@ -23,6 +23,10 @@ namespace Toggl.Daneel.Views
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView FadeView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIView ProjectDotView { get; set; }
 
         [Outlet]
@@ -47,6 +51,11 @@ namespace Toggl.Daneel.Views
             if (DescriptionTopDistanceConstraint != null) {
                 DescriptionTopDistanceConstraint.Dispose ();
                 DescriptionTopDistanceConstraint = null;
+            }
+
+            if (FadeView != null) {
+                FadeView.Dispose ();
+                FadeView = null;
             }
 
             if (ProjectDotView != null) {

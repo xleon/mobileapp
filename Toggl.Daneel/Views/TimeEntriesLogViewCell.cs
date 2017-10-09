@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using CoreAnimation;
+using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
@@ -39,6 +42,15 @@ namespace Toggl.Daneel.Views
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
+
+            FadeView.Layer.AddSublayer(new CAGradientLayer
+            {
+                Colors = new[] { UIColor.White.ColorWithAlpha(0.0f).CGColor, UIColor.White.CGColor },
+                Locations = new[] { new NSNumber(0.0f), new NSNumber(0.2f) },
+                StartPoint = new CGPoint(0.0, 0.5),
+                EndPoint = new CGPoint(1.0, 0.5),
+                Frame = FadeView.Bounds
+            });
 
             TimeLabel.Font = TimeLabel.Font.GetMonospacedDigitFont();
             ContinueButton.TouchUpInside += onContinueButtonTap;
