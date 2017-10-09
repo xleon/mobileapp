@@ -8,6 +8,7 @@ using MvvmCross.Plugins.Visibility;
 using Toggl.Daneel.Combiners;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
+using Toggl.Daneel.Presentation.Transition;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
@@ -21,6 +22,8 @@ namespace Toggl.Daneel.ViewControllers
     {
         private const int switchHeight = 24;
 
+        private EditTimeEntryErrorView syncErrorMessageView;
+
         public EditTimeEntryViewController() : base(nameof(EditTimeEntryViewController), null)
         {
         }
@@ -30,6 +33,22 @@ namespace Toggl.Daneel.ViewControllers
             base.ViewDidLoad();
 
             prepareViews();
+
+            if (PresentationController is ModalPresentationController modalPresentationController)
+            {
+                syncErrorMessageView = EditTimeEntryErrorView.Create();
+                var contentView = modalPresentationController.AdditionalContentView;
+
+                contentView.AddSubview(syncErrorMessageView);
+
+                syncErrorMessageView.TranslatesAutoresizingMaskIntoConstraints = false;
+                syncErrorMessageView.TopAnchor
+                    .ConstraintEqualTo(contentView.TopAnchor, 28).Active = true;
+                syncErrorMessageView.LeadingAnchor
+                    .ConstraintEqualTo(contentView.LeadingAnchor, 8).Active = true;
+                syncErrorMessageView.TrailingAnchor
+                    .ConstraintEqualTo(contentView.TrailingAnchor, -8).Active = true;
+            }
 
             var durationConverter = new TimeSpanToDurationWithUnitValueConverter();
             var dateConverter = new DateToTitleStringValueConverter();
@@ -43,26 +62,46 @@ namespace Toggl.Daneel.ViewControllers
             );
 
             var bindingSet = this.CreateBindingSet<EditTimeEntryViewController, EditTimeEntryViewModel>();
-            
+
+            if (syncErrorMessageView != null)
+            {
+                bindingSet.Bind(syncErrorMessageView)
+                          .For(v => v.Text)
+                          .To(vm => vm.SyncErrorMessage);
+
+                bindingSet.Bind(syncErrorMessageView)
+                          .For(v => v.BindTap())
+                          .To(vm => vm.DismissSyncErrorMessageCommand);
+
+                bindingSet.Bind(syncErrorMessageView)
+                          .For(v => v.CloseCommand)
+                          .To(vm => vm.DismissSyncErrorMessageCommand);
+                
+                bindingSet.Bind(syncErrorMessageView)
+                          .For(v => v.BindVisible())
+                          .To(vm => vm.SyncErrorMessageVisible)
+                          .WithConversion(inverterVisibilityConverter);
+            }
+
             //Text
             bindingSet.Bind(DescriptionTextField).To(vm => vm.Description);
             bindingSet.Bind(BillableSwitch).To(vm => vm.Billable);
             bindingSet.Bind(DurationLabel)
                       .To(vm => vm.Duration)
                       .WithConversion(durationConverter);
-            
+
             bindingSet.Bind(ProjectTaskClientLabel)
                       .For(v => v.AttributedText)
                       .ByCombining(projectTaskClientCombiner,
                           v => v.Project,
                           v => v.Task,
                           v => v.Client,
-                          v => v.ProjectColor); 
+                          v => v.ProjectColor);
 
             bindingSet.Bind(StartDateLabel)
                       .To(vm => vm.StartTime)
                       .WithConversion(dateConverter);
-            
+
             bindingSet.Bind(StartTimeLabel)
                       .To(vm => vm.StartTime)
                       .WithConversion(timeConverter);
@@ -70,7 +109,7 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(TagsLabel)
                       .To(vm => vm.Tags)
                       .WithConversion(new CollectionToStringValueConverter<string>());
-            
+
             //Commands
             bindingSet.Bind(CloseButton).To(vm => vm.CloseCommand);
             bindingSet.Bind(DeleteButton).To(vm => vm.DeleteCommand);
@@ -78,7 +117,7 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(DurationLabel)
                       .For(v => v.BindTap())
                       .To(vm => vm.EditDurationCommand);
-            
+
             bindingSet.Bind(ProjectTaskClientLabel)
                       .For(v => v.BindTap())
                       .To(vm => vm.SelectProjectCommand);
@@ -86,7 +125,7 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(AddProjectAndTaskView)
                       .For(v => v.BindTap())
                       .To(vm => vm.SelectProjectCommand);
-            
+
             bindingSet.Bind(StartDateTimeView)
                       .For(v => v.BindTap())
                       .To(vm => vm.SelectStartDateTimeCommand);
@@ -104,23 +143,24 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindVisible())
                       .To(vm => vm.Project)
                       .WithConversion(visibilityConverter);
-            
+
             bindingSet.Bind(ProjectTaskClientLabel)
                       .For(v => v.BindVisible())
                       .To(vm => vm.Project)
                       .WithConversion(inverterVisibilityConverter);
-            
+
             //Tags visibility
             bindingSet.Bind(AddTagsView)
                       .For(v => v.BindVisible())
                       .To(vm => vm.HasTags)
                       .WithConversion(visibilityConverter);
+
             
             bindingSet.Bind(TagsLabel)
                       .For(v => v.BindVisible())
                       .To(vm => vm.HasTags)
                       .WithConversion(inverterVisibilityConverter);
-            
+
             bindingSet.Apply();
         }
 

@@ -75,9 +75,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public bool Billable { get; set; }
 
+        public string SyncErrorMessage { get; private set; }
+
+        public bool SyncErrorMessageVisible { get; private set; }
+
         public IMvxCommand DeleteCommand { get; }
 
         public IMvxCommand ConfirmCommand { get; }
+
+        public IMvxCommand DismissSyncErrorMessageCommand { get; }
 
         public IMvxAsyncCommand CloseCommand { get; }
 
@@ -106,6 +112,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SelectStartDateTimeCommand = new MvxAsyncCommand(selectStartDateTime);
             SelectProjectCommand = new MvxAsyncCommand(selectProject);
             SelectTagsCommand = new MvxAsyncCommand(selectTags);
+            DismissSyncErrorMessageCommand = new MvxCommand(dismissSyncErrorMessageCommand);
         }
 
         public override void Prepare(long parameter)
@@ -127,6 +134,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Task = timeEntry.Task?.Name;
             Client = timeEntry.Project?.Client?.Name;
             projectId = timeEntry.Project?.Id ?? 0;
+            SyncErrorMessage = timeEntry.LastSyncErrorMessage;
+            SyncErrorMessageVisible = !string.IsNullOrEmpty(SyncErrorMessage);
             foreach (var tagId in timeEntry.TagIds)
                 tagIds.Add(tagId);
 
@@ -247,5 +256,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             RaisePropertyChanged(nameof(Tags));
             RaisePropertyChanged(nameof(HasTags));
         }
+
+        private void dismissSyncErrorMessageCommand()
+            => SyncErrorMessageVisible = false;
     }
 }

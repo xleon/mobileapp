@@ -18,6 +18,9 @@ namespace Toggl.Daneel.Presentation.Transition
             Alpha = 0
         };
 
+        public UIView AdditionalContentView { get; }
+            = new UIView();
+
         public ModalPresentationController(UIViewController presentedViewController, 
             UIViewController presentingViewController, Action onDismissedCallback)
           : base(presentedViewController, presentingViewController)
@@ -27,13 +30,17 @@ namespace Toggl.Daneel.Presentation.Transition
             this.onDismissedCallback = onDismissedCallback;
 
             var recognizer = new UITapGestureRecognizer(dismiss);
-            dimmingView.AddGestureRecognizer(recognizer);
+            AdditionalContentView.AddGestureRecognizer(recognizer);
         }
 
         public override void PresentationTransitionWillBegin()
         {
             dimmingView.Frame = ContainerView.Bounds;
+            AdditionalContentView.Frame = ContainerView.Bounds;
+            AdditionalContentView.Layer.ZPosition += 1;
+
             ContainerView.AddSubview(dimmingView);
+            ContainerView.AddSubview(AdditionalContentView);
 
             var coordinator = PresentedViewController.GetTransitionCoordinator();
             if (coordinator == null)

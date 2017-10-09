@@ -1,20 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using FluentAssertions;
+using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
+using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
-using Xunit;
-using Task = System.Threading.Tasks.Task;
-using static Toggl.Foundation.MvvmCross.Helper.Constants;
 using Toggl.PrimeRadiant.Models;
-using System.Linq;
-using Toggl.Foundation.DataSources;
-using System.Collections.Generic;
-using FsCheck;
+using Xunit;
+using static Toggl.Foundation.MvvmCross.Helper.Constants;
+using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -308,6 +308,66 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 tag.Id.Returns(id);
                 tag.Name.Returns($"Tag{id}");
                 return tag;
+            }
+        }
+
+        public sealed class TheDismissSyncErrorMessageCommand : EditTimeEntryViewModelTest
+        {
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public async Task SetsSyncErrorMessageVisiblePropertyToFalse(bool initialValue)
+            {
+                var errorMessage = initialValue ? "Some error" : null;
+                var id = 13;
+                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                timeEntry.Id.Returns(id);
+                timeEntry.LastSyncErrorMessage.Returns(errorMessage);
+                DataSource.TimeEntries.GetById(Arg.Is<long>(id)).Returns(Observable.Return(timeEntry));
+                ViewModel.Prepare(id);
+                await ViewModel.Initialize();
+
+                ViewModel.DismissSyncErrorMessageCommand.Execute();
+
+                ViewModel.SyncErrorMessageVisible.Should().BeFalse();
+            }
+        }
+
+        public sealed class TheInitializeMethod : EditTimeEntryViewModelTest
+        {
+            private readonly IDatabaseTimeEntry timeEntry;
+
+            public TheInitializeMethod()
+            {
+                timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                timeEntry.Id.Returns(Id);
+                DataSource.TimeEntries.GetById(Arg.Is<long>(Id)).Returns(Observable.Return(timeEntry));
+            }
+
+            [Property]
+            public void SetsTheSyncErrorMessageProperty(string errorMessage)
+            {
+                timeEntry.LastSyncErrorMessage.Returns(errorMessage);
+                ViewModel.Prepare(Id);
+
+                ViewModel.Initialize().Wait();
+
+                ViewModel.SyncErrorMessage.Should().Be(errorMessage);
+            }
+
+            [Theory]
+            [InlineData("Some error", true)]
+            [InlineData("", false)]
+            [InlineData(null, false)]
+            public async Task SetsTheSyncErrorMessageVisibleProperty(
+                string errorMessage, bool expectedVisibility)
+            {
+                timeEntry.LastSyncErrorMessage.Returns(errorMessage);
+                ViewModel.Prepare(Id);
+
+                await ViewModel.Initialize();
+
+                ViewModel.SyncErrorMessageVisible.Should().Be(expectedVisibility);
             }
         }
     }
