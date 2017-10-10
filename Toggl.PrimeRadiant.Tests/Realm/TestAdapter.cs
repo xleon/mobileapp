@@ -48,7 +48,8 @@ namespace Toggl.PrimeRadiant.Tests.Realm
 
         public IEnumerable<(ConflictResolutionMode ResolutionMode, TestModel Entity)> BatchUpdate(
             IEnumerable<(long Id, TestModel Entity)> entities,
-            Func<TestModel, TestModel, ConflictResolutionMode> conflictResolution)
+            Func<TestModel, TestModel, ConflictResolutionMode> conflictResolution,
+            IRivalsResolver<TestModel> resolver)
         {
             throw new NotImplementedException();
         }

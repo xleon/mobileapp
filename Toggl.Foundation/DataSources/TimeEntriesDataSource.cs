@@ -123,11 +123,11 @@ namespace Toggl.Foundation.DataSources
 
         public IObservable<IEnumerable<(ConflictResolutionMode ResolutionMode, IDatabaseTimeEntry Entity)>> BatchUpdate(
             IEnumerable<(long Id, IDatabaseTimeEntry Entity)> entities,
-            Func<IDatabaseTimeEntry, IDatabaseTimeEntry, ConflictResolutionMode> conflictResolution)
+            Func<IDatabaseTimeEntry, IDatabaseTimeEntry, ConflictResolutionMode> conflictResolution,
+            IRivalsResolver<IDatabaseTimeEntry> rivalsResolver = null)
             => repository
-                .BatchUpdate(entities, conflictResolution)
-                .Do(updatedEntities =>
-                    updatedEntities
+                .BatchUpdate(entities, conflictResolution, rivalsResolver)
+                .Do(updatedEntities => updatedEntities
                     .Where(tuple => tuple.ResolutionMode != ConflictResolutionMode.Ignore)
                     .ForEach(handleBatchUpdateTuple));
 
