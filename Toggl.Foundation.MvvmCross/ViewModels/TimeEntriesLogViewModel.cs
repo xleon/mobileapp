@@ -86,6 +86,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var updateObservable =
                 dataSource.TimeEntries.TimeEntryUpdated
                           .Do(onTimeEntryUpdated)
+                          .Where(isNotRunning)
                           .Where(x => !x.IsDeleted);
 
             var updateDisposable =
