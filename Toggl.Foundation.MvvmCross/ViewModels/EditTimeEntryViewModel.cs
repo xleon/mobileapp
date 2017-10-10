@@ -154,6 +154,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             deleteDisposable = dataSource.TimeEntries
                 .Delete(Id)
+                .Do(_ => dataSource.SyncManager.PushSync())
                 .Subscribe(onDeleteError, onDeleteCompleted);
         }
 
@@ -179,6 +180,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             confirmDisposable = dataSource.TimeEntries
                                           .Update(dto)
+                                          .Do(_ => dataSource.SyncManager.PushSync())
                                           .Subscribe((Exception ex) => close(), () => close());
         }
 

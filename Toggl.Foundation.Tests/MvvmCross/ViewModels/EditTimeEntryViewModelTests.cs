@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
@@ -14,6 +15,7 @@ using Toggl.Foundation.Tests.Generators;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 using static Toggl.Foundation.MvvmCross.Helper.Constants;
+using Toggl.Foundation.DTOs;
 using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
@@ -81,6 +83,25 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.DeleteCommand.Execute();
 
                 DataSource.TimeEntries.Received().Delete(Arg.Is(ViewModel.Id));
+            }
+
+            [Fact]
+            public async Task DeleteCommandInitiatesPushSync()
+            {
+                ViewModel.DeleteCommand.Execute();
+
+                await DataSource.SyncManager.Received().PushSync();
+            }
+
+            [Fact]
+            public async Task DoesNotInitiatePushSyncWhenDeletingFails()
+            {
+                DataSource.TimeEntries.Delete(Arg.Any<long>())
+                    .Returns(Observable.Throw<Unit>(new Exception()));
+
+                ViewModel.DeleteCommand.Execute();
+
+                await DataSource.SyncManager.DidNotReceive().PushSync();
             }
         }
 
@@ -207,6 +228,28 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.EditDurationCommand.ExecuteAsync().Wait();
 
                 ViewModel.StopTime.Should().Be(parameterToReturn.Stop);
+            }
+        }
+
+        public sealed class TheConfirmCommand : EditTimeEntryViewModelTest
+        {
+            [Fact]
+            public async Task InitiatesPushSync()
+            {
+                ViewModel.ConfirmCommand.Execute();
+
+                await DataSource.SyncManager.Received().PushSync();
+            }
+
+            [Fact]
+            public async Task DoesNotInitiatePushSyncWhenSavingFails()
+            {
+                DataSource.TimeEntries.Update(Arg.Any<EditTimeEntryDto>())
+                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new Exception()));
+
+                ViewModel.ConfirmCommand.Execute();
+
+                await DataSource.SyncManager.DidNotReceive().PushSync();
             }
         }
 

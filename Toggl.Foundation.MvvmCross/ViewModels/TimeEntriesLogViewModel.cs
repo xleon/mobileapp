@@ -160,7 +160,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     ProjectId = timeEntryViewModel.ProjectId,
                     Description = timeEntryViewModel.Description
                 })
-                .SelectMany(dataSource.TimeEntries.Start);
+                .SelectMany(dataSource.TimeEntries.Start)
+                .Do(_ => dataSource.SyncManager.PushSync());
         }
     }
 }

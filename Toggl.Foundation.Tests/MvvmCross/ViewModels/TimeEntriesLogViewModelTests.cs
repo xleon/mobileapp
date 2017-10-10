@@ -318,6 +318,61 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     dto.ProjectId == projectId
                 )).Wait();
             }
+
+            [Fact]
+            public async void InitiatesPushSyncWhenThereIsARunningTimeEntry()
+            {
+                var timeEntryViewModel = createTimeEntryViewModel();
+
+                await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
+
+                await DataSource.SyncManager.Received().PushSync();
+            }
+
+            [Fact]
+            public async void InitiatesPushSyncWhenThereIsNoRunningTimeEntry()
+            {
+                var timeEntryViewModel = createTimeEntryViewModel();
+                DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>())
+                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new NoRunningTimeEntryException()));
+
+                await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
+
+                await DataSource.SyncManager.Received().PushSync();
+            }
+
+            [Fact]
+            public async void DoesNotInitatePushSyncWhenStoppingFailsForOtherReasonThanThatThereIsNoRunningTimeEntry()
+            {
+                var timeEntryViewModel = createTimeEntryViewModel();
+                DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>())
+                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new Exception()));
+
+                Action executeCommand = () => ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel).Wait();
+
+                executeCommand.ShouldThrow<Exception>();
+                await DataSource.SyncManager.DidNotReceive().PushSync();
+            }
+
+            [Fact]
+            public async void DoesNotInitiatePushSyncWhenStartingFails()
+            {
+                var timeEntryViewModel = createTimeEntryViewModel();
+                DataSource.TimeEntries.Start(Arg.Any<StartTimeEntryDTO>())
+                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new Exception()));
+
+                Action executeCommand = () => ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel).Wait();
+
+                executeCommand.ShouldThrow<Exception>();
+                await DataSource.SyncManager.DidNotReceive().PushSync();
+            }
+            
+            private TimeEntryViewModel createTimeEntryViewModel()
+            {
+                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                timeEntry.Stop.Returns(DateTimeOffset.Now);
+                return new TimeEntryViewModel(timeEntry);
+            }
         }
     }
 }

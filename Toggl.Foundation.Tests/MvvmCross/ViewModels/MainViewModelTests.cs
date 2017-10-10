@@ -113,6 +113,25 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.CurrentTimeEntryElapsedTime.Should().Be(TimeSpan.Zero);
             }
+
+            [Fact]
+            public async Task InitiatesPushSync()
+            {
+                ViewModel.StopTimeEntryCommand.Execute();
+
+                await DataSource.SyncManager.Received().PushSync();
+            }
+
+            [Fact]
+            public async Task DoesNotInitiatePushSyncWhenSavingFails()
+            {
+                DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>())
+                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new Exception()));
+
+                ViewModel.StopTimeEntryCommand.Execute();
+
+                await DataSource.SyncManager.DidNotReceive().PushSync();
+            }
         }
 
         public sealed class TheCurrentlyRunningTimeEntryProperty : MainViewModelTest

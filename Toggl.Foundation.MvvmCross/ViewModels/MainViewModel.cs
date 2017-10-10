@@ -105,7 +105,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task stopTimeEntry()
         {
-            await dataSource.TimeEntries.Stop(timeService.CurrentDateTime);
+            await dataSource.TimeEntries.Stop(timeService.CurrentDateTime)
+                .Do(_ => dataSource.SyncManager.PushSync());
+
             CurrentTimeEntryElapsedTime = TimeSpan.Zero;
         }
 

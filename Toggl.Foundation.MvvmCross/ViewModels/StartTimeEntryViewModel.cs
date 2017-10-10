@@ -268,7 +268,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     ProjectId = TextFieldInfo.ProjectId,
                     TagIds = TextFieldInfo.Tags.Select(t => t.TagId).Distinct().ToArray()
                 })
-                .SelectMany(dataSource.TimeEntries.Start);
+                .SelectMany(dataSource.TimeEntries.Start)
+                .Do(_ => dataSource.SyncManager.PushSync());
 
             await navigationService.Close(this);
         }

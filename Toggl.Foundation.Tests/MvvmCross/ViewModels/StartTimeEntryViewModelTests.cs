@@ -567,6 +567,25 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ));
                 }
 
+                [Fact]
+                public async Task InitiatesPushSync()
+                {
+                    ViewModel.DoneCommand.Execute();
+
+                    await DataSource.SyncManager.Received().PushSync();
+                }
+
+                [Fact]
+                public async Task DoesNotInitiatePushSyncWhenSavingFails()
+                {
+                    DataSource.TimeEntries.Start(Arg.Any<StartTimeEntryDTO>())
+                        .Returns(Observable.Throw<IDatabaseTimeEntry>(new Exception()));
+
+                    ViewModel.DoneCommand.Execute();
+
+                    await DataSource.SyncManager.DidNotReceive().PushSync();
+                }
+
                 private TagSuggestion tagSuggestionFromInt(int i)
                 {
                     var tag = Substitute.For<IDatabaseTag>();
