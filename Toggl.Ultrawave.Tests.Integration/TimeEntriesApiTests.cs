@@ -92,6 +92,57 @@ namespace Toggl.Ultrawave.Tests.Integration
                 post.ShouldThrow<BadRequestException>();
             }
 
+            [Theory]
+            [InlineData(0)]
+            [InlineData(998)]
+            [InlineData(-998)]
+            public async Task CreatesRunningTimeEntryWhenTheDurationIsSetToANegativeTimestampWithinNineHundredNinetyNineHoursInThePast(int hoursOffset)
+            {
+                var (togglApi, user) = await SetupTestUser();
+                var start = DateTimeOffset.Now.AddHours(-hoursOffset);
+                var duration = -start.ToUnixTimeSeconds();
+                var timeEntry = new Ultrawave.Models.TimeEntry
+                {
+                    Description = Guid.NewGuid().ToString(),
+                    WorkspaceId = user.DefaultWorkspaceId,
+                    Start = start,
+                    Stop = null,
+                    Duration = duration,
+                    UserId = user.Id,
+                    TagIds = new List<long>(),
+                    CreatedWith = "IntegrationTests/0.0"
+                };
+
+                var persistedTimeEntry = CallEndpointWith(togglApi, timeEntry).Wait();
+
+                persistedTimeEntry.Id.Should().BePositive();
+            }
+
+            [Theory]
+            [InlineData(1000)]
+            [InlineData(-1000)]
+            public async Task FailsCreatingARunningTimeEntryWhenTheDurationIsSetToATimestampOlderThanNineHundredNinetyNineHoursInThePast(int hoursOffset)
+            {
+                var (togglApi, user) = await SetupTestUser();
+                var start = DateTimeOffset.Now.AddHours(-hoursOffset);
+                var duration = -start.ToUnixTimeSeconds();
+                var timeEntry = new Ultrawave.Models.TimeEntry
+                {
+                    Description = Guid.NewGuid().ToString(),
+                    WorkspaceId = user.DefaultWorkspaceId,
+                    Start = start,
+                    Stop = null,
+                    Duration = duration,
+                    UserId = user.Id,
+                    TagIds = new List<long>(),
+                    CreatedWith = "IntegrationTests/0.0"
+                };
+
+                Action creatingTimeEntry = () => CallEndpointWith(togglApi, timeEntry).Wait();
+
+                creatingTimeEntry.ShouldThrow<InternalServerErrorException>();
+            }
+
             protected override IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi)
                 => Observable.Defer(async () =>
                 {

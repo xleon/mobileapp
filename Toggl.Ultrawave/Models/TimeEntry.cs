@@ -1,5 +1,6 @@
 ﻿using System;
 using Toggl.Multivac.Models;
+using Toggl.Multivac.Extensions;
 using System.Collections.Generic;
 
 namespace Toggl.Ultrawave.Models
@@ -20,11 +21,9 @@ namespace Toggl.Ultrawave.Models
 
         public DateTimeOffset? Stop { get; set; }
 
-        private int runningTimeEntryDuration => -1;
-
-        public int Duration
+        public long Duration
         {
-            get => Stop.HasValue ? (int)(Stop.Value - Start).TotalSeconds : runningTimeEntryDuration;
+            get => Stop.HasValue ? (int)(Stop.Value - Start).TotalSeconds : -Start.ToUnixTimeSeconds();
             set { }
         }
 
