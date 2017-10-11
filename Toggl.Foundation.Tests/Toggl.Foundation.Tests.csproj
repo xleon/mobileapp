@@ -249,6 +249,7 @@
     <Compile Include="MvvmCross\ViewModels\SelectProjectViewModelTests.cs" />
     <Compile Include="DataSources\WorkspacesDataSourceTests.cs" />
     <Compile Include="MvvmCross\ViewModels\SelectTagsViewModelTests.cs" />
+    <Compile Include="DataSources\TasksDataSourceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />

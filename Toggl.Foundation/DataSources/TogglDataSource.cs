@@ -24,17 +24,18 @@ namespace Toggl.Foundation.DataSources
 
             User = new UserDataSource(database.User);
             Tags = new TagsDataSource(database.Tags);
+            Tasks = new TasksDataSource(database.Tasks);
             Workspaces = new WorkspacesDataSource(database);
             Projects = new ProjectsDataSource(database.Projects);
             TimeEntries = new TimeEntriesDataSource(database.IdProvider, database.TimeEntries, timeService);
-            
+
             AutocompleteProvider = new AutocompleteProvider(database);
             SyncManager = TogglSyncManager.CreateSyncManager(database, api, this, timeService, scheduler);
         }
 
         public IUserSource User { get; }
         public ITagsSource Tags { get; }
-        public ITasksSource Tasks => throw new NotImplementedException();
+        public ITasksSource Tasks { get; }
         public IClientsSource Clients => throw new NotImplementedException();
         public IProjectsSource Projects { get; }
         public IWorkspacesSource Workspaces { get; }
