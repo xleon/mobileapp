@@ -7,8 +7,10 @@ namespace Toggl.Foundation.DTOs
         public long UserId { get; set; }
 
         public bool Billable { get; set; }
-        
+
         public long? ProjectId { get; set; }
+
+        public long? TaskId { get; set; }
 
         public string Description { get; set; }
 

@@ -27,6 +27,7 @@ namespace Toggl.Foundation.Tests.Autocomplete
             protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
 
             protected IEnumerable<IDatabaseTag> Tags { get; }
+            protected IEnumerable<IDatabaseTask> Tasks { get; }
             protected IEnumerable<IDatabaseClient> Clients { get; }
             protected IEnumerable<IDatabaseProject> Projects { get; }
             protected IEnumerable<IDatabaseTimeEntry> TimeEntries { get; }
@@ -43,20 +44,36 @@ namespace Toggl.Foundation.Tests.Autocomplete
                     return client;
                 });
 
-                Projects = Enumerable.Range(20, 10).Select(id =>
+                Tasks = Enumerable.Range(20, 10).Select(id =>
                 {
+                    var task = Substitute.For<IDatabaseTask>();
+                    task.Id.Returns(id);
+                    task.Name.Returns(id.ToString());
+                    return task;
+                }).ToList();
+
+                Projects = Enumerable.Range(30, 10).Select(id =>
+                {
+                    var tasks = id % 2 == 0 ? Tasks.Where(t => (t.Id == id - 10 || t.Id == id - 11)).ToList() : null;
                     var project = Substitute.For<IDatabaseProject>();
                     project.Id.Returns(id);
                     project.Name.Returns(id.ToString());
                     project.Color.Returns("#1e1e1e");
+                    project.Tasks.Returns(tasks);
 
-                    var client = id % 2 == 0 ? Clients.Single(c => c.Id == id - 10) : null;
+                    var client = id % 2 == 0 ? Clients.Single(c => c.Id == id - 20) : null;
                     project.Client.Returns(client);
+
+                    if (tasks != null)
+                    {
+                        foreach (var task in tasks)
+                            task.ProjectId.Returns(id);
+                    }
 
                     return project;
                 });
 
-                TimeEntries = Enumerable.Range(30, 10).Select(id =>
+                TimeEntries = Enumerable.Range(40, 10).Select(id =>
                 {
                     var timeEntry = Substitute.For<IDatabaseTimeEntry>();
                     timeEntry.Id.Returns(id);
@@ -65,16 +82,23 @@ namespace Toggl.Foundation.Tests.Autocomplete
                     var project = id % 2 == 0 ? Projects.Single(c => c.Id == id - 10) : null;
                     timeEntry.Project.Returns(project);
 
+                    var task = id > 45 ? project?.Tasks?.First() : null;
+                    //var task = id % 2 == 1 ? Tasks.Single(t => t.Id == id - 20) : null;
+                    timeEntry.Task.Returns(task);
+
                     return timeEntry;
                 });
 
-                Tags = Enumerable.Range(40, 10).Select(id =>
+                Tags = Enumerable.Range(50, 10).Select(id =>
                 {
                     var tag = Substitute.For<IDatabaseTag>();
                     tag.Id.Returns(id);
                     tag.Name.Returns(id.ToString());
                     return tag;
                 });
+
+                Database.Tasks.GetAll()
+                    .Returns(callInfo => Observable.Return(Tasks));
 
                 Database.Tags.GetAll()
                     .Returns(callInfo => Observable.Return(Tags));
@@ -146,7 +170,7 @@ namespace Toggl.Foundation.Tests.Autocomplete
                 [Fact]
                 public async Task SearchesTheDescription()
                 {
-                    const string description = "30";
+                    const string description = "40";
                     var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
 
                     var suggestions = await Provider.Query(textFieldInfo);
@@ -159,7 +183,7 @@ namespace Toggl.Foundation.Tests.Autocomplete
                 [Fact]
                 public async Task SearchesTheProjectsName()
                 {
-                    const string description = "20";
+                    const string description = "30";
                     var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
 
                     var suggestions = await Provider.Query(textFieldInfo);
@@ -183,9 +207,26 @@ namespace Toggl.Foundation.Tests.Autocomplete
                 }
 
                 [Fact]
+                public async Task SearchesTheTaskName()
+                {
+                    const string description = "25";
+                    var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
+
+                    var suggestions = await Provider.Query(textFieldInfo);
+
+                    await Database.TimeEntries.Received().GetAll();
+                    suggestions.Should().HaveCount(1)
+                        .And.AllBeOfType<TimeEntrySuggestion>();
+                    var suggestion = (TimeEntrySuggestion)suggestions.First();
+                    suggestion.TaskId.Should().Be(25);
+                    suggestion.ProjectId.Should().Be(36);
+                    suggestion.Description.Should().Be("46");
+                }
+
+                [Fact]
                 public async Task OnlyDisplaysResultsTheHaveHasAtLeastOneMatchOnEveryWordTyped()
                 {
-                    const string description = "10 20 3";
+                    const string description = "10 30 4";
                     var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
 
                     var suggestions = await Provider.Query(textFieldInfo);
@@ -230,7 +271,7 @@ namespace Toggl.Foundation.Tests.Autocomplete
                 [Fact]
                 public async Task SearchesTheName()
                 {
-                    const string description = "@20";
+                    const string description = "@30";
                     var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 1);
 
                     var suggestions = await Provider.Query(textFieldInfo);
@@ -254,9 +295,22 @@ namespace Toggl.Foundation.Tests.Autocomplete
                 }
 
                 [Fact]
+                public async Task SearchesTheTaskName()
+                {
+                    const string description = "@20";
+                    var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 1);
+
+                    var suggestions = await Provider.Query(textFieldInfo);
+
+                    await Database.Projects.Received().GetAll();
+                    suggestions.Should().HaveCount(1)
+                        .And.AllBeOfType<ProjectSuggestion>();
+                }
+
+                [Fact]
                 public async Task OnlyDisplaysResultsTheHaveHasAtLeastOneMatchOnEveryWordTyped()
                 {
-                    const string description = "@10 2";
+                    const string description = "@10 3";
                     var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 1);
 
                     var suggestions = await Provider.Query(textFieldInfo);
@@ -298,7 +352,7 @@ namespace Toggl.Foundation.Tests.Autocomplete
                 [Fact]
                 public async Task SearchesTheName()
                 {
-                    const string description = "#40";
+                    const string description = "#50";
                     var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 1);
 
                     var suggestions = await Provider.Query(textFieldInfo);
@@ -311,14 +365,14 @@ namespace Toggl.Foundation.Tests.Autocomplete
                 [Fact]
                 public async Task OnlyDisplaysResultsThatHaveAtLeastOneMatchOnEveryWordTyped()
                 {
-                    const string description = "#4 2";
+                    const string description = "#5 2";
                     var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 1);
 
                     var suggestions = await Provider.Query(textFieldInfo);
 
                     await Database.Tags.Received().GetAll();
                     suggestions.Single().Should().BeOfType<TagSuggestion>()
-                        .Which.Name.Should().Be("42");
+                        .Which.Name.Should().Be("52");
                 }
             }
 

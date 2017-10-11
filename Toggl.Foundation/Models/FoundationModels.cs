@@ -66,6 +66,8 @@ namespace Toggl.Foundation.Models
 
         public IDatabaseWorkspace Workspace { get; }
 
+        public IEnumerable<IDatabaseTask> Tasks { get; }
+
         public bool IsDeleted { get; }
 
         public SyncStatus SyncStatus { get; }

@@ -79,6 +79,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand<AutocompleteSuggestion> SelectSuggestionCommand { get; }
 
+        public IMvxCommand<ProjectSuggestion> ToggleTaskSuggestionsCommand { get; }
+
         public StartTimeEntryViewModel(ITogglDataSource dataSource, ITimeService timeService,
             IMvxNavigationService navigationService)
         {
@@ -98,6 +100,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ToggleTagSuggestionsCommand = new MvxCommand(toggleTagSuggestions);
             ToggleProjectSuggestionsCommand = new MvxCommand(toggleProjectSuggestions);
             SelectSuggestionCommand = new MvxCommand<AutocompleteSuggestion>(selectSuggestion);
+            ToggleTaskSuggestionsCommand = new MvxCommand<ProjectSuggestion>(toggleTaskSuggestions);
         }
 
         private void selectSuggestion(AutocompleteSuggestion suggestion)
@@ -114,18 +117,27 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                         timeEntrySuggestion.Description,
                         timeEntrySuggestion.Description.Length);
 
-                    if (timeEntrySuggestion.ProjectId.HasValue)
+                    if (!timeEntrySuggestion.ProjectId.HasValue)
+                    {
+                        TextFieldInfo = TextFieldInfo.RemoveProjectInfo();
+                        return;
+                    }
+
+                    if (timeEntrySuggestion.TaskId == null)
                     {
                         TextFieldInfo = TextFieldInfo.WithProjectInfo(
                             timeEntrySuggestion.ProjectId.Value,
                             timeEntrySuggestion.ProjectName,
                             timeEntrySuggestion.ProjectColor);
-                    }
-                    else
-                    {
-                        TextFieldInfo = TextFieldInfo.RemoveProjectInfo();
+                        break;
                     }
 
+                    TextFieldInfo = TextFieldInfo.WithProjectAndTaskInfo(
+                        timeEntrySuggestion.ProjectId.Value,
+                        timeEntrySuggestion.ProjectName,
+                        timeEntrySuggestion.ProjectColor,
+                        timeEntrySuggestion.TaskId.Value,
+                        timeEntrySuggestion.TaskName);
                     break;
 
                 case ProjectSuggestion projectSuggestion:
@@ -136,6 +148,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                             projectSuggestion.ProjectId,
                             projectSuggestion.ProjectName,
                             projectSuggestion.ProjectColor);
+                    break;
+
+                case TaskSuggestion taskSuggestion:
+                    
+                    TextFieldInfo = TextFieldInfo
+                        .RemoveProjectQueryFromDescriptionIfNeeded()
+                        .WithProjectAndTaskInfo(
+                            taskSuggestion.ProjectId,
+                            taskSuggestion.ProjectName,
+                            taskSuggestion.ProjectColor,
+                            taskSuggestion.TaskId,
+                            taskSuggestion.Name
+                        );
                     break;
 
                 case TagSuggestion tagSuggestion:
@@ -213,6 +238,25 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             TextFieldInfo = TextFieldInfo.WithTextAndCursor(newText, TextFieldInfo.CursorPosition + 1);
         }
 
+        private void toggleTaskSuggestions(ProjectSuggestion projectSuggestion)
+        {
+            var grouping = Suggestions.FirstOrDefault(s => s.WorkspaceName == projectSuggestion.WorkspaceName);
+            if (grouping == null) return;
+
+            var suggestionIndex = grouping.IndexOf(projectSuggestion);
+            if (suggestionIndex < 0) return;
+
+            projectSuggestion.TasksVisible = !projectSuggestion.TasksVisible;
+
+            var groupingIndex = Suggestions.IndexOf(grouping);
+            Suggestions.Remove(grouping);
+            Suggestions.Insert(groupingIndex,
+                new WorkspaceGroupedCollection<AutocompleteSuggestion>(
+                    grouping.WorkspaceName, getSuggestionsWithTasks(grouping)
+                )
+            );
+        }
+
         private void toggleBillable() => IsBillable = !IsBillable;
 
         private async Task changeStartTime()
@@ -260,6 +304,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 })
                 .Select(tuple => new StartTimeEntryDTO
                 {
+                    TaskId = TextFieldInfo.TaskId,
                     StartTime = StartTime,
                     Billable = IsBillable,
                     UserId = tuple.User.Id,
@@ -282,9 +327,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             Suggestions.Clear();
 
-            var groupedSuggestions = groupSuggestions(suggestions);
+            var groupedSuggestions = groupSuggestions(suggestions).ToList();
 
-            UseGrouping = groupedSuggestions.Count() > 1;
+            UseGrouping = groupedSuggestions.Count > 1;
             Suggestions.AddRange(groupedSuggestions);
 
         }
@@ -295,7 +340,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var firstSuggestion = suggestions.FirstOrDefault();
             if (firstSuggestion is ProjectSuggestion)
                 return suggestions.GroupByWorkspaceAddingNoProject();
-           
+
             return suggestions
                 .GroupBy(suggestion => suggestion.WorkspaceName)
                 .Select(grouping => new WorkspaceGroupedCollection<AutocompleteSuggestion>(
@@ -304,20 +349,35 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task setBillableValues(long projectId)
         {
-            var workspaceObservable = projectId == 0 
+            var workspaceObservable = projectId == 0
                 ? dataSource.Workspaces.GetDefault().Select(ws => (Workspace: ws, DefaultToBillable: false))
                 : dataSource.Projects.GetById(projectId)
-                    .SelectMany(project => 
+                    .SelectMany(project =>
                         dataSource.Workspaces
                             .GetById(project.WorkspaceId)
                             .Select(ws => (Workspace: ws, DefaultToBillable: project.Billable ?? false)));
-           
+
             (IsBillableAvailable, IsBillable) =
                 await workspaceObservable
                     .SelectMany(tuple =>
                         dataSource.Workspaces
                             .WorkspaceHasFeature(tuple.Workspace.Id, WorkspaceFeatureId.Pro)
                             .Select(isAvailable => (IsBillableAvailable: isAvailable, IsBillable: isAvailable && tuple.DefaultToBillable)));
+        }
+
+        private IEnumerable<AutocompleteSuggestion> getSuggestionsWithTasks(
+            IEnumerable<AutocompleteSuggestion> suggestions)
+        {
+            foreach (var suggestion in suggestions)
+            {
+                if (suggestion is TaskSuggestion) continue;
+
+                yield return suggestion;
+
+                if (suggestion is ProjectSuggestion projectSuggestion && projectSuggestion.TasksVisible)
+                    foreach (var taskSuggestion in projectSuggestion.Tasks)
+                        yield return taskSuggestion;
+            }
         }
     }
 }

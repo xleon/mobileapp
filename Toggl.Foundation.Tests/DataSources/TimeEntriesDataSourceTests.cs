@@ -32,6 +32,8 @@ namespace Toggl.Foundation.Tests.DataSources
 
             protected const long CurrentRunningId = 13;
 
+            protected const long TaskId = 14;
+
             protected ITimeEntriesSource TimeEntriesSource { get; }
 
             protected TestScheduler TestScheduler { get; } = new TestScheduler();
@@ -72,9 +74,10 @@ namespace Toggl.Foundation.Tests.DataSources
             }
 
             protected StartTimeEntryDTO CreateDto(DateTimeOffset startTime, string description, bool billable,
-                long? projectId) => new StartTimeEntryDTO
+                long? projectId, long? taskId = null) => new StartTimeEntryDTO
                 {
                     UserId = UserId,
+                    TaskId = taskId,
                     WorkspaceId = WorkspaceId,
                     StartTime = startTime,
                     Description = description,
@@ -159,6 +162,14 @@ namespace Toggl.Foundation.Tests.DataSources
                 await TimeEntriesSource.Start(CreateDto(ValidTime, ValidDescription, true, ProjectId));
 
                 await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.UserId == UserId));
+            }
+
+            [Fact]
+            public async ThreadingTask CreatesATimeEntryWithTheProvidedValueForTaskId()
+            {
+                await TimeEntriesSource.Start(CreateDto(ValidTime, ValidDescription, true, ProjectId, TaskId));
+
+                await Repository.Received().Create(Arg.Is<IDatabaseTimeEntry>(te => te.TaskId == TaskId));
             }
 
             [Fact]

@@ -134,6 +134,7 @@
     <Compile Include="Autocomplete\Suggestions\TagSuggestion.cs" />
     <Compile Include="DataSources\WorkspacesDataSource.cs" />
     <Compile Include="DataSources\TagsDataSource.cs" />
+    <Compile Include="Autocomplete\Suggestions\TaskSuggestion.cs" />
     <Compile Include="Exceptions\NoRunningTimeEntryException.cs" />
   </ItemGroup>
   <ItemGroup>

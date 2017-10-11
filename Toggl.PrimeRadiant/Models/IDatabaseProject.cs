@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Toggl.Multivac.Models;
 
 namespace Toggl.PrimeRadiant.Models
@@ -7,5 +8,7 @@ namespace Toggl.PrimeRadiant.Models
         IDatabaseClient Client { get; } 
 
         IDatabaseWorkspace Workspace { get; }
+
+        IEnumerable<IDatabaseTask> Tasks { get; }
     }
 }

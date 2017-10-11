@@ -23,9 +23,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         public abstract class StartTimeEntryViewModelTest : BaseViewModelTests<StartTimeEntryViewModel>
         {
-            protected const long TagId = 20;
             protected const string TagName = "Mobile";
 
+            protected const long TagId = 20;
+            protected const long TaskId = 30;
             protected const long ProjectId = 10;
             protected const long WorkspaceId = 40;
             protected const string ProjectName = "Toggl";
@@ -432,6 +433,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         {
             public sealed class StartsANewTimeEntry : StartTimeEntryViewModelTest
             {
+                private const long taskId = 9;
                 private const long userId = 10;
                 private const long projectId = 11;
                 private const long defaultWorkspaceId = 12;
@@ -551,6 +553,20 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 }
 
                 [Fact]
+                public async Task WithTheAppropriateTaskId()
+                {
+                    ViewModel.TextFieldInfo = TextFieldInfo.Empty
+                        .WithTextAndCursor(description, 0)
+                        .WithProjectAndTaskInfo(projectId, "Something", "#AABBCC", taskId, "Some task");
+
+                    ViewModel.DoneCommand.Execute();
+
+                    await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
+                        dto.TaskId == taskId
+                    ));
+                }
+
+                [Fact]
                 public async Task WithTheSelectedTags()
                 {
                     var tags = Enumerable.Range(0, 3).Select(tagSuggestionFromInt);
@@ -558,7 +574,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.TextFieldInfo =
                         tags.Aggregate(TextFieldInfo.Empty.WithTextAndCursor(description, 0),
                             (info, tag) => info.AddTag(tag));
-                    
+
                     ViewModel.DoneCommand.Execute();
 
                     await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
@@ -611,6 +627,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 where TSuggestion : AutocompleteSuggestion
             {
                 protected IDatabaseTag Tag { get; }
+                protected IDatabaseTask Task { get; }
                 protected IDatabaseProject Project { get; }
                 protected IDatabaseTimeEntry TimeEntry { get; }
                 protected IDatabaseWorkspace Workspace { get; }
@@ -629,6 +646,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Project.Workspace.Returns(Workspace);
                     Project.WorkspaceId.Returns(WorkspaceId);
 
+                    Task = Substitute.For<IDatabaseTask>();
+                    Task.Id.Returns(TaskId);
+                    Task.Project.Returns(Project);
+                    Task.ProjectId.Returns(ProjectId);
+                    Task.Name.Returns(TaskId.ToString());
+
                     TimeEntry = Substitute.For<IDatabaseTimeEntry>();
                     TimeEntry.Description.Returns(Description);
                     TimeEntry.Project.Returns(Project);
@@ -639,7 +662,88 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 }
             }
 
-            public sealed class WhenSelectingATimeEntrySuggestion : SelectSuggestionTest<TimeEntrySuggestion>
+            public abstract class ProjectSettingSuggestion<TSuggestion> : SelectSuggestionTest<TSuggestion>
+                where TSuggestion : AutocompleteSuggestion
+            {
+                [Fact]
+                public void SetsTheProjectIdToTheSuggestedProjectId()
+                {
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.TextFieldInfo.ProjectId.Should().Be(ProjectId);
+                }
+
+                [Fact]
+                public void SetsTheProjectNameToTheSuggestedProjectName()
+                {
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.TextFieldInfo.ProjectName.Should().Be(ProjectName);
+                }
+
+                [Fact]
+                public void SetsTheProjectColorToTheSuggestedProjectColor()
+                {
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.TextFieldInfo.ProjectColor.Should().Be(ProjectColor);
+                }
+
+                [Theory]
+                [InlineData(true)]
+                [InlineData(false)]
+                [InlineData(null)]
+                public void SetsTheAppropriateBillableValue(bool? billableValue)
+                {
+                    Project.Billable.Returns(billableValue);
+                    DataSource.Projects.GetById(ProjectId).Returns(Observable.Return(Project));
+                    DataSource.Workspaces.GetById(WorkspaceId).Returns(Observable.Return(Workspace));
+                    DataSource.Workspaces.WorkspaceHasFeature(WorkspaceId, WorkspaceFeatureId.Pro)
+                        .Returns(Observable.Return(true));
+
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.IsBillable.Should().Be(billableValue ?? false);
+                    ViewModel.IsBillableAvailable.Should().BeTrue();
+                }
+
+                [Theory]
+                [InlineData(true)]
+                [InlineData(false)]
+                [InlineData(null)]
+                public void DisablesBillableIfTheWorkspaceOfTheSelectedProjectDoesNotAllowIt(bool? billableValue)
+                {
+                    Project.Billable.Returns(billableValue);
+                    DataSource.Projects.GetById(ProjectId).Returns(Observable.Return(Project));
+                    DataSource.Workspaces.GetById(WorkspaceId).Returns(Observable.Return(Workspace));
+                    DataSource.Workspaces.WorkspaceHasFeature(WorkspaceId, WorkspaceFeatureId.Pro)
+                        .Returns(Observable.Return(false));
+
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.IsBillable.Should().BeFalse();
+                    ViewModel.IsBillableAvailable.Should().BeFalse();
+                }
+            }
+
+            public abstract class ProjectTaskSuggestion<TSuggestion> : ProjectSettingSuggestion<TSuggestion>
+                where TSuggestion : AutocompleteSuggestion
+            {
+                protected ProjectTaskSuggestion()
+                {
+                    ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor("Something @togg", 15);
+                }
+
+                [Fact]
+                public void RemovesTheProjectQueryFromTheTextFieldInfo()
+                {
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.TextFieldInfo.Text.Should().Be("Something ");
+                }
+            }
+
+            public sealed class WhenSelectingATimeEntrySuggestion : ProjectSettingSuggestion<TimeEntrySuggestion>
             {
                 protected override TimeEntrySuggestion Suggestion { get; }
 
@@ -655,145 +759,41 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     ViewModel.TextFieldInfo.Text.Should().Be(Description);
                 }
+            }
 
-                [Fact]
-                public void SetsTheProjectIdToTheSuggestedProjectId()
+            public sealed class WhenSelectingATaskSuggestion : ProjectTaskSuggestion<TaskSuggestion>
+            {
+                protected override TaskSuggestion Suggestion { get; }
+
+                public WhenSelectingATaskSuggestion()
                 {
-                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
-
-                    ViewModel.TextFieldInfo.ProjectId.Should().Be(ProjectId);
+                    Suggestion = new TaskSuggestion(Task);
                 }
 
                 [Fact]
-                public void SetsTheProjectNameToTheSuggestedProjectName()
+                public void SetsTheTaskIdToTheSameIdAsTheSelectedSuggestion()
                 {
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
 
-                    ViewModel.TextFieldInfo.ProjectName.Should().Be(ProjectName);
-                }
-
-                [Fact]
-                public void SetsTheProjectColorToTheSuggestedProjectColor()
-                {
-                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
-
-                    ViewModel.TextFieldInfo.ProjectColor.Should().Be(ProjectColor);
-                }
-
-                [Theory]
-                [InlineData(true)]
-                [InlineData(false)]
-                [InlineData(null)]
-                public void SetsTheAppropriateBillableValue(bool? billableValue)
-                {
-                    Project.Billable.Returns(billableValue);
-                    DataSource.Projects.GetById(ProjectId).Returns(Observable.Return(Project));
-                    DataSource.Workspaces.GetById(WorkspaceId).Returns(Observable.Return(Workspace));
-                    DataSource.Workspaces.WorkspaceHasFeature(WorkspaceId, WorkspaceFeatureId.Pro)
-                        .Returns(Observable.Return(true));
-
-                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
-
-                    ViewModel.IsBillable.Should().Be(billableValue ?? false);
-                    ViewModel.IsBillableAvailable.Should().BeTrue();
-                }
-
-                [Theory]
-                [InlineData(true)]
-                [InlineData(false)]
-                [InlineData(null)]
-                public void DisablesBillableIfTheWorkspaceOfTheSelectedProjectDoesNotAllowIt(bool? billableValue)
-                {
-                    Project.Billable.Returns(billableValue);
-                    DataSource.Projects.GetById(ProjectId).Returns(Observable.Return(Project));
-                    DataSource.Workspaces.GetById(WorkspaceId).Returns(Observable.Return(Workspace));
-                    DataSource.Workspaces.WorkspaceHasFeature(WorkspaceId, WorkspaceFeatureId.Pro)
-                        .Returns(Observable.Return(false));
-
-                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
-
-                    ViewModel.IsBillable.Should().BeFalse();
-                    ViewModel.IsBillableAvailable.Should().BeFalse();
+                    ViewModel.TextFieldInfo.TaskId.Should().Be(TaskId);
                 }
             }
 
-            public sealed class WhenSelectingAProjectSuggestion : SelectSuggestionTest<ProjectSuggestion>
+            public sealed class WhenSelectingAProjectSuggestion : ProjectTaskSuggestion<ProjectSuggestion>
             {
                 protected override ProjectSuggestion Suggestion { get; }
 
                 public WhenSelectingAProjectSuggestion()
                 {
                     Suggestion = new ProjectSuggestion(Project);
-
-                    ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor("Something @togg", 15);
                 }
 
                 [Fact]
-                public void RemovesTheProjectQueryFromTheTextFieldInfo()
+                public void SetsTheTaskIdToNull()
                 {
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
 
-                    ViewModel.TextFieldInfo.Text.Should().Be("Something ");
-                }
-
-                [Fact]
-                public void SetsTheProjectIdToTheSuggestedProjectId()
-                {
-                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
-
-                    ViewModel.TextFieldInfo.ProjectId.Should().Be(ProjectId);
-                }
-
-                [Fact]
-                public void SetsTheProjectNameToTheSuggestedProjectName()
-                {
-                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
-
-                    ViewModel.TextFieldInfo.ProjectName.Should().Be(ProjectName);
-                }
-
-                [Fact]
-                public void SetsTheProjectColorToTheSuggestedProjectColor()
-                {
-                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
-
-                    ViewModel.TextFieldInfo.ProjectColor.Should().Be(ProjectColor);
-                }
-
-                [Theory]
-                [InlineData(true)]
-                [InlineData(false)]
-                [InlineData(null)]
-                public void SetsTheAppropriateBillableValue(bool? billableValue)
-                {
-                    Project.Billable.Returns(billableValue);
-                    DataSource.Projects.GetById(ProjectId).Returns(Observable.Return(Project));
-                    DataSource.Workspaces.GetById(WorkspaceId).Returns(Observable.Return(Workspace));
-                    DataSource.Workspaces.WorkspaceHasFeature(WorkspaceId, WorkspaceFeatureId.Pro)
-                        .Returns(Observable.Return(true));
-
-                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
-
-                    ViewModel.IsBillable.Should().Be(billableValue ?? false);
-                    ViewModel.IsBillableAvailable.Should().BeTrue();
-                }
-
-                [Theory]
-                [InlineData(true)]
-                [InlineData(false)]
-                [InlineData(null)]
-                public void DisablesBillableIfTheWorkspaceOfTheSelectedProjectDoesNotAllowIt(bool? billableValue)
-                {
-                    Project.Billable.Returns(billableValue);
-                    DataSource.Projects.GetById(ProjectId).Returns(Observable.Return(Project));
-                    DataSource.Workspaces.GetById(WorkspaceId).Returns(Observable.Return(Workspace));
-                    DataSource.Workspaces.WorkspaceHasFeature(WorkspaceId, WorkspaceFeatureId.Pro)
-                        .Returns(Observable.Return(false));
-
-                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
-
-                    ViewModel.IsBillable.Should().BeFalse();
-                    ViewModel.IsBillableAvailable.Should().BeFalse();
+                    ViewModel.TextFieldInfo.TaskId.Should().BeNull();
                 }
             }
 

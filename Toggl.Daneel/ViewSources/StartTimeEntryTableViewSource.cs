@@ -1,5 +1,6 @@
 ﻿using System;
 using Foundation;
+using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Color.iOS;
 using Toggl.Daneel.Views;
 using Toggl.Foundation.Autocomplete.Suggestions;
@@ -11,6 +12,7 @@ namespace Toggl.Daneel.ViewSources
     public sealed class StartTimeEntryTableViewSource : GroupedCollectionTableViewSource<AutocompleteSuggestion>
     {
         private const string tagCellIdentifier = nameof(TagSuggestionViewCell);
+        private const string taskCellIdentifier = nameof(TaskSuggestionViewCell);
         private const string headerCellIdentifier = nameof(WorkspaceHeaderViewCell);
         private const string timeEntryCellIdentifier = nameof(StartTimeEntryViewCell);
         private const string projectCellIdentifier = nameof(ProjectSuggestionViewCell);
@@ -18,13 +20,16 @@ namespace Toggl.Daneel.ViewSources
 
         public bool UseGrouping { get; set; }
 
+        public IMvxCommand<ProjectSuggestion> ToggleTasksCommand { get; set; }
+
         public StartTimeEntryTableViewSource(UITableView tableView)
             : base(tableView, headerCellIdentifier, "")
         {
             tableView.TableFooterView = new UIView();
-            tableView.SeparatorStyle = UITableViewCellSeparatorStyle.SingleLine;
+            tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             tableView.SeparatorColor = Color.StartTimeEntry.SeparatorColor.ToNativeColor();
             tableView.RegisterNibForCellReuse(TagSuggestionViewCell.Nib, tagCellIdentifier);
+            tableView.RegisterNibForCellReuse(TaskSuggestionViewCell.Nib, taskCellIdentifier);
             tableView.RegisterNibForCellReuse(StartTimeEntryViewCell.Nib, timeEntryCellIdentifier);
             tableView.RegisterNibForCellReuse(ProjectSuggestionViewCell.Nib, projectCellIdentifier);
             tableView.RegisterNibForCellReuse(StartTimeEntryEmptyViewCell.Nib, emptySuggestionIdentifier);
@@ -44,6 +49,16 @@ namespace Toggl.Daneel.ViewSources
             cell.LayoutMargins = UIEdgeInsets.Zero;
             cell.SeparatorInset = UIEdgeInsets.Zero;
             cell.PreservesSuperviewLayoutMargins = false;
+
+            if (cell is ProjectSuggestionViewCell projectCell)
+            {
+                projectCell.ToggleTasksCommand = ToggleTasksCommand;
+                
+                var previousItemPath = NSIndexPath.FromItemSection(indexPath.Item - 1, indexPath.Section);
+                var previous = GetItemAt(previousItemPath);
+                var previousIsTask = previous is TaskSuggestion;
+                projectCell.TopSeparatorHidden = !previousIsTask;
+            }
 
             return cell;
         }
@@ -69,6 +84,9 @@ namespace Toggl.Daneel.ViewSources
 
             if (item is TagSuggestion)
                 return tagCellIdentifier;
+            
+            if (item is TaskSuggestion)
+                return taskCellIdentifier;
 
             return timeEntryCellIdentifier;
         }

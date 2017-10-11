@@ -1,6 +1,6 @@
 // WARNING
 //
-// This file has been generated automatically by Xamarin Studio from the outlets and
+// This file has been generated automatically by Visual Studio from the outlets and
 // actions declared in your storyboard file.
 // Manual changes to this file will not be maintained.
 //
@@ -33,6 +33,14 @@ namespace Toggl.Daneel.Views
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIImageView ToggleTaskImage { get; set; }
 
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton ToggleTasksButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView TopSeparatorView { get; set; }
+
         void ReleaseDesignerOutlets ()
         {
             if (AmountOfTasksLabel != null) {
@@ -58,6 +66,16 @@ namespace Toggl.Daneel.Views
             if (ToggleTaskImage != null) {
                 ToggleTaskImage.Dispose ();
                 ToggleTaskImage = null;
+            }
+
+            if (ToggleTasksButton != null) {
+                ToggleTasksButton.Dispose ();
+                ToggleTasksButton = null;
+            }
+
+            if (TopSeparatorView != null) {
+                TopSeparatorView.Dispose ();
+                TopSeparatorView = null;
             }
         }
     }

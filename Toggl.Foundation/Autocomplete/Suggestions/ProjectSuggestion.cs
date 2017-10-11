@@ -10,7 +10,7 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
 
         public static IEnumerable<ProjectSuggestion> FromProjects(
             IEnumerable<IDatabaseProject> projects
-        ) => projects.Select(p => new ProjectSuggestion(p));
+        ) => projects.Select(project => new ProjectSuggestion(project));
 
         public static IEnumerable<ProjectSuggestion> FromProjectsPrependingEmpty(
             IEnumerable<IDatabaseProject> projects) 
@@ -25,11 +25,15 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
 
         public int NumberOfTasks { get; } = 0;
 
+        public IList<TaskSuggestion> Tasks { get; }
+
         public string ProjectName { get; } = "";
 
         public string ClientName { get; } = "";
 
         public string ProjectColor { get; }
+
+        public bool TasksVisible { get; set; }
 
         private ProjectSuggestion()
         {
@@ -44,8 +48,10 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
             ProjectId = project.Id;
             ProjectName = project.Name;
             ProjectColor = project.Color;
+            NumberOfTasks = project.Tasks?.Count() ?? 0;
             ClientName = project.Client?.Name ?? "";
             WorkspaceName = project.Workspace?.Name ?? "";
+            Tasks = project.Tasks?.Select(task => new TaskSuggestion(task)).ToList() ?? new List<TaskSuggestion>();
         }
 
         public override int GetHashCode()

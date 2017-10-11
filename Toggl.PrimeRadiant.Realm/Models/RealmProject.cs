@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Realms;
 using Toggl.PrimeRadiant.Models;
 
@@ -43,5 +45,10 @@ namespace Toggl.PrimeRadiant.Realm
         public long? ClientId => RealmClient?.Id;
 
         public IDatabaseClient Client => RealmClient;
+
+        [Backlink(nameof(RealmTask.RealmProject))]
+        public IQueryable<RealmTask> RealmTasks { get; }
+
+        public IEnumerable<IDatabaseTask> Tasks => RealmTasks;
     }
 }

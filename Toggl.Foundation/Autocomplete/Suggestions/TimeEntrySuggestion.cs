@@ -20,6 +20,10 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
         
         public string ProjectColor { get; } = "";
 
+        public long? TaskId { get; }
+
+        public string TaskName { get; } = "";
+
         public string ClientName { get; } = "";
 
         public TimeEntrySuggestion(IDatabaseTimeEntry timeEntry)
@@ -33,8 +37,14 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
             ProjectName = timeEntry.Project.Name;
             ProjectColor = timeEntry.Project.Color;
 
-            if (timeEntry.Project.Client == null) return;
-            ClientName = timeEntry.Project.Client.Name;
+            if (timeEntry.Project.Client != null)
+                ClientName = timeEntry.Project.Client.Name;
+
+            if (timeEntry.Task != null)
+            {
+                TaskId = timeEntry.Task.Id;
+                TaskName = timeEntry.Task.Name;
+            }
         }
 
         public override int GetHashCode()

@@ -92,14 +92,15 @@ namespace Toggl.Foundation.Autocomplete
                 timeEntries.Where(
                     te => te.Description.ContainsIgnoringCase(word)
                        || (te.Project != null && te.Project.Name.ContainsIgnoringCase(word))
-                       || (te.Project?.Client != null && te.Project.Client.Name.ContainsIgnoringCase(word)));
+                       || (te.Project?.Client != null && te.Project.Client.Name.ContainsIgnoringCase(word))
+                       || (te.Task != null && te.Task.Name.ContainsIgnoringCase(word)));
 
         private Func<IEnumerable<IDatabaseProject>, IEnumerable<IDatabaseProject>> filterProjectsByWord(string word)
             => projects =>
                 projects.Where(
                     p => p.Name.ContainsIgnoringCase(word)
-                      || (p.Client != null && p.Client.Name.ContainsIgnoringCase(word)));
-
+                      || (p.Client != null && p.Client.Name.ContainsIgnoringCase(word))
+                      || (p.Tasks != null && p.Tasks.Any(task => task.Name.ContainsIgnoringCase(word))));
 
         private Func<IEnumerable<IDatabaseTag>, IEnumerable<IDatabaseTag>> filterTagsByWord(string word)
             => tags => tags.Where(t => t.Name.ContainsIgnoringCase(word));

@@ -89,6 +89,7 @@ namespace Toggl.Foundation.DataSources
                 .Apply(TimeEntry.Builder.Create)
                 .SetUserId(dto.UserId)
                 .SetTagIds(dto.TagIds)
+                .SetTaskId(dto.TaskId)
                 .SetStart(dto.StartTime)
                 .SetBillable(dto.Billable)
                 .SetProjectId(dto.ProjectId)

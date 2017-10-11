@@ -13,10 +13,12 @@ namespace Toggl.Foundation.Tests.Autocomplete
             protected const string ProjectName = "Toggl";
             protected const string ProjectColor = "#F41F19";
             protected const string Description = "Testing Toggl mobile apps";
+            protected const long TaskId = 13;
+            protected const string TaskName = "Test Toggl apps";
 
             protected TextFieldInfo CreateDefaultTextFieldInfo() => TextFieldInfo.Empty
                 .WithTextAndCursor(Description, Description.Length)
-                .WithProjectInfo(ProjectId, ProjectName, ProjectColor);
+                .WithProjectAndTaskInfo(ProjectId, ProjectName, ProjectColor, TaskId, TaskName);
         }
 
         public sealed class TheDescriptionCursorPositionProperty
@@ -67,6 +69,51 @@ namespace Toggl.Foundation.Tests.Autocomplete
                         .WithProjectInfo(newProjectId, newProjectName, newProjectColor);
 
                 textFieldInfo.Should().Be(expected);
+            }
+
+            [Fact]
+            public void RemovesTheTaskIdAndTaskName()
+            {
+                const long newProjectId = 11;
+                const string newProjectName = "Some other project";
+                const string newProjectColor = "Some other project";
+
+                var textFieldInfo =
+                    CreateDefaultTextFieldInfo()
+                        .WithProjectInfo(newProjectId, newProjectName, newProjectColor);
+
+                textFieldInfo.TaskId.Should().BeNull();
+                textFieldInfo.TaskName.Should().BeEmpty();
+            }
+        }
+
+        public sealed class TheWithProjectAndTaskInfoMethod : TextFieldInfoTest
+        {
+            private const long projectId = 20;
+            private const string projectName = "New project";
+            private const string projectColor = "FFAABB";
+            private const long taskId = 30;
+            private const string taskName = "New task";
+
+            [Fact]
+            public void SetsTheProjectInfo()
+            {
+                var textFieldInfo = CreateDefaultTextFieldInfo()
+                    .WithProjectAndTaskInfo(projectId, projectName, projectColor, taskId, taskName);
+
+                textFieldInfo.ProjectId.Should().Be(projectId);
+                textFieldInfo.ProjectName.Should().Be(projectName);
+                textFieldInfo.ProjectColor.Should().Be(projectColor);
+            }
+
+            [Fact]
+            public void SetsTheTaskInfo()
+            {
+                var textFieldInfo = CreateDefaultTextFieldInfo()
+                    .WithProjectAndTaskInfo(projectId, projectName, projectColor, taskId, taskName);
+
+                textFieldInfo.TaskId.Should().Be(taskId);
+                textFieldInfo.TaskName.Should().Be(taskName);
             }
         }
 

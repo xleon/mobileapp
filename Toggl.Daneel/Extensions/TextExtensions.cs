@@ -30,7 +30,7 @@ namespace Toggl.Daneel.Extensions
         {
             var result = self.Text;
 
-            var projectText = info.PaddedProjectName();
+            var projectText = info.PaddedProjectAndTaskName();
             if (!string.IsNullOrEmpty(projectText))
                 result = result.Replace(projectText, "");
 
@@ -40,8 +40,18 @@ namespace Toggl.Daneel.Extensions
             return result;
         }
 
-        public static string PaddedProjectName(this TextFieldInfo self)
-            => string.IsNullOrEmpty(self.ProjectName) ? "" : $"      {self.ProjectName}   ".Replace(" ", space);
+        public static string PaddedProjectAndTaskName(this TextFieldInfo self)
+        {
+            if (string.IsNullOrEmpty(self.ProjectName)) return "";
+
+            var builder = new StringBuilder($"      {self.ProjectName}");
+            if (self.TaskId != null)
+                builder.Append($": {self.TaskName}");
+            builder.Append("   ");
+            builder.Replace(" ", space);
+
+            return builder.ToString();
+        }
 
         public static string TagsText(this TextFieldInfo self)
             => self.Tags.Length == 0 ? "" :
@@ -56,7 +66,7 @@ namespace Toggl.Daneel.Extensions
 
         public static NSAttributedString GetAttributedText(this TextFieldInfo self)
         {
-            var projectName = self.PaddedProjectName();
+            var projectName = self.PaddedProjectAndTaskName();
             var tags = self.TagsText();
             var fullText = $"{self.Text}{projectName}{tags}";
             var result = new NSMutableAttributedString(fullText);

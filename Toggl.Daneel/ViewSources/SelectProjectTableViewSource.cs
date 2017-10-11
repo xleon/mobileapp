@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using Foundation;
 using Toggl.Daneel.Views;
 using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.MvvmCross.Collections;
 using UIKit;
 
 namespace Toggl.Daneel.ViewSources
 {
-    public sealed class SelectProjectTableViewSource : GroupedCollectionTableViewSource<ProjectSuggestion>
+    public sealed class SelectProjectTableViewSource : GroupedCollectionTableViewSource<AutocompleteSuggestion>
     {
         private const string cellIdentifier = nameof(ProjectSuggestionViewCell);
         private const string headerCellIdentifier = nameof(WorkspaceHeaderViewCell);

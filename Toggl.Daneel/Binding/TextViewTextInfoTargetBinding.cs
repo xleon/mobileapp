@@ -83,7 +83,7 @@ namespace Toggl.Daneel.Binding
 
         private void onTagDeleted(object sender, TextViewInfoDelegate.TagDeletedEventArgs e)
         {
-            var currentIndex = textFieldInfo.Text.Length + textFieldInfo.PaddedProjectName().Length;
+            var currentIndex = textFieldInfo.Text.Length + textFieldInfo.PaddedProjectAndTaskName().Length;
             foreach (var tag in textFieldInfo.Tags)
             {
                 var tagTextLength = tag.Name.Length + 6;
@@ -124,7 +124,7 @@ namespace Toggl.Daneel.Binding
             var oldCursorPosition = textFieldInfo.CursorPosition;
             var isMovingForward = newCursorPosition >= oldCursorPosition;
 
-            var paddedProjectLength = textFieldInfo.PaddedProjectName().Length;
+            var paddedProjectLength = textFieldInfo.PaddedProjectAndTaskName().Length;
             var cursorIsInsideProjectToken = newCursorPosition <= descriptionLength + paddedProjectLength;
             if (cursorIsInsideProjectToken)
             {
