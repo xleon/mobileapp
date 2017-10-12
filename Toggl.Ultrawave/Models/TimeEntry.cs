@@ -2,6 +2,7 @@
 using Toggl.Multivac.Models;
 using Toggl.Multivac.Extensions;
 using System.Collections.Generic;
+using Toggl.Ultrawave.Serialization;
 
 namespace Toggl.Ultrawave.Models
 {
@@ -33,8 +34,10 @@ namespace Toggl.Ultrawave.Models
 
         public DateTimeOffset At { get; set; }
 
+        [IgnoreWhenPosting]
         public DateTimeOffset? ServerDeletedAt { get; set; }
-        
+
+        [IgnoreWhenPosting]
         public long UserId { get; set; }
 
         public string CreatedWith { get; set; }
