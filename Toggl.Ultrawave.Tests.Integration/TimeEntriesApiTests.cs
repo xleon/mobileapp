@@ -143,6 +143,52 @@ namespace Toggl.Ultrawave.Tests.Integration
                 creatingTimeEntry.ShouldThrow<InternalServerErrorException>();
             }
 
+            [Fact]
+            public async Task TheTimeEntryReturnedByBackendIsARunningTimeEntryWhenPostingANewRunningTimeEntry()
+            {
+                var (togglApi, user) = await SetupTestUser();
+                var start = new DateTimeOffset(2017, 10, 12, 11, 31, 00, TimeSpan.Zero);
+                var timeEntry = new Ultrawave.Models.TimeEntry
+                {
+                    Description = Guid.NewGuid().ToString(),
+                    WorkspaceId = user.DefaultWorkspaceId,
+                    Start = start,
+                    Stop = null,
+                    UserId = user.Id,
+                    TagIds = new List<long>(),
+                    CreatedWith = "IntegrationTests/0.0"
+                };
+
+                var postedTimeEntry = await togglApi.TimeEntries.Create(timeEntry);
+
+                postedTimeEntry.Stop.Should().BeNull();
+            }
+
+            [Fact]
+            public async Task TheTimeEntryStoredInBackendIsARunningTimeEntryWhenFetchingItAfterPostingANewRunningTimeEntry()
+            {
+                var (togglApi, user) = await SetupTestUser();
+                var start = new DateTimeOffset(2017, 10, 12, 11, 31, 00, TimeSpan.Zero);
+                var timeEntry = new Ultrawave.Models.TimeEntry
+                {
+                    Description = Guid.NewGuid().ToString(),
+                    WorkspaceId = user.DefaultWorkspaceId,
+                    Start = start,
+                    Stop = null,
+                    UserId = user.Id,
+                    TagIds = new List<long>(),
+                    CreatedWith = "IntegrationTests/0.0"
+                };
+
+                var postedTimeEntry = await togglApi.TimeEntries.Create(timeEntry);
+                var fetchedTimeEntry = await togglApi.TimeEntries.GetAll()
+                    .SelectMany(timeEntries => timeEntries)
+                    .Where(te => te.Id == postedTimeEntry.Id)
+                    .SingleAsync();
+
+                fetchedTimeEntry.Stop.Should().BeNull();
+            }
+
             protected override IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi)
                 => Observable.Defer(async () =>
                 {
