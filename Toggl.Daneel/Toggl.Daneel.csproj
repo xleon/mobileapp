@@ -317,6 +317,7 @@
     <ImageAsset Include="Resources\Images.xcassets\icUnsynced.imageset\icUnsynced.png" />
     <ImageAsset Include="Resources\Images.xcassets\icUnsynced.imageset\icUnsynced%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icUnsynced.imageset\icUnsynced%403x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\toggl-app-icon-1024x1024.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
