@@ -120,6 +120,7 @@ namespace Toggl.Foundation.DataSources
 
         public IObservable<IDatabaseTimeEntry> Update(long id, IDatabaseTimeEntry entity)
             => repository.Update(id, entity)
+                .Do(_ => maybeUpdateCurrentlyRunningTimeEntryId(id, entity))
                 .Do(timeEntryUpdatedSubject.OnNext);
 
         public IObservable<IEnumerable<(ConflictResolutionMode ResolutionMode, IDatabaseTimeEntry Entity)>> BatchUpdate(
@@ -179,6 +180,12 @@ namespace Toggl.Foundation.DataSources
         private void setRunningTimeEntryId(IDatabaseTimeEntry timeEntry)
         {
             currentlyRunningTimeEntryId = timeEntry?.Id;
+        }
+
+        private void maybeUpdateCurrentlyRunningTimeEntryId(long id, IDatabaseTimeEntry entity)
+        {
+            if (id == currentlyRunningTimeEntryId)
+                currentlyRunningTimeEntryId = entity.Id;
         }
     }
 }
