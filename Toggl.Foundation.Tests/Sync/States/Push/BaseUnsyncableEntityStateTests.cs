@@ -110,7 +110,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             public void TheErrorMessageMatchesTheMessageFromTheReasonException()
             {
                 var entity = CreateDirtyEntity();
-                var reason = new ApiException(Guid.NewGuid().ToString());
+                var reason = new BadRequestException("Test.");
                 var state = CreateState(repository);
                 prepareBatchUpdate(entity);
 
@@ -126,7 +126,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var state = CreateState(repository);
                 prepareBatchUpdate(entity);
 
-                var transition = state.Start((new ApiException("test"), entity)).SingleAsync().Wait();
+                var transition = state.Start((new BadRequestException(), entity)).SingleAsync().Wait();
                 var unsyncableEntity = ((Transition<TModel>)transition).Parameter;
 
                 unsyncableEntity.SyncStatus.Should().Be(SyncStatus.SyncFailed);
@@ -138,7 +138,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var state = CreateState(repository);
                 prepareBatchUpdate(entity);
 
-                state.Start((new ApiException("test"), entity)).SingleAsync().Wait();
+                state.Start((new BadRequestException(), entity)).SingleAsync().Wait();
 
                 repository
                     .Received()
@@ -150,7 +150,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             public void TheOnlyThingThatChangesInTheUnsyncableEntityIsTheSyncStatusAndLastSyncErrorMessage()
             {
                 var entity = CreateDirtyEntity();
-                var reason = new ApiException(Guid.NewGuid().ToString());
+                var reason = new BadRequestException();
                 var state = CreateState(repository);
                 prepareBatchUpdate(entity);
 

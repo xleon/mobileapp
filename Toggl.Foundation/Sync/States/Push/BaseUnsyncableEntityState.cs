@@ -39,7 +39,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             => repository
                 .UpdateWithConflictResolution(entity.Id, CreateUnsyncableFrom(entity, reason), overwriteIfLocalEntityDidNotChange(entity))
                 .Select(updated => MarkedAsUnsyncable.Transition(CopyFrom(updated.Entity)));
-        
+
         private Func<TModel, TModel, ConflictResolutionMode> overwriteIfLocalEntityDidNotChange(TModel local)
             => (currentLocal, _) => HasChanged(local, currentLocal)
                 ? ConflictResolutionMode.Ignore

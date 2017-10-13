@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
+using Toggl.Ultrawave.Exceptions;
 
 namespace Toggl.Foundation.Sync.States
 {
@@ -12,7 +13,9 @@ namespace Toggl.Foundation.Sync.States
         private readonly ITogglApi api;
         private readonly IRepository<TModel> repository;
 
-        public StateResult<(Exception, TModel)> UpdatingFailed { get; } = new StateResult<(Exception, TModel)>();
+        public StateResult<(Exception, TModel)> ClientError { get; } = new StateResult<(Exception, TModel)>();
+        public StateResult<(Exception, TModel)> ServerError { get; } = new StateResult<(Exception, TModel)>();
+        public StateResult<(Exception, TModel)> UnknownError { get; } = new StateResult<(Exception, TModel)>();
         public StateResult<TModel> EntityChanged { get; } = new StateResult<TModel>();
         public StateResult<TModel> UpdatingSucceeded { get; } = new StateResult<TModel>();
 
@@ -47,7 +50,12 @@ namespace Toggl.Foundation.Sync.States
                 : ConflictResolutionMode.Update;
 
         private Func<Exception, IObservable<ITransition>> fail(TModel entity)
-            => exception => Observable.Return((ITransition)UpdatingFailed.Transition((exception, entity)));
+            => exception =>
+                exception is ServerErrorException
+                    ? Observable.Return(ServerError.Transition((exception, entity)))
+                    : exception is ClientErrorException
+                        ? Observable.Return(ClientError.Transition((exception, entity)))
+                        : Observable.Return(UnknownError.Transition((exception, entity)));
 
         private IObservable<ITransition> succeeded(TModel entity)
             => Observable.Return((ITransition)UpdatingSucceeded.Transition(entity));

@@ -205,10 +205,12 @@
     <Compile Include="MvvmCross\Converters\TimeSpanToDurationValueConverterTests.cs" />
     <Compile Include="Sync\ConflictResolution\TimeEntryRivalsResolverTests.cs" />
     <Compile Include="Sync\DeadlockTests.cs" />
+    <Compile Include="Sync\RetryDelayServiceTests.cs" />
     <Compile Include="Sync\StateMachineOrchestratorTests.cs" />
     <Compile Include="Sync\StateMachineTests.cs" />
     <Compile Include="Sync\States\Pull\PersistTasksStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistWorkspaceFeaturesStateTests.cs" />
+    <Compile Include="Sync\States\Push\CheckServerStatusStateTests.cs" />
     <Compile Include="Sync\States\Push\BaseUnsyncableEntityStateTests.cs" />
     <Compile Include="Sync\States\Push\UnsyncableTimeEntryStateTests.cs" />
     <Compile Include="Sync\States\Push\BaseUpdateEntityStateTests.cs" />
@@ -249,6 +251,7 @@
     <Compile Include="MvvmCross\ViewModels\SelectProjectViewModelTests.cs" />
     <Compile Include="DataSources\WorkspacesDataSourceTests.cs" />
     <Compile Include="MvvmCross\ViewModels\SelectTagsViewModelTests.cs" />
+    <Compile Include="Sync\States\Push\ResetAPIDelayStateTests.cs" />
     <Compile Include="DataSources\TasksDataSourceTests.cs" />
   </ItemGroup>
   <ItemGroup>

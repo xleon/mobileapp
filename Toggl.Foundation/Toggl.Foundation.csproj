@@ -65,10 +65,12 @@
     <Compile Include="Sync\ConflictResolution\Selectors\TagSyncSelector.cs" />
     <Compile Include="Sync\ConflictResolution\Selectors\TaskSyncSelector.cs" />
     <Compile Include="Sync\ConflictResolution\Selectors\WorkspaceSyncSelector.cs" />
+    <Compile Include="Sync\IRetryDelayService.cs" />
     <Compile Include="Sync\ConflictResolution\TimeEntryRivalsResolver.cs" />
     <Compile Include="Sync\IStateMachineOrchestrator.cs" />
     <Compile Include="Sync\ISyncManager.cs" />
     <Compile Include="Sync\ISyncStateQueue.cs" />
+    <Compile Include="Sync\RetryDelayService.cs" />
     <Compile Include="Sync\StateMachineEntryPoints.cs" />
     <Compile Include="Sync\StateMachineOrchestrator.cs" />
     <Compile Include="Sync\StateMachine\IStateMachine.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="Sync\States\Pull\PersistTasksState.cs" />
     <Compile Include="Sync\States\Pull\PersistWorkspaceFeaturesState.cs" />
     <Compile Include="Sync\States\Push\BaseUnsyncableEntityState.cs" />
+    <Compile Include="Sync\States\Push\CheckServerStatusState.cs" />
     <Compile Include="Sync\States\Push\UnsyncableTimeEntryState.cs" />
     <Compile Include="Sync\States\Pull\PersistTagsState.cs" />
     <Compile Include="Sync\TransitionHandlerProvider.cs" />
@@ -136,6 +139,7 @@
     <Compile Include="DataSources\TagsDataSource.cs" />
     <Compile Include="Autocomplete\Suggestions\TaskSuggestion.cs" />
     <Compile Include="Exceptions\NoRunningTimeEntryException.cs" />
+    <Compile Include="Sync\States\Push\ResetAPIDelayState.cs" />
     <Compile Include="DataSources\TasksDataSource.cs" />
   </ItemGroup>
   <ItemGroup>

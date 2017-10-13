@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
+using Toggl.Ultrawave.Exceptions;
 
 namespace Toggl.Foundation.Sync.States
 {
@@ -12,7 +13,9 @@ namespace Toggl.Foundation.Sync.States
         private readonly ITogglApi api;
         private readonly IRepository<TModel> repository;
 
-        public StateResult<(Exception, TModel)> CreatingFailed { get; } = new StateResult<(Exception, TModel)>();
+        public StateResult<(Exception, TModel)> ServerError { get; } = new StateResult<(Exception, TModel)>();
+        public StateResult<(Exception, TModel)> ClientError { get; } = new StateResult<(Exception, TModel)>();
+        public StateResult<(Exception, TModel)> UnknownError { get; } = new StateResult<(Exception, TModel)>();
         public StateResult<TModel> CreatingFinished { get; } = new StateResult<TModel>();
 
         public BaseCreateEntityState(ITogglApi api, IRepository<TModel> repository)
@@ -36,7 +39,12 @@ namespace Toggl.Foundation.Sync.States
             => createdEntity => repository.Update(entity.Id, createdEntity).Select(CopyFrom);
 
         private Func<Exception, IObservable<ITransition>> fail(TModel entity)
-            => e => Observable.Return(CreatingFailed.Transition((e, entity)));
+            => exception =>
+                exception is ServerErrorException
+                    ? Observable.Return(ServerError.Transition((exception, entity)))
+                    : exception is ClientErrorException
+                        ? Observable.Return(ClientError.Transition((exception, entity)))
+                        : Observable.Return(UnknownError.Transition((exception, entity)));
 
         protected abstract IObservable<TModel> Create(ITogglApi api, TModel entity);
 

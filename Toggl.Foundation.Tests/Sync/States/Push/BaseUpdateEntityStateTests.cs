@@ -9,6 +9,7 @@ using Toggl.Foundation.Sync.States;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
+using Toggl.Ultrawave.Exceptions;
 using Xunit;
 
 namespace Toggl.Foundation.Tests.Sync.States
@@ -26,9 +27,19 @@ namespace Toggl.Foundation.Tests.Sync.States
         public void ReturnsTheFailTransitionWhenEntityIsNull()
             => helper.ReturnsTheFailTransitionWhenEntityIsNull();
 
+        [Theory]
+        [MemberData(nameof(ServerExceptions))]
+        public void ReturnsTheServerErrorTransitionWhenHttpFailsWithServerError(ServerErrorException exception)
+            => helper.ReturnsTheServerErrorTransitionWhenHttpFailsWithServerError(exception);
+
+        [Theory]
+        [MemberData(nameof(ClientExceptions))]
+        public void ReturnsTheClientErrorTransitionWhenHttpFailsWithClientError(ClientErrorException exception)
+            => helper.ReturnsTheClientErrorTransitionWhenHttpFailsWithClientError(exception);
+
         [Fact]
-        public void ReturnsTheFailTransitionWhenHttpFails()
-            => helper.ReturnsTheFailTransitionWhenHttpFails();
+        public void ReturnsTheUnknownErrorTransitionWhenHttpFailsWithNonApiError()
+            => helper.ReturnsTheUnknownErrorTransitionWhenHttpFailsWithNonApiError();
 
         [Fact]
         public void ReturnsTheFailTransitionWhenDatabaseOperationFails()
@@ -46,10 +57,36 @@ namespace Toggl.Foundation.Tests.Sync.States
         public void ReturnsTheUpdatingSuccessfulTransitionWhenIfEntityChangesLocallyAndAllFunctionsAreCalledWithCorrectParameters()
             => helper.ReturnsTheUpdatingSuccessfulTransitionWhenEntityDoesNotChangeLocallyAndAllFunctionsAreCalledWithCorrectParameters();
 
+        public static object[] ClientExceptions()
+            => new[]
+            {
+                new object[] { new BadRequestException() },
+                new object[] { new UnauthorizedException() },
+                new object[] { new PaymentRequiredException() },
+                new object[] { new ForbiddenException() },
+                new object[] { new NotFoundException() },
+                new object[] { new ApiDeprecatedException() },
+                new object[] { new RequestEntityTooLargeException() },
+                new object[] { new ClientDeprecatedException() },
+                new object[] { new TooManyRequestsException() }
+            };
+
+        public static object[] ServerExceptions()
+            => new[]
+            {
+                new object[] { new InternalServerErrorException() },
+                new object[] { new BadGatewayException() },
+                new object[] { new GatewayTimeoutException() },
+                new object[] { new HttpVersionNotSupportedException() },
+                new object[] { new ServiceUnavailableException() }
+            };
+
         public interface TheStartMethodHelper
         {
             void ReturnsTheFailTransitionWhenEntityIsNull();
-            void ReturnsTheFailTransitionWhenHttpFails();
+            void ReturnsTheServerErrorTransitionWhenHttpFailsWithServerError(ServerErrorException exception);
+            void ReturnsTheClientErrorTransitionWhenHttpFailsWithClientError(ClientErrorException exception);
+            void ReturnsTheUnknownErrorTransitionWhenHttpFailsWithNonApiError();
             void ReturnsTheFailTransitionWhenDatabaseOperationFails();
             void UpdateApiCallIsCalledWithTheInputEntity();
             void ReturnsTheEntityChangedTransitionWhenEntityChangesLocally();
@@ -75,11 +112,39 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var transition = state.Start(null).SingleAsync().Wait();
                 var parameter = ((Transition<(Exception Reason, TModel)>)transition).Parameter;
 
-                transition.Result.Should().Be(state.UpdatingFailed);
+                transition.Result.Should().Be(state.UnknownError);
                 parameter.Reason.Should().BeOfType<ArgumentNullException>();
             }
 
-            public void ReturnsTheFailTransitionWhenHttpFails()
+            public void ReturnsTheServerErrorTransitionWhenHttpFailsWithServerError(ServerErrorException exception)
+            {
+                var state = CreateState(api, repository);
+                var entity = CreateDirtyEntity(1);
+                GetUpdateFunction(api)(Arg.Any<TModel>())
+                    .Returns(_ => Observable.Throw<TApiModel>(exception));
+
+                var transition = state.Start(entity).SingleAsync().Wait();
+                var parameter = ((Transition<(Exception Reason, TModel)>)transition).Parameter;
+
+                transition.Result.Should().Be(state.ServerError);
+                parameter.Reason.Should().BeAssignableTo<ServerErrorException>();
+            }
+
+            public void ReturnsTheClientErrorTransitionWhenHttpFailsWithClientError(ClientErrorException exception)
+            {
+                var state = CreateState(api, repository);
+                var entity = CreateDirtyEntity(1);
+                GetUpdateFunction(api)(Arg.Any<TModel>())
+                    .Returns(_ => Observable.Throw<TApiModel>(exception));
+
+                var transition = state.Start(entity).SingleAsync().Wait();
+                var parameter = ((Transition<(Exception Reason, TModel)>)transition).Parameter;
+
+                transition.Result.Should().Be(state.ClientError);
+                parameter.Reason.Should().BeAssignableTo<ClientErrorException>();
+            }
+
+            public void ReturnsTheUnknownErrorTransitionWhenHttpFailsWithNonApiError()
             {
                 var state = CreateState(api, repository);
                 var entity = CreateDirtyEntity(1);
@@ -89,7 +154,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var transition = state.Start(entity).SingleAsync().Wait();
                 var parameter = ((Transition<(Exception Reason, TModel)>)transition).Parameter;
 
-                transition.Result.Should().Be(state.UpdatingFailed);
+                transition.Result.Should().Be(state.UnknownError);
                 parameter.Reason.Should().BeOfType<TestException>();
             }
 
@@ -104,7 +169,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var transition = state.Start(entity).SingleAsync().Wait();
                 var parameter = ((Transition<(Exception Reason, TModel)>)transition).Parameter;
 
-                transition.Result.Should().Be(state.UpdatingFailed);
+                transition.Result.Should().Be(state.UnknownError);
                 parameter.Reason.Should().BeOfType<TestException>();
             }
 
