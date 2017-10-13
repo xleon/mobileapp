@@ -233,9 +233,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ProjectColor = project.Color;
             workspaceId = project.WorkspaceId;
 
-            if (taskId == null) return;
-
-            Task = (await dataSource.Tasks.GetById(taskId.Value)).Name;
+            Task = taskId.HasValue ? (await dataSource.Tasks.GetById(taskId.Value)).Name : "";
         }
         
         private async Task editDuration()

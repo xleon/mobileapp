@@ -490,5 +490,32 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.SyncErrorMessageVisible.Should().Be(expectedVisibility);
             }
         }
+
+        public sealed class TheSelectProjectCommand : EditTimeEntryViewModelTest
+        {
+            [Fact]
+            public async Task RemovesTheTaskIfNoTaskWasSelected()
+            {
+                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                timeEntry.Id.Returns(10);
+                timeEntry.Project.Name.Returns("Some project");
+                timeEntry.Task.Name.Returns("Some task");
+                DataSource.TimeEntries.GetById(Arg.Is(timeEntry.Id))
+                    .Returns(Observable.Return(timeEntry));
+                ViewModel.Prepare(timeEntry.Id);
+                await ViewModel.Initialize();
+                var projectId = 11;
+                var project = Substitute.For<IDatabaseProject>();
+                project.Id.Returns(projectId);
+                project.Name.Returns("Some other project");
+                DataSource.Projects.GetById(Arg.Is(projectId))
+                    .Returns(Observable.Return(project));
+                NavigationService.Navigate<(long?, long?), (long?, long?)>(typeof(SelectProjectViewModel), Arg.Any<(long?, long?)>())
+                    .Returns((projectId, null));
+                await ViewModel.SelectProjectCommand.ExecuteAsync();
+
+                ViewModel.Task.Should().BeEmpty();
+            }
+        }
     }
 }
