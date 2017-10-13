@@ -31,6 +31,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IDisposable confirmDisposable;
 
         private long? projectId;
+        private long? taskId;
+        private long workspaceId;
+        private long initialWorkspaceId;
 
         public long Id { get; set; }
 
@@ -135,6 +138,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Client = timeEntry.Project?.Client?.Name;
             projectId = timeEntry.Project?.Id ?? 0;
             SyncErrorMessage = timeEntry.LastSyncErrorMessage;
+            initialWorkspaceId = workspaceId = timeEntry.WorkspaceId;
             SyncErrorMessageVisible = !string.IsNullOrEmpty(SyncErrorMessage);
             foreach (var tagId in timeEntry.TagIds)
                 tagIds.Add(tagId);
@@ -174,7 +178,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 StartTime = StartTime,
                 StopTime = StopTime,
                 ProjectId = projectId,
+                TaskId = taskId,
                 Billable = Billable,
+                WorkspaceId = workspaceId,
                 TagIds = new List<long>(tagIds)
             };
 
@@ -203,15 +209,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task selectProject()
         {
-            var selectedProjectId = await navigationService.Navigate<SelectProjectViewModel, long?, long?>(projectId);
+            var selectedProjectIdAndTaskId = await navigationService
+                .Navigate<SelectProjectViewModel, (long?, long?), (long? projectId, long? taskId)>(
+                    (projectId, taskId));
 
-            if (selectedProjectId == projectId) return;
+            if (selectedProjectIdAndTaskId.projectId == projectId
+                && selectedProjectIdAndTaskId.taskId == taskId)
+                return;
 
-            projectId = selectedProjectId;
+            projectId = selectedProjectIdAndTaskId.projectId;
+            taskId = selectedProjectIdAndTaskId.taskId;
 
             if (projectId == null)
             {
                 Project = Task = Client = ProjectColor = "";
+                workspaceId = initialWorkspaceId;
                 return;
             }
 
@@ -219,6 +231,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Project = project.Name;
             Client = project.Client?.Name;
             ProjectColor = project.Color;
+            workspaceId = project.WorkspaceId;
+
+            if (taskId == null) return;
+
+            Task = (await dataSource.Tasks.GetById(taskId.Value)).Name;
         }
         
         private async Task editDuration()

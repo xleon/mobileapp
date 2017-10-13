@@ -251,6 +251,83 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await DataSource.SyncManager.DidNotReceive().PushSync();
             }
+
+            [Fact]
+            public async Task UpdatesWorkspaceIdIfProjectFromAnotherWorkspaceWasSelected()
+            {
+                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                timeEntry.Id.Returns(10);
+                timeEntry.WorkspaceId.Returns(11);
+                timeEntry.ProjectId.Returns(12);
+                DataSource.TimeEntries.GetById(Arg.Is(timeEntry.Id))
+                  .Returns(Observable.Return(timeEntry));
+                var newProjectId = 20;
+                var project = Substitute.For<IDatabaseProject>();
+                project.Id.Returns(newProjectId);
+                project.WorkspaceId.Returns(21);
+                DataSource.Projects.GetById(project.Id)
+                    .Returns(Observable.Return(project));
+                ViewModel.Prepare(timeEntry.Id);
+                await ViewModel.Initialize();
+                NavigationService.Navigate<(long?, long?), (long?, long?)>(typeof(SelectProjectViewModel), Arg.Any<(long?, long?)>())
+                    .Returns((newProjectId, null));
+                await ViewModel.SelectProjectCommand.ExecuteAsync();
+
+                ViewModel.ConfirmCommand.Execute();
+
+                await DataSource.TimeEntries.Received().Update(
+                    Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == project.WorkspaceId));
+            }
+
+            [Fact]
+            public async Task DoesNotUpdateWorkspaceIdIfProjectFromTheSameWorkspaceIsSelected()
+            {
+                var workspaceId = 11;
+                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                timeEntry.Id.Returns(10);
+                timeEntry.WorkspaceId.Returns(workspaceId);
+                timeEntry.ProjectId.Returns(12);
+                DataSource.TimeEntries.GetById(Arg.Is(timeEntry.Id))
+                  .Returns(Observable.Return(timeEntry));
+                var newProjectId = 20;
+                var project = Substitute.For<IDatabaseProject>();
+                project.Id.Returns(newProjectId);
+                project.WorkspaceId.Returns(workspaceId);
+                DataSource.Projects.GetById(project.Id)
+                    .Returns(Observable.Return(project));
+                ViewModel.Prepare(timeEntry.Id);
+                await ViewModel.Initialize();
+                NavigationService.Navigate<(long?, long?), (long?, long?)>(typeof(SelectProjectViewModel), Arg.Any<(long?, long?)>())
+                    .Returns((newProjectId, null));
+                await ViewModel.SelectProjectCommand.ExecuteAsync();
+
+                ViewModel.ConfirmCommand.Execute();
+
+                await DataSource.TimeEntries.Received().Update(
+                    Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == workspaceId));
+            }
+
+            [Fact]
+            public async Task DoesNotUpdateWorkspaceIdIfNoProjectWasSelected()
+            {
+                var workspaceId = 11;
+                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                timeEntry.Id.Returns(10);
+                timeEntry.WorkspaceId.Returns(workspaceId);
+                timeEntry.ProjectId.Returns(12);
+                DataSource.TimeEntries.GetById(Arg.Is(timeEntry.Id))
+                  .Returns(Observable.Return(timeEntry));
+                ViewModel.Prepare(timeEntry.Id);
+                await ViewModel.Initialize();
+                NavigationService.Navigate<(long?, long?), (long?, long?)>(typeof(SelectProjectViewModel), Arg.Any<(long?, long?)>())
+                    .Returns((null, null));
+                await ViewModel.SelectProjectCommand.ExecuteAsync();
+
+                ViewModel.ConfirmCommand.Execute();
+
+                await DataSource.TimeEntries.Received().Update(
+                    Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == workspaceId));
+            }
         }
 
         public sealed class TheSelectTagsCommand : EditTimeEntryViewModelTest

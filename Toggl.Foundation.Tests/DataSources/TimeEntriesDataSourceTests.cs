@@ -411,6 +411,7 @@ namespace Toggl.Foundation.Tests.DataSources
                     StartTime = DateTimeOffset.UtcNow,
                     ProjectId = 13,
                     Billable = true,
+                    WorkspaceId = 71,
                     TagIds = new long[] { 1, 10, 34, 42 }
                 };
             }
@@ -420,7 +421,6 @@ namespace Toggl.Foundation.Tests.DataSources
                 && timeEntry.UserId == DatabaseTimeEntry.UserId
                 && timeEntry.IsDeleted == DatabaseTimeEntry.IsDeleted
                 && timeEntry.CreatedWith == DatabaseTimeEntry.CreatedWith
-                && timeEntry.WorkspaceId == DatabaseTimeEntry.WorkspaceId
                 && timeEntry.ServerDeletedAt == DatabaseTimeEntry.ServerDeletedAt;
 
             [Fact]
@@ -484,6 +484,17 @@ namespace Toggl.Foundation.Tests.DataSources
                 await Repository.Received().Update(Arg.Is(dto.Id), Arg.Is<IDatabaseTimeEntry>(te => te.TagIds.SequenceEqual(dto.TagIds)));
             }
 
+            public async ThreadingTask UpdatesTheWorkspaceId()
+            {
+                var dto = prepareTest();
+
+                await TimeEntriesSource.Update(dto);
+
+                await Repository.Received().Update(
+                    Arg.Is(dto.Id),
+                    Arg.Is<IDatabaseTimeEntry>(te => te.WorkspaceId == dto.WorkspaceId));
+            }
+
             [Fact]
             public async ThreadingTask LeavesAllOtherPropertiesUnchanged()
             {
@@ -499,7 +510,7 @@ namespace Toggl.Foundation.Tests.DataSources
             {
                 var observable = Observable.Return(DatabaseTimeEntry);
                 Repository.GetById(Arg.Is(DatabaseTimeEntry.Id)).Returns(observable);
-                var dto = new EditTimeEntryDto { Id = DatabaseTimeEntry.Id, Description = "New description", StartTime = DateTimeOffset.UtcNow };
+                var dto = new EditTimeEntryDto { Id = DatabaseTimeEntry.Id, Description = "New description", StartTime = DateTimeOffset.UtcNow, WorkspaceId = 71 };
                 var observer = Substitute.For<IObserver<IDatabaseTimeEntry>>();
                 TimeEntriesSource.TimeEntryUpdated.Subscribe(observer);
 

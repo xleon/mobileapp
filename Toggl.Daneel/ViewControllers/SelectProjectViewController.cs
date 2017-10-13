@@ -26,6 +26,9 @@ namespace Toggl.Daneel.ViewControllers
 
             //Table view
             bindingSet.Bind(source).To(vm => vm.Suggestions);
+            bindingSet.Bind(source)
+                      .For(v => v.ToggleTasksCommand)
+                      .To(vm => vm.ToggleTaskSuggestionsCommand);
             
             //Text
             bindingSet.Bind(TextField).To(vm => vm.Text);

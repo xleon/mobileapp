@@ -15,6 +15,10 @@ namespace Toggl.Foundation.DTOs
 
         public long? ProjectId { get; set; }
 
+        public long? TaskId { get; set; }
+
+        public long WorkspaceId { get; set; }
+
         public bool Billable { get; set; }
 
         public IEnumerable<long> TagIds { get; set; }

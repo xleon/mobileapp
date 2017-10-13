@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Suggestions;
@@ -46,19 +47,34 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.CloseCommand.ExecuteAsync();
 
-                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<long?>());
+                await NavigationService.Received()
+                    .Close(Arg.Is(ViewModel), Arg.Any<(long?, long?)>());
             }
 
-            [Fact]
-            public async Task ReturnsTheSameIdThatWasPassedToTheViewModel()
+            [Property]
+            public void ReturnsTheSameProjectIdThatWasPassedToTheViewModel(long? projectId)
             {
-                long id = 13;
-                ViewModel.Prepare(id);
+                ViewModel.Prepare((projectId, 10));
 
-                await ViewModel.CloseCommand.ExecuteAsync();
+                ViewModel.CloseCommand.ExecuteAsync().Wait();
 
-                await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Is(id));
+                NavigationService.Received().Close(
+                    Arg.Is(ViewModel),
+                    Arg.Is<(long? projectId, long? taskId)>(
+                        parameter => parameter.projectId == projectId)).Wait();
+            }
+
+            [Property]
+            public void ReturnsTheSameTaskIdThatWasPassedToTheViewModel(long? taskId)
+            {
+                ViewModel.Prepare((10, taskId));
+
+                ViewModel.CloseCommand.ExecuteAsync().Wait();
+
+                NavigationService.Received().Close(
+                    Arg.Is(ViewModel),
+                    Arg.Is<(long? projectId, long? taskId)>(
+                        parameter => parameter.taskId == taskId)).Wait();
             }
         }
 
@@ -69,19 +85,70 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.SelectProjectCommand.ExecuteAsync(ProjectSuggestion.NoProject);
 
-                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<long?>());
+                await NavigationService.Received()
+                    .Close(Arg.Is(ViewModel), Arg.Any<(long?, long?)>());
             }
 
             [Fact]
-            public async Task ReturnsTheSelectedProjectId()
+            public async Task ReturnsTheSelectedProjectIdWhenSelectingAProject()
             {
                 var project = Substitute.For<IDatabaseProject>();
                 project.Id.Returns(13);
                 var selectedProject = new ProjectSuggestion(project);
+
                 await ViewModel.SelectProjectCommand.ExecuteAsync(selectedProject);
 
-                await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Is(selectedProject.ProjectId));
+                await NavigationService.Received().Close(
+                    Arg.Is(ViewModel),
+                    Arg.Is<(long? projectId, long? taskId)>(
+                        parameter => parameter.projectId == selectedProject.ProjectId));
+            }
+
+            [Fact]
+            public async Task ReturnsNoTaskIdWhenSelectingAProject()
+            {
+                var project = Substitute.For<IDatabaseProject>();
+                project.Id.Returns(13);
+                var selectedProject = new ProjectSuggestion(project);
+
+                await ViewModel.SelectProjectCommand.ExecuteAsync(selectedProject);
+
+                await NavigationService.Received().Close(
+                    Arg.Is(ViewModel),
+                    Arg.Is<(long? projectId, long? taskId)>(
+                        parameter => parameter.taskId == null));
+            }
+
+            [Fact]
+            public async Task ReturnsTheSelectedProjectIdWhenSelectingATask()
+            {
+                var task = Substitute.For<IDatabaseTask>();
+                task.Id.Returns(13);
+                task.ProjectId.Returns(10);
+                var selectedTask = new TaskSuggestion(task);
+
+                await ViewModel.SelectProjectCommand.ExecuteAsync(selectedTask);
+
+                await NavigationService.Received().Close(
+                    Arg.Is(ViewModel),
+                    Arg.Is<(long? projectId, long? taskId)>(
+                        parameter => parameter.projectId == task.ProjectId));
+            }
+
+            [Fact]
+            public async Task ReturnsTheSelectedTaskIdWhenSelectingATask()
+            {
+                var task = Substitute.For<IDatabaseTask>();
+                task.Id.Returns(13);
+                task.ProjectId.Returns(10);
+                var selectedTask = new TaskSuggestion(task);
+
+                await ViewModel.SelectProjectCommand.ExecuteAsync(selectedTask);
+
+                await NavigationService.Received().Close(
+                    Arg.Is(ViewModel),
+                    Arg.Is<(long? projectId, long? taskId)>(
+                        parameter => parameter.taskId == task.Id));
             }
 
             [Fact] 
@@ -89,8 +156,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.SelectProjectCommand.ExecuteAsync(ProjectSuggestion.NoProject);
 
-                await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Is<long?>(id => id == null));
+                await NavigationService.Received().Close(
+                    Arg.Is(ViewModel),
+                    Arg.Is<(long? projectId, long? taskId)>(
+                        parameter => parameter.projectId == null
+                                     && parameter.taskId == null));
             }
         }
 
