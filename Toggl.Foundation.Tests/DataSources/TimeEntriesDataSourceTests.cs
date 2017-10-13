@@ -484,6 +484,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 await Repository.Received().Update(Arg.Is(dto.Id), Arg.Is<IDatabaseTimeEntry>(te => te.TagIds.SequenceEqual(dto.TagIds)));
             }
 
+            [Fact]
             public async ThreadingTask UpdatesTheWorkspaceId()
             {
                 var dto = prepareTest();
