@@ -143,6 +143,10 @@ Task("Build.Release.iOS")
     .IsDependentOn("Nuget")
     .Does(BuildSolution("./Toggl.sln", "Release", "iPhone"));
 
+Task("Build.Release.iOS.TestFlight")
+    .IsDependentOn("Nuget")
+    .Does(BuildSolution("./Toggl.sln", "Release.TestFlight"));
+
 //Unit Tests
 Task("Tests.Unit")
     .IsDependentOn(buildAll ? "Build.Tests.All" : "Build.Tests.Unit")

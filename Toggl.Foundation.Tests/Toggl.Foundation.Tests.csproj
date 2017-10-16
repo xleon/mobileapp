@@ -34,6 +34,11 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\Toggl.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.TestFlight|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release.TestFlight</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MvvmCross.Core, Version=5.2.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\MvvmCross.Core.5.2.0\lib\Xamarin.iOS10\MvvmCross.Core.dll</HintPath>
