@@ -23,7 +23,7 @@ namespace Toggl.PrimeRadiant.Realm
                 .Catch<TModel, Exception>(ex => Observable.Throw<TModel>(new DatabaseException(ex)));
         }
         
-        public IObservable<IEnumerable<(ConflictResolutionMode ResolutionMode, TModel Entity)>> BatchUpdate(
+        public IObservable<IEnumerable<IConflictResolutionResult<TModel>>> BatchUpdate(
             IEnumerable<(long Id, TModel Entity)> entities,
             Func<TModel, TModel, ConflictResolutionMode> conflictResolution,
             IRivalsResolver<TModel> rivalsResolver = null)
@@ -40,16 +40,21 @@ namespace Toggl.PrimeRadiant.Realm
         public static Repository<TModel> For<TRealmEntity>(
             Func<TModel, Realms.Realm, TRealmEntity> convertToRealm)
             where TRealmEntity : RealmObject, IBaseModel, TModel, IUpdatesFrom<TModel>
-            => For(convertToRealm, matchById<TRealmEntity>);
+            => For(convertToRealm, matchById<TRealmEntity>, getId<TRealmEntity>);
 
         public static Repository<TModel> For<TRealmEntity>(
             Func<TModel, Realms.Realm, TRealmEntity> convertToRealm,
-            Func<long, Expression<Func<TRealmEntity, bool>>> matchById)
+            Func<long, Expression<Func<TRealmEntity, bool>>> matchById,
+            Func<TRealmEntity, long> getId)
             where TRealmEntity : RealmObject, TModel, IUpdatesFrom<TModel>
-            => new Repository<TModel>(new RealmAdapter<TRealmEntity, TModel>(convertToRealm, matchById));
+            => new Repository<TModel>(new RealmAdapter<TRealmEntity, TModel>(convertToRealm, matchById, getId));
 
         private static Expression<Func<TRealmEntity, bool>> matchById<TRealmEntity>(long id)
             where TRealmEntity : RealmObject, IBaseModel, TModel, IUpdatesFrom<TModel>
             => x => x.Id == id;
+
+        private static long getId<TRealmEntity>(TRealmEntity entity)
+            where TRealmEntity : RealmObject, IBaseModel, TModel
+            => entity.Id;
     }
 }

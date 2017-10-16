@@ -19,7 +19,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         TModel Update(long id, TModel entity);
 
-        IEnumerable<(ConflictResolutionMode ResolutionMode, TModel Entity)> BatchUpdate(
+        IEnumerable<IConflictResolutionResult<TModel>> BatchUpdate(
             IEnumerable<(long Id, TModel Entity)> batch,
             Func<TModel, TModel, ConflictResolutionMode> conflictResolution,
             IRivalsResolver<TModel> rivalsResolver);
@@ -32,13 +32,19 @@ namespace Toggl.PrimeRadiant.Realm
 
         private readonly Func<long, Expression<Func<TRealmEntity, bool>>> matchEntity;
 
-        public RealmAdapter(Func<TModel, Realms.Realm, TRealmEntity> clone, Func<long, Expression<Func<TRealmEntity, bool>>> matchEntity)
+        private readonly Func<TRealmEntity, long> getId;
+
+        public RealmAdapter(
+            Func<TModel, Realms.Realm, TRealmEntity> clone,
+            Func<long, Expression<Func<TRealmEntity, bool>>> matchEntity,
+            Func<TRealmEntity, long> getId)
         {
             Ensure.Argument.IsNotNull(clone, nameof(clone));
             Ensure.Argument.IsNotNull(matchEntity, nameof(matchEntity));
 
             this.clone = clone;
             this.matchEntity = matchEntity;
+            this.getId = getId;
         }
 
         public IQueryable<TModel> GetAll()
@@ -61,7 +67,7 @@ namespace Toggl.PrimeRadiant.Realm
             return doModyfingTransaction(id, (realm, realmEntity) => realmEntity.SetPropertiesFrom(entity, realm));
         }
 
-        public IEnumerable<(ConflictResolutionMode ResolutionMode, TModel Entity)> BatchUpdate(
+        public IEnumerable<IConflictResolutionResult<TModel>> BatchUpdate(
             IEnumerable<(long Id, TModel Entity)> batch,
             Func<TModel, TModel, ConflictResolutionMode> conflictResolution,
             IRivalsResolver<TModel> rivalsResolver)
@@ -75,29 +81,30 @@ namespace Toggl.PrimeRadiant.Realm
             {
                 var realmEntities = realm.All<TRealmEntity>();
                 var entitiesWithPotentialRival = new List<TRealmEntity>();
-                var resolvedEntities = batch.Select(updated =>
+                var results = batch.Select(updated =>
                 {
                     var oldEntity = realmEntities.SingleOrDefault(matchEntity(updated.Id));
                     var resolveMode = conflictResolution(oldEntity, updated.Entity);
-                    var resolvedEntity = resolveEntity(realm, oldEntity, updated.Entity, resolveMode);
+                    var result = resolveEntity(realm, updated.Id, oldEntity, updated.Entity, resolveMode);
 
                     if (rivalsResolver != null &&
-                        (resolveMode == ConflictResolutionMode.Create || resolveMode == ConflictResolutionMode.Update) &&
-                        rivalsResolver.CanHaveRival(resolvedEntity))
+                        (result is CreateResult<TRealmEntity> || result is UpdateResult<TRealmEntity>))
                     {
-                        entitiesWithPotentialRival.Add(resolvedEntity);
+                        var resolvedEntity = getEntityFromResult(result);
+                        if (rivalsResolver.CanHaveRival(resolvedEntity))
+                            entitiesWithPotentialRival.Add(resolvedEntity);
                     }
 
-                    return (resolveMode, (TModel)resolvedEntity);
+                    return (IConflictResolutionResult<TModel>)result;
                 }).ToList();
 
                 foreach (var entityWithPotentialRival in entitiesWithPotentialRival)
                 {
-                    resolvePotentialRivals(realm, entityWithPotentialRival, rivalsResolver, resolvedEntities);
+                    resolvePotentialRivals(realm, entityWithPotentialRival, rivalsResolver, results);
                 }
 
                 transaction.Commit();
-                return resolvedEntities;
+                return results;
             }
         }
 
@@ -128,27 +135,40 @@ namespace Toggl.PrimeRadiant.Realm
             }
         }
 
-        private TRealmEntity resolveEntity(Realms.Realm realm, TRealmEntity old, TModel entity, ConflictResolutionMode resolveMode)
+        private IConflictResolutionResult<TRealmEntity> resolveEntity(Realms.Realm realm, long oldId, TRealmEntity old, TModel entity, ConflictResolutionMode resolveMode)
         {
             switch (resolveMode)
             {
                 case ConflictResolutionMode.Create:
-                    return realm.Add(convertToRealm(entity, realm));
+                    var realmEntity = realm.Add(convertToRealm(entity, realm));
+                    return new CreateResult<TRealmEntity>(realmEntity);
 
                 case ConflictResolutionMode.Delete:
-                    var ghost = clone(old, realm);
                     realm.Remove(old);
-                    return ghost;
+                    return new DeleteResult<TRealmEntity>(oldId);
 
                 case ConflictResolutionMode.Update:
                     old.SetPropertiesFrom(entity, realm);
-                    return old;
+                    return new UpdateResult<TRealmEntity>(oldId, old);
 
                 case ConflictResolutionMode.Ignore:
-                    return old;
+                    return new IgnoreResult<TRealmEntity>(oldId);
 
                 default:
                     throw new ArgumentException($"Unknown conflict resolution mode {resolveMode}");
+            }
+        }
+
+        private TRealmEntity getEntityFromResult(IConflictResolutionResult<TRealmEntity> result)
+        {
+            switch (result)
+            {
+                case CreateResult<TRealmEntity> c:
+                    return c.Entity;
+                case UpdateResult<TRealmEntity> u:
+                    return u.Entity;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(result));
             }
         }
 
@@ -156,15 +176,16 @@ namespace Toggl.PrimeRadiant.Realm
             Realms.Realm realm,
             TRealmEntity entity,
             IRivalsResolver<TModel> resolver,
-            List<(ConflictResolutionMode, TModel)> resolvedEntities)
+            List<IConflictResolutionResult<TModel>> results)
         {
             var rival = (TRealmEntity)realm.All<TRealmEntity>().SingleOrDefault(resolver.AreRivals(entity));
             if (rival != null)
             {
+                long originalRivalId = getId(rival);
                 (TModel fixedEntity, TModel fixedRival) = resolver.FixRivals(entity, rival, realm.All<TRealmEntity>());
                 entity.SetPropertiesFrom(fixedEntity, realm);
                 rival.SetPropertiesFrom(fixedRival, realm);
-                resolvedEntities.Add((ConflictResolutionMode.Update, rival));
+                results.Add(new UpdateResult<TModel>(originalRivalId, rival));
             }
         }
     }

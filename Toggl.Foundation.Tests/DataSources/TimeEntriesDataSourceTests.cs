@@ -315,13 +315,13 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public async ThreadingTask EmitsANewEventOnTheTimeEntryUpdatedObservable()
             {
-                var observer = TestScheduler.CreateObserver<ITimeEntry>();
+                var observer = TestScheduler.CreateObserver<(long Id, IDatabaseTimeEntry Entity)>();
                 TimeEntriesSource.TimeEntryUpdated.Subscribe(observer);
 
                 await TimeEntriesSource.Stop(ValidTime);
 
                 observer.Messages.Single().Value.Value.Id.Should().Be(CurrentRunningId);
-                observer.Messages.Single().Value.Value.Stop.Should().Be(ValidTime);
+                observer.Messages.Single().Value.Value.Entity.Stop.Should().Be(ValidTime);
             }
         } 
         public sealed class TheDeleteMethod : TimeEntryDataSourceTest
@@ -512,12 +512,12 @@ namespace Toggl.Foundation.Tests.DataSources
                 var observable = Observable.Return(DatabaseTimeEntry);
                 Repository.GetById(Arg.Is(DatabaseTimeEntry.Id)).Returns(observable);
                 var dto = new EditTimeEntryDto { Id = DatabaseTimeEntry.Id, Description = "New description", StartTime = DateTimeOffset.UtcNow, WorkspaceId = 71 };
-                var observer = Substitute.For<IObserver<IDatabaseTimeEntry>>();
+                var observer = Substitute.For<IObserver<(long, IDatabaseTimeEntry)>>();
                 TimeEntriesSource.TimeEntryUpdated.Subscribe(observer);
 
                 await TimeEntriesSource.Update(dto);
 
-                observer.Received().OnNext(Arg.Is<IDatabaseTimeEntry>(te => te.Id == dto.Id));
+                observer.Received().OnNext(Arg.Is<(long Id, IDatabaseTimeEntry)>(te => te.Id == dto.Id));
             }
         }
     }

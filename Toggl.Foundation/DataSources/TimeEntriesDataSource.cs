@@ -22,8 +22,8 @@ namespace Toggl.Foundation.DataSources
         private readonly ITimeService timeService;
         private readonly IRepository<IDatabaseTimeEntry> repository;
         private readonly Subject<IDatabaseTimeEntry> timeEntryCreatedSubject = new Subject<IDatabaseTimeEntry>();
-        private readonly Subject<IDatabaseTimeEntry> timeEntryUpdatedSubject = new Subject<IDatabaseTimeEntry>();
-        private readonly Subject<IDatabaseTimeEntry> timeEntryDeletedSubject = new Subject<IDatabaseTimeEntry>();
+        private readonly Subject<(long Id, IDatabaseTimeEntry Entity)> timeEntryUpdatedSubject = new Subject<(long, IDatabaseTimeEntry)>();
+        private readonly Subject<long> timeEntryDeletedSubject = new Subject<long>();
 
         public IObservable<bool> IsEmpty { get; }
 
@@ -31,9 +31,9 @@ namespace Toggl.Foundation.DataSources
 
         public IObservable<IDatabaseTimeEntry> TimeEntryCreated { get; }
 
-        public IObservable<IDatabaseTimeEntry> TimeEntryUpdated { get; }
+        public IObservable<(long Id, IDatabaseTimeEntry Entity)> TimeEntryUpdated { get; }
 
-        public IObservable<IDatabaseTimeEntry> TimeEntryDeleted { get; }
+        public IObservable<long> TimeEntryDeleted { get; }
 
         public TimeEntriesDataSource(IIdProvider idProvider, IRepository<IDatabaseTimeEntry> repository, ITimeService timeService)
         {
@@ -53,14 +53,14 @@ namespace Toggl.Foundation.DataSources
                     .Select(tes => tes.SingleOrDefault())
                     .StartWith()
                     .Merge(TimeEntryCreated.Where(te => te.Stop == null))
-                    .Merge(TimeEntryUpdated.Where(te => te.Id == currentlyRunningTimeEntryId))
+                    .Merge(TimeEntryUpdated.Where(tuple => tuple.Id == currentlyRunningTimeEntryId).Select(tuple => tuple.Entity))
                     .Select(runningTimeEntry)
                     .Do(setRunningTimeEntryId);
 
             IsEmpty =
                 Observable.Return(default(IDatabaseTimeEntry))
                     .StartWith()
-                    .Merge(TimeEntryUpdated)
+                    .Merge(TimeEntryUpdated.Select(tuple => tuple.Entity))
                     .Merge(TimeEntryCreated)
                     .SelectMany(_ => GetAll())
                     .Select(timeEntries => !timeEntries.Any());
@@ -80,7 +80,7 @@ namespace Toggl.Foundation.DataSources
                          .Select(TimeEntry.DirtyDeleted)
                          .SelectMany(repository.Update)
                          .Select(TimeEntry.DirtyDeleted)
-                         .Do(timeEntryUpdatedSubject.OnNext)
+                         .Do(te => timeEntryDeletedSubject.OnNext(te.Id))
                          .IgnoreElements()
                          .Cast<Unit>();
 
@@ -121,32 +121,32 @@ namespace Toggl.Foundation.DataSources
         public IObservable<IDatabaseTimeEntry> Update(long id, IDatabaseTimeEntry entity)
             => repository.Update(id, entity)
                 .Do(_ => maybeUpdateCurrentlyRunningTimeEntryId(id, entity))
-                .Do(timeEntryUpdatedSubject.OnNext);
+                .Do(_ => timeEntryUpdatedSubject.OnNext((id, entity)));
 
-        public IObservable<IEnumerable<(ConflictResolutionMode ResolutionMode, IDatabaseTimeEntry Entity)>> BatchUpdate(
+        public IObservable<IEnumerable<IConflictResolutionResult<IDatabaseTimeEntry>>> BatchUpdate(
             IEnumerable<(long Id, IDatabaseTimeEntry Entity)> entities,
             Func<IDatabaseTimeEntry, IDatabaseTimeEntry, ConflictResolutionMode> conflictResolution,
             IRivalsResolver<IDatabaseTimeEntry> rivalsResolver = null)
             => repository
                 .BatchUpdate(entities, conflictResolution, rivalsResolver)
                 .Do(updatedEntities => updatedEntities
-                    .Where(tuple => tuple.ResolutionMode != ConflictResolutionMode.Ignore)
-                    .ForEach(handleBatchUpdateTuple));
+                    .Where(result => !(result is IgnoreResult<IDatabaseTimeEntry>))
+                    .ForEach(handleBatchUpdateResult));
 
-        private void handleBatchUpdateTuple((ConflictResolutionMode ResolutionMode, IDatabaseTimeEntry Entity) tuple)
+        private void handleBatchUpdateResult(IConflictResolutionResult<IDatabaseTimeEntry> result)
         {
-            switch (tuple.ResolutionMode)
+            switch (result)
             {
-                case ConflictResolutionMode.Delete:
-                    timeEntryDeletedSubject.OnNext(tuple.Entity);
+                case DeleteResult<IDatabaseTimeEntry> d:
+                    timeEntryDeletedSubject.OnNext(d.Id);
                     return;
 
-                case ConflictResolutionMode.Create:
-                    timeEntryCreatedSubject.OnNext(tuple.Entity);
+                case CreateResult<IDatabaseTimeEntry> c:
+                    timeEntryCreatedSubject.OnNext(c.Entity);
                     return;
 
-                case ConflictResolutionMode.Update:
-                    timeEntryUpdatedSubject.OnNext(tuple.Entity);
+                case UpdateResult<IDatabaseTimeEntry> u:
+                    timeEntryUpdatedSubject.OnNext((u.OriginalId, u.Entity));
                     return;
             }
         }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Foundation.Sync.ConflictResolution;
-using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
@@ -43,8 +42,8 @@ namespace Toggl.Foundation.Sync.States
                 .Select(entities => entities.Select(ConvertToDatabaseEntity).ToList())
                 .SelectMany(databaseEntities =>
                     repository.BatchUpdate(databaseEntities.Select(entity => (GetId(entity), entity)), conflictResolver.Resolve, rivalsResolver)
-                        .Select(results => results.Select(result => result.Item2))
                         .IgnoreElements()
+                        .OfType<List<TDatabaseInterface>>()
                         .Concat(Observable.Return(databaseEntities)))
                 .Select(databaseEntities => LastUpdated(since, databaseEntities))
                 .Select(lastUpdated => UpdateSinceParameters(since, lastUpdated))

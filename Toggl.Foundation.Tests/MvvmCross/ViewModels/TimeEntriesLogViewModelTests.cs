@@ -144,7 +144,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 protected const int InitialAmountOfTimeEntries = 20;
                 
                 protected Subject<IDatabaseTimeEntry> TimeEntryCreatedSubject = new Subject<IDatabaseTimeEntry>();
-                protected Subject<IDatabaseTimeEntry> TimeEntryUpdatedSubject = new Subject<IDatabaseTimeEntry>();
+                protected Subject<(long Id, IDatabaseTimeEntry Entity)> TimeEntryUpdatedSubject = new Subject<(long, IDatabaseTimeEntry)>();
                 protected IDatabaseTimeEntry NewTimeEntry =
                     TimeEntry.Builder.Create(21)
                              .SetUserId(10)
@@ -173,7 +173,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     DataSource.TimeEntries.GetAll().Returns(observable);
                     DataSource.TimeEntries.TimeEntryCreated.Returns(TimeEntryCreatedSubject.AsObservable());
                     DataSource.TimeEntries.TimeEntryUpdated.Returns(TimeEntryUpdatedSubject.AsObservable());
-                    DataSource.TimeEntries.TimeEntryDeleted.Returns(Observable.Empty<IDatabaseTimeEntry>());
+                    DataSource.TimeEntries.TimeEntryDeleted.Returns(Observable.Empty<long>());
                 }
             }
 
@@ -213,7 +213,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     await ViewModel.Initialize();
                     var newTimeEntry = NewTimeEntry.With(stopDate);
 
-                    TimeEntryUpdatedSubject.OnNext(newTimeEntry);
+                    TimeEntryUpdatedSubject.OnNext((newTimeEntry.Id, newTimeEntry));
 
                     ViewModel.TimeEntries.Any(c => c.Any(te => te.Id == 21)).Should().BeTrue();
                     ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries + 1);

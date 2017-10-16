@@ -46,7 +46,7 @@ namespace Toggl.PrimeRadiant.Tests.Realm
             throw new InvalidOperationException();
         }
 
-        public IEnumerable<(ConflictResolutionMode ResolutionMode, TestModel Entity)> BatchUpdate(
+        public IEnumerable<IConflictResolutionResult<TestModel>> BatchUpdate(
             IEnumerable<(long Id, TestModel Entity)> entities,
             Func<TestModel, TestModel, ConflictResolutionMode> conflictResolution,
             IRivalsResolver<TestModel> resolver)

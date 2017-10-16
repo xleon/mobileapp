@@ -28,9 +28,9 @@ namespace Toggl.Foundation.Sync.States
         public IObservable<ITransition> Start(TModel entity)
             => update(entity)
                 .SelectMany(tryOverwrite(entity))
-                .SelectMany(result => result.Mode == ConflictResolutionMode.Ignore
+                .SelectMany(result => result is IgnoreResult<TModel>
                     ? entityChanged(entity)
-                    : succeeded(CopyFrom(result.UpdatedEntity)))
+                    : succeeded(copyFrom(result)))
                 .Catch(fail(entity));
 
         private IObservable<TModel> update(TModel entity)
@@ -41,7 +41,7 @@ namespace Toggl.Foundation.Sync.States
         private IObservable<ITransition> entityChanged(TModel entity)
             => Observable.Return(EntityChanged.Transition(entity));
 
-        private Func<TModel, IObservable<(ConflictResolutionMode Mode, TModel UpdatedEntity)>> tryOverwrite(TModel entity)
+        private Func<TModel, IObservable<IConflictResolutionResult<TModel>>> tryOverwrite(TModel entity)
             => updatedEntity => repository.UpdateWithConflictResolution(entity.Id, updatedEntity, overwriteIfLocalEntityDidNotChange(entity));
 
         private Func<TModel, TModel, ConflictResolutionMode> overwriteIfLocalEntityDidNotChange(TModel local)
@@ -59,6 +59,19 @@ namespace Toggl.Foundation.Sync.States
 
         private IObservable<ITransition> succeeded(TModel entity)
             => Observable.Return((ITransition)UpdatingSucceeded.Transition(entity));
+
+        private TModel copyFrom(IConflictResolutionResult<TModel> result)
+        {
+            switch (result)
+            {
+                case CreateResult<TModel> c:
+                    return CopyFrom(c.Entity);
+                case UpdateResult<TModel> u:
+                    return CopyFrom(u.Entity);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(result));
+            }
+        }
 
         protected abstract bool HasChanged(TModel original, TModel updated);
 

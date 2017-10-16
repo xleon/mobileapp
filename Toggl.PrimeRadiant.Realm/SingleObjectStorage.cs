@@ -36,7 +36,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public static SingleObjectStorage<TModel> For<TRealmEntity>(Func<TModel, Realms.Realm, TRealmEntity> convertToRealm)
             where TRealmEntity : RealmObject, TModel, IUpdatesFrom<TModel>
-            => new SingleObjectStorage<TModel>(new RealmAdapter<TRealmEntity, TModel>(convertToRealm, id => x => x.Id == id));
+            => new SingleObjectStorage<TModel>(new RealmAdapter<TRealmEntity, TModel>(convertToRealm, id => x => x.Id == id, obj => obj.Id));
 
         public IObservable<TModel> Update(TModel entity)
             => Update(entity.Id, entity);

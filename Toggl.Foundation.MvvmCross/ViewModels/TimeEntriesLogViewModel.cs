@@ -65,7 +65,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ContinueTimeEntryCommand = new MvxAsyncCommand<TimeEntryViewModel>(continueTimeEntry);
         }
 
-        public async override Task Initialize()
+        public override async Task Initialize()
         {
             await base.Initialize();
 
@@ -81,11 +81,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             var deleteDisposable = 
                 dataSource.TimeEntries.TimeEntryDeleted
-                          .Subscribe(onTimeEntryUpdated);
+                          .Subscribe(onTimeEntryDeleted);
 
             var updateObservable =
                 dataSource.TimeEntries.TimeEntryUpdated
                           .Do(onTimeEntryUpdated)
+                          .Select(tuple => tuple.Entity)
                           .Where(isNotRunning)
                           .Where(x => !x.IsDeleted);
 
@@ -106,17 +107,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             RaisePropertyChanged(nameof(IsEmpty));
         }
 
-        private void onTimeEntryUpdated(IDatabaseTimeEntry timeEntry)
-        {
-            var collection = TimeEntries.SingleOrDefault(c => c.Date == timeEntry.Start.Date);
-            if (collection == null) return;
-
-            var viewModel = collection.SingleOrDefault(vm => vm.Id == timeEntry.Id);
-            if (viewModel == null) return;
-
-            collection.Remove(viewModel);
-            RaisePropertyChanged(nameof(IsEmpty));
-        }
+        private void onTimeEntryUpdated((long Id, IDatabaseTimeEntry Entity) timeEntry)
+            => onTimeEntryDeleted(timeEntry.Id);
 
         private void onTimeEntryCreated(IDatabaseTimeEntry timeEntry)
         {
@@ -136,6 +128,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var indexToInsert = foundIndex == -1 ? TimeEntries.Count : foundIndex;
             TimeEntries.Insert(indexToInsert, newCollection);
 
+            RaisePropertyChanged(nameof(IsEmpty));
+        }
+
+        private void onTimeEntryDeleted(long id)
+        {
+            var viewModel = TimeEntries.Select(c => c.SingleOrDefault(vm => vm.Id == id)).SingleOrDefault(vm => vm != null);
+            if (viewModel == null) return;
+
+            var collection = TimeEntries.SingleOrDefault(c => c.Date == viewModel.Start.Date);
+            if (collection == null) return;
+
+            collection.Remove(viewModel);
             RaisePropertyChanged(nameof(IsEmpty));
         }
 

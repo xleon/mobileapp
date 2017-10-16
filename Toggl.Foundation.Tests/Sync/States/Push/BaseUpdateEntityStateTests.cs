@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
+using Toggl.Foundation;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Sync.States;
 using Toggl.Multivac.Models;
@@ -54,7 +55,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             => helper.ReturnsTheEntityChangedTransitionWhenEntityChangesLocally();
 
         [Fact]
-        public void ReturnsTheUpdatingSuccessfulTransitionWhenIfEntityChangesLocallyAndAllFunctionsAreCalledWithCorrectParameters()
+        public void ReturnsTheUpdatingSuccessfulTransitionWhenEntityDoesNotChangeLocallyAndAllFunctionsAreCalledWithCorrectParameters()
             => helper.ReturnsTheUpdatingSuccessfulTransitionWhenEntityDoesNotChangeLocallyAndAllFunctionsAreCalledWithCorrectParameters();
 
         public static object[] ClientExceptions()
@@ -164,7 +165,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var entity = CreateDirtyEntity(1);
                 repository
                     .BatchUpdate(Arg.Any<IEnumerable<(long, TModel)>>(), Arg.Any<Func<TModel, TModel, ConflictResolutionMode>>())
-                    .Returns(_ => Observable.Throw<IEnumerable<(ConflictResolutionMode, TModel)>>(new TestException()));
+                    .Returns(_ => Observable.Throw<IEnumerable<IConflictResolutionResult<TModel>>>(new TestException()));
 
                 var transition = state.Start(entity).SingleAsync().Wait();
                 var parameter = ((Transition<(Exception Reason, TModel)>)transition).Parameter;
@@ -181,7 +182,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                     .Returns(Observable.Return(Substitute.For<TApiModel>()));
                 repository
                     .BatchUpdate(Arg.Any<IEnumerable<(long, TModel)>>(), Arg.Any<Func<TModel, TModel, ConflictResolutionMode>>())
-                    .Returns(Observable.Return(new[] { (ConflictResolutionMode.Update, entity) }));
+                    .Returns(Observable.Return(new[] { new UpdateResult<TModel>(entity.Id, entity) }));
 
                 state.Start(entity).SingleAsync().Wait();
 
@@ -197,7 +198,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                     .Returns(Observable.Return(entity));
                 repository
                     .BatchUpdate(Arg.Any<IEnumerable<(long, TModel)>>(), Arg.Any<Func<TModel, TModel, ConflictResolutionMode>>())
-                    .Returns(Observable.Return(new[] { (ConflictResolutionMode.Ignore, entity) }));
+                    .Returns(Observable.Return(new[] { new IgnoreResult<TModel>(entity.Id) }));
 
                 var transition = state.Start(entity).SingleAsync().Wait();
                 var parameter = ((Transition<TModel>)transition).Parameter;
@@ -221,7 +222,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                     .Returns(Observable.Return(localEntity));
                 repository
                     .BatchUpdate(Arg.Any<IEnumerable<(long, TModel)>>(), Arg.Any<Func<TModel, TModel, ConflictResolutionMode>>())
-                    .Returns(Observable.Return(new[] { (ConflictResolutionMode.Update, updatedEntity) }));
+                    .Returns(Observable.Return(new[] { new UpdateResult<TModel>(localEntity.Id, updatedEntity) }));
 
                 var transition = state.Start(entity).SingleAsync().Wait();
                 var parameter = ((Transition<TModel>)transition).Parameter;

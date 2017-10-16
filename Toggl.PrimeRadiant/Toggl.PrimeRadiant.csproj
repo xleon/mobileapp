@@ -54,6 +54,11 @@
     <Compile Include="Models\IDatabaseWorkspaceFeatureCollection.cs" />
     <Compile Include="ConflictResolutionMode.cs" />
     <Compile Include="SyncStatus.cs" />
+    <Compile Include="UpdateResult\IConflictResolutionResult.cs" />
+    <Compile Include="UpdateResult\CreateResult.cs" />
+    <Compile Include="UpdateResult\DeleteResult.cs" />
+    <Compile Include="UpdateResult\IgnoreResult.cs" />
+    <Compile Include="UpdateResult\UpdateResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">
@@ -87,6 +92,7 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Choose>
     <When Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">

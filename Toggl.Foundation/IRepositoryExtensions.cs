@@ -12,7 +12,7 @@ namespace Toggl.Foundation
             where TModel : IBaseModel, IDatabaseSyncable
             => repository.Update(entity.Id, entity);
 
-        public static IObservable<(ConflictResolutionMode ResolutionMode, TModel Entity)> UpdateWithConflictResolution<TModel>(
+        public static IObservable<IConflictResolutionResult<TModel>> UpdateWithConflictResolution<TModel>(
             this IRepository<TModel> repository,
             long id,
             TModel entity,

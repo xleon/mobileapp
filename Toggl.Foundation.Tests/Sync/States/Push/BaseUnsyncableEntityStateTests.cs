@@ -169,8 +169,11 @@ namespace Toggl.Foundation.Tests.Sync.States
                     .BatchUpdate(
                         Arg.Is<IEnumerable<(long Id, TModel Entity)>>(entities => entities.First().Id == entity.Id),
                         Arg.Any<Func<TModel, TModel, ConflictResolutionMode>>())
-                    .Returns(args => Observable.Return(new List<(ConflictResolutionMode, TModel)> {
-                        (ConflictResolutionMode.Update, ((IEnumerable<(long, TModel Entity)>)args[0]).First().Entity) }));
+                    .Returns(args =>
+                    {
+                        var arg = ((IEnumerable<(long Id, TModel Entity)>)args[0]).First();
+                        return Observable.Return(new List<IConflictResolutionResult<TModel>> { new UpdateResult<TModel>(arg.Id, arg.Entity) });
+                    });
             }
 
             protected abstract BaseUnsyncableEntityState<TModel> CreateState(IRepository<TModel> repository);

@@ -11,9 +11,9 @@ namespace Toggl.Foundation.DataSources
 
         IObservable<IDatabaseTimeEntry> TimeEntryCreated { get; }
 
-        IObservable<IDatabaseTimeEntry> TimeEntryUpdated { get; }
+        IObservable<(long Id, IDatabaseTimeEntry Entity)> TimeEntryUpdated { get; }
 
-        IObservable<IDatabaseTimeEntry> TimeEntryDeleted { get; }
+        IObservable<long> TimeEntryDeleted { get; }
 
         IObservable<bool> IsEmpty { get; }
 

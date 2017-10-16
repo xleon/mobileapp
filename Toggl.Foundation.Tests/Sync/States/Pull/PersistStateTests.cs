@@ -11,7 +11,6 @@ using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
-using static Toggl.PrimeRadiant.ConflictResolutionMode;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {
@@ -278,8 +277,8 @@ namespace Toggl.Foundation.Tests.Sync.States
             private void setupDatabaseBatchUpdateMocksToReturnUpdatedDatabaseEntitiesAndSimulateDeletionOfEntities(List<TInterface> entities = null)
             {
                 var foundationEntities = entities?.Select(entity => IsDeletedOnServer(entity)
-                    ? (Delete, (TDatabaseInterface)null)
-                    : (Update, Clean(entity)));
+                    ? (IConflictResolutionResult<TDatabaseInterface>)new DeleteResult<TDatabaseInterface>(0)
+                    : new UpdateResult<TDatabaseInterface>(0, Clean(entity)));
                 repository.BatchUpdate(null, null)
                     .ReturnsForAnyArgs(Observable.Return(foundationEntities));
             }
