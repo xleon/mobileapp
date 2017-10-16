@@ -42,16 +42,16 @@ namespace Toggl.Foundation.Tests.Sync
                 SyncManager = new SyncManager(Queue, Orchestrator);
             }
 
-            protected StateResult PreparePullTransitions(int n)
+            protected StateResult PreparePullTransitions(byte n)
                 => PrepareTransitions(EntryPoints.StartPullSync, n);
 
-            protected StateResult PreparePushTransitions(int n)
+            protected StateResult PreparePushTransitions(byte n)
                 => PrepareTransitions(EntryPoints.StartPushSync, n);
 
-            protected StateResult PrepareTransitions(StateResult entryPoint, int n)
+            protected StateResult PrepareTransitions(StateResult entryPoint, byte n)
             {
                 var lastResult = entryPoint;
-                for (int i = 0; i < Math.Abs(n) + 1; i++)
+                for (byte i = 0; i < n; i++)
                 {
                     var nextResult = new StateResult();
                     Func<IObservable<ITransition>> transition = () => Observable.Return(new Transition(nextResult));
@@ -94,7 +94,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
 
             [Property]
-            public void DoesNotGetStuckInADeadlockWhenThereAreSomeTransitionHandlersForFullSync(int n)
+            public void DoesNotGetStuckInADeadlockWhenThereAreSomeTransitionHandlersForFullSync(byte n)
             {
                 Reset();
                 PreparePullTransitions(n);
@@ -106,7 +106,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
 
             [Property]
-            public void DoesNotGetStuckInADeadlockWhenThereAreSomeTransitionHandlersForPushSync(int n)
+            public void DoesNotGetStuckInADeadlockWhenThereAreSomeTransitionHandlersForPushSync(byte n)
             {
                 Reset();
                 PreparePushTransitions(n);
@@ -117,7 +117,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
 
             [Property]
-            public void DoesNotGetStuckInADeadlockWhenSomeTransitionFailsForFullSync(int n)
+            public void DoesNotGetStuckInADeadlockWhenSomeTransitionFailsForFullSync(byte n)
             {
                 Reset();
                 var lastResult = PreparePullTransitions(n);
@@ -129,7 +129,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
 
             [Property]
-            public void DoesNotGetStuckInADeadlockWhenSomeTransitionFailsForPushSync(int n)
+            public void DoesNotGetStuckInADeadlockWhenSomeTransitionFailsForPushSync(byte n)
             {
                 Reset();
                 var lastResult = PreparePushTransitions(n);
@@ -175,7 +175,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
 
             [Property]
-            public void DoesNotGetStuckInADeadlockWhenThereAreSomeTransitionHandlers(int n)
+            public void DoesNotGetStuckInADeadlockWhenThereAreSomeTransitionHandlers(byte n)
             {
                 Reset();
                 var someResult = new StateResult();
@@ -187,7 +187,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
 
             [Property]
-            public void DoesNotGetStuckInADeadlockWhenATransitionHandlerFails(int n)
+            public void DoesNotGetStuckInADeadlockWhenATransitionHandlerFails(byte n)
             {
                 Reset();
                 var someResult = new StateResult();
@@ -200,7 +200,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
 
             [Property]
-            public void DoesNotGetStuckInADeadlockWhenSomeTransitionTimeOuts(int n)
+            public void DoesNotGetStuckInADeadlockWhenSomeTransitionTimeOuts(byte n)
             {
                 Reset();
                 var someResult = new StateResult();
