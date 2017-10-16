@@ -13,8 +13,8 @@ namespace Toggl.Foundation.Sync.States
         {
         }
 
-        protected override IObservable<IDatabaseTimeEntry> Create(ITogglApi api, IDatabaseTimeEntry entity)
-            => api.TimeEntries.Create(entity).Select(TimeEntry.Clean);
+        protected override IObservable<IDatabaseTimeEntry> Create(IDatabaseTimeEntry entity)
+            => Api.TimeEntries.Create(entity).Select(TimeEntry.Clean);
 
         protected override IDatabaseTimeEntry CopyFrom(IDatabaseTimeEntry entity)
             => TimeEntry.From(entity);

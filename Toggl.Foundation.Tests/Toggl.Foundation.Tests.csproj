@@ -244,7 +244,7 @@
     <Compile Include="Sync\States\Pull\PersistWorkspacesStateTests.cs" />
     <Compile Include="Sync\States\Push\BaseCreateEntityStateTests.cs" />
     <Compile Include="Sync\States\Push\CreateTimeEntryTests.cs" />
-    <Compile Include="Sync\States\Push\BasePushEntityStateTests.cs" />
+    <Compile Include="Sync\States\Push\BasePushOneEntityStateTests.cs" />
     <Compile Include="Sync\States\Push\TestModel.cs" />
     <Compile Include="Autocomplete\AutocompleteProviderTests.cs" />
     <Compile Include="Autocomplete\TextFieldInfoTests.cs" />
@@ -253,6 +253,7 @@
     <Compile Include="MvvmCross\ViewModels\SelectTagsViewModelTests.cs" />
     <Compile Include="Sync\States\Push\ResetAPIDelayStateTests.cs" />
     <Compile Include="DataSources\TasksDataSourceTests.cs" />
+    <Compile Include="Sync\States\Push\BasePushEntityStateTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />

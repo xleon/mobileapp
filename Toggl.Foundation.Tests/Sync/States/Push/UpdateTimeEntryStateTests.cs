@@ -19,10 +19,10 @@ namespace Toggl.Foundation.Tests.Sync.States
 
         private sealed class TheStartMethod : TheStartMethod<IDatabaseTimeEntry, ITimeEntry>
         {
-            protected override BaseUpdateEntityState<IDatabaseTimeEntry> CreateState(ITogglApi api, IRepository<IDatabaseTimeEntry> repository)
+            protected override BasePushEntityState<IDatabaseTimeEntry> CreateState(ITogglApi api, IRepository<IDatabaseTimeEntry> repository)
                 => new UpdateTimeEntryState(api, repository);
 
-            protected override Func<IDatabaseTimeEntry, IObservable<ITimeEntry>> GetUpdateFunction(ITogglApi api)
+            protected override Func<IDatabaseTimeEntry, IObservable<ITimeEntry>> GetApiCallFunction(ITogglApi api)
                 => api.TimeEntries.Update;
 
             protected override IDatabaseTimeEntry CreateDirtyEntity(long id, DateTimeOffset lastUpdate = default(DateTimeOffset))
@@ -30,6 +30,19 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             protected override void AssertUpdateReceived(ITogglApi api, IDatabaseTimeEntry entity)
                 => api.TimeEntries.Received().Update(entity);
+
+            protected override IDatabaseTimeEntry CreateDirtyEntityWithNegativeId()
+                => TimeEntry.Dirty(new Ultrawave.Models.TimeEntry { Id = -1, Description = Guid.NewGuid().ToString() });
+
+            protected override IDatabaseTimeEntry CreateCleanWithPositiveIdFrom(IDatabaseTimeEntry entity)
+            {
+                var te = new Ultrawave.Models.TimeEntry(entity);
+                te.Id = 1;
+                return TimeEntry.Clean(te);
+            }
+
+            protected override IDatabaseTimeEntry CreateCleanEntityFrom(IDatabaseTimeEntry entity)
+                => TimeEntry.Clean(entity);
         }
     }
 }
