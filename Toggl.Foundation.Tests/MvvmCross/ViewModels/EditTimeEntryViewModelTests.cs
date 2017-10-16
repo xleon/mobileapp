@@ -493,25 +493,120 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheSelectProjectCommand : EditTimeEntryViewModelTest
         {
+            private async Task prepare(
+                long? projectId = null,
+                string projectName = null,
+                string projectColor = null,
+                string clientName = null,
+                long? taskId = null,
+                string taskName = null)
+            {
+                await prepareTimeEntry(10);
+
+                if (projectId.HasValue)
+                    prepareProject(projectId.Value, projectName, projectColor, clientName);
+
+                if (taskId.HasValue)
+                    prepareTask(taskId.Value, taskName);
+
+                NavigationService.Navigate<(long?, long?), (long?, long?)>(typeof(SelectProjectViewModel), Arg.Any<(long?, long?)>())
+                    .Returns((projectId, taskId));
+            }
+
+            private async Task prepareTimeEntry(long id)
+            {
+                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                timeEntry.Id.Returns(id);
+                timeEntry.Project.Name.Returns(Guid.NewGuid().ToString());
+                timeEntry.Project.Color.Returns(Guid.NewGuid().ToString());
+                timeEntry.Task.Name.Returns(Guid.NewGuid().ToString());
+                timeEntry.Project.Client.Name.Returns(Guid.NewGuid().ToString());
+                DataSource.TimeEntries.GetById(Arg.Is(id))
+                    .Returns(Observable.Return(timeEntry));
+                ViewModel.Prepare(id);
+                await ViewModel.Initialize();
+            }
+
+            private void prepareProject(
+                long projectId, string projectName, string projectColor, string clientName)
+            {
+                var project = Substitute.For<IDatabaseProject>();
+                project.Id.Returns(projectId);
+                project.Name.Returns(projectName);
+                project.Color.Returns(projectColor);
+                project.Client.Name.Returns(clientName);
+                DataSource.Projects.GetById(Arg.Is(projectId))
+                    .Returns(Observable.Return(project));
+            }
+
+            private void prepareTask(long taskId, string taskName)
+            {
+                var task = Substitute.For<IDatabaseTask>();
+                task.Id.Returns(taskId);
+                task.Name.Returns(taskName);
+                DataSource.Tasks.GetById(Arg.Is(task.Id))
+                    .Returns(Observable.Return(task));
+            }
+
+            [Fact]
+            public async Task SetsTheProject()
+            {
+                var projectName = "Some other project";
+                await prepare(projectId: 11, projectName: projectName);
+
+                await ViewModel.SelectProjectCommand.ExecuteAsync();
+
+                ViewModel.Project.Should().Be(projectName);
+            }
+
+            [Fact]
+            public async Task SetsTheTask()
+            {
+                var taskName = "Some task";
+                await prepare(
+                    projectId: 11,
+                    projectName: "Project",
+                    taskId: 12,
+                    taskName: taskName);
+
+                await ViewModel.SelectProjectCommand.ExecuteAsync();
+
+                ViewModel.Task.Should().Be(taskName);
+            }
+
+            [Fact]
+            public async Task SetsTheClient()
+            {
+                var clientName = "Some client";
+                await prepare(
+                    projectId: 11,
+                    projectName: "Project",
+                    clientName: clientName);
+
+                await ViewModel.SelectProjectCommand.ExecuteAsync();
+
+                ViewModel.Client.Should().Be(clientName);
+            }
+
+            [Fact]
+            public async Task SetsTheColor()
+            {
+                var projectColor = "123456";
+                await prepare(
+                    projectId: 11,
+                    projectName: "Project",
+                    projectColor: projectColor);
+
+                await ViewModel.SelectProjectCommand.ExecuteAsync();
+
+                ViewModel.ProjectColor.Should().Be(projectColor);
+            }
+
             [Fact]
             public async Task RemovesTheTaskIfNoTaskWasSelected()
             {
-                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
-                timeEntry.Id.Returns(10);
-                timeEntry.Project.Name.Returns("Some project");
-                timeEntry.Task.Name.Returns("Some task");
-                DataSource.TimeEntries.GetById(Arg.Is(timeEntry.Id))
-                    .Returns(Observable.Return(timeEntry));
-                ViewModel.Prepare(timeEntry.Id);
-                await ViewModel.Initialize();
-                var projectId = 11;
-                var project = Substitute.For<IDatabaseProject>();
-                project.Id.Returns(projectId);
-                project.Name.Returns("Some other project");
-                DataSource.Projects.GetById(Arg.Is(projectId))
-                    .Returns(Observable.Return(project));
-                NavigationService.Navigate<(long?, long?), (long?, long?)>(typeof(SelectProjectViewModel), Arg.Any<(long?, long?)>())
-                    .Returns((projectId, null));
+                await prepare(11, "Some project");
+
                 await ViewModel.SelectProjectCommand.ExecuteAsync();
 
                 ViewModel.Task.Should().BeEmpty();
