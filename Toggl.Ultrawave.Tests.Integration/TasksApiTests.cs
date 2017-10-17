@@ -142,18 +142,6 @@ namespace Toggl.Ultrawave.Tests.Integration
                 creatingTask.ShouldNotThrow();
             }
 
-            [Fact(DisplayName = "Once this starts failing remove the workaround in the TasksApi class")]
-            public async void WillStartFailingWhenBackendFixesApiIssue5422()
-            {
-                var (togglApi, user) = await SetupTestUser();
-                WorkspaceHelper.SetSubscription(user, user.DefaultWorkspaceId, PricingPlans.StarterMonthly).Wait();
-                var project = createProject(togglApi, user.DefaultWorkspaceId).Wait();
-
-                var task = createTask(togglApi, project, user.Id).Wait();
-
-                task.Should().NotBe(default(DateTimeOffset));
-            }
-
             protected override IObservable<ITask> CallEndpointWith(ITogglApi togglApi)
             {
                 var user = togglApi.User.Get().Wait();
