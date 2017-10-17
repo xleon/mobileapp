@@ -88,14 +88,14 @@ namespace Toggl.PrimeRadiant.Realm
                     var result = resolveEntity(realm, updated.Id, oldEntity, updated.Entity, resolveMode);
 
                     if (rivalsResolver != null &&
-                        (result is CreateResult<TRealmEntity> || result is UpdateResult<TRealmEntity>))
+                        (result is CreateResult<TModel> || result is UpdateResult<TModel>))
                     {
                         var resolvedEntity = getEntityFromResult(result);
                         if (rivalsResolver.CanHaveRival(resolvedEntity))
                             entitiesWithPotentialRival.Add(resolvedEntity);
                     }
 
-                    return (IConflictResolutionResult<TModel>)result;
+                    return result;
                 }).ToList();
 
                 foreach (var entityWithPotentialRival in entitiesWithPotentialRival)
@@ -135,38 +135,38 @@ namespace Toggl.PrimeRadiant.Realm
             }
         }
 
-        private IConflictResolutionResult<TRealmEntity> resolveEntity(Realms.Realm realm, long oldId, TRealmEntity old, TModel entity, ConflictResolutionMode resolveMode)
+        private IConflictResolutionResult<TModel> resolveEntity(Realms.Realm realm, long oldId, TRealmEntity old, TModel entity, ConflictResolutionMode resolveMode)
         {
             switch (resolveMode)
             {
                 case ConflictResolutionMode.Create:
                     var realmEntity = realm.Add(convertToRealm(entity, realm));
-                    return new CreateResult<TRealmEntity>(realmEntity);
+                    return new CreateResult<TModel>(realmEntity);
 
                 case ConflictResolutionMode.Delete:
                     realm.Remove(old);
-                    return new DeleteResult<TRealmEntity>(oldId);
+                    return new DeleteResult<TModel>(oldId);
 
                 case ConflictResolutionMode.Update:
                     old.SetPropertiesFrom(entity, realm);
-                    return new UpdateResult<TRealmEntity>(oldId, old);
+                    return new UpdateResult<TModel>(oldId, old);
 
                 case ConflictResolutionMode.Ignore:
-                    return new IgnoreResult<TRealmEntity>(oldId);
+                    return new IgnoreResult<TModel>(oldId);
 
                 default:
                     throw new ArgumentException($"Unknown conflict resolution mode {resolveMode}");
             }
         }
 
-        private TRealmEntity getEntityFromResult(IConflictResolutionResult<TRealmEntity> result)
+        private TRealmEntity getEntityFromResult(IConflictResolutionResult<TModel> result)
         {
             switch (result)
             {
-                case CreateResult<TRealmEntity> c:
-                    return c.Entity;
-                case UpdateResult<TRealmEntity> u:
-                    return u.Entity;
+                case CreateResult<TModel> c:
+                    return (TRealmEntity)c.Entity;
+                case UpdateResult<TModel> u:
+                    return (TRealmEntity)u.Entity;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(result));
             }
