@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive;
+using System.Reactive.Linq;
 using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.Network;
@@ -31,6 +33,11 @@ namespace Toggl.Ultrawave.ApiClients
 
         public IObservable<ITimeEntry> Update(ITimeEntry timeEntry)
             => pushTimeEntry(endPoints.Put(timeEntry.WorkspaceId, timeEntry.Id), timeEntry, SerializationReason.Default);
+
+        public IObservable<Unit> Delete(ITimeEntry timeEntry)
+            => CreateObservable<ITimeEntry>(endPoints.Delete(timeEntry.WorkspaceId, timeEntry.Id), AuthHeader)
+                .SingleAsync()
+                .Select(_ => Unit.Default);
 
         private IObservable<ITimeEntry> pushTimeEntry(Endpoint endPoint, ITimeEntry timeEntry, SerializationReason reason)
         {

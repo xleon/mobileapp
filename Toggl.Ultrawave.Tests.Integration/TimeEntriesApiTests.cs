@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -39,6 +40,16 @@ namespace Toggl.Ultrawave.Tests.Integration
                     && entry.WorkspaceId == user.DefaultWorkspaceId
                     && entry.Start == secondTimeEntryPosted.Start
                     && entry.UserId == user.Id);
+            }
+
+            [Fact, LogTestInfo]
+            public async Task ReturnsNullInsteadOfAnEmptyListWhenThereIsNoTimeEntryOnTheServer()
+            {
+                var (togglClient, user) = await SetupTestUser();
+
+                var timeEntries = await togglClient.TimeEntries.GetAll();
+
+                timeEntries.Should().BeNull();
             }
 
             protected override IObservable<List<ITimeEntry>> CallEndpointWith(ITogglApi togglApi)
@@ -302,6 +313,121 @@ namespace Toggl.Ultrawave.Tests.Integration
 
             private IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi, TimeEntry timeEntry)
                 => togglApi.TimeEntries.Update(timeEntry);
+        }
+
+        public sealed class TheDeleteMethod : AuthenticatedDeleteEndpointBaseTests<ITimeEntry>
+        {
+            [Fact, LogTestInfo]
+            public async Task DeletesTheTimeEntryFromTheServer()
+            {
+                var (togglApi, user) = await SetupTestUser();
+                var timeEntry = createTimeEntry(user);
+                var persistedTimeEntry = await togglApi.TimeEntries.Create(timeEntry);
+
+                var timeEntriesOnServerBefore = await togglApi.TimeEntries.GetAll();
+                await togglApi.TimeEntries.Delete(persistedTimeEntry);
+                var timeEntriesOnServerAfter = await togglApi.TimeEntries.GetAll();
+
+                timeEntriesOnServerBefore.Should().HaveCount(1);
+                timeEntriesOnServerAfter.Should().BeNull();
+            }
+
+            [Fact, LogTestInfo]
+            public async Task DeletesTheTimeEntryFromTheServerAndKeepsAllTheOtherTimeEntriesIntact()
+            {
+                var (togglApi, user) = await SetupTestUser();
+                var timeEntryA = createTimeEntry(user);
+                var persistedTimeEntryA = await togglApi.TimeEntries.Create(timeEntryA);
+                var timeEntryB = createTimeEntry(user);
+                var persistedTimeEntryB = await togglApi.TimeEntries.Create(timeEntryB);
+                var timeEntryC = createTimeEntry(user);
+                var persistedTimeEntryC = await togglApi.TimeEntries.Create(timeEntryC);
+
+                await togglApi.TimeEntries.Delete(persistedTimeEntryB);
+                var timeEntriesOnServer = await togglApi.TimeEntries.GetAll();
+
+                timeEntriesOnServer.Should().HaveCount(2);
+                timeEntriesOnServer.Should().Contain(te => te.Id == persistedTimeEntryA.Id).And.Contain(te => te.Id == persistedTimeEntryC.Id);
+            }
+
+            [Fact, LogTestInfo]
+            public async Task FailsIfDeletingANonExistingTimeEntryInAWorkspaceWhereTheUserBelongs()
+            {
+                var (togglApi, user) = await SetupTestUser();
+                var timeEntry = createTimeEntry(user);
+                var persistedTimeEntry = await togglApi.TimeEntries.Create(timeEntry);
+                var timeEntryToDelete = new TimeEntry { Id = persistedTimeEntry.Id + 1000000, WorkspaceId = persistedTimeEntry.WorkspaceId };
+
+                Action deleteNonExistingTimeEntry = () => togglApi.TimeEntries.Delete(timeEntryToDelete).Wait();
+
+                deleteNonExistingTimeEntry.ShouldThrow<NotFoundException>();
+                (await togglApi.TimeEntries.GetAll()).Should().Contain(te => te.Id == persistedTimeEntry.Id);
+            }
+
+            [Fact, LogTestInfo]
+            public async Task FailsIfDeletingANonExistingTimeEntryInAWorkspaceWhereTheUserDoesNotBelong()
+            {
+                var (togglApi, user) = await SetupTestUser();
+                var timeEntry = createTimeEntry(user);
+                var persistedTimeEntry = await togglApi.TimeEntries.Create(timeEntry);
+                var timeEntryToDelete = new TimeEntry { Id = persistedTimeEntry.Id + 1000000, WorkspaceId = persistedTimeEntry.WorkspaceId + 1000000 };
+
+                Action deleteNonExistingTimeEntry = () => togglApi.TimeEntries.Delete(timeEntryToDelete).Wait();
+
+                deleteNonExistingTimeEntry.ShouldThrow<ForbiddenException>();
+                (await togglApi.TimeEntries.GetAll()).Should().Contain(te => te.Id == persistedTimeEntry.Id);
+            }
+
+            [Fact, LogTestInfo]
+            public async Task FailsIfDeletingAnExistingTimeEntryInAWorkspaceWhereTheUserDoesNotBelong()
+            {
+                var (togglApi, user) = await SetupTestUser();
+                var timeEntry = createTimeEntry(user);
+                var persistedTimeEntry = await togglApi.TimeEntries.Create(timeEntry);
+                var timeEntryToDelete = new TimeEntry { Id = persistedTimeEntry.Id, WorkspaceId = persistedTimeEntry.WorkspaceId + 1000000 };
+
+                Action deleteNonExistingTimeEntry = () => togglApi.TimeEntries.Delete(timeEntryToDelete).Wait();
+
+                deleteNonExistingTimeEntry.ShouldThrow<ForbiddenException>();
+                (await togglApi.TimeEntries.GetAll()).Should().Contain(te => te.Id == persistedTimeEntry.Id);
+            }
+
+            [Fact, LogTestInfo]
+            public async Task FailsIfDeletingAnAlreadyDeletedTimeEntry()
+            {
+                var (togglApi, user) = await SetupTestUser();
+                var timeEntry = createTimeEntry(user);
+                var persistedTimeEntry = await togglApi.TimeEntries.Create(timeEntry);
+
+                await togglApi.TimeEntries.Delete(persistedTimeEntry);
+                Action secondDelete = () => togglApi.TimeEntries.Delete(persistedTimeEntry).Wait();
+
+                secondDelete.ShouldThrow<NotFoundException>();
+            }
+
+            [Fact, LogTestInfo]
+            public async Task FailsIfDeletingOtherUsersTimeEntry()
+            {
+                var (togglApiA, userA) = await SetupTestUser();
+                var (togglApiB, userB) = await SetupTestUser();
+                var timeEntry = createTimeEntry(userA);
+                var persistedTimeEntry = await togglApiA.TimeEntries.Create(timeEntry);
+
+                Action secondDelete = () => togglApiB.TimeEntries.Delete(persistedTimeEntry).Wait();
+
+                secondDelete.ShouldThrow<ForbiddenException>();
+            }
+
+            protected override IObservable<ITimeEntry> Initialize(ITogglApi togglApi)
+                => Observable.Defer(async () =>
+                {
+                    var user = await togglApi.User.Get();
+                    var timeEntry = createTimeEntry(user);
+                    return togglApi.TimeEntries.Create(timeEntry);
+                });
+
+            protected override IObservable<Unit> Delete(ITogglApi togglApi, ITimeEntry timeEntry)
+                => togglApi.TimeEntries.Delete(timeEntry);
         }
 
         private static TimeEntry createTimeEntry(IUser user) => new TimeEntry
