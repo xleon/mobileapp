@@ -140,7 +140,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 Action creatingTimeEntry = () => CallEndpointWith(togglApi, timeEntry).Wait();
 
-                creatingTimeEntry.ShouldThrow<InternalServerErrorException>();
+                creatingTimeEntry.ShouldThrow<BadRequestException>();
             }
 
             [Fact]
