@@ -98,6 +98,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand SelectTagsCommand { get; }
 
+        public IMvxCommand ToggleBillableCommand { get; }
+
         public EditTimeEntryViewModel(ITogglDataSource dataSource, IMvxNavigationService navigationService, ITimeService timeService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -116,6 +118,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SelectProjectCommand = new MvxAsyncCommand(selectProject);
             SelectTagsCommand = new MvxAsyncCommand(selectTags);
             DismissSyncErrorMessageCommand = new MvxCommand(dismissSyncErrorMessageCommand);
+            ToggleBillableCommand = new MvxCommand(toggleBillable);
         }
 
         public override void Prepare(long parameter)
@@ -276,5 +279,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void dismissSyncErrorMessageCommand()
             => SyncErrorMessageVisible = false;
+
+        private void toggleBillable() 
+        {
+            Billable = !Billable;
+        }
     }
 }

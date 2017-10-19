@@ -18,6 +18,9 @@ namespace Toggl.Daneel.Extensions
         public static string BindCurrentPage(this UIScrollView self)
             => ScrollViewCurrentPageTargetBinding.BindingName;
 
+        public static string BindAnimatedOn(this UISwitch self)
+            => SwitchAnimatedOnTargetBinding.BindingName;
+
         public static string BindFocus(this UITextField self)
             => TextFieldFocusTargetBinding.BindingName;
 

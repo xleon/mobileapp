@@ -31,6 +31,11 @@ namespace Toggl.Daneel
                 view => new ScrollViewCurrentPageTargetBinding(view)
             );
 
+            registry.RegisterCustomBindingFactory<UISwitch>(
+                SwitchAnimatedOnTargetBinding.BindingName,
+                view => new SwitchAnimatedOnTargetBinding(view)
+            );
+
             registry.RegisterCustomBindingFactory<UITextField>(
                 TextFieldFocusTargetBinding.BindingName,
                 view => new TextFieldFocusTargetBinding(view)

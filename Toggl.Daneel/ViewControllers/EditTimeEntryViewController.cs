@@ -85,7 +85,11 @@ namespace Toggl.Daneel.ViewControllers
 
             //Text
             bindingSet.Bind(DescriptionTextField).To(vm => vm.Description);
-            bindingSet.Bind(BillableSwitch).To(vm => vm.Billable);
+
+            bindingSet.Bind(BillableSwitch)
+                      .For(v => v.BindAnimatedOn())
+                      .To(vm => vm.Billable);
+            
             bindingSet.Bind(DurationLabel)
                       .To(vm => vm.Duration)
                       .WithConversion(durationConverter);
@@ -137,6 +141,10 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(AddTagsView)
                       .For(v => v.BindTap())
                       .To(vm => vm.SelectTagsCommand);
+
+            bindingSet.Bind(BillableView)
+                      .For(v => v.BindTap())
+                      .To(vm => vm.ToggleBillableCommand);
 
             //Project visibility
             bindingSet.Bind(AddProjectAndTaskView)

@@ -64,6 +64,10 @@ namespace Toggl.Daneel.ViewControllers
         [Outlet]
         UIKit.UILabel TagsLabel { get; set; }
 
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView BillableView { get; set; }
+
         void ReleaseDesignerOutlets ()
         {
             if (AddProjectAndTaskView != null) {
@@ -79,6 +83,11 @@ namespace Toggl.Daneel.ViewControllers
             if (BillableSwitch != null) {
                 BillableSwitch.Dispose ();
                 BillableSwitch = null;
+            }
+
+            if (BillableView != null) {
+                BillableView.Dispose ();
+                BillableView = null;
             }
 
             if (CloseButton != null) {
