@@ -7,12 +7,17 @@ using MvvmCross.Plugins.Visibility;
 using Toggl.Daneel.Extensions;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using UIKit;
 
 namespace Toggl.Daneel.ViewControllers
 {
     [MvxRootPresentation(WrapInNavigationController = true)]
     public sealed partial class OnboardingViewController : MvxViewController<OnboardingViewModel>
     {
+        private readonly TrackPage trackPagePlaceholder = TrackPage.Create();
+        private readonly LogPage logPagePlaceholder = LogPage.Create();
+        private readonly SummaryPage summaryPagePlaceholder = SummaryPage.Create();
+
         public OnboardingViewController() 
             : base(nameof(OnboardingViewController), null)
         {
@@ -21,6 +26,8 @@ namespace Toggl.Daneel.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            preparePlaceholders();
 
             PageControl.Pages = ViewModel.NumberOfPages;
             FirstPageLabel.Text = Resources.OnboardingTrackPageCopy;
@@ -81,6 +88,22 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.IsFirstPage)
                       .WithConversion(invertedVisibilityConverter);
 
+            bindingSet.Bind(trackPagePlaceholder)
+                      .For(v => v.BindVisibility())
+                      .To(vm => vm.IsTrackPage)
+                      .WithConversion(visibilityConverter);
+
+            bindingSet.Bind(logPagePlaceholder)
+                      .For(v => v.BindVisibility())
+                      .To(vm => vm.IsLogPage)
+                      .WithConversion(visibilityConverter);
+
+            bindingSet.Bind(summaryPagePlaceholder)
+                      .For(v => v.BindVisibility())
+                      .To(vm => vm.IsSummaryPage)
+                      .WithConversion(visibilityConverter);
+
+
             //Current Page
             bindingSet.Bind(ScrollView)
                       .For(v => v.BindCurrentPage())
@@ -101,5 +124,24 @@ namespace Toggl.Daneel.ViewControllers
 
         public override bool PrefersStatusBarHidden()
             => true;
+
+        private void preparePlaceholders()
+        {
+            PhoneContents.AddSubview(trackPagePlaceholder);
+            PhoneContents.AddSubview(logPagePlaceholder);
+            PhoneContents.AddSubview(summaryPagePlaceholder);
+
+            setPlaceholderConstraints(trackPagePlaceholder);
+            setPlaceholderConstraints(logPagePlaceholder);
+            setPlaceholderConstraints(summaryPagePlaceholder);
+        }
+
+        private void setPlaceholderConstraints(UIView view)
+        {
+            view.TopAnchor.ConstraintEqualTo(PhoneContents.TopAnchor).Active = true;
+            view.BottomAnchor.ConstraintEqualTo(PhoneContents.BottomAnchor).Active = true;
+            view.LeadingAnchor.ConstraintEqualTo(PhoneContents.LeadingAnchor).Active = true;
+            view.TrailingAnchor.ConstraintEqualTo(PhoneContents.TrailingAnchor).Active = true;
+        }
     }
 }

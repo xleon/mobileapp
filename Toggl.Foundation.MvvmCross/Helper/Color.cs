@@ -10,7 +10,7 @@ namespace Toggl.Foundation.MvvmCross.Helper
         private static readonly MvxColor pinkishGrey = new MvxColor(206, 206, 206);
         private static readonly MvxColor black = new MvxColor(46, 46, 46);
 
-        internal static class Onboarding
+        public static class Onboarding
         {
             internal static readonly MvxColor TrackPageBorderColor = new MvxColor(14, 150, 213);
             internal static readonly MvxColor TrackPageBackgroundColor = new MvxColor(6, 170, 245);
@@ -20,6 +20,7 @@ namespace Toggl.Foundation.MvvmCross.Helper
 
             internal static readonly MvxColor SummaryPageBorderColor = new MvxColor(230, 179, 31);
             internal static readonly MvxColor SummaryPageBackgroundColor = new MvxColor(241, 195, 63);
+            public static readonly MvxColor SummaryPageTimelineSeparators = new MvxColor(164, 173, 176, 89);
 
             internal static readonly MvxColor LoginPageBackgroundColor = new MvxColor(219, 40, 46);
         }

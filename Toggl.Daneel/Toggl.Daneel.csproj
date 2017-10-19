@@ -360,6 +360,9 @@
     <InterfaceDefinition Include="Views\WorkspaceHeaderViewCell.xib" />
     <InterfaceDefinition Include="Views\TaskSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\EditTimeEntryErrorView.xib" />
+    <InterfaceDefinition Include="Views\Onboarding\TrackPage.xib" />
+    <InterfaceDefinition Include="Views\Onboarding\LogPage.xib" />
+    <InterfaceDefinition Include="Views\Onboarding\SummaryPage.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -523,6 +526,18 @@
     <Compile Include="Views\EditTimeEntryErrorView.designer.cs">
       <DependentUpon>EditTimeEntryErrorView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Onboarding\TrackPage.cs" />
+    <Compile Include="Views\Onboarding\TrackPage.designer.cs">
+      <DependentUpon>TrackPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Onboarding\LogPage.cs" />
+    <Compile Include="Views\Onboarding\LogPage.designer.cs">
+      <DependentUpon>LogPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Onboarding\SummaryPage.cs" />
+    <Compile Include="Views\Onboarding\SummaryPage.designer.cs">
+      <DependentUpon>SummaryPage.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
@@ -559,6 +574,7 @@
     <Folder Include="Resources\Images.xcassets\icSearch.imageset\" />
     <Folder Include="Resources\Images.xcassets\icCheckBoxChecked.imageset\" />
     <Folder Include="Resources\Images.xcassets\icCheckBoxUnchecked.imageset\" />
+    <Folder Include="Views\Onboarding\" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />

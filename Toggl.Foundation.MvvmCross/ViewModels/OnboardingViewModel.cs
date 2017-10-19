@@ -44,6 +44,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         [DependsOn(nameof(CurrentPage))]
+        public bool IsTrackPage => CurrentPage == TrackPage;
+
+        [DependsOn(nameof(CurrentPage))]
+        public bool IsLogPage => CurrentPage == LogPage;
+
+        [DependsOn(nameof(CurrentPage))]
+        public bool IsSummaryPage => CurrentPage == SummaryPage;
+
+        [DependsOn(nameof(CurrentPage))]
         public bool IsFirstPage => CurrentPage == 0;
 
         [DependsOn(nameof(CurrentPage))]
