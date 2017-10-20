@@ -148,6 +148,8 @@
     <Compile Include="DataSources\TasksDataSource.cs" />
     <Compile Include="Sync\States\Push\BaseDeleteEntityState.cs" />
     <Compile Include="Sync\States\Push\BasePushEntityState.cs" />
+    <Compile Include="Sync\States\Push\BaseDeleteLocalEntityState.cs" />
+    <Compile Include="Sync\States\Push\DeleteLocalTimeEntryState.cs" />
     <Compile Include="Sync\States\Push\DeleteTimeEntryState.cs" />
   </ItemGroup>
   <ItemGroup>

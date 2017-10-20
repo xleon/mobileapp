@@ -99,11 +99,12 @@ namespace Toggl.Foundation
             var create = new CreateTimeEntryState(api, dataSource.TimeEntries);
             var update = new UpdateTimeEntryState(api, dataSource.TimeEntries);
             var delete = new DeleteTimeEntryState(api, database.TimeEntries);
+            var deleteLocal = new DeleteLocalTimeEntryState(dataSource.TimeEntries);
             var unsyncable = new UnsyncableTimeEntryState(dataSource.TimeEntries);
             var checkServerStatus = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay);
             var finished = new ResetAPIDelayState(apiDelay);
 
-            return configurePush(transitions, entryPoint, push, pushOne, create, update, delete, unsyncable, checkServerStatus, finished);
+            return configurePush(transitions, entryPoint, push, pushOne, create, update, delete, deleteLocal, unsyncable, checkServerStatus, finished);
         }
 
         private static IStateResult configurePush<T>(
@@ -114,6 +115,7 @@ namespace Toggl.Foundation
             BaseCreateEntityState<T> create,
             BaseUpdateEntityState<T> update,
             BaseDeleteEntityState<T> delete,
+            BaseDeleteLocalEntityState<T> deleteLocal,
             BaseUnsyncableEntityState<T> markUnsyncable,
             CheckServerStatusState checkServerStatus,
             ResetAPIDelayState finished)
@@ -124,6 +126,7 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(pushOne.CreateEntity, create.Start);
             transitions.ConfigureTransition(pushOne.UpdateEntity, update.Start);
             transitions.ConfigureTransition(pushOne.DeleteEntity, delete.Start);
+            transitions.ConfigureTransition(pushOne.DeleteEntityLocally, deleteLocal.Start);
 
             transitions.ConfigureTransition(create.ClientError, markUnsyncable.Start);
             transitions.ConfigureTransition(update.ClientError, markUnsyncable.Start);
@@ -143,6 +146,8 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(create.CreatingFinished, finished.Start);
             transitions.ConfigureTransition(update.UpdatingSucceeded, finished.Start);
             transitions.ConfigureTransition(delete.DeletingFinished, finished.Start);
+            transitions.ConfigureTransition(deleteLocal.Deleted, finished.Start);
+            transitions.ConfigureTransition(deleteLocal.DeletingFailed, finished.Start);
 
             transitions.ConfigureTransition(finished.PushNext, push.Start);
 
