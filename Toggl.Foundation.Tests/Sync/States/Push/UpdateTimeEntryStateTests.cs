@@ -22,7 +22,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             protected override BasePushEntityState<IDatabaseTimeEntry> CreateState(ITogglApi api, IRepository<IDatabaseTimeEntry> repository)
                 => new UpdateTimeEntryState(api, repository);
 
-            protected override Func<IDatabaseTimeEntry, IObservable<ITimeEntry>> GetApiCallFunction(ITogglApi api)
+            protected override Func<IDatabaseTimeEntry, IObservable<ITimeEntry>> GetUpdateFunction(ITogglApi api)
                 => api.TimeEntries.Update;
 
             protected override IDatabaseTimeEntry CreateDirtyEntity(long id, DateTimeOffset lastUpdate = default(DateTimeOffset))

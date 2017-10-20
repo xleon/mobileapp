@@ -67,7 +67,9 @@ namespace Toggl.Ultrawave.ApiClients
                 {
                     try
                     {
-                        var data = await Task.Run(() => serializer.Deserialize<T>(response.RawData)).ConfigureAwait(false);
+                        var data = !string.IsNullOrEmpty(response.RawData)
+                            ? await Task.Run(() => serializer.Deserialize<T>(response.RawData)).ConfigureAwait(false)
+                            : default(T);
                         observer.OnNext(data);
                         observer.OnCompleted();
                     }

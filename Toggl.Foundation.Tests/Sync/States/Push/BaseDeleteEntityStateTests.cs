@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive;
 using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
@@ -12,11 +13,11 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {
-    public abstract class BaseCreateEntityStateTests
+    public abstract class BaseDeleteEntityStateTests
     {
         private IStartMethodTestHelper helper;
 
-        public BaseCreateEntityStateTests(IStartMethodTestHelper helper)
+        public BaseDeleteEntityStateTests(IStartMethodTestHelper helper)
         {
             this.helper = helper;
         }
@@ -48,8 +49,12 @@ namespace Toggl.Foundation.Tests.Sync.States
             => helper.ReturnsSuccessfulTransitionWhenEverythingWorks();
 
         [Fact]
-        public void UpdateIsCalledWithCorrectParameters()
-            => helper.UpdateIsCalledWithCorrectParameters();
+        public void CallsDatabaseDeleteOperationWithCorrectParameter()
+            => helper.CallsDatabaseDeleteOperationWithCorrectParameter();
+
+        [Fact]
+        public void DoesNotDeleteTheEntityLocallyIfTheApiOperationFails()
+            => helper.DoesNotDeleteTheEntityLocallyIfTheApiOperationFails();
 
         public static object[] ClientExceptions()
             => new[]
@@ -83,7 +88,8 @@ namespace Toggl.Foundation.Tests.Sync.States
             void ReturnsUnknownErrorTransitionWhenHttpFailsWithNonApiException();
             void ReturnsFailTransitionWhenDatabaseOperationFails();
             void ReturnsSuccessfulTransitionWhenEverythingWorks();
-            void UpdateIsCalledWithCorrectParameters();
+            void CallsDatabaseDeleteOperationWithCorrectParameter();
+            void DoesNotDeleteTheEntityLocallyIfTheApiOperationFails();
         }
 
         internal abstract class TheStartMethod<TModel, TApiModel> : BasePushEntityStateTests<TModel, TApiModel>, IStartMethodTestHelper
@@ -106,54 +112,67 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void ReturnsSuccessfulTransitionWhenEverythingWorks()
             {
-                var state = createCreateState(api, repository);
+                var state = createDeleteState(api, repository);
                 var entity = CreateDirtyEntityWithNegativeId();
                 var clean = CreateCleanEntityFrom(entity);
                 var withPositiveId = CreateCleanWithPositiveIdFrom(entity);
-                GetCreateFunction(api)(Arg.Any<TModel>())
-                    .Returns(Observable.Return(withPositiveId));
-                repository.Update(Arg.Any<long>(), Arg.Any<TModel>())
-                    .Returns(x => Observable.Return((TModel)x[1]));
+                GetDeleteFunction(api)(Arg.Any<TModel>())
+                    .Returns(Observable.Return(Unit.Default));
+                repository.Delete(Arg.Any<long>())
+                    .Returns(Observable.Return(Unit.Default));
 
                 var transition = state.Start(entity).SingleAsync().Wait();
-                var persistedEntity = ((Transition<TModel>)transition).Parameter;
 
-                transition.Result.Should().Be(state.CreatingFinished);
-                persistedEntity.Id.Should().NotBe(entity.Id);
-                persistedEntity.Id.Should().BeGreaterThan(0);
-                persistedEntity.SyncStatus.Should().Be(SyncStatus.InSync);
-                EntitiesHaveSameImportantProperties(entity, persistedEntity).Should().BeTrue();
+                transition.Result.Should().Be(state.DeletingFinished);
             }
 
-            public void UpdateIsCalledWithCorrectParameters()
+            public void MakesApiCallWithCorrectParameter()
             {
-                var state = createCreateState(api, repository);
+                var state = createDeleteState(api, repository);
                 var entity = CreateDirtyEntityWithNegativeId();
-                var withPositiveId = CreateCleanWithPositiveIdFrom(entity);
-                GetCreateFunction(api)(entity)
-                    .Returns(Observable.Return(withPositiveId));
+                GetDeleteFunction(api)(entity)
+                    .Returns(Observable.Return(Unit.Default));
 
                 state.Start(entity).SingleAsync().Wait();
 
-                repository
-                    .Received()
-                    .Update(entity.Id, Arg.Is<TModel>(model => model.Id == withPositiveId.Id));
+                GetDeleteFunction(api).Received().Invoke(entity);
+            }
+
+            public void CallsDatabaseDeleteOperationWithCorrectParameter()
+            {
+                var state = createDeleteState(api, repository);
+                var entity = CreateDirtyEntityWithNegativeId();
+                GetDeleteFunction(api)(entity)
+                    .Returns(Observable.Return(Unit.Default));
+
+                state.Start(entity).SingleAsync().Wait();
+
+                repository.Received().Delete(entity.Id);
+            }
+
+            public void DoesNotDeleteTheEntityLocallyIfTheApiOperationFails()
+            {
+                var state = createDeleteState(api, repository);
+                var entity = CreateDirtyEntityWithNegativeId();
+                PrepareApiCallFunctionToThrow(new TestException());
+
+                state.Start(entity).SingleAsync().Wait();
+
+                repository.DidNotReceive().Delete(Arg.Any<long>());
             }
 
             protected override void PrepareApiCallFunctionToThrow(Exception e)
-                => GetCreateFunction(api)(Arg.Any<TModel>())
-                    .Returns(_ => Observable.Throw<TApiModel>(e));
+                => GetDeleteFunction(api)(Arg.Any<TModel>())
+                    .Returns(_ => Observable.Throw<Unit>(e));
 
             protected override void PrepareDatabaseFunctionToThrow(Exception e)
-                => repository.Update(Arg.Any<long>(), Arg.Any<TModel>())
-                    .Returns(_ => Observable.Throw<TModel>(e));
+                => repository.Delete(Arg.Any<long>())
+                    .Returns(_ => Observable.Throw<Unit>(e));
 
-            protected abstract Func<TModel, IObservable<TApiModel>> GetCreateFunction(ITogglApi api);
+            private BaseDeleteEntityState<TModel> createDeleteState(ITogglApi api, IRepository<TModel> repository)
+                => CreateState(api, repository) as BaseDeleteEntityState<TModel>;
 
-            private BaseCreateEntityState<TModel> createCreateState(ITogglApi api, IRepository<TModel> repository)
-                => CreateState(api, repository) as BaseCreateEntityState<TModel>;
-
-            protected abstract bool EntitiesHaveSameImportantProperties(TModel a, TModel b);    
+            protected abstract Func<TModel, IObservable<Unit>> GetDeleteFunction(ITogglApi api);
         }
     }
 }

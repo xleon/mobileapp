@@ -41,8 +41,7 @@ namespace Toggl.Foundation.Tests.Sync.States
         {
             var state = CreateState(api, repository);
             var entity = CreateDirtyEntityWithNegativeId();
-            GetApiCallFunction(api)(Arg.Any<TModel>())
-                .Returns(_ => Observable.Throw<TModel>(exception));
+            PrepareApiCallFunctionToThrow(exception);
 
             var transition = state.Start(entity).SingleAsync().Wait();
             var parameter = ((Transition<(Exception Reason, TModel)>)transition).Parameter;
@@ -56,8 +55,7 @@ namespace Toggl.Foundation.Tests.Sync.States
         {
             var state = CreateState(api, repository);
             var entity = CreateDirtyEntityWithNegativeId();
-            GetApiCallFunction(api)(Arg.Any<TModel>())
-                .Returns(_ => Observable.Throw<TModel>(exception));
+            PrepareApiCallFunctionToThrow(exception);
 
             var transition = state.Start(entity).SingleAsync().Wait();
             var parameter = ((Transition<(Exception Reason, TModel)>)transition).Parameter;
@@ -71,8 +69,7 @@ namespace Toggl.Foundation.Tests.Sync.States
         {
             var state = CreateState(api, repository);
             var entity = CreateDirtyEntityWithNegativeId();
-            GetApiCallFunction(api)(Arg.Any<TModel>())
-                .Returns(_ => Observable.Throw<TModel>(new TestException()));
+            PrepareApiCallFunctionToThrow(new TestException());
 
             var transition = state.Start(entity).SingleAsync().Wait();
             var parameter = ((Transition<(Exception Reason, TModel)>)transition).Parameter;
@@ -86,8 +83,7 @@ namespace Toggl.Foundation.Tests.Sync.States
         {
             var state = CreateState(api, repository);
             var entity = CreateDirtyEntityWithNegativeId();
-            repository.Update(Arg.Any<long>(), Arg.Any<TModel>())
-                .Returns(_ => Observable.Throw<TModel>(new TestException()));
+            PrepareDatabaseFunctionToThrow(new TestException());
 
             var transition = state.Start(entity).SingleAsync().Wait();
             var parameter = ((Transition<(Exception Reason, TModel)>)transition).Parameter;
@@ -104,6 +100,8 @@ namespace Toggl.Foundation.Tests.Sync.States
 
         protected abstract TModel CreateCleanEntityFrom(TModel entity);
 
-        protected abstract Func<TModel, IObservable<TApiModel>> GetApiCallFunction(ITogglApi api);
+        protected abstract void PrepareApiCallFunctionToThrow(Exception e);
+
+        protected abstract void PrepareDatabaseFunctionToThrow(Exception e);
     }
 }

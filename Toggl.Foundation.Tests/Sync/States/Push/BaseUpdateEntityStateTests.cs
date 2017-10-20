@@ -127,7 +127,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             {
                 var state = createUpdateState(api, repository);
                 var entity = CreateDirtyEntity(1);
-                getUpdateFunction(api)(Arg.Any<TModel>())
+                GetUpdateFunction(api)(Arg.Any<TModel>())
                     .Returns(_ => Observable.Throw<TApiModel>(exception));
 
                 var transition = state.Start(entity).SingleAsync().Wait();
@@ -141,7 +141,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             {
                 var state = createUpdateState(api, repository);
                 var entity = CreateDirtyEntity(1);
-                getUpdateFunction(api)(Arg.Any<TModel>())
+                GetUpdateFunction(api)(Arg.Any<TModel>())
                     .Returns(_ => Observable.Throw<TApiModel>(exception));
 
                 var transition = state.Start(entity).SingleAsync().Wait();
@@ -155,7 +155,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             {
                 var state = createUpdateState(api, repository);
                 var entity = CreateDirtyEntity(1);
-                getUpdateFunction(api)(Arg.Any<TModel>())
+                GetUpdateFunction(api)(Arg.Any<TModel>())
                     .Returns(_ => Observable.Throw<TApiModel>(new TestException()));
 
                 var transition = state.Start(entity).SingleAsync().Wait();
@@ -184,7 +184,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             {
                 var state = createUpdateState(api, repository);
                 var entity = CreateDirtyEntity(1);
-                getUpdateFunction(api)(entity)
+                GetUpdateFunction(api)(entity)
                     .Returns(Observable.Return(Substitute.For<TApiModel>()));
                 repository
                     .BatchUpdate(Arg.Any<IEnumerable<(long, TModel)>>(), Arg.Any<Func<TModel, TModel, ConflictResolutionMode>>())
@@ -200,7 +200,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var state = createUpdateState(api, repository);
                 var at = new DateTimeOffset(2017, 9, 1, 12, 34, 56, TimeSpan.Zero);
                 var entity = CreateDirtyEntity(1, at);
-                getUpdateFunction(api)(Arg.Any<TModel>())
+                GetUpdateFunction(api)(Arg.Any<TModel>())
                     .Returns(Observable.Return(entity));
                 repository
                     .BatchUpdate(Arg.Any<IEnumerable<(long, TModel)>>(), Arg.Any<Func<TModel, TModel, ConflictResolutionMode>>())
@@ -221,7 +221,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 var serverEntity = CreateDirtyEntity(2, at);
                 var localEntity = CreateDirtyEntity(3, at);
                 var updatedEntity = CreateDirtyEntity(4, at);
-                getUpdateFunction(api)(entity)
+                GetUpdateFunction(api)(entity)
                     .Returns(Observable.Return(serverEntity));
                 repository
                     .GetById(entity.Id)
@@ -241,8 +241,15 @@ namespace Toggl.Foundation.Tests.Sync.States
                     Arg.Any<Func<TModel, TModel, ConflictResolutionMode>>());
             }
 
-            private Func<TModel, IObservable<TApiModel>> getUpdateFunction(ITogglApi api)
-                => GetApiCallFunction(api);
+            protected override void PrepareApiCallFunctionToThrow(Exception e)
+                => GetUpdateFunction(api)(Arg.Any<TModel>())
+                    .Returns(_ => Observable.Throw<TApiModel>(e));
+
+            protected override void PrepareDatabaseFunctionToThrow(Exception e)
+                => repository.Update(Arg.Any<long>(), Arg.Any<TModel>())
+                    .Returns(_ => Observable.Throw<TModel>(e));
+
+            protected abstract Func<TModel, IObservable<TApiModel>> GetUpdateFunction(ITogglApi api);
                 
             private BaseUpdateEntityState<TModel> createUpdateState(ITogglApi api, IRepository<TModel> repository)
                 => CreateState(api, repository) as BaseUpdateEntityState<TModel>;

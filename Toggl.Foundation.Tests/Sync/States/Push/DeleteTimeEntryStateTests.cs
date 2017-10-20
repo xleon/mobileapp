@@ -1,7 +1,7 @@
 ﻿using System;
-using NSubstitute;
+using System.Reactive;
+using System.Reactive.Linq;
 using Toggl.Foundation.Models;
-using Toggl.Foundation.Sync;
 using Toggl.Foundation.Sync.States;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
@@ -10,9 +10,9 @@ using Toggl.Ultrawave;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {
-    public sealed class CreateTimeEntryTests : BaseCreateEntityStateTests
+    public sealed class DeleteTimeEntryStateTests : BaseDeleteEntityStateTests
     {
-        public CreateTimeEntryTests()
+        public DeleteTimeEntryStateTests()
             : base(new TheStartMethod())
         {
         }
@@ -29,13 +29,10 @@ namespace Toggl.Foundation.Tests.Sync.States
                 => TimeEntry.Clean(entity);
 
             protected override BasePushEntityState<IDatabaseTimeEntry> CreateState(ITogglApi api, IRepository<IDatabaseTimeEntry> repository)
-                => new CreateTimeEntryState(api, repository);
+                => new DeleteTimeEntryState(api, repository);
 
-            protected override Func<IDatabaseTimeEntry, IObservable<ITimeEntry>> GetCreateFunction(ITogglApi api)
-                => api.TimeEntries.Create;
-
-            protected override bool EntitiesHaveSameImportantProperties(IDatabaseTimeEntry a, IDatabaseTimeEntry b)
-                => a.Description == b.Description;
+            protected override Func<IDatabaseTimeEntry, IObservable<Unit>> GetDeleteFunction(ITogglApi api)
+                => timeEntry => api.TimeEntries.Delete(timeEntry);
         }
     }
 }

@@ -259,6 +259,8 @@
     <Compile Include="Sync\States\Push\ResetAPIDelayStateTests.cs" />
     <Compile Include="DataSources\TasksDataSourceTests.cs" />
     <Compile Include="Sync\States\Push\BasePushEntityStateTests.cs" />
+    <Compile Include="Sync\States\Push\BaseDeleteEntityStateTests.cs" />
+    <Compile Include="Sync\States\Push\DeleteTimeEntryStateTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />

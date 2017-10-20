@@ -146,7 +146,9 @@
     <Compile Include="Exceptions\NoRunningTimeEntryException.cs" />
     <Compile Include="Sync\States\Push\ResetAPIDelayState.cs" />
     <Compile Include="DataSources\TasksDataSource.cs" />
+    <Compile Include="Sync\States\Push\BaseDeleteEntityState.cs" />
     <Compile Include="Sync\States\Push\BasePushEntityState.cs" />
+    <Compile Include="Sync\States\Push\DeleteTimeEntryState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
