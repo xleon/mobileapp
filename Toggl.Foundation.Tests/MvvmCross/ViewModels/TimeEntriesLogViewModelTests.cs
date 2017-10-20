@@ -251,26 +251,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheContinueTimeEntryCommand : TimeEntriesLogViewModelTest
         {
             [Fact]
-            public async ThreadingTask CallsStopBeforeStartingANewTimeEntry()
+            public async ThreadingTask StartsATimeEntry()
             {
-                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
-                timeEntry.Stop.Returns(DateTimeOffset.Now);
-                var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
-
-                await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
-
-                Received.InOrder(async () =>
-                {
-                    await DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>());
-                    await DataSource.TimeEntries.Start(Arg.Any<StartTimeEntryDTO>());
-                });
-            }
-
-            [Fact]
-            public async ThreadingTask StartsATimeEntryEvenIfTheStopMethodThrowsBecauseThereWasNoRunningTimeEntry()
-            {
-                DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>())
-                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new NoRunningTimeEntryException()));
                 var timeEntry = Substitute.For<IDatabaseTimeEntry>();
                 timeEntry.Stop.Returns(DateTimeOffset.Now);
                 var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
@@ -278,21 +260,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
 
                 await DataSource.TimeEntries.Start(Arg.Any<StartTimeEntryDTO>());
-            }
-
-            [Fact]
-            public async ThreadingTask DoesNotStartATimeEntryWhenTheStopMethodThrowsBecauseOfOtherReasonThatThereWasNoRunningTimeEntry()
-            {
-                DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>())
-                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new InvalidOperationException()));
-                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
-                timeEntry.Stop.Returns(DateTimeOffset.Now);
-                var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
-
-                Action executingCommand = () => ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel).Wait();
-
-                executingCommand.ShouldThrow<InvalidOperationException>();
-                await DataSource.TimeEntries.DidNotReceive().Start(Arg.Any<StartTimeEntryDTO>());
             }
 
             [Property]
@@ -327,31 +294,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
 
                 await DataSource.SyncManager.Received().PushSync();
-            }
-
-            [Fact]
-            public async void InitiatesPushSyncWhenThereIsNoRunningTimeEntry()
-            {
-                var timeEntryViewModel = createTimeEntryViewModel();
-                DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>())
-                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new NoRunningTimeEntryException()));
-
-                await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
-
-                await DataSource.SyncManager.Received().PushSync();
-            }
-
-            [Fact]
-            public async void DoesNotInitatePushSyncWhenStoppingFailsForOtherReasonThanThatThereIsNoRunningTimeEntry()
-            {
-                var timeEntryViewModel = createTimeEntryViewModel();
-                DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>())
-                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new Exception()));
-
-                Action executeCommand = () => ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel).Wait();
-
-                executeCommand.ShouldThrow<Exception>();
-                await DataSource.SyncManager.DidNotReceive().PushSync();
             }
 
             [Fact]

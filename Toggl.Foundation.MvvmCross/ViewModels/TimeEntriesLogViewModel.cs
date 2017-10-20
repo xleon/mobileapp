@@ -150,9 +150,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task continueTimeEntry(TimeEntryViewModel timeEntryViewModel)
         {
-            await dataSource.TimeEntries.Stop(timeService.CurrentDateTime)
-                .Catch((NoRunningTimeEntryException e) => Observable.Return(default(IDatabaseTimeEntry)));
-
             await dataSource.User
                 .Current()
                 .Select(user => new StartTimeEntryDTO
