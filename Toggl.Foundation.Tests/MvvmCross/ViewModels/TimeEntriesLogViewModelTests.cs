@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -145,6 +146,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 
                 protected Subject<IDatabaseTimeEntry> TimeEntryCreatedSubject = new Subject<IDatabaseTimeEntry>();
                 protected Subject<(long Id, IDatabaseTimeEntry Entity)> TimeEntryUpdatedSubject = new Subject<(long, IDatabaseTimeEntry)>();
+                protected Subject<long> TimeEntryDeletedSubject = new Subject<long>();
                 protected IDatabaseTimeEntry NewTimeEntry =
                     TimeEntry.Builder.Create(21)
                              .SetUserId(10)
@@ -161,19 +163,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     var observable = Enumerable.Range(1, InitialAmountOfTimeEntries)
                         .Select(i => TimeEntry.Builder.Create(i))
                         .Select(builder => builder
-                            .SetStart(startTime)
+                            .SetStart(startTime.AddHours(builder.Id * 2))
                             .SetUserId(11)
                             .SetWorkspaceId(12)
                             .SetDescription("")
                             .SetAt(DateTimeOffset.Now)
                             .Build())
-                      .Select(te => te.With(startTime.AddHours(2)))
+                      .Select(te => te.With(startTime.AddHours(te.Id * 2 + 2)))
                       .Apply(Observable.Return);
 
                     DataSource.TimeEntries.GetAll().Returns(observable);
                     DataSource.TimeEntries.TimeEntryCreated.Returns(TimeEntryCreatedSubject.AsObservable());
                     DataSource.TimeEntries.TimeEntryUpdated.Returns(TimeEntryUpdatedSubject.AsObservable());
-                    DataSource.TimeEntries.TimeEntryDeleted.Returns(Observable.Empty<long>());
+                    DataSource.TimeEntries.TimeEntryDeleted.Returns(TimeEntryDeletedSubject.AsObservable());
                 }
             }
 
@@ -229,6 +231,37 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     ViewModel.TimeEntries.Any(c => c.Any(te => te.Id == 21)).Should().BeFalse();
                     ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries);
+                }
+            }
+            
+            public sealed class WhenReceivingAnEventFromTheTimeEntryDeletedObservable : TimeEntryDataSourceObservableTest
+            {
+                [Fact]
+                public async ThreadingTask RemovesTheTimeEntryIfItWasNotRemovedPreviously()
+                {
+                    await ViewModel.Initialize();
+                    var timeEntryCollection = await DataSource.TimeEntries.GetAll().FirstAsync();
+                    var timeEntryToDelete = timeEntryCollection.First();
+
+                    TimeEntryDeletedSubject.OnNext(timeEntryToDelete.Id);
+
+                    ViewModel.TimeEntries.All(c => c.All(te => te.Id != timeEntryToDelete.Id)).Should().BeTrue();
+                    ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries - 1);
+                }
+
+                [Fact]
+                public async ThreadingTask RemovesTheWholeCollectionWhenThereAreNoOtherTimeEntriesLeftForThatDay()
+                {
+                    await ViewModel.Initialize();
+                    var timeEntryCollection = ViewModel.TimeEntries.First();
+                    var timeEntriesToDelete = new List<TimeEntryViewModel>(timeEntryCollection);
+                    var timeEntriesInCollection = timeEntryCollection.Count;
+
+                    foreach (var te in timeEntriesToDelete)
+                        TimeEntryDeletedSubject.OnNext(te.Id);
+
+                    ViewModel.TimeEntries.All(c => c.Date != timeEntryCollection.Date).Should().BeTrue();
+                    ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries - timeEntriesInCollection);
                 }
             }
         }

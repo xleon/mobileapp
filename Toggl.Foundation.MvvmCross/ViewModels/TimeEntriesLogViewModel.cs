@@ -140,6 +140,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (collection == null) return;
 
             collection.Remove(viewModel);
+            var indexToInsert = TimeEntries.IndexOf(collection);
+            TimeEntries.Remove(collection);
+
+            if (collection.Count > 0)
+            {
+                var newCollection = new TimeEntryViewModelCollection(collection.Date.DateTime, collection);
+                TimeEntries.Insert(indexToInsert, newCollection);
+            }
+
             RaisePropertyChanged(nameof(IsEmpty));
         }
 
