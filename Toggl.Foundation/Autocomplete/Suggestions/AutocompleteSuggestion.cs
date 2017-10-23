@@ -4,6 +4,8 @@
     {
         public string WorkspaceName { get; protected set; } = "";
 
+        public long WorkspaceId { get; protected set; }
+
         public abstract override int GetHashCode();
     }
 }
