@@ -23,6 +23,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public string ClientName { get; } = "";
 
+        public long? TaskId { get; }
+
         public string TaskName { get; } = "";
 
         public DateTimeOffset Start { get; }
@@ -58,6 +60,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ProjectName = timeEntry.Project.Name;
             ProjectColor = timeEntry.Project.Color;
 
+            TaskId = timeEntry.TaskId;
             TaskName = timeEntry.Task?.Name ?? "";
 
             ClientName = timeEntry.Project.Client?.Name ?? "";
