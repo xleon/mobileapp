@@ -1,6 +1,6 @@
 ﻿namespace Toggl.Foundation.Autocomplete.Suggestions
 {
-    public abstract class AutocompleteSuggestion 
+    public abstract class AutocompleteSuggestion
     {
         public string WorkspaceName { get; protected set; } = "";
 
