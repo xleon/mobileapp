@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using FluentAssertions;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
@@ -36,7 +38,7 @@ namespace Toggl.Foundation.Tests.Sync
                 Queue = new SyncStateQueue();
                 Transitions = new TransitionHandlerProvider();
                 Scheduler = new TestScheduler();
-                StateMachine = new StateMachine(Transitions, Scheduler);
+                StateMachine = new StateMachine(Transitions, Scheduler, Substitute.For<ISubject<Unit>>());
                 EntryPoints = new StateMachineEntryPoints();
                 Orchestrator = new StateMachineOrchestrator(StateMachine, EntryPoints);
                 SyncManager = new SyncManager(Queue, Orchestrator);

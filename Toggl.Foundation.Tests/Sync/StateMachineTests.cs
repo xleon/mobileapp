@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -25,7 +26,7 @@ namespace Toggl.Foundation.Tests.Sync
                 var scheduler = useScheduler ? Substitute.For<IScheduler>() : null;
 
                 // ReSharper disable once ObjectCreationAsStatement
-                Action ctor = () => new StateMachine(handler, scheduler);
+                Action ctor = () => new StateMachine(handler, scheduler, Substitute.For<ISubject<Unit>>());
 
                 ctor.ShouldThrow<ArgumentNullException>();
             }
@@ -39,12 +40,13 @@ namespace Toggl.Foundation.Tests.Sync
             protected TestScheduler Scheduler { get; } = new TestScheduler();
             protected IStateMachine StateMachine { get; }
             protected List<StateMachineEvent> Events { get; } = new List<StateMachineEvent>();
+            protected ISubject<Unit> DelayCancellation { get; } = new Subject<Unit>();
 
             protected StateMachineTestBase()
             {
                 SetTransitionHandler(Arg.Any<IStateResult>(), null);
 
-                StateMachine = new StateMachine(TransitionHandlers, Scheduler);
+                StateMachine = new StateMachine(TransitionHandlers, Scheduler, DelayCancellation);
                 StateMachine.StateTransitions.Subscribe(e => Events.Add(e));
             }
 
@@ -325,6 +327,31 @@ namespace Toggl.Foundation.Tests.Sync
                 Action starting = () => StateMachine.Start(Substitute.For<ITransition>());
 
                 starting.ShouldThrow<InvalidOperationException>();
+            }
+            
+
+            [Fact]
+            public void CancelsDelays()
+            {
+                bool cancelled = false;
+                DelayCancellation.AsObservable().Subscribe(_ => cancelled = true);
+
+                StateMachine.Freeze();
+
+                cancelled.Should().BeTrue();
+            }
+
+            [Fact]
+            public void CancelsDelaysOnlyOnceWhenFreezeIsCalledMultipleTimes()
+            {
+                int cancelled = 0;
+                DelayCancellation.AsObservable().Subscribe(_ => cancelled++);
+
+                StateMachine.Freeze();
+                StateMachine.Freeze();
+                StateMachine.Freeze();
+
+                cancelled.Should().Be(1);
             }
         }
     }

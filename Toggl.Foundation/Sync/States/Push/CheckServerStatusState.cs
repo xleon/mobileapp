@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Toggl.Ultrawave;
@@ -15,18 +16,19 @@ namespace Toggl.Foundation.Sync.States.Push
         private IScheduler scheduler;
         private IRetryDelayService apiDelay;
         private IRetryDelayService statusDelay;
+        private IObservable<Unit> delayCancellation;
 
-        public CheckServerStatusState(ITogglApi api, IScheduler scheduler, IRetryDelayService apiDelay, IRetryDelayService statusDelay)
+        public CheckServerStatusState(ITogglApi api, IScheduler scheduler, IRetryDelayService apiDelay, IRetryDelayService statusDelay, IObservable<Unit> delayCancellation)
         {
             this.api = api;
             this.scheduler = scheduler;
             this.apiDelay = apiDelay;
             this.statusDelay = statusDelay;
+            this.delayCancellation = delayCancellation;
         }
 
         public IObservable<ITransition> Start()
-            => api.Status.IsAvailable()
-                .Delay(apiDelay.NextSlowDelay(), scheduler)
+            => delay(api.Status.IsAvailable())
                 .Do(_ => statusDelay.Reset())
                 .SelectMany(proceed)
                 .Catch((Exception e) => delayedRetry(getDelay(e)));
@@ -36,6 +38,12 @@ namespace Toggl.Foundation.Sync.States.Push
 
         private IObservable<ITransition> delayedRetry(TimeSpan period)
             => Observable.Return(Retry.Transition()).Delay(period, scheduler);
+
+        private IObservable<Unit> delay(IObservable<Unit> observable)
+            => observable
+                .Delay(apiDelay.NextSlowDelay(), scheduler)
+                .Merge(delayCancellation)
+                .FirstAsync();
 
         private TimeSpan getDelay(Exception exception)
             => exception is InternalServerErrorException

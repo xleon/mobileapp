@@ -26,7 +26,7 @@ namespace Toggl.Foundation.Sync
 
             this.queue = queue;
             this.orchestrator = orchestrator;
-            
+
             orchestrator.SyncCompleteObservable.Subscribe(syncOperationCompleted);
             isFrozen = false;
         }

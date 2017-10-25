@@ -1,4 +1,5 @@
 using System;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -15,17 +16,20 @@ namespace Toggl.Foundation.Sync
 
         private readonly ITransitionHandlerProvider transitionHandlerProvider;
         private readonly IScheduler scheduler;
+        private readonly ISubject<Unit> delayCancellation;
 
         private bool isRunning;
         private bool isFrozen;
 
-        public StateMachine(ITransitionHandlerProvider transitionHandlerProvider, IScheduler scheduler)
+        public StateMachine(ITransitionHandlerProvider transitionHandlerProvider, IScheduler scheduler, ISubject<Unit> delayCancellation)
         {
             Ensure.Argument.IsNotNull(transitionHandlerProvider, nameof(transitionHandlerProvider));
             Ensure.Argument.IsNotNull(scheduler, nameof(scheduler));
+            Ensure.Argument.IsNotNull(delayCancellation, nameof(delayCancellation));
 
             this.transitionHandlerProvider = transitionHandlerProvider;
             this.scheduler = scheduler;
+            this.delayCancellation = delayCancellation;
 
             StateTransitions = stateTransitions.AsObservable();
             isFrozen = false;
@@ -47,6 +51,8 @@ namespace Toggl.Foundation.Sync
 
         public void Freeze()
         {
+            delayCancellation.OnNext(Unit.Default);
+            delayCancellation.OnCompleted();
             isFrozen = true;
         }
 

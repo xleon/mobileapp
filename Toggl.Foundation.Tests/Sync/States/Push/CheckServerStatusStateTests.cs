@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using FluentAssertions;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
@@ -23,6 +24,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
         private IRetryDelayService apiDelay;
         private IRetryDelayService statusDelay;
         private readonly CheckServerStatusState state;
+        private ISubject<Unit> delayCancellation;
 
         public CheckServerStatusStateTests()
         {
@@ -30,7 +32,8 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
             scheduler = new TestScheduler();
             apiDelay = Substitute.For<IRetryDelayService>();
             statusDelay = Substitute.For<IRetryDelayService>();
-            state = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay);
+            delayCancellation = new Subject<Unit>();
+            state = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay, delayCancellation.AsObservable());
         }
 
         [Fact]
@@ -170,6 +173,20 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
             subscription.Dispose();
 
             hasCompleted.Should().BeFalse();
+        }
+
+        [Fact]
+        public void CompletesEvenThoughTheDelayIsNotOverButTheCancellationObservableIsNotifiedOfNewValue()
+        {
+            api.Status.IsAvailable().Returns(Observable.Return(Unit.Default));
+            apiDelay.NextSlowDelay().Returns(TimeSpan.FromSeconds(10));
+
+            ITransition transition = null;
+            state.Start().Subscribe(t => transition = t);
+            scheduler.AdvanceBy(TimeSpan.FromSeconds(1).Ticks);
+            delayCancellation.OnNext(Unit.Default);
+
+            transition.Result.Should().Be(state.ServerIsAvailable);
         }
 
         public static object[] ServerExceptionsOtherThanInternalServerErrorException()

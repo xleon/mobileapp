@@ -9,6 +9,9 @@ using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Sync.States.Push;
+using System.Reactive.Linq;
+using System.Reactive;
+using System.Reactive.Subjects;
 
 namespace Toggl.Foundation
 {
@@ -24,8 +27,10 @@ namespace Toggl.Foundation
             var queue = new SyncStateQueue();
             var entryPoints = new StateMachineEntryPoints();
             var transitions = new TransitionHandlerProvider();
-            ConfigureTransitions(transitions, database, api, dataSource, scheduler, timeService, entryPoints);
-            var stateMachine = new StateMachine(transitions, scheduler);
+            var delayCancellation = new Subject<Unit>();
+            var delayCancellationObservable = delayCancellation.AsObservable().Replay();
+            ConfigureTransitions(transitions, database, api, dataSource, scheduler, timeService, entryPoints, delayCancellationObservable);
+            var stateMachine = new StateMachine(transitions, scheduler, delayCancellation);
             var orchestrator = new StateMachineOrchestrator(stateMachine, entryPoints);
 
             return new SyncManager(queue, orchestrator);
@@ -38,10 +43,11 @@ namespace Toggl.Foundation
             ITogglDataSource dataSource,
             IScheduler scheduler,
             ITimeService timeService,
-            StateMachineEntryPoints entryPoints)
+            StateMachineEntryPoints entryPoints,
+            IObservable<Unit> delayCancellation)
         {
             configurePullTransitions(transitions, database, api, dataSource, timeService, entryPoints.StartPullSync);
-            configurePushTransitions(transitions, database, api, dataSource, scheduler, entryPoints.StartPushSync);
+            configurePushTransitions(transitions, database, api, dataSource, scheduler, entryPoints.StartPushSync, delayCancellation);
         }
 
         private static void configurePullTransitions(
@@ -77,9 +83,10 @@ namespace Toggl.Foundation
             ITogglApi api,
             ITogglDataSource dataSource,
             IScheduler scheduler,
-            StateResult entryPoint)
+            StateResult entryPoint,
+            IObservable<Unit> delayCancellation)
         {
-            configurePushTransitionsForTimeEntries(transitions, database, api, dataSource, scheduler, entryPoint);
+            configurePushTransitionsForTimeEntries(transitions, database, api, dataSource, scheduler, entryPoint, delayCancellation);
         }
 
         private static IStateResult configurePushTransitionsForTimeEntries(
@@ -88,7 +95,8 @@ namespace Toggl.Foundation
             ITogglApi api,
             ITogglDataSource dataSource,
             IScheduler scheduler,
-            StateResult entryPoint)
+            StateResult entryPoint,
+            IObservable<Unit> delayCancellation)
         {
             var rnd = new Random();
             var apiDelay = new RetryDelayService(rnd);
@@ -101,7 +109,7 @@ namespace Toggl.Foundation
             var delete = new DeleteTimeEntryState(api, database.TimeEntries);
             var deleteLocal = new DeleteLocalTimeEntryState(dataSource.TimeEntries);
             var unsyncable = new UnsyncableTimeEntryState(dataSource.TimeEntries);
-            var checkServerStatus = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay);
+            var checkServerStatus = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay, delayCancellation);
             var finished = new ResetAPIDelayState(apiDelay);
 
             return configurePush(transitions, entryPoint, push, pushOne, create, update, delete, deleteLocal, unsyncable, checkServerStatus, finished);

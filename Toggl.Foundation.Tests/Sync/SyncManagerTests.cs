@@ -11,6 +11,7 @@ using Xunit;
 using FsCheck.Xunit;
 using Toggl.Foundation.Tests.Generators;
 using static Toggl.Foundation.Sync.SyncState;
+using System.Reactive;
 
 namespace Toggl.Foundation.Tests.Sync
 {
