@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Reactive;
 using System.Reactive.Linq;
 using FluentAssertions;
@@ -12,6 +14,7 @@ using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.TestExtensions;
 using Toggl.Multivac;
 using Toggl.Ultrawave.Exceptions;
+using Toggl.Ultrawave.Network;
 using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
@@ -475,7 +478,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void IsTrueWhenLoginFails()
             {
                 var scheduler = new TestScheduler();
-                var notification = Notification.CreateOnError<ITogglDataSource>(new ForbiddenException(""));
+                var forbiddenException = new ForbiddenException(
+                    new Request("", new Uri("https://what.ever"), new HttpHeader[0], HttpMethod.Get),
+                    new Response("", false, "application/json", new List<KeyValuePair<string, IEnumerable<string>>>(), System.Net.HttpStatusCode.Forbidden));
+                var notification = Notification.CreateOnError<ITogglDataSource>(forbiddenException);
                 var message = new Recorded<Notification<ITogglDataSource>>(0, notification);
                 var observable = scheduler.CreateColdObservable(message);
                 LoginManager.Login(Arg.Any<Email>(), Arg.Any<string>())
@@ -511,7 +517,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void IsWrongPasswordErrorWhenForbiddenExceptionIsThrown()
             {
                 var scheduler = new TestScheduler();
-                var notification = Notification.CreateOnError<ITogglDataSource>(new ForbiddenException(""));
+                var forbiddenException = new ForbiddenException(
+                    new Request("", new Uri("https://what.ever"), new HttpHeader[0], HttpMethod.Get),
+                    new Response("", false, "application/json", new List<KeyValuePair<string, IEnumerable<string>>>(), System.Net.HttpStatusCode.Forbidden));
+                var notification = Notification.CreateOnError<ITogglDataSource>(forbiddenException);
                 var message = new Recorded<Notification<ITogglDataSource>>(0, notification);
                 var observable = scheduler.CreateColdObservable(message);
                 LoginManager.Login(Arg.Any<Email>(), Arg.Any<string>())

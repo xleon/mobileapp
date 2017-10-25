@@ -22,8 +22,8 @@ namespace Toggl.Foundation.Tests.Sync.States
         public IObservable<ITransition> Start((Exception Reason, TModel Entity) failedPush)
             => failedPush.Reason == null || failedPush.Entity == null
                 ? failBecauseOfNullArguments(failedPush)
-                : failedPush.Reason is ApiException
-                    ? markAsUnsyncable(failedPush.Entity, failedPush.Reason.Message)
+                : failedPush.Reason is ApiException apiException
+                    ? markAsUnsyncable(failedPush.Entity, apiException.LocalizedApiErrorMessage)
                     : failBecauseOfUnexpectedError(failedPush.Reason);
 
         private IObservable<ITransition> failBecauseOfNullArguments((Exception Reason, TModel Entity) failedPush)
@@ -38,9 +38,7 @@ namespace Toggl.Foundation.Tests.Sync.States
         private IObservable<ITransition> markAsUnsyncable(TModel entity, string reason)
             => repository
                 .UpdateWithConflictResolution(entity.Id, CreateUnsyncableFrom(entity, reason), overwriteIfLocalEntityDidNotChange(entity))
-                .Select(updated => updated is UpdateResult<TModel>
-                    ? ((UpdateResult<TModel>)updated).Entity
-                    : entity)
+                .Select(updated => updated is UpdateResult<TModel> updateResult ? updateResult.Entity : entity)
                 .Select(unsyncable => MarkedAsUnsyncable.Transition(CopyFrom(unsyncable)));
 
         private Func<TModel, TModel, ConflictResolutionMode> overwriteIfLocalEntityDidNotChange(TModel local)
