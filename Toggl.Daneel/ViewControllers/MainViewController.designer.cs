@@ -33,7 +33,7 @@ namespace Toggl.Daneel.ViewControllers
 		Toggl.Daneel.Views.MainScrollView MainPagedScrollView { get; set; }
 
 		[Outlet]
-		UIKit.UIView RunningEntryDescriptionFadingView { get; set; }
+		Toggl.Daneel.Views.FadeView RunningEntryDescriptionFadeView { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -98,6 +98,11 @@ namespace Toggl.Daneel.ViewControllers
 				MainPagedScrollView = null;
 			}
 
+			if (RunningEntryDescriptionFadeView != null) {
+				RunningEntryDescriptionFadeView.Dispose ();
+				RunningEntryDescriptionFadeView = null;
+			}
+
 			if (SpiderBroImageView != null) {
 				SpiderBroImageView.Dispose ();
 				SpiderBroImageView = null;
@@ -141,11 +146,6 @@ namespace Toggl.Daneel.ViewControllers
 			if (TimelineView != null) {
 				TimelineView.Dispose ();
 				TimelineView = null;
-			}
-
-			if (RunningEntryDescriptionFadingView != null) {
-				RunningEntryDescriptionFadingView.Dispose ();
-				RunningEntryDescriptionFadingView = null;
 			}
 		}
 	}

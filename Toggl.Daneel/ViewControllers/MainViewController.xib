@@ -4,7 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,7 +16,7 @@
                 <outlet property="CurrentTimeEntryElapsedTimeLabel" destination="0J7-Pj-geT" id="name-outlet-0J7-Pj-geT"/>
                 <outlet property="EditTimeEntryButton" destination="qpc-Yb-DcP" id="name-outlet-qpc-Yb-DcP"/>
                 <outlet property="MainPagedScrollView" destination="fyC-Me-BcE" id="name-outlet-fyC-Me-BcE"/>
-                <outlet property="RunningEntryDescriptionFadingView" destination="E3W-8n-IfX" id="6vQ-hC-IHg"/>
+                <outlet property="RunningEntryDescriptionFadeView" destination="E3W-8n-IfX" id="xWA-xE-taG"/>
                 <outlet property="SpiderBroImageView" destination="mpU-UI-dLB" id="name-outlet-mpU-UI-dLB"/>
                 <outlet property="StartTimeEntryButton" destination="4Kk-Hz-RBS" id="name-outlet-4Kk-Hz-RBS"/>
                 <outlet property="StopTimeEntryButton" destination="Ddo-IW-xE3" id="name-outlet-Ddo-IW-xE3"/>
@@ -210,7 +210,7 @@ TO SEE THE LOG</string>
                             </constraints>
                             <state key="normal" image="stopIcon"/>
                         </button>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E3W-8n-IfX" userLabel="Fading view">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E3W-8n-IfX" userLabel="Fading view" customClass="FadeView">
                             <rect key="frame" x="48" y="26.5" width="279" height="37.5"/>
                             <subviews>
                                 <scrollView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tuf-H4-v8x" customClass="MarqueeView">

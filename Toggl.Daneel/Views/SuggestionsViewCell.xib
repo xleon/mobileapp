@@ -18,22 +18,28 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="63.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Project: task client" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NoR-BE-6hu">
-                        <rect key="frame" x="16" y="35" width="120" height="17"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Doing stuff" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nae-xw-0DY">
-                        <rect key="frame" x="16" y="14" width="72" height="17"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QW4-3n-QYi">
-                        <rect key="frame" x="200" y="0.0" width="120" height="64"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t3P-FN-H4h" customClass="FadeView">
+                        <rect key="frame" x="0.0" y="0.0" width="264" height="63.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Doing stuff" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nae-xw-0DY">
+                                <rect key="frame" x="16" y="14" width="72" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Project: task client" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NoR-BE-6hu">
+                                <rect key="frame" x="16" y="35" width="120" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="120" id="Q9k-zW-ERX"/>
+                            <constraint firstItem="NoR-BE-6hu" firstAttribute="leading" secondItem="Nae-xw-0DY" secondAttribute="leading" id="OP7-aN-WE0"/>
+                            <constraint firstItem="Nae-xw-0DY" firstAttribute="leading" secondItem="t3P-FN-H4h" secondAttribute="leading" constant="16" id="df4-ro-r4N"/>
+                            <constraint firstItem="NoR-BE-6hu" firstAttribute="top" secondItem="Nae-xw-0DY" secondAttribute="bottom" constant="4" id="gXf-2b-arX"/>
+                            <constraint firstItem="Nae-xw-0DY" firstAttribute="top" secondItem="t3P-FN-H4h" secondAttribute="top" constant="14" id="jKg-kf-2HV"/>
                         </constraints>
                     </view>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0rR-jN-UwS">
@@ -52,28 +58,25 @@
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="NoR-BE-6hu" firstAttribute="leading" secondItem="Nae-xw-0DY" secondAttribute="leading" id="DMw-RE-xam"/>
-                    <constraint firstItem="NoR-BE-6hu" firstAttribute="top" secondItem="Nae-xw-0DY" secondAttribute="bottom" constant="4" id="xuV-FC-Yvg"/>
+                    <constraint firstItem="0rR-jN-UwS" firstAttribute="leading" secondItem="t3P-FN-H4h" secondAttribute="trailing" id="Nqm-7B-prY"/>
+                    <constraint firstItem="t3P-FN-H4h" firstAttribute="top" secondItem="zC9-sd-JSK" secondAttribute="top" id="P0I-fK-SWM"/>
+                    <constraint firstItem="t3P-FN-H4h" firstAttribute="leading" secondItem="zC9-sd-JSK" secondAttribute="leading" id="YTQ-q4-rPb"/>
+                    <constraint firstAttribute="bottom" secondItem="t3P-FN-H4h" secondAttribute="bottom" id="YvC-YZ-Y57"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="0rR-jN-UwS" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="4" id="2BP-wK-rsw"/>
-                <constraint firstAttribute="trailing" secondItem="QW4-3n-QYi" secondAttribute="trailing" id="32f-qd-f2U"/>
                 <constraint firstAttribute="trailing" secondItem="cbq-5I-iL8" secondAttribute="trailing" id="4IK-J2-zqm"/>
-                <constraint firstItem="QW4-3n-QYi" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" id="A6y-Ld-Ngo"/>
-                <constraint firstItem="Nae-xw-0DY" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="14" id="AOe-o4-TGF"/>
                 <constraint firstItem="cbq-5I-iL8" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" id="HU0-sY-pxU"/>
                 <constraint firstAttribute="bottom" secondItem="cbq-5I-iL8" secondAttribute="bottom" id="Ngk-22-ccj"/>
                 <constraint firstAttribute="bottom" secondItem="0rR-jN-UwS" secondAttribute="bottom" constant="4" id="Nuf-pp-Ldz"/>
-                <constraint firstAttribute="bottom" secondItem="QW4-3n-QYi" secondAttribute="bottom" id="b8x-nV-X7H"/>
-                <constraint firstItem="Nae-xw-0DY" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="16" id="eAe-gq-Scs"/>
                 <constraint firstAttribute="trailing" secondItem="0rR-jN-UwS" secondAttribute="trailing" id="vrW-TB-u1V"/>
             </constraints>
             <connections>
                 <outlet property="DescriptionLabel" destination="Nae-xw-0DY" id="name-outlet-Nae-xw-0DY"/>
-                <outlet property="DescriptionTopDistanceConstraint" destination="AOe-o4-TGF" id="name-outlet-AOe-o4-TGF"/>
-                <outlet property="FadeView" destination="QW4-3n-QYi" id="name-outlet-QW4-3n-QYi"/>
+                <outlet property="DescriptionTopDistanceConstraint" destination="jKg-kf-2HV" id="hwT-Ll-G3x"/>
+                <outlet property="FadeView" destination="t3P-FN-H4h" id="JV3-er-ldv"/>
                 <outlet property="ProjectTaskClientLabel" destination="NoR-BE-6hu" id="mh6-l7-lfe"/>
                 <outlet property="StartButton" destination="0rR-jN-UwS" id="name-outlet-0rR-jN-UwS"/>
             </connections>

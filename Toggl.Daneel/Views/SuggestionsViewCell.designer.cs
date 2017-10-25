@@ -22,7 +22,7 @@ namespace Toggl.Daneel.Views
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UIView FadeView { get; set; }
+		Toggl.Daneel.Views.FadeView FadeView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel ProjectTaskClientLabel { get; set; }
@@ -38,11 +38,6 @@ namespace Toggl.Daneel.Views
 				DescriptionLabel = null;
 			}
 
-			if (ProjectTaskClientLabel != null) {
-				ProjectTaskClientLabel.Dispose ();
-				ProjectTaskClientLabel = null;
-			}
-
 			if (DescriptionTopDistanceConstraint != null) {
 				DescriptionTopDistanceConstraint.Dispose ();
 				DescriptionTopDistanceConstraint = null;
@@ -51,6 +46,11 @@ namespace Toggl.Daneel.Views
 			if (FadeView != null) {
 				FadeView.Dispose ();
 				FadeView = null;
+			}
+
+			if (ProjectTaskClientLabel != null) {
+				ProjectTaskClientLabel.Dispose ();
+				ProjectTaskClientLabel = null;
 			}
 
 			if (StartButton != null) {

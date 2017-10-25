@@ -158,7 +158,8 @@ namespace Toggl.Daneel.ViewControllers
             reportsButton.SetImage(UIImage.FromBundle("icReports"), UIControlState.Normal);
             settingsButton.SetImage(UIImage.FromBundle("icSettings"), UIControlState.Normal);
 
-            addFading();
+            RunningEntryDescriptionFadeView.FadeLeft = true;
+            RunningEntryDescriptionFadeView.FadeRight = true;
         }
 
         private void animateSpider()
@@ -167,40 +168,6 @@ namespace Toggl.Daneel.ViewControllers
 
             UIView.Animate(Animation.Timings.SpiderBro, 0, UIViewAnimationOptions.Autoreverse | UIViewAnimationOptions.Repeat, 
                 () => SpiderBroImageView.Transform = CGAffineTransform.MakeRotation(animationAngle), animateSpider);
-        }
-
-        private void addFading()
-        {
-            var gradient = new CAGradientLayer();
-            var fadingWidth = 8;
-            var relativeFadingStart
-                = fadingWidth / RunningEntryDescriptionFadingView.Bounds.Width;
-
-            var transparentColor = new UIColor(0, 0).CGColor;
-            var opaqueColor = new UIColor(0, 1).CGColor;
-
-            gradient.Frame = RunningEntryDescriptionFadingView.Bounds;
-            
-            gradient.StartPoint = new CGPoint(0, 0);
-            gradient.EndPoint = new CGPoint(1, 0);
-
-            gradient.Colors = new CGColor[]
-            {
-                transparentColor,
-                opaqueColor,
-                opaqueColor,
-                transparentColor
-            };
-
-            gradient.Locations = new NSNumber[]
-            {
-                0,
-                new NSNumber(relativeFadingStart),
-                new NSNumber(1 - relativeFadingStart),
-                1
-            };
-
-            RunningEntryDescriptionFadingView.Layer.Mask = gradient;
         }
     }
 }
