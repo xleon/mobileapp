@@ -36,6 +36,13 @@ namespace Toggl.Daneel.Combiners
                 throw new ArgumentException($"{nameof(ProjectTaskClientValueCombiner)} needs at least 4 values to work - project, task, client and project color");
 
             var project = stepList[0].GetValue()?.ToString() ?? "";
+
+            if (string.IsNullOrEmpty(project))
+            {
+                value = "";
+                return false;
+            }
+
             var task = stepList[1].GetValue()?.ToString() ?? "";
             var client = stepList[2].GetValue()?.ToString() ?? "";
             var projectColor = stepList[3].GetValue()?.ToString() ?? "";

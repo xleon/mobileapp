@@ -14,6 +14,7 @@
                 <outlet property="CurrentTimeEntryCard" destination="vou-B4-go4" id="name-outlet-vou-B4-go4"/>
                 <outlet property="CurrentTimeEntryDescriptionLabel" destination="eE0-Ob-Ngt" id="hdk-b7-5VN"/>
                 <outlet property="CurrentTimeEntryElapsedTimeLabel" destination="0J7-Pj-geT" id="name-outlet-0J7-Pj-geT"/>
+                <outlet property="CurrentTimeEntryProjectTaskClientLabel" destination="cnc-9d-fgu" id="Qlo-zJ-0bI"/>
                 <outlet property="EditTimeEntryButton" destination="qpc-Yb-DcP" id="name-outlet-qpc-Yb-DcP"/>
                 <outlet property="MainPagedScrollView" destination="fyC-Me-BcE" id="name-outlet-fyC-Me-BcE"/>
                 <outlet property="RunningEntryDescriptionFadeView" destination="E3W-8n-IfX" id="xWA-xE-taG"/>
@@ -217,10 +218,16 @@ TO SEE THE LOG</string>
                                     <rect key="frame" x="0.0" y="0.0" width="279" height="37.5"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PtF-34-2BI">
-                                            <rect key="frame" x="0.0" y="0.0" width="207" height="18.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="314.5" height="18.5"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New iOS app landing page design" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eE0-Ob-Ngt">
                                                     <rect key="frame" x="8" y="4" width="191" height="15"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Project: task client" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cnc-9d-fgu">
+                                                    <rect key="frame" x="201" y="4" width="105.5" height="14.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -229,8 +236,10 @@ TO SEE THE LOG</string>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstItem="eE0-Ob-Ngt" firstAttribute="top" secondItem="PtF-34-2BI" secondAttribute="top" constant="4" id="67Y-0D-FlA"/>
+                                                <constraint firstItem="cnc-9d-fgu" firstAttribute="leading" secondItem="eE0-Ob-Ngt" secondAttribute="trailing" constant="2" id="Yky-O6-plV"/>
+                                                <constraint firstAttribute="trailing" secondItem="cnc-9d-fgu" secondAttribute="trailing" constant="8" id="ZDN-q9-ECp"/>
                                                 <constraint firstAttribute="bottom" secondItem="eE0-Ob-Ngt" secondAttribute="bottom" id="cyQ-fc-PeJ"/>
-                                                <constraint firstAttribute="trailing" secondItem="eE0-Ob-Ngt" secondAttribute="trailing" constant="8" id="is4-tP-PRQ"/>
+                                                <constraint firstItem="cnc-9d-fgu" firstAttribute="top" secondItem="PtF-34-2BI" secondAttribute="top" constant="4" id="xcj-Gx-byw"/>
                                                 <constraint firstItem="eE0-Ob-Ngt" firstAttribute="leading" secondItem="PtF-34-2BI" secondAttribute="leading" constant="8" id="y5C-UV-Wnv"/>
                                             </constraints>
                                         </view>

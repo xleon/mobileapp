@@ -25,6 +25,9 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UILabel CurrentTimeEntryElapsedTimeLabel { get; set; }
 
 		[Outlet]
+		UIKit.UILabel CurrentTimeEntryProjectTaskClientLabel { get; set; }
+
+		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIButton EditTimeEntryButton { get; set; }
 
@@ -81,6 +84,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (CurrentTimeEntryDescriptionLabel != null) {
 				CurrentTimeEntryDescriptionLabel.Dispose ();
 				CurrentTimeEntryDescriptionLabel = null;
+			}
+
+			if (CurrentTimeEntryProjectTaskClientLabel != null) {
+				CurrentTimeEntryProjectTaskClientLabel.Dispose ();
+				CurrentTimeEntryProjectTaskClientLabel = null;
 			}
 
 			if (CurrentTimeEntryElapsedTimeLabel != null) {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Threading.Tasks;
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
@@ -8,13 +6,12 @@ using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters.Attributes;
-using MvvmCross.Platform.WeakSubscription;
 using MvvmCross.Plugins.Color;
 using MvvmCross.Plugins.Color.iOS;
 using MvvmCross.Plugins.Visibility;
+using Toggl.Daneel.Combiners;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Views;
-using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -46,6 +43,11 @@ namespace Toggl.Daneel.ViewControllers
             var visibilityConverter = new MvxVisibilityValueConverter();
             var timeSpanConverter = new TimeSpanToDurationValueConverter();
             var invertedVisibilityConverter = new MvxInvertedVisibilityValueConverter();
+            var projectTaskClientCombiner = new ProjectTaskClientValueCombiner(
+                CurrentTimeEntryProjectTaskClientLabel.Font.CapHeight,
+                Color.Main.CurrentTimeEntryClientColor.ToNativeColor(),
+                true
+            );
 
             var bindingSet = this.CreateBindingSet<MainViewController, MainViewModel>();
 
@@ -65,12 +67,12 @@ namespace Toggl.Daneel.ViewControllers
             //Visibility
             bindingSet.Bind(CurrentTimeEntryCard)
                       .For(v => v.BindVisibility())
-                      .To(vm => vm.CurrentlyRunningTimeEntry)
+                      .To(vm => vm.HasCurrentTimeEntry)
                       .WithConversion(visibilityConverter);
 
             bindingSet.Bind(StartTimeEntryButton)
                       .For(v => v.BindVisibility())
-                      .To(vm => vm.CurrentlyRunningTimeEntry)
+                      .To(vm => vm.HasCurrentTimeEntry)
                       .WithConversion(invertedVisibilityConverter);
 
             bindingSet.Bind(SpiderBroImageView)
@@ -88,10 +90,18 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.IsSyncing);
 
             //Text
-            bindingSet.Bind(CurrentTimeEntryDescriptionLabel).To(vm => vm.CurrentlyRunningTimeEntry.Description);
+            bindingSet.Bind(CurrentTimeEntryDescriptionLabel).To(vm => vm.CurrentTimeEntryDescription);
             bindingSet.Bind(CurrentTimeEntryElapsedTimeLabel)
                       .To(vm => vm.CurrentTimeEntryElapsedTime)
                       .WithConversion(timeSpanConverter);
+
+            bindingSet.Bind(CurrentTimeEntryProjectTaskClientLabel)
+                      .For(v => v.AttributedText)
+                      .ByCombining(projectTaskClientCombiner,
+                                   v => v.CurrentTimeEntryProject,
+                                   v => v.CurrentTimeEntryTask,
+                                   v => v.CurrentTimeEntryClient,
+                                   v => v.CurrentTimeEntryProjectColor);
             
             bindingSet.Apply();
         }

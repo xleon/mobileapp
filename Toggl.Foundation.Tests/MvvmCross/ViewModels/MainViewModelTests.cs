@@ -134,27 +134,117 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public sealed class TheCurrentlyRunningTimeEntryProperty : MainViewModelTest
+        public abstract class CurrentTimeEntrypropertyTest<T> : MainViewModelTest
         {
-            [Fact]
-            public async Task UpdatesWhenTheTimeEntriesSourcesCurrentlyRunningTimeEntryEmitsANewTimeEntry()
+            private BehaviorSubject<IDatabaseTimeEntry> currentTimeEntrySubject
+                = new BehaviorSubject<IDatabaseTimeEntry>(null);
+
+            protected abstract T ActualValue { get; }
+            protected abstract T ExpectedValue { get; }
+            protected abstract T ExpectedEmptyValue { get; }
+
+            protected long TimeEntryId = 13;
+            protected string Description = "Something";
+            protected string Project = "Some project";
+            protected string Task = "Some task";
+            protected string Client = "Some client";
+            protected string ProjectColor = "0000AF";
+
+            private async Task prepare()
             {
-                var timeEntry = TimeEntry.Builder
-                    .Create(13)
-                    .SetUserId(12)
-                    .SetWorkspaceId(11)
-                    .SetDescription("")
-                    .SetAt(DateTimeOffset.Now)
-                    .SetStart(DateTimeOffset.Now)
-                    .Build();
-                var subject = new BehaviorSubject<IDatabaseTimeEntry>(null);
-                DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(subject.AsObservable());
+                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                timeEntry.Id.Returns(TimeEntryId);
+                timeEntry.Description.Returns(Description);
+                timeEntry.Project.Name.Returns(Project);
+                timeEntry.Project.Color.Returns(ProjectColor);
+                timeEntry.Task.Name.Returns(Task);
+                timeEntry.Project.Client.Name.Returns(Client);
+
+                DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(currentTimeEntrySubject.AsObservable());
 
                 await ViewModel.Initialize();
-                subject.OnNext(timeEntry);
-
-                ViewModel.CurrentlyRunningTimeEntry.Should().Be(timeEntry);
+                currentTimeEntrySubject.OnNext(timeEntry);
             }
+
+            [Fact]
+            public async Task IsSet()
+            {
+                await prepare();
+
+                ActualValue.Should().Be(ExpectedValue);
+            }
+
+            [Fact]
+            public async Task IsUnset()
+            {
+                await prepare();
+                currentTimeEntrySubject.OnNext(null);
+
+                ActualValue.Should().Be(ExpectedEmptyValue);
+            }
+        }
+
+        public sealed class TheCurrentTimeEntryIdProperty : CurrentTimeEntrypropertyTest<long?>
+        {
+            protected override long? ActualValue => ViewModel.CurrentTimeEntryId;
+
+            protected override long? ExpectedValue => TimeEntryId;
+
+            protected override long? ExpectedEmptyValue => null;
+        }
+
+        public sealed class TheCurrentTimeEntryDescriptionProperty : CurrentTimeEntrypropertyTest<string>
+        {
+            protected override string ActualValue => ViewModel.CurrentTimeEntryDescription;
+
+            protected override string ExpectedValue => Description;
+
+            protected override string ExpectedEmptyValue => "";
+        }
+
+        public sealed class TheCurrentTimeEntryProjectProperty : CurrentTimeEntrypropertyTest<string>
+        {
+            protected override string ActualValue => ViewModel.CurrentTimeEntryProject;
+
+            protected override string ExpectedValue => Project;
+
+            protected override string ExpectedEmptyValue => "";
+        }
+
+        public sealed class TheCurrentTimeEntryProjectColorProperty : CurrentTimeEntrypropertyTest<string>
+        {
+            protected override string ActualValue => ViewModel.CurrentTimeEntryProjectColor;
+
+            protected override string ExpectedValue => ProjectColor;
+
+            protected override string ExpectedEmptyValue => "";
+        }
+
+        public sealed class TheCurrentTimeEntryTaskProperty : CurrentTimeEntrypropertyTest<string>
+        {
+            protected override string ActualValue => ViewModel.CurrentTimeEntryTask;
+
+            protected override string ExpectedValue => Task;
+
+            protected override string ExpectedEmptyValue => "";
+        }
+
+        public sealed class TheCurrentTimeEntryClientProperty : CurrentTimeEntrypropertyTest<string>
+        {
+            protected override string ActualValue => ViewModel.CurrentTimeEntryClient;
+
+            protected override string ExpectedValue => Client;
+
+            protected override string ExpectedEmptyValue => "";
+        }
+
+        public sealed class TheHasCurrentTimeEntryProperty : CurrentTimeEntrypropertyTest<bool>
+        {
+            protected override bool ActualValue => ViewModel.HasCurrentTimeEntry;
+
+            protected override bool ExpectedValue => true;
+
+            protected override bool ExpectedEmptyValue => false;
         }
     }
 }

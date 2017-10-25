@@ -9,7 +9,7 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -25,7 +25,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public TimeSpan CurrentTimeEntryElapsedTime { get; private set; } = TimeSpan.Zero;
 
-        public ITimeEntry CurrentlyRunningTimeEntry { get; private set; }
+        private DateTimeOffset? currentTimeEntryStart;
+
+        public long? CurrentTimeEntryId { get; private set; }
+
+        public bool HasCurrentTimeEntry => CurrentTimeEntryId != null;
+
+        public string CurrentTimeEntryDescription { get; private set; }
+
+        public string CurrentTimeEntryProject { get; private set; }
+
+        public string CurrentTimeEntryProjectColor { get; private set; }
+
+        public string CurrentTimeEntryTask { get; private set; }
+
+        public string CurrentTimeEntryClient { get; private set; }
 
         public bool IsSyncing { get; private set; }
 
@@ -64,12 +78,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             var tickDisposable = timeService
                 .CurrentDateTimeObservable
-                .Where(_ => CurrentlyRunningTimeEntry != null)
-                .Subscribe(currentTime => CurrentTimeEntryElapsedTime = currentTime - CurrentlyRunningTimeEntry.Start);
+                .Where(_ => currentTimeEntryStart != null)
+                .Subscribe(currentTime => CurrentTimeEntryElapsedTime = currentTime - currentTimeEntryStart.Value);
 
             var currentlyRunningTimeEntryDisposable = dataSource.TimeEntries
                 .CurrentlyRunningTimeEntry
-                .Subscribe(te => CurrentlyRunningTimeEntry = te);
+                .Subscribe(setRunningEntry);
 
             var syncManagerDisposable = 
                 dataSource.SyncManager.StateObservable
@@ -92,6 +106,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             navigationService.Navigate<TimeEntriesLogViewModel>();
         }
 
+        private void setRunningEntry(IDatabaseTimeEntry timeEntry)
+        {
+            CurrentTimeEntryId = timeEntry?.Id;
+            currentTimeEntryStart = timeEntry?.Start;
+            CurrentTimeEntryDescription = timeEntry?.Description ?? "";
+
+            CurrentTimeEntryTask = timeEntry?.Task?.Name ?? "";
+            CurrentTimeEntryProject = timeEntry?.Project?.Name ?? "";
+            CurrentTimeEntryProjectColor = timeEntry?.Project?.Color ?? "";
+            CurrentTimeEntryClient = timeEntry?.Project?.Client?.Name ?? "";
+        }
+
         private void refresh()
         {
             dataSource.SyncManager.ForceFullSync();
@@ -112,6 +138,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private Task editTimeEntry()
-            => navigationService.Navigate<EditTimeEntryViewModel, long>(CurrentlyRunningTimeEntry.Id);
+            => navigationService.Navigate<EditTimeEntryViewModel, long>(CurrentTimeEntryId.Value);
     }
 }
