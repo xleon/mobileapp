@@ -24,14 +24,14 @@ namespace Toggl.Daneel.Presentation.Transition
             dimmingView.Frame = ContainerView.Bounds;
             ContainerView.AddSubview(dimmingView);
 
-            var transitionCoordinaotr = PresentingViewController.GetTransitionCoordinator();
-            transitionCoordinaotr.AnimateAlongsideTransition(context => dimmingView.Alpha = 0.8f, null);
+            var transitionCoordinator = PresentingViewController.GetTransitionCoordinator();
+            transitionCoordinator.AnimateAlongsideTransition(context => dimmingView.Alpha = 0.8f, null);
         }
 
         public override void DismissalTransitionWillBegin()
         {
-            var transitionCoordinaotr = PresentingViewController.GetTransitionCoordinator();
-            transitionCoordinaotr.AnimateAlongsideTransition(context => dimmingView.Alpha = 0.0f, null);   
+            var transitionCoordinator = PresentingViewController.GetTransitionCoordinator();
+            transitionCoordinator.AnimateAlongsideTransition(context => dimmingView.Alpha = 0.0f, null);   
         }
 
         public override void ContainerViewWillLayoutSubviews()
