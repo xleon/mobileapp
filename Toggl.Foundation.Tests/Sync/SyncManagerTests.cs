@@ -338,5 +338,123 @@ namespace Toggl.Foundation.Tests.Sync
                 });
             }
         }
+
+        public sealed class TheFreezeMethod : SyncManagerTestBase
+        {
+            [Fact]
+            public void DoesNotThrowWhenFreezingAFrozenSyncManager()
+            {
+                SyncManager.Freeze();
+
+                Action freezing = () => SyncManager.Freeze();
+
+                freezing.ShouldNotThrow();
+            }
+
+            [Fact]
+            public void FreezingAFrozenSyncManagerImmediatellyReturnsSleep()
+            {
+                SyncState? firstState = null;
+                SyncManager.Freeze();
+
+                var observable = SyncManager.Freeze();
+                var subscription = observable.Subscribe(state => firstState = state);
+
+                firstState.Should().Be(Sleep);
+            }
+
+            [Fact]
+            public void FreezingSyncManagerWhenNoSyncIsRunningImmediatellyReturnsSleep()
+            {
+                SyncState? firstState = null;
+
+                var observable = SyncManager.Freeze();
+                var subscription = observable.Subscribe(state => firstState = state);
+
+                firstState.Should().Be(Sleep);
+            }
+
+            [Fact]
+            public void RunningPushSyncOnFrozenSyncManagerGoesDirectlyToSleepState()
+            {
+                SyncManager.Freeze();
+                
+                SyncManager.PushSync();
+
+                Orchestrator.Received(1).Start(Arg.Is(Sleep));
+                Orchestrator.DidNotReceive().Start(Arg.Is(Push));
+                Orchestrator.DidNotReceive().Start(Arg.Is(Pull));
+            }
+
+            [Fact]
+            public void RunningFullSyncOnFrozenSyncManagerGoesDirectlyToSleepState()
+            {
+                SyncManager.Freeze();
+
+                SyncManager.ForceFullSync();
+
+                Orchestrator.Received(1).Start(Arg.Is(Sleep));
+                Orchestrator.DidNotReceive().Start(Arg.Is(Push));
+                Orchestrator.DidNotReceive().Start(Arg.Is(Pull));
+            }
+
+            [Fact]
+            public void KeepsWaitingWhileNoSleepStateOccursAfterFullSync()
+            {
+                bool finished = false;
+                Queue.Dequeue().Returns(Pull);
+                SyncManager.ForceFullSync();
+
+                var observable = SyncManager.Freeze().Subscribe(_ => finished = true);
+                OrchestratorStates.OnNext(Pull);
+                OrchestratorStates.OnNext(Push);
+
+                SyncManager.IsRunningSync.Should().BeTrue();
+                finished.Should().BeFalse();
+            }
+
+            [Fact]
+            public void KeepsWaitingWhileNoSleepStateOccursAfterPushSync()
+            {
+                bool finished = false;
+                Queue.Dequeue().Returns(Push);
+                SyncManager.PushSync();
+
+                var observable = SyncManager.Freeze().Subscribe(_ => finished = true);
+                OrchestratorStates.OnNext(Push);
+
+                SyncManager.IsRunningSync.Should().BeTrue();
+                finished.Should().BeFalse();
+            }
+
+            [Fact]
+            public void CompletesWhenSleepStateOccursAfterFullSync()
+            {
+                bool finished = false;
+                SyncManager.ForceFullSync();
+
+                var observable = SyncManager.Freeze().Subscribe(_ => finished = true);
+                OrchestratorStates.OnNext(Pull);
+                OrchestratorStates.OnNext(Push);
+                OrchestratorStates.OnNext(Sleep);
+
+                SyncManager.IsRunningSync.Should().BeFalse();
+                finished.Should().BeTrue();
+            }
+
+            [Fact]
+            public void CompletesWhenSleepStateOccursAfterPushSync()
+            {
+                bool finished = false;
+                SyncManager.PushSync();
+
+                var observable = SyncManager.Freeze().Subscribe(_ => finished = true);
+                OrchestratorStates.OnNext(Push);
+                OrchestratorStates.OnNext(Sleep);
+
+                SyncManager.IsRunningSync.Should().BeFalse();
+                finished.Should().BeTrue();
+            }
+        }
     }
 }

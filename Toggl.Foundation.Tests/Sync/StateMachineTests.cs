@@ -267,6 +267,66 @@ namespace Toggl.Foundation.Tests.Sync
                 );
             }
         }
+
+        public sealed class TheFreezeMethod : StateMachineTestBase
+        {
+            [Fact]
+            public void ReachesDeadEndAfterTheStateMachineIsFrozen()
+            {
+                var stateSubject = new Subject<ITransition>();
+                var stateSubject2 = new Subject<ITransition>();
+                var transition = MakeTransitionSubstitute(_ => stateSubject.AsObservable());
+                var transition2 = MakeTransitionSubstitute(_ => stateSubject2.AsObservable());
+                var transition3 = MakeTransitionSubstitute(_ => Observable.Never<ITransition>());
+                
+                StateMachine.Start(transition);
+                stateSubject.OnNext(transition2);
+                stateSubject.OnCompleted();
+                StateMachine.Freeze();
+                stateSubject2.OnNext(transition3);
+                stateSubject2.OnCompleted();
+
+                Events.ShouldBeSameEventsAs(
+                    Transition(transition),
+                    Transition(transition2),
+                    DeadEnd(transition3)
+                );
+            }
+
+            [Fact]
+            public void DoesNotPeformTransitionsAfterFreezing()
+            {
+                var stateSubject = new Subject<ITransition>();
+                var stateSubject2 = new Subject<ITransition>();
+                var transition3Performed = false;
+                var transition = MakeTransitionSubstitute(_ => stateSubject.AsObservable());
+                var transition2 = MakeTransitionSubstitute(_ => stateSubject2.AsObservable());
+                var transition3 = MakeTransitionSubstitute(_ =>
+                    {
+                        transition3Performed = true;
+                        return Observable.Never<ITransition>();
+                    });
+
+                StateMachine.Start(transition);
+                stateSubject.OnNext(transition2);
+                stateSubject.OnCompleted();
+                StateMachine.Freeze();
+                stateSubject2.OnNext(transition3);
+                stateSubject2.OnCompleted();
+
+                transition3Performed.Should().BeFalse();
+            }
+
+            [Fact]
+            public void ThrowsAnExceptionWhenTheStateMachineIsStartedAfterBeingFrozen()
+            {
+                StateMachine.Freeze();
+
+                Action starting = () => StateMachine.Start(Substitute.For<ITransition>());
+
+                starting.ShouldThrow<InvalidOperationException>();
+            }
+        }
     }
 
     internal static class StateMachineTestExtensions
