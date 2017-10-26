@@ -158,6 +158,7 @@
     <Compile Include="PricingPlansTests.cs" />
     <Compile Include="ProjectsApiTests.cs" />
     <Compile Include="StatusApiTests.cs" />
+    <Compile Include="Helper\SubscriptionPlanActivator.cs" />
     <Compile Include="UserApiTests.cs" />
     <Compile Include="TimeEntriesApiTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

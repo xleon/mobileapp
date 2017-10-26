@@ -16,10 +16,11 @@ namespace Toggl.Ultrawave.Tests.Integration
     {
         public sealed class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<ITask>>
         {
+            private readonly SubscriptionPlanActivator plans = new SubscriptionPlanActivator();
+
             protected override IObservable<List<ITask>> CallEndpointWith(ITogglApi togglApi)
             {
-                var user = togglApi.User.Get().Wait();
-                WorkspaceHelper.SetSubscription(user, user.DefaultWorkspaceId, PricingPlans.StarterMonthly).Wait();
+                plans.EnsureDefaultWorkspaceIsOnPlan(togglApi, PricingPlans.StarterMonthly).Wait();
                 return togglApi.Tasks.GetAll();
             }
 
@@ -28,7 +29,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             {
                 var (togglClient, user) = await SetupTestUser();
                 var project = await createProject(togglClient, user.DefaultWorkspaceId);
-                WorkspaceHelper.SetSubscription(user, user.DefaultWorkspaceId, PricingPlans.StarterMonthly).Wait();
+                await plans.EnsureDefaultWorkspaceIsOnPlan(user, PricingPlans.StarterMonthly);
                 var taskA = randomTask(project, user.Id);
                 await togglClient.Tasks.Create(taskA);
                 var taskB = randomTask(project, user.Id);
@@ -42,11 +43,11 @@ namespace Toggl.Ultrawave.Tests.Integration
             }
 
             [Fact, LogTestInfo]
-            public async System.Threading.Tasks.Task ReturnsOnlyActiveProjects()
+            public async System.Threading.Tasks.Task ReturnsOnlyActiveTasks()
             {
                 var (togglClient, user) = await SetupTestUser();
                 var project = await createProject(togglClient, user.DefaultWorkspaceId);
-                WorkspaceHelper.SetSubscription(user, user.DefaultWorkspaceId, PricingPlans.StarterMonthly).Wait();
+                await plans.EnsureDefaultWorkspaceIsOnPlan(user, PricingPlans.StarterMonthly);
                 var task = randomTask(project, user.Id);
                 await togglClient.Tasks.Create(task);
                 var inactiveTask = randomTask(project, user.Id, isActive: false);
@@ -60,11 +61,11 @@ namespace Toggl.Ultrawave.Tests.Integration
             }
 
             [Fact, LogTestInfo]
-            public async System.Threading.Tasks.Task ReturnsEmptyListWhenThereAreNoActiveProjects()
+            public async System.Threading.Tasks.Task ReturnsEmptyListWhenThereAreNoActiveTasks()
             {
                 var (togglClient, user) = await SetupTestUser();
                 var project = await createProject(togglClient, user.DefaultWorkspaceId);
-                WorkspaceHelper.SetSubscription(user, user.DefaultWorkspaceId, PricingPlans.StarterMonthly).Wait();
+                await plans.EnsureDefaultWorkspaceIsOnPlan(user, PricingPlans.StarterMonthly);
                 await togglClient.Tasks.Create(randomTask(project, user.Id, isActive: false));
 
                 var tasks = await togglClient.Tasks.GetAll();
@@ -75,12 +76,13 @@ namespace Toggl.Ultrawave.Tests.Integration
 
         public sealed class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<ITask>
         {
+            private readonly SubscriptionPlanActivator plans = new SubscriptionPlanActivator();
+
             private IProject project;
 
             protected override IObservable<List<ITask>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
             {
-                var user = togglApi.User.Get().Wait();
-                WorkspaceHelper.SetSubscription(user, user.DefaultWorkspaceId, PricingPlans.StarterMonthly).Wait();
+                plans.EnsureDefaultWorkspaceIsOnPlan(togglApi, PricingPlans.StarterMonthly).Wait();
                 return togglApi.Tasks.GetAllSince(threshold);
             }
 
@@ -99,13 +101,12 @@ namespace Toggl.Ultrawave.Tests.Integration
 
             protected override IObservable<ITask> PostModelToApi(ITogglApi api, ITask model)
             {
-                var user = api.User.Get().Wait();
-                WorkspaceHelper.SetSubscription(user, user.DefaultWorkspaceId, PricingPlans.StarterMonthly).Wait();
+                plans.EnsureDefaultWorkspaceIsOnPlan(api, PricingPlans.StarterMonthly).Wait();
                 return api.Tasks.Create(model);
             }
 
             protected override Expression<Func<ITask, bool>> ModelWithSameAttributesAs(ITask model)
-                => p => isTheSameAs(model, p);
+                => t => isTheSameAs(model, t);
 
             private IProject getProject(ITogglApi api, long workspaceId)
                 => project ?? (project = createProject(api, workspaceId).Wait());
@@ -113,6 +114,8 @@ namespace Toggl.Ultrawave.Tests.Integration
 
         public sealed class TheCreateMethod : AuthenticatedPostEndpointBaseTests<ITask>
         {
+            private readonly SubscriptionPlanActivator plans = new SubscriptionPlanActivator();
+
             [Fact]
             public async void CreatingTaskFailsInTheFreePlan()
             {
@@ -134,7 +137,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             public async void CreatingTaskWorksForAllPricingPlansOtherThanTheFreePlan(PricingPlans plan)
             {
                 var (togglApi, user) = await SetupTestUser();
-                WorkspaceHelper.SetSubscription(user, user.DefaultWorkspaceId, plan).Wait();
+                await plans.EnsureDefaultWorkspaceIsOnPlan(user, plan);
                 var project = createProject(togglApi, user.DefaultWorkspaceId).Wait();
 
                 Action creatingTask = () => createTask(togglApi, project, user.Id).Wait();
@@ -145,7 +148,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             protected override IObservable<ITask> CallEndpointWith(ITogglApi togglApi)
             {
                 var user = togglApi.User.Get().Wait();
-                WorkspaceHelper.SetSubscription(user, user.DefaultWorkspaceId, PricingPlans.StarterMonthly).Wait();
+                plans.EnsureDefaultWorkspaceIsOnPlan(user, PricingPlans.StarterMonthly).Wait();
                 var project = createProject(togglApi, user.DefaultWorkspaceId).Wait();
                 return createTask(togglApi, project, user.Id);
             }
