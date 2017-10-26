@@ -104,7 +104,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 Resources.Ok,
                 Resources.Cancel,
                 () => setProject(suggestion),
-                null
+                dismissAction: null,
+                makeConfirmActionBold: true
             );
         }
 

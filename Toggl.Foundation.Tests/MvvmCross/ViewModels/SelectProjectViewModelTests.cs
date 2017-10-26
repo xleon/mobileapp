@@ -181,7 +181,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Is(Resources.Ok),
                     Arg.Is(Resources.Cancel),
                     Arg.Any<Action>(),
-                    Arg.Any<Action>()
+                    Arg.Any<Action>(),
+                    Arg.Is(true)
                 );
             }
 
@@ -201,7 +202,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<Action>(),
-                    Arg.Any<Action>()
+                    Arg.Any<Action>(),
+                    Arg.Any<bool>()
                 );
             }
         }

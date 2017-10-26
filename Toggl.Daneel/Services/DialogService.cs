@@ -12,11 +12,17 @@ namespace Toggl.Daneel.Services
             string confirmButtonTitle,
             string dismissButtonTitle,
             Action confirmAction,
-            Action dismissAction)
+            Action dismissAction,
+            bool makeConfirmActionBold)
         {
             var alert = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);
-            alert.AddAction(UIAlertAction.Create(confirmButtonTitle, UIAlertActionStyle.Default, _ => confirmAction?.Invoke()));
+            var confirmAlertAction = UIAlertAction.Create(confirmButtonTitle, UIAlertActionStyle.Default, _ => confirmAction?.Invoke());
+            alert.AddAction(confirmAlertAction);
             alert.AddAction(UIAlertAction.Create(dismissButtonTitle, UIAlertActionStyle.Cancel, _ => dismissAction?.Invoke()));
+
+            if (makeConfirmActionBold)
+                alert.PreferredAction = confirmAlertAction;
+
             getPresentationController().PresentViewController(alert, true, null);
         }
 

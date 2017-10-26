@@ -15,6 +15,7 @@ namespace Toggl.Foundation.MvvmCross.Services
             string confirmButtonTitle,
             string dismissButtonTitle,
             Action confirmAction,
-            Action dismissAction);
+            Action dismissAction,
+            bool makeConfirmActionBold);
     }
 }
