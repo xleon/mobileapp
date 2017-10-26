@@ -26,6 +26,11 @@ namespace Toggl.Daneel
                 view => new DatePickerDateTimeOffsetTargetBinding(view)
             );
 
+            registry.RegisterCustomBindingFactory<UINavigationItem>(
+                NavigationItemHidesBackButtonTargetBinding.BindingName,
+                view => new NavigationItemHidesBackButtonTargetBinding(view)
+            );
+
             registry.RegisterCustomBindingFactory<UIScrollView>(
                 ScrollViewCurrentPageTargetBinding.BindingName,
                 view => new ScrollViewCurrentPageTargetBinding(view)

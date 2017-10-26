@@ -1,8 +1,8 @@
 ﻿﻿using MvvmCross.Binding.BindingContext;
 using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters.Attributes;
-using MvvmCross.Plugins.Color.iOS;
-using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Daneel.Extensions;
+using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 
 namespace Toggl.Daneel.ViewControllers
@@ -21,8 +21,20 @@ namespace Toggl.Daneel.ViewControllers
 
             Title = ViewModel.Title;
 
+            var inverseBoolConverter = new BoolToConstantValueConverter<bool>(false, true);
+
             var bindingSet = this.CreateBindingSet<SettingsViewController, SettingsViewModel>();
+
             bindingSet.Bind(LogoutButton).To(vm => vm.LogoutCommand);
+            bindingSet.Bind(LogoutButton)
+                      .For(btn => btn.Enabled)
+                      .To(vm => vm.IsLoggingOut)
+                      .WithConversion(inverseBoolConverter);
+
+            bindingSet.Bind(NavigationItem)
+                      .For(nav => nav.BindHidesBackButton())
+                      .To(vm => vm.IsLoggingOut);
+
             bindingSet.Apply();
         }
     }

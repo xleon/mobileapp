@@ -543,6 +543,7 @@
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Views\FadeView.cs" />
     <Compile Include="Views\Interfaces\IHeaderViewCellWithHideableTopSeparator.cs" />
+    <Compile Include="Binding\NavigationItemHidesBackButtonTargetBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
