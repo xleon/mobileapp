@@ -161,12 +161,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             deleteDisposable = dataSource.TimeEntries
                 .Delete(Id)
-                .Do(_ => dataSource.SyncManager.PushSync())
                 .Subscribe(onDeleteError, onDeleteCompleted);
         }
 
         private void onDeleteCompleted()
         {
+            dataSource.SyncManager.PushSync();
             close();
         }
 
