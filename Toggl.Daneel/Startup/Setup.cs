@@ -25,7 +25,11 @@ namespace Toggl.Daneel
     {
         private IMvxNavigationService navigationService;
 
+#if USE_PRODUCTION_API
+        private const ApiEnvironment environment = ApiEnvironment.Production;
+#else
         private const ApiEnvironment environment = ApiEnvironment.Staging;
+#endif
 
         public Setup(MvxApplicationDelegate applicationDelegate, UIWindow window)
             : this(applicationDelegate, new TogglPresenter(applicationDelegate, window))
@@ -50,13 +54,15 @@ namespace Toggl.Daneel
 
         protected override IMvxNavigationService InitializeNavigationService(IMvxViewModelLocatorCollection collection)
             => navigationService = base.InitializeNavigationService(collection);
-            
+
         protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
         {
             base.InitializeApp(pluginManager, app);
 
+#if !USE_PRODUCTION_API
             System.Net.ServicePointManager.ServerCertificateValidationCallback
                   += (sender, certificate, chain, sslPolicyErrors) => true;
+#endif
 
             var database = new Database();
             var timeService = new TimeService(Scheduler.Default);

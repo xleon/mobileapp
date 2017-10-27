@@ -85,7 +85,7 @@
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.TestFlight|AnyCPU' ">
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release.TestFlight</OutputPath>
     <DefineConstants></DefineConstants>
     <WarningLevel>4</WarningLevel>
@@ -98,6 +98,20 @@
     <MtouchLink>Full</MtouchLink>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.AppStore|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release.AppStore</OutputPath>
+    <DefineConstants>__UNIFIED__;__MOBILE__;__IOS__;USE_PRODUCTION_API</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Distribution: Toggl OU (B227VTMZ94)</CodesignKey>
+    <MtouchExtraArgs>--linkskip Toggl.Daneel</MtouchExtraArgs>
+    <MtouchFloat32>true</MtouchFloat32>
+    <MtouchLink>Full</MtouchLink>
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <CodesignProvision>Daneel_AppStore</CodesignProvision>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
