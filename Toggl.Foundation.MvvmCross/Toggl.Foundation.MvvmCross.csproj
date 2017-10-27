@@ -71,6 +71,7 @@
     <Compile Include="Helper\AutocompleteExtensions.cs" />
     <Compile Include="Converters\CollectionToStringValueConverter.cs" />
     <Compile Include="Services\IDialogService.cs" />
+    <Compile Include="Parameters\SelectProjectParameter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">

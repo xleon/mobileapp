@@ -11,15 +11,20 @@ namespace Toggl.Foundation.MvvmCross.Helper
             this IEnumerable<AutocompleteSuggestion> suggestions)
             => suggestions
                 .Where(suggestion => !string.IsNullOrEmpty(suggestion.WorkspaceName))
-                .GroupBy(suggestion => suggestion.WorkspaceName)
+                .GroupBy(suggestion => (suggestion.WorkspaceId, suggestion.WorkspaceName))
                 .Select(collectionWithNoProject);
 
 
         private static WorkspaceGroupedCollection<AutocompleteSuggestion> collectionWithNoProject(
-            IGrouping<string, AutocompleteSuggestion> grouping)
+            IGrouping<(long workspaceId, string workspaceName), AutocompleteSuggestion> grouping)
         {
-            var collection = new WorkspaceGroupedCollection<AutocompleteSuggestion>(grouping.Key, grouping);
-            collection.Insert(0, ProjectSuggestion.NoProject);
+            var collection = new WorkspaceGroupedCollection<AutocompleteSuggestion>(
+                grouping.Key.workspaceName, grouping);
+            collection.Insert(
+                0,
+                ProjectSuggestion.NoProjectWithWorkspace(
+                    grouping.Key.workspaceId,
+                    grouping.Key.workspaceName));
             return collection;
         }
     }

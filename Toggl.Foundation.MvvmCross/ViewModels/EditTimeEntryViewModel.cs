@@ -33,7 +33,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private long? projectId;
         private long? taskId;
         private long workspaceId;
-        private long initialWorkspaceId;
 
         public long Id { get; set; }
 
@@ -141,7 +140,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Client = timeEntry.Project?.Client?.Name;
             projectId = timeEntry.Project?.Id ?? 0;
             SyncErrorMessage = timeEntry.LastSyncErrorMessage;
-            initialWorkspaceId = workspaceId = timeEntry.WorkspaceId;
+            workspaceId = timeEntry.WorkspaceId;
             SyncErrorMessageVisible = !string.IsNullOrEmpty(SyncErrorMessage);
             foreach (var tagId in timeEntry.TagIds)
                 tagIds.Add(tagId);
@@ -212,22 +211,23 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task selectProject()
         {
-            var selectedProjectIdAndTaskId = await navigationService
-                .Navigate<SelectProjectViewModel, (long?, long?, long), (long? projectId, long? taskId)>(
-                    (projectId, taskId, workspaceId));
+            var returnParameter = await navigationService
+                .Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(
+                    SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
 
-            if (selectedProjectIdAndTaskId.projectId == projectId
-                && selectedProjectIdAndTaskId.taskId == taskId)
+            if (returnParameter.WorkspaceId == workspaceId
+                && returnParameter.ProjectId == projectId
+                && returnParameter.TaskId == taskId)
                 return;
 
-            projectId = selectedProjectIdAndTaskId.projectId;
-            taskId = selectedProjectIdAndTaskId.taskId;
+            projectId = returnParameter.ProjectId;
+            taskId = returnParameter.TaskId;
 
             if (projectId == null)
             {
                 Project = Task = Client = ProjectColor = "";
-                clearTagsIfNeeded(workspaceId, initialWorkspaceId);
-                workspaceId = initialWorkspaceId;
+                clearTagsIfNeeded(workspaceId, returnParameter.WorkspaceId);
+                workspaceId = returnParameter.WorkspaceId;
                 return;
             }
 

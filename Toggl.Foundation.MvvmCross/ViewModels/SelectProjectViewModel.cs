@@ -10,6 +10,7 @@ using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
@@ -18,7 +19,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class SelectProjectViewModel
-        : MvxViewModel<(long? projectId, long? taskId, long workspaceId), (long? projectId, long? taskId)>
+        : MvxViewModel<SelectProjectParameter, SelectProjectParameter>
     {
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
@@ -55,11 +56,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SelectProjectCommand = new MvxCommand<AutocompleteSuggestion>(selectProject);
         }
 
-        public override void Prepare((long? projectId, long? taskId, long workspaceId) parameter)
+        public override void Prepare(SelectProjectParameter parameter)
         {
-            taskId = parameter.taskId;
-            projectId = parameter.projectId;
-            workspaceId = parameter.workspaceId;
+            taskId = parameter.TaskId;
+            projectId = parameter.ProjectId;
+            workspaceId = parameter.WorkspaceId;
         }
 
         public override async Task Initialize()
@@ -88,7 +89,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private Task close()
-            => navigationService.Close(this, (projectId, taskId));
+            => navigationService.Close(
+                this,
+                SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
 
         private void selectProject(AutocompleteSuggestion suggestion)
         {
@@ -111,6 +114,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void setProject(AutocompleteSuggestion suggestion)
         {
+            workspaceId = suggestion.WorkspaceId;
             switch (suggestion)
             {
                 case ProjectSuggestion projectSuggestion:
@@ -128,7 +132,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     throw new ArgumentException($"{nameof(suggestion)} must be either of type {nameof(ProjectSuggestion)} or {nameof(TaskSuggestion)}.");
             }
 
-            navigationService.Close(this, (projectId, taskId));
+            navigationService.Close(
+                this,
+                SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
         }
 
         private void toggleTaskSuggestions(ProjectSuggestion projectSuggestion)

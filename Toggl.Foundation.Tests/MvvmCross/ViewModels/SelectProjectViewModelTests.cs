@@ -8,6 +8,7 @@ using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Suggestions;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.PrimeRadiant.Models;
@@ -49,33 +50,33 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.CloseCommand.ExecuteAsync();
 
                 await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Any<(long?, long?)>());
+                    .Close(Arg.Is(ViewModel), Arg.Any<SelectProjectParameter>());
             }
 
             [Property]
             public void ReturnsTheSameProjectIdThatWasPassedToTheViewModel(long? projectId)
             {
-                ViewModel.Prepare((projectId, 10, 11));
+                ViewModel.Prepare(SelectProjectParameter.WithIds(projectId, 10, 11));
 
                 ViewModel.CloseCommand.ExecuteAsync().Wait();
 
                 NavigationService.Received().Close(
                     Arg.Is(ViewModel),
-                    Arg.Is<(long? projectId, long? taskId)>(
-                        parameter => parameter.projectId == projectId)).Wait();
+                    Arg.Is<SelectProjectParameter>(
+                        parameter => parameter.ProjectId == projectId)).Wait();
             }
 
             [Property]
             public void ReturnsTheSameTaskIdThatWasPassedToTheViewModel(long? taskId)
             {
-                ViewModel.Prepare((10, taskId, 11));
+                ViewModel.Prepare(SelectProjectParameter.WithIds(10, taskId, 11));
 
                 ViewModel.CloseCommand.ExecuteAsync().Wait();
 
                 NavigationService.Received().Close(
                     Arg.Is(ViewModel),
-                    Arg.Is<(long? projectId, long? taskId)>(
-                        parameter => parameter.taskId == taskId)).Wait();
+                    Arg.Is<SelectProjectParameter>(
+                        parameter => parameter.TaskId == taskId)).Wait();
             }
         }
 
@@ -87,7 +88,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.SelectProjectCommand.Execute(ProjectSuggestion.NoProject);
 
                 await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Any<(long?, long?)>());
+                    .Close(Arg.Is(ViewModel), Arg.Any<SelectProjectParameter>());
             }
 
             [Fact]
@@ -101,8 +102,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await NavigationService.Received().Close(
                     Arg.Is(ViewModel),
-                    Arg.Is<(long? projectId, long? taskId)>(
-                        parameter => parameter.projectId == selectedProject.ProjectId));
+                    Arg.Is<SelectProjectParameter>(
+                        parameter => parameter.ProjectId == selectedProject.ProjectId));
             }
 
             [Fact]
@@ -116,8 +117,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await NavigationService.Received().Close(
                     Arg.Is(ViewModel),
-                    Arg.Is<(long? projectId, long? taskId)>(
-                        parameter => parameter.taskId == null));
+                    Arg.Is<SelectProjectParameter>(
+                        parameter => parameter.TaskId == null));
             }
 
             [Fact]
@@ -132,8 +133,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await NavigationService.Received().Close(
                     Arg.Is(ViewModel),
-                    Arg.Is<(long? projectId, long? taskId)>(
-                        parameter => parameter.projectId == task.ProjectId));
+                    Arg.Is<SelectProjectParameter>(
+                        parameter => parameter.ProjectId == task.ProjectId));
             }
 
             [Fact]
@@ -148,8 +149,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await NavigationService.Received().Close(
                     Arg.Is(ViewModel),
-                    Arg.Is<(long? projectId, long? taskId)>(
-                        parameter => parameter.taskId == task.Id));
+                    Arg.Is<SelectProjectParameter>(
+                        parameter => parameter.TaskId == task.Id));
             }
 
             [Fact] 
@@ -159,9 +160,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await NavigationService.Received().Close(
                     Arg.Is(ViewModel),
-                    Arg.Is<(long? projectId, long? taskId)>(
-                        parameter => parameter.projectId == null
-                                     && parameter.taskId == null));
+                    Arg.Is<SelectProjectParameter>(
+                        parameter => parameter.ProjectId == null
+                                     && parameter.TaskId == null));
             }
 
             [Fact]
@@ -169,7 +170,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var oldWorkspaceId = 10;
                 var newWorkspaceId = 11;
-                ViewModel.Prepare((null, null, oldWorkspaceId));
+                ViewModel.Prepare(SelectProjectParameter.WithIds(null, null, oldWorkspaceId));
                 var project = Substitute.For<IDatabaseProject>();
                 project.WorkspaceId.Returns(newWorkspaceId);
 
@@ -190,7 +191,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void DoesNotShowsAlertIfWorkspaceIsNotGoingToBeChanged()
             {
                 var workspaceId = 10;
-                ViewModel.Prepare((null, null, workspaceId));
+                ViewModel.Prepare(SelectProjectParameter.WithIds(null, null, workspaceId));
                 var project = Substitute.For<IDatabaseProject>();
                 project.WorkspaceId.Returns(workspaceId);
 
@@ -205,6 +206,61 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Any<Action>(),
                     Arg.Any<bool>()
                 );
+            }
+
+            [Fact] 
+            public async Task ReturnsWorkspaceIdOfTheProjectIfProjectWasSelected()
+            {
+                var project = Substitute.For<IDatabaseProject>();
+                project.WorkspaceId.Returns(13);
+                var projectSuggestion = new ProjectSuggestion(project);
+                prepareDialogService();
+
+                ViewModel.SelectProjectCommand.Execute(projectSuggestion);
+
+                await ensureReturnsWorkspaceIdOfSuggestion(projectSuggestion);
+            }
+
+            [Fact]
+            public async Task ReturnsWorksaceIdIfNoProjectWasSelected()
+            {
+                var noProjectSuggestion = ProjectSuggestion.NoProjectWithWorkspace(13, "");
+                prepareDialogService();
+
+                ViewModel.SelectProjectCommand.Execute(noProjectSuggestion);
+
+                await ensureReturnsWorkspaceIdOfSuggestion(noProjectSuggestion);
+            }
+
+            [Fact]
+            public async Task ReturnsWorkspaceIdOfTheTaskIfTaskWasSelected()
+            {
+                var task = Substitute.For<IDatabaseTask>();
+                task.Id.Returns(13);
+                var taskSuggestion = new TaskSuggestion(task);
+                prepareDialogService();
+
+                ViewModel.SelectProjectCommand.Execute(taskSuggestion);
+
+                await ensureReturnsWorkspaceIdOfSuggestion(taskSuggestion);
+            }
+
+            private void prepareDialogService()
+                => DialogService.Confirm(
+                       Resources.DifferentWorkspaceAlertTitle,
+                       Resources.DifferentWorkspaceAlertMessage,
+                       Resources.Ok,
+                       Resources.Cancel,
+                       Arg.Invoke(),
+                       Arg.Any<Action>(),
+                       Arg.Any<bool>());
+
+            private async Task ensureReturnsWorkspaceIdOfSuggestion(AutocompleteSuggestion suggestion)
+            {
+                await NavigationService.Received().Close(
+                    Arg.Is(ViewModel),
+                    Arg.Is<SelectProjectParameter>(
+                        parameter => parameter.WorkspaceId == suggestion.WorkspaceId));
             }
         }
 

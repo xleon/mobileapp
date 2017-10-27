@@ -269,8 +269,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Returns(Observable.Return(project));
                 ViewModel.Prepare(timeEntry.Id);
                 await ViewModel.Initialize();
-                NavigationService.Navigate<(long?, long?, long), (long?, long?)>(typeof(SelectProjectViewModel), Arg.Any<(long?, long?, long)>())
-                    .Returns((newProjectId, null));
+                var parameter = SelectProjectParameter.WithIds(newProjectId, null, project.WorkspaceId);
+                NavigationService.Navigate<SelectProjectParameter, SelectProjectParameter>(
+                        typeof(SelectProjectViewModel),
+                        Arg.Any<SelectProjectParameter>())
+                    .Returns(parameter);
                 await ViewModel.SelectProjectCommand.ExecuteAsync();
 
                 ViewModel.ConfirmCommand.Execute();
@@ -297,8 +300,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Returns(Observable.Return(project));
                 ViewModel.Prepare(timeEntry.Id);
                 await ViewModel.Initialize();
-                NavigationService.Navigate<(long?, long?), (long?, long?)>(typeof(SelectProjectViewModel), Arg.Any<(long?, long?)>())
-                    .Returns((newProjectId, null));
+                NavigationService.Navigate<SelectProjectParameter, SelectProjectParameter>(
+                        typeof(SelectProjectViewModel),
+                        Arg.Any<SelectProjectParameter>())
+                    .Returns(SelectProjectParameter.WithIds(newProjectId, null, workspaceId));
                 await ViewModel.SelectProjectCommand.ExecuteAsync();
 
                 ViewModel.ConfirmCommand.Execute();
@@ -308,25 +313,28 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact]
-            public async Task DoesNotUpdateWorkspaceIdIfNoProjectWasSelected()
+            public async Task UpdatewWorkspaceIdIfNoProjectWasSelected()
             {
-                var workspaceId = 11;
+                var oldWorkspaceId = 11;
+                var newWorkspaceId = 21;
                 var timeEntry = Substitute.For<IDatabaseTimeEntry>();
                 timeEntry.Id.Returns(10);
-                timeEntry.WorkspaceId.Returns(workspaceId);
+                timeEntry.WorkspaceId.Returns(oldWorkspaceId);
                 timeEntry.ProjectId.Returns(12);
                 DataSource.TimeEntries.GetById(Arg.Is(timeEntry.Id))
                   .Returns(Observable.Return(timeEntry));
                 ViewModel.Prepare(timeEntry.Id);
                 await ViewModel.Initialize();
-                NavigationService.Navigate<(long?, long?), (long?, long?)>(typeof(SelectProjectViewModel), Arg.Any<(long?, long?)>())
-                    .Returns((null, null));
+                NavigationService.Navigate<SelectProjectParameter, SelectProjectParameter>(
+                        typeof(SelectProjectViewModel),
+                        Arg.Any<SelectProjectParameter>())
+                    .Returns(SelectProjectParameter.WithIds(null, null, newWorkspaceId));
                 await ViewModel.SelectProjectCommand.ExecuteAsync();
 
                 ViewModel.ConfirmCommand.Execute();
 
                 await DataSource.TimeEntries.Received().Update(
-                    Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == workspaceId));
+                    Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == newWorkspaceId));
             }
         }
 
@@ -581,10 +589,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             private void prepareNavigationService(long? projectId, long? taskId)
                 => NavigationService
-                       .Navigate<(long?, long?, long), (long?, long?)>(
+                       .Navigate<SelectProjectParameter, SelectProjectParameter>(
                            typeof(SelectProjectViewModel),
-                           Arg.Any<(long?, long?, long)>())
-                       .Returns((projectId, taskId));
+                           Arg.Any<SelectProjectParameter>())
+                       .Returns(SelectProjectParameter.WithIds(projectId, taskId, 0));
 
             private List<IDatabaseTag> createTags(int count)
                 => Enumerable.Range(10000, count)
