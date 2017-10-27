@@ -60,6 +60,7 @@
     <Compile Include="PreserveAttribute.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\ClampExtension.cs" />
+    <Compile Include="Extensions\HashSetExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
