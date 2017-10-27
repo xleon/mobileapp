@@ -57,6 +57,7 @@ namespace Toggl.Foundation.DataSources
                     .StartWith()
                     .Merge(TimeEntryCreated.Where(te => te.Duration == null))
                     .Merge(TimeEntryUpdated.Where(tuple => tuple.Entity.Id == currentlyRunningTimeEntryId).Select(tuple => tuple.Entity))
+                    .Merge(TimeEntryDeleted.Where(id => id == currentlyRunningTimeEntryId).Select(_ => null as IDatabaseTimeEntry))
                     .Select(runningTimeEntry)
                     .Do(setRunningTimeEntryId);
 
@@ -87,7 +88,8 @@ namespace Toggl.Foundation.DataSources
                          .Select(TimeEntry.DirtyDeleted)
                          .Do(te => timeEntryDeletedSubject.OnNext(te.Id))
                          .IgnoreElements()
-                         .Cast<Unit>();
+                         .Cast<Unit>()
+                         .Concat(Observable.Return(Unit.Default));
 
         public IObservable<IDatabaseTimeEntry> Start(StartTimeEntryDTO dto)
             => idProvider.GetNextIdentifier()

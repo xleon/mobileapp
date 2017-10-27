@@ -376,14 +376,14 @@ namespace Toggl.Foundation.Tests.DataSources
             }
 
             [Fact]
-            public void DoesNotEmitAnyElements()
+            public void EmitsSingleElementBeforeCompleting()
             {
                 var observer = Substitute.For<IObserver<Unit>>();
 
                 TimeEntriesSource.Delete(DatabaseTimeEntry.Id).Subscribe(observer);
 
-                observer.DidNotReceive().OnNext(Arg.Any<Unit>());
-                observer.Received().OnCompleted();
+                observer.Received(1).OnNext(Arg.Any<Unit>());
+                observer.Received(1).OnCompleted();
             }
 
             [Fact]
@@ -419,6 +419,34 @@ namespace Toggl.Foundation.Tests.DataSources
                 TimeEntriesSource.Delete(12).Subscribe(observer);
 
                 observer.Received().OnError(Arg.Any<EntityNotFoundException>());
+            }
+
+            [Fact]
+            public async ThreadingTask RemovesCurrentlyRunningTimeEntryWhenItIsDeleted()
+            {
+                var runningTimeEntriesHistory = new List<IDatabaseTimeEntry>();
+                TimeEntriesSource.CurrentlyRunningTimeEntry
+                    .Subscribe(te => runningTimeEntriesHistory.Add(te));
+                var timeEntryDto = CreateDto(ValidTime, ValidDescription, true, ProjectId);
+                prepareBatchUpdate();
+                var timeEntry = await TimeEntriesSource.Start(timeEntryDto);
+                Repository.GetById(Arg.Is(timeEntry.Id)).Returns(Observable.Return(timeEntry));
+
+                TimeEntriesSource.Delete(timeEntry.Id).Wait();
+
+                runningTimeEntriesHistory.Should().HaveCount(3);
+                runningTimeEntriesHistory[0].Should().Be(null); // originally there is no running time entry (in the repository)
+                runningTimeEntriesHistory[1].Id.Should().Be(timeEntry.Id);
+                runningTimeEntriesHistory[2].Should().Be(null);
+            }
+
+            private void prepareBatchUpdate()
+            {
+                Repository.BatchUpdate(
+                        Arg.Any<IEnumerable<(long, IDatabaseTimeEntry)>>(),
+                        Arg.Any<Func<IDatabaseTimeEntry, IDatabaseTimeEntry, ConflictResolutionMode>>(),
+                        Arg.Any<IRivalsResolver<IDatabaseTimeEntry>>())
+                    .Returns(info => Observable.Return(new[] { new CreateResult<IDatabaseTimeEntry>(info.Arg<IEnumerable<(long, IDatabaseTimeEntry Entity)>>().First().Entity) }));
             }
         }
 
