@@ -169,7 +169,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                             .SetDescription("")
                             .SetAt(DateTimeOffset.Now)
                             .Build())
-                      .Select(te => te.With(startTime.AddHours(te.Id * 2 + 2)))
+                      .Select(te => te.With((long)TimeSpan.FromHours(te.Id * 2 + 2).TotalSeconds))
                       .Apply(Observable.Return);
 
                     DataSource.TimeEntries.GetAll().Returns(observable);
@@ -185,7 +185,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 public async ThreadingTask AddsTheCreatedTimeEntryToTheList()
                 {
                     await ViewModel.Initialize();
-                    var newTimeEntry = NewTimeEntry.With(DateTimeOffset.UtcNow.AddHours(1));
+                    var newTimeEntry = NewTimeEntry.With((long)TimeSpan.FromHours(1).TotalSeconds);
 
                     TimeEntryCreatedSubject.OnNext(newTimeEntry);
 
@@ -211,9 +211,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 //This can happen, for example, if the time entry was just stopped
                 public async ThreadingTask AddsTheTimeEntryIfItWasNotAddedPreviously()
                 {
-                    var stopDate = DateTimeOffset.UtcNow.AddHours(1);
                     await ViewModel.Initialize();
-                    var newTimeEntry = NewTimeEntry.With(stopDate);
+                    var newTimeEntry = NewTimeEntry.With((long)TimeSpan.FromHours(1).TotalSeconds);
 
                     TimeEntryUpdatedSubject.OnNext((newTimeEntry.Id, newTimeEntry));
 
@@ -225,7 +224,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 public async ThreadingTask IgnoresTheTimeEntryIfItWasDeleted()
                 {
                     await ViewModel.Initialize();
-                    var newTimeEntry = TimeEntry.DirtyDeleted(NewTimeEntry.With(DateTimeOffset.UtcNow.AddHours(1)));
 
                     TimeEntryCreatedSubject.OnNext(NewTimeEntry);
 
@@ -272,7 +270,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask NavigatesToTheEditTimeEntryViewModel()
             {
                 var databaseTimeEntry = Substitute.For<IDatabaseTimeEntry>();
-                databaseTimeEntry.Stop.Returns(DateTimeOffset.Now);
+                databaseTimeEntry.Duration.Returns(100);
                 var timeEntryViewModel = new TimeEntryViewModel(databaseTimeEntry);
 
                 await ViewModel.EditCommand.ExecuteAsync(timeEntryViewModel);
@@ -287,7 +285,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask StartsATimeEntry()
             {
                 var timeEntry = Substitute.For<IDatabaseTimeEntry>();
-                timeEntry.Stop.Returns(DateTimeOffset.Now);
+                timeEntry.Duration.Returns(100);
                 var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
 
                 await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
@@ -308,7 +306,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 timeEntry.Billable.Returns(billable);
                 timeEntry.Project.Returns(project);
                 timeEntry.TaskId.Returns(taskId);
-                timeEntry.Stop.Returns(DateTimeOffset.Now);
+                timeEntry.Duration.Returns(100);
                 var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
 
                 ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel).Wait();
@@ -347,7 +345,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             private TimeEntryViewModel createTimeEntryViewModel()
             {
                 var timeEntry = Substitute.For<IDatabaseTimeEntry>();
-                timeEntry.Stop.Returns(DateTimeOffset.Now);
+                timeEntry.Duration.Returns(100);
                 return new TimeEntryViewModel(timeEntry);
             }
         }

@@ -15,7 +15,7 @@ namespace Toggl.Multivac.Models
 
         DateTimeOffset Start { get; }
 
-        DateTimeOffset? Stop { get; }
+        long? Duration { get; }
 
         string Description { get; }
 

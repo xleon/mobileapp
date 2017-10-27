@@ -132,7 +132,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             Description = timeEntry.Description;
             StartTime = timeEntry.Start;
-            StopTime = timeEntry.Stop;
+            StopTime = timeEntry.Duration.HasValue ? timeEntry.Start.AddSeconds(timeEntry.Duration.Value) : (DateTimeOffset?)null;
             Billable = timeEntry.Billable;
             Tags = timeEntry.Tags?.Select(tag => tag.Name).ToList() ?? new List<string>();
             Project = timeEntry.Project?.Name;

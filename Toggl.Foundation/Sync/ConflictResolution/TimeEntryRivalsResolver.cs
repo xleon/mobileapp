@@ -17,14 +17,14 @@ namespace Toggl.Foundation.Sync.ConflictResolution
             this.timeService = timeService;
         }
 
-        public bool CanHaveRival(IDatabaseTimeEntry entity) => !entity.Stop.HasValue;
+        public bool CanHaveRival(IDatabaseTimeEntry entity) => !entity.Duration.HasValue;
 
         public Expression<Func<IDatabaseTimeEntry, bool>> AreRivals(IDatabaseTimeEntry entity)
         {
             if (!CanHaveRival(entity))
                 throw new InvalidOperationException("The entity cannot have any rivals.");
 
-            return potentialRival => potentialRival.Stop == null && potentialRival.Id != entity.Id;
+            return potentialRival => potentialRival.Duration == null && potentialRival.Id != entity.Id;
         }
 
         public (IDatabaseTimeEntry FixedEntity, IDatabaseTimeEntry FixedRival) FixRivals(IDatabaseTimeEntry entity, IDatabaseTimeEntry rival, IQueryable<IDatabaseTimeEntry> allTimeEntries)
@@ -37,7 +37,8 @@ namespace Toggl.Foundation.Sync.ConflictResolution
                 .Where(start => start != default(DateTimeOffset))
                 .DefaultIfEmpty(timeService.CurrentDateTime)
                 .Min();
-            return new TimeEntry(toBeStopped, stop);
+            long duration = (long)(stop - toBeStopped.Start).TotalSeconds; // truncates towards zero (floor)
+            return new TimeEntry(toBeStopped, duration);
         }
     }
 }

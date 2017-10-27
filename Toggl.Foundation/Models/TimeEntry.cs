@@ -25,7 +25,7 @@ namespace Toggl.Foundation.Models
 
             public DateTimeOffset Start { get; private set; }
 
-            public DateTimeOffset? Stop { get; private set; }
+            public long? Duration { get; private set; }
 
             public long? WorkspaceId { get; private set; }
 
@@ -85,9 +85,9 @@ namespace Toggl.Foundation.Models
                 return this;
             }
 
-            public Builder SetStop(DateTimeOffset? stop)
+            public Builder SetDuration(long? duration)
             {
-                Stop = stop;
+                Duration = duration;
                 return this;
             }
 
@@ -158,24 +158,24 @@ namespace Toggl.Foundation.Models
                 if (At == null)
                     throw new InvalidOperationException(string.Format(errorMessage, "at"));
 
-                if (Start > Stop)
-                    throw new InvalidOperationException("The stop date must be equal to or greater than the start date");
+                if (Duration < 0)
+                    throw new InvalidOperationException("Duration must be a non-negative number.");
             }
         }
 
-        public TimeEntry(IDatabaseTimeEntry timeEntry, DateTimeOffset stop)
+        public TimeEntry(IDatabaseTimeEntry timeEntry, long duration)
             : this(timeEntry, SyncStatus.SyncNeeded, null)
         {
-            if (Start > stop)
-                throw new ArgumentOutOfRangeException(nameof(stop), "The stop date must be equal to or greater than the start date");
+            if (duration < 0)
+                throw new ArgumentOutOfRangeException(nameof(duration), "The duration must be a non-negative number.");
 
-            Stop = stop;
+            Duration = duration;
         }
 
         private TimeEntry(Builder builder)
         {
             Id = builder.Id;
-            Stop = builder.Stop;
+            Duration = builder.Duration;
             At = builder.At.Value;
             Start = builder.Start;
             TagIds = builder.TagIds;
@@ -194,6 +194,6 @@ namespace Toggl.Foundation.Models
 
     internal static class TimeEntryExtensions
     {
-        public static TimeEntry With(this IDatabaseTimeEntry self, DateTimeOffset stop) => new TimeEntry(self, stop);
+        public static TimeEntry With(this IDatabaseTimeEntry self, long duration) => new TimeEntry(self, duration);
     }
 }

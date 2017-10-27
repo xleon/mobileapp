@@ -43,12 +43,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             Ensure.Argument.IsNotNull(timeEntry, nameof(timeEntry));
 
+            if (timeEntry.Duration.HasValue == false)
+                throw new InvalidOperationException("It is not possible to show a running time entry in the log.");
+
             Id = timeEntry.Id;
             Start = timeEntry.Start;
             Billable = timeEntry.Billable;
             Description = timeEntry.Description;
             HasProject = timeEntry.Project != null;
-            Duration = timeEntry.Stop.Value - Start;
+            Duration = TimeSpan.FromSeconds(timeEntry.Duration.Value);
             HasDescription = !string.IsNullOrEmpty(timeEntry.Description);
 
             CanSync = timeEntry.SyncStatus != SyncStatus.SyncFailed;

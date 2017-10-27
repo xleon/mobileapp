@@ -33,7 +33,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Select(i =>
                     {
                         var timeEntry = Substitute.For<IDatabaseTimeEntry>();
-                        timeEntry.Stop.Returns(Noon.AddHours(-i));
+                        timeEntry.Duration.Returns((long)TimeSpan.FromHours(1).TotalSeconds);
                         timeEntry.Start.Returns(Noon.AddHours(-i - 1));
                         return timeEntry;
                     }).Select(te => new TimeEntryViewModel(te)).GroupBy(x => x.Start.Date).Single()

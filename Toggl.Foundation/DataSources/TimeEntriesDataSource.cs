@@ -52,10 +52,10 @@ namespace Toggl.Foundation.DataSources
             TimeEntryUpdated = timeEntryUpdatedSubject.AsObservable();
             TimeEntryDeleted = timeEntryDeletedSubject.AsObservable();
             CurrentlyRunningTimeEntry =
-                repository.GetAll(te => te.Stop == null)
+                repository.GetAll(te => te.Duration == null)
                     .Select(tes => tes.SingleOrDefault())
                     .StartWith()
-                    .Merge(TimeEntryCreated.Where(te => te.Stop == null))
+                    .Merge(TimeEntryCreated.Where(te => te.Duration == null))
                     .Merge(TimeEntryUpdated.Where(tuple => tuple.Entity.Id == currentlyRunningTimeEntryId).Select(tuple => tuple.Entity))
                     .Select(runningTimeEntry)
                     .Do(setRunningTimeEntryId);
@@ -107,10 +107,10 @@ namespace Toggl.Foundation.DataSources
 
         public IObservable<IDatabaseTimeEntry> Stop(DateTimeOffset stopTime)
             => repository
-                    .GetAll(te => te.Stop == null)
+                    .GetAll(te => te.Duration == null)
                     .Select(timeEntries => timeEntries.SingleOrDefault() ?? throw new NoRunningTimeEntryException())
                     .SelectMany(timeEntry => timeEntry
-                        .With(stopTime)
+                        .With((long)(stopTime - timeEntry.Start).TotalSeconds)
                         .Apply(this.Update));
 
         public IObservable<IDatabaseTimeEntry> Update(EditTimeEntryDto dto)
@@ -160,7 +160,7 @@ namespace Toggl.Foundation.DataSources
         private TimeEntry createUpdatedTimeEntry(IDatabaseTimeEntry timeEntry, EditTimeEntryDto dto)
             => TimeEntry.Builder.Create(dto.Id)
                         .SetDescription(dto.Description)
-                        .SetStop(dto.StopTime)
+                        .SetDuration(dto.StopTime.HasValue ? (long?)(dto.StopTime.Value - dto.StartTime).TotalSeconds : null)
                         .SetTagIds(dto.TagIds)
                         .SetStart(dto.StartTime)
                         .SetTaskId(dto.TaskId)
@@ -177,7 +177,7 @@ namespace Toggl.Foundation.DataSources
 
         private IDatabaseTimeEntry runningTimeEntry(IDatabaseTimeEntry timeEntry)
         {
-            if (timeEntry == null || timeEntry.Stop != null)
+            if (timeEntry == null || timeEntry.Duration != null)
                 return null;
            
             return TimeEntry.From(timeEntry);

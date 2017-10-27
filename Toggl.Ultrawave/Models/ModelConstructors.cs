@@ -91,7 +91,7 @@ namespace Toggl.Ultrawave.Models
             TaskId = entity.TaskId;
             Billable = entity.Billable;
             Start = entity.Start;
-            Stop = entity.Stop;
+            Duration = entity.Duration;
             Description = entity.Description;
             TagIds = entity.TagIds;
             At = entity.At;

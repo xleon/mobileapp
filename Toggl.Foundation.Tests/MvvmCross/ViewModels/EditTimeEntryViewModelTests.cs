@@ -36,8 +36,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .SetUserId(12);
 
                 if (!isRunning)
-                    te = te.SetStop(now.AddHours(-1));
-               
+                    te = te.SetDuration((long)TimeSpan.FromHours(1).TotalSeconds);
+
                 var observable = Observable.Return(te.Build());
 
                 DataSource.TimeEntries.GetById(Arg.Is(Id)).Returns(observable);

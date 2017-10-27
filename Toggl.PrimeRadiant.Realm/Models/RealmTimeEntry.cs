@@ -12,9 +12,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public DateTimeOffset Start { get; set; }
 
-        public DateTimeOffset? Stop { get; set; }
-
-        public int Duration { get; set; }
+        public long? Duration { get; set; }
 
         public string Description { get; set; }
 

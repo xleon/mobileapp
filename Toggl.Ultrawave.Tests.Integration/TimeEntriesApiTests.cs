@@ -117,7 +117,6 @@ namespace Toggl.Ultrawave.Tests.Integration
                     Description = Guid.NewGuid().ToString(),
                     WorkspaceId = user.DefaultWorkspaceId,
                     Start = start,
-                    Stop = null,
                     Duration = duration,
                     UserId = user.Id,
                     TagIds = new List<long>(),
@@ -142,7 +141,6 @@ namespace Toggl.Ultrawave.Tests.Integration
                     Description = Guid.NewGuid().ToString(),
                     WorkspaceId = user.DefaultWorkspaceId,
                     Start = start,
-                    Stop = null,
                     Duration = duration,
                     UserId = user.Id,
                     TagIds = new List<long>(),
@@ -164,7 +162,6 @@ namespace Toggl.Ultrawave.Tests.Integration
                     Description = Guid.NewGuid().ToString(),
                     WorkspaceId = user.DefaultWorkspaceId,
                     Start = start,
-                    Stop = null,
                     UserId = user.Id,
                     TagIds = new List<long>(),
                     CreatedWith = "IntegrationTests/0.0"
@@ -172,7 +169,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 var postedTimeEntry = await togglApi.TimeEntries.Create(timeEntry);
 
-                postedTimeEntry.Stop.Should().BeNull();
+                postedTimeEntry.Duration.Should().BeNull();
             }
 
             [Fact]
@@ -185,7 +182,6 @@ namespace Toggl.Ultrawave.Tests.Integration
                     Description = Guid.NewGuid().ToString(),
                     WorkspaceId = user.DefaultWorkspaceId,
                     Start = start,
-                    Stop = null,
                     UserId = user.Id,
                     TagIds = new List<long>(),
                     CreatedWith = "IntegrationTests/0.0"
@@ -197,7 +193,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                     .Where(te => te.Id == postedTimeEntry.Id)
                     .SingleAsync();
 
-                fetchedTimeEntry.Stop.Should().BeNull();
+                fetchedTimeEntry.Duration.Should().BeNull();
             }
 
             protected override IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi)
@@ -227,7 +223,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                     WorkspaceId = persistedTimeEntry.WorkspaceId,
                     Billable = persistedTimeEntry.Billable,
                     Start = persistedTimeEntry.Start,
-                    Stop = persistedTimeEntry.Stop,
+                    Duration = persistedTimeEntry.Duration,
                     TagIds = persistedTimeEntry.TagIds,
                     UserId = persistedTimeEntry.UserId,
                     CreatedWith = persistedTimeEntry.CreatedWith
@@ -257,7 +253,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                     WorkspaceId = persistedTimeEntry.WorkspaceId,
                     Billable = persistedTimeEntry.Billable,
                     Start = persistedTimeEntry.Start,
-                    Stop = persistedTimeEntry.Stop,
+                    Duration = persistedTimeEntry.Duration,
                     TagIds = new List<long> { tag.Id },
                     UserId = persistedTimeEntry.UserId,
                     CreatedWith = persistedTimeEntry.CreatedWith
@@ -302,7 +298,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                         WorkspaceId = persistedTimeEntry.WorkspaceId,
                         Billable = persistedTimeEntry.Billable,
                         Start = persistedTimeEntry.Start,
-                        Stop = persistedTimeEntry.Stop,
+                        Duration = persistedTimeEntry.Duration,
                         TagIds = persistedTimeEntry.TagIds,
                         UserId = persistedTimeEntry.UserId,
                         CreatedWith = persistedTimeEntry.CreatedWith
@@ -435,7 +431,6 @@ namespace Toggl.Ultrawave.Tests.Integration
             WorkspaceId = user.DefaultWorkspaceId,
             Billable = false,
             Start = new DateTimeOffset(DateTime.Now - TimeSpan.FromMinutes(5)),
-            Stop = new DateTimeOffset(DateTime.Now),
             Description = Guid.NewGuid().ToString(),
             TagIds = new List<long>(),
             UserId = user.Id,

@@ -40,7 +40,7 @@ namespace Toggl.Foundation.Tests.DataSources
 
             protected string ValidDescription { get; } = "Testing software";
 
-            protected DateTimeOffset ValidTime { get; } = DateTimeOffset.Now;
+            protected DateTimeOffset ValidTime { get; } = DateTimeOffset.UtcNow;
 
             protected IIdProvider IdProvider { get; } = Substitute.For<IIdProvider>();
 
@@ -51,8 +51,8 @@ namespace Toggl.Foundation.Tests.DataSources
                     .SetDescription("")
                     .SetWorkspaceId(WorkspaceId)
                     .SetSyncStatus(SyncStatus.InSync)
-                    .SetAt(DateTimeOffset.Now.AddDays(-1))
-                    .SetStart(DateTimeOffset.Now.AddHours(-2))
+                    .SetAt(DateTimeOffset.UtcNow.AddDays(-1))
+                    .SetStart(DateTimeOffset.UtcNow.AddHours(-2))
                     .Build();
 
             protected IRepository<IDatabaseTimeEntry> Repository { get; } = Substitute.For<IRepository<IDatabaseTimeEntry>>();
@@ -266,12 +266,13 @@ namespace Toggl.Foundation.Tests.DataSources
         {
             public TheStopMethod()
             {
+                long duration = (long)(DateTimeOffset.UtcNow - DatabaseTimeEntry.Start).TotalSeconds;
                 var timeEntries = new List<IDatabaseTimeEntry>
                 {
                     DatabaseTimeEntry,
-                    DatabaseTimeEntry.With(DateTimeOffset.UtcNow),
-                    DatabaseTimeEntry.With(DateTimeOffset.UtcNow),
-                    DatabaseTimeEntry.With(DateTimeOffset.UtcNow)
+                    DatabaseTimeEntry.With(duration),
+                    DatabaseTimeEntry.With(duration),
+                    DatabaseTimeEntry.With(duration)
                 };
 
                 Repository
@@ -283,10 +284,10 @@ namespace Toggl.Foundation.Tests.DataSources
             }
 
             [Fact]
-            public async ThreadingTask UpdatesTheTimeEntrySettingItsStopTime()
+            public async ThreadingTask UpdatesTheTimeEntrySettingItsDuration()
             {
                 await TimeEntriesSource.Stop(ValidTime); 
-                await Repository.Received().Update(Arg.Any<long>(), Arg.Is<IDatabaseTimeEntry>(te => te.Stop == ValidTime));
+                await Repository.Received().Update(Arg.Any<long>(), Arg.Is<IDatabaseTimeEntry>(te => te.Duration == (long)(ValidTime - te.Start).TotalSeconds));
             }
 
             [Fact]
@@ -312,11 +313,12 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact]
             public void ThrowsIfThereAreNoRunningTimeEntries()
             {
+                long duration = (long)(DateTimeOffset.UtcNow - DatabaseTimeEntry.Start).TotalSeconds;
                 var timeEntries = new List<IDatabaseTimeEntry>
                 {
-                    DatabaseTimeEntry.With(DateTimeOffset.UtcNow),
-                    DatabaseTimeEntry.With(DateTimeOffset.UtcNow),
-                    DatabaseTimeEntry.With(DateTimeOffset.UtcNow)
+                    DatabaseTimeEntry.With(duration),
+                    DatabaseTimeEntry.With(duration),
+                    DatabaseTimeEntry.With(duration)
                 };
 
                 Repository
@@ -341,8 +343,9 @@ namespace Toggl.Foundation.Tests.DataSources
 
                 await TimeEntriesSource.Stop(ValidTime);
 
-                observer.Messages.Single().Value.Value.Id.Should().Be(CurrentRunningId);
-                observer.Messages.Single().Value.Value.Entity.Stop.Should().Be(ValidTime);
+                var tuple = observer.Messages.Single().Value.Value;
+                tuple.Id.Should().Be(CurrentRunningId);
+                tuple.Entity.Duration.Should().Be((long)(ValidTime - tuple.Entity.Start).TotalSeconds);
             }
         } 
         public sealed class TheDeleteMethod : TimeEntryDataSourceTest
@@ -387,12 +390,12 @@ namespace Toggl.Foundation.Tests.DataSources
             public void PropagatesErrorIfUpdateFails()
             {
                 var timeEntry = TimeEntry.Builder.Create(12)
-                      .SetStart(DateTimeOffset.Now)
+                      .SetStart(DateTimeOffset.UtcNow)
                       .SetSyncStatus(SyncStatus.InSync)
                       .SetDescription("")
                       .SetUserId(11)
                       .SetWorkspaceId(10)
-                      .SetAt(DateTimeOffset.Now)
+                      .SetAt(DateTimeOffset.UtcNow)
                       .Build();
 
                 var timeEntryObservable = Observable.Return(timeEntry);
@@ -468,7 +471,7 @@ namespace Toggl.Foundation.Tests.DataSources
             public async ThreadingTask UpdatesTheAtProperty()
             {
                 var dto = prepareTest();
-                TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
+                TimeService.CurrentDateTime.Returns(DateTimeOffset.UtcNow);
 
                 await TimeEntriesSource.Update(dto);
 

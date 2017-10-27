@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
@@ -141,7 +141,7 @@ namespace Toggl.Foundation.Models
 
         public DateTimeOffset Start { get; }
 
-        public DateTimeOffset? Stop { get; }
+        public long? Duration { get; }
 
         public string Description { get; }
 

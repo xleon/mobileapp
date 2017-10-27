@@ -141,7 +141,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 timeEntry.WorkspaceId.Returns(workspaceId);
                 timeEntry.ProjectId.Returns(projectId);
                 timeEntry.TaskId.Returns(taskId);
-                timeEntry.Stop.Returns(DateTimeOffset.Now);
+                timeEntry.Duration.Returns((long)TimeSpan.FromHours(1).TotalSeconds);
                 var suggestion = new Suggestion(timeEntry);
 
                 ViewModel.StartTimeEntryCommand.ExecuteAsync(suggestion).Wait();
@@ -183,7 +183,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             private Suggestion createSuggestion()
             {
                 var timeEntry = Substitute.For<IDatabaseTimeEntry>();
-                timeEntry.Stop.Returns(DateTimeOffset.Now);
+                timeEntry.Duration.Returns((long)TimeSpan.FromMinutes(30).TotalSeconds);
                 timeEntry.Description.Returns("Testing");
                 return new Suggestion(timeEntry);
             }

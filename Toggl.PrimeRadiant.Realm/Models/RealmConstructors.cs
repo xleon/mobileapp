@@ -211,7 +211,7 @@ namespace Toggl.PrimeRadiant.Realm
             RealmTask = skipTaskFetch ? null : realm.All<RealmTask>().Single(x => x.Id == entity.TaskId);
             Billable = entity.Billable;
             Start = entity.Start;
-            Stop = entity.Stop;
+            Duration = entity.Duration;
             Description = entity.Description;
             RealmTags.Clear();
             if (entity.TagIds != null)

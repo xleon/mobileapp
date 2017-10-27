@@ -2,6 +2,8 @@
 using Toggl.Multivac.Models;
 using Toggl.Multivac.Extensions;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Toggl.Ultrawave.Serialization;
 
 namespace Toggl.Ultrawave.Models
@@ -20,12 +22,20 @@ namespace Toggl.Ultrawave.Models
 
         public DateTimeOffset Start { get; set; }
 
-        public DateTimeOffset? Stop { get; set; }
-
-        public long Duration
+        public DateTimeOffset? Stop
         {
-            get => Stop.HasValue ? (int)(Stop.Value - Start).TotalSeconds : -Start.ToUnixTimeSeconds();
+            get => Duration.HasValue ? Start.AddSeconds(Duration.Value) : null as DateTimeOffset?;
             set { }
+        }
+
+        [JsonIgnore]
+        public long? Duration { get; set; }
+
+        [JsonProperty("duration")]
+        public long ApiDuration
+        {
+            get => Duration ?? -Start.ToUnixTimeSeconds();
+            set => Duration = value < 0 ? null : value as long?;
         }
 
         public string Description { get; set; }

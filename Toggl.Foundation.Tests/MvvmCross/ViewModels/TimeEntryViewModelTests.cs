@@ -47,7 +47,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [InlineData(false)]
             public void ChecksIfTheTimeEntryProvidedHasANonNullProject(bool hasProject)
             {
-                MockTimeEntry.Stop.Returns(DateTimeOffset.UtcNow);
+                MockTimeEntry.Duration.Returns((long)TimeSpan.FromHours(1).TotalSeconds);
                 MockTimeEntry.Project.Returns(hasProject ? Project : null);
 
                 var viewModel = new TimeEntryViewModel(MockTimeEntry);
