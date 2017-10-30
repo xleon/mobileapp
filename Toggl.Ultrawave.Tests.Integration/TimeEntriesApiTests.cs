@@ -107,17 +107,15 @@ namespace Toggl.Ultrawave.Tests.Integration
             [InlineData(0)]
             [InlineData(998)]
             [InlineData(-998)]
-            public async Task CreatesRunningTimeEntryWhenTheDurationIsSetToANegativeTimestampWithinNineHundredNinetyNineHoursInThePast(int hoursOffset)
+            public async Task CreatesRunningTimeEntryWhenTheStartIsSetToCurrentTimePlusMinusNineHundredNinetyNineHours(int hoursOffset)
             {
                 var (togglApi, user) = await SetupTestUser();
                 var start = DateTimeOffset.Now.AddHours(-hoursOffset);
-                var duration = -start.ToUnixTimeSeconds();
                 var timeEntry = new Ultrawave.Models.TimeEntry
                 {
                     Description = Guid.NewGuid().ToString(),
                     WorkspaceId = user.DefaultWorkspaceId,
                     Start = start,
-                    Duration = duration,
                     UserId = user.Id,
                     TagIds = new List<long>(),
                     CreatedWith = "IntegrationTests/0.0"
@@ -131,17 +129,15 @@ namespace Toggl.Ultrawave.Tests.Integration
             [Theory]
             [InlineData(1000)]
             [InlineData(-1000)]
-            public async Task FailsCreatingARunningTimeEntryWhenTheDurationIsSetToATimestampOlderThanNineHundredNinetyNineHoursInThePast(int hoursOffset)
+            public async Task FailsCreatingARunningTimeEntryWhenTheStartTimeIsSetToTheCurrentTimePlusMinusMoreThanNineHundredNinetyNineHours(int hoursOffset)
             {
                 var (togglApi, user) = await SetupTestUser();
                 var start = DateTimeOffset.Now.AddHours(-hoursOffset);
-                var duration = -start.ToUnixTimeSeconds();
                 var timeEntry = new Ultrawave.Models.TimeEntry
                 {
                     Description = Guid.NewGuid().ToString(),
                     WorkspaceId = user.DefaultWorkspaceId,
                     Start = start,
-                    Duration = duration,
                     UserId = user.Id,
                     TagIds = new List<long>(),
                     CreatedWith = "IntegrationTests/0.0"
