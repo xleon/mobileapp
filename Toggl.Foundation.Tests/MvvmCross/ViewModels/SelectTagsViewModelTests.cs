@@ -159,10 +159,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 for (int i = 0; i < count; i++)
                 {
+                    /* Do not inline 'workspace.Id' into another .Return() call 
+                     * because it's a proxy that won't work later on!
+                     * This must be cached before usage.
+                     */
+                    var workspaceId = workspace.Id; 
+
                     var tag = Substitute.For<IDatabaseTag>();
-                    var workspaceId = workspace.Id;
+                    tag.Id.Returns(i);
                     tag.WorkspaceId.Returns(workspaceId);
                     tag.Workspace.Returns(workspace);
+                    tag.Name.Returns($"Tag{i}");
+
                     yield return new TagSuggestion(tag);
                 }
             }
@@ -217,6 +225,39 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.Initialize();
 
                 ViewModel.Tags.Should().HaveCount(tagSuggestions.Count());
+            }
+
+            [Fact]
+            public async Task IsSortedBySelectedStatusThenByName()
+            {
+                var workspace = createWorkspace(13, "Some workspace");
+                var tagSuggestions = getTagSuggestions(4, workspace).ToArray();
+
+                var shuffledTags = new[] { tagSuggestions[3], tagSuggestions[1], tagSuggestions[2], tagSuggestions[0] };
+                var selectedTagIds = new[] { tagSuggestions[0].TagId, tagSuggestions[2].TagId };
+
+                var autocompleteProvider = Substitute.For<IAutocompleteProvider>();
+                autocompleteProvider.Query(Arg.Any<string>(), Arg.Is(AutocompleteSuggestionType.Tags))
+                                    .Returns(Observable.Return(shuffledTags));
+
+                DataSource.AutocompleteProvider.Returns(autocompleteProvider);
+                DataSource.Workspaces.GetById(Arg.Is(workspace.Id))
+                    .Returns(Observable.Return(workspace));
+
+                ViewModel.Prepare((selectedTagIds, workspace.Id));
+                await ViewModel.Initialize();
+
+                ViewModel.Tags.Should().HaveCount(4);
+
+                ViewModel.Tags[0].Name.Should().Be("Tag0");
+                ViewModel.Tags[1].Name.Should().Be("Tag2");
+                ViewModel.Tags[2].Name.Should().Be("Tag1");
+                ViewModel.Tags[3].Name.Should().Be("Tag3");
+
+                ViewModel.Tags[0].Selected.Should().BeTrue();
+                ViewModel.Tags[1].Selected.Should().BeTrue();
+                ViewModel.Tags[2].Selected.Should().BeFalse();
+                ViewModel.Tags[3].Selected.Should().BeFalse();
             }
 
             [Fact]

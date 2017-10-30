@@ -47,13 +47,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SaveCommand = new MvxAsyncCommand(save);
             SelectTagCommand = new MvxCommand<SelectableTagViewModel>(selectTag);
         }
-        
+
         public override void Prepare((long[] tagIds, long workspaceId) parameter)
         {
             workspaceId = parameter.workspaceId;
             defaultResult = parameter.tagIds;
-            foreach (var tagId in parameter.tagIds)
-                selectedTagIds.Add(tagId);
+            selectedTagIds.AddRange(parameter.tagIds);
         }
 
         public override async Task Initialize()
@@ -77,7 +76,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             Tags.Clear();
 
-            Tags.AddRange(tags.Select(createSelectableTag));
+            var sortedTags = tags.Select(createSelectableTag)
+                                 .OrderByDescending(tag => tag.Selected)
+                                 .ThenBy(tag => tag.Name);
+
+            Tags.AddRange(sortedTags);
         }
 
         private SelectableTagViewModel createSelectableTag(TagSuggestion tagSuggestion)
