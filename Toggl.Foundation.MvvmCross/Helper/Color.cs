@@ -81,5 +81,10 @@ namespace Toggl.Foundation.MvvmCross.Helper
         {
             public static readonly MvxColor ClientColor = new MvxColor(163, 163, 163);
         }
+
+        public static class Settings
+        {
+            public static readonly MvxColor SignOutButtonDisabled = new MvxColor(226, 5, 5, 61);
+        }
     }
 }

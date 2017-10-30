@@ -1,8 +1,10 @@
 ﻿﻿using MvvmCross.Binding.BindingContext;
 using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters.Attributes;
+using MvvmCross.Plugins.Color.iOS;
 using Toggl.Daneel.Extensions;
 using Toggl.Foundation.MvvmCross.Converters;
+using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 
 namespace Toggl.Daneel.ViewControllers
@@ -36,6 +38,8 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.IsLoggingOut);
 
             bindingSet.Apply();
+
+            LogoutButton.SetTitleColor(Color.Settings.SignOutButtonDisabled.ToNativeColor(), UIKit.UIControlState.Disabled);
         }
     }
 }
