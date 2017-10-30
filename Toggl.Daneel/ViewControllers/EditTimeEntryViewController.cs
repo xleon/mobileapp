@@ -19,7 +19,7 @@ using UIKit;
 namespace Toggl.Daneel.ViewControllers
 {
     [ModalCardPresentation]
-    public partial class EditTimeEntryViewController : MvxViewController
+    public partial class EditTimeEntryViewController : MvxViewController, IUITextViewDelegate
     {
         private const int switchHeight = 24;
         private const float nonScrollableContentHeight = 100;
@@ -189,6 +189,7 @@ namespace Toggl.Daneel.ViewControllers
         {
             DurationLabel.Font = DurationLabel.Font.GetMonospacedDigitFont();
             PreferredContentSize = View.Frame.Size;
+            DescriptionTextView.Delegate = this;
             resizeSwitch();
             prepareDescriptionField();
         }
@@ -203,5 +204,20 @@ namespace Toggl.Daneel.ViewControllers
         {
             DescriptionTextView.TintColor = Color.StartTimeEntry.Cursor.ToNativeColor();
         }
+
+        [Export("textView:shouldChangeTextInRange:replacementText:")]
+        public bool ShouldChangeText(UITextView textView, NSRange range, string text)
+        {
+            if (text == "\n")
+            {
+                textView.ResignFirstResponder();
+                return false;
+            }
+            return true;
+        }
+
+        [Export("textViewDidChange:")]
+        public void Changed(UITextView textView)
+            => textView.Text = textView.Text.Replace('\n', ' ');
     }
 }
