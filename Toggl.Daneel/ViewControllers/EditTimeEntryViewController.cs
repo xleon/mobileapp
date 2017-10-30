@@ -1,4 +1,5 @@
-﻿using CoreGraphics;
+﻿using System;
+using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
@@ -21,6 +22,7 @@ namespace Toggl.Daneel.ViewControllers
     public partial class EditTimeEntryViewController : MvxViewController
     {
         private const int switchHeight = 24;
+        private const float nonScrollableContentHeight = 100;
 
         private EditTimeEntryErrorView syncErrorMessageView;
 
@@ -76,20 +78,21 @@ namespace Toggl.Daneel.ViewControllers
                 bindingSet.Bind(syncErrorMessageView)
                           .For(v => v.CloseCommand)
                           .To(vm => vm.DismissSyncErrorMessageCommand);
-                
+
                 bindingSet.Bind(syncErrorMessageView)
                           .For(v => v.BindVisible())
                           .To(vm => vm.SyncErrorMessageVisible)
                           .WithConversion(inverterVisibilityConverter);
             }
 
-            //Text
-            bindingSet.Bind(DescriptionTextField).To(vm => vm.Description);
+            // Text
+            bindingSet.Bind(DescriptionTextView)
+                      .To(vm => vm.Description);
 
             bindingSet.Bind(BillableSwitch)
                       .For(v => v.BindAnimatedOn())
                       .To(vm => vm.Billable);
-            
+
             bindingSet.Bind(DurationLabel)
                       .To(vm => vm.Duration)
                       .WithConversion(durationConverter);
@@ -163,13 +166,23 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.HasTags)
                       .WithConversion(visibilityConverter);
 
-            
             bindingSet.Bind(TagsLabel)
                       .For(v => v.BindVisible())
                       .To(vm => vm.HasTags)
                       .WithConversion(inverterVisibilityConverter);
 
             bindingSet.Apply();
+        }
+
+        public override void ViewWillLayoutSubviews()
+        {
+            var newSize = new CGSize(0, nonScrollableContentHeight + ScrollViewContent.Bounds.Height);
+            if (newSize != PreferredContentSize)
+            {
+                PreferredContentSize = newSize;
+                PresentationController.ContainerViewWillLayoutSubviews();
+                ScrollView.ScrollEnabled = ScrollViewContent.Bounds.Height > ScrollView.Bounds.Height;
+            }
         }
 
         private void prepareViews()
@@ -188,22 +201,7 @@ namespace Toggl.Daneel.ViewControllers
 
         private void prepareDescriptionField()
         {
-            var placeholderAttributes = new UIStringAttributes
-            {
-                //This should be the same as Color.pinkishGrey (206, 206, 206),
-                //but iOS makes the color a bit darker, when applied to
-                //UITextField.AttributedPlaceholder, so this is made a bit
-                //lighter than the actual color.
-                ForegroundColor = UIColor.FromRGB(215, 215, 215)
-            };
-            DescriptionTextField.AttributedPlaceholder = new NSAttributedString(Resources.AddDescription, placeholderAttributes);
-            DescriptionTextField.TintColor = Color.StartTimeEntry.Cursor.ToNativeColor();
-
-            DescriptionTextField.ShouldReturn += (textField) =>
-            {
-                DescriptionTextField.ResignFirstResponder();
-                return true; 
-            };
+            DescriptionTextView.TintColor = Color.StartTimeEntry.Cursor.ToNativeColor();
         }
     }
 }

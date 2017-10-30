@@ -38,7 +38,7 @@ namespace Toggl.Daneel.ViewControllers
 
 
         [Outlet]
-        UIKit.UITextField DescriptionTextField { get; set; }
+        UIKit.UITextView DescriptionTextView { get; set; }
 
 
         [Outlet]
@@ -67,6 +67,14 @@ namespace Toggl.Daneel.ViewControllers
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIView BillableView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIScrollView ScrollView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView ScrollViewContent { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
@@ -105,9 +113,9 @@ namespace Toggl.Daneel.ViewControllers
                 DeleteButton = null;
             }
 
-            if (DescriptionTextField != null) {
-                DescriptionTextField.Dispose ();
-                DescriptionTextField = null;
+            if (DescriptionTextView != null) {
+                DescriptionTextView.Dispose ();
+                DescriptionTextView = null;
             }
 
             if (DurationLabel != null) {
@@ -118,6 +126,16 @@ namespace Toggl.Daneel.ViewControllers
             if (ProjectTaskClientLabel != null) {
                 ProjectTaskClientLabel.Dispose ();
                 ProjectTaskClientLabel = null;
+            }
+
+            if (ScrollView != null) {
+                ScrollView.Dispose ();
+                ScrollView = null;
+            }
+
+            if (ScrollViewContent != null) {
+                ScrollViewContent.Dispose ();
+                ScrollViewContent = null;
             }
 
             if (StartDateLabel != null) {

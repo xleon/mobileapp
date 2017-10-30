@@ -4,13 +4,14 @@ using MvvmCross.Plugins.Color.iOS;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Multivac;
 using UIKit;
+using static System.Math;
 
 namespace Toggl.Daneel.Presentation.Transition
 {
     public sealed class ModalPresentationController : UIPresentationController
     {
         private readonly Action onDismissedCallback;
-        private readonly nfloat defaultHeight = UIScreen.MainScreen.Bounds.Height - 20;
+        private readonly nfloat maximumHeight = UIScreen.MainScreen.Bounds.Height - 20;
 
         private readonly UIView dimmingView = new UIView
         {
@@ -21,7 +22,7 @@ namespace Toggl.Daneel.Presentation.Transition
         public UIView AdditionalContentView { get; }
             = new UIView();
 
-        public ModalPresentationController(UIViewController presentedViewController, 
+        public ModalPresentationController(UIViewController presentedViewController,
             UIViewController presentingViewController, Action onDismissedCallback)
           : base(presentedViewController, presentingViewController)
         {
@@ -80,8 +81,8 @@ namespace Toggl.Daneel.Presentation.Transition
 
         public override CGSize GetSizeForChildContentContainer(IUIContentContainer contentContainer, CGSize parentContainerSize)
         {
-            var preferredHeight = PresentedViewController.PreferredContentSize.Height;
-            return new CGSize(parentContainerSize.Width, preferredHeight == 0 ? defaultHeight : preferredHeight);
+            var preferredHeight = Min(maximumHeight, PresentedViewController.PreferredContentSize.Height);
+            return new CGSize(parentContainerSize.Width, preferredHeight == 0 ? maximumHeight : preferredHeight);
         }
 
         public override CGRect FrameOfPresentedViewInContainerView

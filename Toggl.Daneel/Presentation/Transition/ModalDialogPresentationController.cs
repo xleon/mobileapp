@@ -16,7 +16,7 @@ namespace Toggl.Daneel.Presentation.Transition
         public ModalDialogPresentationController(UIViewController presentedViewController, UIViewController presentingViewController)
             : base(presentedViewController, presentingViewController)
         {
-            
+
         }
 
         public override void PresentationTransitionWillBegin()
@@ -31,7 +31,7 @@ namespace Toggl.Daneel.Presentation.Transition
         public override void DismissalTransitionWillBegin()
         {
             var transitionCoordinator = PresentingViewController.GetTransitionCoordinator();
-            transitionCoordinator.AnimateAlongsideTransition(context => dimmingView.Alpha = 0.0f, null);   
+            transitionCoordinator.AnimateAlongsideTransition(context => dimmingView.Alpha = 0.0f, null);
         }
 
         public override void ContainerViewWillLayoutSubviews()
