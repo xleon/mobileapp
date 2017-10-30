@@ -139,6 +139,11 @@ Task("Build.Tests.UI")
     .IsDependentOn("Nuget")
     .Does(BuildSolution("./Toggl.sln", "Debug", "iPhoneSimulator"));
 
+//iOS Builds
+Task("Build.Release.iOS.AdHoc")
+    .IsDependentOn("Nuget")
+    .Does(BuildSolution("./Toggl.sln", "Release", "iPhone"));
+
 Task("Build.Release.iOS.TestFlight")
     .IsDependentOn("Nuget")
     .Does(BuildSolution("./Toggl.sln", "Release.TestFlight"));
