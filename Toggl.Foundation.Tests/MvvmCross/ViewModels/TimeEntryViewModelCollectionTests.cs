@@ -17,7 +17,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         public abstract class TimeEntryViewModelCollectionTest : BaseMvvmCrossTests
         {
-            protected DateTime Noon = DateTime.UtcNow.Date.AddHours(12);
+            protected DateTime Noon = DateTime.Now.Date.AddHours(12);
             protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
             protected Subject<DateTimeOffset> TickSubject = new Subject<DateTimeOffset>();
             protected TimeEntryViewModelCollection ViewModel { get; }
@@ -47,10 +47,24 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void ThrowsIfTheArgumentIsNull()
             {
                 Action tryingToConstructWithEmptyParameters =
-                    () => new TimeEntryViewModelCollection(DateTime.UtcNow, null);
+                    () => new TimeEntryViewModelCollection(DateTime.Now, null);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
+            }
+
+            [Theory]
+            [InlineData(DateTimeKind.Unspecified)]
+            [InlineData(DateTimeKind.Utc)]
+            public void ThrowsIfDateKindIsNotLocal(DateTimeKind kind)
+            {
+                var dateTime = new DateTime(2012, 12, 12, 12, 12, 12, kind);
+
+                Action tryingToConstructWithNonLocalDateTime =
+                    () => new TimeEntryViewModelCollection(dateTime, Enumerable.Empty<TimeEntryViewModel>());
+
+                tryingToConstructWithNonLocalDateTime
+                    .ShouldThrow<ArgumentException>();
             }
         }
 

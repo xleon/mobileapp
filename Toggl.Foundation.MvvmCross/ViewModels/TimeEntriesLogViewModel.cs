@@ -75,7 +75,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Where(isNotRunning)
                 .OrderByDescending(te => te.Start)
                 .Select(te => new TimeEntryViewModel(te))
-                .GroupBy(te => te.Start.Date)
+                .GroupBy(te => te.Start.LocalDateTime.Date)
                 .Select(grouping => new TimeEntryViewModelCollection(grouping.Key, grouping))
                 .ForEach(addTimeEntries);
 
@@ -112,7 +112,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void onTimeEntryCreated(IDatabaseTimeEntry timeEntry)
         {
-            var indexDate = timeEntry.Start.Date;
+            var indexDate = timeEntry.Start.LocalDateTime.Date;
             var timeEntriesInDay = new List<TimeEntryViewModel> { new TimeEntryViewModel(timeEntry) };
 
             var collection = TimeEntries.FirstOrDefault(x => x.Date == indexDate);
@@ -145,7 +145,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             if (collection.Count > 0)
             {
-                var newCollection = new TimeEntryViewModelCollection(collection.Date.DateTime, collection);
+                var newCollection = new TimeEntryViewModelCollection(collection.Date.LocalDateTime, collection);
                 TimeEntries.Insert(indexToInsert, newCollection);
             }
 

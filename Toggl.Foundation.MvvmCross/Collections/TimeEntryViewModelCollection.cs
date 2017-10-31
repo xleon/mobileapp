@@ -18,6 +18,9 @@ namespace Toggl.Foundation.MvvmCross.Collections
         {
             Ensure.Argument.IsNotNull(items, nameof(items));
 
+            if (date.Kind != DateTimeKind.Local)
+                throw new ArgumentException($"{nameof(date)} must have kind DateTimeKind.Local");
+
             this.AddRange(items);
 
             Date = new DateTimeOffset(date);
