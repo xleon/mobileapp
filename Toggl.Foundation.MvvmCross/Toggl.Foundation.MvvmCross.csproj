@@ -72,6 +72,8 @@
     <Compile Include="Converters\CollectionToStringValueConverter.cs" />
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Parameters\SelectProjectParameter.cs" />
+    <Compile Include="ViewModels\BrowserViewModel.cs" />
+    <Compile Include="Parameters\BrowserParameters.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">

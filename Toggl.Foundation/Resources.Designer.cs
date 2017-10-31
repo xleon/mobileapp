@@ -292,5 +292,17 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("Cancel", resourceCulture);
             }
         }
+        
+        public static string PrivacyPolicy {
+            get {
+                return ResourceManager.GetString("PrivacyPolicy", resourceCulture);
+            }
+        }
+        
+        public static string TermsOfService {
+            get {
+                return ResourceManager.GetString("TermsOfService", resourceCulture);
+            }
+        }
     }
 }

@@ -14,13 +14,26 @@ namespace Toggl.Daneel.ViewControllers.Navigation
         {
             base.PushViewController(viewController, animated);
 
-            var navBar = viewController?.NavigationController?.NavigationBar;
+            setNavigationBarAttributes(viewController.NavigationController?.NavigationBar);
+            UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
+        }
+
+        public override UIViewController PopViewController(bool animated)
+        {
+            var viewController = base.PopViewController(animated);
+
+            setNavigationBarAttributes(viewController.NavigationController?.NavigationBar);
+
+            return viewController;
+        }
+
+        private static void setNavigationBarAttributes(UINavigationBar navBar)
+        {
             if (navBar == null) return;
 
             navBar.BarStyle = UIBarStyle.Black;
             navBar.ShadowImage = new UIImage();
             navBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
-            UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
             navBar.TitleTextAttributes = new UIStringAttributes
             {
                 ForegroundColor = UIColor.White,

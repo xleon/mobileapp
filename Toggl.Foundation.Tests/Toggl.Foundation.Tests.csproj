@@ -263,6 +263,7 @@
     <Compile Include="Sync\States\Push\DeleteLocalTimeEntryStateTests.cs" />
     <Compile Include="Sync\States\Push\BaseDeleteEntityStateTests.cs" />
     <Compile Include="Sync\States\Push\DeleteTimeEntryStateTests.cs" />
+    <Compile Include="MvvmCross\ViewModels\BrowserViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />
