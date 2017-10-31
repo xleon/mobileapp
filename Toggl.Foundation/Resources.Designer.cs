@@ -185,9 +185,21 @@ namespace Toggl.Foundation {
             }
         }
         
-        public static string SettingsSyncInProgressButtonSignOutAnyway {
+        public static string SettingsUnsyncedTitle {
             get {
-                return ResourceManager.GetString("SettingsSyncInProgressButtonSignOutAnyway", resourceCulture);
+                return ResourceManager.GetString("SettingsUnsyncedTitle", resourceCulture);
+            }
+        }
+        
+        public static string SettingsUnsyncedMessage {
+            get {
+                return ResourceManager.GetString("SettingsUnsyncedMessage", resourceCulture);
+            }
+        }
+        
+        public static string SettingsDialogButtonSignOut {
+            get {
+                return ResourceManager.GetString("SettingsDialogButtonSignOut", resourceCulture);
             }
         }
         

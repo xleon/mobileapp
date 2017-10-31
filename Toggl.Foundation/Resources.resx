@@ -88,7 +88,13 @@ Please try again.</value>
     <data name="SettingsSyncInProgressMessage">
         <value>You may loose your data when you sign out before the sync is complete.</value>
     </data>
-    <data name="SettingsSyncInProgressButtonSignOutAnyway">
+    <data name="SettingsUnsyncedTitle">
+        <value>Unsynced data</value>
+    </data>
+    <data name="SettingsUnsyncedMessage">
+        <value>You have some unsynced time entries. Any unsynced data will be lost.</value>
+    </data>
+    <data name="SettingsDialogButtonSignOut">
         <value>Sign out</value>
     </data>
     <data name="UnitMin">

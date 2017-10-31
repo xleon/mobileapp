@@ -59,10 +59,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return;
             }
 
+            var (title, message) = IsRunningSync
+                ? (Resources.SettingsSyncInProgressTitle, Resources.SettingsSyncInProgressMessage)
+                : (Resources.SettingsUnsyncedTitle, Resources.SettingsUnsyncedMessage);
+
             dialogService.Confirm(
-                Resources.SettingsSyncInProgressTitle,
-                Resources.SettingsSyncInProgressMessage,
-                Resources.SettingsSyncInProgressButtonSignOutAnyway,
+                title,
+                message,
+                Resources.SettingsDialogButtonSignOut,
                 Resources.Cancel,
                 async () => await logout(),
                 dismissAction: null,
