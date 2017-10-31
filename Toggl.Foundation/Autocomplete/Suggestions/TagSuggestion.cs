@@ -17,7 +17,6 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
         {
             TagId = tag.Id;
             Name = tag.Name;
-            WorkspaceId = tag.WorkspaceId;
             WorkspaceName = tag.Workspace.Name;
             WorkspaceId = tag.WorkspaceId;
         }

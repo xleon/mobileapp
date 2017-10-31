@@ -93,7 +93,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 => Observable.Defer(async () =>
                 {
                     var user = await togglApi.User.Get();
-                    var tag = await createNewTag(user.DefaultWorkspaceId);
+                    var tag = createNewTag(user.DefaultWorkspaceId);
                     return CallEndpointWith(togglApi, tag);
                 });
 
@@ -105,7 +105,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             {
                 var (togglClient, user) = await SetupTestUser();
 
-                var tag = await createNewTag(user.DefaultWorkspaceId);
+                var tag = createNewTag(user.DefaultWorkspaceId);
                 var persistedTag = await CallEndpointWith(togglClient, tag);
 
                 persistedTag.Name.Should().Be(tag.Name);
@@ -113,7 +113,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             }
         }
 
-        private static async Task<Tag> createNewTag(long workspaceID)
+        private static Tag createNewTag(long workspaceID)
             => new Tag { Name = Guid.NewGuid().ToString(), WorkspaceId = workspaceID };
 
         private static bool isTheSameAs(ITag a, ITag b)
