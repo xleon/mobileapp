@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -73,15 +74,15 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EzU-Pd-V8e">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="597"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tGg-Dk-cfk">
+                                        <view hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tGg-Dk-cfk">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
                                             <color key="backgroundColor" red="0.64313725490196072" green="0.67843137254901964" blue="0.69019607843137254" alpha="0.34999999999999998" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="32" id="9BH-86-07X"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mxU-Yy-g7c">
-                                            <rect key="frame" x="0.0" y="43" width="375" height="1"/>
+                                        <view hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mxU-Yy-g7c" userLabel="Timeline Border">
+                                            <rect key="frame" x="0.0" y="31" width="375" height="1"/>
                                             <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="0.5" id="N8t-WU-2KK"/>
@@ -112,33 +113,43 @@ TO SEE THE LOG</string>
                                             </constraints>
                                         </imageView>
                                         <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icIllustrationSpider" translatesAutoresizingMaskIntoConstraints="NO" id="mpU-UI-dLB">
-                                            <rect key="frame" x="158" y="-70" width="60" height="205"/>
+                                            <rect key="frame" x="155.5" y="-102" width="60" height="205"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="60" id="OFT-Lr-yz0"/>
                                                 <constraint firstAttribute="height" constant="205" id="sSY-Bb-Ekc"/>
                                             </constraints>
                                         </imageView>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FPj-ki-Fw8" userLabel="SpiderHinge">
+                                            <rect key="frame" x="179" y="0.0" width="16" height="2"/>
+                                            <color key="backgroundColor" red="0.19607843137254902" green="0.19607843137254902" blue="0.19607843137254902" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="2" id="1LC-Qf-8sp"/>
+                                                <constraint firstAttribute="width" constant="16" id="fDh-CB-hSA"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstItem="LV7-Bw-hnV" firstAttribute="top" secondItem="wKL-ZP-Ff4" secondAttribute="bottom" constant="5" id="2ky-C9-dkz"/>
                                         <constraint firstItem="tGg-Dk-cfk" firstAttribute="width" secondItem="EzU-Pd-V8e" secondAttribute="width" id="A67-kc-kBu"/>
+                                        <constraint firstItem="FPj-ki-Fw8" firstAttribute="top" secondItem="EzU-Pd-V8e" secondAttribute="top" id="CFL-dN-O7V"/>
                                         <constraint firstAttribute="trailing" secondItem="mxU-Yy-g7c" secondAttribute="trailing" id="Fd4-fU-96N"/>
                                         <constraint firstItem="wKL-ZP-Ff4" firstAttribute="top" secondItem="5K9-cC-7E8" secondAttribute="bottom" constant="24" id="HTG-8h-Hsb"/>
                                         <constraint firstAttribute="bottom" secondItem="LV7-Bw-hnV" secondAttribute="bottom" id="MCj-Yu-VUE"/>
-                                        <constraint firstItem="5K9-cC-7E8" firstAttribute="top" secondItem="tGg-Dk-cfk" secondAttribute="bottom" constant="12" id="S2B-dA-cpO"/>
-                                        <constraint firstItem="mpU-UI-dLB" firstAttribute="top" secondItem="EzU-Pd-V8e" secondAttribute="top" constant="-70" id="Wd6-Ev-wuH"/>
-                                        <constraint firstItem="mpU-UI-dLB" firstAttribute="centerX" secondItem="EzU-Pd-V8e" secondAttribute="centerX" id="aUE-VX-PjY"/>
+                                        <constraint firstItem="5K9-cC-7E8" firstAttribute="top" secondItem="EzU-Pd-V8e" secondAttribute="top" constant="44" id="Mwt-ub-HhA"/>
+                                        <constraint firstItem="mpU-UI-dLB" firstAttribute="top" secondItem="EzU-Pd-V8e" secondAttribute="top" constant="-102" id="Wd6-Ev-wuH"/>
+                                        <constraint firstItem="mpU-UI-dLB" firstAttribute="centerX" secondItem="EzU-Pd-V8e" secondAttribute="centerX" constant="-2" id="aUE-VX-PjY"/>
                                         <constraint firstItem="tGg-Dk-cfk" firstAttribute="top" secondItem="EzU-Pd-V8e" secondAttribute="top" id="ceS-NM-2xh"/>
                                         <constraint firstItem="LV7-Bw-hnV" firstAttribute="centerX" secondItem="EzU-Pd-V8e" secondAttribute="centerX" id="fWo-Ty-Iln"/>
+                                        <constraint firstItem="FPj-ki-Fw8" firstAttribute="centerX" secondItem="EzU-Pd-V8e" secondAttribute="centerX" id="fZK-nd-GjM"/>
                                         <constraint firstItem="tGg-Dk-cfk" firstAttribute="centerX" secondItem="EzU-Pd-V8e" secondAttribute="centerX" id="fxy-X1-Jl8"/>
                                         <constraint firstItem="mxU-Yy-g7c" firstAttribute="leading" secondItem="EzU-Pd-V8e" secondAttribute="leading" id="o7A-xv-mri"/>
-                                        <constraint firstItem="5K9-cC-7E8" firstAttribute="top" secondItem="mxU-Yy-g7c" secondAttribute="bottom" id="pWt-QF-DYe"/>
+                                        <constraint firstItem="5K9-cC-7E8" firstAttribute="top" secondItem="mxU-Yy-g7c" secondAttribute="bottom" constant="12" id="pWt-QF-DYe"/>
                                         <constraint firstItem="wKL-ZP-Ff4" firstAttribute="centerX" secondItem="LV7-Bw-hnV" secondAttribute="centerX" id="ref-rY-xle"/>
                                     </constraints>
                                 </view>
-                                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="faz-Sa-kEe">
-                                    <rect key="frame" x="-1" y="667" width="376" height="667"/>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="faz-Sa-kEe">
+                                    <rect key="frame" x="-0.5" y="597" width="375" height="597"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                             </subviews>
@@ -169,7 +180,7 @@ TO SEE THE LOG</string>
                         <constraint firstItem="AoW-bW-7hX" firstAttribute="top" secondItem="fyC-Me-BcE" secondAttribute="top" id="xdV-Mb-C6B"/>
                     </constraints>
                 </scrollView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MHr-Hf-Kio">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MHr-Hf-Kio" userLabel="Padding">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                     <color key="backgroundColor" red="0.98039215686274506" green="0.98431372549019602" blue="0.9882352941176471" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
