@@ -12,5 +12,7 @@ namespace Toggl.Ultrawave.Network
         }
 
         public Endpoint Get => Endpoint.Get(baseUrl, "me");
+
+        public Endpoint Post => Endpoint.Post(baseUrl, "signup");
     }
 }
