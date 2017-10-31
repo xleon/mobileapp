@@ -12,6 +12,7 @@ using NSubstitute;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
+using Toggl.PrimeRadiant.Models;
 using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
@@ -20,21 +21,33 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         public abstract class SettingsViewModelTest : BaseViewModelTests<SettingsViewModel>
         {
+            protected ISubject<SyncState> StateObservableSubject;
+
+            protected override void AdditionalSetup()
+            {
+                StateObservableSubject = new Subject<SyncState>();
+                var syncManager = Substitute.For<ISyncManager>();
+                var observable = StateObservableSubject.AsObservable();
+                syncManager.StateObservable.Returns(observable);
+                DataSource.SyncManager.Returns(syncManager);
+            }
+
             protected override SettingsViewModel CreateViewModel()
-                => new SettingsViewModel(DataSource, NavigationService);
+                => new SettingsViewModel(DataSource, NavigationService, DialogService);
         }
 
         public sealed class TheConstructor : SettingsViewModelTest
         {
             [Theory]
-            [ClassData(typeof(TwoParameterConstructorTestData))]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useNavigationService)
+            [ClassData(typeof(ThreeParameterConstructorTestData))]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useNavigationService, bool useDialogService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var navigationService = useNavigationService ? NavigationService : null;
+                var dialogService = useDialogService ? DialogService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SettingsViewModel(dataSource, navigationService);
+                    () => new SettingsViewModel(dataSource, navigationService, dialogService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -43,17 +56,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheIsRunningSyncObservable : SettingsViewModelTest
         {
-            private ISubject<SyncState> subject;
-
-            protected override void AdditionalSetup()
-            {
-                subject = new Subject<SyncState>();
-                var syncManager = Substitute.For<ISyncManager>();
-                var observable = subject.AsObservable();
-                syncManager.StateObservable.Returns(observable);
-                DataSource.SyncManager.Returns(syncManager);
-            }
-
             [Property]
             public void EmitsTrueAndFalseWhenASyncManagerStateIsChanged(NonEmptyArray<SyncState> statuses)
             {
@@ -62,7 +64,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 foreach (var state in statuses.Get)
                 {
-                    subject.OnNext(state);
+                    StateObservableSubject.OnNext(state);
                     expectedBooleans.Add(state != SyncState.Sleep);
                     log.Add(ViewModel.IsRunningSync);
                 }
@@ -76,6 +78,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task SetsTheIsLoggingOutFlagToTrue()
             {
+                doNotShowConfirmationDialog();
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
                 ViewModel.IsLoggingOut.Should().BeTrue();
@@ -84,6 +87,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task CallsFreezeOnTheSyncManager()
             {
+                doNotShowConfirmationDialog();
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
                 await DataSource.SyncManager.Received().Freeze();
@@ -92,6 +96,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task CallsLogoutOnTheDataSource()
             {
+                doNotShowConfirmationDialog();
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
                 await DataSource.Received().Logout();
@@ -100,6 +105,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task NavigatesToTheOnboardingScreen()
             {
+                doNotShowConfirmationDialog();
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
                 await NavigationService.Received().Navigate(typeof(OnboardingViewModel));
@@ -108,6 +114,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task DoesOperationsInTheCorrectOrder()
             {
+                doNotShowConfirmationDialog();
                 int operationCounter = 0;
                 int isLoggingOutFlag = -1;
                 int callingSyncManagerFreeze = -1;
@@ -155,6 +162,77 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 awaitingLogout.Should().Be(4);
                 callingNavigate.Should().Be(5);
                 awaitingNavigation.Should().Be(6);
+            }
+
+            [Fact]
+            public async Task DoesNotShowConfirmationDialogWhenTheAppIsInSync()
+            {
+                doNotShowConfirmationDialog();
+
+                await ViewModel.LogoutCommand.ExecuteAsync();
+
+                DialogService.DidNotReceiveWithAnyArgs().Confirm("", "", "", "", null, null, false);
+            }
+
+            [Fact]
+            public async Task ShowsConfirmationDialogWhenThereIsNothingToPushButSyncIsRunning()
+            {
+                var emptyList = Observable.Return(new IDatabaseTimeEntry[0]);
+                DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(emptyList);
+                StateObservableSubject.OnNext(SyncState.Pull);
+
+                await ViewModel.LogoutCommand.ExecuteAsync();
+
+                DialogService.ReceivedWithAnyArgs().Confirm("", "", "", "", null, null, false);
+            }
+
+            [Fact]
+            public async Task ShowsConfirmationDialogWhenThereIsSomethingToPushButSyncIsNotRunning()
+            {
+                var listOfTimeEntries = Observable.Return(new[] { Substitute.For<IDatabaseTimeEntry>() });
+                DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(listOfTimeEntries);
+                StateObservableSubject.OnNext(SyncState.Sleep);
+
+                await ViewModel.LogoutCommand.ExecuteAsync();
+
+                DialogService.ReceivedWithAnyArgs().Confirm("", "", "", "", null, null, false);
+            }
+
+            [Fact]
+            public async Task DoesNotProceedWithLogoutWhenUserClicksCancelButtonInTheDialog()
+            {
+                StateObservableSubject.OnNext(SyncState.Pull);
+                DialogService.Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Any<Action>(), Arg.Do<Action>(action => action?.Invoke()), Arg.Any<bool>());
+
+                await ViewModel.LogoutCommand.ExecuteAsync();
+
+                ViewModel.IsLoggingOut.Should().BeFalse();
+                await DataSource.SyncManager.DidNotReceive().Freeze();
+                await DataSource.DidNotReceive().Logout();
+                await NavigationService.DidNotReceive().Navigate<OnboardingViewModel>();
+            }
+
+            [Fact]
+            public async Task ProceedsWithLogoutWhenUserClicksSignOutButtonInTheDialog()
+            {
+                StateObservableSubject.OnNext(SyncState.Pull);
+                DialogService.Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Invoke(), Arg.Any<Action>(), Arg.Any<bool>());
+
+                await ViewModel.LogoutCommand.ExecuteAsync();
+
+                ViewModel.IsLoggingOut.Should().BeTrue();
+                await DataSource.SyncManager.Received().Freeze();
+                await DataSource.Received().Logout();
+                await NavigationService.Received().Navigate<OnboardingViewModel>();
+            }
+
+            private void doNotShowConfirmationDialog()
+            {
+                var emptyList = Observable.Return(new IDatabaseTimeEntry[0]);
+                DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(_ => emptyList);
+                StateObservableSubject.OnNext(SyncState.Sleep);
             }
         }
 

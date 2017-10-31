@@ -82,6 +82,15 @@ Please try again.</value>
     <data name="Settings">
         <value>Settings</value>
     </data>
+    <data name="SettingsSyncInProgressTitle">
+        <value>We're syncing your data</value>
+    </data>
+    <data name="SettingsSyncInProgressMessage">
+        <value>You may loose your data when you sign out before the sync is complete.</value>
+    </data>
+    <data name="SettingsSyncInProgressButtonSignOutAnyway">
+        <value>Sign out</value>
+    </data>
     <data name="UnitMin">
         <value>min</value>
     </data>

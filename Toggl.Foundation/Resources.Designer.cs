@@ -173,6 +173,24 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string SettingsSyncInProgressTitle {
+            get {
+                return ResourceManager.GetString("SettingsSyncInProgressTitle", resourceCulture);
+            }
+        }
+        
+        public static string SettingsSyncInProgressMessage {
+            get {
+                return ResourceManager.GetString("SettingsSyncInProgressMessage", resourceCulture);
+            }
+        }
+        
+        public static string SettingsSyncInProgressButtonSignOutAnyway {
+            get {
+                return ResourceManager.GetString("SettingsSyncInProgressButtonSignOutAnyway", resourceCulture);
+            }
+        }
+        
         public static string UnitMin {
             get {
                 return ResourceManager.GetString("UnitMin", resourceCulture);
