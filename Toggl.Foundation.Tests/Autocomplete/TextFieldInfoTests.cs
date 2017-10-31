@@ -1,7 +1,12 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using FsCheck.Xunit;
+using NSubstitute;
 using Toggl.Foundation.Autocomplete;
+using Toggl.Foundation.Autocomplete.Suggestions;
+using Toggl.PrimeRadiant.Models;
 using Xunit;
+using static Toggl.Multivac.Extensions.FunctionalExtensions;
 
 namespace Toggl.Foundation.Tests.Autocomplete
 {
@@ -185,6 +190,29 @@ namespace Toggl.Foundation.Tests.Autocomplete
                 textFieldInfo.ProjectId.Should().BeNull();
                 textFieldInfo.ProjectName.Should().BeEmpty();
                 textFieldInfo.ProjectColor.Should().BeEmpty();
+            }
+        }
+
+        public sealed class TheClearTagsMethod
+        {
+            [Fact]
+            public void RemovesAllTags()
+            {
+                var tags = Enumerable.Range(10, 10)
+                    .Select(i =>
+                    {
+                        var tag = Substitute.For<IDatabaseTag>();
+                        tag.Id.Returns(i);
+                        tag.Name.Returns($"Tag{i}");
+                        return new TagSuggestion(tag);
+                    });
+                var textFieldInfo = TextFieldInfo.Empty;
+                foreach (var tag in tags)
+                    textFieldInfo = textFieldInfo.AddTag(tag);
+
+                var newtextFieldInfo = textFieldInfo.ClearTags();
+
+                newtextFieldInfo.Tags.Should().BeEmpty();
             }
         }
     }

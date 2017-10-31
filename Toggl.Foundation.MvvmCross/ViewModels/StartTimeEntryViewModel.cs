@@ -13,6 +13,7 @@ using Toggl.Foundation.DTOs;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Parameters;
+using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using static Toggl.Foundation.MvvmCross.Helper.Constants;
@@ -24,11 +25,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     {
         //Fields
         private readonly ITimeService timeService;
+        private readonly IDialogService dialogService;
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
         private readonly Subject<TextFieldInfo> infoSubject = new Subject<TextFieldInfo>();
         private readonly Subject<AutocompleteSuggestionType> queryByTypeSubject = new Subject<AutocompleteSuggestionType>();
 
+        private long workspaceId;
         private long? lastProjectId;
         private IDisposable queryDisposable;
         private IDisposable elapsedTimeDisposable;
@@ -81,15 +84,20 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand<ProjectSuggestion> ToggleTaskSuggestionsCommand { get; }
 
-        public StartTimeEntryViewModel(ITogglDataSource dataSource, ITimeService timeService,
+        public StartTimeEntryViewModel(
+            ITimeService timeService,
+            IDialogService dialogService,
+            ITogglDataSource dataSource,
             IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
+            this.dialogService = dialogService;
             this.navigationService = navigationService;
 
             BackCommand = new MvxAsyncCommand(back);
@@ -142,25 +150,38 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
                 case ProjectSuggestion projectSuggestion:
 
-                    TextFieldInfo = TextFieldInfo
-                        .RemoveProjectQueryFromDescriptionIfNeeded()
-                        .WithProjectInfo(
-                            projectSuggestion.ProjectId,
-                            projectSuggestion.ProjectName,
-                            projectSuggestion.ProjectColor);
+                    if (workspaceId == projectSuggestion.WorkspaceId)
+                    {
+                        setProject(projectSuggestion);
+                        break;
+                    }
+
+                    dialogService.Confirm(
+                        Resources.DifferentWorkspaceAlertTitle,
+                        Resources.DifferentWorkspaceAlertMessage,
+                        Resources.Ok,
+                        Resources.Cancel,
+                        () => setProject(projectSuggestion),
+                        null,
+                        true);
                     break;
 
                 case TaskSuggestion taskSuggestion:
-                    
-                    TextFieldInfo = TextFieldInfo
-                        .RemoveProjectQueryFromDescriptionIfNeeded()
-                        .WithProjectAndTaskInfo(
-                            taskSuggestion.ProjectId,
-                            taskSuggestion.ProjectName,
-                            taskSuggestion.ProjectColor,
-                            taskSuggestion.TaskId,
-                            taskSuggestion.Name
-                        );
+
+                    if (workspaceId == taskSuggestion.WorkspaceId)
+                    {
+                        setTask(taskSuggestion);
+                        break;
+                    }
+
+                    dialogService.Confirm(
+                        Resources.DifferentWorkspaceAlertTitle,
+                        Resources.DifferentWorkspaceAlertMessage,
+                        Resources.Ok,
+                        Resources.Cancel,
+                        () => setTask(taskSuggestion),
+                        null,
+                        true);
                     break;
 
                 case TagSuggestion tagSuggestion:
@@ -170,6 +191,44 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                         .AddTag(tagSuggestion);
                     break;
             }
+        }
+
+        private void setProject(ProjectSuggestion projectSuggestion)
+        {
+            clearTagsIfNeeded(workspaceId, projectSuggestion.WorkspaceId);
+
+            workspaceId = projectSuggestion.WorkspaceId;
+
+            TextFieldInfo = TextFieldInfo
+                .RemoveProjectQueryFromDescriptionIfNeeded()
+                .WithProjectInfo(
+                    projectSuggestion.ProjectId,
+                    projectSuggestion.ProjectName,
+                    projectSuggestion.ProjectColor);
+        }
+
+        private void setTask(TaskSuggestion taskSuggestion)
+        {
+            clearTagsIfNeeded(workspaceId, taskSuggestion.WorkspaceId);
+
+            workspaceId = taskSuggestion.WorkspaceId;
+
+            TextFieldInfo = TextFieldInfo
+                .RemoveProjectQueryFromDescriptionIfNeeded()
+                .WithProjectAndTaskInfo(
+                    taskSuggestion.ProjectId,
+                    taskSuggestion.ProjectName,
+                    taskSuggestion.ProjectColor,
+                    taskSuggestion.TaskId,
+                    taskSuggestion.Name
+                );
+        }
+
+        private void clearTagsIfNeeded(long currenctWorkspaceId, long newWorkspaceId)
+        {
+            if (currenctWorkspaceId == newWorkspaceId) return;
+
+            TextFieldInfo = TextFieldInfo.ClearTags();
         }
 
         public override void Prepare(DateTimeOffset parameter)
@@ -197,6 +256,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             await base.Initialize();
 
             await setBillableValues(0);
+
+            workspaceId = (await dataSource.User.Current()).DefaultWorkspaceId;
         }
 
         private async void OnTextFieldInfoChanged()
@@ -340,6 +401,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var firstSuggestion = suggestions.FirstOrDefault();
             if (firstSuggestion is ProjectSuggestion)
                 return suggestions.GroupByWorkspaceAddingNoProject();
+
+            if (IsSuggestingTags)
+                suggestions = suggestions.Where(suggestion => suggestion.WorkspaceId == workspaceId);
 
             return suggestions
                 .GroupBy(suggestion => suggestion.WorkspaceName)

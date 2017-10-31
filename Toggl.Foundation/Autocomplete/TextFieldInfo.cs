@@ -95,6 +95,17 @@ namespace Toggl.Foundation.Autocomplete
             return new TextFieldInfo(
                 Text, CursorPosition, ProjectId, ProjectName, ProjectColor, TaskId, TaskName, newTags.ToArray());
         }
+
+        public TextFieldInfo ClearTags()
+            => new TextFieldInfo(
+                Text,
+                CursorPosition,
+                ProjectId,
+                ProjectName,
+                ProjectColor,
+                TaskId,
+                TaskName,
+                new TagSuggestion[0]);
        
         public static bool operator ==(TextFieldInfo left, TextFieldInfo right)
             => left.Equals(right);
@@ -121,6 +132,7 @@ namespace Toggl.Foundation.Autocomplete
             => Text == other.Text
             && CursorPosition == other.CursorPosition
             && ProjectName == other.ProjectName
-            && ProjectColor == other.ProjectColor;
+            && ProjectColor == other.ProjectColor
+            && Tags == other.Tags;
     }
 }

@@ -15,6 +15,7 @@ using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 using static Toggl.Foundation.MvvmCross.Helper.Constants;
+using static Toggl.Multivac.Extensions.FunctionalExtensions;
 using TextFieldInfo = Toggl.Foundation.Autocomplete.TextFieldInfo;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
@@ -40,23 +41,37 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DataSource.AutocompleteProvider.Returns(AutocompleteProvider);
             }
 
+            protected override void AdditionalSetup()
+            {
+                DialogService.Confirm(
+                   Arg.Any<string>(),
+                   Arg.Any<string>(),
+                   Arg.Any<string>(),
+                   Arg.Any<string>(),
+                   Arg.Invoke(),
+                   Arg.Any<Action>(),
+                   Arg.Any<bool>()
+               );
+            }
+
             protected override StartTimeEntryViewModel CreateViewModel()
-                => new StartTimeEntryViewModel(DataSource, TimeService, NavigationService);
+                => new StartTimeEntryViewModel(TimeService, DialogService, DataSource, NavigationService);
         }
 
         public sealed class TheConstructor : StartTimeEntryViewModelTest
         {
             [Theory]
-            [ClassData(typeof(ThreeParameterConstructorTestData))]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useTimeService,
-                bool useNavigationService)
+            [ClassData(typeof(FourParameterConstructorTestData))]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(
+                bool useDataSource, bool useTimeService, bool useDialogService, bool useNavigationService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
+                var dialogService = useDialogService ? DialogService : null;
                 var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new StartTimeEntryViewModel(dataSource, timeService, navigationService);
+                    () => new StartTimeEntryViewModel(timeService, dialogService, dataSource, navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -650,6 +665,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Task.Id.Returns(TaskId);
                     Task.Project.Returns(Project);
                     Task.ProjectId.Returns(ProjectId);
+                    Task.WorkspaceId.Returns(WorkspaceId);
                     Task.Name.Returns(TaskId.ToString());
 
                     TimeEntry = Substitute.For<IDatabaseTimeEntry>();
@@ -740,6 +756,68 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
 
                     ViewModel.TextFieldInfo.Text.Should().Be("Something ");
+                }
+
+                [Fact]
+                public async Task ShowsConfirmDialogIfWorkspaceIsAboutToBeChanged()
+                {
+                    var user = Substitute.For<IDatabaseUser>();
+                    user.DefaultWorkspaceId.Returns(100);
+                    DataSource.User.Current().Returns(Observable.Return(user));
+                    await ViewModel.Initialize();
+
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    DialogService.Received().Confirm(
+                        Arg.Is(Resources.DifferentWorkspaceAlertTitle),
+                        Arg.Is(Resources.DifferentWorkspaceAlertMessage),
+                        Arg.Is(Resources.Ok),
+                        Arg.Is(Resources.Cancel),
+                        Arg.Any<Action>(),
+                        Arg.Any<Action>(),
+                        Arg.Is(true)
+                    );
+                }
+
+                [Fact]
+                public async Task DoesNotShowConfirmDialogIfWorkspaceIsNotGoingToChange()
+                {
+                    var user = Substitute.For<IDatabaseUser>();
+                    user.DefaultWorkspaceId.Returns(WorkspaceId);
+                    DataSource.User.Current().Returns(Observable.Return(user));
+                    await ViewModel.Initialize();
+
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    DialogService.DidNotReceive().Confirm(
+                        Arg.Any<string>(),
+                        Arg.Any<string>(),
+                        Arg.Any<string>(),
+                        Arg.Any<string>(),
+                        Arg.Any<Action>(),
+                        Arg.Any<Action>(),
+                        Arg.Any<bool>()
+                    );
+                }
+
+                [Fact]
+                public async Task ClearsTagsIfWorkspaceIsChanged()
+                {
+                    var user = Substitute.For<IDatabaseUser>();
+                    user.DefaultWorkspaceId.Returns(100);
+                    DataSource.User.Current().Returns(Observable.Return(user));
+                    await ViewModel.Initialize();
+                    Enumerable.Range(100, 10)
+                        .Select(i =>
+                        {
+                            var tag = Substitute.For<IDatabaseTag>();
+                            tag.Id.Returns(i);
+                            return new TagSuggestion(tag);
+                        }).ForEach(ViewModel.SelectSuggestionCommand.Execute);
+
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.TextFieldInfo.Tags.Should().BeEmpty();
                 }
             }
 
