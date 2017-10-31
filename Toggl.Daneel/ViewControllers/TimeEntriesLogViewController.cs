@@ -24,11 +24,6 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidLoad();
 
-            //Empty state button config
-            EmptyStateButton.Layer.BorderWidth = 1;
-            EmptyStateButton.Layer.BorderColor = Color.TimeEntriesLog.ButtonBorder.ToNativeColor().CGColor;
-            EmptyStateButton.SetTitle(Resources.TimeEntriesLogEmptyStateButton, UIControlState.Normal);
-
             //TableView config
             var source = new TimeEntriesLogViewSource(TimeEntriesTableView);
             TimeEntriesTableView.Source = source;
@@ -51,11 +46,6 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindVisibility())
                       .To(vm => vm.IsEmpty)
                       .WithConversion(visibilityConverter);
-
-            bindingSet.Bind(EmptyStateButton)
-                      .For(v => v.BindVisibility())
-                      .To(vm => vm.IsWelcome)
-                      .WithConversion(invertedVisibilityConverter);
 
             bindingSet.Bind(TimeEntriesTableView)
                       .For(v => v.BindVisibility())

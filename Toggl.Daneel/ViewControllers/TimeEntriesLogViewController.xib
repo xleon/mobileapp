@@ -4,13 +4,13 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TimeEntriesLogViewController">
             <connections>
-                <outlet property="EmptyStateButton" destination="Hdc-qP-y2l" id="name-outlet-Hdc-qP-y2l"/>
                 <outlet property="EmptyStateImageView" destination="WjB-WZ-VPY" id="name-outlet-WjB-WZ-VPY"/>
                 <outlet property="EmptyStateTextLabel" destination="cxZ-cI-I7t" id="name-outlet-cxZ-cI-I7t"/>
                 <outlet property="EmptyStateTitleLabel" destination="bsW-BH-Xlw" id="name-outlet-bsW-BH-Xlw"/>
@@ -62,29 +62,6 @@ will appear here.</string>
                             <color key="textColor" red="0.70980392160000005" green="0.73725490199999999" blue="0.75294117650000003" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hdc-qP-y2l">
-                            <rect key="frame" x="110" y="509" width="155" height="40"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="155" id="SCQ-Zt-gag"/>
-                                <constraint firstAttribute="height" constant="40" id="WL4-2j-yfg"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <state key="normal" title="Load older entries">
-                                <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </state>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                    <integer key="value" value="8"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                    <integer key="value" value="1"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="color" keyPath="layer.borderColor">
-                                    <color key="value" red="0.95294117647058818" green="0.95294117647058818" blue="0.95294117647058818" alpha="1" colorSpace="calibratedRGB"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                        </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icIllustrationTimer" translatesAutoresizingMaskIntoConstraints="NO" id="SFA-NL-l2y">
                             <rect key="frame" x="134" y="288" width="106" height="106"/>
                             <constraints>
@@ -104,17 +81,15 @@ will appear here.</string>
                     <constraints>
                         <constraint firstItem="WjB-WZ-VPY" firstAttribute="leading" secondItem="bsW-BH-Xlw" secondAttribute="leading" constant="23" id="4K8-0T-d9C"/>
                         <constraint firstItem="65Q-Zq-A3s" firstAttribute="centerX" secondItem="g7g-go-KbG" secondAttribute="centerX" id="BGo-qg-Y5S"/>
-                        <constraint firstItem="cxZ-cI-I7t" firstAttribute="centerX" secondItem="Hdc-qP-y2l" secondAttribute="centerX" id="GGK-2q-vL8"/>
                         <constraint firstItem="SFA-NL-l2y" firstAttribute="centerX" secondItem="bsW-BH-Xlw" secondAttribute="centerX" id="JSS-P3-Jl8"/>
-                        <constraint firstItem="Hdc-qP-y2l" firstAttribute="top" secondItem="cxZ-cI-I7t" secondAttribute="bottom" constant="16" id="JVc-i9-bZy"/>
                         <constraint firstItem="cxZ-cI-I7t" firstAttribute="top" secondItem="bsW-BH-Xlw" secondAttribute="bottom" constant="12" id="JgM-XS-0fO"/>
                         <constraint firstItem="bsW-BH-Xlw" firstAttribute="centerX" secondItem="cxZ-cI-I7t" secondAttribute="centerX" id="Rns-PA-I7I"/>
                         <constraint firstItem="bsW-BH-Xlw" firstAttribute="top" secondItem="SFA-NL-l2y" secondAttribute="bottom" constant="16" id="agE-5y-ipq"/>
-                        <constraint firstItem="Hdc-qP-y2l" firstAttribute="centerX" secondItem="g7g-go-KbG" secondAttribute="centerX" id="dFy-fl-Thb"/>
                         <constraint firstItem="bsW-BH-Xlw" firstAttribute="top" secondItem="WjB-WZ-VPY" secondAttribute="bottom" constant="31" id="dso-e8-Fz2"/>
                         <constraint firstItem="65Q-Zq-A3s" firstAttribute="top" secondItem="g7g-go-KbG" secondAttribute="top" constant="22" id="euv-d6-Fgz"/>
+                        <constraint firstAttribute="bottom" secondItem="cxZ-cI-I7t" secondAttribute="bottom" constant="174" id="g6m-8W-gD9"/>
                         <constraint firstItem="3GW-g5-g55" firstAttribute="centerX" secondItem="g7g-go-KbG" secondAttribute="centerX" id="hzp-dh-Hdb"/>
-                        <constraint firstAttribute="bottom" secondItem="Hdc-qP-y2l" secondAttribute="bottom" constant="118" id="wKQ-rw-jEX"/>
+                        <constraint firstItem="cxZ-cI-I7t" firstAttribute="centerX" secondItem="g7g-go-KbG" secondAttribute="centerX" id="quM-bb-jSD"/>
                         <constraint firstItem="3GW-g5-g55" firstAttribute="top" secondItem="g7g-go-KbG" secondAttribute="top" id="xSV-Kv-K7C"/>
                     </constraints>
                 </view>
