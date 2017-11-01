@@ -253,22 +253,6 @@ namespace Toggl.Foundation.Tests.Autocomplete
                 }
 
                 [Fact]
-                public async Task SuggestsNoProjectWhenThereIsNoStringToSearch()
-                {
-                    const string description = "@";
-                    var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 1);
-
-                    var suggestions = await Provider.Query(textFieldInfo);
-
-                    await Database.Projects.Received().GetAll();
-                    suggestions.Should().HaveCount(11)
-                        .And.AllBeOfType<ProjectSuggestion>();
-
-                    suggestions.Cast<ProjectSuggestion>().First()
-                        .ProjectName.Should().Be(Resources.NoProject);
-                }
-
-                [Fact]
                 public async Task SearchesTheName()
                 {
                     const string description = "@30";

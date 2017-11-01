@@ -6,23 +6,12 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
 {
     public sealed class ProjectSuggestion : AutocompleteSuggestion
     {
-        public static ProjectSuggestion NoProject { get; } = new ProjectSuggestion(0, "");
-
-        public static ProjectSuggestion NoProjectWithWorkspace(long workspaceId, string workspaceName)
+        public static ProjectSuggestion NoProject(long workspaceId, string workspaceName)
             => new ProjectSuggestion(workspaceId, workspaceName);
 
         public static IEnumerable<ProjectSuggestion> FromProjects(
             IEnumerable<IDatabaseProject> projects
         ) => projects.Select(project => new ProjectSuggestion(project));
-
-        public static IEnumerable<ProjectSuggestion> FromProjectsPrependingEmpty(
-            IEnumerable<IDatabaseProject> projects) 
-        {
-            yield return NoProject;
-
-            foreach (var project in projects)
-                yield return new ProjectSuggestion(project);
-        }
 
         public long ProjectId { get; }
 

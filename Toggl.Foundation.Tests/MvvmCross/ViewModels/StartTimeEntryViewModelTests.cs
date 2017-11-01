@@ -229,7 +229,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         {
             public TheToggleProjectSuggestionsCommand()
             {
-                var suggestions = ProjectSuggestion.FromProjectsPrependingEmpty(Enumerable.Empty<IDatabaseProject>());
+                var suggestions = ProjectSuggestion.FromProjects(Enumerable.Empty<IDatabaseProject>());
                 AutocompleteProvider
                     .Query(Arg.Is<TextFieldInfo>(info => info.Text.Contains("@")))
                     .Returns(Observable.Return(suggestions));

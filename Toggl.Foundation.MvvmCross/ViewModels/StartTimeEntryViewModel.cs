@@ -292,6 +292,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (TextFieldInfo.ProjectId != null)
             {
                 queryByTypeSubject.OnNext(AutocompleteSuggestionType.Projects);
+                IsSuggestingProjects = true;
                 return;
             }
 
@@ -382,9 +383,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void onSuggestions(IEnumerable<AutocompleteSuggestion> suggestions)
         {
-            var firstSuggestion = suggestions.FirstOrDefault();
-            IsSuggestingTags = firstSuggestion is TagSuggestion;
-            IsSuggestingProjects = firstSuggestion is ProjectSuggestion;
+            var firstQuerySymbolIndex = TextFieldInfo.Text.IndexOfAny(new char[] { QuerySymbols.Tags, QuerySymbols.Projects });
+            if (firstQuerySymbolIndex >= 0)
+            {
+                var firstQuerySymbol = TextFieldInfo.Text[firstQuerySymbolIndex];
+                IsSuggestingTags = firstQuerySymbol == QuerySymbols.Tags;
+                IsSuggestingProjects = firstQuerySymbol == QuerySymbols.Projects;
+            }
+            else
+            {
+                IsSuggestingTags = IsSuggestingProjects = false;
+            }
 
             Suggestions.Clear();
 

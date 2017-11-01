@@ -85,7 +85,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task ClosesTheViewModel()
             {
-                ViewModel.SelectProjectCommand.Execute(ProjectSuggestion.NoProject);
+                ViewModel.SelectProjectCommand
+                    .Execute(ProjectSuggestion.NoProject(0, ""));
 
                 await NavigationService.Received()
                     .Close(Arg.Is(ViewModel), Arg.Any<SelectProjectParameter>());
@@ -154,15 +155,50 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact] 
-            public async Task ReturnsNullIfNoProjectWasSelected()
+            public async Task ReturnsNoProjectIfNoProjectWasSelected()
             {
-                ViewModel.SelectProjectCommand.Execute(ProjectSuggestion.NoProject);
+                ViewModel.SelectProjectCommand
+                    .Execute(ProjectSuggestion.NoProject(0, ""));
 
                 await NavigationService.Received().Close(
                     Arg.Is(ViewModel),
                     Arg.Is<SelectProjectParameter>(
-                        parameter => parameter.ProjectId == null
-                                     && parameter.TaskId == null));
+                        parameter => parameter.ProjectId == null));
+            }
+
+            [Fact]
+            public async Task ReturnsNoTaskIfNoProjectWasSelected()
+            {
+                ViewModel.SelectProjectCommand
+                    .Execute(ProjectSuggestion.NoProject(0, ""));
+
+                await NavigationService.Received().Close(
+                    Arg.Is(ViewModel),
+                    Arg.Is<SelectProjectParameter>(
+                        parameter => parameter.TaskId == null));
+            }
+
+            [Fact]
+            public async Task ReturnsWorkspaceIfNoProjectWasSelected()
+            {
+                DialogService.Confirm(
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Invoke(),
+                    Arg.Any<Action>(),
+                    Arg.Any<bool>()
+                );
+
+                long workspaceId = 420;
+                ViewModel.SelectProjectCommand
+                    .Execute(ProjectSuggestion.NoProject(workspaceId, ""));
+
+                await NavigationService.Received().Close(
+                    Arg.Is(ViewModel),
+                    Arg.Is<SelectProjectParameter>(
+                        parameter => parameter.WorkspaceId == workspaceId));
             }
 
             [Fact]
@@ -224,7 +260,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task ReturnsWorksaceIdIfNoProjectWasSelected()
             {
-                var noProjectSuggestion = ProjectSuggestion.NoProjectWithWorkspace(13, "");
+                var noProjectSuggestion = ProjectSuggestion.NoProject(13, "");
                 prepareDialogService();
 
                 ViewModel.SelectProjectCommand.Execute(noProjectSuggestion);
