@@ -52,7 +52,7 @@ namespace Toggl.Foundation.DataSources
             TimeEntryUpdated = timeEntryUpdatedSubject.AsObservable();
             TimeEntryDeleted = timeEntryDeletedSubject.AsObservable();
             CurrentlyRunningTimeEntry =
-                repository.GetAll(te => te.IsRunning())
+                repository.GetAll(te => te.Duration == null)
                     .Select(tes => tes.SingleOrDefault())
                     .StartWith()
                     .Merge(TimeEntryCreated.Where(te => te.IsRunning()))
@@ -109,7 +109,7 @@ namespace Toggl.Foundation.DataSources
 
         public IObservable<IDatabaseTimeEntry> Stop(DateTimeOffset stopTime)
             => repository
-                    .GetAll(te => te.IsRunning())
+                    .GetAll(te => te.Duration == null)
                     .Select(timeEntries => timeEntries.SingleOrDefault() ?? throw new NoRunningTimeEntryException())
                     .SelectMany(timeEntry => timeEntry
                         .With((long)(stopTime - timeEntry.Start).TotalSeconds)
