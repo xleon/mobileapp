@@ -24,8 +24,9 @@ private Action Test(string testFiles)
     return () => XUnit2(GetFiles(testFiles), testSettings);
 }
 
-private Action BuildSolution(string targetProject, string configuration = "Release", string platform = "")
+private Action BuildSolution(string configuration, string platform = "", bool uploadSymbols = false)
 {
+    const string togglSolution = "./Toggl.sln";
     var buildSettings = new MSBuildSettings 
     {
         Verbosity = Bitrise.IsRunningOnBitrise ? Verbosity.Verbose : Verbosity.Minimal,
@@ -37,7 +38,20 @@ private Action BuildSolution(string targetProject, string configuration = "Relea
         buildSettings = buildSettings.WithProperty("Platform", platform);
     }
 
-    return () => MSBuild(targetProject, buildSettings);
+    if (!uploadSymbols) 
+        return () => MSBuild(togglSolution, buildSettings);
+
+    return () =>
+    {
+        MSBuild(togglSolution, buildSettings);
+        UploadSymbols();
+    };
+}
+
+private void UploadSymbols()
+{
+    const string args = "Toggl.Daneel/scripts/FirebaseCrashReporting/xamarin_upload_symbols.sh -n Toggl.Daneel -b ./bin/Release -i Toggl.Daneel/Info.plist -p Toggl.Daneel/GoogleService-Info.plist -s Toggl.Daneel/service-account.json";
+    StartProcess("bash", new ProcessSettings { Arguments = args });
 }
 
 //Temporary variable replacement
@@ -51,6 +65,38 @@ private string GetCommitHash()
     }, out redirectedOutput);
 
     return redirectedOutput.Last();
+}
+
+private TemporaryFileTransformation GetIosAnalyticsServicesConfigurationTransformation()
+{
+    const string path = "Toggl.Daneel/GoogleService-Info.plist";
+    var adUnitForBannerTest = EnvironmentVariable("TOGGL_AD_UNIT_ID_FOR_BANNER_TEST");
+    var adUnitIdForInterstitialTest = EnvironmentVariable("TOGGL_AD_UNIT_ID_FOR_INTERSTITIAL_TEST");
+    var clientId = EnvironmentVariable("TOGGL_CLIENT_ID");
+    var reversedClientId = EnvironmentVariable("TOGGL_REVERSED_CLIENT_ID");
+    var apiKey = EnvironmentVariable("TOGGL_API_KEY");
+    var gcmSenderId = EnvironmentVariable("TOGGL_GCM_SENDER_ID");
+    var projectId = EnvironmentVariable("TOGGL_PROJECT_ID");
+    var storageBucket = EnvironmentVariable("TOGGL_STORAGE_BUCKET");
+    var googleAppId = EnvironmentVariable("TOGGL_GOOGLE_APP_ID");
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    { 
+        Path = path, 
+        Original = file,
+        Temporary = file.Replace("{TOGGL_AD_UNIT_ID_FOR_BANNER_TEST}", adUnitForBannerTest)
+                        .Replace("{TOGGL_AD_UNIT_ID_FOR_INTERSTITIAL_TEST}", adUnitIdForInterstitialTest)
+                        .Replace("{TOGGL_CLIENT_ID}", clientId)
+                        .Replace("{TOGGL_REVERSED_CLIENT_ID}", reversedClientId)
+                        .Replace("{TOGGL_API_KEY}", apiKey)
+                        .Replace("{TOGGL_GCM_SENDER_ID}", gcmSenderId)
+                        .Replace("{TOGGL_PROJECT_ID}", projectId)
+                        .Replace("{TOGGL_STORAGE_BUCKET}", storageBucket)
+                        .Replace("{TOGGL_GOOGLE_APP_ID}", googleAppId)
+    };
 }
 
 private TemporaryFileTransformation GetIntegrationTestsConfigurationTransformation()
@@ -105,7 +151,8 @@ var transformations = new List<TemporaryFileTransformation>
 {
     GetIntegrationTestsConfigurationTransformation(),
     GetUITestsFileTransformation(),
-    GetIntegrationTestsCredentialsTransformation()
+    GetIntegrationTestsCredentialsTransformation(),
+    GetIosAnalyticsServicesConfigurationTransformation()
 };
 
 Setup(context => transformations.ForEach(transformation => System.IO.File.WriteAllText(transformation.Path, transformation.Temporary)));
@@ -116,7 +163,20 @@ Task("Clean")
     .Does(() => 
         {
             CleanDirectory("./bin");
-            CleanDirectories("./**/obj");
+            CleanDirectory("./Toggl.Daneel/obj");
+            CleanDirectory("./Toggl.Daneel.Tests/obj");
+            CleanDirectory("./Toggl.Daneel.Tests.UI/obj");
+            CleanDirectory("./Toggl.Foundation/obj");
+            CleanDirectory("./Toggl.Foundation.MvvmCross/obj");
+            CleanDirectory("./Toggl.Foundation.Tests/obj");
+            CleanDirectory("./Toggl.Multivac/obj");
+            CleanDirectory("./Toggl.Multivac.Tests/obj");
+            CleanDirectory("./Toggl.PrimeRadiant/obj");
+            CleanDirectory("./Toggl.PrimeRadiant.Realm/obj");
+            CleanDirectory("./Toggl.PrimeRadiant.Tests/obj");
+            CleanDirectory("./Toggl.Ultrawave/obj");
+            CleanDirectory("./Toggl.Ultrawave.Tests/obj");
+            CleanDirectory("./Toggl.Ultrawave.Tests.Integration/obj");
         });
 
 Task("Nuget")
@@ -125,32 +185,32 @@ Task("Nuget")
 
 Task("Build.Tests.All")
     .IsDependentOn("Nuget")
-    .Does(BuildSolution("./Toggl.sln", "Debug"));
+    .Does(BuildSolution("Debug"));
 
 Task("Build.Tests.Unit")
     .IsDependentOn("Nuget")
-    .Does(BuildSolution("./Toggl.sln", "UnitTests"));
+    .Does(BuildSolution("UnitTests"));
 
 Task("Build.Tests.Integration")
     .IsDependentOn("Nuget")
-    .Does(BuildSolution("./Toggl.sln", "ApiTests"));
+    .Does(BuildSolution("ApiTests"));
 
 Task("Build.Tests.UI")
     .IsDependentOn("Nuget")
-    .Does(BuildSolution("./Toggl.sln", "Debug", "iPhoneSimulator"));
+    .Does(BuildSolution("Debug", "iPhoneSimulator"));
 
 //iOS Builds
 Task("Build.Release.iOS.AdHoc")
     .IsDependentOn("Nuget")
-    .Does(BuildSolution("./Toggl.sln", "Release", "iPhone"));
+    .Does(BuildSolution("Release", "iPhone"));
 
 Task("Build.Release.iOS.TestFlight")
     .IsDependentOn("Nuget")
-    .Does(BuildSolution("./Toggl.sln", "Release.TestFlight"));
+    .Does(BuildSolution("Release.TestFlight", ""));
 
 Task("Build.Release.iOS.AppStore")
     .IsDependentOn("Nuget")
-    .Does(BuildSolution("./Toggl.sln", "Release.AppStore"));
+    .Does(BuildSolution("Release.AppStore", "", uploadSymbols: true));
 
 //Unit Tests
 Task("Tests.Unit")

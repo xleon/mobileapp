@@ -1,4 +1,4 @@
-﻿﻿using MvvmCross.Core.ViewModels;
+﻿using MvvmCross.Core.ViewModels;
 using MvvmCross.iOS.Platform;
 using MvvmCross.Platform;
 using Foundation;
@@ -25,6 +25,11 @@ namespace Toggl.Daneel
 
             #if ENABLE_TEST_CLOUD
             Xamarin.Calabash.Start();
+            #endif
+
+            #if USE_ANALYTICS
+            Firebase.Core.App.Configure();
+            Firebase.CrashReporting.Loader.ForceLoad();
             #endif
 
             return true;
