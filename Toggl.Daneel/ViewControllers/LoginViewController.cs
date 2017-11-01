@@ -51,6 +51,9 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.IsPasswordMasked);
 
             //Commands
+            bindingSet.Bind(PrivacyPolicyButton).To(vm => vm.OpenPrivacyPolicyCommand);
+            bindingSet.Bind(TermsOfServiceButton).To(vm => vm.OpenTermsOfServiceCommand);
+
             bindingSet.Bind(backButton)
                       .For(v => v.BindCommand())
                       .To(vm => vm.BackCommand);
@@ -101,6 +104,14 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindVisible())
                       .To(vm => vm.IsLoading);
 
+            bindingSet.Bind(ForgotPasswordButton)
+                      .For(v => v.BindVisible())
+                      .To(vm => vm.ShowForgotPassword);
+
+            bindingSet.Bind(SignUpLabels)
+                      .For(v => v.BindVisible())
+                      .To(vm => vm.IsSignUp);
+
             if (ViewModel.IsPasswordManagerAvailable)
             {
                 bindingSet.Bind(PasswordManagerButton)
@@ -134,7 +145,7 @@ namespace Toggl.Daneel.ViewControllers
 
         private void keyboardWillShow(object sender, UIKeyboardEventArgs e)
         {
-            BottomConstraint.Constant = e.FrameBegin.Height + forgotPasswordLabelOffset;
+            BottomConstraint.Constant = e.FrameEnd.Height + forgotPasswordLabelOffset;
             UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
         }
 
@@ -146,19 +157,32 @@ namespace Toggl.Daneel.ViewControllers
 
         private void prepareTextFields()
         {
-            var stringAttributes = new CTStringAttributes(
+            var placeholderAttributes = new CTStringAttributes(
                 new UIStringAttributes { ForegroundColor = UIColor.White.ColorWithAlpha(0.5f) }.Dictionary
             );
 
             EmailTextField.TintColor = UIColor.White;
             EmailTextField.AttributedPlaceholder = 
-                new NSAttributedString(Resources.LoginSignUpEmailPlaceholder, stringAttributes);
+                new NSAttributedString(Resources.LoginSignUpEmailPlaceholder, placeholderAttributes);
 
             PasswordTextField.TintColor = UIColor.White;
             PasswordTextField.AttributedPlaceholder = 
-                new NSAttributedString(Resources.LoginSignUpPasswordPlaceholder, stringAttributes);
+                new NSAttributedString(Resources.LoginSignUpPasswordPlaceholder, placeholderAttributes);
 
             ForgotPasswordButton.SetTitle(Resources.LoginForgotPassword, UIControlState.Normal);
+
+            var underscoreAttributes = new CTStringAttributes(new UIStringAttributes
+            { 
+                UnderlineColor = UIColor.White,
+                ForegroundColor = UIColor.White,
+                UnderlineStyle = NSUnderlineStyle.Single,
+                Font = UIFont.SystemFontOfSize(12, UIFontWeight.Medium)
+            }.Dictionary);
+
+            PrivacyPolicyButton.SetAttributedTitle(
+                new NSAttributedString(Resources.PrivacyPolicy, underscoreAttributes), UIControlState.Normal);
+            TermsOfServiceButton.SetAttributedTitle(
+                new NSAttributedString(Resources.TermsOfService, underscoreAttributes), UIControlState.Normal);
         }
 
         private void prepareNavigationBar()

@@ -6,6 +6,7 @@ using MvvmCross.Platform;
 using PropertyChanged;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Login;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
 using Toggl.Ultrawave.Exceptions;
@@ -18,15 +19,22 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     {
         public const int EmailPage = 0;
         public const int PasswordPage = 1;
+        public const string PrivacyPolicyUrl = "https://toggl.com/legal/privacy";
+        public const string TermsOfServiceUrl = "https://toggl.com/legal/terms";
 
         private readonly ILoginManager loginManager;
         private readonly IMvxNavigationService navigationService;
         private readonly IPasswordManagerService passwordManagerService;
 
+        private LoginType loginType;
         private IDisposable loginDisposable;
         private IDisposable passwordManagerDisposable;
 
         private EmailType email = EmailType.Invalid;
+
+        public bool IsLogin => loginType == LoginType.Login;
+
+        public bool IsSignUp => loginType == LoginType.SignUp;
 
         public string Title { get; private set; }
 
@@ -45,11 +53,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public bool IsPasswordMasked { get; private set; } = true;
 
-        public LoginType LoginType { get; set; }
-
         public IMvxCommand NextCommand { get; }
 
         public IMvxCommand BackCommand { get; }
+
+        public IMvxCommand OpenPrivacyPolicyCommand { get; }
+
+        public IMvxCommand OpenTermsOfServiceCommand { get; }
 
         public IMvxCommand TogglePasswordVisibilityCommand { get; }
 
@@ -63,6 +73,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         [DependsOn(nameof(IsPasswordPage), nameof(IsLoading))]
         public bool ShowPasswordButtonVisible => IsPasswordPage && !IsLoading;
+
+        [DependsOn(nameof(IsLogin), nameof(IsPasswordPage))]
+        public bool ShowForgotPassword => IsLogin && IsPasswordPage;
 
         [DependsOn(nameof(CurrentPage), nameof(Password))]
         public bool NextIsEnabled
@@ -84,13 +97,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             BackCommand = new MvxCommand(back);
             NextCommand = new MvxCommand(next);
             StartPasswordManagerCommand = new MvxCommand(startPasswordManager);
+            OpenPrivacyPolicyCommand = new MvxCommand(openPrivacyPolicyCommand);
+            OpenTermsOfServiceCommand = new MvxCommand(openTermsOfServiceCommand);
             TogglePasswordVisibilityCommand = new MvxCommand(togglePasswordVisibility);
         }
 
         public override void Prepare(LoginType parameter)
         {
-            LoginType = parameter;
-            Title = LoginType == LoginType.Login ? Resources.LoginTitle : Resources.SignUpTitle;
+            loginType = parameter;
+            Title = loginType == LoginType.Login ? Resources.LoginTitle : Resources.SignUpTitle;
         }
 
         private void OnEmailChanged()
@@ -98,6 +113,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             email = EmailType.FromString(Email);
             RaisePropertyChanged(nameof(NextIsEnabled));
         }
+
+        private void openTermsOfServiceCommand() =>
+            navigationService.Navigate<BrowserViewModel, BrowserParameters>(
+                BrowserParameters.WithUrlAndTitle(TermsOfServiceUrl, Resources.TermsOfService)
+            );
+
+        private void openPrivacyPolicyCommand() => 
+            navigationService.Navigate<BrowserViewModel, BrowserParameters>(
+                BrowserParameters.WithUrlAndTitle(PrivacyPolicyUrl, Resources.PrivacyPolicy)
+            );
 
         private void next()
         {

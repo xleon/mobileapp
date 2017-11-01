@@ -44,7 +44,19 @@ namespace Toggl.Daneel.ViewControllers
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton PrivacyPolicyButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIImageView ShowPasswordButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView SignUpLabels { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton TermsOfServiceButton { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
@@ -83,9 +95,24 @@ namespace Toggl.Daneel.ViewControllers
                 PasswordTextField = null;
             }
 
+            if (PrivacyPolicyButton != null) {
+                PrivacyPolicyButton.Dispose ();
+                PrivacyPolicyButton = null;
+            }
+
             if (ShowPasswordButton != null) {
                 ShowPasswordButton.Dispose ();
                 ShowPasswordButton = null;
+            }
+
+            if (SignUpLabels != null) {
+                SignUpLabels.Dispose ();
+                SignUpLabels = null;
+            }
+
+            if (TermsOfServiceButton != null) {
+                TermsOfServiceButton.Dispose ();
+                TermsOfServiceButton = null;
             }
         }
     }

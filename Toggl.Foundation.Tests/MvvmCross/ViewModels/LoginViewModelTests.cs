@@ -8,6 +8,7 @@ using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Login;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
@@ -120,12 +121,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public void SetsTheLoginType()
             {
-                ViewModel.LoginType = (LoginType)1000;
-                var parameter = LoginType.Login;
+                var parameter = LoginType.SignUp;
 
                 ViewModel.Prepare(parameter);
 
-                ViewModel.LoginType.Should().Be(LoginType.Login);
+                ViewModel.IsSignUp.Should().BeTrue();
             }
 
             [Fact]
@@ -264,6 +264,56 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     NavigationService.DidNotReceive().Navigate(typeof(MainViewModel));
                 }
+            }
+        }
+
+        public sealed class TheTermsOfServiceCommand : LoginViewModelTest
+        {
+            [Fact]
+            public void OpensTheBrowserInTheTermsOfServicePage()
+            {
+                ViewModel.OpenTermsOfServiceCommand.Execute();
+
+                NavigationService.Received().Navigate(
+                    typeof(BrowserViewModel),
+                    Arg.Is<BrowserParameters>(parameter => parameter.Url == LoginViewModel.TermsOfServiceUrl)
+                );
+            }
+
+            [Fact]
+            public void OpensTheBrowserWithTheAppropriateTitle()
+            {
+                ViewModel.OpenTermsOfServiceCommand.Execute();
+
+                NavigationService.Received().Navigate(
+                    typeof(BrowserViewModel),
+                    Arg.Is<BrowserParameters>(parameter => parameter.Title == Resources.TermsOfService)
+                );
+            }
+        }
+
+        public sealed class ThePrivacyPolicyCommand : LoginViewModelTest
+        {
+            [Fact]
+            public void OpensTheBrowserInThePrivacyPolicyPage()
+            {
+                ViewModel.OpenPrivacyPolicyCommand.Execute();
+
+                NavigationService.Received().Navigate(
+                    typeof(BrowserViewModel),
+                    Arg.Is<BrowserParameters>(parameter => parameter.Url == LoginViewModel.PrivacyPolicyUrl)
+                );
+            }
+
+            [Fact]
+            public void OpensTheBrowserWithTheAppropriateTitle()
+            {
+                ViewModel.OpenPrivacyPolicyCommand.Execute();
+
+                NavigationService.Received().Navigate(
+                    typeof(BrowserViewModel),
+                    Arg.Is<BrowserParameters>(parameter => parameter.Title == Resources.PrivacyPolicy)
+                );
             }
         }
 
