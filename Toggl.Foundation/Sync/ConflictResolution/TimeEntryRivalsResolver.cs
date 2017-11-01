@@ -25,7 +25,7 @@ namespace Toggl.Foundation.Sync.ConflictResolution
             if (!CanHaveRival(entity))
                 throw new InvalidOperationException("The entity cannot have any rivals.");
 
-            return potentialRival => potentialRival.IsRunning() && potentialRival.Id != entity.Id;
+            return potentialRival => potentialRival.Duration == null && potentialRival.Id != entity.Id;
         }
 
         public (IDatabaseTimeEntry FixedEntity, IDatabaseTimeEntry FixedRival) FixRivals(IDatabaseTimeEntry entity, IDatabaseTimeEntry rival, IQueryable<IDatabaseTimeEntry> allTimeEntries)
