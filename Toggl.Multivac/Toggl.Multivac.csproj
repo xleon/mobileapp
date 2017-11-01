@@ -61,6 +61,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\ClampExtension.cs" />
     <Compile Include="Extensions\HashSetExtensions.cs" />
+    <Compile Include="Extensions\TimeEntryExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

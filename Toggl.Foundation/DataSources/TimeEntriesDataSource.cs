@@ -52,10 +52,10 @@ namespace Toggl.Foundation.DataSources
             TimeEntryUpdated = timeEntryUpdatedSubject.AsObservable();
             TimeEntryDeleted = timeEntryDeletedSubject.AsObservable();
             CurrentlyRunningTimeEntry =
-                repository.GetAll(te => te.Duration == null)
+                repository.GetAll(te => te.IsRunning())
                     .Select(tes => tes.SingleOrDefault())
                     .StartWith()
-                    .Merge(TimeEntryCreated.Where(te => te.Duration == null))
+                    .Merge(TimeEntryCreated.Where(te => te.IsRunning()))
                     .Merge(TimeEntryUpdated.Where(tuple => tuple.Entity.Id == currentlyRunningTimeEntryId).Select(tuple => tuple.Entity))
                     .Merge(TimeEntryDeleted.Where(id => id == currentlyRunningTimeEntryId).Select(_ => null as IDatabaseTimeEntry))
                     .Select(runningTimeEntry)
@@ -109,7 +109,7 @@ namespace Toggl.Foundation.DataSources
 
         public IObservable<IDatabaseTimeEntry> Stop(DateTimeOffset stopTime)
             => repository
-                    .GetAll(te => te.Duration == null)
+                    .GetAll(te => te.IsRunning())
                     .Select(timeEntries => timeEntries.SingleOrDefault() ?? throw new NoRunningTimeEntryException())
                     .SelectMany(timeEntry => timeEntry
                         .With((long)(stopTime - timeEntry.Start).TotalSeconds)
@@ -179,7 +179,7 @@ namespace Toggl.Foundation.DataSources
 
         private IDatabaseTimeEntry runningTimeEntry(IDatabaseTimeEntry timeEntry)
         {
-            if (timeEntry == null || timeEntry.Duration != null)
+            if (timeEntry == null || !timeEntry.IsRunning())
                 return null;
            
             return TimeEntry.From(timeEntry);

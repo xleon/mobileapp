@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Toggl.Foundation.Models;
+using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
@@ -17,14 +18,14 @@ namespace Toggl.Foundation.Sync.ConflictResolution
             this.timeService = timeService;
         }
 
-        public bool CanHaveRival(IDatabaseTimeEntry entity) => !entity.Duration.HasValue;
+        public bool CanHaveRival(IDatabaseTimeEntry entity) => entity.IsRunning();
 
         public Expression<Func<IDatabaseTimeEntry, bool>> AreRivals(IDatabaseTimeEntry entity)
         {
             if (!CanHaveRival(entity))
                 throw new InvalidOperationException("The entity cannot have any rivals.");
 
-            return potentialRival => potentialRival.Duration == null && potentialRival.Id != entity.Id;
+            return potentialRival => potentialRival.IsRunning() && potentialRival.Id != entity.Id;
         }
 
         public (IDatabaseTimeEntry FixedEntity, IDatabaseTimeEntry FixedRival) FixRivals(IDatabaseTimeEntry entity, IDatabaseTimeEntry rival, IQueryable<IDatabaseTimeEntry> allTimeEntries)

@@ -1,6 +1,7 @@
 ﻿using System;
 using MvvmCross.Core.ViewModels;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
@@ -43,7 +44,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             Ensure.Argument.IsNotNull(timeEntry, nameof(timeEntry));
 
-            if (timeEntry.Duration.HasValue == false)
+            if (timeEntry.IsRunning())
                 throw new InvalidOperationException("It is not possible to show a running time entry in the log.");
 
             Id = timeEntry.Id;

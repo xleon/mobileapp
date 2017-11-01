@@ -152,7 +152,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             RaisePropertyChanged(nameof(IsEmpty));
         }
 
-        private bool isNotRunning(IDatabaseTimeEntry timeEntry) => timeEntry.Duration != null;
+        private bool isNotRunning(IDatabaseTimeEntry timeEntry) => !timeEntry.IsRunning();
 
         private Task edit(TimeEntryViewModel timeEntryViewModel)
             => navigationService.Navigate<EditTimeEntryViewModel, long>(timeEntryViewModel.Id);
