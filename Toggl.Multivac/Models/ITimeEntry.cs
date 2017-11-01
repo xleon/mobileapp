@@ -26,7 +26,5 @@ namespace Toggl.Multivac.Models
         DateTimeOffset? ServerDeletedAt { get; }
 
         long UserId { get; }
-
-        string CreatedWith { get; }
     }
 }

@@ -54,7 +54,7 @@ namespace Toggl.Foundation.Models
 
         public bool? AutoEstimates { get; }
 
-        public int? EstimatedHours { get; }
+        public long? EstimatedHours { get; }
 
         public double? Rate { get; }
 
@@ -153,8 +153,6 @@ namespace Toggl.Foundation.Models
 
         public long UserId { get; }
 
-        public string CreatedWith { get; }
-
         public IDatabaseTask Task { get; }
 
         public IDatabaseUser User { get; }
@@ -188,27 +186,13 @@ namespace Toggl.Foundation.Models
 
         public string DateFormat { get; }
 
-        public bool StoreStartAndStopTime { get; }
-
         public BeginningOfWeek BeginningOfWeek { get; }
 
         public string Language { get; }
 
         public string ImageUrl { get; }
 
-        public bool SidebarPiechart { get; }
-
         public DateTimeOffset At { get; }
-
-        public int Retention { get; }
-
-        public bool RecordTimeline { get; }
-
-        public bool RenderTimeline { get; }
-
-        public bool TimelineEnabled { get; }
-
-        public bool TimelineExperiment { get; }
 
         public bool IsDeleted { get; }
 

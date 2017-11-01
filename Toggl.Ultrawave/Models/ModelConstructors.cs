@@ -97,7 +97,6 @@ namespace Toggl.Ultrawave.Models
             At = entity.At;
             ServerDeletedAt = entity.ServerDeletedAt;
             UserId = entity.UserId;
-            CreatedWith = entity.CreatedWith;
         }
     }
 
@@ -115,17 +114,10 @@ namespace Toggl.Ultrawave.Models
             Fullname = entity.Fullname;
             TimeOfDayFormat = entity.TimeOfDayFormat;
             DateFormat = entity.DateFormat;
-            StoreStartAndStopTime = entity.StoreStartAndStopTime;
             BeginningOfWeek = entity.BeginningOfWeek;
             Language = entity.Language;
             ImageUrl = entity.ImageUrl;
-            SidebarPiechart = entity.SidebarPiechart;
             At = entity.At;
-            Retention = entity.Retention;
-            RecordTimeline = entity.RecordTimeline;
-            RenderTimeline = entity.RenderTimeline;
-            TimelineEnabled = entity.TimelineEnabled;
-            TimelineExperiment = entity.TimelineExperiment;
         }
     }
 

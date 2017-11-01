@@ -472,7 +472,6 @@ namespace Toggl.Foundation.Tests.DataSources
                 => timeEntry.Id == DatabaseTimeEntry.Id
                 && timeEntry.UserId == DatabaseTimeEntry.UserId
                 && timeEntry.IsDeleted == DatabaseTimeEntry.IsDeleted
-                && timeEntry.CreatedWith == DatabaseTimeEntry.CreatedWith
                 && timeEntry.ServerDeletedAt == DatabaseTimeEntry.ServerDeletedAt;
 
             [Fact]

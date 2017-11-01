@@ -26,7 +26,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public bool? AutoEstimates { get; set; }
 
-        public int? EstimatedHours { get; set; }
+        public long? EstimatedHours { get; set; }
 
         public double? Rate { get; set; }
 

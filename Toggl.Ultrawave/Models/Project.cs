@@ -38,7 +38,7 @@ namespace Toggl.Ultrawave.Models
         public bool? AutoEstimates { get; set; }
 
         [IgnoreWhenPosting]
-        public int? EstimatedHours { get; set; }
+        public long? EstimatedHours { get; set; }
 
         [IgnoreWhenPosting]
         public double? Rate { get; set; }

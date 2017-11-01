@@ -171,7 +171,6 @@ namespace Toggl.Foundation.DataSources
                         .SetWorkspaceId(dto.WorkspaceId)
                         .SetUserId(timeEntry.UserId)
                         .SetIsDeleted(timeEntry.IsDeleted)
-                        .SetCreatedWith(timeEntry.CreatedWith)
                         .SetServerDeletedAt(timeEntry.ServerDeletedAt)
                         .SetAt(timeService.CurrentDateTime)
                         .SetSyncStatus(SyncStatus.SyncNeeded)

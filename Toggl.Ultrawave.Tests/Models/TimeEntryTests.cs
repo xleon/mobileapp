@@ -1,5 +1,6 @@
 using System;
 using FluentAssertions;
+using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.Serialization;
 using Xunit;
@@ -39,7 +40,8 @@ namespace Toggl.Ultrawave.Tests.Models
                 var clonedObject = new TimeEntry(validTimeEntry);
 
                 clonedObject.Should().NotBeSameAs(validTimeEntry);
-                clonedObject.ShouldBeEquivalentTo(validTimeEntry, options => options.IncludingProperties());
+                clonedObject.ShouldBeEquivalentTo(validTimeEntry,
+                    options => options.IncludingProperties().Excluding(te => te.CreatedWith));
             }
 
             [Fact]

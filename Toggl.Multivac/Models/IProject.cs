@@ -26,7 +26,7 @@ namespace Toggl.Multivac.Models
 
         bool? AutoEstimates { get; }
 
-        int? EstimatedHours { get; }
+        long? EstimatedHours { get; }
 
         double? Rate { get; }
 

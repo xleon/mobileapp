@@ -222,7 +222,6 @@ namespace Toggl.Ultrawave.Tests.Integration
                     Duration = persistedTimeEntry.Duration,
                     TagIds = persistedTimeEntry.TagIds,
                     UserId = persistedTimeEntry.UserId,
-                    CreatedWith = persistedTimeEntry.CreatedWith
                 };
 
                 var updatedTimeEntry = await togglClient.TimeEntries.Update(timeEntryWithUpdates);
@@ -252,7 +251,6 @@ namespace Toggl.Ultrawave.Tests.Integration
                     Duration = persistedTimeEntry.Duration,
                     TagIds = new List<long> { tag.Id },
                     UserId = persistedTimeEntry.UserId,
-                    CreatedWith = persistedTimeEntry.CreatedWith
                 };
 
                 var updatedTimeEntry = await togglClient.TimeEntries.Update(timeEntryWithUpdates);
@@ -297,7 +295,6 @@ namespace Toggl.Ultrawave.Tests.Integration
                         Duration = persistedTimeEntry.Duration,
                         TagIds = persistedTimeEntry.TagIds,
                         UserId = persistedTimeEntry.UserId,
-                        CreatedWith = persistedTimeEntry.CreatedWith
                     };
 
                     return CallEndpointWith(togglApi, timeEntryWithUpdates);

@@ -40,8 +40,6 @@ namespace Toggl.Foundation.Models
 
             public long? UserId { get; private set; }
 
-            public string CreatedWith { get; private set; }
-
             public bool IsDeleted { get; private set; }
 
             private Builder(long id)
@@ -129,12 +127,6 @@ namespace Toggl.Foundation.Models
                 return this;
             }
 
-            public Builder SetCreatedWith(string createdWith)
-            {
-                CreatedWith = createdWith;
-                return this;
-            }
-
             public Builder SetIsDeleted(bool isDeleted)
             {
                 IsDeleted = isDeleted;
@@ -185,7 +177,6 @@ namespace Toggl.Foundation.Models
             IsDeleted = builder.IsDeleted;
             ProjectId = builder.ProjectId;
             SyncStatus = builder.SyncStatus;
-            CreatedWith = builder.CreatedWith;
             Description = builder.Description;
             WorkspaceId = builder.WorkspaceId.Value;
             ServerDeletedAt = builder.ServerDeletedAt;

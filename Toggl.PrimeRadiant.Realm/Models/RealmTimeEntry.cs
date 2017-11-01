@@ -26,8 +26,6 @@ namespace Toggl.PrimeRadiant.Realm
 
         public DateTimeOffset? ServerDeletedAt { get; set; }
 
-        public string CreatedWith { get; set; }
-
         public RealmWorkspace RealmWorkspace { get; set; }
 
         public long WorkspaceId => RealmWorkspace?.Id ?? 0;
