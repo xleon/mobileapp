@@ -29,6 +29,7 @@
                 <outlet property="TimeEntriesLogContainer" destination="faz-Sa-kEe" id="name-outlet-faz-Sa-kEe"/>
                 <outlet property="TimelineView" destination="tGg-Dk-cfk" id="name-outlet-tGg-Dk-cfk"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
+                <outlet property="SpiderHinge" destination="FPj-ki-Fw8" id="name-outlet-FPj-ki-Fw8"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -74,6 +75,13 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EzU-Pd-V8e">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="597"/>
                                     <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Btr-Pq-4yV" userLabel="Border">
+                                            <rect key="frame" x="-0.5" y="0.0" width="375" height="1"/>
+                                            <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="1" id="jTY-oz-Zld"/>
+                                            </constraints>
+                                        </view>
                                         <view hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tGg-Dk-cfk">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
                                             <color key="backgroundColor" red="0.64313725490196072" green="0.67843137254901964" blue="0.69019607843137254" alpha="0.34999999999999998" colorSpace="calibratedRGB"/>
@@ -133,8 +141,10 @@ TO SEE THE LOG</string>
                                         <constraint firstItem="LV7-Bw-hnV" firstAttribute="top" secondItem="wKL-ZP-Ff4" secondAttribute="bottom" constant="5" id="2ky-C9-dkz"/>
                                         <constraint firstItem="tGg-Dk-cfk" firstAttribute="width" secondItem="EzU-Pd-V8e" secondAttribute="width" id="A67-kc-kBu"/>
                                         <constraint firstItem="FPj-ki-Fw8" firstAttribute="top" secondItem="EzU-Pd-V8e" secondAttribute="top" id="CFL-dN-O7V"/>
+                                        <constraint firstItem="Btr-Pq-4yV" firstAttribute="width" secondItem="EzU-Pd-V8e" secondAttribute="width" id="Ex4-A6-yRr"/>
                                         <constraint firstAttribute="trailing" secondItem="mxU-Yy-g7c" secondAttribute="trailing" id="Fd4-fU-96N"/>
                                         <constraint firstItem="wKL-ZP-Ff4" firstAttribute="top" secondItem="5K9-cC-7E8" secondAttribute="bottom" constant="24" id="HTG-8h-Hsb"/>
+                                        <constraint firstItem="Btr-Pq-4yV" firstAttribute="centerX" secondItem="EzU-Pd-V8e" secondAttribute="centerX" id="LbQ-df-e2t"/>
                                         <constraint firstAttribute="bottom" secondItem="LV7-Bw-hnV" secondAttribute="bottom" id="MCj-Yu-VUE"/>
                                         <constraint firstItem="5K9-cC-7E8" firstAttribute="top" secondItem="EzU-Pd-V8e" secondAttribute="top" constant="44" id="Mwt-ub-HhA"/>
                                         <constraint firstItem="mpU-UI-dLB" firstAttribute="top" secondItem="EzU-Pd-V8e" secondAttribute="top" constant="-102" id="Wd6-Ev-wuH"/>
@@ -143,6 +153,7 @@ TO SEE THE LOG</string>
                                         <constraint firstItem="LV7-Bw-hnV" firstAttribute="centerX" secondItem="EzU-Pd-V8e" secondAttribute="centerX" id="fWo-Ty-Iln"/>
                                         <constraint firstItem="FPj-ki-Fw8" firstAttribute="centerX" secondItem="EzU-Pd-V8e" secondAttribute="centerX" id="fZK-nd-GjM"/>
                                         <constraint firstItem="tGg-Dk-cfk" firstAttribute="centerX" secondItem="EzU-Pd-V8e" secondAttribute="centerX" id="fxy-X1-Jl8"/>
+                                        <constraint firstItem="Btr-Pq-4yV" firstAttribute="top" secondItem="EzU-Pd-V8e" secondAttribute="top" id="m3S-Dd-gSp"/>
                                         <constraint firstItem="mxU-Yy-g7c" firstAttribute="leading" secondItem="EzU-Pd-V8e" secondAttribute="leading" id="o7A-xv-mri"/>
                                         <constraint firstItem="5K9-cC-7E8" firstAttribute="top" secondItem="mxU-Yy-g7c" secondAttribute="bottom" constant="12" id="pWt-QF-DYe"/>
                                         <constraint firstItem="wKL-ZP-Ff4" firstAttribute="centerX" secondItem="LV7-Bw-hnV" secondAttribute="centerX" id="ref-rY-xle"/>

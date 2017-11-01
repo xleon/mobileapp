@@ -80,6 +80,11 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.SpiderIsVisible)
                       .WithConversion(visibilityConverter);
 
+            bindingSet.Bind(SpiderHinge)
+                     .For(v => v.BindVisibility())
+                     .To(vm => vm.SpiderIsVisible)
+                     .WithConversion(visibilityConverter);
+
             bindingSet.Bind(SyncIndicatorView)
                       .For(v => v.BindVisibility())
                       .To(vm => vm.IsSyncing)
