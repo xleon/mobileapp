@@ -279,29 +279,30 @@ namespace Toggl.Ultrawave.Tests.Integration
                 put.ShouldThrow<BadRequestException>();
             }
 
-            protected override IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi)
+            protected override IObservable<ITimeEntry> PrepareForCallingUpdateEndpoint(ITogglApi togglApi)
                 => Observable.Defer(async () =>
                 {
                     var user = await togglApi.User.Get();
                     var timeEntry = createTimeEntry(user);
-                    var persistedTimeEntry = await togglApi.TimeEntries.Create(timeEntry);
-                    var timeEntryWithUpdates = new TimeEntry
-                    {
-                        Id = persistedTimeEntry.Id,
-                        Description = Guid.NewGuid().ToString(),
-                        WorkspaceId = persistedTimeEntry.WorkspaceId,
-                        Billable = persistedTimeEntry.Billable,
-                        Start = persistedTimeEntry.Start,
-                        Duration = persistedTimeEntry.Duration,
-                        TagIds = persistedTimeEntry.TagIds,
-                        UserId = persistedTimeEntry.UserId,
-                    };
-
-                    return CallEndpointWith(togglApi, timeEntryWithUpdates);
+                    return togglApi.TimeEntries.Create(timeEntry);
                 });
 
-            private IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi, TimeEntry timeEntry)
-                => togglApi.TimeEntries.Update(timeEntry);
+            protected override IObservable<ITimeEntry> CallUpdateEndpoint(ITogglApi togglApi, ITimeEntry timeEntry)
+            {
+                var timeEntryWithUpdates = new TimeEntry
+                {
+                    Id = timeEntry.Id,
+                    Description = Guid.NewGuid().ToString(),
+                    WorkspaceId = timeEntry.WorkspaceId,
+                    Billable = timeEntry.Billable,
+                    Start = timeEntry.Start,
+                    Duration = timeEntry.Duration,
+                    TagIds = timeEntry.TagIds,
+                    UserId = timeEntry.UserId,
+                };
+
+                return togglApi.TimeEntries.Update(timeEntryWithUpdates);
+            }
         }
 
         public sealed class TheDeleteMethod : AuthenticatedDeleteEndpointBaseTests<ITimeEntry>
