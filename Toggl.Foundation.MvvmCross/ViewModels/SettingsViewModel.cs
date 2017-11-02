@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
@@ -7,12 +8,15 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
+using Toggl.PrimeRadiant;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class SettingsViewModel : MvxViewModel
     {
+        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
+
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
         private readonly IDialogService dialogService;
@@ -22,6 +26,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public bool IsLoggingOut { get; private set; }
 
         public bool IsRunningSync { get; private set; }
+
+        public bool IsSynced { get; private set; }
 
         public IMvxAsyncCommand LogoutCommand { get; }
 
@@ -39,14 +45,22 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.navigationService = navigationService;
             this.dialogService = dialogService;
 
-            this.IsLoggingOut = false;
+            IsLoggingOut = false;
+            IsSynced = false;
+            IsRunningSync = false;
 
-            dataSource.SyncManager
+            var syncDisposable = dataSource.SyncManager
                 .StateObservable
-                .Subscribe(state => IsRunningSync = state != SyncState.Sleep);
+                .Subscribe(async state =>
+                {
+                    IsRunningSync = IsLoggingOut == false && state != SyncState.Sleep;
+                    IsSynced = IsLoggingOut == false && await isSynced();
+                });
 
             BackCommand = new MvxAsyncCommand(back);
             LogoutCommand = new MvxAsyncCommand(maybeLogout);
+
+            disposeBag.Add(syncDisposable);
         }
 
         private Task back() => navigationService.Close(this);
@@ -77,16 +91,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private async Task logout()
         {
             IsLoggingOut = true;
-
+            IsSynced = false;
+            IsRunningSync = false;
             await dataSource.SyncManager.Freeze();
             await dataSource.Logout();
             await navigationService.Navigate<OnboardingViewModel>();
         }
 
         private async Task<bool> isSynced()
-        {
-            var everythingIsSynced = await dataSource.TimeEntries.GetAll(te => te.SyncStatus != PrimeRadiant.SyncStatus.InSync).SelectMany(te => te).IsEmpty();
-            return everythingIsSynced && !IsRunningSync;
-        }
+            => IsRunningSync ? false : await thereIsNothingToSync();
+
+        private async Task<bool> thereIsNothingToSync()
+            => await dataSource.TimeEntries.GetAll(te => te.SyncStatus != SyncStatus.InSync).SelectMany(te => te).IsEmpty();
     }
 }
