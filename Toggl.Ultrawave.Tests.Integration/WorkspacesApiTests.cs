@@ -74,7 +74,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             {
                 var (togglClient, user) = await SetupTestUser();
 
-                CallingEndpointWith(togglClient, user.DefaultWorkspaceId - 1).ShouldThrow<ApiException>();
+                CallingEndpointWith(togglClient, user.DefaultWorkspaceId - 1).ShouldThrow<ForbiddenException>();
             }
         }
     }
