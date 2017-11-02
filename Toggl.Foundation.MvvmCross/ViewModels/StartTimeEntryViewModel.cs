@@ -356,6 +356,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             await dataSource.User.Current()
                 .SelectMany(user =>
                 {
+                    if (TextFieldInfo.ProjectId == 0)
+                        return Observable.Return((User: user, WorkspaceId: workspaceId));
+
                     if (TextFieldInfo.ProjectId == null)
                         return Observable.Return((User: user, WorkspaceId: user.DefaultWorkspaceId));
 
