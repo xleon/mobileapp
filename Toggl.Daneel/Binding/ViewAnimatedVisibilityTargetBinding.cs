@@ -21,7 +21,7 @@ namespace Toggl.Daneel.Binding
 
         protected override void SetValue(bool value)
         {
-            Target.Transform = CGAffineTransform.MakeTranslation(0, 0);
+            Target.Transform = CGAffineTransform.MakeTranslation(0, 20);
 
             AnimationExtensions.Animate(
                 Animation.Timings.EnterTiming,
@@ -29,7 +29,7 @@ namespace Toggl.Daneel.Binding
                 () => 
                 {
                     Target.Hidden = !value;
-                    Target.Transform = CGAffineTransform.MakeTranslation(0, -20);
+                    Target.Transform = CGAffineTransform.MakeTranslation(0, 0);
                 }
             );
         }

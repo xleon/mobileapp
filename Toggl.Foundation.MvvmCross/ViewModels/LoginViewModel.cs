@@ -179,13 +179,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             login();
         }
 
-        private void onDataSource(ITogglDataSource dataSource)
+        private async void onDataSource(ITogglDataSource dataSource)
         {
             Mvx.RegisterSingleton(dataSource);
 
-            dataSource.SyncManager.ForceFullSync();
+            await dataSource.SyncManager.ForceFullSync();
 
-            navigationService.Navigate<MainViewModel>();
+            IsLoading = false;
+
+            await navigationService.Navigate<MainViewModel>();
         }
 
         private void onError(Exception ex)
@@ -193,13 +195,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ErrorText = ex is ForbiddenException ? Resources.IncorrectEmailOrPassword
                                                  : Resources.GenericLoginError;
 
+
+            IsLoading = false;
             onCompleted();
         }
 
         private void onCompleted()
         {
-            IsLoading = false;
-
             loginDisposable?.Dispose();
             passwordManagerDisposable?.Dispose();
 

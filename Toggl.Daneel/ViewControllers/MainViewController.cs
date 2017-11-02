@@ -153,8 +153,8 @@ namespace Toggl.Daneel.ViewControllers
             SyncIndicatorView.ContentMode = UIViewContentMode.ScaleAspectFit;
             MainPagedScrollView.SyncStateView = SyncStateView;
             MainPagedScrollView.SyncStateLabel = SyncStateLabel;
-            MainPagedScrollView.SetContentOffset(new CGPoint(0, 0), false);
             MainPagedScrollView.ContentInset = new UIEdgeInsets(MainScrollView.SyncStateViewHeight * 2, 0, 0, 0);
+            MainPagedScrollView.SetContentOffset(new CGPoint(0, 0), false);
 
             //Spider animation
             SpiderBroImageView.Layer.AnchorPoint = new CGPoint(0.5f, 0);
