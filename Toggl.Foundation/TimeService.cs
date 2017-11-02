@@ -9,7 +9,7 @@ namespace Toggl.Foundation
     {
         private readonly IDisposable disposable;
 
-        public DateTimeOffset CurrentDateTime => DateTimeOffset.UtcNow;
+        public DateTimeOffset CurrentDateTime => floor(DateTimeOffset.UtcNow);
 
         public IConnectableObservable<DateTimeOffset> CurrentDateTimeObservable { get; }
 
@@ -18,10 +18,13 @@ namespace Toggl.Foundation
             CurrentDateTimeObservable =
                 Observable
                     .Interval(TimeSpan.FromSeconds(1), scheduler)
-                    .Select(_ => DateTimeOffset.UtcNow)
+                    .Select(_ => CurrentDateTime)
                     .Publish();
 
             disposable = CurrentDateTimeObservable.Connect();
         }
+
+        private DateTimeOffset floor(DateTimeOffset t)
+            => new DateTimeOffset(t.Year, t.Month, t.Day, t.Hour, t.Minute, t.Second, t.Offset);
     }
 }
