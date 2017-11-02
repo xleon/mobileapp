@@ -156,7 +156,11 @@ var transformations = new List<TemporaryFileTransformation>
 };
 
 Setup(context => transformations.ForEach(transformation => System.IO.File.WriteAllText(transformation.Path, transformation.Temporary)));
-Teardown(context => transformations.ForEach(transformation => System.IO.File.WriteAllText(transformation.Path, transformation.Original)));
+Teardown(context =>
+{
+    if (target == "Build.Release.iOS.AppStore") return;
+    transformations.ForEach(transformation => System.IO.File.WriteAllText(transformation.Path, transformation.Original));
+});
 
 //Build
 Task("Clean")
