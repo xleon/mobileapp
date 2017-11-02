@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="StartTimeEntryViewController">
             <connections>
                 <outlet property="BillableButton" destination="Xnc-Zt-xWV" id="name-outlet-Xnc-Zt-xWV"/>
+                <outlet property="BillableButtonWidthConstraint" destination="I25-Y2-oUz" id="name-outlet-I25-Y2-oUz"/>
                 <outlet property="BottomDistanceConstraint" destination="HKM-yE-bqT" id="name-outlet-HKM-yE-bqT"/>
                 <outlet property="BottomOptionsSheet" destination="dU3-s1-ELa" id="name-outlet-dU3-s1-ELa"/>
                 <outlet property="CloseButton" destination="MAa-jq-GXB" id="name-outlet-MAa-jq-GXB"/>
@@ -24,12 +25,11 @@
                 <outlet property="TagsButton" destination="H7M-A1-mmK" id="name-outlet-H7M-A1-mmK"/>
                 <outlet property="TimeLabel" destination="3I4-ki-f8o" id="name-outlet-3I4-ki-f8o"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
-                <outlet property="BillableButtonWidthConstraint" destination="I25-Y2-oUz" id="name-outlet-I25-Y2-oUz"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="2">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MAa-jq-GXB">
@@ -40,25 +40,25 @@
                     </constraints>
                     <state key="normal" image="icClose"/>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5 sec" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3I4-ki-f8o" misplaced="YES">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5 sec" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3I4-ki-f8o">
                     <rect key="frame" x="170" y="12" width="36" height="17"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="R8W-w1-sEf" customClass="TimeEntryTagsTextView" misplaced="YES">
-                    <rect key="frame" x="16" y="64" width="343" height="72"/>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" text="What are you working on?" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="R8W-w1-sEf" customClass="TimeEntryTagsTextView">
+                    <rect key="frame" x="16" y="44" width="343" height="68"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="72" id="u0i-Qv-oYj"/>
+                        <constraint firstAttribute="height" constant="68" id="u0i-Qv-oYj"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" keyboardType="twitter"/>
                 </textView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dU3-s1-ELa" misplaced="YES">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dU3-s1-ELa">
                     <rect key="frame" x="0.0" y="617" width="375" height="50"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2em-4m-f1y" misplaced="YES">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2em-4m-f1y">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
                             <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
@@ -92,7 +92,7 @@
                             <rect key="frame" x="166" y="0.0" width="42" height="50"/>
                             <state key="normal" image="duration"/>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hya-nl-hcs" misplaced="YES">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hya-nl-hcs">
                             <rect key="frame" x="325" y="0.0" width="50" height="50"/>
                             <accessibility key="accessibilityConfiguration" label="StartTimeEntryDone"/>
                             <state key="normal" image="icDone"/>
@@ -128,8 +128,8 @@
                         <constraint firstItem="H7M-A1-mmK" firstAttribute="height" secondItem="qfx-lJ-emc" secondAttribute="height" id="yu9-x5-VRI"/>
                     </constraints>
                 </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="04s-S8-twa" misplaced="YES">
-                    <rect key="frame" x="0.0" y="136" width="375" height="481"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="04s-S8-twa">
+                    <rect key="frame" x="0.0" y="112" width="375" height="505"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
             </subviews>
@@ -148,7 +148,7 @@
                 <constraint firstItem="R8W-w1-sEf" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="kgJ-RZ-uY1"/>
                 <constraint firstItem="dU3-s1-ELa" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="leF-ji-hIr"/>
                 <constraint firstAttribute="trailing" secondItem="04s-S8-twa" secondAttribute="trailing" id="nQ2-A6-IBf"/>
-                <constraint firstItem="R8W-w1-sEf" firstAttribute="top" secondItem="MAa-jq-GXB" secondAttribute="bottom" constant="24" id="wV7-6B-WWt"/>
+                <constraint firstItem="R8W-w1-sEf" firstAttribute="top" secondItem="MAa-jq-GXB" secondAttribute="bottom" constant="4" id="wV7-6B-WWt"/>
             </constraints>
         </view>
     </objects>
@@ -160,30 +160,5 @@
         <image name="icDone" width="16" height="12"/>
         <image name="icProjects" width="16" height="12"/>
         <image name="icTags" width="14" height="13"/>
-        <image name="icArrowUp" width="10" height="6"/>
-        <image name="icContinue" width="10" height="11"/>
-        <image name="icDownS" width="8" height="5"/>
-        <image name="icRefresh" width="20" height="14"/>
-        <image name="icReports" width="16" height="18"/>
-        <image name="icSettings" width="16" height="16"/>
-        <image name="icSyncerror" width="16" height="16"/>
-        <image name="icUpS" width="8" height="5"/>
-        <image name="playIcon" width="50" height="50"/>
-        <image name="stopIcon" width="34" height="34"/>
-        <image name="togglLogoWhite" width="111" height="35"/>
-        <image name="notebook" width="95" height="85"/>
-        <image name="togglCronometer" width="126" height="140"/>
-        <image name="icOnePassword" width="15" height="15"/>
-        <image name="icPassword" width="15" height="10"/>
-        <image name="togglLogo" width="63" height="19"/>
-        <image name="line" width="2" height="14"/>
-        <image name="icLoader" width="24" height="24"/>
-        <image name="icAdd" width="10" height="10"/>
-        <image name="icProjectDot" width="6" height="6"/>
-        <image name="icIllustrationTimer" width="89" height="90"/>
-        <image name="icIllustrationPaws" width="112" height="41"/>
-        <image name="icIllustrationSpider" width="60" height="205"/>
-        <image name="icDoneSmall" width="12" height="9"/>
-        <image name="icSearch" width="13" height="12"/>
     </resources>
 </document>
