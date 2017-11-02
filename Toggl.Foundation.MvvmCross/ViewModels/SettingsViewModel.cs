@@ -77,15 +77,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 ? (Resources.SettingsSyncInProgressTitle, Resources.SettingsSyncInProgressMessage)
                 : (Resources.SettingsUnsyncedTitle, Resources.SettingsUnsyncedMessage);
 
-            dialogService.Confirm(
+            var shouldLogout = await dialogService.Confirm(
                 title,
                 message,
                 Resources.SettingsDialogButtonSignOut,
-                Resources.Cancel,
-                async () => await logout(),
-                dismissAction: null,
-                makeConfirmActionBold: true
+                Resources.Cancel
             );
+
+            if (!shouldLogout) return;
+
+            await logout();
         }
 
         private async Task logout()

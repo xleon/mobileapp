@@ -257,7 +257,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
-                DialogService.DidNotReceiveWithAnyArgs().Confirm("", "", "", "", null, null, false);
+                await DialogService.DidNotReceiveWithAnyArgs().Confirm("", "", "", "");
             }
 
             [Fact]
@@ -269,7 +269,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
-                DialogService.ReceivedWithAnyArgs().Confirm("", "", "", "", null, null, false);
+                await DialogService.ReceivedWithAnyArgs().Confirm("", "", "", "");
             }
 
             [Fact]
@@ -281,15 +281,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
-                DialogService.ReceivedWithAnyArgs().Confirm("", "", "", "", null, null, false);
+                await DialogService.ReceivedWithAnyArgs().Confirm("", "", "", "");
             }
 
             [Fact]
             public async Task DoesNotProceedWithLogoutWhenUserClicksCancelButtonInTheDialog()
             {
                 StateObservableSubject.OnNext(SyncState.Pull);
-                DialogService.Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Any<Action>(), Arg.Do<Action>(action => action?.Invoke()), Arg.Any<bool>());
+                DialogService.Confirm(
+                    Arg.Any<string>(), 
+                    Arg.Any<string>(), 
+                    Arg.Any<string>(), 
+                    Arg.Any<string>()).Returns(false);
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
@@ -303,8 +306,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task ProceedsWithLogoutWhenUserClicksSignOutButtonInTheDialog()
             {
                 StateObservableSubject.OnNext(SyncState.Pull);
-                DialogService.Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Invoke(), Arg.Any<Action>(), Arg.Any<bool>());
+                DialogService.Confirm(
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>()).Returns(true);
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
 

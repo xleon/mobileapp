@@ -1,21 +1,13 @@
-﻿using System;
+﻿using System.Threading.Tasks;
+
 namespace Toggl.Foundation.MvvmCross.Services
 {
     public interface IDialogService
     {
-        void ShowMessage(
+        Task<bool> Confirm(
             string title,
             string message,
-            string dismissButtonTitle,
-            Action dismissAction);
-
-        void Confirm(
-            string title,
-            string message,
-            string confirmButtonTitle,
-            string dismissButtonTitle,
-            Action confirmAction,
-            Action dismissAction,
-            bool makeConfirmActionBold);
+            string confirmButtonText,
+            string dismissButtonText);
     }
 }

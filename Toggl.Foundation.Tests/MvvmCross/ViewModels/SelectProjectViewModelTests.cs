@@ -185,11 +185,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Invoke(),
-                    Arg.Any<Action>(),
-                    Arg.Any<bool>()
-                );
+                    Arg.Any<string>()
+                ).Returns(true);
 
                 long workspaceId = 420;
                 ViewModel.SelectProjectCommand
@@ -216,10 +213,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Is(Resources.DifferentWorkspaceAlertTitle),
                     Arg.Is(Resources.DifferentWorkspaceAlertMessage),
                     Arg.Is(Resources.Ok),
-                    Arg.Is(Resources.Cancel),
-                    Arg.Any<Action>(),
-                    Arg.Any<Action>(),
-                    Arg.Is(true)
+                    Arg.Is(Resources.Cancel)
                 );
             }
 
@@ -237,10 +231,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<Action>(),
-                    Arg.Any<Action>(),
-                    Arg.Any<bool>()
+                    Arg.Any<string>()
                 );
             }
 
@@ -286,10 +277,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                        Resources.DifferentWorkspaceAlertTitle,
                        Resources.DifferentWorkspaceAlertMessage,
                        Resources.Ok,
-                       Resources.Cancel,
-                       Arg.Invoke(),
-                       Arg.Any<Action>(),
-                       Arg.Any<bool>());
+                       Resources.Cancel).Returns(true);
 
             private async Task ensureReturnsWorkspaceIdOfSuggestion(AutocompleteSuggestion suggestion)
             {
