@@ -1,5 +1,4 @@
 ﻿using System;
-using Newtonsoft.Json;
 using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Serialization;
 
@@ -9,10 +8,8 @@ namespace Toggl.Ultrawave.Models
     {
         public long Id { get; set; }
 
-        [JsonProperty("wid")]
         public long WorkspaceId { get; set; }
 
-        [JsonProperty("cid")]
         public long? ClientId { get; set; }
 
         public string Name { get; set; }
