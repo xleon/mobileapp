@@ -55,7 +55,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             protected override IObservable<List<ITimeEntry>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.TimeEntries.GetAll();
         }
-      
+
         public sealed class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<ITimeEntry>
         {
             protected override IObservable<List<ITimeEntry>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
@@ -190,6 +190,29 @@ namespace Toggl.Ultrawave.Tests.Integration
                     .SingleAsync();
 
                 fetchedTimeEntry.Duration.Should().BeNull();
+            }
+
+            [Fact]
+            public async Task BackendStopsPreviousRunningTimeEntryWhenAnotherRunningTimeEntryIsPushed()
+            {
+                var (togglApi, user) = await SetupTestUser();
+                var firstTimeEntry = createTimeEntry(user);
+                firstTimeEntry.Duration = null;
+                var secondTimeEntry = createTimeEntry(user);
+                secondTimeEntry.Duration = null;
+
+                var postedFirstTimeEntry = await togglApi.TimeEntries.Create(firstTimeEntry);
+                await Task.Delay(2000);
+                var postedSecondTimeEntry = await togglApi.TimeEntries.Create(secondTimeEntry);
+                var stoppedFirstTimeEntry =
+                    await togglApi.TimeEntries.GetAll().SelectMany(te => te).Where(te => te.Id == postedFirstTimeEntry.Id).FirstAsync();
+
+                postedFirstTimeEntry.Duration.Should().BeNull();
+                postedSecondTimeEntry.Duration.Should().BeNull();
+                stoppedFirstTimeEntry.Duration.Should().NotBeNull();
+                postedFirstTimeEntry.At.Should().NotBe(stoppedFirstTimeEntry.At);
+                stoppedFirstTimeEntry.At.Should().Be(postedSecondTimeEntry.At);
+                stoppedFirstTimeEntry.Start.AddSeconds(stoppedFirstTimeEntry.Duration.Value).Should().Be(stoppedFirstTimeEntry.At);
             }
 
             protected override IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi)
