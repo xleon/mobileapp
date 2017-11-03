@@ -206,9 +206,9 @@ namespace Toggl.PrimeRadiant.Realm
             var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
             RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId);
             var skipProjectFetch = entity?.ProjectId == null || entity.ProjectId == 0;
-            RealmProject = skipProjectFetch ? null : realm.All<RealmProject>().Single(x => x.Id == entity.ProjectId);
-            var skipTaskFetch = entity?.TaskId == null || entity.TaskId == 0;
-            RealmTask = skipTaskFetch ? null : realm.All<RealmTask>().Single(x => x.Id == entity.TaskId);
+            RealmProject = skipProjectFetch ? null : realm.All<RealmProject>().SingleOrDefault(x => x.Id == entity.ProjectId);
+            var skipTaskFetch = RealmProject == null || entity?.TaskId == null || entity.TaskId == 0;
+            RealmTask = skipTaskFetch ? null : realm.All<RealmTask>().SingleOrDefault(x => x.Id == entity.TaskId);
             Billable = entity.Billable;
             Start = entity.Start;
             Duration = entity.Duration;
