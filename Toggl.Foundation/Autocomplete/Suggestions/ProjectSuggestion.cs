@@ -27,6 +27,8 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
 
         public bool TasksVisible { get; set; }
 
+        public bool Selected { get; set; }
+
         private ProjectSuggestion(long workspaceId, string workspaceName)
         {
             ProjectId = 0;

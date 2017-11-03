@@ -6,6 +6,7 @@ using MvvmCross.Binding.iOS.Views;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Color;
 using MvvmCross.Plugins.Visibility;
+using Toggl.Daneel.Combiners;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.MvvmCross.Converters;
 using UIKit;
@@ -14,6 +15,8 @@ namespace Toggl.Daneel.Views
 {
     public partial class ProjectSuggestionViewCell : MvxTableViewCell
     {
+        private const float selectedProjectBackgroundAlpha = 0.12f;
+
         public static readonly NSString Key = new NSString(nameof(ProjectSuggestionViewCell));
         public static readonly UINib Nib;
 
@@ -48,6 +51,8 @@ namespace Toggl.Daneel.Views
                 var colorConverter = new MvxRGBValueConverter();
                 var taskCountConverter = new TaskCountConverter();
                 var visibilityConverter = new MvxVisibilityValueConverter();
+                var projectSelectedColorCombiner
+                    = new ProjectSelectedColorValueCombiner(selectedProjectBackgroundAlpha);
 
                 var bindingSet = this.CreateBindingSet<ProjectSuggestionViewCell, ProjectSuggestion>();
 
@@ -68,6 +73,13 @@ namespace Toggl.Daneel.Views
                           .For(v => v.BackgroundColor)
                           .To(vm => vm.ProjectColor)
                           .WithConversion(colorConverter);
+
+                bindingSet.Bind(SelectedProjectView)
+                          .For(v => v.BackgroundColor)
+                          .ByCombining(
+                              projectSelectedColorCombiner,
+                              vm => vm.Selected,
+                              vm => vm.ProjectColor);
 
                 //Visibility
                 bindingSet.Bind(ToggleTaskImage)

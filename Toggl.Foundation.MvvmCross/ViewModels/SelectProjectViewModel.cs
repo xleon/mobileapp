@@ -71,8 +71,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                        .StartWith(Text)
                        .SelectMany(text => dataSource.AutocompleteProvider.Query(text, AutocompleteSuggestionType.Projects))
                        .Select(suggestions => suggestions.Cast<ProjectSuggestion>())
+                       .Select(setSelectedProject)
                        .Subscribe(onSuggestions);
         }
+
+        private IEnumerable<ProjectSuggestion> setSelectedProject(IEnumerable<ProjectSuggestion> suggestions)
+            => suggestions.Select(s => { s.Selected = s.ProjectId == projectId; return s; });
 
         private void OnTextChanged()
         {

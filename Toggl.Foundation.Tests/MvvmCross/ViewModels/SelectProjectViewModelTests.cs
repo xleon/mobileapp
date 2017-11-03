@@ -405,6 +405,55 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     }
                 }
             }
+
+            [Fact]
+            public async Task DoesNotContainSelectedProjectIfProjectIdIsNull()
+            {
+                prepareProjects();
+                var parameter = SelectProjectParameter.WithIds(null, null, 0);
+                ViewModel.Prepare(parameter);
+                await ViewModel.Initialize();
+
+                ViewModel.Suggestions.Should().HaveCount(1);
+                ViewModel.Suggestions.First().Should().OnlyContain(
+                    suggestion => ((ProjectSuggestion)suggestion).Selected == false);
+            }
+
+            [Fact]
+            public async Task ContainsOnlyOneSelectedProjectIfProjectIdIsSet()
+            {
+                prepareProjects();
+                long selectedProjectId = 5;
+                var parameter = SelectProjectParameter.WithIds(selectedProjectId, null, 0);
+                ViewModel.Prepare(parameter);
+                await ViewModel.Initialize();
+
+                ViewModel.Suggestions.Should().HaveCount(1);
+                ViewModel.Suggestions.First().Should().OnlyContain(
+                    suggestion => assertSuggestion(suggestion, selectedProjectId));
+            }
+
+            private bool assertSuggestion(AutocompleteSuggestion suggestion, long selectedProjectId)
+            {
+                var projectSuggestion = (ProjectSuggestion)suggestion;
+                return projectSuggestion.Selected == false
+                       || projectSuggestion.ProjectId == selectedProjectId && projectSuggestion.Selected;
+            }
+
+            private void prepareProjects()
+            {
+                var projects = Enumerable.Range(0, 30)
+                    .Select(i =>
+                    {
+                        var project = Substitute.For<IDatabaseProject>();
+                        project.Id.Returns(i);
+                        project.Workspace.Name.Returns("Ws");
+                        return new ProjectSuggestion(project);
+                    });
+                DataSource.AutocompleteProvider
+                    .Query(Arg.Any<string>(), Arg.Is(AutocompleteSuggestionType.Projects))
+                    .Returns(Observable.Return(projects));
+            }
         }
     }
 }
