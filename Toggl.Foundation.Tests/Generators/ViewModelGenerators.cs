@@ -16,8 +16,9 @@ namespace Toggl.Foundation.Tests.Generators
     {
         public static Gen<TimeEntriesLogViewModel> ForTimeEntriesLogViewModel(MonthPredicate filter)
         {
+            var now = new DateTimeOffset(2017, 08, 13, 08, 01, 23, TimeSpan.Zero);
             var monthsGenerator = Gen.Choose(1, 12).Where(filter);
-            var yearGenerator = Gen.Choose(2007, DateTime.UtcNow.Year);
+            var yearGenerator = Gen.Choose(2007, now.Year);
 
             return Arb.Default
                 .Array<DateTimeOffset>()
@@ -39,7 +40,7 @@ namespace Toggl.Foundation.Tests.Generators
                                 .SetWorkspaceId(-3)
                                 .SetStart(d)
                                 .SetDescription("")
-                                .SetAt(DateTimeOffset.Now).Build())
+                                .SetAt(now).Build())
                         .Apply(Observable.Return);
 
                     source.TimeEntries.GetAll().Returns(observable);

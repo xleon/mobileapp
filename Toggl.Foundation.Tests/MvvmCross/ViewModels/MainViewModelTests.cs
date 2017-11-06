@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
@@ -67,18 +68,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await NavigationService.Received().Navigate(typeof(StartTimeEntryViewModel), Arg.Any<DateTimeOffset>());
             }
 
-            [Fact]
-            public async Task PassesTheCurrentDateToTheStartTimeEntryViewModel()
+            [Property]
+            public void PassesTheCurrentDateToTheStartTimeEntryViewModel(DateTimeOffset date)
             {
-                var date = DateTimeOffset.Now;
                 TimeService.CurrentDateTime.Returns(date);
 
-                await ViewModel.StartTimeEntryCommand.ExecuteAsync();
+                ViewModel.StartTimeEntryCommand.ExecuteAsync().Wait();
 
-                await NavigationService.Received().Navigate(
+                NavigationService.Received().Navigate(
                     typeof(StartTimeEntryViewModel),
                     Arg.Is<DateTimeOffset>(parameter => parameter == date)
-                );
+                ).Wait();
             }
         }
 

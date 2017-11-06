@@ -27,14 +27,14 @@ namespace Toggl.Foundation.Tests.Sync.States
             public TheStartMethod()
             {
                 timeService = Substitute.For<ITimeService>();
-                timeService.CurrentDateTime.Returns(_ => DateTimeOffset.Now);
+                timeService.CurrentDateTime.Returns(_ => Now);
             }
 
             protected override PersistTimeEntriesState CreateState(IRepository<IDatabaseTimeEntry> repository, ISinceParameterRepository sinceParameterRepository)
                 => new PersistTimeEntriesState(repository, sinceParameterRepository, timeService);
 
             protected override List<ITimeEntry> CreateListWithOneItem(DateTimeOffset? at = null)
-                => new List<ITimeEntry> { new TimeEntry { At = at ?? DateTimeOffset.Now, Description = Guid.NewGuid().ToString() } };
+                => new List<ITimeEntry> { new TimeEntry { At = at ?? Now, Description = Guid.NewGuid().ToString() } };
 
             protected override FetchObservables CreateObservablesWhichFetchesTwice()
                 => CreateFetchObservables(
@@ -70,7 +70,7 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             protected override List<ITimeEntry> CreateComplexListWhereTheLastUpdateEntityIsDeleted(DateTimeOffset? maybeAt)
             {
-                var at = maybeAt ?? DateTimeOffset.Now;
+                var at = maybeAt ?? Now;
                 return new List<ITimeEntry>
                 {
                     new TimeEntry { At = at.AddDays(-1), Description = Guid.NewGuid().ToString() },

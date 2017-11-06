@@ -27,7 +27,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 => new PersistTasksState(repository, sinceParameterRepository);
 
             protected override List<ITask> CreateListWithOneItem(DateTimeOffset? at = null)
-                => new List<ITask> { new Task { At = at ?? DateTimeOffset.Now, Name = Guid.NewGuid().ToString() } };
+                => new List<ITask> { new Task { At = at ?? Now, Name = Guid.NewGuid().ToString() } };
 
             protected override FetchObservables CreateObservablesWhichFetchesTwice()
                 => CreateFetchObservables(
@@ -67,10 +67,10 @@ namespace Toggl.Foundation.Tests.Sync.States
             protected override List<ITask> CreateComplexListWhereTheLastUpdateEntityIsDeleted(DateTimeOffset? at)
                 => new List<ITask>
                 {
-                    new Task { At = at?.AddDays(-1) ?? DateTimeOffset.Now, Name = Guid.NewGuid().ToString() },
-                    new Task { At = at?.AddDays(-3) ?? DateTimeOffset.Now, Name = Guid.NewGuid().ToString() },
-                    new Task { At = at ?? DateTimeOffset.Now, Name = Guid.NewGuid().ToString() },
-                    new Task { At = at?.AddDays(-2) ?? DateTimeOffset.Now, Name = Guid.NewGuid().ToString() }
+                    new Task { At = at?.AddDays(-1) ?? Now, Name = Guid.NewGuid().ToString() },
+                    new Task { At = at?.AddDays(-3) ?? Now, Name = Guid.NewGuid().ToString() },
+                    new Task { At = at ?? Now, Name = Guid.NewGuid().ToString() },
+                    new Task { At = at?.AddDays(-2) ?? Now, Name = Guid.NewGuid().ToString() }
                 };
 
             protected override Func<IDatabaseTask, bool> ArePersistedAndClean(List<ITask> tasks)

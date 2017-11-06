@@ -23,12 +23,14 @@ namespace Toggl.Foundation.Tests.Suggestions
             protected MostUsedTimeEntrySuggestionProvider Provider { get; }
             protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
             protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
-            
+
+            protected DateTimeOffset Now { get; } = new DateTimeOffset(2017, 03, 24, 12, 34, 56, TimeSpan.Zero);
+
             protected MostUsedTimeEntrySuggestionProviderTest()
             {
                 Provider = new MostUsedTimeEntrySuggestionProvider(Database, TimeService);
 
-                TimeService.CurrentDateTime.Returns(_ => DateTimeOffset.Now);
+                TimeService.CurrentDateTime.Returns(_ => Now);
             }
         }
 
@@ -56,8 +58,8 @@ namespace Toggl.Foundation.Tests.Suggestions
                 var builder = TimeEntry.Builder.Create(21)
                     .SetUserId(10)
                     .SetWorkspaceId(12)
-                    .SetAt(DateTimeOffset.Now)
-                    .SetStart(DateTimeOffset.UtcNow);
+                    .SetAt(Now)
+                    .SetStart(Now);
 
                 return Enumerable.Range(0, numberOfRepetitions.Length)
                     .SelectMany(index => Enumerable
@@ -114,8 +116,8 @@ namespace Toggl.Foundation.Tests.Suggestions
                 var builder = TimeEntry.Builder.Create(12)
                                        .SetUserId(9)
                                        .SetWorkspaceId(2)
-                                       .SetAt(DateTimeOffset.Now)
-                                       .SetStart(DateTimeOffset.UtcNow)
+                                       .SetAt(Now)
+                                       .SetStart(Now)
                                        .SetDescription("");
                 var emptyTimeEntries = Enumerable.Range(20, 0)
                     .Select(_ => builder.Build());

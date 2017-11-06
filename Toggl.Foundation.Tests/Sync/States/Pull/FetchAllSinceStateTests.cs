@@ -22,13 +22,14 @@ namespace Toggl.Foundation.Tests.Sync.States
             private readonly ITogglApi api;
             private readonly ITimeService timeService;
             private readonly FetchAllSinceState state;
+            private readonly DateTimeOffset now = new DateTimeOffset(2017, 02, 15, 13, 50, 00, TimeSpan.Zero);
 
             public TheStartMethod()
             {
                 database = Substitute.For<ITogglDatabase>();
                 api = Substitute.For<ITogglApi>();
                 timeService = Substitute.For<ITimeService>();
-                timeService.CurrentDateTime.Returns(DateTimeOffset.Now);
+                timeService.CurrentDateTime.Returns(now);
                 state = new FetchAllSinceState(database, api, timeService);
             }
 
