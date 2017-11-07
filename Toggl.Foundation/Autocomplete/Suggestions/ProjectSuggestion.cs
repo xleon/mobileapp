@@ -19,6 +19,8 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
 
         public IList<TaskSuggestion> Tasks { get; }
 
+        public bool HasTasks => Tasks?.Count > 0;
+
         public string ProjectName { get; } = "";
 
         public string ClientName { get; } = "";

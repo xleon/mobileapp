@@ -17,6 +17,9 @@ namespace Toggl.Daneel.Views
     {
         private const float selectedProjectBackgroundAlpha = 0.12f;
 
+        private const int fadeViewTrailingConstraintWithTasks = 72;
+        private const int fadeViewTrailingConstraintWithoutTasks = 16;
+
         public static readonly NSString Key = new NSString(nameof(ProjectSuggestionViewCell));
         public static readonly UINib Nib;
 
@@ -42,6 +45,7 @@ namespace Toggl.Daneel.Views
         {
             base.AwakeFromNib();
 
+            FadeView.FadeRight = true;
             ClientNameLabel.LineBreakMode = UILineBreakMode.TailTruncation;
             ProjectNameLabel.LineBreakMode = UILineBreakMode.TailTruncation;
             ToggleTasksButton.TouchUpInside += togglTasksButton;
@@ -53,6 +57,10 @@ namespace Toggl.Daneel.Views
                 var visibilityConverter = new MvxVisibilityValueConverter();
                 var projectSelectedColorCombiner
                     = new ProjectSelectedColorValueCombiner(selectedProjectBackgroundAlpha);
+                var fadeViewTrailingConstantConverter = new BoolToConstantValueConverter<nfloat>(
+                    fadeViewTrailingConstraintWithTasks,
+                    fadeViewTrailingConstraintWithoutTasks
+                );
 
                 var bindingSet = this.CreateBindingSet<ProjectSuggestionViewCell, ProjectSuggestion>();
 
@@ -91,6 +99,12 @@ namespace Toggl.Daneel.Views
                           .For(v => v.BindVisibility())
                           .To(vm => vm.NumberOfTasks)
                           .WithConversion(visibilityConverter);
+
+                //Constraints
+                bindingSet.Bind(FadeViewTrailingConstraint)
+                          .For(c => c.Constant)
+                          .To(MvxViewModel => MvxViewModel.HasTasks)
+                          .WithConversion(fadeViewTrailingConstantConverter);
                 
                 bindingSet.Apply();
             });

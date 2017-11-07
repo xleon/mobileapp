@@ -21,6 +21,12 @@ namespace Toggl.Daneel.Views
 		UIKit.UILabel ClientNameLabel { get; set; }
 
 		[Outlet]
+		Toggl.Daneel.Views.FadeView FadeView { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint FadeViewTrailingConstraint { get; set; }
+
+		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIView ProjectDotView { get; set; }
 
@@ -45,9 +51,9 @@ namespace Toggl.Daneel.Views
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (SelectedProjectView != null) {
-				SelectedProjectView.Dispose ();
-				SelectedProjectView = null;
+			if (FadeViewTrailingConstraint != null) {
+				FadeViewTrailingConstraint.Dispose ();
+				FadeViewTrailingConstraint = null;
 			}
 
 			if (AmountOfTasksLabel != null) {
@@ -60,6 +66,11 @@ namespace Toggl.Daneel.Views
 				ClientNameLabel = null;
 			}
 
+			if (FadeView != null) {
+				FadeView.Dispose ();
+				FadeView = null;
+			}
+
 			if (ProjectDotView != null) {
 				ProjectDotView.Dispose ();
 				ProjectDotView = null;
@@ -68,6 +79,11 @@ namespace Toggl.Daneel.Views
 			if (ProjectNameLabel != null) {
 				ProjectNameLabel.Dispose ();
 				ProjectNameLabel = null;
+			}
+
+			if (SelectedProjectView != null) {
+				SelectedProjectView.Dispose ();
+				SelectedProjectView = null;
 			}
 
 			if (ToggleTaskImage != null) {
