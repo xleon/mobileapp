@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
 using Toggl.PrimeRadiant.Realm.Models;
 
@@ -7,6 +8,15 @@ namespace Toggl.PrimeRadiant.Realm
 {
     public sealed class SinceParameterStorage : ISinceParameterRepository
     {
+        private readonly Func<Realms.Realm> getRealmInstance;
+
+        public SinceParameterStorage(Func<Realms.Realm> getRealmInstance)
+        {
+            Ensure.Argument.IsNotNull(getRealmInstance, nameof(getRealmInstance));
+
+            this.getRealmInstance = getRealmInstance;
+        }
+
         public ISinceParameters Get()
         {
             return doTransaction();
@@ -21,7 +31,7 @@ namespace Toggl.PrimeRadiant.Realm
         {
             RealmSinceParameters parameters;
 
-            var realm = Realms.Realm.GetInstance();
+            var realm = getRealmInstance();
             using (var transaction = realm.BeginWrite())
             {
                 parameters = getOrCreateRealmObject(realm);

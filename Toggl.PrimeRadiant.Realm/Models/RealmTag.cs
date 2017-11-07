@@ -15,5 +15,7 @@ namespace Toggl.PrimeRadiant.Realm
         public long WorkspaceId => RealmWorkspace?.Id ?? 0;
         
         public IDatabaseWorkspace Workspace => RealmWorkspace;
+
+        public DateTimeOffset? DeletedAt { get; set; }
     }
 }

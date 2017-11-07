@@ -1,24 +1,30 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
+using Realms;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.PrimeRadiant.Realm
 {
     public sealed class Database : ITogglDatabase
     {
+        private readonly RealmConfiguration realmConfiguration;
+
         public Database()
         {
-            IdProvider = new IdProvider();
-            SinceParameters = new SinceParameterStorage();
-            Tags = Repository<IDatabaseTag>.For((tag, realm) => new RealmTag(tag, realm));
-            Tasks = Repository<IDatabaseTask>.For((task, realm) => new RealmTask(task, realm));
-            User = SingleObjectStorage<IDatabaseUser>.For((user, realm) => new RealmUser(user, realm));
-            Clients = Repository<IDatabaseClient>.For((client, realm) => new RealmClient(client, realm));
-            Projects = Repository<IDatabaseProject>.For((project, realm) => new RealmProject(project, realm));
-            TimeEntries = Repository<IDatabaseTimeEntry>.For((timeEntry, realm) => new RealmTimeEntry(timeEntry, realm));
-            Workspaces = Repository<IDatabaseWorkspace>.For((workspace, realm) => new RealmWorkspace(workspace, realm));
+            realmConfiguration = createRealmConfiguration();
+
+            IdProvider = new IdProvider(getRealmInstance);
+            SinceParameters = new SinceParameterStorage(getRealmInstance);
+            Tags = Repository<IDatabaseTag>.For(getRealmInstance, (tag, realm) => new RealmTag(tag, realm));
+            Tasks = Repository<IDatabaseTask>.For(getRealmInstance, (task, realm) => new RealmTask(task, realm));
+            User = SingleObjectStorage<IDatabaseUser>.For(getRealmInstance, (user, realm) => new RealmUser(user, realm));
+            Clients = Repository<IDatabaseClient>.For(getRealmInstance, (client, realm) => new RealmClient(client, realm));
+            Projects = Repository<IDatabaseProject>.For(getRealmInstance, (project, realm) => new RealmProject(project, realm));
+            TimeEntries = Repository<IDatabaseTimeEntry>.For(getRealmInstance, (timeEntry, realm) => new RealmTimeEntry(timeEntry, realm));
+            Workspaces = Repository<IDatabaseWorkspace>.For(getRealmInstance, (workspace, realm) => new RealmWorkspace(workspace, realm));
             WorkspaceFeatures = Repository<IDatabaseWorkspaceFeatureCollection>.For(
+                getRealmInstance,
                 (collection, realm) => new RealmWorkspaceFeatureCollection(collection, realm),
                 id => x => x.WorkspaceId == id,
                 features => features.WorkspaceId);
@@ -38,7 +44,7 @@ namespace Toggl.PrimeRadiant.Realm
         public IObservable<Unit> Clear() => 
             Observable.Start(() =>
             {
-                var realm = Realms.Realm.GetInstance();
+                var realm = getRealmInstance();
 
                 using (var transaction = realm.BeginWrite())
                 {
@@ -46,5 +52,21 @@ namespace Toggl.PrimeRadiant.Realm
                     transaction.Commit();
                 }
             });
+
+        private Realms.Realm getRealmInstance()
+            => Realms.Realm.GetInstance(realmConfiguration);
+
+        private RealmConfiguration createRealmConfiguration()
+            => new RealmConfiguration
+            {
+                SchemaVersion = 1,
+                MigrationCallback = (migration, oldSchemaVersion) =>
+                {
+                    if (oldSchemaVersion < 1)
+                    {
+                        // nothing needs explicit updating when updating form schema 0 to 1
+                    }
+                }
+            };
     }
 }

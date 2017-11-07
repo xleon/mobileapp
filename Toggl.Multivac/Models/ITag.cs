@@ -9,5 +9,7 @@ namespace Toggl.Multivac.Models
         string Name { get; }
 
         DateTimeOffset At { get; }
+
+        DateTimeOffset? DeletedAt { get; }
     }
 }

@@ -34,25 +34,30 @@ namespace Toggl.PrimeRadiant.Realm
 
         private readonly Func<TRealmEntity, long> getId;
 
+        private readonly Func<Realms.Realm> getRealmInstance;
+
         public RealmAdapter(
+            Func<Realms.Realm> getRealmInstance,
             Func<TModel, Realms.Realm, TRealmEntity> clone,
             Func<long, Expression<Func<TRealmEntity, bool>>> matchEntity,
             Func<TRealmEntity, long> getId)
         {
+            Ensure.Argument.IsNotNull(getRealmInstance, nameof(getRealmInstance));
             Ensure.Argument.IsNotNull(clone, nameof(clone));
             Ensure.Argument.IsNotNull(matchEntity, nameof(matchEntity));
             Ensure.Argument.IsNotNull(getId, nameof(getId));
 
+            this.getRealmInstance = getRealmInstance;
             this.clone = clone;
             this.matchEntity = matchEntity;
             this.getId = getId;
         }
 
         public IQueryable<TModel> GetAll()
-            => Realms.Realm.GetInstance().All<TRealmEntity>();
+            => getRealmInstance().All<TRealmEntity>();
 
         public TModel Get(long id)
-            => Realms.Realm.GetInstance().All<TRealmEntity>().Single(matchEntity(id));
+            => getRealmInstance().All<TRealmEntity>().Single(matchEntity(id));
 
         public TModel Create(TModel entity)
         {
@@ -77,7 +82,7 @@ namespace Toggl.PrimeRadiant.Realm
             Ensure.Argument.IsNotNull(matchEntity, nameof(matchEntity));
             Ensure.Argument.IsNotNull(conflictResolution, nameof(conflictResolution));
 
-            var realm = Realms.Realm.GetInstance();
+            var realm = getRealmInstance();
             using (var transaction = realm.BeginWrite())
             {
                 var realmEntities = realm.All<TRealmEntity>();
@@ -127,7 +132,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         private TModel doTransaction(Func<Realms.Realm, TModel> transact)
         {
-            var realm = Realms.Realm.GetInstance();
+            var realm = getRealmInstance();
             using (var transaction = realm.BeginWrite())
             {
                 var returnValue = transact(realm);

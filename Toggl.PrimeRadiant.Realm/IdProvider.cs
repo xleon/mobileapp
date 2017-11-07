@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Realms;
+using Toggl.Multivac;
 
 namespace Toggl.PrimeRadiant.Realm
 {
@@ -13,10 +15,19 @@ namespace Toggl.PrimeRadiant.Realm
 
     public sealed class IdProvider : IIdProvider
     {
+        private readonly Func<Realms.Realm> getRealmInstance;
+
+        public IdProvider(Func<Realms.Realm> getRealmInstance)
+        {
+            Ensure.Argument.IsNotNull(getRealmInstance, nameof(getRealmInstance));
+
+            this.getRealmInstance = getRealmInstance;
+        }
+
         public long GetNextIdentifier()
         {
             var nextIdentifier = -1L;
-            var realm = Realms.Realm.GetInstance();
+            var realm = getRealmInstance();
             using (var transaction = realm.BeginWrite())
             {
                 var entity = realm.All<RealmIdProvider>().SingleOrDefault();

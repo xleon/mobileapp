@@ -56,6 +56,7 @@ namespace Toggl.Ultrawave.Models
             WorkspaceId = entity.WorkspaceId;
             Name = entity.Name;
             At = entity.At;
+            DeletedAt = entity.DeletedAt;
         }
     }
 

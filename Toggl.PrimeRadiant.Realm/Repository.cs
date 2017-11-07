@@ -38,16 +38,17 @@ namespace Toggl.PrimeRadiant.Realm
             => CreateObservable(() => Adapter.Get(id));
 
         public static Repository<TModel> For<TRealmEntity>(
-            Func<TModel, Realms.Realm, TRealmEntity> convertToRealm)
+            Func<Realms.Realm> getRealmInstance, Func<TModel, Realms.Realm, TRealmEntity> convertToRealm)
             where TRealmEntity : RealmObject, IBaseModel, TModel, IUpdatesFrom<TModel>
-            => For(convertToRealm, matchById<TRealmEntity>, getId<TRealmEntity>);
+            => For(getRealmInstance, convertToRealm, matchById<TRealmEntity>, getId<TRealmEntity>);
 
         public static Repository<TModel> For<TRealmEntity>(
+            Func<Realms.Realm> getRealmInstance,
             Func<TModel, Realms.Realm, TRealmEntity> convertToRealm,
             Func<long, Expression<Func<TRealmEntity, bool>>> matchById,
             Func<TRealmEntity, long> getId)
             where TRealmEntity : RealmObject, TModel, IUpdatesFrom<TModel>
-            => new Repository<TModel>(new RealmAdapter<TRealmEntity, TModel>(convertToRealm, matchById, getId));
+            => new Repository<TModel>(new RealmAdapter<TRealmEntity, TModel>(getRealmInstance, convertToRealm, matchById, getId));
 
         private static Expression<Func<TRealmEntity, bool>> matchById<TRealmEntity>(long id)
             where TRealmEntity : RealmObject, IBaseModel, TModel, IUpdatesFrom<TModel>

@@ -58,7 +58,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                     Observable.Return(tags),
                     Observable.Return(new List<ITask>()));
 
-            protected override bool IsDeletedOnServer(ITag entity) => false;
+            protected override bool IsDeletedOnServer(ITag entity) => entity.DeletedAt.HasValue;
 
             protected override IDatabaseTag Clean(ITag entity) => Models.Tag.Clean(entity);
 
@@ -69,7 +69,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 {
                     new Tag { At = at.AddDays(-1), Name = Guid.NewGuid().ToString() },
                     new Tag { At = at.AddDays(-3), Name = Guid.NewGuid().ToString() },
-                    new Tag { At = at, Name = Guid.NewGuid().ToString() },
+                    new Tag { At = at, Name = Guid.NewGuid().ToString(), DeletedAt = at.AddDays(-1) },
                     new Tag { At = at.AddDays(-2), Name = Guid.NewGuid().ToString() }
                 };
             }   
