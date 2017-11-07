@@ -130,28 +130,10 @@ private TemporaryFileTransformation GetUITestsFileTransformation()
     };
 }
 
-private TemporaryFileTransformation GetIntegrationTestsCredentialsTransformation()
-{
-    const string path = "Toggl.Ultrawave.Tests.Integration/Helper/TestUserCredentials.cs";
-    var starterUsername = EnvironmentVariable("TOGGL_INTEGRATION_TEST_STARTER_USERNAME");
-    var starterPassword = EnvironmentVariable("TOGGL_INTEGRATION_TEST_STARTER_PASSWORD");
-    var filePath = GetFiles(path).Single();
-    var file = TransformTextFile(filePath).ToString();
-
-    return new TemporaryFileTransformation
-    {
-        Path = path,
-        Original = file,
-        Temporary = file.Replace("{TOGGL_INTEGRATION_TEST_STARTER_USERNAME}", starterUsername)
-                        .Replace("{TOGGL_INTEGRATION_TEST_STARTER_PASSWORD}", starterPassword)
-    };
-}
-
 var transformations = new List<TemporaryFileTransformation> 
 {
     GetIntegrationTestsConfigurationTransformation(),
     GetUITestsFileTransformation(),
-    GetIntegrationTestsCredentialsTransformation(),
     GetIosAnalyticsServicesConfigurationTransformation()
 };
 

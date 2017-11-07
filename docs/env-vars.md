@@ -19,10 +19,6 @@ Below is a list of all the environment variables you need to configure before bu
 `TOGGL_UI_TEST_USERNAME`
 `TOGGL_UI_TEST_PASSWORD`
 
-- Integration tests that rely on users being on the Starter plan :dollar: 
-`TOGGL_INTEGRATION_TEST_STARTER_USERNAME`
-`TOGGL_INTEGRATION_TEST_STARTER_PASSWORD`
-
 # new 'puter who dis? :computer:
 
 To configure this on a macOS:
@@ -46,8 +42,6 @@ export TOGGL_PROJECT_ID=""
 export TOGGL_STORAGE_BUCKET=""
 export TOGGL_GOOGLE_APP_ID=""
 export TOGGL_DATABASE_URL=""
-export TOGGL_INTEGRATION_TEST_STARTER_USERNAME=""
-export TOGGL_INTEGRATION_TEST_STARTER_PASSWORD=""
 ```
 
 Finish it off with:
