@@ -574,6 +574,7 @@
     <Compile Include="Binding\NavigationItemHidesBackButtonTargetBinding.cs" />
     <Compile Include="ViewControllers\BrowserViewController.cs" />
     <Compile Include="Combiners\ProjectSelectedColorValueCombiner.cs" />
+    <Compile Include="Extensions\TableViewExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

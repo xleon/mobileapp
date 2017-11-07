@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CoreText;
 using MvvmCross.Binding.BindingContext;
+using MvvmCross.Core.ViewModels;
 using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
 using MvvmCross.Plugins.Color.iOS;
@@ -9,6 +10,7 @@ using MvvmCross.Plugins.Visibility;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
+using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -35,6 +37,7 @@ namespace Toggl.Daneel.ViewControllers
 
             var source = new StartTimeEntryTableViewSource(SuggestionsTableView);
             SuggestionsTableView.Source = source;
+            source.ToggleTasksCommand = new MvxCommand<ProjectSuggestion>(toggleTaskSuggestions);
 
             var timeSpanConverter = new TimeSpanToDurationValueConverter();
             var invertedVisibilityConverter = new MvxInvertedVisibilityValueConverter();
@@ -48,9 +51,6 @@ namespace Toggl.Daneel.ViewControllers
 
             //TableView
             bindingSet.Bind(source).To(vm => vm.Suggestions);
-            bindingSet.Bind(source)
-                      .For(v => v.ToggleTasksCommand)
-                      .To(vm => vm.ToggleTaskSuggestionsCommand);
 
             bindingSet.Bind(source)
                       .For(v => v.UseGrouping)
@@ -167,6 +167,16 @@ namespace Toggl.Daneel.ViewControllers
             yield return BillableButton;
             yield return DurationButton;
             yield return DateTimeButton;
+        }
+
+        private void toggleTaskSuggestions(ProjectSuggestion parameter)
+        {
+            var offset = SuggestionsTableView.ContentOffset;
+            var frameHeight = SuggestionsTableView.Frame.Height;
+
+            ViewModel.ToggleTaskSuggestionsCommand.Execute(parameter);
+
+            SuggestionsTableView.CorrectOffset(offset, frameHeight);
         }
     }
 }
