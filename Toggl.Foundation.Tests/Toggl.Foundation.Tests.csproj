@@ -216,10 +216,6 @@
     <Compile Include="Sync\States\Pull\PersistTasksStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistWorkspaceFeaturesStateTests.cs" />
     <Compile Include="Sync\States\Push\CheckServerStatusStateTests.cs" />
-    <Compile Include="Sync\States\Push\BaseUnsyncableEntityStateTests.cs" />
-    <Compile Include="Sync\States\Push\UnsyncableTimeEntryStateTests.cs" />
-    <Compile Include="Sync\States\Push\BaseUpdateEntityStateTests.cs" />
-    <Compile Include="Sync\States\Push\UpdateTimeEntryStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistTagsStateTests.cs" />
     <Compile Include="Sync\StateTreeTests.cs" />
     <Compile Include="Sync\SyncManagerTests.cs" />
@@ -239,17 +235,12 @@
     <Compile Include="MvvmCross\ViewModels\TimeEntryViewModelCollectionTests.cs" />
     <Compile Include="Sync\ConflictResolution\PreferNewerTests.cs" />
     <Compile Include="Sync\States\TestException.cs" />
-    <Compile Include="Sync\States\Push\BasePushStateTests.cs" />
-    <Compile Include="Sync\States\Push\PushTimeEntriesStateTests.cs" />
     <Compile Include="Sync\States\Pull\FetchAllSinceStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistClientsStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistProjectsStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistTimeEntriesStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistWorkspacesStateTests.cs" />
-    <Compile Include="Sync\States\Push\BaseCreateEntityStateTests.cs" />
-    <Compile Include="Sync\States\Push\CreateTimeEntryTests.cs" />
-    <Compile Include="Sync\States\Push\BasePushOneEntityStateTests.cs" />
     <Compile Include="Sync\States\Push\TestModel.cs" />
     <Compile Include="Autocomplete\AutocompleteProviderTests.cs" />
     <Compile Include="Autocomplete\TextFieldInfoTests.cs" />
@@ -258,12 +249,24 @@
     <Compile Include="MvvmCross\ViewModels\SelectTagsViewModelTests.cs" />
     <Compile Include="Sync\States\Push\ResetAPIDelayStateTests.cs" />
     <Compile Include="DataSources\TasksDataSourceTests.cs" />
-    <Compile Include="Sync\States\Push\BasePushEntityStateTests.cs" />
-    <Compile Include="Sync\States\Push\BaseDeleteLocalEntityStateTests.cs" />
-    <Compile Include="Sync\States\Push\DeleteLocalTimeEntryStateTests.cs" />
-    <Compile Include="Sync\States\Push\BaseDeleteEntityStateTests.cs" />
-    <Compile Include="Sync\States\Push\DeleteTimeEntryStateTests.cs" />
     <Compile Include="MvvmCross\ViewModels\BrowserViewModelTests.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BaseCreateEntityStateTests.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BaseDeleteEntityStateTests.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BaseDeleteLocalEntityStateTests.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BasePushEntityStateTests.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BasePushOneEntityStateTests.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BasePushStateTests.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BaseUnsyncableEntityStateTests.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BaseUpdateEntityStateTests.cs" />
+    <Compile Include="Sync\States\Push\TimeEntries\CreateTimeEntryTests.cs" />
+    <Compile Include="Sync\States\Push\TimeEntries\DeleteLocalTimeEntryStateTests.cs" />
+    <Compile Include="Sync\States\Push\TimeEntries\PushTimeEntriesStateTests.cs" />
+    <Compile Include="Sync\States\Push\TimeEntries\UnsyncableTimeEntryStateTests.cs" />
+    <Compile Include="Sync\States\Push\Tags\CreateTagTests.cs" />
+    <Compile Include="Sync\States\Push\Tags\PushTagsStateTests.cs" />
+    <Compile Include="Sync\States\Push\Tags\UnsyncableTagStateTests.cs" />
+    <Compile Include="Sync\States\Push\TimeEntries\DeleteTimeEntryStateTests.cs" />
+    <Compile Include="Sync\States\Push\TimeEntries\UpdateTimeEntryStateTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />
@@ -306,6 +309,9 @@
   <ItemGroup />
   <ItemGroup>
     <Folder Include="Sync\States\Push\" />
+    <Folder Include="Sync\States\Push\BaseStates\" />
+    <Folder Include="Sync\States\Push\TimeEntries\" />
+    <Folder Include="Sync\States\Push\Tags\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

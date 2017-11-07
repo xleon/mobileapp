@@ -10,9 +10,9 @@ using Toggl.Ultrawave;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {
-    public sealed class CreateTimeEntryTests : BaseCreateEntityStateTests
+    public sealed class CreateTimeEntryStateTests : BaseCreateEntityStateTests
     {
-        public CreateTimeEntryTests()
+        public CreateTimeEntryStateTests()
             : base(new TheStartMethod())
         {
         }

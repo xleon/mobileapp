@@ -93,9 +93,7 @@
     <Compile Include="Login\ILoginManager.cs" />
     <Compile Include="Sync\States\Pull\PersistTasksState.cs" />
     <Compile Include="Sync\States\Pull\PersistWorkspaceFeaturesState.cs" />
-    <Compile Include="Sync\States\Push\BaseUnsyncableEntityState.cs" />
     <Compile Include="Sync\States\Push\CheckServerStatusState.cs" />
-    <Compile Include="Sync\States\Push\UnsyncableTimeEntryState.cs" />
     <Compile Include="Sync\States\Pull\PersistTagsState.cs" />
     <Compile Include="Sync\TransitionHandlerProvider.cs" />
     <Compile Include="Sync\SyncManager.cs" />
@@ -112,8 +110,6 @@
     <Compile Include="Sync\ConflictResolution\Selectors\TimeEntrySyncSelector.cs" />
     <Compile Include="Sync\ConflictResolution\Resolver.cs" />
     <Compile Include="TogglSyncManagerFactory.cs" />
-    <Compile Include="Sync\States\Push\BasePushState.cs" />
-    <Compile Include="Sync\States\Push\PushTimeEntriesState.cs" />
     <Compile Include="IRepositoryExtensions.cs" />
     <Compile Include="Sync\States\Pull\BasePersistState.cs" />
     <Compile Include="Sync\States\Pull\FetchAllSinceState.cs" />
@@ -122,11 +118,7 @@
     <Compile Include="Sync\States\Pull\PersistProjectsState.cs" />
     <Compile Include="Sync\States\Pull\PersistTimeEntriesState.cs" />
     <Compile Include="Sync\States\Pull\PersistWorkspacesState.cs" />
-    <Compile Include="Sync\States\Push\BaseCreateEntityState.cs" />
-    <Compile Include="Sync\States\Push\CreateTimeEntryState.cs" />
     <Compile Include="Sync\States\Push\PushOneEntityState.cs" />
-    <Compile Include="Sync\States\Push\UpdateTimeEntryState.cs" />
-    <Compile Include="Sync\States\Push\BaseUpdateEntityState.cs" />
     <Compile Include="Autocomplete\TextFieldInfo.cs" />
     <Compile Include="Autocomplete\Suggestions\AutocompleteSuggestion.cs" />
     <Compile Include="Autocomplete\Suggestions\AutocompleteSuggestionComparer.cs" />
@@ -146,11 +138,22 @@
     <Compile Include="Exceptions\NoRunningTimeEntryException.cs" />
     <Compile Include="Sync\States\Push\ResetAPIDelayState.cs" />
     <Compile Include="DataSources\TasksDataSource.cs" />
-    <Compile Include="Sync\States\Push\BaseDeleteEntityState.cs" />
-    <Compile Include="Sync\States\Push\BasePushEntityState.cs" />
-    <Compile Include="Sync\States\Push\BaseDeleteLocalEntityState.cs" />
-    <Compile Include="Sync\States\Push\DeleteLocalTimeEntryState.cs" />
-    <Compile Include="Sync\States\Push\DeleteTimeEntryState.cs" />
+    <Compile Include="Sync\States\Push\TimeEntries\CreateTimeEntryState.cs" />
+    <Compile Include="Sync\States\Push\TimeEntries\DeleteLocalTimeEntryState.cs" />
+    <Compile Include="Sync\States\Push\TimeEntries\DeleteTimeEntryState.cs" />
+    <Compile Include="Sync\States\Push\TimeEntries\PushTimeEntriesState.cs" />
+    <Compile Include="Sync\States\Push\TimeEntries\UnsyncableTimeEntryState.cs" />
+    <Compile Include="Sync\States\Push\TimeEntries\UpdateTimeEntryState.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BaseCreateEntityState.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BaseDeleteEntityState.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BaseDeleteLocalEntityState.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BasePushEntityState.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BasePushState.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BaseUnsyncableEntityState.cs" />
+    <Compile Include="Sync\States\Push\BaseStates\BaseUpdateEntityState.cs" />
+    <Compile Include="Sync\States\Push\Tags\CreateTagState.cs" />
+    <Compile Include="Sync\States\Push\Tags\PushTagsState.cs" />
+    <Compile Include="Sync\States\Push\Tags\UnsyncableTagState.cs" />
     <Compile Include="Helper\Constants.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +211,9 @@
   <ItemGroup />
   <ItemGroup />
   <ItemGroup>
+    <Folder Include="Sync\States\Push\TimeEntries\" />
+    <Folder Include="Sync\States\Push\BaseStates\" />
+    <Folder Include="Sync\States\Push\Tags\" />
     <Folder Include="Helper\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
