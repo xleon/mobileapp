@@ -213,6 +213,7 @@
     <Compile Include="Sync\RetryDelayServiceTests.cs" />
     <Compile Include="Sync\StateMachineOrchestratorTests.cs" />
     <Compile Include="Sync\StateMachineTests.cs" />
+    <Compile Include="Sync\States\InvalidTransitionStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistTasksStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistWorkspaceFeaturesStateTests.cs" />
     <Compile Include="Sync\States\Push\CheckServerStatusStateTests.cs" />

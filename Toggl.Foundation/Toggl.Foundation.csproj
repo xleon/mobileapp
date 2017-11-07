@@ -91,6 +91,7 @@
     <Compile Include="Suggestions\SuggestionProviderContainer.cs" />
     <Compile Include="Login\ApiFactory.cs" />
     <Compile Include="Login\ILoginManager.cs" />
+    <Compile Include="Sync\States\InvalidTransitionState.cs" />
     <Compile Include="Sync\States\Pull\PersistTasksState.cs" />
     <Compile Include="Sync\States\Pull\PersistWorkspaceFeaturesState.cs" />
     <Compile Include="Sync\States\Push\CheckServerStatusState.cs" />
