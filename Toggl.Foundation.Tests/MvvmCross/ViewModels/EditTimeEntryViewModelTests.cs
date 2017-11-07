@@ -1,21 +1,21 @@
 ﻿using System;
-using System.Reactive;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
-using static Toggl.Foundation.MvvmCross.Helper.Constants;
-using Toggl.Foundation.DTOs;
+using static Toggl.Foundation.Helper.Constants;
 using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels

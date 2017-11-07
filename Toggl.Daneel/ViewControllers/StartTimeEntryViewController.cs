@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using CoreText;
 using MvvmCross.Binding.BindingContext;
+using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
 using MvvmCross.Plugins.Color.iOS;
+using MvvmCross.Plugins.Visibility;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
@@ -35,6 +37,8 @@ namespace Toggl.Daneel.ViewControllers
             SuggestionsTableView.Source = source;
 
             var timeSpanConverter = new TimeSpanToDurationValueConverter();
+            var invertedVisibilityConverter = new MvxInvertedVisibilityValueConverter();
+            var invertedBoolConverter = new BoolToConstantValueConverter<bool>(false, true);
             var buttonColorConverter = new BoolToConstantValueConverter<UIColor>(
                 Color.StartTimeEntry.ActiveButton.ToNativeColor(),
                 Color.StartTimeEntry.InactiveButton.ToNativeColor()
@@ -65,6 +69,9 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindTextFieldInfo())
                       .To(vm => vm.TextFieldInfo);
 
+            bindingSet.Bind(DescriptionRemainingLengthLabel)
+                      .To(vm => vm.DescriptionRemainingBytes);
+
             //Buttons
             bindingSet.Bind(TagsButton)
                       .For(v => v.TintColor)
@@ -91,11 +98,21 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.IsEditingStartDate)
                       .WithConversion(buttonColorConverter);
 
+            bindingSet.Bind(DoneButton)
+                      .For(v => v.Enabled)
+                      .To(vm => vm.DescriptionLengthExceeded)
+                      .WithConversion(invertedBoolConverter);
+
             //Visibility
             bindingSet.Bind(BillableButtonWidthConstraint)
                       .For(v => v.Constant)
                       .To(vm => vm.IsBillableAvailable)
                       .WithConversion(new BoolToConstantValueConverter<nfloat>(42, 0));
+
+            bindingSet.Bind(DescriptionRemainingLengthLabel)
+                      .For(v => v.BindVisible())
+                      .To(vm => vm.DescriptionLengthExceeded)
+                      .WithConversion(invertedVisibilityConverter);
 
             //Commands
             bindingSet.Bind(DoneButton).To(vm => vm.DoneCommand);

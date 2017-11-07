@@ -63,7 +63,6 @@
     <Compile Include="Parameters\DurationParameter.cs" />
     <Compile Include="ViewModels\SelectProjectViewModel.cs" />
     <Compile Include="Parameters\DatePickerParameters.cs" />
-    <Compile Include="Helper\Constants.cs" />
     <Compile Include="ViewModels\SelectTagsViewModel.cs" />
     <Compile Include="Collections\WorkspaceGroupedCollection.cs" />
     <Compile Include="Collections\TimeEntryViewModelCollection.cs" />

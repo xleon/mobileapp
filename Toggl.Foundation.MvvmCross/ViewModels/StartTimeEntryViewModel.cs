@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Text;
 using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
@@ -16,7 +18,7 @@ using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
-using static Toggl.Foundation.MvvmCross.Helper.Constants;
+using static Toggl.Foundation.Helper.Constants;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -37,6 +39,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IDisposable elapsedTimeDisposable;
 
         //Properties
+        private int DescriptionByteCount
+            => Encoding.UTF8.GetByteCount(TextFieldInfo.Text);
+
+        public int DescriptionRemainingBytes
+            => MaxTimeEntryDescriptionLengthInBytes - DescriptionByteCount;
+
+        public bool DescriptionLengthExceeded
+            => DescriptionByteCount > MaxTimeEntryDescriptionLengthInBytes;
+
         public bool UseGrouping { get; set; }
 
         public bool IsEditingDuration { get; private set; }

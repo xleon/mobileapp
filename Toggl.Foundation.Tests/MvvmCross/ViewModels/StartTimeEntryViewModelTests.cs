@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck.Xunit;
@@ -14,7 +15,7 @@ using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
-using static Toggl.Foundation.MvvmCross.Helper.Constants;
+using static Toggl.Foundation.Helper.Constants;
 using static Toggl.Multivac.Extensions.FunctionalExtensions;
 using TextFieldInfo = Toggl.Foundation.Autocomplete.TextFieldInfo;
 
@@ -933,6 +934,74 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor("", 0);
 
                 ViewModel.Suggestions.Should().HaveCount(0);
+            }
+        }
+
+        public sealed class TheDescriptionRemainingBytesProperty : StartTimeEntryViewModelTest
+        {
+            [Fact]
+            public void IsMaxIfTheTextIsEmpty()
+            {
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty;
+
+                ViewModel.DescriptionRemainingBytes.Should()
+                    .Be(MaxTimeEntryDescriptionLengthInBytes);
+            }
+
+            [Theory]
+            [InlineData("Hello fox")]
+            [InlineData("Some emojis: 🔥😳👻")]
+            [InlineData("Some weird characters: āčēļķīņš")]
+            [InlineData("Some random arabic characters: ظۓڰڿڀ")]
+            public void IsDecreasedForEachByteInTheText(string text)
+            {
+                var expectedRemainingByteCount
+                    = MaxTimeEntryDescriptionLengthInBytes - Encoding.UTF8.GetByteCount(text);
+
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(text, 0);
+
+                ViewModel.DescriptionRemainingBytes.Should()
+                    .Be(expectedRemainingByteCount);
+            }
+
+            [Fact]
+            public void IsNegativeWhenTextLengthExceedsMax()
+            {
+                var bytesOverLimit = 5;
+                var longString = new string('0', MaxTimeEntryDescriptionLengthInBytes + bytesOverLimit);
+
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(longString, 0);
+
+                ViewModel.DescriptionRemainingBytes.Should().Be(-bytesOverLimit);
+            }
+        }
+
+        public sealed class TheDescriptionLengthExceededproperty : StartTimeEntryViewModelTest
+        {
+            [Theory]
+            [InlineData(0)]
+            [InlineData(20)]
+            [InlineData(2999)]
+            [InlineData(3000)]
+            public void IsFalseIfTextIsShorterOrEqualToMax(int byteCount)
+            {
+                var text = new string('0', byteCount);
+
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(text, 0);
+
+                ViewModel.DescriptionLengthExceeded.Should().BeFalse();
+            }
+
+            [Theory]
+            [InlineData(MaxTimeEntryDescriptionLengthInBytes + 1)]
+            [InlineData(MaxTimeEntryDescriptionLengthInBytes + 20)]
+            public void IsTrueWhenTextIsLongerThanMax(int byteCount)
+            {
+                var text = new string('0', byteCount);
+
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(text, 0);
+
+                ViewModel.DescriptionLengthExceeded.Should().BeTrue();
             }
         }
     }
