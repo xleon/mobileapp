@@ -61,7 +61,7 @@ namespace Toggl.Daneel.ViewSources
             => GetGroupAt(section).Count();
 
         protected IEnumerable<T> GetGroupAt(nint section)
-            => GroupedItems.ElementAt((int)section);
+            => GroupedItems.ElementAtOrDefault((int)section) ?? new MvxObservableCollection<T>();
 
         protected sealed override object GetItemAt(NSIndexPath indexPath)
             => GroupedItems.ElementAtOrDefault(indexPath.Section)?.ElementAtOrDefault((int)indexPath.Item);

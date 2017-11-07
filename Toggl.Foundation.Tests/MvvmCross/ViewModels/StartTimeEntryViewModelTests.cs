@@ -528,6 +528,23 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 }
 
                 [Fact]
+                public async Task WithTheAppropriateWorkspaceSelectedIfNoProjectWasTapped()
+                {
+                    const long expectedWorkspace = 1234;
+                    ViewModel.TextFieldInfo = TextFieldInfo.Empty
+                        .WithTextAndCursor(description, 0)
+                        .WithProjectInfo(projectId, "Something", "#123123");
+                    ViewModel.SelectSuggestionCommand
+                             .Execute(ProjectSuggestion.NoProject(expectedWorkspace, ""));
+
+                    ViewModel.DoneCommand.Execute();
+
+                    await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
+                        dto.WorkspaceId == expectedWorkspace
+                    ));
+                }
+
+                [Fact]
                 public async Task WithTheCurrentUsersId()
                 {
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
