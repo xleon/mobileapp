@@ -535,7 +535,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         .WithTextAndCursor(description, 0)
                         .WithProjectInfo(projectId, "Something", "#123123");
                     ViewModel.SelectSuggestionCommand
-                             .Execute(ProjectSuggestion.NoProjectWithWorkspace(expectedWorkspace, ""));
+                             .Execute(ProjectSuggestion.NoProject(expectedWorkspace, ""));
 
                     ViewModel.DoneCommand.Execute();
 
