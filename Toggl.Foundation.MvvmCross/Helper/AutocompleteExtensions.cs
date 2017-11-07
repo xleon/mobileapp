@@ -22,7 +22,7 @@ namespace Toggl.Foundation.MvvmCross.Helper
                 grouping.Key.workspaceName, grouping);
             collection.Insert(
                 0,
-                ProjectSuggestion.NoProjectWithWorkspace(
+                ProjectSuggestion.NoProject(
                     grouping.Key.workspaceId,
                     grouping.Key.workspaceName));
             return collection;

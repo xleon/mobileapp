@@ -142,6 +142,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             public abstract class TimeEntryDataSourceObservableTest : TimeEntriesLogViewModelTest
             {
+                private static readonly DateTimeOffset now = new DateTimeOffset(2017, 01, 19, 07, 10, 00, TimeZone.CurrentTimeZone.GetUtcOffset(new DateTime(2017, 01, 19)));
+
                 protected const int InitialAmountOfTimeEntries = 20;
                 
                 protected Subject<IDatabaseTimeEntry> TimeEntryCreatedSubject = new Subject<IDatabaseTimeEntry>();
@@ -152,13 +154,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                              .SetUserId(10)
                              .SetWorkspaceId(12)
                              .SetDescription("")
-                             .SetAt(DateTimeOffset.Now)
-                             .SetStart(DateTimeOffset.UtcNow)
+                             .SetAt(now)
+                             .SetStart(now)
                              .Build();
 
                 protected TimeEntryDataSourceObservableTest()
                 {
-                    var startTime = DateTimeOffset.Now.AddHours(-2);
+                    var startTime = now.AddHours(-2);
 
                     var observable = Enumerable.Range(1, InitialAmountOfTimeEntries)
                         .Select(i => TimeEntry.Builder.Create(i))
@@ -167,7 +169,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                             .SetUserId(11)
                             .SetWorkspaceId(12)
                             .SetDescription("")
-                            .SetAt(DateTimeOffset.Now)
+                            .SetAt(now)
                             .Build())
                       .Select(te => te.With((long)TimeSpan.FromHours(te.Id * 2 + 2).TotalSeconds))
                       .Apply(Observable.Return);

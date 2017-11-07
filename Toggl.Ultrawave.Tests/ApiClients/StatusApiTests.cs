@@ -66,7 +66,7 @@ namespace Toggl.Ultrawave.Tests.Clients
 
                 Action gettingServerStatus = () => statusApi.IsAvailable().Wait();
 
-                gettingServerStatus.ShouldThrow<ApiException>();
+                gettingServerStatus.ShouldThrow<InternalServerErrorException>();
             }
         }
     }

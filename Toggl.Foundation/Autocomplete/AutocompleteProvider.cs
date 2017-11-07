@@ -66,7 +66,7 @@ namespace Toggl.Foundation.Autocomplete
             {
                 case AutocompleteSuggestionType.Projects when queryListIsEmpty:
                     return database.Projects.GetAll()
-                        .Select(ProjectSuggestion.FromProjectsPrependingEmpty);
+                        .Select(ProjectSuggestion.FromProjects);
 
                 case AutocompleteSuggestionType.Projects:
                     return wordsToQuery

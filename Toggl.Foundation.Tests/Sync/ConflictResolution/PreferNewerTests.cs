@@ -143,6 +143,8 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
 
         private sealed class TestModel : IDatabaseSyncable
         {
+            private readonly DateTimeOffset now = new DateTimeOffset(2017, 01, 05, 12, 34, 56, TimeSpan.Zero);
+
             public SyncStatus SyncStatus { get; }
             public string LastSyncErrorMessage { get; }
             public DateTimeOffset At { get; }
@@ -151,7 +153,7 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
 
             public TestModel(DateTimeOffset? at = null, DateTimeOffset? deleted = null, SyncStatus syncStatus = SyncStatus.InSync)
             {
-                At = at ?? DateTimeOffset.Now;
+                At = at ?? now;
                 ServerDeletedAt = deleted;
                 SyncStatus = syncStatus;
             }

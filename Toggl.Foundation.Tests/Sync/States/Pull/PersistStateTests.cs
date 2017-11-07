@@ -94,6 +94,8 @@ namespace Toggl.Foundation.Tests.Sync.States
             private readonly ISinceParameterRepository sinceParameterRepository;
             private readonly TState state;
 
+            protected DateTimeOffset Now { get; } = new DateTimeOffset(2017, 04, 05, 12, 34, 56, TimeSpan.Zero);
+
             protected TheStartMethod()
             {
                 repository = Substitute.For<IRepository<TDatabaseInterface>>();

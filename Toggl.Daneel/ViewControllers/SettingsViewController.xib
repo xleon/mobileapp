@@ -4,13 +4,23 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsViewController">
             <connections>
+                <outlet property="LoggingOutIndicator" destination="qYE-D7-hWS" id="qPl-XA-dj4"/>
+                <outlet property="LoggingOutLabel" destination="agY-8S-Buy" id="yr0-19-vIP"/>
+                <outlet property="LoggingOutView" destination="9pV-m0-9wY" id="1O8-3P-zPS"/>
                 <outlet property="LogoutButton" destination="L2S-P3-jra" id="name-outlet-L2S-P3-jra"/>
+                <outlet property="SyncedIcon" destination="2Xf-GA-0Ym" id="BfG-Gy-Dva"/>
+                <outlet property="SyncedLabel" destination="iJW-AF-Ph9" id="3St-Va-wwC"/>
+                <outlet property="SyncedView" destination="mJh-gC-yPW" id="OZ2-Nh-oY5"/>
+                <outlet property="SyncingIndicator" destination="05J-Mj-sE1" id="Pw9-T1-qdo"/>
+                <outlet property="SyncingLabel" destination="FaX-g8-EOP" id="0n2-5c-AcE"/>
+                <outlet property="SyncingView" destination="305" id="HUL-5W-ZWG"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
         </placeholder>
@@ -51,6 +61,100 @@
                         <constraint firstAttribute="height" constant="1" id="R8L-Md-o8F"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" restorationIdentifier="SyncingView" translatesAutoresizingMaskIntoConstraints="NO" id="305">
+                    <rect key="frame" x="146.5" y="574" width="82" height="16"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Syncing..." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FaX-g8-EOP">
+                            <rect key="frame" x="0.0" y="0.0" width="57" height="16"/>
+                            <constraints>
+                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="16" id="Oyg-Hs-dnE"/>
+                                <constraint firstAttribute="height" constant="16" id="YhY-0w-QdC"/>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="57" id="fgv-Dv-7Ou"/>
+                                <constraint firstAttribute="width" constant="57" id="lxR-Zt-bBN"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="ActivityIndicatorView" translatesAutoresizingMaskIntoConstraints="NO" id="05J-Mj-sE1" customClass="ActivityIndicatorView">
+                            <rect key="frame" x="67.5" y="1" width="14" height="14"/>
+                            <constraints>
+                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="14" id="0ox-dI-ka4"/>
+                                <constraint firstAttribute="height" constant="14" id="XH7-pK-7qG"/>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="fiJ-TJ-mGC"/>
+                                <constraint firstAttribute="width" constant="14" id="plK-kC-l6G"/>
+                            </constraints>
+                        </imageView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="HEj-08-uU3"/>
+                        <constraint firstAttribute="bottom" secondItem="FaX-g8-EOP" secondAttribute="bottom" id="N6E-OZ-L4J"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="16" id="ZPw-Wm-3Rl"/>
+                        <constraint firstItem="FaX-g8-EOP" firstAttribute="top" secondItem="305" secondAttribute="top" id="aSl-WJ-FHP"/>
+                        <constraint firstItem="05J-Mj-sE1" firstAttribute="centerY" secondItem="FaX-g8-EOP" secondAttribute="centerY" id="jVS-tU-dMh"/>
+                        <constraint firstAttribute="width" constant="82" id="osM-5W-6ou"/>
+                        <constraint firstItem="FaX-g8-EOP" firstAttribute="leading" secondItem="305" secondAttribute="leading" id="t9b-GY-nsl"/>
+                        <constraint firstItem="05J-Mj-sE1" firstAttribute="leading" secondItem="FaX-g8-EOP" secondAttribute="trailing" constant="10.300000000000001" id="x2e-iB-392"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mJh-gC-yPW">
+                    <rect key="frame" x="156.5" y="574" width="62" height="16"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Synced" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iJW-AF-Ph9">
+                            <rect key="frame" x="0.0" y="0.0" width="44" height="16"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="44" id="IqY-FP-jwU"/>
+                                <constraint firstAttribute="height" constant="16" id="m3s-0g-56e"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="icDoneSmall" translatesAutoresizingMaskIntoConstraints="NO" id="2Xf-GA-0Ym">
+                            <rect key="frame" x="50" y="3" width="12" height="9"/>
+                        </imageView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="iJW-AF-Ph9" firstAttribute="top" secondItem="mJh-gC-yPW" secondAttribute="top" id="7OL-Mr-IGI"/>
+                        <constraint firstAttribute="width" constant="62" id="JAM-Ka-arP"/>
+                        <constraint firstItem="2Xf-GA-0Ym" firstAttribute="leading" secondItem="iJW-AF-Ph9" secondAttribute="trailing" constant="6" id="QtQ-SJ-ZYg"/>
+                        <constraint firstItem="iJW-AF-Ph9" firstAttribute="leading" secondItem="mJh-gC-yPW" secondAttribute="leading" id="YMV-Qj-Wlu"/>
+                        <constraint firstItem="2Xf-GA-0Ym" firstAttribute="centerY" secondItem="iJW-AF-Ph9" secondAttribute="centerY" id="a2W-ph-xEW"/>
+                        <constraint firstAttribute="height" constant="16" id="c0a-cQ-h9j"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9pV-m0-9wY">
+                    <rect key="frame" x="97.5" y="574" width="180" height="16"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Logging you out securely..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="agY-8S-Buy">
+                            <rect key="frame" x="0.0" y="0.0" width="155" height="16"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="155" id="Apn-K4-qBi"/>
+                                <constraint firstAttribute="height" constant="16" id="gZv-NM-ZcI"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" image="ActivityIndicatorView" translatesAutoresizingMaskIntoConstraints="NO" id="qYE-D7-hWS" customClass="ActivityIndicatorView">
+                            <rect key="frame" x="165.5" y="1" width="14" height="14"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="14" id="DzO-hO-7E8"/>
+                                <constraint firstAttribute="width" constant="14" id="xfE-ex-vcq"/>
+                            </constraints>
+                        </imageView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="agY-8S-Buy" firstAttribute="leading" secondItem="9pV-m0-9wY" secondAttribute="leading" id="1eO-NI-eF0"/>
+                        <constraint firstItem="agY-8S-Buy" firstAttribute="top" secondItem="9pV-m0-9wY" secondAttribute="top" id="Hbe-p0-lA0"/>
+                        <constraint firstItem="qYE-D7-hWS" firstAttribute="centerY" secondItem="agY-8S-Buy" secondAttribute="centerY" id="Ovo-cd-Ert"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="16" id="PDJ-Td-K0R"/>
+                        <constraint firstItem="qYE-D7-hWS" firstAttribute="leading" secondItem="agY-8S-Buy" secondAttribute="trailing" constant="10.300000000000001" id="VtX-hY-az6"/>
+                        <constraint firstAttribute="width" constant="180" id="eLI-rN-hXX"/>
+                        <constraint firstAttribute="height" constant="16" id="guL-Wo-W6u"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="kOC-gw-u64"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.98039215686274506" green="0.98431372549019602" blue="0.9882352941176471" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
@@ -58,13 +162,23 @@
                 <constraint firstItem="L2S-P3-jra" firstAttribute="width" secondItem="2" secondAttribute="width" id="82K-eg-vJW"/>
                 <constraint firstItem="8Qk-3T-5lj" firstAttribute="leading" secondItem="L2S-P3-jra" secondAttribute="leading" id="DqP-Cr-uyh"/>
                 <constraint firstAttribute="bottom" secondItem="L2S-P3-jra" secondAttribute="bottom" constant="16" id="MYl-vm-V2c"/>
+                <constraint firstItem="mJh-gC-yPW" firstAttribute="centerX" secondItem="L2S-P3-jra" secondAttribute="centerX" id="OUc-De-4nT"/>
+                <constraint firstItem="8Qk-3T-5lj" firstAttribute="top" secondItem="mJh-gC-yPW" secondAttribute="bottom" constant="16" id="QYY-Nw-rGg"/>
+                <constraint firstItem="8Qk-3T-5lj" firstAttribute="top" secondItem="305" secondAttribute="bottom" constant="16" id="TLE-BD-07o"/>
                 <constraint firstItem="hpG-it-oft" firstAttribute="leading" secondItem="L2S-P3-jra" secondAttribute="leading" id="V14-nl-Ezg"/>
                 <constraint firstItem="hpG-it-oft" firstAttribute="top" secondItem="L2S-P3-jra" secondAttribute="bottom" id="VGT-Oa-Ua3"/>
+                <constraint firstItem="8Qk-3T-5lj" firstAttribute="top" secondItem="9pV-m0-9wY" secondAttribute="bottom" constant="16" id="Zlh-Xq-MTI"/>
                 <constraint firstItem="8Qk-3T-5lj" firstAttribute="width" secondItem="L2S-P3-jra" secondAttribute="width" id="dm5-60-x1y"/>
                 <constraint firstItem="hpG-it-oft" firstAttribute="width" secondItem="L2S-P3-jra" secondAttribute="width" id="fPy-qt-4vH"/>
+                <constraint firstItem="9pV-m0-9wY" firstAttribute="centerX" secondItem="L2S-P3-jra" secondAttribute="centerX" id="jal-K8-5ev"/>
                 <constraint firstItem="L2S-P3-jra" firstAttribute="top" secondItem="8Qk-3T-5lj" secondAttribute="bottom" id="oCV-Xr-4VC"/>
+                <constraint firstItem="305" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="qfW-5P-cqh"/>
             </constraints>
-            <point key="canvasLocation" x="33.5" y="54.5"/>
+            <point key="canvasLocation" x="32.5" y="53.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="ActivityIndicatorView" width="16" height="16"/>
+        <image name="icDoneSmall" width="12" height="9"/>
+    </resources>
 </document>

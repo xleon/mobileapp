@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using Toggl.Foundation.MvvmCross.Services;
 using UIKit;
 
@@ -6,31 +6,25 @@ namespace Toggl.Daneel.Services
 {
     public sealed class DialogService : IDialogService
     {
-        public void Confirm(
-            string title,
-            string message,
-            string confirmButtonTitle,
-            string dismissButtonTitle,
-            Action confirmAction,
-            Action dismissAction,
-            bool makeConfirmActionBold)
+        public Task<bool> Confirm(
+            string title, 
+            string message, 
+            string confirmButtonText, 
+            string dismissButtonText)
         {
-            var alert = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);
-            var confirmAlertAction = UIAlertAction.Create(confirmButtonTitle, UIAlertActionStyle.Default, _ => confirmAction?.Invoke());
-            alert.AddAction(confirmAlertAction);
-            alert.AddAction(UIAlertAction.Create(dismissButtonTitle, UIAlertActionStyle.Cancel, _ => dismissAction?.Invoke()));
+            var tcs = new TaskCompletionSource<bool>();
 
-            if (makeConfirmActionBold)
-                alert.PreferredAction = confirmAlertAction;
+            var alert = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);
+            var confirm = UIAlertAction.Create(confirmButtonText, UIAlertActionStyle.Default, _ => tcs.SetResult(true));
+            var dismiss = UIAlertAction.Create(dismissButtonText, UIAlertActionStyle.Cancel, _ => tcs.SetResult(false));
+
+            alert.AddAction(confirm);
+            alert.AddAction(dismiss);
+            alert.PreferredAction = confirm;
 
             getPresentationController().PresentViewController(alert, true, null);
-        }
 
-        public void ShowMessage(string title, string message, string dismissButtonTitle, Action dismissAction)
-        {
-            var alert = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);
-            alert.AddAction(UIAlertAction.Create(dismissButtonTitle, UIAlertActionStyle.Cancel, _ => dismissAction?.Invoke()));
-            getPresentationController().PresentViewController(alert, true, null);
+            return tcs.Task;
         }
 
         private UIViewController getPresentationController()

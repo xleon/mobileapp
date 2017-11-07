@@ -47,11 +47,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                    Arg.Any<string>(),
                    Arg.Any<string>(),
                    Arg.Any<string>(),
-                   Arg.Any<string>(),
-                   Arg.Invoke(),
-                   Arg.Any<Action>(),
-                   Arg.Any<bool>()
-               );
+                   Arg.Any<string>()
+               ).Returns(true);
             }
 
             protected override StartTimeEntryViewModel CreateViewModel()
@@ -229,7 +226,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         {
             public TheToggleProjectSuggestionsCommand()
             {
-                var suggestions = ProjectSuggestion.FromProjectsPrependingEmpty(Enumerable.Empty<IDatabaseProject>());
+                var suggestions = ProjectSuggestion.FromProjects(Enumerable.Empty<IDatabaseProject>());
                 AutocompleteProvider
                     .Query(Arg.Is<TextFieldInfo>(info => info.Text.Contains("@")))
                     .Returns(Observable.Return(suggestions));
@@ -785,14 +782,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
 
-                    DialogService.Received().Confirm(
+                    await DialogService.Received().Confirm(
                         Arg.Is(Resources.DifferentWorkspaceAlertTitle),
                         Arg.Is(Resources.DifferentWorkspaceAlertMessage),
                         Arg.Is(Resources.Ok),
-                        Arg.Is(Resources.Cancel),
-                        Arg.Any<Action>(),
-                        Arg.Any<Action>(),
-                        Arg.Is(true)
+                        Arg.Is(Resources.Cancel)
                     );
                 }
 
@@ -806,14 +800,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
 
-                    DialogService.DidNotReceive().Confirm(
+                    await DialogService.DidNotReceive().Confirm(
                         Arg.Any<string>(),
                         Arg.Any<string>(),
                         Arg.Any<string>(),
-                        Arg.Any<string>(),
-                        Arg.Any<Action>(),
-                        Arg.Any<Action>(),
-                        Arg.Any<bool>()
+                        Arg.Any<string>()
                     );
                 }
 

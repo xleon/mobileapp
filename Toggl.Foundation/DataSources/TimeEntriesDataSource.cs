@@ -128,8 +128,8 @@ namespace Toggl.Foundation.DataSources
 
         public IObservable<IDatabaseTimeEntry> Update(long id, IDatabaseTimeEntry entity)
             => repository.Update(id, entity)
-                .Do(_ => maybeUpdateCurrentlyRunningTimeEntryId(id, entity))
-                .Do(_ => timeEntryUpdatedSubject.OnNext((id, entity)));
+                .Do(updatedEntity => maybeUpdateCurrentlyRunningTimeEntryId(id, updatedEntity))
+                .Do(updatedEntity => timeEntryUpdatedSubject.OnNext((id, updatedEntity)));
 
         public IObservable<IEnumerable<IConflictResolutionResult<IDatabaseTimeEntry>>> BatchUpdate(
             IEnumerable<(long Id, IDatabaseTimeEntry Entity)> entities,

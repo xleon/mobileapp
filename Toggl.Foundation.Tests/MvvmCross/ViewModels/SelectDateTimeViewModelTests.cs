@@ -99,13 +99,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Property]
-            public void ReturnsAValueThatReflectsTheChangesToDuration(DateTimeOffset dateTimeOffset)
+            public void ReturnsAValueThatReflectsTheChangesToDuration(DateTimeOffset now, DateTimeOffset dateTimeOffset)
             {
                 if (DateTimeOffset.MinValue.AddHours(1) <= dateTimeOffset ||
                     DateTimeOffset.MaxValue.AddHours(-1) >= dateTimeOffset) return;
 
                 var parameter = GenerateParameterForTime(dateTimeOffset);
-                parameter.CurrentDate = DateTimeOffset.Now;
+                parameter.CurrentDate = now;
                 ViewModel.Prepare(parameter);
                 ViewModel.CurrentDateTime = dateTimeOffset;
 

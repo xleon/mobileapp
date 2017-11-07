@@ -54,22 +54,75 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public sealed class TheIsRunningSyncObservable : SettingsViewModelTest
+        public sealed class TheFlags : SettingsViewModelTest
         {
             [Property]
-            public void EmitsTrueAndFalseWhenASyncManagerStateIsChanged(NonEmptyArray<SyncState> statuses)
+            public void SetsIsRunningSyncCorrectly(NonEmptyArray<SyncState> statuses)
             {
-                var log = new List<bool>();
-                var expectedBooleans = new List<bool>();
+                foreach (var state in statuses.Get)
+                {
+                    StateObservableSubject.OnNext(state);
+                    ViewModel.IsRunningSync.Should().Be(state != SyncState.Sleep);
+                }
+            }
+
+            [Property]
+            public void SetsIsSyncedCorrectly(NonEmptyArray<SyncState> statuses)
+            {
+                foreach (var state in statuses.Get)
+                {
+                    StateObservableSubject.OnNext(state);
+                    ViewModel.IsSynced.Should().Be(state == SyncState.Sleep);
+                }
+            }
+
+            [Property]
+            public void SetsTheIsRunningSyncAndIsSyncedFlagsToOppositeValues(NonEmptyArray<SyncState> statuses)
+            {
+                foreach (var state in statuses.Get)
+                {
+                    StateObservableSubject.OnNext(state);
+                    ViewModel.IsRunningSync.Should().Be(!ViewModel.IsSynced);
+                }
+            }
+
+            [Property]
+            public void DoesNotSetTheIsLoggingOutFlagIfTheLogoutCommandIsNotExecuted(NonEmptyArray<SyncState> statuses)
+            {
+                foreach (var state in statuses.Get)
+                {
+                    StateObservableSubject.OnNext(state);
+                    ViewModel.IsLoggingOut.Should().BeFalse();
+                }
+            }
+
+            [Property]
+            public void DoesNotUnsetTheIsLoggingOutFlagAfterItIsSetNoMatterWhatStatusesAreObserved(NonEmptyArray<SyncState> statuses)
+            {
+                DataSource.SyncManager.Freeze().Returns(Observable.Never<SyncState>());
+
+                ViewModel.LogoutCommand.ExecuteAsync();
 
                 foreach (var state in statuses.Get)
                 {
                     StateObservableSubject.OnNext(state);
-                    expectedBooleans.Add(state != SyncState.Sleep);
-                    log.Add(ViewModel.IsRunningSync);
+                    ViewModel.IsLoggingOut.Should().BeTrue();
                 }
+            }
 
-                log.Should().BeEquivalentTo(expectedBooleans);
+            [Property]
+            public void SetsTheIsRunningSyncAndIsSyncedFlagsToFalseAfterTheIsLoggingInFlagIsSetAndDoesNotSetThemToTrueNoMatterWhatStatusesAreObserved(NonEmptyArray<SyncState> statuses)
+            {
+                DataSource.SyncManager.Freeze().Returns(Observable.Never<SyncState>());
+
+                ViewModel.LogoutCommand.ExecuteAsync();
+
+                foreach (var state in statuses.Get)
+                {
+                    StateObservableSubject.OnNext(state);
+                    ViewModel.IsRunningSync.Should().BeFalse();
+                    ViewModel.IsSynced.Should().BeFalse();
+                }
             }
         }
 
@@ -116,7 +169,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 doNotShowConfirmationDialog();
                 int operationCounter = 0;
-                int isLoggingOutFlag = -1;
+                int flagsAreSet = -1;
                 int callingSyncManagerFreeze = -1;
                 int awaitingSyncManagerFreeze = -1;
                 int callingLogout = -1;
@@ -126,8 +179,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var syncManager = Substitute.For<ISyncManager>();
                 syncManager.Freeze().Returns(Observable.Create<SyncState>(async observer =>
                 {
-                    if (ViewModel.IsLoggingOut == true)
-                        isLoggingOutFlag = operationCounter++;
+                    if (ViewModel.IsLoggingOut && ViewModel.IsSynced == false && ViewModel.IsRunningSync == false)
+                        flagsAreSet = operationCounter++;
 
                     callingSyncManagerFreeze = operationCounter++;
                     await Task.Delay(100);
@@ -154,8 +207,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 }));
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
-        
-                isLoggingOutFlag.Should().Be(0);
+
+                flagsAreSet.Should().Be(0);
                 callingSyncManagerFreeze.Should().Be(1);
                 awaitingSyncManagerFreeze.Should().Be(2);
                 callingLogout.Should().Be(3);
@@ -165,13 +218,46 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact]
+            public void SetsTheIsSyncedFlagAfterTheSyncProcessHasFinishedAndThereIsNoTimeEntryToPush()
+            {
+                var emptyList = Observable.Return(new IDatabaseTimeEntry[0]);
+                DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(emptyList);
+                StateObservableSubject.OnNext(SyncState.Sleep);
+
+                ViewModel.IsSynced.Should().BeTrue();
+            }
+
+            [Fact]
+            public void UnsetsTheIsSyncedFlagWhenTheSyncProcessIsNotRunningButThrereIsSomeTimeEntryToPush()
+            {
+                var listOfTimeEntries = Observable.Return(new[] { Substitute.For<IDatabaseTimeEntry>() });
+                DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(listOfTimeEntries);
+                StateObservableSubject.OnNext(SyncState.Sleep);
+
+                ViewModel.IsSynced.Should().BeFalse();
+            }
+
+            [Theory]
+            [InlineData(SyncState.Pull)]
+            [InlineData(SyncState.Push)]
+            public void UnsetsTheIsSyncedFlagWhenThereIsNothingToPushButTheSyncProcessStartsAgain(SyncState state)
+            {
+                var emptyList = Observable.Return(new IDatabaseTimeEntry[0]);
+                DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(emptyList);
+                StateObservableSubject.OnNext(SyncState.Sleep);
+                StateObservableSubject.OnNext(state);
+
+                ViewModel.IsSynced.Should().BeFalse();
+            }
+
+            [Fact]
             public async Task DoesNotShowConfirmationDialogWhenTheAppIsInSync()
             {
                 doNotShowConfirmationDialog();
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
-                DialogService.DidNotReceiveWithAnyArgs().Confirm("", "", "", "", null, null, false);
+                await DialogService.DidNotReceiveWithAnyArgs().Confirm("", "", "", "");
             }
 
             [Fact]
@@ -183,7 +269,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
-                DialogService.ReceivedWithAnyArgs().Confirm("", "", "", "", null, null, false);
+                await DialogService.ReceivedWithAnyArgs().Confirm("", "", "", "");
             }
 
             [Fact]
@@ -195,15 +281,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
-                DialogService.ReceivedWithAnyArgs().Confirm("", "", "", "", null, null, false);
+                await DialogService.ReceivedWithAnyArgs().Confirm("", "", "", "");
             }
 
             [Fact]
             public async Task DoesNotProceedWithLogoutWhenUserClicksCancelButtonInTheDialog()
             {
                 StateObservableSubject.OnNext(SyncState.Pull);
-                DialogService.Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Any<Action>(), Arg.Do<Action>(action => action?.Invoke()), Arg.Any<bool>());
+                DialogService.Confirm(
+                    Arg.Any<string>(), 
+                    Arg.Any<string>(), 
+                    Arg.Any<string>(), 
+                    Arg.Any<string>()).Returns(false);
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
@@ -217,8 +306,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task ProceedsWithLogoutWhenUserClicksSignOutButtonInTheDialog()
             {
                 StateObservableSubject.OnNext(SyncState.Pull);
-                DialogService.Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Invoke(), Arg.Any<Action>(), Arg.Any<bool>());
+                DialogService.Confirm(
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>()).Returns(true);
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
 

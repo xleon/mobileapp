@@ -80,7 +80,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand ToggleProjectSuggestionsCommand { get; }
 
-        public IMvxCommand<AutocompleteSuggestion> SelectSuggestionCommand { get; }
+        public IMvxAsyncCommand<AutocompleteSuggestion> SelectSuggestionCommand { get; }
 
         public IMvxCommand<ProjectSuggestion> ToggleTaskSuggestionsCommand { get; }
 
@@ -107,11 +107,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ChangeStartTimeCommand = new MvxAsyncCommand(changeStartTime);
             ToggleTagSuggestionsCommand = new MvxCommand(toggleTagSuggestions);
             ToggleProjectSuggestionsCommand = new MvxCommand(toggleProjectSuggestions);
-            SelectSuggestionCommand = new MvxCommand<AutocompleteSuggestion>(selectSuggestion);
+            SelectSuggestionCommand = new MvxAsyncCommand<AutocompleteSuggestion>(selectSuggestion);
             ToggleTaskSuggestionsCommand = new MvxCommand<ProjectSuggestion>(toggleTaskSuggestions);
         }
 
-        private void selectSuggestion(AutocompleteSuggestion suggestion)
+        private async Task selectSuggestion(AutocompleteSuggestion suggestion)
         {
             switch (suggestion)
             {
@@ -156,14 +156,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                         break;
                     }
 
-                    dialogService.Confirm(
+                    var shouldChangeProject = await dialogService.Confirm(
                         Resources.DifferentWorkspaceAlertTitle,
                         Resources.DifferentWorkspaceAlertMessage,
                         Resources.Ok,
-                        Resources.Cancel,
-                        () => setProject(projectSuggestion),
-                        null,
-                        true);
+                        Resources.Cancel);
+
+                    if (!shouldChangeProject) break;
+
+                    setProject(projectSuggestion);
+
                     break;
 
                 case TaskSuggestion taskSuggestion:
@@ -174,14 +176,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                         break;
                     }
 
-                    dialogService.Confirm(
+                    var shouldChangeTask = await dialogService.Confirm(
                         Resources.DifferentWorkspaceAlertTitle,
                         Resources.DifferentWorkspaceAlertMessage,
                         Resources.Ok,
-                        Resources.Cancel,
-                        () => setTask(taskSuggestion),
-                        null,
-                        true);
+                        Resources.Cancel);
+
+                    if (!shouldChangeTask) break;
+
+                    setTask(taskSuggestion);
+
                     break;
 
                 case TagSuggestion tagSuggestion:
@@ -292,6 +296,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (TextFieldInfo.ProjectId != null)
             {
                 queryByTypeSubject.OnNext(AutocompleteSuggestionType.Projects);
+                IsSuggestingProjects = true;
                 return;
             }
 
@@ -385,9 +390,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void onSuggestions(IEnumerable<AutocompleteSuggestion> suggestions)
         {
-            var firstSuggestion = suggestions.FirstOrDefault();
-            IsSuggestingTags = firstSuggestion is TagSuggestion;
-            IsSuggestingProjects = firstSuggestion is ProjectSuggestion;
+            var firstQuerySymbolIndex = TextFieldInfo.Text.IndexOfAny(new char[] { QuerySymbols.Tags, QuerySymbols.Projects });
+            if (firstQuerySymbolIndex >= 0)
+            {
+                var firstQuerySymbol = TextFieldInfo.Text[firstQuerySymbolIndex];
+                IsSuggestingTags = firstQuerySymbol == QuerySymbols.Tags;
+                IsSuggestingProjects = firstQuerySymbol == QuerySymbols.Projects;
+            }
+            else
+            {
+                IsSuggestingTags = IsSuggestingProjects = false;
+            }
 
             Suggestions.Clear();
 

@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using PropertyChanged;
-using Toggl.Foundation.DTOs;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DTOs;
+using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
-using System.Reactive.Disposables;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.Exceptions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -81,23 +80,20 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             var deleteDisposable = 
                 dataSource.TimeEntries.TimeEntryDeleted
-                          .Subscribe(onTimeEntryDeleted);
-
-            var updateObservable =
-                dataSource.TimeEntries.TimeEntryUpdated
-                          .Do(onTimeEntryUpdated)
-                          .Select(tuple => tuple.Entity)
-                          .Where(isNotRunning)
-                          .Where(x => !x.IsDeleted);
+                          .Subscribe(safeRemoveTimeEntry);
 
             var updateDisposable =
+                dataSource.TimeEntries.TimeEntryUpdated
+                          .Subscribe(onTimeEntryUpdated);
+
+            var createDisposable =
                 dataSource.TimeEntries.TimeEntryCreated
                     .Where(isNotRunning)
-                    .Merge(updateObservable)
-                    .Subscribe(onTimeEntryCreated);
+                    .Subscribe(safeInsertTimeEntry);
 
-            disposeBag.Add(deleteDisposable);
+            disposeBag.Add(createDisposable);
             disposeBag.Add(updateDisposable);
+            disposeBag.Add(deleteDisposable);
         }
 
         private void addTimeEntries(TimeEntryViewModelCollection collection)
@@ -107,10 +103,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             RaisePropertyChanged(nameof(IsEmpty));
         }
 
-        private void onTimeEntryUpdated((long Id, IDatabaseTimeEntry Entity) timeEntry)
-            => onTimeEntryDeleted(timeEntry.Id);
+        private void onTimeEntryUpdated((long Id, IDatabaseTimeEntry Entity) tuple)
+        {
+            var timeEntry = tuple.Entity;
+            safeRemoveTimeEntry(tuple.Id);
 
-        private void onTimeEntryCreated(IDatabaseTimeEntry timeEntry)
+            if (timeEntry == null || timeEntry.IsRunning() || timeEntry.IsDeleted) return;
+            safeInsertTimeEntry(timeEntry);
+        }
+
+        private void safeInsertTimeEntry(IDatabaseTimeEntry timeEntry)
         {
             var indexDate = timeEntry.Start.LocalDateTime.Date;
             var timeEntriesInDay = new List<TimeEntryViewModel> { new TimeEntryViewModel(timeEntry) };
@@ -131,19 +133,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             RaisePropertyChanged(nameof(IsEmpty));
         }
 
-        private void onTimeEntryDeleted(long id)
+        private void safeRemoveTimeEntry(long id)
         {
-            var viewModel = TimeEntries.Select(c => c.SingleOrDefault(vm => vm.Id == id)).SingleOrDefault(vm => vm != null);
-            if (viewModel == null) return;
-
-            var collection = TimeEntries.SingleOrDefault(c => c.Date == viewModel.Start.Date);
+            var collection = TimeEntries.FirstOrDefault(c => c.Any(vm => vm.Id == id));
             if (collection == null) return;
 
-            collection.Remove(viewModel);
+            var viewModel = collection.First(vm => vm.Id == id);
+
             var indexToInsert = TimeEntries.IndexOf(collection);
+            collection.Remove(viewModel);
             TimeEntries.Remove(collection);
 
-            if (collection.Count > 0)
+            if (collection.Any())
             {
                 var newCollection = new TimeEntryViewModelCollection(collection.Date.LocalDateTime, collection);
                 TimeEntries.Insert(indexToInsert, newCollection);

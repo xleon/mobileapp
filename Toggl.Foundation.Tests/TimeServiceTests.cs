@@ -35,6 +35,26 @@ namespace Toggl.Foundation.Tests
                              .Should().HaveCount(expectedNumberOfMessages)
                              .And.BeEquivalentTo(firstObserver.Messages);
             }
+
+            [Fact]
+            public void PublishesCurrentTimeFlooredToTheCurrentSecond()
+            {
+                DateTimeOffset roundedNow = default(DateTimeOffset);
+                timeService.CurrentDateTimeObservable.Subscribe(time => roundedNow = time);
+
+                testScheduler.AdvanceBy(TimeSpan.FromSeconds(1).Ticks);
+
+                roundedNow.Should().NotBe(default(DateTimeOffset));
+                roundedNow.Millisecond.Should().Be(0);
+            }
+
+            [Fact]
+            public void ReturnsCurrentTimeFlooredToTheCurrentSecond()
+            {
+                DateTimeOffset roundedNow = timeService.CurrentDateTime;
+
+                roundedNow.Millisecond.Should().Be(0);
+            }
         }
     }
 }

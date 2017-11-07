@@ -20,5 +20,11 @@ namespace Toggl.Daneel.ViewSources
 
         protected override UITableViewCell GetOrCreateCellFor(UITableView tableView, NSIndexPath indexPath, object item)
             => tableView.DequeueReusableCell(cellIdentifier, indexPath);
+
+        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+        {
+            base.RowSelected(tableView, indexPath);
+            tableView.DeselectRow(indexPath, true);
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand CloseCommand { get; }
 
-        public IMvxCommand<AutocompleteSuggestion> SelectProjectCommand { get; }
+        public IMvxAsyncCommand<AutocompleteSuggestion> SelectProjectCommand { get; }
 
         public MvxObservableCollection<WorkspaceGroupedCollection<AutocompleteSuggestion>> Suggestions { get; }
             = new MvxObservableCollection<WorkspaceGroupedCollection<AutocompleteSuggestion>>();
@@ -53,7 +53,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             CloseCommand = new MvxAsyncCommand(close);
             ToggleTaskSuggestionsCommand = new MvxCommand<ProjectSuggestion>(toggleTaskSuggestions);
-            SelectProjectCommand = new MvxCommand<AutocompleteSuggestion>(selectProject);
+            SelectProjectCommand = new MvxAsyncCommand<AutocompleteSuggestion>(selectProject);
         }
 
         public override void Prepare(SelectProjectParameter parameter)
@@ -71,8 +71,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                        .StartWith(Text)
                        .SelectMany(text => dataSource.AutocompleteProvider.Query(text, AutocompleteSuggestionType.Projects))
                        .Select(suggestions => suggestions.Cast<ProjectSuggestion>())
+                       .Select(setSelectedProject)
                        .Subscribe(onSuggestions);
         }
+
+        private IEnumerable<ProjectSuggestion> setSelectedProject(IEnumerable<ProjectSuggestion> suggestions)
+            => suggestions.Select(s => { s.Selected = s.ProjectId == projectId; return s; });
 
         private void OnTextChanged()
         {
@@ -93,7 +97,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 this,
                 SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
 
-        private void selectProject(AutocompleteSuggestion suggestion)
+        private async Task selectProject(AutocompleteSuggestion suggestion)
         {
             if (suggestion.WorkspaceId == workspaceId || suggestion.WorkspaceId == 0)
             {
@@ -101,15 +105,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return;
             }
 
-            dialogService.Confirm(
+            var shouldSetProject = await dialogService.Confirm(
                 Resources.DifferentWorkspaceAlertTitle,
                 Resources.DifferentWorkspaceAlertMessage,
                 Resources.Ok,
-                Resources.Cancel,
-                () => setProject(suggestion),
-                dismissAction: null,
-                makeConfirmActionBold: true
+                Resources.Cancel
             );
+
+            if (!shouldSetProject) return;
+
+            setProject(suggestion);
         }
 
         private void setProject(AutocompleteSuggestion suggestion)

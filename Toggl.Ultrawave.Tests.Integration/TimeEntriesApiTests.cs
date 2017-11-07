@@ -55,7 +55,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             protected override IObservable<List<ITimeEntry>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.TimeEntries.GetAll();
         }
-      
+
         public sealed class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<ITimeEntry>
         {
             protected override IObservable<List<ITimeEntry>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
@@ -192,6 +192,29 @@ namespace Toggl.Ultrawave.Tests.Integration
                 fetchedTimeEntry.Duration.Should().BeNull();
             }
 
+            [Fact]
+            public async Task BackendStopsPreviousRunningTimeEntryWhenAnotherRunningTimeEntryIsPushed()
+            {
+                var (togglApi, user) = await SetupTestUser();
+                var firstTimeEntry = createTimeEntry(user);
+                firstTimeEntry.Duration = null;
+                var secondTimeEntry = createTimeEntry(user);
+                secondTimeEntry.Duration = null;
+
+                var postedFirstTimeEntry = await togglApi.TimeEntries.Create(firstTimeEntry);
+                await Task.Delay(2000);
+                var postedSecondTimeEntry = await togglApi.TimeEntries.Create(secondTimeEntry);
+                var stoppedFirstTimeEntry =
+                    await togglApi.TimeEntries.GetAll().SelectMany(te => te).Where(te => te.Id == postedFirstTimeEntry.Id).FirstAsync();
+
+                postedFirstTimeEntry.Duration.Should().BeNull();
+                postedSecondTimeEntry.Duration.Should().BeNull();
+                stoppedFirstTimeEntry.Duration.Should().NotBeNull();
+                postedFirstTimeEntry.At.Should().NotBe(stoppedFirstTimeEntry.At);
+                stoppedFirstTimeEntry.At.Should().Be(postedSecondTimeEntry.At);
+                stoppedFirstTimeEntry.Start.AddSeconds(stoppedFirstTimeEntry.Duration.Value).Should().Be(stoppedFirstTimeEntry.At);
+            }
+
             protected override IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi)
                 => Observable.Defer(async () =>
                 {
@@ -279,29 +302,30 @@ namespace Toggl.Ultrawave.Tests.Integration
                 put.ShouldThrow<BadRequestException>();
             }
 
-            protected override IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi)
+            protected override IObservable<ITimeEntry> PrepareForCallingUpdateEndpoint(ITogglApi togglApi)
                 => Observable.Defer(async () =>
                 {
                     var user = await togglApi.User.Get();
                     var timeEntry = createTimeEntry(user);
-                    var persistedTimeEntry = await togglApi.TimeEntries.Create(timeEntry);
-                    var timeEntryWithUpdates = new TimeEntry
-                    {
-                        Id = persistedTimeEntry.Id,
-                        Description = Guid.NewGuid().ToString(),
-                        WorkspaceId = persistedTimeEntry.WorkspaceId,
-                        Billable = persistedTimeEntry.Billable,
-                        Start = persistedTimeEntry.Start,
-                        Duration = persistedTimeEntry.Duration,
-                        TagIds = persistedTimeEntry.TagIds,
-                        UserId = persistedTimeEntry.UserId,
-                    };
-
-                    return CallEndpointWith(togglApi, timeEntryWithUpdates);
+                    return togglApi.TimeEntries.Create(timeEntry);
                 });
 
-            private IObservable<ITimeEntry> CallEndpointWith(ITogglApi togglApi, TimeEntry timeEntry)
-                => togglApi.TimeEntries.Update(timeEntry);
+            protected override IObservable<ITimeEntry> CallUpdateEndpoint(ITogglApi togglApi, ITimeEntry timeEntry)
+            {
+                var timeEntryWithUpdates = new TimeEntry
+                {
+                    Id = timeEntry.Id,
+                    Description = Guid.NewGuid().ToString(),
+                    WorkspaceId = timeEntry.WorkspaceId,
+                    Billable = timeEntry.Billable,
+                    Start = timeEntry.Start,
+                    Duration = timeEntry.Duration,
+                    TagIds = timeEntry.TagIds,
+                    UserId = timeEntry.UserId,
+                };
+
+                return togglApi.TimeEntries.Update(timeEntryWithUpdates);
+            }
         }
 
         public sealed class TheDeleteMethod : AuthenticatedDeleteEndpointBaseTests<ITimeEntry>

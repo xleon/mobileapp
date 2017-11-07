@@ -4,8 +4,10 @@ using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters.Attributes;
+using MvvmCross.Plugins.Color.iOS;
 using Toggl.Daneel.Extensions;
 using Toggl.Foundation;
+using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
@@ -34,12 +36,13 @@ namespace Toggl.Daneel.ViewControllers
   
             Title = ViewModel.Title;
 
-            prepareTextFields();
-            prepareNavigationBar();
+            prepareViews();
 
             UIKeyboard.Notifications.ObserveWillShow(keyboardWillShow);
             UIKeyboard.Notifications.ObserveWillHide(keyboardWillHide);
-            
+
+            var invertedBoolConverter = new BoolToConstantValueConverter<bool>(false, true);
+
             var bindingSet = this.CreateBindingSet<LoginViewController, LoginViewModel>();
 
             //Text
@@ -80,8 +83,18 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.NextCommand);
 
             bindingSet.Bind(nextButton)
-                      .For(v => v.BindAnimatedEnabled())
+                      .For(v => v.Enabled)
                       .To(vm => vm.NextIsEnabled);
+
+            bindingSet.Bind(backButton)
+                      .For(v => v.Enabled)
+                      .To(vm => vm.IsLoading)
+                      .WithConversion(invertedBoolConverter);
+
+            bindingSet.Bind(ForgotPasswordButton)
+                      .For(v => v.Enabled)
+                      .To(vm => vm.IsLoading)
+                      .WithConversion(invertedBoolConverter);
 
             //Visibility
             bindingSet.Bind(EmailTextField)
@@ -153,6 +166,16 @@ namespace Toggl.Daneel.ViewControllers
         {
             BottomConstraint.Constant = forgotPasswordLabelOffset;
             UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
+        }
+
+        private void prepareViews()
+        {
+            prepareTextFields();
+            prepareNavigationBar();
+
+            ForgotPasswordButton.SetTitleColor(
+                Color.Login.DisabledButtonColor.ToNativeColor(),
+                UIControlState.Disabled);
         }
 
         private void prepareTextFields()

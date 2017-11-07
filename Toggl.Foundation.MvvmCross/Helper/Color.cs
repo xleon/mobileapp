@@ -25,6 +25,11 @@ namespace Toggl.Foundation.MvvmCross.Helper
             internal static readonly MvxColor LoginPageBackgroundColor = new MvxColor(219, 40, 46);
         }
 
+        public static class Login
+        {
+            public static readonly MvxColor DisabledButtonColor = new MvxColor(255, 255, 255, 128);
+        }
+
         public static class NavigationBar
         {
             public static readonly MvxColor BackButton = new MvxColor(94, 91, 91);
@@ -85,6 +90,7 @@ namespace Toggl.Foundation.MvvmCross.Helper
         public static class Settings
         {
             public static readonly MvxColor SignOutButtonDisabled = new MvxColor(226, 5, 5, 61);
+            public static readonly MvxColor SyncStatusText = new MvxColor(144, 146, 147);
         }
     }
 }

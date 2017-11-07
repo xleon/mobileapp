@@ -6,29 +6,20 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
 {
     public sealed class ProjectSuggestion : AutocompleteSuggestion
     {
-        public static ProjectSuggestion NoProject { get; } = new ProjectSuggestion(0, "");
-
-        public static ProjectSuggestion NoProjectWithWorkspace(long workspaceId, string workspaceName)
+        public static ProjectSuggestion NoProject(long workspaceId, string workspaceName)
             => new ProjectSuggestion(workspaceId, workspaceName);
 
         public static IEnumerable<ProjectSuggestion> FromProjects(
             IEnumerable<IDatabaseProject> projects
         ) => projects.Select(project => new ProjectSuggestion(project));
 
-        public static IEnumerable<ProjectSuggestion> FromProjectsPrependingEmpty(
-            IEnumerable<IDatabaseProject> projects) 
-        {
-            yield return NoProject;
-
-            foreach (var project in projects)
-                yield return new ProjectSuggestion(project);
-        }
-
         public long ProjectId { get; }
 
         public int NumberOfTasks { get; } = 0;
 
         public IList<TaskSuggestion> Tasks { get; }
+
+        public bool HasTasks => Tasks?.Count > 0;
 
         public string ProjectName { get; } = "";
 
@@ -37,6 +28,8 @@ namespace Toggl.Foundation.Autocomplete.Suggestions
         public string ProjectColor { get; }
 
         public bool TasksVisible { get; set; }
+
+        public bool Selected { get; set; }
 
         private ProjectSuggestion(long workspaceId, string workspaceName)
         {

@@ -26,6 +26,8 @@ namespace Toggl.Daneel.Views
         {
             base.AwakeFromNib();
 
+            FadeView.FadeRight = true;
+
             this.DelayBind(() =>
             {
                 var bindingSet = this.CreateBindingSet<TaskSuggestionViewCell, TaskSuggestion>();
