@@ -7,13 +7,10 @@ namespace Toggl.Foundation.Sync.States
 {
     internal sealed class PushTimeEntriesState : BasePushState<IDatabaseTimeEntry>
     {
-        public PushTimeEntriesState(ITogglDatabase database)
-            : base(database)
+        public PushTimeEntriesState(IRepository<IDatabaseTimeEntry> repository)
+            : base(repository)
         {
         }
-
-        protected override IRepository<IDatabaseTimeEntry> GetRepository(ITogglDatabase database)
-            => database.TimeEntries;
 
         protected override DateTimeOffset LastChange(IDatabaseTimeEntry entity)
             => entity.At;

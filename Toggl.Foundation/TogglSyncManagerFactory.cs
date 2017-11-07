@@ -102,7 +102,7 @@ namespace Toggl.Foundation
             var apiDelay = new RetryDelayService(rnd);
             var statusDelay = new RetryDelayService(rnd);
 
-            var push = new PushTimeEntriesState(database);
+            var push = new PushTimeEntriesState(database.TimeEntries);
             var pushOne = new PushOneEntityState<IDatabaseTimeEntry>();
             var create = new CreateTimeEntryState(api, dataSource.TimeEntries);
             var update = new UpdateTimeEntryState(api, dataSource.TimeEntries);

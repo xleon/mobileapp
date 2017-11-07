@@ -10,7 +10,7 @@ namespace Toggl.Foundation.Tests.Sync.States
     internal abstract class BaseUnsyncableEntityState<TModel>
         where TModel : IBaseModel, IDatabaseSyncable
     {
-        private IRepository<TModel> repository;
+        private readonly IRepository<TModel> repository;
 
         public StateResult<TModel> MarkedAsUnsyncable { get; } = new StateResult<TModel>();
 
@@ -48,7 +48,7 @@ namespace Toggl.Foundation.Tests.Sync.States
 
         protected abstract bool HasChanged(TModel original, TModel current);
 
-        protected abstract TModel CreateUnsyncableFrom(TModel entity, string reson);
+        protected abstract TModel CreateUnsyncableFrom(TModel entity, string reason);
 
         protected abstract TModel CopyFrom(TModel entity);
     }

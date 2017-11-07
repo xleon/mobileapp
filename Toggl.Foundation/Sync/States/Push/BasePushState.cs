@@ -10,16 +10,16 @@ namespace Toggl.Foundation.Sync.States
     internal abstract class BasePushState<TModel>
         where TModel : class, IBaseModel, IDatabaseSyncable
     {
-        private readonly ITogglDatabase database;
+        private readonly IRepository<TModel> repository;
 
         public StateResult<TModel> PushEntity { get; } = new StateResult<TModel>();
         public StateResult NothingToPush { get; } = new StateResult();
 
-        public BasePushState(ITogglDatabase database)
+        public BasePushState(IRepository<TModel> repository)
         {
-            Ensure.Argument.IsNotNull(database, nameof(database));
+            Ensure.Argument.IsNotNull(repository, nameof(repository));
         
-            this.database = database;
+            this.repository = repository;
         }
 
         public IObservable<ITransition> Start() =>
@@ -31,14 +31,12 @@ namespace Toggl.Foundation.Sync.States
                         : NothingToPush.Transition());
 
         private IObservable<TModel> getOldestUnsynced()
-            => GetRepository(database)
+            => repository
                 .GetAll(syncNeeded)
                 .SingleAsync()
                 .Select(entities => entities
                     .OrderBy(LastChange)
                     .FirstOrDefault());
-
-        protected abstract IRepository<TModel> GetRepository(ITogglDatabase database);
 
         protected abstract DateTimeOffset LastChange(TModel entity);
 

@@ -51,11 +51,11 @@ namespace Toggl.Foundation.Tests.Sync.States
         internal abstract class TheStartMethod<TModel> : ITheStartMethodHelper
             where TModel : class, IBaseModel, IDatabaseSyncable
         {
-            private ITogglDatabase database;
+            private readonly IRepository<TModel> repository;
 
             public TheStartMethod()
             {
-                database = Substitute.For<ITogglDatabase>();
+                repository = Substitute.For<IRepository<TModel>>();
             }
 
             public void ConstructorThrowsWithNullDatabase()
@@ -67,8 +67,8 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void ReturnsNothingToPushTransitionWhenTheRepositoryReturnsNoEntity()
             {
-                var state = CreateState(database);
-                SetupRepositoryToReturn(database, new TModel[] { });
+                var state = CreateState(repository);
+                SetupRepositoryToReturn(repository, new TModel[] { });
 
                 var transition = state.Start().SingleAsync().Wait();
 
@@ -77,9 +77,9 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void ReturnsPushEntityTransitionWhenTheRepositoryReturnsSomeEntity()
             {
-                var state = CreateState(database);
+                var state = CreateState(repository);
                 var entity = CreateUnsyncedEntity();
-                SetupRepositoryToReturn(database, new[] { entity });
+                SetupRepositoryToReturn(repository, new[] { entity });
 
                 var transition = state.Start().SingleAsync().Wait();
                 var parameter = ((Transition<TModel>)transition).Parameter;
@@ -91,11 +91,11 @@ namespace Toggl.Foundation.Tests.Sync.States
             public void ReturnsPushEntityTransitionWithTheOldestEntity()
             {
                 var at = new DateTimeOffset(2017, 9, 1, 12, 34, 56, TimeSpan.Zero);
-                var state = CreateState(database);
+                var state = CreateState(repository);
                 var entity = CreateUnsyncedEntity(at);
                 var entity2 = CreateUnsyncedEntity(at.AddDays(-2));
                 var entity3 = CreateUnsyncedEntity(at.AddDays(-1));
-                SetupRepositoryToReturn(database, new[] { entity, entity2, entity3 });
+                SetupRepositoryToReturn(repository, new[] { entity, entity2, entity3 });
 
                 var transition = state.Start().SingleAsync().Wait();
                 var parameter = ((Transition<TModel>)transition).Parameter;
@@ -106,19 +106,19 @@ namespace Toggl.Foundation.Tests.Sync.States
 
             public void ThrowsWhenRepositoryThrows()
             {
-                var state = CreateState(database);
-                SetupRepositoryToThrow(database);
+                var state = CreateState(repository);
+                SetupRepositoryToThrow(repository);
 
                 Action callingStart = () => state.Start().SingleAsync().Wait();
 
                 callingStart.ShouldThrow<Exception>();
             }
 
-            protected abstract BasePushState<TModel> CreateState(ITogglDatabase database);
+            protected abstract BasePushState<TModel> CreateState(IRepository<TModel> repository);
 
-            protected abstract void SetupRepositoryToReturn(ITogglDatabase database, TModel[] entities);
+            protected abstract void SetupRepositoryToReturn(IRepository<TModel> repository, TModel[] entities);
 
-            protected abstract void SetupRepositoryToThrow(ITogglDatabase database);
+            protected abstract void SetupRepositoryToThrow(IRepository<TModel> repository);
 
             protected abstract TModel CreateUnsyncedEntity(DateTimeOffset lastUpdate = default(DateTimeOffset));
         }
