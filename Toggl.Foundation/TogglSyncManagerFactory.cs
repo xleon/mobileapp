@@ -88,7 +88,8 @@ namespace Toggl.Foundation
         {
             var pushingTagsFinished = configurePushTransitionsForTags(transitions, database, api, scheduler, entryPoint, delayCancellation);
             var pushingClientsFinished = configurePushTransitionsForClients(transitions, database, api, scheduler, pushingTagsFinished, delayCancellation);
-            configurePushTransitionsForTimeEntries(transitions, database, api, dataSource, scheduler, pushingClientsFinished, delayCancellation);
+            var pushingProjectsFinished = configurePushTransitionsForProjects(transitions, database, api, scheduler, pushingClientsFinished, delayCancellation);
+            configurePushTransitionsForTimeEntries(transitions, database, api, dataSource, scheduler, pushingProjectsFinished, delayCancellation);
         }
 
         private static IStateResult configurePushTransitionsForTimeEntries(
@@ -155,6 +156,28 @@ namespace Toggl.Foundation
             var pushOne = new PushOneEntityState<IDatabaseClient>();
             var create = new CreateClientState(api, database.Clients);
             var unsyncable = new UnsyncableClientState(database.Clients);
+            var checkServerStatus = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay, delayCancellation);
+            var finished = new ResetAPIDelayState(apiDelay);
+
+            return configureCreateOnlyPush(transitions, entryPoint, push, pushOne, create, unsyncable, checkServerStatus, finished);
+        }
+
+        private static IStateResult configurePushTransitionsForProjects(
+            TransitionHandlerProvider transitions,
+            ITogglDatabase database,
+            ITogglApi api,
+            IScheduler scheduler,
+            IStateResult entryPoint,
+            IObservable<Unit> delayCancellation)
+        {
+            var rnd = new Random();
+            var apiDelay = new RetryDelayService(rnd);
+            var statusDelay = new RetryDelayService(rnd);
+
+            var push = new PushProjectsState(database.Projects);
+            var pushOne = new PushOneEntityState<IDatabaseProject>();
+            var create = new CreateProjectState(api, database.Projects);
+            var unsyncable = new UnsyncableProjectState(database.Projects);
             var checkServerStatus = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay, delayCancellation);
             var finished = new ResetAPIDelayState(apiDelay);
 

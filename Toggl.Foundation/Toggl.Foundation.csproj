@@ -96,6 +96,9 @@
     <Compile Include="Sync\States\Pull\PersistWorkspaceFeaturesState.cs" />
     <Compile Include="Sync\States\Push\CheckServerStatusState.cs" />
     <Compile Include="Sync\States\Pull\PersistTagsState.cs" />
+    <Compile Include="Sync\States\Push\Projects\CreateProjectState.cs" />
+    <Compile Include="Sync\States\Push\Projects\PushProjectsState.cs" />
+    <Compile Include="Sync\States\Push\Projects\UnsyncableProjectState.cs" />
     <Compile Include="Sync\States\Push\Clients\CreateClientState.cs" />
     <Compile Include="Sync\States\Push\Clients\PushClientsState.cs" />
     <Compile Include="Sync\States\Push\Clients\UnsyncableClientState.cs" />
@@ -214,11 +217,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Sync\States\Push\TimeEntries\" />
-    <Folder Include="Sync\States\Push\BaseStates\" />
-    <Folder Include="Sync\States\Push\Tags\" />
-    <Folder Include="Helper\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
