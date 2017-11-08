@@ -200,10 +200,9 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(push.PushEntity, pushOne.Start);
             transitions.ConfigureTransition(pushOne.CreateEntity, create.Start);
 
-            // skip the unused transitons - using these transitions will lead to a dead end:
-            // - pushOne.UpdateEntity
-            // - pushOne.DeleteEntity
-            // - pushOne.DeleteEntityLocally
+            transitions.ConfigureTransition(pushOne.UpdateEntity, new InvalidTransitionState($"Updating is not supported for {typeof(T).Name} during Push sync.").Start);
+            transitions.ConfigureTransition(pushOne.DeleteEntity, new InvalidTransitionState($"Deleting is not supported for {typeof(T).Name} during Push sync.").Start);
+            transitions.ConfigureTransition(pushOne.DeleteEntityLocally, new InvalidTransitionState($"Deleting locally is not supported for {typeof(T).Name} during Push sync.").Start);
 
             transitions.ConfigureTransition(create.ClientError, markUnsyncable.Start);
             transitions.ConfigureTransition(create.ServerError, checkServerStatus.Start);
