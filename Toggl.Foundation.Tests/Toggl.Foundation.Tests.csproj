@@ -218,6 +218,9 @@
     <Compile Include="Sync\States\Pull\PersistWorkspaceFeaturesStateTests.cs" />
     <Compile Include="Sync\States\Push\CheckServerStatusStateTests.cs" />
     <Compile Include="Sync\States\Pull\PersistTagsStateTests.cs" />
+    <Compile Include="Sync\States\Push\Clients\CreateClientTests.cs" />
+    <Compile Include="Sync\States\Push\Clients\PushClientsStateTests.cs" />
+    <Compile Include="Sync\States\Push\Clients\UnsyncableClientStateTests.cs" />
     <Compile Include="Sync\StateTreeTests.cs" />
     <Compile Include="Sync\SyncManagerTests.cs" />
     <Compile Include="Sync\SyncStateQueueTests.cs" />

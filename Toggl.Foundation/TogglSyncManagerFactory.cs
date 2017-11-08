@@ -87,7 +87,8 @@ namespace Toggl.Foundation
             IObservable<Unit> delayCancellation)
         {
             var pushingTagsFinished = configurePushTransitionsForTags(transitions, database, api, scheduler, entryPoint, delayCancellation);
-            configurePushTransitionsForTimeEntries(transitions, database, api, dataSource, scheduler, pushingTagsFinished, delayCancellation);
+            var pushingClientsFinished = configurePushTransitionsForClients(transitions, database, api, scheduler, pushingTagsFinished, delayCancellation);
+            configurePushTransitionsForTimeEntries(transitions, database, api, dataSource, scheduler, pushingClientsFinished, delayCancellation);
         }
 
         private static IStateResult configurePushTransitionsForTimeEntries(
@@ -132,6 +133,28 @@ namespace Toggl.Foundation
             var pushOne = new PushOneEntityState<IDatabaseTag>();
             var create = new CreateTagState(api, database.Tags);
             var unsyncable = new UnsyncableTagState(database.Tags);
+            var checkServerStatus = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay, delayCancellation);
+            var finished = new ResetAPIDelayState(apiDelay);
+
+            return configureCreateOnlyPush(transitions, entryPoint, push, pushOne, create, unsyncable, checkServerStatus, finished);
+        }
+
+        private static IStateResult configurePushTransitionsForClients(
+            TransitionHandlerProvider transitions,
+            ITogglDatabase database,
+            ITogglApi api,
+            IScheduler scheduler,
+            IStateResult entryPoint,
+            IObservable<Unit> delayCancellation)
+        {
+            var rnd = new Random();
+            var apiDelay = new RetryDelayService(rnd);
+            var statusDelay = new RetryDelayService(rnd);
+
+            var push = new PushClientsState(database.Clients);
+            var pushOne = new PushOneEntityState<IDatabaseClient>();
+            var create = new CreateClientState(api, database.Clients);
+            var unsyncable = new UnsyncableClientState(database.Clients);
             var checkServerStatus = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay, delayCancellation);
             var finished = new ResetAPIDelayState(apiDelay);
 
