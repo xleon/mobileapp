@@ -145,6 +145,8 @@
     <Compile Include="Exceptions\NoRunningTimeEntryException.cs" />
     <Compile Include="Sync\States\Push\ResetAPIDelayState.cs" />
     <Compile Include="DataSources\TasksDataSource.cs" />
+    <Compile Include="DTOs\CreateProjectDTO.cs" />
+    <Compile Include="Models\Project.cs" />
     <Compile Include="Sync\States\Push\TimeEntries\CreateTimeEntryState.cs" />
     <Compile Include="Sync\States\Push\TimeEntries\DeleteLocalTimeEntryState.cs" />
     <Compile Include="Sync\States\Push\TimeEntries\DeleteTimeEntryState.cs" />
