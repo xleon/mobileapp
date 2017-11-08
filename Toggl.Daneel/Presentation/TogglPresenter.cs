@@ -63,7 +63,7 @@ namespace Toggl.Daneel.Presentation
             viewController.ModalPresentationStyle = UIModalPresentationStyle.Custom;
             viewController.TransitioningDelegate = transitionDelegate;
 
-            getCurrentControllerForPresenting().PresentViewController(viewController, true, null);
+            getCurrentControllerForPresenting(MasterNavigationController).PresentViewController(viewController, true, null);
 
             ModalViewControllers.Add(viewController);
 
@@ -75,7 +75,7 @@ namespace Toggl.Daneel.Presentation
             viewController.ModalPresentationStyle = UIModalPresentationStyle.Custom;
             viewController.TransitioningDelegate = modalTransitionDelegate;
 
-            getCurrentControllerForPresenting().PresentViewController(viewController, true, null);
+            getCurrentControllerForPresenting(MasterNavigationController).PresentViewController(viewController, true, null);
 
             ModalViewControllers.Add(viewController);
         }
@@ -129,7 +129,9 @@ namespace Toggl.Daneel.Presentation
             return new TogglNavigationController(viewController);
         }
 
-        private UIViewController getCurrentControllerForPresenting()
-            => MasterNavigationController.PresentedViewController ?? MasterNavigationController;
+        private UIViewController getCurrentControllerForPresenting(UIViewController currentViewController)
+            => currentViewController.PresentedViewController != null 
+             ? getCurrentControllerForPresenting(currentViewController.PresentedViewController)
+             : currentViewController;
     }
 }
