@@ -56,6 +56,7 @@ namespace Toggl.Daneel.ViewControllers
             var dateConverter = new DateToTitleStringValueConverter();
             var timeConverter = new DateTimeToTimeConverter();
             var visibilityConverter = new MvxVisibilityValueConverter();
+            var invertedBoolConverter = new BoolToConstantValueConverter<bool>(false, true);
             var inverterVisibilityConverter = new MvxInvertedVisibilityValueConverter();
             var projectTaskClientCombiner = new ProjectTaskClientValueCombiner(
                 ProjectTaskClientLabel.Font.CapHeight,
@@ -170,6 +171,17 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindVisible())
                       .To(vm => vm.HasTags)
                       .WithConversion(inverterVisibilityConverter);
+
+            //Confirm button enabled
+            bindingSet.Bind(ConfirmButton)
+                      .For(v => v.Enabled)
+                      .To(vm => vm.DescriptionLimitExceeded)
+                      .WithConversion(invertedBoolConverter);
+
+            bindingSet.Bind(ConfirmButton)
+                      .For(v => v.Alpha)
+                      .To(vm => vm.DescriptionLimitExceeded)
+                      .WithConversion(new BoolToConstantValueConverter<nfloat>(0.5f, 1));
 
             bindingSet.Apply();
         }
