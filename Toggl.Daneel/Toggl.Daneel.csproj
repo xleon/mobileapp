@@ -391,6 +391,7 @@
     <InterfaceDefinition Include="Views\Onboarding\TrackPage.xib" />
     <InterfaceDefinition Include="Views\Onboarding\LogPage.xib" />
     <InterfaceDefinition Include="Views\Onboarding\SummaryPage.xib" />
+    <InterfaceDefinition Include="ViewControllers\EditProjectViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectColorViewController.xib" />
     <InterfaceDefinition Include="Views\ColorSelectionViewCell.xib" />
   </ItemGroup>
@@ -575,6 +576,12 @@
     <Compile Include="Views\Interfaces\IHeaderViewCellWithHideableTopSeparator.cs" />
     <Compile Include="Binding\NavigationItemHidesBackButtonTargetBinding.cs" />
     <Compile Include="ViewControllers\BrowserViewController.cs" />
+    <Compile Include="ViewControllers\EditProjectViewController.cs" />
+    <Compile Include="ViewControllers\EditProjectViewController.designer.cs">
+      <DependentUpon>EditProjectViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\AddNewAttributedStringConverter.cs" />
+    <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Combiners\ProjectSelectedColorValueCombiner.cs" />
     <Compile Include="Extensions\TableViewExtensions.cs" />
     <Compile Include="ViewControllers\SelectColorViewController.cs" />

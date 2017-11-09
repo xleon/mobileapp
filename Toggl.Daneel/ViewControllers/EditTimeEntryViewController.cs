@@ -190,14 +190,8 @@ namespace Toggl.Daneel.ViewControllers
             DurationLabel.Font = DurationLabel.Font.GetMonospacedDigitFont();
             PreferredContentSize = View.Frame.Size;
             DescriptionTextView.Delegate = this;
-            resizeSwitch();
+            BillableSwitch.Resize(switchHeight);
             prepareDescriptionField();
-        }
-
-        private void resizeSwitch()
-        {
-            var scale = switchHeight / BillableSwitch.Frame.Height;
-            BillableSwitch.Transform = CGAffineTransform.MakeScale(scale, scale);
         }
 
         private void prepareDescriptionField()
