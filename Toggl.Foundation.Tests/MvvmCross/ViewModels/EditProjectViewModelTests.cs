@@ -85,7 +85,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 Workspace.Id.Returns(WorkspaceId);
                 Workspace.Name.Returns(WorkspaceName);
 
-                ViewModel.Prepare();
+                ViewModel.Prepare("Some name");
             }
 
             [Fact]
@@ -122,7 +122,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task ReturnsNull()
             {
-                ViewModel.Prepare();
+                ViewModel.Prepare("Some name");
 
                 await ViewModel.CloseCommand.ExecuteAsync();
 
@@ -133,7 +133,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task DoesNotTrySavingTheChanges()
             {
-                ViewModel.Prepare();
+                ViewModel.Prepare("Some name");
 
                 await ViewModel.CloseCommand.ExecuteAsync();
 
@@ -173,7 +173,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task ClosesTheViewModel()
             {
-                ViewModel.Prepare();
+                ViewModel.Prepare("Some name");
 
                 await ViewModel.DoneCommand.ExecuteAsync();
 
@@ -184,7 +184,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task ReturnsTheIdOfTheCreatedProject()
             {
-                ViewModel.Prepare();
+                ViewModel.Prepare("Some name");
 
                 await ViewModel.DoneCommand.ExecuteAsync();
 
@@ -195,7 +195,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task DoesNotCallCreateIfTheProjectNameIsInvalid()
             {
-                ViewModel.Prepare();
+                ViewModel.Prepare("Some name");
                 ViewModel.Name = "";
 
                 await ViewModel.DoneCommand.ExecuteAsync();
@@ -207,7 +207,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task DoesNotCloseTheViewModelIfTheProjectNameIsInvalid()
             {
-                ViewModel.Prepare();
+                ViewModel.Prepare("Some name");
                 ViewModel.Name = "";
 
                 await ViewModel.DoneCommand.ExecuteAsync();
@@ -220,7 +220,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task SetsBillableToNullIfTheDefaultWorkspaceIfNotPro()
             {
                 Workspace.Id.Returns(WorkspaceId);
-                ViewModel.Prepare();
+                ViewModel.Prepare("Some name");
 
                 await ViewModel.DoneCommand.ExecuteAsync();
 
@@ -237,7 +237,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 Workspace.Id.Returns(proWorkspaceId);
                 Workspace.ProjectsBillableByDefault.Returns(billableByDefault);
-                ViewModel.Prepare();
+                ViewModel.Prepare("Some name");
                 await ViewModel.Initialize();
 
                 await ViewModel.DoneCommand.ExecuteAsync();
@@ -253,7 +253,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task CallsTheSelectColorViewModel()
             {
-                ViewModel.Prepare();
+                ViewModel.Prepare("Some name");
 
                 await ViewModel.PickColorCommand.ExecuteAsync();
 
@@ -268,7 +268,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 NavigationService
                     .Navigate<MvxColor, MvxColor>(typeof(SelectColorViewModel), Arg.Any<MvxColor>())
                     .Returns(Task.FromResult(expectedColor));
-                ViewModel.Prepare();
+                ViewModel.Prepare("Some name");
                 ViewModel.Color = MvxColors.Azure;
 
                 await ViewModel.PickColorCommand.ExecuteAsync();
