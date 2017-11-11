@@ -119,7 +119,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private Task pickWorkspace()
             => throw new NotImplementedException();
 
-        private Task pickClient()
-            => throw new NotImplementedException();
+        private async Task pickClient()
+        {
+            var selectedClientId = await navigationService.Navigate<SelectClientViewModel, long, long?>(workspaceId);
+            if (selectedClientId == null) return;
+
+            if (selectedClientId.Value == 0)
+            {
+                selectedClientId = null;
+                ClientName = "";
+                return;
+            }
+
+            var client = await dataSource.Clients.GetById(selectedClientId.Value);
+            clientId = client.Id;
+            ClientName = client.Name;
+        }
     }
 }

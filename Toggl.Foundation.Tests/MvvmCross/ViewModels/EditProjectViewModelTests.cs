@@ -276,5 +276,85 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Color.ARGB.Should().Be(expectedColor.ARGB);
             }
         }
+
+        public sealed class ThePickClientCommand : EditProjectViewModelTest
+        {
+            [Fact]
+            public async Task CallsTheSelectClientViewModel()
+            {
+                ViewModel.Prepare("Some name");
+
+                await ViewModel.PickClientCommand.ExecuteAsync();
+
+                await NavigationService.Received()
+                    .Navigate<long, long?>(typeof(SelectClientViewModel), Arg.Any<long>());
+            }
+
+            [Fact]
+            public async Task PassesTheCurrentWorkspaceToTheViewModel()
+            {
+                DataSource.Workspaces
+                    .GetDefault()
+                    .Returns(Observable.Return(Workspace));
+                Workspace.Id.Returns(WorkspaceId);
+                ViewModel.Prepare("Some name");
+                await ViewModel.Initialize();
+
+                await ViewModel.PickClientCommand.ExecuteAsync();
+
+                await NavigationService.Received()
+                    .Navigate<long, long?>(typeof(SelectClientViewModel), WorkspaceId);
+            }
+
+            [Fact]
+            public async Task SetsTheReturnedClientAsTheClientNameProperty()
+            {
+                const string expectedName = "Some client";
+                long? expectedId = 10;
+                var client = Substitute.For<IDatabaseClient>();
+                client.Id.Returns(expectedId.Value);
+                client.Name.Returns(expectedName);
+                NavigationService
+                    .Navigate<long, long?>(typeof(SelectClientViewModel), Arg.Any<long>())
+                    .Returns(Task.FromResult(expectedId));
+                DataSource.Workspaces
+                    .GetDefault()
+                    .Returns(Observable.Return(Workspace));
+                DataSource.Clients.GetById(expectedId.Value).Returns(Observable.Return(client));
+                Workspace.Id.Returns(WorkspaceId);
+                ViewModel.Prepare("Some name");
+
+                await ViewModel.PickClientCommand.ExecuteAsync();
+
+                ViewModel.ClientName.Should().Be(expectedName);
+            }
+
+            [Fact]
+            public async Task ClearsTheCurrentClientIfZeroIsReturned()
+            {
+                const string expectedName = "Some client";
+                long? expectedId = 10;
+                var client = Substitute.For<IDatabaseClient>();
+                client.Id.Returns(expectedId.Value);
+                client.Name.Returns(expectedName);
+                NavigationService
+                    .Navigate<long, long?>(typeof(SelectClientViewModel), Arg.Any<long>())
+                    .Returns(Task.FromResult(expectedId));
+                DataSource.Workspaces
+                    .GetDefault()
+                    .Returns(Observable.Return(Workspace));
+                DataSource.Clients.GetById(expectedId.Value).Returns(Observable.Return(client));
+                Workspace.Id.Returns(WorkspaceId);
+                ViewModel.Prepare("Some name");
+                await ViewModel.PickClientCommand.ExecuteAsync();
+                NavigationService
+                    .Navigate<long, long?>(typeof(SelectClientViewModel), Arg.Any<long>())
+                    .Returns(Task.FromResult<long?>(0));
+
+                await ViewModel.PickClientCommand.ExecuteAsync();
+
+                ViewModel.ClientName.Should().BeNullOrEmpty();
+            }
+        }
     }
 }
