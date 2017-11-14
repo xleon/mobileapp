@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Helpers;
@@ -23,6 +24,16 @@ namespace Toggl.Ultrawave.ApiClients
 
         public IObservable<IUser> Get()
             => CreateObservable<User>(endPoints.Get, AuthHeader);
+
+        public IObservable<IUser> Update(IUser user)
+            => CreateObservable(endPoints.Put, AuthHeader, user as User ?? new User(user), SerializationReason.Post);
+
+        public IObservable<string> ResetPassword(Email email)
+        {
+            var json = $"{{\"email\":\"{email}\"}}";
+            return CreateObservable(endPoints.ResetPassword, new HttpHeader[0], json)
+                .Select(instructions => instructions.Trim('"'));
+        }
 
         public IObservable<IUser> SignUp(Email email, string password)
         {
@@ -58,8 +69,5 @@ namespace Toggl.Ultrawave.ApiClients
                 public PricingPlans InitialPricingPlan { get; set; }
             }
         }
-
-        public IObservable<IUser> Update(IUser user)
-            => CreateObservable(endPoints.Put, AuthHeader, user as User ?? new User(user), SerializationReason.Post);
     }
 }

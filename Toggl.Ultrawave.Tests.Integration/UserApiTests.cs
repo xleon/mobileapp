@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
@@ -50,8 +51,8 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var userFromApi = await CallEndpointWith(togglApi);
 
                 userFromApi.ApiToken.Should().NotBeNull()
-                           .And.HaveLength(32)
-                           .And.MatchRegex(regex);
+                    .And.HaveLength(32)
+                    .And.MatchRegex(regex);
             }
 
             [Fact, LogTestInfo]
@@ -107,6 +108,41 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var uri = new Uri(userFromApi.ImageUrl);
                 var uriIsAbsolute = uri.IsAbsoluteUri;
                 uriIsAbsolute.Should().BeTrue();
+            }
+        }
+
+        public sealed class TheResetPasswordMethod : EndpointTestBase
+        {
+            [Fact]
+            public void ThrowsIfTheEmailIsInvalid()
+            {
+                var api = TogglApiWith(Credentials.None);
+
+                Action resetInvalidEmail = () => api.User.ResetPassword(Email.Invalid).Wait();
+
+                resetInvalidEmail.ShouldThrow<BadRequestException>();
+            }
+
+            [Fact]
+            public void FailsIfUserDoesNotExist()
+            {
+                var api = TogglApiWith(Credentials.None);
+                var email = Email.FromString($"{Guid.NewGuid().ToString()}@domain.com");
+
+                Action resetInvalidEmail = () => api.User.ResetPassword(email).Wait();
+
+                resetInvalidEmail.ShouldThrow<BadRequestException>();
+            }
+
+            [Fact]
+            public async Task ReturnsUserFriendlyInstructionsInEnglishWhenResetSucceeds()
+            {
+                var (_, user) = await SetupTestUser();
+                var api = TogglApiWith(Credentials.None);
+
+                var instructions = await api.User.ResetPassword(user.Email.ToEmail());
+
+                instructions.Should().Be("Please check your inbox for further instructions");
             }
         }
 
