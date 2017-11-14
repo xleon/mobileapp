@@ -453,13 +453,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             [Property]
             public void QueriesTheDataSourceForReturnedTagIds(
-                NonEmptyArray<NonNegativeInt> nonNegativeInts, long[] otherIds)
+                NonEmptyArray<NonNegativeInt> nonNegativeInts)
             {
                 var tagIds = nonNegativeInts.Get
                     .Select(i => (long)i.Get)
                     .ToArray();
                 var tags = tagIds.Select(createTag);
-                var otherTags = otherIds.Select(createTag);
                 DataSource.Tags.GetAll(Arg.Any<Func<IDatabaseTag, bool>>())
                     .Returns(Observable.Return(tags));
                 NavigationService
@@ -471,29 +470,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 DataSource.Tags.Received()
                     .GetAll(Arg.Is<Func<IDatabaseTag, bool>>(
-                        func => ensureFuncWorksAsExpected(func, tags, otherTags)))
+                        func => tags.All(func)))
                     .Wait();
-            }
-
-            private bool ensureFuncWorksAsExpected(
-                Func<IDatabaseTag, bool> func,
-                IEnumerable<IDatabaseTag> tags,
-                IEnumerable<IDatabaseTag> otherTags)
-            {
-                var tagIdHashSet = new HashSet<long>(tags.Select(tag => tag.Id));
-                foreach (var tag in tags)
-                    if (!func(tag))
-                        return false;
-
-                foreach (var otherTag in otherTags)
-                {
-                    if (tagIdHashSet.Contains(otherTag.Id))
-                        continue;
-                    if (func(otherTag))
-                        return false;
-                }
-
-                return true;
             }
 
             [Property]
@@ -503,7 +481,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Select(i => (long)i.Get)
                     .ToArray();
                 var tags = tagIds.Select(createTag);
-                var tagNames = tags.Select(tag => tag.Name);
+                var tagNames = new HashSet<string>(tags.Select(tag => tag.Name));
                 ViewModel.Initialize().Wait();
                 DataSource.Tags.GetAll(Arg.Any<Func<IDatabaseTag, bool>>())
                     .Returns(Observable.Return(tags));
