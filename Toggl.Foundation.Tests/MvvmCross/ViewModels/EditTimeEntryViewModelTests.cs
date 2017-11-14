@@ -19,6 +19,7 @@ using static Toggl.Foundation.Helper.Constants;
 using Task = System.Threading.Tasks.Task;
 using System.Text;
 using System.Globalization;
+using Toggl.Foundation.MvvmCross.Services;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -46,21 +47,23 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             protected override EditTimeEntryViewModel CreateViewModel()
-                => new EditTimeEntryViewModel(DataSource, NavigationService, TimeService);
+                => new EditTimeEntryViewModel(DataSource, NavigationService, TimeService, DialogService);
         }
 
         public sealed class TheConstructor : EditTimeEntryViewModelTest
         {
             [Theory]
-            [ClassData(typeof(ThreeParameterConstructorTestData))]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useNavigationService, bool useTimeService)
+            [ClassData(typeof(FourParameterConstructorTestData))]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(
+                bool useDataSource, bool useNavigationService, bool useTimeService, bool useDialogService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var timeService = useTimeService ? TimeService : null;
+                var dialogService = useDialogService ? DialogService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new EditTimeEntryViewModel(dataSource, navigationService, timeService);
+                    () => new EditTimeEntryViewModel(dataSource, navigationService, timeService, dialogService);
 
                 tryingToConstructWithEmptyParameters.ShouldThrow<ArgumentNullException>();
             }
@@ -77,33 +80,90 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public sealed class TheDeleteCommand : EditTimeEntryViewModelTest
+        public class TheDeleteCommand : EditTimeEntryViewModelTest
         {
-            [Fact]
-            public void CallsDeleteOnDataSource()
+            protected void PrepareActionSheet(bool confirm)
             {
-                ViewModel.DeleteCommand.Execute();
+                var result = confirm ? Resources.Delete : Resources.Cancel;
 
-                DataSource.TimeEntries.Received().Delete(Arg.Is(ViewModel.Id));
+                DialogService.ShowMultipleChoiceDialog(
+                    Arg.Is(Resources.Cancel),
+                    Arg.Is<MultipleChoiceDialogAction>(
+                        action => action.Text == Resources.Delete
+                               && action.Destructive == true)
+                ).Returns(Task.FromResult(result));
             }
 
             [Fact]
-            public async Task DeleteCommandInitiatesPushSync()
+            public async Task ShowsConfirmationActionSheet()
             {
-                ViewModel.DeleteCommand.Execute();
+                await ViewModel.DeleteCommand.ExecuteAsync();
 
-                await DataSource.SyncManager.Received().PushSync();
+                await DialogService.Received().ShowMultipleChoiceDialog(
+                    Arg.Is(Resources.Cancel),
+                    Arg.Is<MultipleChoiceDialogAction>(
+                        action => action.Text == Resources.Delete
+                               && action.Destructive == true)
+                );
             }
 
-            [Fact]
-            public async Task DoesNotInitiatePushSyncWhenDeletingFails()
+            public sealed class WhenUserConfirms : TheDeleteCommand
             {
-                DataSource.TimeEntries.Delete(Arg.Any<long>())
-                    .Returns(Observable.Throw<Unit>(new Exception()));
+                public WhenUserConfirms()
+                {
+                    PrepareActionSheet(true);
+                }
 
-                ViewModel.DeleteCommand.Execute();
+                [Fact]
+                public async Task CallsDeleteOnDataSource()
+                {
+                    await ViewModel.DeleteCommand.ExecuteAsync();
 
-                await DataSource.SyncManager.DidNotReceive().PushSync();
+                    await DataSource.TimeEntries.Received().Delete(Arg.Is(ViewModel.Id));
+                }
+
+                [Fact]
+                public async Task InitiatesPushSync()
+                {
+                    await ViewModel.DeleteCommand.ExecuteAsync();
+
+                    await DataSource.SyncManager.Received().PushSync();
+                }
+
+                [Fact]
+                public async Task DoesNotInitiatePushSyncWhenDeletingFails()
+                {
+                    DataSource.TimeEntries.Delete(Arg.Any<long>())
+                        .Returns(Observable.Throw<Unit>(new Exception()));
+
+                    await ViewModel.DeleteCommand.ExecuteAsync();
+
+                    await DataSource.SyncManager.DidNotReceive().PushSync();
+                }
+            }
+
+            public sealed class WhenUserCancels : TheDeleteCommand
+            {
+                public WhenUserCancels()
+                {
+                    PrepareActionSheet(false);
+                }
+
+                [Fact]
+                public async Task DoesNotCallDeleteOnDataSource()
+                {
+                    await ViewModel.DeleteCommand.ExecuteAsync();
+
+                    await DataSource.TimeEntries.DidNotReceive().Delete(Arg.Is(ViewModel.Id));
+                }
+
+                [Fact]
+                public async Task DoesNotInitiatePushSync()
+                {
+                    await ViewModel.DeleteCommand.ExecuteAsync();
+
+                    await DataSource.SyncManager.DidNotReceive().PushSync();
+                }
             }
         }
 
