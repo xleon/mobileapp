@@ -102,6 +102,9 @@
     <Compile Include="Sync\States\Push\Clients\CreateClientState.cs" />
     <Compile Include="Sync\States\Push\Clients\PushClientsState.cs" />
     <Compile Include="Sync\States\Push\Clients\UnsyncableClientState.cs" />
+    <Compile Include="Sync\States\Push\Users\UpdateUserState.cs" />
+    <Compile Include="Sync\States\Push\Users\PushUsersState.cs" />
+    <Compile Include="Sync\States\Push\Users\UnsyncableUserState.cs" />
     <Compile Include="Sync\TransitionHandlerProvider.cs" />
     <Compile Include="Sync\SyncManager.cs" />
     <Compile Include="Sync\SyncState.cs" />

@@ -86,7 +86,8 @@ namespace Toggl.Foundation
             StateResult entryPoint,
             IObservable<Unit> delayCancellation)
         {
-            var pushingTagsFinished = configurePushTransitionsForTags(transitions, database, api, scheduler, entryPoint, delayCancellation);
+            var pushingUsersFinished = configurePushTransitionsForUsers(transitions, database, api, scheduler, entryPoint, delayCancellation);
+            var pushingTagsFinished = configurePushTransitionsForTags(transitions, database, api, scheduler, pushingUsersFinished, delayCancellation);
             var pushingClientsFinished = configurePushTransitionsForClients(transitions, database, api, scheduler, pushingTagsFinished, delayCancellation);
             var pushingProjectsFinished = configurePushTransitionsForProjects(transitions, database, api, scheduler, pushingClientsFinished, delayCancellation);
             configurePushTransitionsForTimeEntries(transitions, database, api, dataSource, scheduler, pushingProjectsFinished, delayCancellation);
@@ -184,6 +185,28 @@ namespace Toggl.Foundation
             return configureCreateOnlyPush(transitions, entryPoint, push, pushOne, create, unsyncable, checkServerStatus, finished);
         }
 
+        private static IStateResult configurePushTransitionsForUsers(
+            TransitionHandlerProvider transitions,
+            ITogglDatabase database,
+            ITogglApi api,
+            IScheduler scheduler,
+            IStateResult entryPoint,
+            IObservable<Unit> delayCancellation)
+        {
+            var rnd = new Random();
+            var apiDelay = new RetryDelayService(rnd);
+            var statusDelay = new RetryDelayService(rnd);
+
+            var push = new PushUsersState(database.User);
+            var pushOne = new PushOneEntityState<IDatabaseUser>();
+            var update = new UpdateUserState(api, database.User);
+            var unsyncable = new UnsyncableUserState(database.User);
+            var checkServerStatus = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay, delayCancellation);
+            var finished = new ResetAPIDelayState(apiDelay);
+
+            return configureUpdateOnlyPush(transitions, entryPoint, push, pushOne, update, unsyncable, checkServerStatus, finished);
+        }
+
         private static IStateResult configurePush<T>(
             TransitionHandlerProvider transitions,
             IStateResult entryPoint,
@@ -258,6 +281,39 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(checkServerStatus.ServerIsAvailable, push.Start);
 
             transitions.ConfigureTransition(create.CreatingFinished, finished.Start);
+
+            transitions.ConfigureTransition(finished.PushNext, push.Start);
+
+            return push.NothingToPush;
+        }
+
+        private static IStateResult configureUpdateOnlyPush<T>(
+            TransitionHandlerProvider transitions,
+            IStateResult entryPoint,
+            BasePushState<T> push,
+            PushOneEntityState<T> pushOne,
+            BaseUpdateEntityState<T> update,
+            BaseUnsyncableEntityState<T> markUnsyncable,
+            CheckServerStatusState checkServerStatus,
+            ResetAPIDelayState finished)
+            where T : class, IBaseModel, IDatabaseSyncable
+        {
+            transitions.ConfigureTransition(entryPoint, push.Start);
+            transitions.ConfigureTransition(push.PushEntity, pushOne.Start);
+            transitions.ConfigureTransition(pushOne.UpdateEntity, update.Start);
+
+            transitions.ConfigureTransition(pushOne.CreateEntity, new InvalidTransitionState($"Creating is not supported for {typeof(T).Name} during Push sync.").Start);
+            transitions.ConfigureTransition(pushOne.DeleteEntity, new InvalidTransitionState($"Deleting is not supported for {typeof(T).Name} during Push sync.").Start);
+            transitions.ConfigureTransition(pushOne.DeleteEntityLocally, new InvalidTransitionState($"Deleting locally is not supported for {typeof(T).Name} during Push sync.").Start);
+
+            transitions.ConfigureTransition(update.ClientError, markUnsyncable.Start);
+            transitions.ConfigureTransition(update.ServerError, checkServerStatus.Start);
+            transitions.ConfigureTransition(update.UnknownError, checkServerStatus.Start);
+
+            transitions.ConfigureTransition(checkServerStatus.Retry, checkServerStatus.Start);
+            transitions.ConfigureTransition(checkServerStatus.ServerIsAvailable, push.Start);
+
+            transitions.ConfigureTransition(update.UpdatingSucceeded, finished.Start);
 
             transitions.ConfigureTransition(finished.PushNext, push.Start);
 

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using NSubstitute;
 using Toggl.PrimeRadiant.Exceptions;
 using Xunit;
 
@@ -54,5 +57,21 @@ namespace Toggl.PrimeRadiant.Tests
             callingCreateASecondTime
                 .ShouldThrow<EntityAlreadyExistsException>();
         }
+
+        [Theory]
+        [InlineData(2)]
+        [InlineData(5)]
+        [InlineData(100)]
+        public void TheBatchUpdateMehtodThrowsWhenThereIsMoreThanEntityToUpdate(int entitiesToUpdate)
+        {
+            var batch = Enumerable.Range(0, entitiesToUpdate).Select(id => ((long)id, new TTestModel()));
+
+            Func<Task> callingBatchUpdate = async () => await callBatchUpdate(batch);
+
+            callingBatchUpdate.ShouldThrow<ArgumentException>();
+        }
+
+        private IObservable<IEnumerable<IConflictResolutionResult<TTestModel>>> callBatchUpdate(IEnumerable<(long, TTestModel)> batch)
+            => Storage.BatchUpdate(batch, (a, b) => ConflictResolutionMode.Ignore, Substitute.For<IRivalsResolver<TTestModel>>());
     }
 }
