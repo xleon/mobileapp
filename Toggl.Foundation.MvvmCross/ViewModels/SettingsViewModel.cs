@@ -100,9 +100,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private async Task<bool> isSynced()
-            => IsRunningSync ? false : await thereIsNothingToSync();
-
-        private async Task<bool> thereIsNothingToSync()
-            => await dataSource.TimeEntries.GetAll(te => te.SyncStatus != SyncStatus.InSync).SelectMany(te => te).IsEmpty();
+            => !IsRunningSync && !(await dataSource.HasUnsyncedData());
     }
 }

@@ -218,10 +218,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact]
+            public void ChecksIfThereAreUnsyncedDataWhenTheSyncProcessFinishes()
+            {
+                StateObservableSubject.OnNext(SyncState.Sleep);
+
+                DataSource.Received().HasUnsyncedData();
+            }
+
+            [Fact]
             public void SetsTheIsSyncedFlagAfterTheSyncProcessHasFinishedAndThereIsNoTimeEntryToPush()
             {
-                var emptyList = Observable.Return(new IDatabaseTimeEntry[0]);
-                DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(emptyList);
+                DataSource.HasUnsyncedData().Returns(Observable.Return(false));
                 StateObservableSubject.OnNext(SyncState.Sleep);
 
                 ViewModel.IsSynced.Should().BeTrue();
@@ -230,8 +237,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public void UnsetsTheIsSyncedFlagWhenTheSyncProcessIsNotRunningButThrereIsSomeTimeEntryToPush()
             {
-                var listOfTimeEntries = Observable.Return(new[] { Substitute.For<IDatabaseTimeEntry>() });
-                DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(listOfTimeEntries);
+                DataSource.HasUnsyncedData().Returns(Observable.Return(true));
                 StateObservableSubject.OnNext(SyncState.Sleep);
 
                 ViewModel.IsSynced.Should().BeFalse();
@@ -242,8 +248,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [InlineData(SyncState.Push)]
             public void UnsetsTheIsSyncedFlagWhenThereIsNothingToPushButTheSyncProcessStartsAgain(SyncState state)
             {
-                var emptyList = Observable.Return(new IDatabaseTimeEntry[0]);
-                DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(emptyList);
+                DataSource.HasUnsyncedData().Returns(Observable.Return(false));
                 StateObservableSubject.OnNext(SyncState.Sleep);
                 StateObservableSubject.OnNext(state);
 
@@ -263,8 +268,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task ShowsConfirmationDialogWhenThereIsNothingToPushButSyncIsRunning()
             {
-                var emptyList = Observable.Return(new IDatabaseTimeEntry[0]);
-                DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(emptyList);
+                DataSource.HasUnsyncedData().Returns(Observable.Return(false));
                 StateObservableSubject.OnNext(SyncState.Pull);
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
@@ -275,8 +279,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task ShowsConfirmationDialogWhenThereIsSomethingToPushButSyncIsNotRunning()
             {
-                var listOfTimeEntries = Observable.Return(new[] { Substitute.For<IDatabaseTimeEntry>() });
-                DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(listOfTimeEntries);
+                DataSource.HasUnsyncedData().Returns(Observable.Return(true));
                 StateObservableSubject.OnNext(SyncState.Sleep);
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
@@ -322,8 +325,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             private void doNotShowConfirmationDialog()
             {
-                var emptyList = Observable.Return(new IDatabaseTimeEntry[0]);
-                DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(_ => emptyList);
+                DataSource.HasUnsyncedData().Returns(Observable.Return(false));
                 StateObservableSubject.OnNext(SyncState.Sleep);
             }
         }
