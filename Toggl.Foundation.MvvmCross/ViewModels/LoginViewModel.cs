@@ -128,7 +128,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             if (!NextIsEnabled) return;
 
-            if (IsPasswordPage) login();
+            if (IsPasswordPage) 
+            {
+                if (IsLogin) login();
+                if (IsSignUp) signUp();
+            }
+                
 
             CurrentPage = PasswordPage;
             ErrorText = "";
@@ -153,6 +158,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             loginDisposable =
                 loginManager
                     .Login(email, Password)
+                    .Subscribe(onDataSource, onError, onCompleted);
+        }
+
+        private void signUp()
+        {
+            IsLoading = true;
+
+            loginDisposable =
+                loginManager
+                    .SignUp(email, Password)
                     .Subscribe(onDataSource, onError, onCompleted);
         }
 
@@ -194,7 +209,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             ErrorText = ex is ForbiddenException ? Resources.IncorrectEmailOrPassword
                                                  : Resources.GenericLoginError;
-
 
             IsLoading = false;
             onCompleted();

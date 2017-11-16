@@ -51,6 +51,25 @@ namespace Toggl.Foundation.Login
                     });
         }
 
+        public IObservable<ITogglDataSource> SignUp(Email email, string password)
+        {
+            if (!email.IsValid)
+                throw new ArgumentException("A valid email must be provided when trying to signup");
+            Ensure.Argument.IsNotNullOrWhiteSpaceString(password, nameof(password));
+
+            return database
+                    .Clear()
+                    .SelectMany(_ => apiFactory.CreateApiWith(Credentials.None).User.SignUp(email, password))
+                    .Select(User.Clean)
+                    .SelectMany(database.User.Create)
+                    .Select(user =>
+                    {
+                        var newCredentials = Credentials.WithApiToken(user.ApiToken);
+                        var api = apiFactory.CreateApiWith(newCredentials);
+                        return new TogglDataSource(database, api, timeService, scheduler);
+                    });
+        }
+
         public IObservable<string> ResetPassword(Email email)
         {
             if (!email.IsValid)

@@ -203,6 +203,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 }
 
                 [Fact]
+                public void CallsTheLoginManagerForSignUpWhenThePasswordIsValidAndInSignUpMode()
+                {
+                    ViewModel.Prepare(LoginType.SignUp);
+                    ViewModel.Password = ValidPassword;
+
+                    ViewModel.NextCommand.Execute();
+
+                    LoginManager.Received().SignUp(Arg.Any<Email>(), Arg.Any<string>());
+                }
+
+                [Fact]
                 public void DoesNothingWhenThePageIsCurrentlyLoading()
                 {
                     var scheduler = new TestScheduler();

@@ -44,6 +44,7 @@ namespace Toggl.Foundation.Tests.Login
                 LoginManager = new LoginManager(ApiFactory, Database, TimeService, Scheduler);
 
                 Api.User.Get().Returns(Observable.Return(User));
+                Api.User.SignUp(Email, Password).Returns(Observable.Return(User));
                 ApiFactory.CreateApiWith(Arg.Any<Credentials>()).Returns(Api);
                 Database.Clear().Returns(Observable.Return(Unit.Default));
             }
@@ -199,6 +200,80 @@ namespace Toggl.Foundation.Tests.Login
                 var result = LoginManager.GetDataSourceIfLoggedIn();
 
                 result.Should().NotBeNull();
+            }
+        }
+
+        public sealed class TheSignUpMethod : LoginManagerTest
+        {
+            [Theory]
+            [InlineData("susancalvin@psychohistorian.museum", null)]
+            [InlineData("susancalvin@psychohistorian.museum", "")]
+            [InlineData("susancalvin@psychohistorian.museum", " ")]
+            [InlineData("susancalvin@", null)]
+            [InlineData("susancalvin@", "")]
+            [InlineData("susancalvin@", " ")]
+            [InlineData("susancalvin@", "123456")]
+            [InlineData("", null)]
+            [InlineData("", "")]
+            [InlineData("", " ")]
+            [InlineData("", "123456")]
+            [InlineData(null, null)]
+            [InlineData(null, "")]
+            [InlineData(null, " ")]
+            [InlineData(null, "123456")]
+            public void ThrowsIfYouPassInvalidParameters(string email, string password)
+            {
+                var actualEmail = Email.FromString(email);
+
+                Action tryingToConstructWithEmptyParameters =
+                    () => LoginManager.SignUp(actualEmail, password).Wait();
+
+                tryingToConstructWithEmptyParameters
+                    .ShouldThrow<ArgumentException>();
+            }
+
+            [Fact]
+            public async Task EmptiesTheDatabaseBeforeTryingToCreateTheUser()
+            {
+                await LoginManager.SignUp(Email, Password);
+
+                Received.InOrder(async () =>
+                {
+                    await Database.Clear();
+                    await Api.User.SignUp(Email, Password);
+                });
+            }
+
+            [Fact]
+            public async Task CallsTheSignUpMethodOfTheUserApi()
+            {
+                await LoginManager.SignUp(Email, Password);
+
+                await Api.User.Received().SignUp(Email, Password);
+            }
+
+            [Fact]
+            public async Task ShouldPersistTheUserToTheDatabase()
+            {
+                await LoginManager.SignUp(Email, Password);
+
+                await Database.User.Received().Create(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.Id == User.Id));
+            }
+
+            [Fact]
+            public async Task TheUserToBePersistedShouldHaveSyncStatusSetToInSync()
+            {
+                await LoginManager.SignUp(Email, Password);
+
+                await Database.User.Received().Create(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.SyncStatus == SyncStatus.InSync));
+            }
+
+            [Fact]
+            public async Task ShouldAlwaysReturnASingleResult()
+            {
+                await LoginManager
+                        .SignUp(Email, Password)
+                        .SingleAsync();
             }
         }
     }
