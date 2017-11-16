@@ -16,7 +16,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Converters
             public void ReturnsASpecialCaseStringForTheCurrentDay()
             {
                 var converter = new DateToTitleStringValueConverter();
-                var date = DateTimeOffset.UtcNow;
+                var date = DateTimeOffset.Now;
 
                 var result = converter.Convert(date, typeof(DateTimeOffset), null, CultureInfo.CurrentCulture);
 
@@ -27,7 +27,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Converters
             public void ReturnsASpecialCaseStringForThePreviousDay()
             {
                 var converter = new DateToTitleStringValueConverter();
-                var date = DateTimeOffset.UtcNow.AddDays(-1);
+                var date = DateTimeOffset.Now.AddDays(-1);
 
                 var result = converter.Convert(date, typeof(DateTimeOffset), null, CultureInfo.CurrentCulture);
 
