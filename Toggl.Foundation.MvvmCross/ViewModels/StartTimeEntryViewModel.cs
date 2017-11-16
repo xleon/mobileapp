@@ -436,7 +436,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             {
                 var firstQuerySymbol = TextFieldInfo.Text[firstQuerySymbolIndex];
                 IsSuggestingTags = firstQuerySymbol == QuerySymbols.Tags;
-                IsSuggestingProjects = firstQuerySymbol == QuerySymbols.Projects;
+                IsSuggestingProjects = !TextFieldInfo.ProjectId.HasValue && firstQuerySymbol == QuerySymbols.Projects;
             }
             else
             {

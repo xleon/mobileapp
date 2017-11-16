@@ -176,6 +176,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.SuggestCreation.Should().BeFalse();
             }
+
+            [Fact]
+            public async Task ReturnsFalseIfAProjectIsAlreadySelected()
+            {
+                await ViewModel.Initialize();
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty
+                    .WithProjectInfo(ProjectId, ProjectName, ProjectColor);
+
+                ViewModel.TextFieldInfo = ViewModel.TextFieldInfo.WithTextAndCursor("abcde @fgh", 10);
+
+                ViewModel.SuggestCreation.Should().BeFalse();
+            }
         }
 
 
