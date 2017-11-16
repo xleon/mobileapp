@@ -7,10 +7,11 @@
 using Foundation;
 using System;
 using System.CodeDom.Compiler;
+using Toggl.Daneel.Views;
 
 namespace Toggl.Daneel.ViewControllers
 {
-    [Register ("EditViewController")]
+    [Register("EditViewController")]
     partial class EditTimeEntryViewController
     {
         [Outlet]
@@ -38,7 +39,7 @@ namespace Toggl.Daneel.ViewControllers
 
 
         [Outlet]
-        UIKit.UITextView DescriptionTextView { get; set; }
+        TextViewWithPlaceholder DescriptionTextView { get; set; }
 
 
         [Outlet]
@@ -65,96 +66,112 @@ namespace Toggl.Daneel.ViewControllers
         UIKit.UILabel TagsLabel { get; set; }
 
         [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
+        [GeneratedCode("iOS Designer", "1.0")]
         UIKit.UIView BillableView { get; set; }
 
         [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
+        [GeneratedCode("iOS Designer", "1.0")]
         UIKit.UIScrollView ScrollView { get; set; }
 
         [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
+        [GeneratedCode("iOS Designer", "1.0")]
         UIKit.UIView ScrollViewContent { get; set; }
 
-        void ReleaseDesignerOutlets ()
+        void ReleaseDesignerOutlets()
         {
-            if (AddProjectAndTaskView != null) {
-                AddProjectAndTaskView.Dispose ();
+            if (AddProjectAndTaskView != null)
+            {
+                AddProjectAndTaskView.Dispose();
                 AddProjectAndTaskView = null;
             }
 
-            if (AddTagsView != null) {
-                AddTagsView.Dispose ();
+            if (AddTagsView != null)
+            {
+                AddTagsView.Dispose();
                 AddTagsView = null;
             }
 
-            if (BillableSwitch != null) {
-                BillableSwitch.Dispose ();
+            if (BillableSwitch != null)
+            {
+                BillableSwitch.Dispose();
                 BillableSwitch = null;
             }
 
-            if (BillableView != null) {
-                BillableView.Dispose ();
+            if (BillableView != null)
+            {
+                BillableView.Dispose();
                 BillableView = null;
             }
 
-            if (CloseButton != null) {
-                CloseButton.Dispose ();
+            if (CloseButton != null)
+            {
+                CloseButton.Dispose();
                 CloseButton = null;
             }
 
-            if (ConfirmButton != null) {
-                ConfirmButton.Dispose ();
+            if (ConfirmButton != null)
+            {
+                ConfirmButton.Dispose();
                 ConfirmButton = null;
             }
 
-            if (DeleteButton != null) {
-                DeleteButton.Dispose ();
+            if (DeleteButton != null)
+            {
+                DeleteButton.Dispose();
                 DeleteButton = null;
             }
 
-            if (DescriptionTextView != null) {
-                DescriptionTextView.Dispose ();
+            if (DescriptionTextView != null)
+            {
+                DescriptionTextView.Dispose();
                 DescriptionTextView = null;
             }
 
-            if (DurationLabel != null) {
-                DurationLabel.Dispose ();
+            if (DurationLabel != null)
+            {
+                DurationLabel.Dispose();
                 DurationLabel = null;
             }
 
-            if (ProjectTaskClientLabel != null) {
-                ProjectTaskClientLabel.Dispose ();
+            if (ProjectTaskClientLabel != null)
+            {
+                ProjectTaskClientLabel.Dispose();
                 ProjectTaskClientLabel = null;
             }
 
-            if (ScrollView != null) {
-                ScrollView.Dispose ();
+            if (ScrollView != null)
+            {
+                ScrollView.Dispose();
                 ScrollView = null;
             }
 
-            if (ScrollViewContent != null) {
-                ScrollViewContent.Dispose ();
+            if (ScrollViewContent != null)
+            {
+                ScrollViewContent.Dispose();
                 ScrollViewContent = null;
             }
 
-            if (StartDateLabel != null) {
-                StartDateLabel.Dispose ();
+            if (StartDateLabel != null)
+            {
+                StartDateLabel.Dispose();
                 StartDateLabel = null;
             }
 
-            if (StartDateTimeView != null) {
-                StartDateTimeView.Dispose ();
+            if (StartDateTimeView != null)
+            {
+                StartDateTimeView.Dispose();
                 StartDateTimeView = null;
             }
 
-            if (StartTimeLabel != null) {
-                StartTimeLabel.Dispose ();
+            if (StartTimeLabel != null)
+            {
+                StartTimeLabel.Dispose();
                 StartTimeLabel = null;
             }
 
-            if (TagsLabel != null) {
-                TagsLabel.Dispose ();
+            if (TagsLabel != null)
+            {
+                TagsLabel.Dispose();
                 TagsLabel = null;
             }
         }

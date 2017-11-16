@@ -96,7 +96,12 @@ namespace Toggl.Foundation.MvvmCross.Helper
             public static readonly MvxColor SyncStatusText = new MvxColor(144, 146, 147);
         }
 
-        public static readonly MvxColor[] DefaultProjectColors = 
+        public static class Common
+        {
+            public static readonly MvxColor PlaceholderText = pinkishGrey;
+        }
+
+        public static readonly MvxColor[] DefaultProjectColors =
             Foundation.Helper.Color.DefaultProjectColors.Select(MvxColor.ParseHexString).ToArray();
     }
 }
