@@ -182,7 +182,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.Initialize();
                 ViewModel.TextFieldInfo = TextFieldInfo.Empty
-                    .WithProjectInfo(ProjectId, ProjectName, ProjectColor);
+                    .WithProjectInfo(WorkspaceId, ProjectId, ProjectName, ProjectColor);
 
                 ViewModel.TextFieldInfo = ViewModel.TextFieldInfo.WithTextAndCursor("abcde @fgh", 10);
 
@@ -366,7 +366,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Prepare(DateTimeOffset.UtcNow);
                 ViewModel.TextFieldInfo = TextFieldInfo.Empty
                     .WithTextAndCursor(Description, Description.Length)
-                    .WithProjectInfo(ProjectId, ProjectName, ProjectColor);
+                    .WithProjectInfo(WorkspaceId, ProjectId, ProjectName, ProjectColor);
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
 
@@ -642,7 +642,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 {
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty
                         .WithTextAndCursor(description, 0)
-                        .WithProjectInfo(projectId, "Something", "#123123");
+                        .WithProjectInfo(projectWorkspaceId, projectId, "Something", "#123123");
 
                     ViewModel.DoneCommand.Execute();
 
@@ -657,7 +657,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     const long expectedWorkspace = 1234;
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty
                         .WithTextAndCursor(description, 0)
-                        .WithProjectInfo(projectId, "Something", "#123123");
+                        .WithProjectInfo(projectWorkspaceId, projectId, "Something", "#123123");
                     ViewModel.SelectSuggestionCommand
                              .Execute(ProjectSuggestion.NoProject(expectedWorkspace, ""));
 
@@ -684,7 +684,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 {
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty
                         .WithTextAndCursor(description, 0)
-                        .WithProjectInfo(projectId, "Something", "#123123");
+                        .WithProjectInfo(projectWorkspaceId, projectId, "Something", "#123123");
 
                     ViewModel.DoneCommand.Execute();
 
@@ -710,7 +710,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 {
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty
                         .WithTextAndCursor(description, 0)
-                        .WithProjectAndTaskInfo(projectId, "Something", "#AABBCC", taskId, "Some task");
+                        .WithProjectAndTaskInfo(projectWorkspaceId, projectId, "Something", "#AABBCC", taskId, "Some task");
 
                     ViewModel.DoneCommand.Execute();
 

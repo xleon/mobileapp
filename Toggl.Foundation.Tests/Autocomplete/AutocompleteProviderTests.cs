@@ -17,6 +17,7 @@ namespace Toggl.Foundation.Tests.Autocomplete
     {
         public abstract class AutocompleteProviderTest
         {
+            protected const long WorkspaceId = 9;
             protected const long ProjectId = 10;
             protected const string ProjectName = "Toggl";
             protected const string ProjectColor = "#F41F19";
@@ -160,7 +161,7 @@ namespace Toggl.Foundation.Tests.Autocomplete
                     var description = $"Testing Mobile Apps @toggl";
                     var textFieldInfo = TextFieldInfo.Empty
                         .WithTextAndCursor(description, description.Length)
-                        .WithProjectInfo(ProjectId, ProjectName, ProjectColor);
+                        .WithProjectInfo(WorkspaceId, ProjectId, ProjectName, ProjectColor);
                     
                     await Provider.Query(textFieldInfo);
 
