@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -31,7 +32,7 @@
                     <state key="normal" image="icClose"/>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tags" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s6h-5g-H2v">
-                    <rect key="frame" x="142.5" y="12" width="36" height="17"/>
+                    <rect key="frame" x="145" y="12" width="31.5" height="17"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -50,8 +51,8 @@
                         <constraint firstAttribute="height" constant="10" id="rnA-xP-0jR"/>
                     </constraints>
                 </imageView>
-                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add/filter tags" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Oy7-SV-cuq">
-                    <rect key="frame" x="36" y="66.5" width="96" height="17"/>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add/filter tags" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Oy7-SV-cuq">
+                    <rect key="frame" x="36" y="65.5" width="268" height="19"/>
                     <color key="tintColor" red="0.29803921568627451" green="0.85098039215686272" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="textColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -68,6 +69,7 @@
             <constraints>
                 <constraint firstItem="E3h-ZA-T3J" firstAttribute="top" secondItem="2" secondAttribute="top" id="2lM-9h-qGV"/>
                 <constraint firstAttribute="trailing" secondItem="hjx-0o-EI5" secondAttribute="trailing" constant="16" id="HFX-SX-iaE"/>
+                <constraint firstAttribute="trailing" secondItem="Oy7-SV-cuq" secondAttribute="trailing" constant="16" id="JSR-AA-31h"/>
                 <constraint firstItem="Oy7-SV-cuq" firstAttribute="leading" secondItem="vKP-CL-GPZ" secondAttribute="trailing" constant="10" id="NOB-1k-6bS"/>
                 <constraint firstItem="5dy-Z6-wg6" firstAttribute="top" secondItem="vKP-CL-GPZ" secondAttribute="bottom" constant="20" id="NVG-gY-wAg"/>
                 <constraint firstItem="5dy-Z6-wg6" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="bEz-5B-9CW"/>
