@@ -8,6 +8,7 @@ using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.UI;
 using PropertyChanged;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.DTOs;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
@@ -22,6 +23,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
 
+        private bool isPro;
         private long? clientId;
         private long workspaceId;
 
@@ -79,25 +81,27 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public override async Task Initialize()
         {
             var workspace = await dataSource.Workspaces.GetDefault();
+            isPro = await dataSource.Workspaces.WorkspaceHasFeature(workspace.Id, WorkspaceFeatureId.Pro);
             workspaceId = workspace.Id;
             WorkspaceName = workspace.Name;
         }
 
         private async Task pickColor()
         {
-            Color = await navigationService.Navigate<SelectColorViewModel, MvxColor, MvxColor>(Color);
+            Color = await navigationService.Navigate<SelectColorViewModel, ColorParameters, MvxColor>(
+                ColorParameters.Create(Color, isPro));
         }
 
         private async Task done()
         {
             if (!SaveEnabled) return;
-
-            var billable =
-                await dataSource.Workspaces
-                    .WorkspaceHasFeature(workspaceId, WorkspaceFeatureId.Pro)
-                    .SelectMany(isPro =>
-                        isPro ? dataSource.Workspaces.GetById(workspaceId) : Observable.Return(default(IDatabaseWorkspace)))
-                    .Select(workspace => workspace?.ProjectsBillableByDefault);
+            
+            var workspace = 
+                await (isPro 
+                ? dataSource.Workspaces.GetById(workspaceId) 
+                : Observable.Return(default(IDatabaseWorkspace)));
+            
+            var billable = workspace?.ProjectsBillableByDefault;
 
             var createdProject = await dataSource.Projects.Create(new CreateProjectDTO
             {
@@ -127,8 +131,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             workspaceId = selectedWorkspaceId.Value;
             WorkspaceName = workspace.Name;
 
-            var workspaceIsPro = await dataSource.Workspaces.WorkspaceHasFeature(workspaceId, WorkspaceFeatureId.Pro);
-            if (workspaceIsPro || Array.IndexOf(Helper.Color.DefaultProjectColors, Color) >= 0) return;
+            isPro = await dataSource.Workspaces.WorkspaceHasFeature(workspaceId, WorkspaceFeatureId.Pro);
+            if (isPro || Array.IndexOf(Helper.Color.DefaultProjectColors, Color) >= 0) return;
 
             pickRandomColor();
         }

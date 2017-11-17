@@ -5,6 +5,7 @@ using FluentAssertions;
 using MvvmCross.Platform.UI;
 using NSubstitute;
 using Toggl.Foundation.DTOs;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac;
@@ -262,7 +263,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.PickColorCommand.ExecuteAsync();
 
                 await NavigationService.Received()
-                    .Navigate<MvxColor, MvxColor>(typeof(SelectColorViewModel), Arg.Any<MvxColor>());
+                    .Navigate<ColorParameters, MvxColor>(typeof(SelectColorViewModel), Arg.Any<ColorParameters>());
             }
 
             [Fact]
@@ -270,7 +271,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var expectedColor = MvxColors.AliceBlue;
                 NavigationService
-                    .Navigate<MvxColor, MvxColor>(typeof(SelectColorViewModel), Arg.Any<MvxColor>())
+                    .Navigate<ColorParameters, MvxColor>(typeof(SelectColorViewModel), Arg.Any<ColorParameters>())
                     .Returns(Task.FromResult(expectedColor));
                 ViewModel.Prepare("Some name");
                 ViewModel.Color = MvxColors.Azure;
