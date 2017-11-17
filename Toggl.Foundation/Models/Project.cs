@@ -33,6 +33,8 @@ namespace Toggl.Foundation.Models
 
             public long? ClientId { get; private set; }
 
+            public bool Active { get; private set; } = true;
+
             private Builder(long id)
             {
                 Id = id;
@@ -98,6 +100,12 @@ namespace Toggl.Foundation.Models
                 return this;
             }
 
+            public Builder SetActive(bool active)
+            {
+                Active = active;
+                return this;
+            }
+
             private void ensureValidity()
             {
                 if (string.IsNullOrEmpty(Name))
@@ -129,6 +137,7 @@ namespace Toggl.Foundation.Models
             SyncStatus = builder.SyncStatus;
             WorkspaceId = builder.WorkspaceId.Value;
             ServerDeletedAt = builder.ServerDeletedAt;
+            Active = builder.Active;
         }
     }
 }
