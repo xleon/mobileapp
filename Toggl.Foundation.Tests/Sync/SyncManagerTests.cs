@@ -11,7 +11,6 @@ using Xunit;
 using FsCheck.Xunit;
 using Toggl.Foundation.Tests.Generators;
 using static Toggl.Foundation.Sync.SyncState;
-using System.Reactive;
 
 namespace Toggl.Foundation.Tests.Sync
 {
@@ -237,26 +236,6 @@ namespace Toggl.Foundation.Tests.Sync
                 CallMethod();
 
                 Queue.Received().Dequeue();
-            }
-
-            [Fact]
-            public void GoesToSleepAfterAnErrorIsReported()
-            {
-                OrchestratorSyncComplete.OnNext(new Error(new Exception()));
-
-                Orchestrator.Received().Start(Arg.Is(Sleep));
-            }
-
-            [Fact]
-            public void DoesNotPreventFurtherSyncingAfterAnErrorWasReported()
-            {
-                OrchestratorSyncComplete.OnNext(new Error(new Exception()));
-                Orchestrator.ClearReceivedCalls();
-                Queue.When(q => q.QueuePushSync()).Do(_ => Queue.Dequeue().Returns(Push));
-
-                SyncManager.PushSync();
-
-                Orchestrator.Received().Start(Arg.Is(Push));
             }
 
             [Fact]
@@ -486,6 +465,83 @@ namespace Toggl.Foundation.Tests.Sync
                 SyncManager.IsRunningSync.Should().BeFalse();
                 finished.Should().BeTrue();
             }
+        }
+
+        public sealed class ErrorHandling : SyncManagerTestBase
+        {
+            [Fact]
+            public void ClearsTheSyncQueueWhenAnErrorIsReported()
+            {
+                OrchestratorSyncComplete.OnNext(new Error(new Exception()));
+
+                Queue.Received().Clear();
+            }
+
+            [Fact]
+            public void UpdatesInternalStateSoItIsNotLockedForFutureSyncsAfterAnErrorIsReported()
+            {
+                OrchestratorSyncComplete.OnNext(new Error(new Exception()));
+
+                SyncManager.IsRunningSync.Should().BeFalse();
+            }
+
+            [Fact]
+            public void PerformsThreadSafeClearingOfTheQueue()
+            {
+                var startQueueing = new AutoResetEvent(false);
+                var startClearing = new AutoResetEvent(false);
+                int iterator = 0;
+                int queued = -1;
+                int cleared = -1;
+
+                Queue.When(q => q.QueuePullSync()).Do(async _ =>
+                {
+                    startClearing.Set();
+                    await Task.Delay(10);
+                    queued = Interlocked.Increment(ref iterator);
+                });
+
+                Queue.When(q => q.Clear()).Do(_ =>
+                    cleared = Interlocked.Increment(ref iterator));
+
+                var taskA = Task.Run(() =>
+                {
+                    startQueueing.WaitOne();
+                    SyncManager.ForceFullSync();
+                });
+
+                var taskB = Task.Run(() =>
+                {
+                    startClearing.WaitOne();
+                    OrchestratorSyncComplete.OnNext(new Error(new Exception()));
+                });
+
+                startQueueing.Set();
+                Task.WaitAll(taskA, taskB);
+
+                queued.Should().BeLessThan(cleared);
+            }
+
+            [Fact]
+            public void GoesToSleepAfterAnErrorIsReported()
+            {
+                OrchestratorSyncComplete.OnNext(new Error(new Exception()));
+
+                Orchestrator.Received().Start(Arg.Is(Sleep));
+            }
+
+            [Fact]
+            public void DoesNotPreventFurtherSyncingAfterAnErrorWasReported()
+            {
+                OrchestratorSyncComplete.OnNext(new Error(new Exception()));
+                Orchestrator.ClearReceivedCalls();
+                Queue.When(q => q.QueuePushSync()).Do(_ => Queue.Dequeue().Returns(Push));
+
+                SyncManager.PushSync();
+
+                Orchestrator.Received().Start(Arg.Is(Push));
+            }
+
         }
     }
 }

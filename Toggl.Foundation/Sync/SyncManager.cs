@@ -79,6 +79,7 @@ namespace Toggl.Foundation.Sync
 
                 if (result is Error)
                 {
+                    queue.Clear();
                     orchestrator.Start(Sleep);
                     return;
                 }
