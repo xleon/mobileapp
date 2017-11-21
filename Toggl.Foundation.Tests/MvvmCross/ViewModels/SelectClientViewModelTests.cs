@@ -223,5 +223,68 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.SuggestCreation.Should().BeFalse();
             }
         }
+
+        public sealed class TheCreateClientCommand : SelectClientViewModelTest
+        {
+            [Fact]
+            public async Task CreatesANewClientWithTheGivenNameInTheCurrentWorkspace()
+            {
+                long workspaceId = 123;
+                await ViewModel.Initialize();
+                ViewModel.Prepare(workspaceId);
+                ViewModel.Text = "Some name of the client";
+
+                await ViewModel.CreateClientCommand.ExecuteAsync();
+
+                await DataSource.Clients.Received().Create(Arg.Is(ViewModel.Text), Arg.Is(workspaceId));
+            }
+
+            [Theory]
+            [InlineData("   abcde", "abcde")]
+            [InlineData("abcde     ", "abcde")]
+            [InlineData("  abcde ", "abcde")]
+            [InlineData("abcde  fgh", "abcde  fgh")]
+            [InlineData("      abcd\nefgh     ", "abcd\nefgh")]
+            public async Task TrimsNameFromTheStartAndTheEndBeforeSaving(string name, string trimmed)
+            {
+                await ViewModel.Initialize();
+                ViewModel.Text = name;
+
+                await ViewModel.CreateClientCommand.ExecuteAsync();
+
+                await DataSource.Clients.Received().Create(Arg.Is(trimmed), Arg.Any<long>());
+            }
+
+            [Theory]
+            [InlineData(" ")]
+            [InlineData("\t")]
+            [InlineData("\n")]
+            [InlineData("               ")]
+            [InlineData("      \t  \n     ")]
+            public async Task DoesNotSuggestCreatingClientsWhenTheDescriptionConsistsOfOnlyWhiteCharacters(string name)
+            {
+                await ViewModel.Initialize();
+
+                ViewModel.Text = name;
+
+                ViewModel.SuggestCreation.Should().BeFalse();
+            }
+
+            [Theory]
+            [InlineData(" ")]
+            [InlineData("\t")]
+            [InlineData("\n")]
+            [InlineData("               ")]
+            [InlineData("      \t  \n     ")]
+            public async Task DoesNotAllowCreatingClientsWhenTheDescriptionConsistsOfOnlyWhiteCharacters(string name)
+            {
+                await ViewModel.Initialize();
+                ViewModel.Text = name;
+
+                await ViewModel.CreateClientCommand.ExecuteAsync();
+
+                await DataSource.Clients.DidNotReceiveWithAnyArgs().Create(null, 0);
+            }
+        }
     }
 }

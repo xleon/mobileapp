@@ -251,6 +251,24 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Is<CreateProjectDTO>(dto => dto.Billable == billableByDefault)
                 );
             }
+
+            [Theory]
+            [InlineData("   abcde", "abcde")]
+            [InlineData("abcde     ", "abcde")]
+            [InlineData("  abcde ", "abcde")]
+            [InlineData("abcde  fgh", "abcde  fgh")]
+            [InlineData("      abcd\nefgh     ", "abcd\nefgh")]
+            public async Task TrimsNameFromTheStartAndTheEndBeforeSaving(string name, string trimmed)
+            {
+                ViewModel.Prepare(name);
+                await ViewModel.Initialize();
+
+                await ViewModel.DoneCommand.ExecuteAsync();
+
+                await DataSource.Projects.Received().Create(
+                    Arg.Is<CreateProjectDTO>(dto => dto.Name == trimmed)
+                );
+            }
         }
 
         public sealed class ThePickColorCommand : EditProjectViewModelTest
