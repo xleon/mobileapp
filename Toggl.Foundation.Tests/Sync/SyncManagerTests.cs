@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -11,6 +12,8 @@ using Xunit;
 using FsCheck.Xunit;
 using Toggl.Foundation.Tests.Generators;
 using static Toggl.Foundation.Sync.SyncState;
+using Toggl.Ultrawave.Exceptions;
+using Toggl.Ultrawave.Network;
 
 namespace Toggl.Foundation.Tests.Sync
 {
@@ -22,7 +25,7 @@ namespace Toggl.Foundation.Tests.Sync
             protected Subject<SyncState> OrchestratorStates { get; } = new Subject<SyncState>();
             protected ISyncStateQueue Queue { get; } = Substitute.For<ISyncStateQueue>();
             protected IStateMachineOrchestrator Orchestrator { get; } = Substitute.For<IStateMachineOrchestrator>();
-            protected SyncManager SyncManager { get; }
+            protected ISyncManager SyncManager { get; }
 
             protected SyncManagerTestBase()
             {
@@ -467,6 +470,156 @@ namespace Toggl.Foundation.Tests.Sync
             }
         }
 
+        public sealed class TheProgressObservable : SyncManagerTestBase
+        {
+            [Fact]
+            public void EmitsTheUnknownSyncProgressBeforeAnyProgressIsEmitted()
+            {
+                SyncProgress? emitted = null;
+
+                SyncManager.ProgressObservable.Subscribe(
+                    progress => emitted = progress);
+
+                emitted.Should().NotBeNull();
+                emitted.Should().Be(SyncProgress.Unknown);
+            }
+
+            [Fact]
+            public void EmitsSyncingWhenStartingPush()
+            {
+                SyncProgress? progressAfterPushing = null;
+                Queue.Dequeue().Returns(Push);
+
+                SyncManager.PushSync();
+                SyncManager.ProgressObservable.Subscribe(
+                    progress => progressAfterPushing = progress);
+
+                progressAfterPushing.Should().NotBeNull();
+                progressAfterPushing.Should().Be(SyncProgress.Syncing);
+            }
+
+            [Fact]
+            public void EmitsSyncingWhenStartingFullSync()
+            {
+                SyncProgress? progressAfterFullSync = null;
+                Queue.Dequeue().Returns(Pull);
+
+                SyncManager.ForceFullSync();
+                SyncManager.ProgressObservable.Subscribe(
+                    progress => progressAfterFullSync = progress);
+
+                progressAfterFullSync.Should().NotBeNull();
+                progressAfterFullSync.Should().Be(SyncProgress.Syncing);
+            }
+
+            [Theory]
+            [InlineData(Pull)]
+            [InlineData(Push)]
+            public void DoesNotEmitSyncedWhenSyncCompletesButAnotherSyncIsQueued(SyncState queuedState)
+            {
+                SyncProgress? emitted = null;
+                Queue.Dequeue().Returns(queuedState);
+
+                OrchestratorSyncComplete.OnNext(new Success(Pull));
+                SyncManager.ProgressObservable.Subscribe(progress => emitted = progress);
+
+                Orchestrator.Received().Start(queuedState);
+                emitted.Should().NotBe(SyncProgress.Synced);
+            }
+
+            [Fact]
+            public void EmitsSyncedWhenSyncCompletesAndQueueIsEmpty()
+            {
+                SyncProgress? emitted = null;
+                Queue.Dequeue().Returns(Sleep);
+
+                OrchestratorSyncComplete.OnNext(new Success(Pull));
+                SyncManager.ProgressObservable.Subscribe(progress => emitted = progress);
+
+                emitted.Should().NotBeNull();
+                emitted.Should().Be(SyncProgress.Synced);
+            }
+
+            [Fact]
+            public void EmitsOfflineModeDetectedWhenSyncFailsWithOfflineException()
+            {
+                SyncProgress? emitted = null;
+
+                OrchestratorSyncComplete.OnNext(new Error(new OfflineException()));
+                SyncManager.ProgressObservable.Subscribe(progress => emitted = progress);
+
+                emitted.Should().NotBeNull();
+                emitted.Should().Be(SyncProgress.OfflineModeDetected);
+            }
+
+            [Fact]
+            public void EmitsFailedWhenSyncFailsWithUnknownException()
+            {
+                SyncProgress? emitted = null;
+
+                OrchestratorSyncComplete.OnNext(new Error(new Exception()));
+                SyncManager.ProgressObservable.Subscribe(progress => emitted = progress);
+
+                emitted.Should().NotBeNull();
+                emitted.Should().Be(SyncProgress.Failed);
+            }
+
+            [Theory]
+            [MemberData(nameof(clientErrorAbortedExceptions))]
+            public void EmitsFailedWhenAKnownClientErrorExceptionIsReported(ClientErrorException exception)
+            {
+                SyncProgress? emitted = null;
+                SyncManager.ProgressObservable.Subscribe(progress => emitted = progress, (Exception e) => { });
+
+                OrchestratorSyncComplete.OnNext(new Error(exception));
+
+                emitted.Should().NotBeNull();
+                emitted.Should().Be(SyncProgress.Failed);
+            }
+
+            [Theory]
+            [MemberData(nameof(clientErrorAbortedExceptions))]
+            public void ReportsTheErrorWhenAKnownClientErrorExceptionIsReported(ClientErrorException exception)
+            {
+                Exception caughtException = null;
+                SyncManager.ProgressObservable.Subscribe(_ => { }, e => caughtException = e);
+
+                OrchestratorSyncComplete.OnNext(new Error(exception));
+
+                caughtException.Should().NotBeNull();
+                caughtException.Should().Be(exception);
+            }
+
+            [Theory]
+            [MemberData(nameof(clientErrorAbortedExceptions))]
+            public void FreezesTheSyncManagerWhenAKnownClientErrorExceptionIsReported(ClientErrorException exception)
+            {
+                OrchestratorSyncComplete.OnNext(new Error(exception));
+
+                Orchestrator.Received().Freeze();
+            }
+
+            [Fact]
+            public void EmitsTheLastValueAfterSubscribing()
+            {
+                SyncProgress? emitted = null;
+                OrchestratorSyncComplete.OnNext(new Error(new Exception()));
+
+                SyncManager.ProgressObservable.Subscribe(progress => emitted = progress);
+
+                emitted.Should().NotBeNull();
+                emitted.Should().Be(SyncProgress.Failed);
+            }
+
+            private static IEnumerable<object[]> clientErrorAbortedExceptions()
+                => new[]
+                {
+                    new object[] { new ClientDeprecatedException(Substitute.For<IRequest>(), Substitute.For<IResponse>()) },
+                    new object[] { new ApiDeprecatedException(Substitute.For<IRequest>(), Substitute.For<IResponse>()) },
+                    new object[] { new UnauthorizedException(Substitute.For<IRequest>(), Substitute.For<IResponse>()),  }
+                };
+        }
+  
         public sealed class ErrorHandling : SyncManagerTestBase
         {
             [Fact]
