@@ -398,6 +398,42 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await DataSource.TimeEntries.Received().Update(
                     Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == newWorkspaceId));
             }
+
+            [Theory]
+            [InlineData(null)]
+            [InlineData(" ")]
+            [InlineData("\t")]
+            [InlineData("\n")]
+            [InlineData("               ")]
+            [InlineData("      \t  \n     ")]
+            public async Task ReducesDescriptionConsistingOfOnlyEmptyCharactersToAnEmptyString(string description)
+            {
+                ViewModel.Description = description;
+
+                ViewModel.ConfirmCommand.Execute();
+
+                await DataSource.TimeEntries.Received().Update(Arg.Is<EditTimeEntryDto>(dto =>
+                    dto.Description.Length == 0
+                ));
+            }
+
+            [Theory]
+            [InlineData(null, "")]
+            [InlineData("   abcde", "abcde")]
+            [InlineData("abcde     ", "abcde")]
+            [InlineData("  abcde ", "abcde")]
+            [InlineData("abcde  fgh", "abcde  fgh")]
+            [InlineData("      abcd\nefgh     ", "abcd\nefgh")]
+            public async Task TrimsDescriptionFromTheStartAndTheEndBeforeSaving(string description, string trimmed)
+            {
+                ViewModel.Description = description;
+
+                ViewModel.ConfirmCommand.Execute();
+
+                await DataSource.TimeEntries.Received().Update(Arg.Is<EditTimeEntryDto>(dto =>
+                    dto.Description == trimmed
+                ));
+            }
         }
 
         public sealed class TheSelectTagsCommand : EditTimeEntryViewModelTest

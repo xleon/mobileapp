@@ -755,6 +755,41 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     await DataSource.SyncManager.DidNotReceive().PushSync();
                 }
 
+                [Theory]
+                [InlineData(null)]
+                [InlineData(" ")]
+                [InlineData("\t")]
+                [InlineData("\n")]
+                [InlineData("               ")]
+                [InlineData("      \t  \n     ")]
+                public async Task ReducesDescriptionConsistingOfOnlyEmptyCharactersToAnEmptyString(string description)
+                {
+                    ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
+
+                    ViewModel.DoneCommand.Execute();
+
+                    await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
+                        dto.Description.Length == 0
+                    ));
+                }
+
+                [Theory]
+                [InlineData("   abcde", "abcde")]
+                [InlineData("abcde     ", "abcde")]
+                [InlineData("  abcde ", "abcde")]
+                [InlineData("abcde  fgh", "abcde  fgh")]
+                [InlineData("      abcd\nefgh     ", "abcd\nefgh")]
+                public async Task TrimsDescriptionFromTheStartAndTheEndBeforeSaving(string description, string trimmed)
+                {
+                    ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, description.Length);
+
+                    ViewModel.DoneCommand.Execute();
+
+                    await DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
+                        dto.Description == trimmed
+                    ));
+                }
+
                 private TagSuggestion tagSuggestionFromInt(int i)
                 {
                     var tag = Substitute.For<IDatabaseTag>();
