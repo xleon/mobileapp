@@ -410,7 +410,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     Billable = IsBillable,
                     UserId = user.Id,
                     WorkspaceId = TextFieldInfo.WorkspaceId ?? user.DefaultWorkspaceId,
-                    Description = TextFieldInfo.Text,
+                    Description = TextFieldInfo.Text?.Trim() ?? "",
                     ProjectId = TextFieldInfo.ProjectId,
                     TagIds = TextFieldInfo.Tags.Select(t => t.TagId).Distinct().ToArray()
                 })

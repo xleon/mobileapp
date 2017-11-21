@@ -25,6 +25,7 @@ namespace Toggl.Foundation.Tests.Sync
             protected IStateMachineOrchestrator Orchestrator { get; }
             protected List<SyncState> StateEvents { get; } = new List<SyncState>();
             protected List<SyncState> CompletedEvents { get; } = new List<SyncState>();
+            protected List<Exception> ReportedErrors { get; } = new List<Exception>();
 
             protected StateMachineOrchestratorBaseTests()
             {
@@ -33,12 +34,21 @@ namespace Toggl.Foundation.Tests.Sync
                 Orchestrator = new StateMachineOrchestrator(StateMachine, EntryPoints);
 
                 Orchestrator.StateObservable.Subscribe(StateEvents.Add);
-                Orchestrator.SyncCompleteObservable.Subscribe(CompletedEvents.Add);
+                Orchestrator.SyncCompleteObservable.Subscribe(handleSyncCompleteEvent);
             }
 
             protected void SendStateMachineEvent(StateMachineEvent @event)
             {
                 stateMachineEventSubject.OnNext(@event);
+            }
+
+            private void handleSyncCompleteEvent(SyncResult result)
+            {
+                if (result is Error error)
+                    ReportedErrors.Add(error.Exception);
+
+                if (result is Success success)
+                    CompletedEvents.Add(success.Operation);
             }
         }
 
@@ -139,7 +149,7 @@ namespace Toggl.Foundation.Tests.Sync
             public void ShouldNotThrowIfPullSyncingFailed()
             {
                 Orchestrator.Start(Pull);
-                SendStateMachineEvent(new StateMachineError(null));
+                SendStateMachineEvent(new StateMachineError(new Exception()));
 
                 callingMethod.ShouldNotThrow();
             }
@@ -148,7 +158,7 @@ namespace Toggl.Foundation.Tests.Sync
             public void ShouldNotThrowIfPushSyncingFailed()
             {
                 Orchestrator.Start(Push);
-                SendStateMachineEvent(new StateMachineError(null));
+                SendStateMachineEvent(new StateMachineError(new Exception()));
 
                 callingMethod.ShouldNotThrow();
             }
@@ -208,14 +218,14 @@ namespace Toggl.Foundation.Tests.Sync
             }
 
             [Fact]
-            public void ShouldCauseExpectedCompletedEventWhenSyncingFails()
+            public void ShouldReportErrorWhenSyncingFails()
             {
+                var exception = new Exception();
                 CallMethod();
-                SendStateMachineEvent(new StateMachineError(null));
+                SendStateMachineEvent(new StateMachineError(exception));
 
-                CompletedEvents.ShouldBeSameEventsAs(
-                    ExpectedState
-                );
+                ReportedErrors.Should().HaveCount(1);
+                ReportedErrors[0].Should().Be(exception);
             }
         }
 

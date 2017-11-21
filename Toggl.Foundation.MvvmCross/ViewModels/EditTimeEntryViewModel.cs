@@ -202,7 +202,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var dto = new EditTimeEntryDto
             {
                 Id = Id,
-                Description = Description,
+                Description = Description?.Trim() ?? "",
                 StartTime = StartTime,
                 StopTime = StopTime,
                 ProjectId = projectId,

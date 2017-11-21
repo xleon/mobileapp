@@ -35,6 +35,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public string Name { get; set; } = "";
 
+        public string TrimmedName => Name.Trim();
+
         public MvxColor Color { get; set; }
 
         public string Title { get; private set; } = "";
@@ -105,7 +107,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             var createdProject = await dataSource.Projects.Create(new CreateProjectDTO
             {
-                Name = Name,
+                Name = TrimmedName,
                 Color = $"#{Color.R:X2}{Color.G:X2}{Color.B:X2}",
                 IsPrivate = IsPrivate,
                 ClientId = clientId,

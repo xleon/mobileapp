@@ -19,7 +19,7 @@ namespace Toggl.Foundation.Tests.Sync
     {
         public abstract class SyncManagerTestBase
         {
-            protected Subject<SyncState> OrchestratorSyncComplete { get; } = new Subject<SyncState>();
+            protected Subject<SyncResult> OrchestratorSyncComplete { get; } = new Subject<SyncResult>();
             protected Subject<SyncState> OrchestratorStates { get; } = new Subject<SyncState>();
             protected ISyncStateQueue Queue { get; } = Substitute.For<ISyncStateQueue>();
             protected IStateMachineOrchestrator Orchestrator { get; } = Substitute.For<IStateMachineOrchestrator>();
@@ -82,7 +82,7 @@ namespace Toggl.Foundation.Tests.Sync
                 Queue.Dequeue().Returns(Pull);
                 SyncManager.ForceFullSync();
                 Queue.Dequeue().Returns(Sleep);
-                OrchestratorSyncComplete.OnNext(Pull);
+                OrchestratorSyncComplete.OnNext(new Success(Pull));
                 Queue.ClearReceivedCalls();
 
                 CallMethod();
@@ -96,7 +96,7 @@ namespace Toggl.Foundation.Tests.Sync
                 Queue.Dequeue().Returns(Pull);
                 SyncManager.PushSync();
                 Queue.Dequeue().Returns(Sleep);
-                OrchestratorSyncComplete.OnNext(Push);
+                OrchestratorSyncComplete.OnNext(new Success(Push));
                 Queue.ClearReceivedCalls();
 
                 CallMethod();
@@ -107,7 +107,7 @@ namespace Toggl.Foundation.Tests.Sync
             [Fact]
             public async Task DoesNotQueueUntilOtherCompletedEventReturns()
             {
-                await ensureMethodIsThreadSafeWith(() => OrchestratorSyncComplete.OnNext(0));
+                await ensureMethodIsThreadSafeWith(() => OrchestratorSyncComplete.OnNext(new Success(0)));
             }
 
             [Fact]
@@ -176,7 +176,7 @@ namespace Toggl.Foundation.Tests.Sync
         public sealed class TheOrchestratorCompleteObservable : ThreadSafeQueingMethodTests
         {
             protected override void CallMethod()
-                => OrchestratorSyncComplete.OnNext(0);
+                => OrchestratorSyncComplete.OnNext(new Success(0));
 
             [Fact]
             public void TellsQueueToStartSync()
@@ -231,13 +231,43 @@ namespace Toggl.Foundation.Tests.Sync
             {
                 Queue.Dequeue().Returns(Pull);
                 SyncManager.ForceFullSync();
-                OrchestratorSyncComplete.OnNext(Push);
+                OrchestratorSyncComplete.OnNext(new Success(Push));
                 Queue.ClearReceivedCalls();
 
                 CallMethod();
 
                 Queue.Received().Dequeue();
             }
+
+            [Fact]
+            public void GoesToSleepAfterAnErrorIsReported()
+            {
+                OrchestratorSyncComplete.OnNext(new Error(new Exception()));
+
+                Orchestrator.Received().Start(Arg.Is(Sleep));
+            }
+
+            [Fact]
+            public void DoesNotPreventFurtherSyncingAfterAnErrorWasReported()
+            {
+                OrchestratorSyncComplete.OnNext(new Error(new Exception()));
+                Orchestrator.ClearReceivedCalls();
+                Queue.When(q => q.QueuePushSync()).Do(_ => Queue.Dequeue().Returns(Push));
+
+                SyncManager.PushSync();
+
+                Orchestrator.Received().Start(Arg.Is(Push));
+            }
+
+            [Fact]
+            public void ThrowsWhenAnUnsupportedSyncResultIsEmittedByTheOrchestrator()
+            {
+                Action emittingUnsupportedResult = () => OrchestratorSyncComplete.OnNext(new UnsupportedResult());
+
+                emittingUnsupportedResult.ShouldThrow<ArgumentException>();
+            }
+
+            private class UnsupportedResult : SyncResult { }
         }
 
         public abstract class SyncMethodTests : ThreadSafeQueingMethodTests
@@ -295,7 +325,7 @@ namespace Toggl.Foundation.Tests.Sync
             {
                 Queue.Dequeue().Returns(Pull);
                 SyncManager.ForceFullSync();
-                OrchestratorSyncComplete.OnNext(Push);
+                OrchestratorSyncComplete.OnNext(new Success(Push));
                 Queue.ClearReceivedCalls();
 
                 CallMethod();

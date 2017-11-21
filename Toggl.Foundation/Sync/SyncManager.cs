@@ -65,12 +65,25 @@ namespace Toggl.Foundation.Sync
             }
         }
 
-        private void syncOperationCompleted(SyncState operation)
+        private void syncOperationCompleted(SyncResult result)
         {
             lock (stateLock)
             {
                 IsRunningSync = false;
-                startSyncIfNeeded();
+
+                if (result is Success)
+                {
+                    startSyncIfNeeded();
+                    return;
+                }
+
+                if (result is Error)
+                {
+                    orchestrator.Start(Sleep);
+                    return;
+                }
+
+                throw new ArgumentException(nameof(result));
             }
         }
 
