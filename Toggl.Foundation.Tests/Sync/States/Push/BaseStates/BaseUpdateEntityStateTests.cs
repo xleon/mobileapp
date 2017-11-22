@@ -34,7 +34,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             => helper.ReturnsTheServerErrorTransitionWhenHttpFailsWithServerError(exception);
 
         [Theory]
-        [MemberData(nameof(ApiExceptions.ClientExceptions), MemberType = typeof(ApiExceptions))]
+        [MemberData(nameof(ApiExceptions.ClientExceptionsWhichAreNotReThrownInSyncStates), MemberType = typeof(ApiExceptions))]
         public void ReturnsTheClientErrorTransitionWhenHttpFailsWithClientError(ClientErrorException exception)
             => helper.ReturnsTheClientErrorTransitionWhenHttpFailsWithClientError(exception);
 
@@ -81,7 +81,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                 : this(Substitute.For<ITogglApi>(), Substitute.For<IRepository<TModel>>())
             {
             }
-            
+
             public TheStartMethod(ITogglApi api, IRepository<TModel> repository)
                 : base(api, repository)
             {
@@ -226,7 +226,7 @@ namespace Toggl.Foundation.Tests.Sync.States
                     .Returns(_ => Observable.Throw<TModel>(e));
 
             protected abstract Func<TModel, IObservable<TApiModel>> GetUpdateFunction(ITogglApi api);
-                
+
             private BaseUpdateEntityState<TModel> createUpdateState(ITogglApi api, IRepository<TModel> repository)
                 => CreateState(api, repository) as BaseUpdateEntityState<TModel>;
 

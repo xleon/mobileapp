@@ -27,7 +27,7 @@ namespace Toggl.Foundation.Tests.Sync.States
             => helper.ReturnsFailTransitionWhenEntityIsNull();
 
         [Theory]
-        [MemberData(nameof(ApiExceptions.ClientExceptions), MemberType = typeof(ApiExceptions))]
+        [MemberData(nameof(ApiExceptions.ClientExceptionsWhichAreNotReThrownInSyncStates), MemberType = typeof(ApiExceptions))]
         public void ReturnsClientErrorTransitionWhenHttpFailsWithClientErrorException(ClientErrorException exception)
             => helper.ReturnsClientErrorTransitionWhenHttpFailsWithClientErrorException(exception);
 
@@ -73,7 +73,7 @@ namespace Toggl.Foundation.Tests.Sync.States
         {
             private ITogglApi api;
             private IRepository<TModel> repository;
-    
+
             public TheStartMethod()
                 : this(Substitute.For<ITogglApi>(), Substitute.For<IRepository<TModel>>())
             {

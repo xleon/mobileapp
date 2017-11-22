@@ -24,6 +24,17 @@ namespace Toggl.Foundation.Tests.Helpers
                 new object[] { new TooManyRequestsException(request, response) }
             };
 
+        public static object[] ClientExceptionsWhichAreNotReThrownInSyncStates
+            => new[]
+            {
+                new object[] { new BadRequestException(request, response) },
+                new object[] { new PaymentRequiredException(request, response) },
+                new object[] { new ForbiddenException(request, response) },
+                new object[] { new NotFoundException(request, response) },
+                new object[] { new RequestEntityTooLargeException(request, response) },
+                new object[] { new TooManyRequestsException(request, response) }
+            };
+
         public static object[] ServerExceptions
             => new[]
             {
