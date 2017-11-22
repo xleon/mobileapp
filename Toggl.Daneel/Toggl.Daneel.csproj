@@ -365,6 +365,10 @@
     <ImageAsset Include="Resources\Images.xcassets\search.imageset\search.png" />
     <ImageAsset Include="Resources\Images.xcassets\search.imageset\search%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\search.imageset\search%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icArrowRight.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icArrowRight.imageset\icArrowRight.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icArrowRight.imageset\icArrowRight%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icArrowRight.imageset\icArrowRight%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
