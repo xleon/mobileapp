@@ -266,7 +266,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Property]
             public void SetsTheStartTimeToTheValueReturnedByTheSelectDateTimeDialogViewModelWhenEditingARunningTimeEntry(DateTimeOffset now)
             {
-                var parameterToReturn = DurationParameter.WithStartAndStop(now.AddHours(-3), null);
+                var parameterToReturn = DurationParameter.WithStartAndDuration(now.AddHours(-3), null);
                 NavigationService
                     .Navigate<DurationParameter, DurationParameter>(typeof(EditDurationViewModel), Arg.Any<DurationParameter>())
                     .Returns(parameterToReturn);
@@ -281,7 +281,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Property]
             public void SetsTheStopTimeToTheValueReturnedByTheSelectDateTimeDialogViewModelWhenEditingACompletedTimeEntry(DateTimeOffset now)
             {
-                var parameterToReturn = DurationParameter.WithStartAndStop(now.AddHours(-4), now.AddHours(-3));
+                var start = now.AddHours(-4);
+                var duration = TimeSpan.FromHours(1);
+                var parameterToReturn = DurationParameter.WithStartAndDuration(start, duration);
                 NavigationService
                     .Navigate<DurationParameter, DurationParameter>(typeof(EditDurationViewModel), Arg.Any<DurationParameter>())
                     .Returns(parameterToReturn);
@@ -290,7 +292,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.EditDurationCommand.ExecuteAsync().Wait();
 
-                ViewModel.StopTime.Should().Be(parameterToReturn.Stop);
+                ViewModel.Duration.Should().Be(parameterToReturn.Duration.Value);
             }
         }
 

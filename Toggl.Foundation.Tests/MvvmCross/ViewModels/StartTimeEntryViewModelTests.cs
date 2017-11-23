@@ -535,7 +535,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task SetsTheStartDateToTheValueReturnedByTheSelectDateTimeDialogViewModel()
             {
                 var now = DateTimeOffset.UtcNow;
-                var parameterToReturn = DurationParameter.WithStartAndStop(now.AddHours(-2), null);
+                var parameterToReturn = DurationParameter.WithStartAndDuration(now.AddHours(-2), null);
                 NavigationService
                     .Navigate<DurationParameter, DurationParameter>(typeof(EditDurationViewModel), Arg.Any<DurationParameter>())
                     .Returns(parameterToReturn);
@@ -550,7 +550,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task SetsTheIsEditingDurationDateToTrueWhileTheViewDoesNotReturnAndThenSetsItBackToFalse()
             {
                 var now = DateTimeOffset.UtcNow;
-                var parameterToReturn = DurationParameter.WithStartAndStop(now.AddHours(-2), null);
+                var parameterToReturn = DurationParameter.WithStartAndDuration(now.AddHours(-2), null);
                 var tcs = new TaskCompletionSource<DurationParameter>();
                 NavigationService
                     .Navigate<DurationParameter, DurationParameter>(typeof(EditDurationViewModel), Arg.Any<DurationParameter>())
