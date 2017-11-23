@@ -76,6 +76,7 @@ namespace Toggl.Daneel
 
             Mvx.RegisterSingleton<ITimeService>(timeService);
             Mvx.RegisterSingleton<IDialogService>(new DialogService());
+            Mvx.RegisterSingleton<IBrowserService>(new BrowserService());
             Mvx.RegisterSingleton<IAccessRestrictionStorage>(
                 new UserDataAccessRestrictionStorage(Version.Parse(version.ToString())));
             Mvx.RegisterSingleton<ISuggestionProviderContainer>(
