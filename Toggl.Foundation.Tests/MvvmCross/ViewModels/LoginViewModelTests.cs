@@ -612,6 +612,28 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact]
+            public void IsPasswordRequirementsWhenSwitchingFromEmailToPasswordPageInSignUpMode()
+            {
+                ViewModel.Prepare(LoginType.SignUp);
+                ViewModel.Email = ValidEmail;
+
+                ViewModel.NextCommand.Execute();
+
+                ViewModel.ErrorText.Should().Be(Resources.SignUpPasswordRequirements);
+            }
+
+            [Fact]
+            public void IsEmptyWhenSwitchingFromEmailToPasswordPageInLoginMode()
+            {
+                ViewModel.Prepare(LoginType.Login);
+                ViewModel.Email = ValidEmail;
+
+                ViewModel.NextCommand.Execute();
+
+                ViewModel.ErrorText.Should().Be("");
+            }
+             
+            [Fact]
             public void IsGenericSignUpErrorWhenAnyOtherExceptionIsThrown()
             {
                 var scheduler = new TestScheduler();

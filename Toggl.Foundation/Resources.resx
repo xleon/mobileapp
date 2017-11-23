@@ -33,6 +33,9 @@ your time usage</value>
     <data name="LoginSignUpPasswordPlaceholder">
         <value>Password</value>
     </data>
+    <data name="SignUpPasswordRequirements">
+        <value>Password should be at least 6 characters.</value>
+    </data>
     <data name="LoginNextButton">
         <value>Next</value>
     </data>

@@ -83,6 +83,12 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string SignUpPasswordRequirements {
+            get {
+                return ResourceManager.GetString("SignUpPasswordRequirements", resourceCulture);
+            }
+        }
+        
         public static string LoginNextButton {
             get {
                 return ResourceManager.GetString("LoginNextButton", resourceCulture);
@@ -316,7 +322,7 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("Delete", resourceCulture);
             }
         }
-                
+        
         public static string NewProject {
             get {
                 return ResourceManager.GetString("NewProject", resourceCulture);
