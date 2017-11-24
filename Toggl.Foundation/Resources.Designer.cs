@@ -365,6 +365,12 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string CreateProject {
+            get {
+                return ResourceManager.GetString("CreateProject", resourceCulture);
+            }
+        }
+        
         public static string Workspaces {
             get {
                 return ResourceManager.GetString("Workspaces", resourceCulture);
