@@ -643,34 +643,38 @@ namespace Toggl.Foundation.Tests.Sync
             {
                 var startQueueing = new AutoResetEvent(false);
                 var startClearing = new AutoResetEvent(false);
+                var queueCleared = new AutoResetEvent(false);
                 int iterator = 0;
                 int queued = -1;
                 int cleared = -1;
 
-                Queue.When(q => q.QueuePullSync()).Do(async _ =>
+                Queue.When(q => q.QueuePullSync()).Do(_ =>
                 {
                     startClearing.Set();
-                    await Task.Delay(10);
+                    Task.Delay(10).Wait();
                     queued = Interlocked.Increment(ref iterator);
                 });
 
                 Queue.When(q => q.Clear()).Do(_ =>
-                    cleared = Interlocked.Increment(ref iterator));
+                {
+                    cleared = Interlocked.Increment(ref iterator);
+                    queueCleared.Set();
+                });
 
-                var taskA = Task.Run(() =>
+                Task.Run(() =>
                 {
                     startQueueing.WaitOne();
                     SyncManager.ForceFullSync();
                 });
 
-                var taskB = Task.Run(() =>
+                Task.Run(() =>
                 {
                     startClearing.WaitOne();
                     OrchestratorSyncComplete.OnNext(new Error(new Exception()));
                 });
 
                 startQueueing.Set();
-                Task.WaitAll(taskA, taskB);
+                queueCleared.WaitOne();
 
                 queued.Should().BeLessThan(cleared);
             }
