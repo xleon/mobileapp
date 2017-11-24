@@ -4,7 +4,10 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
 using NSubstitute;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.PrimeRadiant.Models;
@@ -46,6 +49,47 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
+        public sealed class ThePrepareMethod : SelectWorkspaceViewModelTest
+        {
+            public ThePrepareMethod()
+            {
+                var workspaces = GenerateWorkspaceList();
+                DataSource.Workspaces.GetAll().Returns(Observable.Return(workspaces));
+            }
+
+            [Fact]
+            public async Task SetsTheDefaultWorkspaceId()
+            {
+                const long expectedId = 8;
+                var parameters = WorkspaceParameters.Create(expectedId, "", true);
+
+                ViewModel.Prepare(parameters);
+
+                await ViewModel.Initialize();
+                ViewModel.Suggestions.Single(x => x.Selected).WorkspaceId.Should().Be(expectedId);
+            }
+
+            [Theory]
+            public void SetsTheAllowsQueryingProperty(bool allowsQuerying)
+            {
+                var parameters = WorkspaceParameters.Create(10, "", allowsQuerying);
+
+                ViewModel.Prepare(parameters);
+
+                ViewModel.AllowQuerying.Should().Be(allowsQuerying);
+            }
+
+            [Property]
+            public void SetsTheTitle(NonEmptyString title)
+            {
+                var parameters = WorkspaceParameters.Create(10, title.Get, false);
+
+                ViewModel.Prepare(parameters);
+
+                ViewModel.Title.Should().Be(title.Get);
+            }
+        }
+
         public sealed class TheInitializeMethod : SelectWorkspaceViewModelTest
         {
             [Fact]
@@ -70,18 +114,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.CloseCommand.ExecuteAsync();
 
                 await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Any<long?>());
+                    .Close(Arg.Is(ViewModel), Arg.Any<long>());
             }
 
             [Fact]
-            public async Task ReturnsNull()
+            public async Task ReturnsTheWorkspacePassedOnPrepare()
             {
+                const long expectedId = 10;
+                var parameters = WorkspaceParameters.Create(expectedId, "", true);
+                ViewModel.Prepare(parameters);
                 await ViewModel.Initialize();
 
                 ViewModel.CloseCommand.ExecuteAsync().Wait();
 
                 await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), null);
+                    .Close(Arg.Is(ViewModel), expectedId);
             }
         }
 
@@ -92,10 +139,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task ClosesTheViewModel()
             {
-                ViewModel.SelectWorkspaceCommand.Execute(Workspace);
+                var selectableWorkspace = new SelectableWorkspaceViewModel(Workspace, true);
+                
+                ViewModel.SelectWorkspaceCommand.Execute(selectableWorkspace);
 
                 await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Any<long?>());
+                    .Close(Arg.Is(ViewModel), Arg.Any<long>());
             }
 
             [Fact]
@@ -103,12 +152,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 const long expectedId = 10;
                 Workspace.Id.Returns(expectedId);
+                var selectableWorkspace = new SelectableWorkspaceViewModel(Workspace, true);
 
-                ViewModel.SelectWorkspaceCommand.Execute(Workspace);
+                ViewModel.SelectWorkspaceCommand.Execute(selectableWorkspace);
 
                 await NavigationService.Received().Close(
                     Arg.Is(ViewModel),
-                    Arg.Is<long?>(expectedId)
+                    Arg.Is(expectedId)
                 );
             }
         }

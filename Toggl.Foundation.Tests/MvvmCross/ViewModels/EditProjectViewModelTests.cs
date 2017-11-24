@@ -329,15 +329,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.PickWorkspaceCommand.ExecuteAsync();
 
                 await NavigationService.Received()
-                    .Navigate<long?>(typeof(SelectWorkspaceViewModel));
+                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>());
             }
 
             [Fact]
             public async Task SetsTheReturnedWorkspaceNameAsTheWorkspaceNameProperty()
             {
                 NavigationService
-                    .Navigate<long?>(typeof(SelectWorkspaceViewModel))
-                    .Returns(Task.FromResult<long?>(workspaceId));
+                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>())
+                    .Returns(Task.FromResult(workspaceId));
 
                 await ViewModel.PickWorkspaceCommand.ExecuteAsync();
 
@@ -348,8 +348,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task ResetsTheClientNameWhenTheWorkspaceChanges()
             {
                 NavigationService
-                    .Navigate<long?>(typeof(SelectWorkspaceViewModel))
-                    .Returns(Task.FromResult<long?>(workspaceId));
+                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>())
+                    .Returns(Task.FromResult(workspaceId));
 
                 await ViewModel.PickWorkspaceCommand.ExecuteAsync();
 
@@ -363,8 +363,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Navigate<MvxColor, MvxColor>(typeof(SelectColorViewModel), Arg.Any<MvxColor>())
                     .Returns(Task.FromResult(MvxColors.Azure));
                 NavigationService
-                    .Navigate<long?>(typeof(SelectWorkspaceViewModel))
-                    .Returns(Task.FromResult<long?>(workspaceId));
+                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>())
+                    .Returns(Task.FromResult(workspaceId));
                 DataSource.Workspaces.WorkspaceHasFeature(workspaceId, WorkspaceFeatureId.Pro)
                     .Returns(Observable.Return(false));
                 await ViewModel.PickColorCommand.ExecuteAsync();

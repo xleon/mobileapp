@@ -347,6 +347,12 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string AddFilterTags {
+            get {
+                return ResourceManager.GetString("AddFilterTags", resourceCulture);
+            }
+        }
+        
         public static string AddFilterProjects {
             get {
                 return ResourceManager.GetString("AddFilterProjects", resourceCulture);
@@ -359,20 +365,27 @@ namespace Toggl.Foundation {
             }
         }
         
-        public static string AddProject {
+        public static string Workspaces {
             get {
-                return ResourceManager.GetString("AddProject", resourceCulture);
+                return ResourceManager.GetString("Workspaces", resourceCulture);
             }
         }
-        public static string AddFilterTags {
+        
+        public static string SetDefaultWorkspaces {
             get {
-                return ResourceManager.GetString("AddFilterTags", resourceCulture);
+                return ResourceManager.GetString("SetDefaultWorkspaces", resourceCulture);
             }
         }
         
         public static string AddTags {
             get {
                 return ResourceManager.GetString("AddTags", resourceCulture);
+            }
+        }
+        
+        public static string AddProject {
+            get {
+                return ResourceManager.GetString("AddProject", resourceCulture);
             }
         }
     }

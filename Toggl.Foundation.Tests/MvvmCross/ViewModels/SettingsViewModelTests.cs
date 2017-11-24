@@ -9,6 +9,7 @@ using FsCheck;
 using FsCheck.Xunit;
 using MvvmCross.Core.Navigation;
 using NSubstitute;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
@@ -327,6 +328,75 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 DataSource.HasUnsyncedData().Returns(Observable.Return(false));
                 StateObservableSubject.OnNext(SyncState.Sleep);
+            }
+        }
+
+        public sealed class ThePickWorkspaceCommand : SettingsViewModelTest
+        {
+            private const long workspaceId = 10;
+            private const long defaultWorkspaceId = 11;
+            private const string workspaceName = "My custom workspace";
+            private readonly IDatabaseWorkspace workspace = Substitute.For<IDatabaseWorkspace>();
+            private readonly IDatabaseWorkspace defaultWorkspace = Substitute.For<IDatabaseWorkspace>();
+
+            public ThePickWorkspaceCommand()
+            {
+                workspace.Id.Returns(workspaceId);
+                workspace.Name.Returns(workspaceName);
+                defaultWorkspace.Id.Returns(defaultWorkspaceId);
+
+                DataSource.Workspaces.GetDefault()
+                    .Returns(Observable.Return(defaultWorkspace));
+
+                DataSource.Workspaces.GetById(workspaceId)
+                    .Returns(Observable.Return(workspace));
+
+                ViewModel.Prepare();
+            }
+
+            [Fact]
+            public async Task CallsTheSelectWorkspaceViewModel()
+            {
+                await ViewModel.EditWorkspaceCommand.ExecuteAsync();
+
+                await NavigationService.Received()
+                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>());
+            }
+
+            [Fact]
+            public async Task SetsTheReturnedWorkspaceNameAsTheWorkspaceNameProperty()
+            {
+                NavigationService
+                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>())
+                    .Returns(Task.FromResult(workspaceId));
+
+                await ViewModel.EditWorkspaceCommand.ExecuteAsync();
+
+                ViewModel.WorkspaceName.Should().Be(workspaceName);
+            }
+
+            [Fact]
+            public async Task UpdatesTheUserWithTheReceivedWorspace()
+            {
+                NavigationService
+                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>())
+                    .Returns(Task.FromResult(workspaceId));
+
+                await ViewModel.EditWorkspaceCommand.ExecuteAsync();
+
+                await DataSource.User.Received().UpdateWorkspace(Arg.Is(workspaceId));
+            }
+
+            [Fact]
+            public async Task StartsTheSyncAlgorithm()
+            {
+                NavigationService
+                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>())
+                    .Returns(Task.FromResult(workspaceId));
+
+                await ViewModel.EditWorkspaceCommand.ExecuteAsync();
+
+                await DataSource.SyncManager.Received().PushSync();
             }
         }
 
