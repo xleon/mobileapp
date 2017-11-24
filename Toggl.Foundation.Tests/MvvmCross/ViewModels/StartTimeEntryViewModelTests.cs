@@ -60,7 +60,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheConstructor : StartTimeEntryViewModelTest
         {
-            [Theory]
+            [Theory, LogIfTooSlow]
             [ClassData(typeof(FourParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource, bool useTimeService, bool useDialogService, bool useNavigationService)
@@ -80,7 +80,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class ThePrepareMethod : StartTimeEntryViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void SetsTheDateAccordingToTheDateParameterReceived()
             {
                 var date = DateTimeOffset.UtcNow;
@@ -93,7 +93,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheInitializeMethod : StartTimeEntryViewModelTest
         {
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData(true)]
             [InlineData(false)]
             public async Task ChecksIfBillableIsAvailableForTheDefaultWorkspace(bool billableValue)
@@ -138,7 +138,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Prepare(DateTimeOffset.Now);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ReturnsFalseIfNotSuggestingProjects()
             {
                 await ViewModel.Initialize();
@@ -148,7 +148,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.SuggestCreation.Should().BeFalse();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ReturnsFalseIfTheCurrentQueryIsEmpty()
             {
                 await ViewModel.Initialize();
@@ -158,7 +158,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.SuggestCreation.Should().BeFalse();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ReturnsFalseIfTheCurrentQueryIsOnlyWhitespace()
             {
                 await ViewModel.Initialize();
@@ -168,7 +168,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.SuggestCreation.Should().BeFalse();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ReturnsFalseIfTheCurrentQueryIsLongerThanTwoHundredAndFiftyCharacters()
             {
                 await ViewModel.Initialize();
@@ -178,7 +178,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.SuggestCreation.Should().BeFalse();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ReturnsFalseIfAProjectIsAlreadySelected()
             {
                 await ViewModel.Initialize();
@@ -210,7 +210,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Prepare(DateTimeOffset.UtcNow);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task CallsTheCreateProjectViewModel()
             {
                 await ViewModel.Initialize();
@@ -221,7 +221,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Navigate<string, long?>(typeof(EditProjectViewModel), Arg.Any<string>());
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task UsesTheCurrentQueryAsTheParameterForTheCreateProjectViewModel()
             {
                 await ViewModel.Initialize();
@@ -235,7 +235,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheBackCommand : StartTimeEntryViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
                 await ViewModel.BackCommand.ExecuteAsync();
@@ -246,7 +246,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheToggleBillableCommand : StartTimeEntryViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void TogglesTheIsBillableProperty()
             {
                 var expected = !ViewModel.IsBillable;
@@ -361,7 +361,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Returns(Observable.Return(suggestions));
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void StartProjectSuggestionEvenIfTheProjectHasAlreadyBeenSelected()
             {
                 ViewModel.Prepare(DateTimeOffset.UtcNow);
@@ -374,7 +374,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.IsSuggestingProjects.Should().BeTrue();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void SetsTheIsSuggestingProjectsPropertyToTrueIfNotInProjectSuggestionMode()
             {
                 ViewModel.Prepare(DateTimeOffset.UtcNow);
@@ -384,7 +384,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.IsSuggestingProjects.Should().BeTrue();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void AddsAnAtSymbolAtTheEndOfTheQueryInOrderToStartProjectSuggestionMode()
             {
                 const string description = "Testing Toggl Apps";
@@ -397,7 +397,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.TextFieldInfo.Text.Should().Be(expected);
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData("@")]
             [InlineData("@somequery")]
             [InlineData("@some query")]
@@ -420,7 +420,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.IsSuggestingProjects.Should().BeFalse();
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData("@", "")]
             [InlineData("@somequery", "")]
             [InlineData("@some query", "")]
@@ -458,7 +458,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Returns(Observable.Return(suggestions));
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void SetsTheIsSuggestingTagsPropertyToTrueIfNotInTagSuggestionMode()
             {
                 ViewModel.Prepare(DateTimeOffset.UtcNow);
@@ -468,7 +468,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.IsSuggestingTags.Should().BeTrue();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void AddsHashtagSymbolAtTheEndOfTheQueryInOrderToTagSuggestionMode()
             {
                 const string description = "Testing Toggl Apps";
@@ -481,7 +481,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.TextFieldInfo.Text.Should().Be(expected);
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData("#")]
             [InlineData("#somequery")]
             [InlineData("#some query")]
@@ -504,7 +504,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.IsSuggestingTags.Should().BeFalse();
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData("#", "")]
             [InlineData("#somequery", "")]
             [InlineData("#some query", "")]
@@ -531,7 +531,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheChangeDurationCommandCommand : StartTimeEntryViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task SetsTheStartDateToTheValueReturnedByTheSelectDateTimeDialogViewModel()
             {
                 var now = DateTimeOffset.UtcNow;
@@ -546,7 +546,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.StartTime.Should().Be(parameterToReturn.Start);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task SetsTheIsEditingDurationDateToTrueWhileTheViewDoesNotReturnAndThenSetsItBackToFalse()
             {
                 var now = DateTimeOffset.UtcNow;
@@ -598,7 +598,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.Prepare(startDate);
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task WithTheDatePassedWhenNavigatingToTheViewModel()
                 {
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
@@ -610,7 +610,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ));
                 }
 
-                [Theory]
+                [Theory, LogIfTooSlow]
                 [InlineData(true)]
                 [InlineData(false)]
                 public async Task WithTheAppropriateValueForBillable(bool billable)
@@ -626,7 +626,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ));
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task WithTheDefaultWorkspaceIfNoProjectIsProvided()
                 {
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
@@ -638,7 +638,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ));
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task WithTheProjectWorkspaceIfAProjectIsProvided()
                 {
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty
@@ -652,7 +652,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ));
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task WithTheAppropriateWorkspaceSelectedIfNoProjectWasTapped()
                 {
                     const long expectedWorkspace = 1234;
@@ -669,7 +669,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ));
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task WithTheCurrentUsersId()
                 {
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
@@ -680,7 +680,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ));
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task WithTheAppropriateProjectId()
                 {
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty
@@ -694,7 +694,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ));
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task WithTheAppropriateDescription()
                 {
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(description, 0);
@@ -706,7 +706,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ));
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task WithTheAppropriateTaskId()
                 {
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty
@@ -720,7 +720,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ));
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task WithTheSelectedTags()
                 {
                     var tags = Enumerable.Range(0, 3).Select(tagSuggestionFromInt);
@@ -737,7 +737,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ));
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task InitiatesPushSync()
                 {
                     ViewModel.DoneCommand.Execute();
@@ -745,7 +745,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     await DataSource.SyncManager.Received().PushSync();
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task DoesNotInitiatePushSyncWhenSavingFails()
                 {
                     DataSource.TimeEntries.Start(Arg.Any<StartTimeEntryDTO>())
@@ -756,7 +756,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     await DataSource.SyncManager.DidNotReceive().PushSync();
                 }
 
-                [Theory]
+                [Theory, LogIfTooSlow]
                 [InlineData(null)]
                 [InlineData(" ")]
                 [InlineData("\t")]
@@ -774,7 +774,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ));
                 }
 
-                [Theory]
+                [Theory, LogIfTooSlow]
                 [InlineData("   abcde", "abcde")]
                 [InlineData("abcde     ", "abcde")]
                 [InlineData("  abcde ", "abcde")]
@@ -801,7 +801,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 }
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
                 await ViewModel.DoneCommand.ExecuteAsync();
@@ -855,7 +855,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public abstract class ProjectSettingSuggestion<TSuggestion> : SelectSuggestionTest<TSuggestion>
                 where TSuggestion : AutocompleteSuggestion
             {
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public void SetsTheProjectIdToTheSuggestedProjectId()
                 {
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
@@ -863,7 +863,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.TextFieldInfo.ProjectId.Should().Be(ProjectId);
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public void SetsTheProjectNameToTheSuggestedProjectName()
                 {
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
@@ -871,7 +871,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.TextFieldInfo.ProjectName.Should().Be(ProjectName);
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public void SetsTheProjectColorToTheSuggestedProjectColor()
                 {
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
@@ -879,7 +879,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.TextFieldInfo.ProjectColor.Should().Be(ProjectColor);
                 }
 
-                [Theory]
+                [Theory, LogIfTooSlow]
                 [InlineData(true)]
                 [InlineData(false)]
                 [InlineData(null)]
@@ -897,7 +897,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.IsBillableAvailable.Should().BeTrue();
                 }
 
-                [Theory]
+                [Theory, LogIfTooSlow]
                 [InlineData(true)]
                 [InlineData(false)]
                 [InlineData(null)]
@@ -924,7 +924,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor("Something @togg", 15);
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public void RemovesTheProjectQueryFromTheTextFieldInfo()
                 {
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
@@ -932,7 +932,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.TextFieldInfo.Text.Should().Be("Something ");
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task ShowsConfirmDialogIfWorkspaceIsAboutToBeChanged()
                 {
                     var user = Substitute.For<IDatabaseUser>();
@@ -950,7 +950,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     );
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task DoesNotShowConfirmDialogIfWorkspaceIsNotGoingToChange()
                 {
                     var user = Substitute.For<IDatabaseUser>();
@@ -968,7 +968,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     );
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task ClearsTagsIfWorkspaceIsChanged()
                 {
                     var user = Substitute.For<IDatabaseUser>();
@@ -998,7 +998,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Suggestion = new TimeEntrySuggestion(TimeEntry);
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public void SetsTheTextFieldInfoTextToTheValueOfTheSuggestedDescription()
                 {
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
@@ -1016,7 +1016,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Suggestion = new TaskSuggestion(Task);
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public void SetsTheTaskIdToTheSameIdAsTheSelectedSuggestion()
                 {
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
@@ -1034,7 +1034,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Suggestion = new ProjectSuggestion(Project);
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public void SetsTheTaskIdToNull()
                 {
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
@@ -1054,7 +1054,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor("Something #togg", 15);
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public void RemovesTheTagQueryFromTheTextFieldInfo()
                 {
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
@@ -1062,7 +1062,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.TextFieldInfo.Text.Should().Be("Something ");
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public void AddsTheSuggestedTagToTheList()
                 {
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
@@ -1075,7 +1075,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 protected override QuerySymbolSuggestion Suggestion { get; } = QuerySymbolSuggestion.Suggestions.First();
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public void SetsTheTextToTheQuerySymbolSelected()
                 {
                     ViewModel.SelectSuggestionCommand.Execute(Suggestion);
@@ -1087,7 +1087,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheSuggestionsProperty : StartTimeEntryViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void IsClearedWhenThereAreNoWordsToQuery()
             {
                 ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor("", 0);
@@ -1098,7 +1098,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheDescriptionRemainingBytesProperty : StartTimeEntryViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void IsMaxIfTheTextIsEmpty()
             {
                 ViewModel.TextFieldInfo = TextFieldInfo.Empty;
@@ -1107,7 +1107,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Be(MaxTimeEntryDescriptionLengthInBytes);
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData("Hello fox")]
             [InlineData("Some emojis: 🔥😳👻")]
             [InlineData("Some weird characters: āčēļķīņš")]
@@ -1123,7 +1123,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Be(expectedRemainingByteCount);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void IsNegativeWhenTextLengthExceedsMax()
             {
                 var bytesOverLimit = 5;
@@ -1137,7 +1137,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheDescriptionLengthExceededproperty : StartTimeEntryViewModelTest
         {
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData(0)]
             [InlineData(20)]
             [InlineData(2999)]
@@ -1151,7 +1151,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.DescriptionLengthExceeded.Should().BeFalse();
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData(MaxTimeEntryDescriptionLengthInBytes + 1)]
             [InlineData(MaxTimeEntryDescriptionLengthInBytes + 20)]
             public void IsTrueWhenTextIsLongerThanMax(int byteCount)

@@ -33,7 +33,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheConstructor : EditProjectViewModelTest
         {
-            [Theory]
+            [Theory, LogIfTooSlow]
             [ClassData(typeof(TwoParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useNavigationService)
             {
@@ -50,7 +50,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheSaveEnabledProperty : EditProjectViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void IsFalseWhenTheNameIsEmpty()
             {
                 ViewModel.Name = "";
@@ -58,7 +58,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.SaveEnabled.Should().BeFalse();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void IsFalseWhenTheNameIsJustWhiteSpace()
             {
                 ViewModel.Name = "            ";
@@ -66,7 +66,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.SaveEnabled.Should().BeFalse();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void IsFalseWhenTheNameIsLongerThanTheThresholdInBytes()
             {
                 ViewModel.Name = "This is a ridiculously big project name made solely with the purpose of testing whether or not Toggl apps UI has validation logic that prevents such a large name to be persisted or, even worse, pushed to the api, an event that might end up in crashes and whatnot";
@@ -89,7 +89,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Prepare("Some name");
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task SetsTheWorkspaceId()
             {
                 await ViewModel.Initialize();
@@ -100,7 +100,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Create(Arg.Is<CreateProjectDTO>(dto => dto.WorkspaceId == WorkspaceId));
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task SetsTheWorkspaceName()
             {
                 await ViewModel.Initialize();
@@ -111,7 +111,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheCloseCommand : EditProjectViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
                 await ViewModel.CloseCommand.ExecuteAsync();
@@ -120,7 +120,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Close(Arg.Is(ViewModel), Arg.Any<long?>());
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ReturnsNull()
             {
                 ViewModel.Prepare("Some name");
@@ -131,7 +131,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Close(Arg.Is(ViewModel), Arg.Is<long?>(result => result == null));
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task DoesNotTrySavingTheChanges()
             {
                 ViewModel.Prepare("Some name");
@@ -175,7 +175,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 Workspace.Id.Returns(proWorkspaceId);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
                 ViewModel.Prepare("Some name");
@@ -186,7 +186,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Close(Arg.Is(ViewModel), Arg.Any<long?>());
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ReturnsTheIdOfTheCreatedProject()
             {
                 ViewModel.Prepare("Some name");
@@ -197,7 +197,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Close(Arg.Is(ViewModel), Arg.Is(projectId));
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task DoesNotCallCreateIfTheProjectNameIsInvalid()
             {
                 ViewModel.Prepare("Some name");
@@ -209,7 +209,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Create(Arg.Any<CreateProjectDTO>());
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task DoesNotCloseTheViewModelIfTheProjectNameIsInvalid()
             {
                 ViewModel.Prepare("Some name");
@@ -221,7 +221,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Close(ViewModel, projectId);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task SetsBillableToNullIfTheWorkspaceIfNotPro()
             {
                 Workspace.Id.Returns(WorkspaceId);
@@ -234,7 +234,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 );
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData(true)]
             [InlineData(false)]
             public async Task SetsBillableToTheValueOfTheProjectsBillableByDefaultPropertyIfTheWorkspaceIsPro(
@@ -252,7 +252,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 );
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData("   abcde", "abcde")]
             [InlineData("abcde     ", "abcde")]
             [InlineData("  abcde ", "abcde")]
@@ -273,7 +273,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class ThePickColorCommand : EditProjectViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task CallsTheSelectColorViewModel()
             {
                 ViewModel.Prepare("Some name");
@@ -284,7 +284,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Navigate<ColorParameters, MvxColor>(typeof(SelectColorViewModel), Arg.Any<ColorParameters>());
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task SetsTheReturnedColorAsTheColorProperty()
             {
                 var expectedColor = MvxColors.AliceBlue;
@@ -323,7 +323,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Prepare();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task CallsTheSelectWorkspaceViewModel()
             {
                 await ViewModel.PickWorkspaceCommand.ExecuteAsync();
@@ -332,7 +332,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>());
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task SetsTheReturnedWorkspaceNameAsTheWorkspaceNameProperty()
             {
                 NavigationService
@@ -344,7 +344,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.WorkspaceName.Should().Be(workspaceName);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ResetsTheClientNameWhenTheWorkspaceChanges()
             {
                 NavigationService
@@ -356,7 +356,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.ClientName.Should().BeNullOrEmpty();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task PicksADefaultColorIfTheSelectedColorIsCustomAndTheWorkspaceIsNotPro()
             {
                 NavigationService
@@ -377,7 +377,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class ThePickClientCommand : EditProjectViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task CallsTheSelectClientViewModel()
             {
                 ViewModel.Prepare("Some name");
@@ -388,7 +388,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Navigate<long, long?>(typeof(SelectClientViewModel), Arg.Any<long>());
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task PassesTheCurrentWorkspaceToTheViewModel()
             {
                 DataSource.Workspaces
@@ -404,7 +404,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Navigate<long, long?>(typeof(SelectClientViewModel), WorkspaceId);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task SetsTheReturnedClientAsTheClientNameProperty()
             {
                 const string expectedName = "Some client";
@@ -427,7 +427,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.ClientName.Should().Be(expectedName);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ClearsTheCurrentClientIfZeroIsReturned()
             {
                 const string expectedName = "Some client";

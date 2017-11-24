@@ -23,7 +23,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheConstructor : EditDurationViewModelTest
         {
-            [Theory]
+            [Theory, LogIfTooSlow]
             [ClassData(typeof(TwoParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(bool useNavigationService, bool useTimeService)
             {
@@ -157,14 +157,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheCloseCommand : EditDurationViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
                 await ViewModel.CloseCommand.ExecuteAsync();
 
                 await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<DurationParameter>());
             }
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ReturnsTheDefaultParameter()
             {
                 var parameter = DurationParameter.WithStartAndDuration(DateTimeOffset.UtcNow, null);
@@ -178,7 +178,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheSaveCommand : EditDurationViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
                 await ViewModel.SaveCommand.ExecuteAsync();

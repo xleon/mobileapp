@@ -53,7 +53,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheConstructor : EditTimeEntryViewModelTest
         {
-            [Theory]
+            [Theory, LogIfTooSlow]
             [ClassData(typeof(FourParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource, bool useNavigationService, bool useTimeService, bool useDialogService)
@@ -72,7 +72,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheCloseCommand : EditTimeEntryViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
                 await ViewModel.CloseCommand.ExecuteAsync();
@@ -95,7 +95,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ).Returns(Task.FromResult(result));
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ShowsConfirmationActionSheet()
             {
                 await ViewModel.DeleteCommand.ExecuteAsync();
@@ -115,7 +115,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     PrepareActionSheet(true);
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task CallsDeleteOnDataSource()
                 {
                     await ViewModel.DeleteCommand.ExecuteAsync();
@@ -123,7 +123,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     await DataSource.TimeEntries.Received().Delete(Arg.Is(ViewModel.Id));
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task InitiatesPushSync()
                 {
                     await ViewModel.DeleteCommand.ExecuteAsync();
@@ -131,7 +131,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     await DataSource.SyncManager.Received().PushSync();
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task DoesNotInitiatePushSyncWhenDeletingFails()
                 {
                     DataSource.TimeEntries.Delete(Arg.Any<long>())
@@ -150,7 +150,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     PrepareActionSheet(false);
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task DoesNotCallDeleteOnDataSource()
                 {
                     await ViewModel.DeleteCommand.ExecuteAsync();
@@ -158,7 +158,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     await DataSource.TimeEntries.DidNotReceive().Delete(Arg.Is(ViewModel.Id));
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task DoesNotInitiatePushSync()
                 {
                     await ViewModel.DeleteCommand.ExecuteAsync();
@@ -298,7 +298,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheConfirmCommand : EditTimeEntryViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task InitiatesPushSync()
             {
                 ViewModel.ConfirmCommand.Execute();
@@ -306,7 +306,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await DataSource.SyncManager.Received().PushSync();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task DoesNotInitiatePushSyncWhenSavingFails()
             {
                 DataSource.TimeEntries.Update(Arg.Any<EditTimeEntryDto>())
@@ -317,7 +317,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await DataSource.SyncManager.DidNotReceive().PushSync();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task UpdatesWorkspaceIdIfProjectFromAnotherWorkspaceWasSelected()
             {
                 var timeEntry = Substitute.For<IDatabaseTimeEntry>();
@@ -347,7 +347,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == project.WorkspaceId));
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task DoesNotUpdateWorkspaceIdIfProjectFromTheSameWorkspaceIsSelected()
             {
                 var workspaceId = 11;
@@ -377,7 +377,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == workspaceId));
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task UpdatewWorkspaceIdIfNoProjectWasSelected()
             {
                 var oldWorkspaceId = 11;
@@ -402,7 +402,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == newWorkspaceId));
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData(null)]
             [InlineData(" ")]
             [InlineData("\t")]
@@ -420,7 +420,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ));
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData(null, "")]
             [InlineData("   abcde", "abcde")]
             [InlineData("abcde     ", "abcde")]
@@ -465,7 +465,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Wait();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task NavigatesToTheSelectTagsViewModelPassingWorkspaceId()
             {
                 long workspaceId = 13;
@@ -546,7 +546,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheDismissSyncErrorMessageCommand : EditTimeEntryViewModelTest
         {
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData(true)]
             [InlineData(false)]
             public async Task SetsSyncErrorMessageVisiblePropertyToFalse(bool initialValue)
@@ -588,7 +588,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.SyncErrorMessage.Should().Be(errorMessage);
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData("Some error", true)]
             [InlineData("", false)]
             [InlineData(null, false)]
@@ -683,7 +683,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         return tag;
                     }).ToList();
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task SetsTheProject()
             {
                 var projectName = "Some other project";
@@ -694,7 +694,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Project.Should().Be(projectName);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task SetsTheTask()
             {
                 var taskName = "Some task";
@@ -709,7 +709,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Task.Should().Be(taskName);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task SetsTheClient()
             {
                 var clientName = "Some client";
@@ -723,7 +723,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Client.Should().Be(clientName);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task SetsTheColor()
             {
                 var projectColor = "123456";
@@ -737,7 +737,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.ProjectColor.Should().Be(projectColor);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task RemovesTheTaskIfNoTaskWasSelected()
             {
                 await prepare(11, "Some project");
@@ -747,7 +747,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Task.Should().BeEmpty();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task RemovesTagsIfProjectFromAnotherWorkspaceWasSelected()
             {
                 var initialTagCount = 10;
@@ -772,7 +772,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheTagsProperty : EditTimeEntryViewModelTest
         {
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData(31, "a")]
             [InlineData(31, "💵")]
             [InlineData(50, "b")]
@@ -785,7 +785,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .OnlyContain(tag => tag.LengthInGraphemes() == 33 && tag.EndsWith("..."));
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData(30, "a")]
             [InlineData(30, "🐕")]
             [InlineData(29, "b")]
@@ -824,7 +824,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheDescriptionLimitExceededProperty : EditTimeEntryViewModelTest
         {
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData("a", MaxTimeEntryDescriptionLengthInBytes - 1)]
             [InlineData("c", MaxTimeEntryDescriptionLengthInBytes)]
             [InlineData("ॷ", MaxTimeEntryDescriptionLengthInBytes / 3)] //This symbol is 3 bytes long
@@ -837,7 +837,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.DescriptionLimitExceeded.Should().BeFalse();
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData("A", MaxTimeEntryDescriptionLengthInBytes + 1)]
             [InlineData("ॷ", MaxTimeEntryDescriptionLengthInBytes / 3 + 1)] //This symbol is 3 bytes long
             [InlineData("Љ", MaxTimeEntryDescriptionLengthInBytes / 2 + 1)] //This symbol is 2 bytes long

@@ -34,7 +34,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheConstructor : SelectWorkspaceViewModelTest
         {
-            [Theory]
+            [Theory, LogIfTooSlow]
             [ClassData(typeof(TwoParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useNavigationService)
             {
@@ -57,7 +57,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DataSource.Workspaces.GetAll().Returns(Observable.Return(workspaces));
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task SetsTheDefaultWorkspaceId()
             {
                 const long expectedId = 8;
@@ -69,7 +69,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Suggestions.Single(x => x.Selected).WorkspaceId.Should().Be(expectedId);
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             public void SetsTheAllowsQueryingProperty(bool allowsQuerying)
             {
                 var parameters = WorkspaceParameters.Create(10, "", allowsQuerying);
@@ -92,7 +92,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheInitializeMethod : SelectWorkspaceViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task AddsAllWorkspacesToTheListOfSuggestions()
             {
                 var workspaces = GenerateWorkspaceList();
@@ -106,7 +106,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheCloseCommand : SelectWorkspaceViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
                 await ViewModel.Initialize();
@@ -117,7 +117,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Close(Arg.Is(ViewModel), Arg.Any<long>());
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ReturnsTheWorkspacePassedOnPrepare()
             {
                 const long expectedId = 10;
@@ -136,7 +136,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         {
             private readonly IDatabaseWorkspace Workspace = Substitute.For<IDatabaseWorkspace>();
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
                 var selectableWorkspace = new SelectableWorkspaceViewModel(Workspace, true);
@@ -147,7 +147,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Close(Arg.Is(ViewModel), Arg.Any<long>());
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task ReturnsTheSelectedWorkspaceId()
             {
                 const long expectedId = 10;
@@ -165,7 +165,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheTextProperty : SelectWorkspaceViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task FiltersTheSuggestionsWhenItChanges()
             {
                 var workspaces = GenerateWorkspaceList();

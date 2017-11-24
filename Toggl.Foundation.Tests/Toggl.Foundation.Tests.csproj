@@ -319,6 +319,10 @@
       <Project>{B4E4943F-0574-4BEF-9ADC-B19102458754}</Project>
       <Name>Toggl.Ultrawave</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Toggl.Multivac.Tests\Toggl.Multivac.Tests.csproj">
+      <Project>{DEAB771F-ED46-4A27-AD25-F26723820F93}</Project>
+      <Name>Toggl.Multivac.Tests</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
