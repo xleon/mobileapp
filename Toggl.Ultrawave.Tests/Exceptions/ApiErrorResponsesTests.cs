@@ -64,6 +64,20 @@ namespace Toggl.Ultrawave.Tests.Exceptions
 
         public sealed class Serialization
         {
+            [Theory, LogIfTooSlow]
+            [MemberData(nameof(ClientErrorsList), MemberType = typeof(ApiErrorResponsesTests))]
+            [MemberData(nameof(ServerErrorsList), MemberType = typeof(ApiErrorResponsesTests))]
+            public void CreatesAStringStartingWithExceptionName(HttpStatusCode statusCode, Type exceptionType)
+            {
+                var request = createRequest(HttpMethod.Get);
+                var response = createErrorResponse(statusCode);
+                var exception = ApiExceptions.For(request, response);
+
+                var serialized = exception.ToString();
+
+                serialized.Should().StartWith($"{exceptionType.Name} ");
+            }
+
             [Fact, LogIfTooSlow]
             public void CreatesAStringWithBodyAndNoHeaders()
             {
@@ -73,7 +87,7 @@ namespace Toggl.Ultrawave.Tests.Exceptions
                 var request = new Request("", endpoint, new HttpHeader[0], method);
                 var response = new Response(body, false, "application/json", new List<KeyValuePair<string, IEnumerable<string>>>(), HttpStatusCode.InternalServerError);
                 var exception = new InternalServerErrorException(request, response, "Custom message.");
-                var expectedSerialization = $"ApiException for request {method} {endpoint}: Response: (Status: [500 InternalServerError]) (Headers: []) (Body: {body}) (Message: Custom message.)";
+                var expectedSerialization = $"InternalServerErrorException for request {method} {endpoint}: Response: (Status: [500 InternalServerError]) (Headers: []) (Body: {body}) (Message: Custom message.)";
 
                 var serialized = exception.ToString();
 
@@ -90,7 +104,7 @@ namespace Toggl.Ultrawave.Tests.Exceptions
                 var headers = new[] { new KeyValuePair<string, IEnumerable<string>>("abc", new[] { "a", "b", "c" }) };
                 var response = new Response(body, false, "application/json", headers, HttpStatusCode.InternalServerError);
                 var exception = new InternalServerErrorException(request, response, "Custom message.");
-                var expectedSerialization = $"ApiException for request {method} {endpoint}: Response: (Status: [500 InternalServerError]) (Headers: ['abc': ['a', 'b', 'c']]) (Body: {body}) (Message: Custom message.)";
+                var expectedSerialization = $"InternalServerErrorException for request {method} {endpoint}: Response: (Status: [500 InternalServerError]) (Headers: ['abc': ['a', 'b', 'c']]) (Body: {body}) (Message: Custom message.)";
 
                 var serialized = exception.ToString();
 
