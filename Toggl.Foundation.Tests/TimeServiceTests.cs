@@ -136,13 +136,9 @@ namespace Toggl.Foundation.Tests
             [InlineData(2)]
             [InlineData(3)]
             [InlineData(4)]
-            [InlineData(10)]
-            [InlineData(20)]
             public void EmitsSeveralDaysInARowExactlyAtMidnightEvenWhenTheTimeChangesDueToDaylightSavingTime(int numberOfDays)
             {
-                if (numberOfDays == 0) return;
-
-                reset(new DateTimeOffset(2017, 10, 20, 12, 34, 56, TimeSpan.Zero));
+                reset(new DateTimeOffset(2017, 10, 26, 12, 34, 56, TimeSpan.Zero));
                 var emittedDateTimes = new List<DateTimeOffset>();
 
                 timeService.MidnightObservable.Subscribe(emittedDateTimes.Add);
