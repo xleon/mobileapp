@@ -73,12 +73,12 @@ namespace Toggl.Daneel
 
             var apiFactory = new ApiFactory(environment, userAgent);
             var loginManager = new LoginManager(apiFactory, database, timeService, TaskPoolScheduler.Default);
+            var accessRestrictionStorage = new UserDataAccessRestrictionStorage(Version.Parse(version.ToString()));
 
             Mvx.RegisterSingleton<ITimeService>(timeService);
             Mvx.RegisterSingleton<IDialogService>(new DialogService());
+            Mvx.RegisterSingleton<IAccessRestrictionStorage>(accessRestrictionStorage);
             Mvx.RegisterSingleton<IBrowserService>(new BrowserService());
-            Mvx.RegisterSingleton<IAccessRestrictionStorage>(
-                new UserDataAccessRestrictionStorage(Version.Parse(version.ToString())));
             Mvx.RegisterSingleton<ISuggestionProviderContainer>(
                 new SuggestionProviderContainer(
                     new MostUsedTimeEntrySuggestionProvider(database, timeService)
@@ -86,7 +86,7 @@ namespace Toggl.Daneel
             );
 
             var togglApp = app as App;
-            togglApp.Initialize(loginManager, navigationService);
+            togglApp.Initialize(loginManager, navigationService, accessRestrictionStorage);
         }
     }
 }

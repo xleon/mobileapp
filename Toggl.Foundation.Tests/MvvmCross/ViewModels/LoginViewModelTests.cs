@@ -12,9 +12,11 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.TestExtensions;
 using Toggl.Multivac;
+using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using Xunit;
+using MvvmCross.Core.Navigation;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -31,22 +33,26 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected ILoginManager LoginManager { get; } = Substitute.For<ILoginManager>();
             protected IPasswordManagerService PasswordManagerService { get; } = Substitute.For<IPasswordManagerService>();
 
+            protected IAccessRestrictionStorage AccessRestrictionStorage { get; } =
+                Substitute.For<IAccessRestrictionStorage>();
+
             protected override LoginViewModel CreateViewModel()
-                => new LoginViewModel(LoginManager, NavigationService, PasswordManagerService);
+                => new LoginViewModel(LoginManager, NavigationService, PasswordManagerService, AccessRestrictionStorage);
         }
 
         public sealed class TheConstructor : LoginViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(ThreeParameterConstructorTestData))]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool userLoginManager, bool userNavigationService, bool usePasswordManagerService)
+            [ClassData(typeof(FourParameterConstructorTestData))]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool userLoginManager, bool userNavigationService, bool usePasswordManagerService, bool useAccessRestrictionStorage)
             {
                 var loginManager = userLoginManager ? LoginManager : null;
                 var navigationService = userNavigationService ? NavigationService : null;
                 var passwordManagerService = usePasswordManagerService ? PasswordManagerService : null;
+                var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new LoginViewModel(loginManager, navigationService, passwordManagerService);
+                    () => new LoginViewModel(loginManager, navigationService, passwordManagerService, accessRestrictionStorage);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -105,7 +111,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     LoginManager.Login(Arg.Any<Email>(), Arg.Any<string>()).Returns(never);
                     ViewModel.Password = ValidPassword;
                     ViewModel.NextCommand.Execute();
-  
+
                     ViewModel.NextCommand.Execute();
 
                     ViewModel.NextIsEnabled.Should().BeFalse();
@@ -680,8 +686,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void IsTrueWhenLoginFails()
             {
                 var scheduler = new TestScheduler();
-                var forbiddenException = new ForbiddenException(Substitute.For<IRequest>(), Substitute.For<IResponse>());
-                var notification = Notification.CreateOnError<ITogglDataSource>(forbiddenException);
+                var exception = new UnauthorizedException(Substitute.For<IRequest>(), Substitute.For<IResponse>());
+                var notification = Notification.CreateOnError<ITogglDataSource>(exception);
                 var message = new Recorded<Notification<ITogglDataSource>>(0, notification);
                 var observable = scheduler.CreateColdObservable(message);
                 LoginManager.Login(Arg.Any<Email>(), Arg.Any<string>())
@@ -714,11 +720,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public void IsWrongPasswordErrorWhenForbiddenExceptionIsThrown()
+            public void IsWrongPasswordErrorWhenUnauthorizedExceptionIsThrown()
             {
                 var scheduler = new TestScheduler();
-                var forbiddenException = new ForbiddenException(Substitute.For<IRequest>(), Substitute.For<IResponse>());
-                var notification = Notification.CreateOnError<ITogglDataSource>(forbiddenException);
+                var exception = new UnauthorizedException(Substitute.For<IRequest>(), Substitute.For<IResponse>());
+                var notification = Notification.CreateOnError<ITogglDataSource>(exception);
                 var message = new Recorded<Notification<ITogglDataSource>>(0, notification);
                 var observable = scheduler.CreateColdObservable(message);
                 LoginManager.Login(Arg.Any<Email>(), Arg.Any<string>())
@@ -1069,6 +1075,79 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.ForgotPasswordCommand.Execute();
 
                     ViewModel.ShowForgotPassword.Should().BeFalse();
+                }
+            }
+        }
+
+        public sealed class ApiErrorHandling
+        {
+            public abstract class BaseApiErrorHandlingTests : LoginViewModelTest
+            {
+                private IRequest request => Substitute.For<IRequest>();
+                private IResponse response => Substitute.For<IResponse>();
+
+                [Fact, LogIfTooSlow]
+                public void SetsTheOutdatedClientVersionFlag()
+                {
+                    CallAndThrow(new ClientDeprecatedException(request, response));
+
+                    AccessRestrictionStorage.Received().SetClientOutdated();
+                }
+
+                [Fact, LogIfTooSlow]
+                public void SetsTheOutdatedApiVersionFlag()
+                {
+                    CallAndThrow(new ApiDeprecatedException(request, response));
+
+                    AccessRestrictionStorage.Received().SetApiOutdated();
+                }
+
+                [Fact, LogIfTooSlow]
+                public void NavigatesToTheOutdatedClientScreen()
+                {
+                    CallAndThrow(new ClientDeprecatedException(request, response));
+
+                    NavigationService.Received().Navigate<OutdatedAppViewModel>();
+                }
+
+                [Fact, LogIfTooSlow]
+                public void NavigatesToTheOutdatedApiScreen()
+                {
+                    CallAndThrow(new ApiDeprecatedException(request, response));
+
+                    NavigationService.Received().Navigate<OutdatedAppViewModel>();
+                }
+
+                protected abstract void CallAndThrow(Exception e);
+            }
+
+            public sealed class Login : BaseApiErrorHandlingTests
+            {
+                protected override void CallAndThrow(Exception e)
+                {
+                    LoginManager.Login(Arg.Any<Email>(), Arg.Any<string>())
+                        .Returns(_ => Observable.Throw<ITogglDataSource>(e));
+
+                    ViewModel.Prepare(LoginType.Login);
+                    ViewModel.Email = ValidEmail;
+                    ViewModel.NextCommand.Execute();
+                    ViewModel.Password = ValidPassword;
+                    ViewModel.NextCommand.Execute();
+                }
+            }
+
+            public sealed class SignUp : BaseApiErrorHandlingTests
+            {
+                protected override void CallAndThrow(Exception e)
+                {
+                    LoginManager.SignUp(Arg.Any<Email>(), Arg.Any<string>())
+                        .Returns(_ => Observable.Throw<ITogglDataSource>(e));
+
+                    ViewModel.Prepare(LoginType.SignUp);
+                    ViewModel.Email = ValidEmail;
+                    ViewModel.NextCommand.Execute();
+                    ViewModel.Password = ValidPassword;
+                    ViewModel.NextCommand.Execute();
                 }
             }
         }
