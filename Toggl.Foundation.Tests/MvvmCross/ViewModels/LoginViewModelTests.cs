@@ -509,7 +509,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PasswordManagerService.IsAvailable.Returns(false);
 
-                ViewModel.StartPasswordManagerCommand.Execute();
+                ViewModel.StartPasswordManagerCommand.ExecuteAsync();
 
                 PasswordManagerService.DidNotReceive().GetLoginInformation();
             }
@@ -519,7 +519,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PasswordManagerService.GetLoginInformation().Returns(Observable.Never<PasswordManagerResult>());
 
-                ViewModel.StartPasswordManagerCommand.Execute();
+                ViewModel.StartPasswordManagerCommand.ExecuteAsync();
 
                 PasswordManagerService.Received().GetLoginInformation();
             }
@@ -531,8 +531,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var never = Observable.Never<PasswordManagerResult>();
                 PasswordManagerService.GetLoginInformation().Returns(never);
 
-                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.Execute());
-                scheduler.Schedule(TimeSpan.FromTicks(40), () => ViewModel.StartPasswordManagerCommand.Execute());
+                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.ExecuteAsync());
+                scheduler.Schedule(TimeSpan.FromTicks(40), () => ViewModel.StartPasswordManagerCommand.ExecuteAsync());
 
                 scheduler.Start();
 
@@ -545,7 +545,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var scheduler = new TestScheduler();
                 var observable = arrangeCallToPasswordManagerWithValidCredentials();
 
-                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.Execute());
+                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.ExecuteAsync());
 
                 scheduler.Start(
                     () => observable,
@@ -563,7 +563,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var scheduler = new TestScheduler();
                 var observable = arrangeCallToPasswordManagerWithValidCredentials();
 
-                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.Execute());
+                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.ExecuteAsync());
 
                 scheduler.Start(
                     () => observable,
@@ -581,7 +581,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var scheduler = new TestScheduler();
                 var observable = arrangeCallToPasswordManagerWithInvalidCredentials();
 
-                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.Execute());
+                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.ExecuteAsync());
 
                 scheduler.Start(
                     () => observable,
@@ -599,7 +599,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var scheduler = new TestScheduler();
                 var observable = arrangeCallToPasswordManagerWithValidCredentials();
 
-                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.Execute());
+                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.ExecuteAsync());
 
                 scheduler.Start(
                     () => observable,
@@ -617,7 +617,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var scheduler = new TestScheduler();
                 var observable = arrangeCallToPasswordManagerWithInvalidCredentials();
 
-                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.Execute());
+                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.ExecuteAsync());
 
                 scheduler.Start(
                     () => observable,
@@ -635,7 +635,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var scheduler = new TestScheduler();
                 var observable = arrangeCallToPasswordManagerWithInvalidCredentials();
 
-                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.Execute());
+                scheduler.Schedule(TimeSpan.FromTicks(20), () => ViewModel.StartPasswordManagerCommand.ExecuteAsync());
 
                 scheduler.Start(
                     () => observable,
