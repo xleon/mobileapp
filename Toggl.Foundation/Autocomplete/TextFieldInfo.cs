@@ -88,9 +88,12 @@ namespace Toggl.Foundation.Autocomplete
         }
 
         public TextFieldInfo AddTag(TagSuggestion tagSuggestion)
-        {
+        {  
+            if (Tags.Any(t => t.TagId == tagSuggestion.TagId))
+               return this;
+
             var tags = new List<TagSuggestion>(Tags) { tagSuggestion }.ToArray();
-            
+          
             return new TextFieldInfo(
                 Text, CursorPosition, WorkspaceId, ProjectId, ProjectName, ProjectColor, TaskId, TaskName, tags);
         }

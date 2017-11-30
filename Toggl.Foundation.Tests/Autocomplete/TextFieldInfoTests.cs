@@ -207,6 +207,36 @@ namespace Toggl.Foundation.Tests.Autocomplete
             }
         }
 
+        public sealed class TheAddTagsMethod : TextFieldInfoTest
+        {
+            [Fact, LogIfTooSlow]
+            public void AddsTagsCorrectly()
+            {
+                var tag1 = createTagSuggestion(1);
+                var tag2 = createTagSuggestion(2);
+
+                var textFieldInfo = TextFieldInfo.Empty
+                                                 .AddTag(tag1)
+                                                 .AddTag(tag2);
+
+                textFieldInfo.Tags.Should().HaveCount(2);
+                textFieldInfo.Tags[0].Should().Be(tag1);
+                textFieldInfo.Tags[1].Should().Be(tag2);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNotAddTagIfAlreadyAdded()
+            {
+                var tag = createTagSuggestion(1);
+
+                var textFieldInfo = TextFieldInfo.Empty
+                                                 .AddTag(tag)
+                                                 .AddTag(tag);
+
+                textFieldInfo.Tags.Should().HaveCount(1);
+            }
+        }
+
         public sealed class TheRemoveProjectInfoMethod : TextFieldInfoTest
         {
             [Fact, LogIfTooSlow]
