@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Multivac.Models.Reports;
 
-namespace Toggl.Ultrawave.ReportsApiClients
+namespace Toggl.Ultrawave.ApiClients
 {
     public interface IProjectsSummaryApi
     {

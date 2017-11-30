@@ -29,11 +29,10 @@ namespace Toggl.Ultrawave
             Status = new StatusApi(endpoints, apiClient);
             Clients = new ClientsApi(endpoints, apiClient, serializer, credentials);
             Projects = new ProjectsApi(endpoints, apiClient, serializer, credentials);
+            ProjectsSummary = new ProjectsSummaryApi(endpoints, apiClient, serializer, credentials);
             Workspaces = new WorkspacesApi(endpoints, apiClient, serializer, credentials);
             TimeEntries = new TimeEntriesApi(endpoints, apiClient, serializer, credentials, userAgent);
             WorkspaceFeatures = new WorkspaceFeaturesApi(endpoints, apiClient, serializer, credentials);
-
-            ReportsApi = new ReportsApi(apiClient, serializer, endpoints, credentials);
         }
 
         public ITagsApi Tags { get; }
@@ -45,6 +44,6 @@ namespace Toggl.Ultrawave
         public IWorkspacesApi Workspaces { get; }
         public ITimeEntriesApi TimeEntries { get; }
         public IWorkspaceFeaturesApi WorkspaceFeatures { get; }
-        public IReportsApi ReportsApi { get; }
+        public IProjectsSummaryApi ProjectsSummary { get; }
     }
 }

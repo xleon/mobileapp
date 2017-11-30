@@ -1,5 +1,6 @@
 using System;
 using Toggl.Ultrawave.Helpers;
+using ReportsEndpoints = Toggl.Ultrawave.Network.Reports.Endpoints;
 
 namespace Toggl.Ultrawave.Network
 {

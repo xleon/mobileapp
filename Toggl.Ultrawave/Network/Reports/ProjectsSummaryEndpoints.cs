@@ -1,5 +1,6 @@
 ﻿using System;
-namespace Toggl.Ultrawave.Network
+
+namespace Toggl.Ultrawave.Network.Reports
 {
     internal sealed class ProjectsSummaryEndpoints
     {

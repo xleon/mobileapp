@@ -3,12 +3,13 @@ using System.Reactive.Linq;
 using Newtonsoft.Json;
 using Toggl.Multivac;
 using Toggl.Multivac.Models.Reports;
-using Toggl.Ultrawave.ApiClients;
-using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
 using Toggl.Ultrawave.Models.Reports;
+using Toggl.Ultrawave.Network;
+using Toggl.Ultrawave.Network.Reports;
+using Endpoints = Toggl.Ultrawave.Network.Endpoints;
 
-namespace Toggl.Ultrawave.ReportsApiClients
+namespace Toggl.Ultrawave.ApiClients
 {
     internal sealed class ProjectsSummaryApi : BaseApi, IProjectsSummaryApi
     {
@@ -19,7 +20,7 @@ namespace Toggl.Ultrawave.ReportsApiClients
         public ProjectsSummaryApi(Endpoints endPoints, IApiClient apiClient, IJsonSerializer serializer, Credentials credentials)
             : base(apiClient, serializer, credentials, endPoints.LoggedIn)
         {
-            this.endPoints = endPoints.ReportsEndpoints.ProjectsSummary;
+            this.endPoints = endPoints.ReportsEndpoints.ProjectsSummaries;
             this.serializer = serializer;
             this.credentials = credentials;
         }

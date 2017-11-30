@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.ReportsApiClients;
+using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.Serialization;
 using Xunit;
 
