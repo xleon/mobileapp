@@ -57,7 +57,7 @@
                     <rect key="frame" x="0.0" y="101" width="375" height="566"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5xF-hO-qNR">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5xF-hO-qNR" userLabel="SuggestionsTopBorder">
                     <rect key="frame" x="0.0" y="101" width="375" height="1"/>
                     <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
