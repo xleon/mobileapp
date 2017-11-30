@@ -6,6 +6,7 @@ using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using PropertyChanged;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
@@ -70,9 +71,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public bool IsPasswordMasked { get; private set; } = true;
 
+        public bool PasswordManagerVisible
+            => IsPasswordManagerAvailable && IsEmailPage && !IsLoading;
+
         public IMvxCommand NextCommand { get; }
 
         public IMvxCommand BackCommand { get; }
+
+        public IMvxCommand GoogleLoginCommand { get; }
 
         public IMvxCommand ForgotPasswordCommand { get; }
 
@@ -138,6 +144,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             BackCommand = new MvxCommand(back);
             NextCommand = new MvxCommand(next);
+            GoogleLoginCommand = new MvxCommand(googleLogin);
             ForgotPasswordCommand = new MvxCommand(forgotPassword);
             OpenPrivacyPolicyCommand = new MvxCommand(openPrivacyPolicyCommand);
             OpenTermsOfServiceCommand = new MvxCommand(openTermsOfServiceCommand);
@@ -253,6 +260,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     .Subscribe(onDataSource, onError, onCompleted);
         }
 
+        private void googleLogin()
+        {
+            if (IsLoading) return;
+
+            IsLoading = true;
+
+            loginDisposable =
+                loginManager
+                    .LoginWithGoogle()
+                    .Subscribe(onDataSource, onError, onCompleted);
+        }
+
         private void signUp()
         {
             IsLoading = true;
@@ -297,16 +316,23 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             if (apiErrorHandlingService.TryHandleDeprecationError(exception))
                 return;
-
-            InfoText = exception is UnauthorizedException
-                ? Resources.IncorrectEmailOrPassword
-                : getGenericError();
+                
+            switch (exception)
+            {
+                case UnauthorizedException forbidden:
+                    InfoText = Resources.IncorrectEmailOrPassword;
+                    break;
+                case GoogleLoginException googleEx when googleEx.LoginWasCanceled:
+                    InfoText = "";
+                    break;
+                default:
+                    InfoText = getGenericError();
+                    break;
+            }
         }
 
         private string getGenericError()
-            => loginType == LoginType.Login
-                ? Resources.GenericLoginError
-                : Resources.GenericSignUpError;
+            => loginType == LoginType.Login ? Resources.GenericLoginError : Resources.GenericSignUpError;
 
         private void onCompleted()
         {

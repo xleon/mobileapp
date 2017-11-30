@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Mail;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -19,7 +18,6 @@ using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac.Models;
 using Microsoft.Reactive.Testing;
 using System.Reactive.Concurrency;
-using FsCheck.Xunit;
 
 namespace Toggl.Foundation.Tests.Login
 {
@@ -34,6 +32,7 @@ namespace Toggl.Foundation.Tests.Login
             protected readonly ITogglApi Api = Substitute.For<ITogglApi>();
             protected readonly IApiFactory ApiFactory = Substitute.For<IApiFactory>();
             protected readonly ITogglDatabase Database = Substitute.For<ITogglDatabase>();
+            protected readonly IGoogleService GoogleService = Substitute.For<IGoogleService>();
             protected readonly ITimeService TimeService = Substitute.For<ITimeService>();
             protected readonly IScheduler Scheduler = new TestScheduler();
 
@@ -41,9 +40,10 @@ namespace Toggl.Foundation.Tests.Login
 
             protected LoginManagerTest()
             {
-                LoginManager = new LoginManager(ApiFactory, Database, TimeService, Scheduler);
+                LoginManager = new LoginManager(ApiFactory, Database, TimeService, GoogleService, Scheduler);
 
                 Api.User.Get().Returns(Observable.Return(User));
+                Api.User.GetWithGoogle().Returns(Observable.Return(User));
                 Api.User.SignUp(Email, Password).Returns(Observable.Return(User));
                 ApiFactory.CreateApiWith(Arg.Any<Credentials>()).Returns(Api);
                 Database.Clear().Returns(Observable.Return(Unit.Default));
@@ -53,16 +53,18 @@ namespace Toggl.Foundation.Tests.Login
         public sealed class Constructor : LoginManagerTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(FourParameterConstructorTestData))]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useApiFactory, bool useDatabase, bool useTimeService, bool useScheduler)
+            [ClassData(typeof(FiveParameterConstructorTestData))]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(
+                bool useApiFactory, bool useDatabase, bool useTimeService, bool useScheduler, bool useGoogleService)
             {
                 var database = useDatabase ? Database : null;
                 var apiFactory = useApiFactory ? ApiFactory : null;
                 var timeService = useTimeService ? TimeService : null;
+                var googleService = useGoogleService ? GoogleService : null;
                 var scheduler = useScheduler ? Scheduler : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new LoginManager(apiFactory, database, timeService, scheduler);
+                    () => new LoginManager(apiFactory, database, timeService, googleService, scheduler);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -119,7 +121,7 @@ namespace Toggl.Foundation.Tests.Login
             }
 
             [Fact, LogIfTooSlow]
-            public async Task ShouldPersistTheUserToTheDatabase()
+            public async Task PersistsTheUserToTheDatabase()
             {
                 await LoginManager.Login(Email, Password);
 
@@ -127,7 +129,7 @@ namespace Toggl.Foundation.Tests.Login
             }
 
             [Fact, LogIfTooSlow]
-            public async Task TheUserToBePersistedShouldHaveSyncStatusSetToInSync()
+            public async Task PersistsTheUserWithTheSyncStatusSetToInSync()
             {
                 await LoginManager.Login(Email, Password);
 
@@ -135,7 +137,7 @@ namespace Toggl.Foundation.Tests.Login
             }
 
             [Fact, LogIfTooSlow]
-            public async Task ShouldAlwaysReturnASingleResult()
+            public async Task AlwaysReturnsASingleResult()
             {
                 await LoginManager
                         .Login(Email, Password)
@@ -253,7 +255,7 @@ namespace Toggl.Foundation.Tests.Login
             }
 
             [Fact, LogIfTooSlow]
-            public async Task ShouldPersistTheUserToTheDatabase()
+            public async Task PersistsTheUserToTheDatabase()
             {
                 await LoginManager.SignUp(Email, Password);
 
@@ -261,7 +263,7 @@ namespace Toggl.Foundation.Tests.Login
             }
 
             [Fact, LogIfTooSlow]
-            public async Task TheUserToBePersistedShouldHaveSyncStatusSetToInSync()
+            public async Task PersistsTheUserWithTheSyncStatusSetToInSync()
             {
                 await LoginManager.SignUp(Email, Password);
 
@@ -269,14 +271,14 @@ namespace Toggl.Foundation.Tests.Login
             }
 
             [Fact, LogIfTooSlow]
-            public async Task ShouldAlwaysReturnASingleResult()
+            public async Task AlwaysReturnsASingleResult()
             {
                 await LoginManager
                         .SignUp(Email, Password)
                         .SingleAsync();
             }
         }
-
+        
         public sealed class TheRefreshTokenMethod : LoginManagerTest
         {
             public TheRefreshTokenMethod()
@@ -285,7 +287,7 @@ namespace Toggl.Foundation.Tests.Login
                 user.Email.Returns(Email.ToString());
                 Database.User.Single().Returns(Observable.Return(user));
             }
-
+ 
             [Theory, LogIfTooSlow]
             [InlineData(null)]
             [InlineData("")]
@@ -294,40 +296,100 @@ namespace Toggl.Foundation.Tests.Login
             {
                 Action tryingToRefreshWithInvalidParameters =
                     () => LoginManager.RefreshToken(password).Wait();
-
+ 
                 tryingToRefreshWithInvalidParameters
                     .ShouldThrow<ArgumentException>();
             }
-
+ 
             [Fact, LogIfTooSlow]
             public async Task CallsTheGetMethodOfTheUserApi()
             {
                 await LoginManager.RefreshToken(Password);
-
-                await Api.User.Received().Get();
+ 
+                 await Api.User.Received().Get();
             }
-
+ 
             [Fact, LogIfTooSlow]
-            public async Task ShouldPersistTheUserToTheDatabase()
+            public async Task PersistsTheUserToTheDatabase()
             {
                 await LoginManager.RefreshToken(Password);
-
+ 
                 await Database.User.Received().Update(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.Id == User.Id));
             }
-
+ 
             [Fact, LogIfTooSlow]
-            public async Task TheUserToBePersistedShouldHaveSyncStatusSetToInSync()
+            public async Task PersistsTheUserWithTheSyncStatusSetToInSync()
             {
                 await LoginManager.RefreshToken(Password);
-
+ 
                 await Database.User.Received().Update(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.SyncStatus == SyncStatus.InSync));
             }
-
+ 
             [Fact, LogIfTooSlow]
-            public async Task ShouldAlwaysReturnASingleResult()
+            public async Task AlwaysReturnsASingleResult()
             {
                 await LoginManager
                         .RefreshToken(Password)
+                        .SingleAsync();
+            }
+        }
+
+        public sealed class TheLoginUsingGoogleMethod : LoginManagerTest
+        {
+            public TheLoginUsingGoogleMethod()
+            {
+                GoogleService.GetAuthToken().Returns(Observable.Return("sometoken"));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task EmptiesTheDatabaseBeforeTryingToCreateTheUser()
+            {
+                await LoginManager.LoginWithGoogle();
+
+                Received.InOrder(async () =>
+                {
+                    await Database.Clear();
+                    await Api.User.GetWithGoogle();
+                });
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task UsesTheGoogleServiceToGetTheToken()
+            {
+                await LoginManager.LoginWithGoogle();
+
+                await GoogleService.Received().GetAuthToken();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task CallsTheGetWithGoogleOfTheUserApi()
+            {
+                await LoginManager.LoginWithGoogle();
+
+                await Api.User.Received().GetWithGoogle();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task PersistsTheUserToTheDatabase()
+            {
+                await LoginManager.LoginWithGoogle();
+
+                await Database.User.Received().Create(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.Id == User.Id));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task PersistsTheUserWithTheSyncStatusSetToInSync()
+            {
+                await LoginManager.LoginWithGoogle();
+
+                await Database.User.Received().Create(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.SyncStatus == SyncStatus.InSync));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task AlwaysReturnsASingleResult()
+            {
+                await LoginManager
+                        .LoginWithGoogle()
                         .SingleAsync();
             }
         }

@@ -29,6 +29,9 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIButton ForgotPasswordButton { get; set; }
 
 		[Outlet]
+		UIKit.UIButton GoogleSignInButton { get; set; }
+
+		[Outlet]
 		UIKit.UILabel InfoLabel { get; set; }
 
 		[Outlet]
@@ -72,14 +75,19 @@ namespace Toggl.Daneel.ViewControllers
 				EmailTextField = null;
 			}
 
-			if (InfoLabel != null) {
-				InfoLabel.Dispose ();
-				InfoLabel = null;
-			}
-
 			if (ForgotPasswordButton != null) {
 				ForgotPasswordButton.Dispose ();
 				ForgotPasswordButton = null;
+			}
+
+			if (GoogleSignInButton != null) {
+				GoogleSignInButton.Dispose ();
+				GoogleSignInButton = null;
+			}
+
+			if (InfoLabel != null) {
+				InfoLabel.Dispose ();
+				InfoLabel = null;
 			}
 
 			if (PasswordManagerButton != null) {

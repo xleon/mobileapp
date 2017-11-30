@@ -8,8 +8,12 @@ namespace Toggl.Foundation.Login
     {
         ITogglDataSource GetDataSourceIfLoggedIn();
 
+        IObservable<ITogglDataSource> LoginWithGoogle();
         IObservable<ITogglDataSource> Login(Email email, string password);
+
+        IObservable<ITogglDataSource> SignUpWithGoogle();
         IObservable<ITogglDataSource> SignUp(Email email, string password);
+
         IObservable<ITogglDataSource> RefreshToken(string password);
 
         IObservable<string> ResetPassword(Email email);

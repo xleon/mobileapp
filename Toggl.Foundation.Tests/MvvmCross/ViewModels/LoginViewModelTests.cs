@@ -5,6 +5,7 @@ using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
@@ -390,6 +391,85 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     var observable = scheduler.CreateColdObservable(recorded);
                     LoginManager.ResetPassword(Arg.Any<Email>()).Returns(observable);
                 }
+            }
+        }
+
+        public sealed class TheGoogleLoginCommand : LoginViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public void CallsTheLoginManager()
+            {
+                ViewModel.GoogleLoginCommand.Execute();
+
+                LoginManager.Received().LoginWithGoogle();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNothingWhenThePageIsCurrentlyLoading()
+            {
+                var scheduler = new TestScheduler();
+                var never = Observable.Never<ITogglDataSource>();
+                LoginManager.LoginWithGoogle().Returns(never);
+                ViewModel.GoogleLoginCommand.Execute();
+
+                ViewModel.GoogleLoginCommand.Execute();
+
+                LoginManager.Received(1).LoginWithGoogle();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void NavigatesToTheTimeEntriesViewModelWhenTheLoginSucceeds()
+            {
+                LoginManager.LoginWithGoogle()
+                            .Returns(Observable.Return(Substitute.For<ITogglDataSource>()));
+                
+                ViewModel.GoogleLoginCommand.Execute();
+
+                NavigationService.Received().Navigate(typeof(MainViewModel));
+            }
+
+            [Fact, LogIfTooSlow]
+            public void StopsTheViewModelLoadStateWhenItCompletes()
+            {
+                LoginManager.LoginWithGoogle()
+                            .Returns(Observable.Return(Substitute.For<ITogglDataSource>()));
+
+                ViewModel.GoogleLoginCommand.Execute();
+
+                ViewModel.IsLoading.Should().BeFalse();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void StopsTheViewModelLoadStateWhenItErrors()
+            {
+                LoginManager.LoginWithGoogle()
+                            .Returns(Observable.Throw<ITogglDataSource>(new GoogleLoginException(false)));
+
+                ViewModel.GoogleLoginCommand.Execute();
+
+                ViewModel.IsLoading.Should().BeFalse();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNotNavigateWhenTheLoginFails()
+            {
+                LoginManager.LoginWithGoogle()
+                            .Returns(Observable.Throw<ITogglDataSource>(new GoogleLoginException(false)));
+
+                ViewModel.GoogleLoginCommand.Execute();
+
+                NavigationService.DidNotReceive().Navigate(typeof(MainViewModel));
+            }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNotDisplayAnErrormessageWhenTheUserCancelsTheRequestOnTheGoogleService()
+            {
+                LoginManager.LoginWithGoogle()
+                            .Returns(Observable.Throw<ITogglDataSource>(new GoogleLoginException(true)));
+
+                ViewModel.GoogleLoginCommand.Execute();
+
+                ViewModel.InfoText.Should().BeEmpty();
             }
         }
 

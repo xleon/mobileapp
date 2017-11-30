@@ -16,18 +16,26 @@ namespace Toggl.Foundation.Login
         private readonly IApiFactory apiFactory;
         private readonly ITogglDatabase database;
         private readonly ITimeService timeService;
-
-        public LoginManager(IApiFactory apiFactory, ITogglDatabase database, ITimeService timeService, IScheduler scheduler)
+        private readonly IGoogleService googleService;
+     
+        public LoginManager(
+            IApiFactory apiFactory, 
+            ITogglDatabase database, 
+            ITimeService timeService,
+            IGoogleService googleService,
+            IScheduler scheduler)
         {
             Ensure.Argument.IsNotNull(database, nameof(database));
+            Ensure.Argument.IsNotNull(scheduler, nameof(scheduler));
             Ensure.Argument.IsNotNull(apiFactory, nameof(apiFactory));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(scheduler, nameof(scheduler));
+            Ensure.Argument.IsNotNull(googleService, nameof(googleService));
 
             this.database = database;
+            this.scheduler = scheduler;
             this.apiFactory = apiFactory;
             this.timeService = timeService;
-            this.scheduler = scheduler;
+            this.googleService = googleService;
         }
 
         public IObservable<ITogglDataSource> Login(Email email, string password)
@@ -44,6 +52,19 @@ namespace Toggl.Foundation.Login
                     .Select(User.Clean)
                     .SelectMany(database.User.Create)
                     .Select(dataSourceFromUser);
+        }
+
+        public IObservable<ITogglDataSource> LoginWithGoogle()
+        {
+            return database
+                .Clear()
+                .SelectMany(_ => googleService.GetAuthToken())
+                .Select(Credentials.WithGoogleToken)
+                .Select(apiFactory.CreateApiWith)
+                .SelectMany(api => api.User.GetWithGoogle())
+                .Select(User.Clean)
+                .SelectMany(database.User.Create)
+                .Select(dataSourceFromUser);
         }
 
         public IObservable<ITogglDataSource> SignUp(Email email, string password)
@@ -90,6 +111,9 @@ namespace Toggl.Foundation.Login
                 .SelectMany(database.User.Update)
                 .Select(dataSourceFromUser);
         }
+
+        public IObservable<ITogglDataSource> SignUpWithGoogle()
+            => throw new NotImplementedException();
 
         private ITogglDataSource dataSourceFromUser(IUser user)
         {

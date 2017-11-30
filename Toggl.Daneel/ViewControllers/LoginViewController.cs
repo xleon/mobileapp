@@ -56,6 +56,7 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.Title);
 
             //Commands
+            bindingSet.Bind(GoogleSignInButton).To(vm => vm.GoogleLoginCommand);
             bindingSet.Bind(ForgotPasswordButton).To(vm => vm.ForgotPasswordCommand);
             bindingSet.Bind(PrivacyPolicyButton).To(vm => vm.OpenPrivacyPolicyCommand);
             bindingSet.Bind(TermsOfServiceButton).To(vm => vm.OpenTermsOfServiceCommand);
@@ -127,18 +128,10 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(SignUpLabels)
                       .For(v => v.BindVisible())
                       .To(vm => vm.IsSignUp);
-
-            if (ViewModel.IsPasswordManagerAvailable)
-            {
-                bindingSet.Bind(PasswordManagerButton)
-                          .For(v => v.BindAnimatedVisibility())
-                          .To(vm => vm.IsEmailPage);
-            }
-            else
-            {
-                PasswordManagerButton.Hidden = true;
-            }
-
+            
+            bindingSet.Bind(PasswordManagerButton)
+                      .For(v => v.BindAnimatedVisibility())
+                      .To(vm => vm.PasswordManagerVisible);
             //State
             bindingSet.Bind(EmailTextField)
                       .For(v => v.BindFocus())
