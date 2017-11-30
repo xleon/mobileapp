@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
-using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
-using Toggl.Ultrawave.Exceptions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -24,7 +21,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
-        private readonly IAccessRestrictionStorage accessRestrictionStorage;
+        private readonly IApiErrorHandlingService apiErrorHandlingService;
 
         public TimeSpan CurrentTimeEntryElapsedTime { get; private set; } = TimeSpan.Zero;
 
@@ -62,17 +59,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ITogglDataSource dataSource,
             ITimeService timeService,
             IMvxNavigationService navigationService,
-            IAccessRestrictionStorage accessRestrictionStorage)
+            IApiErrorHandlingService apiErrorHandlingService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
-            Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
+            Ensure.Argument.IsNotNull(apiErrorHandlingService, nameof(apiErrorHandlingService));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
             this.navigationService = navigationService;
-            this.accessRestrictionStorage = accessRestrictionStorage;
+            this.apiErrorHandlingService = apiErrorHandlingService;
 
             RefreshCommand = new MvxCommand(refresh);
             OpenSettingsCommand = new MvxAsyncCommand(openSettings);
@@ -151,22 +148,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void onSyncingError(Exception exception)
         {
-            switch (exception)
+            if (!apiErrorHandlingService.TryHandleDeprecationError(exception)
+                && !apiErrorHandlingService.TryHandleUnauthorizedError(exception))
             {
-                case ApiDeprecatedException apiDeprecated:
-                    accessRestrictionStorage.SetApiOutdated();
-                    navigationService.Navigate<OutdatedAppViewModel>();
-                    return;
-                case ClientDeprecatedException clientDeprecated:
-                    accessRestrictionStorage.SetClientOutdated();
-                    navigationService.Navigate<OutdatedAppViewModel>();
-                    return;
-                case UnauthorizedException unauthorized:
-                    accessRestrictionStorage.SetUnauthorizedAccess();
-                    navigationService.Navigate<TokenResetViewModel>();
-                    return;
-                default:
-                    throw new ArgumentException(nameof(exception));
+                throw new ArgumentException(nameof(exception));
             }
         }
     }

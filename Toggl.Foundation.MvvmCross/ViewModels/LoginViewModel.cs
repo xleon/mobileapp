@@ -10,7 +10,6 @@ using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
-using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.Exceptions;
 using EmailType = Toggl.Multivac.Email;
 
@@ -28,7 +27,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ILoginManager loginManager;
         private readonly IMvxNavigationService navigationService;
         private readonly IPasswordManagerService passwordManagerService;
-        private readonly IAccessRestrictionStorage accessRestrictionStorage;
+        private readonly IApiErrorHandlingService apiErrorHandlingService;
 
         private LoginType loginType;
         private IDisposable loginDisposable;
@@ -125,17 +124,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ILoginManager loginManager,
             IMvxNavigationService navigationService,
             IPasswordManagerService passwordManagerService,
-            IAccessRestrictionStorage accessRestrictionStorage)
+            IApiErrorHandlingService apiErrorHandlingService)
         {
             Ensure.Argument.IsNotNull(loginManager, nameof(loginManager));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(passwordManagerService, nameof(passwordManagerService));
-            Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
+            Ensure.Argument.IsNotNull(apiErrorHandlingService, nameof(apiErrorHandlingService));
 
             this.loginManager = loginManager;
             this.navigationService = navigationService;
             this.passwordManagerService = passwordManagerService;
-            this.accessRestrictionStorage = accessRestrictionStorage;
+            this.apiErrorHandlingService = apiErrorHandlingService;
 
             BackCommand = new MvxCommand(back);
             NextCommand = new MvxCommand(next);
@@ -296,23 +295,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IsLoading = false;
             onCompleted();
 
-            switch (exception)
-            {
-                case ApiDeprecatedException apiDeprecated:
-                    accessRestrictionStorage.SetApiOutdated();
-                    navigationService.Navigate<OutdatedAppViewModel>();
-                    return;
-                case ClientDeprecatedException clientDeprecated:
-                    accessRestrictionStorage.SetClientOutdated();
-                    navigationService.Navigate<OutdatedAppViewModel>();
-                    return;
-                case UnauthorizedException forbidden:
-                    InfoText = Resources.IncorrectEmailOrPassword;
-                    break;
-                default:
-                    InfoText = getGenericError();
-                    break;
-            }
+            if (apiErrorHandlingService.TryHandleDeprecationError(exception))
+                return;
+
+            InfoText = exception is UnauthorizedException
+                ? Resources.IncorrectEmailOrPassword
+                : getGenericError();
         }
 
         private string getGenericError()

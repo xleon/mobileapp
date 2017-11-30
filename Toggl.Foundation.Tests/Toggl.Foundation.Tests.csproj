@@ -201,6 +201,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\ApiExceptions.cs" />
+    <Compile Include="MvvmCross\Services\ApiErrorHandlingServiceTests.cs" />
     <Compile Include="MvvmCross\ViewModels\EditDurationViewModelTests.cs" />
     <Compile Include="MvvmCross\ViewModels\SelectDateTimeViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

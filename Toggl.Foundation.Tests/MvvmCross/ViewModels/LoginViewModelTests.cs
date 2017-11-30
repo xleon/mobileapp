@@ -12,11 +12,9 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.TestExtensions;
 using Toggl.Multivac;
-using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using Xunit;
-using MvvmCross.Core.Navigation;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -33,26 +31,26 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected ILoginManager LoginManager { get; } = Substitute.For<ILoginManager>();
             protected IPasswordManagerService PasswordManagerService { get; } = Substitute.For<IPasswordManagerService>();
 
-            protected IAccessRestrictionStorage AccessRestrictionStorage { get; } =
-                Substitute.For<IAccessRestrictionStorage>();
+            protected IApiErrorHandlingService ApiErrorHandlingService { get; } =
+                Substitute.For<IApiErrorHandlingService>();
 
             protected override LoginViewModel CreateViewModel()
-                => new LoginViewModel(LoginManager, NavigationService, PasswordManagerService, AccessRestrictionStorage);
+                => new LoginViewModel(LoginManager, NavigationService, PasswordManagerService, ApiErrorHandlingService);
         }
 
         public sealed class TheConstructor : LoginViewModelTest
         {
             [Theory, LogIfTooSlow]
             [ClassData(typeof(FourParameterConstructorTestData))]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool userLoginManager, bool userNavigationService, bool usePasswordManagerService, bool useAccessRestrictionStorage)
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool userLoginManager, bool userNavigationService, bool usePasswordManagerService, bool useDeprecationHandlingService)
             {
                 var loginManager = userLoginManager ? LoginManager : null;
                 var navigationService = userNavigationService ? NavigationService : null;
                 var passwordManagerService = usePasswordManagerService ? PasswordManagerService : null;
-                var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
+                var deprecationHandlingService = useDeprecationHandlingService ? ApiErrorHandlingService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new LoginViewModel(loginManager, navigationService, passwordManagerService, accessRestrictionStorage);
+                    () => new LoginViewModel(loginManager, navigationService, passwordManagerService, deprecationHandlingService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -1087,35 +1085,27 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 private IResponse response => Substitute.For<IResponse>();
 
                 [Fact, LogIfTooSlow]
-                public void SetsTheOutdatedClientVersionFlag()
+                public void HandlesTheClientDeprecatedExceptionWithTheService()
                 {
+                    ApiErrorHandlingService
+                        .TryHandleDeprecationError(Arg.Any<ClientDeprecatedException>())
+                        .Returns(true);
+
                     CallAndThrow(new ClientDeprecatedException(request, response));
 
-                    AccessRestrictionStorage.Received().SetClientOutdated();
+                    ApiErrorHandlingService.Received().TryHandleDeprecationError(Arg.Any<ClientDeprecatedException>());
                 }
 
                 [Fact, LogIfTooSlow]
-                public void SetsTheOutdatedApiVersionFlag()
+                public void HandlesTheApiDeprecatedExceptionWithTheService()
                 {
+                    ApiErrorHandlingService
+                        .TryHandleDeprecationError(Arg.Any<ApiDeprecatedException>())
+                        .Returns(true);
+
                     CallAndThrow(new ApiDeprecatedException(request, response));
 
-                    AccessRestrictionStorage.Received().SetApiOutdated();
-                }
-
-                [Fact, LogIfTooSlow]
-                public void NavigatesToTheOutdatedClientScreen()
-                {
-                    CallAndThrow(new ClientDeprecatedException(request, response));
-
-                    NavigationService.Received().Navigate<OutdatedAppViewModel>();
-                }
-
-                [Fact, LogIfTooSlow]
-                public void NavigatesToTheOutdatedApiScreen()
-                {
-                    CallAndThrow(new ApiDeprecatedException(request, response));
-
-                    NavigationService.Received().Navigate<OutdatedAppViewModel>();
+                    ApiErrorHandlingService.Received().TryHandleDeprecationError(Arg.Any<ApiDeprecatedException>());
                 }
 
                 protected abstract void CallAndThrow(Exception e);

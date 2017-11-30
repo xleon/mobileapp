@@ -565,7 +565,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
 
             [Theory, LogIfTooSlow]
-            [MemberData(nameof(clientErrorAbortedExceptions))]
+            [MemberData(nameof(ExceptionsRethrownByProgressObservableOnError))]
             public void EmitsFailedWhenAKnownClientErrorExceptionIsReported(ClientErrorException exception)
             {
                 SyncProgress? emitted = null;
@@ -578,7 +578,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
 
             [Theory, LogIfTooSlow]
-            [MemberData(nameof(clientErrorAbortedExceptions))]
+            [MemberData(nameof(ExceptionsRethrownByProgressObservableOnError))]
             public void ReportsTheErrorWhenAKnownClientErrorExceptionIsReported(ClientErrorException exception)
             {
                 Exception caughtException = null;
@@ -591,7 +591,7 @@ namespace Toggl.Foundation.Tests.Sync
             }
 
             [Theory, LogIfTooSlow]
-            [MemberData(nameof(clientErrorAbortedExceptions))]
+            [MemberData(nameof(ExceptionsRethrownByProgressObservableOnError))]
             public void FreezesTheSyncManagerWhenAKnownClientErrorExceptionIsReported(ClientErrorException exception)
             {
                 OrchestratorSyncComplete.OnNext(new Error(exception));
@@ -611,7 +611,7 @@ namespace Toggl.Foundation.Tests.Sync
                 emitted.Should().Be(SyncProgress.Failed);
             }
 
-            private static IEnumerable<object[]> clientErrorAbortedExceptions()
+            public static IEnumerable<object[]> ExceptionsRethrownByProgressObservableOnError()
                 => new[]
                 {
                     new object[] { new ClientDeprecatedException(Substitute.For<IRequest>(), Substitute.For<IResponse>()) },
