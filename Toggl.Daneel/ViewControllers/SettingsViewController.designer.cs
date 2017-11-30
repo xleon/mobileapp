@@ -71,6 +71,9 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIView SyncingView { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint TopConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UISwitch TwentyFourHourClockSwitch { get; set; }
 
 		[Outlet]
@@ -90,24 +93,9 @@ namespace Toggl.Daneel.ViewControllers
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (EmailLabel != null) {
-				EmailLabel.Dispose ();
-				EmailLabel = null;
-			}
-
-			if (WorkspaceLabel != null) {
-				WorkspaceLabel.Dispose ();
-				WorkspaceLabel = null;
-			}
-
-			if (PlanLabel != null) {
-				PlanLabel.Dispose ();
-				PlanLabel = null;
-			}
-
-			if (TwentyFourHourClockSwitch != null) {
-				TwentyFourHourClockSwitch.Dispose ();
-				TwentyFourHourClockSwitch = null;
+			if (TopConstraint != null) {
+				TopConstraint.Dispose ();
+				TopConstraint = null;
 			}
 
 			if (AddMobileTagSwitch != null) {
@@ -115,54 +103,29 @@ namespace Toggl.Daneel.ViewControllers
 				AddMobileTagSwitch = null;
 			}
 
-			if (FeedbackView != null) {
-				FeedbackView.Dispose ();
-				FeedbackView = null;
-			}
-
-			if (RateView != null) {
-				RateView.Dispose ();
-				RateView = null;
-			}
-
-			if (UpdateView != null) {
-				UpdateView.Dispose ();
-				UpdateView = null;
-			}
-
-			if (HelpView != null) {
-				HelpView.Dispose ();
-				HelpView = null;
-			}
-
-			if (VersionLabel != null) {
-				VersionLabel.Dispose ();
-				VersionLabel = null;
-			}
-
 			if (AddMobileTagView != null) {
 				AddMobileTagView.Dispose ();
 				AddMobileTagView = null;
 			}
 
-			if (TwentyFourHourClockView != null) {
-				TwentyFourHourClockView.Dispose ();
-				TwentyFourHourClockView = null;
-			}
-
-			if (SubscriptionView != null) {
-				SubscriptionView.Dispose ();
-				SubscriptionView = null;
-			}
-
-			if (WorkspaceView != null) {
-				WorkspaceView.Dispose ();
-				WorkspaceView = null;
+			if (EmailLabel != null) {
+				EmailLabel.Dispose ();
+				EmailLabel = null;
 			}
 
 			if (EmailView != null) {
 				EmailView.Dispose ();
 				EmailView = null;
+			}
+
+			if (FeedbackView != null) {
+				FeedbackView.Dispose ();
+				FeedbackView = null;
+			}
+
+			if (HelpView != null) {
+				HelpView.Dispose ();
+				HelpView = null;
 			}
 
 			if (LoggingOutIndicator != null) {
@@ -183,6 +146,21 @@ namespace Toggl.Daneel.ViewControllers
 			if (LogoutButton != null) {
 				LogoutButton.Dispose ();
 				LogoutButton = null;
+			}
+
+			if (PlanLabel != null) {
+				PlanLabel.Dispose ();
+				PlanLabel = null;
+			}
+
+			if (RateView != null) {
+				RateView.Dispose ();
+				RateView = null;
+			}
+
+			if (SubscriptionView != null) {
+				SubscriptionView.Dispose ();
+				SubscriptionView = null;
 			}
 
 			if (SyncedIcon != null) {
@@ -213,6 +191,36 @@ namespace Toggl.Daneel.ViewControllers
 			if (SyncingView != null) {
 				SyncingView.Dispose ();
 				SyncingView = null;
+			}
+
+			if (TwentyFourHourClockSwitch != null) {
+				TwentyFourHourClockSwitch.Dispose ();
+				TwentyFourHourClockSwitch = null;
+			}
+
+			if (TwentyFourHourClockView != null) {
+				TwentyFourHourClockView.Dispose ();
+				TwentyFourHourClockView = null;
+			}
+
+			if (UpdateView != null) {
+				UpdateView.Dispose ();
+				UpdateView = null;
+			}
+
+			if (VersionLabel != null) {
+				VersionLabel.Dispose ();
+				VersionLabel = null;
+			}
+
+			if (WorkspaceLabel != null) {
+				WorkspaceLabel.Dispose ();
+				WorkspaceLabel = null;
+			}
+
+			if (WorkspaceView != null) {
+				WorkspaceView.Dispose ();
+				WorkspaceView = null;
 			}
 		}
 	}

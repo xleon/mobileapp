@@ -28,6 +28,17 @@ namespace Toggl.Daneel.ViewControllers
             var source = new TimeEntriesLogViewSource(TimeEntriesTableView);
             TimeEntriesTableView.Source = source;
 
+            //Add negative bottom inset, so that footers won't stick to the bottom of the screen
+            var bottomContentInset = -source.GetHeightForFooter(TimeEntriesTableView, 0);
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                var bottomSafeAreaInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+                bottomContentInset -= bottomSafeAreaInset;
+            }
+            var tableViewContentInset = TimeEntriesTableView.ContentInset;
+            tableViewContentInset.Bottom = bottomContentInset;
+            TimeEntriesTableView.ContentInset = tableViewContentInset;
+
             //Converters
             var visibilityConverter = new MvxVisibilityValueConverter();
             var invertedVisibilityConverter = new MvxInvertedVisibilityValueConverter();

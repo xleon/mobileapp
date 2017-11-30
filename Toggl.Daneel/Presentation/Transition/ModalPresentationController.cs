@@ -10,8 +10,10 @@ namespace Toggl.Daneel.Presentation.Transition
 {
     public sealed class ModalPresentationController : UIPresentationController
     {
+        private const int offsetFromSafeAreaTop = 20;
+
         private readonly Action onDismissedCallback;
-        private readonly nfloat maximumHeight = UIScreen.MainScreen.Bounds.Height - 20;
+        private readonly nfloat maximumHeight;
 
         private readonly UIView dimmingView = new UIView
         {
@@ -32,6 +34,19 @@ namespace Toggl.Daneel.Presentation.Transition
 
             var recognizer = new UITapGestureRecognizer(dismiss);
             AdditionalContentView.AddGestureRecognizer(recognizer);
+
+            nfloat distanceFromTop;
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                var safeAreaTopInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top;
+                distanceFromTop = safeAreaTopInset + offsetFromSafeAreaTop;
+            }
+            else
+            {
+                distanceFromTop = offsetFromSafeAreaTop;
+            }
+
+            maximumHeight = UIScreen.MainScreen.Bounds.Height - distanceFromTop;
         }
 
         public override void PresentationTransitionWillBegin()

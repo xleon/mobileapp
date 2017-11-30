@@ -32,7 +32,13 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIButton ConfirmButton { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint ConfirmButtonBottomConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIButton DeleteButton { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint DeleteButtonBottomConstraint { get; set; }
 
 		[Outlet]
 		Toggl.Daneel.Views.TextViewWithCharacterCounter DescriptionTextView { get; set; }
@@ -65,6 +71,16 @@ namespace Toggl.Daneel.ViewControllers
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (DeleteButtonBottomConstraint != null) {
+				DeleteButtonBottomConstraint.Dispose ();
+				DeleteButtonBottomConstraint = null;
+			}
+
+			if (ConfirmButtonBottomConstraint != null) {
+				ConfirmButtonBottomConstraint.Dispose ();
+				ConfirmButtonBottomConstraint = null;
+			}
+
 			if (AddProjectAndTaskView != null) {
 				AddProjectAndTaskView.Dispose ();
 				AddProjectAndTaskView = null;
@@ -78,6 +94,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (BillableSwitch != null) {
 				BillableSwitch.Dispose ();
 				BillableSwitch = null;
+			}
+
+			if (BillableView != null) {
+				BillableView.Dispose ();
+				BillableView = null;
 			}
 
 			if (CloseButton != null) {
@@ -95,19 +116,29 @@ namespace Toggl.Daneel.ViewControllers
 				DeleteButton = null;
 			}
 
-			if (DurationLabel != null) {
-				DurationLabel.Dispose ();
-				DurationLabel = null;
-			}
-
 			if (DescriptionTextView != null) {
 				DescriptionTextView.Dispose ();
 				DescriptionTextView = null;
 			}
 
+			if (DurationLabel != null) {
+				DurationLabel.Dispose ();
+				DurationLabel = null;
+			}
+
 			if (ProjectTaskClientLabel != null) {
 				ProjectTaskClientLabel.Dispose ();
 				ProjectTaskClientLabel = null;
+			}
+
+			if (ScrollView != null) {
+				ScrollView.Dispose ();
+				ScrollView = null;
+			}
+
+			if (ScrollViewContent != null) {
+				ScrollViewContent.Dispose ();
+				ScrollViewContent = null;
 			}
 
 			if (StartDateLabel != null) {
@@ -128,21 +159,6 @@ namespace Toggl.Daneel.ViewControllers
 			if (TagsLabel != null) {
 				TagsLabel.Dispose ();
 				TagsLabel = null;
-			}
-
-			if (BillableView != null) {
-				BillableView.Dispose ();
-				BillableView = null;
-			}
-
-			if (ScrollView != null) {
-				ScrollView.Dispose ();
-				ScrollView = null;
-			}
-
-			if (ScrollViewContent != null) {
-				ScrollViewContent.Dispose ();
-				ScrollViewContent = null;
 			}
 		}
 	}

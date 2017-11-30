@@ -133,6 +133,8 @@ namespace Toggl.Daneel.ViewControllers
             RateView.Hidden = true;
             UpdateView.Hidden = true;
             HelpView.Hidden = true;
+
+            TopConstraint.AdaptForIos10(NavigationController.NavigationBar);
         }
 
         private void setIndicatorSyncColor(UIImageView imageView)

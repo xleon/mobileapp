@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,6 +20,7 @@
                 <outlet property="EditTimeEntryButton" destination="qpc-Yb-DcP" id="name-outlet-qpc-Yb-DcP"/>
                 <outlet property="MainPagedScrollView" destination="fyC-Me-BcE" id="name-outlet-fyC-Me-BcE"/>
                 <outlet property="RunningEntryDescriptionFadeView" destination="E3W-8n-IfX" id="xWA-xE-taG"/>
+                <outlet property="ScrollViewTopConstraint" destination="HLE-W1-VGj" id="srH-AL-3u7"/>
                 <outlet property="SpiderBroImageView" destination="mpU-UI-dLB" id="name-outlet-mpU-UI-dLB"/>
                 <outlet property="SpiderHinge" destination="FPj-ki-Fw8" id="name-outlet-FPj-ki-Fw8"/>
                 <outlet property="StartTimeEntryButton" destination="4Kk-Hz-RBS" id="name-outlet-4Kk-Hz-RBS"/>
@@ -37,11 +39,15 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LRI-bO-uxe" userLabel="Background">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <color key="backgroundColor" red="0.98039215686274506" green="0.98431372549019602" blue="0.9882352941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </view>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fyC-Me-BcE" customClass="MainScrollView">
-                    <rect key="frame" x="0.0" y="70" width="375" height="597"/>
+                    <rect key="frame" x="0.0" y="32" width="375" height="635"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AoW-bW-7hX">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="1194"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="1270"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lb6-Oz-TYx">
                                     <rect key="frame" x="0.0" y="-52" width="375" height="52"/>
@@ -73,7 +79,7 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EzU-Pd-V8e">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="597"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="635"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Btr-Pq-4yV" userLabel="SuggestionsTopBorder">
                                             <rect key="frame" x="-0.5" y="0.0" width="375" height="1"/>
@@ -83,7 +89,7 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5K9-cC-7E8">
-                                            <rect key="frame" x="0.0" y="1" width="375" height="520.5"/>
+                                            <rect key="frame" x="0.0" y="1" width="375" height="558.5"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -92,7 +98,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wKL-ZP-Ff4">
-                                            <rect key="frame" x="142" y="545.5" width="91" height="26.5"/>
+                                            <rect key="frame" x="142" y="583.5" width="91" height="26.5"/>
                                             <string key="text">SWIPE UP
 TO SEE THE LOG</string>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="11"/>
@@ -100,7 +106,7 @@ TO SEE THE LOG</string>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="line" translatesAutoresizingMaskIntoConstraints="NO" id="LV7-Bw-hnV">
-                                            <rect key="frame" x="186" y="577" width="2" height="20"/>
+                                            <rect key="frame" x="186" y="615" width="2" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="20" id="NOX-ND-0D8"/>
                                                 <constraint firstAttribute="width" constant="2" id="idT-K9-PUV"/>
@@ -150,7 +156,7 @@ TO SEE THE LOG</string>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="faz-Sa-kEe">
-                                    <rect key="frame" x="-0.5" y="597" width="375" height="597"/>
+                                    <rect key="frame" x="-0.5" y="635" width="375" height="635"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                             </subviews>
@@ -181,13 +187,6 @@ TO SEE THE LOG</string>
                         <constraint firstItem="AoW-bW-7hX" firstAttribute="top" secondItem="fyC-Me-BcE" secondAttribute="top" id="xdV-Mb-C6B"/>
                     </constraints>
                 </scrollView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MHr-Hf-Kio" userLabel="Padding">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
-                    <color key="backgroundColor" red="0.98039215686274506" green="0.98431372549019602" blue="0.9882352941176471" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="70" id="cwy-a5-McG"/>
-                    </constraints>
-                </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Kk-Hz-RBS">
                     <rect key="frame" x="309" y="601" width="50" height="50"/>
                     <accessibility key="accessibilityConfiguration" label="MainStartTimeEntry"/>
@@ -207,10 +206,10 @@ TO SEE THE LOG</string>
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qpc-Yb-DcP">
-                            <rect key="frame" x="0.0" y="8" width="40" height="40"/>
+                            <rect key="frame" x="0.0" y="0.0" width="40" height="56"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="40" id="dof-2X-akV"/>
-                                <constraint firstAttribute="height" constant="40" id="kWn-aX-XNJ"/>
+                                <constraint firstAttribute="height" constant="56" id="kWn-aX-XNJ"/>
                             </constraints>
                             <state key="normal" image="icArrowUp"/>
                         </button>
@@ -275,12 +274,11 @@ TO SEE THE LOG</string>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="E3W-8n-IfX" secondAttribute="trailing" constant="48" id="1A5-Au-Kqb"/>
-                        <constraint firstItem="qpc-Yb-DcP" firstAttribute="centerY" secondItem="vou-B4-go4" secondAttribute="centerY" constant="-4" id="3oY-17-nBu"/>
+                        <constraint firstItem="qpc-Yb-DcP" firstAttribute="top" secondItem="vou-B4-go4" secondAttribute="top" id="Dj0-eo-BuC"/>
                         <constraint firstItem="0J7-Pj-geT" firstAttribute="top" secondItem="vou-B4-go4" secondAttribute="top" constant="12" id="E1E-1G-lz6"/>
                         <constraint firstAttribute="trailing" secondItem="Ddo-IW-xE3" secondAttribute="trailing" id="I2f-56-ZfV"/>
                         <constraint firstItem="qpc-Yb-DcP" firstAttribute="leading" secondItem="vou-B4-go4" secondAttribute="leading" id="JQx-SZ-5dm"/>
-                        <constraint firstItem="Ddo-IW-xE3" firstAttribute="centerY" secondItem="vou-B4-go4" secondAttribute="centerY" constant="-4" id="bLM-7i-XMM"/>
-                        <constraint firstAttribute="height" constant="64" id="frl-NQ-7dP"/>
+                        <constraint firstItem="Ddo-IW-xE3" firstAttribute="top" secondItem="vou-B4-go4" secondAttribute="top" id="dm5-Vy-ytf"/>
                         <constraint firstAttribute="bottom" secondItem="E3W-8n-IfX" secondAttribute="bottom" id="k3B-ta-yO5"/>
                         <constraint firstItem="E3W-8n-IfX" firstAttribute="top" secondItem="0J7-Pj-geT" secondAttribute="bottom" id="lQe-PR-fVd"/>
                         <constraint firstItem="0J7-Pj-geT" firstAttribute="centerX" secondItem="vou-B4-go4" secondAttribute="centerX" id="oCw-6x-no1"/>
@@ -294,15 +292,18 @@ TO SEE THE LOG</string>
                 <constraint firstAttribute="trailing" secondItem="vou-B4-go4" secondAttribute="trailing" id="83s-7t-oAW"/>
                 <constraint firstAttribute="trailing" secondItem="4Kk-Hz-RBS" secondAttribute="trailing" constant="16" id="90o-lU-zgz"/>
                 <constraint firstAttribute="bottom" secondItem="4Kk-Hz-RBS" secondAttribute="bottom" constant="16" id="DYd-Ht-tay"/>
-                <constraint firstItem="fyC-Me-BcE" firstAttribute="top" secondItem="2" secondAttribute="top" constant="70" id="HLE-W1-VGj"/>
+                <constraint firstItem="fyC-Me-BcE" firstAttribute="top" secondItem="S4t-q9-ct9" secondAttribute="top" constant="12" id="HLE-W1-VGj"/>
                 <constraint firstItem="fyC-Me-BcE" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="IcP-kI-rE4"/>
-                <constraint firstAttribute="trailing" secondItem="MHr-Hf-Kio" secondAttribute="trailing" id="NFa-y0-03F"/>
-                <constraint firstItem="MHr-Hf-Kio" firstAttribute="top" secondItem="2" secondAttribute="top" id="NNw-NW-IED"/>
-                <constraint firstItem="MHr-Hf-Kio" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="PZO-oY-tOY"/>
+                <constraint firstItem="vou-B4-go4" firstAttribute="top" secondItem="S4t-q9-ct9" secondAttribute="bottom" constant="-56" id="Lpx-CQ-TA7"/>
                 <constraint firstAttribute="bottom" secondItem="vou-B4-go4" secondAttribute="bottom" constant="-8" id="eTc-gF-8yE"/>
+                <constraint firstItem="S4t-q9-ct9" firstAttribute="trailing" secondItem="LRI-bO-uxe" secondAttribute="trailing" id="f4m-kX-bhQ"/>
+                <constraint firstItem="LRI-bO-uxe" firstAttribute="leading" secondItem="S4t-q9-ct9" secondAttribute="leading" id="mcZ-ry-0zO"/>
+                <constraint firstItem="LRI-bO-uxe" firstAttribute="top" secondItem="2" secondAttribute="top" id="oxz-ie-1U9"/>
                 <constraint firstItem="vou-B4-go4" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="q3O-7e-AfR"/>
+                <constraint firstItem="S4t-q9-ct9" firstAttribute="bottom" secondItem="LRI-bO-uxe" secondAttribute="bottom" id="reZ-iB-imv"/>
                 <constraint firstAttribute="bottom" secondItem="fyC-Me-BcE" secondAttribute="bottom" id="saN-1L-zHw"/>
             </constraints>
+            <viewLayoutGuide key="safeArea" id="S4t-q9-ct9"/>
             <point key="canvasLocation" x="104" y="24"/>
         </view>
     </objects>

@@ -28,6 +28,8 @@ namespace Toggl.Daneel.ViewControllers
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 40));
         private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
 
+        private bool scrollViewInitialized;
+
         public MainViewController()
             : base(nameof(MainViewController), null)
         {
@@ -124,6 +126,16 @@ namespace Toggl.Daneel.ViewControllers
             };
         }
 
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+
+            if (scrollViewInitialized) return;
+
+            scrollViewInitialized = true;
+            MainPagedScrollView.SetContentOffset(new CGPoint(0, 0), false);
+        }
+
         internal UIView GetContainerFor(UIViewController viewController)
         {
             if (viewController is SuggestionsViewController)
@@ -154,7 +166,6 @@ namespace Toggl.Daneel.ViewControllers
             MainPagedScrollView.SyncStateView = SyncStateView;
             MainPagedScrollView.SyncStateLabel = SyncStateLabel;
             MainPagedScrollView.ContentInset = new UIEdgeInsets(MainScrollView.SyncStateViewHeight * 2, 0, 0, 0);
-            MainPagedScrollView.SetContentOffset(new CGPoint(0, 0), false);
 
             //Spider animation
             SpiderBroImageView.Layer.AnchorPoint = new CGPoint(0.5f, 0);
@@ -175,6 +186,8 @@ namespace Toggl.Daneel.ViewControllers
 
             RunningEntryDescriptionFadeView.FadeLeft = true;
             RunningEntryDescriptionFadeView.FadeRight = true;
+
+            ScrollViewTopConstraint.AdaptForIos10(NavigationController.NavigationBar);
         }
 
         private void animateSpider()

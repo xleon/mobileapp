@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -30,6 +31,7 @@
                 <outlet property="SyncingIndicator" destination="05J-Mj-sE1" id="Pw9-T1-qdo"/>
                 <outlet property="SyncingLabel" destination="FaX-g8-EOP" id="0n2-5c-AcE"/>
                 <outlet property="SyncingView" destination="305" id="HUL-5W-ZWG"/>
+                <outlet property="TopConstraint" destination="kLA-fW-jFc" id="bKW-a3-51R"/>
                 <outlet property="TwentyFourHourClockSwitch" destination="dDv-0e-Fkg" id="5TU-Z6-8gG"/>
                 <outlet property="TwentyFourHourClockView" destination="Ul3-j2-RlO" id="ZpY-2q-dnX"/>
                 <outlet property="UpdateView" destination="ZwN-gq-xX8" id="MZb-JG-cx5"/>
@@ -45,7 +47,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x3h-xq-GmG">
-                    <rect key="frame" x="0.0" y="70" width="375" height="44"/>
+                    <rect key="frame" x="0.0" y="32" width="375" height="44"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Profile" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cDT-0o-Tcp">
                             <rect key="frame" x="16" y="13" width="79" height="18"/>
@@ -99,7 +101,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gKP-Qz-N9c">
-                    <rect key="frame" x="0.0" y="114" width="375" height="44"/>
+                    <rect key="frame" x="0.0" y="76" width="375" height="44"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Workspace" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UxZ-v0-Q9w">
                             <rect key="frame" x="16" y="12.5" width="76.5" height="18"/>
@@ -143,7 +145,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QhC-Dd-WIg">
-                    <rect key="frame" x="0.0" y="158" width="375" height="44"/>
+                    <rect key="frame" x="0.0" y="120" width="375" height="44"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subscription" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PZA-rj-uBn">
                             <rect key="frame" x="16" y="12.5" width="87" height="18"/>
@@ -187,7 +189,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ul3-j2-RlO">
-                    <rect key="frame" x="0.0" y="228" width="375" height="44"/>
+                    <rect key="frame" x="0.0" y="190" width="375" height="44"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use 24-hour Clock" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="abX-c9-kDI">
                             <rect key="frame" x="16" y="12.5" width="130" height="18"/>
@@ -229,7 +231,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ICk-uF-BvB">
-                    <rect key="frame" x="0.0" y="272" width="375" height="44"/>
+                    <rect key="frame" x="0.0" y="234" width="375" height="44"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add 'mobile' tag" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3j2-hT-LLE">
                             <rect key="frame" x="16" y="12.5" width="111" height="18"/>
@@ -261,7 +263,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mmI-mx-iUP">
-                    <rect key="frame" x="0.0" y="340" width="375" height="44"/>
+                    <rect key="frame" x="0.0" y="302" width="375" height="44"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Submit Feedback" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7KY-Cw-c2h">
                             <rect key="frame" x="16" y="13" width="120" height="18"/>
@@ -307,7 +309,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DlP-8Z-xqN">
-                    <rect key="frame" x="0.0" y="384" width="375" height="44"/>
+                    <rect key="frame" x="0.0" y="346" width="375" height="44"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rate Toggl" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rhg-wD-k6k">
                             <rect key="frame" x="16" y="12.5" width="73" height="18"/>
@@ -343,7 +345,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZwN-gq-xX8">
-                    <rect key="frame" x="0.0" y="428" width="375" height="44"/>
+                    <rect key="frame" x="0.0" y="390" width="375" height="44"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Update Toggl" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vSP-oF-zqp">
                             <rect key="frame" x="16" y="12.5" width="93" height="18"/>
@@ -387,7 +389,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RBh-e3-uJT">
-                    <rect key="frame" x="0.0" y="472" width="375" height="44"/>
+                    <rect key="frame" x="0.0" y="434" width="375" height="44"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Help" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xu5-LW-WFD">
                             <rect key="frame" x="16" y="12.5" width="32" height="18"/>
@@ -567,7 +569,7 @@
                 <constraint firstItem="ZwN-gq-xX8" firstAttribute="top" secondItem="DlP-8Z-xqN" secondAttribute="bottom" id="EKz-34-e3I"/>
                 <constraint firstItem="mmI-mx-iUP" firstAttribute="top" secondItem="ICk-uF-BvB" secondAttribute="bottom" constant="24" id="EuG-Qd-MAx"/>
                 <constraint firstAttribute="trailing" secondItem="x3h-xq-GmG" secondAttribute="trailing" id="K8e-Ih-uUr"/>
-                <constraint firstAttribute="bottom" secondItem="L2S-P3-jra" secondAttribute="bottom" constant="16" id="MYl-vm-V2c"/>
+                <constraint firstItem="zSK-oz-LmT" firstAttribute="bottom" secondItem="L2S-P3-jra" secondAttribute="bottom" constant="16" id="MYl-vm-V2c"/>
                 <constraint firstAttribute="trailing" secondItem="QhC-Dd-WIg" secondAttribute="trailing" id="MaJ-Dz-RbF"/>
                 <constraint firstItem="mJh-gC-yPW" firstAttribute="centerX" secondItem="L2S-P3-jra" secondAttribute="centerX" id="OUc-De-4nT"/>
                 <constraint firstItem="8Qk-3T-5lj" firstAttribute="top" secondItem="mJh-gC-yPW" secondAttribute="bottom" constant="16" id="QYY-Nw-rGg"/>
@@ -588,7 +590,7 @@
                 <constraint firstAttribute="trailing" secondItem="DlP-8Z-xqN" secondAttribute="trailing" id="fbr-f5-0qu"/>
                 <constraint firstItem="x3h-xq-GmG" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="fcL-Oc-6fD"/>
                 <constraint firstItem="9pV-m0-9wY" firstAttribute="centerX" secondItem="L2S-P3-jra" secondAttribute="centerX" id="jal-K8-5ev"/>
-                <constraint firstItem="x3h-xq-GmG" firstAttribute="top" secondItem="2" secondAttribute="top" constant="70" id="kLA-fW-jFc"/>
+                <constraint firstItem="x3h-xq-GmG" firstAttribute="top" secondItem="zSK-oz-LmT" secondAttribute="top" constant="12" id="kLA-fW-jFc"/>
                 <constraint firstItem="RBh-e3-uJT" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="lc7-Sf-Pi4"/>
                 <constraint firstItem="gKP-Qz-N9c" firstAttribute="top" secondItem="x3h-xq-GmG" secondAttribute="bottom" id="lvV-bb-rmZ"/>
                 <constraint firstItem="L2S-P3-jra" firstAttribute="top" secondItem="8Qk-3T-5lj" secondAttribute="bottom" id="oCV-Xr-4VC"/>
@@ -597,12 +599,13 @@
                 <constraint firstItem="305" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="qfW-5P-cqh"/>
                 <constraint firstAttribute="trailing" secondItem="ZwN-gq-xX8" secondAttribute="trailing" id="v6d-EP-n3h"/>
             </constraints>
+            <viewLayoutGuide key="safeArea" id="zSK-oz-LmT"/>
             <point key="canvasLocation" x="32.5" y="53.5"/>
         </view>
     </objects>
     <resources>
         <image name="ActivityIndicatorView" width="16" height="16"/>
-        <image name="icArrowRight" width="16" height="16"/>
+        <image name="icArrowRight" width="7" height="12"/>
         <image name="icDoneSmall" width="12" height="9"/>
     </resources>
 </document>

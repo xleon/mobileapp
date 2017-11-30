@@ -39,6 +39,9 @@ namespace Toggl.Daneel.ViewControllers
 		Toggl.Daneel.Views.FadeView RunningEntryDescriptionFadeView { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint ScrollViewTopConstraint { get; set; }
+
+		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIImageView SpiderBroImageView { get; set; }
 
@@ -90,14 +93,14 @@ namespace Toggl.Daneel.ViewControllers
 				CurrentTimeEntryDescriptionLabel = null;
 			}
 
-			if (CurrentTimeEntryProjectTaskClientLabel != null) {
-				CurrentTimeEntryProjectTaskClientLabel.Dispose ();
-				CurrentTimeEntryProjectTaskClientLabel = null;
-			}
-
 			if (CurrentTimeEntryElapsedTimeLabel != null) {
 				CurrentTimeEntryElapsedTimeLabel.Dispose ();
 				CurrentTimeEntryElapsedTimeLabel = null;
+			}
+
+			if (CurrentTimeEntryProjectTaskClientLabel != null) {
+				CurrentTimeEntryProjectTaskClientLabel.Dispose ();
+				CurrentTimeEntryProjectTaskClientLabel = null;
 			}
 
 			if (EditTimeEntryButton != null) {
@@ -163,6 +166,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (TimelineView != null) {
 				TimelineView.Dispose ();
 				TimelineView = null;
+			}
+
+			if (ScrollViewTopConstraint != null) {
+				ScrollViewTopConstraint.Dispose ();
+				ScrollViewTopConstraint = null;
 			}
 		}
 	}

@@ -29,6 +29,12 @@ namespace Toggl.Daneel.ViewControllers
 
             preparePlaceholders();
 
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                var navigationBarHeight = NavigationController.NavigationBar.Frame.Height;
+                AdditionalSafeAreaInsets = new UIEdgeInsets(-navigationBarHeight, 0, 0, 0);
+            }
+
             PageControl.Pages = ViewModel.NumberOfPages;
             FirstPageLabel.Text = Resources.OnboardingTrackPageCopy;
             SecondPageLabel.Text = Resources.OnboardingLogPageCopy;

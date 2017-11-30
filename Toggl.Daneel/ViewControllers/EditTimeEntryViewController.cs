@@ -87,7 +87,7 @@ namespace Toggl.Daneel.ViewControllers
                           .WithConversion(inverterVisibilityConverter);
             }
 
-            // Text
+            //Text
             bindingSet.Bind(DescriptionTextView)
                       .For(v => v.RemainingLength)
                       .To(vm => vm.DescriptionRemainingLength);
@@ -209,6 +209,15 @@ namespace Toggl.Daneel.ViewControllers
             PreferredContentSize = View.Frame.Size;
             BillableSwitch.Resize();
             prepareDescriptionField();
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                var bottomSafeAreaInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+                if (bottomSafeAreaInset >= DeleteButtonBottomConstraint.Constant)
+                    DeleteButtonBottomConstraint.Constant
+                        = ConfirmButtonBottomConstraint.Constant
+                        = 0;
+            }
         }
 
         private void prepareDescriptionField()
