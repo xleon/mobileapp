@@ -53,6 +53,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand OpenSettingsCommand { get; }
 
+        public IMvxAsyncCommand OpenReportsCommand { get; }
+
         public IMvxCommand RefreshCommand { get; }
 
         public MainViewModel(
@@ -72,6 +74,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.apiErrorHandlingService = apiErrorHandlingService;
 
             RefreshCommand = new MvxCommand(refresh);
+            OpenReportsCommand = new MvxAsyncCommand(openReports);
             OpenSettingsCommand = new MvxAsyncCommand(openSettings);
             EditTimeEntryCommand = new MvxAsyncCommand(editTimeEntry);
             StopTimeEntryCommand = new MvxAsyncCommand(stopTimeEntry);
@@ -131,6 +134,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private Task openSettings()
             => navigationService.Navigate<SettingsViewModel>();
+
+        private Task openReports()
+            => navigationService.Navigate<ReportsViewModel>();
 
         private Task startTimeEntry() =>
             navigationService.Navigate<StartTimeEntryViewModel, DateTimeOffset>(timeService.CurrentDateTime);

@@ -54,6 +54,7 @@ namespace Toggl.Daneel.ViewControllers
             var bindingSet = this.CreateBindingSet<MainViewController, MainViewModel>();
 
             //Commands
+            bindingSet.Bind(reportsButton).To(vm => vm.OpenReportsCommand);
             bindingSet.Bind(settingsButton).To(vm => vm.OpenSettingsCommand);
             bindingSet.Bind(StopTimeEntryButton).To(vm => vm.StopTimeEntryCommand);
             bindingSet.Bind(StartTimeEntryButton).To(vm => vm.StartTimeEntryCommand);
@@ -122,7 +123,9 @@ namespace Toggl.Daneel.ViewControllers
             {
                 new UIBarButtonItem(UIBarButtonSystemItem.FixedSpace) { Width = -10 },
                 new UIBarButtonItem(settingsButton),
-                //new UIBarButtonItem(reportsButton)
+                #if DEBUG
+                new UIBarButtonItem(reportsButton)
+                #endif
             };
         }
 

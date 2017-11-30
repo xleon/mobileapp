@@ -88,6 +88,7 @@
     <Compile Include="ViewModels\OutdatedAppViewModel.cs" />
     <Compile Include="Services\IBrowserService.cs" />
     <Compile Include="ViewModels\TokenResetViewModel.cs" />
+    <Compile Include="ViewModels\ReportsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">

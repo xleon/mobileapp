@@ -391,6 +391,10 @@
     <ImageAsset Include="Resources\Images.xcassets\icErrorSmall.imageset\icErrorSmall.png" />
     <ImageAsset Include="Resources\Images.xcassets\icErrorSmall.imageset\icErrorSmall%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icErrorSmall.imageset\icErrorSmall%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationReports.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationReports.imageset\icIllustrationReports.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationReports.imageset\icIllustrationReports%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationReports.imageset\icIllustrationReports%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -431,6 +435,7 @@
     <InterfaceDefinition Include="ViewControllers\SelectClientViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\OutdatedAppViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\TokenResetViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\ReportsViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -673,6 +678,10 @@
     <Compile Include="ViewControllers\LoginViewController.designer.cs">
       <DependentUpon>LoginViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewControllers\ReportsViewController.cs" />
+    <Compile Include="ViewControllers\ReportsViewController.designer.cs">
+      <DependentUpon>ReportsViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
@@ -715,6 +724,7 @@
     <Folder Include="Resources\Images.xcassets\icIllustrationTags.imageset\" />
     <Folder Include="Resources\Images.xcassets\icIllustrationProject.imageset\" />
     <Folder Include="Resources\Images.xcassets\icErrorSmall.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icIllustrationReports.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
