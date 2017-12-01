@@ -404,42 +404,42 @@
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="ViewControllers\OnboardingViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\LoginViewController.xib" />
-    <InterfaceDefinition Include="Views\TimeEntriesLogViewCell.xib" />
-    <InterfaceDefinition Include="Views\TimeEntriesLogHeaderViewCell.xib" />
-    <InterfaceDefinition Include="Views\SuggestionsViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\TimeEntriesLogViewController.xib" />
-    <InterfaceDefinition Include="Views\SuggestionsEmptyViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SuggestionsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\MainViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\EditTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\StartTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SettingsViewController.xib" />
-    <InterfaceDefinition Include="Views\ProjectSuggestionViewCell.xib" />
-    <InterfaceDefinition Include="Views\StartTimeEntryViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\EditDurationViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectProjectViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectDateTimeViewController.xib" />
-    <InterfaceDefinition Include="Views\StartTimeEntryEmptyViewCell.xib" />
-    <InterfaceDefinition Include="Views\TagSuggestionViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectTagsViewController.xib" />
-    <InterfaceDefinition Include="Views\SelectableTagViewCell.xib" />
-    <InterfaceDefinition Include="Views\WorkspaceHeaderViewCell.xib" />
-    <InterfaceDefinition Include="Views\TaskSuggestionViewCell.xib" />
-    <InterfaceDefinition Include="Views\EditTimeEntryErrorView.xib" />
     <InterfaceDefinition Include="Views\Onboarding\TrackPage.xib" />
     <InterfaceDefinition Include="Views\Onboarding\LogPage.xib" />
     <InterfaceDefinition Include="Views\Onboarding\SummaryPage.xib" />
     <InterfaceDefinition Include="ViewControllers\EditProjectViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectColorViewController.xib" />
-    <InterfaceDefinition Include="Views\ColorSelectionViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectWorkspaceViewController.xib" />
-    <InterfaceDefinition Include="Views\WorkspaceViewCell.xib" />
-    <InterfaceDefinition Include="Views\CreateEntityViewCell.xib" />
-    <InterfaceDefinition Include="Views\ClientViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectClientViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\OutdatedAppViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\TokenResetViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\ReportsViewController.xib" />
+    <InterfaceDefinition Include="Views\Color\ColorSelectionViewCell.xib" />
+    <InterfaceDefinition Include="Views\Log\TimeEntriesLogHeaderViewCell.xib" />
+    <InterfaceDefinition Include="Views\Log\TimeEntriesLogViewCell.xib" />
+    <InterfaceDefinition Include="Views\StartTimeEntry\ProjectSuggestionViewCell.xib" />
+    <InterfaceDefinition Include="Views\StartTimeEntry\StartTimeEntryEmptyViewCell.xib" />
+    <InterfaceDefinition Include="Views\StartTimeEntry\StartTimeEntryViewCell.xib" />
+    <InterfaceDefinition Include="Views\StartTimeEntry\TagSuggestionViewCell.xib" />
+    <InterfaceDefinition Include="Views\StartTimeEntry\TaskSuggestionViewCell.xib" />
+    <InterfaceDefinition Include="Views\StartTimeEntry\WorkspaceHeaderViewCell.xib" />
+    <InterfaceDefinition Include="Views\Suggestions\SuggestionsEmptyViewCell.xib" />
+    <InterfaceDefinition Include="Views\Suggestions\SuggestionsViewCell.xib" />
+    <InterfaceDefinition Include="Views\EditTimeEntry\EditTimeEntryErrorView.xib" />
+    <InterfaceDefinition Include="Views\EntityCreation\ClientViewCell.xib" />
+    <InterfaceDefinition Include="Views\EntityCreation\CreateEntityViewCell.xib" />
+    <InterfaceDefinition Include="Views\EntityCreation\SelectableTagViewCell.xib" />
+    <InterfaceDefinition Include="Views\EntityCreation\WorkspaceViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -477,32 +477,16 @@
     <Compile Include="Binding\BarButtonCommandTargetBinding.cs" />
     <Compile Include="Binding\ViewAnimatedVisibilityTargetBinding.cs" />
     <Compile Include="ViewSources\SelectProjectTableViewSource.cs" />
-    <Compile Include="Views\TimeEntriesLogViewCell.cs" />
-    <Compile Include="Views\TimeEntriesLogViewCell.designer.cs">
-      <DependentUpon>TimeEntriesLogViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Binding\TextFieldSecureTextEntryTargetBinding.cs" />
     <Compile Include="Binding\BarButtonAnimatedEnabledTargetBinding.cs" />
     <Compile Include="Binding\TextFieldFocusTargetBinding.cs" />
     <Compile Include="Presentation\TogglPresenter.cs" />
     <Compile Include="ViewControllers\Navigation\TogglNavigationController.cs" />
-    <Compile Include="Views\TimeEntriesLogHeaderViewCell.cs" />
-    <Compile Include="Views\TimeEntriesLogHeaderViewCell.designer.cs">
-      <DependentUpon>TimeEntriesLogHeaderViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SuggestionsViewCell.cs" />
-    <Compile Include="Views\SuggestionsViewCell.designer.cs">
-      <DependentUpon>SuggestionsViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewControllers\TimeEntriesLogViewController.cs" />
     <Compile Include="ViewControllers\TimeEntriesLogViewController.designer.cs">
       <DependentUpon>TimeEntriesLogViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\TimeEntriesLogViewSource.cs" />
-    <Compile Include="Views\SuggestionsEmptyViewCell.cs" />
-    <Compile Include="Views\SuggestionsEmptyViewCell.designer.cs">
-      <DependentUpon>SuggestionsEmptyViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewSources\SuggestionsTableViewSource.cs" />
     <Compile Include="ViewControllers\SuggestionsViewController.cs" />
     <Compile Include="ViewControllers\SuggestionsViewController.designer.cs">
@@ -536,14 +520,6 @@
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="ViewSources\StartTimeEntryTableViewSource.cs" />
-    <Compile Include="Views\ProjectSuggestionViewCell.cs" />
-    <Compile Include="Views\ProjectSuggestionViewCell.designer.cs">
-      <DependentUpon>ProjectSuggestionViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\StartTimeEntryViewCell.cs" />
-    <Compile Include="Views\StartTimeEntryViewCell.designer.cs">
-      <DependentUpon>StartTimeEntryViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Binding\TextViewTextInfoTargetBinding.cs" />
     <Compile Include="Presentation\Attributes\ModalDialogPresentationAttribute.cs" />
     <Compile Include="Presentation\Transition\ModalDialogPresentationController.cs" />
@@ -565,37 +541,13 @@
       <DependentUpon>SelectProjectViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Combiners\ProjectTaskClientValueCombiner.cs" />
-    <Compile Include="Views\StartTimeEntryEmptyViewCell.cs" />
-    <Compile Include="Views\StartTimeEntryEmptyViewCell.designer.cs">
-      <DependentUpon>StartTimeEntryEmptyViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Extensions\DateExtensions.cs" />
-    <Compile Include="Views\TagSuggestionViewCell.cs" />
-    <Compile Include="Views\TagSuggestionViewCell.designer.cs">
-      <DependentUpon>TagSuggestionViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewControllers\SelectTagsViewController.cs" />
     <Compile Include="ViewControllers\SelectTagsViewController.designer.cs">
       <DependentUpon>SelectTagsViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\SelectableTagViewCell.cs" />
-    <Compile Include="Views\SelectableTagViewCell.designer.cs">
-      <DependentUpon>SelectableTagViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewSources\SelectTagsTableViewSource.cs" />
-    <Compile Include="Views\WorkspaceHeaderViewCell.cs" />
-    <Compile Include="Views\WorkspaceHeaderViewCell.designer.cs">
-      <DependentUpon>WorkspaceHeaderViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewSources\GroupedCollectionTableViewSource.cs" />
-    <Compile Include="Views\TaskSuggestionViewCell.cs" />
-    <Compile Include="Views\TaskSuggestionViewCell.designer.cs">
-      <DependentUpon>TaskSuggestionViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EditTimeEntryErrorView.cs" />
-    <Compile Include="Views\EditTimeEntryErrorView.designer.cs">
-      <DependentUpon>EditTimeEntryErrorView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\MarqueeView.cs" />
     <Compile Include="Binding\SwitchAnimatedOnTargetBinding.cs" />
     <Compile Include="Views\Onboarding\TrackPage.cs" />
@@ -628,41 +580,22 @@
       <DependentUpon>SelectColorViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\ColorSelectionCollectionViewSource.cs" />
-    <Compile Include="Views\ColorSelectionViewCell.cs" />
-    <Compile Include="Views\ColorSelectionViewCell.designer.cs">
-      <DependentUpon>ColorSelectionViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewControllers\SelectWorkspaceViewController.cs" />
     <Compile Include="ViewControllers\SelectWorkspaceViewController.designer.cs">
       <DependentUpon>SelectWorkspaceViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\WorkspaceTableViewSource.cs" />
-    <Compile Include="Views\WorkspaceViewCell.cs" />
-    <Compile Include="Views\WorkspaceViewCell.designer.cs">
-      <DependentUpon>WorkspaceViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CreateEntityViewCell.cs" />
-    <Compile Include="Views\CreateEntityViewCell.designer.cs">
-      <DependentUpon>CreateEntityViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewSources\ClientTableViewSource.cs" />
-    <Compile Include="Views\ClientViewCell.cs" />
-    <Compile Include="Views\ClientViewCell.designer.cs">
-      <DependentUpon>ClientViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewControllers\SelectClientViewController.cs" />
     <Compile Include="ViewControllers\SelectClientViewController.designer.cs">
       <DependentUpon>SelectClientViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\CreateSuggestionGroupedTableViewSource.cs" />
     <Compile Include="Converters\ComplementValueConverter.cs" />
-    <Compile Include="Views\HueSaturationPickerView.cs" />
-    <Compile Include="Views\ValueSliderView.cs" />
     <Compile Include="Views\TextViewWithPlaceholder.cs" />
     <Compile Include="Binding\TextViewWithPlaceholderTextTargetBinding.cs" />
     <Compile Include="Extensions\TokenExtensions.cs" />
     <Compile Include="TokenTextAttachment.cs" />
-    <Compile Include="Views\TextViewWithCharacterCounter.cs" />
     <Compile Include="Binding\TextFieldPlaceholderTargetBinding.cs" />
     <Compile Include="Startup\DebugTrace.cs" />
     <Compile Include="Startup\AppDelegate.cs" />
@@ -685,6 +618,73 @@
     <Compile Include="ViewControllers\ReportsViewController.cs" />
     <Compile Include="ViewControllers\ReportsViewController.designer.cs">
       <DependentUpon>ReportsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Color\ColorSelectionViewCell.cs" />
+    <Compile Include="Views\Color\ColorSelectionViewCell.designer.cs">
+      <DependentUpon>ColorSelectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Color\HueSaturationPickerView.cs" />
+    <Compile Include="Views\Log\TimeEntriesLogHeaderViewCell.cs" />
+    <Compile Include="Views\Log\TimeEntriesLogHeaderViewCell.designer.cs">
+      <DependentUpon>TimeEntriesLogHeaderViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Log\TimeEntriesLogViewCell.cs" />
+    <Compile Include="Views\Log\TimeEntriesLogViewCell.designer.cs">
+      <DependentUpon>TimeEntriesLogViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StartTimeEntry\ProjectSuggestionViewCell.cs" />
+    <Compile Include="Views\StartTimeEntry\ProjectSuggestionViewCell.designer.cs">
+      <DependentUpon>ProjectSuggestionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StartTimeEntry\StartTimeEntryEmptyViewCell.cs" />
+    <Compile Include="Views\StartTimeEntry\StartTimeEntryEmptyViewCell.designer.cs">
+      <DependentUpon>StartTimeEntryEmptyViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StartTimeEntry\StartTimeEntryViewCell.cs" />
+    <Compile Include="Views\StartTimeEntry\StartTimeEntryViewCell.designer.cs">
+      <DependentUpon>StartTimeEntryViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StartTimeEntry\TagSuggestionViewCell.cs" />
+    <Compile Include="Views\StartTimeEntry\TagSuggestionViewCell.designer.cs">
+      <DependentUpon>TagSuggestionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StartTimeEntry\TaskSuggestionViewCell.cs" />
+    <Compile Include="Views\StartTimeEntry\TaskSuggestionViewCell.designer.cs">
+      <DependentUpon>TaskSuggestionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StartTimeEntry\WorkspaceHeaderViewCell.cs" />
+    <Compile Include="Views\StartTimeEntry\WorkspaceHeaderViewCell.designer.cs">
+      <DependentUpon>WorkspaceHeaderViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Suggestions\SuggestionsEmptyViewCell.cs" />
+    <Compile Include="Views\Suggestions\SuggestionsEmptyViewCell.designer.cs">
+      <DependentUpon>SuggestionsEmptyViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Suggestions\SuggestionsViewCell.cs" />
+    <Compile Include="Views\Suggestions\SuggestionsViewCell.designer.cs">
+      <DependentUpon>SuggestionsViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Color\ValueSliderView.cs" />
+    <Compile Include="Views\EditTimeEntry\EditTimeEntryErrorView.cs" />
+    <Compile Include="Views\EditTimeEntry\EditTimeEntryErrorView.designer.cs">
+      <DependentUpon>EditTimeEntryErrorView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditTimeEntry\TextViewWithCharacterCounter.cs" />
+    <Compile Include="Views\EntityCreation\ClientViewCell.cs" />
+    <Compile Include="Views\EntityCreation\ClientViewCell.designer.cs">
+      <DependentUpon>ClientViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityCreation\CreateEntityViewCell.cs" />
+    <Compile Include="Views\EntityCreation\CreateEntityViewCell.designer.cs">
+      <DependentUpon>CreateEntityViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityCreation\SelectableTagViewCell.cs" />
+    <Compile Include="Views\EntityCreation\SelectableTagViewCell.designer.cs">
+      <DependentUpon>SelectableTagViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityCreation\WorkspaceViewCell.cs" />
+    <Compile Include="Views\EntityCreation\WorkspaceViewCell.designer.cs">
+      <DependentUpon>WorkspaceViewCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -730,6 +730,13 @@
     <Folder Include="Resources\Images.xcassets\icErrorSmall.imageset\" />
     <Folder Include="Resources\Images.xcassets\icIllustrationReports.imageset\" />
     <Folder Include="Resources\Images.xcassets\icChartEmpty.imageset\" />
+    <Folder Include="Views\Reports\" />
+    <Folder Include="Views\StartTimeEntry\" />
+    <Folder Include="Views\Log\" />
+    <Folder Include="Views\Suggestions\" />
+    <Folder Include="Views\Color\" />
+    <Folder Include="Views\EditTimeEntry\" />
+    <Folder Include="Views\EntityCreation\" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
