@@ -633,7 +633,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var timeEntry = Substitute.For<IDatabaseTimeEntry>();
                 timeEntry.Id.Returns(id);
-                timeEntry.Description.Returns("Fuckface");
+                timeEntry.Description.Returns("Doing stuff");
                 timeEntry.Project.Name.Returns(Guid.NewGuid().ToString());
                 timeEntry.Project.Color.Returns(Guid.NewGuid().ToString());
                 timeEntry.Task.Name.Returns(Guid.NewGuid().ToString());
