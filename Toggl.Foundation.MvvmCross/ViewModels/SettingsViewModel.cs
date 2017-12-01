@@ -44,9 +44,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public bool IsSynced { get; private set; }
 
         public IMvxCommand RateCommand { get; }
-        
+
         public IMvxCommand HelpCommand { get; }
-        
+
         public IMvxCommand UpdateCommand { get; }
 
         public IMvxAsyncCommand BackCommand { get; }
@@ -58,7 +58,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxCommand SubmitFeedbackCommand { get; }
 
         public IMvxCommand EditSubscriptionCommand { get; }
-        
+
         public IMvxAsyncCommand EditWorkspaceCommand { get; }
 
         public IMvxCommand ToggleAddMobileTagCommand { get; }
@@ -102,23 +102,25 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var user = await dataSource.User.Current();
             var workspace = await dataSource.Workspaces.GetDefault();
 
-            Email = user.Email; 
+            Email = user.Email;
             workspaceId = workspace.Id;
             WorkspaceName = workspace.Name;
         }
 
         public void rate() => throw new NotImplementedException();
-        
+
         public void help() => throw new NotImplementedException();
-        
+
         public void update() => throw new NotImplementedException();
-        
-        public void editProfile() => throw new NotImplementedException();
-        
-        public async Task editWorkspace() 
+
+        public void editProfile() 
+        {
+        }
+
+        public async Task editWorkspace()
         {
             var parameters = WorkspaceParameters.Create(workspaceId, Resources.SetDefaultWorkspaces, allowQuerying: false);
-            var selectedWorkspaceId = 
+            var selectedWorkspaceId =
                 await navigationService
                     .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(parameters);
 
@@ -131,9 +133,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             await dataSource.User.UpdateWorkspace(workspaceId);
             await dataSource.SyncManager.PushSync();
         }
-        
+
         public void submitFeedback() => throw new NotImplementedException();
-        
+
         public void editSubscription() => throw new NotImplementedException();
 
         public void toggleAddMobileTag() => AddMobileTag = !AddMobileTag;

@@ -55,7 +55,7 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icArrowRight" translatesAutoresizingMaskIntoConstraints="NO" id="cHK-dA-deg">
+                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icArrowRight" translatesAutoresizingMaskIntoConstraints="NO" id="cHK-dA-deg">
                             <rect key="frame" x="360" y="17" width="5" height="10"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="10" id="Z8N-bm-gDr"/>
