@@ -52,6 +52,9 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIButton DurationButton { get; set; }
 
 		[Outlet]
+		UIKit.UILabel PlaceholderLabel { get; set; }
+
+		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIButton ProjectsButton { get; set; }
 
@@ -69,6 +72,11 @@ namespace Toggl.Daneel.ViewControllers
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (PlaceholderLabel != null) {
+				PlaceholderLabel.Dispose ();
+				PlaceholderLabel = null;
+			}
+
 			if (BillableButton != null) {
 				BillableButton.Dispose ();
 				BillableButton = null;

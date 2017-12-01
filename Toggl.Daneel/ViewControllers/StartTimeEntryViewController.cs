@@ -130,6 +130,11 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.DescriptionLengthExceeded)
                       .WithConversion(invertedVisibilityConverter);
 
+            bindingSet.Bind(PlaceholderLabel)
+                      .For(v => v.BindVisibility())
+                      .To(vm => vm.TextFieldInfo.Text)
+                      .WithConversion(invertedVisibilityConverter);
+
             //Commands
             bindingSet.Bind(DoneButton).To(vm => vm.DoneCommand);
             bindingSet.Bind(CloseButton).To(vm => vm.BackCommand);
@@ -167,11 +172,6 @@ namespace Toggl.Daneel.ViewControllers
             }
 
             TimeLabel.Font = TimeLabel.Font.GetMonospacedDigitFont();
-
-            var stringAttributes = new CTStringAttributes(
-                new UIStringAttributes { ForegroundColor = Color.StartTimeEntry.Placeholder.ToNativeColor() }.Dictionary
-            );
-
             DescriptionTextView.TintColor = Color.StartTimeEntry.Cursor.ToNativeColor();
             DescriptionTextView.BecomeFirstResponder();
         }
