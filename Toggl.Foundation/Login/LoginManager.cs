@@ -3,6 +3,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Models;
+using Toggl.Foundation.Sync;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
@@ -15,20 +16,23 @@ namespace Toggl.Foundation.Login
         private readonly IScheduler scheduler;
         private readonly IApiFactory apiFactory;
         private readonly ITogglDatabase database;
-        private readonly ITimeService timeService;
         private readonly IGoogleService googleService;
-     
+        private readonly ITimeService timeService;
+        private readonly IAccessRestrictionStorage accessRestrictionStorage;
+
         public LoginManager(
-            IApiFactory apiFactory, 
-            ITogglDatabase database, 
+            IApiFactory apiFactory,
+            ITogglDatabase database,
             ITimeService timeService,
             IGoogleService googleService,
-            IScheduler scheduler)
+            IScheduler scheduler,
+            IAccessRestrictionStorage accessRestrictionStorage)
         {
             Ensure.Argument.IsNotNull(database, nameof(database));
             Ensure.Argument.IsNotNull(scheduler, nameof(scheduler));
             Ensure.Argument.IsNotNull(apiFactory, nameof(apiFactory));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(googleService, nameof(googleService));
 
             this.database = database;
@@ -36,6 +40,8 @@ namespace Toggl.Foundation.Login
             this.apiFactory = apiFactory;
             this.timeService = timeService;
             this.googleService = googleService;
+            this.scheduler = scheduler;
+            this.accessRestrictionStorage = accessRestrictionStorage;
         }
 
         public IObservable<ITogglDataSource> Login(Email email, string password)
@@ -51,6 +57,7 @@ namespace Toggl.Foundation.Login
                     .SelectMany(_ => apiFactory.CreateApiWith(credentials).User.Get())
                     .Select(User.Clean)
                     .SelectMany(database.User.Create)
+                    .Do(_ => accessRestrictionStorage.ClearUnauthorizedAccess())
                     .Select(dataSourceFromUser);
         }
 
@@ -64,6 +71,7 @@ namespace Toggl.Foundation.Login
                 .SelectMany(api => api.User.GetWithGoogle())
                 .Select(User.Clean)
                 .SelectMany(database.User.Create)
+                .Do(_ => accessRestrictionStorage.ClearUnauthorizedAccess())
                 .Select(dataSourceFromUser);
         }
 
@@ -78,6 +86,7 @@ namespace Toggl.Foundation.Login
                     .SelectMany(_ => apiFactory.CreateApiWith(Credentials.None).User.SignUp(email, password))
                     .Select(User.Clean)
                     .SelectMany(database.User.Create)
+                    .Do(_ => accessRestrictionStorage.ClearUnauthorizedAccess())
                     .Select(dataSourceFromUser);
         }
 
@@ -109,6 +118,7 @@ namespace Toggl.Foundation.Login
                 .SelectMany(api => api.User.Get())
                 .Select(User.Clean)
                 .SelectMany(database.User.Update)
+                .Do(_ => accessRestrictionStorage.ClearUnauthorizedAccess())
                 .Select(dataSourceFromUser);
         }
 
@@ -119,7 +129,9 @@ namespace Toggl.Foundation.Login
         {
             var newCredentials = Credentials.WithApiToken(user.ApiToken);
             var api = apiFactory.CreateApiWith(newCredentials);
-            return new TogglDataSource(database, api, timeService, scheduler);
+            Func<ITogglDataSource, ISyncManager> createSyncManager = dataSource =>
+                TogglSyncManager.CreateSyncManager(database, api, dataSource, timeService, scheduler);
+            return new TogglDataSource(database, timeService, accessRestrictionStorage, createSyncManager);
         }
     }
 }

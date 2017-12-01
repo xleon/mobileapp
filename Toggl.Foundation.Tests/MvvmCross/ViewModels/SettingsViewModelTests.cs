@@ -99,7 +99,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Property]
             public void DoesNotUnsetTheIsLoggingOutFlagAfterItIsSetNoMatterWhatStatusesAreObserved(NonEmptyArray<SyncState> statuses)
             {
-                DataSource.SyncManager.Freeze().Returns(Observable.Never<SyncState>());
+                DataSource.Logout().Returns(Observable.Never<Unit>());
 
                 ViewModel.LogoutCommand.ExecuteAsync();
 
@@ -113,7 +113,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Property]
             public void SetsTheIsRunningSyncAndIsSyncedFlagsToFalseAfterTheIsLoggingInFlagIsSetAndDoesNotSetThemToTrueNoMatterWhatStatusesAreObserved(NonEmptyArray<SyncState> statuses)
             {
-                DataSource.SyncManager.Freeze().Returns(Observable.Never<SyncState>());
+                DataSource.Logout().Returns(Observable.Never<Unit>());
 
                 ViewModel.LogoutCommand.ExecuteAsync();
 
@@ -138,15 +138,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task CallsFreezeOnTheSyncManager()
-            {
-                doNotShowConfirmationDialog();
-                await ViewModel.LogoutCommand.ExecuteAsync();
-
-                await DataSource.SyncManager.Received().Freeze();
-            }
-
-            [Fact, LogIfTooSlow]
             public async Task CallsLogoutOnTheDataSource()
             {
                 doNotShowConfirmationDialog();
@@ -162,59 +153,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
                 await NavigationService.Received().Navigate(typeof(OnboardingViewModel));
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task DoesOperationsInTheCorrectOrder()
-            {
-                doNotShowConfirmationDialog();
-                int operationCounter = 0;
-                int flagsAreSet = -1;
-                int callingSyncManagerFreeze = -1;
-                int awaitingSyncManagerFreeze = -1;
-                int callingLogout = -1;
-                int awaitingLogout = -1;
-                int callingNavigate = -1;
-                int awaitingNavigation = -1;
-                var syncManager = Substitute.For<ISyncManager>();
-                syncManager.Freeze().Returns(Observable.Create<SyncState>(async observer =>
-                {
-                    if (ViewModel.IsLoggingOut && ViewModel.IsSynced == false && ViewModel.IsRunningSync == false)
-                        flagsAreSet = operationCounter++;
-
-                    callingSyncManagerFreeze = operationCounter++;
-                    await Task.Delay(100);
-                    observer.OnNext(SyncState.Sleep);
-                    observer.OnCompleted();
-                    awaitingSyncManagerFreeze = operationCounter++;
-                    return () => { };
-                }));
-                DataSource.SyncManager.Returns(syncManager);
-                DataSource.Logout().Returns(Observable.Create<Unit>(async observer =>
-                {
-                    callingLogout = operationCounter++;
-                    await Task.Delay(100);
-                    observer.OnNext(Unit.Default);
-                    observer.OnCompleted();
-                    awaitingLogout = operationCounter++;
-                    return () => { };
-                }));
-                NavigationService.Navigate<OnboardingViewModel>().Returns(_ => Task.Run(async () =>
-                {
-                    callingNavigate = operationCounter++;
-                    await Task.Delay(100);
-                    awaitingNavigation = operationCounter++;
-                }));
-
-                await ViewModel.LogoutCommand.ExecuteAsync();
-
-                flagsAreSet.Should().Be(0);
-                callingSyncManagerFreeze.Should().Be(1);
-                awaitingSyncManagerFreeze.Should().Be(2);
-                callingLogout.Should().Be(3);
-                awaitingLogout.Should().Be(4);
-                callingNavigate.Should().Be(5);
-                awaitingNavigation.Should().Be(6);
             }
 
             [Fact, LogIfTooSlow]
@@ -300,7 +238,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
                 ViewModel.IsLoggingOut.Should().BeFalse();
-                await DataSource.SyncManager.DidNotReceive().Freeze();
                 await DataSource.DidNotReceive().Logout();
                 await NavigationService.DidNotReceive().Navigate<OnboardingViewModel>();
             }
@@ -318,7 +255,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
                 ViewModel.IsLoggingOut.Should().BeTrue();
-                await DataSource.SyncManager.Received().Freeze();
                 await DataSource.Received().Logout();
                 await NavigationService.Received().Navigate<OnboardingViewModel>();
             }

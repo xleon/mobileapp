@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Reactive.Concurrency;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using FluentAssertions;
+using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
 using Toggl.PrimeRadiant;
-using Toggl.Ultrawave;
 using Xunit;
-using Microsoft.Reactive.Testing;
 using Toggl.Foundation.Models;
+using Toggl.Foundation.Sync;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant.Models;
 using ThreadingTask = System.Threading.Tasks.Task;
@@ -20,14 +21,14 @@ namespace Toggl.Foundation.Tests.DataSources
         public abstract class TogglDataSourceTest
         {
             protected ITogglDataSource DataSource { get; }
-            protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
             protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
             protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
-            protected IScheduler Scheduler { get; } = new TestScheduler();
+            protected IAccessRestrictionStorage AccessRestrictionStorage { get; } = Substitute.For<IAccessRestrictionStorage>();
+            protected ISyncManager SyncManager { get; } = Substitute.For<ISyncManager>();
 
             public TogglDataSourceTest()
             {
-                DataSource = new TogglDataSource(Database, Api, TimeService, Scheduler);
+                DataSource = new TogglDataSource(Database, TimeService, AccessRestrictionStorage, _ => SyncManager);
             }
         }
 
@@ -36,9 +37,87 @@ namespace Toggl.Foundation.Tests.DataSources
             [Fact, LogIfTooSlow]
             public void ClearsTheDatabase()
             {
-                DataSource.Logout();
+                DataSource.Logout().Wait();
 
                 Database.Received(1).Clear();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void FreezesTheSyncManager()
+            {
+                DataSource.Logout().Wait();
+
+                SyncManager.Received().Freeze();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ClearsUnauthorizedAccessFlag()
+            {
+                DataSource.Logout().Wait();
+
+                AccessRestrictionStorage.Received().ClearUnauthorizedAccess();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNotClearTheDatabaseBeforeTheSyncManagerCompletesFreezing()
+            {
+                var scheduler = new TestScheduler();
+                SyncManager.Freeze().Returns(Observable.Never<SyncState>());
+
+                var observable = DataSource.Logout().SubscribeOn(scheduler).Publish();
+                observable.Connect();
+                scheduler.AdvanceBy(TimeSpan.FromDays(1).Ticks);
+
+                Database.DidNotReceive().Clear();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNotClearTheUnauthorizedAccessFlagBeforeTheDatabaseIsCleared()
+            {
+                var scheduler = new TestScheduler();
+                SyncManager.Freeze().Returns(Observable.Return(SyncState.Sleep));
+                Database.Clear().Returns(Observable.Never<Unit>());
+
+                var observable = DataSource.Logout().SubscribeOn(scheduler).Publish();
+                observable.Connect();
+                scheduler.AdvanceBy(TimeSpan.FromDays(1).Ticks);
+
+                AccessRestrictionStorage.DidNotReceive().ClearUnauthorizedAccess();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ClearTheDatabaseOnlyOnceTheSyncManagerFreezeEmitsAValueEvenThoughItDoesNotComplete()
+            {
+                var freezingSubject = new Subject<SyncState>();
+                SyncManager.Freeze().Returns(freezingSubject.AsObservable());
+
+                var observable = DataSource.Logout().Publish();
+                observable.Connect();
+
+                Database.DidNotReceive().Clear();
+
+                freezingSubject.OnNext(SyncState.Sleep);
+
+                Database.Received().Clear();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void EmitsUnitValueAndCompletesWhenFreezeAndDatabaseClearEmitSingleValueButDoesNotComplete()
+            {
+                var clearingSubject = new Subject<Unit>();
+                SyncManager.Freeze().Returns(_ => Observable.Return(SyncState.Sleep));
+                Database.Clear().Returns(clearingSubject.AsObservable());
+                bool emitsUnitValue = false;
+                bool completed = false;
+
+                var observable = DataSource.Logout();
+                observable.Subscribe(
+                    _ => emitsUnitValue = true,
+                    () => completed = true);
+                clearingSubject.OnNext(Unit.Default);
+
+                emitsUnitValue.Should().BeTrue();
+                completed.Should().BeTrue();
             }
         }
 

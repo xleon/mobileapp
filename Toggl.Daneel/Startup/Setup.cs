@@ -73,9 +73,8 @@ namespace Toggl.Daneel
 
             var googleService = new GoogleService();
             var apiFactory = new ApiFactory(environment, userAgent);
-            var loginManager = new LoginManager(apiFactory, database, timeService, googleService, TaskPoolScheduler.Default);
-
             var accessRestrictionStorage = new UserDataAccessRestrictionStorage(Version.Parse(version.ToString()));
+            var loginManager = new LoginManager(apiFactory, database, timeService, googleService, TaskPoolScheduler.Default, accessRestrictionStorage);
             var deprecationHandlingService = new ApiErrorHandlingService(navigationService, accessRestrictionStorage);
 
             Mvx.RegisterSingleton<ITimeService>(timeService);

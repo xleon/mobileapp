@@ -173,7 +173,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IsLoggingOut = true;
             IsSynced = false;
             IsRunningSync = false;
-            await dataSource.SyncManager.Freeze();
             await dataSource.Logout();
             await navigationService.Navigate<OnboardingViewModel>();
         }

@@ -32,8 +32,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         {
             [Theory, LogIfTooSlow]
             [ClassData(typeof(FourParameterConstructorTestData))]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool userLoginManager,
-                bool userNavigationService, bool useDataSource, bool useDialogService)
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool userLoginManager, bool userNavigationService, bool useDataSource, bool useDialogService)
             {
                 var loginManager = userLoginManager ? LoginManager : null;
                 var navigationService = userNavigationService ? NavigationService : null;

@@ -8,7 +8,6 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
 using Toggl.Ultrawave.Exceptions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
@@ -102,15 +101,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Subscribe(onDataSource, onError);
         }
 
-        private async void onDataSource(ITogglDataSource newDataSource)
+        private void onDataSource(ITogglDataSource newDataSource)
         {
             Mvx.RegisterSingleton(newDataSource);
 
-            await newDataSource.SyncManager.ForceFullSync();
+            newDataSource.SyncManager.ForceFullSync();
 
             IsLoading = false;
 
-            await navigationService.Navigate<MainViewModel>();
+            navigationService.Navigate<MainViewModel>();
         }
 
         private void onError(Exception ex)

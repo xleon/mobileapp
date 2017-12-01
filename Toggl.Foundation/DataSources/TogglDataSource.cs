@@ -1,28 +1,31 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant;
-using Toggl.Ultrawave;
 
 namespace Toggl.Foundation.DataSources
 {
     public sealed class TogglDataSource : ITogglDataSource
     {
         private readonly ITogglDatabase database;
+        private readonly IAccessRestrictionStorage accessRestrictionStorage;
 
-        public TogglDataSource(ITogglDatabase database, ITogglApi api, ITimeService timeService, IScheduler scheduler)
+        public TogglDataSource(
+            ITogglDatabase database,
+            ITimeService timeService,
+            IAccessRestrictionStorage accessRestrictionStorage,
+            Func<ITogglDataSource, ISyncManager> createSyncManager)
         {
-            Ensure.Argument.IsNotNull(api, nameof(api));
             Ensure.Argument.IsNotNull(database, nameof(database));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(scheduler, nameof(scheduler));
+            Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
 
             this.database = database;
+            this.accessRestrictionStorage = accessRestrictionStorage;
 
             User = new UserDataSource(database.User);
             Tags = new TagsDataSource(database.IdProvider, database.Tags, timeService);
@@ -33,7 +36,7 @@ namespace Toggl.Foundation.DataSources
             TimeEntries = new TimeEntriesDataSource(database.IdProvider, database.TimeEntries, timeService);
 
             AutocompleteProvider = new AutocompleteProvider(database);
-            SyncManager = TogglSyncManager.CreateSyncManager(database, api, this, timeService, scheduler);
+            SyncManager = createSyncManager(this);
         }
 
         public IUserSource User { get; }
@@ -65,6 +68,11 @@ namespace Toggl.Foundation.DataSources
                 .Select(unsynced => unsynced.Any())
                 .SingleAsync();
 
-        public IObservable<Unit> Logout() => database.Clear();
+        public IObservable<Unit> Logout()
+            => SyncManager.Freeze()
+                .FirstAsync()
+                .SelectMany(_ => database.Clear())
+                .Do(_ => accessRestrictionStorage.ClearUnauthorizedAccess())
+                .FirstAsync();
     }
 }
