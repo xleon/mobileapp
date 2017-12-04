@@ -186,8 +186,8 @@ time entries will appear here.</value>
     <data name="Workspaces">
         <value>Workspaces</value>
     </data>
-    <data name="SetDefaultWorkspaces">
-        <value>Set default workspaces</value>
+    <data name="SetDefaultWorkspace">
+        <value>Set default workspace</value>
     </data>
     <data name="AddTags">
         <value>Add a tag</value>

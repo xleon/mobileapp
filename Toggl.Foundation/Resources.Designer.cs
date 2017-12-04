@@ -377,9 +377,9 @@ namespace Toggl.Foundation {
             }
         }
         
-        public static string SetDefaultWorkspaces {
+        public static string SetDefaultWorkspace {
             get {
-                return ResourceManager.GetString("SetDefaultWorkspaces", resourceCulture);
+                return ResourceManager.GetString("SetDefaultWorkspace", resourceCulture);
             }
         }
         
@@ -424,7 +424,7 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("PasswordResetOfflineError", resourceCulture);
             }
         }
-
+        
         public static string AreYouSure {
             get {
                 return ResourceManager.GetString("AreYouSure", resourceCulture);
