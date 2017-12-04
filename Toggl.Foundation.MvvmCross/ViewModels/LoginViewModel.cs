@@ -74,6 +74,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public bool PasswordManagerVisible
             => IsPasswordManagerAvailable && IsEmailPage && !IsLoading;
 
+        public bool IsEmailFocused
+            => CurrentPage == EmailPage || CurrentPage == ForgotPasswordPage;
+
         public IMvxCommand NextCommand { get; }
 
         public IMvxCommand BackCommand { get; }

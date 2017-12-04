@@ -135,7 +135,7 @@ namespace Toggl.Daneel.ViewControllers
             //State
             bindingSet.Bind(EmailTextField)
                       .For(v => v.BindFocus())
-                      .To(vm => vm.IsEmailPage);
+                      .To(vm => vm.IsEmailFocused);
             
             bindingSet.Bind(PasswordTextField)
                       .For(v => v.BindFocus())
