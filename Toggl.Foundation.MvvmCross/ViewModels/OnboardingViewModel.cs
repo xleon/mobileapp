@@ -21,7 +21,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             (Color.Onboarding.TrackPageBackgroundColor, Color.Onboarding.TrackPageBorderColor),
             (Color.Onboarding.LogPageBackgroundColor, Color.Onboarding.LogPageBorderColor),
+            #if DEBUG
             (Color.Onboarding.SummaryPageBackgroundColor, Color.Onboarding.SummaryPageBorderColor),
+            #endif
             (Color.Onboarding.LoginPageBackgroundColor, MvxColors.Transparent)
         };
 
