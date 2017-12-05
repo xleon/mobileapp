@@ -76,11 +76,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.navigationService = navigationService;
 
             disposeBag.Add(dataSource.SyncManager
-                .StateObservable
-                .Subscribe(async state =>
+                .ProgressObservable
+                .Subscribe(async progress =>
                 {
-                    IsRunningSync = IsLoggingOut == false && state != SyncState.Sleep;
-                    IsSynced = IsLoggingOut == false && await isSynced();
+                    IsRunningSync = IsLoggingOut == false && progress == SyncProgress.Syncing;
+                    IsSynced = IsLoggingOut == false && progress == SyncProgress.Synced && await isSynced();
                 })
             );
 

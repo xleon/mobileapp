@@ -1,47 +1,41 @@
 ﻿using System;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Models;
-using Toggl.Foundation.Sync;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
+using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
 
 namespace Toggl.Foundation.Login
 {
     public sealed class LoginManager : ILoginManager
     {
-        private readonly IScheduler scheduler;
         private readonly IApiFactory apiFactory;
         private readonly ITogglDatabase database;
         private readonly IGoogleService googleService;
-        private readonly ITimeService timeService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
+        private readonly Func<ITogglApi, ITogglDataSource> createDataSource;
 
         public LoginManager(
             IApiFactory apiFactory,
             ITogglDatabase database,
-            ITimeService timeService,
             IGoogleService googleService,
-            IScheduler scheduler,
-            IAccessRestrictionStorage accessRestrictionStorage)
+            IAccessRestrictionStorage accessRestrictionStorage,
+            Func<ITogglApi, ITogglDataSource> createDataSource)
         {
             Ensure.Argument.IsNotNull(database, nameof(database));
-            Ensure.Argument.IsNotNull(scheduler, nameof(scheduler));
             Ensure.Argument.IsNotNull(apiFactory, nameof(apiFactory));
-            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(googleService, nameof(googleService));
+            Ensure.Argument.IsNotNull(createDataSource, nameof(createDataSource));
 
             this.database = database;
-            this.scheduler = scheduler;
             this.apiFactory = apiFactory;
-            this.timeService = timeService;
-            this.googleService = googleService;
-            this.scheduler = scheduler;
             this.accessRestrictionStorage = accessRestrictionStorage;
+            this.googleService = googleService;
+            this.createDataSource = createDataSource;
         }
 
         public IObservable<ITogglDataSource> Login(Email email, string password)
@@ -125,9 +119,7 @@ namespace Toggl.Foundation.Login
         {
             var newCredentials = Credentials.WithApiToken(user.ApiToken);
             var api = apiFactory.CreateApiWith(newCredentials);
-            Func<ITogglDataSource, ISyncManager> createSyncManager = dataSource =>
-                TogglSyncManager.CreateSyncManager(database, api, dataSource, timeService, scheduler);
-            return new TogglDataSource(database, timeService, accessRestrictionStorage, createSyncManager);
+            return createDataSource(api);
         }
     }
 }

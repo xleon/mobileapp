@@ -124,6 +124,12 @@ Please try again.</value>
     <data name="Syncing">
         <value>Syncing...</value>
     </data>
+    <data name="SyncFailed">
+        <value>Syncing failed</value>
+    </data>
+    <data name="Offline">
+        <value>Offline</value>
+    </data>
     <data name="PullDownToRefresh">
         <value>Pull down to refresh</value>
     </data>

@@ -10,6 +10,7 @@ using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Foundation.Services;
 using Toggl.Multivac;
 using Toggl.Ultrawave.Exceptions;
 using EmailType = Toggl.Multivac.Email;
