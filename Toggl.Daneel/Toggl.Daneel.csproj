@@ -687,6 +687,7 @@
     <Compile Include="Views\EntityCreation\WorkspaceViewCell.designer.cs">
       <DependentUpon>WorkspaceViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewControllers\KeyboardAwareViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
