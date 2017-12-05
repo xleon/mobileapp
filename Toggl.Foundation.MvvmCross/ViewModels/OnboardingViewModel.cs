@@ -98,7 +98,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             => navigationService.Navigate<LoginViewModel, LoginType>(LoginType.SignUp);
 
         private void skip()
-            => CurrentPage = LoginPage;
+            => CurrentPage = PageInfo.Length - 1;
 
         private bool nextCanExecute() => !IsLastPage;
 
