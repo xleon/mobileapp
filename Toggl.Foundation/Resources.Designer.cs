@@ -436,5 +436,11 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("IncorrectPassword", resourceCulture);
             }
         }
+        
+        public static string ThisWeek {
+            get {
+                return ResourceManager.GetString("ThisWeek", resourceCulture);
+            }
+        }
     }
 }

@@ -216,4 +216,7 @@ time entries will appear here.</value>
     <data name="IncorrectPassword">
         <value>Incorrect password. Please, try again</value>
     </data>
+    <data name="ThisWeek">
+        <value>This week</value>
+    </data>
 </root>

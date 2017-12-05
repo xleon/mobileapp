@@ -89,6 +89,7 @@
     <Compile Include="Services\IBrowserService.cs" />
     <Compile Include="ViewModels\TokenResetViewModel.cs" />
     <Compile Include="ViewModels\ReportsViewModel.cs" />
+    <Compile Include="Parameters\DateRangeParameter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">
