@@ -144,16 +144,6 @@ namespace Toggl.Foundation.Tests.Login
                         .Login(Email, Password)
                         .SingleAsync();
             }
-
-            [Fact, LogIfTooSlow]
-            public async Task ClearsUnathorizedAccessFlag()
-            {
-                await LoginManager
-                    .Login(Email, Password)
-                    .SingleAsync();
-
-                AccessRestrictionStorage.Received().ClearUnauthorizedAccess();
-            }
         }
 
         public sealed class TheResetPasswordMethod : LoginManagerTest
@@ -213,17 +203,6 @@ namespace Toggl.Foundation.Tests.Login
                 var result = LoginManager.GetDataSourceIfLoggedIn();
 
                 result.Should().NotBeNull();
-            }
-
-            [Fact, LogIfTooSlow]
-            public void DoesNotClearUnathorizedAccessFlag()
-            {
-                var observable = Observable.Return<IDatabaseUser>(FoundationUser.Clean(User));
-                Database.User.Single().Returns(observable);
-
-                LoginManager.GetDataSourceIfLoggedIn();
-
-                AccessRestrictionStorage.DidNotReceive().ClearUnauthorizedAccess();
             }
         }
 
@@ -299,16 +278,6 @@ namespace Toggl.Foundation.Tests.Login
                         .SignUp(Email, Password)
                         .SingleAsync();
             }
-
-            [Fact, LogIfTooSlow]
-            public async Task ClearsUnathorizedAccessFlag()
-            {
-                await LoginManager
-                    .SignUp(Email, Password)
-                    .SingleAsync();
-
-                AccessRestrictionStorage.Received().ClearUnauthorizedAccess();
-            }
         }
         
         public sealed class TheRefreshTokenMethod : LoginManagerTest
@@ -363,16 +332,6 @@ namespace Toggl.Foundation.Tests.Login
                 await LoginManager
                         .RefreshToken(Password)
                         .SingleAsync();
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task ClearsUnathorizedAccessFlag()
-            {
-                await LoginManager
-                    .RefreshToken(Password)
-                    .SingleAsync();
-
-                AccessRestrictionStorage.Received().ClearUnauthorizedAccess();
             }
         }
 
@@ -433,16 +392,6 @@ namespace Toggl.Foundation.Tests.Login
                 await LoginManager
                         .LoginWithGoogle()
                         .SingleAsync();
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task ClearsUnathorizedAccessFlag()
-            {
-                await LoginManager
-                    .LoginWithGoogle()
-                    .SingleAsync();
-
-                AccessRestrictionStorage.Received().ClearUnauthorizedAccess();
             }
         }
     }

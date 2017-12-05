@@ -72,7 +72,6 @@ namespace Toggl.Foundation.DataSources
             => SyncManager.Freeze()
                 .FirstAsync()
                 .SelectMany(_ => database.Clear())
-                .Do(_ => accessRestrictionStorage.ClearUnauthorizedAccess())
                 .FirstAsync();
     }
 }

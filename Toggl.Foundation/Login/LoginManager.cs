@@ -57,7 +57,6 @@ namespace Toggl.Foundation.Login
                     .SelectMany(_ => apiFactory.CreateApiWith(credentials).User.Get())
                     .Select(User.Clean)
                     .SelectMany(database.User.Create)
-                    .Do(_ => accessRestrictionStorage.ClearUnauthorizedAccess())
                     .Select(dataSourceFromUser);
         }
 
@@ -71,7 +70,6 @@ namespace Toggl.Foundation.Login
                 .SelectMany(api => api.User.GetWithGoogle())
                 .Select(User.Clean)
                 .SelectMany(database.User.Create)
-                .Do(_ => accessRestrictionStorage.ClearUnauthorizedAccess())
                 .Select(dataSourceFromUser);
         }
 
@@ -86,7 +84,6 @@ namespace Toggl.Foundation.Login
                     .SelectMany(_ => apiFactory.CreateApiWith(Credentials.None).User.SignUp(email, password))
                     .Select(User.Clean)
                     .SelectMany(database.User.Create)
-                    .Do(_ => accessRestrictionStorage.ClearUnauthorizedAccess())
                     .Select(dataSourceFromUser);
         }
 
@@ -118,7 +115,6 @@ namespace Toggl.Foundation.Login
                 .SelectMany(api => api.User.Get())
                 .Select(User.Clean)
                 .SelectMany(database.User.Update)
-                .Do(_ => accessRestrictionStorage.ClearUnauthorizedAccess())
                 .Select(dataSourceFromUser);
         }
 

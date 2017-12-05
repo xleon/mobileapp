@@ -51,14 +51,6 @@ namespace Toggl.Foundation.Tests.DataSources
             }
 
             [Fact, LogIfTooSlow]
-            public void ClearsUnauthorizedAccessFlag()
-            {
-                DataSource.Logout().Wait();
-
-                AccessRestrictionStorage.Received().ClearUnauthorizedAccess();
-            }
-
-            [Fact, LogIfTooSlow]
             public void DoesNotClearTheDatabaseBeforeTheSyncManagerCompletesFreezing()
             {
                 var scheduler = new TestScheduler();
@@ -69,20 +61,6 @@ namespace Toggl.Foundation.Tests.DataSources
                 scheduler.AdvanceBy(TimeSpan.FromDays(1).Ticks);
 
                 Database.DidNotReceive().Clear();
-            }
-
-            [Fact, LogIfTooSlow]
-            public void DoesNotClearTheUnauthorizedAccessFlagBeforeTheDatabaseIsCleared()
-            {
-                var scheduler = new TestScheduler();
-                SyncManager.Freeze().Returns(Observable.Return(SyncState.Sleep));
-                Database.Clear().Returns(Observable.Never<Unit>());
-
-                var observable = DataSource.Logout().SubscribeOn(scheduler).Publish();
-                observable.Connect();
-                scheduler.AdvanceBy(TimeSpan.FromDays(1).Ticks);
-
-                AccessRestrictionStorage.DidNotReceive().ClearUnauthorizedAccess();
             }
 
             [Fact, LogIfTooSlow]
