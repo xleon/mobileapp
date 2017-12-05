@@ -131,9 +131,8 @@ namespace Toggl.Daneel.ViewControllers
                       .WithConversion(invertedVisibilityConverter);
 
             bindingSet.Bind(PlaceholderLabel)
-                      .For(v => v.BindVisibility())
-                      .To(vm => vm.TextFieldInfo.Text)
-                      .WithConversion(invertedVisibilityConverter);
+                      .For(v => v.BindVisible())
+                      .To(vm => vm.ShowPlaceholder);
 
             //Commands
             bindingSet.Bind(DoneButton).To(vm => vm.DoneCommand);
