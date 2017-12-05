@@ -610,6 +610,7 @@
     <Compile Include="ViewControllers\TokenResetViewController.designer.cs">
       <DependentUpon>TokenResetViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Binding\TextViewTagListTargetBinding.cs" />
     <Compile Include="Extensions\LayoutConstraintExtensions.cs" />
     <Compile Include="ViewControllers\LoginViewController.cs" />
     <Compile Include="ViewControllers\LoginViewController.designer.cs">
