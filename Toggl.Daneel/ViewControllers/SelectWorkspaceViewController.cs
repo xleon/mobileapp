@@ -42,7 +42,8 @@ namespace Toggl.Daneel.ViewControllers
 
             bindingSet.Apply();
 
-            SearchTextField.BecomeFirstResponder();
+            if (ViewModel.AllowQuerying)
+                SearchTextField.BecomeFirstResponder();
         }
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
