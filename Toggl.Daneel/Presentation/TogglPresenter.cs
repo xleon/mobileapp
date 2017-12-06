@@ -8,6 +8,7 @@ using MvvmCross.iOS.Views.Presenters.Attributes;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Presentation.Transition;
+using Toggl.Daneel.Services;
 using Toggl.Daneel.ViewControllers;
 using Toggl.Daneel.ViewControllers.Navigation;
 using Toggl.Foundation.MvvmCross.Helper;
@@ -16,7 +17,7 @@ using UIKit;
 
 namespace Toggl.Daneel.Presentation
 {
-    public sealed class TogglPresenter : MvxIosViewPresenter
+    public sealed class TogglPresenter : MvxIosViewPresenter, ITopViewControllerProvider
     {
         private ModalTransitionDelegate modalTransitionDelegate = new ModalTransitionDelegate();
 
@@ -63,7 +64,7 @@ namespace Toggl.Daneel.Presentation
             viewController.ModalPresentationStyle = UIModalPresentationStyle.Custom;
             viewController.TransitioningDelegate = transitionDelegate;
 
-            getCurrentControllerForPresenting(MasterNavigationController).PresentViewController(viewController, true, null);
+            TopViewController.PresentViewController(viewController, true, null);
 
             ModalViewControllers.Add(viewController);
 
@@ -75,7 +76,7 @@ namespace Toggl.Daneel.Presentation
             viewController.ModalPresentationStyle = UIModalPresentationStyle.Custom;
             viewController.TransitioningDelegate = modalTransitionDelegate;
 
-            getCurrentControllerForPresenting(MasterNavigationController).PresentViewController(viewController, true, null);
+            TopViewController.PresentViewController(viewController, true, null);
 
             ModalViewControllers.Add(viewController);
         }
@@ -129,9 +130,12 @@ namespace Toggl.Daneel.Presentation
             return new TogglNavigationController(viewController);
         }
 
-        private UIViewController getCurrentControllerForPresenting(UIViewController currentViewController)
-            => currentViewController.PresentedViewController != null 
-             ? getCurrentControllerForPresenting(currentViewController.PresentedViewController)
-             : currentViewController;
+        public UIViewController TopViewController
+            => getPresentationController(MasterNavigationController);
+
+        private UIViewController getPresentationController(UIViewController current)
+            => current.PresentedViewController == null || current.PresentedViewController.IsBeingDismissed
+            ? current
+            : getPresentationController(current.PresentedViewController);
     }
 }

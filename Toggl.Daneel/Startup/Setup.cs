@@ -43,7 +43,7 @@ namespace Toggl.Daneel
         {
         }
 
-        public Setup(MvxApplicationDelegate applicationDelegate, IMvxIosViewPresenter presenter)
+        private Setup(MvxApplicationDelegate applicationDelegate, IMvxIosViewPresenter presenter)
             : base(applicationDelegate, presenter)
         {
         }
@@ -91,7 +91,7 @@ namespace Toggl.Daneel
                 => new TogglDataSource(database, timeService, apiErrorHandlingService, createSyncManager(api));
 
             Mvx.RegisterSingleton<ITimeService>(timeService);
-            Mvx.RegisterSingleton<IDialogService>(new DialogService());
+            Mvx.RegisterSingleton<IDialogService>(new DialogService(Presenter as ITopViewControllerProvider));
             Mvx.RegisterSingleton<IOnboardingStorage>(userDefaultsStorage);
             Mvx.RegisterSingleton<IAccessRestrictionStorage>(userDefaultsStorage);
             Mvx.RegisterSingleton<IBrowserService>(new BrowserService());
