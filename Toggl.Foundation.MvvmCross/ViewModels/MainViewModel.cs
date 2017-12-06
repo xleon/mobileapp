@@ -7,9 +7,11 @@ using MvvmCross.Core.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
+using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -21,6 +23,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
+        private readonly IOnboardingStorage onboardingStorage;
         private readonly IMvxNavigationService navigationService;
 
         public TimeSpan CurrentTimeEntryElapsedTime { get; private set; } = TimeSpan.Zero;
@@ -63,15 +66,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public MainViewModel(
             ITogglDataSource dataSource,
             ITimeService timeService,
+            IOnboardingStorage onboardingStorage,
             IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
             this.navigationService = navigationService;
+            this.onboardingStorage = onboardingStorage;
 
             RefreshCommand = new MvxCommand(refresh);
             OpenReportsCommand = new MvxAsyncCommand(openReports);
@@ -84,6 +90,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public override async Task Initialize()
         {
             await base.Initialize();
+
+            isWelcome = onboardingStorage.IsNewUser();
 
             var tickDisposable = timeService
                 .CurrentDateTimeObservable

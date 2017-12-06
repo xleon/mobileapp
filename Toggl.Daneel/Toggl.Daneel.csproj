@@ -457,7 +457,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding\DatePickerDateTimeOffsetTargetBinding.cs" />
-    <Compile Include="Services\UserDataAccessRestrictionStorage.cs" />
+    <Compile Include="Services\UserDefaultsStorage.cs" />
     <Compile Include="Startup\Setup.cs" />
     <Compile Include="Startup\SetupTargetFactories.cs">
       <DependentUpon>SetupTargetFactories.tt</DependentUpon>
