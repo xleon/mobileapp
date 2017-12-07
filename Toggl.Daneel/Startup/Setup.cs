@@ -91,10 +91,10 @@ namespace Toggl.Daneel
                 => new TogglDataSource(database, timeService, apiErrorHandlingService, createSyncManager(api));
 
             Mvx.RegisterSingleton<ITimeService>(timeService);
-            Mvx.RegisterSingleton<IDialogService>(new DialogService(Presenter as ITopViewControllerProvider));
+            Mvx.RegisterSingleton<IBrowserService>(new BrowserService());
             Mvx.RegisterSingleton<IOnboardingStorage>(userDefaultsStorage);
             Mvx.RegisterSingleton<IAccessRestrictionStorage>(userDefaultsStorage);
-            Mvx.RegisterSingleton<IBrowserService>(new BrowserService());
+            Mvx.RegisterSingleton<IDialogService>(new DialogService((ITopViewControllerProvider)Presenter));
             Mvx.RegisterSingleton<ISuggestionProviderContainer>(
                 new SuggestionProviderContainer(
                     new MostUsedTimeEntrySuggestionProvider(database, timeService)

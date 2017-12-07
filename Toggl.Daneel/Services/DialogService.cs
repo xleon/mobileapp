@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Multivac;
 using UIKit;
 using static Toggl.Multivac.Extensions.FunctionalExtensions;
 
@@ -12,6 +13,8 @@ namespace Toggl.Daneel.Services
 
         public DialogService(ITopViewControllerProvider topViewControllerProvider)
         {
+            Ensure.Argument.IsNotNull(topViewControllerProvider, nameof(topViewControllerProvider));
+            
             this.topViewControllerProvider = topViewControllerProvider;
         }
 
