@@ -290,6 +290,8 @@
     <Compile Include="MvvmCross\ViewModels\OutdatedAppViewModelTests.cs" />
     <Compile Include="MvvmCross\ViewModels\TokenResetViewModelTests.cs" />
     <Compile Include="MvvmCross\ViewModels\ReportsViewModelTests.cs" />
+    <Compile Include="Reports\ReportsProviderTests.cs" />
+    <Compile Include="Reports\ProjectSummaryReportTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />
