@@ -1,4 +1,4 @@
-﻿namespace Toggl.PrimeRadiant
+﻿namespace Toggl.PrimeRadiant.Settings
 {
     public interface IAccessRestrictionStorage
     {
