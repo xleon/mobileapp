@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Exceptions;
 
-namespace Toggl.Foundation.Sync.States.Push
+namespace Toggl.Foundation.Sync.States
 {
     internal sealed class CheckServerStatusState
     {
