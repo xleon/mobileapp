@@ -9,7 +9,7 @@ using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Foundation.Sync;
-using Toggl.Foundation.Sync.States.Push;
+using Toggl.Foundation.Sync.States;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
