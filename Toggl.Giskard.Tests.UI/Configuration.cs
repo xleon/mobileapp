@@ -1,14 +1,14 @@
 using Xamarin.UITest;
-using Xamarin.UITest.iOS;
+using Xamarin.UITest.Android;
 
 namespace Toggl.Tests.UI
 {
     public static class Configuration
     {
-        public static iOSApp GetApp()
+        public static AndroidApp GetApp()
             => ConfigureApp
-                .iOS
-                .AppBundle("../iPhoneSimulator/Debug/Toggl.Daneel.app")
+                .Android
+                .ApkFile("../Debug/Toggl.Giskard.apk")
                 .EnableLocalScreenshots()
                 .StartApp();
     }

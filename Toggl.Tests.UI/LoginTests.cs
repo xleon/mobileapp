@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Toggl.Daneel.Tests.UI.Helpers;
-using Xamarin.UITest.iOS;
-using static Toggl.Daneel.Tests.UI.Extensions.LoginExtensions;
+using Xamarin.UITest;
+using Toggl.Tests.UI.Helpers;
+using static Toggl.Tests.UI.Extensions.LoginExtensions;
 
-namespace Toggl.Daneel.Tests.UI
+namespace Toggl.Tests.UI
 {
     [TestFixture]
     public sealed class LoginTests
     {
         private const string validEmail = "susancalvin@psychohistorian.museum";
 
-        private iOSApp app;
+        private IApp app;
 
         [SetUp]
         public void BeforeEachTest()
@@ -52,13 +52,13 @@ namespace Toggl.Daneel.Tests.UI
         }
 
         [Test]
-        public async Task TheNextButtonAfterInputtingAnInvalidPasswordShowsTheErrorLabel()
+        public void TheNextButtonAfterInputtingAnInvalidPasswordShowsTheErrorLabel()
         {
             var email = randomEmail();
-            var password = await User.Create(email);
-            app.EnterText(validEmail);
+            app.EnterText(email);
             app.GoToPasswordScreen();
 
+            var password = "asdads";
             app.EnterText($"{password}123456");
             app.TryLoginAndFail();
 
@@ -69,10 +69,10 @@ namespace Toggl.Daneel.Tests.UI
         public async Task TheNextButtonAfterInputtingAValidPasswordShowsTheMainScreen()
         {
             var email = randomEmail();
-            var password = await User.Create(email);
-            app.EnterText(validEmail);
+            app.EnterText(email);
             app.GoToPasswordScreen();
 
+            var password = await User.Create(email);
             app.EnterText(password);
             app.LoginSuccesfully();
 

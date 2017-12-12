@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Toggl.Daneel.Tests.UI.Helpers
+namespace Toggl.Tests.UI.Helpers
 {
     public static class User
     {

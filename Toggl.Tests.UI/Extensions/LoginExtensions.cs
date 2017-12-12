@@ -1,6 +1,6 @@
 ﻿using Xamarin.UITest;
 
-namespace Toggl.Daneel.Tests.UI.Extensions
+namespace Toggl.Tests.UI.Extensions
 {
     public static class LoginExtensions
     {
@@ -9,6 +9,13 @@ namespace Toggl.Daneel.Tests.UI.Extensions
             app.WaitForOnboardingScreen();
             app.SkipToLastOnboardingPage();
             app.OpenLoginFromOnboardingLastPage();
+        }
+
+        public static void WaitForSignUpScreen(this IApp app)
+        {
+            app.WaitForOnboardingScreen();
+            app.SkipToLastOnboardingPage();
+            app.OpenSignUpFromOnboardingLastPage();
         }
 
         public static void GoToPasswordScreen(this IApp app)
@@ -37,6 +44,20 @@ namespace Toggl.Daneel.Tests.UI.Extensions
         }
 
         public static void LoginSuccesfully(this IApp app)
+        {
+            app.Tap(Login.NextButton);
+
+            app.WaitForElement(Main.StartTimeEntryButton);
+        }
+
+        public static void TrySigningUpAndFail(this IApp app)
+        {
+            app.Tap(Login.NextButton);
+
+            app.WaitForElement(Login.ErrorLabel);
+        }
+
+        public static void SignUpSuccesfully(this IApp app)
         {
             app.Tap(Login.NextButton);
 

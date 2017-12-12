@@ -1,6 +1,6 @@
 ﻿using Xamarin.UITest;
 
-namespace Toggl.Daneel.Tests.UI.Extensions
+namespace Toggl.Tests.UI.Extensions
 {
     public static class StartTimeEntryExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using Xamarin.UITest;
 
-namespace Toggl.Daneel.Tests.UI.Extensions
+namespace Toggl.Tests.UI.Extensions
 {
     public static class OnboardingExtensions
     {
@@ -82,6 +82,12 @@ namespace Toggl.Daneel.Tests.UI.Extensions
         public static void OpenLoginFromOnboardingLastPage(this IApp app)
         {
             app.Tap(Onboarding.LoginButton);
+            app.WaitForElement(Login.EmailText);
+        }
+
+        public static void OpenSignUpFromOnboardingLastPage(this IApp app)
+        {
+            app.Tap(Onboarding.SignUpButton);
             app.WaitForElement(Login.EmailText);
         }
     }

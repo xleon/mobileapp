@@ -1,15 +1,15 @@
 ﻿using NUnit.Framework;
-using Xamarin.UITest.iOS;
-using static Toggl.Daneel.Tests.UI.Extensions.MainExtensions;
+using Xamarin.UITest;
+using static Toggl.Tests.UI.Extensions.MainExtensions;
 
-namespace Toggl.Daneel.Tests.UI
+namespace Toggl.Tests.UI
 {
     [TestFixture]
     public sealed class MainTests
     {
         private const string validEmail = "susancalvin@psychohistorian.museum";
 
-        private iOSApp app;
+        private IApp app;
 
         [SetUp]
         public void BeforeEachTest()

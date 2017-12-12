@@ -1,26 +1,21 @@
 ﻿using System;
 using Xamarin.UITest;
-using Toggl.Daneel.Tests.UI.Helpers;
 
-namespace Toggl.Daneel.Tests.UI.Extensions
+namespace Toggl.Tests.UI.Extensions
 {
     public static class MainExtensions
     {
         public static void WaitForMainScreen(this IApp app)
         {
             var email = $"{Guid.NewGuid().ToString()}@toggl.space";
-            var task = User.Create(email);
 
-            app.WaitForLoginScreen();
+            app.WaitForSignUpScreen();
 
             app.EnterText(email);
             app.GoToPasswordScreen();
 
-            task.Wait();
-            var password = task.Result;
-
-            app.EnterText(password);
-            app.LoginSuccesfully();
+            app.EnterText("123456");
+            app.SignUpSuccesfully();
         }
 
         public static void StartTimeEntryWithDescription(this IApp app, string description)

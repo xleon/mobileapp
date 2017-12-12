@@ -1,13 +1,13 @@
 ﻿using NUnit.Framework;
-using Xamarin.UITest.iOS;
-using static Toggl.Daneel.Tests.UI.Extensions.OnboardingExtensions;
+using Xamarin.UITest;
+using static Toggl.Tests.UI.Extensions.OnboardingExtensions;
 
-namespace Toggl.Daneel.Tests.UI
+namespace Toggl.Tests.UI
 {
     [TestFixture]
     public sealed class OnboardingTests
     {
-        private iOSApp app;
+        private IApp app;
 
         [SetUp]
         public void BeforeEachTest()
