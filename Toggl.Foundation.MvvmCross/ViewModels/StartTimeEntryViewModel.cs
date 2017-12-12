@@ -318,7 +318,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             queryDisposable =
                 infoSubject.AsObservable()
                     .StartWith(TextFieldInfo)
-                    .Select(dataSource.AutocompleteProvider.ParseFieldInfo)
+                    .Select(QueryInfo.ParseFieldInfo)
                     .Do(onParsedQuery)
                     .SelectMany(dataSource.AutocompleteProvider.Query)
                     .Merge(queryByTypeObservable)

@@ -200,6 +200,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Autocomplete\QueryInfoTests.cs" />
     <Compile Include="Helpers\ApiExceptions.cs" />
     <Compile Include="MvvmCross\Services\ApiErrorHandlingServiceTests.cs" />
     <Compile Include="MvvmCross\ViewModels\EditDurationViewModelTests.cs" />
