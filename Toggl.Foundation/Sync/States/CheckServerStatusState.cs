@@ -37,7 +37,11 @@ namespace Toggl.Foundation.Sync.States
             => Observable.Return(ServerIsAvailable.Transition());
 
         private IObservable<ITransition> delayedRetry(TimeSpan period)
-            => Observable.Return(Retry.Transition()).Delay(period, scheduler);
+            => Observable.Return(Unit.Default)
+                .Delay(period, scheduler)
+                .Merge(delayCancellation)
+                .Select(_ => Retry.Transition())
+                .FirstAsync();
 
         private IObservable<Unit> delay(IObservable<Unit> observable)
             => observable
