@@ -76,9 +76,10 @@ namespace Toggl.Giskard
             var sharedPreferences = ApplicationContext.GetSharedPreferences("giskard", FileCreationMode.WorldWriteable);
             var sharedPreferencesStorage = new SharedPreferencesAccessRestrictionStorage(sharedPreferences, timeService, Version.Parse(version));
             var apiErrorHandlingService = new ApiErrorHandlingService(navigationService, sharedPreferencesStorage);
+            var retryDelayLimit = TimeSpan.FromSeconds(60);
 
             Func<ITogglDataSource, ISyncManager> createSyncManager(ITogglApi api)
-                => dataSource => TogglSyncManager.CreateSyncManager(database, api, dataSource, timeService, scheduler);
+                => dataSource => TogglSyncManager.CreateSyncManager(database, api, dataSource, timeService, retryDelayLimit, scheduler);
 
             ITogglDataSource createDataSource(ITogglApi api)
                 => new TogglDataSource(database, timeService, apiErrorHandlingService, createSyncManager(api));

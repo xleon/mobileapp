@@ -79,13 +79,13 @@ namespace Toggl.Daneel
 
             var googleService = new GoogleService();
             var apiFactory = new ApiFactory(environment, userAgent);
-
             var userDefaultsStorage = new UserDefaultsStorage(timeService, Version.Parse(version.ToString()));
             var deprecationHandlingService = new ApiErrorHandlingService(navigationService, userDefaultsStorage);
             var apiErrorHandlingService = new ApiErrorHandlingService(navigationService, userDefaultsStorage);
-
+            var retryDelayLimit = TimeSpan.FromSeconds(60);
+            
             Func<ITogglDataSource, ISyncManager> createSyncManager(ITogglApi api)
-                => dataSource => TogglSyncManager.CreateSyncManager(database, api, dataSource, timeService, scheduler);
+                => dataSource => TogglSyncManager.CreateSyncManager(database, api, dataSource, timeService, retryDelayLimit, scheduler);
 
             ITogglDataSource createDataSource(ITogglApi api)
                 => new TogglDataSource(database, timeService, apiErrorHandlingService, createSyncManager(api));
