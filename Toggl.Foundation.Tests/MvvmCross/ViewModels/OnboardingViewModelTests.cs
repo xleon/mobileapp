@@ -145,7 +145,20 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.LoginCommand.ExecuteAsync();
 
-                await NavigationService.Received().Navigate(typeof(LoginViewModel), Arg.Any<LoginType>());
+                await NavigationService.Received()
+                    .Navigate<LoginViewModel, LoginType>(Arg.Is(LoginType.Login));
+            }
+        }
+
+        public sealed class TheSignUpCommand : OnboardingViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task RequestsTheLoginViewModelFromTheNavigationService()
+            {
+                await ViewModel.SignUpCommand.ExecuteAsync();
+
+                await NavigationService.Received()
+                    .Navigate<LoginViewModel, LoginType>(Arg.Is(LoginType.SignUp));
             }
         }
     }

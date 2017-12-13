@@ -389,7 +389,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             private void setupProjectCreationResult(long? returnedId)
             {
                 NavigationService
-                    .Navigate<string, long?>(typeof(EditProjectViewModel), Arg.Any<string>())
+                    .Navigate<EditProjectViewModel, string, long?>(Arg.Any<string>())
                     .Returns(Task.FromResult(returnedId));
 
                 if (returnedId == null) return;

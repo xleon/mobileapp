@@ -311,7 +311,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.EditCommand.ExecuteAsync(timeEntryViewModel);
 
-                await NavigationService.Received().Navigate(typeof(EditTimeEntryViewModel),  Arg.Is<long>(p => p == databaseTimeEntry.Id));
+                await NavigationService.Received().Navigate<EditTimeEntryViewModel, long>(
+                    Arg.Is<long>(p => p == databaseTimeEntry.Id)
+                );
             }
         }
 

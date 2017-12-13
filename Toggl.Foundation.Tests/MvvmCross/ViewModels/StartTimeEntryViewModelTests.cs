@@ -296,7 +296,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     await ViewModel.CreateCommand.ExecuteAsync();
 
                     await NavigationService.Received()
-                        .Navigate<string, long?>(typeof(EditProjectViewModel), Arg.Any<string>());
+                        .Navigate<EditProjectViewModel, string, long?>(Arg.Any<string>());
                 }
 
                 [Fact, LogIfTooSlow]
@@ -307,7 +307,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     await ViewModel.CreateCommand.ExecuteAsync();
 
                     await NavigationService.Received()
-                        .Navigate<string, long?>(typeof(EditProjectViewModel), currentQuery);
+                        .Navigate<EditProjectViewModel, string, long?>(currentQuery);
                 }
 
                 [Fact, LogIfTooSlow]
@@ -315,7 +315,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 {
                     long projectId = 200;
                     NavigationService
-                        .Navigate<string, long?>(typeof(EditProjectViewModel), Arg.Is(currentQuery))
+                        .Navigate<EditProjectViewModel, string, long?>(Arg.Is(currentQuery))
                         .Returns(projectId);
                     var project = Substitute.For<IDatabaseProject>();
                     project.Id.Returns(projectId);
@@ -442,17 +442,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 var parameterToReturn = now.AddHours(-2);
                 NavigationService
-                    .Navigate<DatePickerParameters, DateTimeOffset>(typeof(SelectDateTimeViewModel), Arg.Any<DatePickerParameters>())
+                    .Navigate<SelectDateTimeViewModel, DatePickerParameters, DateTimeOffset>(
+                        Arg.Any<DatePickerParameters>())
                     .Returns(parameterToReturn);
                 ViewModel.Prepare(now);
 
                 ViewModel.ChangeStartTimeCommand.ExecuteAsync().Wait();
 
-
                 NavigationService
                     .Received()
-                    .Navigate<DatePickerParameters, DateTimeOffset>(
-                        typeof(SelectDateTimeViewModel),
+                    .Navigate<SelectDateTimeViewModel, DatePickerParameters, DateTimeOffset>(
                         Arg.Is<DatePickerParameters>(p => p.MinDate == now.AddHours(-MaxTimeEntryDurationInHours)));
             }
 
@@ -466,7 +465,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 var parameterToReturn = now.AddHours(-2);
                 NavigationService
-                    .Navigate<DatePickerParameters, DateTimeOffset>(typeof(SelectDateTimeViewModel), Arg.Any<DatePickerParameters>())
+                    .Navigate<SelectDateTimeViewModel, DatePickerParameters, DateTimeOffset>(
+                        Arg.Any<DatePickerParameters>())
                     .Returns(parameterToReturn);
                 ViewModel.Prepare(now);
 
@@ -475,8 +475,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 NavigationService
                     .Received()
-                    .Navigate<DatePickerParameters, DateTimeOffset>(
-                        typeof(SelectDateTimeViewModel),
+                    .Navigate<SelectDateTimeViewModel, DatePickerParameters, DateTimeOffset>(
                         Arg.Is<DatePickerParameters>(p => p.MaxDate == now));
             }
 
@@ -488,7 +487,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 var parameterToReturn = now.AddHours(-2);
                 NavigationService
-                    .Navigate<DateTimeOffset, DateTimeOffset>(typeof(SelectDateTimeViewModel), Arg.Any<DateTimeOffset>())
+                    .Navigate<SelectDateTimeViewModel, DatePickerParameters, DateTimeOffset>(Arg.Any<DatePickerParameters>())
                     .Returns(parameterToReturn);
                 ViewModel.Prepare(now);
 
@@ -506,7 +505,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var parameterToReturn = now.AddHours(-2);
                 var tcs = new TaskCompletionSource<DateTimeOffset>();
                 NavigationService
-                    .Navigate<DateTimeOffset, DateTimeOffset>(typeof(SelectDateTimeViewModel), Arg.Any<DateTimeOffset>())
+                    .Navigate<SelectDateTimeViewModel, DatePickerParameters, DateTimeOffset>(Arg.Any<DatePickerParameters>())
                     .Returns(tcs.Task);
                 ViewModel.Prepare(now);
 
@@ -712,7 +711,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var now = DateTimeOffset.UtcNow;
                 var parameterToReturn = DurationParameter.WithStartAndDuration(now.AddHours(-2), null);
                 NavigationService
-                    .Navigate<DurationParameter, DurationParameter>(typeof(EditDurationViewModel), Arg.Any<DurationParameter>())
+                    .Navigate<EditDurationViewModel, DurationParameter, DurationParameter>(Arg.Any<DurationParameter>())
                     .Returns(parameterToReturn);
                 ViewModel.Prepare(now);
 
@@ -728,7 +727,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var parameterToReturn = DurationParameter.WithStartAndDuration(now.AddHours(-2), null);
                 var tcs = new TaskCompletionSource<DurationParameter>();
                 NavigationService
-                    .Navigate<DurationParameter, DurationParameter>(typeof(EditDurationViewModel), Arg.Any<DurationParameter>())
+                    .Navigate<EditDurationViewModel, DurationParameter, DurationParameter>(Arg.Any<DurationParameter>())
                     .Returns(tcs.Task);
                 ViewModel.Prepare(now);
 

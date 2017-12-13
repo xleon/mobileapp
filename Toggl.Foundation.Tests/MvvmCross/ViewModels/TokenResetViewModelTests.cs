@@ -110,7 +110,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.DoneCommand.Execute();
 
-                NavigationService.Received().Navigate(typeof(MainViewModel));
+                NavigationService.Received().Navigate<MainViewModel>();
             }
 
             [Fact, LogIfTooSlow]
@@ -146,7 +146,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.DoneCommand.Execute();
 
-                NavigationService.DidNotReceive().Navigate(typeof(MainViewModel));
+                NavigationService.DidNotReceive().Navigate<MainViewModel>();
             }
         }
 
@@ -165,7 +165,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ViewModel.SignOutCommand.Execute();
 
-                NavigationService.Received().Navigate(typeof(OnboardingViewModel));
+                NavigationService.Received().Navigate<OnboardingViewModel>();
             }
 
             [Fact, LogIfTooSlow]

@@ -121,7 +121,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 setupChangingWorkspaceScenario();
 
                 NavigationService
-                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>())
+                    .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>())
                     .Returns(Task.FromResult(1L));
 
                 ViewModel.Prepare(projectName);
@@ -509,7 +509,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.PickColorCommand.ExecuteAsync();
 
                 await NavigationService.Received()
-                    .Navigate<ColorParameters, MvxColor>(typeof(SelectColorViewModel), Arg.Any<ColorParameters>());
+                    .Navigate<SelectColorViewModel, ColorParameters, MvxColor>(Arg.Any<ColorParameters>());
             }
 
             [Fact, LogIfTooSlow]
@@ -517,7 +517,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var expectedColor = MvxColors.AliceBlue;
                 NavigationService
-                    .Navigate<ColorParameters, MvxColor>(typeof(SelectColorViewModel), Arg.Any<ColorParameters>())
+                    .Navigate<SelectColorViewModel, ColorParameters, MvxColor>(Arg.Any<ColorParameters>())
                     .Returns(Task.FromResult(expectedColor));
                 ViewModel.Prepare("Some name");
                 ViewModel.Color = MvxColors.Azure;
@@ -557,14 +557,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.PickWorkspaceCommand.ExecuteAsync();
 
                 await NavigationService.Received()
-                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>());
+                    .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>());
             }
 
             [Fact, LogIfTooSlow]
             public async Task SetsTheReturnedWorkspaceNameAsTheWorkspaceNameProperty()
             {
                 NavigationService
-                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>())
+                    .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>())
                     .Returns(Task.FromResult(workspaceId));
 
                 await ViewModel.PickWorkspaceCommand.ExecuteAsync();
@@ -576,7 +576,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task ResetsTheClientNameWhenTheWorkspaceChanges()
             {
                 NavigationService
-                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>())
+                    .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>())
                     .Returns(Task.FromResult(workspaceId));
 
                 await ViewModel.PickWorkspaceCommand.ExecuteAsync();
@@ -588,10 +588,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task PicksADefaultColorIfTheSelectedColorIsCustomAndTheWorkspaceIsNotPro()
             {
                 NavigationService
-                    .Navigate<MvxColor, MvxColor>(typeof(SelectColorViewModel), Arg.Any<MvxColor>())
+                    .Navigate<SelectColorViewModel, ColorParameters, MvxColor>(Arg.Any<ColorParameters>())
                     .Returns(Task.FromResult(MvxColors.Azure));
                 NavigationService
-                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>())
+                    .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>())
                     .Returns(Task.FromResult(workspaceId));
                 DataSource.Workspaces.WorkspaceHasFeature(workspaceId, WorkspaceFeatureId.Pro)
                     .Returns(Observable.Return(false));
@@ -613,7 +613,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.PickClientCommand.ExecuteAsync();
 
                 await NavigationService.Received()
-                    .Navigate<long, long?>(typeof(SelectClientViewModel), Arg.Any<long>());
+                    .Navigate<SelectClientViewModel, long, long?>(Arg.Any<long>());
             }
 
             [Fact, LogIfTooSlow]
@@ -629,7 +629,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.PickClientCommand.ExecuteAsync();
 
                 await NavigationService.Received()
-                    .Navigate<long, long?>(typeof(SelectClientViewModel), WorkspaceId);
+                    .Navigate<SelectClientViewModel, long, long?>(WorkspaceId);
             }
 
             [Fact, LogIfTooSlow]
@@ -641,7 +641,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 client.Id.Returns(expectedId.Value);
                 client.Name.Returns(expectedName);
                 NavigationService
-                    .Navigate<long, long?>(typeof(SelectClientViewModel), Arg.Any<long>())
+                    .Navigate<SelectClientViewModel, long, long?>(Arg.Any<long>())
                     .Returns(Task.FromResult(expectedId));
                 DataSource.Workspaces
                     .GetDefault()
@@ -664,7 +664,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 client.Id.Returns(expectedId.Value);
                 client.Name.Returns(expectedName);
                 NavigationService
-                    .Navigate<long, long?>(typeof(SelectClientViewModel), Arg.Any<long>())
+                    .Navigate<SelectClientViewModel, long, long?>(Arg.Any<long>())
                     .Returns(Task.FromResult(expectedId));
                 DataSource.Workspaces
                     .GetDefault()
@@ -674,7 +674,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Prepare("Some name");
                 await ViewModel.PickClientCommand.ExecuteAsync();
                 NavigationService
-                    .Navigate<long, long?>(typeof(SelectClientViewModel), Arg.Any<long>())
+                    .Navigate<SelectClientViewModel, long, long?>(Arg.Any<long>())
                     .Returns(Task.FromResult<long?>(0));
 
                 await ViewModel.PickClientCommand.ExecuteAsync();

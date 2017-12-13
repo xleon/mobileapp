@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CoreAnimation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Core.Views;
@@ -35,17 +36,38 @@ namespace Toggl.Daneel.Presentation
         {
         }
 
-        protected override void RegisterAttributeTypes()
+        public override void RegisterAttributeTypes()
         {
             base.RegisterAttributeTypes();
 
-            AttributeTypesToShowMethodDictionary.Add(typeof(NestedPresentationAttribute), showNestedViewController);
-            AttributeTypesToShowMethodDictionary.Add(typeof(ModalCardPresentationAttribute), showModalCardViewController);
-            AttributeTypesToShowMethodDictionary.Add(typeof(ModalDialogPresentationAttribute), showModalDialogViewController);
+            AttributeTypesToActionsDictionary.Add(
+                typeof(NestedPresentationAttribute),
+                new MvxPresentationAttributeAction 
+                { 
+                    ShowAction = showNestedViewController,
+                    CloseAction = (viewModel, attribute) => false
+                });
+
+            AttributeTypesToActionsDictionary.Add(
+                typeof(ModalCardPresentationAttribute), 
+                new MvxPresentationAttributeAction 
+                { 
+                    ShowAction = showModalCardViewController,
+                    CloseAction = (viewModel, attribute) => CloseModalViewController(viewModel, (MvxModalPresentationAttribute)attribute)
+                });
+
+            AttributeTypesToActionsDictionary.Add(
+                typeof(ModalDialogPresentationAttribute), 
+                new MvxPresentationAttributeAction 
+                { 
+                    ShowAction = showModalDialogViewController,
+                    CloseAction = (viewModel, attribute) => CloseModalViewController(viewModel, (MvxModalPresentationAttribute)attribute)
+                });
         }
 
-        private void showNestedViewController(UIViewController viewController, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
+        private void showNestedViewController(Type viewType, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
         {
+            var viewController = (UIViewController)this.CreateViewControllerFor(request);
             var mainViewController = MasterNavigationController.ViewControllers.OfType<MainViewController>().Single();
             mainViewController.AddChildViewController(viewController);
 
@@ -56,8 +78,9 @@ namespace Toggl.Daneel.Presentation
             viewController.DidMoveToParentViewController(mainViewController);
         }
 
-        private void showModalCardViewController(UIViewController viewController, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
+        private void showModalCardViewController(Type viewType, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
         {
+            var viewController = (UIViewController)this.CreateViewControllerFor(request);
             var transitionDelegate = new FromBottomTransitionDelegate(
                 () => ModalViewControllers.Remove(viewController)
             );
@@ -72,8 +95,9 @@ namespace Toggl.Daneel.Presentation
             transitionDelegate.WireToViewController(viewController);
         }
 
-        private void showModalDialogViewController(UIViewController viewController, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
+        private void showModalDialogViewController(Type viewType, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
         {
+            var viewController = (UIViewController)this.CreateViewControllerFor(request);
             viewController.ModalPresentationStyle = UIModalPresentationStyle.Custom;
             viewController.TransitioningDelegate = modalTransitionDelegate;
 

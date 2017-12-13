@@ -46,21 +46,21 @@ namespace Toggl.Foundation.MvvmCross
             this.accessRestrictionStorage = accessRestrictionStorage;
         }
 
-        public void Start(object hint = null)
+        public async void Start(object hint = null)
         {
             Mvx.RegisterSingleton(loginManager);
 
             if (accessRestrictionStorage.IsApiOutdated() || accessRestrictionStorage.IsClientOutdated())
             {
-                navigationService.Navigate<OnboardingViewModel>()
-                    .ContinueWith(_ => navigationService.Navigate<OutdatedAppViewModel>());
+                await navigationService.Navigate<OnboardingViewModel>();
+                await navigationService.Navigate<OutdatedAppViewModel>();
                 return;
             }
 
             var dataSource = loginManager.GetDataSourceIfLoggedIn();
             if (dataSource == null)
             {
-                navigationService.Navigate<OnboardingViewModel>();
+                await navigationService.Navigate<OnboardingViewModel>();
                 return;
             }
 
@@ -69,13 +69,13 @@ namespace Toggl.Foundation.MvvmCross
             var user = dataSource.User.Current.Wait();
             if (accessRestrictionStorage.IsUnauthorized(user.ApiToken))
             {
-                navigationService.Navigate<TokenResetViewModel>();
+                await navigationService.Navigate<TokenResetViewModel>();
                 return;
             }
 
-            dataSource.SyncManager.ForceFullSync();
+            var _ = dataSource.SyncManager.ForceFullSync();
 
-            navigationService.Navigate<MainViewModel>();
+            await navigationService.Navigate<MainViewModel>();
         }
     }
 }

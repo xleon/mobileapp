@@ -2,7 +2,6 @@
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using MvvmCross.Core.Navigation;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Login;
@@ -56,74 +55,69 @@ namespace Toggl.Foundation.Tests.MvvmCross
         public sealed class TheStartMethod : AppStartTest
         {
             [Fact, LogIfTooSlow]
-            public void ShowsTheOutdatedViewIfTheCurrentVersionOfTheAppIsOutdated()
+            public async Task ShowsTheOutdatedViewIfTheCurrentVersionOfTheAppIsOutdated()
             {
                 AccessRestrictionStorage.IsClientOutdated().Returns(true);
 
-                AppStart.Start();
-                Task.Delay(10).Wait();
+                await Task.Run(() => AppStart.Start());
 
-                NavigationService.Received().Navigate<OnboardingViewModel>();
-                NavigationService.Received().Navigate<OutdatedAppViewModel>();
+                await NavigationService.Received().Navigate<OnboardingViewModel>();
+                await NavigationService.Received().Navigate<OutdatedAppViewModel>();
                 LoginManager.DidNotReceive().GetDataSourceIfLoggedIn();
             }
 
             [Fact, LogIfTooSlow]
-            public void ShowsTheOutdatedViewIfTheVersionOfTheCurrentlyUsedApiIsOutdated()
+            public async Task ShowsTheOutdatedViewIfTheVersionOfTheCurrentlyUsedApiIsOutdated()
             {
                 AccessRestrictionStorage.IsApiOutdated().Returns(true);
 
-                AppStart.Start();
-                Task.Delay(10).Wait();
+                await Task.Run(() => AppStart.Start());
 
-                NavigationService.Received().Navigate<OnboardingViewModel>();
-                NavigationService.Received().Navigate<OutdatedAppViewModel>();
+                await NavigationService.Received().Navigate<OnboardingViewModel>();
+                await NavigationService.Received().Navigate<OutdatedAppViewModel>();
                 LoginManager.DidNotReceive().GetDataSourceIfLoggedIn();
             }
 
             [Fact, LogIfTooSlow]
-            public void ShowsTheReLoginViewIfTheUserRevokedTheApiToken()
+            public async Task ShowsTheReLoginViewIfTheUserRevokedTheApiToken()
             {
                 AccessRestrictionStorage.IsUnauthorized(Arg.Any<string>()).Returns(true);
 
-                AppStart.Start();
-                Task.Delay(10).Wait();
+                await Task.Run(() => AppStart.Start());
 
-                SyncManager.DidNotReceive().ForceFullSync();
-                NavigationService.Received().Navigate<TokenResetViewModel>();
+                await SyncManager.DidNotReceive().ForceFullSync();
+                await NavigationService.Received().Navigate<TokenResetViewModel>();
             }
 
             [Fact, LogIfTooSlow]
-            public void ShowsTheOutdatedViewIfTheTokenWasRevokedAndTheAppIsOutdated()
+            public async Task ShowsTheOutdatedViewIfTheTokenWasRevokedAndTheAppIsOutdated()
             {
                 AccessRestrictionStorage.IsUnauthorized(Arg.Any<string>()).Returns(true);
                 AccessRestrictionStorage.IsClientOutdated().Returns(true);
 
-                AppStart.Start();
-                Task.Delay(10).Wait();
+                await Task.Run(() => AppStart.Start());
 
-                NavigationService.Received().Navigate<OnboardingViewModel>();
-                NavigationService.Received().Navigate<OutdatedAppViewModel>();
+                await NavigationService.Received().Navigate<OnboardingViewModel>();
+                await NavigationService.Received().Navigate<OutdatedAppViewModel>();
                 LoginManager.DidNotReceive().GetDataSourceIfLoggedIn();
             }
 
             [Fact, LogIfTooSlow]
-            public void ShowsTheOutdatedViewIfTheTokenWasRevokedAndTheApiIsOutdated()
+            public async Task ShowsTheOutdatedViewIfTheTokenWasRevokedAndTheApiIsOutdated()
             {
                 AccessRestrictionStorage.IsUnauthorized(Arg.Any<string>()).Returns(true);
                 AccessRestrictionStorage.IsApiOutdated().Returns(true);
 
-                AppStart.Start();
-                Task.Delay(10).Wait();
+                await Task.Run(() => AppStart.Start());
 
-                NavigationService.Received().Navigate<OnboardingViewModel>();
-                NavigationService.Received().Navigate<OutdatedAppViewModel>();
-                NavigationService.DidNotReceive().Navigate<TokenResetViewModel>();
+                await NavigationService.Received().Navigate<OnboardingViewModel>();
+                await NavigationService.Received().Navigate<OutdatedAppViewModel>();
+                await NavigationService.DidNotReceive().Navigate<TokenResetViewModel>();
                 LoginManager.DidNotReceive().GetDataSourceIfLoggedIn();
             }
 
             [Fact, LogIfTooSlow]
-            public void DoesNotShowTheUnauthorizedAccessViewIfUsersApiTokenChanged()
+            public async Task DoesNotShowTheUnauthorizedAccessViewIfUsersApiTokenChanged()
             {
                 var oldApiToken = Guid.NewGuid().ToString();
                 var newApiToken = Guid.NewGuid().ToString();
@@ -138,32 +132,31 @@ namespace Toggl.Foundation.Tests.MvvmCross
                 AccessRestrictionStorage.IsApiOutdated().Returns(false);
                 AccessRestrictionStorage.IsClientOutdated().Returns(false);
 
-                AppStart.Start();
-                Task.Delay(10).Wait();
+                await Task.Run(() => AppStart.Start());
 
-                NavigationService.Received().Navigate<MainViewModel>();
+                await NavigationService.Received().Navigate<MainViewModel>();
             }
 
             [Fact, LogIfTooSlow]
-            public void ShowsTheOnboardingViewModelIfTheUserHasNotLoggedInPreviously()
+            public async Task ShowsTheOnboardingViewModelIfTheUserHasNotLoggedInPreviously()
             {
                 ITogglDataSource dataSource = null;
                 LoginManager.GetDataSourceIfLoggedIn().Returns(dataSource);
 
-                AppStart.Start();
+                await Task.Run(() => AppStart.Start());
 
-                NavigationService.Received().Navigate(typeof(OnboardingViewModel));
+                await NavigationService.Received().Navigate<OnboardingViewModel>();
             }
 
             [Fact, LogIfTooSlow]
-            public void ShowsTheTimeEntriesViewModelIfTheUserHasLoggedInPreviously()
+            public async Task ShowsTheTimeEntriesViewModelIfTheUserHasLoggedInPreviously()
             {
                 var dataSource = Substitute.For<ITogglDataSource>();
                 LoginManager.GetDataSourceIfLoggedIn().Returns(dataSource);
 
-                AppStart.Start();
+                await Task.Run(() => AppStart.Start());
 
-                NavigationService.Received().Navigate(typeof(MainViewModel));
+                await NavigationService.Received().Navigate<MainViewModel>();
             }
         }
     }

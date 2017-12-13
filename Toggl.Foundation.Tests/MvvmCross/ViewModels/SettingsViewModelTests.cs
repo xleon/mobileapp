@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
-using MvvmCross.Core.Navigation;
 using NSubstitute;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -156,7 +155,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 doNotShowConfirmationDialog();
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
-                await NavigationService.Received().Navigate(typeof(OnboardingViewModel));
+                await NavigationService.Received().Navigate<OnboardingViewModel>();
             }
 
             [Fact, LogIfTooSlow]
@@ -297,14 +296,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.EditWorkspaceCommand.ExecuteAsync();
 
                 await NavigationService.Received()
-                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>());
+                    .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>());
             }
 
             [Fact, LogIfTooSlow]
             public async Task SetsTheReturnedWorkspaceNameAsTheWorkspaceNameProperty()
             {
                 NavigationService
-                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>())
+                    .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>())
                     .Returns(Task.FromResult(workspaceId));
 
                 await ViewModel.EditWorkspaceCommand.ExecuteAsync();
@@ -316,7 +315,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task UpdatesTheUserWithTheReceivedWorspace()
             {
                 NavigationService
-                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>())
+                    .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>())
                     .Returns(Task.FromResult(workspaceId));
 
                 await ViewModel.EditWorkspaceCommand.ExecuteAsync();
@@ -328,7 +327,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task StartsTheSyncAlgorithm()
             {
                 NavigationService
-                    .Navigate<WorkspaceParameters, long>(typeof(SelectWorkspaceViewModel), Arg.Any<WorkspaceParameters>())
+                    .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>())
                     .Returns(Task.FromResult(workspaceId));
 
                 await ViewModel.EditWorkspaceCommand.ExecuteAsync();

@@ -1,3 +1,4 @@
+
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -62,7 +63,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ViewModel.ViewAppeared();
 
-                NavigationService.Received().Navigate(typeof(SuggestionsViewModel));
+                NavigationService.Received().Navigate<SuggestionsViewModel>();
             }
 
             [Fact, LogIfTooSlow]
@@ -70,7 +71,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ViewModel.ViewAppeared();
 
-                NavigationService.Received().Navigate(typeof(TimeEntriesLogViewModel));
+                NavigationService.Received().Navigate<TimeEntriesLogViewModel>();
             }
         }
 
@@ -81,7 +82,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.StartTimeEntryCommand.ExecuteAsync();
 
-                await NavigationService.Received().Navigate(typeof(StartTimeEntryViewModel), Arg.Any<DateTimeOffset>());
+                await NavigationService.Received()
+                    .Navigate<StartTimeEntryViewModel, DateTimeOffset>(Arg.Any<DateTimeOffset>());
             }
 
             [Property]
@@ -91,8 +93,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.StartTimeEntryCommand.ExecuteAsync().Wait();
 
-                NavigationService.Received().Navigate(
-                    typeof(StartTimeEntryViewModel),
+                NavigationService.Received().Navigate<StartTimeEntryViewModel, DateTimeOffset>(
                     Arg.Is<DateTimeOffset>(parameter => parameter == date)
                 ).Wait();
             }
@@ -105,7 +106,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.OpenSettingsCommand.ExecuteAsync();
 
-                await NavigationService.Received().Navigate(typeof(SettingsViewModel));
+                await NavigationService.Received().Navigate<SettingsViewModel>();
             }
         }
 

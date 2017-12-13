@@ -292,7 +292,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     ViewModel.NextCommand.Execute();
 
-                    NavigationService.Received().Navigate(typeof(MainViewModel));
+                    NavigationService.Received().Navigate<MainViewModel>();
                 }
 
                 [Fact, LogIfTooSlow]
@@ -328,7 +328,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     ViewModel.NextCommand.Execute();
 
-                    NavigationService.DidNotReceive().Navigate(typeof(MainViewModel));
+                    NavigationService.DidNotReceive().Navigate<MainViewModel>();
                 }
             }
 
@@ -440,7 +440,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 
                 ViewModel.GoogleLoginCommand.Execute();
 
-                NavigationService.Received().Navigate(typeof(MainViewModel));
+                NavigationService.Received().Navigate<MainViewModel>();
             }
 
             [Fact, LogIfTooSlow]
@@ -473,7 +473,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.GoogleLoginCommand.Execute();
 
-                NavigationService.DidNotReceive().Navigate(typeof(MainViewModel));
+                NavigationService.DidNotReceive().Navigate<MainViewModel>();
             }
 
             [Fact, LogIfTooSlow]
@@ -495,8 +495,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ViewModel.OpenTermsOfServiceCommand.Execute();
 
-                NavigationService.Received().Navigate(
-                    typeof(BrowserViewModel),
+                NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
                     Arg.Is<BrowserParameters>(parameter => parameter.Url == LoginViewModel.TermsOfServiceUrl)
                 );
             }
@@ -506,8 +505,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ViewModel.OpenTermsOfServiceCommand.Execute();
 
-                NavigationService.Received().Navigate(
-                    typeof(BrowserViewModel),
+                NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
                     Arg.Is<BrowserParameters>(parameter => parameter.Title == Resources.TermsOfService)
                 );
             }
@@ -520,8 +518,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ViewModel.OpenPrivacyPolicyCommand.Execute();
 
-                NavigationService.Received().Navigate(
-                    typeof(BrowserViewModel),
+                NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
                     Arg.Is<BrowserParameters>(parameter => parameter.Url == LoginViewModel.PrivacyPolicyUrl)
                 );
             }
@@ -531,8 +528,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ViewModel.OpenPrivacyPolicyCommand.Execute();
 
-                NavigationService.Received().Navigate(
-                    typeof(BrowserViewModel),
+                NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
                     Arg.Is<BrowserParameters>(parameter => parameter.Title == Resources.PrivacyPolicy)
                 );
             }
