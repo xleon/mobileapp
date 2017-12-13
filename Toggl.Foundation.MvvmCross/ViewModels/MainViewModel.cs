@@ -6,6 +6,7 @@ using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
@@ -31,8 +32,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private DateTimeOffset? currentTimeEntryStart;
 
         public long? CurrentTimeEntryId { get; private set; }
-
-        public bool HasCurrentTimeEntry => CurrentTimeEntryId != null;
 
         public string CurrentTimeEntryDescription { get; private set; }
 
@@ -121,6 +120,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             base.ViewAppeared();
             navigationService.Navigate<SuggestionsViewModel>();
             navigationService.Navigate<TimeEntriesLogViewModel>();
+
+            ChangePresentation(new CardVisibilityHint(CurrentTimeEntryId != null));
         }
 
         private void setRunningEntry(IDatabaseTimeEntry timeEntry)
@@ -133,6 +134,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             CurrentTimeEntryProject = timeEntry?.Project?.Name ?? "";
             CurrentTimeEntryProjectColor = timeEntry?.Project?.Color ?? "";
             CurrentTimeEntryClient = timeEntry?.Project?.Client?.Name ?? "";
+
+            ChangePresentation(new CardVisibilityHint(CurrentTimeEntryId != null));
         }
 
         private void refresh()

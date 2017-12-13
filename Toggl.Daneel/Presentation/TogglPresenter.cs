@@ -13,6 +13,7 @@ using Toggl.Daneel.ViewControllers;
 using Toggl.Daneel.ViewControllers.Navigation;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using UIKit;
 
 namespace Toggl.Daneel.Presentation
@@ -100,12 +101,7 @@ namespace Toggl.Daneel.Presentation
                 Animation.Timings.EnterTiming,
                 UIViewAnimationOptions.TransitionCrossDissolve,
                 () => _window.RootViewController = controller,
-                () =>
-                {
-                    if (controller is TogglNavigationController navigation && 
-                        navigation.ViewControllers.FirstOrDefault() is MainViewController mainViewController)
-                        mainViewController.AnimatePlayButton();
-                }
+                null
             );
 
         }
@@ -128,6 +124,19 @@ namespace Toggl.Daneel.Presentation
                 return new OnboardingFlowNavigationController(viewController);
 
             return new TogglNavigationController(viewController);
+        }
+
+        public override void ChangePresentation(MvxPresentationHint hint)
+        {
+            if (hint is CardVisibilityHint visibilityHint )
+            {
+                if (MasterNavigationController.TopViewController is MainViewController mainViewController)
+                    mainViewController.OnTimeEntryCardVisibilityChanged(visibilityHint.Visible);
+
+                return;   
+            }
+
+            base.ChangePresentation(hint);
         }
 
         public UIViewController TopViewController

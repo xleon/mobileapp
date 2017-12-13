@@ -4,6 +4,7 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck.Xunit;
+using MvvmCross.Platform.Core;
 using NSubstitute;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Sync;
@@ -251,15 +252,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected override string ExpectedValue => Client;
 
             protected override string ExpectedEmptyValue => "";
-        }
-
-        public sealed class TheHasCurrentTimeEntryProperty : CurrentTimeEntrypropertyTest<bool>
-        {
-            protected override bool ActualValue => ViewModel.HasCurrentTimeEntry;
-
-            protected override bool ExpectedValue => true;
-
-            protected override bool ExpectedEmptyValue => false;
         }
     }
 }
