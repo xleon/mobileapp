@@ -473,16 +473,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IEnumerable<AutocompleteSuggestion> suggestions)
         {
             var firstSuggestion = suggestions.FirstOrDefault();
-            if (firstSuggestion == null && IsSuggestingProjects && TextFieldInfo.WorkspaceId.HasValue)
-            {
-                // This ensures that "No Project" suggestion is shown even when no project
-                // suggestion matches the search query.
-                var collection = new WorkspaceGroupedCollection<AutocompleteSuggestion>(
-                    "", new[] { ProjectSuggestion.NoProject(TextFieldInfo.WorkspaceId.Value, "") });
-
-                return new[] { collection };
-            }
-                
             if (firstSuggestion is ProjectSuggestion)
                 return suggestions.GroupByWorkspaceAddingNoProject();
 
