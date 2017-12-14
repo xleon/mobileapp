@@ -188,7 +188,7 @@
     <Compile Include="Services\BrowserService.cs" />
     <Compile Include="Activities\OnboardingActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
-    <Compile Include="Services\SharedPreferencesAccessRestrictionStorage.cs" />
+    <Compile Include="Services\SharedPreferencesStorage.cs" />
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
   </ItemGroup>

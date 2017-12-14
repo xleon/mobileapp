@@ -160,6 +160,6 @@ namespace Toggl.Foundation.MvvmCross.Helper
         }
       
         public static readonly MvxColor[] DefaultProjectColors =
-            Foundation.Helper.Color.DefaultProjectColors.Select(MvxColor.ParseHexString).ToArray();
+            Toggl.Foundation.Helper.Color.DefaultProjectColors.Select(MvxColor.ParseHexString).ToArray();
     }
 }

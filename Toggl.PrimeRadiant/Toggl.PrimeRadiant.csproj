@@ -66,6 +66,8 @@
     <Compile Include="UpdateResult\UpdateResult.cs" />
     <Compile Include="Settings\IAccessRestrictionStorage.cs" />
     <Compile Include="Settings\IOnboardingStorage.cs" />
+    <Compile Include="Settings\SettingsStorage.cs" />
+    <Compile Include="Settings\IKeyValueStorage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj">

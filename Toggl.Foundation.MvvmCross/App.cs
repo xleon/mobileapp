@@ -3,7 +3,6 @@ using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using Toggl.Foundation.Login;
-using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Settings;
@@ -22,8 +21,6 @@ namespace Toggl.Foundation.MvvmCross
             Ensure.Argument.IsNotNull(loginManager, nameof(loginManager));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
-
-            Mvx.RegisterSingleton<IPasswordManagerService>(new StubPasswordManagerService());
 
             RegisterAppStart(new AppStart(loginManager, navigationService, accessRestrictionStorage));
         }
@@ -64,9 +61,7 @@ namespace Toggl.Foundation.MvvmCross
                 return;
             }
 
-            Mvx.RegisterSingleton(dataSource);
-
-            var user = dataSource.User.Current.Wait();
+            var user = await dataSource.User.Current;
             if (accessRestrictionStorage.IsUnauthorized(user.ApiToken))
             {
                 await navigationService.Navigate<TokenResetViewModel>();

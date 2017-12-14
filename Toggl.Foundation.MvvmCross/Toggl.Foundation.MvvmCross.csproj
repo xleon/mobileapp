@@ -93,6 +93,8 @@
     <Compile Include="ViewModels\ReportsCalendarViewModel.cs" />
     <Compile Include="ViewModels\CalendarDayViewModel.cs" />
     <Compile Include="ViewModels\CalendarPageViewModel.cs" />
+    <Compile Include="FoundationExtensions.cs" />
+    <Compile Include="DataSourceExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">

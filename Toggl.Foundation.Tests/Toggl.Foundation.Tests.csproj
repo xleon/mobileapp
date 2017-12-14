@@ -293,6 +293,8 @@
     <Compile Include="Reports\ReportsProviderTests.cs" />
     <Compile Include="Reports\ProjectSummaryReportTests.cs" />
     <Compile Include="MvvmCross\ViewModels\CalendarPageViewModelTests.cs" />
+    <Compile Include="FoundationTests.cs" />
+    <Compile Include="MvvmCross\FoundationExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MvvmCross\ViewModels\StartTimeEntryViewModelTests.cs" />
