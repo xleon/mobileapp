@@ -138,8 +138,16 @@ namespace Toggl.Daneel.Binding
 
             [Export("textViewDidChange:")]
             public void DidChange(UITextView textView)
-                => TextChanged.Raise(this);
-           
+            {
+                // When the `MarkedTextRange` property of the UITextView is not null
+                // then it means that the user is in the middle of inputting a multistage character.
+                // Hold off on editing the attributedText until they are done.
+                // Source: https://stackoverflow.com/questions/31430308/uitextview-attributedtext-with-japanese-keyboard-repeats-input
+                if (textView.MarkedTextRange != null) return;
+
+                TextChanged.Raise(this);
+            }
+
             [Export("textView:shouldChangeTextInRange:replacementText:")]
             public bool ShouldChangeCharacters(UITextView textView, NSRange range, string text)
             {
