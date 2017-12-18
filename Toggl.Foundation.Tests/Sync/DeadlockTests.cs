@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -56,7 +57,12 @@ namespace Toggl.Foundation.Tests.Sync
                 for (byte i = 0; i < n; i++)
                 {
                     var nextResult = new StateResult();
-                    Func<IObservable<ITransition>> transition = () => Observable.Return(new Transition(nextResult));
+                    Func<IObservable<ITransition>> transition = () => Observable.Create<ITransition>(async observer =>
+                    {
+                        await Task.Delay(1);
+                        observer.OnNext(new Transition(nextResult));
+                        observer.OnCompleted();
+                    });
 
                     Transitions.ConfigureTransition(lastResult, transition);
 
