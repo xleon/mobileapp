@@ -1,4 +1,6 @@
-﻿using Toggl.Foundation.Autocomplete.Suggestions;
+﻿using System;
+using System.Diagnostics.Tracing;
+using Toggl.Foundation.Autocomplete.Suggestions;
 
 namespace Toggl.Foundation.Autocomplete
 {
@@ -7,6 +9,11 @@ namespace Toggl.Foundation.Autocomplete
         public string Text { get; }
 
         public AutocompleteSuggestionType SuggestionType { get; }
+
+        private const int minimumQueryLength = 2;
+
+        private static QueryInfo emptyQueryInfo
+            => new QueryInfo(String.Empty, AutocompleteSuggestionType.None);
 
         public QueryInfo(string text, AutocompleteSuggestionType suggestionType)
         {
@@ -17,15 +24,15 @@ namespace Toggl.Foundation.Autocomplete
         public static QueryInfo ParseFieldInfo(TextFieldInfo info)
         {
             if (string.IsNullOrEmpty(info.Text))
-                return new QueryInfo("", AutocompleteSuggestionType.TimeEntries);
+                return emptyQueryInfo;
 
-            return trySearchByQuerySymbols(info, out var query)
-                ? query
-                : new QueryInfo(info.Text, AutocompleteSuggestionType.TimeEntries);
+            return searchByQuerySymbols(info)
+                ?? getDefaultQueryInfo(info.Text);
         }
 
-        private static bool trySearchByQuerySymbols(TextFieldInfo info, out QueryInfo query)
+        private static QueryInfo? searchByQuerySymbols(TextFieldInfo info)
         {
+            QueryInfo? query = null;
             var stringToSearch = info.Text.Substring(0, info.DescriptionCursorPosition);
 
             int indexOfQuerySymbol = stringToSearch.LastIndexOfAny(getQuerySymbols(info));
@@ -37,12 +44,15 @@ namespace Toggl.Foundation.Autocomplete
                 var text = info.Text.Substring(startingIndex, stringLength);
 
                 query = new QueryInfo(text, type);
-                return true;
             }
 
-            query = default(QueryInfo);
-            return false;
+            return query;
         }
+
+        private static QueryInfo getDefaultQueryInfo(string text)
+            => text.Length < minimumQueryLength
+                ? emptyQueryInfo
+                : new QueryInfo(text, AutocompleteSuggestionType.TimeEntries);
 
         private static char[] getQuerySymbols(TextFieldInfo info)
             => info.ProjectId.HasValue

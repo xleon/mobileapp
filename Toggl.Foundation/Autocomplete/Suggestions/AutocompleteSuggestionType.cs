@@ -2,6 +2,7 @@
 {
     public enum AutocompleteSuggestionType
     {
+        None,
         TimeEntries,
         Projects,
         Tags

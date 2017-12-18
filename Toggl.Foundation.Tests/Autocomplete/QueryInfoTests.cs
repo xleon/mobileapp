@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using Toggl.Foundation.Autocomplete;
@@ -11,13 +12,43 @@ namespace Toggl.Foundation.Tests.Autocomplete
     {
         public sealed class TheParseQueryMethod
         {
+            public sealed class None
+            {
+                [Theory]
+                [InlineData("")]
+                [InlineData(null)]
+                public void DoesNotSuggestAnythingWhenTheTextIsEmpty(string text)
+                {
+                    var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(text, 0);
+
+                    var parsed = QueryInfo.ParseFieldInfo(textFieldInfo);
+
+                    parsed.SuggestionType.Should().Be(AutocompleteSuggestionType.None);
+                    parsed.Text.Should().Be(String.Empty);
+                }
+
+                [Property]
+                public void DoesNotSuggestAnythingWhenThereIsOnlyOneCharacter(char letter)
+                {
+                    if (letter == '#' || letter == '@')
+                        return;
+
+                    var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(letter.ToString(), 1);
+
+                    var parsed = QueryInfo.ParseFieldInfo(textFieldInfo);
+
+                    parsed.SuggestionType.Should().Be(AutocompleteSuggestionType.None);
+                    parsed.Text.Should().Be(String.Empty);
+                }
+            }
+
             public sealed class TimeEntries : AutocompleteProviderTests.AutocompleteProviderTest
             {
                 [Property]
                 public void ExtractsTheProjectNameWhileTyping(NonEmptyString nonEmptyString)
                 {
                     var text = nonEmptyString.Get;
-                    if (text.Contains("#") || text.Contains("@"))
+                    if (text.Length < 2 || text.Contains("#") || text.Contains("@"))
                         return;
 
                     var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(text, text.Length);
@@ -32,7 +63,7 @@ namespace Toggl.Foundation.Tests.Autocomplete
                 public void DoesNotSuggestAnyMoreProjectsWhenSomeProjectIsAlreadySelected(NonEmptyString nonEmptyString)
                 {
                     var text = nonEmptyString.Get;
-                    if (text.Contains("#"))
+                    if (text.Length < 2 || text.Contains("#"))
                         return;
 
                     var textFieldInfo = TextFieldInfo.Empty
