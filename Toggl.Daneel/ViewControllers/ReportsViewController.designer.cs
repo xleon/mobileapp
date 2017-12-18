@@ -13,19 +13,41 @@ namespace Toggl.Daneel.ViewControllers
 	partial class ReportsViewController
 	{
 		[Outlet]
+		UIKit.UILabel BillablePercentageLabel { get; set; }
+
+		[Outlet]
+		Toggl.Daneel.Views.Reports.PercentageView BillablePercentageView { get; set; }
+
+		[Outlet]
 		UIKit.UIView EmptyStateView { get; set; }
 
 		[Outlet]
 		UIKit.UIImageView ImageView { get; set; }
 
 		[Outlet]
+		Toggl.Daneel.Views.Reports.PieChartView PieChartView { get; set; }
+
+		[Outlet]
 		UIKit.NSLayoutConstraint TopConstraint { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView TotalDurationGraph { get; set; }
 
 		[Outlet]
 		UIKit.UILabel TotalDurationLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (BillablePercentageLabel != null) {
+				BillablePercentageLabel.Dispose ();
+				BillablePercentageLabel = null;
+			}
+
+			if (BillablePercentageView != null) {
+				BillablePercentageView.Dispose ();
+				BillablePercentageView = null;
+			}
+
 			if (EmptyStateView != null) {
 				EmptyStateView.Dispose ();
 				EmptyStateView = null;
@@ -36,9 +58,19 @@ namespace Toggl.Daneel.ViewControllers
 				ImageView = null;
 			}
 
+			if (PieChartView != null) {
+				PieChartView.Dispose ();
+				PieChartView = null;
+			}
+
 			if (TopConstraint != null) {
 				TopConstraint.Dispose ();
 				TopConstraint = null;
+			}
+
+			if (TotalDurationGraph != null) {
+				TotalDurationGraph.Dispose ();
+				TotalDurationGraph = null;
 			}
 
 			if (TotalDurationLabel != null) {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using Toggl.Foundation.Autocomplete;
+using Toggl.Foundation.Reports;
 using Toggl.Foundation.Sync;
 
 namespace Toggl.Foundation.DataSources
@@ -17,6 +18,8 @@ namespace Toggl.Foundation.DataSources
 
         ISyncManager SyncManager { get; }
         IAutocompleteProvider AutocompleteProvider { get; }
+
+        IReportsProvider ReportsProvider { get; }
 
         IObservable<bool> HasUnsyncedData();
         IObservable<Unit> Logout();

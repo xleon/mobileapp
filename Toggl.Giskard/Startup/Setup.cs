@@ -42,6 +42,7 @@ namespace Toggl.Giskard
             const string clientName = "Giskard";
             var packageInfo = ApplicationContext.PackageManager.GetPackageInfo(ApplicationContext.PackageName, 0);
             var version = packageInfo.VersionName;
+
             var sharedPreferences = ApplicationContext.GetSharedPreferences(clientName, FileCreationMode.Private);
 
             var foundation = Foundation.Foundation.Create(

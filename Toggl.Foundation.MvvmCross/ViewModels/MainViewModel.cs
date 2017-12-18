@@ -146,8 +146,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private Task openSettings()
             => navigationService.Navigate<SettingsViewModel>();
 
-        private Task openReports()
-            => navigationService.Navigate<ReportsViewModel>();
+        private async Task openReports()
+        {
+            var user = await dataSource.User.Current;
+            await navigationService.Navigate<ReportsViewModel, long>(user.DefaultWorkspaceId);
+        }
 
         private Task startTimeEntry() =>
             navigationService.Navigate<StartTimeEntryViewModel, DateTimeOffset>(timeService.CurrentDateTime);

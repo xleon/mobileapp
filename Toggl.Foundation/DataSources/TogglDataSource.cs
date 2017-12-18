@@ -3,12 +3,13 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Foundation.Autocomplete;
+using Toggl.Foundation.Reports;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Ultrawave;
 
 namespace Toggl.Foundation.DataSources
 {
@@ -20,11 +21,13 @@ namespace Toggl.Foundation.DataSources
         private IDisposable errorHandlingDisposable;
 
         public TogglDataSource(
+            ITogglApi api,
             ITogglDatabase database,
             ITimeService timeService,
             IApiErrorHandlingService apiErrorHandlingService,
             Func<ITogglDataSource, ISyncManager> createSyncManager)
         {
+            Ensure.Argument.IsNotNull(api, nameof(api));
             Ensure.Argument.IsNotNull(database, nameof(database));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(apiErrorHandlingService, nameof(apiErrorHandlingService));
@@ -44,6 +47,8 @@ namespace Toggl.Foundation.DataSources
             AutocompleteProvider = new AutocompleteProvider(database);
             SyncManager = createSyncManager(this);
 
+            ReportsProvider = new ReportsProvider(api, database);
+
             errorHandlingDisposable = SyncManager.ProgressObservable.Subscribe(onSyncError);
         }
 
@@ -57,6 +62,8 @@ namespace Toggl.Foundation.DataSources
 
         public ISyncManager SyncManager { get; }
         public IAutocompleteProvider AutocompleteProvider { get; }
+
+        public IReportsProvider ReportsProvider { get; }
 
         public IObservable<bool> HasUnsyncedData()
             => Observable.Merge(

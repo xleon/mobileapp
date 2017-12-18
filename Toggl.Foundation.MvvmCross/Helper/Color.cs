@@ -158,6 +158,17 @@ namespace Toggl.Foundation.MvvmCross.Helper
         {
             public static readonly MvxColor PlaceholderText = pinkishGrey;
         }
+
+        public static class Reports
+        {
+            public static readonly MvxColor PercentageActivated = new MvxColor(0, 171, 252);
+
+            public static readonly MvxColor PercentageDisabled = new MvxColor(6, 170, 245, 62);
+
+            public static readonly MvxColor TotalTimeActivated = new MvxColor(76, 217, 100);
+
+            public static readonly MvxColor Disabled = new MvxColor(181, 188, 192);
+        }
       
         public static readonly MvxColor[] DefaultProjectColors =
             Toggl.Foundation.Helper.Color.DefaultProjectColors.Select(MvxColor.ParseHexString).ToArray();

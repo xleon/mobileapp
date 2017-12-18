@@ -688,6 +688,10 @@
       <DependentUpon>WorkspaceViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\KeyboardAwareViewController.cs" />
+    <Compile Include="Views\Reports\PieChartView.cs" />
+    <Compile Include="Converters\TimeSpanReportLabelValueConverter.cs" />
+    <Compile Include="Converters\ReportPercentageLabelValueConverter.cs" />
+    <Compile Include="Views\Reports\PercentageView.cs" />
     <Compile Include="Services\ITopViewControllerProvider.cs" />
   </ItemGroup>
   <ItemGroup>

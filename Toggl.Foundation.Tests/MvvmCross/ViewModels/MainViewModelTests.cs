@@ -1,11 +1,9 @@
-
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck.Xunit;
-using MvvmCross.Platform.Core;
 using NSubstitute;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Sync;
@@ -110,6 +108,22 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
+        public sealed class TheOpenReportsCommand : MainViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task NavigatesToTheReportsViewModel()
+            {
+                const long workspaceId = 10;
+                var user = Substitute.For<IDatabaseUser>();
+                user.DefaultWorkspaceId.Returns(workspaceId);
+                DataSource.User.Current.Returns(Observable.Return(user));
+
+                await ViewModel.OpenReportsCommand.ExecuteAsync();
+
+                await NavigationService.Received().Navigate<ReportsViewModel, long>(workspaceId);
+            }
+        }
+
         public sealed class TheStopTimeEntryCommand : MainViewModelTest
         {
             [Fact, LogIfTooSlow]
@@ -153,7 +167,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public abstract class CurrentTimeEntrypropertyTest<T> : MainViewModelTest
         {
-            private BehaviorSubject<IDatabaseTimeEntry> currentTimeEntrySubject
+            private readonly BehaviorSubject<IDatabaseTimeEntry> currentTimeEntrySubject
                 = new BehaviorSubject<IDatabaseTimeEntry>(null);
 
             protected abstract T ActualValue { get; }

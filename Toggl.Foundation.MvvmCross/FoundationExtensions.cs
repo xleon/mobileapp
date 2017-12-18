@@ -113,7 +113,7 @@ namespace Toggl.Foundation.MvvmCross
                 TogglSyncManager.CreateSyncManager(self.Database, api, dataSource, self.TimeService, retryDelayLimit, scheduler);
 
             ITogglDataSource createDataSource(ITogglApi api)
-                => new TogglDataSource(self.Database, self.TimeService, self.ApiErrorHandlingService, createSyncManager(api))
+                => new TogglDataSource(api, self.Database, self.TimeService, self.ApiErrorHandlingService, createSyncManager(api))
                     .RegisterServices();
 
             var loginManager =

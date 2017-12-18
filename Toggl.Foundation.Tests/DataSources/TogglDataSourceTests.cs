@@ -20,6 +20,7 @@ using Xunit;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using ThreadingTask = System.Threading.Tasks.Task;
+using Toggl.Ultrawave;
 
 namespace Toggl.Foundation.Tests.DataSources
 {
@@ -28,6 +29,7 @@ namespace Toggl.Foundation.Tests.DataSources
         public abstract class TogglDataSourceTest
         {
             protected ITogglDataSource DataSource { get; }
+            protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
             protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
             protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
             protected ISyncManager SyncManager { get; } = Substitute.For<ISyncManager>();
@@ -37,7 +39,7 @@ namespace Toggl.Foundation.Tests.DataSources
             public TogglDataSourceTest()
             {
                 SyncManager.ProgressObservable.Returns(ProgressSubject.AsObservable());
-                DataSource = new TogglDataSource(Database, TimeService, ApiErrorHandlingService, _ => SyncManager);
+                DataSource = new TogglDataSource(Api, Database, TimeService, ApiErrorHandlingService, _ => SyncManager);
             }
         }
 
@@ -249,7 +251,7 @@ namespace Toggl.Foundation.Tests.DataSources
             }
 
             [Fact, LogIfTooSlow]
-            public async ThreadingTask SetsTheUnauthorizedAccessFlag()
+            public void SetsTheUnauthorizedAccessFlag()
             {
                 var exception = new UnauthorizedException(request, response);
                 ApiErrorHandlingService.TryHandleUnauthorizedError(Arg.Any<UnauthorizedException>()).Returns(true);

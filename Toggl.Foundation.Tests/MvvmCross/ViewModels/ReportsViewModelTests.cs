@@ -1,42 +1,110 @@
 ﻿using System;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.Reports;
+using Toggl.Foundation.Tests.Generators;
 using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
     public sealed class ReportsViewModelTests
     {
-        public abstract class ReportsViewModelTest
-            : BaseViewModelTests<ReportsViewModel>
+        public abstract class ReportsViewModelTest : BaseViewModelTests<ReportsViewModel>
         {
+            protected const long WorkspaceId = 10;
+
+            protected IReportsProvider ReportsProvider { get; } = Substitute.For<IReportsProvider>();
+
             protected override ReportsViewModel CreateViewModel()
-                => new ReportsViewModel(TimeService);
+                => new ReportsViewModel(ReportsProvider, TimeService);
         }
 
         public sealed class TheConstructor : ReportsViewModelTest
         {
-            [Fact, LogIfTooSlow]
-            public void ThrowsIfTheArgumentIsNull()
+            [Theory, LogIfTooSlow]
+            [ClassData(typeof(TwoParameterConstructorTestData))]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useReportsProvider, bool useTimeService)
             {
+                var reportsProvider = useReportsProvider ? ReportsProvider : null;
+                var timeService = useTimeService ? TimeService : null;
+
                 Action tryingToConstructWithEmptyParameters =
-                    () => new ReportsViewModel(null);
+                    () => new ReportsViewModel(reportsProvider, timeService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
             }
         }
 
+        public sealed class ThePrepareMethod : ReportsViewModelTest
+        {
+            [Property(MaxTest = 1)]
+            public void FiresACallToLoadReports(DateTimeOffset now)
+            {
+                var date = now.Date;
+                TimeService.CurrentDateTime.Returns(now);
+                var expectedStartDate = date.AddDays(1 - (int)date.DayOfWeek);
+                ViewModel.Prepare(WorkspaceId);
+
+                ReportsProvider.Received().GetProjectSummary(
+                    WorkspaceId, expectedStartDate, expectedStartDate.AddDays(6));
+            }
+        }
+
+        public sealed class TheIsLoadingProperty : ReportsViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public void IsSetToTrueBeforeWhenAReportIsLoading()
+            {
+                var now = DateTimeOffset.Now;
+                TimeService.CurrentDateTime.Returns(now);
+                ReportsProvider.GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
+                    .Returns(Observable.Never<ProjectSummaryReport>());
+
+                ViewModel.Prepare(WorkspaceId);
+
+                ViewModel.IsLoading.Should().BeTrue();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void IsSetToFalseWhenLoadingIsCompleted()
+            {
+                var now = DateTimeOffset.Now;
+                TimeService.CurrentDateTime.Returns(now);
+                ReportsProvider.GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
+                    .Returns(Observable.Return(new ProjectSummaryReport(new ChartSegment[0])));
+
+                ViewModel.Prepare(WorkspaceId);
+
+                ViewModel.IsLoading.Should().BeFalse();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void IsSetToFalseWhenLoadingOverBecauseOfAnError()
+            {
+                var now = DateTimeOffset.Now;
+                TimeService.CurrentDateTime.Returns(now);
+                ReportsProvider.GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
+                    .Returns(Observable.Throw<ProjectSummaryReport>(new Exception()));
+
+                ViewModel.Prepare(WorkspaceId);
+
+                ViewModel.IsLoading.Should().BeFalse();
+            }
+        }
+
         public sealed class TheCurrentDateRangeStringProperty : ReportsViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void IsInitializedToThisWeek()
             {
                 TimeService.CurrentDateTime.Returns(new DateTimeOffset(2017, 10, 10, 10, 10, 10, TimeSpan.Zero));
-                ViewModel.Prepare();
+                ViewModel.Prepare(WorkspaceId);
 
                 ViewModel.CurrentDateRangeString.Should().Be(Resources.ThisWeek);
             }
