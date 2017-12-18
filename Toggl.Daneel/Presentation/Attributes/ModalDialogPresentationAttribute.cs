@@ -1,8 +1,8 @@
-﻿using MvvmCross.Core.Views;
+﻿using MvvmCross.iOS.Views.Presenters.Attributes;
 
 namespace Toggl.Daneel.Presentation.Attributes
 {
-    public class ModalDialogPresentationAttribute : MvxBasePresentationAttribute
+    public class ModalDialogPresentationAttribute : MvxModalPresentationAttribute
     {
     }
 }
