@@ -1270,6 +1270,54 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
+        public sealed class TheTextFieldInfoProperty : StartTimeEntryViewModelTest
+        {
+            [Theory, LogIfTooSlow]
+            [InlineData("abc @def")]
+            [InlineData("abc #def")]
+            public void DoesNotChangeSuggestionsWhenOnlyTheCursorMovesForward(string text)
+            {
+                ViewModel.Prepare(DateTimeOffset.Now);
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(text, text.Length);
+                AutocompleteProvider.ClearReceivedCalls();
+
+                ViewModel.TextFieldInfo = ViewModel.TextFieldInfo.WithTextAndCursor(text, 0);
+
+                AutocompleteProvider.DidNotReceive().Query(Arg.Any<QueryInfo>());
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData("abc @def")]
+            [InlineData("abc #def")]
+            public void ChangesSuggestionsWhenTheCursorMovesBackBehindTheOldCursorPosition(string text)
+            {
+                var extendedText = text + "x";
+                ViewModel.Prepare(DateTimeOffset.Now);
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(extendedText, text.Length);
+                ViewModel.TextFieldInfo = ViewModel.TextFieldInfo.WithTextAndCursor(extendedText, 0);
+                AutocompleteProvider.ClearReceivedCalls();
+
+                ViewModel.TextFieldInfo = ViewModel.TextFieldInfo.WithTextAndCursor(extendedText, extendedText.Length);
+
+                AutocompleteProvider.Received().Query(Arg.Any<QueryInfo>());
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData("abc @def")]
+            [InlineData("abc #def")]
+            public void ChangesSuggestionsWhenTheCursorMovesBeforeTheQuerySymbolAndUserStartsTyping(string text)
+            {
+                ViewModel.Prepare(DateTimeOffset.Now);
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(text, text.Length);
+                ViewModel.TextFieldInfo = ViewModel.TextFieldInfo.WithTextAndCursor(text, 0);
+                AutocompleteProvider.ClearReceivedCalls();
+
+                ViewModel.TextFieldInfo = ViewModel.TextFieldInfo.WithTextAndCursor("x" + text, 1);
+
+                AutocompleteProvider.Received().Query(Arg.Is<QueryInfo>(query => query.Text.StartsWith("x")));
+            }
+        }
+
         public sealed class TheDescriptionRemainingBytesProperty : StartTimeEntryViewModelTest
         {
             [Fact, LogIfTooSlow]

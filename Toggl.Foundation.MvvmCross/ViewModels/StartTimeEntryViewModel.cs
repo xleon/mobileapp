@@ -34,6 +34,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private long? lastProjectId;
         private IDisposable queryDisposable;
         private IDisposable elapsedTimeDisposable;
+        private TextFieldInfo previousTextFieldInfo;
 
         //Properties
         private int DescriptionByteCount
@@ -70,7 +71,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             => string.IsNullOrEmpty(TextFieldInfo.Text)
             && string.IsNullOrEmpty(TextFieldInfo.ProjectName)
             && TextFieldInfo.Tags.Length == 0;
-        
+
         public bool UseGrouping { get; set; }
 
         public string CurrentQuery { get; private set; }
@@ -318,6 +319,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             queryDisposable =
                 infoSubject.AsObservable()
                     .StartWith(TextFieldInfo)
+                    .Where(shouldUpdateSuggestions)
                     .Select(QueryInfo.ParseFieldInfo)
                     .Do(onParsedQuery)
                     .SelectMany(dataSource.AutocompleteProvider.Query)
@@ -448,6 +450,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Do(_ => dataSource.SyncManager.PushSync());
 
             await navigationService.Close(this);
+        }
+
+        private bool shouldUpdateSuggestions(TextFieldInfo textFieldInfo)
+        {
+            if (textFieldInfo.Text != previousTextFieldInfo.Text || textFieldInfo.CursorPosition >= previousTextFieldInfo.CursorPosition)
+            {
+                previousTextFieldInfo = TextFieldInfo;
+                return true;
+            }
+
+            return false;
         }
 
         private void onParsedQuery(QueryInfo parsedQuery)
