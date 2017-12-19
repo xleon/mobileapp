@@ -440,6 +440,7 @@
     <InterfaceDefinition Include="Views\EntityCreation\CreateEntityViewCell.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\SelectableTagViewCell.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\WorkspaceViewCell.xib" />
+    <InterfaceDefinition Include="Views\Reports\ReportsLegendViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -694,6 +695,10 @@
     <Compile Include="Views\Reports\PercentageView.cs" />
     <Compile Include="Services\ITopViewControllerProvider.cs" />
     <Compile Include="Presentation\NestedPresentationInfo.cs" />
+    <Compile Include="Views\Reports\ReportsLegendViewCell.cs" />
+    <Compile Include="Views\Reports\ReportsLegendViewCell.designer.cs">
+      <DependentUpon>ReportsLegendViewCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
