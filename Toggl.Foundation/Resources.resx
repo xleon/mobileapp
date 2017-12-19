@@ -225,4 +225,16 @@ time entries will appear here.</value>
     <data name="ThisWeek">
         <value>This week</value>
     </data>
+    <data name="LastWeek">
+        <value>Last week</value>
+    </data>
+    <data name="ThisMonth">
+        <value>This month</value>
+    </data>
+    <data name="LastMonth">
+        <value>Last month</value>
+    </data>
+    <data name="ThisYear">
+        <value>This year</value>
+    </data>
 </root>

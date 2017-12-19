@@ -140,7 +140,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var end = new DateTimeOffset(endYear, endMonth, endDay, 0, 0, 0, TimeSpan.Zero);
                 TimeService.CurrentDateTime.Returns(currentDate);
                 ViewModel.ChangeDateRangeCommand.Execute(
-                    DateRangeParameter.WithStartAndEndDates(start, end));
+                    DateRangeParameter.WithDates(start, end));
 
                 ViewModel.CurrentDateRangeString.Should().Be(Resources.ThisWeek);
             }
@@ -170,7 +170,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var end = new DateTimeOffset(endYear, endMonth, endDay, 12, 34, 1, TimeSpan.Zero);
 
                 ViewModel.ChangeDateRangeCommand.Execute(
-                    DateRangeParameter.WithStartAndEndDates(start, end));
+                    DateRangeParameter.WithDates(start, end));
 
                 ViewModel.CurrentDateRangeString.Should().Be(expectedResult);
             }
