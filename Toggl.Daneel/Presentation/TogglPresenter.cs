@@ -101,8 +101,6 @@ namespace Toggl.Daneel.Presentation
             TopViewController.PresentViewController(viewController, true, null);
 
             ModalViewControllers.Add(viewController);
-
-            transitionDelegate.WireToViewController(viewController);
         }
 
         private void showModalDialogViewController(Type viewType, MvxBasePresentationAttribute attribute, MvxViewModelRequest request)
@@ -140,16 +138,16 @@ namespace Toggl.Daneel.Presentation
 
         }
 
-        public override void Close(IMvxViewModel toClose)
+        public override void Close(IMvxViewModel viewModel)
         {
-            if (toClose is LoginViewModel)
+            if (viewModel is LoginViewModel)
             {
                 MasterNavigationController.View.Window.Layer.AddAnimation(FadeAnimation, CALayer.Transition);
                 MasterNavigationController.PopViewController(false);
                 return;
             }
 
-            base.Close(toClose);
+            base.Close(viewModel);
         }
 
         protected override MvxNavigationController CreateNavigationController(UIViewController viewController)

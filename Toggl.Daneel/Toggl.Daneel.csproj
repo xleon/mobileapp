@@ -474,7 +474,6 @@
     <Compile Include="Presentation\Attributes\ModalCardPresentationAttribute.cs" />
     <Compile Include="Presentation\Attributes\NestedChildPresentationAttribute.cs" />
     <Compile Include="Presentation\Transition\FromBottomTransition.cs" />
-    <Compile Include="Presentation\Transition\SwipeInteractionController.cs" />
     <Compile Include="Presentation\Transition\FromBottomTransitionDelegate.cs" />
     <Compile Include="Presentation\Transition\ModalPresentationController.cs" />
     <Compile Include="ViewControllers\EditTimeEntryViewController.cs" />

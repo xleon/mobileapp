@@ -16,8 +16,6 @@ namespace Toggl.Daneel.Presentation.Transition
             this.onDismissedCallback = onDismissedCallback;
         }
 
-        private readonly SwipeInteractionController swipeInteractionController = new SwipeInteractionController();
-
         [Export("animationControllerForPresentedController:presentingController:sourceController:")]
         public IUIViewControllerAnimatedTransitioning GetAnimationControllerForDismissedController(
             UIViewController presented, UIViewController presenting, UIViewController source
@@ -31,12 +29,5 @@ namespace Toggl.Daneel.Presentation.Transition
         public UIPresentationController GetPresentationControllerForPresentedViewController(
             UIViewController presented, UIViewController presenting, UIViewController source
         ) => new ModalPresentationController(presented, presenting, onDismissedCallback);
-
-        [Export("interactionControllerForDismissal:")]
-        public IUIViewControllerInteractiveTransitioning GetInteractionControllerForDismissal(IUIViewControllerAnimatedTransitioning animator)
-            => swipeInteractionController.InteractionInProgress ? swipeInteractionController : null;
-
-        public void WireToViewController(UIViewController vc)
-        => swipeInteractionController.WireToViewController(vc, onDismissedCallback);
     }
 }
