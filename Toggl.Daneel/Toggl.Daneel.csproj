@@ -693,6 +693,7 @@
     <Compile Include="Converters\ReportPercentageLabelValueConverter.cs" />
     <Compile Include="Views\Reports\PercentageView.cs" />
     <Compile Include="Services\ITopViewControllerProvider.cs" />
+    <Compile Include="Presentation\NestedPresentationInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
