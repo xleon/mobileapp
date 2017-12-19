@@ -17,7 +17,7 @@ namespace Toggl.Foundation.Reports
 
             Segments = segments;
             TotalSeconds = totalSeconds;
-            BillablePercentage = (100.0f / totalSeconds) * billableSeconds;
+            BillablePercentage = totalSeconds > 0 ? (100.0f / totalSeconds) * billableSeconds : 0;
         }
     }
 }

@@ -4,6 +4,7 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using Toggl.Foundation.Reports;
+using Xunit;
 
 namespace Toggl.Foundation.Tests.Reports
 {
@@ -19,7 +20,7 @@ namespace Toggl.Foundation.Tests.Reports
                     .ToArray();
                 var totalTrackedSeconds = segments.Select(s => s.TrackedSeconds).Sum();
                 var billableSeconds = segments.Select(s => s.BillableSeconds).Sum();
-                var expectedBillablePercentage = (100.0f / totalTrackedSeconds) * billableSeconds;
+                var expectedBillablePercentage = totalTrackedSeconds > 0 ? (100.0f / totalTrackedSeconds) * billableSeconds : 0;
 
                 var report = new ProjectSummaryReport(segments);
 
@@ -38,6 +39,15 @@ namespace Toggl.Foundation.Tests.Reports
                 var report = new ProjectSummaryReport(segments);
 
                 report.TotalSeconds.Should().Be(expectedDuration);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsZerosForEmptyListOfProjects()
+            {
+                var report = new ProjectSummaryReport(new ChartSegment[0]);
+
+                report.TotalSeconds.Should().Be(0);
+                report.BillablePercentage.Should().Be(0);
             }
 
             private ChartSegment getSegmentFromDurationAndIndex(int index, int trackedSeconds)
