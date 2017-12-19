@@ -37,6 +37,7 @@ namespace Toggl.Daneel.Extensions
             tick.AddAttributes(attributes, range);
 
             var result = new NSMutableAttributedString(self);
+            result.Append(new NSAttributedString(" ")); // separate the text from the icon
             result.Append(tick);
 
             return result;
