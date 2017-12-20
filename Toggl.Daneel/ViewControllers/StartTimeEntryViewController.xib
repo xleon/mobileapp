@@ -22,7 +22,6 @@
                 <outlet property="DescriptionTextView" destination="R8W-w1-sEf" id="name-outlet-R8W-w1-sEf"/>
                 <outlet property="DoneButton" destination="Hya-nl-hcs" id="name-outlet-Hya-nl-hcs"/>
                 <outlet property="DurationButton" destination="lT7-d8-d3t" id="name-outlet-lT7-d8-d3t"/>
-                <outlet property="PlaceholderLabel" destination="NhL-JL-C4n" id="259-kW-xYf"/>
                 <outlet property="ProjectsButton" destination="qfx-lJ-emc" id="name-outlet-qfx-lJ-emc"/>
                 <outlet property="SuggestionsTableView" destination="04s-S8-twa" id="name-outlet-04s-S8-twa"/>
                 <outlet property="TagsButton" destination="H7M-A1-mmK" id="name-outlet-H7M-A1-mmK"/>
@@ -152,21 +151,13 @@
                         <constraint firstAttribute="height" constant="1" id="bo4-Gl-gIw"/>
                     </constraints>
                 </view>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What are you working on?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NhL-JL-C4n">
-                    <rect key="frame" x="21" y="56" width="198" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" red="0.80784313725490198" green="0.80784313725490198" blue="0.80784313725490198" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="3I4-ki-f8o" firstAttribute="top" secondItem="2" secondAttribute="top" constant="12" id="1Du-It-obb"/>
                 <constraint firstItem="04s-S8-twa" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="4RY-Xr-C7o"/>
-                <constraint firstItem="NhL-JL-C4n" firstAttribute="top" secondItem="R8W-w1-sEf" secondAttribute="top" constant="12" id="4zA-9x-lDa"/>
                 <constraint firstItem="vbp-dw-DYK" firstAttribute="bottom" secondItem="R8W-w1-sEf" secondAttribute="bottom" id="CrT-Ku-Vu3"/>
                 <constraint firstItem="dU3-s1-ELa" firstAttribute="top" secondItem="04s-S8-twa" secondAttribute="bottom" id="Ed3-WO-VAz"/>
-                <constraint firstItem="NhL-JL-C4n" firstAttribute="leading" secondItem="R8W-w1-sEf" secondAttribute="leading" constant="5" id="Efk-KX-J4j"/>
                 <constraint firstAttribute="bottom" secondItem="dU3-s1-ELa" secondAttribute="bottom" id="HKM-yE-bqT"/>
                 <constraint firstItem="04s-S8-twa" firstAttribute="top" secondItem="R8W-w1-sEf" secondAttribute="bottom" id="LWu-ay-Tlz"/>
                 <constraint firstItem="MAa-jq-GXB" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="SKA-G6-SAk"/>

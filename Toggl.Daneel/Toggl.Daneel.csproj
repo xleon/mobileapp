@@ -687,6 +687,7 @@
     <Compile Include="Views\Reports\ReportsLegendViewCell.designer.cs">
       <DependentUpon>ReportsLegendViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\TextViewPlaceholderManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

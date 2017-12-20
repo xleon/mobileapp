@@ -4,6 +4,7 @@ using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
 using MvvmCross.Platform.Core;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Views;
 using Toggl.Foundation.Autocomplete;
 using UIKit;
 
@@ -22,6 +23,8 @@ namespace Toggl.Daneel.Binding
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.TwoWay;
 
+        private TextViewPlaceholderManager placeholder;
+
         public TextViewTextInfoTargetBinding(UITextView target)
             : base(target)
         {
@@ -30,6 +33,9 @@ namespace Toggl.Daneel.Binding
             infoDelegate.TagDeleted += onTagDeleted;
             infoDelegate.TextChanged += onTextChanged;
             infoDelegate.ProjectDeleted += onProjectDeleted;
+           
+            placeholder = new TextViewPlaceholderManager(target);
+            infoDelegate.TextViewDidChange += placeholder.UpdateVisibility;
 
             selectedTextRangeDisposable = Target.AddObserver(
                 selectedTextRangeChangedKey,
@@ -48,6 +54,8 @@ namespace Toggl.Daneel.Binding
 
             var positionToSet = Target.GetPosition(Target.BeginningOfDocument, value.CursorPosition);
             Target.SelectedTextRange = Target.GetTextRange(positionToSet, positionToSet);
+
+            placeholder.UpdateVisibility();
         }
 
         protected override void Dispose(bool isDisposing)
@@ -109,10 +117,10 @@ namespace Toggl.Daneel.Binding
 
         private void setTextFieldInfo(TextFieldInfo info)
         {
-            if (textFieldInfo.Text != info.Text 
+            if (textFieldInfo.Text != info.Text
              || textFieldInfo.ProjectName != info.ProjectName
              || textFieldInfo.Tags.Length != info.Tags.Length)
-            Target.SetNeedsDisplay();
+                Target.SetNeedsDisplay();
 
             textFieldInfo = info;
         }
@@ -132,6 +140,7 @@ namespace Toggl.Daneel.Binding
                 }
             }
 
+            public event Action TextViewDidChange;
             public event EventHandler TextChanged;
             public event EventHandler ProjectDeleted;
             public event EventHandler<TagDeletedEventArgs> TagDeleted;
@@ -139,6 +148,8 @@ namespace Toggl.Daneel.Binding
             [Export("textViewDidChange:")]
             public void DidChange(UITextView textView)
             {
+                TextViewDidChange?.Invoke();
+
                 // When the `MarkedTextRange` property of the UITextView is not null
                 // then it means that the user is in the middle of inputting a multistage character.
                 // Hold off on editing the attributedText until they are done.

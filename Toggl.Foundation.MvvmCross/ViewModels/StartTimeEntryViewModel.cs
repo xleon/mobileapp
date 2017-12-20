@@ -67,11 +67,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
         }
 
-        public bool ShowPlaceholder
-            => string.IsNullOrEmpty(TextFieldInfo.Text)
-            && string.IsNullOrEmpty(TextFieldInfo.ProjectName)
-            && TextFieldInfo.Tags.Length == 0;
-
         public bool UseGrouping { get; set; }
 
         public string CurrentQuery { get; private set; }
