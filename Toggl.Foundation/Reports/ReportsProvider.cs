@@ -45,17 +45,26 @@ namespace Toggl.Foundation.Reports
                     .Select(s => s.ProjectId)
                     .SelectNonNulls()
                     .Apply(ids => searchProjects(workspaceId, ids.ToArray()))
-                    .Select(projectsInReport => response.ProjectsSummaries
-                        .Select(summary => chartFromSummary(summary, projectsInReport)))
-                    .Select(segments => new ProjectSummaryReport(segments.ToArray()));
+                    .Select(projectsInReport => 
+                    {
+                        var totalSeconds = response.ProjectsSummaries.Select(s => s.TrackedSeconds).Sum();
+                        return response.ProjectsSummaries
+                            .Select(summary => chartFromSummary(summary, projectsInReport, totalSeconds));
+            
+                    })
+                    .Select(segments => 
+                        new ProjectSummaryReport(segments.OrderByDescending(c => c.Percentage).ToArray()));
 
-        private static ChartSegment chartFromSummary(IProjectSummary summary, IList<IProject> projectsInReport)
+        private static ChartSegment chartFromSummary(IProjectSummary summary, 
+                                                     IList<IProject> projectsInReport,
+                                                     long totalSeconds)
         {
+            var percentage = totalSeconds == 0 ? 0 : (summary.TrackedSeconds / (float)totalSeconds) * 100;
             var billableSeconds = summary.BillableSeconds ?? 0;
             var project = projectsInReport.FirstOrDefault(p => p.Id == summary.ProjectId);
             return project == null
-                ? new ChartSegment(Resources.NoProject, summary.TrackedSeconds, billableSeconds, Color.NoProject)
-                : new ChartSegment(project.Name, summary.TrackedSeconds, billableSeconds, project.Color);
+                ? new ChartSegment(Resources.NoProject, percentage,  summary.TrackedSeconds, billableSeconds, Color.NoProject)
+                : new ChartSegment(project.Name, percentage, summary.TrackedSeconds, billableSeconds, project.Color);
         }
 
         private IObservable<IList<IProject>> searchProjects(long workspaceId, long[] projectIds) =>

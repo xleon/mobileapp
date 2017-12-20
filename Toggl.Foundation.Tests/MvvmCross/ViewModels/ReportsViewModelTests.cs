@@ -56,6 +56,24 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
+        public sealed class TheBillablePercentageMethod : ReportsViewModelTest
+        {
+            [Property(MaxTest = 1)]
+            public void IsSetToNullIfTheTotalTimeOfAReportIsZero(DateTimeOffset now)
+            {
+                var date = now.Date;
+                TimeService.CurrentDateTime.Returns(now);
+                var expectedStartDate = date.AddDays(1 - (int)date.DayOfWeek);
+                ReportsProvider.GetProjectSummary(
+                    WorkspaceId, expectedStartDate, expectedStartDate.AddDays(6))
+                    .Returns(Observable.Return(new ProjectSummaryReport(new ChartSegment[0])));
+
+                ViewModel.Prepare(WorkspaceId);
+
+                ViewModel.BillablePercentage.Should().BeNull();
+            }
+        }
+
         public sealed class TheIsLoadingProperty : ReportsViewModelTest
         {
             [Fact, LogIfTooSlow]

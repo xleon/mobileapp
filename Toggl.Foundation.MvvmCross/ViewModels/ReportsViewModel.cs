@@ -91,7 +91,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void onReport(ProjectSummaryReport report)
         {
             TotalTime = TimeSpan.FromSeconds(report.TotalSeconds);
-            BillablePercentage = report.BillablePercentage;
+            BillablePercentage = report.TotalSeconds == 0 ? null : (float?)report.BillablePercentage;
             Segments.AddRange(report.Segments);
             IsLoading = false;
 

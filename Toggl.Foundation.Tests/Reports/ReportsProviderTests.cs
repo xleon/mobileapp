@@ -9,10 +9,10 @@ using NSubstitute;
 using Toggl.Foundation.Helper;
 using Toggl.Foundation.Reports;
 using Toggl.Foundation.Tests.Generators;
+using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
 using Toggl.Multivac.Models.Reports;
 using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Exceptions;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.ApiClients;
@@ -158,7 +158,28 @@ namespace Toggl.Foundation.Tests.Reports
                 var report = ReportsProvider
                     .GetProjectSummary(workspaceId, DateTimeOffset.Now.AddDays(-7), DateTimeOffset.Now).Wait();
 
-                report.Segments.Single(s => s.Color == Color.NoProject).Name.Should().Be(Resources.NoProject);
+                report.Segments.Single(s => s.Color == Color.NoProject).ProjectName.Should().Be(Resources.NoProject);
+            }
+
+            [Property]
+            public void ReturnsTheProjectOrderedByTotalTimeTracked(NonNegativeInt[] projectIds)
+            {
+                var actualProjectIds = projectIds.Select(i => (long)i.Get).Distinct().ToArray();
+                var summaries = getSummaryList(actualProjectIds);
+                summaries.Add(new ProjectSummary());
+                var summaryCount = summaries.Count;
+                for (int i = 0; i < summaryCount; i++)
+                {
+                    var summary = (ProjectSummary)summaries[i];
+                    summary.TrackedSeconds = i;
+                }
+                apiProjectsSummary.ProjectsSummaries.Returns(summaries);
+                configureRepositoryToReturn(actualProjectIds);
+
+                var report = ReportsProvider
+                    .GetProjectSummary(workspaceId, DateTimeOffset.Now.AddDays(-7), DateTimeOffset.Now).Wait();
+
+                report.Segments.Should().BeInDescendingOrder(s => s.Percentage);
             }
 
             private IList<IProjectSummary> getSummaryList(long[] projectIds)

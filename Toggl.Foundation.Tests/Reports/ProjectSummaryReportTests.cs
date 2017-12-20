@@ -18,9 +18,10 @@ namespace Toggl.Foundation.Tests.Reports
                 var segments = durations.Get.Select(duration => duration.Get)
                     .Select((index, duration) => getSegmentFromDurationAndIndex(index, duration))
                     .ToArray();
-                var totalTrackedSeconds = segments.Select(s => s.TrackedSeconds).Sum();
+                var totalTrackedSeconds = segments.Select(s => s.TrackedTime.TotalSeconds).Sum();
                 var billableSeconds = segments.Select(s => s.BillableSeconds).Sum();
-                var expectedBillablePercentage = totalTrackedSeconds > 0 ? (100.0f / totalTrackedSeconds) * billableSeconds : 0;
+                float expectedBillablePercentage = 
+                    (float)(totalTrackedSeconds > 0 ? (100.0f / totalTrackedSeconds) * billableSeconds : 0);
 
                 var report = new ProjectSummaryReport(segments);
 
@@ -34,7 +35,7 @@ namespace Toggl.Foundation.Tests.Reports
                 var segments = actualDurations
                     .Select((index, duration) => getSegmentFromDurationAndIndex(index, duration))
                     .ToArray();
-                var expectedDuration = segments.Select(s => s.TrackedSeconds).Sum();
+                var expectedDuration = segments.Select(s => s.TrackedTime.TotalSeconds).Sum();
 
                 var report = new ProjectSummaryReport(segments);
 
@@ -51,7 +52,7 @@ namespace Toggl.Foundation.Tests.Reports
             }
 
             private ChartSegment getSegmentFromDurationAndIndex(int index, int trackedSeconds)
-                => new ChartSegment("", trackedSeconds, index % 2 == 0 ? trackedSeconds : 0, "#FFFFFF");
+                => new ChartSegment("", 0, trackedSeconds, index % 2 == 0 ? trackedSeconds : 0, "#FFFFFF");
         }
     }
 }

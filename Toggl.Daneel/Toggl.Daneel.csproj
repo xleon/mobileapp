@@ -410,6 +410,7 @@
     <InterfaceDefinition Include="Views\Reports\ReportsCalendarViewCell.xib" />
     <InterfaceDefinition Include="Views\Reports\ReportsCalendarQuickSelectViewCell.xib" />
     <InterfaceDefinition Include="Views\Reports\ReportsLegendViewCell.xib" />
+    <InterfaceDefinition Include="Views\Reports\ReportsHeaderView.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -687,6 +688,11 @@
     <Compile Include="Views\Reports\ReportsLegendViewCell.designer.cs">
       <DependentUpon>ReportsLegendViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Reports\ReportsHeaderView.cs" />
+    <Compile Include="Views\Reports\ReportsHeaderView.designer.cs">
+      <DependentUpon>ReportsHeaderView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSources\ReportsTableViewSource.cs" />
     <Compile Include="Views\TextViewPlaceholderManager.cs" />
   </ItemGroup>
   <ItemGroup>

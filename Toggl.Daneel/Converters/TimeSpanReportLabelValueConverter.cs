@@ -45,7 +45,7 @@ namespace Toggl.Daneel.Converters
         protected override NSAttributedString Convert(TimeSpan value, Type targetType, object parameter, CultureInfo culture)
         {
             var timeString = innerConverter.Convert(value, targetType, parameter, culture) as string;
-            var lengthOfHours = value.Hours.ToString().Length;
+            var lengthOfHours = ((int)value.TotalHours).ToString().Length;
 
             var isEmpty = value.Ticks == 0;
             var result = new NSMutableAttributedString(timeString);

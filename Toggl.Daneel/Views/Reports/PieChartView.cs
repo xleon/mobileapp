@@ -24,11 +24,6 @@ namespace Toggl.Daneel.Views.Reports
             ForegroundColor = UIColor.White
         };
 
-        private nfloat radius;
-        private float totalValue;
-        private nfloat viewCenterX;
-        private nfloat viewCenterY;
-
         private ObservableCollection<ChartSegment> segments = new ObservableCollection<ChartSegment>();
         public ObservableCollection<ChartSegment> Segments
         {
@@ -37,22 +32,6 @@ namespace Toggl.Daneel.Views.Reports
             {
                 segments = value;
                 SetNeedsDisplay();
-                totalValue = Segments.Select(x => x.TrackedSeconds).Sum();
-            }
-        }
-
-        public override CGRect Bounds
-        {
-            get
-            {
-                return base.Bounds;
-            }
-            set
-            {
-                viewCenterX = value.Size.Width * 0.5f;
-                viewCenterY = value.Size.Height * 0.5f;
-                radius = viewCenterX;
-                base.Bounds = value;
             }
         }
 
@@ -65,13 +44,18 @@ namespace Toggl.Daneel.Views.Reports
             var ctx = UIGraphics.GetCurrentContext();
             if (ctx == null) return;
 
+            var viewCenterX = Bounds.Size.Width * 0.5f;
+            var viewCenterY = Bounds.Size.Height * 0.5f;
+            var radius = viewCenterX;
+            var totalValue = Segments.Select(x => x.TrackedTime.TotalSeconds).Sum();
+
             var startAngle = pi * -0.5f;
 
             foreach (var segment in Segments)
             {
                 ctx.SetFillColor(MvxColor.ParseHexString(segment.Color).ToNativeColor().CGColor);
 
-                var percent = segment.TrackedSeconds / totalValue;
+                var percent = (nfloat)(segment.TrackedTime.TotalSeconds / totalValue);
                 // Calculate end angle
                 var endAngle = startAngle + 2 * pi * percent;
 
@@ -92,7 +76,7 @@ namespace Toggl.Daneel.Views.Reports
 
                     // Draw the text
                     var integerPercentage = (int)(percent * 100);
-                    var nameToDraw = new NSAttributedString(segment.Name.TruncatedAt(maxSegmentName), attributes);
+                    var nameToDraw = new NSAttributedString(segment.ProjectName.TruncatedAt(maxSegmentName), attributes);
                     var percentageToDraw = new NSAttributedString($"{integerPercentage}%", attributes);
                     nameToDraw.DrawString(new CGPoint(x: -radius + padding, y: padding));
                     percentageToDraw.DrawString(new CGPoint(x: -radius + padding, y: nameToDraw.Size.Height + padding));
