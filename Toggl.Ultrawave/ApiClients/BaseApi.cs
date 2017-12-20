@@ -82,9 +82,9 @@ namespace Toggl.Ultrawave.ApiClients
                 {
                     response = await apiClient.Send(request).ConfigureAwait(false);
                 }
-                catch (HttpRequestException)
+                catch (HttpRequestException exception)
                 {
-                    observer.OnError(new OfflineException());
+                    observer.OnError(new OfflineException(exception));
                     return;
                 }
 

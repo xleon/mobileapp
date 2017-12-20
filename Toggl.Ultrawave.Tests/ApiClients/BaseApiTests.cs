@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -65,6 +66,31 @@ namespace Toggl.Ultrawave.Tests.ApiClients
 
                 await observable.SingleAsync();
             }
+
+            [Fact, LogIfTooSlow]
+            public void EmitsAnOfflineExceptionIfTheApiClientThrowsAnHttpRequestException()
+            {
+                Exception caughtException = null;
+                var httpRequestException = new HttpRequestException();
+                apiClient.Send(Arg.Any<Request>()).Returns<IResponse>(_ => throw httpRequestException);
+                var credentials = Credentials.None;
+                var endpoint = Endpoint.Get(BaseUrls.ForApi(ApiEnvironment.Staging), "");
+                var testApi = new TestApi(endpoint, apiClient, serializer, credentials, endpoint);
+
+                try
+                {
+                    testApi.TestCreateObservable<string>(endpoint, Enumerable.Empty<HttpHeader>(), "").Wait();
+                }
+                catch (Exception e)
+                {
+                    caughtException = e;
+                }
+
+                caughtException.Should().NotBeNull();
+                caughtException.Should().BeOfType<OfflineException>();
+                caughtException.InnerException.Should().Be(httpRequestException);
+            }
+
 
             [Fact, LogIfTooSlow]
             public void EmitsADeserializationErrorIfTheJsonSerializerThrowsAnException()
