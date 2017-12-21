@@ -163,12 +163,12 @@ namespace Toggl.Daneel.Presentation
             switch (hint)
             {
                 case CardVisibilityHint cardHint:
-                    if (MasterNavigationController.TopViewController is MainViewController mainViewController)
+                    if (MasterNavigationController?.TopViewController is MainViewController mainViewController)
                         mainViewController.OnTimeEntryCardVisibilityChanged(cardHint.Visible);
                     return;
 
                 case ToggleCalendarVisibilityHint calendarHint:
-                    if (MasterNavigationController.TopViewController is ReportsViewController reportsViewController)
+                    if (MasterNavigationController?.TopViewController is ReportsViewController reportsViewController)
                     {
                         if (calendarHint.ForceHide || reportsViewController.CalendarIsVisible)
                         {
