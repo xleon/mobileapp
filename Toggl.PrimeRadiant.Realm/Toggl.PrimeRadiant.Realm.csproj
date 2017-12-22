@@ -27,6 +27,9 @@
     <OutputPath>bin\Release.TestFlight</OutputPath>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\bin\Release</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Models\IModifiableId.cs" />
     <Compile Include="Models\IUpdatesFrom.cs" />

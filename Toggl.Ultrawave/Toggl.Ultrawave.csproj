@@ -27,6 +27,9 @@
     <OutputPath>bin\Release.TestFlight</OutputPath>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\bin\Release</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="ApiClients\Interfaces\IWorkspaceFeaturesApi.cs" />
     <Compile Include="ApiClients\WorkspaceFeaturesApi.cs" />
