@@ -49,7 +49,6 @@ namespace Toggl.Ultrawave.ApiClients
                 Password = password,
                 Workspace = new SignUpParameters.WorkspaceParameters
                 {
-                    Name = $"{email.ToFullName()}'s workspace",
                     InitialPricingPlan = PricingPlans.Free
                 }
             };
@@ -69,7 +68,7 @@ namespace Toggl.Ultrawave.ApiClients
             [Preserve(AllMembers = true)]
             internal class WorkspaceParameters
             {
-                public string Name { get; set; }
+                public string Name { get; } = null;
 
                 public PricingPlans InitialPricingPlan { get; set; }
             }

@@ -1,5 +1,4 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Toggl.Multivac.Tests
@@ -77,46 +76,6 @@ namespace Toggl.Multivac.Tests
                 var email = Email.FromString(emailString);
 
                 email.ToString().Should().Be(emailString);
-            }
-        }
-
-        public sealed class TheToFullNameMethod
-        {
-            [Theory, LogIfTooSlow]
-            [InlineData("john@gmail.com", "John")]
-            [InlineData("john123@gmail.com", "John123")]
-            [InlineData("john.smith@gmail.com", "John Smith")]
-            [InlineData("multiple.names.are.used@gmail.com", "Multiple Names Are Used")]
-            [InlineData("Already.Has.some.capital.Letters@toggl.com", "Already Has Some Capital Letters")]
-            [InlineData("does-not-split-by-dashes@domain.com", "Does-not-split-by-dashes")]
-            [InlineData("šimon@gmail.cz", "Šimon")]
-            [InlineData("ägypter@gmail.de", "Ägypter")]
-            [InlineData("леонтий@gmail.ru", "Леонтий")]
-            [InlineData("iwith.a.dot@gmail.com", "Iwith A Dot")]
-            [InlineData("あabc@gmail.com", "あabc")]
-            [InlineData("\"quoted..email\"@weird.but.valid.com", "Quoted Email")]
-            public void CapitalizesEveryPartOfTheNameSplitByDots(string emailAddress, string expectedName)
-            {
-                var email = Email.FromString(emailAddress);
-
-                var fullName = email.ToFullName();
-
-                fullName.Should().Be(expectedName);
-            }
-
-            [Theory, LogIfTooSlow]
-            [InlineData("twodots..inarow@gmail.com")]
-            [InlineData(".starts.with.a.dot@domain.at")]
-            [InlineData("just an invalid email")]
-            [InlineData("@example.com")]
-            [InlineData("emoji.🙉mail@gmail.com")]
-            public void ReturnsEmtpyStringForInvalidEmails(string emailAddress)
-            {
-                var email = Email.FromString(emailAddress);
-
-                var fullName = email.ToFullName();
-
-                fullName.Should().Be(String.Empty);
             }
         }
     }
