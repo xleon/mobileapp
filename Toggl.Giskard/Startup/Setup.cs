@@ -1,10 +1,10 @@
 using System.Reactive.Concurrency;
+using Android.Content;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Droid.Platform;
+using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platform.Platform;
 using MvvmCross.Platform.Plugins;
-using Android.Content;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Giskard.Services;
@@ -13,7 +13,7 @@ using Toggl.Ultrawave;
 
 namespace Toggl.Giskard
 {
-    public sealed class Setup : MvxAndroidSetup
+    public sealed class Setup : MvxAppCompatSetup
     {
         private IMvxNavigationService navigationService;
 

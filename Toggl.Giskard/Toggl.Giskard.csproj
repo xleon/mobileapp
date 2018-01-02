@@ -163,7 +163,6 @@
   <ItemGroup>
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Activities\MainActivity.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Startup\DebugTrace.cs" />
     <Compile Include="Startup\Setup.cs" />
@@ -177,6 +176,9 @@
     <Compile Include="Services\SharedPreferencesStorage.cs" />
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
+    <Compile Include="Fragments\SuggestionsFragment.cs" />
+    <Compile Include="Fragments\TimeEntriesLogFragment.cs" />
+    <Compile Include="Activities\MainActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -355,6 +357,9 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\timer_dark.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\timer_light.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\unsynced.png" />
+    <AndroidResource Include="Resources\layout\SuggestionsFragment.axml" />
+    <AndroidResource Include="Resources\layout\TimeEntriesLogFragment.axml" />
+    <AndroidResource Include="Resources\values\Colors.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

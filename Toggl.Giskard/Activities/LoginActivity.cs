@@ -6,8 +6,9 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 
 namespace Toggl.Giskard.Activities
 {
-    [Activity(Theme = "@style/Theme.AppCompat.Light.DarkActionBar"), MvxActivityPresentation]
-    public class LoginActivity : MvxAppCompatActivity<LoginViewModel>
+    [MvxActivityPresentation]
+    [Activity(Theme = "@style/AppTheme")]
+    public sealed class LoginActivity : MvxAppCompatActivity<LoginViewModel>
     {
         protected override void OnCreate(Bundle bundle)
         {

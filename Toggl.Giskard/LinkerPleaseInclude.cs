@@ -1,6 +1,7 @@
 using System.Collections.Specialized;
 using System.Windows.Input;
 using Android.App;
+using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Binding.BindingContext;
@@ -107,6 +108,12 @@ namespace Toggl.Giskard
         public void Include(MvxNavigationService service, IMvxViewModelLoader loader)
         {
             service = new MvxNavigationService(null, loader);
+        }
+
+        public void Include(FitWindowsLinearLayout linearLayout)
+        {
+            linearLayout = new FitWindowsLinearLayout(null);
+            linearLayout = new FitWindowsLinearLayout(null, null);
         }
     }
 }
