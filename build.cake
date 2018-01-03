@@ -223,7 +223,7 @@ Task("Build.Tests.UI")
 //iOS Builds
 Task("Build.Release.iOS.AdHoc")
     .IsDependentOn("Nuget")
-    .Does(BuildSolution("Release", "iPhone"));
+    .Does(BuildSolution("Release.AdHoc"));
 
 Task("Build.Release.iOS.TestFlight")
     .IsDependentOn("Nuget")
