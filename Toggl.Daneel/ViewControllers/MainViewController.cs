@@ -163,6 +163,12 @@ namespace Toggl.Daneel.ViewControllers
             MainPagedScrollView.SyncStateLabel = SyncStateLabel;
             MainPagedScrollView.ContentInset = new UIEdgeInsets(MainScrollView.SyncStateViewHeight * 2, 0, 0, 0);
 
+            //Sync bar
+            DismissSyncBarImageView.Image = DismissSyncBarImageView.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
+            DismissSyncBarImageView.TintColor = UIColor.White;
+            DismissSyncBarImageView.Hidden = true;
+            MainPagedScrollView.DismissSyncBarImageView = DismissSyncBarImageView;
+
             //Spider animation
             SpiderBroImageView.Layer.AnchorPoint = new CGPoint(0.5f, 0);
             animateSpider();

@@ -31,14 +31,24 @@ namespace Toggl.Daneel.Extensions
         public static NSAttributedString EndingWithTick(this string self, double fontHeight)
         {
             var tick = GetAttachmentString("icDoneSmall", fontHeight);
+            return endingWithIcon(self, tick);
+        }
 
+        public static NSAttributedString EndingWithRefreshIcon(this string self, double fontHeight)
+        {
+            var refresh = GetAttachmentString("icRefresh", fontHeight);
+            return endingWithIcon(self, refresh);
+        }
+
+        private static NSAttributedString endingWithIcon(string text, NSMutableAttributedString icon)
+        {
             var range = new NSRange(0, 1);
             var attributes = new UIStringAttributes { ForegroundColor = UIColor.White };
-            tick.AddAttributes(attributes, range);
+            icon.AddAttributes(attributes, range);
 
-            var result = new NSMutableAttributedString(self);
+            var result = new NSMutableAttributedString(text);
             result.Append(new NSAttributedString(" ")); // separate the text from the icon
-            result.Append(tick);
+            result.Append(icon);
 
             return result;
         }

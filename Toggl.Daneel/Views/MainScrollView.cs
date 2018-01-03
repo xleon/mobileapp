@@ -18,6 +18,7 @@ namespace Toggl.Daneel.Views
         internal const float SyncStateViewHeight = 26;
         private static readonly float scrollThreshold = SyncStateViewHeight + (SyncStateViewHeight / 2);
 
+        private readonly UIColor pullToRefreshColor = Color.Main.PullToRefresh.ToNativeColor();
         private readonly UIColor syncingColor = Color.Main.Syncing.ToNativeColor();
         private readonly UIColor syncFailedColor = Color.Main.SyncFailed.ToNativeColor();
         private readonly UIColor offlineColor = Color.Main.Offline.ToNativeColor();
@@ -27,6 +28,7 @@ namespace Toggl.Daneel.Views
         private bool needsRefresh;
         private bool shouldCalculateOnDeceleration;
         private bool isSyncing => syncProgress == SyncProgress.Syncing;
+        private int syncIndicatorLastShown;
 
         public SyncProgress SyncProgress
         {
@@ -42,6 +44,8 @@ namespace Toggl.Daneel.Views
         public UIView SyncStateView { get; set; }
 
         public UILabel SyncStateLabel { get; set; }
+
+        public UIImageView DismissSyncBarImageView { get; set; }
 
         public IMvxCommand RefreshCommand { get; set; }
 
@@ -82,8 +86,10 @@ namespace Toggl.Daneel.Views
 
             if (isSyncing) return;
 
-            Animate(Animation.Timings.EnterTiming, () =>
-                SyncStateLabel.Text = needsMorePulling ? Resources.PullDownToRefresh : Resources.ReleaseToRefresh);
+            DismissSyncBarImageView.Hidden = true;
+            setSyncIndicatorTextAndBackground(
+                new NSAttributedString(needsMorePulling ? Resources.PullDownToRefresh : Resources.ReleaseToRefresh),
+                pullToRefreshColor);
         }
 
         private void onDragEnded(object sender, DraggingEventArgs e)
@@ -125,9 +131,7 @@ namespace Toggl.Daneel.Views
 
         private async void updateViews(SyncProgress value)
         {
-            NSAttributedString text;
-            UIColor backgroundColor;
-            bool hideIndicator = true;
+            bool hideIndicator = false;
 
             switch (value)
             {
@@ -135,47 +139,64 @@ namespace Toggl.Daneel.Views
                     return;
 
                 case SyncProgress.Syncing:
-                    text = new NSAttributedString(Resources.Syncing);
-                    backgroundColor = syncingColor;
-                    hideIndicator = false;
+                    setSyncIndicatorTextAndBackground(
+                        new NSAttributedString(Resources.Syncing),
+                        syncingColor);
                     break;
 
                 case SyncProgress.OfflineModeDetected:
-                    text = new NSAttributedString(Resources.Offline);
-                    backgroundColor = offlineColor;
-                    hideIndicator = false;
+                    setSyncIndicatorTextAndBackground(
+                        Resources.Offline.EndingWithRefreshIcon(SyncStateLabel.Font.CapHeight),
+                        offlineColor);
+                    DismissSyncBarImageView.Hidden = false;
                     break;
 
                 case SyncProgress.Synced:
-                    text = Resources.SyncCompleted.EndingWithTick(SyncStateLabel.Font.CapHeight);
-                    backgroundColor = syncCompletedColor;
+                    setSyncIndicatorTextAndBackground(
+                        Resources.SyncCompleted.EndingWithTick(SyncStateLabel.Font.CapHeight),
+                        syncCompletedColor);
+                    hideIndicator = true;
                     break;
 
                 case SyncProgress.Failed:
-                    text = new NSAttributedString(Resources.SyncFailed);
-                    backgroundColor = syncFailedColor;
+                    setSyncIndicatorTextAndBackground(
+                        Resources.SyncFailed.EndingWithRefreshIcon(SyncStateLabel.Font.CapHeight),
+                        syncFailedColor);
+                    DismissSyncBarImageView.Hidden = false;
                     break;
 
                 default:
                     throw new ArgumentException(nameof(value));
             }
 
+            int syncIndicatorShown = showSyncIndicator();
+
+            if (!hideIndicator) return;
+
+            await hideSyncIndicator(syncIndicatorShown);
+        }
+        
+        private void setSyncIndicatorTextAndBackground(NSAttributedString text, UIColor backgroundColor)
+        {
             Animate(Animation.Timings.EnterTiming, () =>
             {
                 SyncStateLabel.AttributedText = text;
                 SyncStateView.BackgroundColor = backgroundColor;
             });
-
-            scrollToIfInFirstPage(new CGPoint(0, -SyncStateViewHeight));
-
-            if (!hideIndicator) return;
-
-            await hideSyncIndicator();
         }
 
-        private async Task hideSyncIndicator()
+        private int showSyncIndicator()
+        {
+            scrollToIfInFirstPage(new CGPoint(0, -SyncStateViewHeight));
+            return ++syncIndicatorLastShown;
+        }
+
+        private async Task hideSyncIndicator(int syncIndicatorShown)
         {
             await Task.Delay(Animation.Timings.HideSyncStateViewDelay);
+
+            if (syncIndicatorShown != syncIndicatorLastShown) return;
+
             scrollToIfInFirstPage(CGPoint.Empty);
         }
 
