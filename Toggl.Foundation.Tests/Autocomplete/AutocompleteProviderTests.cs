@@ -149,7 +149,7 @@ namespace Toggl.Foundation.Tests.Autocomplete
                 public async Task WhenTheUserHasTypedAnySearchSymbolsButMovedTheCaretToAnIndexThatComesBeforeTheSymbol(
                     string description)
                 {
-                    var actualDescription = $"{description}@{description}";
+                    var actualDescription = $"{description} @{description}";
                     var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(actualDescription, 0);
 
                     await Provider.Query(textFieldInfo);
@@ -247,8 +247,8 @@ namespace Toggl.Foundation.Tests.Autocomplete
                 [InlineData("Testing Toggl mobile apps")]
                 public async Task WhenTheAtSymbolIsTyped(string description)
                 {
-                    var actualDescription = $"{description}@{description}";
-                    var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(actualDescription, description.Length + 1);
+                    var actualDescription = $"{description} @{description}";
+                    var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(actualDescription, description.Length + 2);
 
                     await Provider.Query(textFieldInfo);
 
@@ -315,8 +315,8 @@ namespace Toggl.Foundation.Tests.Autocomplete
                 [InlineData("Testing Toggl mobile apps")]
                 public async Task WhenTheHashtagSymbolIsTyped(string description)
                 {
-                    var actualDescription = $"{description}#{description}";
-                    var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(actualDescription, description.Length + 1);
+                    var actualDescription = $"{description} #{description}";
+                    var textFieldInfo = TextFieldInfo.Empty.WithTextAndCursor(actualDescription, description.Length + 2);
 
                     await Provider.Query(textFieldInfo);
 
