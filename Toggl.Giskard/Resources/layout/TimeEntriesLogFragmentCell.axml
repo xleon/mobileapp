@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+    <TextView
+        local:MvxBind="Text Description"
+        android:textSize="15sp"
+        android:textColor="@android:color/black"
+        tools:text="Exporting assets to Zeplin and organizing"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true" />
+    <TextView
+        local:MvxBind="Text ProjectName; TextColor NativeColor(ProjectColor); Visibility Visibility(HasProject)"
+        android:id="@+id/TimeEntriesLogCellProjectLabel"
+        android:textSize="15sp"
+        android:fontFamily="sans-serif-medium"
+        tools:text="Design"
+        tools:textColor="#c56bff"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true" />
+    <TextView
+        local:MvxBind="Text ClientName; Visibility Visibility(HasProject)"
+        android:textSize="15sp"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/clientName"
+        tools:text="Toggl"
+        android:layout_marginLeft="4dp"
+        android:layout_marginBottom="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/TimeEntriesLogCellProjectLabel" />
+    <View
+        android:background="@drawable/TransparentToWhiteGradient"
+        android:layout_width="144dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true" />
+    <TextView
+        local:MvxBind="Text TimeSpanToDuration(Duration)"
+        android:gravity="end"
+        android:textSize="15sp"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/clientName"
+        tools:text="0:23:01"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true" />
+    <ImageView
+        local:MvxBind="Visibility Visibility(CanSync)"
+        android:id="@+id/TimeEntriesLogCellContinueImage"
+        android:src="@drawable/play"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
+    <ImageView
+        local:MvxBind="Visibility Visibility(CanSync)"
+        android:src="@drawable/unsynced"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/TimeEntriesLogCellContinueImage" />
+    <ImageView
+        local:MvxBind="Visibility InvertedVisibility(CanSync)"
+        android:src="@drawable/error_baddata"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
+    <View
+        android:background="@color/separator"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>

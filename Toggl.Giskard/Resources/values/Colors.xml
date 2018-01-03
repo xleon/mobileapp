@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <resources>
     <color name="lightGray">#FFFAFBFC</color>
+    <color name="separator">#FFE5E5E5</color>
+    <color name="clientName">#FF5E5B5B</color>
     <color name="toolbarBlack">#FF323232</color>
     <color name="playButtonGreen">#FF1AD180</color>
 </resources>

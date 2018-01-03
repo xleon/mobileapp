@@ -357,9 +357,11 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\timer_dark.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\timer_light.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\unsynced.png" />
+    <AndroidResource Include="Resources\values\Colors.xml" />
+    <AndroidResource Include="Resources\layout\TimeEntriesLogFragmentCell.axml" />
+    <AndroidResource Include="Resources\drawable\TransparentToWhiteGradient.xml" />
     <AndroidResource Include="Resources\layout\SuggestionsFragment.axml" />
     <AndroidResource Include="Resources\layout\TimeEntriesLogFragment.axml" />
-    <AndroidResource Include="Resources\values\Colors.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
