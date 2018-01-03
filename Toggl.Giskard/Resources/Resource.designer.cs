@@ -5094,7 +5094,10 @@ namespace Toggl.Giskard
 			public const int TimeEntriesLogFragmentCell = 2130968642;
 			
 			// aapt resource value: 0x7f040043
-			public const int tooltip = 2130968643;
+			public const int TimeEntriesLogFragmentHeader = 2130968643;
+			
+			// aapt resource value: 0x7f040044
+			public const int tooltip = 2130968644;
 			
 			static Layout()
 			{

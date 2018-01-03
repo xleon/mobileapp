@@ -362,11 +362,7 @@
     <AndroidResource Include="Resources\drawable\TransparentToWhiteGradient.xml" />
     <AndroidResource Include="Resources\layout\SuggestionsFragment.axml" />
     <AndroidResource Include="Resources\layout\TimeEntriesLogFragment.axml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\drawable\" />
-    <Folder Include="Startup\" />
-    <Folder Include="Services\" />
+    <AndroidResource Include="Resources\layout\TimeEntriesLogFragmentHeader.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">
