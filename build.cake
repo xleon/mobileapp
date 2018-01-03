@@ -184,6 +184,9 @@ Task("Clean")
             CleanDirectory("./Toggl.Daneel/obj");
             CleanDirectory("./Toggl.Daneel.Tests/obj");
             CleanDirectory("./Toggl.Daneel.Tests.UI/obj");
+            CleanDirectory("./Toggl.Giskard/obj");
+            CleanDirectory("./Toggl.Giskard.Tests/obj");
+            CleanDirectory("./Toggl.Giskard.Tests.UI/obj");
             CleanDirectory("./Toggl.Foundation/obj");
             CleanDirectory("./Toggl.Foundation.MvvmCross/obj");
             CleanDirectory("./Toggl.Foundation.Tests/obj");
