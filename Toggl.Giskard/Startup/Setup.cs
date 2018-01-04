@@ -13,7 +13,7 @@ using Toggl.Ultrawave;
 
 namespace Toggl.Giskard
 {
-    public sealed class Setup : MvxAppCompatSetup
+    public sealed partial class Setup : MvxAppCompatSetup
     {
         private IMvxNavigationService navigationService;
 

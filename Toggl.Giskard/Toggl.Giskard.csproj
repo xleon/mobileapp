@@ -179,11 +179,21 @@
     <Compile Include="Fragments\SuggestionsFragment.cs" />
     <Compile Include="Fragments\TimeEntriesLogFragment.cs" />
     <Compile Include="Activities\MainActivity.cs" />
+    <Compile Include="Startup\SetupTargetFactories.cs">
+      <DependentUpon>SetupTargetFactories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Bindings\ViewMarginTargetBinding.cs" />
+    <Compile Include="Extensions\LayoutParamsExtensions.cs" />
+    <Compile Include="Extensions\NumberExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml" />
+    <None Include="Startup\SetupTargetFactories.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SetupTargetFactories.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
