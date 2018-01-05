@@ -195,6 +195,8 @@
     <Compile Include="Extensions\LayoutParamsExtensions.cs" />
     <Compile Include="Extensions\NumberExtensions.cs" />
     <Compile Include="Converters\BoolToConstantOverrides.cs" />
+    <Compile Include="Views\SuggestionsRecyclerView.cs" />
+    <Compile Include="TemplateSelectors\SuggestionsTemplateSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

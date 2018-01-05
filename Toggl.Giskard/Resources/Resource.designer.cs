@@ -4464,11 +4464,14 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f090038
 			public const int SYM = 2131296312;
 			
-			// aapt resource value: 0x7f0900b7
-			public const int TimeEntriesLogCellContinueImage = 2131296439;
-			
 			// aapt resource value: 0x7f0900b6
-			public const int TimeEntriesLogCellProjectLabel = 2131296438;
+			public const int SuggestionsHintTextView = 2131296438;
+			
+			// aapt resource value: 0x7f0900b8
+			public const int TimeEntriesLogCellContinueImage = 2131296440;
+			
+			// aapt resource value: 0x7f0900b7
+			public const int TimeEntriesLogCellProjectLabel = 2131296439;
 			
 			// aapt resource value: 0x7f0900a2
 			public const int Toolbar = 2131296418;
@@ -4716,14 +4719,14 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f090062
 			public const int list_item = 2131296354;
 			
-			// aapt resource value: 0x7f0900ba
-			public const int masked = 2131296442;
+			// aapt resource value: 0x7f0900bb
+			public const int masked = 2131296443;
 			
 			// aapt resource value: 0x7f0900a9
 			public const int media_actions = 2131296425;
 			
-			// aapt resource value: 0x7f0900b8
-			public const int message = 2131296440;
+			// aapt resource value: 0x7f0900b9
+			public const int message = 2131296441;
 			
 			// aapt resource value: 0x7f090032
 			public const int middle = 2131296306;
@@ -4968,8 +4971,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f090016
 			public const int view_offset_helper = 2131296278;
 			
-			// aapt resource value: 0x7f0900b9
-			public const int visible = 2131296441;
+			// aapt resource value: 0x7f0900ba
+			public const int visible = 2131296442;
 			
 			// aapt resource value: 0x7f09003d
 			public const int withText = 2131296317;
@@ -5285,7 +5288,10 @@ namespace Toggl.Giskard
 			public const int SignUp = 2131492905;
 			
 			// aapt resource value: 0x7f0c002d
-			public const int TimeEntriesLogTemplateSelector = 2131492909;
+			public const int SuggestionsTemplateSelector = 2131492909;
+			
+			// aapt resource value: 0x7f0c002e
+			public const int TimeEntriesLogTemplateSelector = 2131492910;
 			
 			// aapt resource value: 0x7f0c0000
 			public const int abc_action_bar_home_description = 2131492864;

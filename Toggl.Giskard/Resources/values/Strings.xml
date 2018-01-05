@@ -5,5 +5,7 @@
     <string name="AppName">Toggl</string>
     <string name="EmailAddress">Email address</string>
 
+	
+    <string name="SuggestionsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SuggestionsTemplateSelector, Toggl.Giskard</string>
     <string name="TimeEntriesLogTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.TimeEntriesLogTemplateSelector, Toggl.Giskard</string>
 </resources>

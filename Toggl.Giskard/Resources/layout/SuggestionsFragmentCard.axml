@@ -3,7 +3,7 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     local:cardUseCompatPadding="true"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <RelativeLayout
         android:layout_height="64dp"
@@ -21,7 +21,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true" />
         <TextView
-            local:MvxBind="Text ProjectName; TextColor NativeColor(ProjectColor); Visibility Visibility(HasProject)"
+            local:MvxBind="Text ProjectName; TextColor ARGB(ProjectColor); Visibility Visibility(HasProject)"
             android:id="@+id/TimeEntriesLogCellProjectLabel"
             android:textSize="15sp"
             android:fontFamily="sans-serif-medium"
