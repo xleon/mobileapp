@@ -47,6 +47,10 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindSecureTextEntry())
                       .To(vm => vm.IsPasswordMasked);
 
+            bindingSet.Bind(GoogleSignInButton)
+                      .For(v => v.BindTitle())
+                      .To(vm => vm.GoogleButtonText);
+
             bindingSet.Bind(this)
                       .For(v => v.Title)
                       .To(vm => vm.Title);
@@ -138,12 +142,6 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.IsPasswordPage);
 
             bindingSet.Apply();
-
-            if (ViewModel.IsSignUp)
-            {
-                GoogleSignInImage.Hidden = true;
-                GoogleSignInButton.Hidden = true;
-            }
 
             EmailTextField.BecomeFirstResponder();
         }

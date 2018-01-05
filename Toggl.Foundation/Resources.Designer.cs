@@ -30,7 +30,7 @@ namespace Toggl.Foundation {
         public static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("Toggl.Foundation.Resources", typeof(Resources).GetTypeInfo().Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("Toggl.Foundation.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -446,6 +446,18 @@ namespace Toggl.Foundation {
         public static string IncorrectPassword {
             get {
                 return ResourceManager.GetString("IncorrectPassword", resourceCulture);
+            }
+        }
+        
+        public static string GoogleLogin {
+            get {
+                return ResourceManager.GetString("GoogleLogin", resourceCulture);
+            }
+        }
+        
+        public static string GoogleSignUp {
+            get {
+                return ResourceManager.GetString("GoogleSignUp", resourceCulture);
             }
         }
         

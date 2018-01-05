@@ -56,8 +56,7 @@ namespace Toggl.Foundation.Login
         }
 
         public IObservable<ITogglDataSource> LoginWithGoogle()
-        {
-            return database
+            => database
                 .Clear()
                 .SelectMany(_ => googleService.GetAuthToken())
                 .Select(Credentials.WithGoogleToken)
@@ -66,7 +65,6 @@ namespace Toggl.Foundation.Login
                 .Select(User.Clean)
                 .SelectMany(database.User.Create)
                 .Select(dataSourceFromUser);
-        }
 
         public IObservable<ITogglDataSource> SignUp(Email email, string password)
         {
@@ -81,6 +79,15 @@ namespace Toggl.Foundation.Login
                     .SelectMany(database.User.Create)
                     .Select(dataSourceFromUser);
         }
+
+        public IObservable<ITogglDataSource> SignUpWithGoogle()
+            => database
+                .Clear()
+                .SelectMany(_ => googleService.GetAuthToken())
+                .SelectMany(apiFactory.CreateApiWith(Credentials.None).User.SignUpWithGoogle)
+                .Select(User.Clean)
+                .SelectMany(database.User.Create)
+                .Select(dataSourceFromUser);
 
         public IObservable<string> ResetPassword(Email email)
         {
@@ -112,9 +119,6 @@ namespace Toggl.Foundation.Login
                 .SelectMany(database.User.Update)
                 .Select(dataSourceFromUser);
         }
-
-        public IObservable<ITogglDataSource> SignUpWithGoogle()
-            => throw new NotImplementedException();
 
         private ITogglDataSource dataSourceFromUser(IUser user)
         {

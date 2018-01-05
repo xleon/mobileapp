@@ -47,13 +47,37 @@ namespace Toggl.Ultrawave.ApiClients
             {
                 Email = email.ToString(),
                 Password = password,
-                Workspace = new SignUpParameters.WorkspaceParameters
+                Workspace = new WorkspaceParameters
                 {
                     InitialPricingPlan = PricingPlans.Free
                 }
             };
             var json = serializer.Serialize(dto, SerializationReason.Post, null);
             return CreateObservable<User>(endPoints.Post, new HttpHeader[0], json);
+        }
+
+        public IObservable<IUser> SignUpWithGoogle(string googleToken)
+        {
+            Ensure.Argument.IsNotNull(googleToken, nameof(googleToken));
+            var parameters = new GoogleSignUpParameters 
+            {
+                GoogleAccessToken = googleToken,
+                Workspace = new WorkspaceParameters
+                {
+                    InitialPricingPlan = PricingPlans.Free
+                }
+            };
+
+            var json = serializer.Serialize(parameters, SerializationReason.Post, null);
+            return CreateObservable<User>(endPoints.PostWithGoogle, new HttpHeader[0], json);
+        }
+
+        [Preserve(AllMembers = true)]
+        internal class WorkspaceParameters
+        {
+            public string Name { get; } = null;
+
+            public PricingPlans InitialPricingPlan { get; set; }
         }
 
         [Preserve(AllMembers = true)]
@@ -64,14 +88,14 @@ namespace Toggl.Ultrawave.ApiClients
             public string Password { get; set; }
 
             public WorkspaceParameters Workspace { get; set; }
+        }
 
-            [Preserve(AllMembers = true)]
-            internal class WorkspaceParameters
-            {
-                public string Name { get; } = null;
+        [Preserve(AllMembers = true)]
+        private class GoogleSignUpParameters
+        {
+            public string GoogleAccessToken { get; set; }
 
-                public PricingPlans InitialPricingPlan { get; set; }
-            }
+            public WorkspaceParameters Workspace { get; set; }
         }
     }
 }
