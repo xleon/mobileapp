@@ -406,14 +406,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 for (int i = 0; i < count; i++)
                 {
-                    var workspace = Substitute.For<IDatabaseWorkspace>();
-                    workspace.Name.Returns($"Workspace{workspaceId}");
-                    workspace.Id.Returns(workspaceId);
-                    var project = Substitute.For<IDatabaseProject>();
-                    project.Name.Returns($"Project{i}");
-                    project.Workspace.Returns(workspace);
-                    yield return new ProjectSuggestion(project);
+                    yield return getProjectSuggestion(i, workspaceId);
                 }
+            }
+
+            private ProjectSuggestion getProjectSuggestion(int projectId, int workspaceId)
+            {
+                var workspace = Substitute.For<IDatabaseWorkspace>();
+                workspace.Name.Returns($"Workspace{workspaceId}");
+                workspace.Id.Returns(workspaceId);
+                var project = Substitute.For<IDatabaseProject>();
+                project.Name.Returns($"Project{projectId}");
+                project.Workspace.Returns(workspace);
+                return new ProjectSuggestion(project);
             }
 
             [Fact, LogIfTooSlow]
@@ -507,6 +512,40 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         if (suggestion.ProjectName == Resources.NoProject)
                             continue;
                         suggestion.WorkspaceName.Should().Be(suggestionGroup.WorkspaceName);
+                    }
+                }
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SortsProjectsByName()
+            {
+                var suggestions = new List<ProjectSuggestion>();
+                suggestions.Add(getProjectSuggestion(3, 0));
+                suggestions.Add(getProjectSuggestion(4, 1));
+                suggestions.Add(getProjectSuggestion(1, 0));
+                suggestions.Add(getProjectSuggestion(33, 1));
+                suggestions.Add(getProjectSuggestion(10, 1));
+                var suggestionsObservable = Observable.Return(suggestions);
+                var autocompleteProvider = Substitute.For<IAutocompleteProvider>();
+                DataSource.AutocompleteProvider.Returns(autocompleteProvider);
+                autocompleteProvider
+                    .Query(Arg.Is<QueryInfo>(
+                        info => info.SuggestionType == AutocompleteSuggestionType.Projects))
+                    .Returns(suggestionsObservable);
+
+                await ViewModel.Initialize();
+
+                ViewModel.Suggestions.Should().HaveCount(2);
+                foreach (var suggestionGroup in ViewModel.Suggestions)
+                {
+                    string prevProjectName = "";
+                    foreach (var suggestion in suggestionGroup.Cast<ProjectSuggestion>())
+                    {
+                        if (suggestion.ProjectName == Resources.NoProject)
+                            continue;
+                        bool correctOrder = string.Compare(prevProjectName, suggestion.ProjectName, true) < 0;
+                        correctOrder.Should().BeTrue();
+                        prevProjectName = suggestion.ProjectName;
                     }
                 }
             }

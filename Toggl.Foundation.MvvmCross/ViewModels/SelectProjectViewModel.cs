@@ -121,6 +121,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Suggestions.Clear();
 
             suggestions
+                .OrderBy(projectSuggestion => projectSuggestion.ProjectName)
                 .GroupByWorkspaceAddingNoProject()
                 .ForEach(Suggestions.Add);
         }
