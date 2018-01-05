@@ -1872,6 +1872,45 @@ namespace Toggl.Giskard
 			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Styleable.ViewStubCompat_android_id = global::Toggl.Giskard.Resource.Styleable.ViewStubCompat_android_id;
 			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Styleable.ViewStubCompat_android_inflatedId = global::Toggl.Giskard.Resource.Styleable.ViewStubCompat_android_inflatedId;
 			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Styleable.ViewStubCompat_android_layout = global::Toggl.Giskard.Resource.Styleable.ViewStubCompat_android_layout;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Attribute.MvxBind = global::Toggl.Giskard.Resource.Attribute.MvxBind;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Attribute.MvxDropDownItemTemplate = global::Toggl.Giskard.Resource.Attribute.MvxDropDownItemTemplate;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Attribute.MvxGroupItemTemplate = global::Toggl.Giskard.Resource.Attribute.MvxGroupItemTemplate;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Attribute.MvxItemTemplate = global::Toggl.Giskard.Resource.Attribute.MvxItemTemplate;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Attribute.MvxLang = global::Toggl.Giskard.Resource.Attribute.MvxLang;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Attribute.MvxSource = global::Toggl.Giskard.Resource.Attribute.MvxSource;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Attribute.MvxTemplate = global::Toggl.Giskard.Resource.Attribute.MvxTemplate;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Attribute.MvxTemplateSelector = global::Toggl.Giskard.Resource.Attribute.MvxTemplateSelector;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Attribute.layoutManager = global::Toggl.Giskard.Resource.Attribute.layoutManager;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Attribute.reverseLayout = global::Toggl.Giskard.Resource.Attribute.reverseLayout;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Attribute.spanCount = global::Toggl.Giskard.Resource.Attribute.spanCount;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Attribute.stackFromEnd = global::Toggl.Giskard.Resource.Attribute.stackFromEnd;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Dimension.item_touch_helper_max_drag_scroll_per_frame = global::Toggl.Giskard.Resource.Dimension.item_touch_helper_max_drag_scroll_per_frame;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Dimension.item_touch_helper_swipe_escape_max_velocity = global::Toggl.Giskard.Resource.Dimension.item_touch_helper_swipe_escape_max_velocity;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Dimension.item_touch_helper_swipe_escape_velocity = global::Toggl.Giskard.Resource.Dimension.item_touch_helper_swipe_escape_velocity;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Id.MvvmCrossTagId = global::Toggl.Giskard.Resource.Id.MvvmCrossTagId;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Id.MvxBindingTagUnique = global::Toggl.Giskard.Resource.Id.MvxBindingTagUnique;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Id.item_touch_helper_previous_elevation = global::Toggl.Giskard.Resource.Id.item_touch_helper_previous_elevation;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.MvxBinding = global::Toggl.Giskard.Resource.Styleable.MvxBinding;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.MvxBinding_MvxBind = global::Toggl.Giskard.Resource.Styleable.MvxBinding_MvxBind;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.MvxBinding_MvxLang = global::Toggl.Giskard.Resource.Styleable.MvxBinding_MvxLang;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.MvxControl = global::Toggl.Giskard.Resource.Styleable.MvxControl;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.MvxControl_MvxTemplate = global::Toggl.Giskard.Resource.Styleable.MvxControl_MvxTemplate;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.MvxExpandableListView = global::Toggl.Giskard.Resource.Styleable.MvxExpandableListView;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.MvxExpandableListView_MvxGroupItemTemplate = global::Toggl.Giskard.Resource.Styleable.MvxExpandableListView_MvxGroupItemTemplate;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.MvxImageView = global::Toggl.Giskard.Resource.Styleable.MvxImageView;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.MvxImageView_MvxSource = global::Toggl.Giskard.Resource.Styleable.MvxImageView_MvxSource;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.MvxListView = global::Toggl.Giskard.Resource.Styleable.MvxListView;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.MvxListView_MvxDropDownItemTemplate = global::Toggl.Giskard.Resource.Styleable.MvxListView_MvxDropDownItemTemplate;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.MvxListView_MvxItemTemplate = global::Toggl.Giskard.Resource.Styleable.MvxListView_MvxItemTemplate;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.MvxRecyclerView = global::Toggl.Giskard.Resource.Styleable.MvxRecyclerView;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.MvxRecyclerView_MvxTemplateSelector = global::Toggl.Giskard.Resource.Styleable.MvxRecyclerView_MvxTemplateSelector;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.RecyclerView = global::Toggl.Giskard.Resource.Styleable.RecyclerView;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.RecyclerView_android_descendantFocusability = global::Toggl.Giskard.Resource.Styleable.RecyclerView_android_descendantFocusability;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.RecyclerView_android_orientation = global::Toggl.Giskard.Resource.Styleable.RecyclerView_android_orientation;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.RecyclerView_layoutManager = global::Toggl.Giskard.Resource.Styleable.RecyclerView_layoutManager;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.RecyclerView_reverseLayout = global::Toggl.Giskard.Resource.Styleable.RecyclerView_reverseLayout;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.RecyclerView_spanCount = global::Toggl.Giskard.Resource.Styleable.RecyclerView_spanCount;
+			global::MvvmCross.Droid.Support.V7.RecyclerView.Resource.Styleable.RecyclerView_stackFromEnd = global::Toggl.Giskard.Resource.Styleable.RecyclerView_stackFromEnd;
 		}
 		
 		public partial class Animation
@@ -1954,26 +1993,29 @@ namespace Toggl.Giskard
 		public partial class Attribute
 		{
 			
-			// aapt resource value: 0x7f010165
-			public const int MvxBind = 2130772325;
-			
-			// aapt resource value: 0x7f010169
-			public const int MvxDropDownItemTemplate = 2130772329;
+			// aapt resource value: 0x7f010166
+			public const int MvxBind = 2130772326;
 			
 			// aapt resource value: 0x7f01016a
-			public const int MvxGroupItemTemplate = 2130772330;
-			
-			// aapt resource value: 0x7f010168
-			public const int MvxItemTemplate = 2130772328;
-			
-			// aapt resource value: 0x7f010166
-			public const int MvxLang = 2130772326;
+			public const int MvxDropDownItemTemplate = 2130772330;
 			
 			// aapt resource value: 0x7f01016b
-			public const int MvxSource = 2130772331;
+			public const int MvxGroupItemTemplate = 2130772331;
+			
+			// aapt resource value: 0x7f010169
+			public const int MvxItemTemplate = 2130772329;
 			
 			// aapt resource value: 0x7f010167
-			public const int MvxTemplate = 2130772327;
+			public const int MvxLang = 2130772327;
+			
+			// aapt resource value: 0x7f01016c
+			public const int MvxSource = 2130772332;
+			
+			// aapt resource value: 0x7f010168
+			public const int MvxTemplate = 2130772328;
+			
+			// aapt resource value: 0x7f010165
+			public const int MvxTemplateSelector = 2130772325;
 			
 			// aapt resource value: 0x7f01005d
 			public const int actionBarDivider = 2130772061;
@@ -5242,6 +5284,9 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0c0029
 			public const int SignUp = 2131492905;
 			
+			// aapt resource value: 0x7f0c002d
+			public const int TimeEntriesLogTemplateSelector = 2131492909;
+			
 			// aapt resource value: 0x7f0c0000
 			public const int abc_action_bar_home_description = 2131492864;
 			
@@ -8032,8 +8077,8 @@ namespace Toggl.Giskard
 			public const int MenuView_subMenuArrow = 8;
 			
 			public static int[] MvxBinding = new int[] {
-					2130772325,
-					2130772326};
+					2130772326,
+					2130772327};
 			
 			// aapt resource value: 0
 			public const int MvxBinding_MvxBind = 0;
@@ -8042,32 +8087,38 @@ namespace Toggl.Giskard
 			public const int MvxBinding_MvxLang = 1;
 			
 			public static int[] MvxControl = new int[] {
-					2130772327};
+					2130772328};
 			
 			// aapt resource value: 0
 			public const int MvxControl_MvxTemplate = 0;
 			
 			public static int[] MvxExpandableListView = new int[] {
-					2130772330};
+					2130772331};
 			
 			// aapt resource value: 0
 			public const int MvxExpandableListView_MvxGroupItemTemplate = 0;
 			
 			public static int[] MvxImageView = new int[] {
-					2130772331};
+					2130772332};
 			
 			// aapt resource value: 0
 			public const int MvxImageView_MvxSource = 0;
 			
 			public static int[] MvxListView = new int[] {
-					2130772328,
-					2130772329};
+					2130772329,
+					2130772330};
 			
 			// aapt resource value: 1
 			public const int MvxListView_MvxDropDownItemTemplate = 1;
 			
 			// aapt resource value: 0
 			public const int MvxListView_MvxItemTemplate = 0;
+			
+			public static int[] MvxRecyclerView = new int[] {
+					2130772325};
+			
+			// aapt resource value: 0
+			public const int MvxRecyclerView_MvxTemplateSelector = 0;
 			
 			public static int[] NavigationView = new int[] {
 					16842964,

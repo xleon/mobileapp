@@ -4,4 +4,6 @@
     <string name="Login">Log in</string>
     <string name="AppName">Toggl</string>
     <string name="EmailAddress">Email address</string>
+
+    <string name="TimeEntriesLogTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.TimeEntriesLogTemplateSelector, Toggl.Giskard</string>
 </resources>

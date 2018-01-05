@@ -159,6 +159,9 @@
     <Reference Include="MvvmCross.Droid.Support.V7.AppCompat">
       <HintPath>..\packages\MvvmCross.Droid.Support.V7.AppCompat.5.5.2\lib\MonoAndroid70\MvvmCross.Droid.Support.V7.AppCompat.dll</HintPath>
     </Reference>
+    <Reference Include="MvvmCross.Droid.Support.V7.RecyclerView">
+      <HintPath>..\packages\MvvmCross.Droid.Support.V7.RecyclerView.5.5.2\lib\MonoAndroid70\MvvmCross.Droid.Support.V7.RecyclerView.dll</HintPath>
+    </Reference>
     <Reference Include="Xamarin.Android.Support.v7.CardView">
       <HintPath>..\packages\Xamarin.Android.Support.v7.CardView.26.1.0.1\lib\MonoAndroid80\Xamarin.Android.Support.v7.CardView.dll</HintPath>
     </Reference>
@@ -182,12 +185,16 @@
     <Compile Include="Fragments\SuggestionsFragment.cs" />
     <Compile Include="Fragments\TimeEntriesLogFragment.cs" />
     <Compile Include="Activities\MainActivity.cs" />
+    <Compile Include="TemplateSelectors\TimeEntriesLogTemplateSelector.cs" />
+    <Compile Include="Adapters\TimeEntriesLogRecyclerAdapter.cs" />
+    <Compile Include="Views\TimeEntriesLogRecyclerView.cs" />
     <Compile Include="Startup\SetupTargetFactories.cs">
       <DependentUpon>SetupTargetFactories.tt</DependentUpon>
     </Compile>
     <Compile Include="Bindings\ViewMarginTargetBinding.cs" />
     <Compile Include="Extensions\LayoutParamsExtensions.cs" />
     <Compile Include="Extensions\NumberExtensions.cs" />
+    <Compile Include="Converters\BoolToConstantOverrides.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

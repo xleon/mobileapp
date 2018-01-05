@@ -2,22 +2,30 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:elevation="1dp"
     android:background="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="70dp">
     <TextView
-        local:MvxBind="Text Description"
+        local:MvxBind="Text Description; TopMargin LogDescriptionTopOffset(HasProject)"
         android:textSize="15sp"
         android:textColor="@android:color/black"
         tools:text="Exporting assets to Zeplin and organizing"
-        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true" />
     <TextView
-        local:MvxBind="Text ProjectName; TextColor NativeColor(ProjectColor); Visibility Visibility(HasProject)"
+        local:MvxBind="Visibility InvertedVisibility(HasDescription); TopMargin LogDescriptionTopOffset(HasProject)"
+        android:textSize="15sp"
+        android:textColor="@color/defaultText"
+        android:text="Add description"
+        android:layout_marginLeft="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        local:MvxBind="Text ProjectName; TextColor RGBA(ProjectColor); Visibility Visibility(HasProject)"
         android:id="@+id/TimeEntriesLogCellProjectLabel"
         android:textSize="15sp"
         android:fontFamily="sans-serif-medium"
@@ -70,7 +78,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true" />
     <ImageView
-        local:MvxBind="Visibility Visibility(CanSync)"
+        local:MvxBind="Visibility Visibility(NeedsSync)"
         android:src="@drawable/unsynced"
         android:layout_width="24dp"
         android:layout_height="24dp"
