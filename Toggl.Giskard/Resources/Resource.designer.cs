@@ -5223,28 +5223,31 @@ namespace Toggl.Giskard
 			public const int select_dialog_singlechoice_material = 2130968637;
 			
 			// aapt resource value: 0x7f04003e
-			public const int SplashScreen = 2130968638;
+			public const int SettingsActivity = 2130968638;
 			
 			// aapt resource value: 0x7f04003f
-			public const int SuggestionsFragment = 2130968639;
+			public const int SplashScreen = 2130968639;
 			
 			// aapt resource value: 0x7f040040
-			public const int SuggestionsFragmentCard = 2130968640;
+			public const int SuggestionsFragment = 2130968640;
 			
 			// aapt resource value: 0x7f040041
-			public const int support_simple_spinner_dropdown_item = 2130968641;
+			public const int SuggestionsFragmentCard = 2130968641;
 			
 			// aapt resource value: 0x7f040042
-			public const int TimeEntriesLogFragment = 2130968642;
+			public const int support_simple_spinner_dropdown_item = 2130968642;
 			
 			// aapt resource value: 0x7f040043
-			public const int TimeEntriesLogFragmentCell = 2130968643;
+			public const int TimeEntriesLogFragment = 2130968643;
 			
 			// aapt resource value: 0x7f040044
-			public const int TimeEntriesLogFragmentHeader = 2130968644;
+			public const int TimeEntriesLogFragmentCell = 2130968644;
 			
 			// aapt resource value: 0x7f040045
-			public const int tooltip = 2130968645;
+			public const int TimeEntriesLogFragmentHeader = 2130968645;
+			
+			// aapt resource value: 0x7f040046
+			public const int tooltip = 2130968646;
 			
 			static Layout()
 			{
@@ -5275,23 +5278,26 @@ namespace Toggl.Giskard
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f0c002b
-			public const int AppName = 2131492907;
-			
 			// aapt resource value: 0x7f0c002c
-			public const int EmailAddress = 2131492908;
+			public const int AppName = 2131492908;
+			
+			// aapt resource value: 0x7f0c002d
+			public const int EmailAddress = 2131492909;
 			
 			// aapt resource value: 0x7f0c002a
 			public const int Login = 2131492906;
 			
+			// aapt resource value: 0x7f0c002b
+			public const int Logout = 2131492907;
+			
 			// aapt resource value: 0x7f0c0029
 			public const int SignUp = 2131492905;
 			
-			// aapt resource value: 0x7f0c002d
-			public const int SuggestionsTemplateSelector = 2131492909;
-			
 			// aapt resource value: 0x7f0c002e
-			public const int TimeEntriesLogTemplateSelector = 2131492910;
+			public const int SuggestionsTemplateSelector = 2131492910;
+			
+			// aapt resource value: 0x7f0c002f
+			public const int TimeEntriesLogTemplateSelector = 2131492911;
 			
 			// aapt resource value: 0x7f0c0000
 			public const int abc_action_bar_home_description = 2131492864;

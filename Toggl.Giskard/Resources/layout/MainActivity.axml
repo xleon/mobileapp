@@ -29,10 +29,24 @@
         android:layout_gravity="bottom|right" />
     <android.support.v7.widget.Toolbar
         android:id="@+id/Toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         android:background="@color/toolbarBlack"
+        local:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        local:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            local:MvxBind="Click OpenSettingsCommand"
+            android:background="@drawable/settings_dark"
+            android:layout_gravity="end"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+        <ImageView
+            android:src="@drawable/timer_light"
+            android:layout_gravity="end"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+    </android.support.v7.widget.Toolbar>
 </android.support.design.widget.CoordinatorLayout>
