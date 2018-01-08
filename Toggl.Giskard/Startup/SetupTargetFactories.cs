@@ -1,6 +1,7 @@
 ﻿﻿using Android.Views;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using Toggl.Giskard.Bindings;
+using Android.Widget;
 
 namespace Toggl.Giskard
 {
@@ -24,6 +25,11 @@ namespace Toggl.Giskard
             registry.RegisterCustomBindingFactory<View>(
                 $"Bottom{ViewMarginTargetBinding.BindingName}",
                 view => new ViewMarginTargetBinding(view, ViewMarginTargetBinding.BoundMargin.Bottom)
+            );
+
+            registry.RegisterCustomBindingFactory<EditText>(
+                EditTextFocusTargetBinding.BindingName,
+                view => new EditTextFocusTargetBinding(view)
             );
 
             registry.RegisterCustomBindingFactory<View>(

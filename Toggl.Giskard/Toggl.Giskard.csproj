@@ -198,6 +198,7 @@
     <Compile Include="Views\SuggestionsRecyclerView.cs" />
     <Compile Include="TemplateSelectors\SuggestionsTemplateSelector.cs" />
     <Compile Include="Activities\SettingsActivity.cs" />
+    <Compile Include="Bindings\EditTextFocusTargetBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
