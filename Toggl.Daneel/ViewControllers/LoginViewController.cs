@@ -180,10 +180,12 @@ namespace Toggl.Daneel.ViewControllers
                 new UIStringAttributes { ForegroundColor = UIColor.White.ColorWithAlpha(0.5f) }.Dictionary
             );
 
+            EmailTextField.ReturnKeyType = UIReturnKeyType.Next;
             EmailTextField.TintColor = UIColor.White;
             EmailTextField.AttributedPlaceholder = 
                 new NSAttributedString(Resources.LoginSignUpEmailPlaceholder, placeholderAttributes);
 
+            PasswordTextField.ReturnKeyType = UIReturnKeyType.Next;
             PasswordTextField.TintColor = UIColor.White;
             PasswordTextField.AttributedPlaceholder = 
                 new NSAttributedString(Resources.LoginSignUpPasswordPlaceholder, placeholderAttributes);

@@ -155,7 +155,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.apiErrorHandlingService = apiErrorHandlingService;
 
             BackCommand = new MvxCommand(back);
-            NextCommand = new MvxCommand(next);
+            NextCommand = new MvxCommand(next, () => NextIsEnabled);
             GoogleLoginCommand = new MvxCommand(googleLogin);
             ForgotPasswordCommand = new MvxCommand(forgotPassword);
             OpenPrivacyPolicyCommand = new MvxCommand(openPrivacyPolicyCommand);
