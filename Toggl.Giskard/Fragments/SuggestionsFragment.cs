@@ -7,7 +7,7 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 
 namespace Toggl.Giskard.Fragments
 {
-    [MvxFragmentPresentation(typeof(MainViewModel), Resource.Id.MainSuggestionsContainer, ActivityHostViewModelType = typeof(MainViewModel))]
+    [MvxFragmentPresentation(typeof(MainViewModel), Resource.Id.MainSuggestionsContainer)]
     public sealed class SuggestionsFragment : MvxFragment
     {
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
