@@ -117,6 +117,10 @@
                         <constraint firstAttribute="width" secondItem="oxk-69-eH5" secondAttribute="height" multiplier="1:1" id="PXy-Y0-b48"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HT1-Ki-ody" customClass="LoadingPieChartView">
+                    <rect key="frame" x="32" y="177" width="311" height="311"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nZs-8E-xY9">
                     <rect key="frame" x="0.0" y="153" width="375" height="382"/>
                     <subviews>
@@ -161,9 +165,14 @@ the selected time period.</string>
                 <constraint firstAttribute="trailing" secondItem="L3q-fe-0ae" secondAttribute="trailing" id="P4N-he-CeN"/>
                 <constraint firstItem="qPk-V7-gUb" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="TBw-PC-gaM"/>
                 <constraint firstAttribute="bottom" secondItem="nZs-8E-xY9" secondAttribute="bottom" id="VGA-pZ-XI3"/>
+                <constraint firstItem="HT1-Ki-ody" firstAttribute="width" secondItem="oxk-69-eH5" secondAttribute="width" id="VuS-PI-ce5"/>
                 <constraint firstItem="nZs-8E-xY9" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="XqN-5b-wLy"/>
+                <constraint firstItem="HT1-Ki-ody" firstAttribute="height" secondItem="oxk-69-eH5" secondAttribute="height" id="ezc-Uo-02U"/>
                 <constraint firstItem="L3q-fe-0ae" firstAttribute="top" secondItem="CCY-m1-lmD" secondAttribute="bottom" id="fk2-fH-31w"/>
                 <constraint firstAttribute="trailing" secondItem="qPk-V7-gUb" secondAttribute="trailing" id="k65-mk-FmW"/>
+                <constraint firstItem="HT1-Ki-ody" firstAttribute="trailing" secondItem="oxk-69-eH5" secondAttribute="trailing" id="lCJ-2A-7N1"/>
+                <constraint firstItem="HT1-Ki-ody" firstAttribute="leading" secondItem="oxk-69-eH5" secondAttribute="leading" id="op5-Pr-uiY"/>
+                <constraint firstItem="HT1-Ki-ody" firstAttribute="top" secondItem="oxk-69-eH5" secondAttribute="top" id="pYB-f0-4gC"/>
                 <constraint firstItem="qPk-V7-gUb" firstAttribute="top" secondItem="1" secondAttribute="top" id="syk-8K-3RK"/>
                 <constraint firstAttribute="trailing" secondItem="oxk-69-eH5" secondAttribute="trailing" constant="32" id="vG5-Oh-LMF"/>
                 <constraint firstItem="nZs-8E-xY9" firstAttribute="top" secondItem="CCY-m1-lmD" secondAttribute="bottom" id="vok-GV-Y77"/>
@@ -174,6 +183,7 @@ the selected time period.</string>
                 <outlet property="BillablePercentageLabel" destination="Pul-Zo-t7x" id="ZoS-iV-R9D"/>
                 <outlet property="BillablePercentageView" destination="LzQ-vK-UXh" id="jpV-X0-3Ix"/>
                 <outlet property="EmptyStateView" destination="nZs-8E-xY9" id="g08-qJ-9lx"/>
+                <outlet property="LoadingPieChartView" destination="HT1-Ki-ody" id="ORI-Ay-pPy"/>
                 <outlet property="PieChartView" destination="oxk-69-eH5" id="k3f-9e-qZH"/>
                 <outlet property="TotalDurationGraph" destination="RFj-Tz-ewn" id="VOb-sg-KuZ"/>
                 <outlet property="TotalDurationLabel" destination="bHH-ZH-1EG" id="Fha-K3-km5"/>

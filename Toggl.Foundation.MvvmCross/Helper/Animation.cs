@@ -27,12 +27,15 @@
             public static readonly CubicBezierCurve Bounce = new CubicBezierCurve(0.175f, 0.885f, 0.32f, 1.375f);
             public static readonly CubicBezierCurve CardInCurve = new CubicBezierCurve(0.23f, 1.0f, 0.32f, 1.0f);
             public static readonly CubicBezierCurve CardOutCurve = new CubicBezierCurve(0.86f, 0.0f, 0.07f, 1.0f);
+            public static readonly CubicBezierCurve Linear = new CubicBezierCurve(0.0f, 0.0f, 1.0f, 1.0f);
         }
 
         public static class Timings
         {
             public const float SpiderBro = 1.5f;
-            
+
+            public const float ReportsLoading = 4.0f;
+
             public const float EnterTiming = 0.225f;
             public const float LeaveTiming = 0.195f;
             public const float LeaveTimingFaster = 0.145f;

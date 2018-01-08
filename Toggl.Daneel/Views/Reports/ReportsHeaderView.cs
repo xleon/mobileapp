@@ -5,10 +5,12 @@ using MvvmCross.Binding.iOS;
 using MvvmCross.Binding.iOS.Views;
 using MvvmCross.Plugins.Color.iOS;
 using Toggl.Daneel.Converters;
+using Toggl.Daneel.Extensions;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
+using static Toggl.Foundation.MvvmCross.Helper.Animation;
 
 namespace Toggl.Daneel.Views.Reports
 {
@@ -32,7 +34,7 @@ namespace Toggl.Daneel.Views.Reports
             base.AwakeFromNib();
 
             var templateImage = TotalDurationGraph.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-            TotalDurationGraph.Image = templateImage; 
+            TotalDurationGraph.Image = templateImage;
 
             this.DelayBind(() =>
             {
@@ -48,6 +50,11 @@ namespace Toggl.Daneel.Views.Reports
                           .For(v => v.AttributedText)
                           .To(vm => vm.TotalTime)
                           .WithConversion(new TimeSpanReportLabelValueConverter());
+
+                //Loading chart
+                bindingSet.Bind(LoadingPieChartView)
+                          .For(v => v.BindVisible())
+                          .To(vm => vm.IsLoading);
 
                 //Pretty stuff
                 bindingSet.Bind(PieChartView)

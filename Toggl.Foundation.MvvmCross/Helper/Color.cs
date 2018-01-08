@@ -190,6 +190,13 @@ namespace Toggl.Foundation.MvvmCross.Helper
             public static readonly MvxColor TotalTimeActivated = new MvxColor(76, 217, 100);
 
             public static readonly MvxColor Disabled = new MvxColor(181, 188, 192);
+
+            public static class Loading
+            {
+                public static readonly MvxColor LightColor = new MvxColor(250, 251, 252);
+
+                public static readonly MvxColor DarkColor = new MvxColor(236, 240, 242);
+            }
         }
       
         public static readonly MvxColor[] DefaultProjectColors =
