@@ -35,6 +35,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
 
                 Action tryingToConstructWithEmptyParameters =
                     () => foundation.RegisterServices(
+                            0,
                             dialogService,
                             browserService,
                             keyValueStorage,

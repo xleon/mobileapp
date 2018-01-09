@@ -15,6 +15,8 @@ namespace Toggl.Giskard
 {
     public sealed partial class Setup : MvxAppCompatSetup
     {
+        private const int maxNumberOfSuggestions = 5;
+
         private IMvxNavigationService navigationService;
 
 #if USE_PRODUCTION_API
@@ -54,7 +56,8 @@ namespace Toggl.Giskard
                 environment
             );
 
-            foundation.RegisterServices(new DialogService(), new BrowserService(), 
+            foundation.RegisterServices(maxNumberOfSuggestions,
+                                        new DialogService(), new BrowserService(), 
                                         new SharedPreferencesStorage(sharedPreferences),
                                         navigationService, new OnePasswordService())
                       .RevokeNewUserIfNeeded()

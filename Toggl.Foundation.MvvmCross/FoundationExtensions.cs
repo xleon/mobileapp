@@ -56,6 +56,7 @@ namespace Toggl.Foundation.MvvmCross
         private static readonly TimeSpan retryDelayLimit = TimeSpan.FromSeconds(60);
 
         public static FoundationMvvmCross RegisterServices(this Foundation self,
+            int maxNumberOfSuggestions,
             IDialogService dialogService,
             IBrowserService browserService,
             IKeyValueStorage keyValueStorage,
@@ -82,7 +83,7 @@ namespace Toggl.Foundation.MvvmCross
             Mvx.RegisterSingleton(passwordManagerService ?? new StubPasswordManagerService());
             Mvx.RegisterSingleton<ISuggestionProviderContainer>(
                 new SuggestionProviderContainer(
-                    new MostUsedTimeEntrySuggestionProvider(self.Database, self.TimeService)
+                    new MostUsedTimeEntrySuggestionProvider(self.Database, self.TimeService, maxNumberOfSuggestions)
                 )
             );
 
