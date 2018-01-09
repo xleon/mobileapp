@@ -243,4 +243,8 @@ time entries will appear here.</value>
     <data name="ThisYear">
         <value>This year</value>
     </data>
+    <data name="NoTagsInfoMessage">
+        <value>Add keywords to your
+time entries with # tags.</value>
+    </data>
 </root>
