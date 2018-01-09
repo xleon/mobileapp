@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
     <RelativeLayout
         android:layout_height="64dp"
-        android:layout_width="200dp">
+        android:layout_width="match_parent">
         <TextView
             local:MvxBind="Text Description"
             android:maxLines="1"

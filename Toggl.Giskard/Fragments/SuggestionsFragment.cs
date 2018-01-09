@@ -8,7 +8,7 @@ using MvvmCross.Droid.Support.V4;
 using MvvmCross.Droid.Views.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Activities;
-using Toggl.Giskard.Bindings;
+using Toggl.Giskard.Extensions;
 
 namespace Toggl.Giskard.Fragments
 {

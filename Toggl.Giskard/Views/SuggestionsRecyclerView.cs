@@ -3,8 +3,8 @@ using Android.Content;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Util;
-using Android.Views;
 using MvvmCross.Droid.Support.V7.RecyclerView;
+using Toggl.Giskard.Adapters;
 
 namespace Toggl.Giskard.Views
 {
@@ -22,9 +22,11 @@ namespace Toggl.Giskard.Views
         }
 
         public SuggestionsRecyclerView(Context context, IAttributeSet attrs, int defStyle)
-            : base(context, attrs, defStyle, new MvxRecyclerAdapter())
+            : base(context, attrs, defStyle, new SuggestionsRecyclerAdapter())
         {
             SetLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.Horizontal, false));
+            var snapHelper = new SuggestionsRecyclerViewSnapHelper();
+            snapHelper.AttachToRecyclerView(this);
         }
     }
 }
