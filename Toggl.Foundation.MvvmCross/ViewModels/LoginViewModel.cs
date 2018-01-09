@@ -3,7 +3,6 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
 using PropertyChanged;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Exceptions;
@@ -14,7 +13,6 @@ using Toggl.Foundation.Services;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Exceptions;
-using EmailType = Toggl.Multivac.Email;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -35,8 +33,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private LoginType loginType;
         private IDisposable loginDisposable;
-
-        private EmailType email = EmailType.Invalid;
 
         private int pageBeforeForgotPasswordPage;
 
@@ -59,9 +55,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
         }
 
-        public string Email { get; set; } = "";
+        public Email Email { get; set; } = Email.Empty;
 
-        public string Password { get; set; } = "";
+        public Password Password { get; set; } = Password.Empty;
 
         public string InfoText { get; set; } = "";
 
@@ -117,17 +113,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         [DependsOn(nameof(IsLogin))]
         public string GoogleButtonText => IsLogin ? Resources.GoogleLogin : Resources.GoogleSignUp;
 
-        [DependsOn(nameof(CurrentPage), nameof(Password))]
+        [DependsOn(nameof(CurrentPage), nameof(Password), nameof(Email))]
         public bool NextIsEnabled
         {
             get
             {
                 if (IsEmailPage)
-                    return email.IsValid;
+                    return Email.IsValid;
                 if (IsPasswordPage)
-                    return Password.Length > 0 && !IsLoading;
+                    return Password.IsValid && !IsLoading;
                 if (IsForgotPasswordPage)
-                    return email.IsValid && !IsLoading;
+                    return Email.IsValid && !IsLoading;
                 return false;
             }
         }
@@ -171,8 +167,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void OnEmailChanged()
         {
-            email = EmailType.FromString(Email);
-            RaisePropertyChanged(nameof(NextIsEnabled));
+            //Needed for Android
+            NextCommand.RaiseCanExecuteChanged();
         }
 
         private void openTermsOfServiceCommand() =>
@@ -211,7 +207,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             IsLoading = true;
             loginManager
-                .ResetPassword(email)
+                .ResetPassword(Email)
                 .Subscribe(onPasswordResetSuccess, onPasswordResetError);
         }
 
@@ -268,7 +264,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             loginDisposable =
                 loginManager
-                    .Login(email, Password)
+                    .Login(Email, Password)
                     .Subscribe(onDataSource, onError, onCompleted);
         }
 
@@ -288,7 +284,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             loginDisposable =
                 loginManager
-                    .SignUp(email, Password)
+                    .SignUp(Email, Password)
                     .Subscribe(onDataSource, onError, onCompleted);
         }
 
@@ -354,7 +350,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             pageBeforeForgotPasswordPage = CurrentPage;
             CurrentPage = ForgotPasswordPage;
-            InfoText = email.IsValid ? "" : Resources.PasswordResetExplanation;
+            InfoText = Email.IsValid ? "" : Resources.PasswordResetExplanation;
         }
     }
 }

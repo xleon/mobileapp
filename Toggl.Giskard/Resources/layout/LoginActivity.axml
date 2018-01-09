@@ -15,7 +15,7 @@
         android:layout_height="?attr/actionBarSize" />
     <EditText
         android:id="@+id/LoginEmailTextField"
-        local:MvxBind="Text Email; Visibility Visibility(EmailFieldVisible); Focus IsEmailFocused"
+        local:MvxBind="Text EmailToString(Email); Visibility Visibility(EmailFieldVisible); Focus IsEmailFocused"
         android:inputType="textEmailAddress"
         android:hint="@string/EmailAddress"
         android:lines="1"
@@ -33,7 +33,7 @@
         android:layout_below="@id/LoginToolbar" />
     <EditText
         android:id="@+id/LoginPasswordTextField"
-        local:MvxBind="Text Password; Visibility Visibility(IsPasswordPage); Focus IsPasswordPage"
+        local:MvxBind="Text PasswordToString(Password); Visibility Visibility(IsPasswordPage); Focus IsPasswordPage"
         android:inputType="textPassword"
         android:hint="Password"
         android:lines="1"
