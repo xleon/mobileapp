@@ -27,6 +27,9 @@ namespace Toggl.Giskard.Views
             SetItemViewCacheSize(20);
             DrawingCacheEnabled = true;
             DrawingCacheQuality = DrawingCacheQuality.High;
+
+            NestedScrollingEnabled = false;
+            GetLayoutManager().AutoMeasureEnabled = true;
         }
     }
 }

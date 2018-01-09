@@ -17,6 +17,8 @@ namespace Toggl.Giskard.Adapters
         private readonly object headerListLock = new object();
         private readonly List<int> headerIndexes = new List<int>();
 
+        private int? cachedItemCount;
+
         public TimeEntriesLogRecyclerAdapter()
         {
         }
@@ -44,6 +46,7 @@ namespace Toggl.Giskard.Adapters
         {
             lock (headerListLock)
             {
+                cachedItemCount = null;
                 headerIndexes.Clear();
 
                 var timeEntryGroups = getTimeEntryGroups();
@@ -63,7 +66,7 @@ namespace Toggl.Giskard.Adapters
             try
             {
                 var timeEntryGroups = ItemsSource as MvxObservableCollection<TimeEntryViewModelCollection>;
-                if (timeEntryGroups == null)
+                if (timeEntryGroups == null || viewPosition == ItemCount - 1)
                     return null;
 
                 var groupIndex = headerIndexes.IndexOf(viewPosition);
@@ -86,11 +89,16 @@ namespace Toggl.Giskard.Adapters
         {
             get
             {
-                var timeEntryGroups = getTimeEntryGroups();
-                if (timeEntryGroups == null) return 0;
+                if (cachedItemCount == null)
+                {
+                    var timeEntryGroups = getTimeEntryGroups();
+                    if (timeEntryGroups == null) return 0;
 
-                var itemCount = timeEntryGroups.Aggregate(timeEntryGroups.Count, (acc, g) => acc + g.Count);
-                return itemCount;
+                    var itemCount = timeEntryGroups.Aggregate(timeEntryGroups.Count, (acc, g) => acc + g.Count);
+                    cachedItemCount = itemCount + 1;
+                }
+
+                return cachedItemCount.Value;
             }
         }
 
