@@ -8,6 +8,7 @@
     android:layout_height="70dp">
     <TextView
         local:MvxBind="Text Description; TopMargin LogDescriptionTopOffset(HasProject)"
+        android:maxLines="1"
         android:textSize="15sp"
         android:textColor="@android:color/black"
         tools:text="Exporting assets to Zeplin and organizing"
@@ -18,6 +19,7 @@
         android:layout_alignParentLeft="true" />
     <TextView
         local:MvxBind="Visibility InvertedVisibility(HasDescription); TopMargin LogDescriptionTopOffset(HasProject)"
+        android:maxLines="1"
         android:textSize="15sp"
         android:textColor="@color/defaultText"
         android:text="Add description"
@@ -27,6 +29,7 @@
     <TextView
         local:MvxBind="Text ProjectName; TextColor RGBA(ProjectColor); Visibility Visibility(HasProject)"
         android:id="@+id/TimeEntriesLogCellProjectLabel"
+        android:maxLines="1"
         android:textSize="15sp"
         android:fontFamily="sans-serif-medium"
         tools:text="Design"
@@ -39,6 +42,7 @@
         android:layout_alignParentBottom="true" />
     <TextView
         local:MvxBind="Text ClientName; Visibility Visibility(HasProject)"
+        android:maxLines="1"
         android:textSize="15sp"
         android:fontFamily="sans-serif"
         android:textColor="@color/clientName"
@@ -56,6 +60,7 @@
         android:layout_alignParentRight="true" />
     <TextView
         local:MvxBind="Text TimeSpanToDuration(Duration)"
+        android:maxLines="1"
         android:gravity="end"
         android:textSize="15sp"
         android:fontFamily="sans-serif"
