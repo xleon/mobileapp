@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
@@ -27,6 +28,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         private CalendarMonth initialMonth;
         private BeginningOfWeek beginningOfWeek;
         private CalendarDayViewModel startOfSelection;
+
+        private CompositeDisposable disposableBag;
 
         //Properties
         [DependsOn(nameof(CurrentPage))]
@@ -59,29 +62,29 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
             CalendarDayTappedCommand = new MvxCommand<CalendarDayViewModel>(calendarDayTapped);
             QuickSelectCommand = new MvxCommand<CalendarBaseQuickSelectShortcut>(quickSelect);
+
+            disposableBag = new CompositeDisposable();
         }
 
         private void calendarDayTapped(CalendarDayViewModel tappedDay)
         {
             if (startOfSelection == null)
             {
-                clearAllHighlights();
+                var date = tappedDay.DateTimeOffset;
+
+                var dateRange = DateRangeParameter.WithDates(date, date);
                 startOfSelection = tappedDay;
-                startOfSelection.Selected
-                    = startOfSelection.IsStartOfSelectedPeriod
-                    = startOfSelection.IsEndOfSelectedPeriod
-                    = true;
-                return;
+                highlightDateRange(dateRange);
             }
+            else
+            {
+                var startDate = startOfSelection.DateTimeOffset;
+                var endDate = tappedDay.DateTimeOffset;
 
-            var startDate = startOfSelection.ToDateTimeOffset();
-            var endDate = tappedDay.ToDateTimeOffset();
-
-            startOfSelection.IsEndOfSelectedPeriod = false;
-
-            var dateRange = DateRangeParameter.WithDates(startDate, endDate);
-            changeDateRange(dateRange);
-            startOfSelection = null;
+                var dateRange = DateRangeParameter.WithDates(startDate, endDate);
+                startOfSelection = null;
+                changeDateRange(dateRange);
+            }
         }
 
         public override void Prepare()
@@ -102,9 +105,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
             QuickSelectShortcuts = createQuickSelectShortcuts();
 
-            QuickSelectShortcuts.ForEach(quickSelectShortcut =>
-                SelectedDateRangeObservable.Subscribe(
-                    quickSelectShortcut.OnDateRangeChanged));
+            QuickSelectShortcuts
+                .Select(quickSelectShortcut => SelectedDateRangeObservable.Subscribe(
+                    quickSelectShortcut.OnDateRangeChanged))
+                .ForEach(disposableBag.Add);
         }
 
         private void fillMonthArray()
@@ -127,13 +131,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         private CalendarMonth convertPageIndexTocalendarMonth(int pageIndex)
             => initialMonth.AddMonths(pageIndex);
 
-        private int convertCalendarMonthToPageIndex(CalendarMonth calendarMonth)
-        {
-            var initialTotalMonths = initialMonth.Year * 12 + initialMonth.Month;
-            var totalMonths = calendarMonth.Year * 12 + calendarMonth.Month;
-            return totalMonths - initialTotalMonths;
-        }
-
         private void changeDateRange(DateRangeParameter newDateRange)
         {
             startOfSelection = null;
@@ -148,76 +145,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
         private void highlightDateRange(DateRangeParameter dateRange)
         {
-            clearAllHighlights();
-
-            //Mark start
-            var startDayViewModels = findDayViewModelsForDate(dateRange.StartDate);
-            startDayViewModels.ForEach(d => d.IsStartOfSelectedPeriod = true);
-
-            //Mark end
-            var endDayViewModels = findDayViewModelsForDate(dateRange.EndDate);
-            endDayViewModels.ForEach(d => d.IsEndOfSelectedPeriod = true);
-
-            //Mark dates as selected
-            for (DateTime i = dateRange.StartDate.Date; i <= dateRange.EndDate.Date; i = i.AddDays(1))
-                findDayViewModelsForDate(i).ForEach(day => day.Selected = true);
-        }
-
-        private void clearAllHighlights()
-        {
-            foreach (var month in Months)
-            {
-                foreach (var day in month.Days)
-                {
-                    day.Selected
-                        = day.IsStartOfSelectedPeriod
-                        = day.IsEndOfSelectedPeriod
-                        = false;
-                }
-            }
-        }
-
-        private List<CalendarDayViewModel> findDayViewModelsForDate(DateTimeOffset date)
-        {
-            List<CalendarDayViewModel> results = new List<CalendarDayViewModel>();
-            var calendarMonth = new CalendarMonth(date.Year, date.Month);
-            var page = convertCalendarMonthToPageIndex(calendarMonth);
-
-            if (page >= 0 && page < monthsToShow)
-            {
-                results
-                    .Add(Months[page]
-                    .Days
-                    .Single(dayViewModel
-                            => dayViewModel.CalendarMonth == calendarMonth
-                            && dayViewModel.Day == date.Day));
-            }
-            
-            if (date.Day < 7 && page > 0)
-            {
-                var otherResult = Months[page - 1]
-                    .Days
-                    .SingleOrDefault(dayViewModel
-                        => !dayViewModel.IsInCurrentMonth
-                        && dayViewModel.Day == date.Day);
-                
-                if (otherResult != null)
-                    results.Add(otherResult);
-            }
-
-            if (date.Day > calendarMonth.DaysInMonth - 7 && page < monthsToShow - 1)
-            {
-                var otherResult = Months[page + 1]
-                    .Days
-                    .SingleOrDefault(dayViewModel
-                        => !dayViewModel.IsInCurrentMonth
-                        && dayViewModel.Day == date.Day);
-
-                if (otherResult != null)
-                    results.Add(otherResult);
-            }
-
-            return results;
+            Months.ForEach(month => month.Days.ForEach(day => day.OnSelectedRangeChanged(dateRange)));
         }
     }
 }

@@ -257,21 +257,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     dayViewModel.IsEndOfSelectedPeriod.Should().BeTrue();
                 }
-
-                [Fact]
-                public void RemovesAnyPreviousSelection()
-                {
-                    var preSelectedDays = new(int pageIndex, int dayIndex)[]
-                        { (2, 1), (2, 2), (2, 3), (2, 4) };
-                    var preSelectedViewModels = preSelectedDays
-                        .Select(day => FindDayViewModel(day.pageIndex, day.dayIndex));
-                    preSelectedViewModels.ForEach(day => day.Selected = true);
-                    var dayToBeSelected = FindDayViewModel(5, 5);
-
-                    ViewModel.CalendarDayTappedCommand.Execute(dayToBeSelected);
-
-                    preSelectedViewModels.ForEach(day => day.Selected.Should().BeFalse());
-                }
             }
 
             public sealed class AfterTappingTwoCells : TheCalendarDayTappedCommand
@@ -360,6 +345,62 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     for (int i = startindex; i <= endIndex; i++)
                         calendarPage.Days[i].Selected.Should().BeTrue();
                 }
+            }
+        }
+
+        public sealed class TheQuickSelectCommand : ReportsCalendarViewModelTest
+        {
+            [Property]
+            public void UsingAnyOfTheShortcutsDoesNotThrowAnyTimeOfTheYear(DateTimeOffset now)
+            {
+                TimeService.CurrentDateTime.Returns(now);
+                // in this property test it is not possible to use the default ViewModel,
+                // because we have to reset it in each iteration of the test
+                var viewModel = CreateViewModel();
+                viewModel.Prepare();
+                viewModel.Initialize().Wait();
+
+                foreach (var shortcut in viewModel.QuickSelectShortcuts)
+                {
+                    Action usingShortcut = () => viewModel.QuickSelectCommand.Execute(shortcut);
+                    usingShortcut.ShouldNotThrow();
+                }
+            }
+
+            [Property]
+            public void SelectingAnyDateRangeDoesNotMakeTheAppCrash(DateTimeOffset a, DateTimeOffset b, DateTimeOffset c)
+            {
+                var dates = new[] { a, b, c };
+                Array.Sort(dates);
+                var start = dates[0];
+                var now = dates[1];
+                var end = dates[2];
+                TimeService.CurrentDateTime.Returns(now);
+                var selectedRange = DateRangeParameter.WithDates(start, end);
+                var customShortcut = new CustomShortcut(selectedRange, TimeService);
+
+                // in this property test it is not possible to use the default ViewModel,
+                // because we have to reset it in each iteration of the test
+                var viewModel = CreateViewModel();
+                viewModel.Prepare();
+                viewModel.Initialize().Wait();
+
+                Action usingShortcut = () => viewModel.QuickSelectCommand.Execute(customShortcut);
+
+                usingShortcut.ShouldNotThrow();
+            }
+
+            private sealed class CustomShortcut : CalendarBaseQuickSelectShortcut
+            {
+                private DateRangeParameter range;
+
+                public CustomShortcut(DateRangeParameter range, ITimeService timeService) : base(timeService, "")
+                {
+                    this.range = range;
+                }
+
+                public override DateRangeParameter GetDateRange()
+                    => range;
             }
         }
     }
