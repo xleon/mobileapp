@@ -247,4 +247,7 @@ time entries will appear here.</value>
         <value>Add keywords to your
 time entries with # tags.</value>
     </data>
+    <data name="Help">
+        <value>Help</value>
+    </data>
 </root>

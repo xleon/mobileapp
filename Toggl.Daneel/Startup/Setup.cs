@@ -63,7 +63,8 @@ namespace Toggl.Daneel
                 new Database(), 
                 new TimeService(Scheduler.Default),
                 new GoogleService(),
-                environment
+                environment,
+                new PlatformConstants()
             );
 
             foundation.RegisterServices(maxNumberOfSuggestions,

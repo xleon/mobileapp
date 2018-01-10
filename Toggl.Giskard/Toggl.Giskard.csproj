@@ -202,6 +202,7 @@
     <Compile Include="Views\SuggestionsRecyclerViewSnapHelper.cs" />
     <Compile Include="Views\SuggestionsRecyclerViewHolder.cs" />
     <Compile Include="Adapters\SuggestionsRecyclerAdapter.cs" />
+    <Compile Include="PlatformConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

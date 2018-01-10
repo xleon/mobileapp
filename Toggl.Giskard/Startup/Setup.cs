@@ -53,7 +53,8 @@ namespace Toggl.Giskard
                 new Database(),
                 new TimeService(Scheduler.Default),
                 new GoogleService(),
-                environment
+                environment,
+                new PlatformConstants()
             );
 
             foundation.RegisterServices(maxNumberOfSuggestions,

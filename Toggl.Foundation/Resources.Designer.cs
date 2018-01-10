@@ -496,5 +496,11 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("NoTagsInfoMessage", resourceCulture);
             }
         }
+        
+        public static string Help {
+            get {
+                return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
     }
 }

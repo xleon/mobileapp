@@ -16,6 +16,7 @@ namespace Toggl.Foundation
         public ITimeService TimeService { get; internal set; }
         public IGoogleService GoogleService { get; internal set; }
         public ApiEnvironment ApiEnvironment { get; internal set; }
+        public IPlatformConstants PlatformConstants { get; internal set; }
 
         public static Foundation Create(
             string clientName,
@@ -23,13 +24,15 @@ namespace Toggl.Foundation
             ITogglDatabase database,
             ITimeService timeService,
             IGoogleService googleService,
-            ApiEnvironment apiEnvironment)
+            ApiEnvironment apiEnvironment,
+            IPlatformConstants platformConstants)
         {
             Ensure.Argument.IsNotNull(version, nameof(version));
             Ensure.Argument.IsNotNull(database, nameof(database));
             Ensure.Argument.IsNotNull(clientName, nameof(clientName));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(googleService, nameof(googleService));
+            Ensure.Argument.IsNotNull(platformConstants, nameof(platformConstants));
 
             var userAgent = new UserAgent(clientName, version);
 
@@ -41,6 +44,7 @@ namespace Toggl.Foundation
                 GoogleService = googleService,
                 ApiEnvironment = apiEnvironment,
                 Version = Version.Parse(version),
+                PlatformConstants = platformConstants,
                 ApiFactory = new ApiFactory(apiEnvironment, userAgent)
             };
 
