@@ -203,6 +203,7 @@
     <Compile Include="Views\SuggestionsRecyclerViewHolder.cs" />
     <Compile Include="Adapters\SuggestionsRecyclerAdapter.cs" />
     <Compile Include="PlatformConstants.cs" />
+    <Compile Include="Activities\StartTimeEntryActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -394,6 +395,14 @@
     <AndroidResource Include="Resources\layout\SuggestionsFragmentCard.axml" />
     <AndroidResource Include="Resources\layout\SettingsActivity.axml" />
     <AndroidResource Include="Resources\layout\TimeEntriesLogFragmentFooter.axml" />
+    <AndroidResource Include="Resources\layout\StartTimeEntryActivity.axml" />
+    <AndroidResource Include="Resources\layout\StartTimeEntryActivityTimeEntryCell.axml" />
+    <AndroidResource Include="Resources\layout\StartTimeEntryActivityProjectCell.axml" />
+    <AndroidResource Include="Resources\layout\StartTimeEntryActivityTagCell.axml" />
+    <AndroidResource Include="Resources\layout\StartTimeEntryActivityTaskCell.axml" />
+    <AndroidResource Include="Resources\layout\StartTimeEntryActivityWorkspaceHeader.axml" />
+    <AndroidResource Include="Resources\layout\StartTimeEntryActivityNoEntityCell.axml" />
+    <AndroidResource Include="Resources\layout\StartTimeEntryActivityEmptyCell.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">
