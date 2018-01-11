@@ -243,6 +243,15 @@ time entries will appear here.</value>
     <data name="ThisYear">
         <value>This year</value>
     </data>
+    <data name="WorkingOnThis">
+        <value>Working on this?</value>
+    </data>
+    <data name="WorkingOnThese">
+        <value>Working on these?</value>
+    </data>
+    <data name="Of">
+        <value>Of</value>
+    </data>
     <data name="NoTagsInfoMessage">
         <value>Add keywords to your
 time entries with # tags.</value>

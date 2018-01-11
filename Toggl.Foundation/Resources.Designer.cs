@@ -491,6 +491,24 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string WorkingOnThis {
+            get {
+                return ResourceManager.GetString("WorkingOnThis", resourceCulture);
+            }
+        }
+        
+        public static string WorkingOnThese {
+            get {
+                return ResourceManager.GetString("WorkingOnThese", resourceCulture);
+            }
+        }
+        
+        public static string Of {
+            get {
+                return ResourceManager.GetString("Of", resourceCulture);
+            }
+        }
+        
         public static string NoTagsInfoMessage {
             get {
                 return ResourceManager.GetString("NoTagsInfoMessage", resourceCulture);

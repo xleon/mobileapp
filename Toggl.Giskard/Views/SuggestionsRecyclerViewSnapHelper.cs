@@ -1,10 +1,26 @@
-﻿using Android.Support.V7.Widget;
+﻿using System;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using Android.Support.V7.Widget;
 using Android.Views;
+using Toggl.Giskard.Extensions;
 
 namespace Toggl.Giskard.Views
 {     public sealed class SuggestionsRecyclerViewSnapHelper : LinearSnapHelper
     {
         private OrientationHelper horizontalHelper;
+        private readonly int startMargin;
+        private readonly BehaviorSubject<int> subject = new BehaviorSubject<int>(1);
+
+        public IObservable<int> CurrentIndexObservable 
+            => subject.AsObservable()
+                .Where(index => index > 0)
+                .DistinctUntilChanged();
+
+        public SuggestionsRecyclerViewSnapHelper(int startMargin)
+        {
+            this.startMargin = startMargin;
+        }
 
         public override View FindSnapView(RecyclerView.LayoutManager layoutManager)
             => getStartView(layoutManager, getHorizontalHelper(layoutManager));
@@ -13,7 +29,7 @@ namespace Toggl.Giskard.Views
             => new[] { distanceToStart(targetView, getHorizontalHelper(layoutManager)), 0 };
 
         private int distanceToStart(View targetView, OrientationHelper helper)
-            => helper.GetDecoratedStart(targetView) - helper.StartAfterPadding;
+            => helper.GetDecoratedStart(targetView) - helper.StartAfterPadding - startMargin;
 
         private OrientationHelper getHorizontalHelper(RecyclerView.LayoutManager layoutManager)
             => horizontalHelper ?? (horizontalHelper = OrientationHelper.CreateHorizontalHelper(layoutManager));
@@ -26,6 +42,7 @@ namespace Toggl.Giskard.Views
             if (firstChildIndex == RecyclerView.NoPosition) 
                 return null;
 
+            subject.OnNext(linearLayoutManager.FindFirstCompletelyVisibleItemPosition() + 1);
             var lastItemIndex = linearLayoutManager.ItemCount - 1;
             var isLastItem = linearLayoutManager.FindLastCompletelyVisibleItemPosition() == lastItemIndex;
             if (isLastItem) 

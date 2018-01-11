@@ -4464,29 +4464,20 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f090038
 			public const int SYM = 2131296312;
 			
-			// aapt resource value: 0x7f0900b7
-			public const int StartTimeEntryProjectCelTaskCountLabel = 2131296439;
-			
 			// aapt resource value: 0x7f0900b6
-			public const int StartTimeEntryProjectCellProjectLabel = 2131296438;
+			public const int SuggestionsHintTextView = 2131296438;
+			
+			// aapt resource value: 0x7f0900b7
+			public const int SuggestionsIndicatorTextView = 2131296439;
 			
 			// aapt resource value: 0x7f0900b8
-			public const int StartTimeEntryTimeEntryCellProjectLabel = 2131296440;
-			
-			// aapt resource value: 0x7f0900b9
-			public const int StartTimeEntryTimeEntryCellTaskLabel = 2131296441;
+			public const int SuggestionsRecyclerView = 2131296440;
 			
 			// aapt resource value: 0x7f0900ba
-			public const int SuggestionsHintTextView = 2131296442;
+			public const int TimeEntriesLogCellContinueImage = 2131296442;
 			
-			// aapt resource value: 0x7f0900bc
-			public const int TimeEntriesLogCellContinueImage = 2131296444;
-			
-			// aapt resource value: 0x7f0900bb
-			public const int TimeEntriesLogCellProjectLabel = 2131296443;
-			
-			// aapt resource value: 0x7f0900bd
-			public const int TimeEntriesLogCellTaskLabel = 2131296445;
+			// aapt resource value: 0x7f0900b9
+			public const int TimeEntriesLogCellProjectLabel = 2131296441;
 			
 			// aapt resource value: 0x7f0900a2
 			public const int Toolbar = 2131296418;
@@ -4734,14 +4725,14 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f090062
 			public const int list_item = 2131296354;
 			
-			// aapt resource value: 0x7f0900c0
-			public const int masked = 2131296448;
+			// aapt resource value: 0x7f0900bd
+			public const int masked = 2131296445;
 			
 			// aapt resource value: 0x7f0900a9
 			public const int media_actions = 2131296425;
 			
-			// aapt resource value: 0x7f0900be
-			public const int message = 2131296446;
+			// aapt resource value: 0x7f0900bb
+			public const int message = 2131296443;
 			
 			// aapt resource value: 0x7f090032
 			public const int middle = 2131296306;
@@ -4986,8 +4977,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f090016
 			public const int view_offset_helper = 2131296278;
 			
-			// aapt resource value: 0x7f0900bf
-			public const int visible = 2131296447;
+			// aapt resource value: 0x7f0900bc
+			public const int visible = 2131296444;
 			
 			// aapt resource value: 0x7f09003d
 			public const int withText = 2131296317;
@@ -5244,52 +5235,28 @@ namespace Toggl.Giskard
 			public const int SplashScreen = 2130968639;
 			
 			// aapt resource value: 0x7f040040
-			public const int StartTimeEntryActivity = 2130968640;
+			public const int SuggestionsFragment = 2130968640;
 			
 			// aapt resource value: 0x7f040041
-			public const int StartTimeEntryActivityEmptyCell = 2130968641;
+			public const int SuggestionsFragmentCard = 2130968641;
 			
 			// aapt resource value: 0x7f040042
-			public const int StartTimeEntryActivityNoEntityCell = 2130968642;
+			public const int support_simple_spinner_dropdown_item = 2130968642;
 			
 			// aapt resource value: 0x7f040043
-			public const int StartTimeEntryActivityProjectCell = 2130968643;
+			public const int TimeEntriesLogFragment = 2130968643;
 			
 			// aapt resource value: 0x7f040044
-			public const int StartTimeEntryActivityTagCell = 2130968644;
+			public const int TimeEntriesLogFragmentCell = 2130968644;
 			
 			// aapt resource value: 0x7f040045
-			public const int StartTimeEntryActivityTaskCell = 2130968645;
+			public const int TimeEntriesLogFragmentFooter = 2130968645;
 			
 			// aapt resource value: 0x7f040046
-			public const int StartTimeEntryActivityTimeEntryCell = 2130968646;
+			public const int TimeEntriesLogFragmentHeader = 2130968646;
 			
 			// aapt resource value: 0x7f040047
-			public const int StartTimeEntryActivityWorkspaceHeader = 2130968647;
-			
-			// aapt resource value: 0x7f040048
-			public const int SuggestionsFragment = 2130968648;
-			
-			// aapt resource value: 0x7f040049
-			public const int SuggestionsFragmentCard = 2130968649;
-			
-			// aapt resource value: 0x7f04004a
-			public const int support_simple_spinner_dropdown_item = 2130968650;
-			
-			// aapt resource value: 0x7f04004b
-			public const int TimeEntriesLogFragment = 2130968651;
-			
-			// aapt resource value: 0x7f04004c
-			public const int TimeEntriesLogFragmentCell = 2130968652;
-			
-			// aapt resource value: 0x7f04004d
-			public const int TimeEntriesLogFragmentFooter = 2130968653;
-			
-			// aapt resource value: 0x7f04004e
-			public const int TimeEntriesLogFragmentHeader = 2130968654;
-			
-			// aapt resource value: 0x7f04004f
-			public const int tooltip = 2130968655;
+			public const int tooltip = 2130968647;
 			
 			static Layout()
 			{
