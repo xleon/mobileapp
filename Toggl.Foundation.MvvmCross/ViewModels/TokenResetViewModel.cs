@@ -102,7 +102,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void onDataSource(ITogglDataSource newDataSource)
         {
-            newDataSource.SyncManager.ForceFullSync();
+            newDataSource.StartSyncing();
 
             IsLoading = false;
 

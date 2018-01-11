@@ -1,5 +1,6 @@
 ﻿using System;
 using Toggl.Foundation.Login;
+using Toggl.Foundation.Services;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
@@ -16,6 +17,7 @@ namespace Toggl.Foundation
         public ITimeService TimeService { get; internal set; }
         public IGoogleService GoogleService { get; internal set; }
         public ApiEnvironment ApiEnvironment { get; internal set; }
+        public IBackgroundService BackgroundService { get; internal set; }
         public IPlatformConstants PlatformConstants { get; internal set; }
 
         public static Foundation Create(
@@ -44,6 +46,7 @@ namespace Toggl.Foundation
                 GoogleService = googleService,
                 ApiEnvironment = apiEnvironment,
                 Version = Version.Parse(version),
+                BackgroundService = new BackgroundService(timeService),
                 PlatformConstants = platformConstants,
                 ApiFactory = new ApiFactory(apiEnvironment, userAgent)
             };

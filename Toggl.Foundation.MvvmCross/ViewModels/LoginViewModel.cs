@@ -306,7 +306,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async void onDataSource(ITogglDataSource dataSource)
         {
-            await dataSource.SyncManager.ForceFullSync();
+            await dataSource.StartSyncing();
 
             IsLoading = false;
 
