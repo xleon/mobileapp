@@ -26,10 +26,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         private readonly ISubject<DateRangeParameter> selectedDateRangeSubject = new Subject<DateRangeParameter>();
 
         private CalendarMonth initialMonth;
-        private BeginningOfWeek beginningOfWeek;
         private CalendarDayViewModel startOfSelection;
 
         private CompositeDisposable disposableBag;
+
+        public BeginningOfWeek BeginningOfWeek { get; private set; }
 
         //Properties
         [DependsOn(nameof(CurrentPage))]
@@ -99,7 +100,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         {
             await base.Initialize();
 
-            beginningOfWeek = (await dataSource.User.Current).BeginningOfWeek;
+            BeginningOfWeek = (await dataSource.User.Current).BeginningOfWeek;
             fillMonthArray();
             RaisePropertyChanged(nameof(CurrentMonth));
 
@@ -115,14 +116,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         {
             var monthIterator = initialMonth;
             for (int i = 0; i < 12; i++, monthIterator = monthIterator.Next())
-                Months.Add(new CalendarPageViewModel(monthIterator, beginningOfWeek, timeService.CurrentDateTime));
+                Months.Add(new CalendarPageViewModel(monthIterator, BeginningOfWeek, timeService.CurrentDateTime));
         }
 
         private List<CalendarBaseQuickSelectShortcut> createQuickSelectShortcuts()
             => new List<CalendarBaseQuickSelectShortcut>
             {
-                new CalendarThisWeekQuickSelectShortcut(timeService, beginningOfWeek),
-                new CalendarLastWeekQuickSelectShortcut(timeService, beginningOfWeek),
+                new CalendarThisWeekQuickSelectShortcut(timeService, BeginningOfWeek),
+                new CalendarLastWeekQuickSelectShortcut(timeService, BeginningOfWeek),
                 new CalendarThisMonthQuickSelectShortcut(timeService),
                 new CalendarLastMonthQuickSelectShortcut(timeService),
                 new CalendarThisYearQuickSelectShortcut(timeService)

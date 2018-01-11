@@ -256,6 +256,27 @@ time entries will appear here.</value>
         <value>Add keywords to your
 time entries with # tags.</value>
     </data>
+    <data name="MondayInitial">
+        <value>M</value>
+    </data>
+    <data name="TuesdayInitial">
+        <value>T</value>
+    </data>
+    <data name="WednesdayInitial">
+        <value>W</value>
+    </data>
+    <data name="ThursdayInitial">
+        <value>T</value>
+    </data>
+    <data name="FridayInitial">
+        <value>F</value>
+    </data>
+    <data name="SaturdayInitial">
+        <value>S</value>
+    </data>
+    <data name="SundayInitial">
+        <value>S</value>
+    </data>
     <data name="Help">
         <value>Help</value>
     </data>

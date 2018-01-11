@@ -102,6 +102,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.QuickSelectShortcuts.Should().HaveCount(5)
                     .And.OnlyContain(shortcut => expectedShortCuts.Contains(shortcut.GetType()));
             }
+
+            [Property]
+            public void InitializesTheBeginningOfWeekProperty(BeginningOfWeek beginningOfWeek)
+            {
+                var user = Substitute.For<IDatabaseUser>();
+                user.BeginningOfWeek.Returns(beginningOfWeek);
+                DataSource.User.Current.Returns(Observable.Return(user));
+                TimeService.CurrentDateTime.Returns(new DateTimeOffset(2018, 4, 20, 16, 20, 0, TimeSpan.Zero));
+                ViewModel.Prepare();
+                ViewModel.Initialize().Wait();
+
+                ViewModel.BeginningOfWeek.Should().Be(beginningOfWeek);
+            }
         }
 
         public sealed class TheCurrentMonthProperty : ReportsCalendarViewModelTest

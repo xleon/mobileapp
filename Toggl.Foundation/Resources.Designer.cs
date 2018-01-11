@@ -515,6 +515,48 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string MondayInitial {
+            get {
+                return ResourceManager.GetString("MondayInitial", resourceCulture);
+            }
+        }
+        
+        public static string TuesdayInitial {
+            get {
+                return ResourceManager.GetString("TuesdayInitial", resourceCulture);
+            }
+        }
+        
+        public static string WednesdayInitial {
+            get {
+                return ResourceManager.GetString("WednesdayInitial", resourceCulture);
+            }
+        }
+        
+        public static string ThursdayInitial {
+            get {
+                return ResourceManager.GetString("ThursdayInitial", resourceCulture);
+            }
+        }
+        
+        public static string FridayInitial {
+            get {
+                return ResourceManager.GetString("FridayInitial", resourceCulture);
+            }
+        }
+        
+        public static string SaturdayInitial {
+            get {
+                return ResourceManager.GetString("SaturdayInitial", resourceCulture);
+            }
+        }
+        
+        public static string SundayInitial {
+            get {
+                return ResourceManager.GetString("SundayInitial", resourceCulture);
+            }
+        }
+        
         public static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
