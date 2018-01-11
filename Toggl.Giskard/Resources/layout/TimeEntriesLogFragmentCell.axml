@@ -113,6 +113,13 @@
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true" />
+    <Button
+        local:MvxBind="Visibility Visibility(CanSync)"
+        android:id="@+id/TimeEntriesLogCellContinueButton"
+        android:background="@android:color/transparent"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentRight="true" />
     <View
         android:background="@color/separator"
         android:layout_width="match_parent"
