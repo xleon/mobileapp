@@ -4485,6 +4485,9 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0900bb
 			public const int TimeEntriesLogCellProjectLabel = 2131296443;
 			
+			// aapt resource value: 0x7f0900bd
+			public const int TimeEntriesLogCellTaskLabel = 2131296445;
+			
 			// aapt resource value: 0x7f0900a2
 			public const int Toolbar = 2131296418;
 			
@@ -4731,14 +4734,14 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f090062
 			public const int list_item = 2131296354;
 			
-			// aapt resource value: 0x7f0900bf
-			public const int masked = 2131296447;
+			// aapt resource value: 0x7f0900c0
+			public const int masked = 2131296448;
 			
 			// aapt resource value: 0x7f0900a9
 			public const int media_actions = 2131296425;
 			
-			// aapt resource value: 0x7f0900bd
-			public const int message = 2131296445;
+			// aapt resource value: 0x7f0900be
+			public const int message = 2131296446;
 			
 			// aapt resource value: 0x7f090032
 			public const int middle = 2131296306;
@@ -4983,8 +4986,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f090016
 			public const int view_offset_helper = 2131296278;
 			
-			// aapt resource value: 0x7f0900be
-			public const int visible = 2131296446;
+			// aapt resource value: 0x7f0900bf
+			public const int visible = 2131296447;
 			
 			// aapt resource value: 0x7f09003d
 			public const int withText = 2131296317;
