@@ -27,4 +27,5 @@ namespace Toggl.Giskard.Activities
             SupportActionBar.SetDisplayShowHomeEnabled(false);
         }
     }
+
 }
