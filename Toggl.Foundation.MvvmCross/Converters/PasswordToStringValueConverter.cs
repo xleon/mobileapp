@@ -5,6 +5,7 @@ using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross.Converters
 {
+    [Preserve(AllMembers = true)]
     public sealed class PasswordToStringValueConverter
         : MvxValueConverter<Password, string>
     {
