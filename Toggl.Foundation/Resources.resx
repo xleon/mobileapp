@@ -280,4 +280,10 @@ time entries with # tags.</value>
     <data name="Help">
         <value>Help</value>
     </data>
+    <data name="WorkspaceChangedAlertTitle">
+        <value>You've changed the workspace.</value>
+    </data>
+    <data name="WorkspaceChangedAlertMessage">
+        <value>Your project and time entry will be allocated under the selected workspace.</value>
+    </data>
 </root>

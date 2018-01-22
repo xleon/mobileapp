@@ -562,5 +562,17 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("Help", resourceCulture);
             }
         }
+        
+        public static string WorkspaceChangedAlertTitle {
+            get {
+                return ResourceManager.GetString("WorkspaceChangedAlertTitle", resourceCulture);
+            }
+        }
+        
+        public static string WorkspaceChangedAlertMessage {
+            get {
+                return ResourceManager.GetString("WorkspaceChangedAlertMessage", resourceCulture);
+            }
+        }
     }
 }

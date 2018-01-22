@@ -254,7 +254,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var project = await dataSource.Projects.GetById(projectId.Value);
             var projectSuggestion = new ProjectSuggestion(project);
 
-            await SelectSuggestionCommand.ExecuteAsync(projectSuggestion);
+            setProject(projectSuggestion);
         }
 
         private async Task createTag()
