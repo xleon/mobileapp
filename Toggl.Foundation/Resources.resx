@@ -256,6 +256,10 @@ time entries will appear here.</value>
         <value>Add keywords to your
 time entries with # tags.</value>
     </data>
+    <data name="NoProjectsInfoMessage">
+        <value>Create a project @ and
+categorize your tracked time.</value>
+    </data>
     <data name="MondayInitial">
         <value>M</value>
     </data>

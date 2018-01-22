@@ -75,6 +75,10 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.ShouldShowNoTagsInfoMessage)
                       .To(vm => vm.ShouldShowNoTagsInfoMessage);
 
+            bindingSet.Bind(source)
+                      .For(v => v.ShouldShowNoProjectsInfoMessage)
+                      .To(vm => vm.ShouldShowNoProjectsInfoMessage);
+
             //Text
             bindingSet.Bind(TimeLabel)
                       .To(vm => vm.ElapsedTime)

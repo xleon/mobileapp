@@ -514,6 +514,12 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("NoTagsInfoMessage", resourceCulture);
             }
         }
+       
+        public static string NoProjectsInfoMessage {
+            get {
+                return ResourceManager.GetString("NoProjectsInfoMessage", resourceCulture);
+            }
+        }
         
         public static string MondayInitial {
             get {
