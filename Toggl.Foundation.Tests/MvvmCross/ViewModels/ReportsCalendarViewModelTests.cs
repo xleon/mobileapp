@@ -85,8 +85,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task FillsQuickSelectShortcutlist()
             {
-                var expectedShortCuts = new HashSet<Type>
+                var expectedShortCuts = new List<Type>
                 {
+                    typeof(CalendarTodayQuickSelectShortcut),
+                    typeof(CalendarYesterdayQuickSelectShortcut),
                     typeof(CalendarThisWeekQuickSelectShortcut),
                     typeof(CalendarLastWeekQuickSelectShortcut),
                     typeof(CalendarThisMonthQuickSelectShortcut),
@@ -99,8 +101,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.Initialize();
 
-                ViewModel.QuickSelectShortcuts.Should().HaveCount(5)
-                    .And.OnlyContain(shortcut => expectedShortCuts.Contains(shortcut.GetType()));
+                for (int i = 0; i < ViewModel.QuickSelectShortcuts.Count; i++)
+                    ViewModel.QuickSelectShortcuts[i].GetType().Should().Be(expectedShortCuts[i]);
             }
 
             [Property]

@@ -135,6 +135,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         private List<CalendarBaseQuickSelectShortcut> createQuickSelectShortcuts()
             => new List<CalendarBaseQuickSelectShortcut>
             {
+                new CalendarTodayQuickSelectShortcut(timeService),
+                new CalendarYesterdayQuickSelectShortcut(timeService),
                 new CalendarThisWeekQuickSelectShortcut(timeService, BeginningOfWeek),
                 new CalendarLastWeekQuickSelectShortcut(timeService, BeginningOfWeek),
                 new CalendarThisMonthQuickSelectShortcut(timeService),
