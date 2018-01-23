@@ -5,6 +5,7 @@
     <string name="Logout">Log out</string>
     <string name="AppName">Toggl</string>
     <string name="EmailAddress">Email address</string>
+    <string name="AddDescription">Add description</string>
     <string name="TermsOfService"><u>Terms of service</u></string>
     <string name="PrivacyPolicy"><u>Privacy policy</u></string>
 	

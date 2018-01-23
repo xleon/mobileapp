@@ -3,10 +3,12 @@ using Android.Content;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Support.V7.AppCompat;
+using MvvmCross.Droid.Views;
 using MvvmCross.Platform.Platform;
 using MvvmCross.Platform.Plugins;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross;
+using Toggl.Giskard.Presenters;
 using Toggl.Giskard.Services;
 using Toggl.PrimeRadiant.Realm;
 using Toggl.Ultrawave;
@@ -36,6 +38,9 @@ namespace Toggl.Giskard
 
         protected override IMvxNavigationService InitializeNavigationService(IMvxViewModelLocatorCollection collection)
             => navigationService = base.InitializeNavigationService(collection);
+
+        protected override IMvxAndroidViewPresenter CreateViewPresenter() 
+            => new TogglPresenter(AndroidViewAssemblies);
 
         protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
         {
