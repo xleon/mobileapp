@@ -217,6 +217,7 @@
     <Compile Include="Activities\StartTimeEntryActivity.cs" />
     <Compile Include="Extensions\VisibilityExtensions.cs" />
     <Compile Include="Activities\BrowserActivity.cs" />
+    <Compile Include="Services\MailService.cs" />
     <Compile Include="Extensions\CircularRevealAnimation.cs" />
   </ItemGroup>
   <ItemGroup>
