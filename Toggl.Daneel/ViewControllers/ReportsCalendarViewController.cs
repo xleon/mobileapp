@@ -5,6 +5,7 @@ using MvvmCross.iOS.Views;
 using Toggl.Daneel.Converters;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
+using Toggl.Daneel.Views.Reports;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Converters;
@@ -46,13 +47,8 @@ namespace Toggl.Daneel.ViewControllers
             CalendarCollectionView.DataSource = calendarCollectionViewSource;
             CalendarCollectionView.CollectionViewLayout = calendarCollectionViewLayout;
 
-            var quickSelectCollectionViewSource = new ReportsCalendarQuickSelectCollectionViewSource(QuickSelectCollectionView);
+            var quickSelectCollectionViewSource = new ReportsCalendarQuickSelectCollectionViewSource(QuickSelectCollectionView, ReportsCalendarQuickSelectViewCell.Font);
             QuickSelectCollectionView.Source = quickSelectCollectionViewSource;
-
-            QuickSelectCollectionViewLayout.EstimatedItemSize = new CGSize(
-                estimatedQuickSelectShortcutWidth,
-                estimatedQuickSelectShortcutHeight
-            );
 
             setupDayHeaders();
 

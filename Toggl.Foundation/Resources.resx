@@ -256,6 +256,10 @@ time entries will appear here.</value>
         <value>Add keywords to your
 time entries with # tags.</value>
     </data>
+    <data name="NoProjectsInfoMessage">
+        <value>Create a project @ and
+categorize your tracked time.</value>
+    </data>
     <data name="MondayInitial">
         <value>M</value>
     </data>
@@ -279,5 +283,18 @@ time entries with # tags.</value>
     </data>
     <data name="Help">
         <value>Help</value>
+    </data>
+    <data name="WorkspaceChangedAlertTitle">
+        <value>You've changed the workspace.</value>
+    </data>
+    <data name="WorkspaceChangedAlertMessage">
+        <value>Your project and time entry will be allocated under the selected workspace.</value>
+    </data>
+    <data name="NoEmailErrorTitle">
+        <value>Oops! Seems like your email
+account is not set up</value>
+    </data>
+    <data name="NoEmailErrorMessage">
+        <value>Go to “Settings > Mail > Add Account” to set up an email account or send us your feedback to support@toggl.com</value>
     </data>
 </root>

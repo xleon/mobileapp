@@ -112,6 +112,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 .ForEach(disposableBag.Add);
         }
 
+        public void OnToggleCalendar() => selectStartOfSelectionIfNeeded();
+
+        public void OnHideCalendar() => selectStartOfSelectionIfNeeded();
+
+        private void selectStartOfSelectionIfNeeded()
+        {
+            if (startOfSelection == null) return;
+
+            var date = startOfSelection.DateTimeOffset;
+            var dateRange = DateRangeParameter.WithDates(date, date);
+            changeDateRange(dateRange);
+        }
+
         private void fillMonthArray()
         {
             var monthIterator = initialMonth;
@@ -122,6 +135,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         private List<CalendarBaseQuickSelectShortcut> createQuickSelectShortcuts()
             => new List<CalendarBaseQuickSelectShortcut>
             {
+                new CalendarTodayQuickSelectShortcut(timeService),
+                new CalendarYesterdayQuickSelectShortcut(timeService),
                 new CalendarThisWeekQuickSelectShortcut(timeService, BeginningOfWeek),
                 new CalendarLastWeekQuickSelectShortcut(timeService, BeginningOfWeek),
                 new CalendarThisMonthQuickSelectShortcut(timeService),

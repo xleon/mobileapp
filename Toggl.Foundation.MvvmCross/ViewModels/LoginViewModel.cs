@@ -171,6 +171,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             NextCommand.RaiseCanExecuteChanged();
         }
 
+        private void OnPasswordChanged()
+        {
+            if (IsSignUp)
+            {
+                validatePassword();
+            }
+        }
+
         private void openTermsOfServiceCommand() =>
             navigationService.Navigate<BrowserViewModel, BrowserParameters>(
                 BrowserParameters.WithUrlAndTitle(TermsOfServiceUrl, Resources.TermsOfService)
@@ -198,9 +206,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
 
             CurrentPage = PasswordPage;
-            InfoText = loginType == LoginType.SignUp
-                ? Resources.SignUpPasswordRequirements
-                : "";
+            if (IsSignUp)
+            {
+                validatePassword();
+            }
+        }
+
+        private void validatePassword()
+        {
+            InfoText = Password.IsValid
+                ? String.Empty
+                : Resources.SignUpPasswordRequirements;
+
+            RaisePropertyChanged(nameof(InfoText));
         }
 
         private void resetPassword()

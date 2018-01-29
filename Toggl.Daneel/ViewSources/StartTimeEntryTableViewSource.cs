@@ -25,18 +25,26 @@ namespace Toggl.Daneel.ViewSources
         private const string noEntityInfoCellIdentifier = nameof(NoEntityInfoViewCell);
         private const string emptySuggestionIdentifier = nameof(StartTimeEntryEmptyViewCell);
         private const string tagIconIdentifier = "icIllustrationTagsSmall";
+        private const string projectIconIdentifier = "icIllustrationProjectsSmall";
 
         private readonly NoEntityInfoMessage noTagsInfoMessage
             = new NoEntityInfoMessage(
                 text: Resources.NoTagsInfoMessage,
                 imageResource: tagIconIdentifier,
                 characterToReplace: '#');
+        private readonly NoEntityInfoMessage noProjectsInfoMessge
+            = new NoEntityInfoMessage(
+                text: Resources.NoProjectsInfoMessage,
+                imageResource: projectIconIdentifier,
+                characterToReplace: '@');
 
         public bool UseGrouping { get; set; }
 
         public bool IsSuggestingProjects { get; set; }
 
         public bool ShouldShowNoTagsInfoMessage { get; set; }
+
+        public bool ShouldShowNoProjectsInfoMessage { get; set; }
 
         public IMvxCommand<ProjectSuggestion> ToggleTasksCommand { get; set; }
 
@@ -87,7 +95,7 @@ namespace Toggl.Daneel.ViewSources
                     break;
 
                 case NoEntityInfoViewCell noEntityCell:
-                    noEntityCell.NoEntityInfoMessage = noTagsInfoMessage;
+                    noEntityCell.NoEntityInfoMessage = getNoEntityInfoMessage();
                     break;
             }
 
@@ -100,7 +108,8 @@ namespace Toggl.Daneel.ViewSources
 
             return GetGroupAt(section).Count()
                 + (SuggestCreation ? 1 : 0)
-                + (ShouldShowNoTagsInfoMessage ? 1 : 0);
+                + (ShouldShowNoTagsInfoMessage ? 1 : 0)
+                + (ShouldShowNoProjectsInfoMessage ? 1 : 0);
         }
 
         public override nint NumberOfSections(UITableView tableView)
@@ -117,14 +126,16 @@ namespace Toggl.Daneel.ViewSources
                 var index = (int)indexPath.Item - 1;
                 if (index < 0) return GetCreateSuggestionItem();
                 if (ShouldShowNoTagsInfoMessage) return noTagsInfoMessage;
+                if (ShouldShowNoProjectsInfoMessage) return noProjectsInfoMessge;
 
                 var newIndexPath = NSIndexPath.FromRowSection(indexPath.Section, index);
                 return GroupedItems.ElementAtOrDefault(indexPath.Section)?.ElementAtOrDefault(index);
             }
 
-            return ShouldShowNoTagsInfoMessage
-                ? noTagsInfoMessage
-                : base.GetItemAt(indexPath);
+            if (ShouldShowNoTagsInfoMessage) return noTagsInfoMessage;
+            if (ShouldShowNoProjectsInfoMessage) return noProjectsInfoMessge;
+
+            return base.GetItemAt(indexPath);
         }
 
         protected override UITableViewHeaderFooterView GetOrCreateHeaderViewFor(UITableView tableView)
@@ -143,12 +154,12 @@ namespace Toggl.Daneel.ViewSources
                 var index = (int)indexPath.Item - 1;
                 if (index < 0) return defaultRowHeight;
 
-                return ShouldShowNoTagsInfoMessage
+                return ShouldShowNoTagsInfoMessage || ShouldShowNoProjectsInfoMessage
                     ? noEntityCellHeight
                     : defaultRowHeight;
             }
 
-            return ShouldShowNoTagsInfoMessage
+            return ShouldShowNoTagsInfoMessage || ShouldShowNoProjectsInfoMessage
                 ? defaultRowHeight + noEntityCellHeight
                 : defaultRowHeight;
         }
@@ -184,5 +195,16 @@ namespace Toggl.Daneel.ViewSources
             => IsSuggestingProjects
                 ? $"{Resources.CreateProject} \"{Text}\""
                 : $"{Resources.CreateTag} \"{Text}\"";
+
+        private NoEntityInfoMessage getNoEntityInfoMessage()
+        {
+            if (ShouldShowNoTagsInfoMessage)
+                return noTagsInfoMessage;
+
+            if (ShouldShowNoProjectsInfoMessage)
+                return noProjectsInfoMessge;
+
+            throw new InvalidOperationException("This method should not be called, when there is no info message to be shown");
+        }
     }
 }

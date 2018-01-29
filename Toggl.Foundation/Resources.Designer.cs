@@ -515,6 +515,12 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string NoProjectsInfoMessage {
+            get {
+                return ResourceManager.GetString("NoProjectsInfoMessage", resourceCulture);
+            }
+        }
+        
         public static string MondayInitial {
             get {
                 return ResourceManager.GetString("MondayInitial", resourceCulture);
@@ -560,6 +566,30 @@ namespace Toggl.Foundation {
         public static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        public static string WorkspaceChangedAlertTitle {
+            get {
+                return ResourceManager.GetString("WorkspaceChangedAlertTitle", resourceCulture);
+            }
+        }
+        
+        public static string WorkspaceChangedAlertMessage {
+            get {
+                return ResourceManager.GetString("WorkspaceChangedAlertMessage", resourceCulture);
+            }
+        }
+        
+        public static string NoEmailErrorTitle {
+            get {
+                return ResourceManager.GetString("NoEmailErrorTitle", resourceCulture);
+            }
+        }
+        
+        public static string NoEmailErrorMessage {
+            get {
+                return ResourceManager.GetString("NoEmailErrorMessage", resourceCulture);
             }
         }
     }
