@@ -4524,11 +4524,11 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0900c5
 			public const int StartTimeEntryDescriptionTextField = 2131296453;
 			
-			// aapt resource value: 0x7f0900c4
-			public const int StartTimeEntryDoneButton = 2131296452;
-			
 			// aapt resource value: 0x7f0900c3
-			public const int StartTimeEntryDurationCard = 2131296451;
+			public const int StartTimeEntryDoneButton = 2131296451;
+			
+			// aapt resource value: 0x7f0900c4
+			public const int StartTimeEntryDurationCard = 2131296452;
 			
 			// aapt resource value: 0x7f0900ca
 			public const int StartTimeEntryProjectCelTaskCountLabel = 2131296458;
