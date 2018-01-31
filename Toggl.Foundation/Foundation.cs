@@ -18,12 +18,14 @@ namespace Toggl.Foundation
         public IMailService MailService { get; internal set; }
         public IGoogleService GoogleService { get; internal set; }
         public ApiEnvironment ApiEnvironment { get; internal set; }
+        public IDeviceInfo DeviceInfo { get; internal set; }
         public IBackgroundService BackgroundService { get; internal set; }
         public IPlatformConstants PlatformConstants { get; internal set; }
 
         public static Foundation Create(
             string clientName,
             string version,
+            IDeviceInfo deviceInfo,
             ITogglDatabase database,
             ITimeService timeService,
             IMailService mailService,
@@ -33,6 +35,7 @@ namespace Toggl.Foundation
         {
             Ensure.Argument.IsNotNull(version, nameof(version));
             Ensure.Argument.IsNotNull(database, nameof(database));
+            Ensure.Argument.IsNotNull(deviceInfo, nameof(deviceInfo));
             Ensure.Argument.IsNotNull(clientName, nameof(clientName));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(mailService, nameof(mailService));
@@ -45,6 +48,7 @@ namespace Toggl.Foundation
             {
                 Database = database,
                 UserAgent = userAgent,
+                DeviceInfo = deviceInfo,
                 TimeService = timeService,
                 MailService = mailService,
                 GoogleService = googleService,

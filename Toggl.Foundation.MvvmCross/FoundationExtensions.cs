@@ -81,8 +81,10 @@ namespace Toggl.Foundation.MvvmCross
             Mvx.RegisterSingleton(self.BackgroundService);
             Mvx.RegisterSingleton(dialogService);
             Mvx.RegisterSingleton(browserService);
+            Mvx.RegisterSingleton(self.UserAgent);
             Mvx.RegisterSingleton(self.TimeService);
             Mvx.RegisterSingleton(self.MailService);
+            Mvx.RegisterSingleton(self.DeviceInfo);
             Mvx.RegisterSingleton(self.PlatformConstants);
             Mvx.RegisterSingleton<IOnboardingStorage>(settingsStorage);
             Mvx.RegisterSingleton<IAccessRestrictionStorage>(settingsStorage);

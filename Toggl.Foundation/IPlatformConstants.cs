@@ -3,5 +3,6 @@
     public interface IPlatformConstants
     {
         string HelpUrl { get; }
+        string FeedbackEmailSubject { get; }
     }
 }

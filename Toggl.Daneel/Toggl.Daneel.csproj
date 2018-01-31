@@ -741,6 +741,7 @@
     <Compile Include="PlatformConstants.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Services\MailService.cs" />
+    <Compile Include="DeviceInfo.cs" />
     <Compile Include="Autocomplete\AutocompleteTextViewDelegate.cs" />
     <Compile Include="Autocomplete\TokenTextAttachment.cs" />
     <Compile Include="Autocomplete\TokenExtensions.cs" />

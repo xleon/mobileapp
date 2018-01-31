@@ -55,6 +55,7 @@ namespace Toggl.Giskard
             var foundation = Foundation.Foundation.Create(
                 clientName,
                 version,
+                new DeviceInfo(),
                 new Database(),
                 new TimeService(Scheduler.Default),
                 new MailService(),
