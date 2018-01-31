@@ -529,7 +529,7 @@
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="ViewSources\StartTimeEntryTableViewSource.cs" />
-    <Compile Include="Binding\TextViewTextInfoTargetBinding.cs" />
+    <Compile Include="Binding\AutocompleteTextViewTextInfoTargetBinding.cs" />
     <Compile Include="Presentation\Attributes\ModalDialogPresentationAttribute.cs" />
     <Compile Include="Presentation\Transition\ModalDialogPresentationController.cs" />
     <Compile Include="Presentation\Transition\ModalDialogTransitionDelegate.cs" />
@@ -729,7 +729,6 @@
       <DependentUpon>ReportsHeaderView.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\ReportsTableViewSource.cs" />
-    <Compile Include="Views\TextViewPlaceholderManager.cs" />
     <Compile Include="Views\StartTimeEntry\NoEntityInfoViewCell.cs" />
     <Compile Include="Views\StartTimeEntry\NoEntityInfoViewCell.designer.cs">
       <DependentUpon>NoEntityInfoViewCell.cs</DependentUpon>
@@ -745,6 +744,8 @@
     <Compile Include="Autocomplete\AutocompleteTextViewDelegate.cs" />
     <Compile Include="Autocomplete\TokenTextAttachment.cs" />
     <Compile Include="Autocomplete\TokenExtensions.cs" />
+    <Compile Include="Views\AutocompleteTextViewPlaceholder.cs" />
+    <Compile Include="Views\AutocompleteTextView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
