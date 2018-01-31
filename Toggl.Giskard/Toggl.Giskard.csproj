@@ -235,7 +235,6 @@
     <Compile Include="Views\StartTimeEntryRecyclerView.cs" />
     <Compile Include="Adapters\StartTimeEntryRecyclerAdapter.cs" />
     <Compile Include="Adapters\SegmentedRecyclerAdapter.cs" />
-    <Compile Include="DeviceInfo.cs" />
     <Compile Include="Autocomplete\AutocompleteTextWatcher.cs" />
     <Compile Include="Autocomplete\TokenExtensions.cs" />
     <Compile Include="Autocomplete\TokenSpan.cs" />

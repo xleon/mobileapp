@@ -15,7 +15,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
         protected UserAgent UserAgent { get; } = new UserAgent("Foundation.Tests", "1.0");
-        protected IDeviceInfo DeviceInfo { get; } = Substitute.For<IDeviceInfo>();
         protected IMailService MailService { get; } = Substitute.For<IMailService>();
         protected IDialogService DialogService { get; } = Substitute.For<IDialogService>();
         protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();

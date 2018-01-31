@@ -24,7 +24,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ITogglDataSource dataSource;
         private readonly IDialogService dialogService;
         private readonly IPlatformConstants platformConstants;
-        private readonly IDeviceInfo deviceInfo;
         private readonly IMvxNavigationService navigationService;
         private readonly IMailService mailService;
         private readonly UserAgent userAgent;
@@ -75,7 +74,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public SettingsViewModel(
             UserAgent userAgent,
-            IDeviceInfo deviceInfo,
             IMailService mailService,
             ITogglDataSource dataSource,
             IDialogService dialogService,
@@ -83,7 +81,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(userAgent, nameof(userAgent));
-            Ensure.Argument.IsNotNull(deviceInfo, nameof(deviceInfo));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(mailService, nameof(mailService));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
@@ -92,7 +89,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             this.userAgent = userAgent;
             this.dataSource = dataSource;
-            this.deviceInfo = deviceInfo;
             this.mailService = mailService;
             this.dialogService = dialogService;
             this.navigationService = navigationService;
@@ -162,8 +158,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private async Task submitFeedback()
         {
             var version = userAgent.ToString();
-            var phone = deviceInfo.PhoneModel;
-            var os = deviceInfo.OperatingSystem;
+            var phone = platformConstants.PhoneModel;
+            var os = platformConstants.OperatingSystem;
             //2 leading newlines, so user user can type something above this info
             var message = $"\n\nVersion: {version}\nPhone: {phone}\nOS: {os}";
 

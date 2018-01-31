@@ -34,7 +34,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected override SettingsViewModel CreateViewModel()
                 => new SettingsViewModel(
                     UserAgent,
-                    DeviceInfo,
                     MailService,
                     DataSource,
                     DialogService,
@@ -45,10 +44,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheConstructor : SettingsViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(SevenParameterConstructorTestData))]
+            [ClassData(typeof(SixParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useUserAgent,
-                bool useDeviceInfo,
                 bool useDataSource,
                 bool useMailService,
                 bool useDialogService,
@@ -56,7 +54,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useNavigationService)
             {
                 var userAgent = useUserAgent ? UserAgent : null;
-                var deviceInfo = useDeviceInfo ? DeviceInfo : null;
                 var dataSource = useDataSource ? DataSource : null;
                 var mailService = useMailService ? MailService : null;
                 var dialogService = useDialogService ? DialogService : null;
@@ -66,7 +63,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 Action tryingToConstructWithEmptyParameters =
                     () => new SettingsViewModel(
                         userAgent,
-                        deviceInfo,
                         mailService,
                         dataSource,
                         dialogService,
@@ -432,8 +428,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var phoneModel = nonEmptyString0.Get;
                 var os = nonEmptyString1.Get;
-                DeviceInfo.PhoneModel.Returns(phoneModel);
-                DeviceInfo.OperatingSystem.Returns(os);
+                PlatformConstants.PhoneModel.Returns(phoneModel);
+                PlatformConstants.OperatingSystem.Returns(os);
 
                 ViewModel.SubmitFeedbackCommand.Execute();
 
@@ -466,9 +462,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task SendsAnEmailWithAppVersionPhoneModelAndOsVersion()
             {
-                DeviceInfo.PhoneModel.Returns("iPhone Y");
-                DeviceInfo.OperatingSystem.Returns("iOS 4.2.0");
-                var expectedMessage = $"\n\nVersion: {UserAgent.ToString()}\nPhone: {DeviceInfo.PhoneModel}\nOS: {DeviceInfo.OperatingSystem}";
+                PlatformConstants.PhoneModel.Returns("iPhone Y");
+                PlatformConstants.OperatingSystem.Returns("iOS 4.2.0");
+                var expectedMessage = $"\n\nVersion: {UserAgent.ToString()}\nPhone: {PlatformConstants.PhoneModel}\nOS: {PlatformConstants.OperatingSystem}";
 
                 await ViewModel.SubmitFeedbackCommand.ExecuteAsync();
 

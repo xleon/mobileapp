@@ -3,6 +3,8 @@
     public interface IPlatformConstants
     {
         string HelpUrl { get; }
+        string PhoneModel { get; }
+        string OperatingSystem { get; }
         string FeedbackEmailSubject { get; }
     }
 }
