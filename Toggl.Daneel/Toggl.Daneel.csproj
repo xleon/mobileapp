@@ -743,6 +743,7 @@
     <Compile Include="Extensions\NoEntityInfoMessageExtensions.cs" />
     <Compile Include="Views\Reports\LoadingPieChartView.cs" />
     <Compile Include="PlatformConstants.cs" />
+    <Compile Include="ApplicationShortcutCreator.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Services\MailService.cs" />
     <Compile Include="Autocomplete\AutocompleteTextViewDelegate.cs" />

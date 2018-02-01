@@ -587,6 +587,30 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string Reports {
+            get {
+                return ResourceManager.GetString("Reports", resourceCulture);
+            }
+        }
+        
+        public static string StartTimeEntry {
+            get {
+                return ResourceManager.GetString("StartTimeEntry", resourceCulture);
+            }
+        }
+        
+        public static string MostRecentEntry {
+            get {
+                return ResourceManager.GetString("MostRecentEntry", resourceCulture);
+            }
+        }
+        
+        public static string TimeEntrySuggestion {
+            get {
+                return ResourceManager.GetString("TimeEntrySuggestion", resourceCulture);
+            }
+        }
+        
         public static string NoEmailErrorTitle {
             get {
                 return ResourceManager.GetString("NoEmailErrorTitle", resourceCulture);

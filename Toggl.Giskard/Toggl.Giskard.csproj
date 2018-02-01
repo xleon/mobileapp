@@ -231,6 +231,7 @@
     <Compile Include="Activities\BrowserActivity.cs" />
     <Compile Include="Services\MailService.cs" />
     <Compile Include="Extensions\CircularRevealAnimation.cs" />
+    <Compile Include="ApplicationShortcutCreator.cs" />
     <Compile Include="TemplateSelectors\StartTimeEntrySuggestionsTemplateSelector.cs" />
     <Compile Include="Views\StartTimeEntryRecyclerView.cs" />
     <Compile Include="Adapters\StartTimeEntryRecyclerAdapter.cs" />
