@@ -85,6 +85,9 @@ Please try again.</value>
     <data name="StartTimeEntryPlaceholder">
         <value>What are you working on?</value>
     </data>
+    <data name="ManualTimeEntryPlaceholder">
+        <value>What have you done?</value>
+    </data>
     <data name="Settings">
         <value>Settings</value>
     </data>

@@ -179,6 +179,12 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string ManualTimeEntryPlaceholder {
+            get {
+                return ResourceManager.GetString("ManualTimeEntryPlaceholder", resourceCulture);
+            }
+        }
+        
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);

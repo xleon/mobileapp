@@ -403,6 +403,10 @@
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationProjectsSmall.imageset\icIllustrationProjectsS.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationProjectsSmall.imageset\icIllustrationProjectsS%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationProjectsSmall.imageset\icIllustrationProjectsS%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\manualIcon.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\manualIcon.imageset\manualIcon.png" />
+    <ImageAsset Include="Resources\Images.xcassets\manualIcon.imageset\manualIcon%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\manualIcon.imageset\manualIcon%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -747,6 +751,7 @@
     <Compile Include="Services\AnalyticsService.cs" />
     <Compile Include="Views\AutocompleteTextViewPlaceholder.cs" />
     <Compile Include="Views\AutocompleteTextView.cs" />
+    <Compile Include="Binding\ButtonImageTargetBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
