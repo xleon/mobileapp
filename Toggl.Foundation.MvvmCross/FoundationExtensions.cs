@@ -93,6 +93,7 @@ namespace Toggl.Foundation.MvvmCross
             Mvx.RegisterSingleton(self.SuggestionProviderContainer);
             Mvx.RegisterSingleton<IOnboardingStorage>(settingsStorage);
             Mvx.RegisterSingleton<IAccessRestrictionStorage>(settingsStorage);
+            Mvx.RegisterSingleton<IUserPreferences>(settingsStorage);
             Mvx.RegisterSingleton<IApiErrorHandlingService>(apiErrorHandlingService);
             Mvx.RegisterSingleton(passwordManagerService ?? new StubPasswordManagerService());
 
