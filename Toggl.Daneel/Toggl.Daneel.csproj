@@ -407,6 +407,10 @@
     <ImageAsset Include="Resources\Images.xcassets\manualIcon.imageset\manualIcon.png" />
     <ImageAsset Include="Resources\Images.xcassets\manualIcon.imageset\manualIcon%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\manualIcon.imageset\manualIcon%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\date.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\date.imageset\date.png" />
+    <ImageAsset Include="Resources\Images.xcassets\date.imageset\date%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\date.imageset\date%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
