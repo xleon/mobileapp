@@ -37,7 +37,17 @@ namespace Toggl.Daneel.Views.EditDuration
 
         private readonly float shadowOpacity = 0.3f;
 
-        private readonly int feedbackEveryMinutes = 1;
+        private readonly nfloat triangleWidth = 9f / 128f;
+
+        private readonly nfloat triangleHeight = 10f / 128f;
+
+        private readonly nfloat triangleCenterHorizontalOffset = 1.4f / 128f;
+
+        private readonly nfloat squareHeight = 10f / 128f;
+
+        private readonly nfloat squareWidth = 10f / 128f;
+
+        private readonly nfloat suqareCenterHorizontalOffset = 0f;
 
         private double endPointsRadius => SmallRadius + (Radius - SmallRadius) / 2;
 
@@ -47,13 +57,15 @@ namespace Toggl.Daneel.Views.EditDuration
 
         private bool isRunning;
 
-        private bool isEnabled;
-
         private CGPoint startTimePosition;
 
         private CGPoint endTimePosition;
 
         private UITouch currentTouch;
+
+        private UIImage startHandleImage;
+
+        private UIImage endHandleImage;
 
         private UISelectionFeedbackGenerator feedbackGenerator;
 
@@ -116,18 +128,26 @@ namespace Toggl.Daneel.Views.EditDuration
             }
         }
 
-        public bool IsEnabled
-        {
-            get => isEnabled;
-            set
-            {
-                isEnabled = value;
-                SetNeedsLayout();
-            }
-        }
-
         public WheelForegroundView(IntPtr handle) : base(handle)
         {
+        }
+
+        public override void AwakeFromNib()
+        {
+            base.AwakeFromNib();
+
+            startHandleImage = UIImage.FromBundle("icStartLabel");
+            endHandleImage = UIImage.FromBundle("icEndLabel");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (disposing == false) return;
+
+            startHandleImage.Dispose();
+            endHandleImage.Dispose();
         }
 
         public override void LayoutSubviews()
@@ -146,17 +166,14 @@ namespace Toggl.Daneel.Views.EditDuration
             var backgroundLayer = createBackgroundLayer();
             Layer.AddSublayer(backgroundLayer);
 
-            if (IsEnabled)
+            if (IsRunning == false)
             {
-                if (IsRunning == false)
-                {
-                    var endCap = createCap(endTimePosition);
-                    Layer.AddSublayer(endCap);
-                }
-
-                var startCap = createCap(startTimePosition);
-                Layer.AddSublayer(startCap);
+                var endCap = createCap(endTimePosition, endHandleImage, squareWidth, squareHeight, suqareCenterHorizontalOffset);
+                Layer.AddSublayer(endCap);
             }
+
+            var startCap = createCap(startTimePosition, startHandleImage, triangleWidth, triangleHeight, triangleCenterHorizontalOffset);
+            Layer.AddSublayer(startCap);
         }
 
         private void calculateEndPointPositions()
@@ -172,8 +189,6 @@ namespace Toggl.Daneel.Views.EditDuration
         public override void TouchesBegan(NSSet touches, UIEvent evt)
         {
             base.TouchesBegan(touches, evt);
-
-            if (IsEnabled == false) return;
 
             var touch = findValidTouch(touches);
             if (touch != null)
@@ -364,7 +379,7 @@ namespace Toggl.Daneel.Views.EditDuration
             return layer;
         }
 
-        private CALayer createCap(CGPoint center)
+        private CALayer createCap(CGPoint center, UIImage image, nfloat imageWidth, nfloat imageHeight, nfloat centerHorizontalOffset)
         {
             var innerRadius = Resize(capRadius);
             var outerRadius = (Radius - SmallRadius) / 2;
@@ -380,35 +395,18 @@ namespace Toggl.Daneel.Views.EditDuration
             var innerPath = new UIBezierPath();
             innerPath.AddArc(center, innerRadius, 0, (nfloat)FullCircle, false);
 
-            // two horizontal bars
-            var length = Resize(horizontalBarLength);
-            var height = Resize(horizontalBarHeight);
-            var offset = Resize(horizontalBarsDistance / 2);
-            var roundedCornersRadius = Resize(horizontalBarCornerRadius);
-
-            var topHorizontalBar = UIBezierPath.FromRoundedRect(
-                new CGRect(center.X - length / 2, center.Y - height - offset, length, height),
-                UIRectCorner.AllCorners,
-                new CGSize(roundedCornersRadius, roundedCornersRadius));
-            var topBar = new CAShapeLayer();
-            topBar.Path = topHorizontalBar.CGPath;
-            topBar.FillColor = backgroundColor;
-
-            var bottomHorizontalBar = UIBezierPath.FromRoundedRect(
-                new CGRect(center.X - length / 2, center.Y + offset, length, height),
-                UIRectCorner.AllCorners,
-                new CGSize(roundedCornersRadius, roundedCornersRadius));
-            var bottomBar = new CAShapeLayer();
-            bottomBar.Path = bottomHorizontalBar.CGPath;
-            bottomBar.FillColor = backgroundColor;
-
-            // combine layers
             var circleLayer = new CAShapeLayer();
             circleLayer.Path = innerPath.CGPath;
             circleLayer.FillColor = capColor;
 
-            circleLayer.AddSublayer(topBar);
-            circleLayer.AddSublayer(bottomBar);
+            var height = Resize(imageHeight);
+            var width = Resize(imageWidth);
+            var offset = Resize(centerHorizontalOffset);
+            var frame = new CGRect(center.X - width / 2f + offset, center.Y - height / 2f, width, height);
+            var imageLayer = new CALayer();
+            imageLayer.Contents = image.CGImage;
+            imageLayer.Frame = frame;
+            circleLayer.AddSublayer(imageLayer);
 
             backgroundLayer.AddSublayer(circleLayer);
 
