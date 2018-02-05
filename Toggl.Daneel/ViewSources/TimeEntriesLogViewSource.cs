@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using CoreGraphics;
 using Foundation;
 using MvvmCross.Core.ViewModels;
@@ -12,15 +11,12 @@ using UIKit;
 
 namespace Toggl.Daneel.ViewSources
 {
-    public sealed class TimeEntriesLogViewSource : GroupedCollectionTableViewSource<TimeEntryViewModel>
+    public sealed class TimeEntriesLogViewSource : GroupedCollectionTableViewSource<TimeEntryViewModelCollection, TimeEntryViewModel>
     {
         private const int bottomPadding = 64;
 
         private const string cellIdentifier = nameof(TimeEntriesLogViewCell);
         private const string headerCellIdentifier = nameof(TimeEntriesLogHeaderViewCell);
-        
-        private IEnumerable<TimeEntryViewModelCollection> groupedItems
-            => ItemsSource as IEnumerable<TimeEntryViewModelCollection>;
 
         public IMvxAsyncCommand<TimeEntryViewModel> ContinueTimeEntryCommand { get; set; }
 
