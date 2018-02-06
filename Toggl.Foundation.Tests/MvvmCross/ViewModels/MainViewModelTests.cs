@@ -10,6 +10,7 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.PrimeRadiant.Models;
+using Toggl.PrimeRadiant.Settings;
 using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
@@ -20,9 +21,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         {
             protected ISubject<SyncProgress> ProgressSubject { get; } = new Subject<SyncProgress>();
 
+            protected IUserPreferences UserPreferences { get; } = Substitute.For<IUserPreferences>();
+
             protected override MainViewModel CreateViewModel()
             {
-                var vm = new MainViewModel(DataSource, TimeService, OnboardingStorage, NavigationService);
+                var vm = new MainViewModel(DataSource, TimeService, OnboardingStorage, NavigationService, UserPreferences);
                 vm.Prepare();
                 return vm;
             }
@@ -40,19 +43,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheConstructor : MainViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(FourParameterConstructorTestData))]
+            [ClassData(typeof(FiveParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, 
                                                         bool useTimeService, 
                                                         bool useOnboardingStorage,
-                                                        bool useNavigationService)
+                                                        bool useNavigationService,
+                                                        bool useUserPreferences)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
+                var userPreferences = useUserPreferences ? UserPreferences : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new MainViewModel(dataSource, timeService, onboardingStorage, navigationService);
+                    () => new MainViewModel(dataSource, timeService, onboardingStorage, navigationService, userPreferences);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -62,6 +67,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void IsNotInManualModeByDefault()
             {
                 ViewModel.IsInManualMode.Should().BeFalse();
+            }
+        }
+
+        public sealed class TheViewAppearingMethod : MainViewModelTest
+        {
+            [Theory, LogIfTooSlow]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void InitializesTheIsInManualModePropertyAccordingToUsersPreferences(bool isEnabled)
+            {
+                UserPreferences.IsManualModeEnabled().Returns(isEnabled);
+
+                ViewModel.ViewAppearing();
+
+                ViewModel.IsInManualMode.Should().Be(isEnabled);
             }
         }
 

@@ -205,11 +205,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             if (IsManualModeEnabled)
             {
-                userPreferences.EnableTimerMode();
+                userPreferences.EnableManualMode();
             }
             else
             {
-                userPreferences.EnableManualMode();
+                userPreferences.EnableTimerMode();
             }
         }
 
