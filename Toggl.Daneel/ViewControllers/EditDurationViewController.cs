@@ -1,4 +1,5 @@
 ﻿using CoreGraphics;
+using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
@@ -28,7 +29,6 @@ namespace Toggl.Daneel.ViewControllers
 
             var timeConverter = new DateTimeToTimeValueConverter();
             var dateConverter = new DateToTitleStringValueConverter();
-            var durationConverter = new TimeSpanToDurationValueConverter();
             var inverseBoolConverter = new BoolToConstantValueConverter<bool>(false, true);
             var editedTimeLabelColorConverter = new BoolToConstantValueConverter<UIColor>(
                 Color.EditDuration.EditedTime.ToNativeColor(),
@@ -76,9 +76,9 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.StopTimeEntryCommand);
 
             //The wheel
-            bindingSet.Bind(DurationLabel)
-                      .To(vm => vm.Duration)
-                      .WithConversion(durationConverter);
+            bindingSet.Bind(DurationInput)
+                      .For(v => v.Duration)
+                      .To(vm => vm.Duration);
 
             bindingSet.Bind(WheelView)
                       .For(v => v.MaximumStartTime)
@@ -111,11 +111,20 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Apply();
         }
 
+        public override void TouchesBegan(NSSet touches, UIEvent evt)
+        {
+            base.TouchesBegan(touches, evt);
+
+            if (DurationInput.IsEditing)
+                DurationInput.EndEditing(true);
+        }
+
         private void prepareViews()
         {
 
+            DurationInput.Converter = new TimeSpanToDurationValueConverter();
+
             EndTimeLabel.Font = EndTimeLabel.Font.GetMonospacedDigitFont();
-            DurationLabel.Font = DurationLabel.Font.GetMonospacedDigitFont();
             StartTimeLabel.Font = StartTimeLabel.Font.GetMonospacedDigitFont();
 
             SetEndButton.TintColor = Color.EditDuration.SetButton.ToNativeColor();

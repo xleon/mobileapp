@@ -121,14 +121,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact]
-            public void SetsTheElapsedTimeToTheValueOfTheDurationParameter()
+            public void SetsTheDisplayedTimeToTheValueOfTheDurationParameter()
             {
                 var duration = TimeSpan.FromSeconds(130);
                 var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", duration);
 
                 ViewModel.Prepare(parameter);
 
-                ViewModel.ElapsedTime.Should().Be(duration);
+                ViewModel.DisplayedTime.Should().Be(duration);
             }
         }
 
@@ -701,11 +701,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await toWait;
 
                 ViewModel.IsEditingTime.Should().BeFalse();
-                ViewModel.ElapsedTime.Should().Be(parameterToReturn.Duration.Value);
+                ViewModel.DisplayedTime.Should().Be(parameterToReturn.Duration.Value);
 
                 currentTimeSubject.OnNext(now.AddHours(10));
 
-                ViewModel.ElapsedTime.Should().Be(parameterToReturn.Duration.Value);
+                ViewModel.DisplayedTime.Should().Be(parameterToReturn.Duration.Value);
             }
         }
 

@@ -768,6 +768,8 @@
     <Compile Include="Services\AnalyticsService.cs" />
     <Compile Include="Views\AutocompleteTextViewPlaceholder.cs" />
     <Compile Include="Views\AutocompleteTextView.cs" />
+    <Compile Include="Views\EditDuration\DurationField.cs" />
+    <Compile Include="Views\EditDuration\NumberKeyPressedEventArgs.cs" />
     <Compile Include="Binding\ButtonImageTargetBinding.cs" />
   </ItemGroup>
   <ItemGroup>

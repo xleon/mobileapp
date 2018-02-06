@@ -38,6 +38,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IDisposable elapsedTimeDisposable;
         private TextFieldInfo previousTextFieldInfo;
 
+        private TimeSpan displayedTime = TimeSpan.Zero;
+
         //Properties
         private int DescriptionByteCount
             => TextFieldInfo.Text.LengthInBytes();
@@ -81,7 +83,23 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public TextFieldInfo TextFieldInfo { get; set; } = TextFieldInfo.Empty;
 
-        public TimeSpan ElapsedTime { get; private set; } = TimeSpan.Zero;
+        public TimeSpan DisplayedTime
+        {
+            get => displayedTime;
+            set
+            {
+                if (elapsedTimeDisposable != null)
+                {
+                    StartTime = timeService.CurrentDateTime - value;
+                }
+                else
+                {
+                    Duration = value;
+                }
+
+                displayedTime = value; 
+            }
+        }
 
         public bool IsBillable { get; private set; } = false;
 
@@ -316,12 +334,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             if (Duration.HasValue)
             {
-                ElapsedTime = Duration.Value;
+                displayedTime = Duration.Value;
+                RaisePropertyChanged(nameof(DisplayedTime));
             }
             else
             {
-                elapsedTimeDisposable =
-                    timeService.CurrentDateTimeObservable.Subscribe(currentTime => ElapsedTime = currentTime - StartTime);
+                elapsedTimeDisposable = timeService.CurrentDateTimeObservable.Subscribe(onCurrentTime);
             }
 
             var queryByTypeObservable =
@@ -354,6 +372,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             
             hasAnyTags = (await dataSource.Tags.GetAll()).Any();
             hasAnyProjects = (await dataSource.Projects.GetAll()).Any();
+        }
+
+        private void onCurrentTime(DateTimeOffset currentTime)
+        {
+            displayedTime = currentTime - StartTime;
+            RaisePropertyChanged(nameof(DisplayedTime));
         }
 
         private async void OnTextFieldInfoChanged()
@@ -439,8 +463,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (selectedDuration.Duration.HasValue)
             {
                 Duration = selectedDuration.Duration;
-                ElapsedTime = selectedDuration.Duration.Value;
-                elapsedTimeDisposable?.Dispose();
+                displayedTime = selectedDuration.Duration.Value;
+                elapsedTimeDisposable.Dispose();
+                RaisePropertyChanged(nameof(DisplayedTime));
             }
 
             IsEditingTime = false;
@@ -448,9 +473,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task setStartDate()
         {
-            var minimum = StartTime + ElapsedTime - TimeSpan.FromHours(MaxTimeEntryDurationInHours);
-            var maximum = StartTime + ElapsedTime;
+            var minimum = StartTime + DisplayedTime - TimeSpan.FromHours(MaxTimeEntryDurationInHours);
+            var maximum = StartTime + DisplayedTime;
             var parameters = DateTimePickerParameters.WithDates(DateTimePickerMode.DateTime, StartTime, minimum, maximum);
+
             var selectedDate = await navigationService
                 .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)
                 .ConfigureAwait(false);
