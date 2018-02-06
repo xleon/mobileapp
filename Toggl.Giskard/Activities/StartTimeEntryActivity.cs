@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
+using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
@@ -15,7 +16,9 @@ using Toggl.Multivac.Extensions;
 namespace Toggl.Giskard.Activities
 {
     [MvxActivityPresentation]
-    [Activity(Theme = "@style/AppTheme")]
+    [Activity(Theme = "@style/AppTheme",
+              ScreenOrientation = ScreenOrientation.Portrait,
+              ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed class StartTimeEntryActivity : MvxAppCompatActivity<StartTimeEntryViewModel>
     {
         private int durationCardYOffset;
