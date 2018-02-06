@@ -245,6 +245,7 @@
     <Compile Include="Views\StartTimeEntryRecyclerViewHolder.cs" />
     <Compile Include="Services\AnalyticsService.cs" />
     <Compile Include="Bindings\FabVisibilityTargetBinding.cs" />
+    <Compile Include="Activities\EditProjectActivity.cs" />
     <Compile Include="Adapters\CreateSuggestionSegmentedRecyclerAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -269,6 +270,21 @@
     <AndroidResource Include="Resources\drawable-xhdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\padlock.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\padlock.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\padlock.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\padlock.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\padlock.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\workspace.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\workspace.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\workspace.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\workspace.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\workspace.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\client.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\client.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\client.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\client.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\client.png" />
     <AndroidResource Include="Resources\drawable-hdpi\add_new.png" />
     <AndroidResource Include="Resources\drawable-mdpi\add_new.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\add_new.png" />
@@ -461,6 +477,7 @@
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityNoEntityCell.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityEmptyCell.axml" />
     <AndroidResource Include="Resources\values\Dimen.xml" />
+    <AndroidResource Include="Resources\layout\EditProjectActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivityCell.axml" />
     <AndroidResource Include="Resources\layout\AbcCreateEntityCell.axml" />
   </ItemGroup>

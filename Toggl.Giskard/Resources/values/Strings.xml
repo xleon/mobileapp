@@ -9,6 +9,8 @@
     <string name="TermsOfService"><u>Terms of service</u></string>
     <string name="PrivacyPolicy"><u>Privacy policy</u></string>
     <string name="StartTimeEntryHint">What are you working on?</string>
+    <string name="PrivateProject">Private project</string>
+    <string name="PrivateProjectHint">Private projects are only accessible\nto project members</string>
 
     <string name="SuggestionsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SuggestionsTemplateSelector, Toggl.Giskard</string>
     <string name="TimeEntriesLogTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.TimeEntriesLogTemplateSelector, Toggl.Giskard</string>
