@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.CalendarQuickSelectShortcuts
 {
-    public abstract class BaseCalendarQuickSelectShortcutTests<T>
+    public abstract class BaseCalendarQuickSelectShortcutTests<T> : BaseMvvmCrossTests
         where T : CalendarBaseQuickSelectShortcut
     {
         protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();

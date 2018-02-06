@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -9,7 +8,6 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.MvvmCross.Parameters;
@@ -506,25 +504,30 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Property]
-            public void SetsTheReturnedTags(NonEmptyArray<NonNegativeInt> nonNegativeInts)
+            public Property SetsTheReturnedTags()
             {
-                var tagIds = nonNegativeInts.Get
-                    .Select(i => (long)i.Get)
-                    .ToArray();
-                var tags = tagIds.Select(createTag);
-                var tagNames = new HashSet<string>(tags.Select(tag => tag.Name));
-                ViewModel.Initialize().Wait();
-                DataSource.Tags.GetAll(Arg.Any<Func<IDatabaseTag, bool>>())
-                    .Returns(Observable.Return(tags));
-                NavigationService
-                    .Navigate<SelectTagsViewModel, (long[], long), long[]>(Arg.Any<(long[], long)>())
-                    .Returns(Task.FromResult(tagIds));
+                return Prop.ForAll(Arb.Default.NonEmptyArray<NonNegativeInt>(), nonNegativeInts =>
+                {
+                    var viewModel = CreateViewModel();
 
-                ViewModel.SelectTagsCommand.ExecuteAsync().Wait();
+                    var tagIds = nonNegativeInts.Get
+                        .Select(i => (long)i.Get)
+                        .ToArray();
+                    var tags = tagIds.Select(createTag);
+                    var tagNames = new HashSet<string>(tags.Select(tag => tag.Name));
+                    viewModel.Initialize().Wait();
+                    DataSource.Tags.GetAll(Arg.Any<Func<IDatabaseTag, bool>>())
+                        .Returns(Observable.Return(tags));
+                    NavigationService
+                        .Navigate<SelectTagsViewModel, (long[], long), long[]>(Arg.Any<(long[], long)>())
+                        .Returns(Task.FromResult(tagIds));
 
-                ViewModel.Tags.Should()
-                         .HaveCount(tags.Count()).And
-                         .OnlyContain(tag => tagNames.Contains(tag));
+                    viewModel.SelectTagsCommand.ExecuteAsync().Wait();
+
+                    viewModel.Tags.Should()
+                             .HaveCount(tags.Count()).And
+                             .OnlyContain(tag => tagNames.Contains(tag));
+                });
             }
 
             private IDatabaseTag createTag(long id)
