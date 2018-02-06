@@ -461,6 +461,7 @@
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityNoEntityCell.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityEmptyCell.axml" />
     <AndroidResource Include="Resources\values\Dimen.xml" />
+    <AndroidResource Include="Resources\layout\SelectTagsActivityCell.axml" />
     <AndroidResource Include="Resources\layout\AbcCreateEntityCell.axml" />
   </ItemGroup>
   <ItemGroup>
