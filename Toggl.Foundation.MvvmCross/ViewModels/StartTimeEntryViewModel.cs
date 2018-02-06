@@ -450,9 +450,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             var minimum = StartTime + ElapsedTime - TimeSpan.FromHours(MaxTimeEntryDurationInHours);
             var maximum = StartTime + ElapsedTime;
-            var parameters = DatePickerParameters.WithDates(StartTime, minimum, maximum);
+            var parameters = DateTimePickerParameters.WithDates(DateTimePickerMode.DateTime, StartTime, minimum, maximum);
             var selectedDate = await navigationService
-                .Navigate<SelectDateTimeViewModel, DatePickerParameters, DateTimeOffset>(parameters)
+                .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)
                 .ConfigureAwait(false);
 
             StartTime = new DateTimeOffset(

@@ -720,7 +720,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Prepare(prepareParameters);
                 await ViewModel.SetStartDateCommand.ExecuteAsync();
 
-                await NavigationService.Received().Navigate<SelectDateTimeViewModel, DatePickerParameters, DateTimeOffset>(Arg.Any<DatePickerParameters>());
+                await NavigationService.Received().Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>());
             }
 
             [Fact, LogIfTooSlow]
@@ -728,7 +728,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var parameterToReturn = now.AddDays(-2);
                 NavigationService
-                    .Navigate<SelectDateTimeViewModel, DatePickerParameters, DateTimeOffset>(Arg.Any<DatePickerParameters>())
+                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>())
                     .Returns(parameterToReturn);
 
                 ViewModel.Prepare(prepareParameters);
@@ -744,7 +744,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var specificPrepareParameters = new StartTimeEntryParameters(startTime, "", null);
                 var parameterToReturn = new DateTimeOffset(2018, 01, 15, 4, 5, 6, TimeSpan.Zero);
                 NavigationService
-                    .Navigate<SelectDateTimeViewModel, DatePickerParameters, DateTimeOffset>(Arg.Any<DatePickerParameters>())
+                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>())
                     .Returns(parameterToReturn);
 
                 ViewModel.Prepare(specificPrepareParameters);

@@ -66,6 +66,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public DateTimeOffset StartTime { get; set; }
 
+        [DependsOn(nameof(StopTime))]
+        public bool IsTimeEntryRunning => !StopTime.HasValue;
+
         private DateTimeOffset? stopTime;
         public DateTimeOffset? StopTime
         {
@@ -73,14 +76,20 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             set
             {
                 if (stopTime == value) return;
+
                 stopTime = value;
-                if (stopTime != null)
+
+                if (IsTimeEntryRunning)
+                {
+                    subscribeToTimeServiceTicks();
+                }
+                else
                 {
                     tickingDisposable?.Dispose();
                     tickingDisposable = null;
-                    return;
                 }
-                subscribeToTimeServiceTicks();
+
+                RaisePropertyChanged(nameof(StopTime));
             }
         }
 
@@ -105,6 +114,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand EditDurationCommand { get; }
 
+        public IMvxAsyncCommand SelectStartTimeCommand { get; }
+
+        public IMvxAsyncCommand SelectEndTimeCommand { get; }
+
+        public IMvxAsyncCommand SelectStartDateCommand { get; }
+
+        [Obsolete("Use SelectStartDate, SelectStartTime and SelectStopTime commands!")]
         public IMvxAsyncCommand SelectStartDateTimeCommand { get; }
 
         public IMvxAsyncCommand SelectProjectCommand { get; }
@@ -134,6 +150,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             CloseCommand = new MvxAsyncCommand(close);
             EditDurationCommand = new MvxAsyncCommand(editDuration);
             SelectStartDateTimeCommand = new MvxAsyncCommand(selectStartDateTime);
+
+            SelectStartTimeCommand = new MvxAsyncCommand(selectStartTime);
+            SelectEndTimeCommand = new MvxAsyncCommand(selectEndTime);
+            SelectStartDateCommand = new MvxAsyncCommand(selectStartDate);
+
             SelectProjectCommand = new MvxAsyncCommand(selectProject);
             SelectTagsCommand = new MvxAsyncCommand(selectTags);
             DismissSyncErrorMessageCommand = new MvxCommand(dismissSyncErrorMessageCommand);
@@ -224,17 +245,67 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private Task close()
             => navigationService.Close(this);
 
+        private async Task selectStartTime()
+        {
+            var parameters = DateTimePickerParameters.WithDates(
+                DateTimePickerMode.Time,
+                StartTime,
+                EarliestAllowedStartTime,
+                LatestAllowedStartTime);
+
+            StartTime = await navigationService
+                .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)
+                .ConfigureAwait(false);
+        }
+
+        private async Task selectEndTime()
+        {
+            if (!stopTime.HasValue)
+            {
+                StopTime = DateTimeOffset.Now;
+                return;
+            }
+
+            var earliestAllowedTime = StartTime;
+            var latestAllowedTime = StartTime.Add(MaxTimeEntryDuration);
+
+            var parameters = DateTimePickerParameters.WithDates(
+                DateTimePickerMode.Time,
+                StopTime.Value,
+                earliestAllowedTime,
+                latestAllowedTime);
+
+            StopTime = await navigationService
+                .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)
+                .ConfigureAwait(false);
+        }
+
+        private async Task selectStartDate()
+        {
+            var parameters = DateTimePickerParameters.WithDates(
+                DateTimePickerMode.Date,
+                StartTime,
+                EarliestAllowedStartTime,
+                LatestAllowedStartTime);
+
+            StartTime = await navigationService
+                .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)
+                .ConfigureAwait(false);
+        }
+
+        [Obsolete("Use SelectStartDate, SelectStartTime and SelectStopTime commands!")]
         private async Task selectStartDateTime()
         {
             var currentTime = timeService.CurrentDateTime;
-            var maxDate = StopTime == null 
-                        ? currentTime 
+            var maxDate = StopTime == null
+                        ? currentTime
                         : StopTime.Value > currentTime ? currentTime : StopTime.Value;
             var minDate = maxDate.AddHours(-MaxTimeEntryDurationInHours);
 
-            var parameters = DatePickerParameters.WithDates(StartTime, minDate, maxDate);
+            var parameters = DateTimePickerParameters.WithDates(DateTimePickerMode.DateTime, StartTime, minDate, maxDate);
+
             StartTime = await navigationService
-                .Navigate<SelectDateTimeViewModel, DatePickerParameters, DateTimeOffset>(parameters)
+                .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)
                 .ConfigureAwait(false);
         }
 
