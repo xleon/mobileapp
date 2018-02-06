@@ -43,11 +43,11 @@ namespace Toggl.Giskard.Adapters
             }
         }
 
-        public SegmentedRecyclerAdapter()
+        protected SegmentedRecyclerAdapter()
         {
         }
 
-        public SegmentedRecyclerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
+        protected SegmentedRecyclerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
         }

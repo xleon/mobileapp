@@ -247,6 +247,7 @@
     <Compile Include="Views\StartTimeEntryRecyclerViewHolder.cs" />
     <Compile Include="Services\AnalyticsService.cs" />
     <Compile Include="Bindings\FabVisibilityTargetBinding.cs" />
+    <Compile Include="Adapters\CreateSuggestionSegmentedRecyclerAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -270,6 +271,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\add_new.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\add_new.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\add_new.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\add_new.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\add_new.png" />
     <AndroidResource Include="Resources\layout\MainActivity.axml" />
     <AndroidResource Include="Resources\layout\OnboardingActivity.axml" />
     <AndroidResource Include="Resources\layout\LoginActivity.axml" />
@@ -457,6 +463,7 @@
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityNoEntityCell.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityEmptyCell.axml" />
     <AndroidResource Include="Resources\values\Dimen.xml" />
+    <AndroidResource Include="Resources\layout\AbcCreateEntityCell.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">
