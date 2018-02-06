@@ -156,6 +156,7 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewWillAppear(animated);
             NavigationController.NavigationBar.UserInteractionEnabled = true;
+            ActivityIndicator.StartAnimation();
         }
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)

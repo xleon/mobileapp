@@ -1,5 +1,7 @@
 ﻿using System;
+using CoreAnimation;
 using CoreGraphics;
+using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
@@ -139,6 +141,9 @@ namespace Toggl.Daneel.ViewControllers
                 new UIBarButtonItem(settingsButton),
                 new UIBarButtonItem(reportsButton)
             };
+
+            animateSpider();
+            SyncIndicatorView.StartAnimation();
         }
 
         public override void ViewDidLayoutSubviews()
@@ -243,10 +248,18 @@ namespace Toggl.Daneel.ViewControllers
 
         private void animateSpider()
         {
-            SpiderBroImageView.Transform = CGAffineTransform.MakeRotation(-animationAngle);
+            SpiderBroImageView.Layer.RemoveAllAnimations();
 
-            UIView.Animate(Timings.SpiderBro, 0, UIViewAnimationOptions.Autoreverse | UIViewAnimationOptions.Repeat,
-                () => SpiderBroImageView.Transform = CGAffineTransform.MakeRotation(animationAngle), animateSpider);
+            var animation = CABasicAnimation.FromKeyPath("transform.rotation.z");
+            animation.Duration = Timings.SpiderBro;
+            animation.TimingFunction = CAMediaTimingFunction.FromName(CAMediaTimingFunction.EaseInEaseOut);
+            animation.Cumulative = false;
+            animation.From = NSNumber.FromFloat(-animationAngle);
+            animation.To = NSNumber.FromFloat(animationAngle);
+            animation.RepeatCount = float.PositiveInfinity;
+            animation.AutoReverses = true;
+
+            SpiderBroImageView.Layer.AddAnimation(animation, "swing");
         }
     }
 }

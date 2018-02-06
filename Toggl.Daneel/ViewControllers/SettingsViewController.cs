@@ -122,6 +122,14 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Apply();
         }
 
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+
+            SyncingIndicator.StartAnimating();
+            LoggingOutIndicator.StartAnimating();
+        }
+
         private void prepareViews()
         {
             // Syncing indicator colors
