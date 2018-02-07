@@ -20,6 +20,8 @@ namespace Toggl.Foundation
 
         public int Hours => combineDigitsIntoANumber(2, 3);
 
+        public bool IsEmpty => digits.Count == 0;
+
         private DurationFieldInfo(Stack<int> digits)
         {
             this.digits = digits;

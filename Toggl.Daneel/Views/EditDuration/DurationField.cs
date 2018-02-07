@@ -13,11 +13,11 @@ namespace Toggl.Daneel.Views.EditDuration
     [Register(nameof(DurationField))]
     public sealed class DurationField : UITextField
     {
+        private TimeSpan originalDuration;
+
         private TimeSpan duration;
 
         private bool isEditing;
-
-        private bool isDirty;
 
         private DurationInputDelegate durationInputDelegate;
 
@@ -92,7 +92,7 @@ namespace Toggl.Daneel.Views.EditDuration
         private void startEditing(object sender, EventArgs e)
         {
             isEditing = true;
-            isDirty = false;
+            originalDuration = duration;
             input = DurationFieldInfo.Empty;
             setText(input.ToString());
         }
@@ -100,13 +100,6 @@ namespace Toggl.Daneel.Views.EditDuration
         private void finishEditing(object sender, EventArgs e)
         {
             isEditing = false;
-
-            if (isDirty)
-            {
-                Duration = input.ToTimeSpan();
-                DurationChanged.Raise(this);
-            }
-
             showCurrentDuration();
         }
 
@@ -114,8 +107,13 @@ namespace Toggl.Daneel.Views.EditDuration
         {
             if (nextInput.Equals(input) == false)
             {
-                isDirty = true;
                 input = nextInput;
+
+                Duration = input.IsEmpty
+                    ? originalDuration
+                    : input.ToTimeSpan();
+
+                DurationChanged.Raise(this);
                 setText(input.ToString());
             }
         }
