@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
@@ -16,7 +15,6 @@ using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
 using static Toggl.Foundation.Helper.Constants;
-using static Toggl.Multivac.Extensions.StringExtensions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -120,9 +118,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand SelectStartDateCommand { get; }
 
-        [Obsolete("Use SelectStartDate, SelectStartTime and SelectStopTime commands!")]
-        public IMvxAsyncCommand SelectStartDateTimeCommand { get; }
-
         public IMvxAsyncCommand SelectProjectCommand { get; }
 
         public IMvxAsyncCommand SelectTagsCommand { get; }
@@ -149,7 +144,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ConfirmCommand = new MvxCommand(confirm);
             CloseCommand = new MvxAsyncCommand(close);
             EditDurationCommand = new MvxAsyncCommand(editDuration);
-            SelectStartDateTimeCommand = new MvxAsyncCommand(selectStartDateTime);
 
             SelectStartTimeCommand = new MvxAsyncCommand(selectStartTime);
             SelectEndTimeCommand = new MvxAsyncCommand(selectEndTime);
@@ -287,22 +281,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 StartTime,
                 EarliestAllowedStartTime,
                 LatestAllowedStartTime);
-
-            StartTime = await navigationService
-                .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)
-                .ConfigureAwait(false);
-        }
-
-        [Obsolete("Use SelectStartDate, SelectStartTime and SelectStopTime commands!")]
-        private async Task selectStartDateTime()
-        {
-            var currentTime = timeService.CurrentDateTime;
-            var maxDate = StopTime == null
-                        ? currentTime
-                        : StopTime.Value > currentTime ? currentTime : StopTime.Value;
-            var minDate = maxDate.AddHours(-MaxTimeEntryDurationInHours);
-
-            var parameters = DateTimePickerParameters.WithDates(DateTimePickerMode.DateTime, StartTime, minDate, maxDate);
 
             StartTime = await navigationService
                 .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)

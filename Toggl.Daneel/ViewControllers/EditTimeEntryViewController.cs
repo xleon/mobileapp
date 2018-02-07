@@ -137,7 +137,7 @@ namespace Toggl.Daneel.ViewControllers
 
             bindingSet.Bind(StartDateTimeView)
                       .For(v => v.BindTap())
-                      .To(vm => vm.SelectStartDateTimeCommand);
+                      .To(vm => vm.SelectStartDateCommand);
 
             bindingSet.Bind(TagsTextView)
                       .For(v => v.BindTap())
