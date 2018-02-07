@@ -37,6 +37,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IDisposable queryDisposable;
         private IDisposable elapsedTimeDisposable;
         private TextFieldInfo previousTextFieldInfo;
+        private StartTimeEntryParameters parameter;
 
         private TimeSpan displayedTime = TimeSpan.Zero;
 
@@ -70,6 +71,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return false;
             }
         }
+
+        public bool IsDirty
+            => TextFieldInfo.Text.Length > 0
+                || TextFieldInfo.ProjectId.HasValue
+                || TextFieldInfo.Tags.Length > 0
+                || IsBillable
+                || StartTime != parameter.StartTime
+                || Duration != parameter.Duration;
 
         public bool UseGrouping { get; set; }
 
@@ -329,6 +338,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public override void Prepare(StartTimeEntryParameters parameter)
         {
+            this.parameter = parameter;
             StartTime = parameter.StartTime;
             Duration = parameter.Duration;
 
@@ -447,7 +457,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             );
         }
 
-        private void toggleBillable() => IsBillable = !IsBillable;
+        private void toggleBillable()
+        {
+            IsBillable = !IsBillable;
+        }
 
         private async Task changeTime()
         {
@@ -481,7 +494,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)
                 .ConfigureAwait(false);
 
-            StartTime = new DateTimeOffset(
+            var newStartTime = new DateTimeOffset(
                 selectedDate.Year,
                 selectedDate.Month,
                 selectedDate.Day,
@@ -490,9 +503,28 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 StartTime.Second,
                 StartTime.Offset)
                 .Clamp(minimum, maximum);
+
+            if (StartTime.Date != newStartTime.Date)
+            {
+                StartTime = newStartTime;
+            }
         }
 
-        private Task back() => navigationService.Close(this);
+        private async Task back()
+        {
+            if (IsDirty)
+            {
+                var result = await dialogService.ShowMultipleChoiceDialog(
+                    Resources.ContinueEditing,
+                    new MultipleChoiceDialogAction(Resources.Discard, true)
+                );
+
+                if (result != Resources.Discard)
+                    return;
+            }
+
+            await navigationService.Close(this);
+        }
 
         private async Task done()
         {

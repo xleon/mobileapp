@@ -159,6 +159,12 @@ time entries will appear here.</value>
     <data name="Cancel">
         <value>Cancel</value>
     </data>
+    <data name="ContinueEditing">
+        <value>Continue Editing</value>
+    </data>
+    <data name="Discard">
+        <value>Discard</value>
+    </data>
     <data name="PrivacyPolicy">
         <value>Privacy Policy</value>
     </data>

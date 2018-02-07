@@ -11,6 +11,7 @@ using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.MvvmCross.Parameters;
+using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac;
@@ -129,6 +130,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Prepare(parameter);
 
                 ViewModel.DisplayedTime.Should().Be(duration);
+            }
+
+            [Fact]
+            public void ClearsTheIsDirtyFlag()
+            {
+                var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null);
+
+                ViewModel.Prepare(parameter);
+
+                ViewModel.IsDirty.Should().BeFalse();
             }
         }
 
@@ -450,12 +461,59 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheBackCommand : StartTimeEntryViewModelTest
         {
+            public TheBackCommand()
+            {
+                var parameter = StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now);
+                ViewModel.Prepare(parameter);
+            }
+
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModel()
+            public async Task ClosesTheViewModelIfUserDoesNotChangeAnything()
             {
                 await ViewModel.BackCommand.ExecuteAsync();
 
                 await NavigationService.Received().Close(ViewModel);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task ShowsAConfirmationDialogIfUserEnteredSomething()
+            {
+                makeDirty();
+
+                await ViewModel.BackCommand.ExecuteAsync();
+
+                await DialogService.Received().ShowMultipleChoiceDialog(
+                    Arg.Any<string>(),
+                    Arg.Is<MultipleChoiceDialogAction>(dialogAction => dialogAction.Destructive == true));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task DoesNotCloseTheViewIfUserWantsToContinueEditing()
+            {
+                makeDirty();
+                DialogService.ShowMultipleChoiceDialog(Arg.Any<string>(), Arg.Any<MultipleChoiceDialogAction>())
+                             .Returns(_ => Task.FromResult(Resources.ContinueEditing));
+
+                await ViewModel.BackCommand.ExecuteAsync();
+
+                await NavigationService.DidNotReceive().Close(ViewModel);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task ClosesTheViewIfUserWantsToDiscardTheEnteredInformation()
+            {
+                makeDirty();
+                DialogService.ShowMultipleChoiceDialog(Arg.Any<string>(), Arg.Any<MultipleChoiceDialogAction>())
+                    .Returns(_ => Task.FromResult(Resources.Discard));
+
+                await ViewModel.BackCommand.ExecuteAsync();
+
+                await NavigationService.Received().Close(ViewModel);
+            }
+
+            private void makeDirty()
+            {
+                ViewModel.ToggleBillableCommand.Execute();
             }
         }
 
@@ -469,6 +527,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.ToggleBillableCommand.Execute();
 
                 ViewModel.IsBillable.Should().Be(expected);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void SetsTheIsDirtyFlag()
+            {
+                ViewModel.ToggleBillableCommand.Execute();
+
+                ViewModel.IsDirty.Should().BeTrue();
             }
         }
 
@@ -561,6 +627,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.TextFieldInfo.Text.Should().Be(expected);
             }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNotSetTheIsDirtyFlag()
+            {
+                ViewModel.ToggleProjectSuggestionsCommand.Execute();
+
+                ViewModel.IsDirty.Should().BeTrue();
+            }
         }
 
         public sealed class TheToggleTagSuggestionsCommand : StartTimeEntryViewModelTest
@@ -639,6 +713,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.TextFieldInfo.Text.Should().Be(expected);
             }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNotSetTheIsDirtyFlag()
+            {
+                ViewModel.ToggleTagSuggestionsCommand.Execute();
+
+                ViewModel.IsDirty.Should().BeTrue();
+            }
         }
 
         public sealed class TheChangeTimeCommand : StartTimeEntryViewModelTest
@@ -707,6 +789,54 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.DisplayedTime.Should().Be(parameterToReturn.Duration.Value);
             }
+
+            [Fact, LogIfTooSlow]
+            public async Task DoesNotSetTheIsDirtyFlagIfNothingChanges()
+            {
+                var now = DateTimeOffset.UtcNow;
+                var parameter = new StartTimeEntryParameters(now, "", null);
+                ViewModel.Prepare(parameter);
+                var parameterToReturn = DurationParameter.WithStartAndDuration(now, null);
+                NavigationService
+                    .Navigate<EditDurationViewModel, DurationParameter, DurationParameter>(Arg.Any<DurationParameter>())
+                    .Returns(Task.FromResult(parameterToReturn));
+
+                await ViewModel.ChangeTimeCommand.ExecuteAsync();
+
+                ViewModel.IsDirty.Should().BeFalse();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SetsTheIsDirtyFlagWhenStartTimeChanges()
+            {
+                var now = DateTimeOffset.UtcNow;
+                var parameter = new StartTimeEntryParameters(now, "", null);
+                var parameterToReturn = DurationParameter.WithStartAndDuration(now.AddHours(-2), null);
+                NavigationService
+                    .Navigate<EditDurationViewModel, DurationParameter, DurationParameter>(Arg.Any<DurationParameter>())
+                    .Returns(Task.FromResult(parameterToReturn));
+                ViewModel.Prepare(parameter);
+
+                await ViewModel.ChangeTimeCommand.ExecuteAsync();
+
+                ViewModel.IsDirty.Should().BeTrue();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SetsTheIsDirtyFlagWhenDurationChanges()
+            {
+                var now = DateTimeOffset.UtcNow;
+                var parameter = new StartTimeEntryParameters(now, "", null);
+                var parameterToReturn = DurationParameter.WithStartAndDuration(now, TimeSpan.FromMinutes(10));
+                NavigationService
+                    .Navigate<EditDurationViewModel, DurationParameter, DurationParameter>(Arg.Any<DurationParameter>())
+                    .Returns(Task.FromResult(parameterToReturn));
+                ViewModel.Prepare(parameter);
+
+                await ViewModel.ChangeTimeCommand.ExecuteAsync();
+
+                ViewModel.IsDirty.Should().BeTrue();
+            }
         }
 
         public sealed class TheSetStartDateCommand : StartTimeEntryViewModelTest
@@ -752,6 +882,33 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.StartTime.Date.Should().Be(parameterToReturn.Date);
                 ViewModel.StartTime.TimeOfDay.Should().Be(startTime.TimeOfDay);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task DoesNotSetTheIsDirtyFlagWhenNothingChanges()
+            {
+                ViewModel.Prepare(prepareParameters);
+                NavigationService
+                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>())
+                    .Returns(prepareParameters.StartTime);
+
+                await ViewModel.SetStartDateCommand.ExecuteAsync();
+
+                ViewModel.IsDirty.Should().BeFalse();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SetsTheIsDirtyFlagWhenTheStartTimeChanges()
+            {
+                var parameterToReturn = now.AddDays(-2);
+                NavigationService
+                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>())
+                    .Returns(parameterToReturn);
+
+                ViewModel.Prepare(prepareParameters);
+                await ViewModel.SetStartDateCommand.ExecuteAsync();
+
+                ViewModel.IsDirty.Should().BeTrue();
             }
         }
 
@@ -1061,6 +1218,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Tag = Substitute.For<IDatabaseTag>();
                     Tag.Id.Returns(TagId);
                     Tag.Name.Returns(TagName);
+                }
+
+                [Fact, LogIfTooSlow]
+                public void SetsTheIsDirtyFlag()
+                {
+                    ViewModel.SelectSuggestionCommand.Execute(Suggestion);
+
+                    ViewModel.IsDirty.Should().BeTrue();
                 }
             }
 
@@ -1386,6 +1551,37 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.TextFieldInfo = ViewModel.TextFieldInfo.WithTextAndCursor("x" + text, 1);
 
                 AutocompleteProvider.Received().Query(Arg.Is<QueryInfo>(query => query.Text.StartsWith("x")));
+            }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNotSetTheIsDirtyFlagIfTheTextFieldIsEmpty()
+            {
+                ViewModel.Prepare(DefaultParameter);
+
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty;
+
+                ViewModel.IsDirty.Should().BeFalse();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void SetsTheIsDirtyFlag()
+            {
+                ViewModel.Prepare(DefaultParameter);
+
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor("a", 1);
+
+                ViewModel.IsDirty.Should().BeTrue();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ClearsTheIsDirtyFlagIfTheTextFieldIsErased()
+            {
+                ViewModel.Prepare(DefaultParameter);
+
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty.WithTextAndCursor("a", 1);
+                ViewModel.TextFieldInfo = TextFieldInfo.Empty;
+
+                ViewModel.IsDirty.Should().BeFalse();
             }
         }
 
