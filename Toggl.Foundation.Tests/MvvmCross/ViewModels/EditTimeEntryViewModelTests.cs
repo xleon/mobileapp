@@ -43,6 +43,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observable = Observable.Return(te.Build());
 
                 DataSource.TimeEntries.GetById(Arg.Is(Id)).Returns(observable);
+
+                TimeService.CurrentDateTime.Returns(now);
             }
 
             protected override EditTimeEntryViewModel CreateViewModel()
@@ -163,6 +165,57 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     await DataSource.SyncManager.DidNotReceive().PushSync();
                 }
+            }
+        }
+
+        public sealed class TheStopCommand : EditTimeEntryViewModelTest
+        {
+            [Fact]
+            public void CannotBeExecutedForAStoppedTimeEntry()
+            {
+                ConfigureEditedTimeEntry(DateTimeOffset.UtcNow, false);
+                ViewModel.Prepare(Id);
+                ViewModel.Initialize().Wait();
+
+                var canExecute = ViewModel.StopCommand.CanExecute();
+
+                canExecute.Should().BeFalse();
+            }
+
+            [Fact]
+            public void CanBeExecutedForARunningTimeEntry()
+            {
+                ConfigureEditedTimeEntry(DateTimeOffset.UtcNow, true);
+                ViewModel.Prepare(Id);
+                ViewModel.Initialize().Wait();
+
+                var canExecute = ViewModel.StopCommand.CanExecute();
+
+                canExecute.Should().BeTrue();
+            }
+
+            [Property]
+            public void SetsTheCurrentTimeAsTheStopTime(DateTimeOffset now)
+            {
+                ConfigureEditedTimeEntry(now, true);
+                ViewModel.Prepare(Id);
+                ViewModel.Initialize().Wait();
+
+                ViewModel.StopCommand.Execute();
+
+                ViewModel.StopTime.Should().Be(now);
+            }
+
+            [Fact]
+            public void ClearsTheIsRunningFlag()
+            {
+                ConfigureEditedTimeEntry(DateTimeOffset.UtcNow, true);
+                ViewModel.Prepare(Id);
+                ViewModel.Initialize().Wait();
+
+                ViewModel.StopCommand.Execute();
+
+                ViewModel.IsTimeEntryRunning.Should().BeFalse();
             }
         }
 

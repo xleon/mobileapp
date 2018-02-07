@@ -106,6 +106,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand DismissSyncErrorMessageCommand { get; }
 
+        public IMvxCommand StopCommand { get; }
+
         public IMvxAsyncCommand DeleteCommand { get; }
 
         public IMvxAsyncCommand CloseCommand { get; }
@@ -144,6 +146,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ConfirmCommand = new MvxCommand(confirm);
             CloseCommand = new MvxAsyncCommand(close);
             EditDurationCommand = new MvxAsyncCommand(editDuration);
+            StopCommand = new MvxCommand(stopTimeEntry, () => IsTimeEntryRunning);
 
             SelectStartTimeCommand = new MvxAsyncCommand(selectStartTime);
             SelectEndTimeCommand = new MvxAsyncCommand(selectEndTime);
@@ -252,11 +255,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .ConfigureAwait(false);
         }
 
+        private void stopTimeEntry()
+        {
+            StopTime = timeService.CurrentDateTime;
+        }
+
         private async Task selectEndTime()
         {
-            if (!stopTime.HasValue)
+            if (IsTimeEntryRunning)
             {
-                StopTime = DateTimeOffset.Now;
+                stopTimeEntry();
                 return;
             }
 
