@@ -83,6 +83,11 @@ namespace Toggl.Foundation.MvvmCross.Helper
             public static readonly MvxColor AddIconColor = new MvxColor(75, 200, 0);
         }
 
+        public static class DurationField
+        {
+            public static readonly MvxColor Cursor = lightishGreen;
+        }
+
         internal static MvxColor FromHSV(float hue, float saturation, float value)
         {
             int r = 0, g = 0, b = 0;
