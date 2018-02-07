@@ -46,7 +46,7 @@ namespace Toggl.Giskard.Adapters
         public override object GetItem(int viewPosition)
         {
             if (UseGrouping)
-                base.GetItem(viewPosition);
+                return base.GetItem(viewPosition);
 
             if (IsSuggestingCreation && viewPosition == 0)
                 return GetCreateSuggestionItem();

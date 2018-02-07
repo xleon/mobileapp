@@ -1,6 +1,8 @@
 ﻿using Android.App;
 using Android.Content.PM;
+using Android.Graphics;
 using Android.OS;
+using Android.Support.V4.Content;
 using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Droid.Support.V7.AppCompat;
@@ -12,6 +14,7 @@ namespace Toggl.Giskard.Activities
 {
     [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme",
+              WindowSoftInputMode = SoftInput.AdjustResize,
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed class EditProjectActivity : MvxAppCompatActivity<EditProjectViewModel>
@@ -22,6 +25,11 @@ namespace Toggl.Giskard.Activities
             SetContentView(Resource.Layout.EditProjectActivity);
 
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
 
             setupToolbar();
         }
@@ -34,9 +42,13 @@ namespace Toggl.Giskard.Activities
 
             SetSupportActionBar(toolbar);
 
+            var upArrow = ContextCompat.GetDrawable(this, Resource.Drawable.abc_ic_ab_back_material);
+            upArrow.SetColorFilter(Color.ParseColor("#757575"), PorterDuff.Mode.SrcAtop);
+            SupportActionBar.SetHomeAsUpIndicator(upArrow);
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.SetDisplayShowHomeEnabled(true);
 
+            toolbar.SetTitleTextColor(Color.Black.ToArgb());
             toolbar.NavigationClick += onNavigateBack;
         }
 
