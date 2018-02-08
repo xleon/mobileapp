@@ -30,11 +30,23 @@ namespace Toggl.Daneel.ViewControllers
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 40));
         private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
 
+        private IDisposable willEnterForegroundNotification;
+
         private bool viewInitialized;
 
         public MainViewController()
             : base(nameof(MainViewController), null)
         {
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (disposing == false) return;
+
+            willEnterForegroundNotification?.Dispose();
+            willEnterForegroundNotification = null;
         }
 
         public override void ViewDidLoad()
@@ -114,6 +126,8 @@ namespace Toggl.Daneel.ViewControllers
                       .WithConversion(startTimeEntryButtonManualModeIconConverter);
 
             bindingSet.Apply();
+
+            willEnterForegroundNotification = UIApplication.Notifications.ObserveWillEnterForeground((sender, e) => startAnimations());
         }
 
         internal void OnTimeEntryCardVisibilityChanged(bool visible)
@@ -142,8 +156,7 @@ namespace Toggl.Daneel.ViewControllers
                 new UIBarButtonItem(reportsButton)
             };
 
-            animateSpider();
-            SyncIndicatorView.StartAnimation();
+            startAnimations();
         }
 
         public override void ViewDidLayoutSubviews()
@@ -244,6 +257,12 @@ namespace Toggl.Daneel.ViewControllers
                         () => StartTimeEntryButton.Transform = CGAffineTransform.MakeScale(1f, 1f)
                     );
                 });
+        }
+
+        private void startAnimations()
+        {
+            animateSpider();
+            SyncIndicatorView.StartAnimation();
         }
 
         private void animateSpider()
