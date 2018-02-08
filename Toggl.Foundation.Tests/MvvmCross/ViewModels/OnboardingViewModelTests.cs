@@ -184,7 +184,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 OnboardingStorage.Received().SetCompletedOnboarding();
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData(1)]
             [InlineData(2)]
             public void DoesNotSetTheCompletedOnboardingFlagWhenUserSkipsAtLeastOnePage(int pagesViewed)
@@ -223,7 +223,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 OnboardingStorage.Received().SetCompletedOnboarding();
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData(1)]
             [InlineData(2)]
             public void DoesNotSetTheCompletedOnboardingFlagWhenUserSkipsAtLeastOnePage(int pagesViewed)

@@ -96,7 +96,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Duration.Should().Be(duration);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void DoesNotStartTheTimerWhenDurationIsNotNull()
             {
                 var observable = Substitute.For<IConnectableObservable<DateTimeOffset>>();
@@ -109,7 +109,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TimeService.CurrentDateTimeObservable.DidNotReceiveWithAnyArgs().Subscribe(null);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void StarsTheTimerWhenDurationIsNull()
             {
                 var observable = Substitute.For<IConnectableObservable<DateTimeOffset>>();
@@ -121,7 +121,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TimeService.CurrentDateTimeObservable.ReceivedWithAnyArgs().Subscribe(null);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void SetsTheDisplayedTimeToTheValueOfTheDurationParameter()
             {
                 var duration = TimeSpan.FromSeconds(130);
@@ -132,7 +132,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.DisplayedTime.Should().Be(duration);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void ClearsTheIsDirtyFlag()
             {
                 var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null);
@@ -1149,7 +1149,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto => dto.Duration.HasValue));
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public void CreatesARunningTimeEntryWhenDurationIsNull()
                 {
                     var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null);
