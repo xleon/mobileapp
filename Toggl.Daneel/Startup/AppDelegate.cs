@@ -33,7 +33,7 @@ namespace Toggl.Daneel
             #endif
             #if USE_ANALYTICS
             Microsoft.AppCenter.AppCenter.Start(
-                {TOGGL_APP_CENTER_ID_IOS}, 
+                "{TOGGL_APP_CENTER_ID_IOS}", 
                 typeof(Microsoft.AppCenter.Crashes.Crashes));
             Firebase.Core.App.Configure();
             Firebase.CrashReporting.Loader.ForceLoad();
