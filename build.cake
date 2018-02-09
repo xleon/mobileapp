@@ -40,7 +40,7 @@ private Action UITest(string[] dllPaths)
     };
 }
 
-private Action BuildSolution(string configuration, string platform = "", bool uploadSymbols = false)
+private Action BuildSolution(string configuration, string platform = "")
 {
     const string togglSolution = "./Toggl.sln";
     var buildSettings = new MSBuildSettings 
@@ -54,20 +54,7 @@ private Action BuildSolution(string configuration, string platform = "", bool up
         buildSettings = buildSettings.WithProperty("Platform", platform);
     }
 
-    if (!uploadSymbols) 
-        return () => MSBuild(togglSolution, buildSettings);
-
-    return () =>
-    {
-        MSBuild(togglSolution, buildSettings);
-        UploadSymbols();
-    };
-}
-
-private void UploadSymbols()
-{
-    const string args = "Toggl.Daneel/scripts/FirebaseCrashReporting/xamarin_upload_symbols.sh -n Toggl.Daneel -b ./bin/Release -i Toggl.Daneel/Info.plist -p Toggl.Daneel/GoogleService-Info.plist -s Toggl.Daneel/service-account.json";
-    StartProcess("bash", new ProcessSettings { Arguments = args });
+    return () => MSBuild(togglSolution, buildSettings);
 }
 
 //Temporary variable replacement
@@ -265,7 +252,7 @@ Task("Build.Release.iOS.TestFlight")
 
 Task("Build.Release.iOS.AppStore")
     .IsDependentOn("Nuget")
-    .Does(BuildSolution("Release.AppStore", "", uploadSymbols: true));
+    .Does(BuildSolution("Release.AppStore", ""));
 
 //Unit Tests
 Task("Tests.Unit")
