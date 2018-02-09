@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck.Xunit;
 using NSubstitute;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.DTOs;
@@ -17,6 +18,7 @@ using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
+using Toggl.PrimeRadiant.Settings;
 using Xunit;
 using static Toggl.Foundation.Helper.Constants;
 using static Toggl.Multivac.Extensions.FunctionalExtensions;
@@ -39,6 +41,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected const string ProjectColor = "#F41F19";
             protected const string Description = "Testing Toggl mobile apps";
 
+            protected IUserPreferences UserPreferences { get; } = Substitute.For<IUserPreferences>();
+
             protected IAutocompleteProvider AutocompleteProvider { get; } = Substitute.For<IAutocompleteProvider>();
 
             protected StartTimeEntryParameters DefaultParameter { get; } = new StartTimeEntryParameters(DateTimeOffset.UtcNow, "", null);
@@ -59,23 +63,30 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             protected override StartTimeEntryViewModel CreateViewModel()
-                => new StartTimeEntryViewModel(TimeService, DialogService, DataSource, NavigationService);
+                => new StartTimeEntryViewModel(TimeService, DataSource, DialogService, UserPreferences, AnalyticsService, NavigationService);
         }
 
         public sealed class TheConstructor : StartTimeEntryViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(FourParameterConstructorTestData))]
+            [ClassData(typeof(SixParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
-                bool useDataSource, bool useTimeService, bool useDialogService, bool useNavigationService)
+                bool useDataSource, 
+                bool useTimeService, 
+                bool useDialogService, 
+                bool useUserPreferences,
+                bool useAnalyticsService,
+                bool useNavigationService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
                 var dialogService = useDialogService ? DialogService : null;
+                var userPreferences = useUserPreferences ? UserPreferences : null;
+                var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new StartTimeEntryViewModel(timeService, dialogService, dataSource, navigationService);
+                    () => new StartTimeEntryViewModel(timeService, dataSource, dialogService, userPreferences, analyticsService, navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -509,6 +520,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.BackCommand.ExecuteAsync();
 
                 await NavigationService.Received().Close(ViewModel);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task DoesNotCallTheAnalyticsServiceSinceNoTimeEntryWasCreated()
+            {
+                await ViewModel.BackCommand.ExecuteAsync();
+
+                AnalyticsService.DidNotReceive().TrackStartedTimeEntry(Arg.Any<TimeEntryStartOrigin>());
             }
 
             private void makeDirty()
@@ -1158,6 +1177,41 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.DoneCommand.ExecuteAsync().Wait();
 
                     DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto => dto.Duration.HasValue == false));
+                }
+
+                [Fact, LogIfTooSlow]
+                public void RegistersTheEventInTheAnalyticsService()
+                {
+                    var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null);
+
+                    ViewModel.Prepare(parameter);
+                    ViewModel.DoneCommand.ExecuteAsync().Wait();
+
+                    AnalyticsService.Received().TrackStartedTimeEntry(Arg.Any<TimeEntryStartOrigin>());
+                }
+
+                [Fact, LogIfTooSlow]
+                public void RegistersTheEventAsATimerEventIfManualModeIsDisabled()
+                {
+                    UserPreferences.IsManualModeEnabled().Returns(false);
+                    var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null);
+
+                    ViewModel.Prepare(parameter);
+                    ViewModel.DoneCommand.ExecuteAsync().Wait();
+
+                    AnalyticsService.Received().TrackStartedTimeEntry(TimeEntryStartOrigin.Timer);
+                }
+
+                [Fact, LogIfTooSlow]
+                public void RegistersTheEventAsAManualEventIfManualModeIsEnabled()
+                {
+                    UserPreferences.IsManualModeEnabled().Returns(true);
+                    var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null);
+
+                    ViewModel.Prepare(parameter);
+                    ViewModel.DoneCommand.ExecuteAsync().Wait();
+
+                    AnalyticsService.Received().TrackStartedTimeEntry(TimeEntryStartOrigin.Manual);
                 }
 
                 private TagSuggestion tagSuggestionFromInt(int i)
