@@ -36,7 +36,6 @@ namespace Toggl.Daneel
                 "{TOGGL_APP_CENTER_ID_IOS}", 
                 typeof(Microsoft.AppCenter.Crashes.Crashes));
             Firebase.Core.App.Configure();
-            Firebase.CrashReporting.Loader.ForceLoad();
             Google.SignIn.SignIn.SharedInstance.ClientID =
                 Firebase.Core.App.DefaultInstance.Options.ClientId;
             #endif
