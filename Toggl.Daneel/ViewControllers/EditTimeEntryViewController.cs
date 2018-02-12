@@ -231,7 +231,13 @@ namespace Toggl.Daneel.ViewControllers
 
         public override void ViewWillLayoutSubviews()
         {
-            var newSize = new CGSize(0, nonScrollableContentHeight + ScrollViewContent.Bounds.Height);
+            var height = nonScrollableContentHeight + ScrollViewContent.Bounds.Height;
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                height += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+            }
+
+            var newSize = new CGSize(0, height);
             if (newSize != PreferredContentSize)
             {
                 PreferredContentSize = newSize;

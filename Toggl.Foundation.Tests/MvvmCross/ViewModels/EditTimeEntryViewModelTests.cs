@@ -28,6 +28,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         {
             protected const long Id = 10;
 
+            protected readonly TimeSpan Duration = TimeSpan.FromHours(1);
+
+            protected IDatabaseTimeEntry TheTimeEntry;
+
             protected void ConfigureEditedTimeEntry(DateTimeOffset now, bool isRunning = false)
             {
                 var te = TimeEntry.Builder.Create(Id)
@@ -38,9 +42,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .SetUserId(12);
 
                 if (!isRunning)
-                    te = te.SetDuration((long)TimeSpan.FromHours(1).TotalSeconds);
+                    te = te.SetDuration((long)Duration.TotalSeconds);
 
-                var observable = Observable.Return(te.Build());
+                TheTimeEntry = te.Build();
+                var observable = Observable.Return(TheTimeEntry);
 
                 DataSource.TimeEntries.GetById(Arg.Is(Id)).Returns(observable);
 
@@ -812,6 +817,86 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         new StringBuilder(),
                         (builder, _) => builder.Append(character))
                     .ToString();
+        }
+    
+        public sealed class TheSelectStartDateCommand : EditTimeEntryViewModelTest
+        {
+            [Fact]
+            public async Task OpensTheSelectDateTimeViewModel()
+            {
+                ConfigureEditedTimeEntry(DateTimeOffset.UtcNow, false);
+                ViewModel.Prepare(Id);
+                ViewModel.Initialize().Wait();
+
+                await ViewModel.SelectStartDateCommand.ExecuteAsync();
+
+                await NavigationService.Received()
+                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(
+                        Arg.Any<DateTimePickerParameters>());
+            }
+
+            [Fact]
+            public async Task OpensTheSelectDateTimeViewModelWithCorrectLimitsForARunnningTimeEntry()
+            {
+                var now = DateTimeOffset.UtcNow;
+                ConfigureEditedTimeEntry(now, true);
+                ViewModel.Prepare(Id);
+                ViewModel.Initialize().Wait();
+
+                await ViewModel.SelectStartDateCommand.ExecuteAsync();
+
+                await NavigationService.Received()
+                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(
+                        Arg.Is<DateTimePickerParameters>(param => param.MinDate == EarliestAllowedStartTime && param.MaxDate == now));
+            }
+
+            [Fact]
+            public async Task OpensTheSelectDateTimeViewModelWithCorrectLimitsForAStoppedTimeEntry()
+            {
+                var now = DateTimeOffset.UtcNow;
+                ConfigureEditedTimeEntry(now, false);
+                ViewModel.Prepare(Id);
+                ViewModel.Initialize().Wait();
+
+                await ViewModel.SelectStartDateCommand.ExecuteAsync();
+
+                await NavigationService.Received()
+                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(
+                        Arg.Is<DateTimePickerParameters>(param => param.MinDate == EarliestAllowedStartTime && param.MaxDate == LatestAllowedStartTime));
+            }
+
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public async Task ChangesTheStartTimeToTheSelectedStartDate(bool isRunning)
+            {
+                var now = DateTimeOffset.UtcNow;
+                var startTime = now.AddMonths(-1);
+                ConfigureEditedTimeEntry(now, isRunning);
+                ViewModel.Prepare(Id);
+                ViewModel.Initialize().Wait();
+                NavigationService
+                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>())
+                    .Returns(startTime);
+
+                await ViewModel.SelectStartDateCommand.ExecuteAsync();
+
+                TheTimeEntry.Start.Should().NotBe(startTime);
+            }
+
+            [Fact]
+            public async Task DoesNotChangeDurationForAStoppedTimeEntry()
+            {
+                var now = DateTimeOffset.UtcNow;
+                ConfigureEditedTimeEntry(now, false);
+                ViewModel.Prepare(Id);
+                ViewModel.Initialize().Wait();
+                var duration = Duration;
+
+                await ViewModel.SelectStartDateCommand.ExecuteAsync();
+
+                TheTimeEntry.Duration.Should().Be((long)duration.TotalSeconds);
+            }
         }
     }
 }
