@@ -175,7 +175,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheStopCommand : EditTimeEntryViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void CannotBeExecutedForAStoppedTimeEntry()
             {
                 ConfigureEditedTimeEntry(DateTimeOffset.UtcNow, false);
@@ -187,7 +187,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 canExecute.Should().BeFalse();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void CanBeExecutedForARunningTimeEntry()
             {
                 ConfigureEditedTimeEntry(DateTimeOffset.UtcNow, true);
@@ -211,7 +211,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.StopTime.Should().Be(now);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void ClearsTheIsRunningFlag()
             {
                 ConfigureEditedTimeEntry(DateTimeOffset.UtcNow, true);

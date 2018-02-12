@@ -28,9 +28,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
+        private readonly IUserPreferences userPreferences;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IMvxNavigationService navigationService;
-        private readonly IUserPreferences userPreferences;
 
         public TimeSpan CurrentTimeEntryElapsedTime { get; private set; } = TimeSpan.Zero;
 

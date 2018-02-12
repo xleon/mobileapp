@@ -63,7 +63,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .ShouldThrow<ArgumentNullException>();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void IsNotInManualModeByDefault()
             {
                 ViewModel.IsInManualMode.Should().BeFalse();
@@ -142,7 +142,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ).Wait();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void PassesTheAppropriatePlaceholderToTheStartTimeEntryViewModel()
             {
                 ViewModel.StartTimeEntryCommand.ExecuteAsync().Wait();
@@ -152,7 +152,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ).Wait();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void PassesNullDurationToTheStartTimeEntryViewModel()
             {
                 ViewModel.StartTimeEntryCommand.ExecuteAsync().Wait();
@@ -175,7 +175,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ).Wait();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void PassesTheAppropriatePlaceholderToTheStartTimeEntryViewModelWhenInManualMode()
             {
                 ViewModel.IsInManualMode = true;
@@ -186,7 +186,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ).Wait();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void PassesThirtyMinutesOfDurationToTheStartTimeEntryViewModelWhenInManualMode()
             {
                 ViewModel.IsInManualMode = true;

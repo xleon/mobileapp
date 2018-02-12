@@ -133,7 +133,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.CurrentDateRangeString.Should().Be($"{Resources.ThisWeek} ▾");
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData(
                 2017, 12, 6,
                 2017, 12, 4,
@@ -169,7 +169,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.CurrentDateRangeString.Should().Be($"{Resources.ThisWeek} ▾");
             }
 
-            [Theory]
+            [Theory, LogIfTooSlow]
             [InlineData(
                  2017, 12, 15,
                  2017, 12, 25,
