@@ -246,10 +246,6 @@ Task("Build.Release.iOS.AdHoc")
     .IsDependentOn("Nuget")
     .Does(BuildSolution("Release.AdHoc"));
 
-Task("Build.Release.iOS.TestFlight")
-    .IsDependentOn("Nuget")
-    .Does(BuildSolution("Release.TestFlight", ""));
-
 Task("Build.Release.iOS.AppStore")
     .IsDependentOn("Nuget")
     .Does(BuildSolution("Release.AppStore", ""));
