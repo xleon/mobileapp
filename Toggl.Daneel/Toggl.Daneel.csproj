@@ -423,6 +423,10 @@
     <ImageAsset Include="Resources\Images.xcassets\date.imageset\date.png" />
     <ImageAsset Include="Resources\Images.xcassets\date.imageset\date%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\date.imageset\date%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorEdit.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorEdit.imageset\icErrorEdit.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorEdit.imageset\icErrorEdit%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorEdit.imageset\icErrorEdit%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -459,7 +463,6 @@
     <InterfaceDefinition Include="Views\StartTimeEntry\WorkspaceHeaderViewCell.xib" />
     <InterfaceDefinition Include="Views\Suggestions\SuggestionsEmptyViewCell.xib" />
     <InterfaceDefinition Include="Views\Suggestions\SuggestionsViewCell.xib" />
-    <InterfaceDefinition Include="Views\EditTimeEntry\EditTimeEntryErrorView.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\ClientViewCell.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\CreateEntityViewCell.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\SelectableTagViewCell.xib" />
@@ -692,10 +695,6 @@
       <DependentUpon>SuggestionsViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Color\ValueSliderView.cs" />
-    <Compile Include="Views\EditTimeEntry\EditTimeEntryErrorView.cs" />
-    <Compile Include="Views\EditTimeEntry\EditTimeEntryErrorView.designer.cs">
-      <DependentUpon>EditTimeEntryErrorView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\EditTimeEntry\TextViewWithCharacterCounter.cs" />
     <Compile Include="Views\EntityCreation\ClientViewCell.cs" />
     <Compile Include="Views\EntityCreation\ClientViewCell.designer.cs">
