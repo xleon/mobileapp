@@ -175,7 +175,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ProjectColor = timeEntry.Project?.Color;
             Task = timeEntry.Task?.Name;
             Client = timeEntry.Project?.Client?.Name;
-            projectId = timeEntry.Project?.Id ?? 0;
+            projectId = timeEntry.Project?.Id;
+            taskId = timeEntry.Task?.Id;
             SyncErrorMessage = timeEntry.LastSyncErrorMessage;
             workspaceId = timeEntry.WorkspaceId;
             SyncErrorMessageVisible = !string.IsNullOrEmpty(SyncErrorMessage);
