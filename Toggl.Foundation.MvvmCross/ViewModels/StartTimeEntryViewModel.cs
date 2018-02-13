@@ -432,10 +432,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void appendSymbol(string symbol)
         {
-            var shouldAddWhitespace = TextFieldInfo.CursorPosition > 0 && Char.IsWhiteSpace(TextFieldInfo.Text[TextFieldInfo.CursorPosition - 1]) == false;
+            var cursor = TextFieldInfo.DescriptionCursorPosition;
+            var shouldAddWhitespace = cursor > 0 && Char.IsWhiteSpace(TextFieldInfo.Text[cursor - 1]) == false;
             var textToInsert = shouldAddWhitespace ? $" {symbol}" : symbol;
-            var newText = TextFieldInfo.Text.Insert(TextFieldInfo.CursorPosition, textToInsert);
-            TextFieldInfo = TextFieldInfo.WithTextAndCursor(newText, TextFieldInfo.CursorPosition + textToInsert.Length);            
+            var newText = TextFieldInfo.Text.Insert(cursor, textToInsert);
+            TextFieldInfo = TextFieldInfo.WithTextAndCursor(newText, cursor + textToInsert.Length);            
         }
 
         private void toggleTaskSuggestions(ProjectSuggestion projectSuggestion)
