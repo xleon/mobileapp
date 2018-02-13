@@ -564,6 +564,87 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.SyncErrorMessageVisible.Should().Be(expectedVisibility);
             }
+
+            [Property]
+            public void CopiesAllInformationFromTheEditedTimeEntrySoNothingIsLost(
+                long id,
+                long workspaceId,
+                long? projectId,
+                long? taskId,
+                bool billable,
+                DateTimeOffset start,
+                long? duration,
+                NonNull<string> description,
+                NonNull<long[]> tagIds)
+            {
+                var viewModel = CreateViewModel(); // view model must be created for each run of the property test
+                DataSource.TimeEntries.ClearReceivedCalls();
+
+                var uniqueTagIds = tagIds.Get.Distinct().ToArray();
+                if (projectId == null)
+                    taskId = null;
+                var timeEntry = mockTimeEntry(id, workspaceId, projectId, taskId, billable, start, duration,
+                    description.Get, uniqueTagIds);
+                var observable = Observable.Return(timeEntry);
+                DataSource.TimeEntries.GetById(id).Returns(observable);
+
+                viewModel.Prepare(id);
+                viewModel.Initialize().Wait();
+                viewModel.ConfirmCommand.Execute();
+
+                DataSource.TimeEntries.Received().Update(Arg.Is<EditTimeEntryDto>(
+                    dto => dto.Id == id
+                        && dto.WorkspaceId == workspaceId
+                        && dto.ProjectId == projectId
+                        && dto.TaskId == taskId
+                        && dto.Billable == billable
+                        && dto.StartTime == start
+                        && dto.StopTime == (duration.HasValue ? start + TimeSpan.FromSeconds(duration.Value) : (DateTimeOffset?)null)
+                        && dto.Description == description.Get.Trim()
+                        && dto.TagIds.Count() == uniqueTagIds.Count()
+                        && dto.TagIds.All(tagId => uniqueTagIds.Any(originalTagId => originalTagId == tagId)))).Wait();
+            }
+
+            private IDatabaseTimeEntry mockTimeEntry(
+                long id,
+                long workspaceId,
+                long? projectId,
+                long? taskId,
+                bool billable,
+                DateTimeOffset start,
+                long? duration,
+                string description,
+                long[] tagIds)
+            {
+                var databaseTimeEntry = Substitute.For<IDatabaseTimeEntry>();
+
+                databaseTimeEntry.Id.Returns(id);
+                databaseTimeEntry.WorkspaceId.Returns(workspaceId);
+
+                IDatabaseProject project = null;
+                if (projectId.HasValue)
+                {
+                    project = Substitute.For<IDatabaseProject>();
+                    project.Id.Returns(projectId.Value);
+                }
+                databaseTimeEntry.Project.Returns(project);
+
+                IDatabaseTask task = null;
+                if (taskId.HasValue)
+                {
+                    task = Substitute.For<IDatabaseTask>();
+                    task.Id.Returns(taskId.Value);
+                }
+                databaseTimeEntry.Task.Returns(task);
+
+                databaseTimeEntry.Billable.Returns(billable);
+                databaseTimeEntry.Start.Returns(start);
+                databaseTimeEntry.Duration.Returns(duration);
+                databaseTimeEntry.Description.Returns(description);
+                databaseTimeEntry.TagIds.Returns(tagIds);
+
+                return databaseTimeEntry;
+            }
         }
 
         public sealed class TheSelectProjectCommand : EditTimeEntryViewModelTest
