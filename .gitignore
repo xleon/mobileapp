@@ -288,6 +288,9 @@ Tools/**
 *.odx.cs
 *.xsd.cs
 
+# KDIFF3 tool
+.orig
+
 # macOS Finder creates this in every folder opened
 .DS_STORE
 
