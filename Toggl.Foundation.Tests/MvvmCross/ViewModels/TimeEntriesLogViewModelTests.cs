@@ -436,5 +436,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 return new TimeEntryViewModel(timeEntry);
             }
         }
+
+        public sealed class TheDeleteCommand : TimeEntriesLogViewModelTest
+        {
+            [Property]
+            public void DeletesTheTimeEntry(long id)
+            {
+                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                timeEntry.Id.Returns(id);
+                timeEntry.Duration.Returns(100);
+                var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
+
+                ViewModel.DeleteCommand.ExecuteAsync(timeEntryViewModel).Wait();
+
+                DataSource.TimeEntries.Received().Delete(id).Wait();
+            }
+        }
     }
 }

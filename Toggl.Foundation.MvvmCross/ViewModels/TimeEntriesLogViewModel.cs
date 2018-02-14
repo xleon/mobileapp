@@ -54,6 +54,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand<TimeEntryViewModel> EditCommand { get; }
 
+        public IMvxAsyncCommand<TimeEntryViewModel> DeleteCommand { get; }
+
         public MvxAsyncCommand<TimeEntryViewModel> ContinueTimeEntryCommand { get; }
 
         public TimeEntriesLogViewModel(ITogglDataSource dataSource,
@@ -75,6 +77,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.navigationService = navigationService;
 
             EditCommand = new MvxAsyncCommand<TimeEntryViewModel>(edit);
+            DeleteCommand = new MvxAsyncCommand<TimeEntryViewModel>(delete);
             ContinueTimeEntryCommand = new MvxAsyncCommand<TimeEntryViewModel>(continueTimeEntry, _ => areContineButtonsEnabled);
         }
 
@@ -207,6 +210,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private Task edit(TimeEntryViewModel timeEntryViewModel)
             => navigationService.Navigate<EditTimeEntryViewModel, long>(timeEntryViewModel.Id);
+
+        private async Task delete(TimeEntryViewModel timeEntryViewModel)
+        {
+            await dataSource.TimeEntries.Delete(timeEntryViewModel.Id);
+        }
 
         private async Task continueTimeEntry(TimeEntryViewModel timeEntryViewModel)
         {
