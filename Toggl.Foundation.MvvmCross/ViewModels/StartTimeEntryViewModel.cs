@@ -40,6 +40,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private StartTimeEntryParameters parameter;
 
         private TimeSpan displayedTime = TimeSpan.Zero;
+        private bool isRunning => elapsedTimeDisposable != null;
 
         //Properties
         private int DescriptionByteCount
@@ -97,7 +98,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             get => displayedTime;
             set
             {
-                if (elapsedTimeDisposable != null)
+                if (isRunning)
                 {
                     StartTime = timeService.CurrentDateTime - value;
                 }
@@ -479,6 +480,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 Duration = selectedDuration.Duration;
                 displayedTime = selectedDuration.Duration.Value;
                 elapsedTimeDisposable?.Dispose();
+                elapsedTimeDisposable = null;
                 RaisePropertyChanged(nameof(DisplayedTime));
             }
 
@@ -487,27 +489,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task setStartDate()
         {
-            var minimum = StartTime + DisplayedTime - TimeSpan.FromHours(MaxTimeEntryDurationInHours);
-            var maximum = StartTime + DisplayedTime;
-            var parameters = DateTimePickerParameters.WithDates(DateTimePickerMode.DateTime, StartTime, minimum, maximum);
+            var parameters = isRunning
+                ? DateTimePickerParameters.ForStartDateOfRunningTimeEntry(StartTime, timeService.CurrentDateTime)
+                : DateTimePickerParameters.ForStartDateOfStoppedTimeEntry(StartTime);
 
-            var selectedDate = await navigationService
+            var duration = Duration;
+
+            StartTime = await navigationService
                 .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)
                 .ConfigureAwait(false);
 
-            var newStartTime = new DateTimeOffset(
-                selectedDate.Year,
-                selectedDate.Month,
-                selectedDate.Day,
-                StartTime.Hour,
-                StartTime.Minute,
-                StartTime.Second,
-                StartTime.Offset)
-                .Clamp(minimum, maximum);
-
-            if (StartTime.Date != newStartTime.Date)
+            if (isRunning == false)
             {
-                StartTime = newStartTime;
+                Duration = duration;
             }
         }
 

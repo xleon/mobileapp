@@ -285,15 +285,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task selectStartDate()
         {
-            var latestAllowedStartTime = IsTimeEntryRunning
-                ? timeService.CurrentDateTime
-                : LatestAllowedStartTime;
-
-            var parameters = DateTimePickerParameters.WithDates(
-                DateTimePickerMode.Date,
-                StartTime,
-                EarliestAllowedStartTime,
-                latestAllowedStartTime);
+            var parameters = IsTimeEntryRunning
+                ? DateTimePickerParameters.ForStartDateOfRunningTimeEntry(StartTime, timeService.CurrentDateTime)
+                : DateTimePickerParameters.ForStartDateOfStoppedTimeEntry(StartTime);
 
             var duration = Duration;
 
