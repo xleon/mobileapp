@@ -6,7 +6,7 @@ namespace Toggl.Foundation.Analytics
     public abstract class BaseAnalyticsService : IAnalyticsService
     {
         private const string pageParameter = "PageWhenSkipWasClicked";
-        private const string originParameter = "PageWhenSkipWasClicked";
+        private const string originParameter = "Origin";
 
         private const string onboardingSkipEventName = "OnboardingSkip";
         private const string startTimeEntryEventName = "TimeEntryStarted";
