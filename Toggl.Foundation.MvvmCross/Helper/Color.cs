@@ -209,6 +209,8 @@ namespace Toggl.Foundation.MvvmCross.Helper
 
         public static class Reports
         {
+            public static readonly MvxColor Background = new MvxColor(250, 251, 252);
+
             public static readonly MvxColor PercentageActivated = new MvxColor(0, 171, 252);
 
             public static readonly MvxColor PercentageDisabled = new MvxColor(6, 170, 245, 62);
