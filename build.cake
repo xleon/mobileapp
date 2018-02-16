@@ -70,6 +70,26 @@ private string GetCommitHash()
     return redirectedOutput.Last();
 }
 
+private TemporaryFileTransformation GetAndroidProjectConfigurationTransformation()
+{
+    const string path = "Toggl.Giskard/Toggl.Giskard.csproj";
+    var storePass = EnvironmentVariable("BITRISEIO_ANDROID_KEYSTORE_PASSWORD");
+    var keyAlias = EnvironmentVariable("BITRISEIO_ANDROID_KEYSTORE_ALIAS");
+    var keyPass = EnvironmentVariable("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD");
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    {
+        Path = path,
+        Original = file,
+        Temporary = file.Replace("{KEYSTORE_PASSWORD}", storePass)
+                        .Replace("{KEYSTORE_ALIAS}", keyAlias)
+                        .Replace("{KEYSTORE_ALIAS_PASSWORD}", keyPass)
+    };
+}
+
 private TemporaryFileTransformation GetIosAnalyticsServicesConfigurationTransformation()
 {
     const string path = "Toggl.Daneel/GoogleService-Info.plist";
@@ -171,7 +191,8 @@ var transformations = new List<TemporaryFileTransformation>
     GetIosCrashConfigurationTransformation(),
     GetDroidCrashConfigurationTransformation(),
     GetIntegrationTestsConfigurationTransformation(),
-    GetIosAnalyticsServicesConfigurationTransformation()
+    GetIosAnalyticsServicesConfigurationTransformation(),
+    GetAndroidProjectConfigurationTransformation()
 };
 
 private string[] GetUnitTestProjects() => new []
@@ -193,7 +214,9 @@ private string[] GetIntegrationTestProjects()
 Setup(context => transformations.ForEach(transformation => System.IO.File.WriteAllText(transformation.Path, transformation.Temporary)));
 Teardown(context =>
 {
-    if (target == "Build.Release.iOS.AppStore") return;
+    if (target == "Build.Release.iOS.AppStore" ||
+        target == "Build.Release.Android.AdHoc")
+        return;
     transformations.ForEach(transformation => System.IO.File.WriteAllText(transformation.Path, transformation.Original));
 });
 
@@ -249,6 +272,11 @@ Task("Build.Release.iOS.AdHoc")
 Task("Build.Release.iOS.AppStore")
     .IsDependentOn("Nuget")
     .Does(BuildSolution("Release.AppStore", ""));
+
+//Android Builds
+Task("Build.Release.Android.AdHoc")
+    .IsDependentOn("Nuget")
+    .Does(BuildSolution("Release.AdHoc.Giskard", ""));
 
 //Unit Tests
 Task("Tests.Unit")
