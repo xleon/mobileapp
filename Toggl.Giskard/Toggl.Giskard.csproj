@@ -250,7 +250,9 @@
     <Compile Include="Activities\BrowserActivity.cs" />
     <Compile Include="Services\MailService.cs" />
     <Compile Include="Extensions\CircularRevealAnimation.cs" />
+    <Compile Include="Activities\EditTimeEntryActivity.cs" />
     <Compile Include="ApplicationShortcutCreator.cs" />
+    <Compile Include="Bindings\TextViewTagListTargetBinding.cs" />
     <Compile Include="TemplateSelectors\StartTimeEntrySuggestionsTemplateSelector.cs" />
     <Compile Include="Views\StartTimeEntryRecyclerView.cs" />
     <Compile Include="Adapters\StartTimeEntryRecyclerAdapter.cs" />
@@ -263,11 +265,13 @@
     <Compile Include="Autocomplete\TagsTokenSpan.cs" />
     <Compile Include="Views\StartTimeEntryRecyclerViewHolder.cs" />
     <Compile Include="Services\AnalyticsService.cs" />
+    <Compile Include="Fragments\SelectDateTimeFragment.cs" />
     <Compile Include="Bindings\FabVisibilityTargetBinding.cs" />
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Helper\ApiAvailability.cs" />
     <Compile Include="Activities\EditProjectActivity.cs" />
     <Compile Include="Adapters\CreateSuggestionSegmentedRecyclerAdapter.cs" />
+    <Compile Include="Views\DurationEditText.cs" />
     <Compile Include="Activities\SelectClientActivity.cs" />
     <Compile Include="Adapters\SelectClientRecyclerAdapter.cs" />
     <Compile Include="TemplateSelectors\SelectClientTemplateSelector.cs" />
@@ -506,6 +510,7 @@
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityWorkspaceHeader.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityNoEntityCell.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityEmptyCell.axml" />
+    <AndroidResource Include="Resources\layout\EditLayout.axml" />
     <AndroidResource Include="Resources\values\Dimen.xml" />
     <AndroidResource Include="Resources\layout\EditProjectActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivityCell.axml" />

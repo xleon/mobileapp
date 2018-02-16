@@ -31,6 +31,11 @@ namespace Toggl.Giskard
             @switch.CheckedChange += (sender, args) => @switch.Checked = !@switch.Checked;
         }
 
+        public void Include(SwitchCompat @switch)
+        {
+            @switch.CheckedChange += (sender, args) => @switch.Checked = !@switch.Checked;
+        }
+
         public void Include(View view)
         {
             view.Click += (s, e) => view.ContentDescription = view.ContentDescription + "";

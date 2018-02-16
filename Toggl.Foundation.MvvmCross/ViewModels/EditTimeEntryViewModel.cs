@@ -13,6 +13,7 @@ using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
+using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant.Models;
 using static Toggl.Foundation.Helper.Constants;
 
@@ -61,6 +62,22 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         [DependsOn(nameof(StartTime), nameof(StopTime))]
         public TimeSpan Duration
             => (StopTime ?? timeService.CurrentDateTime) - StartTime;
+
+        public TimeSpan DisplayedDuration
+        {
+            get => Duration;
+            set
+            {
+                if (stopTime.HasValue)
+                {
+                    StopTime = StartTime + value;
+                }
+                else
+                {
+                    StartTime = timeService.CurrentDateTime - value;
+                }
+            }
+        }
 
         public DateTimeOffset StartTime { get; set; }
 
@@ -332,7 +349,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             Task = taskId.HasValue ? (await dataSource.Tasks.GetById(taskId.Value)).Name : "";
         }
-        
+
         private async Task editDuration()
         {
             var duration = StopTime.HasValue ? Duration : (TimeSpan?)null;
@@ -340,7 +357,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var selectedDuration = await navigationService
                 .Navigate<EditDurationViewModel, DurationParameter, DurationParameter>(currentDuration)
                 .ConfigureAwait(false);
-            
+
             StartTime = selectedDuration.Start;
             if (selectedDuration.Duration.HasValue)
             {
@@ -384,7 +401,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void dismissSyncErrorMessageCommand()
             => SyncErrorMessageVisible = false;
 
-        private void toggleBillable() 
+        private void toggleBillable()
         {
             Billable = !Billable;
         }
