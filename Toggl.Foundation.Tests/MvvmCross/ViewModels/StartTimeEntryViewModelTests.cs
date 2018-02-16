@@ -860,16 +860,47 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheSetStartDateCommand : StartTimeEntryViewModelTest
         {
-            private static readonly DateTimeOffset now = DateTimeOffset.UtcNow;
-            private static readonly StartTimeEntryParameters prepareParameters = new StartTimeEntryParameters(now, "", null);
+            private static readonly DateTimeOffset now = new DateTimeOffset(2018, 02, 13, 23, 59, 12, TimeSpan.FromHours(-1));
+            private static readonly StartTimeEntryParameters prepareParameters = StartTimeEntryParameters.ForTimerMode(now);
+
+            public TheSetStartDateCommand()
+            {
+                TimeService.CurrentDateTime.Returns(now);
+            }
 
             [Fact, LogIfTooSlow]
             public async Task NavigatesToTheSelectDateTimeViewModel()
             {
                 ViewModel.Prepare(prepareParameters);
+
                 await ViewModel.SetStartDateCommand.ExecuteAsync();
 
                 await NavigationService.Received().Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>());
+            }
+
+            [Fact]
+            public async Task OpensTheSelectDateTimeViewModelWithCorrectLimitsForARunnningTimeEntry()
+            {
+                ViewModel.Prepare(prepareParameters);
+
+                await ViewModel.SetStartDateCommand.ExecuteAsync();
+
+                await NavigationService.Received()
+                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(
+                        Arg.Is<DateTimePickerParameters>(param => param.MinDate == now - MaxTimeEntryDuration && param.MaxDate == now));
+            }
+
+            [Fact]
+            public async Task OpensTheSelectDateTimeViewModelWithCorrectLimitsForAStoppedTimeEntry()
+            {
+                var stoppedParametsrs = StartTimeEntryParameters.ForManualMode(now);
+                ViewModel.Prepare(stoppedParametsrs);
+
+                await ViewModel.SetStartDateCommand.ExecuteAsync();
+
+                await NavigationService.Received()
+                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(
+                        Arg.Is<DateTimePickerParameters>(param => param.MinDate == EarliestAllowedStartTime && param.MaxDate == LatestAllowedStartTime));
             }
 
             [Fact, LogIfTooSlow]
@@ -887,20 +918,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task UsesOnlyTheDateReturnedByTheSelectDateTimeViewModelAndKeepsTheOriginalTimeOfDay()
+            public async Task RespectsTheTimeZone()
             {
-                var startTime = new DateTimeOffset(2018, 02, 03, 1, 2, 3, TimeSpan.Zero);
-                var specificPrepareParameters = new StartTimeEntryParameters(startTime, "", null);
-                var parameterToReturn = new DateTimeOffset(2018, 01, 15, 4, 5, 6, TimeSpan.Zero);
+                var now = new DateTimeOffset(2018, 2, 20, 13, 20, 0, TimeSpan.FromHours(5));
+                TimeService.CurrentDateTime.Returns(now);
+                var selectedDate = new DateTimeOffset(2018, 2, 14, 0, 0, 0, TimeSpan.FromHours(5));
                 NavigationService
                     .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>())
-                    .Returns(parameterToReturn);
+                    .Returns(selectedDate);
 
-                ViewModel.Prepare(specificPrepareParameters);
+                ViewModel.Prepare(prepareParameters);
                 await ViewModel.SetStartDateCommand.ExecuteAsync();
 
-                ViewModel.StartTime.Date.Should().Be(parameterToReturn.Date);
-                ViewModel.StartTime.TimeOfDay.Should().Be(startTime.TimeOfDay);
+                ViewModel.StartTime.LocalDateTime.Date.Should().Be(selectedDate.LocalDateTime.Date);
             }
 
             [Fact, LogIfTooSlow]

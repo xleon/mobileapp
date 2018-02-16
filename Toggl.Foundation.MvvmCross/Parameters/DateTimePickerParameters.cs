@@ -1,5 +1,6 @@
 ﻿using System;
 using Toggl.Multivac;
+using static Toggl.Foundation.Helper.Constants;
 
 namespace Toggl.Foundation.MvvmCross.Parameters
 {
@@ -27,5 +28,11 @@ namespace Toggl.Foundation.MvvmCross.Parameters
                 MaxDate = max
             };
         }
+
+        public static DateTimePickerParameters ForStartDateOfRunningTimeEntry(DateTimeOffset start, DateTimeOffset now)
+            => WithDates(DateTimePickerMode.Date, start, now - MaxTimeEntryDuration, now);
+
+        public static DateTimePickerParameters ForStartDateOfStoppedTimeEntry(DateTimeOffset start)
+            => WithDates(DateTimePickerMode.Date, start, EarliestAllowedStartTime, LatestAllowedStartTime);
     }
 }
