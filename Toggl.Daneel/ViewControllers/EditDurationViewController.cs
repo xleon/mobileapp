@@ -30,7 +30,7 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidLoad();
 
-            disableDismissingByTappingOnAdditionalContentView();
+            setupDismissingByTappingOnBackground();
             prepareViews();
 
             var timeConverter = new DateTimeToTimeValueConverter();
@@ -125,6 +125,15 @@ namespace Toggl.Daneel.ViewControllers
                 DurationInput.EndEditing(true);
         }
 
+        private void setupDismissingByTappingOnBackground()
+        {
+            if (PresentationController is ModalPresentationController modalPresentationController)
+            {
+                var tapToDismiss = new UITapGestureRecognizer(() => ViewModel.CloseCommand.Execute());
+                modalPresentationController.AdditionalContentView.AddGestureRecognizer(tapToDismiss);
+            }
+        }
+
         public override void ViewWillLayoutSubviews()
         {
             var height = WheelView.Frame.Bottom + bottomOffset;
@@ -154,18 +163,6 @@ namespace Toggl.Daneel.ViewControllers
             var offsetFromTop = UIScreen.MainScreen.Bounds.Height - height;
             View.Frame = new CGRect(0, offsetFromTop, View.Frame.Width, View.Frame.Height);
             UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
-        }
-
-        private void disableDismissingByTappingOnAdditionalContentView()
-        {
-            if (PresentationController is ModalPresentationController modalPresentationController)
-            {
-                var background = modalPresentationController.AdditionalContentView;
-                foreach (var gestureRecognizer in background.GestureRecognizers)
-                {
-                    background.RemoveGestureRecognizer(gestureRecognizer);
-                }
-            }
         }
 
         private void prepareViews()

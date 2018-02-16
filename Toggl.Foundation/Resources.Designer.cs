@@ -634,5 +634,11 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("NoEmailErrorMessage", resourceCulture);
             }
         }
+        
+        public static string Continue {
+            get {
+                return ResourceManager.GetString("Continue", resourceCulture);
+            }
+        }
     }
 }
