@@ -276,6 +276,7 @@
     <Compile Include="Adapters\SelectClientRecyclerAdapter.cs" />
     <Compile Include="TemplateSelectors\SelectClientTemplateSelector.cs" />
     <Compile Include="Views\SelectClientRecyclerView.cs" />
+    <Compile Include="Services\LicenseProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

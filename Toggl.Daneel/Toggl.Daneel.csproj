@@ -760,6 +760,7 @@
     <Compile Include="Views\EditDuration\DurationField.cs" />
     <Compile Include="Views\EditDuration\NumberKeyPressedEventArgs.cs" />
     <Compile Include="Binding\ButtonImageTargetBinding.cs" />
+    <Compile Include="Services\LicenseProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
