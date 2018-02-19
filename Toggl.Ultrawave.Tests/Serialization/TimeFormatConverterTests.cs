@@ -7,20 +7,20 @@ using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Serialization
 {
-    public sealed class DateFormatConverterTests
+    public sealed class TimeFormatConverterTests
     {
         public sealed class TheCanConvertMethod
         {
-            private readonly DateFormatConverter converter = new DateFormatConverter();
+            private readonly TimeFormatConverter converter = new TimeFormatConverter();
 
             [Fact]
             public void ReturnsTrueWhenObjectTypeIsDateFormat()
             {
-                converter.CanConvert(typeof(DateFormat)).Should().BeTrue();
+                converter.CanConvert(typeof(TimeFormat)).Should().BeTrue();
             }
 
             [Theory]
-            [InlineData(typeof(TimeFormat))]
+            [InlineData(typeof(DateFormat))]
             [InlineData(typeof(string))]
             [InlineData(typeof(DateTimeOffset))]
             public void ReturnsFalseForAnyOtherType(Type type)
@@ -29,18 +29,18 @@ namespace Toggl.Ultrawave.Tests.Serialization
             }
         }
 
-        public sealed class TheDateFormatStruct
+        public sealed class TheTimeFormatStruct
         {
-            private sealed class ClassWithDateFormat
+            private sealed class ClassWithTimeFormat
             {
-                [JsonConverter(typeof(DateFormatConverter))]
-                public DateFormat DateFormat { get; set; }
+                [JsonConverter(typeof(TimeFormatConverter))]
+                public TimeFormat TimeOfDayFormat { get; set; }
             }
 
-            private readonly string validJson = "{\"date_format\":\"MM.DD.YYYY\"}";
-            private readonly ClassWithDateFormat validObject = new ClassWithDateFormat
+            private readonly string validJson = "{\"time_of_day_format\":\"h:mm A\"}";
+            private readonly ClassWithTimeFormat validObject = new ClassWithTimeFormat
             {
-                DateFormat = DateFormat.FromLocalizedDateFormat("MM.DD.YYYY")
+                TimeOfDayFormat = TimeFormat.FromLocalizedTimeFormat("h:mm A")
             };
 
             [Fact]
