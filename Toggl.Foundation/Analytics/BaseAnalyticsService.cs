@@ -5,9 +5,11 @@ namespace Toggl.Foundation.Analytics
 {
     public abstract class BaseAnalyticsService : IAnalyticsService
     {
-        private const string pageParameter = "PageWhenSkipWasClicked";
         private const string originParameter = "Origin";
+        private const string pageParameter = "PageWhenSkipWasClicked";
+        private const string viewModelNameParameter = "ViewModelName";
 
+        private const string currentPageEventName = "CurrentPage";
         private const string onboardingSkipEventName = "OnboardingSkip";
         private const string startTimeEntryEventName = "TimeEntryStarted";
 
@@ -25,6 +27,8 @@ namespace Toggl.Foundation.Analytics
 
         public void TrackCurrentPage(Type viewModelType)
         {
+            var dict = new Dictionary<string, string> { { viewModelNameParameter, viewModelType.ToString() } };
+            NativeTrackEvent(currentPageEventName, dict);
         }
 
         public void TrackLoginEvent()
