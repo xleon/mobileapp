@@ -135,6 +135,11 @@ namespace Toggl.Giskard
             binding = new MvxCompoundButtonCheckedTargetBinding(null, null);
         }
 
+        public void Include(MvxSeekBarProgressTargetBinding binding)
+        {
+            binding = new MvxSeekBarProgressTargetBinding(null, null);
+        }
+
         public void Include(ConsoleColor color)
         {
             Console.Write("");

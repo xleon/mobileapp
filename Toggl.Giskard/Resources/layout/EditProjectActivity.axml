@@ -19,9 +19,9 @@
                 android:src="@drawable/project"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginTop="12dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp" />
+                android:layout_marginRight="16dp"
+                android:layout_centerVertical="true" />
             <EditText
                 local:MvxBind="Text Name"
                 android:lines="1"
@@ -34,20 +34,21 @@
                 android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/EditProjectFadeView"
+                android:layout_alignEnd="@+id/EditProjectColorCircle"
                 android:layout_alignTop="@id/EditProjectProjectImage"
                 android:layout_toRightOf="@id/EditProjectProjectImage" />
-            <View
-                android:id="@+id/EditProjectFadeView"
-                android:background="@drawable/TransparentToWhiteGradient"
-                android:layout_width="68dp"
-                android:layout_marginRight="16dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true" />
+            <toggl.giskard.views.CircleView
+                android:id="@+id/EditProjectColorCircle"
+                local:MvxBind="CircleColor NativeColor(Color); Click PickColorCommand"
+                android:clickable="true"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginRight="4dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/EditProjectColorArrow" />
             <ImageView
                 local:MvxBind="Click PickColorCommand"
+                android:id="@+id/EditProjectColorArrow"
                 android:src="@drawable/dropdown"
                 android:clickable="true"
                 android:layout_marginRight="16dp"
@@ -73,10 +74,9 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="end"
-                android:layout_marginTop="12dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="12dp"
+                android:layout_centerVertical="true"
                 android:layout_below="@+id/EditProjectProjectImage" />
             <TextView
                 local:MvxBind="Text WorkspaceName"
@@ -127,10 +127,9 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="end"
-                android:layout_marginTop="12dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="12dp"
+                android:layout_centerVertical="true"
                 android:layout_below="@id/EditProjectWorkspaceImage" />
             <TextView
                 local:MvxBind="Text If(ClientName, ClientName, 'No Client'); TextColor ARGB(If(ClientName, '#000000', '#CECECE'))"
@@ -173,6 +172,7 @@
             local:MvxBind="Click TogglePrivateProjectCommand"
             android:clickable="true"
             android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
             android:paddingBottom="12dp"
             android:layout_height="wrap_content"
             android:layout_width="match_parent">
@@ -182,10 +182,8 @@
                 android:layout_gravity="end"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginTop="12dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="12dp"
                 android:layout_below="@+id/EditProjectClientImage" />
             <TextView
                 android:id="@+id/EditProjectPrivateProjectLabel"
