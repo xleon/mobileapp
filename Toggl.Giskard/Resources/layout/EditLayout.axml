@@ -92,6 +92,7 @@
         android:layout_width="match_parent"
         android:layout_below="@id/EditAddProjectLabel" />
     <ImageView
+        local:MvxBind="Click SelectTagsCommand"
         android:id="@+id/EditTagsIcon"
         android:scaleType="center"
         android:src="@drawable/tag"
@@ -100,7 +101,7 @@
         android:layout_below="@id/EditProjectIcon" />
     <TextView
         android:id="@+id/EditAddTagsLabel"
-        local:MvxBind="Visibility Visibility(!HasTags)"
+        local:MvxBind="Click SelectTagsCommand; Visibility Visibility(!HasTags)"
         android:textSize="15sp"
         android:text="@string/AddTags"
         android:gravity="center_vertical"
@@ -111,15 +112,16 @@
         android:layout_toRightOf="@id/EditTagsIcon" />
     <TextView
         android:id="@+id/EditTags"
-        local:MvxBind="Tags Tags; Visibility Visibility(HasTags)"
+        local:MvxBind="Click SelectTagsCommand; Tags Tags; Visibility(HasTags)"
         tools:text="tag1 tag2 tag3"
-        android:textSize="15sp"
+        android:textSize="12sp"
         android:gravity="center_vertical"
-        android:textColor="@color/placeholderText"
-        android:layout_height="48dp"
+        android:textColor="#48A"
         android:layout_width="match_parent"
         android:layout_alignTop="@id/EditTagsIcon"
-        android:layout_toRightOf="@id/EditTagsIcon" />
+        android:layout_alignBottom="@id/EditTagsIcon"
+        android:layout_toRightOf="@id/EditTagsIcon"
+        android:layout_height="48dp" />
     <View
         android:background="@color/separator"
         android:layout_height="0.5dp"
