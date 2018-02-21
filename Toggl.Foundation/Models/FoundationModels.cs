@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
@@ -20,6 +20,23 @@ namespace Toggl.Foundation.Models
         public DateTimeOffset? ServerDeletedAt { get; }
 
         public IDatabaseWorkspace Workspace { get; }
+
+        public bool IsDeleted { get; }
+
+        public SyncStatus SyncStatus { get; }
+
+        public string LastSyncErrorMessage { get; }
+    }
+
+    internal partial class Preferences : IDatabasePreferences
+    {
+        public TimeFormat TimeOfDayFormat { get; }
+
+        public DateFormat DateFormat { get; }
+
+        public DurationFormat DurationFormat { get; }
+
+        public bool CollapseTimeEntries { get; }
 
         public bool IsDeleted { get; }
 
