@@ -7,6 +7,6 @@ namespace Toggl.Ultrawave.ApiClients
     public interface IPreferencesApi
     {
         IObservable<IPreferences> Get();
-        IObservable<Unit> Update(IPreferences client);
+        IObservable<IPreferences> Update(IPreferences client);
     }
 }

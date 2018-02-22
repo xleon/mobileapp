@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Models;
@@ -24,11 +23,11 @@ namespace Toggl.Ultrawave.ApiClients
         public IObservable<IPreferences> Get()
             => CreateObservable<Preferences>(endPoints.Get, AuthHeader);
 
-        public IObservable<Unit> Update(IPreferences preferences)
+        public IObservable<IPreferences> Update(IPreferences preferences)
         {
             var body = serializer.Serialize(preferences as Preferences ?? new Preferences(preferences), SerializationReason.Post, null);
             return CreateObservable(endPoints.Post, new[] { AuthHeader }, body)
-                .Select(_ => Unit.Default);
+                .Select(_ => preferences);
         }
     }
 }
