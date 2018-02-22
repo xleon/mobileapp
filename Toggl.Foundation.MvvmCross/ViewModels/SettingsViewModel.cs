@@ -37,6 +37,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public Email Email { get; private set; }
 
+        public string Name { get; private set; } = "";
+
         public string Version { get; private set; } = "";
 
         public string WorkspaceName { get; private set; } = "";
@@ -133,6 +135,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var workspace = await dataSource.Workspaces.GetDefault();
 
             Email = user.Email;
+            Name = user.Fullname;
             workspaceId = workspace.Id;
             WorkspaceName = workspace.Name;
             IsManualModeEnabled = userPreferences.IsManualModeEnabled();

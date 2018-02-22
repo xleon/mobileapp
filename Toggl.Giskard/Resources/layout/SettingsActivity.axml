@@ -1,18 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/lightGray"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <Button
-        local:MvxBind="Click LogoutCommand"
-        android:textColor="@color/errorText"
-        android:background="@color/lightGray"
-        android:text="@string/Logout"
-        android:gravity="center"
-        android:layout_gravity="bottom"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+        <LinearLayout
+            android:paddingTop="24dp"
+            android:orientation="vertical"
+            android:background="@color/lightGray"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                local:MvxBind="Text Name"
+                android:textSize="15sp"
+                android:lineSpacingExtra="5sp"
+                android:gravity="center_horizontal"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@android:color/black"
+                tools:text="Heidi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                local:MvxBind="Text Email"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:lineSpacingExtra="8sp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/defaultText"
+                tools:text="heidi@toggl.com"
+                android:layout_marginBottom="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <View
+                android:background="@color/separator"
+                android:layout_height="0.5dp"
+                android:layout_width="match_parent" />
+            <Button
+                local:MvxBind="Click LogoutCommand"
+                android:paddingLeft="16dp"
+                android:textAllCaps="false"
+                android:text="@string/Logout"
+                android:gravity="center_vertical"
+                android:textColor="@color/errorText"
+                android:background="?attr/selectableItemBackground"
+                android:layout_height="48dp"
+                android:layout_width="match_parent" />
+            <View
+                android:background="@color/separator"
+                android:layout_height="0.5dp"
+                android:layout_width="match_parent" />
+        </LinearLayout>
+    </ScrollView>
     <android.support.v7.widget.Toolbar
         android:id="@+id/Toolbar"
         android:minHeight="?attr/actionBarSize"
