@@ -39,6 +39,11 @@ namespace Toggl.Giskard
                 view => new EditTextFocusTargetBinding(view)
             );
 
+            registry.RegisterCustomBindingFactory<ImageView>(
+                ImageViewVerticalFlipTargetBinding.BindingName,
+                view => new ImageViewVerticalFlipTargetBinding(view)
+            );
+
             registry.RegisterCustomBindingFactory<EditText>(
                 EditTextTextFieldInfoTargetBinding.BindingName,
                 view => new EditTextTextFieldInfoTargetBinding(view)
