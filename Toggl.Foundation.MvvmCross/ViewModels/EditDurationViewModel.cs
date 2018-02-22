@@ -38,9 +38,36 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
         }
 
-        public DateTime MinimumTime { get; private set; }
+        [DependsOn(nameof(IsEditingStartTime), nameof(IsEditingStopTime))]
+        public bool IsEditingTime => IsEditingStopTime || IsEditingStartTime;
 
-        public DateTime MaximumTime { get; private set; }
+        public bool IsEditingStartTime { get; private set; }
+
+        public bool IsEditingStopTime { get; private set; }
+
+        public DateTimeOffset EditedTime
+        {
+            get => IsEditingStartTime ? StartTime : StopTime;
+            set
+            {
+                if (IsEditingTime == false) return;
+
+                value = value.Clamp(MinimumDateTime, MaximumDateTime);
+
+                if (IsEditingStartTime)
+                {
+                    StartTime = value;
+                }
+                else
+                {
+                    StopTime = value;
+                }
+            }
+        }
+
+        public DateTime MinimumDateTime { get; private set; }
+
+        public DateTime MaximumDateTime { get; private set; }
 
         public DateTimeOffset MinimumStartTime => StopTime.AddHours(-MaxTimeEntryDurationInHours);
 
@@ -54,7 +81,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand CloseCommand { get; }
 
-        public IMvxCommand StopTimeEntryCommand { get; }
+        public IMvxCommand EditStartTimeCommand { get; }
+
+        public IMvxCommand EditStopTimeCommand { get; }
+
+        public IMvxCommand StopEditingTimeCommand { get; }
 
         public EditDurationViewModel(IMvxNavigationService navigationService, ITimeService timeService)
         {
@@ -66,7 +97,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             SaveCommand = new MvxAsyncCommand(save);
             CloseCommand = new MvxAsyncCommand(close);
-            StopTimeEntryCommand = new MvxCommand(stopRunningTimeEntry);
+
+            EditStartTimeCommand = new MvxCommand(editStartTime);
+            EditStopTimeCommand = new MvxCommand(editStopTime);
+            StopEditingTimeCommand = new MvxCommand(stopEditingTime);
         }
 
         public override void Prepare(DurationParameter parameter)
@@ -95,11 +129,53 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             return navigationService.Close(this, result);
         }
 
-        private void stopRunningTimeEntry()
+        private void editStartTime()
         {
-            runningTimeEntryDisposable?.Dispose();
-            StopTime = timeService.CurrentDateTime;
-            IsRunning = false;
+            if (IsEditingStartTime == false)
+            {
+                MinimumDateTime = StopTime.AddHours(-MaxTimeEntryDurationInHours).LocalDateTime;
+                MaximumDateTime = StopTime.LocalDateTime;
+
+                IsEditingStartTime = true;
+                IsEditingStopTime = false;
+
+                EditedTime = StartTime;
+            }
+            else
+            {
+                IsEditingStartTime = false;
+            }
+        }
+
+        private void editStopTime()
+        {
+            if (IsRunning)
+            {
+                runningTimeEntryDisposable?.Dispose();
+                StopTime = timeService.CurrentDateTime;
+                IsRunning = false;
+            }
+
+            if (IsEditingStopTime == false)
+            {
+                MinimumDateTime = StartTime.LocalDateTime;
+                MaximumDateTime = StartTime.AddHours(MaxTimeEntryDurationInHours).LocalDateTime;
+
+                IsEditingStopTime = true;
+                IsEditingStartTime = false;
+
+                EditedTime = StopTime;
+            }
+            else
+            {
+                IsEditingStopTime = false;
+            }
+        }
+
+        private void stopEditingTime()
+        {
+            IsEditingStopTime = false;
+            IsEditingStartTime = false;
         }
 
         private void onDurationChanged(TimeSpan changedDuration)
