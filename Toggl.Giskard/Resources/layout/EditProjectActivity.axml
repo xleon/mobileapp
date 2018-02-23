@@ -23,7 +23,8 @@
                 android:layout_marginRight="16dp"
                 android:layout_centerVertical="true" />
             <EditText
-                local:MvxBind="Text Name"
+                android:id="@+id/EditProjectProjectName"
+                local:MvxBind="Text Name; TopMargin EditProjectErrorOffset(IsNameAlreadyTaken)"
                 android:lines="1"
                 android:textSize="15sp"
                 android:singleLine="true"
@@ -31,12 +32,21 @@
                 android:textColor="@android:color/black"
                 android:background="@android:color/white"
                 tools:text="Some client with a ridiculously big name to help us test fading"
-                android:layout_marginTop="4dp"
+                android:layout_marginLeft="56dp"
+                android:layout_marginTop="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/EditProjectColorCircle"
-                android:layout_alignTop="@id/EditProjectProjectImage"
-                android:layout_toRightOf="@id/EditProjectProjectImage" />
+                android:layout_alignEnd="@+id/EditProjectColorCircle" />
+            <TextView
+                local:MvxBind="Visibility Visibility(IsNameAlreadyTaken)"
+                android:textSize="12sp"
+                android:lineSpacingExtra="4sp"
+                android:textColor="@color/errorText"
+                android:text="@string/NameTakenError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/EditProjectProjectName"
+                android:layout_alignStart="@+id/EditProjectProjectName" />
             <toggl.giskard.views.CircleView
                 android:id="@+id/EditProjectColorCircle"
                 local:MvxBind="CircleColor NativeColor(Color); Click PickColorCommand"

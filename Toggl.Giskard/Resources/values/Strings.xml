@@ -23,9 +23,10 @@
     <string name="StartTime">Start time</string>
     <string name="EndTime">End time</string>
     <string name="Save">Save</string>
+    <string name="NameTakenError">Sorry, this name is already taken.</string>
     <string name="General">General</string>
     <string name="Help">Help</string>
-
+  
     <string name="SuggestionsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SuggestionsTemplateSelector, Toggl.Giskard</string>
     <string name="SelectTagsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectTagsTemplateSelector, Toggl.Giskard</string>
     <string name="SelectColorTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectColorTemplateSelector, Toggl.Giskard</string>
