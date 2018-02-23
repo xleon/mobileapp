@@ -321,4 +321,7 @@ account is not set up</value>
     <data name="Continue">
         <value>Continue</value>
     </data>
+    <data name="Loading">
+        <value>Loading...</value>
+    </data>
 </root>

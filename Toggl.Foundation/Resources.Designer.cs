@@ -640,5 +640,11 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("Continue", resourceCulture);
             }
         }
+        
+        public static string Loading {
+            get {
+                return ResourceManager.GetString("Loading", resourceCulture);
+            }
+        }
     }
 }

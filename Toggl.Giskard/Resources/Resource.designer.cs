@@ -5607,7 +5607,7 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c002e
 			public const int AddDescription = 2131492910;
-			
+
 			// aapt resource value: 0x7f0c003a
 			public const int AddProjectHint = 2131492922;
 			
@@ -5616,8 +5616,8 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c003c
 			public const int AddTagsHint = 2131492924;
-			
-			// aapt resource value: 0x7f0c002c
+
+      // aapt resource value: 0x7f0c002c
 			public const int AppName = 2131492908;
 			
 			// aapt resource value: 0x7f0c003b
@@ -5637,7 +5637,7 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c003e
 			public const int EndTime = 2131492926;
-			
+
 			// aapt resource value: 0x7f0c002a
 			public const int Login = 2131492906;
 			
@@ -5661,19 +5661,19 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c0042
 			public const int SelectColorTemplateSelector = 2131492930;
-			
+
 			// aapt resource value: 0x7f0c0035
 			public const int SelectColorTitle = 2131492917;
 			
 			// aapt resource value: 0x7f0c0041
 			public const int SelectTagsTemplateSelector = 2131492929;
-			
+
 			// aapt resource value: 0x7f0c0029
 			public const int SignUp = 2131492905;
 			
 			// aapt resource value: 0x7f0c003d
 			public const int StartTime = 2131492925;
-			
+
 			// aapt resource value: 0x7f0c0032
 			public const int StartTimeEntryHint = 2131492914;
 			
@@ -5682,13 +5682,13 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c0040
 			public const int SuggestionsTemplateSelector = 2131492928;
-			
+
 			// aapt resource value: 0x7f0c002f
 			public const int TermsOfService = 2131492911;
 			
 			// aapt resource value: 0x7f0c0044
 			public const int TimeEntriesLogTemplateSelector = 2131492932;
-			
+
 			// aapt resource value: 0x7f0c0000
 			public const int abc_action_bar_home_description = 2131492864;
 			
