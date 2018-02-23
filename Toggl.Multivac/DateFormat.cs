@@ -1,6 +1,8 @@
-﻿namespace Toggl.Multivac
+﻿using System;
+
+namespace Toggl.Multivac
 {
-    public struct DateFormat
+    public struct DateFormat : IEquatable<DateFormat>
     {
         /// <summary>
         /// Intended for displaying in the UI
@@ -46,5 +48,23 @@
                 shortDateFormat,
                 localizedDateFormat);
         }
+
+        public bool Equals(DateFormat other)
+            => Localized == other.Localized;
+
+        public override bool Equals(object obj)
+        {
+            if (obj is DateFormat dateFormat)
+                return Equals(dateFormat);
+            return false;
+        }
+
+        public override int GetHashCode() => Localized.GetHashCode();
+
+        public static bool operator ==(DateFormat d1, DateFormat d2)
+            => d1.Equals(d2);
+
+        public static bool operator !=(DateFormat d1, DateFormat d2)
+            => !d1.Equals(d2);
     }
 }

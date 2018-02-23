@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DTOs;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
+using Toggl.PrimeRadiant.Exceptions;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Network;
 
@@ -20,7 +22,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     public sealed class SettingsViewModel : MvxViewModel
     {
         private const string feedbackRecipient = "support@toggl.com";
-
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         private readonly ITogglDataSource dataSource;
@@ -57,6 +58,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public bool IsSynced { get; private set; }
 
+        public DateFormat DateFormat { get; private set; }
+
         public IMvxCommand RateCommand { get; }
 
         public IMvxCommand HelpCommand { get; }
@@ -74,6 +77,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxCommand EditSubscriptionCommand { get; }
 
         public IMvxAsyncCommand EditWorkspaceCommand { get; }
+
+        public IMvxAsyncCommand SelectDateFormatCommand { get; }
 
         public IMvxCommand ToggleAddMobileTagCommand { get; }
 
@@ -125,6 +130,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SubmitFeedbackCommand = new MvxAsyncCommand(submitFeedback);
             EditSubscriptionCommand = new MvxCommand(editSubscription);
             ToggleAddMobileTagCommand = new MvxCommand(toggleAddMobileTag);
+            SelectDateFormatCommand = new MvxAsyncCommand(selectDateFormat);
             ToggleUseTwentyFourHourClockCommand = new MvxCommand(toggleUseTwentyFourHourClock);
             ToggleManualModeCommand = new MvxCommand(toggleManualMode);
         }
@@ -139,6 +145,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             workspaceId = workspace.Id;
             WorkspaceName = workspace.Name;
             IsManualModeEnabled = userPreferences.IsManualModeEnabled();
+
+            dataSource
+                .Preferences
+                .Get()
+                .Select(preferences => preferences.DateFormat)
+                .Subscribe(
+                    dateFormat => DateFormat = dateFormat,
+                    //Use a default value temporary, while preference syncing isn't implemented
+                    ex => DateFormat = DateFormat.FromLocalizedDateFormat("MM/DD/YYYY"));
         }
 
         public void rate() => throw new NotImplementedException();
@@ -262,5 +277,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task<bool> isSynced()
             => !IsRunningSync && !(await dataSource.HasUnsyncedData());
+
+        private async Task selectDateFormat()
+        {
+            var newDateFormat = await navigationService
+                .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(DateFormat);
+
+            if (DateFormat == newDateFormat)
+                return;
+            
+            var preferencesDto = new EditPreferencesDTO { DateFormat = newDateFormat };
+            var newPreferences = await dataSource.Preferences.Update(preferencesDto);
+            DateFormat = newPreferences.DateFormat;
+        }
     }
 }

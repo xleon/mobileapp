@@ -1,4 +1,5 @@
 ﻿using System;
+using Toggl.Foundation.DTOs;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.DataSources
@@ -7,6 +8,6 @@ namespace Toggl.Foundation.DataSources
     {
         IObservable<IDatabasePreferences> Get();
 
-        IObservable<IDatabasePreferences> Update(IDatabasePreferences preferences);
+        IObservable<IDatabasePreferences> Update(EditPreferencesDTO dto);
     }
 }

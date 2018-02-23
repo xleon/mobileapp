@@ -7,11 +7,14 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
+using Toggl.Foundation.DTOs;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
+using Toggl.Multivac;
+using Toggl.PrimeRadiant.Exceptions;
 using Toggl.PrimeRadiant.Models;
 using Toggl.PrimeRadiant.Settings;
 using Xunit;
@@ -556,6 +559,100 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await DialogService
                     .DidNotReceive()
                     .Alert(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
+            }
+        }
+
+        public sealed class TheInitializeMethod : SettingsViewModelTest
+        {
+            [Fact]
+            public async Task InitializesDateFormatFromPreferencesDataSource()
+            {
+                var dateFormat = DateFormat.FromLocalizedDateFormat("MM.DD.YYYY");
+                var preferences = Substitute.For<IDatabasePreferences>();
+                preferences.DateFormat.Returns(dateFormat);
+                DataSource.Preferences.Get().Returns(Observable.Return(preferences));
+
+                await ViewModel.Initialize();
+
+                ViewModel.DateFormat.Should().Be(dateFormat);
+            }
+
+            [Fact]
+            public async Task InitializesDateFormatToDefaultvalueIfDataSourceReturnsAnError()
+            {
+                var defaultDateFormat = DateFormat.FromLocalizedDateFormat("MM/DD/YYYY");
+                DataSource
+                    .Preferences
+                    .Get()
+                    .Returns(Observable.Throw<IDatabasePreferences>(new Exception()));
+
+                await ViewModel.Initialize();
+
+                ViewModel.DateFormat.Should().Be(defaultDateFormat);
+            }
+        }
+
+        public sealed class TheSelectDateFormatCommand : SettingsViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task NavigatesToSelectDateFormatViewModelPassingCurrentDateFormat()
+            {
+                var dateFormat = DateFormat.FromLocalizedDateFormat("MM-DD-YYYY");
+                var preferences = Substitute.For<IDatabasePreferences>();
+                preferences.DateFormat.Returns(dateFormat);
+                DataSource.Preferences.Get().Returns(Observable.Return(preferences));
+                await ViewModel.Initialize();
+
+                await ViewModel.SelectDateFormatCommand.ExecuteAsync();
+
+                await NavigationService
+                    .Received()
+                    .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(dateFormat);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task UpdatesTheStoredPreferences()
+            {
+                var oldDateFormat = DateFormat.FromLocalizedDateFormat("MM-DD-YYYY");
+                var newDateFormat = DateFormat.FromLocalizedDateFormat("DD.MM.YYYY");
+                var preferences = Substitute.For<IDatabasePreferences>();
+                preferences.DateFormat.Returns(oldDateFormat);
+                DataSource.Preferences.Get().Returns(Observable.Return(preferences));
+                NavigationService
+                    .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(Arg.Any<DateFormat>())
+                    .Returns(Task.FromResult(newDateFormat));
+                await ViewModel.Initialize();
+
+                await ViewModel.SelectDateFormatCommand.ExecuteAsync();
+
+                await DataSource
+                    .Preferences
+                    .Received()
+                    .Update(Arg.Is<EditPreferencesDTO>(dto => dto.DateFormat == newDateFormat));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task UpdatesTheDateFormatProperty()
+            {
+                var oldDateFormat = DateFormat.FromLocalizedDateFormat("MM-DD-YYYY");
+                var newDateFormat = DateFormat.FromLocalizedDateFormat("DD.MM.YYYY");
+                var oldPreferences = Substitute.For<IDatabasePreferences>();
+                oldPreferences.DateFormat.Returns(oldDateFormat);
+                var newPreferences = Substitute.For<IDatabasePreferences>();
+                newPreferences.DateFormat.Returns(newDateFormat);
+                DataSource.Preferences.Get().Returns(Observable.Return(oldPreferences));
+                NavigationService
+                    .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(Arg.Any<DateFormat>())
+                    .Returns(Task.FromResult(newDateFormat));
+                DataSource
+                    .Preferences
+                    .Update(Arg.Any<EditPreferencesDTO>())
+                    .Returns(Observable.Return(newPreferences));
+                await ViewModel.Initialize();
+
+                await ViewModel.SelectDateFormatCommand.ExecuteAsync();
+
+                ViewModel.DateFormat.Should().Be(newDateFormat);
             }
         }
     }

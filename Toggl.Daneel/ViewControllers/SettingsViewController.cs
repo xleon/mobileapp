@@ -51,12 +51,17 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(VersionLabel).To(vm => vm.Version);
             bindingSet.Bind(PlanLabel).To(vm => vm.CurrentPlan);
             bindingSet.Bind(WorkspaceLabel).To(vm => vm.WorkspaceName);
+            bindingSet.Bind(DateFormatLabel).To(vm => vm.DateFormat.Localized);
 
             // Commands
             bindingSet.Bind(LogoutButton).To(vm => vm.LogoutCommand);
             bindingSet.Bind(EmailView)
                       .For(v => v.BindTap())
                       .To(vm => vm.EditProfileCommand);
+
+            bindingSet.Bind(DateFormatView)
+                      .For(v => v.BindTap())
+                      .To(vm => vm.SelectDateFormatCommand);
 
             bindingSet.Bind(WorkspaceView)
                       .For(v => v.BindTap())
@@ -161,6 +166,9 @@ namespace Toggl.Daneel.ViewControllers
             RateView.Hidden = true;
             UpdateView.Hidden = true;
             HelpView.Hidden = true;
+
+            FormatSettingsSection.Hidden = true;
+            FormatSettingsTitle.Hidden = true;
 
             TopConstraint.AdaptForIos10(NavigationController.NavigationBar);
         }
