@@ -5572,7 +5572,7 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f04005b
 			public const int tooltip = 2130968667;
-			
+	
 			static Layout()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -5622,7 +5622,7 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c003b
 			public const int Billable = 2131492923;
-			
+
 			// aapt resource value: 0x7f0c0037
 			public const int Cancel = 2131492919;
 			
@@ -5634,7 +5634,16 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c002d
 			public const int EmailAddress = 2131492909;
+
+			// aapt resource value: 0x7f0c003d
+			public const int EndTime = 2131492925;
 			
+			// aapt resource value: 0x7f0c003f
+			public const int General = 2131492927;
+			
+			// aapt resource value: 0x7f0c0040
+			public const int Help = 2131492928;
+
 			// aapt resource value: 0x7f0c003e
 			public const int EndTime = 2131492926;
 
