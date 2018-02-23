@@ -209,6 +209,7 @@
     <Compile Include="Activities\SelectTagsActivity.cs" />
     <Compile Include="Adapters\SelectCreatableEntityRecyclerAdapter.cs" />
     <Compile Include="Adapters\SelectTagsRecyclerAdapter.cs" />
+    <Compile Include="Activities\SelectProjectActivity.cs" />
     <Compile Include="Bindings\ImageViewVerticalFlipTargetBinding.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -295,6 +296,7 @@
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
+    <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
     <None Include="Startup\SetupTargetFactories.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SetupTargetFactories.cs</LastGenOutput>

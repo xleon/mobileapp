@@ -54,6 +54,7 @@
         android:layout_below="@id/EditDescriptionBottomBorder" />
     <TextView
         android:id="@+id/EditAddProjectLabel"
+        local:MvxBind="Click SelectProjectCommand; Visibility !Visibility(Project)"
         tools:text=""
         android:textSize="15sp"
         android:gravity="center_vertical"
@@ -64,7 +65,7 @@
         android:layout_alignStart="@id/EditAddDescriptionLabel" />
     <TextView
         android:id="@+id/EditProject"
-        local:MvxBind="Text Project; TextColor RGBA(ProjectColor); Visibility Visibility(Project)"
+        local:MvxBind="Text Project; TextColor RGBA(ProjectColor); Visibility Visibility(Project); Click SelectProjectCommand"
         tools:text="Superday"
         android:textSize="15sp"
         android:gravity="center_vertical"
