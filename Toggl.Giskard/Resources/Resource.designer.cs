@@ -5651,7 +5651,7 @@ namespace Toggl.Giskard
 			public const int Cancel = 2131492919;
 			
 			// aapt resource value: 0x7f0c0043
-			public const int Create = 2131492931;
+			public const int DateAndTime = 2131492931;
 			
 			// aapt resource value: 0x7f0c0036
 			public const int Done = 2131492918;
@@ -5692,17 +5692,17 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0c003f
 			public const int Save = 2131492927;
 			
-			// aapt resource value: 0x7f0c0047
-			public const int SelectClientTemplateSelector = 2131492935;
+			// aapt resource value: 0x7f0c0048
+			public const int SelectClientTemplateSelector = 2131492936;
 			
-			// aapt resource value: 0x7f0c0046
-			public const int SelectColorTemplateSelector = 2131492934;
+			// aapt resource value: 0x7f0c0047
+			public const int SelectColorTemplateSelector = 2131492935;
 			
 			// aapt resource value: 0x7f0c0035
 			public const int SelectColorTitle = 2131492917;
 			
-			// aapt resource value: 0x7f0c0045
-			public const int SelectTagsTemplateSelector = 2131492933;
+			// aapt resource value: 0x7f0c0046
+			public const int SelectTagsTemplateSelector = 2131492934;
 			
 			// aapt resource value: 0x7f0c0029
 			public const int SignUp = 2131492905;
@@ -5713,17 +5713,20 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0c0032
 			public const int StartTimeEntryHint = 2131492914;
 			
-			// aapt resource value: 0x7f0c0049
-			public const int StartTimeEntrySuggestionsTemplateSelector = 2131492937;
+			// aapt resource value: 0x7f0c004a
+			public const int StartTimeEntrySuggestionsTemplateSelector = 2131492938;
 			
-			// aapt resource value: 0x7f0c0044
-			public const int SuggestionsTemplateSelector = 2131492932;
+			// aapt resource value: 0x7f0c0045
+			public const int SuggestionsTemplateSelector = 2131492933;
 			
 			// aapt resource value: 0x7f0c002f
 			public const int TermsOfService = 2131492911;
 			
-			// aapt resource value: 0x7f0c0048
-			public const int TimeEntriesLogTemplateSelector = 2131492936;
+			// aapt resource value: 0x7f0c0049
+			public const int TimeEntriesLogTemplateSelector = 2131492937;
+			
+			// aapt resource value: 0x7f0c0044
+			public const int Use24HourClock = 2131492932;
 			
 			// aapt resource value: 0x7f0c0000
 			public const int abc_action_bar_home_description = 2131492864;

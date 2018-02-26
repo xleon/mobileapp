@@ -26,8 +26,10 @@
     <string name="NameTakenError">Sorry, this name is already taken.</string>
     <string name="General">General</string>
     <string name="Help">Help</string>
+    <string name="DateAndTime">Date and Time</string>
+    <string name="Use24HourClock">Use 24-hour clock</string>
     <string name="Create">Create</string>
-  
+
     <string name="SuggestionsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SuggestionsTemplateSelector, Toggl.Giskard</string>
     <string name="SelectTagsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectTagsTemplateSelector, Toggl.Giskard</string>
     <string name="SelectColorTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectColorTemplateSelector, Toggl.Giskard</string>

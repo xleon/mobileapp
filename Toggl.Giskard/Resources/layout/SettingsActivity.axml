@@ -41,6 +41,51 @@
                 android:paddingLeft="16dp"
                 android:textAllCaps="true"
                 android:letterSpacing="0.04"
+                android:text="@string/DateAndTime"
+                android:gravity="center_vertical"
+                android:textColor="@color/defaultText"
+                android:fontFamily="sans-serif-medium"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                android:layout_width="match_parent" />
+            <View
+                android:background="@color/separator"
+                android:layout_height="0.5dp"
+                android:layout_width="match_parent" />
+            <FrameLayout
+                local:MvxBind="Click ToggleUseTwentyFourHourClockCommand"
+                android:clickable="true"
+                android:layout_height="48dp"
+                android:layout_width="match_parent"
+                android:background="?attr/selectableItemBackground">
+                <TextView
+                    android:textSize="15sp"
+                    android:paddingLeft="16dp"
+                    android:textAllCaps="false"
+                    android:gravity="center_vertical"
+                    android:text="@string/Use24HourClock"
+                    android:textColor="@android:color/black"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content" />
+                <Switch
+                    local:MvxBind="Checked UseTwentyFourHourClock"
+                    android:clickable="false"
+                    android:thumbTint="@color/switchTint"
+                    android:layout_marginRight="18dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_alignTop="@id/EditProjectPrivateProjectImage" />
+            </FrameLayout>
+            <View
+                android:background="@color/separator"
+                android:layout_height="0.5dp"
+                android:layout_width="match_parent" />
+            <TextView
+                android:textSize="12sp"
+                android:paddingLeft="16dp"
+                android:textAllCaps="true"
+                android:letterSpacing="0.04"
                 android:text="@string/General"
                 android:gravity="center_vertical"
                 android:textColor="@color/defaultText"
