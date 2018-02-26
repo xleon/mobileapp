@@ -241,5 +241,19 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         local:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+        <TextView
+            local:MvxBind="Click DoneCommand; TextColor CreateProjectButtonColor(SaveEnabled)"
+            android:text="@string/Create"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:textAllCaps="true"
+            android:letterSpacing="0.04"
+            android:layout_gravity="end"
+            android:fontFamily="sans-serif-medium"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginRight="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </android.support.v7.widget.Toolbar>
 </android.support.design.widget.CoordinatorLayout>

@@ -26,6 +26,7 @@
     <string name="NameTakenError">Sorry, this name is already taken.</string>
     <string name="General">General</string>
     <string name="Help">Help</string>
+    <string name="Create">Create</string>
   
     <string name="SuggestionsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SuggestionsTemplateSelector, Toggl.Giskard</string>
     <string name="SelectTagsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectTagsTemplateSelector, Toggl.Giskard</string>
