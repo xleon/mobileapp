@@ -162,6 +162,18 @@ namespace Toggl.Daneel.Presentation
         {
             switch (hint)
             {
+                case ReloadLogHint _:
+
+                    var timeEntriesLogViewController = 
+                        MasterNavigationController
+                            ?.TopViewController
+                            ?.ChildViewControllers
+                            .FirstOrDefault(vc => vc is TimeEntriesLogViewController) as TimeEntriesLogViewController;
+
+                    timeEntriesLogViewController?.Reload();
+
+                    return;
+
                 case CardVisibilityHint cardHint:
                     if (MasterNavigationController?.TopViewController is MainViewController mainViewController)
                         mainViewController.OnTimeEntryCardVisibilityChanged(cardHint.Visible);
