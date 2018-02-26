@@ -57,7 +57,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             string.IsNullOrEmpty(CurrentTimeEntryDescription)
             && string.IsNullOrEmpty(CurrentTimeEntryProject);
 
-        public bool SpiderIsVisible { get; set; } = true;
+        public bool SpiderIsVisible { get; set; } = false;
 
         public bool IsInManualMode { get; set; } = false;
 

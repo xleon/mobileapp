@@ -389,6 +389,10 @@
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationTagsSmall.imageset\icIllustrationTagsS.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationTagsSmall.imageset\icIllustrationTagsS%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationTagsSmall.imageset\icIllustrationTagsS%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icJustSpider.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icJustSpider.imageset\icJustSpider.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icJustSpider.imageset\icJustSpider%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icJustSpider.imageset\icJustSpider%403x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationProjectsSmall.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationProjectsSmall.imageset\icIllustrationProjectsS.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationProjectsSmall.imageset\icIllustrationProjectsS%402x.png" />
@@ -749,6 +753,8 @@
     <Compile Include="Extensions\NoEntityInfoMessageExtensions.cs" />
     <Compile Include="Views\Reports\LoadingPieChartView.cs" />
     <Compile Include="PlatformConstants.cs" />
+    <Compile Include="Views\SpiderOnARopeView.cs" />
+    <Compile Include="Binding\SpiderOnARopeViewIsVisibleTargetBinding.cs" />
     <Compile Include="ApplicationShortcutCreator.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Services\MailService.cs" />
