@@ -297,6 +297,9 @@
     <None Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
+    <AndroidResource Include="Resources\layout\SelectProjectActivityProjectCell.axml" />
+    <AndroidResource Include="Resources\layout\SelectProjectActivityTaskCell.axml" />
+    <AndroidResource Include="Resources\layout\SelectProjectActivityWorkspaceHeader.axml" />
     <None Include="Startup\SetupTargetFactories.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SetupTargetFactories.cs</LastGenOutput>
