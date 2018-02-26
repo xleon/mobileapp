@@ -9,10 +9,12 @@ using Toggl.Foundation.Autocomplete.Suggestions;
 
 namespace Toggl.Giskard.Views
 {
-    public sealed class StartTimeEntryRecyclerViewHolder : MvxRecyclerViewHolder
+    public sealed class SelectProjectWithExpandableTasksRecyclerViewHolder : MvxRecyclerViewHolder
     {
         private Button toggleTasksButton;
         private bool continueClickOverloaded;
+
+        public int ToggleTasksExpansionButtonId { get; set; }
 
         private IMvxCommand<ProjectSuggestion> toggleTasksCommand;
         public IMvxCommand<ProjectSuggestion> ToggleTasksCommand
@@ -29,12 +31,12 @@ namespace Toggl.Giskard.Views
             }
         }
 
-        public StartTimeEntryRecyclerViewHolder(View itemView, IMvxAndroidBindingContext context)
+        public SelectProjectWithExpandableTasksRecyclerViewHolder(View itemView, IMvxAndroidBindingContext context)
             : base(itemView, context)
         {
         }
 
-        public StartTimeEntryRecyclerViewHolder(IntPtr handle, JniHandleOwnership ownership)
+        public SelectProjectWithExpandableTasksRecyclerViewHolder(IntPtr handle, JniHandleOwnership ownership)
             : base(handle, ownership)
         {
         }
@@ -42,7 +44,7 @@ namespace Toggl.Giskard.Views
         private void ensureContinueClickOverloaded()
         {
             if (continueClickOverloaded) return;
-            toggleTasksButton = ItemView.FindViewById<Button>(Resource.Id.StartTimeEntryToggleTasksButton);
+            toggleTasksButton = ItemView.FindViewById<Button>(ToggleTasksExpansionButtonId);
             toggleTasksButton.Click += onContinueButtonClick;
             continueClickOverloaded = true;
         }
