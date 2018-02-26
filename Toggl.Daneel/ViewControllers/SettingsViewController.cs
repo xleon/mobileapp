@@ -18,6 +18,8 @@ namespace Toggl.Daneel.ViewControllers
     {
         private IDisposable willEnterForegroundNotification;
 
+        private const int verticalSpacing = 24;
+
         public SettingsViewController() 
             : base(nameof(SettingsViewController), null)
         {
@@ -49,7 +51,6 @@ namespace Toggl.Daneel.ViewControllers
             // Text
             bindingSet.Bind(EmailLabel).To(vm => vm.Email);
             bindingSet.Bind(VersionLabel).To(vm => vm.Version);
-            bindingSet.Bind(PlanLabel).To(vm => vm.CurrentPlan);
             bindingSet.Bind(WorkspaceLabel).To(vm => vm.WorkspaceName);
             bindingSet.Bind(DateFormatLabel).To(vm => vm.DateFormat.Localized);
 
@@ -71,33 +72,13 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindTap())
                       .To(vm => vm.ToggleManualModeCommand);
 
-            bindingSet.Bind(SubscriptionView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.EditSubscriptionCommand);
-
             bindingSet.Bind(TwentyFourHourClockView)
                       .For(v => v.BindTap())
                       .To(vm => vm.ToggleUseTwentyFourHourClockCommand);
 
-            bindingSet.Bind(AddMobileTagView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.ToggleAddMobileTagCommand);
-
             bindingSet.Bind(FeedbackView)
                       .For(v => v.BindTap())
                       .To(vm => vm.SubmitFeedbackCommand);
-
-            bindingSet.Bind(RateView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.RateCommand);
-
-            bindingSet.Bind(UpdateView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.UpdateCommand);
-
-            bindingSet.Bind(HelpView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.HelpCommand);
 
             // Logout process
             bindingSet.Bind(LogoutButton)
@@ -125,10 +106,6 @@ namespace Toggl.Daneel.ViewControllers
                       .WithConversion(visibilityConverter);
 
             // Switches
-            bindingSet.Bind(AddMobileTagSwitch)
-                      .For(v => v.BindAnimatedOn())
-                      .To(vm => vm.AddMobileTag);
-            
             bindingSet.Bind(TwentyFourHourClockSwitch)
                       .For(v => v.BindAnimatedOn())
                       .To(vm => vm.UseTwentyFourHourClock);
@@ -148,6 +125,16 @@ namespace Toggl.Daneel.ViewControllers
             startAnimations();
         }
 
+        public override void ViewWillLayoutSubviews()
+        {
+            base.ViewWillLayoutSubviews();
+
+            // Logout container vertical spacing
+            var idealDistance = LogoutContainerView.Superview.Frame.Height - ControlsContainerView.Frame.Bottom - verticalSpacing - LogoutContainerView.Frame.Height;
+            var distance = Math.Max(idealDistance, verticalSpacing);
+            LogoutTopConstraint.Constant = (nfloat)distance;
+        }
+
         private void prepareViews()
         {
             // Syncing indicator colors
@@ -156,19 +143,8 @@ namespace Toggl.Daneel.ViewControllers
             setIndicatorSyncColor(LoggingOutIndicator);
 
             // Resize Switches
-            AddMobileTagSwitch.Resize();
             TwentyFourHourClockSwitch.Resize();
-
-            // Disable unused settings
-            SubscriptionView.Hidden = true;
-            TwentyFourHourClockView.Hidden = true;
-            AddMobileTagView.Hidden = true;
-            RateView.Hidden = true;
-            UpdateView.Hidden = true;
-            HelpView.Hidden = true;
-
-            FormatSettingsSection.Hidden = true;
-            FormatSettingsTitle.Hidden = true;
+            ManualModeSwitch.Resize();
 
             TopConstraint.AdaptForIos10(NavigationController.NavigationBar);
         }
