@@ -289,6 +289,9 @@
     <Compile Include="Adapters\SelectClientRecyclerAdapter.cs" />
     <Compile Include="TemplateSelectors\SelectClientTemplateSelector.cs" />
     <Compile Include="Views\SelectClientRecyclerView.cs" />
+    <Compile Include="Fragments\SelectWorkspaceFragment.cs" />
+    <Compile Include="TemplateSelectors\SelectWorkspaceTemplateSelector.cs" />
+    <Compile Include="Bindings\TextViewFontWeightTargetBinding.cs" />
     <Compile Include="Services\LicenseProvider.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -539,6 +542,8 @@
     <AndroidResource Include="Resources\drawable\ValueSliderThumb.xml" />
     <AndroidResource Include="Resources\layout\SelectClientActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectClientActivityCell.axml" />
+    <AndroidResource Include="Resources\layout\SelectWorkspaceFragment.axml" />
+    <AndroidResource Include="Resources\layout\SelectWorkspaceFragmentCell.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">

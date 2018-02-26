@@ -26,6 +26,11 @@ namespace Toggl.Giskard.Converters
         public BillableDrawableValueConverter() : base(Resource.Drawable.te_billable_active, Resource.Drawable.billable) { }
     }
 
+    public sealed class FontWeightValueConverter : BoolToConstantValueConverter<TypefaceStyle>
+    {
+        public FontWeightValueConverter() : base(TypefaceStyle.Bold, TypefaceStyle.Normal) { }
+    }
+
     public sealed class EditProjectErrorOffsetValueConverter : BoolToConstantValueConverter<int>
     {
         public EditProjectErrorOffsetValueConverter() : base(8, 14) { }

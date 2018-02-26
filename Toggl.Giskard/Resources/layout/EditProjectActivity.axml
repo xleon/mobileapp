@@ -113,7 +113,6 @@
                 android:layout_alignParentBottom="true" />
             <ImageView
                 android:src="@drawable/dropdown"
-                android:clickable="true"
                 android:layout_marginRight="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -234,6 +233,11 @@
             android:layout_marginLeft="55dp"
             android:layout_width="match_parent" />
     </LinearLayout>
+    <FrameLayout
+        android:id="@+id/SelectWorkspaceContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize" />
     <android.support.v7.widget.Toolbar
         android:id="@+id/Toolbar"
         android:minHeight="?attr/actionBarSize"

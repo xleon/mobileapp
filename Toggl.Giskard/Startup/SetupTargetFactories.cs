@@ -63,6 +63,16 @@ namespace Toggl.Giskard
                 ViewMarginTargetBinding.BindingName,
                 view => new ViewMarginTargetBinding(view)
             );
+
+            registry.RegisterCustomBindingFactory<FloatingActionButton>(
+                FabVisibilityTargetBinding.BindingName,
+                view => new FabVisibilityTargetBinding(view)
+            );
+
+            registry.RegisterCustomBindingFactory<TextView>(
+                TextViewFontWeightTargetBinding.BindingName,
+                view => new TextViewFontWeightTargetBinding(view)
+            );
         }
     }
 }
