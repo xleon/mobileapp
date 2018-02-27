@@ -66,7 +66,7 @@ namespace Toggl.Daneel.ViewControllers
 
             bindingSet.Bind(WorkspaceView)
                       .For(v => v.BindTap())
-                      .To(vm => vm.EditWorkspaceCommand);
+                      .To(vm => vm.PickWorkspaceCommand);
 
             bindingSet.Bind(ManualModeView)
                       .For(v => v.BindTap())

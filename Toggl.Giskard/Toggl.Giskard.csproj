@@ -292,6 +292,7 @@
     <Compile Include="TemplateSelectors\SelectWorkspaceTemplateSelector.cs" />
     <Compile Include="Bindings\TextViewFontWeightTargetBinding.cs" />
     <Compile Include="Services\LicenseProvider.cs" />
+    <Compile Include="TemplateSelectors\SettingsTemplateSelector.cs" />
     <Compile Include="Views\SelectProjectWithExpandableTasksRecyclerViewHolder.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +308,8 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SetupTargetFactories.cs</LastGenOutput>
     </None>
+    <AndroidResource Include="Resources\layout\SettingsActivityWorkspaceCell.axml" />
+    <AndroidResource Include="Resources\drawable\TransparentToLightGrayGradient.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />

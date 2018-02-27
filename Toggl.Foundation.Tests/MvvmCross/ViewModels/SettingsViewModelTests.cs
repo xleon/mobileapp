@@ -334,7 +334,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task CallsTheSelectWorkspaceViewModel()
             {
-                await ViewModel.EditWorkspaceCommand.ExecuteAsync();
+                await ViewModel.PickWorkspaceCommand.ExecuteAsync();
 
                 await NavigationService.Received()
                     .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>());
@@ -347,7 +347,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>())
                     .Returns(Task.FromResult(workspaceId));
 
-                await ViewModel.EditWorkspaceCommand.ExecuteAsync();
+                await ViewModel.PickWorkspaceCommand.ExecuteAsync();
 
                 ViewModel.WorkspaceName.Should().Be(workspaceName);
             }
@@ -359,7 +359,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>())
                     .Returns(Task.FromResult(workspaceId));
 
-                await ViewModel.EditWorkspaceCommand.ExecuteAsync();
+                await ViewModel.PickWorkspaceCommand.ExecuteAsync();
 
                 await DataSource.User.Received().UpdateWorkspace(Arg.Is(workspaceId));
             }
@@ -371,7 +371,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>())
                     .Returns(Task.FromResult(workspaceId));
 
-                await ViewModel.EditWorkspaceCommand.ExecuteAsync();
+                await ViewModel.PickWorkspaceCommand.ExecuteAsync();
 
                 await DataSource.SyncManager.Received().PushSync();
             }

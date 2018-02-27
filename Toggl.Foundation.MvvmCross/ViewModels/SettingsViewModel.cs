@@ -12,7 +12,6 @@ using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
-using Toggl.PrimeRadiant.Exceptions;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Network;
 
@@ -76,7 +75,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand EditSubscriptionCommand { get; }
 
-        public IMvxAsyncCommand EditWorkspaceCommand { get; }
+        public IMvxAsyncCommand PickWorkspaceCommand { get; }
 
         public IMvxAsyncCommand SelectDateFormatCommand { get; }
 
@@ -85,6 +84,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxCommand ToggleUseTwentyFourHourClockCommand { get; }
 
         public IMvxCommand ToggleManualModeCommand { get; }
+
+        public IMvxAsyncCommand<SelectableWorkspaceViewModel> SelectDefaultWorkspaceCommand { get; }
+
+        public MvxObservableCollection<SelectableWorkspaceViewModel> Workspaces { get; }
+            = new MvxObservableCollection<SelectableWorkspaceViewModel>();
 
         public SettingsViewModel(
             UserAgent userAgent,
@@ -99,9 +103,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(mailService, nameof(mailService));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
+            Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(platformConstants, nameof(platformConstants));
-            Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
 
             this.userAgent = userAgent;
             this.dataSource = dataSource;
@@ -126,25 +130,32 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             BackCommand = new MvxAsyncCommand(back);
             LogoutCommand = new MvxAsyncCommand(maybeLogout);
             EditProfileCommand = new MvxCommand(editProfile);
-            EditWorkspaceCommand = new MvxAsyncCommand(editWorkspace);
-            SubmitFeedbackCommand = new MvxAsyncCommand(submitFeedback);
             EditSubscriptionCommand = new MvxCommand(editSubscription);
+            ToggleManualModeCommand = new MvxCommand(toggleManualMode);
+            SubmitFeedbackCommand = new MvxAsyncCommand(submitFeedback);
             ToggleAddMobileTagCommand = new MvxCommand(toggleAddMobileTag);
             SelectDateFormatCommand = new MvxAsyncCommand(selectDateFormat);
+            PickWorkspaceCommand = new MvxAsyncCommand(pickDefaultWorkspace);
             ToggleUseTwentyFourHourClockCommand = new MvxCommand(toggleUseTwentyFourHourClock);
-            ToggleManualModeCommand = new MvxCommand(toggleManualMode);
+            SelectDefaultWorkspaceCommand = new MvxAsyncCommand<SelectableWorkspaceViewModel>(selectDefaultWorkspace);
         }
 
         public override async Task Initialize()
         {
             var user = await dataSource.User.Current;
-            var workspace = await dataSource.Workspaces.GetDefault();
+            var defaultWorkspace = await dataSource.Workspaces.GetDefault();
 
             Email = user.Email;
             Name = user.Fullname;
-            workspaceId = workspace.Id;
-            WorkspaceName = workspace.Name;
+            workspaceId = defaultWorkspace.Id;
+            WorkspaceName = defaultWorkspace.Name;
             IsManualModeEnabled = userPreferences.IsManualModeEnabled();
+
+            var workspaces = await dataSource.Workspaces.GetAll();
+            foreach (var workspace in workspaces)
+            {
+                Workspaces.Add(new SelectableWorkspaceViewModel(workspace, workspace.Id == workspaceId));
+            }
 
             dataSource
                 .Preferences
@@ -168,13 +179,26 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
         }
 
-        public async Task editWorkspace()
+        public async Task pickDefaultWorkspace()
         {
             var parameters = WorkspaceParameters.Create(workspaceId, Resources.SetDefaultWorkspace, allowQuerying: false);
             var selectedWorkspaceId =
                 await navigationService
                     .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(parameters);
+            
+            await changeDefaultWorkspace(selectedWorkspaceId);
+        }
 
+        private async Task selectDefaultWorkspace(SelectableWorkspaceViewModel workspace)
+        {
+            foreach (var ws in Workspaces)
+                ws.Selected = ws.WorkspaceId == workspace.WorkspaceId;
+
+            await changeDefaultWorkspace(workspace.WorkspaceId);
+        }
+
+        private async Task changeDefaultWorkspace(long selectedWorkspaceId)
+        {
             if (selectedWorkspaceId == workspaceId) return;
 
             var workspace = await dataSource.Workspaces.GetById(selectedWorkspaceId);
