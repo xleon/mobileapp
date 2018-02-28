@@ -73,6 +73,7 @@ namespace Toggl.Foundation
             var persistWorkspaceFeatures = new PersistWorkspacesFeaturesState(database.WorkspaceFeatures, database.SinceParameters);
             var persistTags = new PersistTagsState(database.Tags, database.SinceParameters);
             var persistClients = new PersistClientsState(database.Clients, database.SinceParameters);
+            var persistPreferences = new PersistPreferencesState(database.Preferences, database.SinceParameters);
             var persistProjects = new PersistProjectsState(database.Projects, database.SinceParameters);
             var persistTimeEntries = new PersistTimeEntriesState(dataSource.TimeEntries, database.SinceParameters, timeService);
             var persistTasks = new PersistTasksState(database.Tasks, database.SinceParameters);
@@ -82,7 +83,8 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(entryPoint, fetchAllSince.Start);
             transitions.ConfigureTransition(fetchAllSince.FetchStarted, persistWorkspaces.Start);
             transitions.ConfigureTransition(persistWorkspaces.FinishedPersisting, persistWorkspaceFeatures.Start);
-            transitions.ConfigureTransition(persistWorkspaceFeatures.FinishedPersisting, persistTags.Start);
+            transitions.ConfigureTransition(persistWorkspaceFeatures.FinishedPersisting, persistPreferences.Start);
+            transitions.ConfigureTransition(persistPreferences.FinishedPersisting, persistTags.Start);
             transitions.ConfigureTransition(persistTags.FinishedPersisting, persistClients.Start);
             transitions.ConfigureTransition(persistClients.FinishedPersisting, persistProjects.Start);
             transitions.ConfigureTransition(persistProjects.FinishedPersisting, persistTasks.Start);
@@ -90,6 +92,7 @@ namespace Toggl.Foundation
 
             transitions.ConfigureTransition(persistWorkspaces.Failed, checkServerStatus.Start);
             transitions.ConfigureTransition(persistWorkspaceFeatures.Failed, checkServerStatus.Start);
+            transitions.ConfigureTransition(persistPreferences.Failed, checkServerStatus.Start);
             transitions.ConfigureTransition(persistTags.Failed, checkServerStatus.Start);
             transitions.ConfigureTransition(persistClients.Failed, checkServerStatus.Start);
             transitions.ConfigureTransition(persistProjects.Failed, checkServerStatus.Start);

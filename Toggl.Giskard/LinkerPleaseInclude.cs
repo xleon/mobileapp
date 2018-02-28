@@ -9,6 +9,7 @@ using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.Droid.Target;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
+using Newtonsoft.Json.Converters;
 
 namespace Toggl.Giskard
 {
@@ -138,6 +139,11 @@ namespace Toggl.Giskard
         public void Include(MvxSeekBarProgressTargetBinding binding)
         {
             binding = new MvxSeekBarProgressTargetBinding(null, null);
+        }
+
+        public void Include(StringEnumConverter converter)
+        {
+            converter = new StringEnumConverter(true);
         }
 
         public void Include(ConsoleColor color)
