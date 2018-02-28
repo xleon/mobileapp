@@ -29,14 +29,17 @@
     <string name="DateAndTime">Date and Time</string>
     <string name="Use24HourClock">Use 24-hour clock</string>
     <string name="Create">Create</string>
+    <string name="DateFormat">Date format</string>
     <string name="DefaultWorkspace">Default Workspace</string>
 
     <string name="SettingsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SettingsTemplateSelector, Toggl.Giskard</string>
     <string name="SelectTagsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectTagsTemplateSelector, Toggl.Giskard</string>
     <string name="SuggestionsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SuggestionsTemplateSelector, Toggl.Giskard</string>
     <string name="SelectColorTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectColorTemplateSelector, Toggl.Giskard</string>
+    <string name="SuggestionsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SuggestionsTemplateSelector, Toggl.Giskard</string>
     <string name="SelectClientTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectClientTemplateSelector, Toggl.Giskard</string>
     <string name="TimeEntriesLogTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.TimeEntriesLogTemplateSelector, Toggl.Giskard</string>
     <string name="SelectWorkspaceTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectWorkspaceTemplateSelector, Toggl.Giskard</string>
+    <string name="SelectDateFormatTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectDateFormatTemplateSelector, Toggl.Giskard</string>
     <string name="StartTimeEntrySuggestionsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.StartTimeEntrySuggestionsTemplateSelector, Toggl.Giskard</string>
 </resources>

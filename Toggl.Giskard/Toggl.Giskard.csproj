@@ -294,6 +294,8 @@
     <Compile Include="Services\LicenseProvider.cs" />
     <Compile Include="TemplateSelectors\SettingsTemplateSelector.cs" />
     <Compile Include="Views\SelectProjectWithExpandableTasksRecyclerViewHolder.cs" />
+    <Compile Include="Fragments\SelectDateFormatFragment.cs" />
+    <Compile Include="TemplateSelectors\SelectDateFormatTemplateSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -308,6 +310,8 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SetupTargetFactories.cs</LastGenOutput>
     </None>
+    <AndroidResource Include="Resources\layout\SelectDateFormatFragment.axml" />
+    <AndroidResource Include="Resources\layout\SelectDateFormatFragmentCell.axml" />
     <AndroidResource Include="Resources\layout\SettingsActivityWorkspaceCell.axml" />
     <AndroidResource Include="Resources\drawable\TransparentToLightGrayGradient.xml" />
   </ItemGroup>

@@ -3,6 +3,7 @@ using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.Selectable
 {
+    [Preserve]
     public sealed class SelectableDateFormatViewModel : MvxNotifyPropertyChanged
     {
         public DateFormat DateFormat { get; }
