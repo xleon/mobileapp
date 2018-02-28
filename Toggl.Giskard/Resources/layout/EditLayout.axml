@@ -14,7 +14,6 @@
         android:padding="0dp"
         android:textSize="15sp"
         android:focusable="true"
-        android:minHeight="56dp"
         android:maxHeight="224dp"
         android:background="@null"
         android:paddingLeft="16dp"
@@ -23,6 +22,7 @@
         android:textAlignment="viewStart"
         android:focusableInTouchMode="true"
         android:hint="@string/AddDescription"
+        android:minHeight="?attr/actionBarSize"
         android:textColor="@color/editTimeEntryText"
         android:textColorHint="@color/placeholderText"
         android:layout_marginTop="16dp"
@@ -310,8 +310,8 @@
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        android:layout_height="56dp"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <TextView
             local:MvxBind="Click ConfirmCommand"
             android:textAllCaps="true"
