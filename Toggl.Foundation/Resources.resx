@@ -106,6 +106,9 @@ Please try again.</value>
     <data name="SettingsDialogButtonSignOut">
         <value>Sign out</value>
     </data>
+    <data name="UnitHour">
+        <value>h</value>
+    </data>
     <data name="UnitMin">
         <value>min</value>
     </data>

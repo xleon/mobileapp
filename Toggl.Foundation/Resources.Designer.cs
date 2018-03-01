@@ -221,6 +221,12 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string UnitHour {
+            get {
+                return ResourceManager.GetString("UnitHour", resourceCulture);
+            }
+        }
+        
         public static string UnitMin {
             get {
                 return ResourceManager.GetString("UnitMin", resourceCulture);
