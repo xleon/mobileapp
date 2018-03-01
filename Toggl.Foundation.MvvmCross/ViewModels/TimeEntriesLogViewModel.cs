@@ -10,6 +10,7 @@ using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
@@ -207,8 +208,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             onboardingStorage.SetIsNewUser(false);
         }
 
-        private async void onMidnight(DateTimeOffset midnight)
-            => await reset();
+        private void onMidnight(DateTimeOffset midnight)
+        {
+            ChangePresentation(new ReloadLogHint());
+        }
 
         private bool isNotRunning(IDatabaseTimeEntry timeEntry) => !timeEntry.IsRunning();
 
