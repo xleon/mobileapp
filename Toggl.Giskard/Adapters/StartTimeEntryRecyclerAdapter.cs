@@ -69,8 +69,8 @@ namespace Toggl.Giskard.Adapters
             {
                 Click = ItemClick,
                 LongClick = ItemLongClick,
-                ToggleTasksCommand = ToggleTasksCommand,
-                ToggleTasksExpansionButtonId = Resource.Id.StartTimeEntryToggleTasksButton
+                ToggleTasksExpansionButtonId = Resource.Id.StartTimeEntryToggleTasksButton,
+                ToggleTasksCommand = ToggleTasksCommand
             };
 
             return viewHolder;
