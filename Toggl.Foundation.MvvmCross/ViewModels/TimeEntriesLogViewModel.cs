@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using PropertyChanged;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.MvvmCross.Collections;
@@ -24,6 +25,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
+        private readonly IAnalyticsService analyticsService;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IMvxNavigationService navigationService;
 
@@ -53,24 +55,30 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand<TimeEntryViewModel> EditCommand { get; }
 
+        public IMvxAsyncCommand<TimeEntryViewModel> DeleteCommand { get; }
+
         public MvxAsyncCommand<TimeEntryViewModel> ContinueTimeEntryCommand { get; }
 
         public TimeEntriesLogViewModel(ITogglDataSource dataSource,
                                        ITimeService timeService,
+                                       IAnalyticsService analyticsService,
                                        IOnboardingStorage onboardingStorage,
                                        IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
+            this.analyticsService = analyticsService;
             this.onboardingStorage = onboardingStorage;
             this.navigationService = navigationService;
 
             EditCommand = new MvxAsyncCommand<TimeEntryViewModel>(edit);
+            DeleteCommand = new MvxAsyncCommand<TimeEntryViewModel>(delete);
             ContinueTimeEntryCommand = new MvxAsyncCommand<TimeEntryViewModel>(continueTimeEntry, _ => areContineButtonsEnabled);
         }
 
@@ -210,6 +218,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private Task edit(TimeEntryViewModel timeEntryViewModel)
             => navigationService.Navigate<EditTimeEntryViewModel, long>(timeEntryViewModel.Id);
 
+        private async Task delete(TimeEntryViewModel timeEntryViewModel)
+        {
+            await dataSource.TimeEntries.Delete(timeEntryViewModel.Id);
+        }
+
         private async Task continueTimeEntry(TimeEntryViewModel timeEntryViewModel)
         {
             areContineButtonsEnabled = false;
@@ -235,6 +248,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     areContineButtonsEnabled = true;
                     ContinueTimeEntryCommand.RaiseCanExecuteChanged();
                 });
+
+            analyticsService.TrackStartedTimeEntry(TimeEntryStartOrigin.Continue);
         }
     }
 }

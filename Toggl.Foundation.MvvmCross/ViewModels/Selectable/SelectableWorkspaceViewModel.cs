@@ -1,10 +1,10 @@
 ﻿using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.UI;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
+    [Preserve(AllMembers = true)]
     public sealed class SelectableWorkspaceViewModel : MvxNotifyPropertyChanged
     {
         public long WorkspaceId { get; set; }

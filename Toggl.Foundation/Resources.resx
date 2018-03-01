@@ -318,4 +318,10 @@ account is not set up</value>
     <data name="NoEmailErrorMessage">
         <value>Go to “Settings > Mail > Add Account” to set up an email account or send us your feedback to support@toggl.com</value>
     </data>
+    <data name="Continue">
+        <value>Continue</value>
+    </data>
+    <data name="Loading">
+        <value>Loading...</value>
+    </data>
 </root>

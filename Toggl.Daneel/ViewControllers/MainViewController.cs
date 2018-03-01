@@ -86,10 +86,9 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.EditTimeEntryCommand);
 
             //Visibility
-            bindingSet.Bind(SpiderBroImageView)
-                      .For(v => v.BindVisibility())
-                      .To(vm => vm.SpiderIsVisible)
-                      .WithConversion(visibilityConverter);
+            bindingSet.Bind(SpiderBroView)
+                      .For(v => v.BindSpiderVisibility())
+                      .To(vm => vm.SpiderIsVisible);
 
             bindingSet.Bind(SpiderHinge)
                      .For(v => v.BindVisibility())
@@ -159,6 +158,13 @@ namespace Toggl.Daneel.ViewControllers
             startAnimations();
         }
 
+        public override void ViewDidDisappear(bool animated)
+        {
+            base.ViewWillDisappear(animated);
+
+            SpiderBroView.Dispose();
+        }
+
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
@@ -196,10 +202,6 @@ namespace Toggl.Daneel.ViewControllers
             DismissSyncBarImageView.TintColor = UIColor.White;
             DismissSyncBarImageView.Hidden = true;
             MainPagedScrollView.DismissSyncBarImageView = DismissSyncBarImageView;
-
-            //Spider animation
-            SpiderBroImageView.Layer.AnchorPoint = new CGPoint(0.5f, 0);
-            animateSpider();
 
             //Card border
             CurrentTimeEntryCard.Layer.BorderWidth = 1;
@@ -261,24 +263,11 @@ namespace Toggl.Daneel.ViewControllers
 
         private void startAnimations()
         {
-            animateSpider();
             SyncIndicatorView.StartAnimation();
-        }
-
-        private void animateSpider()
-        {
-            SpiderBroImageView.Layer.RemoveAllAnimations();
-
-            var animation = CABasicAnimation.FromKeyPath("transform.rotation.z");
-            animation.Duration = Timings.SpiderBro;
-            animation.TimingFunction = CAMediaTimingFunction.FromName(CAMediaTimingFunction.EaseInEaseOut);
-            animation.Cumulative = false;
-            animation.From = NSNumber.FromFloat(-animationAngle);
-            animation.To = NSNumber.FromFloat(animationAngle);
-            animation.RepeatCount = float.PositiveInfinity;
-            animation.AutoReverses = true;
-
-            SpiderBroImageView.Layer.AddAnimation(animation, "swing");
+            if (ViewModel.SpiderIsVisible)
+            {
+                SpiderBroView.Show();
+            }
         }
     }
 }

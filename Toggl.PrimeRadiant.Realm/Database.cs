@@ -20,6 +20,7 @@ namespace Toggl.PrimeRadiant.Realm
             Tasks = Repository<IDatabaseTask>.For(getRealmInstance, (task, realm) => new RealmTask(task, realm));
             User = SingleObjectStorage<IDatabaseUser>.For(getRealmInstance, (user, realm) => new RealmUser(user, realm));
             Clients = Repository<IDatabaseClient>.For(getRealmInstance, (client, realm) => new RealmClient(client, realm));
+            Preferences = SingleObjectStorage<IDatabasePreferences>.For(getRealmInstance, (preferences, realm) => new RealmPreferences(preferences, realm));
             Projects = Repository<IDatabaseProject>.For(getRealmInstance, (project, realm) => new RealmProject(project, realm));
             TimeEntries = Repository<IDatabaseTimeEntry>.For(getRealmInstance, (timeEntry, realm) => new RealmTimeEntry(timeEntry, realm));
             Workspaces = Repository<IDatabaseWorkspace>.For(getRealmInstance, (workspace, realm) => new RealmWorkspace(workspace, realm));
@@ -35,6 +36,7 @@ namespace Toggl.PrimeRadiant.Realm
         public IRepository<IDatabaseTag> Tags { get; }
         public IRepository<IDatabaseTask> Tasks { get; }
         public IRepository<IDatabaseClient> Clients { get; }
+        public ISingleObjectStorage<IDatabasePreferences> Preferences { get; }
         public IRepository<IDatabaseProject> Projects { get; }
         public ISingleObjectStorage<IDatabaseUser> User { get; }
         public IRepository<IDatabaseTimeEntry> TimeEntries { get; }
@@ -59,12 +61,12 @@ namespace Toggl.PrimeRadiant.Realm
         private RealmConfiguration createRealmConfiguration()
             => new RealmConfiguration
             {
-                SchemaVersion = 1,
+                SchemaVersion = 2,
                 MigrationCallback = (migration, oldSchemaVersion) =>
                 {
-                    if (oldSchemaVersion < 1)
+                    if (oldSchemaVersion < 2)
                     {
-                        // nothing needs explicit updating when updating form schema 0 to 1
+                        // nothing needs explicit updating when updating form schema 0 to 1 and from 1 to 2
                     }
                 }
             };

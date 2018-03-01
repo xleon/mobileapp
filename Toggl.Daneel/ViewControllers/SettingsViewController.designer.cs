@@ -9,251 +9,307 @@ using System.CodeDom.Compiler;
 
 namespace Toggl.Daneel.ViewControllers
 {
-	[Register ("SettingsViewController")]
-	partial class SettingsViewController
-	{
-		[Outlet]
-		UIKit.UISwitch AddMobileTagSwitch { get; set; }
+    [Register ("SettingsViewController")]
+    partial class SettingsViewController
+    {
+        [Outlet]
+        UIKit.UISwitch AddMobileTagSwitch { get; set; }
 
-		[Outlet]
-		UIKit.UIView AddMobileTagView { get; set; }
+        [Outlet]
+        UIKit.UIView AddMobileTagView { get; set; }
 
-		[Outlet]
-		UIKit.UILabel EmailLabel { get; set; }
+        [Outlet]
+        UIKit.UIView ControlsContainerView { get; set; }
 
-		[Outlet]
-		UIKit.UIView EmailView { get; set; }
+        [Outlet]
+        UIKit.UILabel DateFormatLabel { get; set; }
 
-		[Outlet]
-		UIKit.UIView FeedbackView { get; set; }
+        [Outlet]
+        UIKit.UIView DateFormatView { get; set; }
 
-		[Outlet]
-		UIKit.UIView HelpView { get; set; }
+        [Outlet]
+        UIKit.UILabel EmailLabel { get; set; }
 
-		[Outlet]
-		Toggl.Daneel.Views.ActivityIndicatorView LoggingOutActivityIndicatorView { get; set; }
+        [Outlet]
+        UIKit.UIView EmailView { get; set; }
 
-		[Outlet]
-		UIKit.UIImageView LoggingOutIndicator { get; set; }
+        [Outlet]
+        UIKit.UIView FeedbackView { get; set; }
 
-		[Outlet]
-		UIKit.UILabel LoggingOutLabel { get; set; }
+        [Outlet]
+        UIKit.UIView FormatSettingsSection { get; set; }
 
-		[Outlet]
-		UIKit.UIView LoggingOutView { get; set; }
+        [Outlet]
+        UIKit.UILabel FormatSettingsTitle { get; set; }
 
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UIButton LogoutButton { get; set; }
+        [Outlet]
+        UIKit.UIView HelpView { get; set; }
 
-		[Outlet]
-		UIKit.UISwitch ManualModeSwitch { get; set; }
+        [Outlet]
+        Toggl.Daneel.Views.ActivityIndicatorView LoggingOutActivityIndicatorView { get; set; }
 
-		[Outlet]
-		UIKit.UIView ManualModeView { get; set; }
+        [Outlet]
+        UIKit.UIImageView LoggingOutIndicator { get; set; }
 
-		[Outlet]
-		UIKit.UILabel PlanLabel { get; set; }
+        [Outlet]
+        UIKit.UILabel LoggingOutLabel { get; set; }
 
-		[Outlet]
-		UIKit.UIView RateView { get; set; }
+        [Outlet]
+        UIKit.UIView LoggingOutView { get; set; }
 
-		[Outlet]
-		UIKit.UIView SubscriptionView { get; set; }
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton LogoutButton { get; set; }
 
-		[Outlet]
-		UIKit.UIImageView SyncedIcon { get; set; }
+        [Outlet]
+        UIKit.UIView LogoutContainerView { get; set; }
 
-		[Outlet]
-		UIKit.UILabel SyncedLabel { get; set; }
+        [Outlet]
+        UIKit.NSLayoutConstraint LogoutTopConstraint { get; set; }
 
-		[Outlet]
-		UIKit.UIView SyncedView { get; set; }
+        [Outlet]
+        UIKit.UISwitch ManualModeSwitch { get; set; }
 
-		[Outlet]
-		Toggl.Daneel.Views.ActivityIndicatorView SyncingActivityIndicatorView { get; set; }
+        [Outlet]
+        UIKit.UIView ManualModeView { get; set; }
 
-		[Outlet]
-		UIKit.UIImageView SyncingIndicator { get; set; }
+        [Outlet]
+        UIKit.UILabel PlanLabel { get; set; }
 
-		[Outlet]
-		UIKit.UILabel SyncingLabel { get; set; }
+        [Outlet]
+        UIKit.UIView RateView { get; set; }
 
-		[Outlet]
-		UIKit.UIView SyncingView { get; set; }
+        [Outlet]
+        UIKit.UIView SubscriptionView { get; set; }
 
-		[Outlet]
-		UIKit.NSLayoutConstraint TopConstraint { get; set; }
+        [Outlet]
+        UIKit.UIImageView SyncedIcon { get; set; }
 
-		[Outlet]
-		UIKit.UISwitch TwentyFourHourClockSwitch { get; set; }
+        [Outlet]
+        UIKit.UILabel SyncedLabel { get; set; }
 
-		[Outlet]
-		UIKit.UIView TwentyFourHourClockView { get; set; }
+        [Outlet]
+        UIKit.UIView SyncedView { get; set; }
 
-		[Outlet]
-		UIKit.UIView UpdateView { get; set; }
+        [Outlet]
+        Toggl.Daneel.Views.ActivityIndicatorView SyncingActivityIndicatorView { get; set; }
 
-		[Outlet]
-		UIKit.UILabel VersionLabel { get; set; }
+        [Outlet]
+        UIKit.UIImageView SyncingIndicator { get; set; }
 
-		[Outlet]
-		UIKit.UILabel WorkspaceLabel { get; set; }
+        [Outlet]
+        UIKit.UILabel SyncingLabel { get; set; }
 
-		[Outlet]
-		UIKit.UIView WorkspaceView { get; set; }
-		
-		void ReleaseDesignerOutlets ()
-		{
-			if (LoggingOutActivityIndicatorView != null) {
-				LoggingOutActivityIndicatorView.Dispose ();
-				LoggingOutActivityIndicatorView = null;
-			}
+        [Outlet]
+        UIKit.UIView SyncingView { get; set; }
 
-			if (SyncingActivityIndicatorView != null) {
-				SyncingActivityIndicatorView.Dispose ();
-				SyncingActivityIndicatorView = null;
-			}
+        [Outlet]
+        UIKit.NSLayoutConstraint TopConstraint { get; set; }
 
-			if (AddMobileTagSwitch != null) {
-				AddMobileTagSwitch.Dispose ();
-				AddMobileTagSwitch = null;
-			}
+        [Outlet]
+        UIKit.UISwitch TwentyFourHourClockSwitch { get; set; }
 
-			if (AddMobileTagView != null) {
-				AddMobileTagView.Dispose ();
-				AddMobileTagView = null;
-			}
+        [Outlet]
+        UIKit.UIView TwentyFourHourClockView { get; set; }
 
-			if (EmailLabel != null) {
-				EmailLabel.Dispose ();
-				EmailLabel = null;
-			}
+        [Outlet]
+        UIKit.UIView UpdateView { get; set; }
 
-			if (EmailView != null) {
-				EmailView.Dispose ();
-				EmailView = null;
-			}
+        [Outlet]
+        UIKit.UILabel VersionLabel { get; set; }
 
-			if (FeedbackView != null) {
-				FeedbackView.Dispose ();
-				FeedbackView = null;
-			}
+        [Outlet]
+        UIKit.UILabel WorkspaceLabel { get; set; }
 
-			if (HelpView != null) {
-				HelpView.Dispose ();
-				HelpView = null;
-			}
+        [Outlet]
+        UIKit.UIView WorkspaceView { get; set; }
+        
+        void ReleaseDesignerOutlets ()
+        {
+            if (AddMobileTagSwitch != null) {
+                AddMobileTagSwitch.Dispose ();
+                AddMobileTagSwitch = null;
+            }
 
-			if (LoggingOutIndicator != null) {
-				LoggingOutIndicator.Dispose ();
-				LoggingOutIndicator = null;
-			}
+            if (AddMobileTagView != null) {
+                AddMobileTagView.Dispose ();
+                AddMobileTagView = null;
+            }
 
-			if (LoggingOutLabel != null) {
-				LoggingOutLabel.Dispose ();
-				LoggingOutLabel = null;
-			}
+            if (DateFormatLabel != null) {
+                DateFormatLabel.Dispose ();
+                DateFormatLabel = null;
+            }
 
-			if (LoggingOutView != null) {
-				LoggingOutView.Dispose ();
-				LoggingOutView = null;
-			}
+            if (DateFormatView != null) {
+                DateFormatView.Dispose ();
+                DateFormatView = null;
+            }
 
-			if (LogoutButton != null) {
-				LogoutButton.Dispose ();
-				LogoutButton = null;
-			}
+            if (EmailLabel != null) {
+                EmailLabel.Dispose ();
+                EmailLabel = null;
+            }
 
-			if (PlanLabel != null) {
-				PlanLabel.Dispose ();
-				PlanLabel = null;
-			}
+            if (EmailView != null) {
+                EmailView.Dispose ();
+                EmailView = null;
+            }
 
-			if (RateView != null) {
-				RateView.Dispose ();
-				RateView = null;
-			}
+            if (FeedbackView != null) {
+                FeedbackView.Dispose ();
+                FeedbackView = null;
+            }
 
-			if (SubscriptionView != null) {
-				SubscriptionView.Dispose ();
-				SubscriptionView = null;
-			}
+            if (FormatSettingsSection != null) {
+                FormatSettingsSection.Dispose ();
+                FormatSettingsSection = null;
+            }
 
-			if (SyncedIcon != null) {
-				SyncedIcon.Dispose ();
-				SyncedIcon = null;
-			}
+            if (FormatSettingsTitle != null) {
+                FormatSettingsTitle.Dispose ();
+                FormatSettingsTitle = null;
+            }
 
-			if (SyncedLabel != null) {
-				SyncedLabel.Dispose ();
-				SyncedLabel = null;
-			}
+            if (HelpView != null) {
+                HelpView.Dispose ();
+                HelpView = null;
+            }
 
-			if (SyncedView != null) {
-				SyncedView.Dispose ();
-				SyncedView = null;
-			}
+            if (LoggingOutActivityIndicatorView != null) {
+                LoggingOutActivityIndicatorView.Dispose ();
+                LoggingOutActivityIndicatorView = null;
+            }
 
-			if (SyncingIndicator != null) {
-				SyncingIndicator.Dispose ();
-				SyncingIndicator = null;
-			}
+            if (LoggingOutIndicator != null) {
+                LoggingOutIndicator.Dispose ();
+                LoggingOutIndicator = null;
+            }
 
-			if (SyncingLabel != null) {
-				SyncingLabel.Dispose ();
-				SyncingLabel = null;
-			}
+            if (LoggingOutLabel != null) {
+                LoggingOutLabel.Dispose ();
+                LoggingOutLabel = null;
+            }
 
-			if (SyncingView != null) {
-				SyncingView.Dispose ();
-				SyncingView = null;
-			}
+            if (LoggingOutView != null) {
+                LoggingOutView.Dispose ();
+                LoggingOutView = null;
+            }
 
-			if (TopConstraint != null) {
-				TopConstraint.Dispose ();
-				TopConstraint = null;
-			}
+            if (LogoutButton != null) {
+                LogoutButton.Dispose ();
+                LogoutButton = null;
+            }
 
-			if (TwentyFourHourClockSwitch != null) {
-				TwentyFourHourClockSwitch.Dispose ();
-				TwentyFourHourClockSwitch = null;
-			}
+            if (ManualModeSwitch != null) {
+                ManualModeSwitch.Dispose ();
+                ManualModeSwitch = null;
+            }
 
-			if (TwentyFourHourClockView != null) {
-				TwentyFourHourClockView.Dispose ();
-				TwentyFourHourClockView = null;
-			}
+            if (ManualModeView != null) {
+                ManualModeView.Dispose ();
+                ManualModeView = null;
+            }
 
-			if (UpdateView != null) {
-				UpdateView.Dispose ();
-				UpdateView = null;
-			}
+            if (PlanLabel != null) {
+                PlanLabel.Dispose ();
+                PlanLabel = null;
+            }
 
-			if (VersionLabel != null) {
-				VersionLabel.Dispose ();
-				VersionLabel = null;
-			}
+            if (RateView != null) {
+                RateView.Dispose ();
+                RateView = null;
+            }
 
-			if (WorkspaceLabel != null) {
-				WorkspaceLabel.Dispose ();
-				WorkspaceLabel = null;
-			}
+            if (SubscriptionView != null) {
+                SubscriptionView.Dispose ();
+                SubscriptionView = null;
+            }
 
-			if (WorkspaceView != null) {
-				WorkspaceView.Dispose ();
-				WorkspaceView = null;
-			}
+            if (SyncedIcon != null) {
+                SyncedIcon.Dispose ();
+                SyncedIcon = null;
+            }
 
-			if (ManualModeView != null) {
-				ManualModeView.Dispose ();
-				ManualModeView = null;
-			}
+            if (SyncedLabel != null) {
+                SyncedLabel.Dispose ();
+                SyncedLabel = null;
+            }
 
-			if (ManualModeSwitch != null) {
-				ManualModeSwitch.Dispose ();
-				ManualModeSwitch = null;
-			}
-		}
-	}
+            if (SyncedView != null) {
+                SyncedView.Dispose ();
+                SyncedView = null;
+            }
+
+            if (SyncingActivityIndicatorView != null) {
+                SyncingActivityIndicatorView.Dispose ();
+                SyncingActivityIndicatorView = null;
+            }
+
+            if (SyncingIndicator != null) {
+                SyncingIndicator.Dispose ();
+                SyncingIndicator = null;
+            }
+
+            if (SyncingLabel != null) {
+                SyncingLabel.Dispose ();
+                SyncingLabel = null;
+            }
+
+            if (SyncingView != null) {
+                SyncingView.Dispose ();
+                SyncingView = null;
+            }
+
+            if (TopConstraint != null) {
+                TopConstraint.Dispose ();
+                TopConstraint = null;
+            }
+
+            if (TwentyFourHourClockSwitch != null) {
+                TwentyFourHourClockSwitch.Dispose ();
+                TwentyFourHourClockSwitch = null;
+            }
+
+            if (TwentyFourHourClockView != null) {
+                TwentyFourHourClockView.Dispose ();
+                TwentyFourHourClockView = null;
+            }
+
+            if (UpdateView != null) {
+                UpdateView.Dispose ();
+                UpdateView = null;
+            }
+
+            if (VersionLabel != null) {
+                VersionLabel.Dispose ();
+                VersionLabel = null;
+            }
+
+            if (WorkspaceLabel != null) {
+                WorkspaceLabel.Dispose ();
+                WorkspaceLabel = null;
+            }
+
+            if (WorkspaceView != null) {
+                WorkspaceView.Dispose ();
+                WorkspaceView = null;
+            }
+
+            if (ControlsContainerView != null) {
+                ControlsContainerView.Dispose ();
+                ControlsContainerView = null;
+            }
+
+            if (LogoutTopConstraint != null) {
+                LogoutTopConstraint.Dispose ();
+                LogoutTopConstraint = null;
+            }
+
+            if (LogoutContainerView != null) {
+                LogoutContainerView.Dispose ();
+                LogoutContainerView = null;
+            }
+        }
+    }
 }

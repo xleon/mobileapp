@@ -58,6 +58,7 @@ namespace Toggl.Foundation.DataSources
             Tasks = new TasksDataSource(database.Tasks);
             Workspaces = new WorkspacesDataSource(database);
             Clients = new ClientsDataSource(database.IdProvider, database.Clients, timeService);
+            Preferences = new PreferencesDataSource(database.Preferences);
             Projects = new ProjectsDataSource(database.IdProvider, database.Projects, timeService);
             TimeEntries = new TimeEntriesDataSource(database.IdProvider, shortcutCreator, database.TimeEntries, timeService);
 
@@ -74,6 +75,7 @@ namespace Toggl.Foundation.DataSources
         public ITagsSource Tags { get; }
         public ITasksSource Tasks { get; }
         public IClientsSource Clients { get; }
+        public IPreferencesSource Preferences { get; }
         public IProjectsSource Projects { get; }
         public IWorkspacesSource Workspaces { get; }
         public ITimeEntriesSource TimeEntries { get; }

@@ -30,6 +30,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
         }
 
+        public bool Is24HoursFormat { get; private set; } = true;
+
         public DateTimeOffset MinDate { get; private set; }
 
         public DateTimeOffset MaxDate { get; private set; }
@@ -63,10 +65,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             switch (Mode)
             {
                 case DateTimePickerMode.Date:
-                    return defaultResult.WithDate(dateTime);
+                    return defaultResult.ToUniversalTime().WithDate(dateTime.ToUniversalTime());
                 
                 case DateTimePickerMode.Time:
-                    return defaultResult.WithTime(dateTime);
+                    return defaultResult.ToUniversalTime().WithTime(dateTime.ToUniversalTime());
 
                 case DateTimePickerMode.DateTime:
                     return dateTime;

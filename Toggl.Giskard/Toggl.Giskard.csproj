@@ -35,11 +35,30 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-    <AndroidCreatePackagePerAbi>true</AndroidCreatePackagePerAbi>
+    <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-    <AndroidSupportedAbis>armeabi-v7a;armeabi;x86_64</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi-v7a;armeabi;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
     <OutputPath>..\bin</OutputPath>
+    <DefineConstants></DefineConstants>
+    <AndroidKeyStore>True</AndroidKeyStore>
+    <AndroidSigningKeyStore>../giskard.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>{KEYSTORE_PASSWORD}</AndroidSigningStorePass>
+    <AndroidSigningKeyAlias>{KEYSTORE_ALIAS}</AndroidSigningKeyAlias>
+    <AndroidSigningKeyPass>{KEYSTORE_ALIAS_PASSWORD}</AndroidSigningKeyPass>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.PlayStore|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release.PlayStore</OutputPath>
+    <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <AndroidLinkSkip></AndroidLinkSkip>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidSupportedAbis>armeabi-v7a;armeabi;arm64-v8a;x86_64</AndroidSupportedAbis>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <AndroidCreatePackagePerAbi>true</AndroidCreatePackagePerAbi>
+    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -187,6 +206,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\SelectTagsActivity.cs" />
+    <Compile Include="Adapters\SelectCreatableEntityRecyclerAdapter.cs" />
+    <Compile Include="Adapters\SelectTagsRecyclerAdapter.cs" />
+    <Compile Include="Activities\SelectProjectActivity.cs" />
+    <Compile Include="Bindings\ImageViewVerticalFlipTargetBinding.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
@@ -205,8 +229,10 @@
     <Compile Include="Fragments\SuggestionsFragment.cs" />
     <Compile Include="Fragments\TimeEntriesLogFragment.cs" />
     <Compile Include="Activities\MainActivity.cs" />
+    <Compile Include="TemplateSelectors\SelectTagsTemplateSelector.cs" />
     <Compile Include="TemplateSelectors\TimeEntriesLogTemplateSelector.cs" />
     <Compile Include="Adapters\TimeEntriesLogRecyclerAdapter.cs" />
+    <Compile Include="Views\SelectTagsRecyclerView.cs" />
     <Compile Include="Views\TimeEntriesLogRecyclerView.cs" />
     <Compile Include="Startup\SetupTargetFactories.cs">
       <DependentUpon>SetupTargetFactories.tt</DependentUpon>
@@ -231,7 +257,9 @@
     <Compile Include="Activities\BrowserActivity.cs" />
     <Compile Include="Services\MailService.cs" />
     <Compile Include="Extensions\CircularRevealAnimation.cs" />
+    <Compile Include="Activities\EditTimeEntryActivity.cs" />
     <Compile Include="ApplicationShortcutCreator.cs" />
+    <Compile Include="Bindings\TextViewTagListTargetBinding.cs" />
     <Compile Include="TemplateSelectors\StartTimeEntrySuggestionsTemplateSelector.cs" />
     <Compile Include="Views\StartTimeEntryRecyclerView.cs" />
     <Compile Include="Adapters\StartTimeEntryRecyclerAdapter.cs" />
@@ -242,20 +270,50 @@
     <Compile Include="Bindings\EditTextTextFieldInfoTargetBinding.cs" />
     <Compile Include="Autocomplete\ProjectTokenSpan.cs" />
     <Compile Include="Autocomplete\TagsTokenSpan.cs" />
-    <Compile Include="Views\StartTimeEntryRecyclerViewHolder.cs" />
     <Compile Include="Services\AnalyticsService.cs" />
+    <Compile Include="Fragments\SelectDateTimeFragment.cs" />
     <Compile Include="Bindings\FabVisibilityTargetBinding.cs" />
+    <Compile Include="Extensions\ActivityExtensions.cs" />
+    <Compile Include="Helper\ApiAvailability.cs" />
     <Compile Include="Activities\EditProjectActivity.cs" />
     <Compile Include="Adapters\CreateSuggestionSegmentedRecyclerAdapter.cs" />
+    <Compile Include="Views\CircleView.cs" />
+    <Compile Include="Views\HueSaturationPickerView.cs" />
+    <Compile Include="Fragments\SelectColorFragment.cs" />
+    <Compile Include="Views\ValueSlider.cs" />
+    <Compile Include="TemplateSelectors\SelectColorTemplateSelector.cs" />
+    <Compile Include="Converters\DecimalToPercentageValueConverter.cs" />
+    <Compile Include="Views\DurationEditText.cs" />
+    <Compile Include="Activities\SelectClientActivity.cs" />
+    <Compile Include="Adapters\SelectClientRecyclerAdapter.cs" />
+    <Compile Include="TemplateSelectors\SelectClientTemplateSelector.cs" />
+    <Compile Include="Views\SelectClientRecyclerView.cs" />
+    <Compile Include="Fragments\SelectWorkspaceFragment.cs" />
+    <Compile Include="TemplateSelectors\SelectWorkspaceTemplateSelector.cs" />
+    <Compile Include="Bindings\TextViewFontWeightTargetBinding.cs" />
+    <Compile Include="Services\LicenseProvider.cs" />
+    <Compile Include="TemplateSelectors\SettingsTemplateSelector.cs" />
+    <Compile Include="Views\SelectProjectWithExpandableTasksRecyclerViewHolder.cs" />
+    <Compile Include="Fragments\SelectDateFormatFragment.cs" />
+    <Compile Include="TemplateSelectors\SelectDateFormatTemplateSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml" />
+    <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
+    <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
+    <AndroidResource Include="Resources\layout\SelectProjectActivityProjectCell.axml" />
+    <AndroidResource Include="Resources\layout\SelectProjectActivityTaskCell.axml" />
+    <AndroidResource Include="Resources\layout\SelectProjectActivityWorkspaceHeader.axml" />
     <None Include="Startup\SetupTargetFactories.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SetupTargetFactories.cs</LastGenOutput>
     </None>
+    <AndroidResource Include="Resources\layout\SelectDateFormatFragment.axml" />
+    <AndroidResource Include="Resources\layout\SelectDateFormatFragmentCell.axml" />
+    <AndroidResource Include="Resources\layout\SettingsActivityWorkspaceCell.axml" />
+    <AndroidResource Include="Resources\drawable\TransparentToLightGrayGradient.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
@@ -280,6 +338,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\workspace.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\workspace.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\workspace.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\check.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\check.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\check.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\check.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\check.png" />
     <AndroidResource Include="Resources\drawable-hdpi\client.png" />
     <AndroidResource Include="Resources\drawable-mdpi\client.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\client.png" />
@@ -476,10 +539,18 @@
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityWorkspaceHeader.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityNoEntityCell.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityEmptyCell.axml" />
+    <AndroidResource Include="Resources\layout\EditLayout.axml" />
     <AndroidResource Include="Resources\values\Dimen.xml" />
     <AndroidResource Include="Resources\layout\EditProjectActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivityCell.axml" />
     <AndroidResource Include="Resources\layout\AbcCreateEntityCell.axml" />
+    <AndroidResource Include="Resources\layout\SelectColorFragment.axml" />
+    <AndroidResource Include="Resources\layout\SelectColorFragmentCell.axml" />
+    <AndroidResource Include="Resources\drawable\ValueSliderThumb.xml" />
+    <AndroidResource Include="Resources\layout\SelectClientActivity.axml" />
+    <AndroidResource Include="Resources\layout\SelectClientActivityCell.axml" />
+    <AndroidResource Include="Resources\layout\SelectWorkspaceFragment.axml" />
+    <AndroidResource Include="Resources\layout\SelectWorkspaceFragmentCell.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">

@@ -2,6 +2,7 @@
 using FluentAssertions;
 using MvvmCross.Core.Navigation;
 using NSubstitute;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.Services;
@@ -18,7 +19,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
     {
         public class TheRegisterServicesMethod : BaseMvvmCrossTests
         {
-            [Theory]
+            [Theory, LogIfTooSlow]
             [ClassData(typeof(FiveParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheParametersIsNull(
                 bool useFoundation,
@@ -48,7 +49,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
 
         public class TheRevokeNewUserIfNeededMethod : BaseMvvmCrossTests
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void MarksTheUserAsNotNewWhenUsingTheAppForTheFirstTimeAfterSixtyDays()
             {
                 var version = "1.0";
@@ -56,6 +57,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                 var apiFactory = Substitute.For<IApiFactory>();
                 var database = Substitute.For<ITogglDatabase>();
                 var timeService = Substitute.For<ITimeService>();
+                var analyticsService = Substitute.For<IAnalyticsService>();
                 var googleService = Substitute.For<IGoogleService>();
                 var backgroundService = Substitute.For<IBackgroundService>();
                 var keyValueStorage = Substitute.For<IKeyValueStorage>();
@@ -66,6 +68,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                     apiFactory,
                     database,
                     timeService,
+                    analyticsService,
                     googleService,
                     applicationShortcutCreator,
                     backgroundService,

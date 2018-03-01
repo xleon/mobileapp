@@ -58,7 +58,8 @@ namespace Toggl.Foundation.Tests.Sync.States
                 Observable.Return(projects),
                 Observable.Return(new List<ITimeEntry>()),
                 Observable.Return(new List<ITag>()),
-                Observable.Return(new List<ITask>()));
+                Observable.Return(new List<ITask>()),
+                Observable.Return(Substitute.For<IPreferences>()));
 
             protected override bool IsDeletedOnServer(IProject entity) => entity.ServerDeletedAt.HasValue;
 

@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Globalization;
 using MvvmCross.Platform.Converters;
+using Toggl.Multivac;
+using static System.Math;
 
-namespace Toggl.Daneel.Converters
+namespace Toggl.Foundation.MvvmCross.Converters
 {
-    public class ComplementValueConverter : MvxValueConverter<float, float>
+    [Preserve(AllMembers = true)]
+    public sealed class ComplementValueConverter : MvxValueConverter<float, float>
     {
         protected override float Convert(float value, Type targetType, object parameter, CultureInfo culture)
-            => Math.Abs(value - 1);
+            => Abs(value - 1);
 
         protected override float ConvertBack(float value, Type targetType, object parameter, CultureInfo culture)
-            => Math.Abs(value - 1);
+            => Abs(value - 1);
     }
 }
