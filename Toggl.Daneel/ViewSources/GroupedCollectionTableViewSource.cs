@@ -7,7 +7,6 @@ using Foundation;
 using MvvmCross.Binding.ExtensionMethods;
 using MvvmCross.Binding.iOS.Views;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.WeakSubscription;
 using Toggl.Daneel.Views.Interfaces;
 using Toggl.Foundation.MvvmCross.Collections;
 using UIKit;
@@ -180,12 +179,16 @@ namespace Toggl.Daneel.ViewSources
             {
                 case NotifyCollectionChangedAction.Add:
                     var indexToAdd = NSIndexSet.FromIndex(args.NewStartingIndex);
+                    TableView.BeginUpdates();
                     TableView.InsertSections(indexToAdd, UITableViewRowAnimation.Automatic);
+                    TableView.EndUpdates();
                     break;
 
                 case NotifyCollectionChangedAction.Remove:
                     var indexToRemove = NSIndexSet.FromIndex(args.OldStartingIndex);
+                    TableView.BeginUpdates();
                     TableView.DeleteSections(indexToRemove, UITableViewRowAnimation.Automatic);
+                    TableView.EndUpdates();
                     break;
             }
         }
@@ -198,7 +201,10 @@ namespace Toggl.Daneel.ViewSources
                     var indexPathsToAdd = args.Indexes
                         .Select(row => NSIndexPath.FromRowSection(row, args.CollectionIndex))
                         .ToArray();
+
+                    TableView.BeginUpdates();
                     TableView.InsertRows(indexPathsToAdd, AddAnimation);
+                    TableView.EndUpdates();
                     break;
 
                 case NotifyCollectionChangedAction.Remove:
@@ -206,7 +212,9 @@ namespace Toggl.Daneel.ViewSources
                         .Select(row => NSIndexPath.FromRowSection(row, args.CollectionIndex))
                         .ToArray();
 
+                    TableView.BeginUpdates();
                     TableView.DeleteRows(indexPathsToRemove, RemoveAnimation);
+                    TableView.EndUpdates();
                     break;
 
                 case NotifyCollectionChangedAction.Replace:
@@ -214,7 +222,9 @@ namespace Toggl.Daneel.ViewSources
                         .Select(row => NSIndexPath.FromRowSection(row, args.CollectionIndex))
                         .ToArray();
 
+                    TableView.BeginUpdates();
                     TableView.ReloadRows(indexPathsToUpdate, ReplaceAnimation);
+                    TableView.EndUpdates();
                     break;
             }
         }
