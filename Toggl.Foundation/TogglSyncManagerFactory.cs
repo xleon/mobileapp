@@ -73,7 +73,7 @@ namespace Toggl.Foundation
             var persistWorkspaceFeatures = new PersistWorkspacesFeaturesState(database.WorkspaceFeatures, database.SinceParameters);
             var persistTags = new PersistTagsState(database.Tags, database.SinceParameters);
             var persistClients = new PersistClientsState(database.Clients, database.SinceParameters);
-            var persistPreferences = new PersistPreferencesState(database.Preferences, database.SinceParameters);
+            var persistPreferences = new PersistPreferencesState(dataSource.Preferences, database.SinceParameters);
             var persistProjects = new PersistProjectsState(database.Projects, database.SinceParameters);
             var persistTimeEntries = new PersistTimeEntriesState(dataSource.TimeEntries, database.SinceParameters, timeService);
             var persistTasks = new PersistTasksState(database.Tasks, database.SinceParameters);

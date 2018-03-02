@@ -6,10 +6,21 @@ namespace Toggl.Foundation.Models
 {
     internal sealed partial class Preferences
     {
+        public static Preferences DefaultPreferences { get; } =
+            Builder.Create()
+                .SetDurationFormat(DurationFormat.Improved)
+                .SetDateFormat(DateFormat.FromLocalizedDateFormat("DD.MM.YYYY"))
+                .SetTimeOfDayFormat(TimeFormat.FromLocalizedTimeFormat("H:mm"))
+                .SetCollapseTimeEntries(false)
+                .Build();
+
         internal sealed class Builder
         {
             public static Builder FromExisting(IDatabasePreferences preferences)
                 => new Builder(preferences);
+
+            public static Builder Create()
+                => new Builder();
 
             public DateFormat DateFormat { get; private set; }
 
@@ -18,6 +29,10 @@ namespace Toggl.Foundation.Models
             public DurationFormat DurationFormat { get; private set; }
 
             public bool CollapseTimeEntries { get; private set; }
+
+            private Builder()
+            {
+            }
 
             private Builder(IDatabasePreferences preferences)
             {
@@ -61,6 +76,12 @@ namespace Toggl.Foundation.Models
             {
                 if (Enum.IsDefined(typeof(DurationFormat), DurationFormat) == false)
                     throw new InvalidOperationException($"You need to set a valid value to the {nameof(DurationFormat)} property before building preferences.");
+
+                if (DateFormat.Localized == null)
+                    throw new InvalidOperationException($"You must set a valid value to the {nameof(DateFormat)} property before building preferences.");
+
+                if (TimeOfDayFormat.Localized == null)
+                    throw new InvalidOperationException($"You must set a valid value to the {nameof(TimeOfDayFormat)} property before building preferences.");
             }
         }
 
