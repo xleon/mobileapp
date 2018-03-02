@@ -293,15 +293,15 @@ namespace Toggl.Foundation {
             }
         }
         
-        public static string SuggestionsEmptyStateTitle {
+        public static string LogEmptyStateTitle {
             get {
-                return ResourceManager.GetString("SuggestionsEmptyStateTitle", resourceCulture);
+                return ResourceManager.GetString("LogEmptyStateTitle", resourceCulture);
             }
         }
         
-        public static string SuggestionsEmptyStateText {
+        public static string LogEmptyStateText {
             get {
-                return ResourceManager.GetString("SuggestionsEmptyStateText", resourceCulture);
+                return ResourceManager.GetString("LogEmptyStateText", resourceCulture);
             }
         }
         

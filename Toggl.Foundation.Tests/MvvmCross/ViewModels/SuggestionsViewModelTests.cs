@@ -28,7 +28,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected ISuggestionProviderContainer Container { get; } = Substitute.For<ISuggestionProviderContainer>();
 
             protected override SuggestionsViewModel CreateViewModel()
-                => new SuggestionsViewModel(DataSource, AnalyticsService, OnboardingStorage, Container, TimeService);
+                => new SuggestionsViewModel(DataSource, AnalyticsService, Container, TimeService);
 
             protected void SetProviders(params ISuggestionProvider[] providers)
             {
@@ -39,10 +39,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheConstructor : SuggestionsViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(FiveParameterConstructorTestData))]
+            [ClassData(typeof(FourParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource, 
-                bool useOnboardingStorage, 
                 bool useContainer, 
                 bool useAnalyticsService,
                 bool useTimeService)
@@ -51,10 +50,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
-                var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SuggestionsViewModel(dataSource, analyticsService, onboardingStorage, container, timeService);
+                    () => new SuggestionsViewModel(dataSource, analyticsService, container, timeService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();

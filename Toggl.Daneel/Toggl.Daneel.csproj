@@ -262,9 +262,6 @@
     <ImageAsset Include="Resources\Images.xcassets\icUpS.imageset\icUpS.png" />
     <ImageAsset Include="Resources\Images.xcassets\icUpS.imageset\icUpS%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icUpS.imageset\icUpS%403x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\playIcon.imageset\playIcon.png" />
-    <ImageAsset Include="Resources\Images.xcassets\playIcon.imageset\playIcon%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\playIcon.imageset\playIcon%403x.png" />
     <ImageAsset Include="Resources\Images.xcassets\stopIcon.imageset\stopIcon.png" />
     <ImageAsset Include="Resources\Images.xcassets\stopIcon.imageset\stopIcon%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\stopIcon.imageset\stopIcon%403x.png" />
@@ -421,13 +418,14 @@
     <ImageAsset Include="Resources\Images.xcassets\icErrorEdit.imageset\icErrorEdit.png" />
     <ImageAsset Include="Resources\Images.xcassets\icErrorEdit.imageset\icErrorEdit%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icErrorEdit.imageset\icErrorEdit%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\playIcon.imageset\play.png" />
+    <ImageAsset Include="Resources\Images.xcassets\playIcon.imageset\play%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\playIcon.imageset\play%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="ViewControllers\OnboardingViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\LoginViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\TimeEntriesLogViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\SuggestionsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\MainViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\EditTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\StartTimeEntryViewController.xib" />
@@ -456,7 +454,6 @@
     <InterfaceDefinition Include="Views\StartTimeEntry\TaskSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\WorkspaceHeaderViewCell.xib" />
     <InterfaceDefinition Include="Views\Suggestions\SuggestionsEmptyViewCell.xib" />
-    <InterfaceDefinition Include="Views\Suggestions\SuggestionsViewCell.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\ClientViewCell.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\CreateEntityViewCell.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\SelectableTagViewCell.xib" />
@@ -467,6 +464,8 @@
     <InterfaceDefinition Include="Views\Reports\ReportsLegendViewCell.xib" />
     <InterfaceDefinition Include="Views\Reports\ReportsHeaderView.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\NoEntityInfoViewCell.xib" />
+    <InterfaceDefinition Include="Views\Suggestions\SuggestionView.xib" />
+    <InterfaceDefinition Include="Views\Log\TimeEntriesLogEmptyStateViewCell.xib" />
     <InterfaceDefinition Include="Views\Settings\DateFormatViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectDateFormatViewController.xib" />
   </ItemGroup>
@@ -511,16 +510,7 @@
     <Compile Include="Binding\TextFieldFocusTargetBinding.cs" />
     <Compile Include="Presentation\TogglPresenter.cs" />
     <Compile Include="ViewControllers\Navigation\TogglNavigationController.cs" />
-    <Compile Include="ViewControllers\TimeEntriesLogViewController.cs" />
-    <Compile Include="ViewControllers\TimeEntriesLogViewController.designer.cs">
-      <DependentUpon>TimeEntriesLogViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewSources\TimeEntriesLogViewSource.cs" />
-    <Compile Include="ViewSources\SuggestionsTableViewSource.cs" />
-    <Compile Include="ViewControllers\SuggestionsViewController.cs" />
-    <Compile Include="ViewControllers\SuggestionsViewController.designer.cs">
-      <DependentUpon>SuggestionsViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewControllers\MainViewController.cs" />
     <Compile Include="ViewControllers\MainViewController.designer.cs">
       <DependentUpon>MainViewController.cs</DependentUpon>
@@ -562,7 +552,6 @@
       <DependentUpon>SelectDateTimeViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\TextExtensions.cs" />
-    <Compile Include="Views\MainScrollView.cs" />
     <Compile Include="ViewControllers\SelectProjectViewController.cs" />
     <Compile Include="ViewControllers\SelectProjectViewController.designer.cs">
       <DependentUpon>SelectProjectViewController.cs</DependentUpon>
@@ -685,10 +674,6 @@
     <Compile Include="Views\Suggestions\SuggestionsEmptyViewCell.designer.cs">
       <DependentUpon>SuggestionsEmptyViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Suggestions\SuggestionsViewCell.cs" />
-    <Compile Include="Views\Suggestions\SuggestionsViewCell.designer.cs">
-      <DependentUpon>SuggestionsViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\Color\ValueSliderView.cs" />
     <Compile Include="Views\EditTimeEntry\TextViewWithCharacterCounter.cs" />
     <Compile Include="Views\EntityCreation\ClientViewCell.cs" />
@@ -767,7 +752,20 @@
     <Compile Include="Views\EditDuration\DurationField.cs" />
     <Compile Include="Views\EditDuration\NumberKeyPressedEventArgs.cs" />
     <Compile Include="Binding\ButtonImageTargetBinding.cs" />
+    <Compile Include="Views\Suggestions\SuggestionsView.cs" />
+    <Compile Include="Views\Suggestions\SuggestionView.cs" />
+    <Compile Include="Views\Suggestions\SuggestionView.designer.cs">
+      <DependentUpon>SuggestionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSources\MainTableViewSource.cs" />
+    <Compile Include="ViewSources\SwipeToRefreshTableViewDelegate.cs" />
+    <Compile Include="Converters\CollectionSizeToHeightConverter.cs" />
+    <Compile Include="Binding\LayoutConstraintConstantTargetBinding.cs" />
     <Compile Include="Services\LicenseProvider.cs" />
+    <Compile Include="Views\Log\TimeEntriesLogEmptyStateViewCell.cs" />
+    <Compile Include="Views\Log\TimeEntriesLogEmptyStateViewCell.designer.cs">
+      <DependentUpon>TimeEntriesLogEmptyStateViewCell.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings\DateFormatViewCell.cs" />
     <Compile Include="Views\Settings\DateFormatViewCell.designer.cs">
       <DependentUpon>DateFormatViewCell.cs</DependentUpon>

@@ -116,7 +116,7 @@ Please try again.</value>
         <value>sec</value>
     </data>
     <data name="SuggestionsHeader">
-        <value>Working on these tasks?</value>
+        <value>WORKING ON THESE?</value>
     </data>
     <data name="AddDescription">
         <value>Add description</value>
@@ -142,10 +142,10 @@ Please try again.</value>
     <data name="ReleaseToRefresh">
         <value>Release to Refresh</value>
     </data>
-    <data name="SuggestionsEmptyStateTitle">
+    <data name="LogEmptyStateTitle">
         <value>Welcome back!</value>
     </data>
-    <data name="SuggestionsEmptyStateText">
+    <data name="LogEmptyStateText">
         <value>You haven’t tracked time for a while.
 Start the timer and your most used
 time entries will appear here.</value>

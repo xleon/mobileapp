@@ -1,6 +1,4 @@
-﻿using System;
-using CoreAnimation;
-using CoreGraphics;
+﻿using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
@@ -11,7 +9,9 @@ using MvvmCross.Plugins.Color.iOS;
 using MvvmCross.Plugins.Visibility;
 using Toggl.Daneel.Combiners;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Suggestions;
 using Toggl.Daneel.Views;
+using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -26,11 +26,16 @@ namespace Toggl.Daneel.ViewControllers
         private const float animationAngle = 0.1f;
         private const float showCardDelay = 0.1f;
 
+        private const float spiderHingeCornerRadius = 0.8f;
+        private const float spiderHingeWidth = 16;
+        private const float spiderHingeHeight = 2;
+        private const float spiderXOffset = -2;
+
+        private readonly UIView spiderContainerView = new UIView();
+        private readonly SpiderOnARopeView spiderBroView = new SpiderOnARopeView();
         private readonly UIButton reportsButton = new UIButton(new CGRect(0, 0, 40, 40));
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 40));
         private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
-
-        private IDisposable willEnterForegroundNotification;
 
         private bool viewInitialized;
 
@@ -39,26 +44,30 @@ namespace Toggl.Daneel.ViewControllers
         {
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-
-            if (disposing == false) return;
-
-            willEnterForegroundNotification?.Dispose();
-            willEnterForegroundNotification = null;
-        }
-
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
             prepareViews();
 
+            var source = new MainTableViewSource(TimeEntriesLogTableView);
+            var suggestionsView = new SuggestionsView();
+
+            TimeEntriesLogTableView.TableHeaderView = suggestionsView;
+            TimeEntriesLogTableView.Source = source;
+
+            suggestionsView.DataContext = ViewModel.SuggestionsViewModel;
+
+            source.Initialize();
+
+            var timeEntriesLogFooter = new UIView(
+                new CGRect(0, 0, UIScreen.MainScreen.Bounds.Width, 64)
+            );
             var colorConverter = new MvxNativeColorValueConverter();
             var visibilityConverter = new MvxVisibilityValueConverter();
             var timeSpanConverter = new TimeSpanToDurationValueConverter();
             var invertedVisibilityConverter = new MvxInvertedVisibilityValueConverter();
+            var timeEntriesLogFooterConverter = new BoolToConstantValueConverter<UIView>(new UIView(), timeEntriesLogFooter);
             var projectTaskClientCombiner = new ProjectTaskClientValueCombiner(
                 CurrentTimeEntryProjectTaskClientLabel.Font.CapHeight,
                 Color.Main.CurrentTimeEntryClientColor.ToNativeColor(),
@@ -71,38 +80,68 @@ namespace Toggl.Daneel.ViewControllers
 
             var bindingSet = this.CreateBindingSet<MainViewController, MainViewModel>();
 
+            //Table view
+            bindingSet.Bind(source)
+                      .To(vm => vm.TimeEntriesLog.TimeEntries);
+
+            bindingSet.Bind(source)
+                      .For(v => v.SyncProgress)
+                      .To(vm => vm.SyncingProgress);
+
+            bindingSet.Bind(source)
+                      .For(v => v.IsEmptyState)
+                      .To(vm => vm.ShouldShowEmptyState);
+
+            bindingSet.Bind(TimeEntriesLogTableView)
+                      .For(v => v.TableFooterView)
+                      .To(vm => vm.TimeEntriesLog.IsEmpty)
+                      .WithConversion(timeEntriesLogFooterConverter);
+
             //Commands
             bindingSet.Bind(reportsButton).To(vm => vm.OpenReportsCommand);
             bindingSet.Bind(settingsButton).To(vm => vm.OpenSettingsCommand);
             bindingSet.Bind(StopTimeEntryButton).To(vm => vm.StopTimeEntryCommand);
             bindingSet.Bind(StartTimeEntryButton).To(vm => vm.StartTimeEntryCommand);
             bindingSet.Bind(EditTimeEntryButton).To(vm => vm.EditTimeEntryCommand);
-            bindingSet.Bind(MainPagedScrollView)
-                      .For(v => v.RefreshCommand)
-                      .To(vm => vm.RefreshCommand);
 
             bindingSet.Bind(CurrentTimeEntryCard)
                       .For(v => v.BindTap())
                       .To(vm => vm.EditTimeEntryCommand);
+            
+            bindingSet.Bind(source)
+                      .For(v => v.SelectionChangedCommand)
+                      .To(vm => vm.TimeEntriesLog.EditCommand);
+            
+            bindingSet.Bind(source)
+                      .For(v => v.ContinueTimeEntryCommand)
+                      .To(vm => vm.TimeEntriesLog.ContinueTimeEntryCommand);
+            
+            bindingSet.Bind(source)
+                      .For(v => v.RefreshCommand)
+                      .To(vm => vm.RefreshCommand);
+
+            bindingSet.Bind(source)
+                      .For(v => v.DeleteTimeEntryCommand)
+                      .To(vm => vm.TimeEntriesLog.DeleteCommand);
+
+            bindingSet.Bind(suggestionsView)
+                      .For(v => v.SuggestionTappedCommad)
+                      .To(vm => vm.SuggestionsViewModel.StartTimeEntryCommand);
 
             //Visibility
-            bindingSet.Bind(SpiderBroView)
-                      .For(v => v.BindSpiderVisibility())
-                      .To(vm => vm.SpiderIsVisible);
-
-            bindingSet.Bind(SpiderHinge)
-                     .For(v => v.BindVisibility())
-                     .To(vm => vm.SpiderIsVisible)
-                     .WithConversion(visibilityConverter);
-
-            bindingSet.Bind(SyncIndicatorView)
+            bindingSet.Bind(WelcomeBackView)
                       .For(v => v.BindVisibility())
-                      .To(vm => vm.ShowSyncIndicator)
+                      .To(vm => vm.ShouldShowWelcomeBack)
                       .WithConversion(visibilityConverter);
 
-            bindingSet.Bind(MainPagedScrollView)
-                      .For(v => v.SyncProgress)
-                      .To(vm => vm.SyncingProgress);
+            bindingSet.Bind(spiderContainerView)
+                      .For(v => v.BindVisibility())
+                      .To(vm => vm.ShouldShowWelcomeBack)
+                      .WithConversion(visibilityConverter);
+
+            bindingSet.Bind(spiderBroView)
+                      .For(v => v.BindSpiderVisibility())
+                      .To(vm => vm.ShouldShowWelcomeBack);
 
             //Text
             bindingSet.Bind(CurrentTimeEntryDescriptionLabel).To(vm => vm.CurrentTimeEntryDescription);
@@ -126,7 +165,8 @@ namespace Toggl.Daneel.ViewControllers
 
             bindingSet.Apply();
 
-            willEnterForegroundNotification = UIApplication.Notifications.ObserveWillEnterForeground((sender, e) => startAnimations());
+            View.SetNeedsLayout();
+            View.LayoutIfNeeded();
         }
 
         internal void OnTimeEntryCardVisibilityChanged(bool visible)
@@ -154,15 +194,14 @@ namespace Toggl.Daneel.ViewControllers
                 new UIBarButtonItem(settingsButton),
                 new UIBarButtonItem(reportsButton)
             };
-
-            startAnimations();
         }
 
-        public override void ViewDidDisappear(bool animated)
+        protected override void Dispose(bool disposing)
         {
-            base.ViewWillDisappear(animated);
+            base.Dispose(disposing);
 
-            SpiderBroView.Dispose();
+            if (!disposing) return;
+            spiderBroView.Dispose();
         }
 
         public override void ViewDidLayoutSubviews()
@@ -172,18 +211,6 @@ namespace Toggl.Daneel.ViewControllers
             if (viewInitialized) return;
 
             viewInitialized = true;
-            MainPagedScrollView.SetContentOffset(new CGPoint(0, 0), false);
-        }
-
-        internal UIView GetContainerFor(Type viewControllerType)
-        {
-            if (viewControllerType == typeof(SuggestionsViewController))
-                return SuggestionsContainer;
-
-            if (viewControllerType == typeof(TimeEntriesLogViewController))
-                return TimeEntriesLogContainer;
-
-            throw new ArgumentOutOfRangeException(nameof(viewControllerType), "Received unexpected ViewController type");
         }
 
         private void prepareViews()
@@ -191,22 +218,11 @@ namespace Toggl.Daneel.ViewControllers
             //Prevent bounces in UIScrollView
             AutomaticallyAdjustsScrollViewInsets = false;
 
-            //Pull to refresh
-            SyncIndicatorView.ContentMode = UIViewContentMode.ScaleAspectFit;
-            MainPagedScrollView.SyncStateView = SyncStateView;
-            MainPagedScrollView.SyncStateLabel = SyncStateLabel;
-            MainPagedScrollView.ContentInset = new UIEdgeInsets(MainScrollView.SyncStateViewHeight * 2, 0, 0, 0);
-
-            //Sync bar
-            DismissSyncBarImageView.Image = DismissSyncBarImageView.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-            DismissSyncBarImageView.TintColor = UIColor.White;
-            DismissSyncBarImageView.Hidden = true;
-            MainPagedScrollView.DismissSyncBarImageView = DismissSyncBarImageView;
-
             //Card border
-            CurrentTimeEntryCard.Layer.BorderWidth = 1;
             CurrentTimeEntryCard.Layer.CornerRadius = 8;
-            CurrentTimeEntryCard.Layer.BorderColor = Color.TimeEntriesLog.ButtonBorder.ToNativeColor().CGColor;
+            CurrentTimeEntryCard.Layer.ShadowColor = UIColor.Black.CGColor;
+            CurrentTimeEntryCard.Layer.ShadowOffset = new CGSize(0, -2);
+            CurrentTimeEntryCard.Layer.ShadowOpacity = 0.1f;
             CurrentTimeEntryElapsedTimeLabel.Font = CurrentTimeEntryElapsedTimeLabel.Font.GetMonospacedDigitFont();
 
             // Card animations
@@ -223,7 +239,7 @@ namespace Toggl.Daneel.ViewControllers
             RunningEntryDescriptionFadeView.FadeLeft = true;
             RunningEntryDescriptionFadeView.FadeRight = true;
 
-            ScrollViewTopConstraint.AdaptForIos10(NavigationController.NavigationBar);
+            prepareSpiderViews();
         }
 
         private void showTimeEntryCard()
@@ -261,13 +277,48 @@ namespace Toggl.Daneel.ViewControllers
                 });
         }
 
-        private void startAnimations()
+        //Spider is added in code, because IB doesn't allow adding subviews
+        //to a UITableView and the spider needs to be a subview of the table
+        //view so it reacts to pulling down to refresh
+        private void prepareSpiderViews()
         {
-            SyncIndicatorView.StartAnimation();
-            if (ViewModel.SpiderIsVisible)
-            {
-                SpiderBroView.Show();
-            }
+            var spiderHinge = new UIView();
+
+            spiderHinge.Layer.CornerRadius = spiderHingeCornerRadius;
+            spiderHinge.TranslatesAutoresizingMaskIntoConstraints = false;
+            spiderHinge.BackgroundColor = Color.Main.SpiderHinge.ToNativeColor();
+            spiderContainerView.TranslatesAutoresizingMaskIntoConstraints = false;
+            spiderBroView.TranslatesAutoresizingMaskIntoConstraints = false;
+            spiderContainerView.BackgroundColor = UIColor.Clear;
+
+            spiderContainerView.AddSubview(spiderHinge);
+            spiderContainerView.AddSubview(spiderBroView);
+            TimeEntriesLogTableView.AddSubview(spiderContainerView);
+
+            //Container constraints
+            spiderContainerView.WidthAnchor.ConstraintEqualTo(TimeEntriesLogTableView.WidthAnchor).Active = true;
+            spiderContainerView.HeightAnchor.ConstraintEqualTo(TimeEntriesLogTableView.HeightAnchor).Active = true;
+            spiderContainerView.CenterYAnchor.ConstraintEqualTo(TimeEntriesLogTableView.CenterYAnchor).Active = true;
+            spiderContainerView.CenterXAnchor.ConstraintEqualTo(TimeEntriesLogTableView.CenterXAnchor).Active = true;
+
+            //Hinge constraints
+            spiderHinge.WidthAnchor.ConstraintEqualTo(spiderHingeWidth).Active = true;
+            spiderHinge.HeightAnchor.ConstraintEqualTo(spiderHingeHeight).Active = true;
+            spiderHinge.TopAnchor.ConstraintEqualTo(spiderContainerView.TopAnchor).Active = true;
+            spiderHinge.CenterXAnchor.ConstraintEqualTo(spiderContainerView.CenterXAnchor).Active = true;
+
+            //Spider constraints
+            spiderBroView.TopAnchor.ConstraintEqualTo(spiderContainerView.TopAnchor).Active = true;
+            spiderBroView.WidthAnchor.ConstraintEqualTo(spiderContainerView.WidthAnchor).Active = true;
+            spiderBroView.BottomAnchor.ConstraintEqualTo(spiderContainerView.BottomAnchor).Active = true;
+            spiderBroView.CenterXAnchor.ConstraintEqualTo(spiderContainerView.CenterXAnchor).Active = true;
+        }
+
+        internal void Reload()
+        {
+            var range = new NSRange(0, TimeEntriesLogTableView.NumberOfSections());
+            var indexSet = NSIndexSet.FromNSRange(range);
+            TimeEntriesLogTableView.ReloadSections(indexSet, UITableViewRowAnimation.None);
         }
     }
 }

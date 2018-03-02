@@ -31,8 +31,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private bool areContineButtonsEnabled = true;
 
-        public bool IsWelcome { get; private set; }
-
         public NestableObservableCollection<TimeEntryViewModelCollection, TimeEntryViewModel> TimeEntries { get; }
             = new NestableObservableCollection<TimeEntryViewModelCollection, TimeEntryViewModel>(
                 newTimeEntry => vm => vm.Start < newTimeEntry.Start
@@ -41,17 +39,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         [DependsOn(nameof(TimeEntries))]
         public bool IsEmpty => !TimeEntries.Any();
 
-        [DependsOn(nameof(IsWelcome))]
-        public string EmptyStateTitle
-            => IsWelcome
-            ? Resources.TimeEntriesLogEmptyStateWelcomeTitle
-            : Resources.TimeEntriesLogEmptyStateTitle;
-
-        [DependsOn(nameof(IsWelcome))]
-        public string EmptyStateText
-            => IsWelcome
-            ? Resources.TimeEntriesLogEmptyStateWelcomeText
-            : Resources.TimeEntriesLogEmptyStateText;
+        public bool IsWelcome { get; private set; }
 
         public IMvxAsyncCommand<TimeEntryViewModel> EditCommand { get; }
 
@@ -86,6 +74,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             await base.Initialize();
 
+            IsWelcome = onboardingStorage.IsNewUser();
+
             await reset();
 
             var deleteDisposable =
@@ -104,8 +94,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var midnightDisposable =
                 timeService.MidnightObservable
                     .Subscribe(onMidnight);
-
-            IsWelcome = onboardingStorage.IsNewUser();
 
             disposeBag.Add(createDisposable);
             disposeBag.Add(updateDisposable);
@@ -201,13 +189,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             RaisePropertyChanged(nameof(IsEmpty));
         }
 
-        private void OnIsWelcomeChanged()
-        {
-            if (IsWelcome) return;
-
-            onboardingStorage.SetIsNewUser(false);
-        }
-
         private void onMidnight(DateTimeOffset midnight)
         {
             ChangePresentation(new ReloadLogHint());
@@ -220,7 +201,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task delete(TimeEntryViewModel timeEntryViewModel)
         {
-            await dataSource.TimeEntries.Delete(timeEntryViewModel.Id);
+            await dataSource
+                .TimeEntries
+                .Delete(timeEntryViewModel.Id)
+                .Do(_ => dataSource.SyncManager.PushSync());
         }
 
         private async Task continueTimeEntry(TimeEntryViewModel timeEntryViewModel)
@@ -250,6 +234,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 });
 
             analyticsService.TrackStartedTimeEntry(TimeEntryStartOrigin.Continue);
+        }
+
+        private void OnIsWelcomeChanged()
+        {
+            if (IsWelcome) return;
+
+            onboardingStorage.SetIsNewUser(false);
         }
     }
 }

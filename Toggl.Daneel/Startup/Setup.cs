@@ -21,7 +21,7 @@ namespace Toggl.Daneel
 {
     public partial class Setup : MvxIosSetup
     {
-        private const int maxNumberOfSuggestions = 7;
+        private const int maxNumberOfSuggestions = 3;
 
         private IAnalyticsService analyticsService;
         private IMvxNavigationService navigationService;

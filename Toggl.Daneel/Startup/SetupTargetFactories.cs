@@ -3,6 +3,8 @@ using MvvmCross.iOS.Platform;
 using Toggl.Daneel.Binding;
 using UIKit;
 using Toggl.Daneel.Views;
+using System.Collections.Generic;
+using MvvmCross.Binding.iOS.Views;
 
 namespace Toggl.Daneel
 {
@@ -40,6 +42,11 @@ namespace Toggl.Daneel
             registry.RegisterCustomBindingFactory<NSLayoutConstraint>(
                 LayoutConstraintAnimatedConstantTargetBinding.BindingName,
                 view => new LayoutConstraintAnimatedConstantTargetBinding(view)
+            );
+
+            registry.RegisterCustomBindingFactory<NSLayoutConstraint>(
+                LayoutConstraintConstantTargetBinding.BindingName,
+                view => new LayoutConstraintConstantTargetBinding(view)
             );
 
             registry.RegisterCustomBindingFactory<UINavigationItem>(

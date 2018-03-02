@@ -4,6 +4,7 @@ using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
+using Toggl.Foundation.Suggestions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
@@ -23,6 +24,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         protected ITogglDataSource DataSource { get; } = Substitute.For<ITogglDataSource>();
         protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
         protected IPlatformConstants PlatformConstants { get; } = Substitute.For<IPlatformConstants>();
+        protected ISuggestionProviderContainer SuggestionProviderContainer { get; } = Substitute.For<ISuggestionProviderContainer>();
 
         protected IOnboardingStorage OnboardingStorage { get; } = Substitute.For<IOnboardingStorage>();
 
@@ -37,6 +39,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         private void Setup()
         {
+            Ioc.RegisterSingleton(Api);
+            Ioc.RegisterSingleton(Database);
+            Ioc.RegisterSingleton(DataSource);
+            Ioc.RegisterSingleton(TimeService);
+            Ioc.RegisterSingleton(MailService);
+            Ioc.RegisterSingleton(DialogService);
+            Ioc.RegisterSingleton(AnalyticsService);
+            Ioc.RegisterSingleton(PlatformConstants);
+            Ioc.RegisterSingleton(OnboardingStorage);
+            Ioc.RegisterSingleton(NavigationService);
+            Ioc.RegisterSingleton(SuggestionProviderContainer);
+
             AdditionalSetup();
 
             ViewModel = CreateViewModel();

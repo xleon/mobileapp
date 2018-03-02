@@ -33,6 +33,11 @@ namespace Toggl.Daneel.Views
 
         public bool IsVisible { get; private set; }
 
+        public SpiderOnARopeView()
+        {
+            init();
+        }
+
         public SpiderOnARopeView(IntPtr handle) : base(handle)
         {
         }
@@ -41,7 +46,13 @@ namespace Toggl.Daneel.Views
         {
             base.AwakeFromNib();
 
+            init();
+        }
+
+        private void init()
+        {
             spiderImage = UIImage.FromBundle("icJustSpider");
+            BackgroundColor = UIColor.Clear;
         }
 
         public override void LayoutSubviews()
@@ -118,6 +129,11 @@ namespace Toggl.Daneel.Views
 
         private void reset()
         {
+            foreach(var subview in Subviews)
+            {
+                subview.RemoveFromSuperview();
+            }
+            
             motionManager?.Dispose();
             gravity?.Dispose();
             spiderAnimator?.Dispose();
@@ -127,11 +143,6 @@ namespace Toggl.Daneel.Views
             motionManager = null;
             gravity = null;
             spiderView = null;
-
-            for (var i = 0; i < Subviews.Length; i++)
-            {
-                Subviews[i].RemoveFromSuperview();
-            }
 
             IsVisible = false;
         }

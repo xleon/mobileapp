@@ -22,10 +22,9 @@ namespace Toggl.Foundation.Tests.MvvmCross
             MvxSingletonCache.Initialize();
             MvxSimpleIoCContainer.Initialize();
 
-            MvxSingleton<IMvxIoCProvider>.Instance.RegisterSingleton(MvxSingleton<IMvxIoCProvider>.Instance);
             MvxSingleton<IMvxIoCProvider>.Instance.RegisterSingleton<IMvxTrace>(new TestTrace());
             MvxSingleton<IMvxIoCProvider>.Instance.RegisterSingleton<IMvxSettings>(new MvxSettings());
-
+            
             MvxTrace.Initialize();
         }
 

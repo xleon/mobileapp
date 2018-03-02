@@ -70,7 +70,7 @@ namespace Toggl.Daneel.ViewSources
         public override nint RowsInSection(UITableView tableview, nint section)
             => GetGroupAt(section).Count();
 
-        protected IEnumerable<TItem> GetGroupAt(nint section)
+        protected virtual IEnumerable<TItem> GetGroupAt(nint section)
             => GroupedItems.ElementAtOrDefault((int)section) ?? new TCollection();
 
         protected override object GetItemAt(NSIndexPath indexPath)
@@ -153,6 +153,11 @@ namespace Toggl.Daneel.ViewSources
             });
         }
 
+        protected virtual void OnSectionRemoved(NSIndexSet indexToRemove)
+        {
+            TableView.DeleteSections(indexToRemove, UITableViewRowAnimation.Automatic);
+        }
+
         protected void OnChildCollectionChanged(object sender, ChildCollectionChangedEventArgs args)
         {
             InvokeOnMainThread(() =>
@@ -179,8 +184,7 @@ namespace Toggl.Daneel.ViewSources
             switch (args.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    var indexToAdd = NSIndexSet.FromIndex(args.NewStartingIndex);
-                    TableView.InsertSections(indexToAdd, UITableViewRowAnimation.Automatic);
+                    OnSectionAdded(NSIndexSet.FromIndex(args.NewStartingIndex));
                     break;
 
                 case NotifyCollectionChangedAction.Remove:
@@ -188,6 +192,11 @@ namespace Toggl.Daneel.ViewSources
                     TableView.DeleteSections(indexToRemove, UITableViewRowAnimation.Automatic);
                     break;
             }
+        }
+
+        protected virtual void OnSectionAdded(NSIndexSet indexToAdd)
+        {
+            TableView.InsertSections(indexToAdd, UITableViewRowAnimation.Automatic);
         }
 
         private void animateRowChangesIfPossible(ChildCollectionChangedEventArgs args)

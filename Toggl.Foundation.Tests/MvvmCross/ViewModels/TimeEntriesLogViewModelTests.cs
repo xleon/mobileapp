@@ -52,52 +52,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public sealed class TheEmptyStateTitleProperty : TimeEntriesLogViewModelTest
-        {
-            [Fact, LogIfTooSlow]
-            public async ThreadingTask ReturnsTheWelcomeStringIfTheIsNewUserPropertyIsTrue()
-            {
-                OnboardingStorage.IsNewUser().Returns(true);
-
-                await ViewModel.Initialize();
-
-                ViewModel.EmptyStateTitle.Should().Be(Resources.TimeEntriesLogEmptyStateWelcomeTitle);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async ThreadingTask ReturnsTheDefaultStringIfTheIsNewUserPropertyIsFalse()
-            {
-                OnboardingStorage.IsNewUser().Returns(false);
-
-                await ViewModel.Initialize();
-
-                ViewModel.EmptyStateTitle.Should().Be(Resources.TimeEntriesLogEmptyStateTitle);
-            }
-        }
-
-        public sealed class TheEmptyStateTextProperty : TimeEntriesLogViewModelTest
-        {
-            [Fact, LogIfTooSlow]
-            public async ThreadingTask ReturnsTheWelcomeStringIfTheIsNewUserPropertyIsTrue()
-            {
-                OnboardingStorage.IsNewUser().Returns(true);
-
-                await ViewModel.Initialize();
-
-                ViewModel.EmptyStateText.Should().Be(Resources.TimeEntriesLogEmptyStateWelcomeText);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async ThreadingTask ReturnsTheDefaultStringIfTheIsNewUserPropertyIsFalse()
-            {
-                OnboardingStorage.IsNewUser().Returns(false);
-
-                await ViewModel.Initialize();
-
-                ViewModel.EmptyStateText.Should().Be(Resources.TimeEntriesLogEmptyStateText);
-            }
-        }
-
         public sealed class TheTimeEntriesProperty
         {
             [Property]
