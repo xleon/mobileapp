@@ -493,17 +493,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.BackCommand.ExecuteAsync();
 
-                await DialogService.Received().ShowMultipleChoiceDialog(
-                    Arg.Any<string>(),
-                    Arg.Is<MultipleChoiceDialogAction>(dialogAction => dialogAction.Destructive == true));
+                await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
             }
 
             [Fact, LogIfTooSlow]
             public async Task DoesNotCloseTheViewIfUserWantsToContinueEditing()
             {
                 makeDirty();
-                DialogService.ShowMultipleChoiceDialog(Arg.Any<string>(), Arg.Any<MultipleChoiceDialogAction>())
-                             .Returns(_ => Task.FromResult(Resources.ContinueEditing));
+                DialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
+                             .Returns(_ => Task.FromResult(false));
 
                 await ViewModel.BackCommand.ExecuteAsync();
 
@@ -514,8 +512,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task ClosesTheViewIfUserWantsToDiscardTheEnteredInformation()
             {
                 makeDirty();
-                DialogService.ShowMultipleChoiceDialog(Arg.Any<string>(), Arg.Any<MultipleChoiceDialogAction>())
-                    .Returns(_ => Task.FromResult(Resources.Discard));
+                DialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
+                             .Returns(_ => Task.FromResult(true));
 
                 await ViewModel.BackCommand.ExecuteAsync();
 

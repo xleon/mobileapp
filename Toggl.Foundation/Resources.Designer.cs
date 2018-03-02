@@ -652,5 +652,17 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("Loading", resourceCulture);
             }
         }
+        
+        public static string DeleteThisTimeEntry {
+            get {
+                return ResourceManager.GetString("DeleteThisTimeEntry", resourceCulture);
+            }
+        }
+        
+        public static string DiscardThisTimeEntry {
+            get {
+                return ResourceManager.GetString("DiscardThisTimeEntry", resourceCulture);
+            }
+        }
     }
 }

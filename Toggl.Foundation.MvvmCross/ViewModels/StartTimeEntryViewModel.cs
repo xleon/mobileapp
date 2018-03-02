@@ -519,12 +519,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             if (IsDirty)
             {
-                var result = await dialogService.ShowMultipleChoiceDialog(
-                    Resources.ContinueEditing,
-                    new MultipleChoiceDialogAction(Resources.Discard, true)
-                );
-
-                if (result != Resources.Discard)
+                var shouldDiscard = await dialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
+                if (!shouldDiscard)
                     return;
             }
 

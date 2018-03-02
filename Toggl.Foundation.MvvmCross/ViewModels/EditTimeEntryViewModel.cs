@@ -215,12 +215,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task delete()
         {
-            var result = await dialogService.ShowMultipleChoiceDialog(
-                Resources.Cancel,
-                new MultipleChoiceDialogAction(Resources.Delete, true)
-            );
-
-            if (result != Resources.Delete)
+            var shouldDelete = await dialogService.ConfirmDestructiveAction(ActionType.DeleteExistingTimeEntry);
+            if (!shouldDelete)
                 return;
 
             deleteDisposable = dataSource.TimeEntries
