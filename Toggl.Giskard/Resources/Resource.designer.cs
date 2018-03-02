@@ -6875,6 +6875,9 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a011b
 			public const int ThemeOverlay_AppCompat_Light = 2131362075;
 			
+			// aapt resource value: 0x7f0a0190
+			public const int TogglDialog = 2131362192;
+			
 			// aapt resource value: 0x7f0a011c
 			public const int Widget_AppCompat_ActionBar = 2131362076;
 			

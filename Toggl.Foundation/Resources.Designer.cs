@@ -113,36 +113,6 @@ namespace Toggl.Foundation {
             }
         }
         
-        public static string TimeEntriesLogEmptyStateTitle {
-            get {
-                return ResourceManager.GetString("TimeEntriesLogEmptyStateTitle", resourceCulture);
-            }
-        }
-        
-        public static string TimeEntriesLogEmptyStateText {
-            get {
-                return ResourceManager.GetString("TimeEntriesLogEmptyStateText", resourceCulture);
-            }
-        }
-        
-        public static string TimeEntriesLogEmptyStateButton {
-            get {
-                return ResourceManager.GetString("TimeEntriesLogEmptyStateButton", resourceCulture);
-            }
-        }
-        
-        public static string TimeEntriesLogEmptyStateWelcomeTitle {
-            get {
-                return ResourceManager.GetString("TimeEntriesLogEmptyStateWelcomeTitle", resourceCulture);
-            }
-        }
-        
-        public static string TimeEntriesLogEmptyStateWelcomeText {
-            get {
-                return ResourceManager.GetString("TimeEntriesLogEmptyStateWelcomeText", resourceCulture);
-            }
-        }
-        
         public static string Today {
             get {
                 return ResourceManager.GetString("Today", resourceCulture);

@@ -313,14 +313,6 @@
     <ImageAsset Include="Resources\Images.xcassets\icProjectDot.imageset\icProjectDot.png" />
     <ImageAsset Include="Resources\Images.xcassets\icProjectDot.imageset\icProjectDot%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icProjectDot.imageset\icProjectDot%403x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icIllustrationTimer.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\icIllustrationTimer.imageset\icIllustrationTimer.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icIllustrationTimer.imageset\icIllustrationTimer%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icIllustrationTimer.imageset\icIllustrationTimer%403x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icIllustrationPaws.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\icIllustrationPaws.imageset\icIllustrationPaws.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icIllustrationPaws.imageset\icIllustrationPaws%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icIllustrationPaws.imageset\icIllustrationPaws%403x.png" />
     <ImageAsset Include="Resources\Images.xcassets\duration.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\duration.imageset\duration.png" />
     <ImageAsset Include="Resources\Images.xcassets\duration.imageset\duration%402x.png" />
@@ -829,6 +821,7 @@
     <Folder Include="Resources\Images.xcassets\icIllustrationTagsSmall.imageset\" />
     <Folder Include="Resources\Images.xcassets\icIllustrationProjectsSmall.imageset\" />
     <Folder Include="Views\Settings\" />
+    <Folder Include="Resources\Images.xcassets\.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />
