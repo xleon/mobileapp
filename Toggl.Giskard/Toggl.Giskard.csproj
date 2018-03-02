@@ -296,6 +296,8 @@
     <Compile Include="Views\SelectProjectWithExpandableTasksRecyclerViewHolder.cs" />
     <Compile Include="Fragments\SelectDateFormatFragment.cs" />
     <Compile Include="TemplateSelectors\SelectDateFormatTemplateSelector.cs" />
+    <Compile Include="Fragments\SelectBeginningOfWeekFragment.cs" />
+    <Compile Include="TemplateSelectors\SelectBeginningOfWeekTemplateSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -314,6 +316,8 @@
     <AndroidResource Include="Resources\layout\SelectDateFormatFragmentCell.axml" />
     <AndroidResource Include="Resources\layout\SettingsActivityWorkspaceCell.axml" />
     <AndroidResource Include="Resources\drawable\TransparentToLightGrayGradient.xml" />
+    <AndroidResource Include="Resources\layout\SelectBeginningOfWeekFragment.axml" />
+    <AndroidResource Include="Resources\layout\SelectBeginningOfWeekFragmentCell.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />

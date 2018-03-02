@@ -655,5 +655,91 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.DateFormat.Should().Be(newDateFormat);
             }
         }
+
+        public sealed class TheSelectBeginningOfWeekCommand : SettingsViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task NavigatesToSelectBeginningOfWeekViewModelPassingCurrentBeginningOfWeek()
+            {
+                var beginningOfWeek = BeginningOfWeek.Friday;
+                var user = Substitute.For<IDatabaseUser>();
+                user.BeginningOfWeek.Returns(beginningOfWeek);
+                DataSource.User.Current.Returns(Observable.Return(user));
+                await ViewModel.Initialize();
+
+                await ViewModel.SelectBeginningOfWeekCommand.ExecuteAsync();
+
+                await NavigationService
+                    .Received()
+                    .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(beginningOfWeek);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task UpdatesTheStoredPreferences()
+            {
+                var oldBeginningOfWeek = BeginningOfWeek.Tuesday;
+                var newBeginningOfWeek = BeginningOfWeek.Sunday;
+
+                var user = Substitute.For<IDatabaseUser>();
+                user.BeginningOfWeek.Returns(oldBeginningOfWeek);
+                DataSource.User.Current.Returns(Observable.Return(user));
+                NavigationService
+                    .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(Arg.Any<BeginningOfWeek>())
+                    .Returns(Task.FromResult(newBeginningOfWeek));
+                await ViewModel.Initialize();
+
+                await ViewModel.SelectBeginningOfWeekCommand.ExecuteAsync();
+
+                await DataSource
+                    .User
+                    .Received()
+                    .Update(Arg.Is<EditUserDTO>(dto => dto.BeginningOfWeek == newBeginningOfWeek));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SelectBeginningOfWeekCommandCallsPushSync()
+            {
+                var oldBeginningOfWeek = BeginningOfWeek.Tuesday;
+                var newBeginningOfWeek = BeginningOfWeek.Sunday;
+                var user = Substitute.For<IDatabaseUser>();
+                user.BeginningOfWeek.Returns(oldBeginningOfWeek);
+                DataSource.User.Current.Returns(Observable.Return(user));
+                NavigationService
+                    .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(Arg.Any<BeginningOfWeek>())
+                    .Returns(Task.FromResult(newBeginningOfWeek));
+                var syncManager = Substitute.For<ISyncManager>();
+                DataSource.SyncManager.Returns(syncManager);
+                await ViewModel.Initialize();
+
+                await ViewModel.SelectBeginningOfWeekCommand.ExecuteAsync();
+
+                await syncManager.Received().PushSync();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task UpdatesTheBeginningOfWeekProperty()
+            {
+                var oldBeginningOfWeek = BeginningOfWeek.Tuesday;
+                var newBeginningOfWeek = BeginningOfWeek.Sunday;
+
+                var oldUser = Substitute.For<IDatabaseUser>();
+                oldUser.BeginningOfWeek.Returns(oldBeginningOfWeek);
+                var newUser = Substitute.For<IDatabaseUser>();
+                newUser.BeginningOfWeek.Returns(newBeginningOfWeek);
+                DataSource.User.Current.Returns(Observable.Return(oldUser));
+                NavigationService
+                    .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(Arg.Any<BeginningOfWeek>())
+                    .Returns(Task.FromResult(newBeginningOfWeek));
+                DataSource
+                    .User
+                    .Update(Arg.Any<EditUserDTO>())
+                    .Returns(Observable.Return(newUser));
+                await ViewModel.Initialize();
+
+                await ViewModel.SelectBeginningOfWeekCommand.ExecuteAsync();
+
+                ViewModel.BeginningOfWeek.Should().Be(newBeginningOfWeek);
+            }
+        }
     }
 }

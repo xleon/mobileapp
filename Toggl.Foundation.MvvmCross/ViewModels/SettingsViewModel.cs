@@ -59,6 +59,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public DateFormat DateFormat { get; private set; }
 
+        public BeginningOfWeek BeginningOfWeek { get; private set; }
+
         public IMvxCommand RateCommand { get; }
 
         public IMvxCommand HelpCommand { get; }
@@ -78,6 +80,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxAsyncCommand PickWorkspaceCommand { get; }
 
         public IMvxAsyncCommand SelectDateFormatCommand { get; }
+
+        public IMvxAsyncCommand SelectBeginningOfWeekCommand { get; }
 
         public IMvxCommand ToggleAddMobileTagCommand { get; }
 
@@ -135,6 +139,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SubmitFeedbackCommand = new MvxAsyncCommand(submitFeedback);
             ToggleAddMobileTagCommand = new MvxCommand(toggleAddMobileTag);
             SelectDateFormatCommand = new MvxAsyncCommand(selectDateFormat);
+            SelectBeginningOfWeekCommand = new MvxAsyncCommand(selectBeginningOfWeek);
             PickWorkspaceCommand = new MvxAsyncCommand(pickDefaultWorkspace);
             ToggleUseTwentyFourHourClockCommand = new MvxCommand(toggleUseTwentyFourHourClock);
             SelectDefaultWorkspaceCommand = new MvxAsyncCommand<SelectableWorkspaceViewModel>(selectDefaultWorkspace);
@@ -150,6 +155,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             workspaceId = defaultWorkspace.Id;
             WorkspaceName = defaultWorkspace.Name;
             IsManualModeEnabled = userPreferences.IsManualModeEnabled();
+            BeginningOfWeek = user.BeginningOfWeek;
 
             var workspaces = await dataSource.Workspaces.GetAll();
             foreach (var workspace in workspaces)
@@ -313,6 +319,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var preferencesDto = new EditPreferencesDTO { DateFormat = newDateFormat };
             var newPreferences = await dataSource.Preferences.Update(preferencesDto);
             DateFormat = newPreferences.DateFormat;
+        }
+
+        private async Task selectBeginningOfWeek()
+        {
+            var newBeginningOfWeek = await navigationService
+                .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(BeginningOfWeek);
+
+            if (BeginningOfWeek == newBeginningOfWeek)
+                return;
+
+            var userDto = new EditUserDTO { BeginningOfWeek = newBeginningOfWeek };
+            var newUser = await dataSource.User.Update(userDto);
+            BeginningOfWeek = newUser.BeginningOfWeek;
+
+            await dataSource.SyncManager.PushSync();
         }
     }
 }
