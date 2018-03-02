@@ -78,6 +78,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand SubmitFeedbackCommand { get; }
 
+        public IMvxAsyncCommand AboutCommand { get; }
+
         public IMvxCommand EditSubscriptionCommand { get; }
 
         public IMvxAsyncCommand PickWorkspaceCommand { get; }
@@ -142,6 +144,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             EditSubscriptionCommand = new MvxCommand(editSubscription);
             ToggleManualModeCommand = new MvxCommand(toggleManualMode);
             SubmitFeedbackCommand = new MvxAsyncCommand(submitFeedback);
+            AboutCommand = new MvxAsyncCommand(openAboutPage);
             ToggleAddMobileTagCommand = new MvxCommand(toggleAddMobileTag);
             SelectDateFormatCommand = new MvxAsyncCommand(selectDateFormat);
             SelectDurationFormatCommand = new MvxAsyncCommand(selectDurationFormat);
@@ -346,6 +349,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             await dataSource.SyncManager.PushSync();
         }
 
+        private async Task openAboutPage()
+        {
+            throw new NotImplementedException();
+        }
+        
         private async Task selectDurationFormat()
         {
             var newDurationFormat = await navigationService

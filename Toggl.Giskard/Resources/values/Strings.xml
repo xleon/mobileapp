@@ -25,7 +25,9 @@
     <string name="Save">Save</string>
     <string name="NameTakenError">Sorry, this name is already taken.</string>
     <string name="General">General</string>
+    <string name="SubmitFeedback">Submit feedback</string>
     <string name="Help">Help</string>
+    <string name="About">About</string>
     <string name="DateAndTime">Date and Time</string>
     <string name="Use24HourClock">Use 24-hour clock</string>
     <string name="Create">Create</string>
