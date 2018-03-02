@@ -664,5 +664,23 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("DiscardThisTimeEntry", resourceCulture);
             }
         }
+        
+        public static string DurationFormatClassic {
+            get {
+                return ResourceManager.GetString("DurationFormatClassic", resourceCulture);
+            }
+        }
+        
+        public static string DurationFormatImproved {
+            get {
+                return ResourceManager.GetString("DurationFormatImproved", resourceCulture);
+            }
+        }
+        
+        public static string DurationFormatDecimal {
+            get {
+                return ResourceManager.GetString("DurationFormatDecimal", resourceCulture);
+            }
+        }
     }
 }

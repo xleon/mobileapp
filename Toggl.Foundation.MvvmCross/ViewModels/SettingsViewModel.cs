@@ -12,6 +12,7 @@ using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
+using Toggl.PrimeRadiant.Models;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Network;
 
@@ -59,6 +60,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public DateFormat DateFormat { get; private set; }
 
+        public DurationFormat DurationFormat { get; private set; }
+
         public BeginningOfWeek BeginningOfWeek { get; private set; }
 
         public IMvxCommand RateCommand { get; }
@@ -80,6 +83,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxAsyncCommand PickWorkspaceCommand { get; }
 
         public IMvxAsyncCommand SelectDateFormatCommand { get; }
+
+        public IMvxAsyncCommand SelectDurationFormatCommand { get; }
 
         public IMvxAsyncCommand SelectBeginningOfWeekCommand { get; }
 
@@ -139,6 +144,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SubmitFeedbackCommand = new MvxAsyncCommand(submitFeedback);
             ToggleAddMobileTagCommand = new MvxCommand(toggleAddMobileTag);
             SelectDateFormatCommand = new MvxAsyncCommand(selectDateFormat);
+            SelectDurationFormatCommand = new MvxAsyncCommand(selectDurationFormat);
             SelectBeginningOfWeekCommand = new MvxAsyncCommand(selectBeginningOfWeek);
             PickWorkspaceCommand = new MvxAsyncCommand(pickDefaultWorkspace);
             ToggleUseTwentyFourHourClockCommand = new MvxCommand(toggleUseTwentyFourHourClock);
@@ -166,11 +172,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             dataSource
                 .Preferences
                 .Get()
-                .Select(preferences => preferences.DateFormat)
-                .Subscribe(
-                    dateFormat => DateFormat = dateFormat,
+                .Subscribe(updateFromPreferences,
                     //Use a default value temporary, while preference syncing isn't implemented
                     ex => DateFormat = DateFormat.FromLocalizedDateFormat("MM/DD/YYYY"));
+        }
+
+        private void updateFromPreferences(IDatabasePreferences preferences)
+        {
+            DateFormat = preferences.DateFormat;
+            DurationFormat = preferences.DurationFormat;
         }
 
         public void rate() => throw new NotImplementedException();
@@ -332,6 +342,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var userDto = new EditUserDTO { BeginningOfWeek = newBeginningOfWeek };
             var newUser = await dataSource.User.Update(userDto);
             BeginningOfWeek = newUser.BeginningOfWeek;
+
+            await dataSource.SyncManager.PushSync();
+        }
+
+        private async Task selectDurationFormat()
+        {
+            var newDurationFormat = await navigationService
+                .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(DurationFormat);
+
+            if (DurationFormat == newDurationFormat)
+                return;
+
+            var preferencesDto = new EditPreferencesDTO { DurationFormat = newDurationFormat };
+            var newPreferences = await dataSource.Preferences.Update(preferencesDto);
+            DurationFormat = newPreferences.DurationFormat;
 
             await dataSource.SyncManager.PushSync();
         }

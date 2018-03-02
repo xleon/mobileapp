@@ -101,7 +101,7 @@ namespace Toggl.Foundation.DataSources
         private IDatabasePreferences updatedPreferences(IDatabasePreferences existing, EditPreferencesDTO dto)
             => Preferences.Builder
                 .FromExisting(existing)
-                .SetDateFormat(dto.DateFormat)
+                .SetFrom(dto)
                 .Build();
     }
 }

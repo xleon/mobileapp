@@ -1,4 +1,5 @@
 ﻿using System;
+using Toggl.Foundation.DTOs;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
 
@@ -46,6 +47,23 @@ namespace Toggl.Foundation.Models
             {
                 ensureValidity();
                 return new Preferences(this);
+            }
+
+            public Builder SetFrom(EditPreferencesDTO dto) 
+            {
+                if (dto.DateFormat.HasValue)
+                    DateFormat = dto.DateFormat.Value;
+
+                if (dto.DurationFormat.HasValue)
+                    DurationFormat = dto.DurationFormat.Value;
+
+                if (dto.TimeOfDayFormat.HasValue)
+                    TimeOfDayFormat = dto.TimeOfDayFormat.Value;
+
+                if (dto.CollapseTimeEntries.HasValue)
+                    CollapseTimeEntries = dto.CollapseTimeEntries.Value;
+
+                return this;
             }
 
             public Builder SetDateFormat(DateFormat dateFormat)

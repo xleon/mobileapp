@@ -31,6 +31,7 @@
     <string name="Create">Create</string>
     <string name="DateFormat">Date format</string>
     <string name="BeginningOfWeek">First day of the week</string>
+    <string name="DurationFormat">Duration display format</string>
     <string name="DefaultWorkspace">Default Workspace</string>
 
     <string name="SettingsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SettingsTemplateSelector, Toggl.Giskard</string>
@@ -43,5 +44,6 @@
     <string name="SelectWorkspaceTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectWorkspaceTemplateSelector, Toggl.Giskard</string>
     <string name="SelectDateFormatTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectDateFormatTemplateSelector, Toggl.Giskard</string>
     <string name="SelectBeginningOfWeekTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectBeginningOfWeekTemplateSelector, Toggl.Giskard</string>
+    <string name="SelectDurationFormatTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectDurationFormatTemplateSelector, Toggl.Giskard</string>
     <string name="StartTimeEntrySuggestionsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.StartTimeEntrySuggestionsTemplateSelector, Toggl.Giskard</string>
 </resources>

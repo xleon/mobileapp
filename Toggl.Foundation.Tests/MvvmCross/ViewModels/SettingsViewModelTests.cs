@@ -656,6 +656,90 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
+        public sealed class TheSelectDurationFormatCommand : SettingsViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task NavigatesToSelectDurationFormatViewModelPassingCurrentDurationFormat()
+            {
+                var durationFormat = DurationFormat.Improved;
+                var preferences = Substitute.For<IDatabasePreferences>();
+                preferences.DurationFormat.Returns(durationFormat);
+                DataSource.Preferences.Get().Returns(Observable.Return(preferences));
+                await ViewModel.Initialize();
+
+                await ViewModel.SelectDurationFormatCommand.ExecuteAsync();
+
+                await NavigationService
+                    .Received()
+                    .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(durationFormat);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task UpdatesTheStoredPreferences()
+            {
+                var oldDurationFormat = DurationFormat.Decimal;
+                var newDurationFormat = DurationFormat.Improved;
+                var preferences = Substitute.For<IDatabasePreferences>();
+                preferences.DurationFormat.Returns(oldDurationFormat);
+                DataSource.Preferences.Get().Returns(Observable.Return(preferences));
+                NavigationService
+                    .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(Arg.Any<DurationFormat>())
+                    .Returns(Task.FromResult(newDurationFormat));
+                await ViewModel.Initialize();
+
+                await ViewModel.SelectDurationFormatCommand.ExecuteAsync();
+
+                await DataSource
+                    .Preferences
+                    .Received()
+                    .Update(Arg.Is<EditPreferencesDTO>(dto => dto.DurationFormat == newDurationFormat));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SelectDurationFormatCommandCallsPushSync()
+            {
+                var oldDurationFormat = DurationFormat.Decimal;
+                var newDurationFormat = DurationFormat.Improved;
+                var preferences = Substitute.For<IDatabasePreferences>();
+                preferences.DurationFormat.Returns(oldDurationFormat);
+                DataSource.Preferences.Get().Returns(Observable.Return(preferences));
+                NavigationService
+                    .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(Arg.Any<DurationFormat>())
+                    .Returns(Task.FromResult(newDurationFormat));
+                var syncManager = Substitute.For<ISyncManager>();
+                DataSource.SyncManager.Returns(syncManager);
+                await ViewModel.Initialize();
+
+                await ViewModel.SelectDurationFormatCommand.ExecuteAsync();
+
+                await syncManager.Received().PushSync();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task UpdatesTheDurationFormatProperty()
+            {
+                var oldDurationFormat = DurationFormat.Decimal;
+                var newDurationFormat = DurationFormat.Improved;
+                var oldPreferences = Substitute.For<IDatabasePreferences>();
+                oldPreferences.DurationFormat.Returns(oldDurationFormat);
+                var newPreferences = Substitute.For<IDatabasePreferences>();
+                newPreferences.DurationFormat.Returns(newDurationFormat);
+                DataSource.Preferences.Get().Returns(Observable.Return(oldPreferences));
+                NavigationService
+                    .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(Arg.Any<DurationFormat>())
+                    .Returns(Task.FromResult(newDurationFormat));
+                DataSource
+                    .Preferences
+                    .Update(Arg.Any<EditPreferencesDTO>())
+                    .Returns(Observable.Return(newPreferences));
+                await ViewModel.Initialize();
+
+                await ViewModel.SelectDurationFormatCommand.ExecuteAsync();
+
+                ViewModel.DurationFormat.Should().Be(newDurationFormat);
+            }
+        }
+
         public sealed class TheSelectBeginningOfWeekCommand : SettingsViewModelTest
         {
             [Fact, LogIfTooSlow]
