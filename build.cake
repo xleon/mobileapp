@@ -138,6 +138,46 @@ private TemporaryFileTransformation GetIosCrashConfigurationTransformation()
     };
 }
 
+private TemporaryFileTransformation GetAndroidGoogleServicesTransformation()
+{
+    const string path = "Toggl.Giskard/google-services.json";
+    var apiKey = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_API_KEY");
+    var clientId = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID");
+    var mobileSdkAppId = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_MOBILE_SDK_APP_ID");
+    var projectNumber = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_PROJECT_NUMBER");
+    var projectId = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_PROJECT_ID");
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    { 
+        Path = path, 
+        Original = file,
+        Temporary = file.Replace("{TOGGL_DROID_GOOGLE_SERVICES_API_KEY}", apiKey)
+                        .Replace("{TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID}", clientId)
+                        .Replace("{TOGGL_DROID_GOOGLE_SERVICES_MOBILE_SDK_APP_ID}", mobileSdkAppId)
+                        .Replace("{TOGGL_DROID_GOOGLE_SERVICES_PROJECT_NUMBER}", projectNumber)
+                        .Replace("{TOGGL_DROID_GOOGLE_SERVICES_PROJECT_ID}", projectId)
+    };
+}
+
+private TemporaryFileTransformation GetAndroidGoogleLoginTransformation()
+{
+    const string path = "Toggl.Giskard/Services/GoogleService.cs";
+    var clientId = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID");
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    { 
+        Path = path, 
+        Original = file,
+        Temporary = file.Replace("{TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID}", clientId)
+    };
+}
+
 private TemporaryFileTransformation GetDroidCrashConfigurationTransformation()
 {
     const string path = "Toggl.Giskard/Startup/SplashScreen.cs";
@@ -192,7 +232,9 @@ var transformations = new List<TemporaryFileTransformation>
     GetDroidCrashConfigurationTransformation(),
     GetIntegrationTestsConfigurationTransformation(),
     GetIosAnalyticsServicesConfigurationTransformation(),
-    GetAndroidProjectConfigurationTransformation()
+    GetAndroidProjectConfigurationTransformation(),
+    GetAndroidGoogleServicesTransformation(),
+    GetAndroidGoogleLoginTransformation()
 };
 
 private string[] GetUnitTestProjects() => new []
