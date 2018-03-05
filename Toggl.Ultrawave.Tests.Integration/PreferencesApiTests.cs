@@ -96,7 +96,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             [Fact, LogTestInfo]
             public async Task ChangingTimeOfDayFormatWithWrongFormatThrows()
             {
-                var constructor = typeof(Email).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)[0];
+                var constructor = typeof(TimeFormat).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)[0];
                 var invalidFormat = (TimeFormat)constructor.Invoke(new object[] { "h:mm:ss", "H:mm:ss" });
                 var (togglClient, user) = await SetupTestUser();
 
