@@ -15,6 +15,7 @@ using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Multivac;
 using UIKit;
 using static Toggl.Foundation.MvvmCross.Helper.Animation;
 
@@ -65,7 +66,7 @@ namespace Toggl.Daneel.ViewControllers
             );
             var colorConverter = new MvxNativeColorValueConverter();
             var visibilityConverter = new MvxVisibilityValueConverter();
-            var timeSpanConverter = new TimeSpanToDurationValueConverter();
+            var parametricTimeSpanConverter = new ParametricTimeSpanToDurationValueConverter();
             var invertedVisibilityConverter = new MvxInvertedVisibilityValueConverter();
             var timeEntriesLogFooterConverter = new BoolToConstantValueConverter<UIView>(new UIView(), timeEntriesLogFooter);
             var projectTaskClientCombiner = new ProjectTaskClientValueCombiner(
@@ -147,7 +148,7 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(CurrentTimeEntryDescriptionLabel).To(vm => vm.CurrentTimeEntryDescription);
             bindingSet.Bind(CurrentTimeEntryElapsedTimeLabel)
                       .To(vm => vm.CurrentTimeEntryElapsedTime)
-                      .WithConversion(timeSpanConverter);
+                      .WithConversion(parametricTimeSpanConverter, DurationFormat.Improved);
 
             bindingSet.Bind(CurrentTimeEntryProjectTaskClientLabel)
                       .For(v => v.AttributedText)

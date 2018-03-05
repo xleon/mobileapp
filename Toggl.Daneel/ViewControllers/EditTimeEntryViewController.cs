@@ -33,7 +33,7 @@ namespace Toggl.Daneel.ViewControllers
 
             prepareViews();
 
-            var durationConverter = new TimeSpanToDurationWithUnitValueConverter();
+            var durationCombiner = new DurationValueCombiner();
             var dateConverter = new DateToTitleStringValueConverter();
             var timeConverter = new DateTimeToTimeValueConverter();
             var visibilityConverter = new MvxVisibilityValueConverter();
@@ -77,8 +77,9 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.Billable);
 
             bindingSet.Bind(DurationLabel)
-                      .To(vm => vm.Duration)
-                      .WithConversion(durationConverter);
+                      .ByCombining(durationCombiner,
+                          vm => vm.Duration,
+                          vm => vm.DurationFormat);
 
             bindingSet.Bind(ProjectTaskClientLabel)
                       .For(v => v.AttributedText)
