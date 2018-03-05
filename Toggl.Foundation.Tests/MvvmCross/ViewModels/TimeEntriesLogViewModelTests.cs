@@ -12,6 +12,7 @@ using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
+using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
@@ -263,7 +264,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var databaseTimeEntry = Substitute.For<IDatabaseTimeEntry>();
                 databaseTimeEntry.Duration.Returns(100);
-                var timeEntryViewModel = new TimeEntryViewModel(databaseTimeEntry);
+                var timeEntryViewModel = new TimeEntryViewModel(databaseTimeEntry, DurationFormat.Improved);
 
                 await ViewModel.EditCommand.ExecuteAsync(timeEntryViewModel);
 
@@ -280,7 +281,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var timeEntry = Substitute.For<IDatabaseTimeEntry>();
                 timeEntry.Duration.Returns(100);
-                var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
+                var timeEntryViewModel = new TimeEntryViewModel(timeEntry, DurationFormat.Improved);
 
                 await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
 
@@ -309,7 +310,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 timeEntry.TaskId.Returns(taskId);
                 timeEntry.TagIds.Returns(tagIds.Get);
                 timeEntry.Duration.Returns(100);
-                var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
+                var timeEntryViewModel = new TimeEntryViewModel(timeEntry, DurationFormat.Improved);
 
                 ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel).Wait();
 
@@ -387,7 +388,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var timeEntry = Substitute.For<IDatabaseTimeEntry>();
                 timeEntry.Duration.Returns(100);
-                return new TimeEntryViewModel(timeEntry);
+                return new TimeEntryViewModel(timeEntry, DurationFormat.Improved);
             }
         }
 
@@ -399,7 +400,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var timeEntry = Substitute.For<IDatabaseTimeEntry>();
                 timeEntry.Id.Returns(id);
                 timeEntry.Duration.Returns(100);
-                var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
+                var timeEntryViewModel = new TimeEntryViewModel(timeEntry, DurationFormat.Improved);
 
                 ViewModel.DeleteCommand.ExecuteAsync(timeEntryViewModel).Wait();
 

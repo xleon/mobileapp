@@ -14,11 +14,13 @@ namespace Toggl.Foundation.MvvmCross.Collections
 
         public TimeSpan TotalTime { get; private set; }
 
+        public DurationFormat DurationFormat { get; set; }
+
         public TimeEntryViewModelCollection()
         {
         }
 
-        public TimeEntryViewModelCollection(DateTime date, IEnumerable<TimeEntryViewModel> items)
+        public TimeEntryViewModelCollection(DateTime date, IEnumerable<TimeEntryViewModel> items, DurationFormat durationFormat)
         {
             Ensure.Argument.IsNotNull(items, nameof(items));
 
@@ -29,6 +31,7 @@ namespace Toggl.Foundation.MvvmCross.Collections
 
             Date = new DateTimeOffset(date);
             TotalTime = calculateTotalTime();
+            DurationFormat = durationFormat;
         }
 
         protected override void ClearItems()

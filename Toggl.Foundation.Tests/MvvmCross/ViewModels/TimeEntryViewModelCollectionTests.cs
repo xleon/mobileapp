@@ -8,6 +8,7 @@ using NSubstitute;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
+using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 
@@ -36,7 +37,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         timeEntry.Duration.Returns((long)TimeSpan.FromHours(1).TotalSeconds);
                         timeEntry.Start.Returns(Noon.AddHours(-i - 1));
                         return timeEntry;
-                    }).Select(te => new TimeEntryViewModel(te)).GroupBy(x => x.Start.Date).Single()
+                    }).Select(te => new TimeEntryViewModel(te, DurationFormat.Improved)).GroupBy(x => x.Start.Date).Single(),
+                    DurationFormat.Improved
                 );
             }
         }
@@ -47,7 +49,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void ThrowsIfTheArgumentIsNull()
             {
                 Action tryingToConstructWithEmptyParameters =
-                    () => new TimeEntryViewModelCollection(DateTime.Now, null);
+                    () => new TimeEntryViewModelCollection(DateTime.Now, null, DurationFormat.Improved);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -61,7 +63,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var dateTime = new DateTime(2012, 12, 12, 12, 12, 12, kind);
 
                 Action tryingToConstructWithNonLocalDateTime =
-                    () => new TimeEntryViewModelCollection(dateTime, Enumerable.Empty<TimeEntryViewModel>());
+                    () => new TimeEntryViewModelCollection(dateTime, Enumerable.Empty<TimeEntryViewModel>(), DurationFormat.Improved);
 
                 tryingToConstructWithNonLocalDateTime
                     .ShouldThrow<ArgumentException>();

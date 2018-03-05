@@ -35,7 +35,7 @@ namespace Toggl.Daneel.Views
             this.DelayBind(() =>
             {
                 var visibilityConverter = new MvxVisibilityValueConverter();
-                var timeSpanConverter = new TimeSpanToDurationValueConverter();
+                var durationCombiner = new DurationValueCombiner();
                 var dateTitleConverter = new DateToTitleStringValueConverter();
 
                 var bindingSet = this.CreateBindingSet<TimeEntriesLogHeaderViewCell, TimeEntryViewModelCollection>();
@@ -46,8 +46,9 @@ namespace Toggl.Daneel.Views
                           .WithConversion(dateTitleConverter);
 
                 bindingSet.Bind(DurationLabel)
-                          .To(vm => vm.TotalTime)
-                          .WithConversion(timeSpanConverter);
+                          .ByCombining(durationCombiner,
+                              vm => vm.TotalTime,
+                              vm => vm.DurationFormat);
 
                 bindingSet.Apply();
             });

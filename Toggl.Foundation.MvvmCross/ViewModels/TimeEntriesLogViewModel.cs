@@ -31,6 +31,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private bool areContineButtonsEnabled = true;
 
+        private DurationFormat durationFormat;
+
         public NestableObservableCollection<TimeEntryViewModelCollection, TimeEntryViewModel> TimeEntries { get; }
             = new NestableObservableCollection<TimeEntryViewModelCollection, TimeEntryViewModel>(
                 newTimeEntry => vm => vm.Start < newTimeEntry.Start
@@ -95,10 +97,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 timeService.MidnightObservable
                     .Subscribe(onMidnight);
 
+            var preferencesDisposable =
+                dataSource.Preferences.Current
+                    .Subscribe(onPreferencesChanged);
+
             disposeBag.Add(createDisposable);
             disposeBag.Add(updateDisposable);
             disposeBag.Add(deleteDisposable);
             disposeBag.Add(midnightDisposable);
+            disposeBag.Add(preferencesDisposable);
         }
 
         private async Task reset()
@@ -112,9 +119,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             timeEntries
                 .Where(isNotRunning)
                 .OrderByDescending(te => te.Start)
-                .Select(te => new TimeEntryViewModel(te))
+                .Select(te => new TimeEntryViewModel(te, durationFormat))
                 .GroupBy(te => te.Start.LocalDateTime.Date)
-                .Select(grouping => new TimeEntryViewModelCollection(grouping.Key, grouping))
+                .Select(grouping => new TimeEntryViewModelCollection(grouping.Key, grouping, durationFormat))
                 .ForEach(addTimeEntries);
         }
 
@@ -148,7 +155,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 var timeEntryExistsInTheCollection = timeEntryIndex >= 0;
                 if (timeEntryExistsInTheCollection)
                 {
-                    var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
+                    var timeEntryViewModel = new TimeEntryViewModel(timeEntry, durationFormat);
                     TimeEntries.ReplaceInChildCollection(collectionIndex, timeEntryIndex, timeEntryViewModel);
                     return;
                 }
@@ -162,7 +169,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IsWelcome = false;
 
             var indexDate = timeEntry.Start.LocalDateTime.Date;
-            var timeEntryViewModel = new TimeEntryViewModel(timeEntry);
+            var timeEntryViewModel = new TimeEntryViewModel(timeEntry, durationFormat);
 
             var collectionIndex = TimeEntries.IndexOf(x => x.Date == indexDate);
             if (collectionIndex >= 0)
@@ -171,7 +178,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return;
             }
 
-            var newCollection = new TimeEntryViewModelCollection(indexDate, new[] { timeEntryViewModel });
+            var newCollection = new TimeEntryViewModelCollection(indexDate, new[] { timeEntryViewModel }, durationFormat);
             var foundIndex = TimeEntries.IndexOf(TimeEntries.FirstOrDefault(x => x.Date < indexDate));
             var indexToInsert = foundIndex == -1 ? TimeEntries.Count : foundIndex;
             TimeEntries.Insert(indexToInsert, newCollection);
@@ -192,6 +199,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void onMidnight(DateTimeOffset midnight)
         {
             ChangePresentation(new ReloadLogHint());
+        }
+
+        private void onPreferencesChanged(IDatabasePreferences preferences)
+        {
+            durationFormat = preferences.DurationFormat;
+
+            foreach (var collection in TimeEntries)
+            {
+                collection.DurationFormat = durationFormat;
+
+                foreach (var timeEntry in collection)
+                {
+                    timeEntry.DurationFormat = durationFormat;
+                }
+            }
         }
 
         private bool isNotRunning(IDatabaseTimeEntry timeEntry) => !timeEntry.IsRunning();

@@ -52,7 +52,7 @@ namespace Toggl.Daneel.Views
             {
                 var colorConverter = new MvxRGBValueConverter();
                 var visibilityConverter = new MvxVisibilityValueConverter();
-                var timeSpanConverter = new TimeSpanToDurationValueConverter();
+                var durationCombiner = new DurationValueCombiner();
                 var invertedVisibilityConverter = new MvxInvertedVisibilityValueConverter();
                 var projectTaskClientCombiner = new ProjectTaskClientValueCombiner(
                     ProjectTaskClientLabel.Font.CapHeight,
@@ -75,8 +75,9 @@ namespace Toggl.Daneel.Views
                               v => v.ProjectColor);
 
                 bindingSet.Bind(TimeLabel)
-                          .To(vm => vm.Duration)
-                          .WithConversion(timeSpanConverter);
+                          .ByCombining(durationCombiner,
+                              vm => vm.Duration,
+                              vm => vm.DurationFormat);
 
                 //Visibility
                 bindingSet.Bind(DescriptionTopDistanceConstraint)
