@@ -13,6 +13,7 @@ using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Foundation.Reports;
 using Toggl.Multivac;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -22,7 +23,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private const string dateFormat = "d MMM";
 
         private readonly ITimeService timeService;
-        private readonly IReportsProvider reportsProvider;
+        private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
         private readonly ReportsCalendarViewModel calendarViewModel;
         private readonly Subject<Unit> reportSubject = new Subject<Unit>();
@@ -36,6 +37,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public bool IsLoading { get; private set; }
 
         public TimeSpan TotalTime { get; private set; } = TimeSpan.Zero;
+
+        public DurationFormat DurationFormat { get; private set; }
 
         public bool TotalTimeIsZero => TotalTime.Ticks == 0;
 
@@ -76,7 +79,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             this.timeService = timeService;
             this.navigationService = navigationService;
-            reportsProvider = dataSource.ReportsProvider;
+            this.dataSource = dataSource;
 
             calendarViewModel = new ReportsCalendarViewModel(timeService, dataSource);
 
@@ -99,7 +102,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     .StartWith(Unit.Default)
                     .AsObservable()
                     .Do(setLoadingState)
-                    .SelectMany(_ => reportsProvider.GetProjectSummary(workspaceId, startDate, endDate))
+                    .SelectMany(_ => dataSource.ReportsProvider.GetProjectSummary(workspaceId, startDate, endDate))
                     .Subscribe(onReport, onError)
             );
 
@@ -108,6 +111,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     newDateRange => ChangeDateRangeCommand.Execute(newDateRange)
                 )
             );
+
+            var preferencesDisposable = dataSource.Preferences.Current
+                .Subscribe(onPreferencesChanged);
+
+            disposeBag.Add(preferencesDisposable);
         }
 
         public override void ViewAppeared()
@@ -126,7 +134,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             TotalTime = TimeSpan.FromSeconds(report.TotalSeconds);
             BillablePercentage = report.TotalSeconds == 0 ? null : (float?)report.BillablePercentage;
-            Segments.AddRange(report.Segments);
+
+            var segments = report.Segments.Select(segment => segment.WithDurationFormat(DurationFormat));
+            Segments.AddRange(segments);
             IsLoading = false;
 
             RaisePropertyChanged(nameof(Segments));
@@ -169,6 +179,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             CurrentDateRangeString = IsCurrentWeek
                 ? $"{Resources.ThisWeek} ▾"
                 : $"{startDate.ToString(dateFormat, culture)} - {endDate.ToString(dateFormat, culture)} ▾";
+        }
+
+        private void onPreferencesChanged(IDatabasePreferences preferences)
+        {
+            DurationFormat = preferences.DurationFormat;
+
+            var segments = Segments.Select(segment => segment.WithDurationFormat(DurationFormat));
+            Segments.Clear();
+            Segments.AddRange(segments);
         }
     }
 }
