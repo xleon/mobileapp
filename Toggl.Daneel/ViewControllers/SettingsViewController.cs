@@ -45,6 +45,7 @@ namespace Toggl.Daneel.ViewControllers
 
             var inverseBoolConverter = new BoolToConstantValueConverter<bool>(false, true);
             var visibilityConverter = new MvxVisibilityValueConverter();
+            var durationFormatToStringConverter = new DurationFormatToStringValueConverter();
 
             var bindingSet = this.CreateBindingSet<SettingsViewController, SettingsViewModel>();
 
@@ -53,6 +54,9 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(VersionLabel).To(vm => vm.Version);
             bindingSet.Bind(WorkspaceLabel).To(vm => vm.WorkspaceName);
             bindingSet.Bind(DateFormatLabel).To(vm => vm.DateFormat.Localized);
+            bindingSet.Bind(DurationFormatLabel)
+                      .To(vm => vm.DurationFormat)
+                      .WithConversion(durationFormatToStringConverter);
 
             // Commands
             bindingSet.Bind(LogoutButton).To(vm => vm.LogoutCommand);
@@ -63,6 +67,10 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(DateFormatView)
                       .For(v => v.BindTap())
                       .To(vm => vm.SelectDateFormatCommand);
+
+            bindingSet.Bind(DurationFormatView)
+                      .For(verticalSpacing => verticalSpacing.BindTap())
+                      .To(vm => vm.SelectDurationFormatCommand);
 
             bindingSet.Bind(WorkspaceView)
                       .For(v => v.BindTap())
