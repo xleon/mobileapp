@@ -63,10 +63,12 @@ namespace Toggl.Foundation.DataSources
 
         public IObservable<IDatabasePreferences> Create(IDatabasePreferences entity)
             => databaseStorage.Create(entity)
+                .Select(Preferences.From)
                 .Do(currentPreferencesSubject.OnNext);
 
         public IObservable<IDatabasePreferences> Update(long id, IDatabasePreferences entity)
             => databaseStorage.Update(id, entity)
+                .Select(Preferences.From)
                 .Do(currentPreferencesSubject.OnNext);
 
         public IObservable<Unit> Delete(long id)
@@ -75,10 +77,10 @@ namespace Toggl.Foundation.DataSources
         }
 
         public IObservable<IEnumerable<IDatabasePreferences>> GetAll()
-            => databaseStorage.GetAll();
+            => databaseStorage.GetAll().Select(preferences => preferences.Select(Preferences.From));
 
         public IObservable<IEnumerable<IDatabasePreferences>> GetAll(Func<IDatabasePreferences, bool> predicate)
-            => databaseStorage.GetAll(predicate);
+            => databaseStorage.GetAll(predicate).Select(preferences => preferences.Select(Preferences.From));
 
         private void processConflictResultionResult(IEnumerable<IConflictResolutionResult<IDatabasePreferences>> batchResult)
         {
@@ -89,11 +91,13 @@ namespace Toggl.Foundation.DataSources
             switch (preferences)
             {
                 case CreateResult<IDatabasePreferences> created:
-                    currentPreferencesSubject.OnNext(created.Entity);
+                    var createdEntity = Preferences.From(created.Entity);
+                    currentPreferencesSubject.OnNext(createdEntity);
                     break;
 
                 case UpdateResult<IDatabasePreferences> updated:
-                    currentPreferencesSubject.OnNext(updated.Entity);
+                    var updatedEntity = Preferences.From(updated.Entity);
+                    currentPreferencesSubject.OnNext(updatedEntity);
                     break;
             }
         }
