@@ -27,5 +27,11 @@ namespace Toggl.Multivac.Extensions
 
         public static IEnumerable<T> SelectNonNulls<T>(this IEnumerable<Nullable<T>> self) where T : struct
             => self.Where(nullable => nullable.HasValue).Select(nullable => nullable.Value);
+
+        public static bool None<T>(this IEnumerable<T> collection, Func<T, bool> condition)
+            => !collection.Any(condition);
+
+        public static bool None<T>(this IEnumerable<T> collection)
+           => !collection.Any();
     }
 }
