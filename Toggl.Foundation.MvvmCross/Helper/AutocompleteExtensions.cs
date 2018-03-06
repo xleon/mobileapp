@@ -19,7 +19,7 @@ namespace Toggl.Foundation.MvvmCross.Helper
             IGrouping<(long workspaceId, string workspaceName), AutocompleteSuggestion> grouping)
         {
             var collection = new WorkspaceGroupedCollection<AutocompleteSuggestion>(
-                grouping.Key.workspaceName, grouping);
+                grouping.Key.workspaceName, grouping.Key.workspaceId, grouping);
             collection.Insert(
                 0,
                 ProjectSuggestion.NoProject(

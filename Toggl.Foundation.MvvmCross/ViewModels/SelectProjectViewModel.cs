@@ -190,7 +190,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void toggleTaskSuggestions(ProjectSuggestion projectSuggestion)
         {
-            var grouping = Suggestions.FirstOrDefault(s => s.WorkspaceName == projectSuggestion.WorkspaceName);
+            var grouping = Suggestions.FirstOrDefault(s => s.WorkspaceId == projectSuggestion.WorkspaceId);
             if (grouping == null) return;
 
             var suggestionIndex = grouping.IndexOf(projectSuggestion);
@@ -202,7 +202,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Suggestions.Remove(grouping);
             Suggestions.Insert(groupingIndex,
                 new WorkspaceGroupedCollection<AutocompleteSuggestion>(
-                    grouping.WorkspaceName, getSuggestionsWithTasks(grouping)
+                    grouping.WorkspaceName, grouping.WorkspaceId, getSuggestionsWithTasks(grouping)
                 )
             );
         }

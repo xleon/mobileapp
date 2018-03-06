@@ -452,7 +452,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void toggleTaskSuggestions(ProjectSuggestion projectSuggestion)
         {
-            var grouping = Suggestions.FirstOrDefault(s => s.WorkspaceName == projectSuggestion.WorkspaceName);
+            var grouping = Suggestions.FirstOrDefault(s => s.WorkspaceId == projectSuggestion.WorkspaceId);
             if (grouping == null) return;
 
             var suggestionIndex = grouping.IndexOf(projectSuggestion);
@@ -464,7 +464,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Suggestions.Remove(grouping);
             Suggestions.Insert(groupingIndex,
                 new WorkspaceGroupedCollection<AutocompleteSuggestion>(
-                    grouping.WorkspaceName, getSuggestionsWithTasks(grouping)
+                    grouping.WorkspaceName, grouping.WorkspaceId, getSuggestionsWithTasks(grouping)
                 )
             );
         }
@@ -603,9 +603,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 suggestions = suggestions.Where(suggestion => suggestion.WorkspaceId == TextFieldInfo.WorkspaceId);
 
             return suggestions
-                .GroupBy(suggestion => suggestion.WorkspaceName)
+                .GroupBy(suggestion => new { suggestion.WorkspaceName, suggestion.WorkspaceId })
                 .Select(grouping => new WorkspaceGroupedCollection<AutocompleteSuggestion>(
-                    grouping.Key, grouping.Distinct(AutocompleteSuggestionComparer.Instance)));
+                    grouping.Key.WorkspaceName, grouping.Key.WorkspaceId, grouping.Distinct(AutocompleteSuggestionComparer.Instance)));
         }
 
         private async Task setBillableValues(long projectId)
