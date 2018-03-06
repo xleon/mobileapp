@@ -57,19 +57,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public bool ShouldShowEmptyState
             => SuggestionsViewModel.IsEmpty
-            && TimeEntriesLog.IsEmpty
+            && TimeEntriesLogViewModel.IsEmpty
             && IsWelcome;
 
         public bool ShouldShowWelcomeBack
             => SuggestionsViewModel.IsEmpty
-            && TimeEntriesLog.IsEmpty
+            && TimeEntriesLogViewModel.IsEmpty
             && !IsWelcome;
 
-        public bool IsWelcome => TimeEntriesLog.IsWelcome;
+        public bool IsWelcome => TimeEntriesLogViewModel.IsWelcome;
 
         public bool IsInManualMode { get; set; } = false;
 
-        public TimeEntriesLogViewModel TimeEntriesLog { get; } = Mvx.IocConstruct<TimeEntriesLogViewModel>();
+        public TimeEntriesLogViewModel TimeEntriesLogViewModel { get; } = Mvx.IocConstruct<TimeEntriesLogViewModel>();
 
         public SuggestionsViewModel SuggestionsViewModel { get; } = Mvx.IocConstruct<SuggestionsViewModel>();
 
@@ -118,7 +118,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             await base.Initialize();
 
-            await TimeEntriesLog.Initialize();
+            await TimeEntriesLogViewModel.Initialize();
             await SuggestionsViewModel.Initialize();
 
             var tickDisposable = timeService

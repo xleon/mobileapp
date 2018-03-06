@@ -248,14 +248,12 @@
     <Compile Include="Services\SharedPreferencesStorage.cs" />
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
-    <Compile Include="Fragments\SuggestionsFragment.cs" />
-    <Compile Include="Fragments\TimeEntriesLogFragment.cs" />
     <Compile Include="Activities\MainActivity.cs" />
     <Compile Include="TemplateSelectors\SelectTagsTemplateSelector.cs" />
-    <Compile Include="TemplateSelectors\TimeEntriesLogTemplateSelector.cs" />
-    <Compile Include="Adapters\TimeEntriesLogRecyclerAdapter.cs" />
+    <Compile Include="TemplateSelectors\MainTemplateSelector.cs" />
+    <Compile Include="Adapters\MainRecyclerAdapter.cs" />
     <Compile Include="Views\SelectTagsRecyclerView.cs" />
-    <Compile Include="Views\TimeEntriesLogRecyclerView.cs" />
+    <Compile Include="Views\MainRecyclerView.cs" />
     <Compile Include="Startup\SetupTargetFactories.cs">
       <DependentUpon>SetupTargetFactories.tt</DependentUpon>
     </Compile>
@@ -269,7 +267,7 @@
     <Compile Include="Activities\SettingsActivity.cs" />
     <Compile Include="Bindings\EditTextFocusTargetBinding.cs" />
     <Compile Include="Presenters\TogglPresenter.cs" />
-    <Compile Include="Views\TimeEntriesLogRecyclerViewHolder.cs" />
+    <Compile Include="Views\MainRecyclerViewLogViewHolder.cs" />
     <Compile Include="Views\SuggestionsRecyclerViewSnapHelper.cs" />
     <Compile Include="Views\SuggestionsRecyclerViewHolder.cs" />
     <Compile Include="Adapters\SuggestionsRecyclerAdapter.cs" />
@@ -322,6 +320,8 @@
     <Compile Include="TemplateSelectors\SelectBeginningOfWeekTemplateSelector.cs" />
     <Compile Include="Fragments\SelectDurationFormatFragment.cs" />
     <Compile Include="TemplateSelectors\SelectDurationFormatTemplateSelector.cs" />
+    <Compile Include="Views\MainRecyclerViewSuggestionsViewHolder.cs" />
+    <Compile Include="Views\MainRecyclerViewTouchCallback.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -550,17 +550,16 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\timer_light.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\unsynced.png" />
     <AndroidResource Include="Resources\values\Colors.xml" />
-    <AndroidResource Include="Resources\layout\TimeEntriesLogFragmentCell.axml" />
+    <AndroidResource Include="Resources\layout\MainLogCell.axml" />
     <AndroidResource Include="Resources\drawable\TransparentToWhiteGradient.xml" />
-    <AndroidResource Include="Resources\layout\SuggestionsFragment.axml" />
-    <AndroidResource Include="Resources\layout\TimeEntriesLogFragment.axml" />
-    <AndroidResource Include="Resources\layout\TimeEntriesLogFragmentHeader.axml" />
+    <AndroidResource Include="Resources\layout\MainSuggestions.axml" />
+    <AndroidResource Include="Resources\layout\MainLogHeader.axml" />
     <AndroidResource Include="Resources\drawable\SmallDot.xml" />
-    <AndroidResource Include="Resources\layout\SuggestionsFragmentCard.axml" />
+    <AndroidResource Include="Resources\layout\MainSuggestionsCard.axml" />
     <AndroidResource Include="Resources\layout\MainRunningTimeEntry.axml" />
     <AndroidResource Include="Resources\layout\SettingsActivity.axml" />
     <AndroidResource Include="Resources\layout\BrowserActivity.axml" />
-    <AndroidResource Include="Resources\layout\TimeEntriesLogFragmentFooter.axml" />
+    <AndroidResource Include="Resources\layout\MainLogFooter.axml" />
     <AndroidResource Include="Resources\drawable\TopShadow.xml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivity.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityTimeEntryCell.axml" />

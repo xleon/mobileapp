@@ -83,7 +83,7 @@ namespace Toggl.Daneel.ViewControllers
 
             //Table view
             bindingSet.Bind(source)
-                      .To(vm => vm.TimeEntriesLog.TimeEntries);
+                      .To(vm => vm.TimeEntriesLogViewModel.TimeEntries);
 
             bindingSet.Bind(source)
                       .For(v => v.SyncProgress)
@@ -95,7 +95,7 @@ namespace Toggl.Daneel.ViewControllers
 
             bindingSet.Bind(TimeEntriesLogTableView)
                       .For(v => v.TableFooterView)
-                      .To(vm => vm.TimeEntriesLog.IsEmpty)
+                      .To(vm => vm.TimeEntriesLogViewModel.IsEmpty)
                       .WithConversion(timeEntriesLogFooterConverter);
 
             //Commands
@@ -111,11 +111,11 @@ namespace Toggl.Daneel.ViewControllers
             
             bindingSet.Bind(source)
                       .For(v => v.SelectionChangedCommand)
-                      .To(vm => vm.TimeEntriesLog.EditCommand);
+                      .To(vm => vm.TimeEntriesLogViewModel.EditCommand);
             
             bindingSet.Bind(source)
                       .For(v => v.ContinueTimeEntryCommand)
-                      .To(vm => vm.TimeEntriesLog.ContinueTimeEntryCommand);
+                      .To(vm => vm.TimeEntriesLogViewModel.ContinueTimeEntryCommand);
             
             bindingSet.Bind(source)
                       .For(v => v.RefreshCommand)
@@ -123,7 +123,7 @@ namespace Toggl.Daneel.ViewControllers
 
             bindingSet.Bind(source)
                       .For(v => v.DeleteTimeEntryCommand)
-                      .To(vm => vm.TimeEntriesLog.DeleteCommand);
+                      .To(vm => vm.TimeEntriesLogViewModel.DeleteCommand);
 
             bindingSet.Bind(suggestionsView)
                       .For(v => v.SuggestionTappedCommad)

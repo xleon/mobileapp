@@ -2,40 +2,61 @@
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Linq;
-using Android.OS;
+using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Binding.Droid.BindingContext;
-using MvvmCross.Droid.Support.V4;
-using MvvmCross.Droid.Views.Attributes;
+using MvvmCross.Droid.Support.V7.RecyclerView;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Droid;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Giskard.Activities;
 using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Views;
 using TogglResources = Toggl.Foundation.Resources;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Giskard.Views
 {
-    [MvxFragmentPresentation(typeof(MainViewModel), Resource.Id.MainSuggestionsContainer)]
-    public sealed class SuggestionsFragment : MvxFragment<SuggestionsViewModel>
+    public sealed class MainRecyclerViewSuggestionsViewHolder : MvxRecyclerViewHolder
     {
+        public SuggestionsViewModel ViewModel => DataContext as SuggestionsViewModel;
+
         private TextView hintTextView;
         private TextView indicatorTextView;
-        private int containerHeightInPixels;
         private IDisposable countDisposable;
         private IDisposable currentCardDisposable;
+        private static readonly int containerHeightInPixels;
 
         private int currentSuggestionCard = 1;
+        private bool initialized;
 
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        static MainRecyclerViewSuggestionsViewHolder()
         {
-            containerHeightInPixels = (int)130.DpToPixels(Activity);
+            var context = Mvx.Resolve<IMvxAndroidGlobals>().ApplicationContext;
+            containerHeightInPixels = (int)130.DpToPixels(context);
+        }
 
-            base.OnCreateView(inflater, container, savedInstanceState);
-            var view = this.BindingInflate(Resource.Layout.SuggestionsFragment, null);
+        public MainRecyclerViewSuggestionsViewHolder(View itemView, IMvxAndroidBindingContext context)
+            : base(itemView, context)
+        {
+        }
 
-            hintTextView = view.FindViewById<TextView>(Resource.Id.SuggestionsHintTextView);
-            indicatorTextView = view.FindViewById<TextView>(Resource.Id.SuggestionsIndicatorTextView);
+        public MainRecyclerViewSuggestionsViewHolder(IntPtr handle, JniHandleOwnership ownership)
+            : base(handle, ownership)
+        {
+        }
+
+        public override void OnAttachedToWindow()
+        {
+            base.OnAttachedToWindow();
+
+            initializeIfNeeded();
+        }
+
+        private void initializeIfNeeded()
+        {
+            if (initialized) return;
+
+            hintTextView = ItemView.FindViewById<TextView>(Resource.Id.SuggestionsHintTextView);
+            indicatorTextView = ItemView.FindViewById<TextView>(Resource.Id.SuggestionsIndicatorTextView);
 
             countDisposable =
                 Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
@@ -47,33 +68,30 @@ namespace Toggl.Giskard.Fragments
                 .Subscribe(onCollectionCountChanged);
 
             currentCardDisposable =
-                view.FindViewById<SuggestionsRecyclerView>(Resource.Id.SuggestionsRecyclerView)
+                ItemView.FindViewById<SuggestionsRecyclerView>(Resource.Id.SuggestionsRecyclerView)
                     .CurrentIndexObservable.Subscribe(onCurrentSuggestionIndexChanged);
 
-            return view;
+            initialized = true;
         }
 
-        public override void OnDestroyView()
+        protected override void Dispose(bool disposing)
         {
+            base.Dispose(disposing);
+
+            if (!disposing) return;
+
             currentCardDisposable?.Dispose();
             countDisposable?.Dispose();
-            base.OnDestroyView();
         }
 
         private void onCurrentSuggestionIndexChanged(int currentIndex)
         {
             currentSuggestionCard = currentIndex;
-            
             updateHintText();
         }
 
         private void onCollectionCountChanged(int itemCount)
         {
-            var mainActivity = (MainActivity)Activity;
-            var height = itemCount > 0 ? containerHeightInPixels : 0;
-            var newParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent, height);
-            mainActivity.SuggestionsContainer.LayoutParameters = newParams;
-
             updateHintText();
         }
 

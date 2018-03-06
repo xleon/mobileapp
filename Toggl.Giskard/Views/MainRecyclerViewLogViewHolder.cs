@@ -9,7 +9,7 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 
 namespace Toggl.Giskard.Views
 {
-    public sealed class TimeEntriesLogRecyclerViewHolder : MvxRecyclerViewHolder
+    public sealed class MainRecyclerViewLogViewHolder : MvxRecyclerViewHolder
     {
         private Button continueButton;
         private bool continueClickOverloaded;
@@ -31,12 +31,12 @@ namespace Toggl.Giskard.Views
             }
         }
 
-        public TimeEntriesLogRecyclerViewHolder(View itemView, IMvxAndroidBindingContext context)
+        public MainRecyclerViewLogViewHolder(View itemView, IMvxAndroidBindingContext context)
             : base(itemView, context)
         {
         }
 
-        public TimeEntriesLogRecyclerViewHolder(IntPtr handle, JniHandleOwnership ownership)
+        public MainRecyclerViewLogViewHolder(IntPtr handle, JniHandleOwnership ownership)
             : base(handle, ownership)
         {
         }
@@ -64,5 +64,4 @@ namespace Toggl.Giskard.Views
             continueButton.Click -= onContinueButtonClick;
         }
     }
-
 }

@@ -515,7 +515,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel
                     .IsWelcome
                     .Should()
-                    .Be(ViewModel.TimeEntriesLog.IsWelcome);
+                    .Be(ViewModel.TimeEntriesLogViewModel.IsWelcome);
             }
 
             private IDatabaseTimeEntry createTimeEntry(int id)
