@@ -7,6 +7,7 @@ using System.Reactive.Subjects;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Models;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
@@ -25,19 +26,10 @@ namespace Toggl.Foundation.DataSources
 
             this.databaseStorage = databaseStorage;
 
-            IDatabasePreferences preferences;
-            try
-            {
-                preferences = Get().Wait();
-            }
-            catch
-            {
-                preferences = Preferences.DefaultPreferences;
-            }
-
-            currentPreferencesSubject = new BehaviorSubject<IDatabasePreferences>(preferences);
+            currentPreferencesSubject = new ReplaySubject<IDatabasePreferences>(1);
 
             Current = currentPreferencesSubject.AsObservable();
+            Get().Do(currentPreferencesSubject.OnNext);
         }
 
         public IObservable<IDatabasePreferences> Get()
