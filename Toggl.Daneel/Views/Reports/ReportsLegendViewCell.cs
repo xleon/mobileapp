@@ -3,7 +3,7 @@ using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS.Views;
 using MvvmCross.Plugins.Color;
-using Toggl.Foundation.MvvmCross.Converters;
+using Toggl.Foundation.MvvmCross.Combiners;
 using Toggl.Foundation.Reports;
 using UIKit;
 

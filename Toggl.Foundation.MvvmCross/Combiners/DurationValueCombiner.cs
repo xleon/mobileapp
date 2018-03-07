@@ -7,7 +7,7 @@ using MvvmCross.Platform.Converters;
 using Toggl.Foundation.Extensions;
 using Toggl.Multivac;
 
-namespace Toggl.Foundation.MvvmCross.Converters
+namespace Toggl.Foundation.MvvmCross.Combiners
 {
     [Preserve(AllMembers = true)]
     public sealed class DurationValueCombiner : MvxValueCombiner

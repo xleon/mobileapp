@@ -2,7 +2,7 @@
 using FluentAssertions;
 using MvvmCross.Binding.Bindings.SourceSteps;
 using MvvmCross.Platform.Converters;
-using Toggl.Foundation.MvvmCross.Converters;
+using Toggl.Foundation.MvvmCross.Combiners;
 using Toggl.Multivac;
 using Xunit;
 

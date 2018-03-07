@@ -13,6 +13,7 @@ using MvvmCross.Plugins.Visibility;
 using Toggl.Daneel.Combiners;
 using Toggl.Daneel.Extensions;
 using Toggl.Foundation.MvvmCross.Converters;
+using Toggl.Foundation.MvvmCross.Combiners;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;

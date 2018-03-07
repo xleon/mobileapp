@@ -12,6 +12,7 @@ using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Presentation.Transition;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Converters;
+using Toggl.Foundation.MvvmCross.Combiners;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
