@@ -57,13 +57,24 @@ private Action BuildSolution(string configuration, string platform = "")
     return () => MSBuild(togglSolution, buildSettings);
 }
 
-//Temporary variable replacement
 private string GetCommitHash()
 {   
     IEnumerable<string> redirectedOutput;
     StartProcess("git", new ProcessSettings
     {
         Arguments = "rev-parse HEAD",
+        RedirectStandardOutput = true
+    }, out redirectedOutput);
+
+    return redirectedOutput.Last();
+}
+
+private string GetCommitCount()
+{   
+    IEnumerable<string> redirectedOutput;
+    StartProcess("git", new ProcessSettings
+    {
+        Arguments = "rev-list --count HEAD",
         RedirectStandardOutput = true
     }, out redirectedOutput);
 
@@ -198,6 +209,7 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
 {
     const string path = "Toggl.Daneel/Info.plist";
 
+    var commitCount = GetCommitCount();
     var reversedClientId = EnvironmentVariable("TOGGL_REVERSED_CLIENT_ID");
     var filePath = GetFiles(path).Single();
     var file = TransformTextFile(filePath).ToString();
@@ -207,6 +219,7 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
         Path = path, 
         Original = file,
         Temporary = file.Replace("{TOGGL_REVERSED_CLIENT_ID}", reversedClientId)
+                        .Replace("IOS_BUNDLE_VERSION", commitCount)
     };
 }
 
@@ -237,6 +250,13 @@ var transformations = new List<TemporaryFileTransformation>
     GetAndroidGoogleLoginTransformation()
 };
 
+private HashSet<string> targetsThatSkipTearDown = new HashSet<string>
+{
+    "Build.Release.iOS.AdHoc",
+    "Build.Release.iOS.AppStore",
+    "Build.Release.Android.AdHoc"
+};
+
 private string[] GetUnitTestProjects() => new []
 {
     "./Toggl.Multivac.Tests/Toggl.Multivac.Tests.csproj",
@@ -256,9 +276,9 @@ private string[] GetIntegrationTestProjects()
 Setup(context => transformations.ForEach(transformation => System.IO.File.WriteAllText(transformation.Path, transformation.Temporary)));
 Teardown(context =>
 {
-    if (target == "Build.Release.iOS.AppStore" ||
-        target == "Build.Release.Android.AdHoc")
+    if (targetsThatSkipTearDown.Contains(target))
         return;
+
     transformations.ForEach(transformation => System.IO.File.WriteAllText(transformation.Path, transformation.Original));
 });
 
