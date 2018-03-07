@@ -50,14 +50,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.Combiners
             {
                 [Theory, LogIfTooSlow]
                 [MemberData(nameof(TimeFormats))]
-                public void FailsForDurationFormatsWhichAreOutOfRange(TimeFormat format)
+                public void WorksForValidFormats(TimeFormat format)
                 {
+                    var time = DateTimeOffset.UtcNow;
                     var combiner = new DateTimeOffsetTimeFormatValueCombiner(TimeZoneInfo.Utc);
-                    var successful = tryGetValue(combiner, DateTimeOffset.UtcNow, format, out var convertedValue);
+                    var successful = tryGetValue(combiner, time, format, out var convertedValue);
 
                     successful.Should().BeTrue();
                     convertedValue.Should().BeOfType<string>();
-                    ((string)convertedValue).Length.Should().Be(format.Format.Length);
+                    convertedValue.Should().Be(time.ToString(format.Format));
                 }
 
                 public static IEnumerable<object[]> TimeFormats()
