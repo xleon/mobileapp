@@ -29,7 +29,7 @@
                 <outlet property="LoggingOutView" destination="9pV-m0-9wY" id="1O8-3P-zPS"/>
                 <outlet property="LogoutButton" destination="L2S-P3-jra" id="name-outlet-L2S-P3-jra"/>
                 <outlet property="LogoutContainerView" destination="S7D-xE-bn6" id="kPb-sw-nup"/>
-                <outlet property="LogoutTopConstraint" destination="81x-cE-taJ" id="tAZ-zT-g89"/>
+                <outlet property="LogoutTopConstraint" destination="Gv8-8r-GkE" id="FO6-c8-aey"/>
                 <outlet property="ManualModeSwitch" destination="ohF-qt-ZZa" id="xth-Kj-iue"/>
                 <outlet property="ManualModeView" destination="oxz-tC-Puw" id="lbe-hw-A8S"/>
                 <outlet property="SyncedIcon" destination="2Xf-GA-0Ym" id="BfG-Gy-Dva"/>
@@ -55,7 +55,7 @@
                     <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hiM-9h-DGV">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="482.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="496.5"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x3h-xq-GmG">
                                     <rect key="frame" x="0.0" y="12" width="375" height="44"/>
@@ -406,14 +406,14 @@
                                         <constraint firstAttribute="height" constant="44" id="yw9-fY-F4T"/>
                                     </constraints>
                                 </view>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can add your data manually, instead of tracking in real time" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GYa-UD-wrC">
-                                    <rect key="frame" x="16" y="399.5" width="343" height="15"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can add your data manually, instead of tracking in real time." lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GYa-UD-wrC">
+                                    <rect key="frame" x="16" y="399.5" width="343" height="29"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mmI-mx-iUP">
-                                    <rect key="frame" x="0.0" y="438.5" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="452.5" width="375" height="44"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Submit Feedback" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7KY-Cw-c2h">
                                             <rect key="frame" x="16" y="13" width="120" height="18"/>
@@ -460,9 +460,9 @@
                                 </view>
                             </subviews>
                             <constraints>
-                                <constraint firstAttribute="width" constant="375" id="DnW-b9-mXc"/>
                                 <constraint firstItem="GYa-UD-wrC" firstAttribute="trailing" secondItem="ohF-qt-ZZa" secondAttribute="trailing" id="EAg-Px-Q86"/>
                                 <constraint firstItem="oxz-tC-Puw" firstAttribute="leading" secondItem="hiM-9h-DGV" secondAttribute="leading" id="FfH-U7-FOS"/>
+                                <constraint firstAttribute="bottom" secondItem="mmI-mx-iUP" secondAttribute="bottom" id="GA0-hg-H0G"/>
                                 <constraint firstItem="GYa-UD-wrC" firstAttribute="leading" secondItem="hiM-9h-DGV" secondAttribute="leading" constant="16" id="Idr-1i-0US"/>
                                 <constraint firstItem="mmI-mx-iUP" firstAttribute="width" secondItem="hiM-9h-DGV" secondAttribute="width" id="KLV-IU-sfe"/>
                                 <constraint firstItem="x3h-xq-GmG" firstAttribute="leading" secondItem="hiM-9h-DGV" secondAttribute="leading" id="KR3-Sr-WNl"/>
@@ -471,22 +471,20 @@
                                 <constraint firstItem="eLA-8w-5DK" firstAttribute="leading" secondItem="hiM-9h-DGV" secondAttribute="leading" id="V4m-x0-xmy"/>
                                 <constraint firstAttribute="trailing" secondItem="eLA-8w-5DK" secondAttribute="trailing" id="ZIE-AI-kfb"/>
                                 <constraint firstItem="gKP-Qz-N9c" firstAttribute="top" secondItem="x3h-xq-GmG" secondAttribute="bottom" id="aEa-gX-ZKB"/>
+                                <constraint firstItem="mmI-mx-iUP" firstAttribute="top" secondItem="GYa-UD-wrC" secondAttribute="bottom" constant="24" id="bfB-hf-fBr"/>
                                 <constraint firstItem="KrT-vw-rEA" firstAttribute="leading" secondItem="hiM-9h-DGV" secondAttribute="leading" constant="16" id="dFs-ud-XUL"/>
                                 <constraint firstItem="KrT-vw-rEA" firstAttribute="top" secondItem="gKP-Qz-N9c" secondAttribute="bottom" constant="24" id="esi-kR-UL5"/>
-                                <constraint firstAttribute="bottom" secondItem="mmI-mx-iUP" secondAttribute="bottom" id="iZF-8y-Zzl"/>
                                 <constraint firstItem="mmI-mx-iUP" firstAttribute="leading" secondItem="hiM-9h-DGV" secondAttribute="leading" id="iaP-p5-tdO"/>
                                 <constraint firstItem="x3h-xq-GmG" firstAttribute="width" secondItem="hiM-9h-DGV" secondAttribute="width" id="kyS-Wj-LhR"/>
                                 <constraint firstItem="x3h-xq-GmG" firstAttribute="top" secondItem="hiM-9h-DGV" secondAttribute="top" constant="12" id="n1G-du-bTL"/>
-                                <constraint firstAttribute="height" constant="482.5" id="rDB-ZK-4gE"/>
                                 <constraint firstItem="oxz-tC-Puw" firstAttribute="top" secondItem="eLA-8w-5DK" secondAttribute="bottom" constant="24" id="t8t-Cz-Gwf"/>
-                                <constraint firstItem="mmI-mx-iUP" firstAttribute="top" secondItem="GYa-UD-wrC" secondAttribute="bottom" constant="24" id="uHg-F4-6YM"/>
                                 <constraint firstItem="gKP-Qz-N9c" firstAttribute="width" secondItem="hiM-9h-DGV" secondAttribute="width" id="uSC-vg-JDY"/>
                                 <constraint firstItem="eLA-8w-5DK" firstAttribute="top" secondItem="KrT-vw-rEA" secondAttribute="bottom" constant="8" id="uhZ-ZV-DYg"/>
                                 <constraint firstItem="oxz-tC-Puw" firstAttribute="width" secondItem="hiM-9h-DGV" secondAttribute="width" id="xV9-Qr-jmF"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S7D-xE-bn6">
-                            <rect key="frame" x="0.0" y="506.5" width="375" height="66"/>
+                            <rect key="frame" x="0.0" y="520.5" width="375" height="66"/>
                             <subviews>
                                 <view contentMode="scaleToFill" restorationIdentifier="SyncingView" translatesAutoresizingMaskIntoConstraints="NO" id="305">
                                     <rect key="frame" x="146.5" y="-2" width="82" height="16"/>
@@ -641,7 +639,7 @@
                     </subviews>
                     <constraints>
                         <constraint firstItem="hiM-9h-DGV" firstAttribute="top" secondItem="wCd-uo-EFZ" secondAttribute="top" id="3kn-k8-Iam"/>
-                        <constraint firstItem="S7D-xE-bn6" firstAttribute="top" secondItem="hiM-9h-DGV" secondAttribute="bottom" constant="24" id="81x-cE-taJ"/>
+                        <constraint firstItem="S7D-xE-bn6" firstAttribute="top" secondItem="mmI-mx-iUP" secondAttribute="bottom" constant="24" id="Gv8-8r-GkE"/>
                         <constraint firstItem="S7D-xE-bn6" firstAttribute="leading" secondItem="wCd-uo-EFZ" secondAttribute="leading" id="Syu-id-jVP"/>
                         <constraint firstItem="S7D-xE-bn6" firstAttribute="width" secondItem="wCd-uo-EFZ" secondAttribute="width" id="acK-Pm-BTc"/>
                         <constraint firstItem="hiM-9h-DGV" firstAttribute="leading" secondItem="wCd-uo-EFZ" secondAttribute="leading" id="de4-H8-Sjf"/>
