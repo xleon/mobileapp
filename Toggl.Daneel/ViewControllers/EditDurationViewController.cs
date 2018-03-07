@@ -36,8 +36,8 @@ namespace Toggl.Daneel.ViewControllers
             prepareViews();
 
             var durationCombiner = new DurationValueCombiner();
-            var timeConverter = new DateTimeToTimeValueConverter();
-            var dateConverter = new DateToTitleStringValueConverter();
+            var timeCombiner = new DateTimeOffsetTimeFormatValueCombiner(TimeZoneInfo.Local);
+            var dateCombiner = new DateTimeOffsetDateFormatValueCombiner(TimeZoneInfo.Local, useLongFormat: false);
             var inverseBoolConverter = new BoolToConstantValueConverter<bool>(false, true);
             var editedTimeLabelColorConverter = new BoolToConstantValueConverter<UIColor>(
                 Color.EditDuration.EditedTime.ToNativeColor(),
@@ -51,20 +51,24 @@ namespace Toggl.Daneel.ViewControllers
 
             //Start and stop date/time
             bindingSet.Bind(StartTimeLabel)
-                      .To(vm => vm.StartTime)
-                      .WithConversion(timeConverter);
+                      .ByCombining(timeCombiner,
+                          vm => vm.StartTime,
+                          vm => vm.TimeFormat);
 
             bindingSet.Bind(StartDateLabel)
-                      .To(vm => vm.StartTime)
-                      .WithConversion(dateConverter);
+                      .ByCombining(dateCombiner,
+                          vm => vm.StartTime,
+                          vm => vm.DateFormat);
 
             bindingSet.Bind(EndTimeLabel)
-                      .To(vm => vm.StopTime)
-                      .WithConversion(timeConverter);
+                      .ByCombining(timeCombiner,
+                          vm => vm.StopTime,
+                          vm => vm.TimeFormat);
 
             bindingSet.Bind(EndDateLabel)
-                      .To(vm => vm.StopTime)
-                      .WithConversion(dateConverter);
+                      .ByCombining(dateCombiner,
+                          vm => vm.StopTime,
+                          vm => vm.DateFormat);
 
             //Editing start and end time
             bindingSet.Bind(StartView)

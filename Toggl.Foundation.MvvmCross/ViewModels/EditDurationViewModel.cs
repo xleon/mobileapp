@@ -29,6 +29,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         [DependsOn(nameof(IsRunning))]
         public DurationFormat DurationFormat => IsRunning ? DurationFormat.Improved : durationFormat;
 
+        public DateFormat DateFormat { get; private set; }
+
+        public TimeFormat TimeFormat { get; private set; }
+
         public bool IsRunning { get; private set; }
 
         public DateTimeOffset StartTime { get; private set; }
@@ -208,6 +212,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void onPreferencesChanged(IDatabasePreferences preferences)
         {
             durationFormat = preferences.DurationFormat;
+            DateFormat = preferences.DateFormat;
+            TimeFormat = preferences.TimeOfDayFormat;
 
             RaisePropertyChanged(nameof(DurationFormat));
         }
