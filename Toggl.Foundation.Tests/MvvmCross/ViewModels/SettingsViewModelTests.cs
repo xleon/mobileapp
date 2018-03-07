@@ -565,30 +565,25 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheInitializeMethod : SettingsViewModelTest
         {
             [Fact]
-            public async Task InitializesDateFormatFromPreferencesDataSource()
+            public async Task InitializesFormatsFromPreferencesDataSource()
             {
-                var dateFormat = DateFormat.FromLocalizedDateFormat("MM.DD.YYYY");
-                var preferences = Substitute.For<IDatabasePreferences>();
-                preferences.DateFormat.Returns(dateFormat);
-                DataSource.Preferences.Get().Returns(Observable.Return(preferences));
+                var preferences = createPreferences();
+                DataSource.Preferences.Current.Returns(Observable.Return(preferences));
 
                 await ViewModel.Initialize();
 
-                ViewModel.DateFormat.Should().Be(dateFormat);
+                ViewModel.DateFormat.Should().Be(preferences.DateFormat);
+                ViewModel.UseTwentyFourHourClock.Should().Be(preferences.TimeOfDayFormat.IsTwentyFourHoursFormat);
+                ViewModel.DurationFormat.Should().Be(preferences.DurationFormat);
             }
 
-            [Fact]
-            public async Task InitializesDateFormatToDefaultvalueIfDataSourceReturnsAnError()
+            private IDatabasePreferences createPreferences()
             {
-                var defaultDateFormat = DateFormat.FromLocalizedDateFormat("MM/DD/YYYY");
-                DataSource
-                    .Preferences
-                    .Get()
-                    .Returns(Observable.Throw<IDatabasePreferences>(new Exception()));
-
-                await ViewModel.Initialize();
-
-                ViewModel.DateFormat.Should().Be(defaultDateFormat);
+                var preferences = Substitute.For<IDatabasePreferences>();
+                preferences.DateFormat.Returns(DateFormat.FromLocalizedDateFormat("MM.DD.YYYY"));
+                preferences.DurationFormat.Returns(DurationFormat.Classic);
+                preferences.TimeOfDayFormat.Returns(TimeFormat.TwelveHoursFormat);
+                return preferences;
             }
         }
 
@@ -600,7 +595,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var dateFormat = DateFormat.FromLocalizedDateFormat("MM-DD-YYYY");
                 var preferences = Substitute.For<IDatabasePreferences>();
                 preferences.DateFormat.Returns(dateFormat);
-                DataSource.Preferences.Get().Returns(Observable.Return(preferences));
+                DataSource.Preferences.Current.Returns(Observable.Return(preferences));
                 await ViewModel.Initialize();
 
                 await ViewModel.SelectDateFormatCommand.ExecuteAsync();
@@ -617,7 +612,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var newDateFormat = DateFormat.FromLocalizedDateFormat("DD.MM.YYYY");
                 var preferences = Substitute.For<IDatabasePreferences>();
                 preferences.DateFormat.Returns(oldDateFormat);
-                DataSource.Preferences.Get().Returns(Observable.Return(preferences));
+                DataSource.Preferences.Current.Returns(Observable.Return(preferences));
                 NavigationService
                     .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(Arg.Any<DateFormat>())
                     .Returns(Task.FromResult(newDateFormat));
@@ -640,7 +635,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 oldPreferences.DateFormat.Returns(oldDateFormat);
                 var newPreferences = Substitute.For<IDatabasePreferences>();
                 newPreferences.DateFormat.Returns(newDateFormat);
-                DataSource.Preferences.Get().Returns(Observable.Return(oldPreferences));
+                DataSource.Preferences.Current.Returns(Observable.Return(oldPreferences));
                 NavigationService
                     .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(Arg.Any<DateFormat>())
                     .Returns(Task.FromResult(newDateFormat));
@@ -674,6 +669,53 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
+        public sealed class TheToggleUseTwentyFourHourClock : SettingsViewModelTest
+        {
+            [Theory, LogIfTooSlow]
+            [InlineData(true)]
+            [InlineData(false)]
+            public async Task ChangesTheValueOfTheUseTwentyFourHourHourClock(bool originalValue)
+            {
+                await ViewModel.Initialize();
+                ViewModel.UseTwentyFourHourClock = originalValue;
+
+                await ViewModel.ToggleUseTwentyFourHourClockCommand.ExecuteAsync();
+
+                ViewModel.UseTwentyFourHourClock.Should().Be(!originalValue);
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData(true)]
+            [InlineData(false)]
+            public async Task UpdatesTheValueInTheDataSource(bool originalValue)
+            {
+                await ViewModel.Initialize();
+                ViewModel.UseTwentyFourHourClock = originalValue;
+
+                await ViewModel.ToggleUseTwentyFourHourClockCommand.ExecuteAsync();
+
+                await DataSource.Preferences.Received().Update(Arg.Is<EditPreferencesDTO>(
+                    dto => dto.TimeOfDayFormat.HasValue
+                        && dto.TimeOfDayFormat.Value.IsTwentyFourHoursFormat != originalValue));
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData(true)]
+            [InlineData(false)]
+            public async Task InitiatesPushSync(bool originalValue)
+            {
+                var preferences = Substitute.For<IDatabasePreferences>();
+                var observable = Observable.Return(preferences);
+                DataSource.Preferences.Update(Arg.Any<EditPreferencesDTO>()).Returns(observable);
+                await ViewModel.Initialize();
+                ViewModel.UseTwentyFourHourClock = originalValue;
+
+                await ViewModel.ToggleUseTwentyFourHourClockCommand.ExecuteAsync();
+
+                await DataSource.SyncManager.Received().PushSync();
+            }
+        }
+
         public sealed class TheSelectDurationFormatCommand : SettingsViewModelTest
         {
             [Fact, LogIfTooSlow]
@@ -682,7 +724,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var durationFormat = DurationFormat.Improved;
                 var preferences = Substitute.For<IDatabasePreferences>();
                 preferences.DurationFormat.Returns(durationFormat);
-                DataSource.Preferences.Get().Returns(Observable.Return(preferences));
+                DataSource.Preferences.Current.Returns(Observable.Return(preferences));
                 await ViewModel.Initialize();
 
                 await ViewModel.SelectDurationFormatCommand.ExecuteAsync();
@@ -699,7 +741,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var newDurationFormat = DurationFormat.Improved;
                 var preferences = Substitute.For<IDatabasePreferences>();
                 preferences.DurationFormat.Returns(oldDurationFormat);
-                DataSource.Preferences.Get().Returns(Observable.Return(preferences));
+                DataSource.Preferences.Current.Returns(Observable.Return(preferences));
                 NavigationService
                     .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(Arg.Any<DurationFormat>())
                     .Returns(Task.FromResult(newDurationFormat));
@@ -720,7 +762,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var newDurationFormat = DurationFormat.Improved;
                 var preferences = Substitute.For<IDatabasePreferences>();
                 preferences.DurationFormat.Returns(oldDurationFormat);
-                DataSource.Preferences.Get().Returns(Observable.Return(preferences));
+                DataSource.Preferences.Current.Returns(Observable.Return(preferences));
                 NavigationService
                     .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(Arg.Any<DurationFormat>())
                     .Returns(Task.FromResult(newDurationFormat));
@@ -742,7 +784,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 oldPreferences.DurationFormat.Returns(oldDurationFormat);
                 var newPreferences = Substitute.For<IDatabasePreferences>();
                 newPreferences.DurationFormat.Returns(newDurationFormat);
-                DataSource.Preferences.Get().Returns(Observable.Return(oldPreferences));
+                DataSource.Preferences.Current.Returns(Observable.Return(oldPreferences));
                 NavigationService
                     .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(Arg.Any<DurationFormat>())
                     .Returns(Task.FromResult(newDurationFormat));

@@ -85,6 +85,10 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindTap())
                       .To(vm => vm.ToggleUseTwentyFourHourClockCommand);
 
+            bindingSet.Bind(TwentyFourHourClockSwitch)
+                      .For(v => v.BindValueChanged())
+                      .To(vm => vm.ToggleUseTwentyFourHourClockCommand);
+
             bindingSet.Bind(BeginningOfWeekView)
                       .For(v => v.BindTap())
                       .To(vm => vm.SelectBeginningOfWeekCommand);

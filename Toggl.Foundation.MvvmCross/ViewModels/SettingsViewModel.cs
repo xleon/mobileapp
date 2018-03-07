@@ -92,7 +92,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand ToggleAddMobileTagCommand { get; }
 
-        public IMvxCommand ToggleUseTwentyFourHourClockCommand { get; }
+        public IMvxAsyncCommand ToggleUseTwentyFourHourClockCommand { get; }
 
         public IMvxCommand ToggleManualModeCommand { get; }
 
@@ -150,7 +150,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SelectDurationFormatCommand = new MvxAsyncCommand(selectDurationFormat);
             SelectBeginningOfWeekCommand = new MvxAsyncCommand(selectBeginningOfWeek);
             PickWorkspaceCommand = new MvxAsyncCommand(pickDefaultWorkspace);
-            ToggleUseTwentyFourHourClockCommand = new MvxCommand(toggleUseTwentyFourHourClock);
+            ToggleUseTwentyFourHourClockCommand = new MvxAsyncCommand(toggleUseTwentyFourHourClock);
             SelectDefaultWorkspaceCommand = new MvxAsyncCommand<SelectableWorkspaceViewModel>(selectDefaultWorkspace);
         }
 
@@ -172,18 +172,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 Workspaces.Add(new SelectableWorkspaceViewModel(workspace, workspace.Id == workspaceId));
             }
 
-            dataSource
-                .Preferences
-                .Get()
-                .Subscribe(updateFromPreferences,
-                    //Use a default value temporary, while preference syncing isn't implemented
-                    ex => DateFormat = DateFormat.FromLocalizedDateFormat("MM/DD/YYYY"));
+            dataSource.Preferences.Current
+                .Subscribe(updateFromPreferences);
         }
 
         private void updateFromPreferences(IDatabasePreferences preferences)
         {
             DateFormat = preferences.DateFormat;
             DurationFormat = preferences.DurationFormat;
+            UseTwentyFourHourClock = preferences.TimeOfDayFormat.IsTwentyFourHoursFormat;
         }
 
         public void rate() => throw new NotImplementedException();
@@ -263,7 +260,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public void toggleAddMobileTag() => AddMobileTag = !AddMobileTag;
 
-        public void toggleUseTwentyFourHourClock() => UseTwentyFourHourClock = !UseTwentyFourHourClock;
+        public async Task toggleUseTwentyFourHourClock()
+        {
+            UseTwentyFourHourClock = !UseTwentyFourHourClock;
+            var timeFormat = UseTwentyFourHourClock
+                ? TimeFormat.TwentyFourHoursFormat
+                : TimeFormat.TwelveHoursFormat;
+
+            var preferencesDto = new EditPreferencesDTO { TimeOfDayFormat = timeFormat };
+            await updatePreferences(preferencesDto);
+        }
 
         private void toggleManualMode()
         {
