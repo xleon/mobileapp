@@ -35,6 +35,7 @@ namespace Toggl.Daneel.ViewSources
         private bool shouldCalculateOnDeceleration;
         private bool isSyncing => syncProgress == SyncProgress.Syncing;
         private int syncIndicatorLastShown;
+        private bool shouldRefreshOnTap;
 
         public SyncProgress SyncProgress
         {
@@ -91,6 +92,10 @@ namespace Toggl.Daneel.ViewSources
             syncStateLabel.Font = syncStateLabel.Font.WithSize(syncLabelFontSize);
             syncStateLabel.CenterXAnchor.ConstraintEqualTo(syncStateView.CenterXAnchor).Active = true;
             syncStateLabel.BottomAnchor.ConstraintEqualTo(syncStateView.BottomAnchor, -6).Active = true;
+
+            var tapGestureRecognizer = new UITapGestureRecognizer(onStatusLabelTap);
+            syncStateLabel.UserInteractionEnabled = true;
+            syncStateLabel.AddGestureRecognizer(tapGestureRecognizer);
         }
 
         private void prepareActivityIndicatorView()
@@ -117,6 +122,7 @@ namespace Toggl.Daneel.ViewSources
         private async void OnSyncProgressChanged()
         {
             bool hideIndicator = false;
+            shouldRefreshOnTap = false;
 
             switch (SyncProgress)
             {
@@ -136,6 +142,7 @@ namespace Toggl.Daneel.ViewSources
                         offlineColor);
                     dismissSyncBarButton.Hidden = false;
                     setActivityIndicatorVisible(false);
+                    shouldRefreshOnTap = true;
                     break;
 
                 case SyncProgress.Synced:
@@ -258,6 +265,13 @@ namespace Toggl.Daneel.ViewSources
                 activityIndicatorView.StartAnimation();
             else
                 activityIndicatorView.StopAnimation();
+        }
+
+        private void onStatusLabelTap()
+        {
+            if (shouldRefreshOnTap == false) return;
+
+            RefreshCommand?.Execute();
         }
 
         private void onDismissSyncBarButtonTap(object sender, EventArgs e)
