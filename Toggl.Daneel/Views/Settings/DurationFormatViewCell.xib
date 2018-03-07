@@ -38,8 +38,8 @@
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="tpf-MU-YNm" secondAttribute="bottom" id="4GI-1k-s06"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="ZI2-be-0ne" secondAttribute="trailing" constant="16" id="IdE-Lr-kvf"/>
-                    <constraint firstItem="Aqt-Iu-NrH" firstAttribute="leading" secondItem="GfM-WX-zDV" secondAttribute="leadingMargin" constant="16" id="Qij-TO-o76"/>
+                    <constraint firstAttribute="trailing" secondItem="ZI2-be-0ne" secondAttribute="trailing" constant="16" id="IdE-Lr-kvf"/>
+                    <constraint firstItem="Aqt-Iu-NrH" firstAttribute="leading" secondItem="GfM-WX-zDV" secondAttribute="leading" constant="16" id="Qij-TO-o76"/>
                     <constraint firstItem="Aqt-Iu-NrH" firstAttribute="centerY" secondItem="GfM-WX-zDV" secondAttribute="centerY" id="knM-Bi-bGu"/>
                     <constraint firstItem="tpf-MU-YNm" firstAttribute="leading" secondItem="GfM-WX-zDV" secondAttribute="leading" id="okJ-Zr-n8J"/>
                     <constraint firstAttribute="trailing" secondItem="tpf-MU-YNm" secondAttribute="trailing" id="v6I-nb-Xr2"/>
