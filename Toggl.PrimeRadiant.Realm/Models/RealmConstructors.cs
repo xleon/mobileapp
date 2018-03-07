@@ -45,8 +45,12 @@ namespace Toggl.PrimeRadiant.Realm
         }
     }
 
-    internal partial class RealmPreferences : IUpdatesFrom<IDatabasePreferences>
+    internal partial class RealmPreferences : IUpdatesFrom<IDatabasePreferences>, IModifiableId
     {
+        public long Id { get; set; }
+
+        public long? OriginalId { get; set; }
+
         public bool IsDeleted { get; set; }
 
         public int SyncStatusInt { get; set; }
@@ -72,6 +76,7 @@ namespace Toggl.PrimeRadiant.Realm
             IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
+            Id = entity.Id;
             TimeOfDayFormat = entity.TimeOfDayFormat;
             DateFormat = entity.DateFormat;
             DurationFormat = entity.DurationFormat;

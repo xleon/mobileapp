@@ -7,6 +7,8 @@ namespace Toggl.Foundation.Models
 {
     internal sealed partial class Preferences
     {
+        private const long fakeId = 0;
+
         public static Preferences DefaultPreferences { get; } =
             Builder.Create()
                 .SetDurationFormat(DurationFormat.Improved)
@@ -105,6 +107,7 @@ namespace Toggl.Foundation.Models
 
         private Preferences(Builder builder)
         {
+            Id = fakeId;
             DateFormat = builder.DateFormat;
             TimeOfDayFormat = builder.TimeOfDayFormat;
             DurationFormat = builder.DurationFormat;

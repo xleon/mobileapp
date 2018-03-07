@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
@@ -30,6 +30,8 @@ namespace Toggl.Foundation.Models
 
     internal partial class Preferences : IDatabasePreferences
     {
+        public long Id { get; }
+
         public TimeFormat TimeOfDayFormat { get; }
 
         public DateFormat DateFormat { get; }

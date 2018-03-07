@@ -65,6 +65,7 @@ namespace Toggl.Foundation.Models
 
         private Preferences(IPreferences entity, SyncStatus syncStatus, string lastSyncErrorMessage, bool isDeleted = false)
         {
+            Id = entity.Id;
             TimeOfDayFormat = entity.TimeOfDayFormat;
             DateFormat = entity.DateFormat;
             DurationFormat = entity.DurationFormat;
