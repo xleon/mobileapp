@@ -19,6 +19,12 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIView AddMobileTagView { get; set; }
 
 		[Outlet]
+		UIKit.UILabel BeginningOfWeekLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView BeginningOfWeekView { get; set; }
+
+		[Outlet]
 		UIKit.UIView ControlsContainerView { get; set; }
 
 		[Outlet]
@@ -140,6 +146,16 @@ namespace Toggl.Daneel.ViewControllers
 			if (AddMobileTagView != null) {
 				AddMobileTagView.Dispose ();
 				AddMobileTagView = null;
+			}
+
+			if (BeginningOfWeekLabel != null) {
+				BeginningOfWeekLabel.Dispose ();
+				BeginningOfWeekLabel = null;
+			}
+
+			if (BeginningOfWeekView != null) {
+				BeginningOfWeekView.Dispose ();
+				BeginningOfWeekView = null;
 			}
 
 			if (ControlsContainerView != null) {

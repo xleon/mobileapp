@@ -57,6 +57,7 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(DurationFormatLabel)
                       .To(vm => vm.DurationFormat)
                       .WithConversion(durationFormatToStringConverter);
+            bindingSet.Bind(BeginningOfWeekLabel).To(vm => vm.BeginningOfWeek);
 
             // Commands
             bindingSet.Bind(LogoutButton).To(vm => vm.LogoutCommand);
@@ -83,6 +84,10 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(TwentyFourHourClockView)
                       .For(v => v.BindTap())
                       .To(vm => vm.ToggleUseTwentyFourHourClockCommand);
+
+            bindingSet.Bind(BeginningOfWeekView)
+                      .For(v => v.BindTap())
+                      .To(vm => vm.SelectBeginningOfWeekCommand);
 
             bindingSet.Bind(FeedbackView)
                       .For(v => v.BindTap())

@@ -462,6 +462,8 @@
     <InterfaceDefinition Include="ViewControllers\SelectDateFormatViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectDurationFormatViewController.xib" />
     <InterfaceDefinition Include="Views\Settings\DurationFormatViewCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\SelectBeginningOfWeekViewController.xib" />
+    <InterfaceDefinition Include="Views\Settings\DayOfWeekViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -777,6 +779,15 @@
     <Compile Include="Views\Settings\DurationFormatViewCell.cs" />
     <Compile Include="Views\Settings\DurationFormatViewCell.designer.cs">
       <DependentUpon>DurationFormatViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\SelectBeginningOfWeekViewController.cs" />
+    <Compile Include="ViewControllers\SelectBeginningOfWeekViewController.designer.cs">
+      <DependentUpon>SelectBeginningOfWeekViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSources\BeginningOfWeekTableViewSource.cs" />
+    <Compile Include="Views\Settings\DayOfWeekViewCell.cs" />
+    <Compile Include="Views\Settings\DayOfWeekViewCell.designer.cs">
+      <DependentUpon>DayOfWeekViewCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
