@@ -654,6 +654,24 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.DateFormat.Should().Be(newDateFormat);
             }
+
+            [Fact, LogIfTooSlow]
+            public async Task InitiatesPushSync()
+            {
+                var oldDateFormat = DateFormat.FromLocalizedDateFormat("MM-DD-YYYY");
+                var newDateFormat = DateFormat.FromLocalizedDateFormat("DD.MM.YYYY");
+                var preferences = Substitute.For<IDatabasePreferences>();
+                preferences.DateFormat.Returns(oldDateFormat);
+                DataSource.Preferences.Get().Returns(Observable.Return(preferences));
+                NavigationService
+                    .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(Arg.Any<DateFormat>())
+                    .Returns(Task.FromResult(newDateFormat));
+                await ViewModel.Initialize();
+
+                await ViewModel.SelectDateFormatCommand.ExecuteAsync();
+
+                await DataSource.SyncManager.Received().PushSync();
+            }
         }
 
         public sealed class TheSelectDurationFormatCommand : SettingsViewModelTest

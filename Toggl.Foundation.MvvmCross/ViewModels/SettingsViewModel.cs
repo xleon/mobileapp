@@ -225,7 +225,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             WorkspaceName = workspace.Name;
 
             await dataSource.User.UpdateWorkspace(workspaceId);
-            await dataSource.SyncManager.PushSync();
+            dataSource.SyncManager.PushSync();
         }
 
         private async Task submitFeedback()
@@ -330,7 +330,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return;
             
             var preferencesDto = new EditPreferencesDTO { DateFormat = newDateFormat };
-            var newPreferences = await dataSource.Preferences.Update(preferencesDto);
+            var newPreferences = await updatePreferences(preferencesDto);
             DateFormat = newPreferences.DateFormat;
         }
 
@@ -346,7 +346,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var newUser = await dataSource.User.Update(userDto);
             BeginningOfWeek = newUser.BeginningOfWeek;
 
-            await dataSource.SyncManager.PushSync();
+            dataSource.SyncManager.PushSync();
         }
 
         private async Task openAboutPage()
@@ -363,10 +363,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return;
 
             var preferencesDto = new EditPreferencesDTO { DurationFormat = newDurationFormat };
-            var newPreferences = await dataSource.Preferences.Update(preferencesDto);
+            var newPreferences = await updatePreferences(preferencesDto);
             DurationFormat = newPreferences.DurationFormat;
+        }
 
-            await dataSource.SyncManager.PushSync();
+        private async Task<IDatabasePreferences> updatePreferences(EditPreferencesDTO preferencesDto)
+        {
+            var newPreferences = await dataSource.Preferences.Update(preferencesDto);
+            dataSource.SyncManager.PushSync();
+            return newPreferences;
         }
     }
 }
