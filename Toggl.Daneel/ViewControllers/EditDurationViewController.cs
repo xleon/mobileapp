@@ -34,6 +34,7 @@ namespace Toggl.Daneel.ViewControllers
             setupDismissingByTappingOnBackground();
             prepareViews();
 
+            var durationCombiner = new DurationValueCombiner();
             var timeConverter = new DateTimeToTimeValueConverter();
             var dateConverter = new DateToTitleStringValueConverter();
             var inverseBoolConverter = new BoolToConstantValueConverter<bool>(false, true);
@@ -138,6 +139,12 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.Duration)
                       .To(vm => vm.Duration);
 
+            bindingSet.Bind(DurationInput)
+                      .For(v => v.FormattedDuration)
+                      .ByCombining(durationCombiner,
+                          vm => vm.Duration,
+                          vm => vm.DurationFormat);
+
             bindingSet.Bind(WheelView)
                       .For(v => v.UserInteractionEnabled)
                       .To(vm => vm.IsEditingTime)
@@ -240,8 +247,6 @@ namespace Toggl.Daneel.ViewControllers
 
         private void prepareViews()
         {
-            DurationInput.Converter = new TimeSpanToDurationValueConverter();
-
             EndTimeLabel.Font = EndTimeLabel.Font.GetMonospacedDigitFont();
             StartTimeLabel.Font = StartTimeLabel.Font.GetMonospacedDigitFont();
 

@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using PropertyChanged;
+using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
+using Toggl.PrimeRadiant.Models;
 using static Toggl.Foundation.Helper.Constants;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
@@ -15,10 +17,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     {
         private readonly ITimeService timeService;
         private readonly IMvxNavigationService navigationService;
+        private readonly ITogglDataSource dataSource;
 
         private IDisposable runningTimeEntryDisposable;
+        private IDisposable preferencesDisposable;
 
         private DurationParameter defaultResult;
+
+        private DurationFormat durationFormat;
+
+        [DependsOn(nameof(IsRunning))]
+        public DurationFormat DurationFormat => IsRunning ? DurationFormat.Improved : durationFormat;
 
         public bool IsRunning { get; private set; }
 
@@ -87,13 +96,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand StopEditingTimeCommand { get; }
 
-        public EditDurationViewModel(IMvxNavigationService navigationService, ITimeService timeService)
+        public EditDurationViewModel(IMvxNavigationService navigationService, ITimeService timeService, ITogglDataSource dataSource)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
 
             this.timeService = timeService;
             this.navigationService = navigationService;
+            this.dataSource = dataSource;
 
             SaveCommand = new MvxAsyncCommand(save);
             CloseCommand = new MvxAsyncCommand(close);
@@ -118,6 +129,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             StopTime = parameter.Duration.HasValue
                 ? StartTime + parameter.Duration.Value
                 : timeService.CurrentDateTime;
+        }
+
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+
+            preferencesDisposable = dataSource.Preferences.Current
+                .Subscribe(onPreferencesChanged);
         }
 
         private Task close()
@@ -184,6 +203,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 StartTime = timeService.CurrentDateTime - changedDuration;
 
             StopTime = StartTime + changedDuration;
+        }
+
+        private void onPreferencesChanged(IDatabasePreferences preferences)
+        {
+            durationFormat = preferences.DurationFormat;
+
+            RaisePropertyChanged(nameof(DurationFormat));
         }
     }
 }
