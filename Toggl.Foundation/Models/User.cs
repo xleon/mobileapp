@@ -16,7 +16,7 @@ namespace Toggl.Foundation.Models
         public sealed class Builder
         {
             public static Builder FromExisting(IDatabaseUser user)
-             => new Builder(user);
+                => new Builder(user);
 
             public long Id { get; private set; }
             public string ApiToken { get; private set; }
@@ -27,6 +27,9 @@ namespace Toggl.Foundation.Models
             public string Language { get; private set; }
             public string ImageUrl { get; private set; }
             public DateTimeOffset At { get; private set; }
+            public SyncStatus SyncStatus { get; private set; }
+            public string LastSyncErrorMessage { get; private set; }
+            public bool IsDeleted { get; private set; }
 
             public Builder(IDatabaseUser user)
             {
@@ -39,11 +42,26 @@ namespace Toggl.Foundation.Models
                 Language = user.Language;
                 ImageUrl = user.ImageUrl;
                 At = user.At;
+                SyncStatus = user.SyncStatus;
+                LastSyncErrorMessage = user.LastSyncErrorMessage;
+                IsDeleted = user.IsDeleted;
             }
 
             public Builder SetBeginningOfWeek(BeginningOfWeek beginningOfWeek)
             {
                 BeginningOfWeek = beginningOfWeek;
+                return this;
+            }
+
+            public Builder SetSyncStatus(SyncStatus syncStatus)
+            {
+                SyncStatus = syncStatus;
+                return this;
+            }
+
+            public Builder SetAt(DateTimeOffset dateTime)
+            {
+                At = dateTime;
                 return this;
             }
 
@@ -83,6 +101,9 @@ namespace Toggl.Foundation.Models
             Language = builder.Language;
             ImageUrl = builder.ImageUrl;
             At = builder.At;
+            SyncStatus = builder.SyncStatus;
+            LastSyncErrorMessage = builder.LastSyncErrorMessage;
+            IsDeleted = builder.IsDeleted;
         }
     }
 
