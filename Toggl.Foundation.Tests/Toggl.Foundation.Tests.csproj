@@ -31,5 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MvvmCross\ViewModels\CalendarQuickSelectShortcuts\" />
+    <Folder Include="Interactors\" />
+    <Folder Include="Mocks\" />
   </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@ using NSubstitute;
 
 namespace Toggl.Foundation.Tests.MvvmCross
 {
-    public abstract class BaseMvvmCrossTests
+    public abstract class BaseMvvmCrossTests : InteractorAwareTests
     {
         protected IMvxIoCProvider Ioc { get; private set; }
 

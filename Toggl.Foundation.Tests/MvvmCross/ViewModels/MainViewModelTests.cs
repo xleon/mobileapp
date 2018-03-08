@@ -25,8 +25,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         {
             protected ISubject<SyncProgress> ProgressSubject { get; } = new Subject<SyncProgress>();
 
-            protected IUserPreferences UserPreferences { get; } = Substitute.For<IUserPreferences>();
-
             protected override MainViewModel CreateViewModel()
             {
                 var vm = new MainViewModel(DataSource, TimeService, OnboardingStorage, NavigationService, UserPreferences);

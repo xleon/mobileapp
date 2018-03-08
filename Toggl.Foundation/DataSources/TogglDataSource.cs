@@ -60,7 +60,7 @@ namespace Toggl.Foundation.DataSources
             Clients = new ClientsDataSource(database.IdProvider, database.Clients, timeService);
             Preferences = new PreferencesDataSource(database.Preferences);
             Projects = new ProjectsDataSource(database.IdProvider, database.Projects, timeService);
-            TimeEntries = new TimeEntriesDataSource(database.IdProvider, shortcutCreator, database.TimeEntries, timeService);
+            TimeEntries = new TimeEntriesDataSource(database.IdProvider, database.TimeEntries, timeService);
 
             AutocompleteProvider = new AutocompleteProvider(database);
             SyncManager = createSyncManager(this);
