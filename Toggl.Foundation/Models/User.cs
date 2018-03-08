@@ -18,6 +18,7 @@ namespace Toggl.Foundation.Models
             public static Builder FromExisting(IDatabaseUser user)
              => new Builder(user);
 
+            public long Id { get; private set; }
             public string ApiToken { get; private set; }
             public long DefaultWorkspaceId { get; private set; }
             public Email Email { get; private set; }
@@ -29,6 +30,7 @@ namespace Toggl.Foundation.Models
 
             public Builder(IDatabaseUser user)
             {
+                Id = user.Id;
                 ApiToken = user.ApiToken;
                 DefaultWorkspaceId = user.DefaultWorkspaceId;
                 Email = user.Email;
@@ -53,6 +55,9 @@ namespace Toggl.Foundation.Models
 
             private void ensureValidity()
             {
+                if (Id == 0)
+                    throw new InvalidOperationException($"{nameof(Id)} must be specified before building user.");
+
                 if (Enum.IsDefined(typeof(BeginningOfWeek), BeginningOfWeek) == false)
                     throw new InvalidOperationException($"You need to set a valid value to the {nameof(BeginningOfWeek)} property before building user.");
 
@@ -69,6 +74,7 @@ namespace Toggl.Foundation.Models
 
         private User(Builder builder)
         {
+            Id = builder.Id;
             ApiToken = builder.ApiToken;
             DefaultWorkspaceId = builder.DefaultWorkspaceId;
             Email = builder.Email;
