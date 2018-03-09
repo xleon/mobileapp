@@ -24,6 +24,8 @@ namespace Toggl.Foundation.MvvmCross
 
         internal ITimeService TimeService { get; }
 
+        internal IScheduler Scheduler { get; }
+
         internal IAnalyticsService AnalyticsService { get; }
 
         internal IGoogleService GoogleService { get; }
@@ -42,6 +44,7 @@ namespace Toggl.Foundation.MvvmCross
             IApiFactory apiFactory,
             ITogglDatabase database,
             ITimeService timeService,
+            IScheduler scheduler,
             IAnalyticsService analyticsService,
             IGoogleService googleService,
             IApplicationShortcutCreator shortcutCreator,
@@ -53,6 +56,7 @@ namespace Toggl.Foundation.MvvmCross
             Database = database;
             ApiFactory = apiFactory;
             TimeService = timeService;
+            Scheduler = scheduler;
             AnalyticsService = analyticsService;
             GoogleService = googleService;
             ShortcutCreator = shortcutCreator;
@@ -91,6 +95,7 @@ namespace Toggl.Foundation.MvvmCross
             Mvx.RegisterSingleton(browserService);
             Mvx.RegisterSingleton(self.UserAgent);
             Mvx.RegisterSingleton(self.TimeService);
+            Mvx.RegisterSingleton(self.Scheduler);
             Mvx.RegisterSingleton(self.ShortcutCreator);
             Mvx.RegisterSingleton(self.MailService);
             Mvx.RegisterSingleton(self.AnalyticsService);
@@ -106,6 +111,7 @@ namespace Toggl.Foundation.MvvmCross
                 self.ApiFactory,
                 self.Database,
                 timeService,
+                self.Scheduler,
                 self.AnalyticsService,
                 self.GoogleService,
                 self.ShortcutCreator,
