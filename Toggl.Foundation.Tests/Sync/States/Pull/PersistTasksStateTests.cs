@@ -8,8 +8,7 @@ using Toggl.Foundation.Sync.States;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
-using Task = Toggl.Ultrawave.Models.Task;
-using static Toggl.PrimeRadiant.ConflictResolutionMode;
+using Task = Toggl.Foundation.Tests.Mocks.MockTask;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {
