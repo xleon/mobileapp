@@ -43,6 +43,7 @@
     <string name="SelectColorTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectColorTemplateSelector, Toggl.Giskard</string>
     <string name="SuggestionsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SuggestionsTemplateSelector, Toggl.Giskard</string>
     <string name="SelectClientTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectClientTemplateSelector, Toggl.Giskard</string>
+    <string name="SelectProjectTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectProjectTemplateSelector, Toggl.Giskard</string>
     <string name="SelectWorkspaceTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectWorkspaceTemplateSelector, Toggl.Giskard</string>
     <string name="SelectDateFormatTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectDateFormatTemplateSelector, Toggl.Giskard</string>
     <string name="SelectBeginningOfWeekTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectBeginningOfWeekTemplateSelector, Toggl.Giskard</string>

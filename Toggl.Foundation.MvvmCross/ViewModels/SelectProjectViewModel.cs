@@ -149,7 +149,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Suggestions.Clear();
 
             var workspaces = groupByWorkspace(suggestions, !UsesFilter);
-
             if (!UsesFilter)
                 workspaces = addMissingWorkspacesTo(workspaces);
 
