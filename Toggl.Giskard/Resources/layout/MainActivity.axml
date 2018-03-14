@@ -5,13 +5,19 @@
     android:background="@color/lightGray"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <toggl.giskard.views.MainRecyclerView
-        local:MvxBind="ItemsSource TimeEntriesLogViewModel.TimeEntries; SuggestionsViewModel SuggestionsViewModel; TimeEntriesLogViewModel TimeEntriesLogViewModel"
-        local:MvxTemplateSelector="@string/MainTemplateSelector"
-        android:scrollbars="vertical"
+    <mvvmcross.droid.support.v4.MvxSwipeRefreshLayout
+        local:MvxBind="RefreshCommand RefreshCommand; Refreshing ShowSyncIndicator"
+        android:id="@+id/MainSwipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize" />
+        android:layout_marginTop="?attr/actionBarSize">
+        <toggl.giskard.views.MainRecyclerView
+            local:MvxBind="ItemsSource TimeEntriesLogViewModel.TimeEntries; SuggestionsViewModel SuggestionsViewModel; TimeEntriesLogViewModel TimeEntriesLogViewModel"
+            local:MvxTemplateSelector="@string/MainTemplateSelector"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </mvvmcross.droid.support.v4.MvxSwipeRefreshLayout>
     <include
         layout="@layout/MainRunningTimeEntry" />
     <android.support.design.widget.FloatingActionButton

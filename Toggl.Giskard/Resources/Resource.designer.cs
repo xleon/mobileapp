@@ -4755,9 +4755,6 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0c003e
 			public const int META = 2131492926;
 			
-			// aapt resource value: 0x7f0c00d7
-			public const int MainCoordinatorLayout = 2131493079;
-			
 			// aapt resource value: 0x7f0c00d8
 			public const int MainPlayButton = 2131493080;
 			
@@ -4781,6 +4778,9 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c00e3
 			public const int MainStopButton = 2131493091;
+			
+			// aapt resource value: 0x7f0c00d7
+			public const int MainSwipeRefreshLayout = 2131493079;
 			
 			// aapt resource value: 0x7f0c001c
 			public const int MvvmCrossTagId = 2131492892;
