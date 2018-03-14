@@ -330,4 +330,7 @@ account is not set up</value>
      <data name="DurationFormatDecimal">
         <value>Decimal (0.79 h)</value>
     </data>
+     <data name="TapToRetry">
+        <value>Tap to retry</value>
+    </data>
 </root>

@@ -143,18 +143,14 @@ namespace Toggl.Foundation {
             }
         }
         
-        public static string EmailIsAlreadyUsedError
-        {
-            get
-            {
+        public static string EmailIsAlreadyUsedError {
+            get {
                 return ResourceManager.GetString("EmailIsAlreadyUsedError", resourceCulture);
             }
         }
         
-        public static string TryLoggingInInstead
-        {
-            get
-            {
+        public static string TryLoggingInInstead {
+            get {
                 return ResourceManager.GetString("TryLoggingInInstead", resourceCulture);
             }
         }
@@ -666,6 +662,12 @@ namespace Toggl.Foundation {
         public static string DurationFormatDecimal {
             get {
                 return ResourceManager.GetString("DurationFormatDecimal", resourceCulture);
+            }
+        }
+        
+        public static string TapToRetry {
+            get {
+                return ResourceManager.GetString("TapToRetry", resourceCulture);
             }
         }
     }
