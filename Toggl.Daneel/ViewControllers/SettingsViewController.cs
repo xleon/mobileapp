@@ -51,7 +51,6 @@ namespace Toggl.Daneel.ViewControllers
 
             // Text
             bindingSet.Bind(EmailLabel).To(vm => vm.Email);
-            bindingSet.Bind(VersionLabel).To(vm => vm.Version);
             bindingSet.Bind(WorkspaceLabel).To(vm => vm.WorkspaceName);
             bindingSet.Bind(DateFormatLabel).To(vm => vm.DateFormat.Localized);
             bindingSet.Bind(DurationFormatLabel)
@@ -140,16 +139,6 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewWillAppear(animated);
             startAnimations();
-        }
-
-        public override void ViewWillLayoutSubviews()
-        {
-            base.ViewWillLayoutSubviews();
-
-            // Logout container vertical spacing
-            var idealDistance = LogoutContainerView.Superview.Frame.Height - ControlsContainerView.Frame.Bottom - verticalSpacing - LogoutContainerView.Frame.Height;
-            var distance = Math.Max(idealDistance, verticalSpacing);
-            LogoutTopConstraint.Constant = (nfloat)distance;
         }
 
         private void prepareViews()
