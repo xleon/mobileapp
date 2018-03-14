@@ -20,6 +20,7 @@
                 <outlet property="StartTimeEntryButton" destination="4Kk-Hz-RBS" id="name-outlet-4Kk-Hz-RBS"/>
                 <outlet property="StopTimeEntryButton" destination="Ddo-IW-xE3" id="name-outlet-Ddo-IW-xE3"/>
                 <outlet property="TimeEntriesLogTableView" destination="hoP-Tg-vBM" id="cct-0m-nqm"/>
+                <outlet property="TopConstraint" destination="uv0-dd-PVb" id="rca-dp-xNl"/>
                 <outlet property="TopSeparator" destination="niU-tX-YTJ" id="xUr-AE-63C"/>
                 <outlet property="WelcomeBackView" destination="Xqe-XF-nVb" id="fHK-W8-vN4"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>

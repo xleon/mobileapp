@@ -47,6 +47,9 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UITableView TimeEntriesLogTableView { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint TopConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIView TopSeparator { get; set; }
 
 		[Outlet]
@@ -54,6 +57,11 @@ namespace Toggl.Daneel.ViewControllers
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (TopConstraint != null) {
+				TopConstraint.Dispose ();
+				TopConstraint = null;
+			}
+
 			if (CurrentTimeEntryCard != null) {
 				CurrentTimeEntryCard.Dispose ();
 				CurrentTimeEntryCard = null;
