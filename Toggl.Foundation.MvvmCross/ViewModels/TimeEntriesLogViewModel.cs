@@ -78,7 +78,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             IsWelcome = onboardingStorage.IsNewUser();
 
-            await reset();
+            await fetchSectionedTimeEntries();
 
             var deleteDisposable =
                 dataSource.TimeEntries.TimeEntryDeleted
@@ -108,30 +108,23 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             disposeBag.Add(preferencesDisposable);
         }
 
-        private async Task reset()
+        private async Task fetchSectionedTimeEntries()
         {
-            TimeEntries.Clear();
-
             var timeEntries = await dataSource.TimeEntries.GetAll();
+            if (timeEntries == null) 
+            {
+                TimeEntries.Clear();
+                return;
+            }
 
-            if (timeEntries == null) return;
-
-            timeEntries
+            var groupedEntries = timeEntries
                 .Where(isNotRunning)
                 .OrderByDescending(te => te.Start)
                 .Select(te => new TimeEntryViewModel(te, durationFormat))
                 .GroupBy(te => te.Start.LocalDateTime.Date)
-                .Select(grouping => new TimeEntryViewModelCollection(grouping.Key, grouping, durationFormat))
-                .ForEach(addTimeEntries);
-        }
+                .Select(grouping => new TimeEntryViewModelCollection(grouping.Key, grouping, durationFormat));
 
-        private void addTimeEntries(TimeEntryViewModelCollection collection)
-        {
-            IsWelcome = false;
-
-            TimeEntries.Add(collection);
-
-            RaisePropertyChanged(nameof(IsEmpty));
+            TimeEntries.ReplaceWith(groupedEntries);
         }
 
         private void onTimeEntryUpdated((long Id, IDatabaseTimeEntry Entity) tuple)
