@@ -18,7 +18,7 @@ namespace Toggl.Giskard.Bindings
         {
         }
 
-        public override MvxBindingMode DefaultMode => MvxBindingMode.Default;
+        public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
         protected override void SetValueImpl(View target, Color value)
         {
