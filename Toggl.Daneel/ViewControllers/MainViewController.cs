@@ -241,6 +241,8 @@ namespace Toggl.Daneel.ViewControllers
             RunningEntryDescriptionFadeView.FadeRight = true;
 
             prepareSpiderViews();
+
+            TopConstraint.AdaptForIos10(NavigationController.NavigationBar);
         }
 
         private void showTimeEntryCard()
