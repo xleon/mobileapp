@@ -8,7 +8,7 @@ using Toggl.Foundation.Sync.States;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
-using TimeEntry = Toggl.Ultrawave.Models.TimeEntry;
+using TimeEntry = Toggl.Foundation.Tests.Mocks.MockTimeEntry;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {

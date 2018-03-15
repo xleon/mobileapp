@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content.PM;
@@ -9,9 +10,12 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Views.Attributes;
+using MvvmCross.Platform.WeakSubscription;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
+using static Toggl.Foundation.Sync.SyncProgress;
 using static Toggl.Giskard.Extensions.CircularRevealAnimation.AnimationType;
+using FoundationResources = Toggl.Foundation.Resources;
 
 namespace Toggl.Giskard.Activities
 {
@@ -21,9 +25,13 @@ namespace Toggl.Giskard.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed class MainActivity : MvxAppCompatActivity<MainViewModel>
     {
+        private const int snackbarDuration = 5000;
+
+        private IDisposable disposable;
         private View runningEntryCardFrame;
         private FloatingActionButton playButton;
         private FloatingActionButton stopButton;
+        private CoordinatorLayout coordinatorLayout;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -43,6 +51,35 @@ namespace Toggl.Giskard.Activities
 
             playButton = FindViewById<FloatingActionButton>(Resource.Id.MainPlayButton);
             stopButton = FindViewById<FloatingActionButton>(Resource.Id.MainStopButton);
+            coordinatorLayout = FindViewById<CoordinatorLayout>(Resource.Id.MainCoordinatorLayout);
+
+            disposable =
+                ViewModel.WeakSubscribe<PropertyChangedEventArgs>(nameof(ViewModel.SyncingProgress), onSyncChanged);
+        }
+
+        private void onSyncChanged(object sender, PropertyChangedEventArgs args)
+        {
+            switch (ViewModel.SyncingProgress)
+            {
+                case Failed:
+                case Unknown:
+                case OfflineModeDetected:
+
+                    var errorMessage = ViewModel.SyncingProgress == OfflineModeDetected
+                                     ? FoundationResources.Offline
+                                     : FoundationResources.SyncFailed;
+
+                    var snackbar = Snackbar.Make(coordinatorLayout, errorMessage, Snackbar.LengthLong)
+                        .SetAction(FoundationResources.TapToRetry, onRetryTapped);
+                    snackbar.SetDuration(snackbarDuration);
+                    snackbar.Show();
+                    break;
+            }
+
+            void onRetryTapped(View view)
+            {
+                ViewModel.RefreshCommand.Execute();
+            }
         }
 
         internal async void OnTimeEntryCardVisibilityChanged(bool visible)

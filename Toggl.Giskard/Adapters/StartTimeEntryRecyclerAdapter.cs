@@ -38,7 +38,7 @@ namespace Toggl.Giskard.Adapters
                 if (UseGrouping)
                     return base.ItemCount;
 
-                return Collection.FirstOrDefault()?.Count ?? 0
+                return (Collection.FirstOrDefault()?.Count ?? 0)
                     + (IsSuggestingCreation ? 1 : 0);
             }
         }

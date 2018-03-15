@@ -5,6 +5,7 @@ using MvvmCross.Platform;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Login;
+using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Shortcuts;
@@ -24,6 +25,8 @@ namespace Toggl.Foundation.MvvmCross
 
         internal ITimeService TimeService { get; }
 
+        internal IScheduler Scheduler { get; }
+
         internal IAnalyticsService AnalyticsService { get; }
 
         internal IGoogleService GoogleService { get; }
@@ -42,6 +45,7 @@ namespace Toggl.Foundation.MvvmCross
             IApiFactory apiFactory,
             ITogglDatabase database,
             ITimeService timeService,
+            IScheduler scheduler,
             IAnalyticsService analyticsService,
             IGoogleService googleService,
             IApplicationShortcutCreator shortcutCreator,
@@ -53,6 +57,7 @@ namespace Toggl.Foundation.MvvmCross
             Database = database;
             ApiFactory = apiFactory;
             TimeService = timeService;
+            Scheduler = scheduler;
             AnalyticsService = analyticsService;
             GoogleService = googleService;
             ShortcutCreator = shortcutCreator;
@@ -91,21 +96,27 @@ namespace Toggl.Foundation.MvvmCross
             Mvx.RegisterSingleton(browserService);
             Mvx.RegisterSingleton(self.UserAgent);
             Mvx.RegisterSingleton(self.TimeService);
+            Mvx.RegisterSingleton(self.Scheduler);
             Mvx.RegisterSingleton(self.ShortcutCreator);
             Mvx.RegisterSingleton(self.MailService);
+            Mvx.RegisterSingleton(self.ShortcutCreator);
             Mvx.RegisterSingleton(self.AnalyticsService);
             Mvx.RegisterSingleton(self.PlatformConstants);
+            Mvx.RegisterSingleton(self.Database.IdProvider);
             Mvx.RegisterSingleton(self.SuggestionProviderContainer);
+            Mvx.RegisterSingleton<IUserPreferences>(settingsStorage);
             Mvx.RegisterSingleton<IOnboardingStorage>(settingsStorage);
             Mvx.RegisterSingleton<IAccessRestrictionStorage>(settingsStorage);
-            Mvx.RegisterSingleton<IUserPreferences>(settingsStorage);
             Mvx.RegisterSingleton<IApiErrorHandlingService>(apiErrorHandlingService);
             Mvx.RegisterSingleton(passwordManagerService ?? new StubPasswordManagerService());
+
+            Mvx.LazyConstructAndRegisterSingleton<IInteractorFactory, InteractorFactory>();
 
             return new FoundationMvvmCross(
                 self.ApiFactory,
                 self.Database,
                 timeService,
+                self.Scheduler,
                 self.AnalyticsService,
                 self.GoogleService,
                 self.ShortcutCreator,

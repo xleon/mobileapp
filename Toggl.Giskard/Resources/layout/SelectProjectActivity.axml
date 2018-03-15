@@ -34,4 +34,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical" />
     </LinearLayout>
+    <toggl.giskard.views.SelectProjectRecyclerView
+        local:MvxBind="ItemsSource Suggestions; ItemClick SelectProjectCommand;  UseGrouping UseGrouping; CreateCommand CreateProjectCommand; Text Text; IsSuggestingCreation SuggestCreation"
+        local:MvxTemplateSelector="@string/SelectProjectTemplateSelector"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize" />
 </android.support.design.widget.CoordinatorLayout>

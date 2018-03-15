@@ -226,7 +226,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                     .SignUp(email, "thePasswordIsNotImportant".ToPassword())
                     .Wait();
 
-                secondSigningUp.ShouldThrow<BadRequestException>();
+                secondSigningUp.ShouldThrow<EmailIsAlreadyUsedException>();
             }
 
             [Fact, LogTestInfo]
@@ -238,7 +238,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 Action secondSigningUp = () => unauthenticatedTogglApi.User.SignUp(email, password).Wait();
 
-                secondSigningUp.ShouldThrow<BadRequestException>();
+                secondSigningUp.ShouldThrow<EmailIsAlreadyUsedException>();
             }
 
             [Fact, LogTestInfo]

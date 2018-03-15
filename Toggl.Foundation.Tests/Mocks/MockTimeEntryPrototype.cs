@@ -1,13 +1,10 @@
 ﻿using System;
+using Toggl.Foundation.Models;
 
-namespace Toggl.Foundation.DTOs
+namespace Toggl.Foundation.Tests.Mocks
 {
-    public sealed class StartTimeEntryDTO
+    public sealed class MockTimeEntryPrototype : ITimeEntryPrototype
     {
-        public long UserId { get; set; }
-
-        public bool Billable { get; set; }
-
         public long? ProjectId { get; set; }
 
         public long? TaskId { get; set; }
@@ -17,6 +14,8 @@ namespace Toggl.Foundation.DTOs
         public long WorkspaceId { get; set; }
 
         public long[] TagIds { get; set; }
+
+        public bool IsBillable { get; set; }
 
         public DateTimeOffset StartTime { get; set; }
 

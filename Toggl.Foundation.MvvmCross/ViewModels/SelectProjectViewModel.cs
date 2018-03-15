@@ -22,6 +22,8 @@ using static Toggl.Foundation.Helper.Constants;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
+    using WorkspaceGroupedSuggestionsCollection = WorkspaceGroupedCollection<AutocompleteSuggestion>;
+
     [Preserve(AllMembers = true)]
     public sealed class SelectProjectViewModel
         : MvxViewModel<SelectProjectParameter, SelectProjectParameter>
@@ -35,18 +37,33 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private long? projectId;
         private long workspaceId;
 
+        private List<IDatabaseWorkspace> allWorkspaces = new List<IDatabaseWorkspace>();
+
         public string Text { get; set; } = "";
 
+        [DependsOn(nameof(Text))]
+        public bool UsesFilter => !string.IsNullOrEmpty(Text.Trim());
+
+        [DependsOn(nameof(Text))]
         public bool SuggestCreation
         {
             get
             {
+                if (!UsesFilter)
+                    return false;
+
                 var text = Text.Trim();
-                return !string.IsNullOrEmpty(text)
-                    && !Suggestions.Any(c => c.Any(s => s is ProjectSuggestion pS && pS.ProjectName == text))
-                    && text.LengthInBytes() <= MaxProjectNameLengthInBytes;
+
+                var isOfAllowedLength = text.LengthInBytes() <= MaxProjectNameLengthInBytes;
+                if (!isOfAllowedLength)
+                    return false;
+
+                var hasNoExactMatches = Suggestions.None(ws => ws.Any(s => s is ProjectSuggestion ps && ps.ProjectName == text));
+                return hasNoExactMatches;
             }
         }
+
+        public bool UseGrouping { get; private set; }
 
         public bool IsEmpty { get; set; } = false;
 
@@ -95,6 +112,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             await base.Initialize();
 
+            dataSource.Workspaces
+                      .GetAll()
+                      .Subscribe(workspaces =>
+                      {
+                          allWorkspaces = workspaces.ToList();
+                          UseGrouping = allWorkspaces.Count > 1;
+                      });
+
             dataSource.Projects
                       .GetAll()
                       .Select(projects => projects.Any())
@@ -109,7 +134,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private IEnumerable<ProjectSuggestion> setSelectedProject(IEnumerable<ProjectSuggestion> suggestions)
-            => suggestions.Select(s => { s.Selected = s.ProjectId == projectId; return s; });
+        {
+            return suggestions.Select(s =>
+            {
+                s.Selected = s.ProjectId == projectId;
+                return s;
+            });
+        }
 
         private void OnTextChanged()
         {
@@ -120,10 +151,43 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             Suggestions.Clear();
 
-            suggestions
-                .OrderBy(projectSuggestion => projectSuggestion.ProjectName)
-                .GroupByWorkspaceAddingNoProject()
-                .ForEach(Suggestions.Add);
+            var workspaces = groupByWorkspace(suggestions, !UsesFilter);
+            if (!UsesFilter)
+                workspaces = addMissingWorkspacesTo(workspaces);
+
+            workspaces = workspaces
+                .OrderByDescending(ws => ws.WorkspaceId == workspaceId)
+                .ThenBy(ws => ws.WorkspaceName);
+
+            Suggestions.AddRange(workspaces);
+        }
+
+        private IEnumerable<WorkspaceGroupedSuggestionsCollection> addMissingWorkspacesTo(IEnumerable<WorkspaceGroupedSuggestionsCollection> workspaces)
+        {
+            var usedWorkspaceIds = new HashSet<long>(workspaces.Select(ws => ws.WorkspaceId));
+
+            var unusedWorkspaces = allWorkspaces
+                .Where(ws => !usedWorkspaceIds.Contains(ws.Id))
+                .Select(workspaceGroupedSuggestionCollection);
+
+            return workspaces.Concat(unusedWorkspaces);
+        }
+
+        private WorkspaceGroupedSuggestionsCollection workspaceGroupedSuggestionCollection(IDatabaseWorkspace workspace)
+            => new WorkspaceGroupedSuggestionsCollection(
+                workspace.Name,
+                workspace.Id,
+                new[] { ProjectSuggestion.NoProject(workspace.Id, workspace.Name) });
+
+        private IEnumerable<WorkspaceGroupedSuggestionsCollection> groupByWorkspace(IEnumerable<ProjectSuggestion> suggestions, bool prependNoProjectItem)
+        {
+            var sortedSuggestions = suggestions.OrderBy(ps => ps.ProjectName);
+
+            var groupedSuggestions = prependNoProjectItem
+                ? sortedSuggestions.GroupByWorkspaceAddingNoProject()
+                : sortedSuggestions.GroupByWorkspace();
+
+            return groupedSuggestions;
         }
 
         private async Task createProject()

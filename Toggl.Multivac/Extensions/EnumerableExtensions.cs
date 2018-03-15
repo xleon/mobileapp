@@ -33,5 +33,8 @@ namespace Toggl.Multivac.Extensions
 
         public static bool None<T>(this IEnumerable<T> collection)
            => !collection.Any();
+
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> collection)
+            => new HashSet<T>(collection);
     }
 }
