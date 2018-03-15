@@ -135,8 +135,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private IEnumerable<ProjectSuggestion> setSelectedProject(IEnumerable<ProjectSuggestion> suggestions)
         {
-            suggestions.ForEach(s => s.Selected = s.ProjectId == projectId);
-            return suggestions;
+            return suggestions.Select(s =>
+            {
+                s.Selected = s.ProjectId == projectId;
+                return s;
+            });
         }
 
         private void OnTextChanged()
