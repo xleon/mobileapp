@@ -7,7 +7,7 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
+using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
@@ -325,85 +325,40 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async ThreadingTask StartsATimeEntry()
+            public async ThreadingTask CallsTheContinueTimeEntryInteractor()
             {
                 var timeEntryViewModel = createTimeEntryViewModel();
 
                 await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
 
-                await DataSource.TimeEntries.Create(Arg.Any<IDatabaseTimeEntry>());
-            }
-
-            [Property]
-            public void StartATimeEntryWithTheSameValuesOfTheSelectedTimeEntry(
-                string description,
-                long workspaceId,
-                long projectId,
-                long? taskId,
-                bool billable,
-                NonNull<long[]> tagIds)
-            {
-                if (description == null || projectId == 0 || workspaceId == 0) return;
-
-                var project = Substitute.For<IDatabaseProject>();
-                project.Id.Returns(projectId);
-                project.WorkspaceId.Returns(workspaceId);
-                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
-                timeEntry.WorkspaceId.Returns(workspaceId);
-                timeEntry.Description.Returns(description);
-                timeEntry.Billable.Returns(billable);
-                timeEntry.Project.Returns(project);
-                timeEntry.TaskId.Returns(taskId);
-                timeEntry.TagIds.Returns(tagIds.Get);
-                timeEntry.Duration.Returns(100);
-                var timeEntryViewModel = new TimeEntryViewModel(timeEntry, DurationFormat.Improved);
-
-                ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel).Wait();
-
-                DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(dto =>
-                    dto.WorkspaceId == workspaceId &&
-                    dto.TagIds.SequenceEqual(tagIds.Get) &&
-                    dto.Description == description &&
-                    dto.ProjectId == projectId &&
-                    dto.Billable == billable &&
-                    dto.TaskId == taskId
-                )).Wait();
+                InteractorFactory.Received().ContinueTimeEntry(timeEntryViewModel);
             }
 
             [Fact, LogIfTooSlow]
-            public async ThreadingTask InitiatesPushSyncWhenThereIsARunningTimeEntry()
+            public async ThreadingTask ExecutesTheContinueTimeEntryInteractor()
             {
+                var mockedInteractor = Substitute.For<IInteractor<IObservable<IDatabaseTimeEntry>>>();
+                InteractorFactory.ContinueTimeEntry(Arg.Any<ITimeEntryPrototype>()).Returns(mockedInteractor);
                 var timeEntryViewModel = createTimeEntryViewModel();
 
                 await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
 
-                await DataSource.SyncManager.Received().PushSync();
+                await mockedInteractor.Received().Execute();
             }
 
             [Fact, LogIfTooSlow]
-            public async ThreadingTask DoesNotInitiatePushSyncWhenStartingFails()
+            public void CannotBeExecutedTwiceInARow()
             {
                 var timeEntryViewModel = createTimeEntryViewModel();
-                DataSource.TimeEntries.Create(Arg.Any<IDatabaseTimeEntry>())
-                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new Exception()));
-
-                Action executeCommand = () => ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel).Wait();
-
-                executeCommand.ShouldThrow<Exception>();
-                await DataSource.SyncManager.DidNotReceive().PushSync();
-            }
-
-            [Fact, LogIfTooSlow]
-            public async ThreadingTask CannotBeExecutedTwiceInARow()
-            {
-                var timeEntryViewModel = createTimeEntryViewModel();
-                DataSource.TimeEntries.Create(Arg.Any<IDatabaseTimeEntry>())
+                var mockedInteractor = Substitute.For<IInteractor<IObservable<IDatabaseTimeEntry>>>();
+                InteractorFactory.ContinueTimeEntry(Arg.Any<ITimeEntryPrototype>()).Returns(mockedInteractor);
+                mockedInteractor.Execute()
                     .Returns(Observable.Never<IDatabaseTimeEntry>());
 
-                var _ = ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
-                var __ = ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
+                ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
+                ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
 
-                await DataSource.TimeEntries.Received(1).Create(Arg.Any<IDatabaseTimeEntry>());
+                InteractorFactory.Received(1).ContinueTimeEntry(timeEntryViewModel);
             }
 
             [Fact, LogIfTooSlow]
@@ -411,23 +366,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var timeEntryViewModel = createTimeEntryViewModel();
                 var timeEntry = Substitute.For<IDatabaseTimeEntry>();
-                DataSource.TimeEntries.Create(Arg.Any<IDatabaseTimeEntry>())
+                var mockedInteractor = Substitute.For<IInteractor<IObservable<IDatabaseTimeEntry>>>();
+                InteractorFactory.ContinueTimeEntry(Arg.Any<ITimeEntryPrototype>()).Returns(mockedInteractor);
+                mockedInteractor.Execute()
                     .Returns(Observable.Return(timeEntry));
 
                 await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
                 await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
 
-                await DataSource.TimeEntries.Received(2).Create(Arg.Any<IDatabaseTimeEntry>());
-            }
-
-            [Fact]
-            public async ThreadingTask RegistersTheEventInTheAnalyticsService()
-            {
-                var timeEntryViewModel = createTimeEntryViewModel();
-
-                await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
-
-                AnalyticsService.Received().TrackStartedTimeEntry(TimeEntryStartOrigin.Continue);
+                InteractorFactory.Received(2).ContinueTimeEntry(timeEntryViewModel);
             }
 
             private TimeEntryViewModel createTimeEntryViewModel()

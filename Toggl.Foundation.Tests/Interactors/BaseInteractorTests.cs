@@ -8,7 +8,7 @@ using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.Tests
 {
-    public abstract class InteractorAwareTests
+    public abstract class BaseInteractorTests
     {
         protected IIdProvider IdProvider { get; } = Substitute.For<IIdProvider>();
         protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
@@ -20,7 +20,7 @@ namespace Toggl.Foundation.Tests
 
         protected IInteractorFactory InteractorFactory { get; }
 
-        protected InteractorAwareTests()
+        protected BaseInteractorTests()
         {
             InteractorFactory = new InteractorFactory(
                 IdProvider,

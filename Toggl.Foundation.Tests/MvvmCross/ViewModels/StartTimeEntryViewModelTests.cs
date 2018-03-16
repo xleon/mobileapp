@@ -10,6 +10,7 @@ using NSubstitute;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Suggestions;
+using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -21,6 +22,7 @@ using Xunit;
 using static Toggl.Foundation.Helper.Constants;
 using static Toggl.Multivac.Extensions.FunctionalExtensions;
 using static Toggl.Multivac.Extensions.StringExtensions;
+using ITimeEntryPrototype = Toggl.Foundation.Models.ITimeEntryPrototype;
 using TextFieldInfo = Toggl.Foundation.Autocomplete.TextFieldInfo;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
@@ -975,165 +977,26 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     var parameter = new StartTimeEntryParameters(startDate, "", null);
                     ViewModel.Prepare(parameter);
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty(defaultWorkspaceId);
+                
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task WithTheDatePassedWhenNavigatingToTheViewModel()
+                public async Task CallsTheCreateTimeEntryInteractor()
                 {
-                    ViewModel.TextFieldInfo = TextFieldInfo.Empty(1).WithTextAndCursor(description, 0);
+                    await ViewModel.DoneCommand.ExecuteAsync();
 
-                    ViewModel.DoneCommand.Execute();
-
-                    await DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(timeEntry =>
-                        timeEntry.Start == startDate
-                    ));
-                }
-
-                [Theory, LogIfTooSlow]
-                [InlineData(true)]
-                [InlineData(false)]
-                public async Task WithTheAppropriateValueForBillable(bool billable)
-                {
-                    ViewModel.TextFieldInfo = TextFieldInfo.Empty(1).WithTextAndCursor(description, 0);
-                    if (billable != ViewModel.IsBillable)
-                        ViewModel.ToggleBillableCommand.Execute();
-
-                    ViewModel.DoneCommand.Execute();
-
-                    await DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(timeEntry =>
-                        timeEntry.Billable == billable
-                    ));
+                    InteractorFactory.Received().CreateTimeEntry(ViewModel);
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task WithTheDefaultWorkspaceIfNoProjectIsProvided()
+                public async Task ExecutesTheCreateTimeEntryInteractor()
                 {
-                    await ViewModel.Initialize();
-                    ViewModel.TextFieldInfo = ViewModel.TextFieldInfo.WithTextAndCursor(description, 0);
+                    var mockedInteractor = Substitute.For<IInteractor<IObservable<IDatabaseTimeEntry>>>();
+                    InteractorFactory.CreateTimeEntry(Arg.Any<ITimeEntryPrototype>()).Returns(mockedInteractor);
 
-                    ViewModel.DoneCommand.Execute();
+                    await ViewModel.DoneCommand.ExecuteAsync();
 
-                    await DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(timeEntry =>
-                        timeEntry.WorkspaceId == defaultWorkspaceId
-                    ));
-                }
-
-                [Fact, LogIfTooSlow]
-                public async Task WithTheProjectWorkspaceIfAProjectIsProvided()
-                {
-                    ViewModel.TextFieldInfo = TextFieldInfo.Empty(1)
-                        .WithTextAndCursor(description, 0)
-                        .WithProjectInfo(projectWorkspaceId, projectId, "Something", "#123123");
-
-                    ViewModel.DoneCommand.Execute();
-
-                    await DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(timeEntry =>
-                        timeEntry.WorkspaceId == projectWorkspaceId
-                    ));
-                }
-
-                [Fact, LogIfTooSlow]
-                public async Task WithTheAppropriateWorkspaceSelectedIfNoProjectWasTapped()
-                {
-                    const long expectedWorkspace = 1234;
-                    ViewModel.TextFieldInfo = TextFieldInfo.Empty(1)
-                        .WithTextAndCursor(description, 0)
-                        .WithProjectInfo(projectWorkspaceId, projectId, "Something", "#123123");
-                    ViewModel.SelectSuggestionCommand
-                             .Execute(ProjectSuggestion.NoProject(expectedWorkspace, ""));
-
-                    ViewModel.DoneCommand.Execute();
-
-                    await DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(timeEntry =>
-                        timeEntry.WorkspaceId == expectedWorkspace
-                    ));
-                }
-
-                [Fact, LogIfTooSlow]
-                public async Task WithTheCurrentUsersId()
-                {
-                    ViewModel.TextFieldInfo = TextFieldInfo.Empty(1).WithTextAndCursor(description, 0);
-                    ViewModel.DoneCommand.Execute();
-
-                    await DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(timeEntry =>
-                        timeEntry.UserId == userId
-                    ));
-                }
-
-                [Fact, LogIfTooSlow]
-                public async Task WithTheAppropriateProjectId()
-                {
-                    ViewModel.TextFieldInfo = TextFieldInfo.Empty(1)
-                        .WithTextAndCursor(description, 0)
-                        .WithProjectInfo(projectWorkspaceId, projectId, "Something", "#123123");
-
-                    ViewModel.DoneCommand.Execute();
-
-                    await DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(timeEntry =>
-                        timeEntry.ProjectId == projectId
-                    ));
-                }
-
-                [Fact, LogIfTooSlow]
-                public async Task WithTheAppropriateDescription()
-                {
-                    ViewModel.TextFieldInfo = TextFieldInfo.Empty(1).WithTextAndCursor(description, 0);
-
-                    ViewModel.DoneCommand.Execute();
-
-                    await DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(timeEntry =>
-                        timeEntry.Description == description
-                    ));
-                }
-
-                [Fact, LogIfTooSlow]
-                public async Task WithTheAppropriateTaskId()
-                {
-                    ViewModel.TextFieldInfo = TextFieldInfo.Empty(1)
-                        .WithTextAndCursor(description, 0)
-                        .WithProjectAndTaskInfo(projectWorkspaceId, projectId, "Something", "#AABBCC", taskId, "Some task");
-
-                    ViewModel.DoneCommand.Execute();
-
-                    await DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(timeEntry =>
-                        timeEntry.TaskId == taskId
-                    ));
-                }
-
-                [Fact, LogIfTooSlow]
-                public async Task WithTheSelectedTags()
-                {
-                    var tags = Enumerable.Range(0, 3).Select(tagSuggestionFromInt);
-                    var expectedTags = tags.Select(tag => tag.TagId).ToArray();
-                    ViewModel.TextFieldInfo =
-                        tags.Aggregate(TextFieldInfo.Empty(1).WithTextAndCursor(description, 0),
-                            (info, tag) => info.AddTag(tag));
-
-                    ViewModel.DoneCommand.Execute();
-
-                    await DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(timeEntry =>
-                        timeEntry.TagIds.Count() == expectedTags.Length &&
-                        timeEntry.TagIds.All(tagId => expectedTags.Contains(tagId))
-                    ));
-                }
-
-                [Fact, LogIfTooSlow]
-                public async Task InitiatesPushSync()
-                {
-                    ViewModel.DoneCommand.Execute();
-
-                    await DataSource.SyncManager.Received().PushSync();
-                }
-
-                [Fact, LogIfTooSlow]
-                public async Task DoesNotInitiatePushSyncWhenSavingFails()
-                {
-                    DataSource.TimeEntries.Create(Arg.Any<IDatabaseTimeEntry>())
-                        .Returns(Observable.Throw<IDatabaseTimeEntry>(new Exception()));
-
-                    ViewModel.DoneCommand.Execute();
-
-                    await DataSource.SyncManager.DidNotReceive().PushSync();
+                    await mockedInteractor.Received().Execute();
                 }
 
                 [Theory, LogIfTooSlow]
@@ -1147,9 +1010,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 {
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty(1).WithTextAndCursor(description, 0);
 
-                    ViewModel.DoneCommand.Execute();
+                    await ViewModel.DoneCommand.ExecuteAsync();
 
-                    await DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(timeEntry =>
+                    InteractorFactory.Received().CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(timeEntry =>
                         timeEntry.Description.Length == 0
                     ));
                 }
@@ -1164,9 +1027,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 {
                     ViewModel.TextFieldInfo = TextFieldInfo.Empty(1).WithTextAndCursor(description, description.Length);
 
-                    ViewModel.DoneCommand.Execute();
+                    await ViewModel.DoneCommand.ExecuteAsync();
 
-                    await DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(timeEntry =>
+                    InteractorFactory.Received().CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(timeEntry =>
                         timeEntry.Description == trimmed
                     ));
                 }
@@ -1181,9 +1044,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.Prepare(parameter);
                     ViewModel.DoneCommand.ExecuteAsync().Wait();
 
-                    DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(timeEntry =>
+                    InteractorFactory.Received().CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(timeEntry =>
                         timeEntry.Duration.HasValue
-                    )).Wait();
+                    ));
                 }
 
                 [Fact, LogIfTooSlow]
@@ -1194,42 +1057,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.Prepare(parameter);
                     await ViewModel.DoneCommand.ExecuteAsync();
 
-                    await DataSource.TimeEntries.Received().Create(Arg.Is<IDatabaseTimeEntry>(timeEntry =>
+                    InteractorFactory.Received().CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(timeEntry =>
                         timeEntry.Duration.HasValue == false
                     ));
-                }
-
-                [Fact, LogIfTooSlow]
-                public void RegistersTheEventInTheAnalyticsService()
-                {
-                    var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null);
-
-                    ViewModel.Prepare(parameter);
-                    ViewModel.DoneCommand.ExecuteAsync().Wait();
-
-                    AnalyticsService.Received().TrackStartedTimeEntry(Arg.Any<TimeEntryStartOrigin>());
-                }
-
-                [Fact, LogIfTooSlow]
-                public void RegistersTheEventAsATimerEventIfManualModeIsDisabled()
-                {
-                    var parameter = StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now);
-
-                    ViewModel.Prepare(parameter);
-                    ViewModel.DoneCommand.ExecuteAsync().Wait();
-
-                    AnalyticsService.Received().TrackStartedTimeEntry(TimeEntryStartOrigin.Timer);
-                }
-
-                [Fact, LogIfTooSlow]
-                public void RegistersTheEventAsAManualEventIfManualModeIsEnabled()
-                {
-                    var parameter = StartTimeEntryParameters.ForManualMode(DateTimeOffset.Now);
-
-                    ViewModel.Prepare(parameter);
-                    ViewModel.DoneCommand.ExecuteAsync().Wait();
-
-                    AnalyticsService.Received().TrackStartedTimeEntry(TimeEntryStartOrigin.Manual);
                 }
 
                 private TagSuggestion tagSuggestionFromInt(int i)
