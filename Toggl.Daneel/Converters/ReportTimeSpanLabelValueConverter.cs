@@ -1,22 +1,16 @@
-﻿using System;
-using System.Globalization;
-using Foundation;
-using MvvmCross.Platform.Converters;
+﻿using Foundation;
 using MvvmCross.Plugins.Color.iOS;
-using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using UIKit;
 
 namespace Toggl.Daneel.Converters
 {
-    public sealed class TimeSpanReportLabelValueConverter : MvxValueConverter<TimeSpan, NSAttributedString>
+    public sealed class ReportTimeSpanLabelValueConverter : BaseReportTimeSpanLabelValueConverter<NSAttributedString>
     {
         private const int fontSize = 24;
 
         private static readonly UIColor normalColor = Color.Reports.TotalTimeActivated.ToNativeColor();
         private static readonly UIColor disabledColor = Color.Reports.Disabled.ToNativeColor();
-
-        private static readonly TimeSpanToDurationValueConverter innerConverter = new TimeSpanToDurationValueConverter();
 
         private readonly UIStringAttributes normalAttributes = new UIStringAttributes
         {
@@ -42,16 +36,12 @@ namespace Toggl.Daneel.Converters
             ForegroundColor = disabledColor
         };
 
-        protected override NSAttributedString Convert(TimeSpan value, Type targetType, object parameter, CultureInfo culture)
+        protected override NSAttributedString GetFormattedString(string timeString, int lengthOfHours, bool isDisabled)
         {
-            var timeString = innerConverter.Convert(value, targetType, parameter, culture) as string;
-            var lengthOfHours = ((int)value.TotalHours).ToString().Length;
-
-            var isEmpty = value.Ticks == 0;
             var result = new NSMutableAttributedString(timeString);
 
-            var attributes = isEmpty ? disabledAttributes : normalAttributes;
-            var secondsAttributes = isEmpty ? disabledSecondsAttributes : normalSecondsAttributes;
+            var attributes = isDisabled ? disabledAttributes : normalAttributes;
+            var secondsAttributes = isDisabled ? disabledSecondsAttributes : normalSecondsAttributes;
 
             result.AddAttributes(attributes, new NSRange(0, lengthOfHours + 3));
             result.AddAttributes(secondsAttributes, new NSRange(lengthOfHours + 3, 3));

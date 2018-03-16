@@ -710,7 +710,7 @@
     <Compile Include="Views\RoundedView.cs" />
     <Compile Include="Combiners\CalendarCellTextColorValueCombiner.cs" />
     <Compile Include="Views\Reports\PieChartView.cs" />
-    <Compile Include="Converters\TimeSpanReportLabelValueConverter.cs" />
+    <Compile Include="Converters\ReportTimeSpanLabelValueConverter.cs" />
     <Compile Include="Converters\ReportPercentageLabelValueConverter.cs" />
     <Compile Include="Views\Reports\PercentageView.cs" />
     <Compile Include="Services\ITopViewControllerProvider.cs" />
