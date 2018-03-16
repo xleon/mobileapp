@@ -789,6 +789,7 @@
     <Compile Include="Views\Settings\DayOfWeekViewCell.designer.cs">
       <DependentUpon>DayOfWeekViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Converters\TimeFormatToLocaleValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
