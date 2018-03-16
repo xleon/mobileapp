@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <RelativeLayout
-                local:MvxBind="Visibility Visibility(SyncErrorMessageVisible)"
+                local:MvxBind="Click DismissSyncErrorMessageCommand; Visibility Visibility(SyncErrorMessageVisible)"
                 android:id="@+id/EditErrorContainer"
                 android:background="@android:color/white"
                 android:elevation="4dp"
