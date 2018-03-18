@@ -14,12 +14,12 @@ namespace Toggl.Giskard.Activities
 {
     [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme")]
-    public class EditTimeEntryActivity : MvxAppCompatActivity<EditTimeEntryViewModel>
+    public sealed class EditTimeEntryActivity : MvxAppCompatActivity<EditTimeEntryViewModel>
     {
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            SetContentView(Resource.Layout.EditLayout);
+            SetContentView(Resource.Layout.EditActivity);
 
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
 

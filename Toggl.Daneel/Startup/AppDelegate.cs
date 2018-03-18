@@ -7,7 +7,7 @@ using UIKit;
 
 namespace Toggl.Daneel
 {
-    [Register("AppDelegate")]
+    [Register(nameof(AppDelegate))]
     public sealed class AppDelegate : MvxApplicationDelegate
     {
         private IBackgroundService backgroundService;

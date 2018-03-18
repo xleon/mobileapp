@@ -412,9 +412,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Billable = !Billable;
         }
 
-        private void clearTagsIfNeeded(long currenctWorkspaceId, long newWorkspaceId)
+        private void clearTagsIfNeeded(long currentWorkspaceId, long newWorkspaceId)
         {
-            if (currenctWorkspaceId == newWorkspaceId) return;
+            if (currentWorkspaceId == newWorkspaceId) return;
 
             Tags.Clear();
             tagIds.Clear();

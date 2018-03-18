@@ -5607,7 +5607,7 @@ namespace Toggl.Giskard
 			public const int design_text_input_password_icon = 2130968618;
 			
 			// aapt resource value: 0x7f04002b
-			public const int EditLayout = 2130968619;
+			public const int EditActivity = 2130968619;
 			
 			// aapt resource value: 0x7f04002c
 			public const int EditProjectActivity = 2130968620;

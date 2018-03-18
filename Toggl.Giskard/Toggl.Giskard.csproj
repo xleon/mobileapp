@@ -574,7 +574,7 @@
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityWorkspaceHeader.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityNoEntityCell.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityEmptyCell.axml" />
-    <AndroidResource Include="Resources\layout\EditLayout.axml" />
+    <AndroidResource Include="Resources\layout\EditActivity.axml" />
     <AndroidResource Include="Resources\values\Dimen.xml" />
     <AndroidResource Include="Resources\layout\EditProjectActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivityCell.axml" />
