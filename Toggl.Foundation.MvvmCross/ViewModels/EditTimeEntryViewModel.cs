@@ -59,6 +59,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public string Task { get; set; }
 
+        public bool AllowsBillableRates { get; private set; }
+
         [DependsOn(nameof(StartTime), nameof(StopTime))]
         public TimeSpan Duration
             => (StopTime ?? timeService.CurrentDateTime) - StartTime;
@@ -214,6 +216,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             preferencesDisposable = dataSource.Preferences.Current
                 .Subscribe(onPreferencesChanged);
+
+            await updateFeaturesAvailability();
         }
 
         private void subscribeToTimeServiceTicks()
@@ -354,6 +358,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             workspaceId = project.WorkspaceId;
 
             Task = taskId.HasValue ? (await dataSource.Tasks.GetById(taskId.Value)).Name : "";
+
+            await updateFeaturesAvailability();
         }
 
         private async Task editDuration()
@@ -438,6 +444,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             TimeFormat = preferences.TimeOfDayFormat;
 
             RaisePropertyChanged(nameof(DurationFormat));
+        }
+
+        private async Task updateFeaturesAvailability()
+        {
+            AllowsBillableRates = await dataSource.Workspaces.WorkspaceHasFeature(workspaceId, WorkspaceFeatureId.Pro);
         }
     }
 }

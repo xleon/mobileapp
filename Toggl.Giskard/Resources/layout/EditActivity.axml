@@ -183,7 +183,7 @@
                 android:layout_below="@id/EditAddTagsLabel" />
             <LinearLayout
                 android:id="@+id/EditBillableRow"
-                local:MvxBind="Click ToggleBillableCommand"
+                local:MvxBind="Click ToggleBillableCommand; Visibility Visibility(AllowsBillableRates)"
                 android:orientation="horizontal"
                 android:background="?attr/selectableItemBackground"
                 android:layout_height="48dp"
@@ -212,6 +212,7 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <View
+                local:MvxBind="Visibility Visibility(AllowsBillableRates)"
                 android:background="@color/separator"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="56dp"
