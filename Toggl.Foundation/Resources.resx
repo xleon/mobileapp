@@ -16,13 +16,13 @@
         <value>Track your hours 
 with a single tap</value>
     </data>
-    <data name="OnboardingLogPageCopy">
-        <value>See your most used 
-time entries first</value>
+    <data name="OnboardingMostUsedPageCopy">
+        <value>Resume tracking
+what you do most often</value>
     </data>
-    <data name="OnboardingSummaryPageCopy">
-        <value>See a daily summary of
-your time usage</value>
+    <data name="OnboardingReportsPageCopy">
+        <value>Get an instant summary
+of your time with reports</value>
     </data>
     <data name="LoginTitle">
         <value>Log in</value>

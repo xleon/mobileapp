@@ -1,21 +1,21 @@
-using System;
 using Foundation;
+using System;
+using UIKit;
 using ObjCRuntime;
 using Toggl.Daneel.Extensions;
-using UIKit;
 
 namespace Toggl.Daneel
 {
-    public sealed partial class TrackPage : UIView
+    public sealed partial class MostUsedPage : UIView
     {
-        public TrackPage (IntPtr handle) : base (handle)
+        public MostUsedPage (IntPtr handle) : base (handle)
         {
         }
 
-        public static TrackPage Create()
+        public static MostUsedPage Create()
         {
-            var arr = NSBundle.MainBundle.LoadNib(nameof(TrackPage), null, null);
-            return Runtime.GetNSObject<TrackPage>(arr.ValueAt(0));
+            var arr = NSBundle.MainBundle.LoadNib(nameof(MostUsedPage), null, null);
+            return Runtime.GetNSObject<MostUsedPage>(arr.ValueAt(0));
         }
 
         public override void AwakeFromNib()

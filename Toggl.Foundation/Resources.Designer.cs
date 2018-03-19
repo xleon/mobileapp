@@ -53,15 +53,15 @@ namespace Toggl.Foundation {
             }
         }
         
-        public static string OnboardingLogPageCopy {
+        public static string OnboardingMostUsedPageCopy {
             get {
-                return ResourceManager.GetString("OnboardingLogPageCopy", resourceCulture);
+                return ResourceManager.GetString("OnboardingMostUsedPageCopy", resourceCulture);
             }
         }
         
-        public static string OnboardingSummaryPageCopy {
+        public static string OnboardingReportsPageCopy {
             get {
-                return ResourceManager.GetString("OnboardingSummaryPageCopy", resourceCulture);
+                return ResourceManager.GetString("OnboardingReportsPageCopy", resourceCulture);
             }
         }
         

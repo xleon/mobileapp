@@ -9,14 +9,11 @@ using System.CodeDom.Compiler;
 
 namespace Toggl.Daneel
 {
-	[Register ("TrackPage")]
-	partial class TrackPage
+	[Register ("LogPage")]
+	partial class MostUsedPage
 	{
 		[Outlet]
 		UIKit.UIView FirstCell { get; set; }
-
-		[Outlet]
-		UIKit.UIImageView PlayIcon { get; set; }
 
 		[Outlet]
 		UIKit.UIView SecondCell { get; set; }
@@ -39,11 +36,6 @@ namespace Toggl.Daneel
 			if (ThirdCell != null) {
 				ThirdCell.Dispose ();
 				ThirdCell = null;
-			}
-
-			if (PlayIcon != null) {
-				PlayIcon.Dispose ();
-				PlayIcon = null;
 			}
 		}
 	}
