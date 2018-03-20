@@ -43,8 +43,8 @@ namespace Toggl.Giskard.Activities
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
 
             SetSupportActionBar(FindViewById<Toolbar>(Resource.Id.Toolbar));
-            SupportActionBar.SetDisplayHomeAsUpEnabled(false);
             SupportActionBar.SetDisplayShowHomeEnabled(false);
+            SupportActionBar.SetDisplayShowTitleEnabled(false);
 
             runningEntryCardFrame = FindViewById(Resource.Id.MainRunningTimeEntryFrame);
             runningEntryCardFrame.Visibility = ViewStates.Invisible;

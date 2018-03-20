@@ -39,6 +39,11 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <ImageView
+            android:layout_gravity="start"
+            android:src="@drawable/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp" />
         <Button
             local:MvxBind="Click OpenSettingsCommand"
             android:background="@drawable/settings_dark"

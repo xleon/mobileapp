@@ -324,6 +324,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
+            local:MvxBind="Click BackCommand"
+            android:layout_gravity="start"
+            android:src="@drawable/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp" />
+        <ImageView
             android:src="@drawable/settings_light"
             android:layout_width="24dp"
             android:layout_gravity="end"

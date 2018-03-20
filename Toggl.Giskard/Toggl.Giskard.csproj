@@ -350,6 +350,11 @@
     <AndroidResource Include="Resources\layout\SelectDurationFormatFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDurationFormatFragmentCell.axml" />
     <AndroidResource Include="Resources\drawable\RoundedRectangle.xml" />
+    <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\logo.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\logo.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\logo.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\logo.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
