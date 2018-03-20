@@ -296,6 +296,7 @@
                     android:layout_gravity="center_vertical|right" />
             </FrameLayout>
             <View
+                android:layout_marginTop="16dp"
                 android:background="@color/separator"
                 android:layout_height="0.5dp"
                 android:layout_width="match_parent" />
