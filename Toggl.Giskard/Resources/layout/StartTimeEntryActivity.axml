@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true" />
         <ImageView
-            local:MvxBind="Click ToggleBillableCommand; DrawableId BillableDrawable(IsBillable); Visibility Visibility(IsBillableAvailable), CommandParameter=true"
+            local:MvxBind="Click ToggleBillableCommand; DrawableId BillableDrawable(IsBillable); Visibility Visibility(IsBillableAvailable)"
             android:id="@+id/StartTimeEntryToolbarBillable"
             android:background="@drawable/billable"
             android:layout_width="24dp"
@@ -96,6 +96,7 @@
             android:layout_height="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
+            android:layout_alignWithParentIfMissing="true"
             android:layout_toLeftOf="@+id/StartTimeEntryToolbarBillable" />
         <ImageView
             local:MvxBind="Click ToggleProjectSuggestionsCommand; DrawableId ProjectDrawable(IsSuggestingProjects)"
