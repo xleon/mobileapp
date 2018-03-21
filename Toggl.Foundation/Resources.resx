@@ -321,6 +321,9 @@ account is not set up</value>
     <data name="DiscardThisTimeEntry">
         <value>Discard this time entry?</value>
     </data>
+    <data name="DiscardEditingChanges">
+        <value>Discard changes?</value>
+    </data>
      <data name="DurationFormatClassic">
         <value>Classic (47:06 min)</value>
     </data>

@@ -34,10 +34,24 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IDisposable confirmDisposable;
         private IDisposable preferencesDisposable;
 
+        private IDatabaseTimeEntry originalTimeEntry;
+
         private long? projectId;
         private long? taskId;
         private long workspaceId;
         private DurationFormat durationFormat;
+
+        private bool isDirty
+            => originalTimeEntry.Description != Description
+               || originalTimeEntry.WorkspaceId != workspaceId
+               || originalTimeEntry.ProjectId != projectId
+               || originalTimeEntry.TaskId != taskId
+               || originalTimeEntry.Start != StartTime
+               || originalTimeEntry.TagIds.SequenceEqual(tagIds) == false
+               || originalTimeEntry.Duration.HasValue != !IsTimeEntryRunning
+               || (originalTimeEntry.Duration.HasValue
+                   && originalTimeEntry.Duration != (long)Duration.TotalSeconds)
+               || originalTimeEntry.Billable != Billable;
 
         public long Id { get; set; }
 
@@ -170,7 +184,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             DeleteCommand = new MvxAsyncCommand(delete);
             ConfirmCommand = new MvxCommand(confirm);
-            CloseCommand = new MvxAsyncCommand(close);
+            CloseCommand = new MvxAsyncCommand(closeWithConfirmation);
             EditDurationCommand = new MvxAsyncCommand(editDuration);
             StopCommand = new MvxCommand(stopTimeEntry, () => IsTimeEntryRunning);
 
@@ -192,6 +206,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public override async Task Initialize()
         {
             var timeEntry = await dataSource.TimeEntries.GetById(Id);
+            originalTimeEntry = timeEntry;
 
             Description = timeEntry.Description;
             StartTime = timeEntry.Start;
@@ -241,7 +256,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void onDeleteCompleted()
         {
             dataSource.SyncManager.PushSync();
-            close();
+            navigationService.Close(this);
         }
 
         private void onDeleteError(Exception exception) { }
@@ -265,6 +280,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                                           .Update(dto)
                                           .Do(_ => dataSource.SyncManager.PushSync())
                                           .Subscribe((Exception ex) => close(), () => close());
+        }
+
+        private async Task closeWithConfirmation()
+        {
+            if (isDirty)
+            {
+                var shouldDiscard = await dialogService.ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                if (!shouldDiscard)
+                    return;
+            }
+
+            await close();
         }
 
         private Task close()

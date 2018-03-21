@@ -647,6 +647,12 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string DiscardEditingChanges {
+            get {
+                return ResourceManager.GetString("DiscardEditingChanges", resourceCulture);
+            }
+        }
+
         public static string DurationFormatClassic {
             get {
                 return ResourceManager.GetString("DurationFormatClassic", resourceCulture);
