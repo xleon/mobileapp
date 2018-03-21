@@ -1,3 +1,4 @@
+using System;
 using System.Reactive.Concurrency;
 using Foundation;
 using MvvmCross.Core.Navigation;
@@ -14,6 +15,7 @@ using Toggl.Foundation.Analytics;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.Suggestions;
 using Toggl.PrimeRadiant.Realm;
+using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
 using UIKit;
 
@@ -77,6 +79,9 @@ namespace Toggl.Daneel
                 new MostUsedTimeEntrySuggestionProvider(database, timeService, maxNumberOfSuggestions)
             );
 
+            var keyValueStorage = new UserDefaultsStorage();
+            var settingsStorage = new SettingsStorage(Version.Parse(version), keyValueStorage);
+
             var foundation = Foundation.Foundation.Create(
                 clientName,
                 version,
@@ -89,14 +94,18 @@ namespace Toggl.Daneel
                 analyticsService,
                 new PlatformConstants(),
                 new ApplicationShortcutCreator(suggestionProviderContainer),
-                suggestionProviderContainer
+                suggestionProviderContainer,
+                new DaneelOnboardingService(settingsStorage)
             );
 
             foundation
                 .RegisterServices(
                     new DialogService((ITopViewControllerProvider)Presenter),
                     new BrowserService(),
-                    new UserDefaultsStorage(),
+                    keyValueStorage,
+                    settingsStorage,
+                    settingsStorage,
+                    settingsStorage,
                     navigationService,
                     new OnePasswordService())
                 .RevokeNewUserIfNeeded()

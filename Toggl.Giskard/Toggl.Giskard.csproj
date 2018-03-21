@@ -325,6 +325,7 @@
     <Compile Include="TemplateSelectors\SelectDurationFormatTemplateSelector.cs" />
     <Compile Include="Views\MainRecyclerViewSuggestionsViewHolder.cs" />
     <Compile Include="Views\MainRecyclerViewTouchCallback.cs" />
+    <Compile Include="Services\GiskardOnboardingService.cs" />
     <Compile Include="Converters\TransparentColorValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>

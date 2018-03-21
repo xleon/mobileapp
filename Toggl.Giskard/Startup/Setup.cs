@@ -1,3 +1,4 @@
+using System;
 using System.Reactive.Concurrency;
 using Android.Content;
 using MvvmCross.Core.Navigation;
@@ -14,6 +15,7 @@ using Toggl.Foundation.Suggestions;
 using Toggl.Giskard.Presenters;
 using Toggl.Giskard.Services;
 using Toggl.PrimeRadiant.Realm;
+using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
 
 namespace Toggl.Giskard
@@ -71,6 +73,9 @@ namespace Toggl.Giskard
                 new MostUsedTimeEntrySuggestionProvider(database, timeService, maxNumberOfSuggestions)
             );
 
+            var keyValueStorage = new SharedPreferencesStorage(sharedPreferences);
+            var settingsStorage = new SettingsStorage(Version.Parse(version), keyValueStorage);
+
             var foundation = Foundation.Foundation.Create(
                 clientName,
                 version,
@@ -83,14 +88,18 @@ namespace Toggl.Giskard
                 analyticsService,
                 new PlatformConstants(),
                 new ApplicationShortcutCreator(suggestionProviderContainer),
-                suggestionProviderContainer
+                suggestionProviderContainer,
+                new GiskardOnboardingService()
             );
 
             foundation
                 .RegisterServices(
                     new DialogService(),
                     new BrowserService(), 
-                    new SharedPreferencesStorage(sharedPreferences),
+                    keyValueStorage,
+                    settingsStorage,
+                    settingsStorage,
+                    settingsStorage,
                     navigationService,
                     new OnePasswordService())
                .RevokeNewUserIfNeeded()
