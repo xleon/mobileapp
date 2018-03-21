@@ -3147,44 +3147,44 @@ namespace Toggl.Giskard
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f0a006a
-			public const int abc_background_cache_hint_selector_material_dark = 2131361898;
-			
-			// aapt resource value: 0x7f0a006b
-			public const int abc_background_cache_hint_selector_material_light = 2131361899;
-			
-			// aapt resource value: 0x7f0a006c
-			public const int abc_btn_colored_borderless_text_material = 2131361900;
-			
 			// aapt resource value: 0x7f0a006d
-			public const int abc_btn_colored_text_material = 2131361901;
+			public const int abc_background_cache_hint_selector_material_dark = 2131361901;
 			
 			// aapt resource value: 0x7f0a006e
-			public const int abc_color_highlight_material = 2131361902;
+			public const int abc_background_cache_hint_selector_material_light = 2131361902;
 			
 			// aapt resource value: 0x7f0a006f
-			public const int abc_hint_foreground_material_dark = 2131361903;
+			public const int abc_btn_colored_borderless_text_material = 2131361903;
 			
 			// aapt resource value: 0x7f0a0070
-			public const int abc_hint_foreground_material_light = 2131361904;
+			public const int abc_btn_colored_text_material = 2131361904;
+			
+			// aapt resource value: 0x7f0a0071
+			public const int abc_color_highlight_material = 2131361905;
+			
+			// aapt resource value: 0x7f0a0072
+			public const int abc_hint_foreground_material_dark = 2131361906;
+			
+			// aapt resource value: 0x7f0a0073
+			public const int abc_hint_foreground_material_light = 2131361907;
 			
 			// aapt resource value: 0x7f0a000c
 			public const int abc_input_method_navigation_guard = 2131361804;
 			
-			// aapt resource value: 0x7f0a0071
-			public const int abc_primary_text_disable_only_material_dark = 2131361905;
-			
-			// aapt resource value: 0x7f0a0072
-			public const int abc_primary_text_disable_only_material_light = 2131361906;
-			
-			// aapt resource value: 0x7f0a0073
-			public const int abc_primary_text_material_dark = 2131361907;
-			
 			// aapt resource value: 0x7f0a0074
-			public const int abc_primary_text_material_light = 2131361908;
+			public const int abc_primary_text_disable_only_material_dark = 2131361908;
 			
 			// aapt resource value: 0x7f0a0075
-			public const int abc_search_url_text = 2131361909;
+			public const int abc_primary_text_disable_only_material_light = 2131361909;
+			
+			// aapt resource value: 0x7f0a0076
+			public const int abc_primary_text_material_dark = 2131361910;
+			
+			// aapt resource value: 0x7f0a0077
+			public const int abc_primary_text_material_light = 2131361911;
+			
+			// aapt resource value: 0x7f0a0078
+			public const int abc_search_url_text = 2131361912;
 			
 			// aapt resource value: 0x7f0a000d
 			public const int abc_search_url_text_normal = 2131361805;
@@ -3195,29 +3195,29 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a000f
 			public const int abc_search_url_text_selected = 2131361807;
 			
-			// aapt resource value: 0x7f0a0076
-			public const int abc_secondary_text_material_dark = 2131361910;
-			
-			// aapt resource value: 0x7f0a0077
-			public const int abc_secondary_text_material_light = 2131361911;
-			
-			// aapt resource value: 0x7f0a0078
-			public const int abc_tint_btn_checkable = 2131361912;
-			
 			// aapt resource value: 0x7f0a0079
-			public const int abc_tint_default = 2131361913;
+			public const int abc_secondary_text_material_dark = 2131361913;
 			
 			// aapt resource value: 0x7f0a007a
-			public const int abc_tint_edittext = 2131361914;
+			public const int abc_secondary_text_material_light = 2131361914;
 			
 			// aapt resource value: 0x7f0a007b
-			public const int abc_tint_seek_thumb = 2131361915;
+			public const int abc_tint_btn_checkable = 2131361915;
 			
 			// aapt resource value: 0x7f0a007c
-			public const int abc_tint_spinner = 2131361916;
+			public const int abc_tint_default = 2131361916;
 			
 			// aapt resource value: 0x7f0a007d
-			public const int abc_tint_switch_track = 2131361917;
+			public const int abc_tint_edittext = 2131361917;
+			
+			// aapt resource value: 0x7f0a007e
+			public const int abc_tint_seek_thumb = 2131361918;
+			
+			// aapt resource value: 0x7f0a007f
+			public const int abc_tint_spinner = 2131361919;
+			
+			// aapt resource value: 0x7f0a0080
+			public const int abc_tint_switch_track = 2131361920;
 			
 			// aapt resource value: 0x7f0a0010
 			public const int accent_material_dark = 2131361808;
@@ -3236,6 +3236,15 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0a0015
 			public const int background_material_light = 2131361813;
+			
+			// aapt resource value: 0x7f0a006c
+			public const int blueBackgroundTextHintColor = 2131361900;
+			
+			// aapt resource value: 0x7f0a006b
+			public const int blueStatusBarBackground = 2131361899;
+			
+			// aapt resource value: 0x7f0a006a
+			public const int blueToolbarBackground = 2131361898;
 			
 			// aapt resource value: 0x7f0a0016
 			public const int bright_foreground_disabled_material_dark = 2131361814;
@@ -3282,8 +3291,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a005e
 			public const int clientName = 2131361886;
 			
-			// aapt resource value: 0x7f0a007e
-			public const int common_google_signin_btn_text_dark = 2131361918;
+			// aapt resource value: 0x7f0a0081
+			public const int common_google_signin_btn_text_dark = 2131361921;
 			
 			// aapt resource value: 0x7f0a0000
 			public const int common_google_signin_btn_text_dark_default = 2131361792;
@@ -3297,8 +3306,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a0003
 			public const int common_google_signin_btn_text_dark_pressed = 2131361795;
 			
-			// aapt resource value: 0x7f0a007f
-			public const int common_google_signin_btn_text_light = 2131361919;
+			// aapt resource value: 0x7f0a0082
+			public const int common_google_signin_btn_text_light = 2131361922;
 			
 			// aapt resource value: 0x7f0a0004
 			public const int common_google_signin_btn_text_light_default = 2131361796;
@@ -3312,8 +3321,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a0007
 			public const int common_google_signin_btn_text_light_pressed = 2131361799;
 			
-			// aapt resource value: 0x7f0a0080
-			public const int common_google_signin_btn_tint = 2131361920;
+			// aapt resource value: 0x7f0a0083
+			public const int common_google_signin_btn_tint = 2131361923;
 			
 			// aapt resource value: 0x7f0a0063
 			public const int darkLabel = 2131361891;
@@ -3339,8 +3348,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a0048
 			public const int design_bottom_navigation_shadow_color = 2131361864;
 			
-			// aapt resource value: 0x7f0a0081
-			public const int design_error = 2131361921;
+			// aapt resource value: 0x7f0a0084
+			public const int design_error = 2131361924;
 			
 			// aapt resource value: 0x7f0a0049
 			public const int design_fab_shadow_end_color = 2131361865;
@@ -3366,8 +3375,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a0050
 			public const int design_snackbar_background_color = 2131361872;
 			
-			// aapt resource value: 0x7f0a0082
-			public const int design_tint_password_toggle = 2131361922;
+			// aapt resource value: 0x7f0a0085
+			public const int design_tint_password_toggle = 2131361925;
 			
 			// aapt resource value: 0x7f0a001e
 			public const int dim_foreground_disabled_material_dark = 2131361822;
@@ -3525,11 +3534,11 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a0042
 			public const int switch_thumb_disabled_material_light = 2131361858;
 			
-			// aapt resource value: 0x7f0a0083
-			public const int switch_thumb_material_dark = 2131361923;
+			// aapt resource value: 0x7f0a0086
+			public const int switch_thumb_material_dark = 2131361926;
 			
-			// aapt resource value: 0x7f0a0084
-			public const int switch_thumb_material_light = 2131361924;
+			// aapt resource value: 0x7f0a0087
+			public const int switch_thumb_material_light = 2131361927;
 			
 			// aapt resource value: 0x7f0a0043
 			public const int switch_thumb_normal_material_dark = 2131361859;

@@ -1,10 +1,13 @@
 ﻿using System;
 using Android.App;
+using Android.Graphics;
 using Android.OS;
+using Android.Support.V4.Content;
 using Android.Support.V7.Widget;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Views.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Fragments;
 using Toggl.Giskard.Views;
 using static Android.Support.V7.Widget.Toolbar;
@@ -18,6 +21,8 @@ namespace Toggl.Giskard.Activities
     {
         protected override void OnCreate(Bundle bundle)
         {
+            this.ChangeStatusBarColor(new Color(ContextCompat.GetColor(this, Resource.Color.blueStatusBarBackground)));
+            
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.EditActivity);
 
@@ -35,6 +40,9 @@ namespace Toggl.Giskard.Activities
             SetSupportActionBar(toolbar);
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.SetDisplayShowHomeEnabled(true);
+            var closeDrawable = GetDrawable(Resource.Drawable.close);
+            closeDrawable.SetColorFilter(Color.White, PorterDuff.Mode.SrcIn);
+            SupportActionBar.SetHomeAsUpIndicator(closeDrawable);
 
             toolbar.NavigationClick += onNavigateBack;
         }
