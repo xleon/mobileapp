@@ -87,7 +87,7 @@ namespace Toggl.Giskard
                 environment,
                 analyticsService,
                 new PlatformConstants(),
-                new ApplicationShortcutCreator(suggestionProviderContainer),
+                new ApplicationShortcutCreator(),
                 suggestionProviderContainer,
                 new GiskardOnboardingService()
             );

@@ -93,7 +93,7 @@ namespace Toggl.Daneel
                 environment,
                 analyticsService,
                 new PlatformConstants(),
-                new ApplicationShortcutCreator(suggestionProviderContainer),
+                new ApplicationShortcutCreator(),
                 suggestionProviderContainer,
                 new DaneelOnboardingService(settingsStorage)
             );

@@ -64,10 +64,10 @@ namespace Toggl.Foundation.Tests.MvvmCross
             {
                 var version = "1.0";
                 var now = DateTimeOffset.Now;
+                var scheduler = Substitute.For<IScheduler>();
                 var apiFactory = Substitute.For<IApiFactory>();
                 var database = Substitute.For<ITogglDatabase>();
                 var timeService = Substitute.For<ITimeService>();
-                var scheduler = Substitute.For<IScheduler>();
                 var analyticsService = Substitute.For<IAnalyticsService>();
                 var googleService = Substitute.For<IGoogleService>();
                 var backgroundService = Substitute.For<IBackgroundService>();
