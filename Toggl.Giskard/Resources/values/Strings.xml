@@ -37,6 +37,8 @@
     <string name="DurationFormat">Duration display format</string>
     <string name="DefaultWorkspace">Default Workspace</string>
     <string name="Total">Total</string>
+    <string name="ManualMode">Manual Mode</string>
+    <string name="ManualModeExplanation">You can add your data manually, instead of tracking in real time.</string>
     <string name="TryLoggingInInstead"><u>Try logging in instead.</u></string>
 
     <string name="MainTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.MainTemplateSelector, Toggl.Giskard</string>

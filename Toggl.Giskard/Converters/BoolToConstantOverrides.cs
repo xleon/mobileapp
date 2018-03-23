@@ -49,4 +49,9 @@ namespace Toggl.Giskard.Converters
         public ReportsChartColorValueConverter()
             : base(Reports.Disabled.ToAndroidColor(), Reports.TotalTimeActivated.ToAndroidColor()) { }
     }
+
+    public sealed class ManualModeEnabledDrawableValueConverter : BoolToConstantValueConverter<int>
+    {
+        public ManualModeEnabledDrawableValueConverter() : base(Resource.Drawable.add_white, Resource.Drawable.play_white) { }
+    }
 }

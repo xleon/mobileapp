@@ -22,7 +22,7 @@
         layout="@layout/MainRunningTimeEntry" />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/MainPlayButton"
-        local:MvxBind="Click StartTimeEntryCommand;"
+        local:MvxBind="Click StartTimeEntryCommand; DrawableId ManualModeEnabledDrawable(IsInManualMode)"
         local:backgroundTint="@color/playButtonGreen"
         local:elevation="4dp"
         android:src="@drawable/play_white"

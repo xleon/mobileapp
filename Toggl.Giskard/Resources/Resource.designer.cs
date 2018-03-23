@@ -4314,289 +4314,292 @@ namespace Toggl.Giskard
 			public const int add_new = 2130837587;
 			
 			// aapt resource value: 0x7f020054
-			public const int arrow_back = 2130837588;
+			public const int add_white = 2130837588;
 			
 			// aapt resource value: 0x7f020055
-			public const int avd_hide_password = 2130837589;
-			
-			// aapt resource value: 0x7f0200ad
-			public const int avd_hide_password_1 = 2130837677;
-			
-			// aapt resource value: 0x7f0200ae
-			public const int avd_hide_password_2 = 2130837678;
-			
-			// aapt resource value: 0x7f0200af
-			public const int avd_hide_password_3 = 2130837679;
+			public const int arrow_back = 2130837589;
 			
 			// aapt resource value: 0x7f020056
-			public const int avd_show_password = 2130837590;
+			public const int avd_hide_password = 2130837590;
+			
+			// aapt resource value: 0x7f0200ae
+			public const int avd_hide_password_1 = 2130837678;
+			
+			// aapt resource value: 0x7f0200af
+			public const int avd_hide_password_2 = 2130837679;
 			
 			// aapt resource value: 0x7f0200b0
-			public const int avd_show_password_1 = 2130837680;
-			
-			// aapt resource value: 0x7f0200b1
-			public const int avd_show_password_2 = 2130837681;
-			
-			// aapt resource value: 0x7f0200b2
-			public const int avd_show_password_3 = 2130837682;
+			public const int avd_hide_password_3 = 2130837680;
 			
 			// aapt resource value: 0x7f020057
-			public const int billable = 2130837591;
+			public const int avd_show_password = 2130837591;
+			
+			// aapt resource value: 0x7f0200b1
+			public const int avd_show_password_1 = 2130837681;
+			
+			// aapt resource value: 0x7f0200b2
+			public const int avd_show_password_2 = 2130837682;
+			
+			// aapt resource value: 0x7f0200b3
+			public const int avd_show_password_3 = 2130837683;
 			
 			// aapt resource value: 0x7f020058
-			public const int check = 2130837592;
+			public const int billable = 2130837592;
 			
 			// aapt resource value: 0x7f020059
-			public const int check_light = 2130837593;
+			public const int check = 2130837593;
 			
 			// aapt resource value: 0x7f02005a
-			public const int checkbox_off = 2130837594;
+			public const int check_light = 2130837594;
 			
 			// aapt resource value: 0x7f02005b
-			public const int checkbox_on = 2130837595;
+			public const int checkbox_off = 2130837595;
 			
 			// aapt resource value: 0x7f02005c
-			public const int client = 2130837596;
+			public const int checkbox_on = 2130837596;
 			
 			// aapt resource value: 0x7f02005d
-			public const int close = 2130837597;
+			public const int client = 2130837597;
 			
 			// aapt resource value: 0x7f02005e
-			public const int common_full_open_on_phone = 2130837598;
+			public const int close = 2130837598;
 			
 			// aapt resource value: 0x7f02005f
-			public const int common_google_signin_btn_icon_dark = 2130837599;
+			public const int common_full_open_on_phone = 2130837599;
 			
 			// aapt resource value: 0x7f020060
-			public const int common_google_signin_btn_icon_dark_focused = 2130837600;
+			public const int common_google_signin_btn_icon_dark = 2130837600;
 			
 			// aapt resource value: 0x7f020061
-			public const int common_google_signin_btn_icon_dark_normal = 2130837601;
+			public const int common_google_signin_btn_icon_dark_focused = 2130837601;
 			
 			// aapt resource value: 0x7f020062
-			public const int common_google_signin_btn_icon_dark_normal_background = 2130837602;
+			public const int common_google_signin_btn_icon_dark_normal = 2130837602;
 			
 			// aapt resource value: 0x7f020063
-			public const int common_google_signin_btn_icon_disabled = 2130837603;
+			public const int common_google_signin_btn_icon_dark_normal_background = 2130837603;
 			
 			// aapt resource value: 0x7f020064
-			public const int common_google_signin_btn_icon_light = 2130837604;
+			public const int common_google_signin_btn_icon_disabled = 2130837604;
 			
 			// aapt resource value: 0x7f020065
-			public const int common_google_signin_btn_icon_light_focused = 2130837605;
+			public const int common_google_signin_btn_icon_light = 2130837605;
 			
 			// aapt resource value: 0x7f020066
-			public const int common_google_signin_btn_icon_light_normal = 2130837606;
+			public const int common_google_signin_btn_icon_light_focused = 2130837606;
 			
 			// aapt resource value: 0x7f020067
-			public const int common_google_signin_btn_icon_light_normal_background = 2130837607;
+			public const int common_google_signin_btn_icon_light_normal = 2130837607;
 			
 			// aapt resource value: 0x7f020068
-			public const int common_google_signin_btn_text_dark = 2130837608;
+			public const int common_google_signin_btn_icon_light_normal_background = 2130837608;
 			
 			// aapt resource value: 0x7f020069
-			public const int common_google_signin_btn_text_dark_focused = 2130837609;
+			public const int common_google_signin_btn_text_dark = 2130837609;
 			
 			// aapt resource value: 0x7f02006a
-			public const int common_google_signin_btn_text_dark_normal = 2130837610;
+			public const int common_google_signin_btn_text_dark_focused = 2130837610;
 			
 			// aapt resource value: 0x7f02006b
-			public const int common_google_signin_btn_text_dark_normal_background = 2130837611;
+			public const int common_google_signin_btn_text_dark_normal = 2130837611;
 			
 			// aapt resource value: 0x7f02006c
-			public const int common_google_signin_btn_text_disabled = 2130837612;
+			public const int common_google_signin_btn_text_dark_normal_background = 2130837612;
 			
 			// aapt resource value: 0x7f02006d
-			public const int common_google_signin_btn_text_light = 2130837613;
+			public const int common_google_signin_btn_text_disabled = 2130837613;
 			
 			// aapt resource value: 0x7f02006e
-			public const int common_google_signin_btn_text_light_focused = 2130837614;
+			public const int common_google_signin_btn_text_light = 2130837614;
 			
 			// aapt resource value: 0x7f02006f
-			public const int common_google_signin_btn_text_light_normal = 2130837615;
+			public const int common_google_signin_btn_text_light_focused = 2130837615;
 			
 			// aapt resource value: 0x7f020070
-			public const int common_google_signin_btn_text_light_normal_background = 2130837616;
+			public const int common_google_signin_btn_text_light_normal = 2130837616;
 			
 			// aapt resource value: 0x7f020071
-			public const int date = 2130837617;
+			public const int common_google_signin_btn_text_light_normal_background = 2130837617;
 			
 			// aapt resource value: 0x7f020072
-			public const int delete = 2130837618;
+			public const int date = 2130837618;
 			
 			// aapt resource value: 0x7f020073
-			public const int description = 2130837619;
+			public const int delete = 2130837619;
 			
 			// aapt resource value: 0x7f020074
-			public const int description_active = 2130837620;
+			public const int description = 2130837620;
 			
 			// aapt resource value: 0x7f020075
-			public const int design_bottom_navigation_item_background = 2130837621;
+			public const int description_active = 2130837621;
 			
 			// aapt resource value: 0x7f020076
-			public const int design_fab_background = 2130837622;
+			public const int design_bottom_navigation_item_background = 2130837622;
 			
 			// aapt resource value: 0x7f020077
-			public const int design_ic_visibility = 2130837623;
+			public const int design_fab_background = 2130837623;
 			
 			// aapt resource value: 0x7f020078
-			public const int design_ic_visibility_off = 2130837624;
+			public const int design_ic_visibility = 2130837624;
 			
 			// aapt resource value: 0x7f020079
-			public const int design_password_eye = 2130837625;
+			public const int design_ic_visibility_off = 2130837625;
 			
 			// aapt resource value: 0x7f02007a
-			public const int design_snackbar_background = 2130837626;
+			public const int design_password_eye = 2130837626;
 			
 			// aapt resource value: 0x7f02007b
-			public const int dropdown = 2130837627;
+			public const int design_snackbar_background = 2130837627;
 			
 			// aapt resource value: 0x7f02007c
-			public const int error_baddata = 2130837628;
+			public const int dropdown = 2130837628;
 			
 			// aapt resource value: 0x7f02007d
-			public const int google = 2130837629;
+			public const int error_baddata = 2130837629;
 			
 			// aapt resource value: 0x7f02007e
-			public const int googleg_disabled_color_18 = 2130837630;
+			public const int google = 2130837630;
 			
 			// aapt resource value: 0x7f02007f
-			public const int googleg_standard_color_18 = 2130837631;
+			public const int googleg_disabled_color_18 = 2130837631;
 			
 			// aapt resource value: 0x7f020080
-			public const int ic_launcher = 2130837632;
+			public const int googleg_standard_color_18 = 2130837632;
 			
 			// aapt resource value: 0x7f020081
-			public const int logo = 2130837633;
+			public const int ic_launcher = 2130837633;
 			
 			// aapt resource value: 0x7f020082
-			public const int logo_icon = 2130837634;
+			public const int logo = 2130837634;
 			
 			// aapt resource value: 0x7f020083
-			public const int navigation_empty_icon = 2130837635;
+			public const int logo_icon = 2130837635;
 			
 			// aapt resource value: 0x7f020084
-			public const int next_light = 2130837636;
+			public const int navigation_empty_icon = 2130837636;
 			
 			// aapt resource value: 0x7f020085
-			public const int notification_action_background = 2130837637;
+			public const int next_light = 2130837637;
 			
 			// aapt resource value: 0x7f020086
-			public const int notification_bg = 2130837638;
+			public const int notification_action_background = 2130837638;
 			
 			// aapt resource value: 0x7f020087
-			public const int notification_bg_low = 2130837639;
+			public const int notification_bg = 2130837639;
 			
 			// aapt resource value: 0x7f020088
-			public const int notification_bg_low_normal = 2130837640;
+			public const int notification_bg_low = 2130837640;
 			
 			// aapt resource value: 0x7f020089
-			public const int notification_bg_low_pressed = 2130837641;
+			public const int notification_bg_low_normal = 2130837641;
 			
 			// aapt resource value: 0x7f02008a
-			public const int notification_bg_normal = 2130837642;
+			public const int notification_bg_low_pressed = 2130837642;
 			
 			// aapt resource value: 0x7f02008b
-			public const int notification_bg_normal_pressed = 2130837643;
+			public const int notification_bg_normal = 2130837643;
 			
 			// aapt resource value: 0x7f02008c
-			public const int notification_icon_background = 2130837644;
-			
-			// aapt resource value: 0x7f0200ab
-			public const int notification_template_icon_bg = 2130837675;
-			
-			// aapt resource value: 0x7f0200ac
-			public const int notification_template_icon_low_bg = 2130837676;
+			public const int notification_bg_normal_pressed = 2130837644;
 			
 			// aapt resource value: 0x7f02008d
-			public const int notification_tile_bg = 2130837645;
+			public const int notification_icon_background = 2130837645;
+			
+			// aapt resource value: 0x7f0200ac
+			public const int notification_template_icon_bg = 2130837676;
+			
+			// aapt resource value: 0x7f0200ad
+			public const int notification_template_icon_low_bg = 2130837677;
 			
 			// aapt resource value: 0x7f02008e
-			public const int notify_panel_notification_icon_bg = 2130837646;
+			public const int notification_tile_bg = 2130837646;
 			
 			// aapt resource value: 0x7f02008f
-			public const int padlock = 2130837647;
+			public const int notify_panel_notification_icon_bg = 2130837647;
 			
 			// aapt resource value: 0x7f020090
-			public const int play = 2130837648;
+			public const int padlock = 2130837648;
 			
 			// aapt resource value: 0x7f020091
-			public const int play_white = 2130837649;
+			public const int play = 2130837649;
 			
 			// aapt resource value: 0x7f020092
-			public const int project = 2130837650;
+			public const int play_white = 2130837650;
 			
 			// aapt resource value: 0x7f020093
-			public const int project_active = 2130837651;
+			public const int project = 2130837651;
 			
 			// aapt resource value: 0x7f020094
-			public const int reports_dark = 2130837652;
+			public const int project_active = 2130837652;
 			
 			// aapt resource value: 0x7f020095
-			public const int reports_light = 2130837653;
+			public const int reports_dark = 2130837653;
 			
 			// aapt resource value: 0x7f020096
-			public const int reports_total_chart = 2130837654;
+			public const int reports_light = 2130837654;
 			
 			// aapt resource value: 0x7f020097
-			public const int RoundedRectangle = 2130837655;
+			public const int reports_total_chart = 2130837655;
 			
 			// aapt resource value: 0x7f020098
-			public const int settings_dark = 2130837656;
+			public const int RoundedRectangle = 2130837656;
 			
 			// aapt resource value: 0x7f020099
-			public const int settings_light = 2130837657;
+			public const int settings_dark = 2130837657;
 			
 			// aapt resource value: 0x7f02009a
-			public const int SmallDot = 2130837658;
+			public const int settings_light = 2130837658;
 			
 			// aapt resource value: 0x7f02009b
-			public const int stop_white = 2130837659;
+			public const int SmallDot = 2130837659;
 			
 			// aapt resource value: 0x7f02009c
-			public const int tag = 2130837660;
+			public const int stop_white = 2130837660;
 			
 			// aapt resource value: 0x7f02009d
-			public const int tag_active = 2130837661;
+			public const int tag = 2130837661;
 			
 			// aapt resource value: 0x7f02009e
-			public const int te_billable_active = 2130837662;
+			public const int tag_active = 2130837662;
 			
 			// aapt resource value: 0x7f02009f
-			public const int te_project_active = 2130837663;
+			public const int te_billable_active = 2130837663;
 			
 			// aapt resource value: 0x7f0200a0
-			public const int te_tag_active = 2130837664;
+			public const int te_project_active = 2130837664;
 			
 			// aapt resource value: 0x7f0200a1
-			public const int timer_dark = 2130837665;
+			public const int te_tag_active = 2130837665;
 			
 			// aapt resource value: 0x7f0200a2
-			public const int timer_light = 2130837666;
+			public const int timer_dark = 2130837666;
 			
 			// aapt resource value: 0x7f0200a3
-			public const int tooltip_frame_dark = 2130837667;
+			public const int timer_light = 2130837667;
 			
 			// aapt resource value: 0x7f0200a4
-			public const int tooltip_frame_light = 2130837668;
+			public const int tooltip_frame_dark = 2130837668;
 			
 			// aapt resource value: 0x7f0200a5
-			public const int TopShadow = 2130837669;
+			public const int tooltip_frame_light = 2130837669;
 			
 			// aapt resource value: 0x7f0200a6
-			public const int TransparentToLightGrayGradient = 2130837670;
+			public const int TopShadow = 2130837670;
 			
 			// aapt resource value: 0x7f0200a7
-			public const int TransparentToWhiteGradient = 2130837671;
+			public const int TransparentToLightGrayGradient = 2130837671;
 			
 			// aapt resource value: 0x7f0200a8
-			public const int unsynced = 2130837672;
+			public const int TransparentToWhiteGradient = 2130837672;
 			
 			// aapt resource value: 0x7f0200a9
-			public const int ValueSliderThumb = 2130837673;
+			public const int unsynced = 2130837673;
 			
 			// aapt resource value: 0x7f0200aa
-			public const int workspace = 2130837674;
+			public const int ValueSliderThumb = 2130837674;
+			
+			// aapt resource value: 0x7f0200ab
+			public const int workspace = 2130837675;
 			
 			static Drawable()
 			{
@@ -5926,8 +5929,14 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f080043
 			public const int Logout = 2131230787;
 			
+			// aapt resource value: 0x7f080069
+			public const int MainTemplateSelector = 2131230825;
+			
+			// aapt resource value: 0x7f080066
+			public const int ManualMode = 2131230822;
+			
 			// aapt resource value: 0x7f080067
-			public const int MainTemplateSelector = 2131230823;
+			public const int ManualModeExplanation = 2131230823;
 			
 			// aapt resource value: 0x7f080059
 			public const int NameTakenError = 2131230809;
@@ -5944,41 +5953,41 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f08004c
 			public const int PrivateProjectHint = 2131230796;
 			
-			// aapt resource value: 0x7f080068
-			public const int ReportsTemplateSelector = 2131230824;
+			// aapt resource value: 0x7f08006a
+			public const int ReportsTemplateSelector = 2131230826;
 			
 			// aapt resource value: 0x7f080057
 			public const int Save = 2131230807;
 			
-			// aapt resource value: 0x7f080072
-			public const int SelectBeginningOfWeekTemplateSelector = 2131230834;
+			// aapt resource value: 0x7f080074
+			public const int SelectBeginningOfWeekTemplateSelector = 2131230836;
 			
-			// aapt resource value: 0x7f08006d
-			public const int SelectClientTemplateSelector = 2131230829;
+			// aapt resource value: 0x7f08006f
+			public const int SelectClientTemplateSelector = 2131230831;
 			
-			// aapt resource value: 0x7f08006c
-			public const int SelectColorTemplateSelector = 2131230828;
+			// aapt resource value: 0x7f08006e
+			public const int SelectColorTemplateSelector = 2131230830;
 			
 			// aapt resource value: 0x7f08004d
 			public const int SelectColorTitle = 2131230797;
 			
+			// aapt resource value: 0x7f080072
+			public const int SelectDateFormatTemplateSelector = 2131230834;
+			
+			// aapt resource value: 0x7f080073
+			public const int SelectDurationFormatTemplateSelector = 2131230835;
+			
 			// aapt resource value: 0x7f080070
-			public const int SelectDateFormatTemplateSelector = 2131230832;
+			public const int SelectProjectTemplateSelector = 2131230832;
+			
+			// aapt resource value: 0x7f08006c
+			public const int SelectTagsTemplateSelector = 2131230828;
 			
 			// aapt resource value: 0x7f080071
-			public const int SelectDurationFormatTemplateSelector = 2131230833;
+			public const int SelectWorkspaceTemplateSelector = 2131230833;
 			
-			// aapt resource value: 0x7f08006e
-			public const int SelectProjectTemplateSelector = 2131230830;
-			
-			// aapt resource value: 0x7f08006a
-			public const int SelectTagsTemplateSelector = 2131230826;
-			
-			// aapt resource value: 0x7f08006f
-			public const int SelectWorkspaceTemplateSelector = 2131230831;
-			
-			// aapt resource value: 0x7f080069
-			public const int SettingsTemplateSelector = 2131230825;
+			// aapt resource value: 0x7f08006b
+			public const int SettingsTemplateSelector = 2131230827;
 			
 			// aapt resource value: 0x7f080041
 			public const int SignUp = 2131230785;
@@ -5989,14 +5998,14 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f08004a
 			public const int StartTimeEntryHint = 2131230794;
 			
-			// aapt resource value: 0x7f080073
-			public const int StartTimeEntrySuggestionsTemplateSelector = 2131230835;
+			// aapt resource value: 0x7f080075
+			public const int StartTimeEntrySuggestionsTemplateSelector = 2131230837;
 			
 			// aapt resource value: 0x7f08005b
 			public const int SubmitFeedback = 2131230811;
 			
-			// aapt resource value: 0x7f08006b
-			public const int SuggestionsTemplateSelector = 2131230827;
+			// aapt resource value: 0x7f08006d
+			public const int SuggestionsTemplateSelector = 2131230829;
 			
 			// aapt resource value: 0x7f080047
 			public const int TermsOfService = 2131230791;
@@ -6004,8 +6013,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f080065
 			public const int Total = 2131230821;
 			
-			// aapt resource value: 0x7f080066
-			public const int TryLoggingInInstead = 2131230822;
+			// aapt resource value: 0x7f080068
+			public const int TryLoggingInInstead = 2131230824;
 			
 			// aapt resource value: 0x7f08005f
 			public const int Use24HourClock = 2131230815;
