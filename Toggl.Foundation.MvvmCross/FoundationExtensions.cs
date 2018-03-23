@@ -119,7 +119,6 @@ namespace Toggl.Foundation.MvvmCross
             Mvx.RegisterSingleton(accessRestrictionStorage);
             Mvx.RegisterSingleton<IApiErrorHandlingService>(apiErrorHandlingService);
             Mvx.RegisterSingleton(passwordManagerService ?? new StubPasswordManagerService());
-            Mvx.RegisterSingleton(self.OnboardingService);
 
             Mvx.LazyConstructAndRegisterSingleton<IInteractorFactory, InteractorFactory>();
 

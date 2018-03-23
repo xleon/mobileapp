@@ -28,7 +28,6 @@ namespace Toggl.Foundation
         public IBackgroundService BackgroundService { get; internal set; }
         public IPlatformConstants PlatformConstants { get; internal set; }
         public ISuggestionProviderContainer SuggestionProviderContainer { get; internal set; }
-        public IOnboardingService OnboardingService { get; internal set; }
 
         public static Foundation Create(
             string clientName,
@@ -42,8 +41,7 @@ namespace Toggl.Foundation
             IAnalyticsService analyticsService,
             IPlatformConstants platformConstants,
             IApplicationShortcutCreator shortcutCreator,
-            ISuggestionProviderContainer suggestionProviderContainer,
-            IOnboardingService onboardingService)
+            ISuggestionProviderContainer suggestionProviderContainer)
         {
             Ensure.Argument.IsNotNull(version, nameof(version));
             Ensure.Argument.IsNotNull(database, nameof(database));
@@ -56,7 +54,6 @@ namespace Toggl.Foundation
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(platformConstants, nameof(platformConstants));
             Ensure.Argument.IsNotNull(suggestionProviderContainer, nameof(suggestionProviderContainer));
-            Ensure.Argument.IsNotNull(onboardingService, nameof(onboardingService));
 
             var userAgent = new UserAgent(clientName, version.ToString());
 
@@ -75,8 +72,7 @@ namespace Toggl.Foundation
                 PlatformConstants = platformConstants,
                 BackgroundService = new BackgroundService(timeService),
                 ApiFactory = new ApiFactory(apiEnvironment, userAgent),
-                SuggestionProviderContainer = suggestionProviderContainer,
-                OnboardingService = onboardingService
+                SuggestionProviderContainer = suggestionProviderContainer
             };
 
             return foundation;

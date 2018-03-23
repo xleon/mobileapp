@@ -88,8 +88,7 @@ namespace Toggl.Giskard
                 analyticsService,
                 new PlatformConstants(),
                 new ApplicationShortcutCreator(),
-                suggestionProviderContainer,
-                new GiskardOnboardingService()
+                suggestionProviderContainer
             );
 
             foundation
