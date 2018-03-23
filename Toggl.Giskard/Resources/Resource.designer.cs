@@ -5727,7 +5727,7 @@ namespace Toggl.Giskard
 			public const int ReportsActivity = 2130968645;
 			
 			// aapt resource value: 0x7f040046
-			public const int ReportsActivitySummary = 2130968646;
+			public const int ReportsActivityHeader = 2130968646;
 			
 			// aapt resource value: 0x7f040047
 			public const int select_dialog_item_material = 2130968647;

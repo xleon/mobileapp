@@ -335,6 +335,7 @@
     <Compile Include="Converters\ReportPercentageLabelValueConverter.cs" />
     <Compile Include="Converters\ReportTimeSpanLabelValueConverter.cs" />
     <Compile Include="Bindings\ViewWidthPercentageTargetBinding.cs" />
+    <Compile Include="Views\PieChartView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -360,7 +361,7 @@
     <AndroidResource Include="Resources\layout\SelectDurationFormatFragmentCell.axml" />
     <AndroidResource Include="Resources\drawable\RoundedRectangle.xml" />
     <AndroidResource Include="Resources\layout\ReportsActivity.axml" />
-    <AndroidResource Include="Resources\layout\ReportsActivitySummary.axml" />
+    <AndroidResource Include="Resources\layout\ReportsActivityHeader.axml" />
     <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
     <AndroidResource Include="Resources\drawable-mdpi\logo.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\logo.png" />
