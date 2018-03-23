@@ -195,6 +195,11 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.DescriptionLimitExceeded)
                       .WithConversion(new BoolToConstantValueConverter<nfloat>(0.5f, 1));
 
+            bindingSet.Bind(BillableView)
+                      .For(v => v.BindVisibility())
+                      .To(vm => vm.IsBillableAvailable)
+                      .WithConversion(visibilityConverter);
+
             bindingSet.Apply();
         }
 

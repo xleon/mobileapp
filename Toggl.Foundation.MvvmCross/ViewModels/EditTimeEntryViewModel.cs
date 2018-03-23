@@ -76,6 +76,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public bool AllowsBillableRates { get; private set; }
 
+        public bool IsBillableAvailable { get; private set; }
+
         [DependsOn(nameof(StartTime), nameof(StopTime))]
         public TimeSpan Duration
             => (StopTime ?? timeService.CurrentDateTime) - StartTime;
@@ -378,6 +380,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 Project = Task = Client = ProjectColor = "";
                 clearTagsIfNeeded(workspaceId, returnParameter.WorkspaceId);
                 workspaceId = returnParameter.WorkspaceId;
+                await updateFeaturesAvailability();
                 return;
             }
 
@@ -480,6 +483,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private async Task updateFeaturesAvailability()
         {
             AllowsBillableRates = await interactorFactory.WorkspaceAllowsBillableRates(workspaceId).Execute();
+            IsBillableAvailable = await interactorFactory.IsBillableAvailableForWorkspace(workspaceId).Execute();
         }
     }
 }
