@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using PropertyChanged;
-using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
-using Toggl.Foundation.DTOs;
+using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Multivac;
@@ -27,7 +26,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
-        private readonly IAnalyticsService analyticsService;
+        private readonly IInteractorFactory interactorFactory;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IMvxNavigationService navigationService;
 
@@ -37,7 +36,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public NestableObservableCollection<TimeEntryViewModelCollection, TimeEntryViewModel> TimeEntries { get; }
             = new NestableObservableCollection<TimeEntryViewModelCollection, TimeEntryViewModel>(
-                newTimeEntry => vm => vm.Start < newTimeEntry.Start
+                newTimeEntry => vm => vm.StartTime < newTimeEntry.StartTime
             );
 
         [DependsOn(nameof(TimeEntries))]
@@ -51,22 +50,22 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public MvxAsyncCommand<TimeEntryViewModel> ContinueTimeEntryCommand { get; }
 
-        public TimeEntriesLogViewModel(ITogglDataSource dataSource,
-                                       ITimeService timeService,
-                                       IAnalyticsService analyticsService,
+        public TimeEntriesLogViewModel(ITimeService timeService,
+                                       ITogglDataSource dataSource,
+                                       IInteractorFactory interactorFactory,
                                        IOnboardingStorage onboardingStorage,
                                        IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
+            Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
-            this.analyticsService = analyticsService;
             this.onboardingStorage = onboardingStorage;
+            this.interactorFactory = interactorFactory;
             this.navigationService = navigationService;
 
             EditCommand = new MvxAsyncCommand<TimeEntryViewModel>(edit);
@@ -124,7 +123,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Where(isNotRunning)
                 .OrderByDescending(te => te.Start)
                 .Select(te => new TimeEntryViewModel(te, durationFormat))
-                .GroupBy(te => te.Start.LocalDateTime.Date)
+                .GroupBy(te => te.StartTime.LocalDateTime.Date)
                 .Select(grouping => new TimeEntryViewModelCollection(grouping.Key, grouping, durationFormat));
 
             TimeEntries.ReplaceWith(groupedEntries);
@@ -252,28 +251,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             areContineButtonsEnabled = false;
             ContinueTimeEntryCommand.RaiseCanExecuteChanged();
 
-            await dataSource.User
-                .Current
-                .Select(user => new StartTimeEntryDTO
-                {
-                    UserId = user.Id,
-                    TaskId = timeEntryViewModel.TaskId,
-                    WorkspaceId = timeEntryViewModel.WorkspaceId,
-                    Billable = timeEntryViewModel.Billable,
-                    StartTime = timeService.CurrentDateTime,
-                    ProjectId = timeEntryViewModel.ProjectId,
-                    Description = timeEntryViewModel.Description,
-                    TagIds = timeEntryViewModel.TagIds
-                })
-                .SelectMany(dataSource.TimeEntries.Start)
-                .Do(_ => dataSource.SyncManager.PushSync())
+            await interactorFactory
+                .ContinueTimeEntry(timeEntryViewModel)
+                .Execute()
                 .Do(_ =>
                 {
                     areContineButtonsEnabled = true;
                     ContinueTimeEntryCommand.RaiseCanExecuteChanged();
                 });
-
-            analyticsService.TrackStartedTimeEntry(TimeEntryStartOrigin.Continue);
         }
 
         private void OnIsWelcomeChanged()

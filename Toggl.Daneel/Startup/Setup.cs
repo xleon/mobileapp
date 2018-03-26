@@ -1,3 +1,4 @@
+using System;
 using System.Reactive.Concurrency;
 using Foundation;
 using MvvmCross.Core.Navigation;
@@ -14,6 +15,7 @@ using Toggl.Foundation.Analytics;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.Suggestions;
 using Toggl.PrimeRadiant.Realm;
+using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
 using UIKit;
 
@@ -71,22 +73,27 @@ namespace Toggl.Daneel
             const string clientName = "Daneel";
             var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"].ToString();
             var database = new Database();
-            var timeService = new TimeService(Scheduler.Default);
+            var scheduler = Scheduler.Default;
+            var timeService = new TimeService(scheduler);
             var suggestionProviderContainer = new SuggestionProviderContainer(
                 new MostUsedTimeEntrySuggestionProvider(database, timeService, maxNumberOfSuggestions)
             );
+
+            var keyValueStorage = new UserDefaultsStorage();
+            var settingsStorage = new SettingsStorage(Version.Parse(version), keyValueStorage);
 
             var foundation = Foundation.Foundation.Create(
                 clientName,
                 version,
                 database,
                 timeService,
+                scheduler,
                 new MailService((ITopViewControllerProvider)Presenter),
                 new GoogleService(),
                 environment,
                 analyticsService,
                 new PlatformConstants(),
-                new ApplicationShortcutCreator(suggestionProviderContainer),
+                new ApplicationShortcutCreator(),
                 suggestionProviderContainer
             );
 
@@ -94,7 +101,10 @@ namespace Toggl.Daneel
                 .RegisterServices(
                     new DialogService((ITopViewControllerProvider)Presenter),
                     new BrowserService(),
-                    new UserDefaultsStorage(),
+                    keyValueStorage,
+                    settingsStorage,
+                    settingsStorage,
+                    settingsStorage,
                     navigationService,
                     new OnePasswordService())
                 .RevokeNewUserIfNeeded()

@@ -8,7 +8,7 @@ using Toggl.Foundation.Sync.States;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
-using WorkspaceFeatureCollection = Toggl.Ultrawave.Models.WorkspaceFeatureCollection;
+using WorkspaceFeatureCollection = Toggl.Foundation.Tests.Mocks.MockWorkspaceFeatureCollection;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {

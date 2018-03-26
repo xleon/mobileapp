@@ -5,17 +5,16 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck;
-using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DTOs;
+using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Suggestions;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 using TimeEntry = Toggl.Foundation.Models.TimeEntry;
+using ITimeEntryPrototype = Toggl.Foundation.Models.ITimeEntryPrototype;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -28,7 +27,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected ISuggestionProviderContainer Container { get; } = Substitute.For<ISuggestionProviderContainer>();
 
             protected override SuggestionsViewModel CreateViewModel()
-                => new SuggestionsViewModel(DataSource, AnalyticsService, Container, TimeService);
+                => new SuggestionsViewModel(DataSource, InteractorFactory, Container);
 
             protected void SetProviders(params ISuggestionProvider[] providers)
             {
@@ -39,20 +38,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheConstructor : SuggestionsViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(FourParameterConstructorTestData))]
+            [ClassData(typeof(ThreeParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource, 
                 bool useContainer, 
-                bool useAnalyticsService,
-                bool useTimeService)
+                bool useInteractorFactory)
             {
                 var container = useContainer ? Container : null;
                 var dataSource = useDataSource ? DataSource : null;
-                var timeService = useTimeService ? TimeService : null;
-                var analyticsService = useAnalyticsService ? AnalyticsService : null;
+                var interactorFactory = useInteractorFactory ? InteractorFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SuggestionsViewModel(dataSource, analyticsService, container, timeService);
+                    () => new SuggestionsViewModel(dataSource, interactorFactory, container);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -137,65 +134,50 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheStartTimeEntryCommand : SuggestionsViewModelTest
         {
-            [Property]
-            public void StarstATimeEntryWithTheSameValuesOfTheSelectedSuggestion(
-                NonEmptyString description, long? projectId, long? taskId, long workspaceId)
+            public TheStartTimeEntryCommand()
             {
-                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
-                timeEntry.Description.Returns(description.Get);
-                timeEntry.WorkspaceId.Returns(workspaceId);
-                timeEntry.ProjectId.Returns(projectId);
-                timeEntry.TaskId.Returns(taskId);
-                timeEntry.Duration.Returns((long)TimeSpan.FromHours(1).TotalSeconds);
-                var suggestion = new Suggestion(timeEntry);
+                var user = Substitute.For<IDatabaseUser>();
+                user.Id.Returns(10);
+                DataSource.User.Current.Returns(Observable.Return(user));
 
-                ViewModel.StartTimeEntryCommand.ExecuteAsync(suggestion).Wait();
-
-                DataSource.TimeEntries.Received().Start(Arg.Is<StartTimeEntryDTO>(dto =>
-                    dto.Description == description.Get &&
-                    dto.TaskId == taskId &&
-                    dto.ProjectId == projectId &&
-                    dto.WorkspaceId == workspaceId
-                )).Wait();
+                TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
             }
 
             [Fact, LogIfTooSlow]
-            public async Task InitiatesPushSyncWhenStartingSucceeds()
+            public async Task CallsTheCreateTimeEntryInteractor()
             {
                 var suggestion = createSuggestion();
 
                 await ViewModel.StartTimeEntryCommand.ExecuteAsync(suggestion);
 
-                await DataSource.SyncManager.Received().PushSync();
+                InteractorFactory.Received().StartSuggestion(suggestion);
             }
 
             [Fact, LogIfTooSlow]
-            public async Task DoesNotInitiatePushSyncWhenStartingFails()
+            public async Task ExecutesTheContinueTimeEntryInteractor()
             {
                 var suggestion = createSuggestion();
-                DataSource.TimeEntries.Start(Arg.Any<StartTimeEntryDTO>())
-                    .Returns(Observable.Throw<IDatabaseTimeEntry>(new Exception()));
+                var mockedInteractor = Substitute.For<IInteractor<IObservable<IDatabaseTimeEntry>>>();
+                InteractorFactory.StartSuggestion(Arg.Any<Suggestion>()).Returns(mockedInteractor);
 
-                Action executeCommand
-                    = () => ViewModel.StartTimeEntryCommand
-                                .ExecuteAsync(suggestion)
-                                .Wait();
+                await ViewModel.StartTimeEntryCommand.ExecuteAsync(suggestion);
 
-                executeCommand.ShouldThrow<Exception>();
-                await DataSource.SyncManager.DidNotReceive().PushSync();
+                await mockedInteractor.Received().Execute();
             }
 
             [Fact, LogIfTooSlow]
-            public async Task CannotBeExecutedTwiceInARow()
+            public void CannotBeExecutedTwiceInARow()
             {
                 var suggestion = createSuggestion();
-                DataSource.TimeEntries.Start(Arg.Any<StartTimeEntryDTO>())
+                var mockedInteractor = Substitute.For<IInteractor<IObservable<IDatabaseTimeEntry>>>();
+                InteractorFactory.StartSuggestion(Arg.Any<Suggestion>()).Returns(mockedInteractor);
+                mockedInteractor.Execute()
                     .Returns(Observable.Never<IDatabaseTimeEntry>());
 
-                var _ = ViewModel.StartTimeEntryCommand.ExecuteAsync(suggestion);
-                var __ = ViewModel.StartTimeEntryCommand.ExecuteAsync(suggestion);
+                ViewModel.StartTimeEntryCommand.ExecuteAsync(suggestion);
+                ViewModel.StartTimeEntryCommand.ExecuteAsync(suggestion);
 
-                await DataSource.TimeEntries.Received(1).Start(Arg.Any<StartTimeEntryDTO>());
+                InteractorFactory.Received(1).StartSuggestion(suggestion);
             }
 
             [Fact, LogIfTooSlow]
@@ -203,23 +185,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var suggestion = createSuggestion();
                 var timeEntry = Substitute.For<IDatabaseTimeEntry>();
-                DataSource.TimeEntries.Start(Arg.Any<StartTimeEntryDTO>())
+                var mockedInteractor = Substitute.For<IInteractor<IObservable<IDatabaseTimeEntry>>>();
+                InteractorFactory.StartSuggestion(Arg.Any<Suggestion>()).Returns(mockedInteractor);
+                mockedInteractor.Execute()
                     .Returns(Observable.Return(timeEntry));
 
                 await ViewModel.StartTimeEntryCommand.ExecuteAsync(suggestion);
                 await ViewModel.StartTimeEntryCommand.ExecuteAsync(suggestion);
 
-                await DataSource.TimeEntries.Received(2).Start(Arg.Any<StartTimeEntryDTO>());
-            }
-
-            [Fact]
-            public async Task RegistersTheEventInTheAnalyticsService()
-            {
-                var suggestion = createSuggestion();
-
-                await ViewModel.StartTimeEntryCommand.ExecuteAsync(suggestion);
-
-                AnalyticsService.Received().TrackStartedTimeEntry(TimeEntryStartOrigin.Suggestion);
+                InteractorFactory.Received(2).StartSuggestion(suggestion);
             }
 
             private Suggestion createSuggestion()
@@ -227,6 +201,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var timeEntry = Substitute.For<IDatabaseTimeEntry>();
                 timeEntry.Duration.Returns((long)TimeSpan.FromMinutes(30).TotalSeconds);
                 timeEntry.Description.Returns("Testing");
+                timeEntry.WorkspaceId.Returns(10);
                 return new Suggestion(timeEntry);
             }
         }

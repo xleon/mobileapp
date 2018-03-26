@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.toggl.daneel</string>
+	<string>com.toggl.daneel.debug</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
@@ -32,7 +32,7 @@
 		<string>org-appextension-feature-password-management</string>
 	</array>
 	<key>CFBundleName</key>
-	<string>Toggl</string>
+	<string>Toggl for Devs</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.4.2</string>
 	<key>CFBundleURLTypes</key>
@@ -55,6 +55,6 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>31</string>
+	<string>IOS_BUNDLE_VERSION</string>
 </dict>
 </plist>

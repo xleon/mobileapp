@@ -10,6 +10,7 @@ using Toggl.Ultrawave;
 using Xunit;
 using Toggl.Foundation.Suggestions;
 using Toggl.Foundation.Analytics;
+using System.Reactive.Concurrency;
 
 namespace Toggl.Foundation.Tests
 {
@@ -18,11 +19,12 @@ namespace Toggl.Foundation.Tests
         public class TheCreateMethod
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(TenParameterConstructorTestData))]
+            [ClassData(typeof(ElevenParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useClientName,
                 bool useVersion,
                 bool useDatabase,
+                bool useScheduler,
                 bool useTimeService,
                 bool useMailService,
                 bool useGoogleService,
@@ -33,6 +35,7 @@ namespace Toggl.Foundation.Tests
             {
                 var version = useVersion ? "1.0" : null;
                 var clientName = useClientName ? "Some Client" : null;
+                var scheduler = useScheduler ? Substitute.For<IScheduler>() : null;
                 var database = useDatabase ? Substitute.For<ITogglDatabase>() : null;
                 var timeService = useTimeService ? Substitute.For<ITimeService>() : null;
                 var mailService = useMailService ? Substitute.For<IMailService>() : null;
@@ -48,6 +51,7 @@ namespace Toggl.Foundation.Tests
                         version,
                         database,
                         timeService,
+                        scheduler,
                         mailService,
                         googleService,
                         ApiEnvironment.Staging,

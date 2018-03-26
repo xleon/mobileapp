@@ -15,8 +15,8 @@ namespace Toggl.Daneel.ViewControllers
     public sealed partial class OnboardingViewController : MvxViewController<OnboardingViewModel>
     {
         private readonly TrackPage trackPagePlaceholder = TrackPage.Create();
-        private readonly LogPage logPagePlaceholder = LogPage.Create();
-        private readonly SummaryPage summaryPagePlaceholder = SummaryPage.Create();
+        private readonly MostUsedPage mostUsedPagePlaceholder = MostUsedPage.Create();
+        private readonly ReportsPage reportsPagePlaceholder = ReportsPage.Create();
 
         public OnboardingViewController() 
             : base(nameof(OnboardingViewController), null)
@@ -37,8 +37,8 @@ namespace Toggl.Daneel.ViewControllers
 
             PageControl.Pages = ViewModel.NumberOfPages;
             FirstPageLabel.Text = Resources.OnboardingTrackPageCopy;
-            SecondPageLabel.Text = Resources.OnboardingLogPageCopy;
-            ThirdPageLabel.Text = Resources.OnboardingSummaryPageCopy;
+            SecondPageLabel.Text = Resources.OnboardingMostUsedPageCopy;
+            ThirdPageLabel.Text = Resources.OnboardingReportsPageCopy;
 
             var visibilityConverter = new MvxVisibilityValueConverter();
             var invertedVisibilityConverter = new MvxInvertedVisibilityValueConverter();
@@ -99,12 +99,12 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.IsTrackPage)
                       .WithConversion(visibilityConverter);
 
-            bindingSet.Bind(logPagePlaceholder)
+            bindingSet.Bind(mostUsedPagePlaceholder)
                       .For(v => v.BindVisibility())
-                      .To(vm => vm.IsLogPage)
+                      .To(vm => vm.IsMostUsedPage)
                       .WithConversion(visibilityConverter);
 
-            bindingSet.Bind(summaryPagePlaceholder)
+            bindingSet.Bind(reportsPagePlaceholder)
                       .For(v => v.BindVisibility())
                       .To(vm => vm.IsSummaryPage)
                       .WithConversion(visibilityConverter);
@@ -134,8 +134,8 @@ namespace Toggl.Daneel.ViewControllers
         private void preparePlaceholders()
         {
             PhoneContents.AddSubview(trackPagePlaceholder);
-            PhoneContents.AddSubview(logPagePlaceholder);
-            PhoneContents.AddSubview(summaryPagePlaceholder);
+            PhoneContents.AddSubview(mostUsedPagePlaceholder);
+            PhoneContents.AddSubview(reportsPagePlaceholder);
         }
 
         public override void ViewDidLayoutSubviews()
@@ -144,10 +144,10 @@ namespace Toggl.Daneel.ViewControllers
 
             if (trackPagePlaceholder != null)
                 trackPagePlaceholder.Frame = PhoneContents.Bounds;
-            if (logPagePlaceholder != null)
-                logPagePlaceholder.Frame = PhoneContents.Bounds;
-            if (summaryPagePlaceholder != null)
-                summaryPagePlaceholder.Frame = PhoneContents.Bounds;
+            if (mostUsedPagePlaceholder != null)
+                mostUsedPagePlaceholder.Frame = PhoneContents.Bounds;
+            if (reportsPagePlaceholder != null)
+                reportsPagePlaceholder.Frame = PhoneContents.Bounds;
         }
     }
 }

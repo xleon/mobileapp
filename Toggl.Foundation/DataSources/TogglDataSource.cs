@@ -56,11 +56,10 @@ namespace Toggl.Foundation.DataSources
             User = new UserDataSource(database.User, timeService);
             Tags = new TagsDataSource(database.IdProvider, database.Tags, timeService);
             Tasks = new TasksDataSource(database.Tasks);
-            Workspaces = new WorkspacesDataSource(database);
             Clients = new ClientsDataSource(database.IdProvider, database.Clients, timeService);
             Preferences = new PreferencesDataSource(database.Preferences);
             Projects = new ProjectsDataSource(database.IdProvider, database.Projects, timeService);
-            TimeEntries = new TimeEntriesDataSource(database.IdProvider, shortcutCreator, database.TimeEntries, timeService);
+            TimeEntries = new TimeEntriesDataSource(database.IdProvider, database.TimeEntries, timeService);
 
             AutocompleteProvider = new AutocompleteProvider(database);
             SyncManager = createSyncManager(this);
@@ -77,7 +76,6 @@ namespace Toggl.Foundation.DataSources
         public IClientsSource Clients { get; }
         public IPreferencesSource Preferences { get; }
         public IProjectsSource Projects { get; }
-        public IWorkspacesSource Workspaces { get; }
         public ITimeEntriesSource TimeEntries { get; }
 
         public ISyncManager SyncManager { get; }

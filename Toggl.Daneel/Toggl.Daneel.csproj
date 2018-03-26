@@ -413,6 +413,10 @@
     <ImageAsset Include="Resources\Images.xcassets\playIcon.imageset\play.png" />
     <ImageAsset Include="Resources\Images.xcassets\playIcon.imageset\play%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\playIcon.imageset\play%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\doneGreen.png" />
+    <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\doneGreen%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\doneGreen%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -427,8 +431,8 @@
     <InterfaceDefinition Include="ViewControllers\SelectDateTimeViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectTagsViewController.xib" />
     <InterfaceDefinition Include="Views\Onboarding\TrackPage.xib" />
-    <InterfaceDefinition Include="Views\Onboarding\LogPage.xib" />
-    <InterfaceDefinition Include="Views\Onboarding\SummaryPage.xib" />
+    <InterfaceDefinition Include="Views\Onboarding\MostUsedPage.xib" />
+    <InterfaceDefinition Include="Views\Onboarding\ReportsPage.xib" />
     <InterfaceDefinition Include="ViewControllers\EditProjectViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectColorViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectWorkspaceViewController.xib" />
@@ -567,13 +571,13 @@
     <Compile Include="Views\Onboarding\TrackPage.designer.cs">
       <DependentUpon>TrackPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Onboarding\LogPage.cs" />
-    <Compile Include="Views\Onboarding\LogPage.designer.cs">
-      <DependentUpon>LogPage.cs</DependentUpon>
+    <Compile Include="Views\Onboarding\MostUsedPage.cs" />
+    <Compile Include="Views\Onboarding\MostUsedPage.designer.cs">
+      <DependentUpon>MostUsedPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Onboarding\SummaryPage.cs" />
-    <Compile Include="Views\Onboarding\SummaryPage.designer.cs">
-      <DependentUpon>SummaryPage.cs</DependentUpon>
+    <Compile Include="Views\Onboarding\ReportsPage.cs" />
+    <Compile Include="Views\Onboarding\ReportsPage.designer.cs">
+      <DependentUpon>ReportsPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Views\FadeView.cs" />
@@ -711,7 +715,7 @@
     <Compile Include="Views\RoundedView.cs" />
     <Compile Include="Combiners\CalendarCellTextColorValueCombiner.cs" />
     <Compile Include="Views\Reports\PieChartView.cs" />
-    <Compile Include="Converters\TimeSpanReportLabelValueConverter.cs" />
+    <Compile Include="Converters\ReportTimeSpanLabelValueConverter.cs" />
     <Compile Include="Converters\ReportPercentageLabelValueConverter.cs" />
     <Compile Include="Views\Reports\PercentageView.cs" />
     <Compile Include="Services\ITopViewControllerProvider.cs" />
@@ -794,6 +798,8 @@
     <Compile Include="Views\Log\TimeEntryMockView.designer.cs">
       <DependentUpon>TimeEntryMockView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\OnboardingExtensions.cs" />
+    <Compile Include="Converters\TimeFormatToLocaleValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

@@ -1,5 +1,7 @@
 ﻿using System;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
+using static Toggl.Multivac.Math;
 
 namespace Toggl.Foundation.Reports
 {
@@ -36,6 +38,8 @@ namespace Toggl.Foundation.Reports
 
     public static class ChartSegmentExtensions
     {
+        private const int maxSegmentNameLength = 18;
+
         public static ChartSegment WithDurationFormat(this ChartSegment segment, DurationFormat durationFormat)
             => new ChartSegment(
                 segment.ProjectName,
@@ -44,5 +48,8 @@ namespace Toggl.Foundation.Reports
                 segment.BillableSeconds,
                 segment.Color,
                 durationFormat);
+
+        public static string FormattedName(this ChartSegment segment)
+            => segment.ProjectName.TruncatedAt(maxSegmentNameLength);
     }
 }
