@@ -50,6 +50,12 @@ namespace Toggl.Giskard.Converters
             : base(Reports.Disabled.ToAndroidColor(), Reports.TotalTimeActivated.ToAndroidColor()) { }
     }
 
+    public sealed class LoginInfoTextColorValueConverter : BoolToConstantValueConverter<Color>
+    {
+        public LoginInfoTextColorValueConverter()
+            : base(Color.ParseColor("#e20505"), Color.ParseColor("#5e5b5b")) { }
+    }
+    
     public sealed class ManualModeEnabledDrawableValueConverter : BoolToConstantValueConverter<int>
     {
         public ManualModeEnabledDrawableValueConverter() : base(Resource.Drawable.add_white, Resource.Drawable.play_white) { }

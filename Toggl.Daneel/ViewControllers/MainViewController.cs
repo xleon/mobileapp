@@ -1,4 +1,5 @@
-﻿using CoreGraphics;
+﻿using System;
+using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
@@ -9,6 +10,7 @@ using MvvmCross.Plugins.Color.iOS;
 using MvvmCross.Plugins.Visibility;
 using Toggl.Daneel.Combiners;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Onboarding.MainView;
 using Toggl.Daneel.Suggestions;
 using Toggl.Daneel.Views;
 using Toggl.Daneel.ViewSources;
@@ -16,6 +18,7 @@ using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac;
+using Toggl.PrimeRadiant.Extensions;
 using UIKit;
 using static Toggl.Foundation.MvvmCross.Helper.Animation;
 
@@ -40,6 +43,7 @@ namespace Toggl.Daneel.ViewControllers
         private readonly TimeEntriesEmptyLogView emptyStateView = TimeEntriesEmptyLogView.Create();
 
         private bool viewInitialized;
+        private IDisposable onboardingDisposable;
 
         public MainViewController()
             : base(nameof(MainViewController), null)
@@ -51,6 +55,7 @@ namespace Toggl.Daneel.ViewControllers
             base.ViewDidLoad();
 
             prepareViews();
+            prepareOnboarding();
 
             var source = new MainTableViewSource(TimeEntriesLogTableView);
             var suggestionsView = new SuggestionsView();
@@ -205,6 +210,7 @@ namespace Toggl.Daneel.ViewControllers
 
             if (!disposing) return;
             spiderBroView.Dispose();
+            onboardingDisposable.Dispose();
         }
 
         public override void ViewDidLayoutSubviews()
@@ -331,6 +337,22 @@ namespace Toggl.Daneel.ViewControllers
             emptyStateView.HeightAnchor.ConstraintEqualTo(TimeEntriesLogTableView.HeightAnchor).Active = true;
             emptyStateView.CenterYAnchor.ConstraintEqualTo(TimeEntriesLogTableView.CenterYAnchor).Active = true;
             emptyStateView.TopAnchor.ConstraintEqualTo(TimeEntriesLogTableView.TopAnchor).Active = true;
+        }
+
+        private void prepareOnboarding()
+        {
+            var onboardingStorage = ViewModel.OnboardingStorage;
+
+            var step = new StartTimeEntryOnboardingStep(onboardingStorage).ToDismissable(nameof(StartTimeEntryOnboardingStep), onboardingStorage);
+
+            var tapOnStartButtonBubble = new UITapGestureRecognizer(() => step.Dismiss());
+            StartTimeEntryOnboardingBubbleView.AddGestureRecognizer(tapOnStartButtonBubble);
+
+            onboardingDisposable = step.ShouldBeVisible
+                .Subscribe(visible => InvokeOnMainThread(() =>
+                {
+                    StartTimeEntryOnboardingBubbleView.Hidden = !visible;
+                }));
         }
 
         internal void Reload()

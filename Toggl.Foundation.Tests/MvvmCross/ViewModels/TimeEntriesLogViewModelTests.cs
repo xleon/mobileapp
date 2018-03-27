@@ -220,7 +220,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async ThreadingTask SetsTheIsWelcomePropertyToFalse()
             {
-                OnboardingStorage.IsNewUser().Returns(true);
+                var observable = Observable.Return(true);
+                OnboardingStorage.IsNewUser.Returns(observable);
                 await ViewModel.Initialize();
 
                 TimeEntryCreatedSubject.OnNext(NewTimeEntry.With((long)TimeSpan.FromHours(1).TotalSeconds));
@@ -232,7 +233,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async ThreadingTask SetsTheUserIsNotNewFlagToFalseInTheStorage()
             {
-                OnboardingStorage.IsNewUser().Returns(true);
+                var observable = Observable.Return(true);
+                OnboardingStorage.IsNewUser.Returns(observable);
                 await ViewModel.Initialize();
 
                 TimeEntryCreatedSubject.OnNext(NewTimeEntry.With((long)TimeSpan.FromHours(1).TotalSeconds));

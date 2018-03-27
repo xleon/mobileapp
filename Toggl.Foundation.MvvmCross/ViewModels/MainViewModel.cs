@@ -87,6 +87,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public SuggestionsViewModel SuggestionsViewModel { get; } = Mvx.IocConstruct<SuggestionsViewModel>();
 
+        public IOnboardingStorage OnboardingStorage => onboardingStorage;
+
         public IMvxAsyncCommand StartTimeEntryCommand { get; }
 
         public IMvxAsyncCommand StopTimeEntryCommand { get; }
@@ -248,6 +250,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private Task startTimeEntry()
         {
+            OnboardingStorage.StartButtonWasTapped();
+
             var parameter = IsInManualMode
                 ? StartTimeEntryParameters.ForManualMode(timeService.CurrentDateTime)
                 : StartTimeEntryParameters.ForTimerMode(timeService.CurrentDateTime); 
