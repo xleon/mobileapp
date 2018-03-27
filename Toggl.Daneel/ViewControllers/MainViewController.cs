@@ -40,6 +40,7 @@ namespace Toggl.Daneel.ViewControllers
         private readonly UIButton reportsButton = new UIButton(new CGRect(0, 0, 40, 40));
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 40));
         private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
+        private readonly TimeEntriesEmptyLogView emptyStateView = TimeEntriesEmptyLogView.Create();
 
         private bool viewInitialized;
         private IDisposable onboardingDisposable;
@@ -94,10 +95,6 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.SyncProgress)
                       .To(vm => vm.SyncingProgress);
 
-            bindingSet.Bind(source)
-                      .For(v => v.IsEmptyState)
-                      .To(vm => vm.ShouldShowEmptyState);
-
             bindingSet.Bind(TimeEntriesLogTableView)
                       .For(v => v.TableFooterView)
                       .To(vm => vm.TimeEntriesLogViewModel.IsEmpty)
@@ -148,6 +145,11 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(spiderBroView)
                       .For(v => v.BindSpiderVisibility())
                       .To(vm => vm.ShouldShowWelcomeBack);
+
+            bindingSet.Bind(emptyStateView)
+                      .For(v => v.BindVisibility())
+                      .To(vm => vm.ShouldShowEmptyState)
+                      .WithConversion(visibilityConverter);
 
             //Text
             bindingSet.Bind(CurrentTimeEntryDescriptionLabel).To(vm => vm.CurrentTimeEntryDescription);
@@ -247,6 +249,7 @@ namespace Toggl.Daneel.ViewControllers
             RunningEntryDescriptionFadeView.FadeRight = true;
 
             prepareSpiderViews();
+            prepareEmptyStateView();
 
             TopConstraint.AdaptForIos10(NavigationController.NavigationBar);
         }
@@ -321,6 +324,19 @@ namespace Toggl.Daneel.ViewControllers
             spiderBroView.WidthAnchor.ConstraintEqualTo(spiderContainerView.WidthAnchor).Active = true;
             spiderBroView.BottomAnchor.ConstraintEqualTo(spiderContainerView.BottomAnchor).Active = true;
             spiderBroView.CenterXAnchor.ConstraintEqualTo(spiderContainerView.CenterXAnchor).Active = true;
+        }
+
+        private void prepareEmptyStateView()
+        {
+            emptyStateView.BackgroundColor = UIColor.Clear;
+            emptyStateView.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            TimeEntriesLogTableView.AddSubview(emptyStateView);
+
+            emptyStateView.WidthAnchor.ConstraintEqualTo(TimeEntriesLogTableView.WidthAnchor).Active = true;
+            emptyStateView.HeightAnchor.ConstraintEqualTo(TimeEntriesLogTableView.HeightAnchor).Active = true;
+            emptyStateView.CenterYAnchor.ConstraintEqualTo(TimeEntriesLogTableView.CenterYAnchor).Active = true;
+            emptyStateView.TopAnchor.ConstraintEqualTo(TimeEntriesLogTableView.TopAnchor).Active = true;
         }
 
         private void prepareOnboarding()

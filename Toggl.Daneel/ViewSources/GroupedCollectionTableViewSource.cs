@@ -159,13 +159,6 @@ namespace Toggl.Daneel.ViewSources
             });
         }
 
-        protected virtual void OnSectionAdded(NSIndexSet indexToAdd)
-        {
-            TableView.BeginUpdates();
-            TableView.InsertSections(indexToAdd, UITableViewRowAnimation.Automatic);
-            TableView.EndUpdates();
-        }
-
         private void animateSectionChangesIfPossible(NotifyCollectionChangedEventArgs args)
         {
             lock (animationLock)
@@ -174,7 +167,9 @@ namespace Toggl.Daneel.ViewSources
                 {
                     case NotifyCollectionChangedAction.Add:
                         var indexToAdd = NSIndexSet.FromIndex(args.NewStartingIndex);
-                        OnSectionAdded(indexToAdd);
+                        TableView.BeginUpdates();
+                        TableView.InsertSections(indexToAdd, UITableViewRowAnimation.Automatic);
+                        TableView.EndUpdates();
                         break;
 
                     case NotifyCollectionChangedAction.Remove:

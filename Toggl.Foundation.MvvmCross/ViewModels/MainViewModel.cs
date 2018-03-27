@@ -66,6 +66,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             string.IsNullOrEmpty(CurrentTimeEntryDescription)
             && string.IsNullOrEmpty(CurrentTimeEntryProject);
 
+        public bool ShouldShowTimeEntriesLog
+            => !TimeEntriesLogViewModel.IsEmpty;
+
         public bool ShouldShowEmptyState
             => SuggestionsViewModel.IsEmpty
             && TimeEntriesLogViewModel.IsEmpty
@@ -168,6 +171,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Merge(dataSource.TimeEntries.TimeEntryDeleted)
                 .Subscribe((long _) =>
                 {
+                    RaisePropertyChanged(nameof(ShouldShowTimeEntriesLog));
                     RaisePropertyChanged(nameof(ShouldShowWelcomeBack));
                     RaisePropertyChanged(nameof(ShouldShowEmptyState));
                 });
