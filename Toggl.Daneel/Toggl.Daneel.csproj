@@ -812,6 +812,7 @@
     </Compile>
     <Compile Include="Extensions\OnboardingExtensions.cs" />
     <Compile Include="Converters\TimeFormatToLocaleValueConverter.cs" />
+    <Compile Include="Binding\ViewVisibilityWithFadeTargetBinding.cs" />
     <Compile Include="Binding\ImageViewAnimatedImageTargetBinding.cs" />
     <Compile Include="Onboarding\MainView\StartTimeEntryOnboardingStep.cs" />
   </ItemGroup>

@@ -113,6 +113,11 @@ namespace Toggl.Daneel
                 ViewAnimatedVisibilityTargetBinding.BindingName,
                 view => new ViewAnimatedVisibilityTargetBinding(view)
             );
+
+            registry.RegisterCustomBindingFactory<UIView>(
+                ViewVisibilityWithFadeTargetBinding.BindingName,
+                view => new ViewVisibilityWithFadeTargetBinding(view)
+            );
         }
     }
 }

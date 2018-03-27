@@ -6,6 +6,7 @@ using MvvmCross.Binding.iOS;
 using MvvmCross.Binding.iOS.Views;
 using MvvmCross.Plugins.Color.iOS;
 using Toggl.Daneel.Converters;
+using Toggl.Daneel.Extensions;
 using Toggl.Foundation.MvvmCross.Combiners;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
@@ -63,7 +64,11 @@ namespace Toggl.Daneel.Views.Reports
 
                 //Loading chart
                 bindingSet.Bind(LoadingPieChartView)
-                          .For(v => v.BindVisible())
+                          .For(v => v.BindVisibilityWithFade())
+                          .To(vm => vm.IsLoading);
+
+                bindingSet.Bind(LoadingCardView)
+                          .For(v => v.BindVisibilityWithFade())
                           .To(vm => vm.IsLoading);
 
                 //Pretty stuff
@@ -97,6 +102,7 @@ namespace Toggl.Daneel.Views.Reports
         private void prepareViews()
         {
             prepareCard(OverviewCardView);
+            prepareCard(LoadingCardView);
 
             TotalTitleLabel.AttributedText = prepareKerning(TotalTitleLabel.Text, -0.2);
             TotalDurationLabel.AttributedText = prepareKerning(TotalDurationLabel.Text, -0.2);

@@ -19,10 +19,19 @@ namespace Toggl.Daneel.Views.Reports
 		Toggl.Daneel.Views.Reports.PercentageView BillablePercentageView { get; set; }
 
 		[Outlet]
+		UIKit.UILabel BillableTitleLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIView EmptyStateView { get; set; }
 
 		[Outlet]
+		UIKit.UIView LoadingCardView { get; set; }
+
+		[Outlet]
 		Toggl.Daneel.Views.Reports.LoadingPieChartView LoadingPieChartView { get; set; }
+
+		[Outlet]
+		UIKit.UIView OverviewCardView { get; set; }
 
 		[Outlet]
 		Toggl.Daneel.Views.Reports.PieChartView PieChartView { get; set; }
@@ -32,18 +41,17 @@ namespace Toggl.Daneel.Views.Reports
 
 		[Outlet]
 		UIKit.UILabel TotalDurationLabel { get; set; }
-		
-		[Outlet]
-		UIKit.UILabel BillableTitleLabel { get; set; }
 
 		[Outlet]
 		UIKit.UILabel TotalTitleLabel { get; set; }
-
-		[Outlet]
-		UIKit.UIView OverviewCardView { get; set; }
-
+		
 		void ReleaseDesignerOutlets ()
 		{
+			if (LoadingCardView != null) {
+				LoadingCardView.Dispose ();
+				LoadingCardView = null;
+			}
+
 			if (BillablePercentageLabel != null) {
 				BillablePercentageLabel.Dispose ();
 				BillablePercentageLabel = null;
@@ -54,19 +62,29 @@ namespace Toggl.Daneel.Views.Reports
 				BillablePercentageView = null;
 			}
 
+			if (BillableTitleLabel != null) {
+				BillableTitleLabel.Dispose ();
+				BillableTitleLabel = null;
+			}
+
 			if (EmptyStateView != null) {
 				EmptyStateView.Dispose ();
 				EmptyStateView = null;
 			}
 
-			if (PieChartView != null) {
-				PieChartView.Dispose ();
-				PieChartView = null;
-			}
-
 			if (LoadingPieChartView != null) {
 				LoadingPieChartView.Dispose ();
 				LoadingPieChartView = null;
+			}
+
+			if (OverviewCardView != null) {
+				OverviewCardView.Dispose ();
+				OverviewCardView = null;
+			}
+
+			if (PieChartView != null) {
+				PieChartView.Dispose ();
+				PieChartView = null;
 			}
 
 			if (TotalDurationGraph != null) {
@@ -79,19 +97,9 @@ namespace Toggl.Daneel.Views.Reports
 				TotalDurationLabel = null;
 			}
 
-			if (BillableTitleLabel != null) {
-				BillableTitleLabel.Dispose ();
-				BillableTitleLabel = null;
-			}
-
 			if (TotalTitleLabel != null) {
 				TotalTitleLabel.Dispose ();
 				TotalTitleLabel = null;
-			}
-
-			if (OverviewCardView != null) {
-				OverviewCardView.Dispose ();
-				OverviewCardView = null;
 			}
 		}
 	}
