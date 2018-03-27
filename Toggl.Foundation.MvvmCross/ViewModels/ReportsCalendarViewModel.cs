@@ -9,11 +9,12 @@ using MvvmCross.Core.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Parameters;
+using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
+namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class ReportsCalendarViewModel : MvxViewModel
@@ -24,11 +25,22 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
         private readonly ISubject<DateRangeParameter> selectedDateRangeSubject = new Subject<DateRangeParameter>();
+        private readonly string[] dayHeaders =
+        {
+            Resources.SundayInitial,
+            Resources.MondayInitial,
+            Resources.TuesdayInitial,
+            Resources.WednesdayInitial,
+            Resources.ThursdayInitial,
+            Resources.FridayInitial,
+            Resources.SaturdayInitial
+        };
 
         private CalendarMonth initialMonth;
         private CalendarDayViewModel startOfSelection;
 
         private CompositeDisposable disposableBag;
+
 
         public BeginningOfWeek BeginningOfWeek { get; private set; }
 
@@ -115,6 +127,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         public void OnToggleCalendar() => selectStartOfSelectionIfNeeded();
 
         public void OnHideCalendar() => selectStartOfSelectionIfNeeded();
+
+        public string DayHeaderFor(int index)
+            => dayHeaders[(index + (int)BeginningOfWeek + 7) % 7];
 
         private void selectStartOfSelectionIfNeeded()
         {
