@@ -339,6 +339,7 @@
     <Compile Include="Views\PieChartView.cs" />
     <Compile Include="Views\ReportsRecyclerViewHolder.cs" />
     <Compile Include="Startup\TogglBindingBuilder.cs" />
+    <Compile Include="Views\ReportsLinearLayout.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
