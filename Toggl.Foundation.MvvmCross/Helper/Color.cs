@@ -188,7 +188,7 @@ namespace Toggl.Foundation.MvvmCross.Helper
 
         public static class Suggestions
         {
-            public static readonly MvxColor ClientColor = new MvxColor(163, 163, 163);
+            public static readonly MvxColor ClientColor = new MvxColor(94, 91, 91);
             public static readonly MvxColor HeaderText = new MvxColor(94, 91, 91);
         }
 
