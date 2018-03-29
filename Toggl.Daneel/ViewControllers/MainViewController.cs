@@ -10,6 +10,7 @@ using MvvmCross.Plugins.Color.iOS;
 using MvvmCross.Plugins.Visibility;
 using Toggl.Daneel.Combiners;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Onboarding;
 using Toggl.Daneel.Onboarding.MainView;
 using Toggl.Daneel.Suggestions;
 using Toggl.Daneel.Views;
@@ -348,11 +349,7 @@ namespace Toggl.Daneel.ViewControllers
             var tapOnStartButtonBubble = new UITapGestureRecognizer(() => step.Dismiss());
             StartTimeEntryOnboardingBubbleView.AddGestureRecognizer(tapOnStartButtonBubble);
 
-            onboardingDisposable = step.ShouldBeVisible
-                .Subscribe(visible => InvokeOnMainThread(() =>
-                {
-                    StartTimeEntryOnboardingBubbleView.Hidden = !visible;
-                }));
+            onboardingDisposable = step.ManageVisibilityOf(StartTimeEntryOnboardingBubbleView);
         }
 
         internal void Reload()

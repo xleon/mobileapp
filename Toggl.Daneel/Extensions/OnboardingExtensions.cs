@@ -1,5 +1,7 @@
 ﻿using System;
 using CoreGraphics;
+using Toggl.Daneel.Onboarding;
+using Toggl.PrimeRadiant.Onboarding;
 using UIKit;
 
 namespace Toggl.Daneel.Extensions
@@ -24,5 +26,10 @@ namespace Toggl.Daneel.Extensions
             view.Layer.ShadowOpacity = shadowOpacity;
             view.Layer.ShadowRadius = shadowRadius;
         }
+
+        public static IDisposable ManageVisibilityOf(this IOnboardingStep step, UIView view)
+            => step.ShouldBeVisible.Subscribe(
+                visible => UIApplication.SharedApplication.InvokeOnMainThread(
+                    () => view.Hidden = !visible));
     }
 }
