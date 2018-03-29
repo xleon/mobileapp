@@ -44,6 +44,7 @@
 
     <string name="MainTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.MainTemplateSelector, Toggl.Giskard</string>
     <string name="ReportsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsTemplateSelector, Toggl.Giskard</string>
+    <string name="CalendarTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.CalendarTemplateSelector, Toggl.Giskard</string>
     <string name="SettingsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SettingsTemplateSelector, Toggl.Giskard</string>
     <string name="SelectTagsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectTagsTemplateSelector, Toggl.Giskard</string>
     <string name="SuggestionsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SuggestionsTemplateSelector, Toggl.Giskard</string>

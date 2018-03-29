@@ -17,6 +17,7 @@ namespace Toggl.Giskard.Views
         private const int calendarAnimationDuration = 500;
         private const int calendarAnimationFlingDuration = 200;
 
+        private float currentX;
         private float currentY;
         private View calendarContainer;
         private int negativeContainerHeight;
@@ -71,6 +72,7 @@ namespace Toggl.Giskard.Views
         {
             if (ev.Action == Down)
             {
+                currentX = ev.RawX;
                 currentY = ev.RawY;
                 return false;
             }
@@ -82,12 +84,14 @@ namespace Toggl.Giskard.Views
 
             var calendarIsTotallyVisible = marginParams.TopMargin == 0;
             var calendarIsTotallyHidden = marginParams.TopMargin == negativeContainerHeight;
-            var offset = ev.RawY - currentY;
+            var offsetY = ev.RawY - currentY;
+            var offsetX = ev.RawX - currentX;
 
-            var isSwipingUp = offset < 0;
+            var isSwipingUp = offsetY < 0;
             var isSwipingDown = !isSwipingUp;
 
             var shouldIntercept =
+                !(calendarIsTotallyVisible && offsetX > offsetY) &&
                 (!calendarIsTotallyHidden && !calendarIsTotallyVisible) ||
                 (calendarIsTotallyVisible && isSwipingUp);
 

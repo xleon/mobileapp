@@ -58,7 +58,7 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(CurrentYearLabel).To(vm => vm.CurrentMonth.Year);
             bindingSet.Bind(CurrentMonthLabel)
                       .To(vm => vm.CurrentMonth.Month)
-                      .WithConversion(new IntToMonthNameConverter());
+                      .WithConversion(new IntToMonthNameValueConverter());
 
             bindingSet.Apply();
         }

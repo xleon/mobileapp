@@ -341,6 +341,11 @@
     <Compile Include="Startup\TogglBindingBuilder.cs" />
     <Compile Include="Fragments\ReportsCalendarFragment.cs" />
     <Compile Include="Views\ReportsLinearLayout.cs" />
+    <Compile Include="Adapters\CalendarRecyclerAdapter.cs" />
+    <Compile Include="Views\CalendarRecyclerView.cs" />
+    <Compile Include="TemplateSelectors\CalendarTemplateSelector.cs" />
+    <Compile Include="Adapters\CalendarPagerAdapter.cs" />
+    <Compile Include="Bindings\ViewPagerCurrentPageTargetBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -613,6 +618,8 @@
     <AndroidResource Include="Resources\layout\SelectWorkspaceFragmentCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsActivityItem.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragment.axml" />
+    <AndroidResource Include="Resources\layout\ReportsCalendarFragmentDayCell.axml" />
+    <AndroidResource Include="Resources\layout\ReportsCalendarFragmentPage.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">

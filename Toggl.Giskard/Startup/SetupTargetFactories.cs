@@ -4,6 +4,7 @@ using Toggl.Giskard.Bindings;
 using Toggl.Giskard.Views;
 using Android.Widget;
 using Android.Support.Design.Widget;
+using Android.Support.V4.View;
 
 namespace Toggl.Giskard
 {
@@ -67,6 +68,11 @@ namespace Toggl.Giskard
             registry.RegisterCustomBindingFactory<View>(
                 ViewMarginTargetBinding.BindingName,
                 view => new ViewMarginTargetBinding(view)
+            );
+
+            registry.RegisterCustomBindingFactory<ViewPager>(
+                ViewPagerCurrentPageTargetBinding.BindingName,
+                view => new ViewPagerCurrentPageTargetBinding(view)
             );
 
             registry.RegisterCustomBindingFactory<View>(
