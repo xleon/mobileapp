@@ -78,6 +78,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             set
             {
+                if (!IsEditingTime) return;
+
                 var valueInRange = value.Clamp(MinimumDateTime, MaximumDateTime);
 
                 switch (editMode)
