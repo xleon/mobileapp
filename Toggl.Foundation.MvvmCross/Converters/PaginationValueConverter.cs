@@ -4,11 +4,11 @@ using MvvmCross.Platform.Converters;
 
 namespace Toggl.Foundation.MvvmCross.Converters
 {
-    public sealed class PaginationConverter<T> : MvxValueConverter<int, T>
+    public sealed class PaginationValueConverter<T> : MvxValueConverter<int, T>
     {
         private T[] pages;
 
-        public PaginationConverter(T[] pages)
+        public PaginationValueConverter(T[] pages)
         {
             this.pages = pages;
         }

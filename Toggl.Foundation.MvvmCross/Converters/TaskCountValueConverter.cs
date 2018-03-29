@@ -6,7 +6,7 @@ using Toggl.Multivac;
 namespace Toggl.Foundation.MvvmCross.Converters
 {
     [Preserve(AllMembers = true)]
-    public sealed class TaskCountConverter : MvxValueConverter<int, string>
+    public sealed class TaskCountValueConverter : MvxValueConverter<int, string>
     {
         protected override string Convert(int value, Type targetType, object parameter, CultureInfo culture)
         {

@@ -48,7 +48,7 @@ namespace Toggl.Daneel.ViewControllers
             var colorConverter = new MvxNativeColorValueConverter();
             var bindingSet = this.CreateBindingSet<OnboardingViewController, OnboardingViewModel>();
 
-            var pagedBackgroundImageColorConverter = new PaginationConverter<UIImage>(new[]
+            var pagedBackgroundImageColorConverter = new PaginationValueConverter<UIImage>(new[]
             {
                 UIImage.FromBundle("bgNoiseBlue"),
                 UIImage.FromBundle("bgNoisePurple"),
