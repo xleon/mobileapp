@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Android.Content;
 using Android.Views;
+using Android.Views.InputMethods;
 
 namespace Toggl.Giskard.Extensions
 {
@@ -14,5 +16,13 @@ namespace Toggl.Giskard.Extensions
 
         public static IEnumerable<T> GetChildren<T>(this ViewGroup view) 
             => view.GetChildren().OfType<T>();
+
+        public static void RemoveFocus(this View view) 
+        {
+            view.ClearFocus();
+
+            var service = (InputMethodManager)view.Context.GetSystemService(Context.InputMethodService);
+            service.HideSoftInputFromWindow(view.WindowToken, 0);
+        }
     }
 }

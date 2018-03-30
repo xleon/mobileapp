@@ -682,5 +682,17 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("TryLoggingInInstead", resourceCulture);
             }
         }
+        
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        public static string Done {
+            get {
+                return ResourceManager.GetString("Done", resourceCulture);
+            }
+        }
     }
 }

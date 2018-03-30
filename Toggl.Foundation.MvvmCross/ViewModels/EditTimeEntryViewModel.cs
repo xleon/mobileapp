@@ -58,6 +58,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public string Description { get; set; }
 
+        [DependsOn(nameof(IsEditingDescription))]
+        public string ConfirmButtonText => IsEditingDescription ? Resources.Done : Resources.Save;
+
+        public bool IsEditingDescription { get; set; }
+
         [DependsOn(nameof(Description))]
         public int DescriptionRemainingLength
             => MaxTimeEntryDescriptionLengthInBytes - Description.LengthInBytes();
@@ -73,8 +78,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public string Client { get; set; }
 
         public string Task { get; set; }
-
-        public bool AllowsBillableRates { get; private set; }
 
         public bool IsBillableAvailable { get; private set; }
 
@@ -227,6 +230,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SyncErrorMessage = timeEntry.LastSyncErrorMessage;
             workspaceId = timeEntry.WorkspaceId;
             SyncErrorMessageVisible = !string.IsNullOrEmpty(SyncErrorMessage);
+            IsEditingDescription = true;
 
             onTags(timeEntry.Tags);
             foreach (var tagId in timeEntry.TagIds)
@@ -268,6 +272,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void onDeleteError(Exception exception) { }
 
         private void confirm()
+        {
+            if (IsEditingDescription)
+            {
+                IsEditingDescription = false;
+                return;
+            }
+
+            save();
+        }
+
+        private void save()
         {
             var dto = new EditTimeEntryDto
             {
@@ -482,7 +497,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task updateFeaturesAvailability()
         {
-            AllowsBillableRates = await interactorFactory.WorkspaceAllowsBillableRates(workspaceId).Execute();
             IsBillableAvailable = await interactorFactory.IsBillableAvailableForWorkspace(workspaceId).Execute();
         }
     }
