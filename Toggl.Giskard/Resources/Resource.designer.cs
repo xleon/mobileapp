@@ -4652,13 +4652,13 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c00c1
 			public const int EditDurationBottomBorder = 2131493057;
-			
+
 			// aapt resource value: 0x7f0c00bd
 			public const int EditEndTimeLabel = 2131493053;
 			
 			// aapt resource value: 0x7f0c00bb
 			public const int EditEndValueLabel = 2131493051;
-			
+
 			// aapt resource value: 0x7f0c00bc
 			public const int EditEndValueSetLabel = 2131493052;
 			
@@ -4703,7 +4703,7 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c00c8
 			public const int EditProjectWorkspaceImage = 2131493064;
-			
+
 			// aapt resource value: 0x7f0c00b9
 			public const int EditStartTimeLabel = 2131493049;
 			
@@ -4731,6 +4731,9 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0c00a5
 			public const int EditTimeEntryDescriptionTextField = 2131493029;
 
+			// aapt resource value: 0x7f0c00c1
+			public const int EditTimeEntryDurationLabel = 2131493057;
+      
 			// aapt resource value: 0x7f0c00b7
 			public const int EditTimeLeftPart = 2131493047;
 			
@@ -4871,7 +4874,7 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c0102
 			public const int ReportsSummaryTotalLabel = 2131493122;
-			
+
 			// aapt resource value: 0x7f0c003f
 			public const int SHIFT = 2131492927;
 			
@@ -4901,7 +4904,7 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c0114
 			public const int SelectTagsBackIcon = 2131493140;
-			
+
 			// aapt resource value: 0x7f0c00cd
 			public const int SelectWorkspaceContainer = 2131493069;
       
@@ -4919,7 +4922,7 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c011d
 			public const int StartTimeEntryProjectCellCaret = 2131493149;
-			
+
 			// aapt resource value: 0x7f0c0093
 			public const int StartTimeEntryProjectCellFade = 2131493011;
 			
@@ -5027,7 +5030,7 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c0064
 			public const int action_mode_close_button = 2131492964;
-			
+
 			// aapt resource value: 0x7f0c00ee
 			public const int action_text = 2131493102;
 			
@@ -5072,7 +5075,7 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c006b
 			public const int buttonPanel = 2131492971;
-		
+
 			// aapt resource value: 0x7f0c00f0
 			public const int cancel_action = 2131493104;
 
@@ -5087,7 +5090,7 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c007b
 			public const int checkbox = 2131492987;
-			
+
 			// aapt resource value: 0x7f0c00f8
 			public const int chronometer = 2131493112;
 
@@ -5204,7 +5207,7 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c0067
 			public const int image = 2131492967;
-			
+
 			// aapt resource value: 0x7f0c00f9
 			public const int info = 2131493113;
 
@@ -5273,7 +5276,7 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c00f4
 			public const int notification_main_column_container = 2131493108;
-			
+
 			// aapt resource value: 0x7f0c0054
 			public const int parallax = 2131492948;
 			
@@ -5303,7 +5306,7 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f0c00f6
 			public const int right_side = 2131493110;
-			
+
 			// aapt resource value: 0x7f0c000c
 			public const int save_image_matrix = 2131492876;
 			
@@ -5444,7 +5447,7 @@ namespace Toggl.Giskard
 
 			// aapt resource value: 0x7f0c00f7
 			public const int time = 2131493111;
-			
+
 			// aapt resource value: 0x7f0c001b
 			public const int title = 2131492891;
 			
@@ -5490,8 +5493,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0c0016
 			public const int view_offset_helper = 2131492886;
 			
-			// aapt resource value: 0x7f0c0123
-			public const int visible = 2131493155;
+			// aapt resource value: 0x7f0c0124
+			public const int visible = 2131493156;
 
 			// aapt resource value: 0x7f0c0023
 			public const int wide = 2131492899;
@@ -5967,6 +5970,9 @@ namespace Toggl.Giskard
 			
 			// aapt resource value: 0x7f08004e
 			public const int Done = 2131230798;
+			
+			// aapt resource value: 0x7f08006a
+			public const int Duration = 2131230826;
 			
 			// aapt resource value: 0x7f080063
 			public const int DurationFormat = 2131230819;
