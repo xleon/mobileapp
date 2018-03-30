@@ -377,11 +377,38 @@
                 android:layout_alignTop="@id/EditDateIcon"
                 android:layout_toRightOf="@id/EditDateIcon" />
             <View
+                android:id="@+id/EditDateValueBottomBorder"
                 android:background="@color/separator"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="56dp"
                 android:layout_width="match_parent"
                 android:layout_below="@id/EditDateValueLabel" />
+            <ImageView
+                android:id="@+id/EditTimeEntryDeleteIcon"
+                local:MvxBind="Click DeleteCommand"
+                android:scaleType="center"
+                android:src="@drawable/delete"
+                android:layout_width="56dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/EditDateValueBottomBorder" />
+            <TextView
+                android:id="@+id/EditTimeEntryDeleteLabel"
+                local:MvxBind="Click DeleteCommand"
+                android:text="@string/DeleteEntry"
+                android:textSize="15sp"
+                android:gravity="center_vertical"
+                android:textColor="@color/errorText"
+                android:background="?attr/selectableItemBackground"
+                android:layout_height="48dp"
+                android:layout_width="match_parent"
+                android:layout_alignTop="@id/EditTimeEntryDeleteIcon"
+                android:layout_toRightOf="@id/EditTimeEntryDeleteIcon" />
+            <View
+                android:background="@color/separator"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="56dp"
+                android:layout_width="match_parent"
+                android:layout_below="@id/EditTimeEntryDeleteLabel" />
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>
