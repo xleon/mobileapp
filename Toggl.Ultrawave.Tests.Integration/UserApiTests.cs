@@ -305,10 +305,11 @@ namespace Toggl.Ultrawave.Tests.Integration
                     .SignUpWithGoogle(notAToken)
                     .Wait();
 
-                signUp.ShouldThrow<BadRequestException>();
+                signUp.ShouldThrow<UnauthorizedException>();
             }
 
-            public void FailsWHenTheGoogleTokenParameterIsAnInvalidJWT()
+            [Fact, LogTestInfo]
+            public void FailsWhenTheGoogleTokenParameterIsAnInvalidJWT()
             {
                 var jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ";
 
@@ -317,7 +318,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                     .SignUpWithGoogle(jwt)
                     .Wait();
 
-                signUp.ShouldThrow<BadRequestException>();
+                signUp.ShouldThrow<UnauthorizedException>();
             }
         }
 
