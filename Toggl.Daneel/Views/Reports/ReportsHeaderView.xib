@@ -184,7 +184,7 @@
                         <constraint firstAttribute="height" constant="127" id="zK5-L7-sb3"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CCY-m1-lmD">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CCY-m1-lmD" userLabel="Separator">
                     <rect key="frame" x="0.0" y="175" width="375" height="1"/>
                     <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
@@ -253,7 +253,7 @@ the selected time period.</string>
                         <constraint firstAttribute="bottom" secondItem="HT1-Ki-ody" secondAttribute="bottom" id="zQ8-St-i6n"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="crX-KG-Rz2">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="crX-KG-Rz2" userLabel="Bottom Separator">
                     <rect key="frame" x="0.0" y="534" width="375" height="1"/>
                     <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>

@@ -60,7 +60,7 @@
                     <rect key="frame" x="0.0" y="100.5" width="375" height="566.5"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fpE-1M-0Da">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fpE-1M-0Da" userLabel="Separator">
                     <rect key="frame" x="0.0" y="100.5" width="375" height="1"/>
                     <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
