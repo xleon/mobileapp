@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:background="@color/toolbarBlack"
     android:orientation="vertical"
+    android:animateLayoutChanges="true"
     android:layout_width="match_parent"
-    android:layout_height="400dp">
+    android:layout_height="wrap_content">
     <TextView
         local:MvxBind="Text Format('{0} {1}', IntToMonthName(CurrentMonth.Month), CurrentMonth.Year)"
         tools:text="May 2018"
@@ -21,6 +22,7 @@
         android:id="@+id/ReportsCalendarFragmentHeader"
         android:orientation="horizontal"
         android:layout_height="16dp"
+        android:layout_marginBottom="16dp"
         android:layout_width="match_parent">
         <TextView
             android:textSize="14sp"
@@ -82,8 +84,7 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/ReportsCalendarFragmentViewPager"
         local:MvxBind="CurrentPage CurrentPage"
-        android:layout_height="255dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:minHeight="225dp"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent" />
 </LinearLayout>

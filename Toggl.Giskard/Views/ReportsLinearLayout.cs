@@ -23,21 +23,19 @@ namespace Toggl.Giskard.Views
         private int negativeContainerHeight;
         private readonly GestureDetector gestureDetector;
 
-        internal View CalendarContainer 
+        internal View CalendarContainer
         {
             get => calendarContainer;
             set
             {
                 calendarContainer = value;
 
-                value.Post(onContainerChanged);
+                value.Post(() =>
+                {
+                    negativeContainerHeight = -calendarContainer.Height;
+                    animateCalendar(true, true);
+                });
             }
-        }
-
-        private void onContainerChanged()
-        {
-            negativeContainerHeight = -calendarContainer.Height;
-            animateCalendar(true, true);
         }
 
         public ReportsLinearLayout(IntPtr javaReference, JniHandleOwnership transfer)
@@ -68,6 +66,22 @@ namespace Toggl.Giskard.Views
             animateCalendar(forceHide, false);
         }
 
+        internal void RecalculateCalendarHeight()
+        {
+            Post(() =>
+            {
+                negativeContainerHeight = -calendarContainer.Height;
+
+                var marginParams = CalendarContainer.LayoutParameters as MarginLayoutParams;
+                var calendarIsTotallyVisible = marginParams.TopMargin == 0;
+                if (calendarIsTotallyVisible)
+                    return;
+
+                marginParams.TopMargin = negativeContainerHeight;
+                CalendarContainer.LayoutParameters = marginParams;
+            });
+        }
+
         public override bool OnInterceptTouchEvent(MotionEvent ev)
         {
             if (ev.Action == Down)
@@ -83,7 +97,7 @@ namespace Toggl.Giskard.Views
             var marginParams = CalendarContainer.LayoutParameters as MarginLayoutParams;
 
             var calendarIsTotallyVisible = marginParams.TopMargin == 0;
-            var calendarIsTotallyHidden = marginParams.TopMargin == negativeContainerHeight;
+            var calendarIsTotallyHidden = marginParams.TopMargin <= negativeContainerHeight;
             var offsetY = ev.RawY - currentY;
             var offsetX = ev.RawX - currentX;
 
@@ -118,7 +132,7 @@ namespace Toggl.Giskard.Views
 
                     var newY = e.RawY;
                     var offset = newY - currentY;
-                    currentY = newY; 
+                    currentY = newY;
 
                     var marginParams = CalendarContainer.LayoutParameters as MarginLayoutParams;
                     var calendarIsTotallyVisible = marginParams.TopMargin == 0;
@@ -146,7 +160,7 @@ namespace Toggl.Giskard.Views
 
         public bool OnFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
         {
-            if (velocityY <= flingVelocityThreshold)
+            if (Math.Abs(velocityY) > Math.Abs(velocityX) && velocityY <= flingVelocityThreshold)
             {
                 animateCalendar(true, true);
                 return true;

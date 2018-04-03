@@ -35,5 +35,10 @@ namespace Toggl.Giskard.Activities
         {
             reportsMainContainer.ToggleCalendar(forceHide);
         }
+
+        internal void RecalculateCalendarHeight()
+        {
+            reportsMainContainer.RecalculateCalendarHeight();
+        }
     }
 }

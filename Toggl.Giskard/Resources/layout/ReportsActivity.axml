@@ -17,8 +17,8 @@
         <FrameLayout
             android:id="@+id/ReportsCalendarContainer"
             android:background="@color/toolbarBlack"
-            android:layout_height="400dp"
-            android:layout_marginTop="-400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-500dp"
             android:layout_width="match_parent" />
         <toggl.giskard.views.ReportsRecyclerView
             android:id="@+id/ReportsActivityRecyclerView"
