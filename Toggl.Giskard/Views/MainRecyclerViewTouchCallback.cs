@@ -34,7 +34,7 @@ namespace Toggl.Giskard.Views
                 .Select(color => new ColorDrawable(color))
                 .ToArray();
 
-            textMargin = (int)16.DpToPixels(context);
+            textMargin = 16.DpToPixels(context);
 
             textPaint.Color = Color.White;
             textPaint.TextAlign = Paint.Align.Left;

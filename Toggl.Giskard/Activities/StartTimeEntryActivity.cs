@@ -37,7 +37,7 @@ namespace Toggl.Giskard.Activities
 
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
 
-            durationCardYOffset = (int)144.DpToPixels(this);
+            durationCardYOffset = 144.DpToPixels(this);
             durationCard = FindViewById(Resource.Id.StartTimeEntryDurationCard);
             durationCardAnimatedViews = new[] { FindViewById(Resource.Id.StartTimeEntryDoneButton), durationCard };
 

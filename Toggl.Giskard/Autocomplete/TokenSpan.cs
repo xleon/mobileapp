@@ -23,8 +23,8 @@ namespace Toggl.Giskard.Autocomplete
         {
             var context = Mvx.Resolve<IMvxAndroidGlobals>().ApplicationContext;
 
-            tokenHeight = (int)24.DpToPixels(context);
-            padding = margin = cornerRadius = (int)6.DpToPixels(context);
+            tokenHeight = 24.DpToPixels(context);
+            padding = margin = cornerRadius = 6.DpToPixels(context);
             halfPadding = padding / 2.0f;
         }
 

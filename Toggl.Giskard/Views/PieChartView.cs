@@ -11,14 +11,13 @@ using MvvmCross.Platform.UI;
 using MvvmCross.Plugins.Color.Droid;
 using Toggl.Foundation.Reports;
 using Toggl.Giskard.Extensions;
-using static Toggl.Multivac.Math;
 
 namespace Toggl.Giskard.Views
 {
     [Register("toggl.giskard.views.PieChartView")]
     public sealed class PieChartView : View
     {
-        private float padding;
+        private int padding;
         private const float fullCircle = 360.0f;
         private const double radToDegree = 180 / Math.PI;
         private readonly TextPaint textPaint = new TextPaint();
