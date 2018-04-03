@@ -41,7 +41,7 @@ namespace Toggl.Giskard.Converters
     public sealed class CreateProjectButtonColorValueConverter : BoolToConstantValueConverter<Color>
     {
         public CreateProjectButtonColorValueConverter()
-            : base(Color.ParseColor("#328fff"), new Color(ColorUtils.SetAlphaComponent(Color.ParseColor("#328fff").ToArgb(), 127))) { }
+            : base(Color.White, new Color(ColorUtils.SetAlphaComponent(Color.White, 127))) { }
     }
 
     public sealed class ReportsChartColorValueConverter : BoolToConstantValueConverter<Color>
