@@ -14,7 +14,7 @@
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="1" customClass="ReportsHeaderView">
             <rect key="frame" x="0.0" y="0.0" width="375" height="535"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qPk-V7-gUb">
                     <rect key="frame" x="16" y="24" width="343" height="127"/>
@@ -268,8 +268,8 @@ the selected time period.</string>
                 <constraint firstItem="tpc-Wf-lB4" firstAttribute="centerX" secondItem="qPk-V7-gUb" secondAttribute="centerX" id="5cX-8m-9Fx"/>
                 <constraint firstItem="crX-KG-Rz2" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="6JX-mY-on7"/>
                 <constraint firstItem="CCY-m1-lmD" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="6YX-3o-jMS"/>
-                <constraint firstAttribute="trailing" secondItem="BGP-SH-dFd" secondAttribute="trailing" constant="32" id="81U-Kg-2Oj"/>
                 <constraint firstAttribute="bottom" secondItem="crX-KG-Rz2" secondAttribute="bottom" id="9Vs-Qj-rDV"/>
+                <constraint firstItem="BGP-SH-dFd" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="A8f-BR-kjC"/>
                 <constraint firstItem="CCY-m1-lmD" firstAttribute="top" secondItem="qPk-V7-gUb" secondAttribute="bottom" constant="24" id="Fb0-p2-TW2"/>
                 <constraint firstAttribute="trailing" secondItem="crX-KG-Rz2" secondAttribute="trailing" id="Gby-gw-I4S"/>
                 <constraint firstItem="tpc-Wf-lB4" firstAttribute="height" secondItem="qPk-V7-gUb" secondAttribute="height" id="JKG-Ao-FOb"/>
@@ -278,13 +278,17 @@ the selected time period.</string>
                 <constraint firstAttribute="trailing" secondItem="L3q-fe-0ae" secondAttribute="trailing" id="P4N-he-CeN"/>
                 <constraint firstAttribute="bottom" secondItem="nZs-8E-xY9" secondAttribute="bottom" id="VGA-pZ-XI3"/>
                 <constraint firstItem="nZs-8E-xY9" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="XqN-5b-wLy"/>
+                <constraint firstItem="L3q-fe-0ae" firstAttribute="top" secondItem="qPk-V7-gUb" secondAttribute="bottom" constant="25" id="aji-tt-afw"/>
+                <constraint firstAttribute="bottom" secondItem="BGP-SH-dFd" secondAttribute="bottom" constant="24" id="d8H-vQ-R2r"/>
                 <constraint firstItem="qPk-V7-gUb" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="16" id="fU5-oX-HHc"/>
                 <constraint firstItem="L3q-fe-0ae" firstAttribute="top" secondItem="CCY-m1-lmD" secondAttribute="bottom" id="fk2-fH-31w"/>
-                <constraint firstItem="BGP-SH-dFd" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="32" id="prc-T3-SpP"/>
+                <constraint firstItem="nZs-8E-xY9" firstAttribute="top" secondItem="qPk-V7-gUb" secondAttribute="bottom" constant="25" id="hqV-ST-xCF"/>
                 <constraint firstItem="qPk-V7-gUb" firstAttribute="top" secondItem="1" secondAttribute="top" constant="24" id="rZA-s4-amh"/>
                 <constraint firstItem="tpc-Wf-lB4" firstAttribute="baseline" secondItem="qPk-V7-gUb" secondAttribute="baseline" id="uMW-gI-XB0"/>
+                <constraint firstItem="L3q-fe-0ae" firstAttribute="top" secondItem="tpc-Wf-lB4" secondAttribute="bottom" constant="25" id="uaY-de-w7S"/>
                 <constraint firstItem="nZs-8E-xY9" firstAttribute="top" secondItem="CCY-m1-lmD" secondAttribute="bottom" id="vok-GV-Y77"/>
                 <constraint firstAttribute="trailing" secondItem="CCY-m1-lmD" secondAttribute="trailing" id="wnQ-do-EcG"/>
+                <constraint firstItem="nZs-8E-xY9" firstAttribute="top" secondItem="tpc-Wf-lB4" secondAttribute="bottom" constant="25" id="xPK-9L-6rg"/>
                 <constraint firstItem="BGP-SH-dFd" firstAttribute="top" secondItem="CCY-m1-lmD" secondAttribute="bottom" constant="24" id="xQl-m8-OhD"/>
                 <constraint firstItem="tpc-Wf-lB4" firstAttribute="width" secondItem="qPk-V7-gUb" secondAttribute="width" id="zVo-i8-7Df"/>
             </constraints>
