@@ -234,6 +234,8 @@ namespace Toggl.Foundation.MvvmCross.Helper
 
             public static readonly MvxColor TotalTimeActivated = new MvxColor(76, 217, 100);
 
+            public static readonly MvxColor DayNotInMonth = new MvxColor(149, 149, 149);
+
             public static readonly MvxColor Disabled = new MvxColor(181, 188, 192);
 
             public static class Loading

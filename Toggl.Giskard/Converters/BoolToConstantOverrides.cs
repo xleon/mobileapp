@@ -60,4 +60,9 @@ namespace Toggl.Giskard.Converters
     {
         public ManualModeEnabledDrawableValueConverter() : base(Resource.Drawable.add_white, Resource.Drawable.play_white) { }
     }
+
+    public sealed class CalendarDayColorValueConverter : BoolToConstantValueConverter<Color>
+    {
+        public CalendarDayColorValueConverter() : base (Color.White, Reports.DayNotInMonth.ToAndroidColor()) { }
+    }
 }

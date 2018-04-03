@@ -17,7 +17,7 @@ using Toggl.Giskard.Extensions;
 using Toggl.Multivac.Extensions;
 
 namespace Toggl.Giskard.Fragments
-{
+{   
     [MvxFragmentPresentation(typeof(ReportsViewModel), Resource.Id.ReportsCalendarContainer, AddToBackStack = false)]
     public sealed class ReportsCalendarFragment : MvxFragment<ReportsCalendarViewModel>
     {
