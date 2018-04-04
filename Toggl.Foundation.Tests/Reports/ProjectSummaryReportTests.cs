@@ -51,7 +51,7 @@ namespace Toggl.Foundation.Tests.Reports
             }
 
             private ChartSegment getSegmentFromDurationAndIndex(int index, int trackedSeconds)
-                => new ChartSegment("", 0, trackedSeconds, index % 2 == 0 ? trackedSeconds : 0, "#FFFFFF");
+                => new ChartSegment("", "", 0, trackedSeconds, index % 2 == 0 ? trackedSeconds : 0, "#FFFFFF");
         }
     }
 }

@@ -104,10 +104,10 @@ namespace Toggl.Daneel.Views.Reports
             prepareCard(OverviewCardView);
             prepareCard(LoadingCardView);
 
-            TotalTitleLabel.AttributedText = prepareKerning(TotalTitleLabel.Text, -0.2);
-            TotalDurationLabel.AttributedText = prepareKerning(TotalDurationLabel.Text, -0.2);
-            BillableTitleLabel.AttributedText = prepareKerning(BillableTitleLabel.Text, -0.2);
-            BillablePercentageLabel.AttributedText = prepareKerning(BillablePercentageLabel.Text, -0.2);
+            TotalTitleLabel.SetKerning(-0.2);
+            TotalDurationLabel.SetKerning(-0.2);
+            BillableTitleLabel.SetKerning(-0.2);
+            BillablePercentageLabel.SetKerning(-0.2);
         }
 
         private void prepareCard(UIView view)
@@ -117,15 +117,6 @@ namespace Toggl.Daneel.Views.Reports
             view.Layer.ShadowRadius = 16;
             view.Layer.ShadowOffset = new CGSize(0, 2);
             view.Layer.ShadowOpacity = 0.1f;
-        }
-
-        private NSAttributedString prepareKerning(string text, double letterSpacing)
-        {
-            var attributedText = new NSMutableAttributedString(text);
-            var range = new NSRange(0, text.Length - 1);
-
-            attributedText.AddAttribute(UIStringAttributeKey.KerningAdjustment, new NSNumber(letterSpacing), range);
-            return attributedText;
         }
     }
 }

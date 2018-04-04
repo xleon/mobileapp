@@ -15,12 +15,17 @@ namespace Toggl.Foundation.Reports
 
         public string ProjectName { get; }
 
+        public string ClientName { get; }
+
+        public bool HasClient => !string.IsNullOrEmpty(ClientName);
+
         public string Color { get; }
 
         public DurationFormat DurationFormat { get; set; }
 
         public ChartSegment(
             string projectName,
+            string clientName,
             float percentage,
             float trackedSeconds,
             float billableSeconds,
@@ -28,6 +33,7 @@ namespace Toggl.Foundation.Reports
             DurationFormat durationFormat = DurationFormat.Improved)
         {
             ProjectName = projectName;
+            ClientName = clientName;
             Color = color;
             Percentage = percentage;
             TrackedTime = TimeSpan.FromSeconds(trackedSeconds);
@@ -43,6 +49,7 @@ namespace Toggl.Foundation.Reports
         public static ChartSegment WithDurationFormat(this ChartSegment segment, DurationFormat durationFormat)
             => new ChartSegment(
                 segment.ProjectName,
+                segment.ClientName,
                 segment.Percentage,
                 (float)segment.TrackedTime.TotalSeconds,
                 segment.BillableSeconds,
