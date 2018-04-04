@@ -64,20 +64,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             protected override StartTimeEntryViewModel CreateViewModel()
-                => new StartTimeEntryViewModel(TimeService, DataSource, DialogService, UserPreferences, InteractorFactory, NavigationService);
+                => new StartTimeEntryViewModel(TimeService, DataSource, DialogService, UserPreferences, InteractorFactory, NavigationService, OnboardingStorage);
         }
 
         public sealed class TheConstructor : StartTimeEntryViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(SixParameterConstructorTestData))]
+            [ClassData(typeof(SevenParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource, 
                 bool useTimeService, 
                 bool useDialogService,
                 bool useUserPreferences,
                 bool useInteractorFactory,
-                bool useNavigationService)
+                bool useNavigationService,
+                bool useOnboardingStorage)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
@@ -85,9 +86,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var navigationService = useNavigationService ? NavigationService : null;
+                var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new StartTimeEntryViewModel(timeService, dataSource, dialogService, userPreferences, interactorFactory, navigationService);
+                    () => new StartTimeEntryViewModel(timeService, dataSource, dialogService, userPreferences, interactorFactory, navigationService, onboardingStorage);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();

@@ -171,13 +171,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand<ProjectSuggestion> ToggleTaskSuggestionsCommand { get; }
 
+        public IOnboardingStorage OnboardingStorage { get; }
+
         public StartTimeEntryViewModel(
             ITimeService timeService,
             ITogglDataSource dataSource,
             IDialogService dialogService,
             IUserPreferences userPreferences,
             IInteractorFactory interactorFactory,
-            IMvxNavigationService navigationService)
+            IMvxNavigationService navigationService,
+            IOnboardingStorage onboardingStorage)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
@@ -185,6 +188,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
+            Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
@@ -192,6 +196,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.userPreferences = userPreferences;
             this.navigationService = navigationService;
             this.interactorFactory = interactorFactory;
+
+            OnboardingStorage = onboardingStorage;
 
             BackCommand = new MvxAsyncCommand(back);
             DoneCommand = new MvxAsyncCommand(done);

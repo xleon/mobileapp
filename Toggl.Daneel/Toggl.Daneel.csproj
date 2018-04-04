@@ -429,6 +429,10 @@
     <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\doneGreen.png" />
     <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\doneGreen%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\doneGreen%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icCheckGrey.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icCheckGrey.imageset\icCheckGrey.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icCheckGrey.imageset\icCheckGrey%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icCheckGrey.imageset\icCheckGrey%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -837,6 +841,7 @@
     <Compile Include="Binding\ViewVisibilityWithFadeTargetBinding.cs" />
     <Compile Include="Binding\ImageViewAnimatedImageTargetBinding.cs" />
     <Compile Include="Onboarding\MainView\StartTimeEntryOnboardingStep.cs" />
+    <Compile Include="Onboarding\CreationView\DisabledConfirmationButtonOnboardingStep.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
@@ -895,6 +900,7 @@
     <Folder Include="ViewControllers\Settings\" />
     <Folder Include="Onboarding\" />
     <Folder Include="Onboarding\MainView\" />
+    <Folder Include="Onboarding\CreationView\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />
