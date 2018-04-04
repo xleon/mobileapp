@@ -245,6 +245,11 @@ namespace Toggl.Foundation.MvvmCross.Helper
                 public static readonly MvxColor DarkColor = new MvxColor(236, 240, 242);
             }
         }
+
+        public static class Licenses
+        {
+            public static readonly MvxColor Border = new MvxColor(232, 232, 232);
+        }
       
         public static readonly MvxColor[] DefaultProjectColors =
             Toggl.Foundation.Helper.Color.DefaultProjectColors.Select(MvxColor.ParseHexString).ToArray();

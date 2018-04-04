@@ -634,7 +634,7 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("DiscardEditingChanges", resourceCulture);
             }
         }
-
+        
         public static string DurationFormatClassic {
             get {
                 return ResourceManager.GetString("DurationFormatClassic", resourceCulture);
@@ -680,6 +680,18 @@ namespace Toggl.Foundation {
         public static string TryLoggingInInstead {
             get {
                 return ResourceManager.GetString("TryLoggingInInstead", resourceCulture);
+            }
+        }
+        
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        public static string Licenses {
+            get {
+                return ResourceManager.GetString("Licenses", resourceCulture);
             }
         }
         

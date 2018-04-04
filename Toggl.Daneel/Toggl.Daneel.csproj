@@ -437,7 +437,6 @@
     <InterfaceDefinition Include="ViewControllers\MainViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\EditTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\StartTimeEntryViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\SettingsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\EditDurationViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectProjectViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectDateTimeViewController.xib" />
@@ -479,6 +478,11 @@
     <InterfaceDefinition Include="Views\Settings\DurationFormatViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectBeginningOfWeekViewController.xib" />
     <InterfaceDefinition Include="Views\Settings\DayOfWeekViewCell.xib" />
+    <InterfaceDefinition Include="Views\Settings\LicensesHeaderViewCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\LicensesViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\SettingsViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\AboutViewController.xib" />
+    <InterfaceDefinition Include="Views\Settings\LicensesViewCell.xib" />
     <InterfaceDefinition Include="Views\Log\TimeEntriesEmptyLogView.xib" />
     <InterfaceDefinition Include="Views\Log\TimeEntryMockView.xib" />
   </ItemGroup>
@@ -541,10 +545,6 @@
     <Compile Include="ViewControllers\EditTimeEntryViewController.cs" />
     <Compile Include="ViewControllers\EditTimeEntryViewController.designer.cs">
       <DependentUpon>EditTimeEntryViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\SettingsViewController.cs" />
-    <Compile Include="ViewControllers\SettingsViewController.designer.cs">
-      <DependentUpon>SettingsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\FontExtensions.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
@@ -812,6 +812,27 @@
     </Compile>
     <Compile Include="Extensions\OnboardingExtensions.cs" />
     <Compile Include="Converters\TimeFormatToLocaleValueConverter.cs" />
+    <Compile Include="Views\Settings\LicensesHeaderViewCell.cs" />
+    <Compile Include="Views\Settings\LicensesHeaderViewCell.designer.cs">
+      <DependentUpon>LicensesHeaderViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\LicensesViewController.cs" />
+    <Compile Include="ViewControllers\Settings\LicensesViewController.designer.cs">
+      <DependentUpon>LicensesViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\SettingsViewController.cs" />
+    <Compile Include="ViewControllers\Settings\SettingsViewController.designer.cs">
+      <DependentUpon>SettingsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\AboutViewController.cs" />
+    <Compile Include="ViewControllers\Settings\AboutViewController.designer.cs">
+      <DependentUpon>AboutViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\LicensesViewCell.cs" />
+    <Compile Include="Views\Settings\LicensesViewCell.designer.cs">
+      <DependentUpon>LicensesViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSources\LicensesTableViewSource.cs" />
     <Compile Include="Binding\ViewVisibilityWithFadeTargetBinding.cs" />
     <Compile Include="Binding\ImageViewAnimatedImageTargetBinding.cs" />
     <Compile Include="Onboarding\MainView\StartTimeEntryOnboardingStep.cs" />
@@ -870,6 +891,7 @@
     <Folder Include="Resources\Images.xcassets\icIllustrationProjectsSmall.imageset\" />
     <Folder Include="Views\Settings\" />
     <Folder Include="Resources\Images.xcassets\.imageset\" />
+    <Folder Include="ViewControllers\Settings\" />
     <Folder Include="Onboarding\" />
     <Folder Include="Onboarding\MainView\" />
   </ItemGroup>

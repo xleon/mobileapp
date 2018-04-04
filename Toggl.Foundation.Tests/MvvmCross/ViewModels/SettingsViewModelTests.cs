@@ -10,6 +10,7 @@ using NSubstitute;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.Settings;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
@@ -591,6 +592,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.DurationFormat.Should().Be(preferences.DurationFormat);
             }
 
+            [Fact, LogIfTooSlow]
+            public async Task InitializesVersion()
+            {
+                await ViewModel.Initialize();
+
+                ViewModel.Version.Should().Be(UserAgent.Version);
+            }
+
             private IDatabasePreferences createPreferences()
             {
                 var preferences = Substitute.For<IDatabasePreferences>();
@@ -897,6 +906,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.SelectBeginningOfWeekCommand.ExecuteAsync();
 
                 ViewModel.BeginningOfWeek.Should().Be(newBeginningOfWeek);
+            }
+        }
+
+        public sealed class TheAboutCommand : SettingsViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task NavigatesToTheAboutPage()
+            {
+                await ViewModel.AboutCommand.ExecuteAsync();
+
+                await NavigationService.Received().Navigate<AboutViewModel>();
             }
         }
     }

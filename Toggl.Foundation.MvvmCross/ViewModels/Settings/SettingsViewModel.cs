@@ -10,6 +10,7 @@ using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Foundation.MvvmCross.ViewModels.Settings;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
@@ -170,6 +171,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             Email = user.Email;
             Name = user.Fullname;
+            Version = userAgent.Version;
             workspaceId = defaultWorkspace.Id;
             WorkspaceName = defaultWorkspace.Name;
             IsManualModeEnabled = userPreferences.IsManualModeEnabled();
@@ -365,10 +367,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             dataSource.SyncManager.PushSync();
         }
 
-        private async Task openAboutPage()
-        {
-            throw new NotImplementedException();
-        }
+        private Task openAboutPage()
+            => navigationService.Navigate<AboutViewModel>();
         
         private async Task selectDurationFormat()
         {

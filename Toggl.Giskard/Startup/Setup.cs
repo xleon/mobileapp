@@ -88,6 +88,7 @@ namespace Toggl.Giskard
                 new MailService(),
                 new GoogleService(),
                 environment,
+                new LicenseProvider(),
                 analyticsService,
                 new PlatformConstants(),
                 new ApplicationShortcutCreator(),

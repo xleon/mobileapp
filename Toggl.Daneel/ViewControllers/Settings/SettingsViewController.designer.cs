@@ -13,6 +13,9 @@ namespace Toggl.Daneel.ViewControllers
 	partial class SettingsViewController
 	{
 		[Outlet]
+		UIKit.UIView AboutView { get; set; }
+
+		[Outlet]
 		UIKit.UILabel BeginningOfWeekLabel { get; set; }
 
 		[Outlet]
@@ -104,6 +107,9 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIView TwentyFourHourClockView { get; set; }
 
 		[Outlet]
+		UIKit.UILabel VersionLabel { get; set; }
+
+		[Outlet]
 		UIKit.UILabel WorkspaceLabel { get; set; }
 
 		[Outlet]
@@ -111,6 +117,11 @@ namespace Toggl.Daneel.ViewControllers
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (AboutView != null) {
+				AboutView.Dispose ();
+				AboutView = null;
+			}
+
 			if (BeginningOfWeekLabel != null) {
 				BeginningOfWeekLabel.Dispose ();
 				BeginningOfWeekLabel = null;
@@ -186,6 +197,11 @@ namespace Toggl.Daneel.ViewControllers
 				LogoutButton = null;
 			}
 
+			if (LogoutContainerView != null) {
+				LogoutContainerView.Dispose ();
+				LogoutContainerView = null;
+			}
+
 			if (LogoutVerticalOffsetConstraint != null) {
 				LogoutVerticalOffsetConstraint.Dispose ();
 				LogoutVerticalOffsetConstraint = null;
@@ -199,6 +215,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (ManualModeView != null) {
 				ManualModeView.Dispose ();
 				ManualModeView = null;
+			}
+
+			if (ScrollView != null) {
+				ScrollView.Dispose ();
+				ScrollView = null;
 			}
 
 			if (SyncedIcon != null) {
@@ -261,14 +282,9 @@ namespace Toggl.Daneel.ViewControllers
 				WorkspaceView = null;
 			}
 
-			if (LogoutContainerView != null) {
-				LogoutContainerView.Dispose ();
-				LogoutContainerView = null;
-			}
-
-			if (ScrollView != null) {
-				ScrollView.Dispose ();
-				ScrollView = null;
+			if (VersionLabel != null) {
+				VersionLabel.Dispose ();
+				VersionLabel = null;
 			}
 		}
 	}

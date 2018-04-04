@@ -339,6 +339,12 @@ account is not set up</value>
     <data name="TryLoggingInInstead">     
         <value>Try logging in instead.</value>      
     </data>
+    <data name="About">
+        <value>About</value>      
+    </data>
+    <data name="Licenses">
+        <value>Licenses</value>
+    </data>
      <data name="Save">     
         <value>Save</value>      
     </data>

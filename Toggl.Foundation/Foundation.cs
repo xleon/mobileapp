@@ -23,6 +23,7 @@ namespace Toggl.Foundation
         public IMailService MailService { get; internal set; }
         public IGoogleService GoogleService { get; internal set; }
         public ApiEnvironment ApiEnvironment { get; internal set; }
+        public ILicenseProvider LicenseProvider { get; internal set; }
         public IAnalyticsService AnalyticsService { get; internal set; }
         public IApplicationShortcutCreator ShortcutCreator { get; internal set; }
         public IBackgroundService BackgroundService { get; internal set; }
@@ -38,6 +39,7 @@ namespace Toggl.Foundation
             IMailService mailService,
             IGoogleService googleService,
             ApiEnvironment apiEnvironment,
+            ILicenseProvider licenseProvider,
             IAnalyticsService analyticsService,
             IPlatformConstants platformConstants,
             IApplicationShortcutCreator shortcutCreator,
@@ -50,6 +52,7 @@ namespace Toggl.Foundation
             Ensure.Argument.IsNotNull(scheduler, nameof(scheduler));
             Ensure.Argument.IsNotNull(mailService, nameof(mailService));
             Ensure.Argument.IsNotNull(googleService, nameof(googleService));
+            Ensure.Argument.IsNotNull(licenseProvider, nameof(licenseProvider));
             Ensure.Argument.IsNotNull(shortcutCreator, nameof(shortcutCreator));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(platformConstants, nameof(platformConstants));
@@ -66,6 +69,7 @@ namespace Toggl.Foundation
                 MailService = mailService,
                 GoogleService = googleService,
                 ApiEnvironment = apiEnvironment,
+                LicenseProvider = licenseProvider,
                 Version = Version.Parse(version),
                 ShortcutCreator = shortcutCreator,
                 AnalyticsService = analyticsService,
