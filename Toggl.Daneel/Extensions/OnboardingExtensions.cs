@@ -1,6 +1,5 @@
 ﻿using System;
 using CoreGraphics;
-using Toggl.Daneel.Onboarding;
 using Toggl.PrimeRadiant.Onboarding;
 using UIKit;
 
@@ -31,5 +30,11 @@ namespace Toggl.Daneel.Extensions
             => step.ShouldBeVisible.Subscribe(
                 visible => UIApplication.SharedApplication.InvokeOnMainThread(
                     () => view.Hidden = !visible));
+
+        public static void DismissByTapping(this IDismissable step, UIView view)
+        {
+            var tapGestureRecognizer = new UITapGestureRecognizer(() => step.Dismiss());
+            view.AddGestureRecognizer(tapGestureRecognizer);
+        }
     }
 }

@@ -226,6 +226,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await NavigationService.DidNotReceive()
                     .Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(Arg.Any<StartTimeEntryParameters>());
             }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask MarksTheActionForOnboardingPurposes()
+            {
+                await ViewModel.StartTimeEntryCommand.ExecuteAsync();
+
+                OnboardingStorage.Received().StartButtonWasTapped();
+            }
         }
 
         public sealed class TheOpenSettingsCommand : MainViewModelTest
@@ -295,6 +303,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
 
                 await DataSource.SyncManager.Received().PushSync();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask MarksTheActionForOnboardingPurposes()
+            {
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+
+                OnboardingStorage.Received().StopButtonWasTapped();
             }
 
             [Fact, LogIfTooSlow]

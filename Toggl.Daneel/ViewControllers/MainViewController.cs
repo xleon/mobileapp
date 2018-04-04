@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters.Attributes;
+using MvvmCross.Platform.WeakSubscription;
 using MvvmCross.Plugins.Color;
 using MvvmCross.Plugins.Color.iOS;
 using MvvmCross.Plugins.Visibility;
@@ -44,7 +47,9 @@ namespace Toggl.Daneel.ViewControllers
         private readonly TimeEntriesEmptyLogView emptyStateView = TimeEntriesEmptyLogView.Create();
 
         private bool viewInitialized;
-        private IDisposable onboardingDisposable;
+        private IDisposable startButtonOnboardingDisposable;
+        private IDisposable stopButtonOnboardingDisposable;
+        private IDisposable currentTimeEntryDisposable;
 
         public MainViewController()
             : base(nameof(MainViewController), null)
@@ -210,8 +215,11 @@ namespace Toggl.Daneel.ViewControllers
             base.Dispose(disposing);
 
             if (!disposing) return;
+
             spiderBroView.Dispose();
-            onboardingDisposable.Dispose();
+            startButtonOnboardingDisposable.Dispose();
+            stopButtonOnboardingDisposable.Dispose();
+            currentTimeEntryDisposable.Dispose();
         }
 
         public override void ViewDidLayoutSubviews()
@@ -344,12 +352,21 @@ namespace Toggl.Daneel.ViewControllers
         {
             var onboardingStorage = ViewModel.OnboardingStorage;
 
-            var step = new StartTimeEntryOnboardingStep(onboardingStorage).ToDismissable(nameof(StartTimeEntryOnboardingStep), onboardingStorage);
+            var isRunningSubject = new BehaviorSubject<bool>(ViewModel.CurrentTimeEntryId.HasValue);
+            var isRunningObservable = isRunningSubject.AsObservable();
 
-            var tapOnStartButtonBubble = new UITapGestureRecognizer(() => step.Dismiss());
-            StartTimeEntryOnboardingBubbleView.AddGestureRecognizer(tapOnStartButtonBubble);
+            currentTimeEntryDisposable = ViewModel.WeakSubscribe(
+                () => ViewModel.CurrentTimeEntryId,
+                (sender, e) => isRunningSubject.OnNext(ViewModel.CurrentTimeEntryId.HasValue));
 
-            onboardingDisposable = step.ManageVisibilityOf(StartTimeEntryOnboardingBubbleView);
+            var startButtonStep = new StartTimeEntryOnboardingStep(onboardingStorage).ToDismissable(nameof(StartTimeEntryOnboardingStep), onboardingStorage);
+            var stopButtonStep = new StopTimeEntryOnboardingStep(onboardingStorage, isRunningObservable).ToDismissable(nameof(StopTimeEntryOnboardingStep), onboardingStorage);
+
+            startButtonStep.DismissByTapping(StartTimeEntryOnboardingBubbleView);
+            stopButtonStep.DismissByTapping(StopTimeEntryOnboardingBubbleView);
+
+            startButtonOnboardingDisposable = startButtonStep.ManageVisibilityOf(StartTimeEntryOnboardingBubbleView);
+            stopButtonOnboardingDisposable = stopButtonStep.ManageVisibilityOf(StopTimeEntryOnboardingBubbleView);
         }
 
         internal void Reload()

@@ -47,6 +47,9 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIButton StopTimeEntryButton { get; set; }
 
 		[Outlet]
+		UIKit.UIView StopTimeEntryOnboardingBubbleView { get; set; }
+
+		[Outlet]
 		UIKit.UITableView TimeEntriesLogTableView { get; set; }
 
 		[Outlet]
@@ -60,11 +63,6 @@ namespace Toggl.Daneel.ViewControllers
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (TopConstraint != null) {
-				TopConstraint.Dispose ();
-				TopConstraint = null;
-			}
-
 			if (CurrentTimeEntryCard != null) {
 				CurrentTimeEntryCard.Dispose ();
 				CurrentTimeEntryCard = null;
@@ -100,6 +98,16 @@ namespace Toggl.Daneel.ViewControllers
 				StartTimeEntryButton = null;
 			}
 
+			if (StartTimeEntryOnboardingBubbleView != null) {
+				StartTimeEntryOnboardingBubbleView.Dispose ();
+				StartTimeEntryOnboardingBubbleView = null;
+			}
+
+			if (StopTimeEntryOnboardingBubbleView != null) {
+				StopTimeEntryOnboardingBubbleView.Dispose ();
+				StopTimeEntryOnboardingBubbleView = null;
+			}
+
 			if (StopTimeEntryButton != null) {
 				StopTimeEntryButton.Dispose ();
 				StopTimeEntryButton = null;
@@ -110,6 +118,11 @@ namespace Toggl.Daneel.ViewControllers
 				TimeEntriesLogTableView = null;
 			}
 
+			if (TopConstraint != null) {
+				TopConstraint.Dispose ();
+				TopConstraint = null;
+			}
+
 			if (TopSeparator != null) {
 				TopSeparator.Dispose ();
 				TopSeparator = null;
@@ -118,11 +131,6 @@ namespace Toggl.Daneel.ViewControllers
 			if (WelcomeBackView != null) {
 				WelcomeBackView.Dispose ();
 				WelcomeBackView = null;
-			}
-
-			if (StartTimeEntryOnboardingBubbleView != null) {
-				StartTimeEntryOnboardingBubbleView.Dispose ();
-				StartTimeEntryOnboardingBubbleView = null;
 			}
 		}
 	}

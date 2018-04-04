@@ -19,6 +19,7 @@ namespace Toggl.PrimeRadiant.Settings
         private const string preferManualMode = "PreferManualMode";
 
         private const string startButtonWasTappedBeforeKey = "StartButtonWasTappedBefore";
+        private const string stopButtonWasTappedBeforeKey = "StopButtonWasTappedBefore";
 
         private const string onboardingPrefix = "Onboarding_";
 
@@ -27,6 +28,7 @@ namespace Toggl.PrimeRadiant.Settings
 
         private readonly ISubject<bool> isNewUserSubject;
         private readonly ISubject<bool> startButtonWasTappedSubject;
+        private readonly ISubject<bool> stopButtonWasTappedSubject;
 
         public SettingsStorage(Version version, IKeyValueStorage keyValueStorage)
         {
@@ -35,13 +37,9 @@ namespace Toggl.PrimeRadiant.Settings
             this.version = version;
             this.keyValueStorage = keyValueStorage;
 
-            var isNewUser = keyValueStorage.GetBool(isNewUserKey);
-            isNewUserSubject = new BehaviorSubject<bool>(isNewUser);
-            IsNewUser = isNewUserSubject.AsObservable().DistinctUntilChanged();
-
-            var startButtonWasTapped = keyValueStorage.GetBool(startButtonWasTappedBeforeKey);
-            startButtonWasTappedSubject = new BehaviorSubject<bool>(startButtonWasTapped);
-            StartButtonWasTappedBefore = startButtonWasTappedSubject.AsObservable().DistinctUntilChanged();
+            (isNewUserSubject, IsNewUser) = prepareSubjectAndObservable(isNewUserKey);
+            (startButtonWasTappedSubject, StartButtonWasTappedBefore) = prepareSubjectAndObservable(startButtonWasTappedBeforeKey);
+            (stopButtonWasTappedSubject, StopButtonWasTappedBefore) = prepareSubjectAndObservable(stopButtonWasTappedBeforeKey);
         }
 
         #region IAccessRestrictionStorage
@@ -90,6 +88,8 @@ namespace Toggl.PrimeRadiant.Settings
 
         public IObservable<bool> StartButtonWasTappedBefore { get; }
 
+        public IObservable<bool> StopButtonWasTappedBefore { get; }
+
         public void SetLastOpened(DateTimeOffset date)
         {
             var dateString = date.ToString();
@@ -117,6 +117,12 @@ namespace Toggl.PrimeRadiant.Settings
             keyValueStorage.SetBool(startButtonWasTappedBeforeKey, true);
         }
 
+        public void StopButtonWasTapped()
+        {
+            stopButtonWasTappedSubject.OnNext(true);
+            keyValueStorage.SetBool(stopButtonWasTappedBeforeKey, true);
+        }
+
         public bool WasDismissed(IDismissable dismissable) => keyValueStorage.GetBool(onboardingPrefix + dismissable.Key);
 
         public void Dismiss(IDismissable dismissable) => keyValueStorage.SetBool(onboardingPrefix + dismissable.Key, true);
@@ -125,6 +131,9 @@ namespace Toggl.PrimeRadiant.Settings
         {
             keyValueStorage.SetBool(startButtonWasTappedBeforeKey, false);
             startButtonWasTappedSubject.OnNext(false);
+
+            keyValueStorage.SetBool(stopButtonWasTappedBeforeKey, false);
+            stopButtonWasTappedSubject.OnNext(false);
 
             keyValueStorage.RemoveAllWithPrefix(onboardingPrefix);
         }
@@ -151,5 +160,14 @@ namespace Toggl.PrimeRadiant.Settings
         }
 
         #endregion
+
+        private (ISubject<bool>, IObservable<bool>) prepareSubjectAndObservable(string key)
+        {
+            var initialValue = keyValueStorage.GetBool(key);
+            var subject = new BehaviorSubject<bool>(initialValue);
+            var observable = subject.AsObservable().DistinctUntilChanged();
+
+            return (subject, observable);
+        }
     }
 }

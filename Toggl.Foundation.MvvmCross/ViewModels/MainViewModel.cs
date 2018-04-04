@@ -260,6 +260,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task stopTimeEntry()
         {
+            OnboardingStorage.StopButtonWasTapped();
+
             isStopButtonEnabled = false;
             StopTimeEntryCommand.RaiseCanExecuteChanged();
 
