@@ -5,6 +5,7 @@ using MvvmCross.Binding.iOS.Views;
 using MvvmCross.Core.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Sync;
+using Toggl.Foundation.MvvmCross.Collections;
 using UIKit;
 
 namespace Toggl.Daneel.ViewSources
@@ -20,10 +21,16 @@ namespace Toggl.Daneel.ViewSources
             set => timeEntriesLogViewSource.ContinueTimeEntryCommand = value;
         }
 
+        public NestableObservableCollection<TimeEntryViewModelCollection, TimeEntryViewModel> ObservableCollection
+        {
+            get => timeEntriesLogViewSource.ObservableCollection;
+            set => timeEntriesLogViewSource.ObservableCollection = value;
+        }
+
         public override IEnumerable ItemsSource
         {
             get => timeEntriesLogViewSource.ItemsSource;
-            set => timeEntriesLogViewSource.ItemsSource = value;
+            set { throw new InvalidOperationException($"You must bind to the {nameof(ObservableCollection)} and not the {nameof(ItemsSource)}"); }
         }
 
         public SyncProgress SyncProgress
