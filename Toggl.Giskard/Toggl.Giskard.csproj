@@ -621,6 +621,22 @@
     <AndroidResource Include="Resources\layout\ReportsCalendarFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentDayCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentPage.axml" />
+    <AndroidResource Include="Resources\drawable\OnboardingGradient.xml" />
+    <AndroidResource Include="Resources\drawable-hdpi\book.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\timer.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\book.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\timer.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\book.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\timer.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\book.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\timer.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\book.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\timer.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\toggl_logo.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\toggl_logo.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\toggl_logo.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\toggl_logo.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\toggl_logo.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">

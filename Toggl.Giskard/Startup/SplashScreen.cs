@@ -1,16 +1,20 @@
 using Android.App;
 using Android.Content.PM;
+using Android.Graphics;
+using Android.OS;
+using Android.Support.V4.Content;
 using MvvmCross.Droid.Views;
+using Toggl.Giskard.Extensions;
 using MvvmCross.Platform;
 using MvvmCross.Core.Navigation;
 
 namespace Toggl.Giskard
 {
-    [Activity(Label = "Toggl", 
-              NoHistory = true, 
-              MainLauncher = true, 
-              Icon = "@mipmap/ic_launcher", 
-              Theme = "@style/Theme.Splash", 
+    [Activity(Label = "Toggl",
+              NoHistory = true,
+              MainLauncher = true,
+              Icon = "@mipmap/ic_launcher",
+              Theme = "@style/Theme.Splash",
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     [IntentFilter(
@@ -23,6 +27,7 @@ namespace Toggl.Giskard
         public SplashScreen()
             : base(Resource.Layout.SplashScreen)
         {
+
         }
 
         protected override void TriggerFirstNavigate()
@@ -36,15 +41,18 @@ namespace Toggl.Giskard
             Mvx.Resolve<IMvxNavigationService>().Navigate(navigationUrl);
         }
 
-        #if USE_ANALYTICS
         protected override void OnCreate(Android.OS.Bundle bundle)
         {
             base.OnCreate(bundle);
 
+            var statusBarColor = new Color(ContextCompat.GetColor(this, Resource.Color.onboardingStatusBarColor));
+            this.ChangeStatusBarColor(statusBarColor);
+
+            #if USE_ANALYTICS
             Microsoft.AppCenter.AppCenter.Start(
                 "{TOGGL_APP_CENTER_ID_DROID}",
                 typeof(Microsoft.AppCenter.Crashes.Crashes));
+            #endif
         }
-        #endif
     }
 }
