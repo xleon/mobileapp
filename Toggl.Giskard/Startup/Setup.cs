@@ -91,7 +91,7 @@ namespace Toggl.Giskard
                 new LicenseProvider(),
                 analyticsService,
                 new PlatformConstants(),
-                new ApplicationShortcutCreator(),
+                new ApplicationShortcutCreator(ApplicationContext),
                 suggestionProviderContainer
             );
 
