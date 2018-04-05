@@ -30,9 +30,60 @@ namespace Toggl.Daneel.Extensions
         }
 
         public static IDisposable ManageVisibilityOf(this IOnboardingStep step, UIView view)
-            => step.ShouldBeVisible.Subscribe(
-                visible => UIApplication.SharedApplication.InvokeOnMainThread(
-                    () => view.Hidden = !visible));
+        {
+            view.Hidden = true;
+
+            void toggleVisibilityOnMainThread(bool shouldBeVisible)
+            {
+                UIApplication.SharedApplication.InvokeOnMainThread(
+                    () => toggleVisiblity(shouldBeVisible));
+            }
+
+            void toggleVisiblity(bool shouldBeVisible)
+            {
+                var isVisible = view.Hidden == false;
+                if (isVisible == shouldBeVisible) return;
+
+                if (shouldBeVisible)
+                {
+                    view.Hidden = false;
+                    view.Alpha = 0;
+                    view.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f);
+                    AnimationExtensions.Animate(
+                        Animation.Timings.LeaveTiming,
+                        Animation.Curves.Bounce,
+                        () =>
+                        {
+                            view.Alpha = 1;
+                            view.Transform = CGAffineTransform.MakeScale(1f, 1f);
+                        },
+                        () =>
+                        {
+                            isVisible = true;
+                        });
+                }
+                else
+                {
+                    view.Alpha = 1;
+                    view.Transform = CGAffineTransform.MakeScale(1f, 1f);
+                    AnimationExtensions.Animate(
+                        Animation.Timings.LeaveTiming,
+                        Animation.Curves.Bounce,
+                        () =>
+                        {
+                            view.Alpha = 0;
+                            view.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f);
+                        },
+                        () =>
+                        {
+                            view.Hidden = true;
+                            isVisible = false;
+                        });
+                }
+            }
+
+            return step.ShouldBeVisible.Subscribe(toggleVisibilityOnMainThread);
+        }
 
         public static void DismissByTapping(this IDismissable step, UIView view)
         {
