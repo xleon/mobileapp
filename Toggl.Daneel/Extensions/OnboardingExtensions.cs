@@ -2,6 +2,9 @@
 using CoreGraphics;
 using Toggl.PrimeRadiant.Onboarding;
 using UIKit;
+using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.PrimeRadiant.Settings;
+using Toggl.PrimeRadiant.Extensions;
 
 namespace Toggl.Daneel.Extensions
 {
@@ -35,6 +38,13 @@ namespace Toggl.Daneel.Extensions
         {
             var tapGestureRecognizer = new UITapGestureRecognizer(() => step.Dismiss());
             view.AddGestureRecognizer(tapGestureRecognizer);
+        }
+
+        public static IDisposable ManageDismissableTooltip(this IOnboardingStep step, UIView tooltip, IOnboardingStorage storage)
+        {
+            var dismissableStep = step.ToDismissable(step.GetType().FullName, storage);
+            dismissableStep.DismissByTapping(tooltip);
+            return dismissableStep.ManageVisibilityOf(tooltip);
         }
     }
 }

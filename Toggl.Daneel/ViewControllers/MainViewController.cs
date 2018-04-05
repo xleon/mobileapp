@@ -49,7 +49,8 @@ namespace Toggl.Daneel.ViewControllers
         private bool viewInitialized;
         private IDisposable startButtonOnboardingDisposable;
         private IDisposable stopButtonOnboardingDisposable;
-        private IDisposable currentTimeEntryDisposable;
+
+        private readonly ISubject<bool> isRunningSubject = new BehaviorSubject<bool>(false);
 
         public MainViewController()
             : base(nameof(MainViewController), null)
@@ -219,7 +220,6 @@ namespace Toggl.Daneel.ViewControllers
             spiderBroView.Dispose();
             startButtonOnboardingDisposable.Dispose();
             stopButtonOnboardingDisposable.Dispose();
-            currentTimeEntryDisposable.Dispose();
         }
 
         public override void ViewDidLayoutSubviews()
@@ -265,6 +265,8 @@ namespace Toggl.Daneel.ViewControllers
 
         private void showTimeEntryCard()
         {
+            isRunningSubject.OnNext(true);
+
             StopTimeEntryButton.Hidden = false;
             CurrentTimeEntryCard.Hidden = false;
 
@@ -282,6 +284,8 @@ namespace Toggl.Daneel.ViewControllers
 
         private void hideTimeEntryCard()
         {
+            isRunningSubject.OnNext(false);
+
             AnimationExtensions.Animate(Timings.LeaveTimingFaster, Curves.EaseIn,
                 () => StopTimeEntryButton.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f),
                 () => StopTimeEntryButton.Hidden = true);
@@ -350,23 +354,11 @@ namespace Toggl.Daneel.ViewControllers
 
         private void prepareOnboarding()
         {
-            var onboardingStorage = ViewModel.OnboardingStorage;
+            var storage = ViewModel.OnboardingStorage;
 
-            var isRunningSubject = new BehaviorSubject<bool>(ViewModel.CurrentTimeEntryId.HasValue);
-            var isRunningObservable = isRunningSubject.AsObservable();
+            startButtonOnboardingDisposable = new StartTimeEntryOnboardingStep(storage).ManageDismissableTooltip(StartTimeEntryOnboardingBubbleView, storage);
 
-            currentTimeEntryDisposable = ViewModel.WeakSubscribe(
-                () => ViewModel.CurrentTimeEntryId,
-                (sender, e) => isRunningSubject.OnNext(ViewModel.CurrentTimeEntryId.HasValue));
-
-            var startButtonStep = new StartTimeEntryOnboardingStep(onboardingStorage).ToDismissable(nameof(StartTimeEntryOnboardingStep), onboardingStorage);
-            var stopButtonStep = new StopTimeEntryOnboardingStep(onboardingStorage, isRunningObservable).ToDismissable(nameof(StopTimeEntryOnboardingStep), onboardingStorage);
-
-            startButtonStep.DismissByTapping(StartTimeEntryOnboardingBubbleView);
-            stopButtonStep.DismissByTapping(StopTimeEntryOnboardingBubbleView);
-
-            startButtonOnboardingDisposable = startButtonStep.ManageVisibilityOf(StartTimeEntryOnboardingBubbleView);
-            stopButtonOnboardingDisposable = stopButtonStep.ManageVisibilityOf(StopTimeEntryOnboardingBubbleView);
+            stopButtonOnboardingDisposable = new StopTimeEntryOnboardingStep(storage, isRunningSubject.AsObservable()).ManageDismissableTooltip(StopTimeEntryOnboardingBubbleView, storage);
         }
 
         internal void Reload()
