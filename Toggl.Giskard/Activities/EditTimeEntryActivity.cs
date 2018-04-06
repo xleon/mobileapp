@@ -25,7 +25,7 @@ namespace Toggl.Giskard.Activities
             this.ChangeStatusBarColor(new Color(ContextCompat.GetColor(this, Resource.Color.blueStatusBarBackground)));
             
             base.OnCreate(bundle);
-            SetContentView(Resource.Layout.EditActivity);
+            SetContentView(Resource.Layout.EditTimeEntryActivity);
 
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
         }

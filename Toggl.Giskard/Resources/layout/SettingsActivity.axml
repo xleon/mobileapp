@@ -214,7 +214,6 @@
                 <Switch
                     local:MvxBind="Checked UseTwentyFourHourClock"
                     android:clickable="false"
-                    android:thumbTint="@color/switchTint"
                     android:layout_marginRight="18dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -229,7 +228,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginTop="24dp"
                 android:layout_width="match_parent"
-                android:background="@color/separator"/>
+                android:background="@color/separator" />
             <FrameLayout
                 local:MvxBind="Click ToggleManualModeCommand"
                 android:clickable="true"
@@ -244,21 +243,19 @@
                     android:text="@string/ManualMode"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textColor="@android:color/black"/>
+                    android:textColor="@android:color/black" />
                 <Switch
                     local:MvxBind="Checked IsManualModeEnabled"
                     android:clickable="false"
                     android:layout_marginRight="18dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:thumbTint="@color/switchTint"
-                    android:layout_gravity="center_vertical|right"/>
+                    android:layout_gravity="center_vertical|right" />
             </FrameLayout>
             <View
                 android:layout_height="0.5dp"
                 android:layout_width="match_parent"
-                android:background="@color/separator"/>
-            
+                android:background="@color/separator" />
             <TextView
                 android:textSize="12sp"
                 android:layout_marginTop="8dp"
@@ -267,8 +264,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ManualModeExplanation"/>
-            
+                android:text="@string/ManualModeExplanation" />
             <TextView
                 android:textSize="12sp"
                 android:paddingLeft="16dp"

@@ -3147,44 +3147,44 @@ namespace Toggl.Giskard
 		public partial class Color
 		{
 			
+			// aapt resource value: 0x7f0a006f
+			public const int abc_background_cache_hint_selector_material_dark = 2131361903;
+			
 			// aapt resource value: 0x7f0a0070
-			public const int abc_background_cache_hint_selector_material_dark = 2131361904;
+			public const int abc_background_cache_hint_selector_material_light = 2131361904;
 			
 			// aapt resource value: 0x7f0a0071
-			public const int abc_background_cache_hint_selector_material_light = 2131361905;
+			public const int abc_btn_colored_borderless_text_material = 2131361905;
 			
 			// aapt resource value: 0x7f0a0072
-			public const int abc_btn_colored_borderless_text_material = 2131361906;
+			public const int abc_btn_colored_text_material = 2131361906;
 			
 			// aapt resource value: 0x7f0a0073
-			public const int abc_btn_colored_text_material = 2131361907;
+			public const int abc_color_highlight_material = 2131361907;
 			
 			// aapt resource value: 0x7f0a0074
-			public const int abc_color_highlight_material = 2131361908;
+			public const int abc_hint_foreground_material_dark = 2131361908;
 			
 			// aapt resource value: 0x7f0a0075
-			public const int abc_hint_foreground_material_dark = 2131361909;
-			
-			// aapt resource value: 0x7f0a0076
-			public const int abc_hint_foreground_material_light = 2131361910;
+			public const int abc_hint_foreground_material_light = 2131361909;
 			
 			// aapt resource value: 0x7f0a000c
 			public const int abc_input_method_navigation_guard = 2131361804;
 			
+			// aapt resource value: 0x7f0a0076
+			public const int abc_primary_text_disable_only_material_dark = 2131361910;
+			
 			// aapt resource value: 0x7f0a0077
-			public const int abc_primary_text_disable_only_material_dark = 2131361911;
+			public const int abc_primary_text_disable_only_material_light = 2131361911;
 			
 			// aapt resource value: 0x7f0a0078
-			public const int abc_primary_text_disable_only_material_light = 2131361912;
+			public const int abc_primary_text_material_dark = 2131361912;
 			
 			// aapt resource value: 0x7f0a0079
-			public const int abc_primary_text_material_dark = 2131361913;
+			public const int abc_primary_text_material_light = 2131361913;
 			
 			// aapt resource value: 0x7f0a007a
-			public const int abc_primary_text_material_light = 2131361914;
-			
-			// aapt resource value: 0x7f0a007b
-			public const int abc_search_url_text = 2131361915;
+			public const int abc_search_url_text = 2131361914;
 			
 			// aapt resource value: 0x7f0a000d
 			public const int abc_search_url_text_normal = 2131361805;
@@ -3195,29 +3195,29 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a000f
 			public const int abc_search_url_text_selected = 2131361807;
 			
+			// aapt resource value: 0x7f0a007b
+			public const int abc_secondary_text_material_dark = 2131361915;
+			
 			// aapt resource value: 0x7f0a007c
-			public const int abc_secondary_text_material_dark = 2131361916;
+			public const int abc_secondary_text_material_light = 2131361916;
 			
 			// aapt resource value: 0x7f0a007d
-			public const int abc_secondary_text_material_light = 2131361917;
+			public const int abc_tint_btn_checkable = 2131361917;
 			
 			// aapt resource value: 0x7f0a007e
-			public const int abc_tint_btn_checkable = 2131361918;
+			public const int abc_tint_default = 2131361918;
 			
 			// aapt resource value: 0x7f0a007f
-			public const int abc_tint_default = 2131361919;
+			public const int abc_tint_edittext = 2131361919;
 			
 			// aapt resource value: 0x7f0a0080
-			public const int abc_tint_edittext = 2131361920;
+			public const int abc_tint_seek_thumb = 2131361920;
 			
 			// aapt resource value: 0x7f0a0081
-			public const int abc_tint_seek_thumb = 2131361921;
+			public const int abc_tint_spinner = 2131361921;
 			
 			// aapt resource value: 0x7f0a0082
-			public const int abc_tint_spinner = 2131361922;
-			
-			// aapt resource value: 0x7f0a0083
-			public const int abc_tint_switch_track = 2131361923;
+			public const int abc_tint_switch_track = 2131361922;
 			
 			// aapt resource value: 0x7f0a0010
 			public const int accent_material_dark = 2131361808;
@@ -3237,14 +3237,14 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a0015
 			public const int background_material_light = 2131361813;
 			
-			// aapt resource value: 0x7f0a006e
-			public const int blueBackgroundTextHintColor = 2131361902;
-			
 			// aapt resource value: 0x7f0a006d
-			public const int blueStatusBarBackground = 2131361901;
+			public const int blueBackgroundTextHintColor = 2131361901;
 			
 			// aapt resource value: 0x7f0a006c
-			public const int blueToolbarBackground = 2131361900;
+			public const int blueStatusBarBackground = 2131361900;
+			
+			// aapt resource value: 0x7f0a006b
+			public const int blueToolbarBackground = 2131361899;
 			
 			// aapt resource value: 0x7f0a0016
 			public const int bright_foreground_disabled_material_dark = 2131361814;
@@ -3288,14 +3288,14 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a000b
 			public const int cardview_shadow_start_color = 2131361803;
 			
-			// aapt resource value: 0x7f0a006a
-			public const int checkboxTint = 2131361898;
+			// aapt resource value: 0x7f0a0069
+			public const int checkboxTint = 2131361897;
 			
 			// aapt resource value: 0x7f0a005e
 			public const int clientName = 2131361886;
 			
-			// aapt resource value: 0x7f0a0084
-			public const int common_google_signin_btn_text_dark = 2131361924;
+			// aapt resource value: 0x7f0a0083
+			public const int common_google_signin_btn_text_dark = 2131361923;
 			
 			// aapt resource value: 0x7f0a0000
 			public const int common_google_signin_btn_text_dark_default = 2131361792;
@@ -3309,8 +3309,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a0003
 			public const int common_google_signin_btn_text_dark_pressed = 2131361795;
 			
-			// aapt resource value: 0x7f0a0085
-			public const int common_google_signin_btn_text_light = 2131361925;
+			// aapt resource value: 0x7f0a0084
+			public const int common_google_signin_btn_text_light = 2131361924;
 			
 			// aapt resource value: 0x7f0a0004
 			public const int common_google_signin_btn_text_light_default = 2131361796;
@@ -3324,8 +3324,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a0007
 			public const int common_google_signin_btn_text_light_pressed = 2131361799;
 			
-			// aapt resource value: 0x7f0a0086
-			public const int common_google_signin_btn_tint = 2131361926;
+			// aapt resource value: 0x7f0a0085
+			public const int common_google_signin_btn_tint = 2131361925;
 			
 			// aapt resource value: 0x7f0a0063
 			public const int darkLabel = 2131361891;
@@ -3351,8 +3351,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a0048
 			public const int design_bottom_navigation_shadow_color = 2131361864;
 			
-			// aapt resource value: 0x7f0a0087
-			public const int design_error = 2131361927;
+			// aapt resource value: 0x7f0a0086
+			public const int design_error = 2131361926;
 			
 			// aapt resource value: 0x7f0a0049
 			public const int design_fab_shadow_end_color = 2131361865;
@@ -3378,8 +3378,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a0050
 			public const int design_snackbar_background_color = 2131361872;
 			
-			// aapt resource value: 0x7f0a0088
-			public const int design_tint_password_toggle = 2131361928;
+			// aapt resource value: 0x7f0a0087
+			public const int design_tint_password_toggle = 2131361927;
 			
 			// aapt resource value: 0x7f0a001e
 			public const int dim_foreground_disabled_material_dark = 2131361822;
@@ -3414,8 +3414,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a0026
 			public const int highlighted_text_material_light = 2131361830;
 			
-			// aapt resource value: 0x7f0a0069
-			public const int launcherBackgroundColor = 2131361897;
+			// aapt resource value: 0x7f0a0068
+			public const int launcherBackgroundColor = 2131361896;
 			
 			// aapt resource value: 0x7f0a005c
 			public const int lightGray = 2131361884;
@@ -3468,8 +3468,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a0047
 			public const int notification_material_background_media_default_color = 2131361863;
 			
-			// aapt resource value: 0x7f0a006f
-			public const int onboardingStatusBarColor = 2131361903;
+			// aapt resource value: 0x7f0a006e
+			public const int onboardingStatusBarColor = 2131361902;
 			
 			// aapt resource value: 0x7f0a0057
 			public const int placeholderText = 2131361879;
@@ -3504,8 +3504,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a003a
 			public const int primary_text_disabled_material_light = 2131361850;
 			
-			// aapt resource value: 0x7f0a006b
-			public const int reportsLabelColor = 2131361899;
+			// aapt resource value: 0x7f0a006a
+			public const int reportsLabelColor = 2131361898;
 			
 			// aapt resource value: 0x7f0a003b
 			public const int ripple_material_dark = 2131361851;
@@ -3534,20 +3534,17 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0a005d
 			public const int separator = 2131361885;
 			
-			// aapt resource value: 0x7f0a0068
-			public const int switchTint = 2131361896;
-			
 			// aapt resource value: 0x7f0a0041
 			public const int switch_thumb_disabled_material_dark = 2131361857;
 			
 			// aapt resource value: 0x7f0a0042
 			public const int switch_thumb_disabled_material_light = 2131361858;
 			
-			// aapt resource value: 0x7f0a0089
-			public const int switch_thumb_material_dark = 2131361929;
+			// aapt resource value: 0x7f0a0088
+			public const int switch_thumb_material_dark = 2131361928;
 			
-			// aapt resource value: 0x7f0a008a
-			public const int switch_thumb_material_light = 2131361930;
+			// aapt resource value: 0x7f0a0089
+			public const int switch_thumb_material_light = 2131361929;
 			
 			// aapt resource value: 0x7f0a0043
 			public const int switch_thumb_normal_material_dark = 2131361859;
@@ -4641,140 +4638,140 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0c003c
 			public const int CTRL = 2131492924;
 			
-			// aapt resource value: 0x7f0c00ac
-			public const int EditAddProjectLabel = 2131493036;
-			
-			// aapt resource value: 0x7f0c00b0
-			public const int EditAddTagsLabel = 2131493040;
-			
-			// aapt resource value: 0x7f0c00b3
-			public const int EditBillableIcon = 2131493043;
-			
-			// aapt resource value: 0x7f0c00b4
-			public const int EditBillableLabel = 2131493044;
-			
-			// aapt resource value: 0x7f0c00b2
-			public const int EditBillableRow = 2131493042;
-			
-			// aapt resource value: 0x7f0c00b5
-			public const int EditBillableSwitch = 2131493045;
-			
-			// aapt resource value: 0x7f0c00c3
-			public const int EditDateIcon = 2131493059;
-			
-			// aapt resource value: 0x7f0c00c5
-			public const int EditDateValueBottomBorder = 2131493061;
-			
-			// aapt resource value: 0x7f0c00c4
-			public const int EditDateValueLabel = 2131493060;
-			
-			// aapt resource value: 0x7f0c00c0
-			public const int EditDuration = 2131493056;
-			
-			// aapt resource value: 0x7f0c00c2
-			public const int EditDurationBottomBorder = 2131493058;
-			
-			// aapt resource value: 0x7f0c00bd
-			public const int EditEndTimeLabel = 2131493053;
-			
-			// aapt resource value: 0x7f0c00bb
-			public const int EditEndValueLabel = 2131493051;
-			
-			// aapt resource value: 0x7f0c00bc
-			public const int EditEndValueSetLabel = 2131493052;
-			
-			// aapt resource value: 0x7f0c00a8
-			public const int EditErrorContainer = 2131493032;
-			
-			// aapt resource value: 0x7f0c00a9
-			public const int EditErrorIcon = 2131493033;
-			
-			// aapt resource value: 0x7f0c00aa
-			public const int EditErrorTextTitle = 2131493034;
-			
-			// aapt resource value: 0x7f0c00ad
-			public const int EditProject = 2131493037;
-			
-			// aapt resource value: 0x7f0c00ce
-			public const int EditProjectClientImage = 2131493070;
-			
-			// aapt resource value: 0x7f0c00cb
-			public const int EditProjectColorArrow = 2131493067;
-			
-			// aapt resource value: 0x7f0c00ca
-			public const int EditProjectColorCircle = 2131493066;
-			
-			// aapt resource value: 0x7f0c00cd
-			public const int EditProjectFadeView = 2131493069;
-			
-			// aapt resource value: 0x7f0c00ab
-			public const int EditProjectIcon = 2131493035;
-			
-			// aapt resource value: 0x7f0c00cf
-			public const int EditProjectPrivateProjectImage = 2131493071;
-			
-			// aapt resource value: 0x7f0c00d0
-			public const int EditProjectPrivateProjectLabel = 2131493072;
-			
-			// aapt resource value: 0x7f0c00c8
-			public const int EditProjectProjectImage = 2131493064;
-			
-			// aapt resource value: 0x7f0c00c9
-			public const int EditProjectProjectName = 2131493065;
-			
-			// aapt resource value: 0x7f0c00cc
-			public const int EditProjectWorkspaceImage = 2131493068;
-			
-			// aapt resource value: 0x7f0c00b9
-			public const int EditStartTimeLabel = 2131493049;
-			
-			// aapt resource value: 0x7f0c00b8
-			public const int EditStartValueLabel = 2131493048;
-			
-			// aapt resource value: 0x7f0c00b1
-			public const int EditTags = 2131493041;
-			
-			// aapt resource value: 0x7f0c00af
-			public const int EditTagsIcon = 2131493039;
-			
-			// aapt resource value: 0x7f0c00ae
-			public const int EditTask = 2131493038;
-			
-			// aapt resource value: 0x7f0c00a7
-			public const int EditTimeEntryColumnAnchor = 2131493031;
-			
-			// aapt resource value: 0x7f0c00a6
-			public const int EditTimeEntryConfirmButton = 2131493030;
-			
-			// aapt resource value: 0x7f0c00c6
-			public const int EditTimeEntryDeleteIcon = 2131493062;
-			
-			// aapt resource value: 0x7f0c00c7
-			public const int EditTimeEntryDeleteLabel = 2131493063;
-			
-			// aapt resource value: 0x7f0c00a4
-			public const int EditTimeEntryDescriptionContainer = 2131493028;
-			
-			// aapt resource value: 0x7f0c00a5
-			public const int EditTimeEntryDescriptionTextField = 2131493029;
-			
-			// aapt resource value: 0x7f0c00c1
-			public const int EditTimeEntryDurationLabel = 2131493057;
-			
-			// aapt resource value: 0x7f0c00b7
-			public const int EditTimeLeftPart = 2131493047;
+			// aapt resource value: 0x7f0c00b6
+			public const int EditAddProjectLabel = 2131493046;
 			
 			// aapt resource value: 0x7f0c00ba
-			public const int EditTimeRightPart = 2131493050;
+			public const int EditAddTagsLabel = 2131493050;
 			
-			// aapt resource value: 0x7f0c00b6
-			public const int EditTimeSeparator = 2131493046;
+			// aapt resource value: 0x7f0c00bd
+			public const int EditBillableIcon = 2131493053;
 			
 			// aapt resource value: 0x7f0c00be
-			public const int EditTimerIcon = 2131493054;
+			public const int EditBillableLabel = 2131493054;
+			
+			// aapt resource value: 0x7f0c00bc
+			public const int EditBillableRow = 2131493052;
 			
 			// aapt resource value: 0x7f0c00bf
-			public const int EditTimesBottomBorder = 2131493055;
+			public const int EditBillableSwitch = 2131493055;
+			
+			// aapt resource value: 0x7f0c00cd
+			public const int EditDateIcon = 2131493069;
+			
+			// aapt resource value: 0x7f0c00cf
+			public const int EditDateValueBottomBorder = 2131493071;
+			
+			// aapt resource value: 0x7f0c00ce
+			public const int EditDateValueLabel = 2131493070;
+			
+			// aapt resource value: 0x7f0c00ca
+			public const int EditDuration = 2131493066;
+			
+			// aapt resource value: 0x7f0c00cc
+			public const int EditDurationBottomBorder = 2131493068;
+			
+			// aapt resource value: 0x7f0c00c7
+			public const int EditEndTimeLabel = 2131493063;
+			
+			// aapt resource value: 0x7f0c00c5
+			public const int EditEndValueLabel = 2131493061;
+			
+			// aapt resource value: 0x7f0c00c6
+			public const int EditEndValueSetLabel = 2131493062;
+			
+			// aapt resource value: 0x7f0c00b2
+			public const int EditErrorContainer = 2131493042;
+			
+			// aapt resource value: 0x7f0c00b3
+			public const int EditErrorIcon = 2131493043;
+			
+			// aapt resource value: 0x7f0c00b4
+			public const int EditErrorTextTitle = 2131493044;
+			
+			// aapt resource value: 0x7f0c00b7
+			public const int EditProject = 2131493047;
+			
+			// aapt resource value: 0x7f0c00aa
+			public const int EditProjectClientImage = 2131493034;
+			
+			// aapt resource value: 0x7f0c00a7
+			public const int EditProjectColorArrow = 2131493031;
+			
+			// aapt resource value: 0x7f0c00a6
+			public const int EditProjectColorCircle = 2131493030;
+			
+			// aapt resource value: 0x7f0c00a9
+			public const int EditProjectFadeView = 2131493033;
+			
+			// aapt resource value: 0x7f0c00b5
+			public const int EditProjectIcon = 2131493045;
+			
+			// aapt resource value: 0x7f0c00ab
+			public const int EditProjectPrivateProjectImage = 2131493035;
+			
+			// aapt resource value: 0x7f0c00ac
+			public const int EditProjectPrivateProjectLabel = 2131493036;
+			
+			// aapt resource value: 0x7f0c00a4
+			public const int EditProjectProjectImage = 2131493028;
+			
+			// aapt resource value: 0x7f0c00a5
+			public const int EditProjectProjectName = 2131493029;
+			
+			// aapt resource value: 0x7f0c00a8
+			public const int EditProjectWorkspaceImage = 2131493032;
+			
+			// aapt resource value: 0x7f0c00c3
+			public const int EditStartTimeLabel = 2131493059;
+			
+			// aapt resource value: 0x7f0c00c2
+			public const int EditStartValueLabel = 2131493058;
+			
+			// aapt resource value: 0x7f0c00bb
+			public const int EditTags = 2131493051;
+			
+			// aapt resource value: 0x7f0c00b9
+			public const int EditTagsIcon = 2131493049;
+			
+			// aapt resource value: 0x7f0c00b8
+			public const int EditTask = 2131493048;
+			
+			// aapt resource value: 0x7f0c00b1
+			public const int EditTimeEntryColumnAnchor = 2131493041;
+			
+			// aapt resource value: 0x7f0c00b0
+			public const int EditTimeEntryConfirmButton = 2131493040;
+			
+			// aapt resource value: 0x7f0c00d0
+			public const int EditTimeEntryDeleteIcon = 2131493072;
+			
+			// aapt resource value: 0x7f0c00d1
+			public const int EditTimeEntryDeleteLabel = 2131493073;
+			
+			// aapt resource value: 0x7f0c00ae
+			public const int EditTimeEntryDescriptionContainer = 2131493038;
+			
+			// aapt resource value: 0x7f0c00af
+			public const int EditTimeEntryDescriptionTextField = 2131493039;
+			
+			// aapt resource value: 0x7f0c00cb
+			public const int EditTimeEntryDurationLabel = 2131493067;
+			
+			// aapt resource value: 0x7f0c00c1
+			public const int EditTimeLeftPart = 2131493057;
+			
+			// aapt resource value: 0x7f0c00c4
+			public const int EditTimeRightPart = 2131493060;
+			
+			// aapt resource value: 0x7f0c00c0
+			public const int EditTimeSeparator = 2131493056;
+			
+			// aapt resource value: 0x7f0c00c8
+			public const int EditTimerIcon = 2131493064;
+			
+			// aapt resource value: 0x7f0c00c9
+			public const int EditTimesBottomBorder = 2131493065;
 			
 			// aapt resource value: 0x7f0c003d
 			public const int FUNCTION = 2131492925;
@@ -4932,8 +4929,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0c0119
 			public const int SelectTagsBackIcon = 2131493145;
 			
-			// aapt resource value: 0x7f0c00d1
-			public const int SelectWorkspaceContainer = 2131493073;
+			// aapt resource value: 0x7f0c00ad
+			public const int SelectWorkspaceContainer = 2131493037;
 			
 			// aapt resource value: 0x7f0c011a
 			public const int SelectWorkspaceListContainer = 2131493146;
@@ -5718,10 +5715,10 @@ namespace Toggl.Giskard
 			public const int design_text_input_password_icon = 2130968618;
 			
 			// aapt resource value: 0x7f04002b
-			public const int EditActivity = 2130968619;
+			public const int EditProjectActivity = 2130968619;
 			
 			// aapt resource value: 0x7f04002c
-			public const int EditProjectActivity = 2130968620;
+			public const int EditTimeEntryActivity = 2130968620;
 			
 			// aapt resource value: 0x7f04002d
 			public const int LoginActivity = 2130968621;

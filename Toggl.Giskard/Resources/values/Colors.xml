@@ -21,7 +21,6 @@
     <color name="runningEntryTimer">#328FFF</color>
     <color name="calendarSelected">#328FFF</color>
     <color name="editTimeEntryText">#000000</color>
-    <color name="switchTint">#328FFF</color>
     <color name="launcherBackgroundColor">#FFFF</color>
     <color name="checkboxTint">#328FFF</color>
     <color name="reportsLabelColor">#757575</color>
