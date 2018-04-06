@@ -272,7 +272,8 @@ private HashSet<string> targetsThatSkipTearDown = new HashSet<string>
 {
     "Build.Release.iOS.AdHoc",
     "Build.Release.iOS.AppStore",
-    "Build.Release.Android.AdHoc"
+    "Build.Release.Android.AdHoc",
+    "Build.Release.Android.PlayStore"
 };
 
 private string[] GetUnitTestProjects() => new []
@@ -357,6 +358,10 @@ Task("Build.Release.iOS.AppStore")
 Task("Build.Release.Android.AdHoc")
     .IsDependentOn("Nuget")
     .Does(BuildSolution("Release.AdHoc.Giskard", ""));
+
+Task("Build.Release.Android.PlayStore")
+    .IsDependentOn("Nuget")
+    .Does(BuildSolution("Release.PlayStore", ""));
 
 //Unit Tests
 Task("Tests.Unit")
