@@ -348,6 +348,7 @@
     <Compile Include="Adapters\CalendarPagerAdapter.cs" />
     <Compile Include="Bindings\ViewPagerCurrentPageTargetBinding.cs" />
     <Compile Include="TemplateSelectors\CalendarShortcutsTemplateSelector.cs" />
+    <Compile Include="Activities\TokenResetActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -639,6 +640,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\toggl_logo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\toggl_logo.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\toggl_logo.png" />
+    <AndroidResource Include="Resources\layout\TokenResetActivity.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">

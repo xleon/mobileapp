@@ -15,7 +15,8 @@ namespace Toggl.Giskard.Presenters
         private readonly HashSet<Type> clearBackStackTypes = new HashSet<Type>
         {
             typeof(MainViewModel),
-            typeof(OnboardingViewModel)
+            typeof(OnboardingViewModel),
+            typeof(TokenResetViewModel)
         };
 
         public TogglPresenter(IEnumerable<Assembly> androidViewAssemblies)

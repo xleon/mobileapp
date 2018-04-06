@@ -5001,6 +5001,18 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0c00e3
 			public const int TimeEntriesLogCellTaskLabel = 2131493091;
 			
+			// aapt resource value: 0x7f0c012c
+			public const int TokenResetMessageEnterPassword = 2131493164;
+			
+			// aapt resource value: 0x7f0c012b
+			public const int TokenResetMessageWarning = 2131493163;
+			
+			// aapt resource value: 0x7f0c012a
+			public const int TokenResetPassword = 2131493162;
+			
+			// aapt resource value: 0x7f0c0129
+			public const int TokenResetToolbar = 2131493161;
+			
 			// aapt resource value: 0x7f0c0095
 			public const int Toolbar = 2131493013;
 			
@@ -5262,14 +5274,14 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0c0069
 			public const int list_item = 2131492969;
 			
-			// aapt resource value: 0x7f0c012b
-			public const int masked = 2131493163;
+			// aapt resource value: 0x7f0c012f
+			public const int masked = 2131493167;
 			
 			// aapt resource value: 0x7f0c00f6
 			public const int media_actions = 2131493110;
 			
-			// aapt resource value: 0x7f0c0129
-			public const int message = 2131493161;
+			// aapt resource value: 0x7f0c012d
+			public const int message = 2131493165;
 			
 			// aapt resource value: 0x7f0c003a
 			public const int middle = 2131492922;
@@ -5517,8 +5529,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f0c0016
 			public const int view_offset_helper = 2131492886;
 			
-			// aapt resource value: 0x7f0c012a
-			public const int visible = 2131493162;
+			// aapt resource value: 0x7f0c012e
+			public const int visible = 2131493166;
 			
 			// aapt resource value: 0x7f0c0023
 			public const int wide = 2131492899;
@@ -5916,7 +5928,10 @@ namespace Toggl.Giskard
 			public const int support_simple_spinner_dropdown_item = 2130968684;
 			
 			// aapt resource value: 0x7f04006d
-			public const int tooltip = 2130968685;
+			public const int TokenResetActivity = 2130968685;
+			
+			// aapt resource value: 0x7f04006e
+			public const int tooltip = 2130968686;
 			
 			static Layout()
 			{
