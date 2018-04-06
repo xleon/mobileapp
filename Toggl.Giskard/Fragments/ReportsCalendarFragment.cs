@@ -2,11 +2,13 @@
 using System.ComponentModel;
 using Android.OS;
 using Android.Support.V4.View;
+using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V4;
+using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Droid.Views.Attributes;
 using MvvmCross.Platform;
 using MvvmCross.Platform.WeakSubscription;
@@ -31,7 +33,7 @@ namespace Toggl.Giskard.Fragments
             base.OnCreateView(inflater, container, savedInstanceState);
             var view = this.BindingInflate(Resource.Layout.ReportsCalendarFragment, null);
 
-            rowHeight = 55.DpToPixels(Activity);
+            rowHeight = 60.DpToPixels(Activity);
 
             Mvx.Resolve<IMvxBindingContextStack<IMvxAndroidBindingContext>>()
                .Push(BindingContext as IMvxAndroidBindingContext);
@@ -39,6 +41,9 @@ namespace Toggl.Giskard.Fragments
             pager = view.FindViewById<ViewPager>(Resource.Id.ReportsCalendarFragmentViewPager);
             pager.Adapter = new CalendarPagerAdapter(Activity, ViewModel);
             pager.SetCurrentItem(ViewModel.Months.Count - 1, false);
+
+            view.FindViewById<MvxRecyclerView>(Resource.Id.ReportsCalendarFragmentShortcuts)
+                .SetLayoutManager(new LinearLayoutManager(Activity, LinearLayoutManager.Horizontal, false));
 
             view.FindViewById<LinearLayout>(Resource.Id.ReportsCalendarFragmentHeader)
                 .GetChildren<TextView>()

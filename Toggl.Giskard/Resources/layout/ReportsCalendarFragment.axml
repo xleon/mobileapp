@@ -87,4 +87,15 @@
         android:minHeight="225dp"
         android:layout_height="wrap_content"
         android:layout_width="match_parent" />
+    <mvvmcross.droid.support.v7.recyclerview.MvxRecyclerView
+        android:id="@+id/ReportsCalendarFragmentShortcuts"
+        local:MvxBind="ItemsSource QuickSelectShortcuts; ItemClick QuickSelectCommand"
+        local:MvxTemplateSelector="@string/CalendarShortcutsTemplateSelector"
+        android:scrollbars="vertical"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

@@ -347,6 +347,7 @@
     <Compile Include="TemplateSelectors\CalendarTemplateSelector.cs" />
     <Compile Include="Adapters\CalendarPagerAdapter.cs" />
     <Compile Include="Bindings\ViewPagerCurrentPageTargetBinding.cs" />
+    <Compile Include="TemplateSelectors\CalendarShortcutsTemplateSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -621,6 +622,7 @@
     <AndroidResource Include="Resources\layout\ReportsCalendarFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentDayCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentPage.axml" />
+    <AndroidResource Include="Resources\layout\ReportsCalendarShortcutCell.axml" />
     <AndroidResource Include="Resources\drawable\OnboardingGradient.xml" />
     <AndroidResource Include="Resources\drawable-hdpi\book.png" />
     <AndroidResource Include="Resources\drawable-hdpi\timer.png" />

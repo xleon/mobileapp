@@ -55,7 +55,7 @@ namespace Toggl.Giskard.Converters
         public LoginInfoTextColorValueConverter()
             : base(Color.ParseColor("#e20505"), Color.ParseColor("#5e5b5b")) { }
     }
-    
+
     public sealed class ManualModeEnabledDrawableValueConverter : BoolToConstantValueConverter<int>
     {
         public ManualModeEnabledDrawableValueConverter() : base(Resource.Drawable.add_white, Resource.Drawable.play_white) { }
@@ -63,6 +63,12 @@ namespace Toggl.Giskard.Converters
 
     public sealed class CalendarDayColorValueConverter : BoolToConstantValueConverter<Color>
     {
-        public CalendarDayColorValueConverter() : base (Color.White, Reports.DayNotInMonth.ToAndroidColor()) { }
+        public CalendarDayColorValueConverter() : base(Color.White, Reports.DayNotInMonth.ToAndroidColor()) { }
+    }
+
+    public sealed class CalendarShortcutBackgroundColorValueConverter : BoolToConstantValueConverter<Color>
+    {
+        public CalendarShortcutBackgroundColorValueConverter()
+            : base(Color.ParseColor("#328fff"), Color.ParseColor("#3e3e3e")) { }
     }
 }
