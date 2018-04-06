@@ -230,7 +230,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SyncErrorMessage = timeEntry.LastSyncErrorMessage;
             workspaceId = timeEntry.WorkspaceId;
             SyncErrorMessageVisible = !string.IsNullOrEmpty(SyncErrorMessage);
-            IsEditingDescription = true;
 
             onTags(timeEntry.Tags);
             foreach (var tagId in timeEntry.TagIds)
