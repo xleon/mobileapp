@@ -6007,6 +6007,9 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f080056
 			public const int EndTime = 2131230806;
 			
+			// aapt resource value: 0x7f08006c
+			public const int FeedbackChooserCopy = 2131230828;
+			
 			// aapt resource value: 0x7f080069
 			public const int ForgotPassword = 2131230825;
 			

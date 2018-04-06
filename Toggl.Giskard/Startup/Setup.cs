@@ -85,7 +85,7 @@ namespace Toggl.Giskard
                 database,
                 timeService,
                 scheduler,
-                new MailService(),
+                new MailService(ApplicationContext),
                 new GoogleService(),
                 environment,
                 new LicenseProvider(),
