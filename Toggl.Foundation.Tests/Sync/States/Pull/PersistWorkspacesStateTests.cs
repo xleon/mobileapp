@@ -8,7 +8,7 @@ using Toggl.Foundation.Sync.States;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
-using Workspace = Toggl.Ultrawave.Models.Workspace;
+using Workspace = Toggl.Foundation.Tests.Mocks.MockWorkspace;
 
 namespace Toggl.Foundation.Tests.Sync.States
 {

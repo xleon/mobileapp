@@ -226,7 +226,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                     .SignUp(email, "thePasswordIsNotImportant".ToPassword())
                     .Wait();
 
-                secondSigningUp.ShouldThrow<BadRequestException>();
+                secondSigningUp.ShouldThrow<EmailIsAlreadyUsedException>();
             }
 
             [Fact, LogTestInfo]
@@ -238,7 +238,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 Action secondSigningUp = () => unauthenticatedTogglApi.User.SignUp(email, password).Wait();
 
-                secondSigningUp.ShouldThrow<BadRequestException>();
+                secondSigningUp.ShouldThrow<EmailIsAlreadyUsedException>();
             }
 
             [Fact, LogTestInfo]
@@ -271,6 +271,54 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 workspace.Id.Should().BeGreaterThan(0);
                 workspace.Name.Should().Be(expectedWorkspaceName);
+            }
+        }
+
+        public class TheSignUpWithGoogleMethod : EndpointTestBase
+        {
+            private readonly ITogglApi unauthenticatedTogglApi;
+
+            public TheSignUpWithGoogleMethod()
+            {
+                unauthenticatedTogglApi = TogglApiWith(Credentials.None);
+            }
+
+            [Fact, LogTestInfo]
+            public void ThrowsIfTheGoogleTokenIsNull()
+            {
+                Action signingUp = () => unauthenticatedTogglApi
+                    .User
+                    .SignUpWithGoogle(null)
+                    .Wait();
+
+                signingUp.ShouldThrow<ArgumentException>();
+            }
+
+            [Theory, LogTestInfo]
+            [InlineData("")]
+            [InlineData("x.y.z")]
+            [InlineData("asdkjasdkhjdsadhkda")]
+            public void FailsWhenTheGoogleTokenIsParameterARandomString(string notAToken)
+            {
+                Action signUp = () => unauthenticatedTogglApi
+                    .User
+                    .SignUpWithGoogle(notAToken)
+                    .Wait();
+
+                signUp.ShouldThrow<UnauthorizedException>();
+            }
+
+            [Fact, LogTestInfo]
+            public void FailsWhenTheGoogleTokenParameterIsAnInvalidJWT()
+            {
+                var jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ";
+
+                Action signUp = () => unauthenticatedTogglApi
+                    .User
+                    .SignUpWithGoogle(jwt)
+                    .Wait();
+
+                signUp.ShouldThrow<UnauthorizedException>();
             }
         }
 

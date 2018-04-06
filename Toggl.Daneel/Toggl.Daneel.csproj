@@ -413,6 +413,26 @@
     <ImageAsset Include="Resources\Images.xcassets\playIcon.imageset\play.png" />
     <ImageAsset Include="Resources\Images.xcassets\playIcon.imageset\play%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\playIcon.imageset\play%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\bgNoiseBlue.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\bgNoiseBlue.imageset\bgNoiseBlue.png" />
+    <ImageAsset Include="Resources\Images.xcassets\bgNoiseBlue.imageset\bgNoiseBlue%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\bgNoiseBlue.imageset\bgNoiseBlue%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\bgNoisePurple.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\bgNoisePurple.imageset\bgNoisePurple.png" />
+    <ImageAsset Include="Resources\Images.xcassets\bgNoisePurple.imageset\bgNoisePurple%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\bgNoisePurple.imageset\bgNoisePurple%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\bgNoiseYellow.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\bgNoiseYellow.imageset\bgNoiseYellow.png" />
+    <ImageAsset Include="Resources\Images.xcassets\bgNoiseYellow.imageset\bgNoiseYellow%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\bgNoiseYellow.imageset\bgNoiseYellow%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\doneGreen.png" />
+    <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\doneGreen%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\doneGreen%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icCheckGrey.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icCheckGrey.imageset\icCheckGrey.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icCheckGrey.imageset\icCheckGrey%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icCheckGrey.imageset\icCheckGrey%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -421,14 +441,13 @@
     <InterfaceDefinition Include="ViewControllers\MainViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\EditTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\StartTimeEntryViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\SettingsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\EditDurationViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectProjectViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectDateTimeViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectTagsViewController.xib" />
     <InterfaceDefinition Include="Views\Onboarding\TrackPage.xib" />
-    <InterfaceDefinition Include="Views\Onboarding\LogPage.xib" />
-    <InterfaceDefinition Include="Views\Onboarding\SummaryPage.xib" />
+    <InterfaceDefinition Include="Views\Onboarding\MostUsedPage.xib" />
+    <InterfaceDefinition Include="Views\Onboarding\ReportsPage.xib" />
     <InterfaceDefinition Include="ViewControllers\EditProjectViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectColorViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectWorkspaceViewController.xib" />
@@ -463,6 +482,11 @@
     <InterfaceDefinition Include="Views\Settings\DurationFormatViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectBeginningOfWeekViewController.xib" />
     <InterfaceDefinition Include="Views\Settings\DayOfWeekViewCell.xib" />
+    <InterfaceDefinition Include="Views\Settings\LicensesHeaderViewCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\LicensesViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\SettingsViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\AboutViewController.xib" />
+    <InterfaceDefinition Include="Views\Settings\LicensesViewCell.xib" />
     <InterfaceDefinition Include="Views\Log\TimeEntriesEmptyLogView.xib" />
     <InterfaceDefinition Include="Views\Log\TimeEntryMockView.xib" />
   </ItemGroup>
@@ -526,10 +550,6 @@
     <Compile Include="ViewControllers\EditTimeEntryViewController.designer.cs">
       <DependentUpon>EditTimeEntryViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewControllers\SettingsViewController.cs" />
-    <Compile Include="ViewControllers\SettingsViewController.designer.cs">
-      <DependentUpon>SettingsViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Extensions\FontExtensions.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
@@ -567,13 +587,13 @@
     <Compile Include="Views\Onboarding\TrackPage.designer.cs">
       <DependentUpon>TrackPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Onboarding\LogPage.cs" />
-    <Compile Include="Views\Onboarding\LogPage.designer.cs">
-      <DependentUpon>LogPage.cs</DependentUpon>
+    <Compile Include="Views\Onboarding\MostUsedPage.cs" />
+    <Compile Include="Views\Onboarding\MostUsedPage.designer.cs">
+      <DependentUpon>MostUsedPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Onboarding\SummaryPage.cs" />
-    <Compile Include="Views\Onboarding\SummaryPage.designer.cs">
-      <DependentUpon>SummaryPage.cs</DependentUpon>
+    <Compile Include="Views\Onboarding\ReportsPage.cs" />
+    <Compile Include="Views\Onboarding\ReportsPage.designer.cs">
+      <DependentUpon>ReportsPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Views\FadeView.cs" />
@@ -711,7 +731,7 @@
     <Compile Include="Views\RoundedView.cs" />
     <Compile Include="Combiners\CalendarCellTextColorValueCombiner.cs" />
     <Compile Include="Views\Reports\PieChartView.cs" />
-    <Compile Include="Converters\TimeSpanReportLabelValueConverter.cs" />
+    <Compile Include="Converters\ReportTimeSpanLabelValueConverter.cs" />
     <Compile Include="Converters\ReportPercentageLabelValueConverter.cs" />
     <Compile Include="Views\Reports\PercentageView.cs" />
     <Compile Include="Services\ITopViewControllerProvider.cs" />
@@ -794,6 +814,35 @@
     <Compile Include="Views\Log\TimeEntryMockView.designer.cs">
       <DependentUpon>TimeEntryMockView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\OnboardingExtensions.cs" />
+    <Compile Include="Converters\TimeFormatToLocaleValueConverter.cs" />
+    <Compile Include="Extensions\LabelExtensions.cs" />
+    <Compile Include="Views\Settings\LicensesHeaderViewCell.cs" />
+    <Compile Include="Views\Settings\LicensesHeaderViewCell.designer.cs">
+      <DependentUpon>LicensesHeaderViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\LicensesViewController.cs" />
+    <Compile Include="ViewControllers\Settings\LicensesViewController.designer.cs">
+      <DependentUpon>LicensesViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\SettingsViewController.cs" />
+    <Compile Include="ViewControllers\Settings\SettingsViewController.designer.cs">
+      <DependentUpon>SettingsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\AboutViewController.cs" />
+    <Compile Include="ViewControllers\Settings\AboutViewController.designer.cs">
+      <DependentUpon>AboutViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\LicensesViewCell.cs" />
+    <Compile Include="Views\Settings\LicensesViewCell.designer.cs">
+      <DependentUpon>LicensesViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSources\LicensesTableViewSource.cs" />
+    <Compile Include="Binding\ViewVisibilityWithFadeTargetBinding.cs" />
+    <Compile Include="Binding\ImageViewAnimatedImageTargetBinding.cs" />
+    <Compile Include="Onboarding\MainView\StartTimeEntryOnboardingStep.cs" />
+    <Compile Include="Onboarding\MainView\StopTimeEntryOnboardingStep.cs" />
+    <Compile Include="Onboarding\CreationView\DisabledConfirmationButtonOnboardingStep.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
@@ -849,6 +898,10 @@
     <Folder Include="Resources\Images.xcassets\icIllustrationProjectsSmall.imageset\" />
     <Folder Include="Views\Settings\" />
     <Folder Include="Resources\Images.xcassets\.imageset\" />
+    <Folder Include="ViewControllers\Settings\" />
+    <Folder Include="Onboarding\" />
+    <Folder Include="Onboarding\MainView\" />
+    <Folder Include="Onboarding\CreationView\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />

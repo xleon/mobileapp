@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Multivac;
+using Toggl.PrimeRadiant.Onboarding;
 
 namespace Toggl.PrimeRadiant.Settings
 {
@@ -15,8 +18,17 @@ namespace Toggl.PrimeRadiant.Settings
 
         private const string preferManualMode = "PreferManualMode";
 
+        private const string startButtonWasTappedBeforeKey = "StartButtonWasTappedBefore";
+        private const string stopButtonWasTappedBeforeKey = "StopButtonWasTappedBefore";
+
+        private const string onboardingPrefix = "Onboarding_";
+
         private readonly Version version;
         private readonly IKeyValueStorage keyValueStorage;
+
+        private readonly ISubject<bool> isNewUserSubject;
+        private readonly ISubject<bool> startButtonWasTappedSubject;
+        private readonly ISubject<bool> stopButtonWasTappedSubject;
 
         public SettingsStorage(Version version, IKeyValueStorage keyValueStorage)
         {
@@ -24,6 +36,10 @@ namespace Toggl.PrimeRadiant.Settings
 
             this.version = version;
             this.keyValueStorage = keyValueStorage;
+
+            (isNewUserSubject, IsNewUser) = prepareSubjectAndObservable(isNewUserKey);
+            (startButtonWasTappedSubject, StartButtonWasTappedBefore) = prepareSubjectAndObservable(startButtonWasTappedBeforeKey);
+            (stopButtonWasTappedSubject, StopButtonWasTappedBefore) = prepareSubjectAndObservable(stopButtonWasTappedBeforeKey);
         }
 
         #region IAccessRestrictionStorage
@@ -68,6 +84,12 @@ namespace Toggl.PrimeRadiant.Settings
 
         #region IOnboardingStorage
 
+        public IObservable<bool> IsNewUser { get; }
+
+        public IObservable<bool> StartButtonWasTappedBefore { get; }
+
+        public IObservable<bool> StopButtonWasTappedBefore { get; }
+
         public void SetLastOpened(DateTimeOffset date)
         {
             var dateString = date.ToString();
@@ -76,6 +98,7 @@ namespace Toggl.PrimeRadiant.Settings
 
         public void SetIsNewUser(bool isNewUser)
         {
+            isNewUserSubject.OnNext(isNewUser);
             keyValueStorage.SetBool(isNewUserKey, isNewUser);
         }
 
@@ -84,11 +107,36 @@ namespace Toggl.PrimeRadiant.Settings
             keyValueStorage.SetBool(completedOnboardingKey, true);
         }
 
-        public bool IsNewUser() => keyValueStorage.GetBool(isNewUserKey);
-
         public bool CompletedOnboarding() => keyValueStorage.GetBool(completedOnboardingKey);
 
         public string GetLastOpened() => keyValueStorage.GetString(lastAccessDateKey);
+
+        public void StartButtonWasTapped()
+        {
+            startButtonWasTappedSubject.OnNext(true);
+            keyValueStorage.SetBool(startButtonWasTappedBeforeKey, true);
+        }
+
+        public void StopButtonWasTapped()
+        {
+            stopButtonWasTappedSubject.OnNext(true);
+            keyValueStorage.SetBool(stopButtonWasTappedBeforeKey, true);
+        }
+
+        public bool WasDismissed(IDismissable dismissable) => keyValueStorage.GetBool(onboardingPrefix + dismissable.Key);
+
+        public void Dismiss(IDismissable dismissable) => keyValueStorage.SetBool(onboardingPrefix + dismissable.Key, true);
+
+        void IOnboardingStorage.Reset()
+        {
+            keyValueStorage.SetBool(startButtonWasTappedBeforeKey, false);
+            startButtonWasTappedSubject.OnNext(false);
+
+            keyValueStorage.SetBool(stopButtonWasTappedBeforeKey, false);
+            stopButtonWasTappedSubject.OnNext(false);
+
+            keyValueStorage.RemoveAllWithPrefix(onboardingPrefix);
+        }
 
         #endregion
 
@@ -106,11 +154,20 @@ namespace Toggl.PrimeRadiant.Settings
             keyValueStorage.SetBool(preferManualMode, false);
         }
 
-        public void Reset()
+        void IUserPreferences.Reset()
         {
             EnableTimerMode();
         }
 
         #endregion
+
+        private (ISubject<bool>, IObservable<bool>) prepareSubjectAndObservable(string key)
+        {
+            var initialValue = keyValueStorage.GetBool(key);
+            var subject = new BehaviorSubject<bool>(initialValue);
+            var observable = subject.AsObservable().DistinctUntilChanged();
+
+            return (subject, observable);
+        }
     }
 }

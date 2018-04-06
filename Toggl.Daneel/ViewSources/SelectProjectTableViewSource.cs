@@ -31,6 +31,8 @@ namespace Toggl.Daneel.ViewSources
             tableView.RegisterNibForHeaderFooterViewReuse(WorkspaceHeaderViewCell.Nib, headerCellIdentifier);
         }
 
+        public bool UseGrouping { get; set; }
+
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             var cell = base.GetCell(tableView, indexPath);
@@ -57,6 +59,12 @@ namespace Toggl.Daneel.ViewSources
             return cell;
         }
 
+        public override nfloat GetHeightForHeader(UITableView tableView, nint section)
+            => UseGrouping ? base.GetHeightForHeader(tableView, section) : 0;
+
+        public override UIView GetViewForHeader(UITableView tableView, nint section)
+            => UseGrouping ? base.GetViewForHeader(tableView, section) : null;
+
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath) => 48;
 
         protected override UITableViewCell GetOrCreateCellFor(UITableView tableView, NSIndexPath indexPath, object item)
@@ -69,7 +77,7 @@ namespace Toggl.Daneel.ViewSources
 
             if (item is ProjectSuggestion)
                 return projectCellIdentifier;
-            
+
             if (item is TaskSuggestion)
                 return taskCellIdentifier;
 

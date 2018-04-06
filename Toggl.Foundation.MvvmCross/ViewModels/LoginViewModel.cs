@@ -35,6 +35,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private LoginType loginType;
         private IDisposable loginDisposable;
+        private bool tryLoggingInInstead;
 
         private int pageBeforeForgotPasswordPage;
 
@@ -63,8 +64,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public string InfoText { get; set; } = "";
 
+        [DependsOn(nameof(IsSignUp))]
+        public bool TryLoggingInInsteadOfSignup => IsSignUp && tryLoggingInInstead;
+
         [DependsOn(nameof(InfoText))]
         public bool HasInfoText => !string.IsNullOrEmpty(InfoText);
+
+        [DependsOn(nameof(InfoText))]
+        public bool IsErrorText { get; private set; }
 
         public int CurrentPage { get; private set; } = EmailPage;
 
@@ -93,6 +100,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxCommand TogglePasswordVisibilityCommand { get; }
 
         public IMvxAsyncCommand StartPasswordManagerCommand { get; }
+
+        public IMvxCommand ChangeSignUpToLoginCommand { get; }
 
         [DependsOn(nameof(CurrentPage))]
         public bool IsEmailPage => CurrentPage == EmailPage;
@@ -163,6 +172,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             OpenTermsOfServiceCommand = new MvxCommand(openTermsOfServiceCommand);
             StartPasswordManagerCommand = new MvxAsyncCommand(startPasswordManager, () => IsPasswordManagerAvailable);
             TogglePasswordVisibilityCommand = new MvxCommand(togglePasswordVisibility);
+            ChangeSignUpToLoginCommand = new MvxCommand(changeSignUpToLogin, () => IsSignUp);
         }
 
         public override void Prepare(LoginType parameter)
@@ -198,6 +208,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             if (!NextIsEnabled) return;
 
+            tryLoggingInInstead = false;
+            RaisePropertyChanged(nameof(TryLoggingInInsteadOfSignup));
+
             if (IsPasswordPage)
             {
                 if (IsLogin) login();
@@ -219,6 +232,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void validatePassword()
         {
+            IsErrorText = true;
+
             InfoText = Password.IsValid
                 ? String.Empty
                 : Resources.SignUpPasswordRequirements;
@@ -239,12 +254,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             IsLoading = false;
             CurrentPage = PasswordPage;
+            IsErrorText = false;
             InfoText = Resources.PasswordResetSuccess;
         }
 
         private void onPasswordResetError(Exception exception)
         {
             IsLoading = false;
+
+            IsErrorText = true;
 
             switch (exception)
             {
@@ -275,8 +293,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 CurrentPage = pageBeforeForgotPasswordPage;
             else
                 CurrentPage--;
-            
+
             InfoText = "";
+            tryLoggingInInstead = false;
+            RaisePropertyChanged(nameof(TryLoggingInInsteadOfSignup));
         }
 
         private void togglePasswordVisibility()
@@ -358,7 +378,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             if (apiErrorHandlingService.TryHandleDeprecationError(exception))
                 return;
-                
+
+            IsErrorText = true;
+
             switch (exception)
             {
                 case UnauthorizedException forbidden:
@@ -366,6 +388,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     break;
                 case GoogleLoginException googleEx when googleEx.LoginWasCanceled:
                     InfoText = "";
+                    break;
+                case EmailIsAlreadyUsedException _ when IsSignUp:
+                    InfoText = Resources.EmailIsAlreadyUsedError;
+                    tryLoggingInInstead = true;
+                    RaisePropertyChanged(nameof(TryLoggingInInsteadOfSignup));
                     break;
                 default:
                     InfoText = getGenericError();
@@ -386,7 +413,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             pageBeforeForgotPasswordPage = CurrentPage;
             CurrentPage = ForgotPasswordPage;
+            IsErrorText = false;
             InfoText = Email.IsValid ? "" : Resources.PasswordResetExplanation;
+        }
+
+        private void changeSignUpToLogin()
+        {
+            tryLoggingInInstead = false;
+            InfoText = String.Empty;
+            loginType = LoginType.Login;
+            Password = Password.Empty;
+            CurrentPage = EmailPage;
+            RaisePropertyChanged(nameof(TryLoggingInInsteadOfSignup));
         }
     }
 }

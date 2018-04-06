@@ -10,11 +10,11 @@ using NSubstitute;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.Settings;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac;
-using Toggl.PrimeRadiant.Exceptions;
 using Toggl.PrimeRadiant.Models;
 using Toggl.PrimeRadiant.Settings;
 using Xunit;
@@ -26,7 +26,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public abstract class SettingsViewModelTest : BaseViewModelTests<SettingsViewModel>
         {
             protected ISubject<SyncProgress> ProgressSubject;
-            protected IUserPreferences UserPreferences;
 
             protected override void AdditionalSetup()
             {
@@ -34,7 +33,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var syncManager = Substitute.For<ISyncManager>();
                 syncManager.ProgressObservable.Returns(ProgressSubject.AsObservable());
                 DataSource.SyncManager.Returns(syncManager);
-                UserPreferences = Substitute.For<IUserPreferences>();
             }
 
             protected override SettingsViewModel CreateViewModel()
@@ -43,31 +41,37 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     MailService,
                     DataSource,
                     DialogService,
+                    InteractorFactory,
                     PlatformConstants,
                     UserPreferences,
+                    OnboardingStorage,
                     NavigationService);
         }
 
         public sealed class TheConstructor : SettingsViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(SevenParameterConstructorTestData))]
+            [ClassData(typeof(NineParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useUserAgent,
                 bool useDataSource,
                 bool useMailService,
                 bool useDialogService,
+                bool useInteractorFactory,
                 bool usePlatformConstants,
                 bool useUserPreferences,
+                bool useOnboardingStorage,
                 bool useNavigationService)
             {
                 var userAgent = useUserAgent ? UserAgent : null;
                 var dataSource = useDataSource ? DataSource : null;
                 var mailService = useMailService ? MailService : null;
                 var dialogService = useDialogService ? DialogService : null;
+                var userPreferences = useUserPreferences ? UserPreferences : null;
+                var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var platformConstants = usePlatformConstants ? PlatformConstants : null;
-                var userPreferences = useUserPreferences ? UserPreferences : null;
+                var interactorFactory = useInteractorFactory ? InteractorFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new SettingsViewModel(
@@ -75,8 +79,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         mailService,
                         dataSource,
                         dialogService,
+                        interactorFactory,
                         platformConstants,
                         userPreferences,
+                        onboardingStorage,
                         navigationService);
 
                 tryingToConstructWithEmptyParameters
@@ -188,6 +194,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
                 UserPreferences.Received().Reset();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task ResetsOnboarding()
+            {
+                doNotShowConfirmationDialog();
+                await ViewModel.LogoutCommand.ExecuteAsync();
+
+                OnboardingStorage.Received().Reset();
             }
 
             [Fact, LogIfTooSlow]
@@ -322,10 +337,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 workspace.Name.Returns(workspaceName);
                 defaultWorkspace.Id.Returns(defaultWorkspaceId);
 
-                DataSource.Workspaces.GetDefault()
+                InteractorFactory.GetDefaultWorkspace().Execute()
                     .Returns(Observable.Return(defaultWorkspace));
 
-                DataSource.Workspaces.GetById(workspaceId)
+                InteractorFactory.GetWorkspaceById(workspaceId).Execute()
                     .Returns(Observable.Return(workspace));
 
                 ViewModel.Prepare();
@@ -575,6 +590,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.DateFormat.Should().Be(preferences.DateFormat);
                 ViewModel.UseTwentyFourHourClock.Should().Be(preferences.TimeOfDayFormat.IsTwentyFourHoursFormat);
                 ViewModel.DurationFormat.Should().Be(preferences.DurationFormat);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task InitializesVersion()
+            {
+                await ViewModel.Initialize();
+
+                ViewModel.Version.Should().Be(UserAgent.Version);
             }
 
             private IDatabasePreferences createPreferences()
@@ -883,6 +906,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.SelectBeginningOfWeekCommand.ExecuteAsync();
 
                 ViewModel.BeginningOfWeek.Should().Be(newBeginningOfWeek);
+            }
+        }
+
+        public sealed class TheAboutCommand : SettingsViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task NavigatesToTheAboutPage()
+            {
+                await ViewModel.AboutCommand.ExecuteAsync();
+
+                await NavigationService.Received().Navigate<AboutViewModel>();
             }
         }
     }

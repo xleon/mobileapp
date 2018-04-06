@@ -49,7 +49,7 @@ namespace Toggl.Foundation.MvvmCross.Collections
         protected override void InsertItem(int index, TimeEntryViewModel item)
         {
             base.InsertItem(index, item);
-            TotalTime += item.Duration;
+            TotalTime += item.Duration ?? TimeSpan.Zero;
         }
 
         protected override void RemoveItem(int index)
@@ -59,6 +59,6 @@ namespace Toggl.Foundation.MvvmCross.Collections
         }
 
         private TimeSpan calculateTotalTime()
-            => Items.Aggregate(TimeSpan.Zero, (acc, vm) => acc + vm.Duration);
+        => Items.Aggregate(TimeSpan.Zero, (acc, vm) => acc + (vm.Duration ?? TimeSpan.Zero));
     }
 }

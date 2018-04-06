@@ -1,10 +1,12 @@
+using System;
+using Toggl.Foundation.Models;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Suggestions
 {
     [Preserve(AllMembers = true)]
-    public sealed class Suggestion
+    public sealed class Suggestion : ITimeEntryPrototype
     {
         public string Description { get; } = "";
 
@@ -24,10 +26,19 @@ namespace Toggl.Foundation.Suggestions
 
         public long WorkspaceId { get; }
 
+        public bool IsBillable { get; } = false;
+
+        public long[] TagIds { get; } = Array.Empty<long>();
+
+        public DateTimeOffset StartTime { get; }
+
+        public TimeSpan? Duration { get; } = null;
+
         internal Suggestion(IDatabaseTimeEntry timeEntry)
         {
             TaskId = timeEntry.TaskId;
             ProjectId = timeEntry.ProjectId;
+            IsBillable = timeEntry.Billable;
             Description = timeEntry.Description;
             WorkspaceId = timeEntry.WorkspaceId;
 

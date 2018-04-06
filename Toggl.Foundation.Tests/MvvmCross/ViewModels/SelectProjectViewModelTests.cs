@@ -22,21 +22,26 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public abstract class SelectProjectViewModelTest : BaseViewModelTests<SelectProjectViewModel>
         {
             protected override SelectProjectViewModel CreateViewModel()
-            => new SelectProjectViewModel(DataSource, NavigationService, DialogService);
+            => new SelectProjectViewModel(DataSource, InteractorFactory, NavigationService, DialogService);
         }
 
         public sealed class TheConstructor : SelectProjectViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(ThreeParameterConstructorTestData))]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useNavigationService, bool useDialogService)
+            [ClassData(typeof(FourParameterConstructorTestData))]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(
+                bool useDataSource, 
+                bool useInteractorFactory,
+                bool useNavigationService, 
+                bool useDialogService)
             {
                 var dataSource = useDataSource ? DataSource : null;
-                var navigationService = useNavigationService ? NavigationService : null;
                 var dialogService = useDialogService ? DialogService : null;
+                var interactorFactory = useInteractorFactory ? InteractorFactory : null;
+                var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SelectProjectViewModel(dataSource, navigationService, dialogService);
+                    () => new SelectProjectViewModel(dataSource, interactorFactory, navigationService, dialogService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -405,9 +410,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             private IEnumerable<ProjectSuggestion> getProjectSuggestions(int count, int workspaceId)
             {
                 for (int i = 0; i < count; i++)
-                {
                     yield return getProjectSuggestion(i, workspaceId);
-                }
             }
 
             private ProjectSuggestion getProjectSuggestion(int projectId, int workspaceId)
@@ -441,7 +444,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Text = queryText;
 
                 ViewModel.Suggestions.Should().HaveCount(1);
-                ViewModel.Suggestions.First().Should().HaveCount(2);
+                ViewModel.Suggestions.First().Should().HaveCount(1);
             }
 
             [Fact, LogIfTooSlow]
@@ -463,7 +466,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task PrependsEmptyProjectToEveryGroup()
+            public async Task PrependsEmptyProjectToEveryGroupIfFilterIsEmpty()
             {
                 var suggestions = new List<ProjectSuggestion>();
                 suggestions.AddRange(getProjectSuggestions(3, 0));
@@ -482,6 +485,30 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 foreach (var group in ViewModel.Suggestions)
                 {
                     group.Cast<ProjectSuggestion>().First().ProjectName.Should().Be(Resources.NoProject);
+                }
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task DoesNotPrependEmptyProjectToGroupsIfFilterIsUsed()
+            {
+                var suggestions = new List<ProjectSuggestion>();
+                suggestions.AddRange(getProjectSuggestions(3, 0));
+                suggestions.AddRange(getProjectSuggestions(4, 1));
+                suggestions.AddRange(getProjectSuggestions(1, 10));
+                suggestions.AddRange(getProjectSuggestions(10, 54));
+                var suggestionsObservable = Observable.Return(suggestions);
+                var autocompleteProvider = Substitute.For<IAutocompleteProvider>();
+                autocompleteProvider
+                    .Query(Arg.Is<QueryInfo>(
+                        info => info.SuggestionType == AutocompleteSuggestionType.Projects))
+                    .Returns(suggestionsObservable);
+
+                await ViewModel.Initialize();
+                ViewModel.Text = suggestions.First().ProjectName;
+
+                foreach (var group in ViewModel.Suggestions)
+                {
+                    group.Cast<ProjectSuggestion>().First().ProjectName.Should().NotBe(Resources.NoProject);
                 }
             }
 

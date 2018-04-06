@@ -160,7 +160,7 @@ namespace Toggl.Foundation.Tests.Login
             {
                 await LoginManager.Login(Email, Password);
 
-                ApplicationShortcutCreator.Received().OnLogin();
+                ApplicationShortcutCreator.Received().OnLogin(Arg.Any<ITogglDataSource>());
             }
         }
 
@@ -306,7 +306,7 @@ namespace Toggl.Foundation.Tests.Login
             {
                 await LoginManager.SignUp(Email, Password);
 
-                ApplicationShortcutCreator.Received().OnLogin();
+                ApplicationShortcutCreator.Received().OnLogin(Arg.Any<ITogglDataSource>());
             }
         }
         
@@ -429,7 +429,7 @@ namespace Toggl.Foundation.Tests.Login
             {
                 await LoginManager.LoginWithGoogle();
 
-                ApplicationShortcutCreator.Received().OnLogin();
+                ApplicationShortcutCreator.Received().OnLogin(Arg.Any<ITogglDataSource>());
             }
         }
     }

@@ -1,7 +1,5 @@
 ﻿using MvvmCross.Core.ViewModels;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Suggestions;
@@ -18,15 +16,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
         protected UserAgent UserAgent { get; } = new UserAgent("Foundation.Tests", "1.0");
         protected IMailService MailService { get; } = Substitute.For<IMailService>();
-        protected IDialogService DialogService { get; } = Substitute.For<IDialogService>();
-        protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
         protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
-        protected ITogglDataSource DataSource { get; } = Substitute.For<ITogglDataSource>();
-        protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
+        protected IDialogService DialogService { get; } = Substitute.For<IDialogService>();
+        protected ILicenseProvider LicenseProvider { get; } = Substitute.For<ILicenseProvider>();
         protected IPlatformConstants PlatformConstants { get; } = Substitute.For<IPlatformConstants>();
-        protected ISuggestionProviderContainer SuggestionProviderContainer { get; } = Substitute.For<ISuggestionProviderContainer>();
-
         protected IOnboardingStorage OnboardingStorage { get; } = Substitute.For<IOnboardingStorage>();
+        protected ISuggestionProviderContainer SuggestionProviderContainer { get; } = Substitute.For<ISuggestionProviderContainer>();
 
         protected TViewModel ViewModel { get; private set; }
 
@@ -45,7 +40,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             Ioc.RegisterSingleton(TimeService);
             Ioc.RegisterSingleton(MailService);
             Ioc.RegisterSingleton(DialogService);
+            Ioc.RegisterSingleton(LicenseProvider);
             Ioc.RegisterSingleton(AnalyticsService);
+            Ioc.RegisterSingleton(InteractorFactory);
             Ioc.RegisterSingleton(PlatformConstants);
             Ioc.RegisterSingleton(OnboardingStorage);
             Ioc.RegisterSingleton(NavigationService);

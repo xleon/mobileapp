@@ -3,9 +3,8 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
-using Toggl.Foundation.DTOs;
+using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Suggestions;
 using Toggl.Multivac;
 
@@ -14,14 +13,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class SuggestionsViewModel : MvxViewModel
     {
-        private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
-        private readonly IAnalyticsService analyticsService;
+        private readonly IInteractorFactory interactorFactory;
         private readonly ISuggestionProviderContainer suggestionProviders;
 
-        private IDisposable emptyDatabaseDisposable;
-
         private bool areStartButtonsEnabled = true;
+        private IDisposable emptyDatabaseDisposable;
 
         public MvxObservableCollection<Suggestion> Suggestions { get; }
             = new MvxObservableCollection<Suggestion>();
@@ -32,18 +29,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public SuggestionsViewModel(
             ITogglDataSource dataSource,
-            IAnalyticsService analyticsService,
-            ISuggestionProviderContainer suggestionProviders,
-            ITimeService timeService)
+            IInteractorFactory interactorFactory,
+            ISuggestionProviderContainer suggestionProviders)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
+            Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(suggestionProviders, nameof(suggestionProviders));
 
             this.dataSource = dataSource;
-            this.timeService = timeService;
-            this.analyticsService = analyticsService;
+            this.interactorFactory = interactorFactory;
             this.suggestionProviders = suggestionProviders;
 
             StartTimeEntryCommand = new MvxAsyncCommand<Suggestion>(startTimeEntry, _ => areStartButtonsEnabled);
@@ -85,26 +79,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             areStartButtonsEnabled = false;
             StartTimeEntryCommand.RaiseCanExecuteChanged();
 
-            await dataSource.User
-                .Current
-                .Select(user => new StartTimeEntryDTO
-                {
-                    UserId = user.Id,
-                    TaskId = suggestion.TaskId,
-                    ProjectId = suggestion.ProjectId,
-                    Description = suggestion.Description,
-                    WorkspaceId = suggestion.WorkspaceId,
-                    StartTime = timeService.CurrentDateTime
-                })
-                .SelectMany(dataSource.TimeEntries.Start)
-                .Do(_ => dataSource.SyncManager.PushSync())
+            await interactorFactory
+                .StartSuggestion(suggestion)
+                .Execute()
                 .Do(_ =>
                 {
                     areStartButtonsEnabled = true;
                     StartTimeEntryCommand.RaiseCanExecuteChanged();
                 });
-
-            analyticsService.TrackStartedTimeEntry(TimeEntryStartOrigin.Suggestion);
         }
     }
 }

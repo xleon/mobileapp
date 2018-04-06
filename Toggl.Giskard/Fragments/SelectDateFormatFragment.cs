@@ -13,7 +13,7 @@ using Toggl.Giskard.Extensions;
 namespace Toggl.Giskard.Fragments
 {
     [MvxDialogFragmentPresentation(AddToBackStack = true)]
-    public class SelectDateFormatFragment : MvxDialogFragment<SelectDateFormatViewModel>
+    public sealed class SelectDateFormatFragment : MvxDialogFragment<SelectDateFormatViewModel>
     {
         public SelectDateFormatFragment() { }
 
@@ -36,8 +36,8 @@ namespace Toggl.Giskard.Fragments
             var screenWidth = displayMetrics.WidthPixels;
             var isLargeScreen = screenWidth > 360.DpToPixels(Context);
 
-            var width = (int)(isLargeScreen ? screenWidth - 72.DpToPixels(Context) : 312.DpToPixels(Context));
-            var height = (int)400.DpToPixels(Context);
+            var width = isLargeScreen ? screenWidth - 72.DpToPixels(Context) : 312.DpToPixels(Context);
+            var height = 400.DpToPixels(Context);
 
             Dialog.Window.SetLayout(width, height);
         }

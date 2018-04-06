@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,7 +19,9 @@
                 <outlet property="CurrentTimeEntryProjectTaskClientLabel" destination="cnc-9d-fgu" id="Qlo-zJ-0bI"/>
                 <outlet property="RunningEntryDescriptionFadeView" destination="E3W-8n-IfX" id="xWA-xE-taG"/>
                 <outlet property="StartTimeEntryButton" destination="4Kk-Hz-RBS" id="name-outlet-4Kk-Hz-RBS"/>
+                <outlet property="StartTimeEntryOnboardingBubbleView" destination="jpn-gJ-vFB" id="JIf-UQ-5t0"/>
                 <outlet property="StopTimeEntryButton" destination="Ddo-IW-xE3" id="name-outlet-Ddo-IW-xE3"/>
+                <outlet property="StopTimeEntryOnboardingBubbleView" destination="0wI-i0-MgR" id="7ci-ti-Pzx"/>
                 <outlet property="TimeEntriesLogTableView" destination="hoP-Tg-vBM" id="cct-0m-nqm"/>
                 <outlet property="TopConstraint" destination="uv0-dd-PVb" id="rca-dp-xNl"/>
                 <outlet property="TopSeparator" destination="niU-tX-YTJ" id="xUr-AE-63C"/>
@@ -84,6 +87,56 @@ time entries will appear here.</string>
                     </constraints>
                     <state key="normal" image="playIcon"/>
                 </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jpn-gJ-vFB">
+                    <rect key="frame" x="121" y="599" width="174" height="48"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FPE-zZ-Orx">
+                            <rect key="frame" x="0.0" y="0.0" width="167" height="48"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to start timer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LCs-H0-PO4">
+                                    <rect key="frame" x="27" y="15" width="111.5" height="17"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" red="0.14117647058823529" green="0.14117647058823529" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstItem="LCs-H0-PO4" firstAttribute="centerY" secondItem="FPE-zZ-Orx" secondAttribute="centerY" id="kp1-8u-o1l"/>
+                                <constraint firstItem="LCs-H0-PO4" firstAttribute="centerX" secondItem="FPE-zZ-Orx" secondAttribute="centerX" id="zsB-Ww-Ee5"/>
+                            </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                    <integer key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Poc-0i-MwY">
+                            <rect key="frame" x="162" y="19" width="10" height="10"/>
+                            <color key="backgroundColor" red="0.14117647059999999" green="0.14117647059999999" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="10" id="hLs-QC-8dg"/>
+                                <constraint firstAttribute="height" constant="10" id="qUF-gn-f2K"/>
+                            </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.transform.rotation.z">
+                                    <real key="value" value="0.78500000000000003"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="FPE-zZ-Orx" secondAttribute="trailing" constant="7" id="13X-HG-quT"/>
+                        <constraint firstAttribute="height" constant="48" id="6HD-Rm-eft"/>
+                        <constraint firstAttribute="trailing" secondItem="Poc-0i-MwY" secondAttribute="trailing" constant="2" id="DSm-0V-wXz"/>
+                        <constraint firstItem="Poc-0i-MwY" firstAttribute="centerY" secondItem="FPE-zZ-Orx" secondAttribute="centerY" id="QO3-7n-fpm"/>
+                        <constraint firstAttribute="bottom" secondItem="FPE-zZ-Orx" secondAttribute="bottom" id="XCH-53-D0E"/>
+                        <constraint firstItem="FPE-zZ-Orx" firstAttribute="top" secondItem="jpn-gJ-vFB" secondAttribute="top" id="Xhv-hu-tyn"/>
+                        <constraint firstAttribute="width" constant="174" id="oHx-bf-FR6"/>
+                        <constraint firstItem="FPE-zZ-Orx" firstAttribute="leading" secondItem="jpn-gJ-vFB" secondAttribute="leading" id="uhI-dL-Kv4"/>
+                    </constraints>
+                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vou-B4-go4">
                     <rect key="frame" x="0.0" y="595" width="375" height="72"/>
                     <subviews>
@@ -153,7 +206,7 @@ time entries will appear here.</string>
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ddo-IW-xE3">
-                    <rect key="frame" x="319" y="595" width="56" height="56"/>
+                    <rect key="frame" x="319" y="603" width="56" height="56"/>
                     <accessibility key="accessibilityConfiguration" label="MainStopTimeEntry"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="56" id="cJZ-zk-6qM"/>
@@ -161,6 +214,44 @@ time entries will appear here.</string>
                     </constraints>
                     <state key="normal" image="stopIcon"/>
                 </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0wI-i0-MgR">
+                    <rect key="frame" x="193.5" y="554" width="173.5" height="45"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to stop timer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tFY-U0-EZM">
+                            <rect key="frame" x="32" y="14" width="109.5" height="17"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iEb-UM-o0r">
+                            <rect key="frame" x="148.5" y="40" width="10" height="10"/>
+                            <color key="backgroundColor" red="0.14117647059999999" green="0.14117647059999999" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="10" id="Sr7-zR-T2w"/>
+                                <constraint firstAttribute="width" constant="10" id="wme-sD-wSy"/>
+                            </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.transform.rotation.z">
+                                    <real key="value" value="0.78500000000000003"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" red="0.14117647058823529" green="0.14117647058823529" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="tFY-U0-EZM" firstAttribute="centerY" secondItem="0wI-i0-MgR" secondAttribute="centerY" id="Bfu-tU-ZqQ"/>
+                        <constraint firstAttribute="trailing" secondItem="tFY-U0-EZM" secondAttribute="trailing" constant="32" id="UEf-bD-eBs"/>
+                        <constraint firstAttribute="bottom" secondItem="tFY-U0-EZM" secondAttribute="bottom" constant="14" id="Xud-9b-rul"/>
+                        <constraint firstAttribute="bottom" secondItem="iEb-UM-o0r" secondAttribute="top" constant="5" id="dQQ-vy-Two"/>
+                        <constraint firstItem="tFY-U0-EZM" firstAttribute="top" secondItem="0wI-i0-MgR" secondAttribute="top" constant="14" id="iRx-oc-rEk"/>
+                        <constraint firstItem="tFY-U0-EZM" firstAttribute="leading" secondItem="0wI-i0-MgR" secondAttribute="leading" constant="32" id="xzR-oQ-ny8"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.98039215686274506" green="0.98431372549019602" blue="0.9882352941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -170,9 +261,13 @@ time entries will appear here.</string>
                 <constraint firstItem="hoP-Tg-vBM" firstAttribute="top" secondItem="niU-tX-YTJ" secondAttribute="bottom" id="723-z7-Pn2"/>
                 <constraint firstAttribute="trailing" secondItem="vou-B4-go4" secondAttribute="trailing" id="83s-7t-oAW"/>
                 <constraint firstAttribute="trailing" secondItem="4Kk-Hz-RBS" secondAttribute="trailing" constant="16" id="90o-lU-zgz"/>
+                <constraint firstItem="4Kk-Hz-RBS" firstAttribute="leading" secondItem="jpn-gJ-vFB" secondAttribute="trailing" constant="8" id="9bb-2W-Ulw"/>
+                <constraint firstItem="jpn-gJ-vFB" firstAttribute="centerY" secondItem="4Kk-Hz-RBS" secondAttribute="centerY" id="DHx-Nf-c5q"/>
                 <constraint firstAttribute="bottom" secondItem="4Kk-Hz-RBS" secondAttribute="bottom" constant="16" id="DYd-Ht-tay"/>
                 <constraint firstItem="Jhd-oR-xIN" firstAttribute="top" secondItem="niU-tX-YTJ" secondAttribute="top" id="GGm-kJ-UIE"/>
                 <constraint firstItem="vou-B4-go4" firstAttribute="top" secondItem="S4t-q9-ct9" secondAttribute="bottom" constant="-72" id="Lpx-CQ-TA7"/>
+                <constraint firstItem="Ddo-IW-xE3" firstAttribute="top" secondItem="0wI-i0-MgR" secondAttribute="bottom" constant="4" id="MVm-2l-BA6"/>
+                <constraint firstItem="0wI-i0-MgR" firstAttribute="trailing" secondItem="Ddo-IW-xE3" secondAttribute="centerX" constant="20" id="Pmg-mN-KVS"/>
                 <constraint firstItem="hoP-Tg-vBM" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="Rnl-ra-37p"/>
                 <constraint firstItem="Ddo-IW-xE3" firstAttribute="trailing" secondItem="vou-B4-go4" secondAttribute="trailing" id="RsZ-Od-g2H"/>
                 <constraint firstAttribute="trailing" secondItem="Jhd-oR-xIN" secondAttribute="trailing" id="TAP-Mf-VjB"/>
@@ -181,7 +276,8 @@ time entries will appear here.</string>
                 <constraint firstAttribute="bottom" secondItem="Jhd-oR-xIN" secondAttribute="bottom" id="jk0-Wh-1za"/>
                 <constraint firstItem="niU-tX-YTJ" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="mlI-eM-pqI"/>
                 <constraint firstItem="vou-B4-go4" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="q3O-7e-AfR"/>
-                <constraint firstItem="Ddo-IW-xE3" firstAttribute="top" secondItem="vou-B4-go4" secondAttribute="top" id="rDp-HB-uui"/>
+                <constraint firstItem="Ddo-IW-xE3" firstAttribute="top" secondItem="vou-B4-go4" secondAttribute="top" constant="8" id="rDp-HB-uui"/>
+                <constraint firstItem="iEb-UM-o0r" firstAttribute="centerX" secondItem="Ddo-IW-xE3" secondAttribute="centerX" id="tRU-y4-0ll"/>
                 <constraint firstItem="hoP-Tg-vBM" firstAttribute="top" secondItem="S4t-q9-ct9" secondAttribute="top" constant="12" id="uv0-dd-PVb"/>
                 <constraint firstItem="hoP-Tg-vBM" firstAttribute="trailing" secondItem="2" secondAttribute="trailing" id="vc5-gN-f6s"/>
                 <constraint firstItem="Jhd-oR-xIN" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="yWZ-Xb-sTX"/>

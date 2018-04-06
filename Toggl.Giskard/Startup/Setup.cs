@@ -1,5 +1,7 @@
+using System;
 using System.Reactive.Concurrency;
 using Android.Content;
+using MvvmCross.Binding;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Support.V7.AppCompat;
@@ -14,6 +16,7 @@ using Toggl.Foundation.Suggestions;
 using Toggl.Giskard.Presenters;
 using Toggl.Giskard.Services;
 using Toggl.PrimeRadiant.Realm;
+using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
 
 namespace Toggl.Giskard
@@ -36,9 +39,11 @@ namespace Toggl.Giskard
         {
         }
 
+        protected override IMvxApplication CreateApp() => new App();
+
         protected override IMvxTrace CreateDebugTrace() => new DebugTrace();
 
-        protected override IMvxApplication CreateApp() => new App();
+        protected override MvxBindingBuilder CreateBindingBuilder() => new TogglBindingBuilder();
 
         protected override IMvxNavigationService InitializeNavigationService(IMvxViewModelLocatorCollection collection)
         {
@@ -65,22 +70,28 @@ namespace Toggl.Giskard
             var version = packageInfo.VersionName;
             var sharedPreferences = ApplicationContext.GetSharedPreferences(clientName, FileCreationMode.Private);
             var database = new Database();
-            var timeService = new TimeService(Scheduler.Default);
+            var scheduler = Scheduler.Default;
+            var timeService = new TimeService(scheduler);
             var suggestionProviderContainer = new SuggestionProviderContainer(
                 new MostUsedTimeEntrySuggestionProvider(database, timeService, maxNumberOfSuggestions)
             );
+
+            var keyValueStorage = new SharedPreferencesStorage(sharedPreferences);
+            var settingsStorage = new SettingsStorage(Version.Parse(version), keyValueStorage);
 
             var foundation = Foundation.Foundation.Create(
                 clientName,
                 version,
                 database,
                 timeService,
-                new MailService(),
+                scheduler,
+                new MailService(ApplicationContext),
                 new GoogleService(),
                 environment,
+                new LicenseProvider(),
                 analyticsService,
                 new PlatformConstants(),
-                new ApplicationShortcutCreator(suggestionProviderContainer),
+                new ApplicationShortcutCreator(ApplicationContext),
                 suggestionProviderContainer
             );
 
@@ -88,7 +99,10 @@ namespace Toggl.Giskard
                 .RegisterServices(
                     new DialogService(),
                     new BrowserService(), 
-                    new SharedPreferencesStorage(sharedPreferences),
+                    keyValueStorage,
+                    settingsStorage,
+                    settingsStorage,
+                    settingsStorage,
                     navigationService,
                     new OnePasswordService())
                .RevokeNewUserIfNeeded()
