@@ -340,6 +340,11 @@
                 android:background="@color/separator"
                 android:layout_height="0.5dp"
                 android:layout_width="match_parent" />
+            <View
+                android:background="@color/separator"
+                android:layout_height="0.5dp"
+                android:layout_width="match_parent"
+                android:layout_marginTop="70dp" />
             <Button
                 local:MvxBind="Click LogoutCommand"
                 android:paddingLeft="16dp"
@@ -353,7 +358,8 @@
             <View
                 android:background="@color/separator"
                 android:layout_height="0.5dp"
-                android:layout_width="match_parent" />
+                android:layout_width="match_parent"
+                android:layout_marginBottom="24dp" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
     <android.support.v7.widget.Toolbar
