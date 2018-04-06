@@ -5974,9 +5974,12 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f080053
 			public const int Billable = 2131230803;
 			
-			// aapt resource value: 0x7f080071
-			public const int CalendarTemplateSelector = 2131230833;
-
+			// aapt resource value: 0x7f08007d
+			public const int CalendarShortcutsTemplateSelector = 2131230845;
+			
+			// aapt resource value: 0x7f080074
+			public const int CalendarTemplateSelector = 2131230836;
+			
 			// aapt resource value: 0x7f08004f
 			public const int Cancel = 2131230799;
 			
@@ -6031,8 +6034,8 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f080043
 			public const int Logout = 2131230787;
 			
-			// aapt resource value: 0x7f08006f
-			public const int MainTemplateSelector = 2131230831;
+			// aapt resource value: 0x7f080072
+			public const int MainTemplateSelector = 2131230834;
 			
 			// aapt resource value: 0x7f080066
 			public const int ManualMode = 2131230822;
@@ -6043,14 +6046,20 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f080059
 			public const int NameTakenError = 2131230809;
 			
-			// aapt resource value: 0x7f08006d
-			public const int OnboardingGetStarted = 2131230829;
-			
 			// aapt resource value: 0x7f08006e
-			public const int OnboardingKickstartProductivity = 2131230830;
+			public const int NoEmailHandlerErrorMessage = 2131230830;
 			
-			// aapt resource value: 0x7f08006c
-			public const int OnboardingSignup = 2131230828;
+			// aapt resource value: 0x7f08006d
+			public const int NoEmailHandlerErrorTitle = 2131230829;
+			
+			// aapt resource value: 0x7f080070
+			public const int OnboardingGetStarted = 2131230832;
+			
+			// aapt resource value: 0x7f080071
+			public const int OnboardingKickstartProductivity = 2131230833;
+			
+			// aapt resource value: 0x7f08006f
+			public const int OnboardingSignup = 2131230831;
 			
 			// aapt resource value: 0x7f080058
 			public const int Oops = 2131230808;
@@ -6064,41 +6073,41 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f08004c
 			public const int PrivateProjectHint = 2131230796;
 			
-			// aapt resource value: 0x7f080070
-			public const int ReportsTemplateSelector = 2131230832;
+			// aapt resource value: 0x7f080073
+			public const int ReportsTemplateSelector = 2131230835;
 			
 			// aapt resource value: 0x7f080057
 			public const int Save = 2131230807;
 			
+			// aapt resource value: 0x7f08007f
+			public const int SelectBeginningOfWeekTemplateSelector = 2131230847;
+			
 			// aapt resource value: 0x7f080079
-			public const int SelectBeginningOfWeekTemplateSelector = 2131230841;
+			public const int SelectClientTemplateSelector = 2131230841;
 			
-			// aapt resource value: 0x7f080076
-			public const int SelectClientTemplateSelector = 2131230838;
-			
-			// aapt resource value: 0x7f080075
-			public const int SelectColorTemplateSelector = 2131230837;
+			// aapt resource value: 0x7f080078
+			public const int SelectColorTemplateSelector = 2131230840;
 			
 			// aapt resource value: 0x7f08004d
 			public const int SelectColorTitle = 2131230797;
 			
-			// aapt resource value: 0x7f080079
-			public const int SelectDateFormatTemplateSelector = 2131230841;
+			// aapt resource value: 0x7f08007c
+			public const int SelectDateFormatTemplateSelector = 2131230844;
+			
+			// aapt resource value: 0x7f08007e
+			public const int SelectDurationFormatTemplateSelector = 2131230846;
 			
 			// aapt resource value: 0x7f08007a
-			public const int SelectDurationFormatTemplateSelector = 2131230842;
-
-			// aapt resource value: 0x7f080077
-			public const int SelectProjectTemplateSelector = 2131230839;
+			public const int SelectProjectTemplateSelector = 2131230842;
 			
-			// aapt resource value: 0x7f080073
-			public const int SelectTagsTemplateSelector = 2131230835;
+			// aapt resource value: 0x7f080076
+			public const int SelectTagsTemplateSelector = 2131230838;
 			
-			// aapt resource value: 0x7f080078
-			public const int SelectWorkspaceTemplateSelector = 2131230840;
+			// aapt resource value: 0x7f08007b
+			public const int SelectWorkspaceTemplateSelector = 2131230843;
 			
-			// aapt resource value: 0x7f080072
-			public const int SettingsTemplateSelector = 2131230834;
+			// aapt resource value: 0x7f080075
+			public const int SettingsTemplateSelector = 2131230837;
 			
 			// aapt resource value: 0x7f080041
 			public const int SignUp = 2131230785;
@@ -6109,14 +6118,14 @@ namespace Toggl.Giskard
 			// aapt resource value: 0x7f08004a
 			public const int StartTimeEntryHint = 2131230794;
 			
-			// aapt resource value: 0x7f08007c
-			public const int StartTimeEntrySuggestionsTemplateSelector = 2131230844;
+			// aapt resource value: 0x7f080080
+			public const int StartTimeEntrySuggestionsTemplateSelector = 2131230848;
 			
 			// aapt resource value: 0x7f08005b
 			public const int SubmitFeedback = 2131230811;
 			
-			// aapt resource value: 0x7f080074
-			public const int SuggestionsTemplateSelector = 2131230836;
+			// aapt resource value: 0x7f080077
+			public const int SuggestionsTemplateSelector = 2131230839;
 			
 			// aapt resource value: 0x7f080047
 			public const int TermsOfService = 2131230791;

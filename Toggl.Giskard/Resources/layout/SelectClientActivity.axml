@@ -15,14 +15,15 @@
         <ImageView
             local:MvxBind="Click CloseCommand"
             android:clickable="true"
+            android:paddingTop="20dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="16dp"
             android:src="@drawable/arrow_back"
             android:tint="@android:color/white"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_width="56dp"
+            android:layout_height="56dp" />
         <EditText
             local:MvxBind="Text Text"
             android:textSize="19sp"

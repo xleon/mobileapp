@@ -49,7 +49,6 @@
             android:background="@drawable/settings_dark"
             android:layout_gravity="end"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:layout_width="24dp"
             android:layout_height="24dp" />
         <Button
@@ -57,11 +56,6 @@
             android:background="@drawable/reports_dark"
             android:layout_gravity="end"
             android:layout_marginLeft="16dp"
-            android:layout_width="24dp"
-            android:layout_height="24dp" />
-        <ImageView
-            android:src="@drawable/timer_light"
-            android:layout_gravity="end"
             android:layout_width="24dp"
             android:layout_height="24dp" />
     </android.support.v7.widget.Toolbar>
