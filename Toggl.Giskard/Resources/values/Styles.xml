@@ -12,5 +12,6 @@
     </style>
     <style name="TogglDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:colorAccent">#328FFF</item>
+		<item name="colorControlActivated">#328FFF</item>
     </style>
 </resources>
