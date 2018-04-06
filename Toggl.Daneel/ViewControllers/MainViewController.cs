@@ -96,6 +96,7 @@ namespace Toggl.Daneel.ViewControllers
 
             //Table view
             bindingSet.Bind(source)
+                      .For(v => v.ObservableCollection)
                       .To(vm => vm.TimeEntriesLogViewModel.TimeEntries);
 
             bindingSet.Bind(source)
