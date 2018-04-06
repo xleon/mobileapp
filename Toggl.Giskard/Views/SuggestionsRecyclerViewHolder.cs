@@ -25,7 +25,7 @@ namespace Toggl.Giskard.Views
             var size = new Point();
             display.GetSize(size);
 
-            firstItemMargin = 16.DpToPixels(context);
+            firstItemMargin = 14.DpToPixels(context);
             defaultCardSize = 200.DpToPixels(context);
             lastItemMargin = size.X - defaultCardSize - firstItemMargin;
         }
