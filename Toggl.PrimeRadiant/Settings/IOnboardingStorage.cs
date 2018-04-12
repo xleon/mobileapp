@@ -7,16 +7,18 @@ namespace Toggl.PrimeRadiant.Settings
     {
         IObservable<bool> IsNewUser { get; }
         IObservable<bool> StartButtonWasTappedBefore { get; }
+        IObservable<bool> ProjectOrTagWasAddedBefore { get; }
         IObservable<bool> StopButtonWasTappedBefore { get; }
 
+        void SetCompletedOnboarding();
         void SetIsNewUser(bool isNewUser);
         void SetLastOpened(DateTimeOffset dateString);
-        void SetCompletedOnboarding();
 
         string GetLastOpened();
         bool CompletedOnboarding();
 
         void StartButtonWasTapped();
+        void ProjectOrTagWasAdded();
         void StopButtonWasTapped();
 
         bool WasDismissed(IDismissable dismissable);

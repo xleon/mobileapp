@@ -19,6 +19,7 @@ namespace Toggl.PrimeRadiant.Settings
         private const string preferManualMode = "PreferManualMode";
 
         private const string startButtonWasTappedBeforeKey = "StartButtonWasTappedBefore";
+        private const string projectOrTagWasAddedBeforeKey = "ProjectOrTagWasAddedBefore";
         private const string stopButtonWasTappedBeforeKey = "StopButtonWasTappedBefore";
 
         private const string onboardingPrefix = "Onboarding_";
@@ -27,6 +28,7 @@ namespace Toggl.PrimeRadiant.Settings
         private readonly IKeyValueStorage keyValueStorage;
 
         private readonly ISubject<bool> isNewUserSubject;
+        private readonly ISubject<bool> projectOrTagWasAddedSubject;
         private readonly ISubject<bool> startButtonWasTappedSubject;
         private readonly ISubject<bool> stopButtonWasTappedSubject;
 
@@ -38,8 +40,9 @@ namespace Toggl.PrimeRadiant.Settings
             this.keyValueStorage = keyValueStorage;
 
             (isNewUserSubject, IsNewUser) = prepareSubjectAndObservable(isNewUserKey);
-            (startButtonWasTappedSubject, StartButtonWasTappedBefore) = prepareSubjectAndObservable(startButtonWasTappedBeforeKey);
             (stopButtonWasTappedSubject, StopButtonWasTappedBefore) = prepareSubjectAndObservable(stopButtonWasTappedBeforeKey);
+            (startButtonWasTappedSubject, StartButtonWasTappedBefore) = prepareSubjectAndObservable(startButtonWasTappedBeforeKey);
+            (projectOrTagWasAddedSubject, ProjectOrTagWasAddedBefore) = prepareSubjectAndObservable(projectOrTagWasAddedBeforeKey);
         }
 
         #region IAccessRestrictionStorage
@@ -88,6 +91,8 @@ namespace Toggl.PrimeRadiant.Settings
 
         public IObservable<bool> StartButtonWasTappedBefore { get; }
 
+        public IObservable<bool> ProjectOrTagWasAddedBefore { get; }
+
         public IObservable<bool> StopButtonWasTappedBefore { get; }
 
         public void SetLastOpened(DateTimeOffset date)
@@ -117,6 +122,13 @@ namespace Toggl.PrimeRadiant.Settings
             keyValueStorage.SetBool(startButtonWasTappedBeforeKey, true);
         }
 
+
+        public void ProjectOrTagWasAdded()
+        {
+            projectOrTagWasAddedSubject.OnNext(true);
+            keyValueStorage.SetBool(projectOrTagWasAddedBeforeKey, true);
+        }
+
         public void StopButtonWasTapped()
         {
             stopButtonWasTappedSubject.OnNext(true);
@@ -134,6 +146,9 @@ namespace Toggl.PrimeRadiant.Settings
 
             keyValueStorage.SetBool(stopButtonWasTappedBeforeKey, false);
             stopButtonWasTappedSubject.OnNext(false);
+
+            keyValueStorage.SetBool(projectOrTagWasAddedBeforeKey, false);
+            projectOrTagWasAddedSubject.OnNext(false);
 
             keyValueStorage.RemoveAllWithPrefix(onboardingPrefix);
         }
