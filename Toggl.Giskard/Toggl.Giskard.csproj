@@ -351,6 +351,8 @@
     <Compile Include="Bindings\ViewPagerCurrentPageTargetBinding.cs" />
     <Compile Include="TemplateSelectors\CalendarShortcutsTemplateSelector.cs" />
     <Compile Include="Activities\TokenResetActivity.cs" />
+    <Compile Include="Tiles\ReportsTileService.cs" />
+    <Compile Include="Tiles\NewTimeEntryTileService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
