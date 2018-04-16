@@ -87,6 +87,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IOnboardingStorage OnboardingStorage => onboardingStorage;
 
+        public IMvxNavigationService NavigationService => navigationService;
+
         public IMvxAsyncCommand StartTimeEntryCommand { get; }
 
         public IMvxAsyncCommand StopTimeEntryCommand { get; }

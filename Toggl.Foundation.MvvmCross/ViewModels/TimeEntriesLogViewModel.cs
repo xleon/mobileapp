@@ -236,7 +236,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private bool isNotRunning(IDatabaseTimeEntry timeEntry) => !timeEntry.IsRunning();
 
         private Task edit(TimeEntryViewModel timeEntryViewModel)
-            => navigationService.Navigate<EditTimeEntryViewModel, long>(timeEntryViewModel.Id);
+        {
+            onboardingStorage.TimeEntryWasTapped();
+
+            return navigationService.Navigate<EditTimeEntryViewModel, long>(timeEntryViewModel.Id);
+        }
 
         private async Task delete(TimeEntryViewModel timeEntryViewModel)
         {

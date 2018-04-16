@@ -6,18 +6,22 @@ namespace Toggl.PrimeRadiant.Settings
     public interface IOnboardingStorage
     {
         IObservable<bool> IsNewUser { get; }
+        IObservable<bool> UserSignedUpUsingTheApp { get; }
         IObservable<bool> StartButtonWasTappedBefore { get; }
-        IObservable<bool> ProjectOrTagWasAddedBefore { get; }
+        IObservable<bool> HasEditedTimeEntry { get; }
         IObservable<bool> StopButtonWasTappedBefore { get; }
+        IObservable<bool> ProjectOrTagWasAddedBefore { get; }
 
         void SetCompletedOnboarding();
         void SetIsNewUser(bool isNewUser);
         void SetLastOpened(DateTimeOffset dateString);
+        void SetUserSignedUp();
 
         string GetLastOpened();
         bool CompletedOnboarding();
 
         void StartButtonWasTapped();
+        void TimeEntryWasTapped();
         void ProjectOrTagWasAdded();
         void StopButtonWasTapped();
 
