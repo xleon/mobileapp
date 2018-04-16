@@ -83,9 +83,12 @@ namespace Toggl.Daneel.ViewControllers
                       .WithConversion(inverterVisibilityConverter);
 
             //Text
-            bindingSet.Bind(DescriptionTextView)
-                      .For(v => v.RemainingLength)
+            bindingSet.Bind(RemainingCharacterCount)
                       .To(vm => vm.DescriptionRemainingLength);
+
+            bindingSet.Bind(RemainingCharacterCount)
+                      .For(v => v.BindVisible())
+                      .To(vm => vm.DescriptionLimitExceeded);
 
             bindingSet.Bind(DescriptionTextView)
                       .For(v => v.BindText())
