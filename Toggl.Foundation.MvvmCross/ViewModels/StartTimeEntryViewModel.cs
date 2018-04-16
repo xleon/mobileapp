@@ -151,6 +151,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public NestableObservableCollection<WorkspaceGroupedCollection<AutocompleteSuggestion>, AutocompleteSuggestion> Suggestions { get; }
             = new NestableObservableCollection<WorkspaceGroupedCollection<AutocompleteSuggestion>, AutocompleteSuggestion>();
 
+        public ITogglDataSource DataSource => dataSource;
+
         public IMvxAsyncCommand BackCommand { get; }
 
         public IMvxAsyncCommand DoneCommand { get; }
@@ -178,17 +180,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ITogglDataSource dataSource,
             IDialogService dialogService,
             IUserPreferences userPreferences,
+            IOnboardingStorage onboardingStorage,
             IInteractorFactory interactorFactory,
-            IMvxNavigationService navigationService,
-            IOnboardingStorage onboardingStorage)
+            IMvxNavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
+            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
@@ -444,6 +446,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return;
             }
 
+            OnboardingStorage.ProjectOrTagWasAdded();
             appendSymbol(QuerySymbols.TagsString);
         }
 
@@ -455,6 +458,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 IsSuggestingProjects = false;
                 return;
             }
+
+            OnboardingStorage.ProjectOrTagWasAdded();
 
             if (TextFieldInfo.ProjectId != null)
             {

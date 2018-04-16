@@ -350,7 +350,10 @@
     <Compile Include="Adapters\CalendarPagerAdapter.cs" />
     <Compile Include="Bindings\ViewPagerCurrentPageTargetBinding.cs" />
     <Compile Include="TemplateSelectors\CalendarShortcutsTemplateSelector.cs" />
+    <Compile Include="Activities\OutdatedAppActivity.cs" />
     <Compile Include="Activities\TokenResetActivity.cs" />
+    <Compile Include="Tiles\ReportsTileService.cs" />
+    <Compile Include="Tiles\NewTimeEntryTileService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -642,6 +645,12 @@
     <AndroidResource Include="Resources\drawable-xhdpi\toggl_logo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\toggl_logo.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\toggl_logo.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_illustration_error_spider.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_illustration_error_spider.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_illustration_error_spider.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_illustration_error_spider.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_illustration_error_spider.png" />
+    <AndroidResource Include="Resources\layout\OutdatedAppActivity.axml" />
     <AndroidResource Include="Resources\layout\TokenResetActivity.axml" />
   </ItemGroup>
   <ItemGroup>

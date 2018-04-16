@@ -429,6 +429,10 @@
     <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\doneGreen.png" />
     <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\doneGreen%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\doneGreen%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\emojiRaisedHands.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\emojiRaisedHands.imageset\emoji1.png" />
+    <ImageAsset Include="Resources\Images.xcassets\emojiRaisedHands.imageset\emoji1%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\emojiRaisedHands.imageset\emoji1%403x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icCheckGrey.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\icCheckGrey.imageset\icCheckGrey.png" />
     <ImageAsset Include="Resources\Images.xcassets\icCheckGrey.imageset\icCheckGrey%402x.png" />
@@ -841,6 +845,8 @@
     <Compile Include="Binding\ViewVisibilityWithFadeTargetBinding.cs" />
     <Compile Include="Binding\ImageViewAnimatedImageTargetBinding.cs" />
     <Compile Include="Onboarding\MainView\StartTimeEntryOnboardingStep.cs" />
+    <Compile Include="Onboarding\MainView\EditTimeEntryOnboardingStep.cs" />
+    <Compile Include="Onboarding\StartTimeEntryView\AddProjectOrTagOnboardingStep.cs" />
     <Compile Include="Onboarding\MainView\StopTimeEntryOnboardingStep.cs" />
     <Compile Include="Onboarding\CreationView\DisabledConfirmationButtonOnboardingStep.cs" />
   </ItemGroup>
@@ -901,6 +907,7 @@
     <Folder Include="ViewControllers\Settings\" />
     <Folder Include="Onboarding\" />
     <Folder Include="Onboarding\MainView\" />
+    <Folder Include="Onboarding\StartTimeEntryView\" />
     <Folder Include="Onboarding\CreationView\" />
   </ItemGroup>
   <ItemGroup>

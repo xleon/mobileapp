@@ -64,7 +64,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             protected override StartTimeEntryViewModel CreateViewModel()
-                => new StartTimeEntryViewModel(TimeService, DataSource, DialogService, UserPreferences, InteractorFactory, NavigationService, OnboardingStorage);
+                => new StartTimeEntryViewModel(
+                    TimeService,
+                    DataSource,
+                    DialogService,
+                    UserPreferences,
+                    OnboardingStorage,
+                    InteractorFactory,
+                    NavigationService);
         }
 
         public sealed class TheConstructor : StartTimeEntryViewModelTest
@@ -77,19 +84,26 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useDialogService,
                 bool useUserPreferences,
                 bool useInteractorFactory,
-                bool useNavigationService,
-                bool useOnboardingStorage)
+                bool useOnboardingStorage,
+                bool useNavigationService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
                 var dialogService = useDialogService ? DialogService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
-                var navigationService = useNavigationService ? NavigationService : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
+                var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new StartTimeEntryViewModel(timeService, dataSource, dialogService, userPreferences, interactorFactory, navigationService, onboardingStorage);
+                    () => new StartTimeEntryViewModel(
+                        timeService,
+                        dataSource,
+                        dialogService,
+                        userPreferences,
+                        onboardingStorage,
+                        interactorFactory,
+                        navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -644,6 +658,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.IsDirty.Should().BeTrue();
             }
+
+            [Fact, LogIfTooSlow]
+            public void SetsProjectOrTagWasAdded()
+            {
+                ViewModel.ToggleProjectSuggestionsCommand.Execute();
+
+                OnboardingStorage.Received().ProjectOrTagWasAdded();
+            }
         }
 
         public sealed class TheToggleTagSuggestionsCommand : StartTimeEntryViewModelTest
@@ -729,6 +751,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.ToggleTagSuggestionsCommand.Execute();
 
                 ViewModel.IsDirty.Should().BeTrue();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void SetsProjectOrTagWasAdded()
+            {
+                ViewModel.ToggleTagSuggestionsCommand.Execute();
+
+                OnboardingStorage.Received().ProjectOrTagWasAdded();
             }
         }
 

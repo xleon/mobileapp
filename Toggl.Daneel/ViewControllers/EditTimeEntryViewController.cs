@@ -16,6 +16,7 @@ using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
 using Toggl.Daneel.Presentation.Transition;
+using Foundation;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -24,8 +25,22 @@ namespace Toggl.Daneel.ViewControllers
     {
         private const float nonScrollableContentHeight = 116f;
 
+        private const string boundsKey = "bounds";
+
+        private IDisposable contentSizeChangedDisposable;
+
         public EditTimeEntryViewController() : base(nameof(EditTimeEntryViewController), null)
         {
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (!disposing) return;
+
+            contentSizeChangedDisposable?.Dispose();
+            contentSizeChangedDisposable = null;
         }
 
         public override void ViewDidLoad()
@@ -34,6 +49,8 @@ namespace Toggl.Daneel.ViewControllers
 
             setupDismissingByTappingOnBackground();
             prepareViews();
+
+            contentSizeChangedDisposable = ScrollViewContent.AddObserver(boundsKey, NSKeyValueObservingOptions.New, onContentSizeChanged);
 
             var durationCombiner = new DurationValueCombiner();
             var dateCombiner = new DateTimeOffsetDateFormatValueCombiner(TimeZoneInfo.Local);
@@ -218,19 +235,7 @@ namespace Toggl.Daneel.ViewControllers
 
         public override void ViewWillLayoutSubviews()
         {
-            var height = nonScrollableContentHeight + ScrollViewContent.Bounds.Height;
-            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
-            {
-                height += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
-            }
-
-            var newSize = new CGSize(0, height);
-            if (newSize != PreferredContentSize)
-            {
-                PreferredContentSize = newSize;
-                PresentationController.ContainerViewWillLayoutSubviews();
-                ScrollView.ScrollEnabled = ScrollViewContent.Bounds.Height > ScrollView.Bounds.Height;
-            }
+            adjustHeight();
         }
 
         private void prepareViews()
@@ -271,6 +276,29 @@ namespace Toggl.Daneel.ViewControllers
                 var tapToDismiss = new UITapGestureRecognizer(() => ViewModel.CloseCommand.Execute());
                 modalPresentationController.AdditionalContentView.AddGestureRecognizer(tapToDismiss);
             }
+        }
+
+        private void onContentSizeChanged(NSObservedChange change)
+        {
+            adjustHeight();
+        }
+
+        private void adjustHeight()
+        {
+            var height = nonScrollableContentHeight + ScrollViewContent.Bounds.Height;
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                height += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+            }
+
+            var newSize = new CGSize(0, height);
+            if (newSize != PreferredContentSize)
+            {
+                PreferredContentSize = newSize;
+                PresentationController.ContainerViewWillLayoutSubviews();
+            }
+
+            ScrollView.ScrollEnabled = ScrollViewContent.Bounds.Height > ScrollView.Bounds.Height;
         }
     }
 }

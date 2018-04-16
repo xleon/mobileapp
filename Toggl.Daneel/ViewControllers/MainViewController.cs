@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CoreGraphics;
@@ -23,6 +25,7 @@ using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Extensions;
+using Toggl.PrimeRadiant.Onboarding;
 using UIKit;
 using static Toggl.Foundation.MvvmCross.Helper.Animation;
 
@@ -46,11 +49,24 @@ namespace Toggl.Daneel.ViewControllers
         private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
         private readonly TimeEntriesEmptyLogView emptyStateView = TimeEntriesEmptyLogView.Create();
 
+        private MainTableViewSource source;
+        private TimeEntriesLogViewCell firstTimeEntry;
+
         private bool viewInitialized;
+
+        private DismissableOnboardingStep tapToEditStep;
+
+        private IDisposable onboardingDisposable;
+        private IDisposable tapToEditDisposable;
+        private IDisposable firstTimeEntryDisposable;
+        private IDisposable isEmptyDisposable;
         private IDisposable startButtonOnboardingDisposable;
         private IDisposable stopButtonOnboardingDisposable;
+        private IDisposable currentTimeEntryDisposable;
+        private IDisposable scrollDisposable;
 
         private readonly ISubject<bool> isRunningSubject = new BehaviorSubject<bool>(false);
+        private readonly ISubject<bool> isEmptySubject = new BehaviorSubject<bool>(false);
 
         public MainViewController()
             : base(nameof(MainViewController), null)
@@ -62,9 +78,11 @@ namespace Toggl.Daneel.ViewControllers
             base.ViewDidLoad();
 
             prepareViews();
+
+            source = new MainTableViewSource(TimeEntriesLogTableView);
+
             prepareOnboarding();
 
-            var source = new MainTableViewSource(TimeEntriesLogTableView);
             var suggestionsView = new SuggestionsView();
 
             TimeEntriesLogTableView.TableHeaderView = suggestionsView;
@@ -219,6 +237,15 @@ namespace Toggl.Daneel.ViewControllers
             if (!disposing) return;
 
             spiderBroView.Dispose();
+            onboardingDisposable.Dispose();
+            tapToEditDisposable.Dispose();
+            firstTimeEntryDisposable.Dispose();
+            isEmptyDisposable.Dispose();
+
+            scrollDisposable.Dispose();
+            source.OnScrolled -= onScrolled;
+            ViewModel.NavigationService.AfterNavigate -= onNavigate;
+
             startButtonOnboardingDisposable.Dispose();
             stopButtonOnboardingDisposable.Dispose();
         }
@@ -357,9 +384,66 @@ namespace Toggl.Daneel.ViewControllers
         {
             var storage = ViewModel.OnboardingStorage;
 
-            startButtonOnboardingDisposable = new StartTimeEntryOnboardingStep(storage).ManageDismissableTooltip(StartTimeEntryOnboardingBubbleView, storage);
+            isRunningSubject.OnNext(ViewModel.CurrentTimeEntryId.HasValue);
+            isEmptySubject.OnNext(ViewModel.ShouldShowEmptyState);
 
-            stopButtonOnboardingDisposable = new StopTimeEntryOnboardingStep(storage, isRunningSubject.AsObservable()).ManageDismissableTooltip(StopTimeEntryOnboardingBubbleView, storage);
+            isEmptyDisposable = ViewModel.WeakSubscribe(() => ViewModel.ShouldShowEmptyState, onEmptyChanged);
+            
+            startButtonOnboardingDisposable = new StartTimeEntryOnboardingStep(storage)
+                .ManageDismissableTooltip(StartTimeEntryOnboardingBubbleView, storage);
+
+            stopButtonOnboardingDisposable = new StopTimeEntryOnboardingStep(storage, isRunningSubject.AsObservable())
+                .ManageDismissableTooltip(StopTimeEntryOnboardingBubbleView, storage);
+
+            tapToEditStep = new EditTimeEntryOnboardingStep(storage, isEmptySubject.AsObservable())
+                .ToDismissable(nameof(EditTimeEntryOnboardingStep), storage);
+
+            tapToEditStep.DismissByTapping(TapToEditBubbleView);
+            tapToEditDisposable = tapToEditStep.ManageVisibilityOf(TapToEditBubbleView);
+
+            scrollDisposable = tapToEditStep.ShouldBeVisible.Subscribe(visible =>
+            {
+                if (visible)
+                    source.OnScrolled += onScrolled;
+                else
+                    source.OnScrolled -= onScrolled;
+            });
+
+            firstTimeEntryDisposable = source.FirstTimeEntry
+                .Subscribe(firstTimeEntry =>
+                {
+                    this.firstTimeEntry = firstTimeEntry;
+                    updateTapToEditTooltipPosition();
+                });
+
+            ViewModel.NavigationService.AfterNavigate += onNavigate;
+        }
+
+        private void onEmptyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            isEmptySubject.OnNext(ViewModel.ShouldShowEmptyState);
+        }
+
+        private void onScrolled(object sender, EventArgs e)
+        {
+            updateTapToEditTooltipPosition();
+        }
+
+        private void onNavigate(object sender, EventArgs e)
+        {
+            if (TapToEditBubbleView.Hidden == false)
+            {
+                tapToEditStep.Dismiss();
+                ViewModel.NavigationService.AfterNavigate -= onNavigate;
+            }
+        }
+
+        private void updateTapToEditTooltipPosition()
+        {
+            if (firstTimeEntry == null) return;
+
+            var position = TimeEntriesLogTableView.ConvertRectToView(firstTimeEntry.Frame, View);
+            TapToEditBubbleViewTopConstraint.Constant = position.Bottom + 7;
         }
 
         internal void Reload()

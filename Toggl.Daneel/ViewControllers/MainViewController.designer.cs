@@ -47,6 +47,12 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIButton StopTimeEntryButton { get; set; }
 
 		[Outlet]
+		UIKit.UIView TapToEditBubbleView { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint TapToEditBubbleViewTopConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIView StopTimeEntryOnboardingBubbleView { get; set; }
 
 		[Outlet]
@@ -111,6 +117,16 @@ namespace Toggl.Daneel.ViewControllers
 			if (StopTimeEntryButton != null) {
 				StopTimeEntryButton.Dispose ();
 				StopTimeEntryButton = null;
+			}
+
+			if (TapToEditBubbleView != null) {
+				TapToEditBubbleView.Dispose ();
+				TapToEditBubbleView = null;
+			}
+
+			if (TapToEditBubbleViewTopConstraint != null) {
+				TapToEditBubbleViewTopConstraint.Dispose ();
+				TapToEditBubbleViewTopConstraint = null;
 			}
 
 			if (TimeEntriesLogTableView != null) {
