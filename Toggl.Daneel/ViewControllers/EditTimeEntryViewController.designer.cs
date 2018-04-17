@@ -26,6 +26,9 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIView BillableView { get; set; }
 
 		[Outlet]
+		UIKit.UIView CategorizeWithProjectsBubbleView { get; set; }
+
+		[Outlet]
 		UIKit.UIButton CloseButton { get; set; }
 
 		[Outlet]
@@ -218,6 +221,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (TagsTextView != null) {
 				TagsTextView.Dispose ();
 				TagsTextView = null;
+			}
+
+			if (CategorizeWithProjectsBubbleView != null) {
+				CategorizeWithProjectsBubbleView.Dispose ();
+				CategorizeWithProjectsBubbleView = null;
 			}
 
 			if (RemainingCharacterCount != null) {

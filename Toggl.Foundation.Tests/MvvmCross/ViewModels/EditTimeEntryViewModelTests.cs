@@ -55,28 +55,30 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             protected override EditTimeEntryViewModel CreateViewModel()
-                => new EditTimeEntryViewModel(TimeService, DataSource, InteractorFactory, NavigationService, DialogService);
+                => new EditTimeEntryViewModel(TimeService, DataSource, InteractorFactory, NavigationService, OnboardingStorage, DialogService);
         }
 
         public sealed class TheConstructor : EditTimeEntryViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(FiveParameterConstructorTestData))]
+            [ClassData(typeof(SixParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
                 bool useNavigationService,
                 bool useTimeService,
                 bool useInteractorFactory,
+                bool useOnboardingStorage,
                 bool useDialogService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
                 var dialogService = useDialogService ? DialogService : null;
                 var navigationService = useNavigationService ? NavigationService : null;
+                var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new EditTimeEntryViewModel(timeService, dataSource, interactorFactory, navigationService, dialogService);
+                    () => new EditTimeEntryViewModel(timeService, dataSource, interactorFactory, navigationService, onboardingStorage, dialogService);
 
                 tryingToConstructWithEmptyParameters.ShouldThrow<ArgumentNullException>();
             }
@@ -411,6 +413,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheConfirmCommand : EditTimeEntryViewModelTest
         {
+            [Fact, LogIfTooSlow]
+            public void SetsTheOnboardingStorageFlag()
+            {
+                ViewModel.ConfirmCommand.Execute();
+
+                OnboardingStorage.Received().EditedTimeEntry();
+            }
+
             [Fact, LogIfTooSlow]
             public async Task InitiatesPushSync()
             {
@@ -916,6 +926,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         tag.Id.Returns(i);
                         return tag;
                     }).ToList();
+
+            [Fact, LogIfTooSlow]
+            public async Task SetsTheOnboardingStorageFlag()
+            {
+                var projectName = "Some other project";
+                await prepare(projectId: 11, projectName: projectName);
+
+                await ViewModel.SelectProjectCommand.ExecuteAsync();
+
+                OnboardingStorage.Received().SelectsProject();
+            }
 
             [Fact, LogIfTooSlow]
             public async Task SetsTheProject()

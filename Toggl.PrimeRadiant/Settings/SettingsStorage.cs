@@ -23,6 +23,7 @@ namespace Toggl.PrimeRadiant.Settings
         private const string hasEditedTimeEntryKey = "HasEditedTimeEntry";
         private const string projectOrTagWasAddedBeforeKey = "ProjectOrTagWasAddedBefore";
         private const string stopButtonWasTappedBeforeKey = "StopButtonWasTappedBefore";
+        private const string hasSelectedProjectKey = "HasSelectedProject";
 
         private const string onboardingPrefix = "Onboarding_";
 
@@ -35,6 +36,7 @@ namespace Toggl.PrimeRadiant.Settings
         private readonly ISubject<bool> startButtonWasTappedSubject;
         private readonly ISubject<bool> hasEditedTimeEntrySubject;
         private readonly ISubject<bool> stopButtonWasTappedSubject;
+        private readonly ISubject<bool> hasSelectedProjectSubject;
 
         public SettingsStorage(Version version, IKeyValueStorage keyValueStorage)
         {
@@ -46,6 +48,7 @@ namespace Toggl.PrimeRadiant.Settings
             (isNewUserSubject, IsNewUser) = prepareSubjectAndObservable(isNewUserKey);
             (stopButtonWasTappedSubject, StopButtonWasTappedBefore) = prepareSubjectAndObservable(stopButtonWasTappedBeforeKey);
             (hasEditedTimeEntrySubject, HasEditedTimeEntry) = prepareSubjectAndObservable(hasEditedTimeEntryKey);
+            (hasSelectedProjectSubject, HasSelectedProject) = prepareSubjectAndObservable(hasSelectedProjectKey);
             (userSignedUpUsingTheAppSubject, UserSignedUpUsingTheApp) = prepareSubjectAndObservable(userSignedUpUsingTheAppKey);
             (startButtonWasTappedSubject, StartButtonWasTappedBefore) = prepareSubjectAndObservable(startButtonWasTappedBeforeKey);
             (projectOrTagWasAddedSubject, ProjectOrTagWasAddedBefore) = prepareSubjectAndObservable(projectOrTagWasAddedBeforeKey);
@@ -105,6 +108,8 @@ namespace Toggl.PrimeRadiant.Settings
 
         public IObservable<bool> StopButtonWasTappedBefore { get; }
 
+        public IObservable<bool> HasSelectedProject { get; }
+
         public void SetLastOpened(DateTimeOffset date)
         {
             var dateString = date.ToString();
@@ -154,6 +159,18 @@ namespace Toggl.PrimeRadiant.Settings
         {
             stopButtonWasTappedSubject.OnNext(true);
             keyValueStorage.SetBool(stopButtonWasTappedBeforeKey, true);
+        }
+
+        public void SelectsProject()
+        {
+            hasSelectedProjectSubject.OnNext(true);
+            keyValueStorage.SetBool(hasSelectedProjectKey, true);
+        }
+
+        public void EditedTimeEntry()
+        {
+            hasEditedTimeEntrySubject.OnNext(true);
+            keyValueStorage.SetBool(hasEditedTimeEntryKey, true);
         }
 
         public bool WasDismissed(IDismissable dismissable) => keyValueStorage.GetBool(onboardingPrefix + dismissable.Key);

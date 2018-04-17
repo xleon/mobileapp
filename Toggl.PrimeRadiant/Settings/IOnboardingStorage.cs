@@ -10,6 +10,7 @@ namespace Toggl.PrimeRadiant.Settings
         IObservable<bool> StartButtonWasTappedBefore { get; }
         IObservable<bool> HasEditedTimeEntry { get; }
         IObservable<bool> StopButtonWasTappedBefore { get; }
+        IObservable<bool> HasSelectedProject { get; }
         IObservable<bool> ProjectOrTagWasAddedBefore { get; }
 
         void SetCompletedOnboarding();
@@ -24,6 +25,9 @@ namespace Toggl.PrimeRadiant.Settings
         void TimeEntryWasTapped();
         void ProjectOrTagWasAdded();
         void StopButtonWasTapped();
+
+        void EditedTimeEntry();
+        void SelectsProject();
 
         bool WasDismissed(IDismissable dismissable);
         void Dismiss(IDismissable dismissable);

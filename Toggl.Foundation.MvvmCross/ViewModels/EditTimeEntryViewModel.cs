@@ -14,6 +14,7 @@ using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
+using Toggl.PrimeRadiant.Settings;
 using static Toggl.Foundation.Helper.Constants;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
@@ -28,6 +29,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IDialogService dialogService;
         private readonly IInteractorFactory interactorFactory;
         private readonly IMvxNavigationService navigationService;
+        private readonly IOnboardingStorage onboardingStorage;
 
         private readonly HashSet<long> tagIds = new HashSet<long>();
         private IDisposable deleteDisposable;
@@ -53,6 +55,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                || (originalTimeEntry.Duration.HasValue
                    && originalTimeEntry.Duration != (long)Duration.TotalSeconds)
                || originalTimeEntry.Billable != Billable;
+
+        public IOnboardingStorage OnboardingStorage => onboardingStorage;
 
         public long Id { get; set; }
 
@@ -177,12 +181,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ITogglDataSource dataSource,
             IInteractorFactory interactorFactory,
             IMvxNavigationService navigationService,
+            IOnboardingStorage onboardingStorage,
             IDialogService dialogService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
+            Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.dataSource = dataSource;
@@ -190,6 +196,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.dialogService = dialogService;
             this.interactorFactory = interactorFactory;
             this.navigationService = navigationService;
+            this.onboardingStorage = onboardingStorage;
 
             DeleteCommand = new MvxAsyncCommand(delete);
             ConfirmCommand = new MvxCommand(confirm);
@@ -283,6 +290,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void save()
         {
+            onboardingStorage.EditedTimeEntry();
+
             var dto = new EditTimeEntryDto
             {
                 Id = Id,
@@ -377,6 +386,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task selectProject()
         {
+            onboardingStorage.SelectsProject();
+
             var returnParameter = await navigationService
                 .Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(
                     SelectProjectParameter.WithIds(projectId, taskId, workspaceId));

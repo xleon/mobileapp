@@ -848,6 +848,7 @@
     <Compile Include="Onboarding\StartTimeEntryView\AddProjectOrTagOnboardingStep.cs" />
     <Compile Include="Onboarding\MainView\StopTimeEntryOnboardingStep.cs" />
     <Compile Include="Onboarding\CreationView\DisabledConfirmationButtonOnboardingStep.cs" />
+    <Compile Include="Onboarding\EditView\CategorizeTimeUsingProjectsOnboardingStep.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
@@ -907,6 +908,7 @@
     <Folder Include="Onboarding\MainView\" />
     <Folder Include="Onboarding\StartTimeEntryView\" />
     <Folder Include="Onboarding\CreationView\" />
+    <Folder Include="Onboarding\EditView\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />
