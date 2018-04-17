@@ -696,7 +696,6 @@
       <DependentUpon>SuggestionsEmptyViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Color\ValueSliderView.cs" />
-    <Compile Include="Views\EditTimeEntry\TextViewWithCharacterCounter.cs" />
     <Compile Include="Views\EntityCreation\ClientViewCell.cs" />
     <Compile Include="Views\EntityCreation\ClientViewCell.designer.cs">
       <DependentUpon>ClientViewCell.cs</DependentUpon>
@@ -898,7 +897,6 @@
     <Folder Include="Views\Log\" />
     <Folder Include="Views\Suggestions\" />
     <Folder Include="Views\Color\" />
-    <Folder Include="Views\EditTimeEntry\" />
     <Folder Include="Views\EntityCreation\" />
     <Folder Include="Resources\Images.xcassets\icIllustrationTagsSmall.imageset\" />
     <Folder Include="Resources\Images.xcassets\icIllustrationProjectsSmall.imageset\" />
