@@ -652,6 +652,7 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_illustration_error_spider.png" />
     <AndroidResource Include="Resources\layout\OutdatedAppActivity.axml" />
     <AndroidResource Include="Resources\layout\TokenResetActivity.axml" />
+    <AndroidResource Include="Resources\drawable\EditTextWhiteCursor.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">

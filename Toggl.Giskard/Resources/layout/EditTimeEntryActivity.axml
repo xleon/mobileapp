@@ -36,7 +36,7 @@
             android:letterSpacing="-0.01"
             android:lineSpacingExtra="5sp"
             android:scrollHorizontally="true"
-            android:textCursorDrawable="@null"
+            android:textCursorDrawable="@drawable/EditTextWhiteCursor"
             android:textColor="@android:color/white"
             android:hint="@string/StartTimeEntryHint"
             android:background="@color/blueToolbarBackground"
