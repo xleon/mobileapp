@@ -20,8 +20,7 @@ namespace Toggl.Daneel.Binding
 
         protected override void SetValue(DateTimeOffset value)
         {
-            /* Related to issue https://github.com/toggl/mobileapp/issues/1887
-             * We are setting the date to NSDate.Now here because of a glitch that causes the picker
+            /* We are setting the date to NSDate.Now here because of a glitch that causes the picker
              * to show the correct time, but an invalid date (Jan 1 or Dec 31).
              * This glitch seems to be related to the Xamarin wrapper, since I wasn't able to reproduce
              * the same problem in a Swift app.
