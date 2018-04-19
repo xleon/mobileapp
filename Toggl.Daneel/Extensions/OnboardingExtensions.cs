@@ -5,6 +5,7 @@ using UIKit;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.PrimeRadiant.Extensions;
+using System.Reactive.Linq;
 
 namespace Toggl.Daneel.Extensions
 {
@@ -19,6 +20,8 @@ namespace Toggl.Daneel.Extensions
         private static readonly nfloat shadowRadius = 6;
 
         private const float shadowOpacity = 0.1f;
+
+        private static readonly TimeSpan visibilityDelay = TimeSpan.FromMilliseconds(600);
 
         public static void MockSuggestion(this UIView view)
         {
@@ -82,7 +85,9 @@ namespace Toggl.Daneel.Extensions
                 }
             }
 
-            return step.ShouldBeVisible.Subscribe(toggleVisibilityOnMainThread);
+            return step.ShouldBeVisible
+                       .Delay(visibilityDelay)
+                       .Subscribe(toggleVisibilityOnMainThread);
         }
 
         public static void DismissByTapping(this IDismissable step, UIView view)
