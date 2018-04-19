@@ -77,6 +77,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             && TimeEntriesLogViewModel.IsEmpty
             && !IsWelcome;
 
+        public int TimeEntriesCount => TimeEntriesLogViewModel.TimeEntries?.Select(section => section.Count).Sum() ?? 0;
+
         public bool IsWelcome => TimeEntriesLogViewModel.IsWelcome;
 
         public bool IsInManualMode { get; set; } = false;
@@ -174,6 +176,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     RaisePropertyChanged(nameof(ShouldShowTimeEntriesLog));
                     RaisePropertyChanged(nameof(ShouldShowWelcomeBack));
                     RaisePropertyChanged(nameof(ShouldShowEmptyState));
+                    RaisePropertyChanged(nameof(TimeEntriesCount));
                 });
 
             disposeBag.Add(tickDisposable);

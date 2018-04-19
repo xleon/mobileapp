@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CoreGraphics;
@@ -15,7 +14,6 @@ using MvvmCross.Plugins.Color.iOS;
 using MvvmCross.Plugins.Visibility;
 using Toggl.Daneel.Combiners;
 using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Onboarding;
 using Toggl.Daneel.Onboarding.MainView;
 using Toggl.Daneel.Suggestions;
 using Toggl.Daneel.Views;
@@ -26,8 +24,10 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Extensions;
 using Toggl.PrimeRadiant.Onboarding;
+using Toggl.PrimeRadiant.Settings;
 using UIKit;
 using static Toggl.Foundation.MvvmCross.Helper.Animation;
+using static System.Math;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -55,18 +55,25 @@ namespace Toggl.Daneel.ViewControllers
         private bool viewInitialized;
 
         private DismissableOnboardingStep tapToEditStep;
+        private DismissableOnboardingStep swipeLeftStep;
+        private DismissableOnboardingStep swipeRightStep;
 
-        private IDisposable onboardingDisposable;
+        private UIGestureRecognizer swipeLeftGestureRecognizer;
+        private UIGestureRecognizer swipeRightGestureRecognizer;
+
         private IDisposable tapToEditDisposable;
         private IDisposable firstTimeEntryDisposable;
         private IDisposable isEmptyDisposable;
         private IDisposable startButtonOnboardingDisposable;
         private IDisposable stopButtonOnboardingDisposable;
-        private IDisposable currentTimeEntryDisposable;
         private IDisposable scrollDisposable;
+        private IDisposable timeEntriesCountDisposable;
+        private IDisposable swipeLeftOnboardingDisposable;
+        private IDisposable swipeRightOnboardingDisposable;
 
         private readonly ISubject<bool> isRunningSubject = new BehaviorSubject<bool>(false);
         private readonly ISubject<bool> isEmptySubject = new BehaviorSubject<bool>(false);
+        private readonly ISubject<int> timeEntriesCountSubject = new BehaviorSubject<int>(0);
 
         public MainViewController()
             : base(nameof(MainViewController), null)
@@ -237,14 +244,16 @@ namespace Toggl.Daneel.ViewControllers
             if (!disposing) return;
 
             spiderBroView.Dispose();
-            onboardingDisposable.Dispose();
             tapToEditDisposable.Dispose();
             firstTimeEntryDisposable.Dispose();
             isEmptyDisposable.Dispose();
 
             scrollDisposable.Dispose();
+            swipeLeftOnboardingDisposable.Dispose();
+            swipeRightOnboardingDisposable.Dispose();
             source.OnScrolled -= onScrolled;
             ViewModel.NavigationService.AfterNavigate -= onNavigate;
+            timeEntriesCountDisposable.Dispose();
 
             startButtonOnboardingDisposable.Dispose();
             stopButtonOnboardingDisposable.Dispose();
@@ -388,7 +397,7 @@ namespace Toggl.Daneel.ViewControllers
             isEmptySubject.OnNext(ViewModel.ShouldShowEmptyState);
 
             isEmptyDisposable = ViewModel.WeakSubscribe(() => ViewModel.ShouldShowEmptyState, onEmptyChanged);
-            
+
             startButtonOnboardingDisposable = new StartTimeEntryOnboardingStep(storage)
                 .ManageDismissableTooltip(StartTimeEntryOnboardingBubbleView, storage);
 
@@ -401,22 +410,50 @@ namespace Toggl.Daneel.ViewControllers
             tapToEditStep.DismissByTapping(TapToEditBubbleView);
             tapToEditDisposable = tapToEditStep.ManageVisibilityOf(TapToEditBubbleView);
 
-            scrollDisposable = tapToEditStep.ShouldBeVisible.Subscribe(visible =>
-            {
-                if (visible)
-                    source.OnScrolled += onScrolled;
-                else
-                    source.OnScrolled -= onScrolled;
-            });
+            prepareSwipeGesturesOnboarding(storage);
+
+            scrollDisposable = tapToEditStep.ShouldBeVisible.CombineLatest(
+                swipeLeftStep.ShouldBeVisible,
+                swipeRightStep.ShouldBeVisible,
+                (tapToEdit, swipeLeft, swipeRight) => tapToEdit || swipeLeft || swipeRight)
+                .Subscribe(visible =>
+                {
+                    if (visible)
+                        source.OnScrolled += onScrolled;
+                    else
+                        source.OnScrolled -= onScrolled;
+                });
 
             firstTimeEntryDisposable = source.FirstTimeEntry
                 .Subscribe(firstTimeEntry =>
                 {
+                    updateSwipeDismissGestures(firstTimeEntry);
                     this.firstTimeEntry = firstTimeEntry;
-                    updateTapToEditTooltipPosition();
+                    updateTooltipPositions();
                 });
 
             ViewModel.NavigationService.AfterNavigate += onNavigate;
+        }
+
+        private void prepareSwipeGesturesOnboarding(IOnboardingStorage storage)
+        {
+            timeEntriesCountSubject.OnNext(ViewModel.TimeEntriesCount);
+
+            timeEntriesCountDisposable = ViewModel.WeakSubscribe(() => ViewModel.TimeEntriesCount, onTimeEntriesCountChanged);
+
+            swipeRightStep = new SwipeRightOnboardingStep(timeEntriesCountSubject.AsObservable())
+                .ToDismissable(nameof(SwipeRightOnboardingStep), storage);
+
+            swipeLeftStep = new SwipeLeftOnboardingStep(timeEntriesCountSubject.AsObservable(), swipeRightStep.ShouldBeVisible)
+                .ToDismissable(nameof(SwipeLeftOnboardingStep), storage);
+
+            swipeLeftStep.DismissByTapping(SwipeLeftBubbleView);
+            swipeLeftOnboardingDisposable = swipeLeftStep.ManageVisibilityOf(SwipeLeftBubbleView);
+
+            swipeRightStep.DismissByTapping(SwipeRightBubbleView);
+            swipeRightOnboardingDisposable = swipeRightStep.ManageVisibilityOf(SwipeRightBubbleView);
+
+            updateSwipeDismissGestures(firstTimeEntry);
         }
 
         private void onEmptyChanged(object sender, PropertyChangedEventArgs args)
@@ -424,26 +461,72 @@ namespace Toggl.Daneel.ViewControllers
             isEmptySubject.OnNext(ViewModel.ShouldShowEmptyState);
         }
 
+        private void onTimeEntriesCountChanged(object sender, PropertyChangedEventArgs e)
+        {
+            timeEntriesCountSubject.OnNext(ViewModel.TimeEntriesCount);
+        }
+
         private void onScrolled(object sender, EventArgs e)
         {
-            updateTapToEditTooltipPosition();
+            updateTooltipPositions();
         }
 
         private void onNavigate(object sender, EventArgs e)
         {
-            if (TapToEditBubbleView.Hidden == false)
+            bool isHidden = false;
+            InvokeOnMainThread(() => isHidden = TapToEditBubbleView.Hidden);
+
+            if (isHidden == false)
             {
                 tapToEditStep.Dismiss();
                 ViewModel.NavigationService.AfterNavigate -= onNavigate;
             }
         }
 
-        private void updateTapToEditTooltipPosition()
+        private void updateTooltipPositions()
         {
             if (firstTimeEntry == null) return;
 
-            var position = TimeEntriesLogTableView.ConvertRectToView(firstTimeEntry.Frame, View);
+            var position = TimeEntriesLogTableView.ConvertRectToView(
+                firstTimeEntry.Frame, TimeEntriesLogTableView.Superview);
+
             TapToEditBubbleViewTopConstraint.Constant = position.Bottom + 7;
+            SwipeLeftTopConstraint.Constant = position.Y - SwipeLeftBubbleView.Frame.Height;
+            SwipeRightTopConstraint.Constant = position.Y - SwipeRightBubbleView.Frame.Height;
+        }
+
+        private void updateSwipeDismissGestures(UIView nextFirstTimeEntry)
+        {
+            if (swipeLeftGestureRecognizer != null)
+                firstTimeEntry?.RemoveGestureRecognizer(swipeLeftGestureRecognizer);
+
+            if (swipeRightGestureRecognizer != null)
+                firstTimeEntry?.RemoveGestureRecognizer(swipeRightGestureRecognizer);
+
+            if (nextFirstTimeEntry == null) return;
+
+            swipeLeftGestureRecognizer = dismissBySwiping(nextFirstTimeEntry, swipeLeftStep, direction: -1);
+            swipeRightGestureRecognizer = dismissBySwiping(nextFirstTimeEntry, swipeRightStep, direction: 1);
+        }
+
+        private UIGestureRecognizer dismissBySwiping(UIView view, DismissableOnboardingStep step, nfloat direction)
+        {
+            async void onGesture(UIPanGestureRecognizer recognizer)
+            {
+                var isVisible = await step.ShouldBeVisible.FirstAsync();
+                var isInDesiredDirection = Sign(recognizer.VelocityInView(view).X) == Sign(direction);
+                if (isVisible && isInDesiredDirection)
+                    step.Dismiss();
+            }
+
+            var panGestureRecognizer = new UIPanGestureRecognizer(onGesture)
+                {
+                    ShouldRecognizeSimultaneously = (a, b) => true
+                };
+
+            view.AddGestureRecognizer(panGestureRecognizer);
+
+            return panGestureRecognizer;
         }
 
         internal void Reload()
