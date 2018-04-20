@@ -15,6 +15,7 @@ using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.PrimeRadiant.Models;
+using Toggl.Foundation.Analytics;
 using Xunit;
 using static Toggl.Foundation.Helper.Constants;
 using static Toggl.Multivac.Extensions.StringExtensions;
@@ -31,6 +32,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected readonly TimeSpan Duration = TimeSpan.FromHours(1);
 
             protected IDatabaseTimeEntry TheTimeEntry;
+
+            protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
 
             protected void ConfigureEditedTimeEntry(DateTimeOffset now, bool isRunning = false)
             {
@@ -55,20 +58,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             protected override EditTimeEntryViewModel CreateViewModel()
-                => new EditTimeEntryViewModel(TimeService, DataSource, InteractorFactory, NavigationService, OnboardingStorage, DialogService);
+            => new EditTimeEntryViewModel(TimeService, DataSource, InteractorFactory, NavigationService, OnboardingStorage, DialogService, AnalyticsService);
         }
 
         public sealed class TheConstructor : EditTimeEntryViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(SixParameterConstructorTestData))]
+            [ClassData(typeof(SevenParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
                 bool useNavigationService,
                 bool useTimeService,
                 bool useInteractorFactory,
                 bool useOnboardingStorage,
-                bool useDialogService)
+                bool useDialogService,
+                bool useAnalyticsService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
@@ -76,9 +80,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var navigationService = useNavigationService ? NavigationService : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
+                var analyticsService = useAnalyticsService ? AnalyticsService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new EditTimeEntryViewModel(timeService, dataSource, interactorFactory, navigationService, onboardingStorage, dialogService);
+                    () => new EditTimeEntryViewModel(timeService, dataSource, interactorFactory, navigationService, onboardingStorage, dialogService, analyticsService);
 
                 tryingToConstructWithEmptyParameters.ShouldThrow<ArgumentNullException>();
             }
@@ -698,6 +703,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 });
             }
 
+            [Fact, LogIfTooSlow]
+            public async Task TracksTagSelectorOpens()
+            {
+                await ViewModel.SelectTagsCommand.ExecuteAsync();
+
+                AnalyticsService.Received().TrackEditOpensTagSelector();
+            }
+
             private IDatabaseTag createTag(long id)
             {
                 var tag = Substitute.For<IDatabaseTag>();
@@ -1022,6 +1035,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.SelectProjectCommand.ExecuteAsync();
 
                 ViewModel.Tags.Should().HaveCount(0);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksProjectSelectorOpens()
+            {
+                await prepare(11, "Some project");
+
+                await ViewModel.SelectProjectCommand.ExecuteAsync();
+
+                AnalyticsService.Received().TrackEditOpensProjectSelector();
             }
         }
 

@@ -15,6 +15,7 @@ using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
 using Toggl.PrimeRadiant.Settings;
+using Toggl.Foundation.Analytics;
 using static Toggl.Foundation.Helper.Constants;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
@@ -30,6 +31,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IInteractorFactory interactorFactory;
         private readonly IMvxNavigationService navigationService;
         private readonly IOnboardingStorage onboardingStorage;
+        private readonly IAnalyticsService analyticsService;
 
         private readonly HashSet<long> tagIds = new HashSet<long>();
         private IDisposable deleteDisposable;
@@ -182,7 +184,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IInteractorFactory interactorFactory,
             IMvxNavigationService navigationService,
             IOnboardingStorage onboardingStorage,
-            IDialogService dialogService)
+            IDialogService dialogService,
+            IAnalyticsService analyticsService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
@@ -190,6 +193,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
+            Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
@@ -197,6 +201,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.interactorFactory = interactorFactory;
             this.navigationService = navigationService;
             this.onboardingStorage = onboardingStorage;
+            this.analyticsService = analyticsService;
 
             DeleteCommand = new MvxAsyncCommand(delete);
             ConfirmCommand = new MvxCommand(confirm);
@@ -386,6 +391,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task selectProject()
         {
+            analyticsService.TrackEditOpensProjectSelector();
+
             onboardingStorage.SelectsProject();
 
             var returnParameter = await navigationService
@@ -438,6 +445,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task selectTags()
         {
+            analyticsService.TrackEditOpensTagSelector();
+
             var tagsToPass = tagIds.ToArray();
             var returnedTags = await navigationService
                 .Navigate<SelectTagsViewModel, (long[], long), long[]>(
