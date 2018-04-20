@@ -210,7 +210,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="56dp"
                 android:layout_width="match_parent"
-                android:layout_below="@id/EditAddTagsLabel" />
+                android:layout_below="@id/EditTags" />
             <LinearLayout
                 android:id="@+id/EditBillableRow"
                 local:MvxBind="Click ToggleBillableCommand; Visibility Visibility(IsBillableAvailable)"
