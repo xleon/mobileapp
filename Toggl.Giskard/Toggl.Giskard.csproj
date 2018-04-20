@@ -286,7 +286,6 @@
     <Compile Include="Extensions\CircularRevealAnimation.cs" />
     <Compile Include="Activities\EditTimeEntryActivity.cs" />
     <Compile Include="ApplicationShortcutCreator.cs" />
-    <Compile Include="Bindings\TextViewTagListTargetBinding.cs" />
     <Compile Include="TemplateSelectors\StartTimeEntrySuggestionsTemplateSelector.cs" />
     <Compile Include="Views\StartTimeEntryRecyclerView.cs" />
     <Compile Include="Adapters\StartTimeEntryRecyclerAdapter.cs" />
@@ -354,6 +353,9 @@
     <Compile Include="Activities\TokenResetActivity.cs" />
     <Compile Include="Tiles\ReportsTileService.cs" />
     <Compile Include="Tiles\NewTimeEntryTileService.cs" />
+    <Compile Include="Views\TagsListRecyclerView.cs" />
+    <Compile Include="TemplateSelectors\TagsListTemplateSelector.cs" />
+    <Compile Include="Adapters\TagsListRecyclerAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -652,6 +654,7 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_illustration_error_spider.png" />
     <AndroidResource Include="Resources\layout\OutdatedAppActivity.axml" />
     <AndroidResource Include="Resources\layout\TokenResetActivity.axml" />
+    <AndroidResource Include="Resources\layout\EditTimeEntryTagCell.axml" />
     <AndroidResource Include="Resources\drawable\EditTextWhiteCursor.xml" />
   </ItemGroup>
   <ItemGroup>
