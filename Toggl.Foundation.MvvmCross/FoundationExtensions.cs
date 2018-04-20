@@ -121,8 +121,6 @@ namespace Toggl.Foundation.MvvmCross
             Mvx.RegisterSingleton<IApiErrorHandlingService>(apiErrorHandlingService);
             Mvx.RegisterSingleton(passwordManagerService ?? new StubPasswordManagerService());
 
-            Mvx.LazyConstructAndRegisterSingleton<IInteractorFactory, InteractorFactory>();
-
             return new FoundationMvvmCross(
                 self.ApiFactory,
                 self.Database,
@@ -159,8 +157,14 @@ namespace Toggl.Foundation.MvvmCross
                 TogglSyncManager.CreateSyncManager(self.Database, api, dataSource, self.TimeService, self.AnalyticsService, retryDelayLimit, scheduler);
 
             ITogglDataSource createDataSource(ITogglApi api)
-                => new TogglDataSource(api, self.Database, self.TimeService, self.ApiErrorHandlingService, self.BackgroundService, createSyncManager(api), TimeSpan.FromMinutes(5), self.ShortcutCreator)
+            {
+                var dataSource = new TogglDataSource(api, self.Database, self.TimeService, self.ApiErrorHandlingService, self.BackgroundService, createSyncManager(api), TimeSpan.FromMinutes(5), self.ShortcutCreator)
                     .RegisterServices();
+
+                Mvx.ConstructAndRegisterSingleton<IInteractorFactory, InteractorFactory>();
+
+                return dataSource;
+            }
 
             var loginManager =
                 new LoginManager(self.ApiFactory, self.Database, self.GoogleService, self.ShortcutCreator, self.AccessRestrictionStorage, createDataSource);
