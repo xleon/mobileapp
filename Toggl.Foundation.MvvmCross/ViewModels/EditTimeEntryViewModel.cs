@@ -141,7 +141,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
         }
 
-        public List<string> Tags { get; private set; } = new List<string>();
+        public MvxObservableCollection<string> Tags { get; private set; } = new MvxObservableCollection<string>();
 
         [DependsOn(nameof(Tags))]
         public bool HasTags => Tags?.Any() ?? false;

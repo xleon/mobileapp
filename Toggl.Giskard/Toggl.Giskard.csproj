@@ -355,7 +355,6 @@
     <Compile Include="Tiles\NewTimeEntryTileService.cs" />
     <Compile Include="Views\TagsListRecyclerView.cs" />
     <Compile Include="TemplateSelectors\TagsListTemplateSelector.cs" />
-    <Compile Include="Adapters\TagsListRecyclerAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
