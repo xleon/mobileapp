@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Onboarding;
+using UIKit;
 
 namespace Toggl.Daneel.Onboarding.MainView
 {
@@ -15,8 +16,9 @@ namespace Toggl.Daneel.Onboarding.MainView
         {
             Ensure.Argument.IsNotNull(timeEntriesCountObservable, nameof(timeEntriesCountObservable));
 
-            ShouldBeVisible = timeEntriesCountObservable
-                .Select(timeEntriesCount => timeEntriesCount >= minimumTimeEntriesCount);
+            ShouldBeVisible = UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
+                ? timeEntriesCountObservable.Select(timeEntriesCount => timeEntriesCount >= minimumTimeEntriesCount)
+                : Observable.Return(false);
         }
     }
 }
