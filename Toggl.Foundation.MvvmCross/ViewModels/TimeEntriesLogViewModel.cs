@@ -92,8 +92,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var createDisposable =
                 dataSource.TimeEntries.TimeEntryCreated
                     .Where(isNotRunning)
-                    .Buffer(timeEntryCreationBufferDuration)
-                    .Subscribe(safeInsertTimeEntries);
+                    .Subscribe(safeInsertTimeEntry);
 
             var midnightDisposable =
                 timeService.MidnightObservable
@@ -155,49 +154,39 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     return;
                 }
 
-                safeInsertTimeEntries(new[] { timeEntry });
+                safeInsertTimeEntry(timeEntry);
             }
         }
 
-        private void safeInsertTimeEntries(IEnumerable<IDatabaseTimeEntry> timeEntries)
+        private void safeInsertTimeEntry(IDatabaseTimeEntry timeEntry)
         {
-            if (!timeEntries.Any()) return;
-
             IsWelcome = false;
 
-            var groupsToInsert = timeEntries.GroupBy(te => te.Start.LocalDateTime.Date);
-
-            foreach (var group in groupsToInsert)
+            var indexDate = timeEntry.Start.LocalDateTime.Date;
+            var collectionIndex = TimeEntries.IndexOf(x => x.Date.LocalDateTime == indexDate);
+            var groupExists = collectionIndex >= 0;
+            if (groupExists)
             {
-                var indexDate = group.Key;
-                var collectionIndex = TimeEntries.IndexOf(x => x.Date.LocalDateTime == indexDate);
-                var groupExists = collectionIndex >= 0;
-                if (groupExists)
-                {
-                    insertTimeEntriesInGroup(group, collectionIndex);
-                }
-                else
-                {
-                    insertNewTimeEntryGroup(group, indexDate);
-                }
+                insertTimeEntryInGroup(timeEntry, collectionIndex);
+            }
+            else
+            {
+                insertNewTimeEntryGroup(timeEntry, indexDate);
             }
 
             RaisePropertyChanged(nameof(IsEmpty));
         }
 
-        private void insertTimeEntriesInGroup(IGrouping<DateTime, IDatabaseTimeEntry> group, int collectionIndex)
+        private void insertTimeEntryInGroup(IDatabaseTimeEntry timeEntry, int collectionIndex)
         {
-            foreach (var timeEntry in group)
-            {
-                var timeEntryViewModel = new TimeEntryViewModel(timeEntry, durationFormat);
-                TimeEntries.InsertInChildCollection(collectionIndex, timeEntryViewModel);
-            }
+            var timeEntryViewModel = new TimeEntryViewModel(timeEntry, durationFormat);
+            TimeEntries.InsertInChildCollection(collectionIndex, timeEntryViewModel);
         }
 
-        private void insertNewTimeEntryGroup(IGrouping<DateTime, IDatabaseTimeEntry> group, DateTime indexDate)
+        private void insertNewTimeEntryGroup(IDatabaseTimeEntry timeEntry, DateTime indexDate)
         {
-            var timeEntriesToAdd = group.Select(te => new TimeEntryViewModel(te, durationFormat)).ToArray();
-            var newCollection = new TimeEntryViewModelCollection(indexDate, timeEntriesToAdd, durationFormat);
+            var timeEntryToAdd = new TimeEntryViewModel(timeEntry, durationFormat);
+            var newCollection = new TimeEntryViewModelCollection(indexDate, new[] { timeEntryToAdd }, durationFormat);
             var foundIndex = TimeEntries.IndexOf(TimeEntries.FirstOrDefault(x => x.Date < indexDate));
             var indexToInsert = foundIndex == -1 ? TimeEntries.Count : foundIndex;
             TimeEntries.Insert(indexToInsert, newCollection);
