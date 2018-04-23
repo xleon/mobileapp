@@ -394,9 +394,9 @@ namespace Toggl.Daneel.ViewControllers
             var storage = ViewModel.OnboardingStorage;
 
             isRunningSubject.OnNext(ViewModel.CurrentTimeEntryId.HasValue);
-            isEmptySubject.OnNext(ViewModel.ShouldShowEmptyState);
+            isEmptySubject.OnNext(ViewModel.IsLogEmpty);
 
-            isEmptyDisposable = ViewModel.WeakSubscribe(() => ViewModel.ShouldShowEmptyState, onEmptyChanged);
+            isEmptyDisposable = ViewModel.WeakSubscribe(() => ViewModel.IsLogEmpty, onEmptyChanged);
 
             startButtonOnboardingDisposable = new StartTimeEntryOnboardingStep(storage)
                 .ManageDismissableTooltip(StartTimeEntryOnboardingBubbleView, storage);
@@ -458,7 +458,7 @@ namespace Toggl.Daneel.ViewControllers
 
         private void onEmptyChanged(object sender, PropertyChangedEventArgs args)
         {
-            isEmptySubject.OnNext(ViewModel.ShouldShowEmptyState);
+            isEmptySubject.OnNext(ViewModel.IsLogEmpty);
         }
 
         private void onTimeEntriesCountChanged(object sender, PropertyChangedEventArgs e)
