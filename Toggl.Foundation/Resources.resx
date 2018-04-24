@@ -189,8 +189,8 @@ time entries will appear here.</value>
     <data name="SetDefaultWorkspace">
         <value>Set default workspace</value>
     </data>
-    <data name="AddTags">
-        <value>Add a tag</value>
+    <data name="EnterTag">
+        <value>Enter tag name</value>
     </data>
     <data name="EnterProject">
         <value>Enter project name</value>
