@@ -395,9 +395,9 @@ namespace Toggl.Foundation {
             }
         }
         
-        public static string AddProject {
+        public static string EnterProject {
             get {
-                return ResourceManager.GetString("AddProject", resourceCulture);
+                return ResourceManager.GetString("EnterProject", resourceCulture);
             }
         }
         
