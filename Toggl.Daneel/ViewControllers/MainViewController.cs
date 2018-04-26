@@ -27,7 +27,6 @@ using Toggl.PrimeRadiant.Onboarding;
 using Toggl.PrimeRadiant.Settings;
 using UIKit;
 using static Toggl.Foundation.MvvmCross.Helper.Animation;
-using static System.Math;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -62,7 +61,6 @@ namespace Toggl.Daneel.ViewControllers
         private DismissableOnboardingStep swipeRightStep;
 
         private UIGestureRecognizer swipeLeftGestureRecognizer;
-        private UIGestureRecognizer swipeRightGestureRecognizer;
 
         private IDisposable tapToEditDisposable;
         private IDisposable firstTimeEntryDisposable;
@@ -75,6 +73,7 @@ namespace Toggl.Daneel.ViewControllers
         private IDisposable swipeRightOnboardingDisposable;
         private IDisposable swipeLeftAnimationDisposable;
         private IDisposable swipeRightAnimationDisposable;
+        private IDisposable swipeToContinueWasUsedDisposable;
 
         private readonly ISubject<bool> isRunningSubject = new BehaviorSubject<bool>(false);
         private readonly ISubject<bool> isEmptySubject = new BehaviorSubject<bool>(false);
@@ -262,6 +261,9 @@ namespace Toggl.Daneel.ViewControllers
 
             startButtonOnboardingDisposable.Dispose();
             stopButtonOnboardingDisposable.Dispose();
+
+            swipeToContinueWasUsedDisposable?.Dispose();
+            swipeToContinueWasUsedDisposable = null;
         }
 
         public override void ViewDidLayoutSubviews()
@@ -451,6 +453,13 @@ namespace Toggl.Daneel.ViewControllers
             swipeRightOnboardingDisposable = swipeRightStep.ManageVisibilityOf(SwipeRightBubbleView);
             swipeRightAnimationDisposable = swipeRightStep.ManageSwipeActionAnimationOf(firstTimeEntry, Direction.Right);
 
+            swipeToContinueWasUsedDisposable = Observable.FromEventPattern(source, nameof(MainTableViewSource.SwipeToContinueWasUsed))
+                .Subscribe(_ =>
+                {
+                    swipeRightStep.Dismiss();
+                    swipeToContinueWasUsedDisposable?.Dispose();
+                    swipeToContinueWasUsedDisposable = null;
+                });
             updateSwipeDismissGestures(firstTimeEntry);
         }
 
@@ -515,11 +524,6 @@ namespace Toggl.Daneel.ViewControllers
                 firstTimeEntry?.RemoveGestureRecognizer(swipeLeftGestureRecognizer);
             }
 
-            if (swipeRightGestureRecognizer != null)
-            {
-                firstTimeEntry?.RemoveGestureRecognizer(swipeRightGestureRecognizer);
-            }
-
             swipeLeftAnimationDisposable?.Dispose();
             swipeRightAnimationDisposable?.Dispose();
 
@@ -529,7 +533,6 @@ namespace Toggl.Daneel.ViewControllers
             swipeRightAnimationDisposable = swipeRightStep.ManageSwipeActionAnimationOf(nextFirstTimeEntry, Direction.Right);
 
             swipeLeftGestureRecognizer = swipeLeftStep.DismissBySwiping(nextFirstTimeEntry, Direction.Left);
-            swipeRightGestureRecognizer = swipeRightStep.DismissBySwiping(nextFirstTimeEntry, Direction.Right);
         }
 
         internal void Reload()
