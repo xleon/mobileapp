@@ -222,6 +222,22 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Prepare(startTimeEntryParameters);
         }
 
+        public override void Prepare()
+        {
+            var queryByTypeObservable = queryByTypeSubject
+                .AsObservable()
+                .SelectMany(type => dataSource.AutocompleteProvider.Query(new QueryInfo("", type)));
+
+            queryDisposable = infoSubject.AsObservable()
+                .StartWith(TextFieldInfo)
+                .Where(shouldUpdateSuggestions)
+                .Select(QueryInfo.ParseFieldInfo)
+                .Do(onParsedQuery)
+                .SelectMany(dataSource.AutocompleteProvider.Query)
+                .Merge(queryByTypeObservable)
+                .Subscribe(onSuggestions);
+        }
+
         public override void Prepare(StartTimeEntryParameters parameter)
         {
             this.parameter = parameter;
@@ -237,21 +253,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             {
                 elapsedTimeDisposable = timeService.CurrentDateTimeObservable.Subscribe(onCurrentTime);
             }
-
-            var queryByTypeObservable =
-                queryByTypeSubject
-                    .AsObservable()
-                    .SelectMany(type => dataSource.AutocompleteProvider.Query(new QueryInfo("", type)));
-
-            queryDisposable =
-                infoSubject.AsObservable()
-                    .StartWith(TextFieldInfo)
-                    .Where(shouldUpdateSuggestions)
-                    .Select(QueryInfo.ParseFieldInfo)
-                    .Do(onParsedQuery)
-                    .SelectMany(dataSource.AutocompleteProvider.Query)
-                    .Merge(queryByTypeObservable)
-                    .Subscribe(onSuggestions);
 
             PlaceholderText = parameter.PlaceholderText;
         }
