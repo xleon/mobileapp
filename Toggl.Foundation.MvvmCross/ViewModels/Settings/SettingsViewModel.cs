@@ -331,7 +331,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IsSynced = false;
             IsRunningSync = false;
             userPreferences.Reset();
-            onboardingStorage.Reset();
             await dataSource.Logout();
             await navigationService.Navigate<OnboardingViewModel>();
         }
