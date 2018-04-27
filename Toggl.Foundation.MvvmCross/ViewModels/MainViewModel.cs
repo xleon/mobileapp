@@ -222,8 +222,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             base.ViewAppeared();
             navigationService.Navigate<SuggestionsViewModel>();
             navigationService.Navigate<TimeEntriesLogViewModel>();
-
-            ChangePresentation(new CardVisibilityHint(CurrentTimeEntryId != null));
         }
 
         private void setRunningEntry(IDatabaseTimeEntry timeEntry)
