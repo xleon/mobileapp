@@ -19,7 +19,6 @@ namespace Toggl.Daneel
     {
         private IAnalyticsService analyticsService;
         private IBackgroundService backgroundService;
-        private IInteractorFactory interactorFactory;
         private IMvxNavigationService navigationService;
 
         public override UIWindow Window { get; set; }
@@ -36,7 +35,6 @@ namespace Toggl.Daneel
 
             analyticsService = Mvx.Resolve<IAnalyticsService>();
             backgroundService = Mvx.Resolve<IBackgroundService>();
-            interactorFactory = Mvx.Resolve<IInteractorFactory>();
             navigationService = Mvx.Resolve<IMvxNavigationService>();
 
             Window.MakeKeyAndVisible();
@@ -86,6 +84,8 @@ namespace Toggl.Daneel
             switch (shortcutType)
             {
                 case ShortcutType.ContinueLastTimeEntry:
+                    var interactorFactory = Mvx.Resolve<IInteractorFactory>();
+                    if (interactorFactory == null) return;
                     IDisposable subscription = null;
                     subscription = interactorFactory
                         .ContinueMostRecentTimeEntry()
