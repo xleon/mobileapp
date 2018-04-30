@@ -4,6 +4,7 @@ using Android.App;
 using Android.OS;
 using Firebase.Analytics;
 using Toggl.Foundation.Analytics;
+using AppCenterAnalytics = Microsoft.AppCenter.Analytics.Analytics;
 
 namespace Toggl.Giskard.Services
 {
@@ -12,6 +13,8 @@ namespace Toggl.Giskard.Services
         private const string exceptionEventName = "HandledException";
         private const string exceptionTypeParameter = "ExceptionType";
         private const string exceptionMessageParameter = "ExceptionMessage";
+
+        private const int maxAppCenterStringLength = 64;
 
         private FirebaseAnalytics firebaseAnalytics { get; }
 
@@ -27,6 +30,7 @@ namespace Toggl.Giskard.Services
             #if USE_ANALYTICS
             var bundle = bundleFromParameters(parameters);
             firebaseAnalytics.LogEvent(eventName, bundle);
+            AppCenterAnalytics.TrackEvent(eventName, trimLongParameters(parameters));
             #endif
         }
 
@@ -50,5 +54,19 @@ namespace Toggl.Giskard.Services
 
             return bundle;
         }
+
+        private Dictionary<string, string> trimLongParameters(Dictionary<string, string> parameters)
+        {
+            var validParameters = new Dictionary<string, string>();
+            foreach (var (key, value) in parameters)
+            {
+                validParameters.Add(trimForAppCenter(key), trimForAppCenter(value));
+            }
+
+            return validParameters;
+        }
+
+        private string trimForAppCenter(string text)
+            => text.Length > maxAppCenterStringLength ? text.Substring(0, maxAppCenterStringLength) : text;
     }
 }
