@@ -312,7 +312,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     ViewModel.NextCommand.Execute();
 
-                    AnalyticsService.TrackLoginEvent(AuthenticationMethod.EmailAndPassword);
+                    AnalyticsService.Received().TrackLoginEvent(AuthenticationMethod.EmailAndPassword);
                 }
 
                 [Fact, LogIfTooSlow]
@@ -325,7 +325,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     ViewModel.NextCommand.Execute();
 
-                    AnalyticsService.TrackSignUpEvent(AuthenticationMethod.EmailAndPassword);
+                    AnalyticsService.Received().TrackSignUpEvent(AuthenticationMethod.EmailAndPassword);
                 }
 
                 [Fact, LogIfTooSlow]
