@@ -53,6 +53,10 @@ These are endpoints that are prefixed with `https://mobile.toggl.com/api/v9/` (`
 * `GET me/preferences`
 * `POST me/preferences`
 
+## Countries
+
+* `GET countries`
+
 ## Other
 
 * `GET status`
