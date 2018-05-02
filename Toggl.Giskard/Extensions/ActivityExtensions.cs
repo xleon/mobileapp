@@ -47,7 +47,9 @@ namespace Toggl.Giskard.Extensions
                 ? widthPixels - largeScreenMargins.DpToPixels(context)
                 : smallScreenWidth.DpToPixels(context);
             
-            var height = heightDp.DpToPixels(context);
+            var height = heightDp >= 0
+                ? heightDp.DpToPixels(context)
+                : heightDp;
 
             window.SetLayout(width, height);
         }
