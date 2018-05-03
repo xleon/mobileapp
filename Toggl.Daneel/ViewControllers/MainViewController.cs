@@ -280,7 +280,10 @@ namespace Toggl.Daneel.ViewControllers
             viewInitialized = true;
 
             if (blockedTimeEntryCardVisibilityChange.HasValue)
+            {
                 OnTimeEntryCardVisibilityChanged(blockedTimeEntryCardVisibilityChange.Value);
+                blockedTimeEntryCardVisibilityChange = null;
+            }
         }
 
         private void prepareViews()
