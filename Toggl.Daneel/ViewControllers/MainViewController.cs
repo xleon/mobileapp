@@ -55,6 +55,7 @@ namespace Toggl.Daneel.ViewControllers
         private TimeEntriesLogViewCell firstTimeEntry;
 
         private bool viewInitialized;
+        private bool? blockedTimeEntryCardVisibilityChange;
 
         private DismissableOnboardingStep tapToEditStep;
         private DismissableOnboardingStep swipeLeftStep;
@@ -216,7 +217,11 @@ namespace Toggl.Daneel.ViewControllers
 
         internal void OnTimeEntryCardVisibilityChanged(bool visible)
         {
-            if (!viewInitialized) return;
+            if (!viewInitialized)
+            {
+                blockedTimeEntryCardVisibilityChange = visible;
+                return;
+            }
 
             if (visible)
             {
@@ -273,6 +278,9 @@ namespace Toggl.Daneel.ViewControllers
             if (viewInitialized) return;
 
             viewInitialized = true;
+
+            if (blockedTimeEntryCardVisibilityChange.HasValue)
+                OnTimeEntryCardVisibilityChanged(blockedTimeEntryCardVisibilityChange.Value);
         }
 
         private void prepareViews()
