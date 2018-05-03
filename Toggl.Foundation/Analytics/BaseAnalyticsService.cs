@@ -29,6 +29,10 @@ namespace Toggl.Foundation.Analytics
         private const string editEntrySelectProjectEventName = "EditEntrySelectProject";
         private const string editEntrySelectTagEventName = "EditEntrySelectTag";
 
+        private const string startEntrySelectProjectEventName = "StartEntrySelectProject";
+        private const string startEntrySelectTagEventName = "StartEntrySelectTag";
+        private const string suggestionSourceParameter = "Source";
+
         public void TrackOnboardingSkipEvent(string pageName)
         {
             track(onboardingSkipEventName, pageParameter, pageName);
@@ -97,6 +101,17 @@ namespace Toggl.Foundation.Analytics
         public void TrackEditOpensTagSelector()
         {
             track(editEntrySelectTagEventName);
+        }
+
+        public void TrackStartOpensProjectSelector(ProjectTagSuggestionSource source)
+        {
+            track(startEntrySelectProjectEventName, suggestionSourceParameter, source.ToString());
+
+        }
+
+        public void TrackStartOpensTagSelector(ProjectTagSuggestionSource source)
+        {
+            track(startEntrySelectTagEventName, suggestionSourceParameter, source.ToString());
         }
 
         private void track(string eventName)

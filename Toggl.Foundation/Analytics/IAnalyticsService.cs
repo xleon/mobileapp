@@ -27,5 +27,8 @@ namespace Toggl.Foundation.Analytics
 
         void TrackEditOpensProjectSelector();
         void TrackEditOpensTagSelector();
+
+        void TrackStartOpensProjectSelector(ProjectTagSuggestionSource source);
+        void TrackStartOpensTagSelector(ProjectTagSuggestionSource source);
     }
 }
