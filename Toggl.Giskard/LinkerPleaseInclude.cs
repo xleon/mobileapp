@@ -71,6 +71,11 @@ namespace Toggl.Giskard
             radioGroup.CheckedChange += (sender, args) => radioGroup.Check(args.CheckedId);
         }
 
+        public void Include(EditText editText)
+        {
+            editText.FocusChange += (sender, args) => editText.Text = args.ToString();
+        }
+
         public void Include(RadioButton radioButton)
         {
             radioButton.CheckedChange += (sender, args) => radioButton.Checked = args.IsChecked;
