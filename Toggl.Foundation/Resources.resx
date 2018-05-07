@@ -351,4 +351,7 @@ account is not set up</value>
      <data name="Done">     
         <value>Done</value>      
     </data>
+    <data name="SignUpCountryRequired">
+        <value>Please select your country.</value>
+    </data>
 </root>

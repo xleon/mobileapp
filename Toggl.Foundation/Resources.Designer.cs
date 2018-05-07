@@ -706,5 +706,11 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("Done", resourceCulture);
             }
         }
+        
+        public static string SignUpCountryRequired {
+            get {
+                return ResourceManager.GetString("SignUpCountryRequired", resourceCulture);
+            }
+        }
     }
 }
