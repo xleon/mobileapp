@@ -113,6 +113,12 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string LoginGetHelpLoggingIn {
+            get {
+                return ResourceManager.GetString("LoginGetHelpLoggingIn", resourceCulture);
+            }
+        }
+        
         public static string Today {
             get {
                 return ResourceManager.GetString("Today", resourceCulture);
