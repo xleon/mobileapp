@@ -11,6 +11,13 @@ public class TemporaryFileTransformation
 var target = Argument("target", "Default");
 var buildAll = Argument("buildall", Bitrise.IsRunningOnBitrise);
 
+private void FormatAndroidAxml()
+{
+	var args = "tools/xml-format/WilliamizeXml.Console.dll Toggl.Giskard/Resources/layout/";
+
+	StartProcess("mono", new ProcessSettings { Arguments = args });
+}
+
 private Action Test(string[] projectPaths)
 {
     var settings = new DotNetCoreTestSettings { NoBuild = true };
@@ -343,6 +350,10 @@ Task("Clean")
             CleanDirectory("./Toggl.Ultrawave.Tests/obj");
             CleanDirectory("./Toggl.Ultrawave.Tests.Integration/obj");
         });
+
+Task("Format")
+    .IsDependentOn("Clean")
+    .Does(() => FormatAndroidAxml());
 
 Task("Nuget")
     .IsDependentOn("Clean")
