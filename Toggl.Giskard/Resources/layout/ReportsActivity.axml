@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:animateLayoutChanges="true"
@@ -41,13 +40,14 @@
         <TextView
             local:MvxBind="Text CurrentDateRangeString; Click ToggleCalendarCommand"
             tools:text="Last week"
+            android:padding="16dp"
             android:textSize="19sp"
             android:gravity="center"
             android:letterSpacing="-0.01"
             android:lineSpacingExtra="5sp"
             android:textColor="@android:color/white"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical" />
     </android.support.v7.widget.Toolbar>
 </android.support.design.widget.CoordinatorLayout>
