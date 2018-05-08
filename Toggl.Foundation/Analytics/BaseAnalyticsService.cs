@@ -19,6 +19,9 @@ namespace Toggl.Foundation.Analytics
         private const string signupEventName = "SignUp";
         private const string resetPasswordEventName = "ResetPassword";
 
+        private const string logoutEventName = "Logout";
+        private const string logoutSourceParameter = "Source";
+
         private const string passwordManagerButtonClicked = "PasswordManagerButtonClicked";
         private const string passwordManagerContainsValidEmail = "PasswordManagerContainsValidEmail";
         private const string passwordManagerContainsValidPassword = "PasswordManagerContainsValidPassword";
@@ -57,6 +60,11 @@ namespace Toggl.Foundation.Analytics
         public void TrackSignUpEvent(AuthenticationMethod authenticationMethod)
         {
             track(signupEventName, authenticationMethodParameter, authenticationMethod.ToString());
+        }
+
+        public void TrackLogoutEvent(LogoutSource source)
+        {
+            track(loginEventName, logoutSourceParameter, source.ToString());
         }
 
         public void TrackResetPassword()
