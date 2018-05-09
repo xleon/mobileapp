@@ -18,6 +18,7 @@
     <string name="AddTags">Add tags</string>
     <string name="AddClientHint">Add/filter clients</string>
     <string name="AddProjectHint">Add/filter projects</string>
+    <string name="AddProjectTask">Add project/task</string>
     <string name="Billable">Billable</string>
     <string name="AddTagsHint">Add/filter tags</string>
     <string name="StartTime">Start time</string>
