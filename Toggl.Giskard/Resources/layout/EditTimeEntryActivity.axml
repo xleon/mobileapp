@@ -22,6 +22,7 @@
             android:padding="16dp"
             android:clickable="true"
             android:src="@drawable/close"
+            android:foregroundGravity="center"
             android:tint="@android:color/white"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_width="?attr/actionBarSize"
@@ -50,14 +51,14 @@
             android:id="@+id/EditTimeEntryConfirmButton"
             local:MvxBind="Text ConfirmButtonText; Click ConfirmCommand"
             android:text="DONE"
+            android:padding="16dp"
             android:textSize="14sp"
+            android:gravity="center"
             android:textAllCaps="true"
             android:fontFamily="sans-serif-medium"
             android:textColor="@android:color/white"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="16dp"
+            android:layout_height="56dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignParentRight="true" />
     </RelativeLayout>
     <android.support.v4.widget.NestedScrollView
