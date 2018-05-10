@@ -68,21 +68,24 @@ namespace Toggl.Giskard.Fragments
             pager.OffscreenPageLimit = 2;
             pager.Adapter = new SelectTimePagerAdapter(BindingContext);
             tabLayout.AddOnTabSelectedListener(this);
-            tabLayout.SetupWithViewPager(pager, true);
 
             onModeChangedDisposable =
                 ViewModel.WeakSubscribe<PropertyChangedEventArgs>(nameof(ViewModel.IsCalendarView), onIsCalendarViewChanged);
 
             var startPageView = this.BindingInflate(Resource.Layout.SelectDateTimeStartTimeTabHeader, null);
-            tabLayout.GetTabAt(StartTimeTab).SetCustomView(startPageView);
-
             var stopPageView = this.BindingInflate(Resource.Layout.SelectDateTimeStopTimeTabHeader, null);
-            tabLayout.GetTabAt(StopTimeTab).SetCustomView(stopPageView);
-
             var durationPageView = this.BindingInflate(Resource.Layout.SelectDateTimeDurationTabHeader, null);
-            tabLayout.GetTabAt(DurationTab).SetCustomView(durationPageView);
+            
+            tabLayout.Post(() =>
+            {
+                tabLayout.SetupWithViewPager(pager, true);
 
-            pager.SetCurrentItem(ViewModel.StartingTabIndex, false);
+                tabLayout.GetTabAt(StartTimeTab).SetCustomView(startPageView);
+                tabLayout.GetTabAt(StopTimeTab).SetCustomView(stopPageView);
+                tabLayout.GetTabAt(DurationTab).SetCustomView(durationPageView);
+
+                pager.SetCurrentItem(ViewModel.StartingTabIndex, false);
+            });
 
             return view;
         }
