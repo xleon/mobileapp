@@ -266,13 +266,22 @@
                 android:layout_alignBottom="@id/EditTimeSeparator">
                 <TextView
                     android:id="@+id/EditStartValueLabel"
-                    local:MvxBind="Text Format('{0} {1}', DateTimeOffsetTimeFormat(StartTime, TimeFormat), DateTimeOffsetShortDateFormat(StartTime, DateFormat))"
+                    local:MvxBind="Text DateTimeOffsetTimeFormat(StartTime, TimeFormat)"
                     tools:text="11:25 AM"
                     android:textSize="15sp"
                     android:textColor="@color/darkLabel"
-                    android:layout_weight="1"
                     android:layout_marginTop="16dp"
                     android:layout_marginLeft="56dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    local:MvxBind="Text DateTimeOffsetShortDateFormat(StartTime, DateFormat)"
+                    tools:text="06.05."
+                    android:textSize="15sp"
+                    android:textColor="@color/editViewDate"
+                    android:layout_toRightOf="@id/EditStartValueLabel"
+                    android:layout_alignTop="@id/EditStartValueLabel"
+                    android:layout_marginLeft="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
@@ -298,13 +307,23 @@
                 android:layout_alignBottom="@id/EditTimeSeparator">
                 <TextView
                     android:id="@+id/EditEndValueLabel"
-                    local:MvxBind="Text Format('{0} {1}', DateTimeOffsetTimeFormat(StopTimeOrCurrent, TimeFormat), DateTimeOffsetShortDateFormat(StopTimeOrCurrent, DateFormat)); DateTimeToTime(StopTime); Visibility Visibility(!IsTimeEntryRunning, true)"
+                    local:MvxBind="Text DateTimeOffsetTimeFormat(StopTimeOrCurrent, TimeFormat); Visibility Visibility(!IsTimeEntryRunning, true)"
                     tools:text="11:48 AM"
                     android:textSize="15sp"
                     android:textColor="@color/darkLabel"
                     android:layout_weight="1"
                     android:layout_marginTop="16dp"
                     android:layout_marginLeft="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    local:MvxBind="Text DateTimeOffsetShortDateFormat(StopTimeOrCurrent, DateFormat); Visibility Visibility(!IsTimeEntryRunning, true)"
+                    tools:text="06.05."
+                    android:textSize="15sp"
+                    android:textColor="@color/editViewDate"
+                    android:layout_toRightOf="@id/EditEndValueLabel"
+                    android:layout_alignTop="@id/EditEndValueLabel"
+                    android:layout_marginLeft="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
