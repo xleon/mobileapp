@@ -266,7 +266,7 @@
                 android:layout_alignBottom="@id/EditTimeSeparator">
                 <TextView
                     android:id="@+id/EditStartValueLabel"
-                    local:MvxBind="Text DateTimeToTime(StartTime)"
+                    local:MvxBind="Text Format('{0} {1}', DateTimeOffsetTimeFormat(StartTime, TimeFormat), DateTimeOffsetShortDateFormat(StartTime, DateFormat))"
                     tools:text="11:25 AM"
                     android:textSize="15sp"
                     android:textColor="@color/darkLabel"
@@ -298,7 +298,7 @@
                 android:layout_alignBottom="@id/EditTimeSeparator">
                 <TextView
                     android:id="@+id/EditEndValueLabel"
-                    local:MvxBind="Text DateTimeToTime(StopTime); Visibility Visibility(!IsTimeEntryRunning, true)"
+                    local:MvxBind="Text Format('{0} {1}', DateTimeOffsetTimeFormat(StopTimeOrCurrent, TimeFormat), DateTimeOffsetShortDateFormat(StopTimeOrCurrent, DateFormat)); DateTimeToTime(StopTime); Visibility Visibility(!IsTimeEntryRunning, true)"
                     tools:text="11:48 AM"
                     android:textSize="15sp"
                     android:textColor="@color/darkLabel"
@@ -310,7 +310,7 @@
                 <TextView
                     android:id="@+id/EditEndValueSetLabel"
                     local:MvxBind="Visibility Visibility(IsTimeEntryRunning)"
-                    android:text="@string/StopButtonText"
+                    android:text="@string/Stop"
                     android:textSize="15sp"
                     android:textColor="@color/buttonBlue"
                     android:layout_width="match_parent"
@@ -378,39 +378,13 @@
                 android:layout_width="match_parent"
                 android:layout_below="@id/EditDuration" />
             <ImageView
-                android:id="@+id/EditDateIcon"
-                android:scaleType="center"
-                android:src="@drawable/date"
-                android:layout_width="56dp"
-                android:layout_height="48dp"
-                android:layout_below="@id/EditDurationBottomBorder" />
-            <TextView
-                android:id="@+id/EditDateValueLabel"
-                local:MvxBind="Text DateToTitleString(StartTime); Click SelectTimeCommand, CommandParameter='StartDate'"
-                tools:text="Tue, 14 Nov"
-                android:textSize="15sp"
-                android:gravity="center_vertical"
-                android:textColor="@color/darkLabel"
-                android:background="?attr/selectableItemBackground"
-                android:layout_height="48dp"
-                android:layout_width="match_parent"
-                android:layout_alignTop="@id/EditDateIcon"
-                android:layout_toRightOf="@id/EditDateIcon" />
-            <View
-                android:id="@+id/EditDateValueBottomBorder"
-                android:background="@color/separator"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="56dp"
-                android:layout_width="match_parent"
-                android:layout_below="@id/EditDateValueLabel" />
-            <ImageView
                 android:id="@+id/EditTimeEntryDeleteIcon"
                 local:MvxBind="Click DeleteCommand"
                 android:scaleType="center"
                 android:src="@drawable/delete"
                 android:layout_width="56dp"
                 android:layout_height="48dp"
-                android:layout_below="@id/EditDateValueBottomBorder" />
+                android:layout_below="@id/EditDurationBottomBorder" />
             <TextView
                 android:id="@+id/EditTimeEntryDeleteLabel"
                 local:MvxBind="Click DeleteCommand"
