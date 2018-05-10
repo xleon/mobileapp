@@ -50,11 +50,6 @@ namespace Toggl.Giskard
                 view => new FabVisibilityTargetBinding(view)
             );
 
-            registry.RegisterCustomBindingFactory<ImageView>(
-                ImageViewVerticalFlipTargetBinding.BindingName,
-                view => new ImageViewVerticalFlipTargetBinding(view)
-            );
-
             registry.RegisterCustomBindingFactory<TextView>(
                 TextViewFontWeightTargetBinding.BindingName,
                 view => new TextViewFontWeightTargetBinding(view)
@@ -73,6 +68,11 @@ namespace Toggl.Giskard
             registry.RegisterCustomBindingFactory<ViewPager>(
                 ViewPagerCurrentPageTargetBinding.BindingName,
                 view => new ViewPagerCurrentPageTargetBinding(view)
+            );
+
+            registry.RegisterCustomBindingFactory<View>(
+                ViewUpsideDownTargetBinding.BindingName,
+                view => new ViewUpsideDownTargetBinding(view)
             );
 
             registry.RegisterCustomBindingFactory<View>(
