@@ -217,13 +217,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IsInManualMode = userPreferences.IsManualModeEnabled();
         }
 
-        public override void ViewAppeared()
-        {
-            base.ViewAppeared();
-            navigationService.Navigate<SuggestionsViewModel>();
-            navigationService.Navigate<TimeEntriesLogViewModel>();
-        }
-
         private void setRunningEntry(IDatabaseTimeEntry timeEntry)
         {
             CurrentTimeEntryId = timeEntry?.Id;

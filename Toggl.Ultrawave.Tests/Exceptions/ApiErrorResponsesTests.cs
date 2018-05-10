@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using FluentAssertions;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Helpers;
@@ -30,7 +29,7 @@ namespace Toggl.Ultrawave.Tests.Exceptions
                 exception.Should().BeAssignableTo<ClientErrorException>().And.BeOfType(expectedExceptionType);
             }
         }
-        
+
         public sealed class ServerErrors
         {
             [Theory, LogIfTooSlow]
@@ -58,7 +57,7 @@ namespace Toggl.Ultrawave.Tests.Exceptions
                 var exception = ApiExceptions.For(request, response);
 
                 exception.Should().BeOfType<UnknownApiErrorException>()
-                    .Which.HttpCode.Should().Equals(httpStatusCode);
+                    .Which.HttpCode.Should().Be(httpStatusCode);
             }
         }
 
@@ -85,9 +84,9 @@ namespace Toggl.Ultrawave.Tests.Exceptions
                 var endpoint = new Uri("https://www.some.url");
                 var method = new HttpMethod("GET");
                 var request = new Request("", endpoint, new HttpHeader[0], method);
-                var response = new Response(body, false, "application/json", new List<KeyValuePair<string, IEnumerable<string>>>(), HttpStatusCode.InternalServerError);
+                var response = new Response(body, false, "plain/text", new List<KeyValuePair<string, IEnumerable<string>>>(), HttpStatusCode.InternalServerError);
                 var exception = new InternalServerErrorException(request, response, "Custom message.");
-                var expectedSerialization = $"InternalServerErrorException for request {method} {endpoint}: Response: (Status: [500 InternalServerError]) (Headers: []) (Body: {body}) (Message: Custom message.)";
+                var expectedSerialization = $"InternalServerErrorException (Custom message.) for request {method} {endpoint} with response {{\"status\":\"500 InternalServerError\",\"headers\":{{}},\"body\":\"{body}\"}}";
 
                 var serialized = exception.ToString();
 
@@ -102,9 +101,9 @@ namespace Toggl.Ultrawave.Tests.Exceptions
                 var method = new HttpMethod("GET");
                 var request = new Request("", endpoint, new HttpHeader[0], method);
                 var headers = new[] { new KeyValuePair<string, IEnumerable<string>>("abc", new[] { "a", "b", "c" }) };
-                var response = new Response(body, false, "application/json", headers, HttpStatusCode.InternalServerError);
+                var response = new Response(body, false, "plain/text", headers, HttpStatusCode.InternalServerError);
                 var exception = new InternalServerErrorException(request, response, "Custom message.");
-                var expectedSerialization = $"InternalServerErrorException for request {method} {endpoint}: Response: (Status: [500 InternalServerError]) (Headers: ['abc': ['a', 'b', 'c']]) (Body: {body}) (Message: Custom message.)";
+                var expectedSerialization = $"InternalServerErrorException (Custom message.) for request {method} {endpoint} with response {{\"status\":\"500 InternalServerError\",\"headers\":{{\"abc\":[\"a\",\"b\",\"c\"]}},\"body\":\"{body}\"}}";
 
                 var serialized = exception.ToString();
 
@@ -112,60 +111,89 @@ namespace Toggl.Ultrawave.Tests.Exceptions
             }
 
             [Fact, LogIfTooSlow]
-            public void SerializesOneHeaderKeyWithNoValues()
+            public void DeserializesLocalizedErrorMessageAsJsonInResponse()
             {
-                var headers = new[] { new KeyValuePair<string, IEnumerable<string>>("abc", new string[0]) };
-                var expectedSerialization = "'abc': []";
+                var defaultMessage = "Default message";
+                var message = "Couldn't find workspace with id blah blah blah...";
+                var body = $"{{\"message\": \"{message}\"}}"; 
+                var endpoint = new Uri("https://www.some.url");
+                var method = new HttpMethod("GET");
+                var request = new Request("", endpoint, new HttpHeader[0], method);
+                var response = new Response(body, false, "application/json", new List<KeyValuePair<string, IEnumerable<string>>>(), HttpStatusCode.NotFound);
+                var exception = new ApiException(request, response, defaultMessage);
 
-                var serialized = ApiException.SerializeHeaders(headers);
+                exception.LocalizedApiErrorMessage.Should().Be(message);
+            }
 
-                serialized.Should().Be(expectedSerialization);
+            [Theory, LogIfTooSlow]
+            [InlineData("null")]
+            [InlineData("{}")]
+            [InlineData("{\"message\":null}")]
+            [InlineData("{\"notAMessage\":\"hi\"}")]
+            public void ReturnsFallbackLocalisedErrorMessageIfJsonErrorHasNoMessage(string noMessageJson)
+            {
+                var defaultMessage = "Default message";
+                var endpoint = new Uri("https://www.some.url");
+                var method = new HttpMethod("GET");
+                var request = new Request("", endpoint, new HttpHeader[0], method);
+                var response = new Response(noMessageJson, false, "application/json", new List<KeyValuePair<string, IEnumerable<string>>>(), HttpStatusCode.NotFound);
+                var exception = new ApiException(request, response, defaultMessage);
+
+                exception.LocalizedApiErrorMessage.Should().Be("Encountered unexpected error.");
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData("{")]
+            [InlineData("}")]
+            [InlineData("{\"message\":}")]
+            [InlineData("\"\"")]
+            [InlineData("This is an error.")]
+            public void ReturnsFallbackLocalisedErrorMessageIfJsonErrorHasInvalidSyntax(string brokenJson)
+            {
+                var defaultMessage = "Default message";
+                var endpoint = new Uri("https://www.some.url");
+                var method = new HttpMethod("GET");
+                var request = new Request("", endpoint, new HttpHeader[0], method);
+                var response = new Response(brokenJson, false, "application/json", new List<KeyValuePair<string, IEnumerable<string>>>(), HttpStatusCode.NotFound);
+                var exception = new ApiException(request, response, defaultMessage);
+
+                exception.LocalizedApiErrorMessage.Should().Be("Encountered unexpected error.");
             }
 
             [Fact, LogIfTooSlow]
-            public void SerializesOneHeaderKeyWithOneValue()
+            public void DeserializesLocalizedErrorMessageAsTextInResponse()
             {
-                var headers = new[] { new KeyValuePair<string, IEnumerable<string>>("abc", new[] { "def" }) };
-                var expectedSerialization = "'abc': ['def']";
+                var defaultMessage = "Default message";
+                var body = "Couldn't find workspace with id blah blah blah....";
+                var endpoint = new Uri("https://www.some.url");
+                var method = new HttpMethod("GET");
+                var request = new Request("", endpoint, new HttpHeader[0], method);
+                var response = new Response(body, false, "text/plain", new List<KeyValuePair<string, IEnumerable<string>>>(), HttpStatusCode.NotFound);
+                var exception = new ApiException(request, response, defaultMessage);
 
-                var serialized = ApiException.SerializeHeaders(headers);
-
-                serialized.Should().Be(expectedSerialization);
+                exception.LocalizedApiErrorMessage.Should().Be(body);
             }
 
             [Fact, LogIfTooSlow]
-            public void SerializesOneHeaderKeyWithMultipleValues()
+            public void DeserializesLocalizedErrorMessageAsTextInResponseForAnyContentType()
             {
-                var headers = new[] { new KeyValuePair<string, IEnumerable<string>>("abc", new[] { "def", "ghi", "jkl" }) };
-                var expectedSerialization = "'abc': ['def', 'ghi', 'jkl']";
+                var defaultMessage = "Default message";
+                var body = "Couldn't find workspace with id blah blah blah....";
+                var endpoint = new Uri("https://www.some.url");
+                var method = new HttpMethod("GET");
+                var request = new Request("", endpoint, new HttpHeader[0], method);
+                var response = new Response(body, false, "foo/bar", new List<KeyValuePair<string, IEnumerable<string>>>(), HttpStatusCode.NotFound);
+                var exception = new ApiException(request, response, defaultMessage);
 
-                var serialized = ApiException.SerializeHeaders(headers);
-
-                serialized.Should().Be(expectedSerialization);
-            }
-
-            [Fact, LogIfTooSlow]
-            public void SerializesMultipleHeaderKeyWithZeroOneOrMultipleValues()
-            {
-                var headers = new[]
-                {
-                    new KeyValuePair<string, IEnumerable<string>>("abc", new[] { "def", "ghi", "jkl" }),
-                    new KeyValuePair<string, IEnumerable<string>>("xyz", new string[0]),
-                    new KeyValuePair<string, IEnumerable<string>>("uvw", new[] { "123" })
-                };
-                var expectedSerialization = "'abc': ['def', 'ghi', 'jkl'], 'xyz': [], 'uvw': ['123']";
-
-                var serialized = ApiException.SerializeHeaders(headers);
-
-                serialized.Should().Be(expectedSerialization);
+                exception.LocalizedApiErrorMessage.Should().Be(body);
             }
         }
 
         private static Request createRequest(HttpMethod method)
             => new Request("{\"a\":123}", new Uri("https://integration.tests"), new[] { new HttpHeader("X", "Y") }, method);
 
-        private static Response createErrorResponse(HttpStatusCode code, string rawData = "")
-            => new Response(rawData, false, "application/json", new List<KeyValuePair<string, IEnumerable<string>>>(), code);
+        private static Response createErrorResponse(HttpStatusCode code, string contentType = "plain/text", string rawData = "")
+            => new Response(rawData, false, contentType, new List<KeyValuePair<string, IEnumerable<string>>>(), code);
 
         public static IEnumerable<object[]> ClientErrorsList
             => new[]

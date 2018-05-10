@@ -119,6 +119,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         [DependsOn(nameof(StopTime))]
         public bool IsTimeEntryRunning => !StopTime.HasValue;
 
+        public DateTimeOffset StopTimeOrCurrent => StopTime ?? timeService.CurrentDateTime;
+
         private DateTimeOffset? stopTime;
         public DateTimeOffset? StopTime
         {
@@ -160,11 +162,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand StopCommand { get; }
 
+        public IMvxAsyncCommand<string> StopTimeEntryCommand { get; }
+
         public IMvxAsyncCommand DeleteCommand { get; }
 
         public IMvxAsyncCommand CloseCommand { get; }
 
         public IMvxAsyncCommand EditDurationCommand { get; }
+
+        public IMvxAsyncCommand<string> SelectTimeCommand { get; }
 
         public IMvxAsyncCommand SelectStartTimeCommand { get; }
 
@@ -208,6 +214,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             CloseCommand = new MvxAsyncCommand(closeWithConfirmation);
             EditDurationCommand = new MvxAsyncCommand(editDuration);
             StopCommand = new MvxCommand(stopTimeEntry, () => IsTimeEntryRunning);
+            StopTimeEntryCommand = new MvxAsyncCommand<string>(onStopTimeEntryCommand);
 
             SelectStartTimeCommand = new MvxAsyncCommand(selectStartTime);
             SelectEndTimeCommand = new MvxAsyncCommand(selectEndTime);
@@ -217,6 +224,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SelectTagsCommand = new MvxAsyncCommand(selectTags);
             DismissSyncErrorMessageCommand = new MvxCommand(dismissSyncErrorMessageCommand);
             ToggleBillableCommand = new MvxCommand(toggleBillable);
+
+            SelectTimeCommand = new MvxAsyncCommand<string>(selectTime);
         }
 
         public override void Prepare(long parameter)
@@ -344,9 +353,38 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .ConfigureAwait(false);
         }
 
+        private async Task selectTime(string bindingParameter)
+        {
+            var parameters = 
+                SelectTimeParameters
+                .CreateFromBindingString(bindingParameter, StartTime, StopTime)
+                .WithFormats(DateFormat, TimeFormat);
+
+            var data = await navigationService
+                .Navigate<SelectTimeViewModel, SelectTimeParameters, SelectTimeResultsParameters>(parameters)
+                .ConfigureAwait(false);
+
+            if (data == null)
+                return;
+
+            StartTime = data.Start;
+            StopTime = data.Stop;
+        }
+
         private void stopTimeEntry()
         {
             StopTime = timeService.CurrentDateTime;
+        }
+
+        private async Task onStopTimeEntryCommand(string bindingParameter)
+        {
+            if (IsTimeEntryRunning)
+            {
+                StopTime = timeService.CurrentDateTime;
+                return;
+            }
+
+            await SelectTimeCommand.ExecuteAsync(bindingParameter);
         }
 
         private async Task selectEndTime()
