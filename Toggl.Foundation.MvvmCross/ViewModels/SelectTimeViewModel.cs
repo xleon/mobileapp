@@ -259,9 +259,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             await base.Initialize();
 
-            timeServiceDisposable = timeService.CurrentDateTimeObservable
-                       .StartWith(timeService.CurrentDateTime)
-                       .Subscribe(currentDateTime => CurrentDateTime = currentDateTime);
+            if (!StopTime.HasValue)
+            {
+                timeServiceDisposable =
+                    timeService.CurrentDateTimeObservable
+                               .StartWith(timeService.CurrentDateTime)
+                               .Subscribe(currentDateTime => CurrentDateTime = currentDateTime);
+            }
         }
 
         private Action increaseDuration(int minutes)
@@ -287,6 +291,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void stopTimeEntry()
         {
             StopTime = CurrentDateTime;
+        }
+
+        public override void ViewDestroy()
+        {
+            base.ViewDestroy();
+            timeServiceDisposable?.Dispose();
         }
 
         private async Task cancel()
