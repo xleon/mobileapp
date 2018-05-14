@@ -1,5 +1,7 @@
 ﻿using System;
 using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
 using MvvmCross.Core.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Xunit;
@@ -14,7 +16,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 => new SelectTimeViewModel(NavigationService, TimeService);
         }
 
-        public sealed class TheIncreaseDuration5MinCommand : SelectTimeViewModelTest
+        public sealed class TheIncreaseDurationCommand : SelectTimeViewModelTest
         {
             [Fact, LogIfTooSlow]
             public void IncreasesTheStartTimeWhenIsRunning()
@@ -27,7 +29,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 var duration = ViewModel.Duration;
 
-                ViewModel.IncreaseDuration5MinCommand.Execute();
+                ViewModel.IncreaseDurationCommand.Execute(minutes);
 
                 ViewModel.StartTime.Should().Be(startTime - TimeSpan.FromMinutes(minutes));
                 ViewModel.StopTime.Should().Be(null);
@@ -46,10 +48,29 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 var duration = ViewModel.Duration;
 
-                ViewModel.IncreaseDuration5MinCommand.Execute();
+                ViewModel.IncreaseDurationCommand.Execute(minutes);
 
                 ViewModel.StartTime.Should().Be(startTime);
                 ViewModel.StopTime.Should().Be(stopTime + TimeSpan.FromMinutes(minutes));
+                ViewModel.Duration.Should().Be(duration + TimeSpan.FromMinutes(minutes));
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData(5)]
+            [InlineData(10)]
+            [InlineData(30)]
+            public void IncreasesTheDurationForCorrectAmountOfTime(int minutes)
+            {
+                var startTime = DateTimeOffset.Now;
+                var stopTime = DateTimeOffset.Now + TimeSpan.FromHours(1);
+
+                ViewModel.StartTime = startTime;
+                ViewModel.StopTime = stopTime;
+
+                var duration = ViewModel.Duration;
+
+                ViewModel.IncreaseDurationCommand.Execute(minutes);
+
                 ViewModel.Duration.Should().Be(duration + TimeSpan.FromMinutes(minutes));
             }
         }
