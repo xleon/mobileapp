@@ -99,6 +99,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand StartTimeEntryCommand { get; }
 
+        public IMvxAsyncCommand AlternativeStartTimeEntryCommand { get; }
+
         public IMvxAsyncCommand StopTimeEntryCommand { get; }
 
         public IMvxAsyncCommand EditTimeEntryCommand { get; }
@@ -147,6 +149,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             EditTimeEntryCommand = new MvxAsyncCommand(editTimeEntry, () => CurrentTimeEntryId.HasValue);
             StopTimeEntryCommand = new MvxAsyncCommand(stopTimeEntry, () => isStopButtonEnabled);
             StartTimeEntryCommand = new MvxAsyncCommand(startTimeEntry, () => CurrentTimeEntryId.HasValue == false);
+            AlternativeStartTimeEntryCommand = new MvxAsyncCommand(alternativeStartTimeEntry, () => CurrentTimeEntryId.HasValue == false);
         }
 
         public void Init(string action)
@@ -256,10 +259,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private Task startTimeEntry()
+            => startTimeEntry(IsInManualMode);
+
+        private Task alternativeStartTimeEntry()
+            => startTimeEntry(!IsInManualMode);
+
+        private Task startTimeEntry(bool initializeInManualMode)
         {
             OnboardingStorage.StartButtonWasTapped();
 
-            var parameter = IsInManualMode
+            var parameter = initializeInManualMode
                 ? StartTimeEntryParameters.ForManualMode(timeService.CurrentDateTime)
                 : StartTimeEntryParameters.ForTimerMode(timeService.CurrentDateTime);
             return navigationService.Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(parameter);
