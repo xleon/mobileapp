@@ -39,8 +39,6 @@ namespace Toggl.Ultrawave.Models
 
         public Location(ILocation entity)
         {
-            City = entity.City;
-            State = entity.State;
             CountryName = entity.CountryName;
             CountryCode = entity.CountryCode;
         }

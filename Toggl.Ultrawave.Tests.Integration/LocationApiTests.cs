@@ -12,14 +12,12 @@ namespace Toggl.Ultrawave.Tests.Integration
         public sealed class TheGetMethod : EndpointTestBase
         {
             [Fact, LogIfTooSlow]
-            public async Task ReturnsNonEmptyLocation()
+            public async Task ReturnsNonEmptyCountry()
             {
                 var api = TogglApiWith(Credentials.None);
 
                 var location = await api.Location.Get();
 
-                location.City.Should().NotBeNullOrEmpty();
-                location.State.Should().NotBeNullOrEmpty();
                 location.CountryName.Should().NotBeNullOrEmpty();
                 location.CountryCode.Should().NotBeNullOrEmpty();
             }

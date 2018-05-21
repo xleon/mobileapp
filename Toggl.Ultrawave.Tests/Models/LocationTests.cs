@@ -1,5 +1,7 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using Toggl.Ultrawave.Models;
+using Toggl.Ultrawave.Serialization;
 using Xunit;
 
 namespace Toggl.Ultrawave.Tests.Models
@@ -13,8 +15,6 @@ namespace Toggl.Ultrawave.Tests.Models
 
             private Location validLocation = new Location
             {
-                City = "Riga",
-                State = "Riga",
                 CountryName = "Latvia",
                 CountryCode = "LV"
             };
@@ -35,9 +35,11 @@ namespace Toggl.Ultrawave.Tests.Models
             }
 
             [Fact, LogIfTooSlow]
-            public void CanBeSerialized()
+            public void CannotBeSerialized()
             {
-                SerializationHelper.CanBeSerialized(validJson, validLocation);
+                Action serializing = () => SerializationHelper.CanBeSerialized(validJson, validLocation);
+
+                serializing.ShouldThrow<SerializationException>();
             }
         }
     }
