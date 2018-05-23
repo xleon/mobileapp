@@ -114,6 +114,7 @@ namespace Toggl.Daneel.ViewControllers
 
             PasswordTextField.ShouldReturn += _ =>
             {
+                ViewModel.SignupCommand.Execute();
                 PasswordTextField.ResignFirstResponder();
                 return false;
             };
