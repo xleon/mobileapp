@@ -62,8 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/LoginPassword" />
     <Button
-        local:MvxBind="Click LoginCommand; Visibility InvertedVisibility(IsLoading)"
-        android:text="@string/Login"
+        local:MvxBind="Click LoginCommand; Text If(IsLoading, '', 'Log in')"
         android:background="@color/buttonBlue"
         android:textColor="@android:color/white"
         android:foreground="?attr/selectableItemBackground"
@@ -78,6 +77,10 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="16dp"
+        android:indeterminateTintMode="src_in"
+        android:indeterminateTint="@android:color/white"
         android:layout_below="@+id/LoginError"
         android:layout_centerHorizontal="true" />
     <TextView
