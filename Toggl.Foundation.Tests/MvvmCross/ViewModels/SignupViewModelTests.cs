@@ -192,7 +192,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 NavigationService
                     .Received()
-                    .Navigate<NewLoginViewModel, CredentialsParameter>(
+                    .Navigate<LoginViewModel, CredentialsParameter>(
                         Arg.Is<CredentialsParameter>(parameter
                             => parameter.Email.Equals(ViewModel.Email)
                                 && parameter.Password.Equals(ViewModel.Password)
@@ -222,7 +222,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 NavigationService
                     .Received()
-                    .Navigate<NewLoginViewModel, CredentialsParameter>(
+                    .Navigate<LoginViewModel, CredentialsParameter>(
                         Arg.Is<CredentialsParameter>(
                             parameter => parameter.Email.Equals(ViewModel.Email)
                                 && parameter.Password.Equals(ViewModel.Password)

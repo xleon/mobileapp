@@ -15,6 +15,7 @@ using Toggl.Multivac;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
+using MvvmCross.Core.ViewModels;
 
 namespace Toggl.Foundation.MvvmCross
 {
@@ -152,7 +153,8 @@ namespace Toggl.Foundation.MvvmCross
             return self;
         }
 
-        public static void Initialize(this FoundationMvvmCross self, App app, IScheduler scheduler)
+        public static void Initialize<T>(this FoundationMvvmCross self, App<T> app, IScheduler scheduler)
+            where T : MvxViewModel
         {
             Func<ITogglDataSource, ISyncManager> createSyncManager(ITogglApi api) => dataSource =>
                 TogglSyncManager.CreateSyncManager(self.Database, api, dataSource, self.TimeService, self.AnalyticsService, retryDelayLimit, scheduler);

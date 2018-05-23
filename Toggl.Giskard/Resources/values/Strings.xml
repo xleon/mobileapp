@@ -42,13 +42,12 @@
     <string name="ManualModeExplanationPartOne">You can add your data manually, instead of</string>
 	<string name="ManualModeExplanationPartTwo">tracking in real time.</string>
     <string name="TryLoggingInInstead"><u>Try logging in instead.</u></string>
-    <string name="ForgotPassword">Forgot your password?</string>
+    <string name="ForgotPassword">Forgot your password? <b>Get help logging in</b></string>
     <string name="Duration">Duration</string>
     <string name="DeleteEntry">Delete this entry</string>
     <string name="FeedbackChooserCopy">Send feedback with</string>
     <string name="NoEmailHandlerErrorTitle">Oops! Seems like your email account is not set up</string>
     <string name="NoEmailHandlerErrorMessage">Set up an email account or send us your feedback to support@toggl.com</string>
-    <string name="OnboardingSignup">Don\'t have an account? <b>Sign up for free!</b></string>
     <string name="OnboardingGetStarted">Let\'s get started!</string>
     <string name="OnboardingKickstartProductivity">Kickstart your productivity\nwith Toggl</string>
 	  <string name="OutdatedAppMessage">Seems you haven’t updated the app
@@ -64,6 +63,12 @@ your app to continue.</string>
     <string name="StartTimeAfterStopTimeWarning">Start time must be before Stop time!</string>
     <string name="StopTimeBeforeStartTimeWarning">Stop time must be after Start time!</string>
     <string name="DurationTooLong">Duration can\'t exceed 999 hours!</string>
+    <string name="Email">Email</string>
+    <string name="Password">Password</string>
+    <string name="SignUpForFree">Sign up for free</string>
+    <string name="DontHaveAnAccount">Don\'t have an account?</string>
+    <string name="LoginWithGoogle">Login With Google</string>
+    <string name="Or">Or</string>
     
     <string name="MainTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.MainTemplateSelector, Toggl.Giskard</string>
     <string name="ReportsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsTemplateSelector, Toggl.Giskard</string>

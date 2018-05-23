@@ -700,6 +700,31 @@
     <AndroidResource Include="Resources\drawable-xhdpi\date_light.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\date_light.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\date_light.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\logo_black.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\logo_black.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\logo_black.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\logo_black.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\logo_black.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\visibility_off.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\visibility_off.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\visibility_off.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\visibility_off.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\visibility_off.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\visibility_on.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\visibility_on.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\visibility_on.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\visibility_on.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\visibility_on.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\bike.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\bike.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\bike.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\bike.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\bike.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\bg_noise_login.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\bg_noise_login.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\bg_noise_login.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\bg_noise_login.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\bg_noise_login.png" />
     <AndroidResource Include="Resources\drawable\TagRoundedRectangle.xml" />
   </ItemGroup>
   <ItemGroup>

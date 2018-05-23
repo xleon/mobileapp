@@ -173,7 +173,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private Task login()
         {
             var parameter = CredentialsParameter.With(Email, Password);
-            return navigationService.Navigate<NewLoginViewModel, CredentialsParameter>(parameter);
+            return navigationService.Navigate<LoginViewModel, CredentialsParameter>(parameter);
         }
 
         private void OnEmailChanged()
