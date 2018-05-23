@@ -599,6 +599,12 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string Other {
+            get {
+                return ResourceManager.GetString("Other", resourceCulture);
+            }
+        }
+        
         public static string StartTimeEntry {
             get {
                 return ResourceManager.GetString("StartTimeEntry", resourceCulture);
