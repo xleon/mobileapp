@@ -14,6 +14,7 @@ namespace Toggl.Foundation.Analytics
         private const string currentPageEventName = "CurrentPage";
         private const string onboardingSkipEventName = "OnboardingSkip";
         private const string startTimeEntryEventName = "TimeEntryStarted";
+        private const string deleteTimeEntryEventName = "DeleteTimeEntry";
 
         private const string loginEventName = "Login";
         private const string loginErrorEventName = "LoginError";
@@ -50,6 +51,11 @@ namespace Toggl.Foundation.Analytics
         public void TrackStartedTimeEntry(TimeEntryStartOrigin origin)
         {
             track(startTimeEntryEventName, originParameter, origin.ToString());
+        }
+
+        public void TrackDeletingTimeEntry()
+        {
+            track(deleteTimeEntryEventName);
         }
 
         public void TrackCurrentPage(Type viewModelType)

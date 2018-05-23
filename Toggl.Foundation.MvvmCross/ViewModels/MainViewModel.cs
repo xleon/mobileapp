@@ -18,6 +18,7 @@ using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
 using Toggl.PrimeRadiant.Settings;
 using System.Reactive;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Suggestions;
 
 [assembly: MvxNavigation(typeof(MainViewModel), ApplicationUrls.Main.Regex)]
@@ -123,6 +124,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ITimeService timeService,
             IUserPreferences userPreferences,
             IOnboardingStorage onboardingStorage,
+            IAnalyticsService analyticsService,
             IInteractorFactory interactorFactory,
             IMvxNavigationService navigationService,
             ISuggestionProviderContainer suggestionProviders)
@@ -144,7 +146,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.navigationService = navigationService;
             this.onboardingStorage = onboardingStorage;
 
-            TimeEntriesLogViewModel = new TimeEntriesLogViewModel(timeService, dataSource, interactorFactory, onboardingStorage, navigationService);
+            TimeEntriesLogViewModel = new TimeEntriesLogViewModel(timeService, dataSource, interactorFactory, onboardingStorage, analyticsService, navigationService);
             SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, suggestionProviders);
 
             RefreshCommand = new MvxCommand(refresh);

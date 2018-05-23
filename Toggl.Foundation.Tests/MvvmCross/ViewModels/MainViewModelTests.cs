@@ -37,7 +37,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             protected override MainViewModel CreateViewModel()
             {
-                var vm = new MainViewModel(Scheduler, DataSource, TimeService, UserPreferences, OnboardingStorage, InteractorFactory, NavigationService, SuggestionProviderContainer);
+                var vm = new MainViewModel(Scheduler, DataSource, TimeService, UserPreferences, OnboardingStorage, AnalyticsService, InteractorFactory, NavigationService, SuggestionProviderContainer);
                 vm.Prepare();
                 return vm;
             }
@@ -55,13 +55,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheConstructor : MainViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(EightParameterConstructorTestData))]
+            [ClassData(typeof(NineParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useScheduler,
                 bool useDataSource,
                 bool useTimeService,
                 bool useUserPreferences,
                 bool useOnboardingStorage,
+                bool useAnalyticsService,
                 bool useInteractorFactory,
                 bool useNavigationService,
                 bool useSuggestionProviderContainer)
@@ -73,10 +74,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var navigationService = useNavigationService ? NavigationService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
+                var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new MainViewModel(scheduler, dataSource, timeService, userPreferences, onboardingStorage, interactorFactory, navigationService, suggestionProviderContainer);
+                    () => new MainViewModel(scheduler, dataSource, timeService, userPreferences, onboardingStorage, analyticsService, interactorFactory, navigationService, suggestionProviderContainer);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
