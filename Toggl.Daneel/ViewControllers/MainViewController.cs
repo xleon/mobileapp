@@ -76,6 +76,7 @@ namespace Toggl.Daneel.ViewControllers
         private IDisposable swipeLeftAnimationDisposable;
         private IDisposable swipeRightAnimationDisposable;
         private IDisposable swipeToContinueWasUsedDisposable;
+        private IDisposable swipeToDeleteWasUsedDisposable;
 
         private readonly ISubject<bool> isRunningSubject = new BehaviorSubject<bool>(false);
         private readonly ISubject<bool> isEmptySubject = new BehaviorSubject<bool>(false);
@@ -283,6 +284,9 @@ namespace Toggl.Daneel.ViewControllers
 
             swipeToContinueWasUsedDisposable?.Dispose();
             swipeToContinueWasUsedDisposable = null;
+
+            swipeToDeleteWasUsedDisposable?.Dispose();
+            swipeToDeleteWasUsedDisposable = null;
         }
 
         public override void ViewDidLayoutSubviews()
@@ -486,6 +490,15 @@ namespace Toggl.Daneel.ViewControllers
                     swipeToContinueWasUsedDisposable?.Dispose();
                     swipeToContinueWasUsedDisposable = null;
                 });
+
+            swipeToDeleteWasUsedDisposable = Observable.FromEventPattern(source, nameof(MainTableViewSource.SwipeToDeleteWasUsed))
+                .Subscribe(_ =>
+                {
+                    swipeLeftStep.Dismiss();
+                    swipeToDeleteWasUsedDisposable?.Dispose();
+                    swipeToDeleteWasUsedDisposable = null;
+                });
+
             updateSwipeDismissGestures(firstTimeEntry);
         }
 
