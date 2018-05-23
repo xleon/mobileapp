@@ -46,9 +46,9 @@ namespace Toggl.Daneel.ViewControllers
 
         private readonly UIView spiderContainerView = new UIView();
         private readonly SpiderOnARopeView spiderBroView = new SpiderOnARopeView();
-        private readonly UIButton reportsButton = new UIButton(new CGRect(0, 0, 40, 40));
-        private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 40));
-        private readonly UIButton syncFailuresButton = new UIButton(new CGRect(0, 0, 40, 40));
+        private readonly UIButton reportsButton = new UIButton(new CGRect(0, 0, 30, 40));
+        private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 30, 40));
+        private readonly UIButton syncFailuresButton = new UIButton(new CGRect(0, 0, 30, 40));
         private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
         private readonly TimeEntriesEmptyLogView emptyStateView = TimeEntriesEmptyLogView.Create();
 
@@ -248,7 +248,6 @@ namespace Toggl.Daneel.ViewControllers
             NavigationItem.TitleView = titleImage;
             NavigationItem.RightBarButtonItems = new[]
             {
-                new UIBarButtonItem(UIBarButtonSystemItem.FixedSpace) { Width = -10 },
                 new UIBarButtonItem(settingsButton),
                 new UIBarButtonItem(reportsButton)
             };
