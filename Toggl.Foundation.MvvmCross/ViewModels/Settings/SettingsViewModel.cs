@@ -338,7 +338,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             analyticsService.TrackLogoutEvent(LogoutSource.Settings);
             userPreferences.Reset();
             await dataSource.Logout();
-            await navigationService.Navigate<OnboardingViewModel>();
+            await navigationService.Navigate<LoginViewModel>();
         }
 
         private async Task<bool> isSynced()

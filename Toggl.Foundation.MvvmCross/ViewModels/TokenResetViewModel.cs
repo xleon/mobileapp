@@ -103,7 +103,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             analyticsService.TrackLogoutEvent(LogoutSource.TokenReset);
             userPreferences.Reset();
             await dataSource.Logout();
-            await navigationService.Navigate<OnboardingViewModel>();
+            await navigationService.Navigate<LoginViewModel>();
         }
 
         private void done()
