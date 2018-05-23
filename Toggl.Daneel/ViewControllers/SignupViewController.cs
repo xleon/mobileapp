@@ -126,6 +126,12 @@ namespace Toggl.Daneel.ViewControllers
                 return false;
             };
 
+            View.AddGestureRecognizer(new UITapGestureRecognizer(() =>
+            {
+                EmailTextField.ResignFirstResponder();
+                PasswordTextField.ResignFirstResponder();
+            }));
+
             PasswordTextField.ResignFirstResponder();
 
             ShowPasswordButton.SetupShowPasswordButton();
