@@ -108,6 +108,7 @@ namespace Toggl.Foundation.MvvmCross
             Mvx.RegisterSingleton(browserService);
             Mvx.RegisterSingleton(self.UserAgent);
             Mvx.RegisterSingleton(self.Scheduler);
+            Mvx.RegisterSingleton(self.ApiFactory);
             Mvx.RegisterSingleton(self.TimeService);
             Mvx.RegisterSingleton(self.MailService);
             Mvx.RegisterSingleton(self.ShortcutCreator);

@@ -4,6 +4,7 @@ using MvvmCross.Binding.iOS;
 using MvvmCross.iOS.Views;
 using MvvmCross.iOS.Views.Presenters.Attributes;
 using MvvmCross.Plugins.Color.iOS;
+using MvvmCross.Plugins.Visibility;
 using Toggl.Daneel.Extensions;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Converters;
@@ -29,6 +30,7 @@ namespace Toggl.Daneel.ViewControllers
             base.ViewDidLoad();
 
             var signupButtonTitleConverter = new BoolToConstantValueConverter<string>("", Resources.SignUpTitle);
+            var invertedVisibilityConverter = new MvxInvertedVisibilityValueConverter();
 
             var bindingSet = this.CreateBindingSet<SignupViewController, SignupViewModel>();
 
@@ -48,13 +50,14 @@ namespace Toggl.Daneel.ViewControllers
                       .WithConversion(signupButtonTitleConverter);
 
             bindingSet.Bind(SelectCountryButton)
-                      .For(v => v.BindTitle())
-                      .To(vm => vm.Country.Name);
+                      .For(v => v.BindAnimatedTitle())
+                      .To(vm => vm.CountryButtonTitle);
 
             //Commands
             bindingSet.Bind(SignupButton).To(vm => vm.SignupCommand);
             bindingSet.Bind(GoogleSignupButton).To(vm => vm.GoogleSignupCommand);
             bindingSet.Bind(ShowPasswordButton).To(vm => vm.TogglePasswordVisibilityCommand);
+            bindingSet.Bind(SelectCountryButton).To(vm => vm.PickCountryCommand);
             bindingSet.Bind(LoginCard)
                       .For(v => v.BindTap())
                       .To(vm => vm.LoginCommand);
@@ -80,6 +83,10 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindFirstResponder())
                       .To(vm => vm.IsShowPasswordButtonVisible)
                       .Mode(MvxBindingMode.OneWayToSource);
+
+            bindingSet.Bind(CountryNotSelectedImageView)
+                      .For(v => v.BindAnimatedVisibility())
+                      .To(vm => vm.IsCountryErrorVisible);
             
             bindingSet.Apply();
 
@@ -122,11 +129,6 @@ namespace Toggl.Daneel.ViewControllers
             PasswordTextField.ResignFirstResponder();
 
             ShowPasswordButton.SetupShowPasswordButton();
-
-            SelectCountryButton.SemanticContentAttribute = UISemanticContentAttribute.ForceRightToLeft;
-            var spacing = 4;
-            SelectCountryButton.ImageEdgeInsets = new UIEdgeInsets(0, spacing, 0, 0);
-            SelectCountryButton.TitleEdgeInsets = new UIEdgeInsets(0, 0, 0, spacing);
         }
     }
 }

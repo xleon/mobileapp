@@ -38,9 +38,11 @@ namespace Toggl.Foundation.Interactors
         {
             string json = Resources.CountriesJson;
 
-            var countries = new Serialization.JsonSerializer()
-                                             .Deserialize<List<Country>>(json)
-                                             .ToList<ICountry>();
+            var countries = new Serialization
+                .JsonSerializer()
+                .Deserialize<List<Country>>(json)
+                .OrderBy(country => country.Name)
+                .ToList<ICountry>();
 
             return Observable.Return(countries);
         }

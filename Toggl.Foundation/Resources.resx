@@ -375,4 +375,7 @@ account is not set up</value>
     <data name="TermsOfServiceDialogMessage">
         <value>By tapping I Agree, you understand and agree to Toggl’s Terms of Service and Privacy Policy.</value>
     </data>
+    <data name="SelectCountry">
+        <value>Select country...</value>
+    </data>
 </root>

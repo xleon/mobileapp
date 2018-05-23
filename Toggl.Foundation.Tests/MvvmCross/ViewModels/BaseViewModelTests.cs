@@ -16,10 +16,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         where TViewModel : MvxViewModel
     {
         protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
-        protected UserAgent UserAgent { get; } = new UserAgent("Foundation.Tests", "1.0");
+        protected IApiFactory ApiFactory { get; } = Substitute.For<IApiFactory>();
         protected IMailService MailService { get; } = Substitute.For<IMailService>();
         protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
         protected ILoginManager LoginManager { get; } = Substitute.For<ILoginManager>();
+        protected UserAgent UserAgent { get; } = new UserAgent("Foundation.Tests", "1.0");
         protected IDialogService DialogService { get; } = Substitute.For<IDialogService>();
         protected IBrowserService BrowserService { get; } = Substitute.For<IBrowserService>();
         protected ILicenseProvider LicenseProvider { get; } = Substitute.For<ILicenseProvider>();
