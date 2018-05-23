@@ -1,5 +1,6 @@
 ﻿using MvvmCross.Core.ViewModels;
 using NSubstitute;
+using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
@@ -27,6 +28,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         protected IPasswordManagerService PasswordManagerService { get; } = Substitute.For<IPasswordManagerService>();
         protected IApiErrorHandlingService ApiErrorHandlingService { get; } = Substitute.For<IApiErrorHandlingService>();
         protected ISuggestionProviderContainer SuggestionProviderContainer { get; } = Substitute.For<ISuggestionProviderContainer>();
+        protected IAutocompleteProvider AutocompleteProvider { get; } = Substitute.For<IAutocompleteProvider>();
 
         protected TViewModel ViewModel { get; private set; }
 

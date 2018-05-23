@@ -3,6 +3,7 @@ using System.Reactive.Concurrency;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Platform;
 using Toggl.Foundation.Analytics;
+using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.Interactors;
@@ -162,6 +163,7 @@ namespace Toggl.Foundation.MvvmCross
                     .RegisterServices();
 
                 Mvx.ConstructAndRegisterSingleton<IInteractorFactory, InteractorFactory>();
+                Mvx.ConstructAndRegisterSingleton<IAutocompleteProvider, AutocompleteProvider>();
 
                 return dataSource;
             }

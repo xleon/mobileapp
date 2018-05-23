@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Suggestions;
 using Toggl.PrimeRadiant.Models;
-using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.Interactors
 {
@@ -50,6 +50,19 @@ namespace Toggl.Foundation.Interactors
         #region Sync
 
         IInteractor<IObservable<IEnumerable<SyncFailureItem>>> GetItemsThatFailedToSync();
+
+        #endregion
+
+        #region Autocomplete Suggestions
+
+        IInteractor<IObservable<IEnumerable<AutocompleteSuggestion>>> GetTimeEntriesAutocompleteSuggestions(
+            IList<string> wordsToQuery);
+
+        IInteractor<IObservable<IEnumerable<AutocompleteSuggestion>>> GetTagsAutocompleteSuggestions(
+            IList<string> wordsToQuery);
+
+        IInteractor<IObservable<IEnumerable<AutocompleteSuggestion>>> GetProjectsAutocompleteSuggestions(
+            IList<string> wordsToQuery);
 
         #endregion
     }

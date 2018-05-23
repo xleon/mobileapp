@@ -48,8 +48,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             protected StartTimeEntryViewModelTest()
             {
-                DataSource.AutocompleteProvider.Returns(AutocompleteProvider);
-
                 ViewModel.TextFieldInfo = TextFieldInfo.Empty(1);
             }
 
@@ -72,14 +70,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     OnboardingStorage,
                     InteractorFactory,
                     NavigationService,
-                    AnalyticsService
+                    AnalyticsService,
+                    AutocompleteProvider
             );
         }
 
         public sealed class TheConstructor : StartTimeEntryViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(EightParameterConstructorTestData))]
+            [ClassData(typeof(NineParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
                 bool useTimeService,
@@ -88,7 +87,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useInteractorFactory,
                 bool useOnboardingStorage,
                 bool useNavigationService,
-                bool useAnalyticsService)
+                bool useAnalyticsService,
+                bool useAutocompleteProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
@@ -98,6 +98,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
+                var autocompleteProvider = useAutocompleteProvider ? AutocompleteProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new StartTimeEntryViewModel(
@@ -108,7 +109,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         onboardingStorage,
                         interactorFactory,
                         navigationService,
-                        analyticsService);
+                        analyticsService,
+                        autocompleteProvider);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -279,7 +281,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     project.Workspace.Name.Returns("Some workspace");
                     var projectSuggestion = new ProjectSuggestion(project);
 
-                    DataSource.AutocompleteProvider
+                    AutocompleteProvider
                         .Query(Arg.Is<QueryInfo>(info => info.SuggestionType == AutocompleteSuggestionType.Projects))
                               .Returns(Observable.Return(new ProjectSuggestion[] { projectSuggestion }));
 
@@ -333,7 +335,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     tag.Name.Returns(TagName);
                     var tagSuggestion = new TagSuggestion(tag);
 
-                    DataSource.AutocompleteProvider
+                    AutocompleteProvider
                         .Query(Arg.Is<QueryInfo>(info => info.SuggestionType == AutocompleteSuggestionType.Tags))
                         .Returns(Observable.Return(new TagSuggestion[] { tagSuggestion }));
 
@@ -596,7 +598,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var suggestions = ProjectSuggestion.FromProjects(Enumerable.Empty<IDatabaseProject>());
                 AutocompleteProvider
-                    .Query(Arg.Is<TextFieldInfo>(info => info.Text.Contains("@")))
+                    .Query(Arg.Is<QueryInfo>(info => info.Text.Contains("@")))
                     .Returns(Observable.Return(suggestions));
 
                 AutocompleteProvider
@@ -716,7 +718,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 tag.Name.Returns(TagName);
                 var suggestions = TagSuggestion.FromTags(new[] { tag });
                 AutocompleteProvider
-                    .Query(Arg.Is<TextFieldInfo>(info => info.Text.Contains("#")))
+                    .Query(Arg.Is<QueryInfo>(info => info.Text.Contains("#")))
                     .Returns(Observable.Return(suggestions));
             }
 
