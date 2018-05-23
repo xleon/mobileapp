@@ -8,6 +8,7 @@ using Toggl.Multivac;
 
 namespace Toggl.Foundation.Autocomplete
 {
+    [Preserve(AllMembers = true)]
     public sealed class AutocompleteProvider : IAutocompleteProvider
     {
         private readonly IInteractorFactory interactorFactory;
