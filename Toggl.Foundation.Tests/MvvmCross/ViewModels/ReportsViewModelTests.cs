@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck.Xunit;
 using NSubstitute;
+using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -274,9 +275,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 string expectedResult)
             {
                 TimeService.CurrentDateTime.Returns(DateTimeOffset.UtcNow);
-                var preferences = Substitute.For<IDatabasePreferences>();
+                var preferences = Substitute.For<IThreadSafePreferences>();
                 preferences.DateFormat.Returns(dateFormat);
-                var preferencesSubject = new Subject<IDatabasePreferences>();
+                var preferencesSubject = new Subject<IThreadSafePreferences>();
                 DataSource.Preferences.Current.Returns(preferencesSubject.AsObservable());
                 ViewModel.Prepare(0);
                 await ViewModel.Initialize();
