@@ -33,6 +33,28 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DataSource.ReportsProvider.Returns(ReportsProvider);
                 return new ReportsViewModel(DataSource, TimeService, NavigationService);
             }
+
+            protected async Task Initialize()
+            {
+                using (var block = new AutoResetEvent(false))
+                {
+                    NavigationService
+                        .When(service => service.Navigate(Arg.Any<ReportsCalendarViewModel>()))
+                        .Do(async callInfo =>
+                        {
+                            var calendarViewModel = callInfo.Arg<ReportsCalendarViewModel>();
+                            calendarViewModel.Prepare();
+                            await calendarViewModel.Initialize();
+                            block.Set();
+                        });
+
+                    ViewModel.Prepare(WorkspaceId);
+                    await ViewModel.Initialize();
+                    ViewModel.ViewAppeared();
+
+                    block.WaitOne();
+                }
+            }
         }
 
         public sealed class TheConstructor : ReportsViewModelTest
@@ -52,23 +74,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
-            }
-        }
-
-        public sealed class TheInitializeMethod : ReportsViewModelTest
-        {
-            [Property(MaxTest = 1)]
-            public void FiresACallToLoadReports(DateTimeOffset now)
-            {
-                var date = now.Date;
-                TimeService.CurrentDateTime.Returns(now);
-                var expectedStartDate = date.AddDays(1 - (int)date.DayOfWeek);
-                ViewModel.Prepare(WorkspaceId);
-
-                ViewModel.Initialize().Wait();
-
-                ReportsProvider.Received().GetProjectSummary(
-                    WorkspaceId, expectedStartDate, expectedStartDate.AddDays(6));
             }
         }
 
@@ -94,14 +99,23 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheIsLoadingProperty : ReportsViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task IsSetToTrueBeforeWhenAReportIsLoading()
+            public async Task IsSetToTrueWhenTheViewIsInitializedBeforeAnyLoadingOfReportsStarts()
+            {
+                ViewModel.Prepare(WorkspaceId);
+                await ViewModel.Initialize();
+
+                ViewModel.IsLoading.Should().BeTrue();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task IsSetToTrueWhenAReportIsLoading()
             {
                 var now = DateTimeOffset.Now;
                 TimeService.CurrentDateTime.Returns(now);
                 ReportsProvider.GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
                     .Returns(Observable.Never<ProjectSummaryReport>());
-                ViewModel.Prepare(WorkspaceId);
-                await ViewModel.Initialize();
+
+                await Initialize();
 
                 ViewModel.IsLoading.Should().BeTrue();
             }
@@ -113,21 +127,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TimeService.CurrentDateTime.Returns(now);
                 ReportsProvider.GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
                     .Returns(Observable.Return(new ProjectSummaryReport(new ChartSegment[0])));
-                ViewModel.Prepare(WorkspaceId);
-                await ViewModel.Initialize();
 
-                ViewModel.IsLoading.Should().BeFalse();
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task IsSetToFalseWhenLoadingOverBecauseOfAnError()
-            {
-                var now = DateTimeOffset.Now;
-                TimeService.CurrentDateTime.Returns(now);
-                ReportsProvider.GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
-                    .Returns(Observable.Throw<ProjectSummaryReport>(new Exception()));
-                ViewModel.Prepare(WorkspaceId);
-                await ViewModel.Initialize();
+                await Initialize();
 
                 ViewModel.IsLoading.Should().BeFalse();
             }
@@ -136,13 +137,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheCurrentDateRangeStringProperty : ReportsViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task IsInitializedToThisWeek()
+            public async Task IsInitializedToEmptyOrNull()
             {
-                TimeService.CurrentDateTime.Returns(new DateTimeOffset(2017, 10, 10, 10, 10, 10, TimeSpan.Zero));
                 ViewModel.Prepare(WorkspaceId);
                 await ViewModel.Initialize();
 
-                ViewModel.CurrentDateRangeString.Should().Be($"{Resources.ThisWeek} ▾");
+                ViewModel.CurrentDateRangeString.Should().BeNullOrEmpty();
             }
 
             [Theory, LogIfTooSlow]
@@ -259,9 +259,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TimeService.CurrentDateTime.Returns(new DateTimeOffset(2018, 05, 15, 12, 00, 00, TimeSpan.Zero));
                 ReportsProvider.GetProjectSummary(WorkspaceId, Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
                     .Returns(Observable.Return(new ProjectSummaryReport(segments)));
-                ViewModel.Prepare(WorkspaceId);
 
-                await ViewModel.Initialize();
+                await Initialize();
 
                 ViewModel.Segments.Should().HaveCount(4);
                 ViewModel.Segments.Should().Contain(segment =>
