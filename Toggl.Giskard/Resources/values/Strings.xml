@@ -6,8 +6,8 @@
     <string name="AppName">Toggl</string>
     <string name="EmailAddress">Email address</string>
     <string name="AddDescription">Add description</string>
-    <string name="TermsOfService"><u>Terms of service</u></string>
-    <string name="PrivacyPolicy"><u>Privacy policy</u></string>
+    <string name="TermsOfService">Terms of service</string>
+    <string name="PrivacyPolicy">Privacy policy</string>
     <string name="Edit">Edit</string>
     <string name="StartTimeEntryHint">What are you working on?</string>
     <string name="PrivateProject">Private project</string>
@@ -69,6 +69,11 @@ your app to continue.</string>
     <string name="DontHaveAnAccount">Don\'t have an account?</string>
     <string name="LoginWithGoogle">Login With Google</string>
     <string name="Or">Or</string>
+    <string name="And">and</string>
+	<string name="IAgree">I Agree</string>
+	<string name="ReviewTheTerms">Review the Terms</string>
+	<string name="TermsMessage">By tapping "I Agree", you
+understand and agree to Toggl\'s</string>
     
     <string name="MainTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.MainTemplateSelector, Toggl.Giskard</string>
     <string name="ReportsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsTemplateSelector, Toggl.Giskard</string>
