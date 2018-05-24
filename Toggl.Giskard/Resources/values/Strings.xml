@@ -60,6 +60,7 @@ your app to continue.</string>
     <string name="StopTimer">Stop timer</string>
     <string name="Start">Start</string>
     <string name="Stop">Stop</string>
+    <string name="SelectCountryOfResidence">Select country of residence</string>
     <string name="StartTimeAfterStopTimeWarning">Start time must be before Stop time!</string>
     <string name="StopTimeBeforeStartTimeWarning">Stop time must be after Start time!</string>
     <string name="DurationTooLong">Duration can\'t exceed 999 hours!</string>
@@ -85,6 +86,7 @@ understand and agree to Toggl\'s</string>
     <string name="SelectColorTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectColorTemplateSelector, Toggl.Giskard</string>
     <string name="SelectClientTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectClientTemplateSelector, Toggl.Giskard</string>
     <string name="SelectProjectTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectProjectTemplateSelector, Toggl.Giskard</string>
+    <string name="SelectCountryTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectCountryTemplateSelector, Toggl.Giskard</string>
     <string name="SelectWorkspaceTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectWorkspaceTemplateSelector, Toggl.Giskard</string>
     <string name="SelectDateFormatTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectDateFormatTemplateSelector, Toggl.Giskard</string>
     <string name="CalendarShortcutsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.CalendarShortcutsTemplateSelector, Toggl.Giskard</string>
