@@ -67,6 +67,7 @@ your app to continue.</string>
     <string name="Email">Email</string>
     <string name="Password">Password</string>
     <string name="SignUpForFree">Sign up for free</string>
+    <string name="AlreadyHaveAnAccount">Already have an account?</string>
     <string name="DontHaveAnAccount">Don\'t have an account?</string>
     <string name="LoginWithGoogle">Login With Google</string>
     <string name="Or">Or</string>
@@ -75,7 +76,7 @@ your app to continue.</string>
 	<string name="ReviewTheTerms">Review the Terms</string>
 	<string name="TermsMessage">By tapping "I Agree", you
 understand and agree to Toggl\'s</string>
-    
+
     <string name="MainTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.MainTemplateSelector, Toggl.Giskard</string>
     <string name="ReportsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsTemplateSelector, Toggl.Giskard</string>
     <string name="CalendarTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.CalendarTemplateSelector, Toggl.Giskard</string>
