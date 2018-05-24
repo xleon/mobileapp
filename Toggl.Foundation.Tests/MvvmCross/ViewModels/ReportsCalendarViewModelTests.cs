@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
@@ -16,7 +15,6 @@ using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
-using static Toggl.Multivac.Extensions.FunctionalExtensions;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -413,7 +411,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var now = dates[1];
                 var end = dates[2];
                 TimeService.CurrentDateTime.Returns(now);
-                var selectedRange = DateRangeParameter.WithDates(start, end);
+                var selectedRange = DateRangeParameter.WithDates(start, end).WithSource(ReportsSource.Calendar);
                 var customShortcut = new CustomShortcut(selectedRange, TimeService);
 
                 // in this property test it is not possible to use the default ViewModel,
