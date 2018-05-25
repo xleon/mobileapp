@@ -81,4 +81,10 @@ namespace Toggl.Giskard.Converters
     {
         public MainFooterHeightValueConverter() : base (104, 70) { }
     }
+
+    public sealed class ButtonEnabledTextColorValueConverter : BoolToConstantValueConverter<Color>
+    {
+        public ButtonEnabledTextColorValueConverter()
+            : base(Color.White, new Color(ColorUtils.SetAlphaComponent(Color.White, 122))) { }
+    }
 }

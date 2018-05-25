@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck.Xunit;
 using NSubstitute;
+using Toggl.Foundation.Models.Interfaces;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Reports;
@@ -31,7 +31,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected override ReportsViewModel CreateViewModel()
             {
                 DataSource.ReportsProvider.Returns(ReportsProvider);
-                return new ReportsViewModel(DataSource, TimeService, NavigationService);
+                return new ReportsViewModel(DataSource, TimeService, NavigationService, AnalyticsService);
             }
 
             protected async Task Initialize()
@@ -60,17 +60,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheConstructor : ReportsViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(ThreeParameterConstructorTestData))]
+            [ClassData(typeof(FourParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource,
                                                         bool useTimeService,
-                                                        bool useNavigationService)
+                                                        bool useNavigationService,
+                                                        bool useAnalyticsService)
             {
                 var timeService = useTimeService ? TimeService : null;
                 var reportsProvider = useDataSource ? DataSource : null;
                 var navigationService = useNavigationService ? NavigationService : null;
+                var analyticsService = useAnalyticsService ? AnalyticsService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new ReportsViewModel(reportsProvider, timeService, navigationService);
+                    () => new ReportsViewModel(reportsProvider, timeService, navigationService, analyticsService);
 
                 tryingToConstructWithEmptyParameters
                     .ShouldThrow<ArgumentNullException>();
@@ -83,11 +85,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void IsSetToNullIfTheTotalTimeOfAReportIsZero(DateTimeOffset now)
             {
                 var date = now.Date;
+                var projectsNotSyncedCount = 0;
                 TimeService.CurrentDateTime.Returns(now);
                 var expectedStartDate = date.AddDays(1 - (int)date.DayOfWeek);
                 ReportsProvider.GetProjectSummary(
                     WorkspaceId, expectedStartDate, expectedStartDate.AddDays(6))
-                    .Returns(Observable.Return(new ProjectSummaryReport(new ChartSegment[0])));
+                        .Returns(Observable.Return(new ProjectSummaryReport(new ChartSegment[0], projectsNotSyncedCount)));
                 ViewModel.Prepare(WorkspaceId);
 
                 ViewModel.Initialize().Wait();
@@ -111,6 +114,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task IsSetToTrueWhenAReportIsLoading()
             {
                 var now = DateTimeOffset.Now;
+                var projectsNotSyncedCount = 0;
                 TimeService.CurrentDateTime.Returns(now);
                 ReportsProvider.GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
                     .Returns(Observable.Never<ProjectSummaryReport>());
@@ -176,7 +180,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var end = new DateTimeOffset(endYear, endMonth, endDay, 0, 0, 0, TimeSpan.Zero);
                 TimeService.CurrentDateTime.Returns(currentDate);
                 ViewModel.ChangeDateRangeCommand.Execute(
-                    DateRangeParameter.WithDates(start, end));
+                    DateRangeParameter.WithDates(start, end).WithSource(ReportsSource.Calendar));
 
                 ViewModel.CurrentDateRangeString.Should().Be($"{Resources.ThisWeek} ▾");
             }
@@ -190,16 +194,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 string expectedResult)
             {
                 TimeService.CurrentDateTime.Returns(DateTimeOffset.UtcNow);
-                var preferences = Substitute.For<IDatabasePreferences>();
+                var preferences = Substitute.For<IThreadSafePreferences>();
                 preferences.DateFormat.Returns(dateFormat);
-                var preferencesSubject = new Subject<IDatabasePreferences>();
+                var preferencesSubject = new Subject<IThreadSafePreferences>();
                 DataSource.Preferences.Current.Returns(preferencesSubject.AsObservable());
                 ViewModel.Prepare(0);
                 await ViewModel.Initialize();
                 preferencesSubject.OnNext(preferences);
 
                 ViewModel.ChangeDateRangeCommand.Execute(
-                    DateRangeParameter.WithDates(start, end));
+                    DateRangeParameter.WithDates(start, end).WithSource(ReportsSource.Calendar));
 
                 ViewModel.CurrentDateRangeString.Should().Be(expectedResult);
             }
@@ -252,13 +256,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 new ChartSegment("Project 4", "Client 4", 23, 23, 0, "#ffffff"),
                 new ChartSegment("Project 5", "Client 5", 66, 66, 0, "#ffffff")
             };
+            private readonly int projectsNotSyncedCount = 0;
 
             [Fact]
             public async Task GroupsProjectSegmentsWithPercentageLessThanTenPercent()
             {
                 TimeService.CurrentDateTime.Returns(new DateTimeOffset(2018, 05, 15, 12, 00, 00, TimeSpan.Zero));
                 ReportsProvider.GetProjectSummary(WorkspaceId, Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
-                    .Returns(Observable.Return(new ProjectSummaryReport(segments)));
+                    .Returns(Observable.Return(new ProjectSummaryReport(segments, projectsNotSyncedCount)));
 
                 await Initialize();
 

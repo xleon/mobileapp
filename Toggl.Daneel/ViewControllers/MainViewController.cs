@@ -447,7 +447,7 @@ namespace Toggl.Daneel.ViewControllers
             tapToEditStep.DismissByTapping(TapToEditBubbleView);
             tapToEditDisposable = tapToEditStep.ManageVisibilityOf(TapToEditBubbleView);
 
-            prepareSwipeGesturesOnboarding(storage);
+            prepareSwipeGesturesOnboarding(storage, tapToEditStep.ShouldBeVisible);
 
             scrollDisposable = tapToEditStep.ShouldBeVisible
                 .CombineLatest(
@@ -463,16 +463,21 @@ namespace Toggl.Daneel.ViewControllers
             ViewModel.NavigationService.AfterNavigate += onNavigate;
         }
 
-        private void prepareSwipeGesturesOnboarding(IOnboardingStorage storage)
+        private void prepareSwipeGesturesOnboarding(IOnboardingStorage storage, IObservable<bool> tapToEditStepIsVisible)
         {
             timeEntriesCountSubject.OnNext(ViewModel.TimeEntriesCount);
 
             timeEntriesCountDisposable = ViewModel.WeakSubscribe(() => ViewModel.TimeEntriesCount, onTimeEntriesCountChanged);
 
-            swipeRightStep = new SwipeRightOnboardingStep(timeEntriesCountSubject.AsObservable())
+            var swipeRightCanBeShown = tapToEditStepIsVisible.Select(isVisible => !isVisible);
+            swipeRightStep = new SwipeRightOnboardingStep(swipeRightCanBeShown, timeEntriesCountSubject.AsObservable())
                 .ToDismissable(nameof(SwipeRightOnboardingStep), storage);
 
-            swipeLeftStep = new SwipeLeftOnboardingStep(timeEntriesCountSubject.AsObservable(), swipeRightStep.ShouldBeVisible)
+            var swipeLeftCanBeShown = Observable.CombineLatest(
+                tapToEditStepIsVisible,
+                swipeRightStep.ShouldBeVisible,
+                (tapToEditIsVisible, swipeRightIsVisble) => !tapToEditIsVisible && !swipeRightIsVisble);
+            swipeLeftStep = new SwipeLeftOnboardingStep(swipeLeftCanBeShown, timeEntriesCountSubject.AsObservable())
                 .ToDismissable(nameof(SwipeLeftOnboardingStep), storage);
 
             swipeLeftStep.DismissByTapping(SwipeLeftBubbleView);

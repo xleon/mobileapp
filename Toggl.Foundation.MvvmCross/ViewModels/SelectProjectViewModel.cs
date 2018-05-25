@@ -12,6 +12,7 @@ using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
+using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Parameters;
@@ -39,7 +40,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private long? projectId;
         private long workspaceId;
 
-        private List<IDatabaseWorkspace> allWorkspaces = new List<IDatabaseWorkspace>();
+        private List<IThreadSafeWorkspace> allWorkspaces = new List<IThreadSafeWorkspace>();
 
         public string Text { get; set; } = "";
 
