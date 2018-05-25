@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck.Xunit;
@@ -128,9 +129,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task IsSetToFalseWhenLoadingIsCompleted()
             {
                 var now = DateTimeOffset.Now;
+                var projectsNotSyncedCount = 0;
                 TimeService.CurrentDateTime.Returns(now);
                 ReportsProvider.GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
-                    .Returns(Observable.Return(new ProjectSummaryReport(new ChartSegment[0])));
+                    .Returns(Observable.Return(new ProjectSummaryReport(new ChartSegment[0], projectsNotSyncedCount)));
 
                 await Initialize();
 
