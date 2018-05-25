@@ -65,7 +65,7 @@
     <Button
         local:MvxBind="Click LoginCommand; Text If(IsLoading, '', 'Log in')"
         android:background="@color/buttonBlue"
-        android:textColor="@android:color/white"
+        android:textColor="@color/BlueButtonTextColor"
         android:foreground="?attr/selectableItemBackground"
         android:layout_height="36dp"
         android:layout_marginLeft="24dp"
