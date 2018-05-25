@@ -605,7 +605,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 DataSource.TimeEntries.IsEmpty.Returns(Observable.Return(false));
                 var suggestionProvider = Substitute.For<ISuggestionProvider>();
-                var timeEntry = Substitute.For<IDatabaseTimeEntry>();
+                var timeEntry = Substitute.For<IThreadSafeTimeEntry>();
                 timeEntry.Id.Returns(123);
                 timeEntry.Start.Returns(DateTimeOffset.Now);
                 timeEntry.Duration.Returns((long?)null);
@@ -757,7 +757,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 [Fact, LogIfTooSlow]
                 public async ThreadingTask ExecutesTheContinueMostRecentTimeEntryInteractor()
                 {
-                    var interactor = Substitute.For<IInteractor<IObservable<IDatabaseTimeEntry>>>();
+                    var interactor = Substitute.For<IInteractor<IObservable<IThreadSafeTimeEntry>>>();
                     InteractorFactory.ContinueMostRecentTimeEntry().Returns(interactor);
                     ViewModel.Init(ApplicationUrls.Main.Action.Continue);
 
