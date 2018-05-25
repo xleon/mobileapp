@@ -737,13 +737,15 @@
     <AndroidResource Include="Resources\drawable-xhdpi\paws.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\paws.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\paws.png" />
-    <AndroidResource Include="Resources\drawable\TagRoundedRectangle.xml" />
+    <AndroidResource Include="Resources\drawable\LightBlueRoundedRectangle.xml" />
     <AndroidResource Include="Resources\layout\ForgotPasswordActivity.axml" />
     <AndroidResource Include="Resources\color\BlueButtonTextColor.xml" />
     <AndroidResource Include="Resources\layout\SignUpActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectCountryActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectCountryActivityCountryCell.axml" />
     <AndroidResource Include="Resources\layout\TermsOfServiceFragment.axml" />
+    <AndroidResource Include="Resources\drawable\ProjectRoundedRectangle.xml" />
+    <AndroidResource Include="Resources\drawable\ReportsCalendarShortcutRoundedRectangle.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">
