@@ -89,6 +89,24 @@ namespace Toggl.Foundation.Tests.DataSources
             }
         }
 
+        public sealed class TheCreateMethod : TimeEntryDataSourceTest
+        {
+            [Fact]
+            public async ThreadingTask CallsRepositoryWithConflictResolvers()
+            {
+                var timeEntry = new MockTimeEntry();
+                Repository.BatchUpdate(null, null, null)
+                    .ReturnsForAnyArgs(Observable.Return(new[] { new CreateResult<IDatabaseTimeEntry>(timeEntry) }));
+
+                await TimeEntriesSource.Create(timeEntry);
+
+                Repository.Received().BatchUpdate(
+                    Arg.Any<IEnumerable<(long, IDatabaseTimeEntry)>>(),
+                    Arg.Is<Func<IDatabaseTimeEntry, IDatabaseTimeEntry, ConflictResolutionMode>>(conflictResolution => conflictResolution != null),
+                    Arg.Is<IRivalsResolver<IDatabaseTimeEntry>>(resolver => resolver != null));
+            }
+        }
+
         public sealed class TheGetAllMethod : TimeEntryDataSourceTest
         {
             [Fact, LogIfTooSlow]
