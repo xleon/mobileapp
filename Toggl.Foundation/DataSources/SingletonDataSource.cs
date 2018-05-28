@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 
@@ -19,27 +21,26 @@ namespace Toggl.Foundation.DataSources
 
         private readonly ISubject<TThreadsafe> currentSubject;
 
-        private IDisposable initializationDisposable;
-
         public IObservable<TThreadsafe> Current { get; }
 
-        public SingletonDataSource(ISingleObjectStorage<TDatabase> storage, TThreadsafe defaultCurrentValue)
+        protected SingletonDataSource(ISingleObjectStorage<TDatabase> storage, TThreadsafe defaultCurrentValue)
             : base(storage)
         {
             Ensure.Argument.IsNotNull(storage, nameof(storage));
 
             this.storage = storage;
 
-            currentSubject = new BehaviorSubject<TThreadsafe>(defaultCurrentValue);
+            currentSubject = new Subject<TThreadsafe>();
 
-            Current = currentSubject.AsObservable();
-
-            // right after login/signup the database does not contain the preferences and retreiving
-            // it will fail we can ignore this error because it will be immediately fetched and until
-            // then the default preferences will be used
-            initializationDisposable = storage.Single()
+            var initialValueObservable = storage.Single()
                 .Select(Convert)
-                .Subscribe(currentSubject.OnNext, (Exception _) => { });
+                .Catch((Exception _) => Observable.Return(defaultCurrentValue))
+                .FirstAsync();
+
+            var connectableCurrent = initialValueObservable.Concat(currentSubject).Replay(1);
+            connectableCurrent.Connect();
+
+            Current = connectableCurrent;
         }
 
         public virtual IObservable<TThreadsafe> Get()
@@ -57,6 +58,10 @@ namespace Toggl.Foundation.DataSources
         public override IObservable<IConflictResolutionResult<TThreadsafe>> OverwriteIfOriginalDidNotChange(
             TThreadsafe original, TThreadsafe entity)
             => base.OverwriteIfOriginalDidNotChange(original, entity).Do(handleConflictResolutionResult);
+
+        public override IObservable<IEnumerable<IConflictResolutionResult<TThreadsafe>>> BatchUpdate(
+            IEnumerable<TThreadsafe> entities)
+            => base.BatchUpdate(entities).Do(results => results.ForEach(handleConflictResolutionResult));
 
         private void handleConflictResolutionResult(IConflictResolutionResult<TThreadsafe> result)
         {
