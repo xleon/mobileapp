@@ -80,6 +80,91 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
+        public sealed class TheInitializeMethod : ReportsViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task ReturnsSegmentsJustOnceWhenChangingDateRange()
+            {
+                var segments = new ChartSegment[2] {
+                    new ChartSegment("Project 1", "Client 1", 50f, 10, 0, "ff0000"),
+                    new ChartSegment("Project 2", "Client 2", 50f, 10, 0, "00ff00")
+                };
+                var projectsNotSyncedCount = 0;
+
+                var currentDate = new DateTimeOffset(2018, 5, 23, 0, 0, 0, TimeSpan.Zero);
+                var start = new DateTimeOffset(2018, 5, 1, 0, 0, 0, TimeSpan.Zero);
+                var end = new DateTimeOffset(2018, 5, 7, 0, 0, 0, TimeSpan.Zero);
+                TimeService.CurrentDateTime.Returns(currentDate);
+
+                var delayed = Observable
+                    .Return(new ProjectSummaryReport(segments, projectsNotSyncedCount))
+                    .Delay(TimeSpan.FromMilliseconds(100));
+
+                var instant = Observable
+                    .Return(new ProjectSummaryReport(segments, projectsNotSyncedCount));
+
+                ReportsProvider.GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
+                               .Returns(delayed, instant);
+
+                await Initialize();
+                ViewModel.ChangeDateRangeCommand.Execute(
+                    DateRangeParameter.WithDates(start, end));
+
+                await delayed;
+                ViewModel.Segments.Count.Should().Be(segments.Length);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksAnEventWhenReportLoadsSuccessfully()
+            {
+                var startDateRange = new DateTimeOffset(2018, 05, 05, 0, 0, 0, TimeSpan.Zero);
+                var endDateRange = startDateRange.AddDays(7);
+
+                var totalDays = (int)(endDateRange - startDateRange).TotalDays;
+                var projectsNotSyncedCount = 0;
+                var loadingDuration = TimeSpan.FromSeconds(5);
+                var now = new DateTimeOffset(2018, 01, 01, 0, 0, 0, TimeSpan.Zero);
+
+                TimeService.CurrentDateTime.Returns(_ =>
+                {
+                    now = now + loadingDuration;
+                    return now;
+                });
+
+                ReportsProvider.GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
+                        .Returns(Observable.Return(new ProjectSummaryReport(new ChartSegment[0], projectsNotSyncedCount)));
+
+                await Initialize();
+
+                AnalyticsService.Received().TrackReportsSuccess(ReportsSource.Initial, totalDays, projectsNotSyncedCount, loadingDuration.TotalMilliseconds);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksAnEventWhenReportFailsToLoad()
+            {
+                var startDateRange = new DateTimeOffset(2018, 05, 05, 0, 0, 0, TimeSpan.Zero);
+                var endDateRange = startDateRange.AddDays(7);
+
+                var totalDays = (int)(endDateRange - startDateRange).TotalDays;
+                var loadingDuration = TimeSpan.FromSeconds(5);
+                var now = new DateTimeOffset(2018, 01, 01, 0, 0, 0, TimeSpan.Zero);
+
+                TimeService.CurrentDateTime.Returns(_ =>
+                {
+                    now = now + loadingDuration;
+                    return now;
+                });
+
+                ReportsProvider.GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
+                        .Returns(Observable.Throw<ProjectSummaryReport>(new Exception()));
+
+                await Initialize();
+
+                AnalyticsService.Received().TrackReportsFailure(ReportsSource.Initial, totalDays, loadingDuration.TotalMilliseconds);
+            }
+        }
+
+
         public sealed class TheBillablePercentageMethod : ReportsViewModelTest
         {
             [Property(MaxTest = 1)]

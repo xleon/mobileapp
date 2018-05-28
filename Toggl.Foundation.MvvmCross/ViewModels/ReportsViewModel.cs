@@ -126,8 +126,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     .Current
                     .Select(user => user.DefaultWorkspaceId);
 
-            source = ReportsSource.Initial;
-
             disposeBag.Add(
                 reportSubject
                     .AsObservable()
