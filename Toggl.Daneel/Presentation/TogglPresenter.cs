@@ -187,12 +187,6 @@ namespace Toggl.Daneel.Presentation
 
                     return;
                 }
-                case CardVisibilityHint cardHint:
-                {
-                    if (MasterNavigationController?.TopViewController is MainViewController mainViewController)
-                        mainViewController.OnTimeEntryCardVisibilityChanged(cardHint.Visible);
-                    return;
-                }
 
                 case ToggleCalendarVisibilityHint calendarHint:
                     if (MasterNavigationController?.TopViewController is ReportsViewController reportsViewController)

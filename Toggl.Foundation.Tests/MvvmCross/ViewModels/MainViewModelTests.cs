@@ -31,6 +31,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         public abstract class MainViewModelTest : BaseViewModelTests<MainViewModel>
         {
+            private IDisposable disposable;
+
             protected ISubject<SyncProgress> ProgressSubject { get; } = new Subject<SyncProgress>();
 
             protected IUserPreferences UserPreferences { get; } = Substitute.For<IUserPreferences>();
@@ -41,6 +43,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var vm = new MainViewModel(Scheduler, DataSource, TimeService, UserPreferences, OnboardingStorage, AnalyticsService, InteractorFactory, NavigationService, SuggestionProviderContainer);
                 vm.Prepare();
+
                 return vm;
             }
 
@@ -193,6 +196,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observable = Observable.Return(timeEntry);
                 DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(observable);
                 ViewModel.Initialize().Wait();
+                ViewModel.TimeEntryCardVisibility.Subscribe(_ => { });
 
                 await CallCommand();
 
@@ -277,6 +281,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(observable);
 
                 ViewModel.Initialize().Wait();
+                ViewModel.TimeEntryCardVisibility.Subscribe(_ => { });
                 Scheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
             }
 
@@ -382,6 +387,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observable = Observable.Return(timeEntry);
                 DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(observable);
                 ViewModel.Initialize().Wait();
+                ViewModel.TimeEntryCardVisibility.Subscribe(_ => { });
 
                 await ViewModel.EditTimeEntryCommand.ExecuteAsync();
 
@@ -397,6 +403,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observable = Observable.Return(timeEntry);
                 DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(observable);
                 ViewModel.Initialize().Wait();
+                ViewModel.TimeEntryCardVisibility.Subscribe(_ => { });
 
                 ViewModel.EditTimeEntryCommand.ExecuteAsync().Wait();
 
@@ -410,6 +417,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observable = Observable.Return<IThreadSafeTimeEntry>(null);
                 DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(observable);
                 ViewModel.Initialize().Wait();
+                ViewModel.TimeEntryCardVisibility.Subscribe(_ => { });
 
                 ViewModel.EditTimeEntryCommand.ExecuteAsync().Wait();
 
@@ -452,6 +460,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(currentTimeEntrySubject.AsObservable());
 
                 await ViewModel.Initialize();
+                ViewModel.TimeEntryCardVisibility.Subscribe(_ => { });
                 currentTimeEntrySubject.OnNext(timeEntry);
                 Scheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
             }
@@ -582,6 +591,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Updated
                     .Returns(Observable.Never<EntityUpdate<IThreadSafeTimeEntry>>());
                 await ViewModel.Initialize();
+                ViewModel.TimeEntryCardVisibility.Subscribe(_ => { });
 
                 ViewModel
                     .IsWelcome
@@ -646,6 +656,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PrepareIsWelcome(true);
                 await ViewModel.Initialize();
+                ViewModel.TimeEntryCardVisibility.Subscribe(_ => { });
 
                 ViewModel.ShouldShowEmptyState.Should().BeTrue();
             }
@@ -656,6 +667,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 PrepareSuggestion();
 
                 await ViewModel.Initialize();
+                ViewModel.TimeEntryCardVisibility.Subscribe(_ => { });
 
                 ViewModel.ShouldShowEmptyState.Should().BeFalse();
             }
@@ -666,6 +678,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 PrepareTimeEntry();
 
                 await ViewModel.Initialize();
+                ViewModel.TimeEntryCardVisibility.Subscribe(_ => { });
 
                 ViewModel.ShouldShowEmptyState.Should().BeFalse();
             }
@@ -675,6 +688,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PrepareIsWelcome(false);
                 await ViewModel.Initialize();
+                ViewModel.TimeEntryCardVisibility.Subscribe(_ => { });
 
                 ViewModel.ShouldShowEmptyState.Should().BeFalse();
             }

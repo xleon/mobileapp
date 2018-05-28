@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
 using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
@@ -64,6 +65,8 @@ namespace Toggl.Daneel.ViewControllers
 
         private UIGestureRecognizer swipeLeftGestureRecognizer;
 
+        private IDisposable cardDisposable;
+
         private IDisposable tapToEditDisposable;
         private IDisposable firstTimeEntryDisposable;
         private IDisposable isEmptyDisposable;
@@ -105,6 +108,9 @@ namespace Toggl.Daneel.ViewControllers
             suggestionsView.DataContext = ViewModel.SuggestionsViewModel;
 
             source.Initialize();
+
+            cardDisposable = ViewModel.TimeEntryCardVisibility
+                .ObserveOn(SynchronizationContext.Current).Subscribe(onTimeEntryCardVisibilityChanged);
 
             var timeEntriesLogFooter = new UIView(
                 new CGRect(0, 0, UIScreen.MainScreen.Bounds.Width, 64)
@@ -224,7 +230,7 @@ namespace Toggl.Daneel.ViewControllers
             View.LayoutIfNeeded();
         }
 
-        internal void OnTimeEntryCardVisibilityChanged(bool visible)
+        private void onTimeEntryCardVisibilityChanged(bool visible)
         {
             if (!viewInitialized)
             {
@@ -287,6 +293,9 @@ namespace Toggl.Daneel.ViewControllers
 
             swipeToDeleteWasUsedDisposable?.Dispose();
             swipeToDeleteWasUsedDisposable = null;
+
+            cardDisposable?.Dispose();
+            cardDisposable = null;
         }
 
         public override void ViewDidLayoutSubviews()
@@ -299,7 +308,7 @@ namespace Toggl.Daneel.ViewControllers
 
             if (blockedTimeEntryCardVisibilityChange.HasValue)
             {
-                OnTimeEntryCardVisibilityChanged(blockedTimeEntryCardVisibilityChange.Value);
+                onTimeEntryCardVisibilityChanged(blockedTimeEntryCardVisibilityChange.Value);
                 blockedTimeEntryCardVisibilityChange = null;
             }
         }

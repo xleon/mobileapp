@@ -61,6 +61,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public int NumberOfSyncFailures { get; private set; }
 
+        public IObservable<bool> TimeEntryCardVisibility { get; private set; }
+
         [DependsOn(nameof(SyncingProgress))]
         public bool ShowSyncIndicator => SyncingProgress == SyncProgress.Syncing;
 
@@ -171,16 +173,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             await TimeEntriesLogViewModel.Initialize();
             await SuggestionsViewModel.Initialize();
 
+            TimeEntryCardVisibility = dataSource
+                .TimeEntries
+                .CurrentlyRunningTimeEntry
+                .Throttle(currentTimeEntryDueTime, scheduler) // avoid overwhelming the UI with frequent updates
+                .Do(setRunningEntry)
+                .Select(timeEntry => timeEntry != null);
+            
             var tickDisposable = timeService
                 .CurrentDateTimeObservable
                 .Where(_ => currentTimeEntryStart != null)
                 .Subscribe(currentTime => CurrentTimeEntryElapsedTime = currentTime - currentTimeEntryStart.Value);
-
-            var currentlyRunningTimeEntryDisposable = dataSource
-                .TimeEntries
-                .CurrentlyRunningTimeEntry
-                .Throttle(currentTimeEntryDueTime, scheduler) // avoid overwhelming the UI with frequent updates
-                .Subscribe(setRunningEntry);
 
             var syncManagerDisposable = dataSource
                 .SyncManager
@@ -209,7 +212,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             disposeBag.Add(tickDisposable);
             disposeBag.Add(syncManagerDisposable);
             disposeBag.Add(isEmptyChangedDisposable);
-            disposeBag.Add(currentlyRunningTimeEntryDisposable);
             disposeBag.Add(getNumberOfSyncFailuresDisposable);
 
             switch (urlNavigationAction)
@@ -247,8 +249,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             CurrentTimeEntryProject = timeEntry?.Project?.Name ?? "";
             CurrentTimeEntryProjectColor = timeEntry?.Project?.Color ?? "";
             CurrentTimeEntryClient = timeEntry?.Project?.Client?.Name ?? "";
-
-            ChangePresentation(new CardVisibilityHint(CurrentTimeEntryId != null));
 
             isStopButtonEnabled = timeEntry != null;
 
