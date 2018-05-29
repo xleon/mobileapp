@@ -87,6 +87,7 @@ namespace Toggl.Foundation
             var persistTasks = new PersistState<ITask, IDatabaseTask, IThreadSafeTask>(dataSource.Tasks, database.SinceParameters, Task.Clean);
             var checkServerStatus = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay, delayCancellation);
             var finished = new ResetAPIDelayState(apiDelay);
+            var deleteOlderEntries = new DeleteOldEntriesState(timeService, dataSource.TimeEntries);
 
             transitions.ConfigureTransition(entryPoint, fetchAllSince.Start);
             transitions.ConfigureTransition(fetchAllSince.FetchStarted, persistWorkspaces.Start);
@@ -98,6 +99,7 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(persistClients.FinishedPersisting, persistProjects.Start);
             transitions.ConfigureTransition(persistProjects.FinishedPersisting, persistTasks.Start);
             transitions.ConfigureTransition(persistTasks.FinishedPersisting, persistTimeEntries.Start);
+            transitions.ConfigureTransition(persistTimeEntries.FinishedPersisting, deleteOlderEntries.Start);
 
             transitions.ConfigureTransition(persistWorkspaces.Failed, checkServerStatus.Start);
             transitions.ConfigureTransition(persistWorkspaceFeatures.Failed, checkServerStatus.Start);

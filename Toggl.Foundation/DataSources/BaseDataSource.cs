@@ -42,7 +42,7 @@ namespace Toggl.Foundation.DataSources
 
         public virtual IObservable<IEnumerable<IConflictResolutionResult<T>>> BatchUpdate(IEnumerable<T> entities)
             => Repository.BatchUpdate(
-                    convertEntitiesForBatchUpdate(entities),
+                    ConvertEntitiesForBatchUpdate(entities),
                     ResolveConflicts,
                     RivalsResolver)
                 .ToThreadSafeResult(Convert);
@@ -52,8 +52,7 @@ namespace Toggl.Foundation.DataSources
                 ? ConflictResolutionMode.Ignore
                 : ConflictResolutionMode.Update;
 
-        private IEnumerable<(long, U)> convertEntitiesForBatchUpdate(
-            IEnumerable<T> entities)
+        protected IEnumerable<(long, U)> ConvertEntitiesForBatchUpdate(IEnumerable<T> entities)
             => entities.Select(entity => (entity.Id, (U)entity));
 
         protected abstract T Convert(U entity);

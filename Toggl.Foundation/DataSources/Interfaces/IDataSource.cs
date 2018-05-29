@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive;
 using Toggl.Foundation.Models.Interfaces;
+using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.DataSources.Interfaces
@@ -15,6 +16,8 @@ namespace Toggl.Foundation.DataSources.Interfaces
         IObservable<IEnumerable<TThreadsafe>> GetAll();
 
         IObservable<IEnumerable<TThreadsafe>> GetAll(Func<TDatabase, bool> predicate);
+
+        IObservable<IEnumerable<IConflictResolutionResult<TThreadsafe>>> DeleteAll(IEnumerable<TThreadsafe> entities);
 
         IObservable<Unit> Delete(long id);
     }
