@@ -52,16 +52,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-    <toggl.giskard.views.togglDroidDatePicker
+    <toggl.giskard.views.TogglDroidDatePicker
         android:id="@+id/SelectDateTimeCalendarView"
-        local:MvxBind="Value StartDatePart; Visibility Visibility(IsCalendarView); Boundaries StartTimeBoundaries"
+        local:MvxBind="Value StartTime; Visibility Visibility(IsCalendarView); Boundaries StartTimeBoundaries"
         android:layout_marginTop="96dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <mvvmcross.binding.droid.views.MvxTimePicker
+    <toggl.giskard.views.TogglDroidTimePicker
         android:id="@+id/SelectDateTimeClockView"
         android:headerBackground="@color/popupBlueBackground"
-        local:MvxBind="Value StartTimePart; Visibility Visibility(!IsCalendarView)"
+        local:MvxBind="Value StartTime; Visibility Visibility(!IsCalendarView)"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <LinearLayout

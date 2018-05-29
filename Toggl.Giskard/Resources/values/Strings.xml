@@ -61,6 +61,7 @@ your app to continue.</string>
     <string name="Start">Start</string>
     <string name="Stop">Stop</string>
     <string name="SelectCountryOfResidence">Select country of residence</string>
+    <string name="StartTimeAfterCurrentTimeWarning">Start time must be before current time!</string>
     <string name="StartTimeAfterStopTimeWarning">Start time must be before Stop time!</string>
     <string name="StopTimeBeforeStartTimeWarning">Stop time must be after Start time!</string>
     <string name="DurationTooLong">Duration can\'t exceed 999 hours!</string>

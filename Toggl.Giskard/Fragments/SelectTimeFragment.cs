@@ -106,9 +106,10 @@ namespace Toggl.Giskard.Fragments
 
         private Dictionary<TemporalInconsistency, int> inconsistencyMessages = new Dictionary<TemporalInconsistency, int>
         {
+            [StartTimeAfterCurrentTime] = Resource.String.StartTimeAfterCurrentTimeWarning,
             [StartTimeAfterStopTime] = Resource.String.StartTimeAfterStopTimeWarning,
             [StopTimeBeforeStartTime] = Resource.String.StopTimeBeforeStartTimeWarning,
-            [DurationTooLong] = Resource.String.DurationTooLong
+            [DurationTooLong] = Resource.String.DurationTooLong,
         };
 
         private void onTemporalInconsistency(TemporalInconsistency temporalInconsistency)
