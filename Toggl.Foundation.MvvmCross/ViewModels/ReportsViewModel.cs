@@ -8,6 +8,7 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
+using PropertyChanged;
 using Toggl.Foundation;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Interactors;
@@ -54,13 +55,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IReadOnlyList<ChartSegment> Segments
         {
-            get => groupedSegments ?? (groupedSegments = groupSegments());
+            get => segments;
             private set
             {
                 segments = value;
                 groupedSegments = null;
             }
         }
+
+        [DependsOn(nameof(Segments))]
+        public IReadOnlyList<ChartSegment> GroupedSegments
+            => groupedSegments ?? (groupedSegments = groupSegments());
 
         public bool ShowEmptyState => !segments.Any() && !IsLoading;
 
@@ -224,7 +229,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IReadOnlyList<ChartSegment> groupSegments()
         {
             var otherProjects = segments.Where(segment => segment.Percentage < minimumPieChartSegmentPercentage).ToList();
-            if (otherProjects.Count == 0)
+            if (otherProjects.Count <= 1 || otherProjects.Count == segments.Count)
                 return segments;
 
             var otherSegment = new ChartSegment(

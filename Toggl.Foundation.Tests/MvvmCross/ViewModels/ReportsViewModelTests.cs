@@ -246,32 +246,75 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheSegmentsProperty : ReportsViewModelTest
         {
-            private readonly ChartSegment[] segments =
-            {
-                new ChartSegment("Project 1", "Client 1", 2, 2, 0, "#ffffff"),
-                new ChartSegment("Project 2", "Client 2", 7, 7, 0, "#ffffff"),
-                new ChartSegment("Project 3", "Client 3", 12, 12, 0, "#ffffff"),
-                new ChartSegment("Project 4", "Client 4", 23, 23, 0, "#ffffff"),
-                new ChartSegment("Project 5", "Client 5", 66, 66, 0, "#ffffff")
-            };
-
             [Fact]
             public async Task GroupsProjectSegmentsWithPercentageLessThanTenPercent()
             {
+                ChartSegment[] segments =
+                {
+                    new ChartSegment("Project 1", "Client 1", 2, 2, 0, "#ffffff"),
+                    new ChartSegment("Project 2", "Client 2", 7, 7, 0, "#ffffff"),
+                    new ChartSegment("Project 3", "Client 3", 12, 12, 0, "#ffffff"),
+                    new ChartSegment("Project 4", "Client 4", 23, 23, 0, "#ffffff"),
+                    new ChartSegment("Project 5", "Client 5", 56, 56, 0, "#ffffff")
+                };
+
                 TimeService.CurrentDateTime.Returns(new DateTimeOffset(2018, 05, 15, 12, 00, 00, TimeSpan.Zero));
                 ReportsProvider.GetProjectSummary(WorkspaceId, Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
                     .Returns(Observable.Return(new ProjectSummaryReport(segments)));
 
                 await Initialize();
 
-                ViewModel.Segments.Should().HaveCount(4);
-                ViewModel.Segments.Should().Contain(segment =>
+                ViewModel.Segments.Should().HaveCount(5);
+                ViewModel.GroupedSegments.Should().HaveCount(4);
+                ViewModel.GroupedSegments.Should().Contain(segment =>
                     segment.ProjectName == Resources.Other &&
                     segment.Percentage == segments[0].Percentage + segments[1].Percentage);
-                ViewModel.Segments
+                ViewModel.GroupedSegments
                     .Where(project => project.ProjectName != Resources.Other)
                     .Select(segment => segment.Percentage)
                     .ForEach(percentage => percentage.Should().BeGreaterOrEqualTo(10));
+            }
+
+            [Fact]
+            public async Task DoesNotGroupOtherProjectsWhenThereIsJustOneProjectWithLessThanTenPercent()
+            {
+                ChartSegment[] segments =
+                {
+                    new ChartSegment("Project 1", "Client 1", 7, 7, 0, "#ffffff"),
+                    new ChartSegment("Project 2", "Client 2", 23, 23, 0, "#ffffff"),
+                    new ChartSegment("Project 3", "Client 3", 70, 70, 0, "#ffffff")
+                };
+
+                TimeService.CurrentDateTime.Returns(new DateTimeOffset(2018, 05, 15, 12, 00, 00, TimeSpan.Zero));
+                ReportsProvider.GetProjectSummary(WorkspaceId, Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
+                    .Returns(Observable.Return(new ProjectSummaryReport(segments)));
+                ViewModel.Prepare(WorkspaceId);
+
+                await Initialize();
+
+                ViewModel.GroupedSegments.Should().HaveCount(3);
+                ViewModel.GroupedSegments.Should().NotContain(segment => segment.ProjectName == Resources.Other);
+            }
+
+            [Fact]
+            public async Task DoesNotGroupOtherProjectsWhenAllProjectsHaveLessThanTenPercent()
+            {
+                ChartSegment[] segments =
+                {
+                    new ChartSegment("Project 1", "Client 1", 1, 1, 0, "#ffffff"),
+                    new ChartSegment("Project 2", "Client 2", 3, 3, 0, "#ffffff"),
+                    new ChartSegment("Project 3", "Client 3", 9, 9, 0, "#ffffff")
+                };
+
+                TimeService.CurrentDateTime.Returns(new DateTimeOffset(2018, 05, 15, 12, 00, 00, TimeSpan.Zero));
+                ReportsProvider.GetProjectSummary(WorkspaceId, Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
+                    .Returns(Observable.Return(new ProjectSummaryReport(segments)));
+                ViewModel.Prepare(WorkspaceId);
+
+                await Initialize();
+
+                ViewModel.GroupedSegments.Should().HaveCount(3);
+                ViewModel.GroupedSegments.Should().NotContain(segment => segment.ProjectName == Resources.Other);
             }
         }
     }
