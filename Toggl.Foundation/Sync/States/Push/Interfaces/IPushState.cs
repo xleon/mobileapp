@@ -2,9 +2,9 @@
 
 namespace Toggl.Foundation.Sync.States.Push.Interfaces
 {
-    public interface IPushState<TThreadsafeModel>
+    public interface IPushState<T>
     {   
-        StateResult<TThreadsafeModel> PushEntity { get; }
+        StateResult<T> PushEntity { get; }
 
         StateResult NothingToPush { get; }
 

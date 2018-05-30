@@ -4,17 +4,11 @@ using System.Linq;
 using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Sync.States;
 using Toggl.Foundation.Tests.Helpers;
-using Toggl.Foundation.Tests.Mocks;
-using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Models;
 using Toggl.Ultrawave.Exceptions;
 using Xunit;
 
@@ -22,7 +16,7 @@ namespace Toggl.Foundation.Tests.Sync.States
 {
     public sealed class PersistStateTests
     {
-        private readonly IBaseDataSource<IThreadSafeTestModel, IDatabaseTestModel> dataSource;
+        private readonly IBaseDataSource<IThreadSafeTestModel> dataSource;
         private readonly ISinceParameterRepository sinceParameterRepository;
         private readonly PersistState<ITestModel, IDatabaseTestModel, IThreadSafeTestModel> state;
 
@@ -31,7 +25,7 @@ namespace Toggl.Foundation.Tests.Sync.States
 
         public PersistStateTests()
         {
-            dataSource = Substitute.For<IBaseDataSource<IThreadSafeTestModel, IDatabaseTestModel>>();
+            dataSource = Substitute.For<IBaseDataSource<IThreadSafeTestModel>>();
             sinceParameterRepository = Substitute.For<ISinceParameterRepository>();
             state = new PersistState<ITestModel, IDatabaseTestModel, IThreadSafeTestModel>(dataSource, sinceParameterRepository, TestModel.Clean);
         }

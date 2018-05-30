@@ -13,13 +13,13 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
 {
     public sealed class PushSingleStateTests
     {
-        private readonly ISingletonDataSource<IThreadSafeTestModel, IDatabaseTestModel> dataSource
-            = Substitute.For<ISingletonDataSource<IThreadSafeTestModel, IDatabaseTestModel>>();
+        private readonly ISingletonDataSource<IThreadSafeTestModel> dataSource
+            = Substitute.For<ISingletonDataSource<IThreadSafeTestModel>>();
 
         [Fact, LogIfTooSlow]
         public void ConstructorThrowsWithNullDataSource()
         {
-            Action creatingWithNullArgument = () => new PushSingleState<IDatabaseTestModel, IThreadSafeTestModel>(null);
+            Action creatingWithNullArgument = () => new PushSingleState<IThreadSafeTestModel>(null);
 
             creatingWithNullArgument.ShouldThrow<ArgumentNullException>();
         }
@@ -30,7 +30,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
         public void ReturnsNothingToPushTransitionWhenTheSingleEntityDoesNotNeedSyncing(SyncStatus syncStatus)
         {
             var entity = new TestModel(1, syncStatus);
-            var state = new PushSingleState<IDatabaseTestModel, IThreadSafeTestModel>(dataSource);
+            var state = new PushSingleState<IThreadSafeTestModel>(dataSource);
             dataSource.Get().Returns(Observable.Return(entity));
 
             var transition = state.Start().SingleAsync().Wait();
@@ -41,7 +41,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
         [Fact, LogIfTooSlow]
         public void ReturnsPushEntityTransitionWhenTheRepositoryReturnsSomeEntity()
         {
-            var state = new PushSingleState<IDatabaseTestModel, IThreadSafeTestModel>(dataSource);
+            var state = new PushSingleState<IThreadSafeTestModel>(dataSource);
             var entity = new TestModel(1, SyncStatus.SyncNeeded);
             dataSource.Get().Returns(Observable.Return(entity));
 
@@ -55,7 +55,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
         [Fact, LogIfTooSlow]
         public void ThrowsWhenRepositoryThrows()
         {
-            var state = new PushSingleState<IDatabaseTestModel, IThreadSafeTestModel>(dataSource);
+            var state = new PushSingleState<IThreadSafeTestModel>(dataSource);
             dataSource.Get().Returns(Observable.Throw<IThreadSafeTestModel>(new Exception()));
 
             Action callingStart = () => state.Start().SingleAsync().Wait();

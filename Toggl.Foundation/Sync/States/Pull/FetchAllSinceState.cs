@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
 using Toggl.Multivac.Extensions;
-using Toggl.Foundation.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Ultrawave;

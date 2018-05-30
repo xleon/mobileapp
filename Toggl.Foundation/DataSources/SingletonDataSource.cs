@@ -13,7 +13,7 @@ namespace Toggl.Foundation.DataSources
 {
     public abstract class SingletonDataSource<TThreadsafe, TDatabase>
         : BaseDataSource<TThreadsafe, TDatabase>,
-          ISingletonDataSource<TThreadsafe, TDatabase>
+          ISingletonDataSource<TThreadsafe>
         where TDatabase : IDatabaseSyncable
         where TThreadsafe : IThreadSafeModel, IIdentifiable, TDatabase
     {

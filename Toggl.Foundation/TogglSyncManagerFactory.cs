@@ -154,12 +154,12 @@ namespace Toggl.Foundation
 
             var push = new PushState<TDatabase, TThreadsafe>(dataSource);
             var pushOne = new PushOneEntityState<TThreadsafe>();
-            var create = new CreateEntityState<TModel, TDatabase, TThreadsafe>(creatingApi, dataSource, toClean);
-            var update = new UpdateEntityState<TModel, TDatabase, TThreadsafe>(updatingApi, dataSource, toClean);
+            var create = new CreateEntityState<TModel, TThreadsafe>(creatingApi, dataSource, toClean);
+            var update = new UpdateEntityState<TModel, TThreadsafe>(updatingApi, dataSource, toClean);
             var delete = new DeleteEntityState<TModel, TDatabase, TThreadsafe>(deletingApi, dataSource);
             var deleteLocal = new DeleteLocalEntityState<TDatabase, TThreadsafe>(dataSource);
             var tryResolveClientError = new TryResolveClientErrorState<TThreadsafe>();
-            var unsyncable = new UnsyncableEntityState<TDatabase, TThreadsafe>(dataSource, toUnsyncable);
+            var unsyncable = new UnsyncableEntityState<TThreadsafe>(dataSource, toUnsyncable);
             var checkServerStatus = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay, delayCancellation);
             var finished = new ResetAPIDelayState(apiDelay);
 
@@ -219,9 +219,9 @@ namespace Toggl.Foundation
 
             var push = new PushState<TDatabase, TThreadsafe>(dataSource);
             var pushOne = new PushOneEntityState<TThreadsafe>();
-            var create = new CreateEntityState<TModel, TDatabase, TThreadsafe>(creatingApi, dataSource, toClean);
+            var create = new CreateEntityState<TModel, TThreadsafe>(creatingApi, dataSource, toClean);
             var tryResolveClientError = new TryResolveClientErrorState<TThreadsafe>();
-            var unsyncable = new UnsyncableEntityState<TDatabase, TThreadsafe>(dataSource, toUnsyncable);
+            var unsyncable = new UnsyncableEntityState<TThreadsafe>(dataSource, toUnsyncable);
             var checkServerStatus = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay, delayCancellation);
             var finished = new ResetAPIDelayState(apiDelay);
 
@@ -250,10 +250,10 @@ namespace Toggl.Foundation
             return push.NothingToPush;
         }
 
-        private static IStateResult configurePushSingleton<TModel, TDatabase, TThreadsafe>(
+        private static IStateResult configurePushSingleton<TModel, TThreadsafe>(
             TransitionHandlerProvider transitions,
             IStateResult entryPoint,
-            ISingletonDataSource<TThreadsafe, TDatabase> dataSource,
+            ISingletonDataSource<TThreadsafe> dataSource,
             IUpdatingApiClient<TModel> updatingApi,
             Func<TModel, TThreadsafe> toClean,
             Func<TThreadsafe, string, TThreadsafe> toUnsyncable,
@@ -261,18 +261,17 @@ namespace Toggl.Foundation
             IScheduler scheduler,
             IObservable<Unit> delayCancellation)
             where TModel : class
-            where TDatabase : class, TModel, IDatabaseSyncable
-            where TThreadsafe : class, TDatabase, IThreadSafeModel
+            where TThreadsafe : class, TModel, IThreadSafeModel, IDatabaseSyncable
         {
             var rnd = new Random();
             var apiDelay = new RetryDelayService(rnd);
             var statusDelay = new RetryDelayService(rnd);
 
-            var push = new PushSingleState<TDatabase, TThreadsafe>(dataSource);
+            var push = new PushSingleState<TThreadsafe>(dataSource);
             var pushOne = new PushOneEntityState<TThreadsafe>();
-            var update = new UpdateEntityState<TModel, TDatabase, TThreadsafe>(updatingApi, dataSource, toClean);
+            var update = new UpdateEntityState<TModel, TThreadsafe>(updatingApi, dataSource, toClean);
             var tryResolveClientError = new TryResolveClientErrorState<TThreadsafe>();
-            var unsyncable = new UnsyncableEntityState<TDatabase, TThreadsafe>(dataSource, toUnsyncable);
+            var unsyncable = new UnsyncableEntityState<TThreadsafe>(dataSource, toUnsyncable);
             var checkServerStatus = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay, delayCancellation);
             var finished = new ResetAPIDelayState(apiDelay);
 

@@ -7,7 +7,7 @@ using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.DataSources.Interfaces
 {
-    public interface IDataSource<TThreadsafe, TDatabase> : IBaseDataSource<TThreadsafe, TDatabase>
+    public interface IDataSource<TThreadsafe, out TDatabase> : IBaseDataSource<TThreadsafe>
         where TDatabase : IDatabaseModel
         where TThreadsafe : TDatabase, IThreadSafeModel
     {

@@ -12,10 +12,9 @@ using Toggl.Ultrawave.Exceptions;
 namespace Toggl.Foundation.Sync.States
 {
     internal sealed class PersistState<TInterface, TDatabaseInterface, TThreadsafeInterface>
-        where TDatabaseInterface : TInterface
-        where TThreadsafeInterface : TDatabaseInterface, IThreadSafeModel
+        where TThreadsafeInterface : IThreadSafeModel, TDatabaseInterface, TInterface
     {
-        private readonly IBaseDataSource<TThreadsafeInterface, TDatabaseInterface> dataSource;
+        private readonly IBaseDataSource<TThreadsafeInterface> dataSource;
 
         private readonly ISinceParameterRepository sinceParameterRepository;
 
@@ -26,7 +25,7 @@ namespace Toggl.Foundation.Sync.States
         public StateResult<Exception> Failed { get; } = new StateResult<Exception>();
 
         public PersistState(
-            IBaseDataSource<TThreadsafeInterface, TDatabaseInterface> dataSource,
+            IBaseDataSource<TThreadsafeInterface> dataSource,
             ISinceParameterRepository sinceParameterRepository,
             Func<TInterface, TThreadsafeInterface> convertToThreadsafeEntity)
         {

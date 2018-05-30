@@ -5,17 +5,17 @@ using Toggl.PrimeRadiant;
 
 namespace Toggl.Foundation.DataSources.Interfaces
 {
-    public interface IBaseDataSource<TThreadsafe, TDatabase>
-        where TThreadsafe : IThreadSafeModel, TDatabase
+    public interface IBaseDataSource<T>
+        where T : IThreadSafeModel
     {
-        IObservable<TThreadsafe> Create(TThreadsafe entity);
+        IObservable<T> Create(T entity);
 
-        IObservable<TThreadsafe> Update(TThreadsafe entity);
+        IObservable<T> Update(T entity);
 
-        IObservable<TThreadsafe> Overwrite(TThreadsafe original, TThreadsafe entity);
+        IObservable<T> Overwrite(T original, T entity);
 
-        IObservable<IConflictResolutionResult<TThreadsafe>> OverwriteIfOriginalDidNotChange(TThreadsafe original, TThreadsafe entity);
+        IObservable<IConflictResolutionResult<T>> OverwriteIfOriginalDidNotChange(T original, T entity);
 
-        IObservable<IEnumerable<IConflictResolutionResult<TThreadsafe>>> BatchUpdate(IEnumerable<TThreadsafe> entities);
+        IObservable<IEnumerable<IConflictResolutionResult<T>>> BatchUpdate(IEnumerable<T> entities);
     }
 }
