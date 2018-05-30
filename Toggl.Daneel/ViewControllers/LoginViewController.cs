@@ -19,6 +19,7 @@ namespace Toggl.Daneel.ViewControllers
     public sealed partial class LoginViewController : MvxViewController<LoginViewModel>
     {
         private const int iPhoneSeScreenHeight = 568;
+        private const int topConstraintForBiggerScreens = 92;
 
         public LoginViewController() 
             : base(nameof(LoginViewController), null)
@@ -102,7 +103,7 @@ namespace Toggl.Daneel.ViewControllers
             base.ViewDidLayoutSubviews();
 
             if (View.Frame.Height > iPhoneSeScreenHeight)
-                TopConstraint.Constant = 132;
+                TopConstraint.Constant = topConstraintForBiggerScreens;
 
             SignupCard.SetupBottomCard();
             GoogleLoginButton.SetupGoogleButton();
