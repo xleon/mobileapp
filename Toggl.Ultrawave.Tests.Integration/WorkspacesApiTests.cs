@@ -38,7 +38,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 => Observable.Defer(async () =>
                 {
                     var user = await togglApi.User.Get();
-                    return CallEndpointWith(togglApi, user.DefaultWorkspaceId);
+                    return CallEndpointWith(togglApi, user.DefaultWorkspaceId.Value);
                 });
 
             private Func<Task> CallingEndpointWith(ITogglApi togglApi, long id)
@@ -52,7 +52,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             {
                 var (togglClient, user) = await SetupTestUser();
 
-                var workspace = await CallEndpointWith(togglClient, user.DefaultWorkspaceId);
+                var workspace = await CallEndpointWith(togglClient, user.DefaultWorkspaceId.Value);
 
                 workspace.Id.Should().Be(user.DefaultWorkspaceId);
             }
@@ -74,7 +74,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             {
                 var (togglClient, user) = await SetupTestUser();
 
-                CallingEndpointWith(togglClient, user.DefaultWorkspaceId - 1).ShouldThrow<ForbiddenException>();
+                CallingEndpointWith(togglClient, user.DefaultWorkspaceId.Value - 1).ShouldThrow<ForbiddenException>();
             }
         }
     }

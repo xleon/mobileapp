@@ -242,9 +242,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask NavigatesToTheReportsViewModel()
             {
                 const long workspaceId = 10;
-                var user = Substitute.For<IDatabaseUser>();
-                user.DefaultWorkspaceId.Returns(workspaceId);
-                DataSource.User.Current.Returns(Observable.Return(user));
+                var workspace = Substitute.For<IDatabaseWorkspace>();
+                workspace.Id.Returns(workspaceId);
+                InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(workspace));
 
                 await ViewModel.OpenReportsCommand.ExecuteAsync();
 

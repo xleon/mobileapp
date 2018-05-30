@@ -270,12 +270,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             setUpTimeSubscriptionIfNeeded();
         }
 
-        public async override Task Initialize()
+        public override async Task Initialize()
         {
             await base.Initialize();
 
+            var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
             TextFieldInfo =
-                await dataSource.User.Current.Select(user => TextFieldInfo.Empty(user.DefaultWorkspaceId));
+                await dataSource.User.Current.Select(user => TextFieldInfo.Empty(workspace.Id));
 
             await setBillableValues(lastProjectId);
 

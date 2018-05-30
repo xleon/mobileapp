@@ -269,8 +269,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task openReports()
         {
-            var user = await dataSource.User.Current;
-            await navigationService.Navigate<ReportsViewModel, long>(user.DefaultWorkspaceId);
+            var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
+            await navigationService.Navigate<ReportsViewModel, long>(workspace.Id);
         }
 
         private Task openSyncFailures()

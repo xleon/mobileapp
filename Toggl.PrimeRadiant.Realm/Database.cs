@@ -61,12 +61,12 @@ namespace Toggl.PrimeRadiant.Realm
         private RealmConfiguration createRealmConfiguration()
             => new RealmConfiguration
             {
-                SchemaVersion = 2,
+                SchemaVersion = 3,
                 MigrationCallback = (migration, oldSchemaVersion) =>
                 {
-                    if (oldSchemaVersion < 2)
+                    if (oldSchemaVersion < 3)
                     {
-                        // nothing needs explicit updating when updating form schema 0 to 1 and from 1 to 2
+                        // nothing needs explicit updating when updating form schema 0 up to 3
                     }
                 }
             };

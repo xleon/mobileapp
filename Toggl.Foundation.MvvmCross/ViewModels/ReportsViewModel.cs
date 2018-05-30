@@ -10,6 +10,7 @@ using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using Toggl.Foundation;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -29,6 +30,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
+        private readonly IInteractorFactory interactorFactory;
         private readonly ReportsCalendarViewModel calendarViewModel;
         private readonly Subject<Unit> reportSubject = new Subject<Unit>();
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
@@ -85,15 +87,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public ReportsViewModel(ITogglDataSource dataSource,
                                 ITimeService timeService,
-                                IMvxNavigationService navigationService)
+                                IMvxNavigationService navigationService,
+                                IInteractorFactory interactorFactory)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
 
             this.timeService = timeService;
             this.navigationService = navigationService;
             this.dataSource = dataSource;
+            this.interactorFactory = interactorFactory;
 
             calendarViewModel = new ReportsCalendarViewModel(timeService, dataSource);
 
@@ -107,13 +112,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             workspaceId = parameter;
         }
 
-        public async override Task Initialize()
+        public override async Task Initialize()
         {
             if (workspaceId == 0)
-                workspaceId = await dataSource
-                    .User
-                    .Current
-                    .Select(user => user.DefaultWorkspaceId);
+            {
+                var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
+                workspaceId = workspace.Id;
+            }
 
             disposeBag.Add(
                 reportSubject

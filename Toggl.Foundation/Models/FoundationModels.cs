@@ -197,7 +197,7 @@ namespace Toggl.Foundation.Models
 
         public string ApiToken { get; }
 
-        public long DefaultWorkspaceId { get; }
+        public long? DefaultWorkspaceId { get; }
 
         public Email Email { get; }
 
