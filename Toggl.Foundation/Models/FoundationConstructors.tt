@@ -71,7 +71,7 @@ namespace Toggl.Foundation.Models
                     var isList = line.Contains(" IEnumerable<");
                     if (isList)
                     {
-                        var foundationClassName = Regex.Match(line, "IEnumerable<IDatabase(?<class>[^>]+?)>").Groups["class"].Value;
+                        var foundationClassName = Regex.Match(line, "IEnumerable<IDatabase(?<class>[^>]+)>").Groups["class"].Value;
                         wrapping = $"entity.{propName}.Select(Models.{foundationClassName}.From)";
                     }
                     else
