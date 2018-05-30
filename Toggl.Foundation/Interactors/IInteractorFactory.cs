@@ -70,5 +70,11 @@ namespace Toggl.Foundation.Interactors
             IList<string> wordsToQuery);
 
         #endregion
+
+        #region Preferences
+
+        IInteractor<IObservable<IThreadSafePreferences>> GetPreferences();
+
+        #endregion
     }
 }

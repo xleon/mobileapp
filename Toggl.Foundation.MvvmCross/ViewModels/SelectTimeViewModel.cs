@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Globalization;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.Core;
 using PropertyChanged;
 using Toggl.Foundation.Helper;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 using System.Reactive.Subjects;
+using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Interactors;
 using static Toggl.Foundation.MvvmCross.ViewModels.SelectTimeViewModel.TemporalInconsistency;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
@@ -32,7 +32,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private readonly ISubject<TemporalInconsistency> temporalInconsistencySubject = new Subject<TemporalInconsistency>();
 
+        private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
+        private readonly IInteractorFactory interactorFactory;
         private readonly ITimeService timeService;
         private IDisposable timeServiceDisposable;
         private bool isViewModelPrepared;
@@ -62,6 +64,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public DateTimeOffset StopTimeOrCurrent => StopTime ?? CurrentDateTime;
 
         public IObservable<TemporalInconsistency> TemporalInconsistencyDetected { get; }
+
+        public IObservable<bool> Is24HoursModeObservable { get; private set; }
 
         public bool IsEditingDuration { get; set; }
 
@@ -116,16 +120,20 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public bool IsRunningTimeEntryAM => CurrentDateTime.Hour < 12;
 
         public SelectTimeViewModel(
+            ITogglDataSource dataSource,
             IMvxNavigationService navigationService,
+            IInteractorFactory interactorFactory,
             ITimeService timeService)
         {
+            Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
+            Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-
-            TemporalInconsistencyDetected = temporalInconsistencySubject.AsObservable();
 
             this.navigationService = navigationService;
             this.timeService = timeService;
+            this.interactorFactory = interactorFactory;
+            this.dataSource = dataSource;
 
             CancelCommand = new MvxAsyncCommand(cancel);
             SaveCommand = new MvxAsyncCommand(save);
@@ -138,6 +146,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             StopTimeEntryCommand = new MvxCommand(stopTimeEntry);
 
             ToggleClockCalendarModeCommand = new MvxCommand(togglClockCalendarMode);
+
+            TemporalInconsistencyDetected = temporalInconsistencySubject.AsObservable();
         }
 
         public override void Prepare(SelectTimeParameters parameter)
@@ -166,6 +176,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                                .StartWith(timeService.CurrentDateTime)
                                .Subscribe(currentDateTime => CurrentDateTime = currentDateTime);
             }
+
+            Is24HoursModeObservable = interactorFactory
+                .GetPreferences()
+                .Execute()
+                .Select(pref => pref.TimeOfDayFormat.IsTwentyFourHoursFormat);
         }
 
         private void increaseDuration(int minutes)

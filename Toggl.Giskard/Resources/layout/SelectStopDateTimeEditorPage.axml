@@ -53,13 +53,13 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
     <toggl.giskard.views.TogglDroidDatePicker
-        android:id="@+id/SelectDateTimeCalendarView"
+        android:id="@+id/SelectStopTimeCalendarView"
         local:MvxBind="Value StopTime; Boundaries StopTimeBoundaries; Visibility Visibility(And(IsCalendarView, IsTimeEntryStopped))"
         android:layout_marginTop="96dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <toggl.giskard.views.TogglDroidTimePicker
-        android:id="@+id/SelectDateTimeClockView"
+        android:id="@+id/SelectStopTimeClockView"
         local:MvxBind="Value StopTime; Visibility Visibility(And(!IsCalendarView, IsTimeEntryStopped))"
         android:headerBackground="@color/popupBlueBackground"
         android:layout_width="match_parent"

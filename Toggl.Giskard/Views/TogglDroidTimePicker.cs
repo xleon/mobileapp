@@ -12,6 +12,7 @@ using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Helper;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
+using JavaBool = Java.Lang.Boolean;
 
 namespace Toggl.Giskard.Views
 {
@@ -80,6 +81,11 @@ namespace Toggl.Giskard.Views
         }
 
         public event EventHandler ValueChanged;
+
+        public void Update24HourMode(bool is24HourMode)
+        {
+            SetIs24HourView(new JavaBool(is24HourMode));
+        }
 
         public void OnTimeChanged(TimePicker view, int hourOfDay, int minute)
         {
