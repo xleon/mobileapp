@@ -10,6 +10,7 @@ using Toggl.Foundation.Sync.States;
 using Toggl.Foundation.Tests.Helpers;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.Exceptions;
+using Toggl.Ultrawave.Network;
 using Xunit;
 
 namespace Toggl.Foundation.Tests.Sync.States
@@ -174,6 +175,7 @@ namespace Toggl.Foundation.Tests.Sync.States
 
         [Theory, LogIfTooSlow]
         [MemberData(nameof(ApiExceptions.ExceptionsWhichCauseRethrow), MemberType = typeof(ApiExceptions))]
+        [MemberData(nameof(ExtraExceptionsToRethrow))]
         public void ThrowsWhenExceptionsWhichShouldCauseRethrowAreCaught(Exception exception)
         {
             var state = new PersistState<ITestModel, IDatabaseTestModel, IThreadSafeTestModel>(dataSource, sinceParameterRepository, TestModel.Clean);
@@ -237,5 +239,11 @@ namespace Toggl.Foundation.Tests.Sync.States
 
         private IFetchObservables createFetchObservablesWhichThrow(Exception exception)
             => createFetchObservables(null, Observable.Throw<List<ITestModel>>(exception));
+
+        public static IEnumerable<object[]> ExtraExceptionsToRethrow
+            => new[]
+            {
+                new object[] { new DeserializationException<TestModel>(Substitute.For<IRequest>(), Substitute.For<IResponse>(), "{a:\"b\"}") }
+            };
     }
 }

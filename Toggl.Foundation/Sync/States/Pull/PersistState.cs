@@ -57,7 +57,10 @@ namespace Toggl.Foundation.Sync.States
                 : Observable.Return(Failed.Transition(exception));
 
         private bool shouldRethrow(Exception e)
-            => e is ApiException == false || e is ApiDeprecatedException || e is ClientDeprecatedException || e is UnauthorizedException;
+            => !(e is ServerErrorException || e is ClientErrorException)
+               || e is ApiDeprecatedException
+               || e is ClientDeprecatedException
+               || e is UnauthorizedException;
 
         private void maybeUpdateSinceDates(IEnumerable<TThreadsafeInterface> entities)
         {
