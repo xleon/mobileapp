@@ -425,7 +425,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ChangesManualModeToTimerMode()
             {
-                UserPreferences.IsManualModeEnabled().Returns(true);
+                UserPreferences.IsManualModeEnabled.Returns(true);
 
                 await ViewModel.Initialize();
                 ViewModel.ToggleManualModeCommand.Execute();
@@ -437,7 +437,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ChangesTimerModeToManualMode()
             {
-                UserPreferences.IsManualModeEnabled().Returns(true);
+                UserPreferences.IsManualModeEnabled.Returns(true);
 
                 await ViewModel.Initialize();
                 ViewModel.ToggleManualModeCommand.Execute();
