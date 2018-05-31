@@ -285,7 +285,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
-                    Arg.Any<string>()).Returns(false);
+                    Arg.Any<string>()).Returns(Observable.Return(false));
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
@@ -302,7 +302,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
-                    Arg.Any<string>()).Returns(true);
+                    Arg.Any<string>()).Returns(Observable.Return(true));
 
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
