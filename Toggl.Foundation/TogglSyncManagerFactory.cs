@@ -139,6 +139,7 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(persistTimeEntries.FinishedPersisting, deleteOlderEntries.Start);
 
             transitions.ConfigureTransition(persistWorkspaces.Failed, checkServerStatus.Start);
+            transitions.ConfigureTransition(persistUser.Failed, checkServerStatus.Start);
             transitions.ConfigureTransition(persistWorkspaceFeatures.Failed, checkServerStatus.Start);
             transitions.ConfigureTransition(persistPreferences.Failed, checkServerStatus.Start);
             transitions.ConfigureTransition(persistTags.Failed, checkServerStatus.Start);
