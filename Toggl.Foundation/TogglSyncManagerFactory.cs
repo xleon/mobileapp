@@ -111,6 +111,8 @@ namespace Toggl.Foundation
                     .UpdateSince<IProject, IDatabaseProject>(database.SinceParameters)
                     .CatchApiExceptions();
 
+            var createGhostProjects = new CreateGhostProjectsState(dataSource.Projects).CatchApiExceptions();
+
             var persistTimeEntries =
                 new PersistListState<ITimeEntry, IDatabaseTimeEntry, IThreadSafeTimeEntry>(dataSource.TimeEntries, TimeEntry.Clean)
                     .UpdateSince<ITimeEntry, IDatabaseTimeEntry>(database.SinceParameters)
@@ -135,7 +137,8 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(persistTags.FinishedPersisting, persistClients.Start);
             transitions.ConfigureTransition(persistClients.FinishedPersisting, persistProjects.Start);
             transitions.ConfigureTransition(persistProjects.FinishedPersisting, persistTasks.Start);
-            transitions.ConfigureTransition(persistTasks.FinishedPersisting, persistTimeEntries.Start);
+            transitions.ConfigureTransition(persistTasks.FinishedPersisting, createGhostProjects.Start);
+            transitions.ConfigureTransition(createGhostProjects.FinishedPersisting, persistTimeEntries.Start);
             transitions.ConfigureTransition(persistTimeEntries.FinishedPersisting, deleteOlderEntries.Start);
 
             transitions.ConfigureTransition(persistWorkspaces.Failed, checkServerStatus.Start);
@@ -146,6 +149,7 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(persistClients.Failed, checkServerStatus.Start);
             transitions.ConfigureTransition(persistProjects.Failed, checkServerStatus.Start);
             transitions.ConfigureTransition(persistTasks.Failed, checkServerStatus.Start);
+            transitions.ConfigureTransition(createGhostProjects.Failed, checkServerStatus.Start);
             transitions.ConfigureTransition(persistTimeEntries.Failed, checkServerStatus.Start);
 
             transitions.ConfigureTransition(checkServerStatus.Retry, checkServerStatus.Start);

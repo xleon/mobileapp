@@ -141,6 +141,20 @@ namespace Toggl.Foundation.Tests.Sync.ConflictResolution
             mode.Should().Be(ConflictResolutionMode.Update);
         }
 
+        [Property]
+        public void AlwaysOverrideNonDeletedEntityWhichNeedsRefetch(DateTimeOffset existing, DateTimeOffset incoming)
+        {
+            if (existing <= incoming)
+                (existing, incoming) = (incoming, existing);
+
+            var existingEntity = new TestModel(existing, syncStatus: SyncStatus.RefetchingNeeded);
+            var incomingEntity = new TestModel(incoming, deleted: null);
+
+            var mode = resolver.Resolve(existingEntity, incomingEntity);
+
+            mode.Should().Be(ConflictResolutionMode.Update);
+        }
+
         private sealed class TestModel : IDeletable, IDatabaseSyncable, ILastChangedDatable
         {
             private readonly DateTimeOffset now = new DateTimeOffset(2017, 01, 05, 12, 34, 56, TimeSpan.Zero);
