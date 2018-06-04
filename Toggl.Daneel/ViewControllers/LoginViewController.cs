@@ -17,7 +17,7 @@ using System;
 namespace Toggl.Daneel.ViewControllers
 {
     [MvxRootPresentation(WrapInNavigationController = true)]
-    [MvxFromStoryboard("LoginStoryboard")]
+    [MvxFromStoryboard("Login")]
     public sealed partial class LoginViewController : MvxViewController<LoginViewModel>
     {
         private const int iPhoneSeScreenHeight = 568;
