@@ -125,7 +125,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 Action creatingTask = () => createTask(togglApi, project, user.Id).Wait();
 
-                creatingTask.ShouldThrow<ForbiddenException>();
+                creatingTask.Should().Throw<ForbiddenException>();
             }
 
             [Theory, LogTestInfo]
@@ -143,7 +143,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 Action creatingTask = () => createTask(togglApi, project, user.Id).Wait();
 
-                creatingTask.ShouldNotThrow();
+                creatingTask.Should().NotThrow();
             }
 
             protected override IObservable<ITask> CallEndpointWith(ITogglApi togglApi)

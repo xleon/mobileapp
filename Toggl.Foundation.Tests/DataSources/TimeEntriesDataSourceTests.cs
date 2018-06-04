@@ -85,7 +85,7 @@ namespace Toggl.Foundation.Tests.DataSources
                     () => new TimeEntriesDataSource(repository, timeService);
 
                 tryingToConstructWithEmptyParameters
-                    .ShouldThrow<ArgumentNullException>();
+                    .Should().Throw<ArgumentNullException>();
             }
         }
 

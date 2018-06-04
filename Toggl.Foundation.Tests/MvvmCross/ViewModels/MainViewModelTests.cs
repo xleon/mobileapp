@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -86,7 +86,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     () => new MainViewModel(scheduler, dataSource, timeService, userPreferences, onboardingStorage, analyticsService, interactorFactory, navigationService, suggestionProviderContainer);
 
                 tryingToConstructWithEmptyParameters
-                    .ShouldThrow<ArgumentNullException>();
+                    .Should().Throw<ArgumentNullException>();
             }
 
             [Fact, LogIfTooSlow]
@@ -328,7 +328,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 Action stopTimeEntry = () => ViewModel.StopTimeEntryCommand.ExecuteAsync().Wait();
 
-                stopTimeEntry.ShouldThrow<Exception>();
+                stopTimeEntry.Should().Throw<Exception>();
                 await DataSource.SyncManager.DidNotReceive().PushSync();
             }
 

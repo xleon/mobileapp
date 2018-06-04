@@ -157,15 +157,15 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(CurrentTimeEntryCard)
                       .For(v => v.BindTap())
                       .To(vm => vm.EditTimeEntryCommand);
-            
+
             bindingSet.Bind(source)
                       .For(v => v.SelectionChangedCommand)
                       .To(vm => vm.TimeEntriesLogViewModel.EditCommand);
-            
+
             bindingSet.Bind(source)
                       .For(v => v.ContinueTimeEntryCommand)
                       .To(vm => vm.TimeEntriesLogViewModel.ContinueTimeEntryCommand);
-            
+
             bindingSet.Bind(source)
                       .For(v => v.RefreshCommand)
                       .To(vm => vm.RefreshCommand);
@@ -463,10 +463,12 @@ namespace Toggl.Daneel.ViewControllers
                     swipeLeftStep.ShouldBeVisible,
                     swipeRightStep.ShouldBeVisible,
                     (tapToEdit, swipeLeft, swipeRight) => tapToEdit || swipeLeft || swipeRight)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(onScrollableTooltipsVisibilityChanged);
 
             firstTimeEntryDisposable = source.FirstTimeEntry
                 .Where(nextFirstTimeEntry => nextFirstTimeEntry != firstTimeEntry)
+                .ObserveOn(SynchronizationContext.Current)
                 .Subscribe(onFirstTimeEntryChanged);
 
             ViewModel.NavigationService.AfterNavigate += onNavigate;

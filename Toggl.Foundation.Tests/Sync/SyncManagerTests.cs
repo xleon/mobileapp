@@ -51,7 +51,7 @@ namespace Toggl.Foundation.Tests.Sync
                 // ReSharper disable once ObjectCreationAsStatement
                 Action constructor = () => new SyncManager(queue, orchestrator, analyticsService);
 
-                constructor.ShouldThrow<ArgumentNullException>();
+                constructor.Should().Throw<ArgumentNullException>();
             }
         }
 
@@ -238,7 +238,7 @@ namespace Toggl.Foundation.Tests.Sync
             {
                 Action emittingUnsupportedResult = () => OrchestratorSyncComplete.OnNext(new UnsupportedResult());
 
-                emittingUnsupportedResult.ShouldThrow<ArgumentException>();
+                emittingUnsupportedResult.Should().Throw<ArgumentException>();
             }
 
             private class UnsupportedResult : SyncResult { }
@@ -267,7 +267,7 @@ namespace Toggl.Foundation.Tests.Sync
 
                 var actual = observable.ToList().Wait();
 
-                actual.ShouldBeEquivalentTo(expectedStates);
+                actual.Should().BeEquivalentTo(expectedStates);
             }
 
             [Fact, LogIfTooSlow]
@@ -353,7 +353,7 @@ namespace Toggl.Foundation.Tests.Sync
 
                 Action freezing = () => SyncManager.Freeze();
 
-                freezing.ShouldNotThrow();
+                freezing.Should().NotThrow();
             }
 
             [Fact, LogIfTooSlow]

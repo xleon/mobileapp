@@ -36,7 +36,7 @@ namespace Toggl.Foundation.Tests.Interactors
                     () => new ContinueMostRecentTimeEntryInteractor(idProvider, timeService, dataSource, analyticsService);
 
                 tryingToConstructWithEmptyParameters
-                    .ShouldThrow<ArgumentNullException>();
+                    .Should().Throw<ArgumentNullException>();
             }
         }
 

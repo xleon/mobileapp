@@ -152,7 +152,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 Action post = () => togglClient.TimeEntries.Create(timeEntry).Wait();
 
-                post.ShouldThrow<BadRequestException>();
+                post.Should().Throw<BadRequestException>();
             }
 
             [Theory, LogTestInfo]
@@ -197,7 +197,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 Action creatingTimeEntry = () => CallEndpointWith(togglApi, timeEntry).Wait();
 
-                creatingTimeEntry.ShouldThrow<BadRequestException>();
+                creatingTimeEntry.Should().Throw<BadRequestException>();
             }
 
             [Fact, LogTestInfo]
@@ -349,7 +349,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 Action put = () => togglClient.TimeEntries.Update(timeEntry).Wait();
 
-                put.ShouldThrow<BadRequestException>();
+                put.Should().Throw<BadRequestException>();
             }
 
             protected override IObservable<ITimeEntry> PrepareForCallingUpdateEndpoint(ITogglApi togglApi)
@@ -423,7 +423,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 Action deleteNonExistingTimeEntry = () => togglApi.TimeEntries.Delete(timeEntryToDelete).Wait();
 
-                deleteNonExistingTimeEntry.ShouldThrow<NotFoundException>();
+                deleteNonExistingTimeEntry.Should().Throw<NotFoundException>();
                 (await togglApi.TimeEntries.GetAll()).Should().Contain(te => te.Id == persistedTimeEntry.Id);
             }
 
@@ -437,7 +437,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 Action deleteNonExistingTimeEntry = () => togglApi.TimeEntries.Delete(timeEntryToDelete).Wait();
 
-                deleteNonExistingTimeEntry.ShouldThrow<ForbiddenException>();
+                deleteNonExistingTimeEntry.Should().Throw<ForbiddenException>();
                 (await togglApi.TimeEntries.GetAll()).Should().Contain(te => te.Id == persistedTimeEntry.Id);
             }
 
@@ -451,7 +451,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 Action deleteNonExistingTimeEntry = () => togglApi.TimeEntries.Delete(timeEntryToDelete).Wait();
 
-                deleteNonExistingTimeEntry.ShouldThrow<ForbiddenException>();
+                deleteNonExistingTimeEntry.Should().Throw<ForbiddenException>();
                 (await togglApi.TimeEntries.GetAll()).Should().Contain(te => te.Id == persistedTimeEntry.Id);
             }
 
@@ -465,7 +465,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 await togglApi.TimeEntries.Delete(persistedTimeEntry);
                 Action secondDelete = () => togglApi.TimeEntries.Delete(persistedTimeEntry).Wait();
 
-                secondDelete.ShouldThrow<NotFoundException>();
+                secondDelete.Should().Throw<NotFoundException>();
             }
 
             [Fact, LogTestInfo]
@@ -478,7 +478,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 Action secondDelete = () => togglApiB.TimeEntries.Delete(persistedTimeEntry).Wait();
 
-                secondDelete.ShouldThrow<ForbiddenException>();
+                secondDelete.Should().Throw<ForbiddenException>();
             }
 
             protected override IObservable<ITimeEntry> Initialize(ITogglApi togglApi)

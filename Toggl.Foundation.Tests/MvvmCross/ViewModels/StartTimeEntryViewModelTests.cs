@@ -114,7 +114,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         autocompleteProvider);
 
                 tryingToConstructWithEmptyParameters
-                    .ShouldThrow<ArgumentNullException>();
+                    .Should().Throw<ArgumentNullException>();
             }
         }
 

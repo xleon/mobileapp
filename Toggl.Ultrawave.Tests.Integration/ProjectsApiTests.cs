@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
@@ -166,7 +166,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 Action searchingNull = () => togglApi.Projects.Search(user.DefaultWorkspaceId, null).Wait();
 
-                searchingNull.ShouldThrow<ArgumentNullException>();
+                searchingNull.Should().Throw<ArgumentNullException>();
             }
 
             [Fact, LogTestInfo]
@@ -177,7 +177,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
                 Action searchingWithEmptyIds = () => togglApi.Projects.Search(user.DefaultWorkspaceId, projectIds).Wait();
 
-                searchingWithEmptyIds.ShouldThrow<BadRequestException>();
+                searchingWithEmptyIds.Should().Throw<BadRequestException>();
             }
 
             [Fact, LogTestInfo]

@@ -76,7 +76,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     () => new ReportsViewModel(reportsProvider, timeService, navigationService, analyticsService);
 
                 tryingToConstructWithEmptyParameters
-                    .ShouldThrow<ArgumentNullException>();
+                    .Should().Throw<ArgumentNullException>();
             }
         }
 
