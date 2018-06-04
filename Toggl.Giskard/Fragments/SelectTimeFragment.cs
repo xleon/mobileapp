@@ -114,9 +114,19 @@ namespace Toggl.Giskard.Fragments
                          .Subscribe(on24HourModeChanged);
             });
 
+            setupDialogWindowPosition();
+
             return view;
         }
 
+        private void setupDialogWindowPosition()
+        {
+            var window = Dialog.Window;
+            var layoutParams = window.Attributes;
+            layoutParams.Gravity = GravityFlags.Top;
+            window.Attributes = layoutParams;
+        }
+        
         private void on24HourModeChanged(bool is24HoursMode)
         {
             startTimePicker?.Update24HourMode(is24HoursMode);
