@@ -12,22 +12,25 @@ using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
+using System;
 
 namespace Toggl.Daneel.ViewControllers
 {
     [MvxRootPresentation(WrapInNavigationController = true)]
+    [MvxFromStoryboard("LoginStoryboard")]
     public sealed partial class LoginViewController : MvxViewController<LoginViewModel>
     {
         private const int iPhoneSeScreenHeight = 568;
 
-        public LoginViewController() 
-            : base(nameof(LoginViewController), null)
+        public LoginViewController(IntPtr handle) : base(handle)
         {
         }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            NavigationController.NavigationBarHidden = true;
 
             var loginButtonColorConverter = new BoolToConstantValueConverter<UIColor>(UIColor.White, UIColor.Black);
             var loginButtonTitleConverter = new BoolToConstantValueConverter<string>("", Resources.LoginTitle);
@@ -102,7 +105,7 @@ namespace Toggl.Daneel.ViewControllers
             base.ViewDidLayoutSubviews();
 
             if (View.Frame.Height > iPhoneSeScreenHeight)
-                TopConstraint.Constant = 132;
+                TopConstraint.Constant = 72;
 
             SignupCard.SetupBottomCard();
             GoogleLoginButton.SetupGoogleButton();

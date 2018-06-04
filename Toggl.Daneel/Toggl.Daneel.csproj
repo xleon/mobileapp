@@ -517,7 +517,6 @@
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="ViewControllers\OnboardingViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\LoginViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\MainViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\EditTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\StartTimeEntryViewController.xib" />
@@ -575,6 +574,7 @@
     <InterfaceDefinition Include="ViewControllers\SignupViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\TermsOfServiceViewController.xib" />
     <InterfaceDefinition Include="Views\SyncFailures\SyncFailureCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\Login.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
