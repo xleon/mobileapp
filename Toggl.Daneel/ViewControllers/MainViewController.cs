@@ -343,7 +343,7 @@ namespace Toggl.Daneel.ViewControllers
             prepareSpiderViews();
             prepareEmptyStateView();
 
-            TopConstraint.AdaptForIos10(NavigationController.NavigationBar);
+            View.BackgroundColor = Color.Main.BackgroundColor.ToNativeColor();
         }
 
         private void showTimeEntryCard()

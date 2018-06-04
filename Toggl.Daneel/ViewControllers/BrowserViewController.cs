@@ -14,7 +14,7 @@ namespace Toggl.Daneel.ViewControllers
     [MvxChildPresentation]
     public sealed class BrowserViewController : MvxViewController<BrowserViewModel>, IWKNavigationDelegate
     {
-        private const int distanceFromTop = 80;
+        private const int distanceFromTopForIos10 = 3;
 
         private WKWebView webView;
 
@@ -50,7 +50,7 @@ namespace Toggl.Daneel.ViewControllers
             if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
                 webView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
             else
-                webView.TopAnchor.ConstraintEqualTo(View.TopAnchor, distanceFromTop).Active = true;
+                webView.TopAnchor.ConstraintEqualTo(View.TopAnchor, distanceFromTopForIos10).Active = true;
 
             webView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
             webView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
