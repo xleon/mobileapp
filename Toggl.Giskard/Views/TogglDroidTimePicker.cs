@@ -83,6 +83,17 @@ namespace Toggl.Giskard.Views
 
         public event EventHandler ValueChanged;
 
+        protected override void OnFinishInflate()
+        {
+            base.OnFinishInflate();
+
+            if (OreoApis.AreAvailable)
+            {
+                var keyboardIconId = Resources.GetIdentifier("toggle_mode", "id", "android");
+                FindViewById(keyboardIconId).Visibility = ViewStates.Gone;
+            }
+        }
+
         public void OnTimeChanged(TimePicker view, int hourOfDay, int minute)
         {
             var localTime = originalValue.ToLocalTime();
