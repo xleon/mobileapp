@@ -46,7 +46,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         timeService, loginManager, analyticsSerivce, navigationService);
 
                 tryingToConstructWithEmptyParameters
-                    .ShouldThrow<ArgumentNullException>();
+                    .Should().Throw<ArgumentNullException>();
             }
         }
 

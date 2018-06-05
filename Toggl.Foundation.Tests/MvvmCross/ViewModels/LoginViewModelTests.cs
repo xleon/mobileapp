@@ -69,7 +69,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                                              apiErrorHandlingService);
 
                 tryingToConstructWithEmptyParameters
-                    .ShouldThrow<ArgumentNullException>();
+                    .Should().Throw<ArgumentNullException>();
             }
         }
 

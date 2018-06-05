@@ -64,7 +64,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     () => new TokenResetViewModel(loginManager, dataSource, dialogService, navigationService, userPreferences, onboardingStorage, analyticsService);
 
                 tryingToConstructWithEmptyParameters
-                    .ShouldThrow<ArgumentNullException>();
+                    .Should().Throw<ArgumentNullException>();
             }
         }
 

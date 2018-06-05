@@ -58,10 +58,9 @@
         android:layout_marginTop="96dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <toggl.giskard.views.TogglDroidTimePicker
-        android:id="@+id/SelectStartTimeClockView"
-        android:headerBackground="@color/popupBlueBackground"
-        local:MvxBind="Value StartTime; Visibility Visibility(!IsCalendarView)"
+    <FrameLayout
+        android:id="@+id/SelectStartTimeClockViewContainer"
+        local:MvxBind="Visibility Visibility(!IsCalendarView)"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <LinearLayout

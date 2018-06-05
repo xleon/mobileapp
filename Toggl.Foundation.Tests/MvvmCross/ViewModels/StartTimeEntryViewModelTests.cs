@@ -114,7 +114,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         autocompleteProvider);
 
                 tryingToConstructWithEmptyParameters
-                    .ShouldThrow<ArgumentNullException>();
+                    .Should().Throw<ArgumentNullException>();
             }
         }
 
@@ -186,11 +186,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [InlineData(false)]
             public async Task ChecksIfBillableIsAvailableForTheDefaultWorkspace(bool billableValue)
             {
-                var user = new MockUser { DefaultWorkspaceId = 10 };
-                DataSource.User.Current.Returns(Observable.Return(user));
-
+                var workspace = new MockWorkspace { Id = 10 };
                 InteractorFactory
-                    .IsBillableAvailableForWorkspace(10)
+                    .GetDefaultWorkspace()
+                    .Execute()
+                    .Returns(Observable.Return(workspace));
+                InteractorFactory
+                    .IsBillableAvailableForWorkspace(workspace.Id)
                     .Execute()
                     .Returns(Observable.Return(billableValue));
                 var parameter = new StartTimeEntryParameters(DateTimeOffset.UtcNow, "", null);
@@ -478,9 +480,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 public async Task CreatesTagInUsersDefaultWorkspaceIfNoProjectIsSelected()
                 {
                     long workspaceId = 100;
+                    var workspace = new MockWorkspace { Id = workspaceId };
+                    InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(workspace));
                     var user = Substitute.For<IThreadSafeUser>();
                     user.DefaultWorkspaceId.Returns(workspaceId);
-                    DataSource.User.Current.Returns(Observable.Return(user));
+                    DataSource.User.Get().Returns(Observable.Return(user));
                     await ViewModel.Initialize();
 
                     await ViewModel.CreateCommand.ExecuteAsync();
@@ -1354,6 +1358,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 [Fact, LogIfTooSlow]
                 public async Task DoesNotShowConfirmDialogIfWorkspaceIsNotGoingToChange()
                 {
+                    var workspace = new MockWorkspace { Id = WorkspaceId };
+                    InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(workspace));
                     var user = Substitute.For<IThreadSafeUser>();
                     user.DefaultWorkspaceId.Returns(WorkspaceId);
                     DataSource.User.Current.Returns(Observable.Return(user));
@@ -1840,7 +1846,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .WithTextAndCursor(query, 1);
 
                 ViewModel.ShouldShowNoTagsInfoMessage.Should().BeFalse();
-
             }
 
             [Theory, LogIfTooSlow]

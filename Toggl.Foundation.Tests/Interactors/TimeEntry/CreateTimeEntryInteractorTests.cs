@@ -172,7 +172,7 @@ namespace Toggl.Foundation.Tests.Interactors
                 Action executeCommand =
                     () => CallInteractor(CreatePrototype(ValidTime, ValidDescription, true, ProjectId)).Wait();
 
-                executeCommand.ShouldThrow<Exception>();
+                executeCommand.Should().Throw<Exception>();
                 await DataSource.SyncManager.DidNotReceive().PushSync();
             }
         }

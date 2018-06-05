@@ -166,8 +166,6 @@ namespace Toggl.Daneel.ViewControllers
             // Resize Switches
             TwentyFourHourClockSwitch.Resize();
             ManualModeSwitch.Resize();
-
-            TopConstraint.AdaptForIos10(NavigationController.NavigationBar);
         }
 
         private void setIndicatorSyncColor(UIImageView imageView)
