@@ -1458,7 +1458,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 {
                     InteractorFactory.GetWorkspaceById(WorkspaceId).Execute().Returns(Observable.Return(Workspace));
                     InteractorFactory.IsBillableAvailableForProject(ProjectId).Execute()
-                        .Returns(Observable.Throw<bool>(new EntityNotFoundException(new Exception())));
+                        .Returns(Observable.Throw<bool>(new DatabaseOperationException<IDatabaseProject>(new Exception())));
                     InteractorFactory.IsBillableAvailableForWorkspace(WorkspaceId).Execute()
                         .Returns(Observable.Return(isBillableAvailable));
                     var noProjectSuggestion = ProjectSuggestion.NoProject(WorkspaceId, Workspace.Name);

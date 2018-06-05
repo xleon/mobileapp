@@ -31,7 +31,7 @@ namespace Toggl.PrimeRadiant.Tests
                 async () => await Repository.GetById(-1);
 
             callingGetByIdInAnEmptyRepository
-                .Should().Throw<EntityNotFoundException>();
+                .Should().Throw<DatabaseOperationException<TTestModel>>();
         }
 
         [Fact, LogIfTooSlow]
@@ -78,7 +78,7 @@ namespace Toggl.PrimeRadiant.Tests
                 async () => await Repository.GetById(oldTestEntity.Id);
 
             gettingTheEntityByOldId
-                .Should().Throw<EntityNotFoundException>();
+                .Should().Throw<DatabaseOperationException<TTestModel>>();
         }
 
         [Fact, LogIfTooSlow]
@@ -93,7 +93,7 @@ namespace Toggl.PrimeRadiant.Tests
                 async () => await Repository.Update(oldTestEntity.Id, nextTestEntity);
 
             tringToChangeTheOldEntity
-                .Should().Throw<EntityNotFoundException>();
+                .Should().Throw<DatabaseOperationException<TTestModel>>();
         }
     }
 }

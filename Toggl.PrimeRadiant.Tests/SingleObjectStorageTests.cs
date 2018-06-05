@@ -32,7 +32,7 @@ namespace Toggl.PrimeRadiant.Tests
                 async () => await Storage.Single();
 
             callingGetLastInAnEmptyRepository
-                .Should().Throw<EntityNotFoundException>();
+                .Should().Throw<DatabaseOperationException<TTestModel>>();
         }
 
         [Fact, LogIfTooSlow]
