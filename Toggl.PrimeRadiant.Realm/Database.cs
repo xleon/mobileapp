@@ -74,12 +74,12 @@ namespace Toggl.PrimeRadiant.Realm
         private RealmConfiguration createRealmConfiguration()
             => new RealmConfiguration
             {
-                SchemaVersion = 4,
+                SchemaVersion = 5,
                 MigrationCallback = (migration, oldSchemaVersion) =>
                 {
                     if (oldSchemaVersion < 3)
                     {
-                        // nothing needs explicit updating when updating form schema 0 up to 3
+                        // nothing needs explicit updating when updating from schema 0 up to 3
                     }
 
                     if (oldSchemaVersion < 4)
@@ -92,6 +92,11 @@ namespace Toggl.PrimeRadiant.Realm
                             var newTag = newTags.ElementAt(i);
                             newTag.ServerDeletedAt = oldTag.DeletedAt;
                         }
+                    }
+
+                    if (oldSchemaVersion < 5)
+                    {
+                        // nothing needs explicit updating when updating from schema 4 up to 5
                     }
                 }
             };
