@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Tests.Generators;
@@ -49,27 +47,6 @@ namespace Toggl.Foundation.Tests.DataSources
             protected ISingleObjectStorage<IDatabaseUser> Storage;
         }
 
-        public sealed class TheCurrentMethod : UserDataSourceTest
-        {
-            [Fact, LogIfTooSlow]
-            public void AccessesUnderlyingStorage()
-            {
-                DataSource.Current.Wait();
-
-                Storage.Received().Single();
-            }
-
-            [Fact, LogIfTooSlow]
-            public void DoesNotUseCachedVersion()
-            {
-                var userA = DataSource.Current.Wait();
-                var userB = DataSource.Current.Wait();
-
-                userA.DefaultWorkspaceId.Should().Be(InitialWorkspaceId);
-                userB.DefaultWorkspaceId.Should().Be(UpdatedWorkspaceId);
-            }
-        }
-
         public sealed class TheConstructor
         {
             [Theory, LogIfTooSlow]
@@ -83,7 +60,7 @@ namespace Toggl.Foundation.Tests.DataSources
                     () => new UserDataSource(repository, timeService);
 
                 tryingToConstructWithEmptyParameters
-                    .ShouldThrow<ArgumentNullException>();
+                    .Should().Throw<ArgumentNullException>();
             }
         }
     }

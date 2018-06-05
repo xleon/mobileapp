@@ -64,7 +64,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     () => new TokenResetViewModel(loginManager, dataSource, dialogService, navigationService, userPreferences, onboardingStorage, analyticsService);
 
                 tryingToConstructWithEmptyParameters
-                    .ShouldThrow<ArgumentNullException>();
+                    .Should().Throw<ArgumentNullException>();
             }
         }
 
@@ -190,11 +190,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public void NavigatesToTheOnboardingViewModel()
+            public void NavigatesToTheLoginViewModel()
             {
                 ViewModel.SignOutCommand.Execute();
 
-                NavigationService.Received().Navigate<OnboardingViewModel>();
+                NavigationService.Received().Navigate<LoginViewModel>();
             }
 
             [Fact, LogIfTooSlow]
@@ -214,7 +214,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 DialogService.Confirm(
                     Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
-                    .Returns(Task.FromResult(false));
+                    .Returns(Observable.Return(false));
                 DataSource.HasUnsyncedData().Returns(Observable.Return(true));
                 await ViewModel.Initialize();
 
