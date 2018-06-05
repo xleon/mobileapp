@@ -15,6 +15,8 @@ namespace Toggl.Giskard.Presenters
         private readonly HashSet<Type> clearBackStackTypes = new HashSet<Type>
         {
             typeof(MainViewModel),
+            typeof(LoginViewModel),
+            typeof(SignupViewModel),
             typeof(OnboardingViewModel),
             typeof(TokenResetViewModel),
             typeof(OutdatedAppViewModel)
@@ -41,10 +43,6 @@ namespace Toggl.Giskard.Presenters
         {
             switch (hint)
             {
-                case CardVisibilityHint cardHint when CurrentActivity is MainActivity mainActivity:
-                    mainActivity.OnTimeEntryCardVisibilityChanged(cardHint.Visible);
-                    return;
-
                 case ToggleCalendarVisibilityHint calendarHint when CurrentActivity is ReportsActivity reportsActivity:
                     reportsActivity.ToggleCalendarState(calendarHint.ForceHide);
                     return;

@@ -1,5 +1,4 @@
-﻿using CoreGraphics;
-using Foundation;
+﻿using Foundation;
 using MvvmCross.Binding;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
@@ -12,17 +11,18 @@ using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
+using System;
 
 namespace Toggl.Daneel.ViewControllers
 {
     [MvxRootPresentation(WrapInNavigationController = true)]
+    [MvxFromStoryboard("Login")]
     public sealed partial class LoginViewController : MvxViewController<LoginViewModel>
     {
         private const int iPhoneSeScreenHeight = 568;
         private const int topConstraintForBiggerScreens = 92;
 
-        public LoginViewController() 
-            : base(nameof(LoginViewController), null)
+        public LoginViewController(IntPtr handle) : base(handle)
         {
         }
 
@@ -30,9 +30,10 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidLoad();
 
+            NavigationController.NavigationBarHidden = true;
+
             var loginButtonColorConverter = new BoolToConstantValueConverter<UIColor>(UIColor.White, UIColor.Black);
             var loginButtonTitleConverter = new BoolToConstantValueConverter<string>("", Resources.LoginTitle);
-            var invertedBoolConverter = new BoolToConstantValueConverter<bool>(false, true);
 
             var bindingSet = this.CreateBindingSet<LoginViewController, LoginViewModel>();
 
@@ -41,11 +42,11 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(EmailTextField)
                       .To(vm => vm.Email)
                       .WithConversion(new EmailToStringValueConverter());
-            
+
             bindingSet.Bind(PasswordTextField)
                       .To(vm => vm.Password)
                       .WithConversion(new PasswordToStringValueConverter());
-            
+
             bindingSet.Bind(LoginButton)
                       .For(v => v.BindAnimatedTitle())
                       .To(vm => vm.IsLoading)
@@ -119,6 +120,8 @@ namespace Toggl.Daneel.ViewControllers
 
         private void prepareViews()
         {
+            NavigationController.NavigationBarHidden = true;
+
             LoginButton.SetTitleColor(
                 Color.Login.DisabledButtonColor.ToNativeColor(),
                 UIControlState.Disabled
@@ -150,7 +153,6 @@ namespace Toggl.Daneel.ViewControllers
 
         private void prepareForgotPasswordButton()
         {
-            var normalFont = UIFont.SystemFontOfSize(12, UIFontWeight.Regular);
             var boldFont = UIFont.SystemFontOfSize(12, UIFontWeight.Medium);
             var color = Color.Login.ForgotPassword.ToNativeColor();
             var text = new NSMutableAttributedString(

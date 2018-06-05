@@ -31,7 +31,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     () => new OnboardingViewModel(navigationService, onboardingStorage, analyticsService);
 
                 tryingToConstructWithEmptyParameters
-                    .ShouldThrow<ArgumentNullException>();
+                    .Should().Throw<ArgumentNullException>();
             }
         }
 

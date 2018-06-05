@@ -7,6 +7,7 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Sync.States;
+using Toggl.Foundation.Sync.States.Push;
 using Xunit;
 using Toggl.Foundation.Tests.Helpers;
 using Toggl.PrimeRadiant;
@@ -26,7 +27,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
 
             Action tryResolve = () => state.Start((exception, model)).Wait();
 
-            tryResolve.ShouldThrow<ArgumentException>();
+            tryResolve.Should().Throw<ArgumentException>();
         }
 
         [Fact, LogIfTooSlow]

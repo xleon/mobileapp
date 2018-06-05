@@ -16,7 +16,7 @@ namespace Toggl.Ultrawave.Tests.Models
             WorkspaceId = 424213,
             Name = "mobile",
             At = new DateTimeOffset(2014, 04, 25, 10, 10, 13, TimeSpan.Zero),
-            DeletedAt = new DateTimeOffset(2014, 04, 25, 10, 10, 10, TimeSpan.Zero)
+            ServerDeletedAt = new DateTimeOffset(2014, 04, 25, 10, 10, 10, TimeSpan.Zero)
         };
 
         [Fact, LogIfTooSlow]
@@ -25,7 +25,7 @@ namespace Toggl.Ultrawave.Tests.Models
             var clonedObject = new Tag(validTag);
 
             clonedObject.Should().NotBeSameAs(validTag);
-            clonedObject.ShouldBeEquivalentTo(validTag, options => options.IncludingProperties());
+            clonedObject.Should().BeEquivalentTo(validTag, options => options.IncludingProperties());
         }
 
         [Fact, LogIfTooSlow]

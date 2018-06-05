@@ -7,7 +7,7 @@ using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
-using Toggl.Multivac;
+using Toggl.Foundation.Tests.Extensions;
 using Xunit;
 using static Toggl.Foundation.Sync.SyncState;
 
@@ -64,7 +64,7 @@ namespace Toggl.Foundation.Tests.Sync
                 // ReSharper disable once ObjectCreationAsStatement
                 Action constructing = () => new StateMachineOrchestrator(stateMachine, entryPoints);
 
-                constructing.ShouldThrow<ArgumentNullException>();
+                constructing.Should().Throw<ArgumentNullException>();
             }
 
             [Fact, LogIfTooSlow]
@@ -100,7 +100,7 @@ namespace Toggl.Foundation.Tests.Sync
             [Fact, LogIfTooSlow]
             public void DoesNotThrowIfNotSyncing()
             {
-                callingMethod.ShouldNotThrow();
+                callingMethod.Should().NotThrow();
             }
 
             [Fact, LogIfTooSlow]
@@ -108,7 +108,7 @@ namespace Toggl.Foundation.Tests.Sync
             {
                 Orchestrator.Start(Sleep);
 
-                callingMethod.ShouldNotThrow();
+                callingMethod.Should().NotThrow();
             }
 
             [Fact, LogIfTooSlow]
@@ -116,7 +116,7 @@ namespace Toggl.Foundation.Tests.Sync
             {
                 Orchestrator.Start(Pull);
 
-                callingMethod.ShouldThrow<InvalidOperationException>();
+                callingMethod.Should().Throw<InvalidOperationException>();
             }
 
             [Fact, LogIfTooSlow]
@@ -124,7 +124,7 @@ namespace Toggl.Foundation.Tests.Sync
             {
                 Orchestrator.Start(Push);
 
-                callingMethod.ShouldThrow<InvalidOperationException>();
+                callingMethod.Should().Throw<InvalidOperationException>();
             }
 
             [Fact, LogIfTooSlow]
@@ -133,7 +133,7 @@ namespace Toggl.Foundation.Tests.Sync
                 Orchestrator.Start(Pull);
                 SendStateMachineEvent(new StateMachineDeadEnd(null));
 
-                callingMethod.ShouldNotThrow();
+                callingMethod.Should().NotThrow();
             }
 
             [Fact, LogIfTooSlow]
@@ -142,7 +142,7 @@ namespace Toggl.Foundation.Tests.Sync
                 Orchestrator.Start(Push);
                 SendStateMachineEvent(new StateMachineDeadEnd(null));
 
-                callingMethod.ShouldNotThrow();
+                callingMethod.Should().NotThrow();
             }
 
             [Fact, LogIfTooSlow]
@@ -151,7 +151,7 @@ namespace Toggl.Foundation.Tests.Sync
                 Orchestrator.Start(Pull);
                 SendStateMachineEvent(new StateMachineError(new Exception()));
 
-                callingMethod.ShouldNotThrow();
+                callingMethod.Should().NotThrow();
             }
 
             [Fact, LogIfTooSlow]
@@ -160,7 +160,7 @@ namespace Toggl.Foundation.Tests.Sync
                 Orchestrator.Start(Push);
                 SendStateMachineEvent(new StateMachineError(new Exception()));
 
-                callingMethod.ShouldNotThrow();
+                callingMethod.Should().NotThrow();
             }
 
             [Fact, LogIfTooSlow]
@@ -268,7 +268,7 @@ namespace Toggl.Foundation.Tests.Sync
 
                     Action callingStartWithUnknownState = () => Orchestrator.Start((SyncState)state);
 
-                    callingStartWithUnknownState.ShouldThrow<ArgumentOutOfRangeException>();
+                    callingStartWithUnknownState.Should().Throw<ArgumentOutOfRangeException>();
                 }
             }
         }
@@ -281,32 +281,6 @@ namespace Toggl.Foundation.Tests.Sync
                 Orchestrator.Freeze();
 
                 StateMachine.Received().Freeze();
-            }
-        }
-    }
-
-    internal static class StateMachineOrchestratorTestExtensions
-    {
-        public static void ShouldBeSameEventsAs(this List<SyncState> actualEvents,
-            params SyncState[] expectedEvents)
-        {
-            Ensure.Argument.IsNotNull(expectedEvents, nameof(expectedEvents));
-
-            actualEvents.Should().HaveCount(expectedEvents.Length);
-
-            for (var i = 0; i < expectedEvents.Length; i++)
-            {
-                var actual = actualEvents[i];
-                var expected = expectedEvents[i];
-
-                try
-                {
-                    actual.Should().Be(expected);
-                }
-                catch (Exception e)
-                {
-                    throw new Exception($"Found unexpected event at index {i}.", e);
-                }
             }
         }
     }

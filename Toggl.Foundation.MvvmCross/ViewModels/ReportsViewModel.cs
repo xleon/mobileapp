@@ -10,15 +10,16 @@ using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Interactors;
+using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Foundation.Reports;
 using Toggl.Multivac;
-using Toggl.PrimeRadiant.Models;
 
 [assembly: MvxNavigation(typeof(ReportsViewModel), ApplicationUrls.Reports)]
 namespace Toggl.Foundation.MvvmCross.ViewModels
@@ -32,12 +33,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
         private readonly IInteractorFactory interactorFactory;
+        private readonly IAnalyticsService analyticsService;
         private readonly ReportsCalendarViewModel calendarViewModel;
         private readonly Subject<Unit> reportSubject = new Subject<Unit>();
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         private DateTimeOffset startDate;
         private DateTimeOffset endDate;
+        private int totalDays => (endDate - startDate).Days + 1;
+        private ReportsSource source;
+        private int projectsNotSyncedCount;
+        private DateTime reportSubjectStartTime;
         private long workspaceId;
         private DateFormat dateFormat;
         private IReadOnlyList<ChartSegment> segments = new ChartSegment[0];
@@ -93,15 +99,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public ReportsViewModel(ITogglDataSource dataSource,
                                 ITimeService timeService,
                                 IMvxNavigationService navigationService,
-                                IInteractorFactory interactorFactory)
+                                IInteractorFactory interactorFactory,
+                                IAnalyticsService analyticsService)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
 
             this.timeService = timeService;
             this.navigationService = navigationService;
+            this.analyticsService = analyticsService;
             this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
 
@@ -155,6 +164,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void setLoadingState(Unit obj)
         {
+            reportSubjectStartTime = timeService.CurrentDateTime.UtcDateTime;
             IsLoading = true;
             Segments = new ChartSegment[0];
         }
@@ -170,12 +180,29 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                              .AsReadOnly();
 
             IsLoading = false;
+
+            trackReportsEvent(true);
         }
 
         private void onError(Exception ex)
         {
             RaisePropertyChanged(nameof(Segments));
             IsLoading = false;
+            trackReportsEvent(false);
+        }
+
+        private void trackReportsEvent(bool success)
+        {
+            var loadingTime = timeService.CurrentDateTime.UtcDateTime - reportSubjectStartTime;
+
+            if (success)
+            {
+                analyticsService.TrackReportsSuccess(source, totalDays, projectsNotSyncedCount, loadingTime.TotalMilliseconds);
+            }
+            else
+            {
+                analyticsService.TrackReportsFailure(source, totalDays, loadingTime.TotalMilliseconds);
+            }
         }
 
         private void toggleCalendar()
@@ -194,6 +221,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             startDate = dateRange.StartDate;
             endDate = dateRange.EndDate;
+            source = dateRange.Source;
             updateCurrentDateRangeString();
             reportSubject.OnNext(Unit.Default);
         }
@@ -214,7 +242,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 : $"{startDate.ToString(dateFormat.Short)} - {endDate.ToString(dateFormat.Short)} ▾";
         }
 
-        private void onPreferencesChanged(IDatabasePreferences preferences)
+        private void onPreferencesChanged(IThreadSafePreferences preferences)
         {
             DurationFormat = preferences.DurationFormat;
             dateFormat = preferences.DateFormat;
