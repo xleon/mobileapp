@@ -166,7 +166,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var timeEntry = new Ultrawave.Models.TimeEntry
                 {
                     Description = Guid.NewGuid().ToString(),
-                    WorkspaceId = user.DefaultWorkspaceId,
+                    WorkspaceId = user.DefaultWorkspaceId.Value,
                     Start = start,
                     UserId = user.Id,
                     TagIds = new List<long>(),
@@ -188,7 +188,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var timeEntry = new Ultrawave.Models.TimeEntry
                 {
                     Description = Guid.NewGuid().ToString(),
-                    WorkspaceId = user.DefaultWorkspaceId,
+                    WorkspaceId = user.DefaultWorkspaceId.Value,
                     Start = start,
                     UserId = user.Id,
                     TagIds = new List<long>(),
@@ -207,7 +207,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var timeEntry = new Ultrawave.Models.TimeEntry
                 {
                     Description = Guid.NewGuid().ToString(),
-                    WorkspaceId = user.DefaultWorkspaceId,
+                    WorkspaceId = user.DefaultWorkspaceId.Value,
                     Start = DateTimeOffset.UtcNow,
                     UserId = user.Id,
                     TagIds = new List<long>(),
@@ -226,7 +226,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var timeEntry = new Ultrawave.Models.TimeEntry
                 {
                     Description = Guid.NewGuid().ToString(),
-                    WorkspaceId = user.DefaultWorkspaceId,
+                    WorkspaceId = user.DefaultWorkspaceId.Value,
                     Start = DateTimeOffset.UtcNow,
                     UserId = user.Id,
                     TagIds = new List<long>(),
@@ -313,7 +313,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 var timeEntry = createTimeEntry(user);
                 var persistedTimeEntry = await togglClient.TimeEntries.Create(timeEntry);
-                var tag = await togglClient.Tags.Create(new Models.Tag { Name = Guid.NewGuid().ToString(), WorkspaceId = user.DefaultWorkspaceId });
+                var tag = await togglClient.Tags.Create(new Models.Tag { Name = Guid.NewGuid().ToString(), WorkspaceId = user.DefaultWorkspaceId.Value });
                 var timeEntryWithUpdates = new TimeEntry
                 {
                     Id = persistedTimeEntry.Id,
@@ -496,7 +496,7 @@ namespace Toggl.Ultrawave.Tests.Integration
         private static TimeEntry createTimeEntry(IUser user, DateTimeOffset? start = null)
             => new TimeEntry
             {
-                WorkspaceId = user.DefaultWorkspaceId,
+                WorkspaceId = user.DefaultWorkspaceId.Value,
                 Billable = false,
                 Start = start ?? new DateTimeOffset(DateTime.Now - TimeSpan.FromMinutes(5)),
                 Duration = (long)TimeSpan.FromMinutes(5).TotalSeconds,

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -8,18 +9,16 @@ using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Interactors;
+using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.Hints;
+using Toggl.Foundation.Suggestions;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Settings;
-using System.Reactive;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Suggestions;
 
 [assembly: MvxNavigation(typeof(MainViewModel), ApplicationUrls.Main.Regex)]
 namespace Toggl.Foundation.MvvmCross.ViewModels
@@ -179,7 +178,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Throttle(currentTimeEntryDueTime, scheduler) // avoid overwhelming the UI with frequent updates
                 .Do(setRunningEntry)
                 .Select(timeEntry => timeEntry != null);
-            
+
             var tickDisposable = timeService
                 .CurrentDateTimeObservable
                 .Where(_ => currentTimeEntryStart != null)
@@ -269,8 +268,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task openReports()
         {
-            var user = await dataSource.User.Current.FirstAsync();
-            await navigationService.Navigate<ReportsViewModel, long>(user.DefaultWorkspaceId);
+            var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
+            await navigationService.Navigate<ReportsViewModel, long>(workspace.Id);
         }
 
         private Task openSyncFailures()

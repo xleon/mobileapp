@@ -1,5 +1,4 @@
-﻿using CoreGraphics;
-using Foundation;
+﻿using Foundation;
 using MvvmCross.Binding;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.iOS;
@@ -21,6 +20,7 @@ namespace Toggl.Daneel.ViewControllers
     public sealed partial class LoginViewController : MvxViewController<LoginViewModel>
     {
         private const int iPhoneSeScreenHeight = 568;
+        private const int topConstraintForBiggerScreens = 92;
 
         public LoginViewController(IntPtr handle) : base(handle)
         {
@@ -34,7 +34,6 @@ namespace Toggl.Daneel.ViewControllers
 
             var loginButtonColorConverter = new BoolToConstantValueConverter<UIColor>(UIColor.White, UIColor.Black);
             var loginButtonTitleConverter = new BoolToConstantValueConverter<string>("", Resources.LoginTitle);
-            var invertedBoolConverter = new BoolToConstantValueConverter<bool>(false, true);
 
             var bindingSet = this.CreateBindingSet<LoginViewController, LoginViewModel>();
 
@@ -43,11 +42,11 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(EmailTextField)
                       .To(vm => vm.Email)
                       .WithConversion(new EmailToStringValueConverter());
-            
+
             bindingSet.Bind(PasswordTextField)
                       .To(vm => vm.Password)
                       .WithConversion(new PasswordToStringValueConverter());
-            
+
             bindingSet.Bind(LoginButton)
                       .For(v => v.BindAnimatedTitle())
                       .To(vm => vm.IsLoading)
@@ -105,7 +104,7 @@ namespace Toggl.Daneel.ViewControllers
             base.ViewDidLayoutSubviews();
 
             if (View.Frame.Height > iPhoneSeScreenHeight)
-                TopConstraint.Constant = 72;
+                TopConstraint.Constant = topConstraintForBiggerScreens;
 
             SignupCard.SetupBottomCard();
             GoogleLoginButton.SetupGoogleButton();
@@ -154,7 +153,6 @@ namespace Toggl.Daneel.ViewControllers
 
         private void prepareForgotPasswordButton()
         {
-            var normalFont = UIFont.SystemFontOfSize(12, UIFontWeight.Regular);
             var boldFont = UIFont.SystemFontOfSize(12, UIFontWeight.Medium);
             var color = Color.Login.ForgotPassword.ToNativeColor();
             var text = new NSMutableAttributedString(
