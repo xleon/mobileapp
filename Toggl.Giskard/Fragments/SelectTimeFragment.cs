@@ -82,12 +82,17 @@ namespace Toggl.Giskard.Fragments
             pager.Adapter = new SelectTimePagerAdapter(BindingContext);
             tabLayout.AddOnTabSelectedListener(this);
 
-            subscribeAndAddToDisposableBag(nameof(ViewModel.IsCalendarView), onIsCalendarViewChanged);
+            ViewModel.IsCalendarViewObservable
+                     .ObserveOn(SynchronizationContext.Current)
+                     .Subscribe(onIsCalendarViewChanged)
+                     .DisposedBy(disposableBag);
+
             subscribeAndAddToDisposableBag(nameof(ViewModel.StopTime), onStopTimeChanged);
             subscribeAndAddToDisposableBag(nameof(ViewModel.StartTime), onStartTimeChanged);
 
-            ViewModel.TemporalInconsistencyDetected.Subscribe(onTemporalInconsistency)
-                .DisposedBy(disposableBag);
+            ViewModel.TemporalInconsistencyDetected
+                     .Subscribe(onTemporalInconsistency)
+                     .DisposedBy(disposableBag);
 
             var startPageView = this.BindingInflate(Resource.Layout.SelectDateTimeStartTimeTabHeader, null);
             var stopPageView = this.BindingInflate(Resource.Layout.SelectDateTimeStopTimeTabHeader, null);
@@ -187,9 +192,9 @@ namespace Toggl.Giskard.Fragments
             toast.Show();
         }
 
-        private void onIsCalendarViewChanged(object sender, PropertyChangedEventArgs args)
+        private void onIsCalendarViewChanged(bool isCalendarView)
         {
-            editorMode = ViewModel.IsCalendarView ? Date : Time;
+            editorMode = isCalendarView ? Date : Time;
             updateLayoutHeight();
         }
 
