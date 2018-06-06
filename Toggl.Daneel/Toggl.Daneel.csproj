@@ -226,6 +226,9 @@
     <Reference Include="System.Collections.Immutable">
       <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
     </Reference>
+    <Reference Include="Firebase.PerformanceMonitoring">
+      <HintPath>..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.1.1.0.1\lib\Xamarin.iOS10\Firebase.PerformanceMonitoring.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -1055,4 +1058,5 @@
   <Import Project="..\packages\Xamarin.Firebase.iOS.CrashReporting.2.0.0.5\build\Xamarin.Firebase.iOS.CrashReporting.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.CrashReporting.2.0.0.5\build\Xamarin.Firebase.iOS.CrashReporting.targets')" />
   <Import Project="..\packages\Xamarin.Google.iOS.Core.3.1.0.1\build\Xamarin.Google.iOS.Core.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.Core.3.1.0.1\build\Xamarin.Google.iOS.Core.targets')" />
   <Import Project="..\packages\Xamarin.Google.iOS.SignIn.4.1.1.1\build\Xamarin.Google.iOS.SignIn.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.SignIn.4.1.1.1\build\Xamarin.Google.iOS.SignIn.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.1.1.0.1\build\Xamarin.Firebase.iOS.PerformanceMonitoring.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.1.1.0.1\build\Xamarin.Firebase.iOS.PerformanceMonitoring.targets')" />
 </Project>
