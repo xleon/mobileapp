@@ -759,6 +759,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\logo_googleg_48_dp.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\logo_googleg_48_dp.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\logo_googleg_48_dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\reports.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\reports.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\reports.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\reports.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\reports.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">
