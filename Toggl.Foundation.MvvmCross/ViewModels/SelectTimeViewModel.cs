@@ -64,6 +64,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public DateTimeOffset StopTimeOrCurrent => StopTime ?? CurrentDateTime;
 
+        public string StartTimeAmPmLabel =>
+            TimeFormat.IsTwentyFourHoursFormat ? "" : StartTime.ToString("tt");
+       
+        public string StopTimeAmPmLabel =>
+            TimeFormat.IsTwentyFourHoursFormat ? "" : StopTimeOrCurrent.ToString("tt");
+
         public IObservable<TemporalInconsistency> TemporalInconsistencyDetected { get; }
         public IObservable<bool> IsCalendarViewObservable { get; }
 
