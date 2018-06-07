@@ -38,5 +38,7 @@ namespace Toggl.Foundation.Analytics
 
         void TrackReportsSuccess(ReportsSource source, int totalDays, int projectsNotSyncedCount, double loadingTime);
         void TrackReportsFailure(ReportsSource source, int totalDays, double loadingTime);
+
+        void TrackCreatingProjectGhosts(int numberOfCreatedGhosts);
     }
 }

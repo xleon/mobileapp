@@ -50,6 +50,9 @@ namespace Toggl.Foundation.Analytics
         private const string reportsProjectsNotSyncedCountParameter = "ProjectsNotSynced";
         private const string reportsLoadingTimeParameter = "LoadingTime";
 
+        private const string creatingGhostProjectsEventName = "CreatingGhostProjects";
+        private const string numberOfCreatedGhostsParameter = "NumberOfCreatedGhosts";
+
         public void TrackOnboardingSkipEvent(string pageName)
         {
             track(onboardingSkipEventName, pageParameter, pageName);
@@ -174,6 +177,16 @@ namespace Toggl.Foundation.Analytics
             };
 
             NativeTrackEvent(reportsSuccessEventName, parameters);
+        }
+
+        public void TrackCreatingProjectGhosts(int numberOfCreatedGhosts)
+        {
+            NativeTrackEvent(
+                creatingGhostProjectsEventName,
+                new Dictionary<string, string>
+                {
+                    [numberOfCreatedGhostsParameter] = numberOfCreatedGhosts.ToString()
+                });
         }
 
         private void track(string eventName)

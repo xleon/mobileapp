@@ -40,7 +40,7 @@ namespace Toggl.Foundation
             var apiDelay = new RetryDelayService(random, retryLimit);
             var delayCancellation = new Subject<Unit>();
             var delayCancellationObservable = delayCancellation.AsObservable().Replay();
-            ConfigureTransitions(transitions, database, api, dataSource, apiDelay, scheduler, timeService, entryPoints, delayCancellationObservable);
+            ConfigureTransitions(transitions, database, api, dataSource, apiDelay, scheduler, timeService, analyticsService, entryPoints, delayCancellationObservable);
             var stateMachine = new StateMachine(transitions, scheduler, delayCancellation);
             var orchestrator = new StateMachineOrchestrator(stateMachine, entryPoints);
 
@@ -55,10 +55,11 @@ namespace Toggl.Foundation
             IRetryDelayService apiDelay,
             IScheduler scheduler,
             ITimeService timeService,
+            IAnalyticsService analyticsService,
             StateMachineEntryPoints entryPoints,
             IObservable<Unit> delayCancellation)
         {
-            configurePullTransitions(transitions, database, api, dataSource, timeService, scheduler, entryPoints.StartPullSync, delayCancellation);
+            configurePullTransitions(transitions, database, api, dataSource, timeService, analyticsService, scheduler, entryPoints.StartPullSync, delayCancellation);
             configurePushTransitions(transitions, api, dataSource, apiDelay, scheduler, entryPoints.StartPushSync, delayCancellation);
         }
 
@@ -68,6 +69,7 @@ namespace Toggl.Foundation
             ITogglApi api,
             ITogglDataSource dataSource,
             ITimeService timeService,
+            IAnalyticsService analyticsService,
             IScheduler scheduler,
             StateResult entryPoint,
             IObservable<Unit> delayCancellation)
@@ -111,7 +113,7 @@ namespace Toggl.Foundation
                     .UpdateSince<IProject, IDatabaseProject>(database.SinceParameters)
                     .CatchApiExceptions();
 
-            var createGhostProjects = new CreateGhostProjectsState(dataSource.Projects).CatchApiExceptions();
+            var createGhostProjects = new CreateGhostProjectsState(dataSource.Projects, analyticsService).CatchApiExceptions();
 
             var persistTimeEntries =
                 new PersistListState<ITimeEntry, IDatabaseTimeEntry, IThreadSafeTimeEntry>(dataSource.TimeEntries, TimeEntry.Clean)
