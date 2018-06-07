@@ -129,6 +129,7 @@ namespace Toggl.Foundation
 
             var finished = new ResetAPIDelayState(apiDelay);
             var deleteOlderEntries = new DeleteOldEntriesState(timeService, dataSource.TimeEntries);
+            var deleteNonReferencedGhostProjects = new DeleteNonReferencedProjectGhostsState(dataSource.Projects, dataSource.TimeEntries);
 
             transitions.ConfigureTransition(entryPoint, fetchAllSince.Start);
             transitions.ConfigureTransition(fetchAllSince.FetchStarted, persistWorkspaces.Start);
@@ -141,7 +142,9 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(persistProjects.FinishedPersisting, persistTasks.Start);
             transitions.ConfigureTransition(persistTasks.FinishedPersisting, createGhostProjects.Start);
             transitions.ConfigureTransition(createGhostProjects.FinishedPersisting, persistTimeEntries.Start);
+
             transitions.ConfigureTransition(persistTimeEntries.FinishedPersisting, deleteOlderEntries.Start);
+            transitions.ConfigureTransition(deleteOlderEntries.FinishedDeleting, deleteNonReferencedGhostProjects.Start);
 
             transitions.ConfigureTransition(persistWorkspaces.Failed, checkServerStatus.Start);
             transitions.ConfigureTransition(persistUser.Failed, checkServerStatus.Start);
