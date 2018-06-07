@@ -45,7 +45,7 @@ namespace Toggl.Giskard
         {
             base.OnCreate(bundle);
 
-            var statusBarColor = new Color(ContextCompat.GetColor(this, Resource.Color.onboardingStatusBarColor));
+            var statusBarColor = new Color(ContextCompat.GetColor(this, Resource.Color.lightGray));
             this.ChangeStatusBarColor(statusBarColor);
 
             #if USE_ANALYTICS

@@ -774,6 +774,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\reports.png" />
     <AndroidResource Include="Resources\drawable-mdpi\reports.png" />
     <AndroidResource Include="Resources\drawable-hdpi\reports.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\logo_splash.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\logo_splash.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\logo_splash.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\logo_splash.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\logo_splash.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">
