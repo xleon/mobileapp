@@ -394,6 +394,7 @@
     <Compile Include="Bindings\ViewUpsideDownTargetBinding.cs" />
     <Compile Include="Bindings\ViewHeightTargetBinding.cs" />
     <Compile Include="Views\SelectCountryRecyclerView.cs" />
+    <Compile Include="Helper\ImageUtils.cs" />
     <Compile Include="Activities\SelectCountryActivity.cs" />
     <Compile Include="Helper\VibratorExtensions.cs" />
     <Compile Include="Bindings\DatePickerBoundariesTargetBinding.cs" />
