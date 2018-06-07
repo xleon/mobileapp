@@ -432,6 +432,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     projectSuggestion.ProjectId,
                     projectSuggestion.ProjectName,
                     projectSuggestion.ProjectColor);
+
+            IsSuggestingProjects = false;
+            queryByTypeSubject.OnNext(AutocompleteSuggestionType.None);
         }
 
         private void setTask(TaskSuggestion taskSuggestion)
@@ -506,8 +509,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             if (IsSuggestingProjects)
             {
-                TextFieldInfo = TextFieldInfo.RemoveProjectQueryFromDescriptionIfNeeded();
                 IsSuggestingProjects = false;
+                TextFieldInfo = TextFieldInfo.RemoveProjectQueryFromDescriptionIfNeeded();
+                queryByTypeSubject.OnNext(AutocompleteSuggestionType.None);
                 return;
             }
 
@@ -516,8 +520,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             if (TextFieldInfo.ProjectId != null)
             {
-                queryByTypeSubject.OnNext(AutocompleteSuggestionType.Projects);
                 IsSuggestingProjects = true;
+                queryByTypeSubject.OnNext(AutocompleteSuggestionType.Projects);
                 return;
             }
 
