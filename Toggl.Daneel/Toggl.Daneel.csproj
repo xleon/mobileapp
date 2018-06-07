@@ -972,6 +972,7 @@
       <DependentUpon>SyncFailureCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\ImageExtension.cs" />
+    <Compile Include="Extensions\UIExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
