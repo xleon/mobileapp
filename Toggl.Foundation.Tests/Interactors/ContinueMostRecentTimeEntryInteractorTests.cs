@@ -67,7 +67,7 @@ namespace Toggl.Foundation.Tests.Interactors
                         TagIds = new long[] { 100, 101, 100 + i }
                     });
                 mostRecentTimeEntry = timeEntries.Last();
-                
+
                 DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>())
                     .Returns(Observable.Return(timeEntries));
 
@@ -208,7 +208,7 @@ namespace Toggl.Foundation.Tests.Interactors
             {
                 await interactor.Execute();
 
-                AnalyticsService.Received().TrackStartedTimeEntry(TimeEntryStartOrigin.ContinueMostRecent);
+                AnalyticsService.Received().TimeEntryStarted.Track(TimeEntryStartOrigin.ContinueMostRecent);
             }
         }
     }

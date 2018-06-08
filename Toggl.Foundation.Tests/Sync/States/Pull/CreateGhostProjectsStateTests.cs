@@ -131,7 +131,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
 
             await state.Start(fetchObservables);
 
-            analyticsService.Received().TrackCreatingProjectGhosts(2);
+            analyticsService.ProjectGhostsCreated.Received().Track(2);
         }
 
         [Fact]
@@ -144,7 +144,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
 
             await state.Start(fetchObservables);
 
-            analyticsService.Received().TrackCreatingProjectGhosts(0);
+            analyticsService.ProjectGhostsCreated.Received().Track(0);
         }
 
         [Fact]
@@ -157,7 +157,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
 
             await state.Start(fetchObservables);
 
-            analyticsService.Received().TrackCreatingProjectGhosts(0);
+            analyticsService.ProjectGhostsCreated.Received().Track(0);
         }
 
         private IFetchObservables fetch(params ITimeEntry[] timeEntries)

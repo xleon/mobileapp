@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Helper;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
@@ -41,7 +42,7 @@ namespace Toggl.Foundation.Sync.States.Pull
                 .WhereAsync(needsGhostProject)
                 .SelectMany(createGhostProject)
                 .Count()
-                .Do(analyticsService.TrackCreatingProjectGhosts)
+                .Track(analyticsService.ProjectGhostsCreated)
                 .Select(FinishedPersisting.Transition(fetch));
 
         private IObservable<bool> needsGhostProject(ITimeEntry timeEntry)

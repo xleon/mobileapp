@@ -323,7 +323,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     ViewModel.TextFieldInfo = ViewModel.TextFieldInfo.WithTextAndCursor("abcde @fgh", 10);
 
-                    AnalyticsService.Received().TrackStartOpensProjectSelector(ProjectTagSuggestionSource.TextField);
+                    AnalyticsService.StartEntrySelectProject.Received().Track(ProjectTagSuggestionSource.TextField);
                 }
             }
 
@@ -381,7 +381,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     ViewModel.TextFieldInfo = ViewModel.TextFieldInfo.WithTextAndCursor("abcde #fgh", 10);
 
-                    AnalyticsService.Received().TrackStartOpensTagSelector(ProjectTagSuggestionSource.TextField);
+                    AnalyticsService.StartEntrySelectTag.Received().Track(ProjectTagSuggestionSource.TextField);
                 }
             }
         }
@@ -569,7 +569,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.BackCommand.ExecuteAsync();
 
-                AnalyticsService.DidNotReceive().TrackStartedTimeEntry(Arg.Any<TimeEntryStartOrigin>());
+                AnalyticsService.TimeEntryStarted.DidNotReceive().Track(Arg.Any<TimeEntryStartOrigin>());
             }
 
             private void makeDirty()
@@ -768,7 +768,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
 
-                AnalyticsService.Received().TrackStartOpensProjectSelector(ProjectTagSuggestionSource.ButtonOverKeyboard);
+                AnalyticsService.StartEntrySelectProject.Received().Track(ProjectTagSuggestionSource.ButtonOverKeyboard);
             }
         }
 
@@ -872,7 +872,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ViewModel.ToggleTagSuggestionsCommand.Execute();
 
-                AnalyticsService.Received().TrackStartOpensTagSelector(ProjectTagSuggestionSource.ButtonOverKeyboard);
+                AnalyticsService.StartEntrySelectTag.Received().Track(ProjectTagSuggestionSource.ButtonOverKeyboard);
             }
         }
 
@@ -1297,7 +1297,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         .First();
 
                     ViewModel.SelectSuggestionCommand.Execute(projectSuggestion);
-                    AnalyticsService.Received().TrackStartOpensProjectSelector(ProjectTagSuggestionSource.TableCellButton);
+                    AnalyticsService.StartEntrySelectProject.Received().Track(ProjectTagSuggestionSource.TableCellButton);
                 }
 
                 [Fact, LogIfTooSlow]
@@ -1308,7 +1308,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         .First();
 
                     ViewModel.SelectSuggestionCommand.Execute(tagSuggestion);
-                    AnalyticsService.Received().TrackStartOpensTagSelector(ProjectTagSuggestionSource.TableCellButton);
+                    AnalyticsService.StartEntrySelectTag.Received().Track(ProjectTagSuggestionSource.TableCellButton);
                 }
             }
 

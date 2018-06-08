@@ -317,7 +317,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 doNotShowConfirmationDialog();
                 await ViewModel.LogoutCommand.ExecuteAsync();
 
-                AnalyticsService.Received().TrackLogoutEvent(Analytics.LogoutSource.Settings);
+                AnalyticsService.Logout.Received().Track(Analytics.LogoutSource.Settings);
             }
 
             private void doNotShowConfirmationDialog()

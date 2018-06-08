@@ -301,12 +301,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
                     if (querySymbolSuggestion.Symbol == QuerySymbols.ProjectsString)
                     {
-                        analyticsService.TrackStartOpensProjectSelector(ProjectTagSuggestionSource.TableCellButton);
+                        analyticsService.StartEntrySelectProject.Track(ProjectTagSuggestionSource.TableCellButton);
                     }
 
                     if (querySymbolSuggestion.Symbol == QuerySymbols.TagsString)
                     {
-                        analyticsService.TrackStartOpensTagSelector(ProjectTagSuggestionSource.TableCellButton);
+                        analyticsService.StartEntrySelectTag.Track(ProjectTagSuggestionSource.TableCellButton);
                     }
 
                     TextFieldInfo = TextFieldInfo.WithTextAndCursor(querySymbolSuggestion.Symbol, 1);
@@ -500,7 +500,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return;
             }
 
-            analyticsService.TrackStartOpensTagSelector(ProjectTagSuggestionSource.ButtonOverKeyboard);
+            analyticsService.StartEntrySelectTag.Track(ProjectTagSuggestionSource.ButtonOverKeyboard);
             OnboardingStorage.ProjectOrTagWasAdded();
             appendSymbol(QuerySymbols.TagsString);
         }
@@ -515,7 +515,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return;
             }
 
-            analyticsService.TrackStartOpensProjectSelector(ProjectTagSuggestionSource.ButtonOverKeyboard);
+            analyticsService.StartEntrySelectProject.Track(ProjectTagSuggestionSource.ButtonOverKeyboard);
             OnboardingStorage.ProjectOrTagWasAdded();
 
             if (TextFieldInfo.ProjectId != null)
@@ -657,12 +657,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             if (!IsSuggestingTags && suggestsTags)
             {
-                analyticsService.TrackStartOpensTagSelector(ProjectTagSuggestionSource.TextField);
+                analyticsService.StartEntrySelectTag.Track(ProjectTagSuggestionSource.TextField);
             }
 
             if (!IsSuggestingProjects && suggestsProjects)
             {
-                analyticsService.TrackStartOpensProjectSelector(ProjectTagSuggestionSource.TextField);
+                analyticsService.StartEntrySelectProject.Track(ProjectTagSuggestionSource.TextField);
             }
 
             IsSuggestingTags = suggestsTags;

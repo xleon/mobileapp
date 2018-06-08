@@ -420,7 +420,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.DeleteCommand.ExecuteAsync(timeEntryViewModel);
 
-                AnalyticsService.Received().TrackDeletingTimeEntry();
+                AnalyticsService.DeleteTimeEntry.Received().Track();
             }
         }
     }

@@ -109,7 +109,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.SkipCommand.ExecuteAsync();
 
-                AnalyticsService.Received().TrackOnboardingSkipEvent(expectedPageName);
+                AnalyticsService.Received().OnboardingSkip.Track(expectedPageName);
             }
         }
 

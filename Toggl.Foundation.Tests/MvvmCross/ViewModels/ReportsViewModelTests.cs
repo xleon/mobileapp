@@ -138,7 +138,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await Initialize();
 
-                AnalyticsService.Received().TrackReportsSuccess(ReportsSource.Initial, totalDays, projectsNotSyncedCount, loadingDuration.TotalMilliseconds);
+                AnalyticsService.Received().ReportsSuccess.Track(ReportsSource.Initial, totalDays, projectsNotSyncedCount, loadingDuration.TotalMilliseconds);
             }
 
             [Fact, LogIfTooSlow]
@@ -162,7 +162,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await Initialize();
 
-                AnalyticsService.Received().TrackReportsFailure(ReportsSource.Initial, totalDays, loadingDuration.TotalMilliseconds);
+                AnalyticsService.Received().ReportsFailure.Track(ReportsSource.Initial, totalDays, loadingDuration.TotalMilliseconds);
             }
         }
 

@@ -197,11 +197,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             if (success)
             {
-                analyticsService.TrackReportsSuccess(source, totalDays, projectsNotSyncedCount, loadingTime.TotalMilliseconds);
+                analyticsService.ReportsSuccess.Track(source, totalDays, projectsNotSyncedCount, loadingTime.TotalMilliseconds);
             }
             else
             {
-                analyticsService.TrackReportsFailure(source, totalDays, loadingTime.TotalMilliseconds);
+                analyticsService.ReportsFailure.Track(source, totalDays, loadingTime.TotalMilliseconds);
             }
         }
 
