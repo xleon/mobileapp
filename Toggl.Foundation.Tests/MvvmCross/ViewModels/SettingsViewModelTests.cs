@@ -650,7 +650,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await DataSource
                     .Preferences
                     .Received()
-                    .Update(Arg.Is<EditPreferencesDTO>(dto => dto.DateFormat == newDateFormat));
+                    .Update(Arg.Is<EditPreferencesDTO>(dto => dto.DateFormat.Equals(New<DateFormat>.Value(newDateFormat))));
             }
 
             [Fact, LogIfTooSlow]
@@ -722,8 +722,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.ToggleUseTwentyFourHourClockCommand.ExecuteAsync();
 
                 await DataSource.Preferences.Received().Update(Arg.Is<EditPreferencesDTO>(
-                    dto => dto.TimeOfDayFormat.HasValue
-                        && dto.TimeOfDayFormat.Value.IsTwentyFourHoursFormat != originalValue));
+                    dto => dto.TimeOfDayFormat.ValueOr(default(TimeFormat)).IsTwentyFourHoursFormat != originalValue));
             }
 
             [Theory, LogIfTooSlow]
@@ -779,7 +778,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await DataSource
                     .Preferences
                     .Received()
-                    .Update(Arg.Is<EditPreferencesDTO>(dto => dto.DurationFormat == newDurationFormat));
+                    .Update(Arg.Is<EditPreferencesDTO>(dto => dto.DurationFormat.Equals(New<DurationFormat>.Value(newDurationFormat))));
             }
 
             [Fact, LogIfTooSlow]
