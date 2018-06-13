@@ -674,6 +674,7 @@
     </Compile>
     <Compile Include="ViewSources\SelectTagsTableViewSource.cs" />
     <Compile Include="ViewSources\GroupedCollectionTableViewSource.cs" />
+    <Compile Include="Views\EditDuration\DurationFieldTextFormatter.cs" />
     <Compile Include="Views\MarqueeView.cs" />
     <Compile Include="Binding\SwitchAnimatedOnTargetBinding.cs" />
     <Compile Include="Views\Onboarding\TrackPage.cs" />
