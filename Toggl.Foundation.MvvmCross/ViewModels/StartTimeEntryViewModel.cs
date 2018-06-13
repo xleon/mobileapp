@@ -56,6 +56,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private bool isRunning => !Duration.HasValue;
 
+        private long defaultWorkspaceId;
+
         //Properties
         private int DescriptionByteCount
             => TextFieldInfo.Text.LengthInBytes();
@@ -277,9 +279,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
             TextFieldInfo =
                 await dataSource.User.Get().Select(user => TextFieldInfo.Empty(workspace.Id));
+            defaultWorkspaceId = workspace.Id;
 
             await setBillableValues(lastProjectId);
-
             preferencesDisposable = dataSource.Preferences.Current
                 .Subscribe(onPreferencesChanged);
 
@@ -698,7 +700,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             var firstSuggestion = suggestions.FirstOrDefault();
             if (firstSuggestion is ProjectSuggestion)
-                return suggestions.GroupByWorkspaceAddingNoProject();
+                return suggestions
+                    .GroupByWorkspaceAddingNoProject()
+                    .OrderByDefaultWorkspaceAndName(defaultWorkspaceId);
 
             if (IsSuggestingTags)
                 suggestions = suggestions.Where(suggestion => suggestion.WorkspaceId == TextFieldInfo.WorkspaceId);
