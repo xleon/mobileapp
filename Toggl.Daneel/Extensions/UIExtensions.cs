@@ -18,6 +18,7 @@ namespace Toggl.Daneel.Extensions
             => Observable.Create<Unit>(observer =>
             {
                 var gestureRecognizer = new UITapGestureRecognizer(() => observer.OnNext(Unit.Default));
+                gestureRecognizer.ShouldRecognizeSimultaneously = (recognizer, otherRecognizer) => true;
                 view.AddGestureRecognizer(gestureRecognizer);
 
                 return Disposable.Create(() => view.RemoveGestureRecognizer(gestureRecognizer));
