@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Toggl.Foundation.Extensions;
 using Toggl.Multivac;
 
 namespace Toggl.Foundation.Analytics
@@ -81,11 +82,26 @@ namespace Toggl.Foundation.Analytics
         [AnalyticsEvent("NumberOfCreatedGhosts")]
         public IAnalyticsEvent<int> ProjectGhostsCreated { get; protected set; }
 
+        [AnalyticsEvent("ExceptionType", "ExceptionMessage")]
+        public IAnalyticsEvent<string, string> HandledException { get; protected set; }
+
         [AnalyticsEvent("TapSource")]
         public IAnalyticsEvent<StartViewTapSource> StartViewTapped { get; protected set; }
 
+        public void Track(Exception exception)
+        {
+            if (exception.IsAnonymized())
+            {
+                TrackException(exception);
+            }
+            else
+            {
+                HandledException.Track(exception.GetType().FullName, exception.Message);
+            }
+        }
+
         public abstract void Track(string eventName, Dictionary<string, string> parameters = null);
 
-        public abstract void Track(Exception exception);
+        protected abstract void TrackException(Exception exception);
     }
 }

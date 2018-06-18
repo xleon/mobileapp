@@ -53,6 +53,8 @@ namespace Toggl.Foundation.Analytics
 
         IAnalyticsEvent<StartViewTapSource> StartViewTapped { get; }
 
+        IAnalyticsEvent<string, string> HandledException { get; }
+
         void Track(string eventName, Dictionary<string, string> parameters = null);
 
         void Track(Exception exception);
