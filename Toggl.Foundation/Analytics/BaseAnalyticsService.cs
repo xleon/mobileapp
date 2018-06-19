@@ -102,6 +102,9 @@ namespace Toggl.Foundation.Analytics
 
         public abstract void Track(string eventName, Dictionary<string, string> parameters = null);
 
+        public void Track(ITrackableEvent trackableEvent)
+            => Track(trackableEvent.EventName, trackableEvent.ToDictionary());
+            
         protected abstract void TrackException(Exception exception);
     }
 }

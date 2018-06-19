@@ -6,6 +6,9 @@ namespace Toggl.Foundation.Extensions
 {
     public static class ObservableExtensions
     {
+        public static IObservable<T> Track<T>(this IObservable<T> observable, ITrackableEvent trackableEvent, IAnalyticsService service)
+            => observable.Do(_ => trackableEvent.TrackWith(service));
+
         public static IObservable<T> Track<T>(this IObservable<T> observable, IAnalyticsEvent analyticsEvent)
             => observable.Do(_ => analyticsEvent.Track());
 
