@@ -19,6 +19,7 @@ using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Models.Interfaces;
 using static Toggl.Foundation.Helper.Constants;
 using Toggl.Foundation.Extensions;
+using SelectTimeOrigin = Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -163,7 +164,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand StopCommand { get; }
 
-        public IMvxAsyncCommand<string> StopTimeEntryCommand { get; }
+        public IMvxAsyncCommand<SelectTimeOrigin> StopTimeEntryCommand { get; }
 
         public IMvxAsyncCommand DeleteCommand { get; }
 
@@ -171,7 +172,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand SelectDurationCommand { get; }
 
-        public IMvxAsyncCommand<string> SelectTimeCommand { get; }
+        public IMvxAsyncCommand<SelectTimeOrigin> SelectTimeCommand { get; }
 
         public IMvxAsyncCommand SelectStartTimeCommand { get; }
 
@@ -217,13 +218,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             CloseCommand = new MvxAsyncCommand(closeWithConfirmation);
 
             StopCommand = new MvxCommand(stopTimeEntry, () => IsTimeEntryRunning);
-            StopTimeEntryCommand = new MvxAsyncCommand<string>(onStopTimeEntryCommand);
+            StopTimeEntryCommand = new MvxAsyncCommand<SelectTimeOrigin>(onStopTimeEntryCommand);
 
             SelectStartTimeCommand = new MvxAsyncCommand(selectStartTime);
             SelectStopTimeCommand = new MvxAsyncCommand(selectStopTime);
             SelectStartDateCommand = new MvxAsyncCommand(selectStartDate);
             SelectDurationCommand = new MvxAsyncCommand(selectDuration);
-            SelectTimeCommand = new MvxAsyncCommand<string>(selectTime);
+            SelectTimeCommand = new MvxAsyncCommand<SelectTimeOrigin>(selectTime);
 
             SelectProjectCommand = new MvxAsyncCommand(selectProject);
             SelectTagsCommand = new MvxAsyncCommand(selectTags);
@@ -382,14 +383,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             await editDuration(true);
         }
 
-        private async Task selectTime(string bindingParameter)
+        private async Task selectTime(SelectTimeOrigin origin)
         {
-            var tapSource = getTapSourceFromBindingParameter(bindingParameter);
+            var tapSource = getTapSourceFromSelectTimeOrigin(origin);
             analyticsService.EditViewTapped.Track(tapSource);
 
-            var parameters =
-                SelectTimeParameters
-                .CreateFromBindingString(bindingParameter, StartTime, StopTime)
+            var parameters = SelectTimeParameters
+                .CreateFromOrigin(origin, StartTime, StopTime)
                 .WithFormats(DateFormat, TimeFormat);
 
             var data = await navigationService
@@ -403,17 +403,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             StopTime = data.Stop;
         }
 
-        private EditViewTapSource getTapSourceFromBindingParameter(string bindingParameter)
+        private EditViewTapSource getTapSourceFromSelectTimeOrigin(SelectTimeOrigin origin)
         {
-            switch (bindingParameter)
+            switch (origin)
             {
-                case "StartTime":
-                case "StartDate":
+                case SelectTimeOrigin.StartTime:
+                case SelectTimeOrigin.StartDate:
                     return EditViewTapSource.StartTime;
-                case "StopTime":
-                case "StopDate":
+                case SelectTimeOrigin.StopTime:
+                case SelectTimeOrigin.StopDate:
                     return EditViewTapSource.StopTime;
-                case "Duration":
+                case SelectTimeOrigin.Duration:
                     return EditViewTapSource.Duration;
                 default:
                     throw new ArgumentException("Binding parameter is incorrect.");
@@ -425,7 +425,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             StopTime = timeService.CurrentDateTime;
         }
 
-        private async Task onStopTimeEntryCommand(string bindingParameter)
+        private async Task onStopTimeEntryCommand(SelectTimeOrigin origin)
         {
             if (IsTimeEntryRunning)
             {
@@ -433,7 +433,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return;
             }
 
-            await SelectTimeCommand.ExecuteAsync(bindingParameter);
+            await SelectTimeCommand.ExecuteAsync(origin);
         }
 
         private async Task selectProject()
