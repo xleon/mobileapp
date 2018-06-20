@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Models;
@@ -24,6 +25,7 @@ namespace Toggl.Foundation.Login
         private readonly IGoogleService googleService;
         private readonly IApplicationShortcutCreator shortcutCreator;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
+        private readonly IAnalyticsService analyticsService;
         private readonly Func<ITogglApi, ITogglDataSource> createDataSource;
         private readonly IScheduler scheduler;
         private readonly TimeSpan delayBeforeTryingToLogin = TimeSpan.FromSeconds(2);
@@ -34,6 +36,7 @@ namespace Toggl.Foundation.Login
             IGoogleService googleService,
             IApplicationShortcutCreator shortcutCreator,
             IAccessRestrictionStorage accessRestrictionStorage,
+            IAnalyticsService analyticsService,
             Func<ITogglApi, ITogglDataSource> createDataSource,
             IScheduler scheduler
         )
@@ -43,6 +46,7 @@ namespace Toggl.Foundation.Login
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(googleService, nameof(googleService));
             Ensure.Argument.IsNotNull(shortcutCreator, nameof(shortcutCreator));
+            Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(createDataSource, nameof(createDataSource));
             Ensure.Argument.IsNotNull(scheduler, nameof(scheduler));
 
@@ -50,6 +54,7 @@ namespace Toggl.Foundation.Login
             this.apiFactory = apiFactory;
             this.accessRestrictionStorage = accessRestrictionStorage;
             this.googleService = googleService;
+            this.analyticsService = analyticsService;
             this.shortcutCreator = shortcutCreator;
             this.createDataSource = createDataSource;
             this.scheduler = scheduler;
@@ -71,6 +76,9 @@ namespace Toggl.Foundation.Login
                 .SelectMany(database.User.Create)
                 .Select(dataSourceFromUser)
                 .Do(shortcutCreator.OnLogin)
+                .Track<ITogglDataSource, LoginSignupAuthenticationMethod, UserIsMissingApiTokenException>(
+                    analyticsService.UserIsMissingApiToken,
+                    LoginSignupAuthenticationMethod.Login)
                 .RetryWhenUserIsMissingApiToken(scheduler);
         }
 
@@ -94,6 +102,9 @@ namespace Toggl.Foundation.Login
                 .SelectMany(database.User.Create)
                 .Select(dataSourceFromUser)
                 .Do(shortcutCreator.OnLogin)
+                .Track<ITogglDataSource, LoginSignupAuthenticationMethod, UserIsMissingApiTokenException>(
+                    analyticsService.UserIsMissingApiToken,
+                    LoginSignupAuthenticationMethod.SignUp)
                 .Catch<ITogglDataSource, UserIsMissingApiTokenException>(_ => delayedLogin(email, password));
         }
 
@@ -155,6 +166,9 @@ namespace Toggl.Foundation.Login
                 .SelectMany(database.User.Create)
                 .Select(dataSourceFromUser)
                 .Do(shortcutCreator.OnLogin)
+                .Track<ITogglDataSource, LoginSignupAuthenticationMethod, UserIsMissingApiTokenException>(
+                    analyticsService.UserIsMissingApiToken,
+                    LoginSignupAuthenticationMethod.LoginGoogle)
                 .RetryWhenUserIsMissingApiToken(scheduler);
         }
 
@@ -178,6 +192,9 @@ namespace Toggl.Foundation.Login
                 .SelectMany(database.User.Create)
                 .Select(dataSourceFromUser)
                 .Do(shortcutCreator.OnLogin)
+                .Track<ITogglDataSource, LoginSignupAuthenticationMethod, UserIsMissingApiTokenException>(
+                    analyticsService.UserIsMissingApiToken,
+                    LoginSignupAuthenticationMethod.SignUpWithGoogle)
                 .Catch<ITogglDataSource, UserIsMissingApiTokenException>(_ => delayedLoginWithGoogle(googleToken));
         }
 

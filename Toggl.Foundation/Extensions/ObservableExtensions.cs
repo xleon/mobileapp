@@ -20,5 +20,13 @@ namespace Toggl.Foundation.Extensions
 
         public static IObservable<T> Track<T, T1, T2>(this IObservable<T> observable, IAnalyticsEvent<T1, T2> analyticsEvent, T1 param1, T2 param2)
             => observable.Do(_ => analyticsEvent.Track(param1, param2));
+
+        public static IObservable<T> Track<T, T1, TException>(this IObservable<T> observable, IAnalyticsEvent<T1> analyticsEvent, T1 parameter)
+            where TException : Exception
+            => observable.Catch<T, TException>(exception =>
+            {
+                analyticsEvent.Track(parameter);
+                return Observable.Throw<T>(exception);
+            });
     }
 }

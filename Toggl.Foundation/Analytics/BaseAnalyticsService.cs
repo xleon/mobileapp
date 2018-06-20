@@ -25,6 +25,9 @@ namespace Toggl.Foundation.Analytics
         [AnalyticsEvent("Source")]
         public IAnalyticsEvent<SignUpErrorSource> SignUpError { get; protected set; }
 
+        [AnalyticsEvent("AuthenticationMethod")]
+        public IAnalyticsEvent<LoginSignupAuthenticationMethod> UserIsMissingApiToken { get; protected set; }
+
         [AnalyticsEvent("PageWhenSkipWasClicked")]
         public IAnalyticsEvent<string> OnboardingSkip { get; protected set; }
 

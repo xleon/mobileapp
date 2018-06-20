@@ -8,7 +8,9 @@ using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.Shortcuts;
 using Toggl.Foundation.Tests.Generators;
@@ -49,10 +51,11 @@ namespace Toggl.Foundation.Tests.Login
             protected IScheduler Scheduler { get; } = System.Reactive.Concurrency.Scheduler.Default;
             protected ITogglDataSource CreateDataSource(ITogglApi api) => DataSource;
             protected virtual IScheduler CreateScheduler => Scheduler;
+            protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
 
             protected LoginManagerTest()
             {
-                LoginManager = new LoginManager(ApiFactory, Database, GoogleService, ApplicationShortcutCreator, AccessRestrictionStorage, CreateDataSource, CreateScheduler);
+                LoginManager = new LoginManager(ApiFactory, Database, GoogleService, ApplicationShortcutCreator, AccessRestrictionStorage, AnalyticsService, CreateDataSource, CreateScheduler);
 
                 Api.User.Get().Returns(Observable.Return(User));
                 Api.User.SignUp(Email, Password, TermsAccepted, CountryId).Returns(Observable.Return(User));
@@ -71,7 +74,7 @@ namespace Toggl.Foundation.Tests.Login
         public sealed class Constructor : LoginManagerTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(SevenParameterConstructorTestData))]
+            [ClassData(typeof(EightParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useApiFactory,
                 bool useDatabase,
@@ -79,7 +82,8 @@ namespace Toggl.Foundation.Tests.Login
                 bool useAccessRestrictionStorage,
                 bool useApplicationShortcutCreator,
                 bool useCreateDataSource,
-                bool useScheduler)
+                bool useScheduler,
+                bool useAnalyticsService)
             {
                 var database = useDatabase ? Database : null;
                 var apiFactory = useApiFactory ? ApiFactory : null;
@@ -88,9 +92,10 @@ namespace Toggl.Foundation.Tests.Login
                 var createDataSource = useCreateDataSource ? CreateDataSource : (Func<ITogglApi, ITogglDataSource>)null;
                 var shortcutCreator = useApplicationShortcutCreator ? ApplicationShortcutCreator : null;
                 var testScheduler = useScheduler ? Scheduler : null;
+                var analyticsService = useAnalyticsService ? AnalyticsService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new LoginManager(apiFactory, database, googleService, shortcutCreator, accessRestrictionStorage, createDataSource, testScheduler);
+                    () => new LoginManager(apiFactory, database, googleService, shortcutCreator, accessRestrictionStorage, analyticsService, createDataSource, testScheduler);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -190,6 +195,23 @@ namespace Toggl.Foundation.Tests.Login
 
                 tryingToLoginWhenTheApiIsThrowingSomeRandomServerErrorException
                     .Should().Throw<ServerErrorException>();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksMissingApiToken()
+            {
+                var userIsMissingApiTokenException = new UserIsMissingApiTokenException(Substitute.For<IRequest>(), Substitute.For<IResponse>());
+                Api.User.Get().Returns(Observable.Throw<IUser>(userIsMissingApiTokenException));
+
+                try
+                {
+                    await LoginManager.Login(Email, Password);
+                }
+                catch
+                {
+                }
+
+                AnalyticsService.UserIsMissingApiToken.Received().Track(Arg.Is(LoginSignupAuthenticationMethod.Login));
             }
         }
 
@@ -350,6 +372,23 @@ namespace Toggl.Foundation.Tests.Login
                 tryingToSignUpWhenTheApiIsThrowingSomeRandomServerErrorException
                     .Should().Throw<ServerErrorException>();
             }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksMissingApiToken()
+            {
+                var userIsMissingApiTokenException = new UserIsMissingApiTokenException(Substitute.For<IRequest>(), Substitute.For<IResponse>());
+                Api.User.SignUp(Email, Password, TermsAccepted, CountryId).Returns(Observable.Throw<IUser>(userIsMissingApiTokenException));
+
+                try
+                {
+                    await LoginManager.SignUp(Email, Password, TermsAccepted, CountryId);
+                }
+                catch
+                {
+                }
+
+                AnalyticsService.UserIsMissingApiToken.Received().Track(Arg.Is(LoginSignupAuthenticationMethod.SignUp));
+            }
         }
 
         public sealed class TheRefreshTokenMethod : LoginManagerTest
@@ -472,6 +511,23 @@ namespace Toggl.Foundation.Tests.Login
                 await LoginManager.LoginWithGoogle();
 
                 ApplicationShortcutCreator.Received().OnLogin(Arg.Any<ITogglDataSource>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksMissingApiToken()
+            {
+                var userIsMissingApiTokenException = new UserIsMissingApiTokenException(Substitute.For<IRequest>(), Substitute.For<IResponse>());
+                Api.User.GetWithGoogle().Returns(Observable.Throw<IUser>(userIsMissingApiTokenException));
+
+                try
+                {
+                    await LoginManager.LoginWithGoogle();
+                }
+                catch
+                {
+                }
+
+                AnalyticsService.UserIsMissingApiToken.Received().Track(Arg.Is(LoginSignupAuthenticationMethod.LoginGoogle));
             }
         }
 
@@ -604,7 +660,28 @@ namespace Toggl.Foundation.Tests.Login
             }
         }
 
-        public sealed class TheLoginUpWithGoogleMethodRetries : LoginManagerWithTestSchedulerTest
+        public sealed class TheSignUpWithGoogleMethod : LoginManagerTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task TracksMissingApiToken()
+            {
+                var userIsMissingApiTokenException = new UserIsMissingApiTokenException(Substitute.For<IRequest>(), Substitute.For<IResponse>());
+                Api.User.SignUpWithGoogle(Arg.Any<string>()).Returns(Observable.Throw<IUser>(userIsMissingApiTokenException));
+                GoogleService.GetAuthToken().Returns(Observable.Return("abc"));
+
+                try
+                {
+                    await LoginManager.SignUpWithGoogle();
+                }
+                catch
+                {
+                }
+
+                AnalyticsService.UserIsMissingApiToken.Received().Track(Arg.Is(LoginSignupAuthenticationMethod.SignUpWithGoogle));
+            }
+        }
+
+        public sealed class TheSignUpWithGoogleMethodRetries : LoginManagerWithTestSchedulerTest
         {
             [Theory, LogIfTooSlow]
             [InlineData(0, 1)]
@@ -674,7 +751,6 @@ namespace Toggl.Foundation.Tests.Login
                 observer.Messages.Single().Value.Exception.Should().Be(serverErrorException);
                 Api.User.Received(2).GetWithGoogle();
             }
-
         }
 
         public sealed class TheSignUpWithGoogleMethodRuns : LoginManagerWithTestSchedulerTest

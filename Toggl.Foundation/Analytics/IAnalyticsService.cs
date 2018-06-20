@@ -13,6 +13,8 @@ namespace Toggl.Foundation.Analytics
 
         IAnalyticsEvent<SignUpErrorSource> SignUpError { get; }
 
+        IAnalyticsEvent<LoginSignupAuthenticationMethod> UserIsMissingApiToken { get; }
+
         IAnalyticsEvent<string> OnboardingSkip { get; }
 
         IAnalyticsEvent<LogoutSource> Logout { get; }
