@@ -93,6 +93,7 @@ namespace Toggl.Foundation
 
             var persistUser =
                 new PersistSingletonState<IUser, IDatabaseUser, IThreadSafeUser>(dataSource.User, User.Clean)
+                    .TrackNoDefaultWorkspace(analyticsService)
                     .CatchApiExceptions();
 
             var persistTags =

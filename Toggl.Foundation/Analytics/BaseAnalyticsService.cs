@@ -88,6 +88,9 @@ namespace Toggl.Foundation.Analytics
         [AnalyticsEvent("TapSource")]
         public IAnalyticsEvent<StartViewTapSource> StartViewTapped { get; protected set; }
 
+        [AnalyticsEvent]
+        public IAnalyticsEvent NoDefaultWorkspace { get; protected set; }
+
         public void Track(Exception exception)
         {
             if (exception.IsAnonymized())
