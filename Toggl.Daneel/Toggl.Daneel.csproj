@@ -102,7 +102,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Facebook, Version=4.10.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Xamarin.Facebook.iOS.4.33.0\lib\Xamarin.iOS10\Facebook.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Facebook.iOS.4.30.0\lib\Xamarin.iOS10\Facebook.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
