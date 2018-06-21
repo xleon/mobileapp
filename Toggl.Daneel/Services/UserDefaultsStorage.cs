@@ -13,6 +13,12 @@ namespace Toggl.Daneel.Services
         public string GetString(string key)
             => NSUserDefaults.StandardUserDefaults.StringForKey(key);
 
+        public DateTimeOffset? GetDateTimeOffset(string key)
+        {
+            var serialized = GetString(key);
+            return DateTimeOffset.TryParse(serialized, out var parsed) ? parsed : (DateTimeOffset?)null;
+        }
+
         public void SetBool(string key, bool value)
         {
             NSUserDefaults.StandardUserDefaults.SetBool(value, key);
@@ -21,6 +27,11 @@ namespace Toggl.Daneel.Services
         public void SetString(string key, string value)
         {
             NSUserDefaults.StandardUserDefaults.SetString(value, key);
+        }
+
+        public void SetDateTimeOffset(string key, DateTimeOffset dateTime)
+        {
+            SetString(key, dateTime.ToString());
         }
 
         public void Remove(string key)

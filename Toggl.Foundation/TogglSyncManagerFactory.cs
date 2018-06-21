@@ -16,6 +16,7 @@ using Toggl.Foundation.Sync.States.Push;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
+using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.ApiClients.Interfaces;
@@ -30,6 +31,7 @@ namespace Toggl.Foundation
             ITogglDataSource dataSource,
             ITimeService timeService,
             IAnalyticsService analyticsService,
+            ILastTimeUsageStorage lastTimeUsageStorage,
             TimeSpan? retryLimit,
             IScheduler scheduler)
         {
@@ -44,7 +46,7 @@ namespace Toggl.Foundation
             var stateMachine = new StateMachine(transitions, scheduler, delayCancellation);
             var orchestrator = new StateMachineOrchestrator(stateMachine, entryPoints);
 
-            return new SyncManager(queue, orchestrator, analyticsService);
+            return new SyncManager(queue, orchestrator, analyticsService, lastTimeUsageStorage, timeService);
         }
 
         public static void ConfigureTransitions(

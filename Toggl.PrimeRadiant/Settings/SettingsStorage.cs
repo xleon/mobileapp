@@ -6,7 +6,7 @@ using Toggl.PrimeRadiant.Onboarding;
 
 namespace Toggl.PrimeRadiant.Settings
 {
-    public sealed class SettingsStorage : IAccessRestrictionStorage, IOnboardingStorage, IUserPreferences
+    public sealed class SettingsStorage : IAccessRestrictionStorage, IOnboardingStorage, IUserPreferences, ILastTimeUsageStorage
     {
         private const string outdatedApiKey = "OutdatedApi";
         private const string outdatedClientKey = "OutdatedClient";
@@ -27,6 +27,10 @@ namespace Toggl.PrimeRadiant.Settings
         private const string hasSelectedProjectKey = "HasSelectedProject";
 
         private const string onboardingPrefix = "Onboarding_";
+
+        private const string lastSyncAttemptKey = "LastSyncAttempt";
+        private const string lastSuccessfulSyncKey = "LastSuccessfulSync";
+        private const string lastLoginKey = "LastLogin";
 
         private readonly Version version;
         private readonly IKeyValueStorage keyValueStorage;
@@ -229,6 +233,31 @@ namespace Toggl.PrimeRadiant.Settings
         {
             EnableTimerMode();
             isManualModeEnabledSubject.OnNext(false);
+        }
+
+        #endregion
+
+        #region ILastTimeUsageStorage
+
+        public DateTimeOffset? LastSyncAttempt => keyValueStorage.GetDateTimeOffset(lastSyncAttemptKey);
+
+        public DateTimeOffset? LastSuccessfulSync => keyValueStorage.GetDateTimeOffset(lastSuccessfulSyncKey);
+
+        public DateTimeOffset? LastLogin => keyValueStorage.GetDateTimeOffset(lastLoginKey);
+
+        public void SetFullSyncAttempt(DateTimeOffset now)
+        {
+            keyValueStorage.SetDateTimeOffset(lastSyncAttemptKey, now);
+        }
+
+        public void SetSuccessfulFullSync(DateTimeOffset now)
+        {
+            keyValueStorage.SetDateTimeOffset(lastSuccessfulSyncKey, now);
+        }
+
+        public void SetLogin(DateTimeOffset now)
+        {
+            keyValueStorage.SetDateTimeOffset(lastLoginKey, now);
         }
 
         #endregion
