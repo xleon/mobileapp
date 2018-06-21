@@ -29,8 +29,6 @@ namespace Toggl.Foundation.Analytics
 
         IAnalyticsEvent<Type> CurrentPage { get; }
 
-        IAnalyticsEvent<TimeEntryStartOrigin> TimeEntryStarted { get; }
-
         IAnalyticsEvent DeleteTimeEntry { get; }
 
         IAnalyticsEvent<string> ApplicationShortcut { get; }
@@ -62,5 +60,7 @@ namespace Toggl.Foundation.Analytics
         void Track(string eventName, Dictionary<string, string> parameters = null);
 
         void Track(Exception exception);
+
+        void Track(ITrackableEvent trackableEvent);
     }
 }

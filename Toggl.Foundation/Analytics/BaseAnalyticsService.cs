@@ -49,9 +49,6 @@ namespace Toggl.Foundation.Analytics
         [AnalyticsEvent("CurrentPage")]
         public IAnalyticsEvent<Type> CurrentPage { get; protected set; }
 
-        [AnalyticsEvent("Origin")]
-        public IAnalyticsEvent<TimeEntryStartOrigin> TimeEntryStarted { get; protected set; }
-
         [AnalyticsEvent]
         public IAnalyticsEvent DeleteTimeEntry { get; protected set; }
 

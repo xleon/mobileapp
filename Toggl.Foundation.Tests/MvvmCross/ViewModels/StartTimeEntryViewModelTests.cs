@@ -570,7 +570,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.BackCommand.ExecuteAsync();
 
-                AnalyticsService.TimeEntryStarted.DidNotReceive().Track(Arg.Any<TimeEntryStartOrigin>());
+                AnalyticsService.DidNotReceive().Track(Arg.Any<StartTimeEntryEvent>());
             }
 
             private void makeDirty()
