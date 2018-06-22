@@ -69,7 +69,7 @@ namespace Toggl.Daneel
             var openUrlOptions = new UIApplicationOpenUrlOptions(options);
             var googleResponse = Google.SignIn.SignIn.SharedInstance.HandleUrl(url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
 
-            var facebookResponse = Facebook.CoreKit.ApplicationDelegate.SharedInstance.OpenUrl(app, url, options);
+            var facebookResponse = Facebook.CoreKit.ApplicationDelegate.SharedInstance.OpenUrl(app, url, (NSDictionary<NSString, NSObject>)options);
 
             return googleResponse || facebookResponse;
         }
