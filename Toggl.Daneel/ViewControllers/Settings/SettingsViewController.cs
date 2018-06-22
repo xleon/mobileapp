@@ -27,6 +27,7 @@ namespace Toggl.Daneel.ViewControllers
             prepareViews();
 
             Title = ViewModel.Title;
+            VersionLabel.Text = ViewModel.Version;
 
             LoggingOutView.Hidden = true;
 
