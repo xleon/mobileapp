@@ -52,7 +52,7 @@ namespace Toggl.Giskard.Activities
             });
 
             this.Bind(logoutButton.Tapped(), ViewModel.TryLogout);
-            this.Bind(helpButton.Tapped(), ViewModel.ShowHelpView);
+            this.Bind(helpButton.Tapped(), ViewModel.OpenHelpView);
             this.Bind(feedbackButton.Tapped(), ViewModel.SubmitFeedback);
             this.BindVoid(manualModeView.Tapped(), ViewModel.ToggleManualMode);
             this.Bind(beginningOfWeekView.Tapped(), ViewModel.SelectBeginningOfWeek);

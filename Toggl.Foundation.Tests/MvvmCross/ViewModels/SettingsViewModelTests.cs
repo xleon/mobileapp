@@ -458,7 +458,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public sealed class TheShowHelpViewMethod : SettingsViewModelTest
+        public sealed class TheOpenHelpViewMethod : SettingsViewModelTest
         {
             [Property]
             public void NavigatesToBrowserViewModelWithUrlFromPlatformConstants(
@@ -467,7 +467,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var helpUrl = nonEmptyString.Get;
                 PlatformConstants.HelpUrl.Returns(helpUrl);
 
-                ViewModel.ShowHelpView();
+                ViewModel.OpenHelpView();
 
                 NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
                     Arg.Is<BrowserParameters>(parameter => parameter.Url == helpUrl));
@@ -476,7 +476,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public void NavigatesToBrowserViewModelWithHelpTitle()
             {
-                ViewModel.ShowHelpView();
+                ViewModel.OpenHelpView();
 
                 NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
                     Arg.Is<BrowserParameters>(parameter => parameter.Title == Resources.Help));

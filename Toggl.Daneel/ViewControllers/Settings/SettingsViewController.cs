@@ -47,6 +47,7 @@ namespace Toggl.Daneel.ViewControllers
                 SyncedView.Hidden = true;
             });
 
+            this.Bind(HelpView.Tapped(), ViewModel.OpenHelpView);
             this.Bind(LogoutButton.Tapped(), ViewModel.TryLogout);
             this.Bind(AboutView.Tapped(), ViewModel.OpenAboutView);
             this.Bind(FeedbackView.Tapped(), ViewModel.SubmitFeedback);
