@@ -42,6 +42,7 @@ namespace Toggl.Foundation.MvvmCross
         public IPasswordManagerService PasswordManagerService { get; }
         public IErrorHandlingService ErrorHandlingService { get; }
         public IAccessRestrictionStorage AccessRestrictionStorage { get; }
+        public ILastTimeUsageStorage LastTimeUsageStorage { get; }
 
         private MvvmCrossFoundation(Builder builder)
         {
@@ -56,6 +57,7 @@ namespace Toggl.Foundation.MvvmCross
             PasswordManagerService = builder.PasswordManagerService;
             ErrorHandlingService = builder.ErrorHandlingService;
             AccessRestrictionStorage = builder.AccessRestrictionStorage;
+            LastTimeUsageStorage = builder.LastTimeUsageStorage;
 
             Version = builder.Foundation.Version;
             Database = builder.Foundation.Database;
@@ -86,6 +88,7 @@ namespace Toggl.Foundation.MvvmCross
             public IPasswordManagerService PasswordManagerService { get; private set; }
             public IErrorHandlingService ErrorHandlingService { get; private set; }
             public IAccessRestrictionStorage AccessRestrictionStorage { get; private set; }
+            public ILastTimeUsageStorage LastTimeUsageStorage { get; private set; }
 
             public Builder(TogglFoundation foundation)
             {
@@ -115,6 +118,12 @@ namespace Toggl.Foundation.MvvmCross
             public Builder WithAccessRestrictionStorage(IAccessRestrictionStorage accessRestrictionStorage)
             {
                 AccessRestrictionStorage = accessRestrictionStorage;
+                return this;
+            }
+
+            public Builder WithLastTimeUsageStorage(ILastTimeUsageStorage lastTimeUsageStorage)
+            {
+                LastTimeUsageStorage = lastTimeUsageStorage;
                 return this;
             }
 
@@ -197,6 +206,7 @@ namespace Toggl.Foundation.MvvmCross
                 Ensure.Argument.IsNotNull(NavigationService, nameof(NavigationService));
                 Ensure.Argument.IsNotNull(ErrorHandlingService, nameof(ErrorHandlingService));
                 Ensure.Argument.IsNotNull(AccessRestrictionStorage, nameof(AccessRestrictionStorage));
+                Ensure.Argument.IsNotNull(LastTimeUsageStorage, nameof(LastTimeUsageStorage));
             }
         }
     }

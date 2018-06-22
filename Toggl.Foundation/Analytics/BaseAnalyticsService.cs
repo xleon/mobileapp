@@ -25,6 +25,9 @@ namespace Toggl.Foundation.Analytics
         [AnalyticsEvent("Source")]
         public IAnalyticsEvent<SignUpErrorSource> SignUpError { get; protected set; }
 
+        [AnalyticsEvent("AuthenticationMethod")]
+        public IAnalyticsEvent<LoginSignupAuthenticationMethod> UserIsMissingApiToken { get; protected set; }
+
         [AnalyticsEvent("PageWhenSkipWasClicked")]
         public IAnalyticsEvent<string> OnboardingSkip { get; protected set; }
 
@@ -45,9 +48,6 @@ namespace Toggl.Foundation.Analytics
 
         [AnalyticsEvent("CurrentPage")]
         public IAnalyticsEvent<Type> CurrentPage { get; protected set; }
-
-        [AnalyticsEvent("Origin")]
-        public IAnalyticsEvent<TimeEntryStartOrigin> TimeEntryStarted { get; protected set; }
 
         [AnalyticsEvent]
         public IAnalyticsEvent DeleteTimeEntry { get; protected set; }
@@ -87,6 +87,9 @@ namespace Toggl.Foundation.Analytics
 
         [AnalyticsEvent("TapSource")]
         public IAnalyticsEvent<StartViewTapSource> StartViewTapped { get; protected set; }
+
+        [AnalyticsEvent]
+        public IAnalyticsEvent NoDefaultWorkspace { get; protected set; }
 
         public void Track(Exception exception)
         {

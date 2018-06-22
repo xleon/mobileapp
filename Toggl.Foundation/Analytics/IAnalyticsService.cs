@@ -13,6 +13,8 @@ namespace Toggl.Foundation.Analytics
 
         IAnalyticsEvent<SignUpErrorSource> SignUpError { get; }
 
+        IAnalyticsEvent<LoginSignupAuthenticationMethod> UserIsMissingApiToken { get; }
+
         IAnalyticsEvent<string> OnboardingSkip { get; }
 
         IAnalyticsEvent<LogoutSource> Logout { get; }
@@ -26,8 +28,6 @@ namespace Toggl.Foundation.Analytics
         IAnalyticsEvent PasswordManagerContainsValidPassword { get; }
 
         IAnalyticsEvent<Type> CurrentPage { get; }
-
-        IAnalyticsEvent<TimeEntryStartOrigin> TimeEntryStarted { get; }
 
         IAnalyticsEvent DeleteTimeEntry { get; }
 
@@ -48,15 +48,19 @@ namespace Toggl.Foundation.Analytics
         IAnalyticsEvent OfflineModeDetected { get; }
 
         IAnalyticsEvent<int> ProjectGhostsCreated { get; }
-      
+
         IAnalyticsEvent<EditViewTapSource> EditViewTapped { get; }
 
         IAnalyticsEvent<StartViewTapSource> StartViewTapped { get; }
+
+        IAnalyticsEvent NoDefaultWorkspace { get; }
 
         IAnalyticsEvent<string, string> HandledException { get; }
 
         void Track(string eventName, Dictionary<string, string> parameters = null);
 
         void Track(Exception exception);
+
+        void Track(ITrackableEvent trackableEvent);
     }
 }

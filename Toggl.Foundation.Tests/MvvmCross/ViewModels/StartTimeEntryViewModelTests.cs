@@ -20,13 +20,14 @@ using Toggl.Foundation.Tests.Mocks;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Exceptions;
 using Toggl.PrimeRadiant.Models;
+using Toggl.Foundation.Models.Interfaces;
 using Xunit;
+using static Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
 using static Toggl.Foundation.Helper.Constants;
 using static Toggl.Multivac.Extensions.FunctionalExtensions;
 using static Toggl.Multivac.Extensions.StringExtensions;
 using ITimeEntryPrototype = Toggl.Foundation.Models.ITimeEntryPrototype;
 using TextFieldInfo = Toggl.Foundation.Autocomplete.TextFieldInfo;
-using Toggl.Foundation.Models.Interfaces;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -569,7 +570,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.BackCommand.ExecuteAsync();
 
-                AnalyticsService.TimeEntryStarted.DidNotReceive().Track(Arg.Any<TimeEntryStartOrigin>());
+                AnalyticsService.DidNotReceive().Track(Arg.Any<StartTimeEntryEvent>());
             }
 
             private void makeDirty()
@@ -1655,7 +1656,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheSelectTimeCommand : StartTimeEntryViewModelTest
         {
-            private const string bindingParameter = "Duration";
+            private const SelectTimeParameters.Origin origin = Duration;
             private readonly TaskCompletionSource<SelectTimeResultsParameters> tcs = new TaskCompletionSource<SelectTimeResultsParameters>();
 
             public TheSelectTimeCommand()
@@ -1668,7 +1669,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public void SetsIsEditingTimeToTrueWhenItStarts()
             {
-                ViewModel.SelectTimeCommand.ExecuteAsync(bindingParameter);
+                ViewModel.SelectTimeCommand.ExecuteAsync(origin);
 
                 ViewModel.IsEditingTime.Should().BeTrue();
             }
@@ -1753,14 +1754,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Returns(Task.FromResult(returnParameters));
                 ViewModel.Prepare(parameters);
 
-                await ViewModel.SelectTimeCommand.ExecuteAsync("Duration");
+                await ViewModel.SelectTimeCommand.ExecuteAsync(SelectTimeParameters.Origin.Duration);
 
                 AnalyticsService.StartViewTapped.Received().Track(StartViewTapSource.Duration);
             }
 
             private Task callCommandCorrectly(int? hoursToAddToStopTime = null)
             {
-                var commandTask = ViewModel.SelectTimeCommand.ExecuteAsync(bindingParameter);
+                var commandTask = ViewModel.SelectTimeCommand.ExecuteAsync(origin);
                 var now = DateTimeOffset.Now;
                 var stopTime = hoursToAddToStopTime.HasValue ? now.AddHours(hoursToAddToStopTime.Value) : (DateTimeOffset?)null;
                 tcs.SetResult(new SelectTimeResultsParameters(now, stopTime));

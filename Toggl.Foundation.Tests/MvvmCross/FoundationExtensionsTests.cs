@@ -45,6 +45,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
         private readonly IMvxNavigationService navigationService = Substitute.For<IMvxNavigationService>();
         private readonly IErrorHandlingService errorHandlingService = Substitute.For<IErrorHandlingService>();
         private readonly IAccessRestrictionStorage accessRestrictionStorage = Substitute.For<IAccessRestrictionStorage>();
+        private readonly ILastTimeUsageStorage lastTimeUsageStorage = Substitute.For<ILastTimeUsageStorage>();
 
         public FoundationExtensionsTests()
         {
@@ -58,11 +59,12 @@ namespace Toggl.Foundation.Tests.MvvmCross
                     .WithNavigationService(navigationService)
                     .WithErrorHandlingService(errorHandlingService)
                     .WithAccessRestrictionStorage(accessRestrictionStorage)
+                    .WithLastTimeUsageStorage(lastTimeUsageStorage)
                     .Build();
         }
 
         [Theory, LogIfTooSlow]
-        [ClassData(typeof(NineParameterConstructorTestData))]
+        [ClassData(typeof(TenParameterConstructorTestData))]
         public void ThrowsIfAnyOfTheParametersIsNull(
             bool useFoundation,
             bool useDialogService,
@@ -72,7 +74,8 @@ namespace Toggl.Foundation.Tests.MvvmCross
             bool useOnboardingStorage,
             bool useNavigationService,
             bool useApiErrorHandlingService,
-            bool useAccessRestrictionStorage)
+            bool useAccessRestrictionStorage,
+            bool useLastTimeUsageStorage)
         {
             var foundation = useFoundation ? constructFoundation() : null;
             var actualDialogService = useDialogService ? Substitute.For<IDialogService>() : null;
@@ -83,6 +86,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
             var actualNavigationService = useNavigationService ? Substitute.For<IMvxNavigationService>() : null;
             var actualApiErrorHandlingService = useApiErrorHandlingService ? Substitute.For<IErrorHandlingService>() : null;
             var actualAccessRestrictionStorage = useAccessRestrictionStorage ? Substitute.For<IAccessRestrictionStorage>() : null;
+            var actualLastTimeUsageStorage = useLastTimeUsageStorage ? Substitute.For<ILastTimeUsageStorage>() : null;
 
             Action tryingToConstructWithEmptyParameters = () =>
                 foundation.StartRegisteringPlatformServices()
@@ -94,6 +98,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                     .WithNavigationService(actualNavigationService)
                     .WithErrorHandlingService(actualApiErrorHandlingService)
                     .WithAccessRestrictionStorage(actualAccessRestrictionStorage)
+                    .WithLastTimeUsageStorage(actualLastTimeUsageStorage)
                     .Build();
 
             tryingToConstructWithEmptyParameters
@@ -112,6 +117,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
             var actualNavigationService = Substitute.For<IMvxNavigationService>();
             var actualApiErrorHandlingService = Substitute.For<IErrorHandlingService>();
             var actualAccessRestrictionStorage = Substitute.For<IAccessRestrictionStorage>();
+            var actualLastTimeUsageStorage = Substitute.For<ILastTimeUsageStorage>();
 
             Action tryingToConstructWithEmptyParameters = () =>
                 foundation.StartRegisteringPlatformServices()
@@ -123,6 +129,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                     .WithNavigationService(actualNavigationService)
                     .WithErrorHandlingService(actualApiErrorHandlingService)
                     .WithAccessRestrictionStorage(actualAccessRestrictionStorage)
+                    .WithLastTimeUsageStorage(actualLastTimeUsageStorage)
                     .Build();
 
             tryingToConstructWithEmptyParameters.Should().NotThrow<Exception>();

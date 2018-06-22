@@ -102,6 +102,7 @@ namespace Toggl.Giskard
                     .WithApplicationShortcutCreator(new ApplicationShortcutCreator(ApplicationContext))
 
                     .StartRegisteringPlatformServices()
+                    .WithLastTimeUsageStorage(settingsStorage)
                     .WithDialogService<DialogService>()
                     .WithBrowserService<BrowserService>()
                     .WithKeyValueStorage(keyValueStorage)
