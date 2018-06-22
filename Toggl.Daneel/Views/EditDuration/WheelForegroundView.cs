@@ -1,4 +1,7 @@
 using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using CoreAnimation;
 using CoreGraphics;
 using MvvmCross.Plugins.Color.iOS;
@@ -8,6 +11,7 @@ using UIKit;
 using MvvmCross.Platform.Core;
 using static Toggl.Multivac.Math;
 using Toggl.Daneel.Extensions;
+using Toggl.Foundation.Analytics;
 using Toggl.Multivac.Extensions;
 
 namespace Toggl.Daneel.Views.EditDuration
@@ -86,6 +90,10 @@ namespace Toggl.Daneel.Views.EditDuration
         public event EventHandler StartTimeChanged;
 
         public event EventHandler EndTimeChanged;
+
+        private readonly  Subject<EditTimeSource> timeEditedSubject = new Subject<EditTimeSource>();
+        public IObservable<EditTimeSource> TimeEdited
+            => timeEditedSubject.AsObservable();
 
         public DateTimeOffset MinimumStartTime { get; set; }
 
@@ -245,6 +253,18 @@ namespace Toggl.Daneel.Views.EditDuration
             if (currentTouch == null || currentTouch.Phase == UITouchPhase.Ended)
             {
                 finishTouchEditing();
+                switch (updateType)
+                {
+                    case WheelUpdateType.EditStartTime:
+                        timeEditedSubject.OnNext(EditTimeSource.WheelStartTime);
+                        break;
+                    case WheelUpdateType.EditEndTime:
+                        timeEditedSubject.OnNext(EditTimeSource.WheelEndTime);
+                        break;
+                    default:
+                        timeEditedSubject.OnNext(EditTimeSource.WheelBothTimes);
+                        break;
+                }
             }
         }
 

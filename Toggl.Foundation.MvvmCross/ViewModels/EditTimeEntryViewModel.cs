@@ -480,7 +480,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             var duration = StopTime.HasValue ? Duration : (TimeSpan?)null;
             var currentDuration = DurationParameter.WithStartAndDuration(StartTime, duration);
-            var editDurationParam = new EditDurationParameters(currentDuration, isDurationInitiallyFocused);
+            var editDurationParam = new EditDurationParameters(currentDuration, false, isDurationInitiallyFocused);
             var selectedDuration = await navigationService
                 .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(editDurationParam)
                 .ConfigureAwait(false);
