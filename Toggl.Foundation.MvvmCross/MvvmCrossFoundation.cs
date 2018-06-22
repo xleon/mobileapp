@@ -206,6 +206,7 @@ namespace Toggl.Foundation.MvvmCross
                 Ensure.Argument.IsNotNull(NavigationService, nameof(NavigationService));
                 Ensure.Argument.IsNotNull(ErrorHandlingService, nameof(ErrorHandlingService));
                 Ensure.Argument.IsNotNull(AccessRestrictionStorage, nameof(AccessRestrictionStorage));
+                Ensure.Argument.IsNotNull(LastTimeUsageStorage, nameof(LastTimeUsageStorage));
             }
         }
     }

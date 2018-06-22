@@ -64,6 +64,7 @@ namespace Toggl.Daneel
 
             Mvx.RegisterSingleton<IMvxNavigationService>(navigationService);
             return navigationService;
+
         }
 
         protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
@@ -105,6 +106,7 @@ namespace Toggl.Daneel
                     .WithMailService(new MailService((ITopViewControllerProvider)Presenter))
 
                     .StartRegisteringPlatformServices()
+                    .WithLastTimeUsageStorage(settingsStorage)
                     .WithBrowserService<BrowserService>()
                     .WithKeyValueStorage(keyValueStorage)
                     .WithUserPreferences(settingsStorage)
