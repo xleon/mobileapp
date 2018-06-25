@@ -85,6 +85,7 @@ namespace Toggl.Foundation.Login
         public IObservable<ITogglDataSource> LoginWithGoogle()
             => database
                 .Clear()
+                .SelectMany(_ => googleService.LogOutIfNeeded())
                 .SelectMany(_ => googleService.GetAuthToken())
                 .SelectMany(loginWithGoogle);
 
@@ -111,6 +112,7 @@ namespace Toggl.Foundation.Login
         public IObservable<ITogglDataSource> SignUpWithGoogle()
             => database
                 .Clear()
+                .SelectMany(_ => googleService.LogOutIfNeeded())
                 .SelectMany(_ => googleService.GetAuthToken())
                 .SelectMany(signUpWithGoogle);
 
