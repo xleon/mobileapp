@@ -191,11 +191,12 @@
                 android:background="@color/separator"
                 android:layout_height="0.5dp"
                 android:layout_width="match_parent" />
-            <Button
+            <TextView
                 android:id="@+id/SettingsSubmitFeedbackButton"
                 android:textSize="15sp"
+                android:clickable="true"
+                android:focusable="true"
                 android:paddingLeft="16dp"
-                android:textAllCaps="false"
                 android:gravity="center_vertical"
                 android:text="@string/SubmitFeedback"
                 android:textColor="@android:color/black"
@@ -206,12 +207,13 @@
                 android:background="@color/separator"
                 android:layout_height="0.5dp"
                 android:layout_width="match_parent" />
-            <Button
+            <TextView
                 android:id="@+id/SettingsHelpButton"
                 android:textSize="15sp"
+                android:clickable="true"
+                android:focusable="true"
                 android:paddingLeft="16dp"
                 android:text="@string/Help"
-                android:textAllCaps="false"
                 android:gravity="center_vertical"
                 android:textColor="@android:color/black"
                 android:background="?attr/selectableItemBackground"
@@ -251,11 +253,12 @@
                 android:background="@color/separator"
                 android:layout_height="0.5dp"
                 android:layout_width="match_parent" />
-            <Button
+            <TextView
                 android:id="@+id/SettingsLogoutButton"
                 android:textSize="15sp"
+                android:clickable="true"
+                android:focusable="true"
                 android:paddingLeft="16dp"
-                android:textAllCaps="false"
                 android:text="@string/Logout"
                 android:gravity="center_vertical"
                 android:textColor="@color/errorText"

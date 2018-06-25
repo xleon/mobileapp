@@ -7,21 +7,20 @@ namespace Toggl.Giskard.Activities
 {
     public partial class SettingsActivity
     {
+        private View helpView;
+        private View aboutView;
+        private View logoutView;
+        private View feedbackView;
         private View manualModeView;
         private View avatarContainer;
         private View beginningOfWeekView;
-        private View aboutContainer;
 
         private TextView nameTextView;
         private TextView emailTextView;
-        private TextView beginningOfWeekTextView;
         private TextView versionTextView;
+        private TextView beginningOfWeekTextView;
 
         private ImageView avatarView;
-
-        private Button helpButton;
-        private Button logoutButton;
-        private Button feedbackButton;
 
         private Switch manualModeSwitch;
 
@@ -29,19 +28,18 @@ namespace Toggl.Giskard.Activities
 
         protected override void InitializeViews()
         {
+            helpView = FindViewById(Resource.Id.SettingsHelpButton);
+            aboutView = FindViewById(Resource.Id.SettingsAboutContainer);
+            logoutView = FindViewById(Resource.Id.SettingsLogoutButton);
+            feedbackView = FindViewById(Resource.Id.SettingsSubmitFeedbackButton);
             manualModeView = FindViewById(Resource.Id.SettingsToggleManualModeView);
             avatarContainer = FindViewById(Resource.Id.SettingsViewAvatarImageContainer);
             beginningOfWeekView = FindViewById(Resource.Id.SettingsSelectBeginningOfWeekView);
-            aboutContainer = FindViewById(Resource.Id.SettingsAboutContainer);
 
             nameTextView = FindViewById<TextView>(Resource.Id.SettingsNameTextView);
             emailTextView = FindViewById<TextView>(Resource.Id.SettingsEmailTextView);
-            beginningOfWeekTextView = FindViewById<TextView>(Resource.Id.SettingsBeginningOfWeekTextView);
             versionTextView = FindViewById<TextView>(Resource.Id.SettingsAppVersionTextView);
-
-            helpButton = FindViewById<Button>(Resource.Id.SettingsHelpButton);
-            logoutButton = FindViewById<Button>(Resource.Id.SettingsLogoutButton);
-            feedbackButton = FindViewById<Button>(Resource.Id.SettingsSubmitFeedbackButton);
+            beginningOfWeekTextView = FindViewById<TextView>(Resource.Id.SettingsBeginningOfWeekTextView);
 
             avatarView = FindViewById<ImageView>(Resource.Id.SettingsViewAvatarImage);
             manualModeSwitch = FindViewById<Switch>(Resource.Id.SettingsIsManualModeEnabledSwitch);
