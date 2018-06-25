@@ -409,6 +409,9 @@
     <Compile Include="ViewHolders\BaseRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\WorkspaceSelectionViewHolder.cs" />
     <Compile Include="Adapters\SimpleAdapter.cs" />
+    <Compile Include="Activities\AboutActivity.cs" />
+    <Compile Include="Services\RatingService.cs" />
+    <Compile Include="Services\RemoteConfigService.cs" />
     <Compile Include="Activities\SettingsActivity.ViewBinds.cs">
       <DependentUpon>SettingsActivity.cs</DependentUpon>
     </Compile>
@@ -418,13 +421,15 @@
     <Compile Include="Activities\StartTimeEntryActivity.ViewBinds.cs">
       <DependentUpon>StartTimeEntryActivity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\RatingService.cs" />
-    <Compile Include="Services\RemoteConfigService.cs" />
+    <Compile Include="Activities\AboutActivity.ViewBinds.cs">
+      <DependentUpon>AboutActivity.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml" />
+    <AndroidResource Include="Resources\layout\AboutActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivityProjectCell.axml" />

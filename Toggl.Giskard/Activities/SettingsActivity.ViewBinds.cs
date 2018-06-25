@@ -10,10 +10,12 @@ namespace Toggl.Giskard.Activities
         private View manualModeView;
         private View avatarContainer;
         private View beginningOfWeekView;
+        private View aboutContainer;
 
         private TextView nameTextView;
         private TextView emailTextView;
         private TextView beginningOfWeekTextView;
+        private TextView versionTextView;
 
         private ImageView avatarView;
 
@@ -30,10 +32,12 @@ namespace Toggl.Giskard.Activities
             manualModeView = FindViewById(Resource.Id.SettingsToggleManualModeView);
             avatarContainer = FindViewById(Resource.Id.SettingsViewAvatarImageContainer);
             beginningOfWeekView = FindViewById(Resource.Id.SettingsSelectBeginningOfWeekView);
+            aboutContainer = FindViewById(Resource.Id.SettingsAboutContainer);
 
             nameTextView = FindViewById<TextView>(Resource.Id.SettingsNameTextView);
             emailTextView = FindViewById<TextView>(Resource.Id.SettingsEmailTextView);
             beginningOfWeekTextView = FindViewById<TextView>(Resource.Id.SettingsBeginningOfWeekTextView);
+            versionTextView = FindViewById<TextView>(Resource.Id.SettingsAppVersionTextView);
 
             helpButton = FindViewById<Button>(Resource.Id.SettingsHelpButton);
             logoutButton = FindViewById<Button>(Resource.Id.SettingsLogoutButton);
