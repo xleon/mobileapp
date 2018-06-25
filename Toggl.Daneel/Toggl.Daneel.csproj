@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.props" Condition="Exists('..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.props')" />
   <PropertyGroup>
@@ -118,6 +118,15 @@
     <Reference Include="OnePasswordExtension">
       <HintPath>..\packages\Xamarin.1PasswordExtension.1.8.4\lib\Xamarin.iOS10\OnePasswordExtension.dll</HintPath>
     </Reference>
+    <Reference Include="System.Reactive.PlatformServices">
+      <HintPath>..\packages\System.Reactive.PlatformServices.3.0.0\lib\netstandard1.3\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Core">
+      <HintPath>..\packages\Xamarin.Google.iOS.Core.3.1.0\lib\Xamarin.iOS10\Google.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.SignIn">
+      <HintPath>..\packages\Xamarin.Google.iOS.SignIn.4.1.0\lib\Xamarin.iOS10\Google.SignIn.dll</HintPath>
+    </Reference>
     <Reference Include="MvvmCross.Platform">
       <HintPath>..\packages\MvvmCross.Platform.5.5.2\lib\Xamarin.iOS10\MvvmCross.Platform.dll</HintPath>
     </Reference>
@@ -222,6 +231,18 @@
     </Reference>
     <Reference Include="System.Reactive.PlatformServices">
       <HintPath>..\packages\System.Reactive.PlatformServices.4.0.0\lib\netstandard2.0\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.Core">
+      <HintPath>..\packages\Xamarin.Firebase.iOS.Core.4.0.13.1\lib\Xamarin.iOS10\Firebase.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.InstanceID">
+      <HintPath>..\packages\Xamarin.Firebase.iOS.InstanceID.2.0.8\lib\Xamarin.iOS10\Firebase.InstanceID.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.Analytics">
+      <HintPath>..\packages\Xamarin.Firebase.iOS.Analytics.4.0.5.1\lib\Xamarin.iOS10\Firebase.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.RemoteConfig">
+      <HintPath>..\packages\Xamarin.Firebase.iOS.RemoteConfig.2.0.3.2\lib\Xamarin.iOS10\Firebase.RemoteConfig.dll</HintPath>
     </Reference>
     <Reference Include="System.Collections.Immutable">
       <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
@@ -499,6 +520,14 @@
     <ImageAsset Include="Resources\Images.xcassets\icOnePassword.imageset\passwordman.png" />
     <ImageAsset Include="Resources\Images.xcassets\icOnePassword.imageset\passwordman%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icOnePassword.imageset\passwordman%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\thumbsup.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\thumbsup.imageset\thumbsup.png" />
+    <ImageAsset Include="Resources\Images.xcassets\thumbsup.imageset\thumbsup%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\thumbsup.imageset\thumbsup%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\thumbsdown.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\thumbsdown.imageset\thumbsdown.png" />
+    <ImageAsset Include="Resources\Images.xcassets\thumbsdown.imageset\thumbsdown%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\thumbsdown.imageset\thumbsdown%403x.png" />
     <ImageAsset Include="Resources\Images.xcassets\confirmation.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\confirmation.imageset\confirmation.png" />
     <ImageAsset Include="Resources\Images.xcassets\confirmation.imageset\confirmation%402x.png" />
@@ -571,6 +600,7 @@
     <InterfaceDefinition Include="ViewControllers\Settings\AboutViewController.xib" />
     <InterfaceDefinition Include="Views\Log\TimeEntriesEmptyLogView.xib" />
     <InterfaceDefinition Include="Views\Log\TimeEntryMockView.xib" />
+    <InterfaceDefinition Include="Views\Rating\RatingView.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectCountryViewController.xib" />
     <InterfaceDefinition Include="Views\CountrySelection\CountryViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\ForgotPasswordViewController.xib" />
@@ -942,6 +972,10 @@
     <Compile Include="Views\LoginTextField.cs" />
     <Compile Include="Binding\ButtonAnimatedTitleTargetBinding.cs" />
     <Compile Include="Binding\LoginTextFieldFirstResponderTargetBinding.cs" />
+    <Compile Include="Views\Rating\RatingView.cs" />
+    <Compile Include="Views\Rating\RatingView.designer.cs">
+      <DependentUpon>RatingView.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\ForgotPasswordViewController.cs" />
     <Compile Include="ViewControllers\ForgotPasswordViewController.designer.cs">
       <DependentUpon>ForgotPasswordViewController.cs</DependentUpon>
@@ -956,8 +990,10 @@
       <DependentUpon>TermsOfServiceViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\RangeExtensions.cs" />
+    <Compile Include="Services\RemoteConfigService.cs" />
     <Compile Include="Extensions\ImageExtension.cs" />
     <Compile Include="Extensions\UIExtensions.cs" />
+    <Compile Include="Services\RatingService.cs" />
     <Compile Include="ViewControllers\ReactiveViewController.cs" />
     <Compile Include="Cells\BaseTableViewCell.cs" />
     <Compile Include="Cells\BaseTableHeaderFooterView.cs" />
@@ -1021,6 +1057,9 @@
     <Folder Include="Resources\Images.xcassets\bike.imageset\" />
     <Folder Include="Resources\Images.xcassets\togglLogoBig.imageset\" />
     <Folder Include="Resources\Images.xcassets\icGoogleColored.imageset\" />
+    <Folder Include="Views\Rating\" />
+    <Folder Include="Resources\Images.xcassets\thumbsup.imageset\" />
+    <Folder Include="Resources\Images.xcassets\thumbsdown.imageset\" />
     <Folder Include="Resources\Images.xcassets\confirmation.imageset\" />
     <Folder Include="Resources\Images.xcassets\icBackNoPadding.imageset\" />
     <Folder Include="Resources\Images.xcassets\paws.imageset\" />
@@ -1031,6 +1070,7 @@
     <BundleResource Include="GoogleService-Info.plist" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.RemoteConfig.2.0.3.2\build\Xamarin.Firebase.iOS.RemoteConfig.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.RemoteConfig.2.0.3.2\build\Xamarin.Firebase.iOS.RemoteConfig.targets')" />
   <Import Project="..\packages\Fody.2.4.6\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.6\build\Fody.targets')" />
   <Import Project="..\packages\Realm.Database.3.0.0\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.3.0.0\build\Realm.Database.targets')" />
   <Import Project="..\packages\Realm.3.0.0\build\Realm.targets" Condition="Exists('..\packages\Realm.3.0.0\build\Realm.targets')" />

@@ -415,9 +415,11 @@
     <Compile Include="Activities\EditTimeEntryActivity.ViewBinds.cs">
       <DependentUpon>EditTimeEntryActivity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Activities\StartTimeEntryActivity.ViewBinds.cs" >
+    <Compile Include="Activities\StartTimeEntryActivity.ViewBinds.cs">
       <DependentUpon>StartTimeEntryActivity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\RatingService.cs" />
+    <Compile Include="Services\RemoteConfigService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

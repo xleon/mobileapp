@@ -767,6 +767,42 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string RatingViewPositiveCTATitle {
+            get {
+                return ResourceManager.GetString("RatingViewPositiveCTATitle", resourceCulture);
+            }
+        }
+        
+        public static string RatingViewNegativeCTATitle {
+            get {
+                return ResourceManager.GetString("RatingViewNegativeCTATitle", resourceCulture);
+            }
+        }
+        
+        public static string RatingViewPositiveCTADescription {
+            get {
+                return ResourceManager.GetString("RatingViewPositiveCTADescription", resourceCulture);
+            }
+        }
+        
+        public static string RatingViewNegativeCTADescription {
+            get {
+                return ResourceManager.GetString("RatingViewNegativeCTADescription", resourceCulture);
+            }
+        }
+        
+        public static string RatingViewPositiveCTAButtonTitle {
+            get {
+                return ResourceManager.GetString("RatingViewPositiveCTAButtonTitle", resourceCulture);
+            }
+        }
+        
+        public static string RatingViewNegativeCTAButtonTitle {
+            get {
+                return ResourceManager.GetString("RatingViewNegativeCTAButtonTitle", resourceCulture);
+            }
+        }
+        
         public static string ArchivedProjectDecorator {
             get {
                 return ResourceManager.GetString("ArchivedProjectDecorator", resourceCulture);

@@ -15,6 +15,7 @@ namespace Toggl.PrimeRadiant.Settings
         private const string userSignedUpUsingTheAppKey = "UserSignedUpUsingTheApp";
         private const string isNewUserKey = "IsNewUser";
         private const string lastAccessDateKey = "LastAccessDate";
+        private const string firstAccessDateKey = "FirstAccessDate";
         private const string completedOnboardingKey = "CompletedOnboarding";
 
         private const string preferManualModeKey = "PreferManualMode";
@@ -28,6 +29,9 @@ namespace Toggl.PrimeRadiant.Settings
 
         private const string onboardingPrefix = "Onboarding_";
 
+        private const string ratingViewOutcomeKey = "RatingViewOutcome";
+        private const string ratingViewOutcomeTimeKey = "RatingViewOutcomeTime";
+        
         private const string lastSyncAttemptKey = "LastSyncAttempt";
         private const string lastSuccessfulSyncKey = "LastSuccessfulSync";
         private const string lastLoginKey = "LastLogin";
@@ -127,6 +131,12 @@ namespace Toggl.PrimeRadiant.Settings
             keyValueStorage.SetString(lastAccessDateKey, dateString);
         }
 
+        public void SetFirstOpened(DateTimeOffset dateTime)
+        {
+            if (GetFirstOpened() == null)
+                keyValueStorage.SetString(firstAccessDateKey, dateTime.ToString());
+        }
+
         public void SetUserSignedUp()
         {
             userSignedUpUsingTheAppSubject.OnNext(true);
@@ -147,6 +157,16 @@ namespace Toggl.PrimeRadiant.Settings
         public bool CompletedOnboarding() => keyValueStorage.GetBool(completedOnboardingKey);
 
         public string GetLastOpened() => keyValueStorage.GetString(lastAccessDateKey);
+
+        public DateTimeOffset? GetFirstOpened()
+        {
+            var dateString = keyValueStorage.GetString(firstAccessDateKey);
+
+            if (string.IsNullOrEmpty(dateString))
+                return null;
+
+            return DateTimeOffset.Parse(dateString);
+        }
 
         public void StartButtonWasTapped()
         {
@@ -183,6 +203,24 @@ namespace Toggl.PrimeRadiant.Settings
             hasEditedTimeEntrySubject.OnNext(true);
             keyValueStorage.SetBool(hasEditedTimeEntryKey, true);
         }
+
+        public void SetRatingViewOutcome(RatingViewOutcome outcome, DateTimeOffset dateTime)
+        {
+            keyValueStorage.SetInt(ratingViewOutcomeKey, (int)outcome);
+            keyValueStorage.SetDateTimeOffset(ratingViewOutcomeTimeKey, dateTime);
+        }
+
+        public RatingViewOutcome? RatingViewOutcome()
+        {
+            var defaultIntValue = -1;
+            var intValue = keyValueStorage.GetInt(ratingViewOutcomeKey, defaultIntValue);
+            if (intValue == defaultIntValue)
+                return null;
+            return (RatingViewOutcome)intValue;
+        }
+
+        public DateTimeOffset? RatingViewOutcomeTime()
+            => keyValueStorage.GetDateTimeOffset(ratingViewOutcomeTimeKey);
 
         public bool WasDismissed(IDismissable dismissable) => keyValueStorage.GetBool(onboardingPrefix + dismissable.Key);
 

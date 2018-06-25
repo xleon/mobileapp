@@ -8,12 +8,16 @@ namespace Toggl.PrimeRadiant.Settings
 
         string GetString(string key);
 
+        int GetInt(string key, int defaultValue);
+      
         DateTimeOffset? GetDateTimeOffset(string key);
 
         void SetBool(string key, bool value);
 
         void SetString(string key, string value);
 
+        void SetInt(string key, int value);
+      
         void SetDateTimeOffset(string key, DateTimeOffset value);
 
         void Remove(string key);

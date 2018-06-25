@@ -29,6 +29,16 @@ namespace Toggl.Foundation.Analytics
 
         IAnalyticsEvent<Type> CurrentPage { get; }
 
+        IAnalyticsEvent<TimeEntryStartOrigin> TimeEntryStarted { get; }
+
+        IAnalyticsEvent AppWasRated { get; }
+      
+        IAnalyticsEvent RatingViewWasShown { get; }
+      
+        IAnalyticsEvent<bool> UserFinishedRatingViewFirstStep { get; }
+      
+        IAnalyticsEvent<RatingViewSecondStepOutcome> UserFinishedRatingViewSecondStep { get; }
+
         IAnalyticsEvent DeleteTimeEntry { get; }
 
         IAnalyticsEvent<string> ApplicationShortcut { get; }

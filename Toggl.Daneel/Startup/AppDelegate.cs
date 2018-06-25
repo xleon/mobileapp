@@ -5,16 +5,15 @@ using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.iOS.Platform;
 using MvvmCross.Platform;
+using MvvmCross.Plugins.Color.iOS;
+using Toggl.Daneel.Extensions;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Interactors;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using MvvmCross.Plugins.Color.iOS;
-using Toggl.Foundation.Analytics;
 using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Shortcuts;
 using UIKit;
-using Toggl.Daneel.Extensions;
 
 
 namespace Toggl.Daneel
