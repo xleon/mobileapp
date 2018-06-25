@@ -178,6 +178,10 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.SuggestionTappedCommad)
                       .To(vm => vm.SuggestionsViewModel.StartTimeEntryCommand);
 
+            bindingSet.Bind(StartTimeEntryButton)
+                      .For(v => v.BindLongPress())
+                      .To(vm => vm.AlternativeStartTimeEntryCommand);
+
             //Visibility
             bindingSet.Bind(WelcomeBackView)
                       .For(v => v.BindVisibility())

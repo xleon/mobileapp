@@ -965,6 +965,7 @@
     <Compile Include="Cells\SyncFailures\SyncFailureCell.designer.cs">
       <DependentUpon>SyncFailureCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Binding\ViewLongPressCommandTargetBinding.cs" />
     <Compile Include="Cells\Settings\LicensesHeaderViewCell.cs" />
     <Compile Include="Cells\Settings\LicensesHeaderViewCell.designer.cs">
       <DependentUpon>LicensesHeaderViewCell.cs</DependentUpon>
