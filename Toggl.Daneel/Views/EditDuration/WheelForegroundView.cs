@@ -1,5 +1,4 @@
 using System;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CoreAnimation;
@@ -19,7 +18,13 @@ namespace Toggl.Daneel.Views.EditDuration
     [Register(nameof(WheelForegroundView))]
     public sealed class WheelForegroundView : BaseWheelView
     {
-        private readonly CGColor backgroundColor = Color.EditDuration.Wheel.Duration.ToNativeColor().CGColor;
+        private CGColor backgroundColor
+            => Color.EditDuration.Wheel.Rainbow.GetPingPongIndexedItem(numberOfFullLoops).ToNativeColor().CGColor;
+
+        private CGColor foregroundColor
+            => Color.EditDuration.Wheel.Rainbow.GetPingPongIndexedItem(numberOfFullLoops + 1).ToNativeColor().CGColor;
+
+        private readonly CGColor capBackgroundColor = Color.EditDuration.Wheel.CapBackground.ToNativeColor().CGColor;
 
         private readonly CGColor capColor = Color.EditDuration.Wheel.Cap.ToNativeColor().CGColor;
 
@@ -39,7 +44,7 @@ namespace Toggl.Daneel.Views.EditDuration
 
         private readonly nfloat shadowRadius = 4f / 128f;
 
-        private readonly float shadowOpacity = 0.3f;
+        private readonly float shadowOpacity = 0.32f;
 
         private readonly nfloat triangleWidth = 9f / 128f;
 
@@ -400,24 +405,12 @@ namespace Toggl.Daneel.Views.EditDuration
 
             var layer = new CAShapeLayer();
             layer.Path = durationArc.CGPath;
-            layer.FillColor = backgroundColor;
+            layer.FillColor = foregroundColor;
 
-            if (isFullCircle)
-            {
-                // cap shadows
-                var shadowPath = new UIBezierPath();
-                shadowPath.AddArc(startTimePosition, capArcRadius, 0f, (nfloat)FullCircle, false);
-                shadowPath.AddArc(endTimePosition, capArcRadius, 0f, (nfloat)FullCircle, true);
+            setupEndCapShadow(layer);
 
-                layer.ShadowPath = shadowPath.CGPath;
-                layer.ShadowColor = shadowColor;
-                layer.ShadowRadius = Resize(shadowRadius);
-                layer.ShadowOpacity = shadowOpacity;
-                layer.ShadowOffset = CGSize.Empty;
-
-                var wheelLayer = CreateWheelLayer(backgroundColor);
-                layer.Mask = wheelLayer;
-            }
+            var wheelLayer = CreateWheelLayer(backgroundColor);
+            layer.Mask = wheelLayer;
 
             return layer;
         }
@@ -426,14 +419,13 @@ namespace Toggl.Daneel.Views.EditDuration
         {
             var innerRadius = Resize(capRadius);
             var outerRadius = (Radius - SmallRadius) / 2;
-            var centerDistance = SmallRadius + outerRadius;
 
             var outerPath = new UIBezierPath();
             outerPath.AddArc(center, outerRadius, 0, (nfloat)FullCircle, false);
 
             var backgroundLayer = new CAShapeLayer();
             backgroundLayer.Path = outerPath.CGPath;
-            backgroundLayer.FillColor = backgroundColor;
+            backgroundLayer.FillColor = capBackgroundColor;
 
             var innerPath = new UIBezierPath();
             innerPath.AddArc(center, innerRadius, 0, (nfloat)FullCircle, false);
@@ -454,6 +446,18 @@ namespace Toggl.Daneel.Views.EditDuration
             backgroundLayer.AddSublayer(circleLayer);
 
             return backgroundLayer;
+        }
+
+        private void setupEndCapShadow(CALayer layer)
+        {
+            var shadowPath = new UIBezierPath();
+            shadowPath.AddArc(endTimePosition, Thickness / 2f, 0, (nfloat)FullCircle, false);
+
+            layer.ShadowPath = shadowPath.CGPath;
+            layer.ShadowColor = shadowColor;
+            layer.ShadowRadius = Resize(shadowRadius);
+            layer.ShadowOpacity = shadowOpacity;
+            layer.ShadowOffset = CGSize.Empty;
         }
 
         #endregion
