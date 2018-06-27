@@ -11,6 +11,7 @@ using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Sync.ConflictResolution;
+using Toggl.Foundation.Extensions;
 
 namespace Toggl.Foundation.DataSources
 {
@@ -61,11 +62,13 @@ namespace Toggl.Foundation.DataSources
         }
 
         public override IObservable<IThreadSafeTimeEntry> Create(IThreadSafeTimeEntry entity)
-            => Repository.UpdateWithConflictResolution(entity.Id, entity, alwaysCreate, RivalsResolver)
-                .OfType<CreateResult<IDatabaseTimeEntry>>()
-                .Select(result => result.Entity)
-                .Select(Convert)
-                .Do(CreatedSubject.OnNext);
+            => Repository.BatchUpdate(new[] { (entity.Id, (IDatabaseTimeEntry)entity) }, alwaysCreate, RivalsResolver)
+                .ToThreadSafeResult(Convert)
+                .SelectMany(CommonFunctions.Identity)
+                .Do(HandleConflictResolutionResult)
+                .OfType<CreateResult<IThreadSafeTimeEntry>>()
+                .FirstAsync()
+                .Select(result => result.Entity);
 
         public IObservable<IThreadSafeTimeEntry> Stop(DateTimeOffset stopTime)
             => GetAll(te => te.IsDeleted == false && te.Duration == null)
