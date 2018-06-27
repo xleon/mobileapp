@@ -40,6 +40,8 @@ namespace Toggl.Giskard.Activities
             workspacesRecyclerView.SetAdapter(adapter);
             workspacesRecyclerView.SetLayoutManager(new LinearLayoutManager(this));
 
+            versionTextView.Text = ViewModel.Version;
+
             this.Bind(ViewModel.Name, nameTextView.BindText());
             this.Bind(ViewModel.Email, emailTextView.BindText());
             this.Bind(ViewModel.Workspaces, adapter.BindItems());
@@ -51,9 +53,10 @@ namespace Toggl.Giskard.Activities
                 avatarContainer.Visibility = ViewStates.Visible;
             });
 
-            this.Bind(logoutButton.Tapped(), ViewModel.TryLogout);
-            this.Bind(helpButton.Tapped(), ViewModel.ShowHelpView);
-            this.Bind(feedbackButton.Tapped(), ViewModel.SubmitFeedback);
+            this.Bind(logoutView.Tapped(), ViewModel.TryLogout);
+            this.Bind(helpView.Tapped(), ViewModel.ShowHelpView);
+            this.Bind(aboutView.Tapped(), ViewModel.OpenAboutView);
+            this.Bind(feedbackView.Tapped(), ViewModel.SubmitFeedback);
             this.BindVoid(manualModeView.Tapped(), ViewModel.ToggleManualMode);
             this.Bind(beginningOfWeekView.Tapped(), ViewModel.SelectBeginningOfWeek);
 

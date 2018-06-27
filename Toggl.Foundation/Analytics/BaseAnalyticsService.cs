@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Toggl.Foundation.Extensions;
 using Toggl.Multivac;
@@ -25,6 +25,9 @@ namespace Toggl.Foundation.Analytics
         [AnalyticsEvent("Source")]
         public IAnalyticsEvent<SignUpErrorSource> SignUpError { get; protected set; }
 
+        [AnalyticsEvent("AuthenticationMethod")]
+        public IAnalyticsEvent<LoginSignupAuthenticationMethod> UserIsMissingApiToken { get; protected set; }
+
         [AnalyticsEvent("PageWhenSkipWasClicked")]
         public IAnalyticsEvent<string> OnboardingSkip { get; protected set; }
 
@@ -46,9 +49,6 @@ namespace Toggl.Foundation.Analytics
         [AnalyticsEvent("CurrentPage")]
         public IAnalyticsEvent<Type> CurrentPage { get; protected set; }
 
-        [AnalyticsEvent("Origin")]
-        public IAnalyticsEvent<TimeEntryStartOrigin> TimeEntryStarted { get; protected set; }
-
         [AnalyticsEvent]
         public IAnalyticsEvent DeleteTimeEntry { get; protected set; }
 
@@ -66,6 +66,18 @@ namespace Toggl.Foundation.Analytics
 
         [AnalyticsEvent("Source")]
         public IAnalyticsEvent<ProjectTagSuggestionSource> StartEntrySelectTag { get; protected set; }
+
+        [AnalyticsEvent]
+        public IAnalyticsEvent AppWasRated { get; protected set; }
+      
+        [AnalyticsEvent]
+        public IAnalyticsEvent RatingViewWasShown { get; protected set; }
+      
+        [AnalyticsEvent("isPositive")]
+        public IAnalyticsEvent<bool> UserFinishedRatingViewFirstStep { get; protected set; }
+      
+        [AnalyticsEvent("outcome")]
+        public IAnalyticsEvent<RatingViewSecondStepOutcome> UserFinishedRatingViewSecondStep { get; protected set; }
 
         [AnalyticsEvent("Source", "TotalDays", "ProjectsNotSynced", "LoadingTime")]
         public IAnalyticsEvent<ReportsSource, int, int, double> ReportsSuccess { get; protected set; }
@@ -87,6 +99,12 @@ namespace Toggl.Foundation.Analytics
 
         [AnalyticsEvent("TapSource")]
         public IAnalyticsEvent<StartViewTapSource> StartViewTapped { get; protected set; }
+
+        [AnalyticsEvent]
+        public IAnalyticsEvent NoDefaultWorkspace { get; protected set; }
+
+        [AnalyticsEvent("Origin")]
+        public IAnalyticsEvent<TimeEntryStartOrigin> TimeEntryStarted { get; protected set; }
 
         public void Track(Exception exception)
         {

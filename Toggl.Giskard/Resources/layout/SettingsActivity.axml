@@ -10,16 +10,16 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize">
         <LinearLayout
-            android:animateLayoutChanges="true"
             android:paddingTop="24dp"
             android:orientation="vertical"
+            android:animateLayoutChanges="true"
             android:background="@color/lightGray"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <LinearLayout
                 android:id="@+id/SettingsViewAvatarImageContainer"
-                android:visibility="gone"
                 android:gravity="center"
+                android:visibility="gone"
                 android:orientation="vertical"
                 android:background="@android:color/transparent"
                 android:layout_height="72dp"
@@ -191,11 +191,12 @@
                 android:background="@color/separator"
                 android:layout_height="0.5dp"
                 android:layout_width="match_parent" />
-            <Button
+            <TextView
                 android:id="@+id/SettingsSubmitFeedbackButton"
                 android:textSize="15sp"
+                android:clickable="true"
+                android:focusable="true"
                 android:paddingLeft="16dp"
-                android:textAllCaps="false"
                 android:gravity="center_vertical"
                 android:text="@string/SubmitFeedback"
                 android:textColor="@android:color/black"
@@ -206,12 +207,13 @@
                 android:background="@color/separator"
                 android:layout_height="0.5dp"
                 android:layout_width="match_parent" />
-            <Button
+            <TextView
                 android:id="@+id/SettingsHelpButton"
                 android:textSize="15sp"
+                android:clickable="true"
+                android:focusable="true"
                 android:paddingLeft="16dp"
                 android:text="@string/Help"
-                android:textAllCaps="false"
                 android:gravity="center_vertical"
                 android:textColor="@android:color/black"
                 android:background="?attr/selectableItemBackground"
@@ -221,10 +223,42 @@
                 android:background="@color/separator"
                 android:layout_height="0.5dp"
                 android:layout_width="match_parent" />
-            <Button
+            <FrameLayout
+                android:id="@+id/SettingsAboutContainer"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:layout_height="48dp"
+                android:layout_width="match_parent">
+                <TextView
+                    android:textSize="15sp"
+                    android:paddingLeft="16dp"
+                    android:text="@string/About"
+                    android:gravity="center_vertical"
+                    android:textColor="@android:color/black"
+                    android:layout_gravity="start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/SettingsAppVersionTextView"
+                    android:textSize="15sp"
+                    android:paddingRight="16dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/defaultText"
+                    android:layout_gravity="end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+            <View
+                android:background="@color/separator"
+                android:layout_height="0.5dp"
+                android:layout_width="match_parent" />
+            <TextView
                 android:id="@+id/SettingsLogoutButton"
+                android:textSize="15sp"
+                android:clickable="true"
+                android:focusable="true"
                 android:paddingLeft="16dp"
-                android:textAllCaps="false"
                 android:text="@string/Logout"
                 android:gravity="center_vertical"
                 android:textColor="@color/errorText"
