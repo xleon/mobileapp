@@ -539,7 +539,11 @@ namespace Toggl.Daneel.ViewControllers
 
             timeEntriesCountDisposable = ViewModel.WeakSubscribe(() => ViewModel.TimeEntriesCount, onTimeEntriesCountChanged);
 
-            var swipeRightCanBeShown = tapToEditStepIsVisible.Select(isVisible => !isVisible);
+            var swipeRightCanBeShown =
+                UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
+                    ? tapToEditStepIsVisible.Select(isVisible => !isVisible)
+                    : Observable.Return(false);
+
             swipeRightStep = new SwipeRightOnboardingStep(swipeRightCanBeShown, timeEntriesCountSubject.AsObservable())
                 .ToDismissable(nameof(SwipeRightOnboardingStep), storage);
 
