@@ -57,7 +57,7 @@ namespace Toggl.Giskard.Activities
 
             var disposeBag = new CompositeDisposable();
 
-            disposeBag.Add(ViewModel.TimeEntryCardVisibility.Subscribe(onTimeEntryCardVisibilityChanged));
+            disposeBag.Add(ViewModel.IsTimeEntryRunning.Subscribe(onTimeEntryCardVisibilityChanged));
             disposeBag.Add(ViewModel.WeakSubscribe<PropertyChangedEventArgs>(nameof(ViewModel.SyncingProgress), onSyncChanged));
 
             disposable = disposeBag;
