@@ -176,6 +176,7 @@ private TemporaryFileTransformation GetAndroidGoogleServicesTransformation()
     var storageBucket = EnvironmentVariable("TOGGL_STORAGE_BUCKET");
     var mobileSdkAppId = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_MOBILE_SDK_APP_ID");
     var clientId = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID");
+    var certificateHash = EnvironmentVariable("TOGGL_DROID_CERTIFICATE_HASH");
     var apiKey = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_API_KEY");
 
     var filePath = GetFiles(path).Single();
@@ -191,6 +192,7 @@ private TemporaryFileTransformation GetAndroidGoogleServicesTransformation()
                         .Replace("{TOGGL_STORAGE_BUCKET}", storageBucket)
                         .Replace("{TOGGL_DROID_GOOGLE_SERVICES_MOBILE_SDK_APP_ID}", mobileSdkAppId)
                         .Replace("{TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID}", clientId)
+                        .Replace("{TOGGL_DROID_CERTIFICATE_HASH}", certificateHash)
                         .Replace("{TOGGL_DROID_GOOGLE_SERVICES_API_KEY}", apiKey)
     };
 }
