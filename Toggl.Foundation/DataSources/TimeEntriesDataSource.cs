@@ -22,6 +22,9 @@ namespace Toggl.Foundation.DataSources
         private long? currentlyRunningTimeEntryId;
 
         private readonly ITimeService timeService;
+
+        private readonly IRepository<IDatabaseTimeEntry> repository;
+
         private readonly Func<IDatabaseTimeEntry, IDatabaseTimeEntry, ConflictResolutionMode> alwaysCreate
             = (a, b) => ConflictResolutionMode.Create;
 
@@ -37,10 +40,12 @@ namespace Toggl.Foundation.DataSources
             : base(repository)
         {
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(repository, nameof(repository));
 
             this.timeService = timeService;
+            this.repository = repository;
 
-            CurrentlyRunningTimeEntry = 
+            CurrentlyRunningTimeEntry =
                 GetAll(te => te.IsDeleted == false && te.Duration == null)
                     .Select(tes => tes.SingleOrDefault())
                     .StartWith()
@@ -57,12 +62,12 @@ namespace Toggl.Foundation.DataSources
                     .Merge(Created)
                     .SelectMany(_ => GetAll(te => te.IsDeleted == false))
                     .Select(timeEntries => !timeEntries.Any());
-            
+
             RivalsResolver = new TimeEntryRivalsResolver(timeService);
         }
 
         public override IObservable<IThreadSafeTimeEntry> Create(IThreadSafeTimeEntry entity)
-            => Repository.BatchUpdate(new[] { (entity.Id, (IDatabaseTimeEntry)entity) }, alwaysCreate, RivalsResolver)
+            => repository.BatchUpdate(new[] { (entity.Id, (IDatabaseTimeEntry)entity) }, alwaysCreate, RivalsResolver)
                 .ToThreadSafeResult(Convert)
                 .SelectMany(CommonFunctions.Identity)
                 .Do(HandleConflictResolutionResult)
@@ -80,7 +85,7 @@ namespace Toggl.Foundation.DataSources
         public IObservable<Unit> SoftDelete(IThreadSafeTimeEntry timeEntry)
             => Observable.Return(timeEntry)
                 .Select(TimeEntry.DirtyDeleted)
-                .SelectMany(Repository.Update)
+                .SelectMany(repository.Update)
                 .Do(entity => DeletedSubject.OnNext(entity.Id))
                 .Select(_ => Unit.Default);
 

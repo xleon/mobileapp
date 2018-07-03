@@ -20,13 +20,12 @@ namespace Toggl.Foundation.Sync.States.Push
 
         public StateResult<TThreadsafeModel> EntityChanged { get; } = new StateResult<TThreadsafeModel>();
 
-        public StateResult<TThreadsafeModel> UpdatingSucceeded { get; } = new StateResult<TThreadsafeModel>();
+        public StateResult<TThreadsafeModel> Finished { get; } = new StateResult<TThreadsafeModel>();
 
         public UpdateEntityState(
             IUpdatingApiClient<TModel> api,
             IBaseDataSource<TThreadsafeModel> dataSource,
             Func<TModel, TThreadsafeModel> convertToThreadsafeModel)
-            : base(dataSource)
         {
             Ensure.Argument.IsNotNull(api, nameof(api));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -39,23 +38,17 @@ namespace Toggl.Foundation.Sync.States.Push
 
         public override IObservable<ITransition> Start(TThreadsafeModel entity)
             => update(entity)
+                .Select(convertToThreadsafeModel)
                 .SelectMany(tryOverwrite(entity))
-                .SelectMany(result => result is IgnoreResult<TThreadsafeModel>
-                    ? entityChanged(entity)
-                    : succeeded(extractFrom(result)))
                 .Catch(Fail(entity));
 
-        private IObservable<TModel> update(TModel entity)
-            => entity == null
-                ? Observable.Throw<TModel>(new ArgumentNullException(nameof(entity)))
-                : api.Update(entity);
-
-        private IObservable<ITransition> entityChanged(TThreadsafeModel entity)
-            => Observable.Return(EntityChanged.Transition(entity));
-
-        private Func<TModel, IObservable<IConflictResolutionResult<TThreadsafeModel>>> tryOverwrite(TModel entity)
-            => updatedEntity => dataSource.OverwriteIfOriginalDidNotChange(
-            convertToThreadsafeModel(entity), convertToThreadsafeModel(updatedEntity));
+        private Func<TThreadsafeModel, IObservable<ITransition>> tryOverwrite(TThreadsafeModel originalEntity)
+            => updatedEntity
+                => dataSource.OverwriteIfOriginalDidNotChange(originalEntity, updatedEntity)
+                    .Select(result =>
+                        result is IgnoreResult<TThreadsafeModel>
+                            ? EntityChanged.Transition(originalEntity)
+                            : Finished.Transition(extractFrom(result)));
 
         private TThreadsafeModel extractFrom(IConflictResolutionResult<TThreadsafeModel> result)
         {
@@ -70,7 +63,9 @@ namespace Toggl.Foundation.Sync.States.Push
             }
         }
 
-        private IObservable<ITransition> succeeded(TThreadsafeModel entity)
-            => Observable.Return((ITransition)UpdatingSucceeded.Transition(entity));
+        private IObservable<TModel> update(TModel entity)
+            => entity == null
+                ? Observable.Throw<TModel>(new ArgumentNullException(nameof(entity)))
+                : api.Update(entity);
     }
 }

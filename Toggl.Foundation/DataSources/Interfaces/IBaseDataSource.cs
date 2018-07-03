@@ -11,8 +11,6 @@ namespace Toggl.Foundation.DataSources.Interfaces
 
         IObservable<T> Update(T entity);
 
-        IObservable<T> Overwrite(T original, T entity);
-
         IObservable<IConflictResolutionResult<T>> OverwriteIfOriginalDidNotChange(T original, T entity);
     }
 }

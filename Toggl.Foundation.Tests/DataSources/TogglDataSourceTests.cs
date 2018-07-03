@@ -236,11 +236,11 @@ namespace Toggl.Foundation.Tests.DataSources
                 where TModel : class
                 where TDatabaseModel : TModel, IDatabaseSyncable
             {
-                private readonly IRepository<TDatabaseModel> repository;
+                private readonly IBaseStorage<TDatabaseModel> repository;
                 private readonly Func<TModel, TDatabaseModel> dirty;
                 private readonly Func<TModel, string, TDatabaseModel> unsyncable;
 
-                public BaseHasUnsyncedDataTest(Func<ITogglDatabase, IRepository<TDatabaseModel>> repository,
+                public BaseHasUnsyncedDataTest(Func<ITogglDatabase, IBaseStorage<TDatabaseModel>> repository,
                     Func<TModel, TDatabaseModel> dirty, Func<TModel, string, TDatabaseModel> unsyncable)
                 {
                     this.repository = repository(Database);

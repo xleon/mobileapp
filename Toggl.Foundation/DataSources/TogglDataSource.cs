@@ -123,7 +123,7 @@ namespace Toggl.Foundation.DataSources
                 .Do(_ => shortcutCreator.OnLogout())
                 .FirstAsync();
 
-        private IObservable<bool> hasUnsyncedData<TModel>(IRepository<TModel> repository)
+        private IObservable<bool> hasUnsyncedData<TModel>(IBaseStorage<TModel> repository)
             where TModel : IDatabaseSyncable
             => repository
                 .GetAll(entity => entity.SyncStatus != SyncStatus.InSync)

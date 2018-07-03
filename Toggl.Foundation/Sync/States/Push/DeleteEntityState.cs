@@ -25,7 +25,6 @@ namespace Toggl.Foundation.Sync.States.Push
         public DeleteEntityState(
             IDeletingApiClient<TModel> api,
             IDataSource<TThreadsafeModel, TDatabaseModel> dataSource)
-            : base(dataSource)
         {
             Ensure.Argument.IsNotNull(api, nameof(api));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));

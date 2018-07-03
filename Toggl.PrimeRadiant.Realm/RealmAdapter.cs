@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Realms;
 using Toggl.Multivac;
+using Toggl.PrimeRadiant.Models;
 using Toggl.PrimeRadiant.Realm.Models;
 
 namespace Toggl.PrimeRadiant.Realm
@@ -13,6 +14,8 @@ namespace Toggl.PrimeRadiant.Realm
         IQueryable<TModel> GetAll();
 
         TModel Get(long id);
+
+        TModel ChangeId(long currentId, long newId);
 
         void Delete(long id);
 
@@ -59,6 +62,20 @@ namespace Toggl.PrimeRadiant.Realm
 
         public TModel Get(long id)
             => getRealmInstance().All<TRealmEntity>().Single(matchEntity(id));
+
+        public TModel ChangeId(long currentId, long newId)
+        {
+            return doModyfingTransaction(currentId, (realm, realmEntity) =>
+            {
+                if (realmEntity is IModifiableId modifiableEntity)
+                {
+                    modifiableEntity.ChangeId(newId);
+                    return;
+                }
+
+                throw new InvalidOperationException($"Cannot change ID of entity of type {typeof(TModel)} which does not implement {nameof(IModifiableId)}.");
+            });
+        }
 
         public TModel Create(TModel entity)
         {
