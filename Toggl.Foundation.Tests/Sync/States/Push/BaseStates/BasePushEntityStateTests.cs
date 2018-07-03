@@ -87,6 +87,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Push.BaseStates
 
         [Theory, LogIfTooSlow]
         [MemberData(nameof(ApiExceptions.ExceptionsWhichCauseRethrow), MemberType = typeof(ApiExceptions))]
+        [MemberData(nameof(ExtraExceptionsToRethrow))]
         public void ThrowsWhenExceptionsWhichShouldBeRethrownAreCaught(Exception exception)
         {
             var state = CreateState();
@@ -105,6 +106,11 @@ namespace Toggl.Foundation.Tests.Sync.States.Push.BaseStates
             caughtException.Should().NotBeNull();
             caughtException.Should().BeAssignableTo(exception.GetType());
         }
+
+        public static IEnumerable<object[]> ExtraExceptionsToRethrow => new[]
+        {
+            new object[] { new OfflineException(new Exception()) }
+        };
 
         protected abstract PushSyncOperation Operation { get; }
 
