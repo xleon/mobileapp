@@ -26,6 +26,22 @@ namespace Toggl.Giskard.Extensions
             return new PopupOffsets(horizontalOffset, verticalOffset);
         }
 
+        public static PopupOffsets TopRightFrom(this PopupWindow popupWindow,
+            View anchor,
+            int dpExtraRightMargin = 0,
+            int dpExtraBottomMargin = 0)
+        {
+            var contentWindow = popupWindow.ContentView;
+            if (contentWindow == null)
+            {
+                throw new AndroidRuntimeException("The contentView must be set before calling this method");
+            }
+
+            var horizontalOffset = -contentWindow.MeasuredWidth + anchor.Width + dpExtraRightMargin.DpToPixels(contentWindow.Context);
+            var verticalOffset = -(contentWindow.MeasuredHeight + anchor.Height + dpExtraBottomMargin.DpToPixels(contentWindow.Context));
+            return new PopupOffsets(horizontalOffset, verticalOffset);
+        }
+
         public static PopupOffsets TopHorizontallyCenteredOffsetsTo(this PopupWindow popupWindow,
             View anchor,
             int dpExtraTopMargin = 0)

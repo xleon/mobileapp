@@ -38,6 +38,7 @@ namespace Toggl.Giskard.Activities
         private FloatingActionButton stopButton;
         private CoordinatorLayout coordinatorLayout;
         private PopupWindow playButtonTooltipPopupWindow;
+        private PopupWindow stopButtonTooltipPopupWindow;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -64,6 +65,7 @@ namespace Toggl.Giskard.Activities
             disposeBag.Add(ViewModel.WeakSubscribe<PropertyChangedEventArgs>(nameof(ViewModel.SyncingProgress), onSyncChanged));
 
             setupStartTimeEntryOnboardingStep();
+            setupStopTimeEntryOnboardingStep();
         }
 
         protected override void Dispose(bool disposing)
@@ -74,6 +76,13 @@ namespace Toggl.Giskard.Activities
 
             disposeBag?.Dispose();
             disposeBag = null;
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+            playButtonTooltipPopupWindow.Dismiss();
+            stopButtonTooltipPopupWindow.Dismiss();
         }
 
         private void onSyncChanged(object sender, PropertyChangedEventArgs args)
@@ -147,14 +156,32 @@ namespace Toggl.Giskard.Activities
                     Resource.String.OnboardingTapToStartTimer);
             }
 
-            var storage = ViewModel.OnboardingStorage;
-
-            new StartTimeEntryOnboardingStep(storage)
+            new StartTimeEntryOnboardingStep(ViewModel.OnboardingStorage)
                 .ManageDismissableTooltip(
                     playButtonTooltipPopupWindow,
                     playButton,
                     (popup, anchor) => popup.LeftVerticallyCenteredOffsetsTo(anchor, dpExtraRightMargin: 8),
-                    storage)
+                    ViewModel.OnboardingStorage)
+                .DisposedBy(disposeBag);
+        }
+
+        private void setupStopTimeEntryOnboardingStep()
+        {
+            if (stopButtonTooltipPopupWindow == null)
+            {
+                stopButtonTooltipPopupWindow = PopupWindowFactory.PopupWindowWithText(
+                    this,
+                    Resource.Layout.TooltipWithRightBottomArrow,
+                    Resource.Id.TooltipText,
+                    Resource.String.OnboardingTapToStopTimer);
+            }
+
+            new StopTimeEntryOnboardingStep(ViewModel.OnboardingStorage, ViewModel.IsTimeEntryRunning)
+                .ManageDismissableTooltip(
+                    stopButtonTooltipPopupWindow,
+                    stopButton,
+                    (popup, anchor) => popup.TopRightFrom(anchor, dpExtraBottomMargin: 8),
+                    ViewModel.OnboardingStorage)
                 .DisposedBy(disposeBag);
         }
 
