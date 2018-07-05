@@ -7,6 +7,7 @@ using System.Reactive.Subjects;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Services;
@@ -39,11 +40,21 @@ namespace Toggl.Foundation.Tests.DataSources
             protected ISubject<SyncProgress> ProgressSubject = new Subject<SyncProgress>();
             protected TimeSpan MinimumTimeInBackgroundForFullSync = TimeSpan.FromMinutes(5);
             protected IApplicationShortcutCreator ApplicationShortcutCreator { get; } = Substitute.For<IApplicationShortcutCreator>();
+            protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
 
             public TogglDataSourceTest()
             {
                 SyncManager.ProgressObservable.Returns(ProgressSubject.AsObservable());
-                DataSource = new TogglDataSource(Api, Database, TimeService, ErrorHandlingService, BackgroundService, _ => SyncManager, MinimumTimeInBackgroundForFullSync, ApplicationShortcutCreator);
+                DataSource = new TogglDataSource(
+                    Api,
+                    Database,
+                    TimeService,
+                    ErrorHandlingService,
+                    BackgroundService,
+                    _ => SyncManager,
+                    MinimumTimeInBackgroundForFullSync,
+                    ApplicationShortcutCreator,
+                    AnalyticsService);
             }
         }
 

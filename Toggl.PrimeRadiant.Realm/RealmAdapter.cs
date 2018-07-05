@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using Realms;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
 using Toggl.PrimeRadiant.Realm.Models;
 
@@ -122,10 +124,7 @@ namespace Toggl.PrimeRadiant.Realm
                     return result;
                 }).ToList();
 
-                foreach (var entityWithPotentialRival in entitiesWithPotentialRival)
-                {
-                    resolvePotentialRivals(realm, entityWithPotentialRival, rivalsResolver, results);
-                }
+                resolvePotentialRivals(realm, entitiesWithPotentialRival, rivalsResolver, results);
 
                 transaction.Commit();
                 return results;
@@ -206,13 +205,45 @@ namespace Toggl.PrimeRadiant.Realm
 
         private void resolvePotentialRivals(
             Realms.Realm realm,
-            TRealmEntity entity,
+            IList<TRealmEntity> entitiesWithPotentialRivals,
             IRivalsResolver<TModel> resolver,
             List<IConflictResolutionResult<TModel>> results)
         {
-            var rival = (TRealmEntity)realm.All<TRealmEntity>().SingleOrDefault(resolver.AreRivals(entity));
-            if (rival == null) return;
+            var entitiesWithRivals = entitiesWithPotentialRivals
+                .Select(entity => (entity: entity, rival: findRival(realm, entity, resolver)))
+                .Where(tuple => tuple.rival != null)
+                .Aggregate(
+                    new List<(TRealmEntity entity, TRealmEntity rival)>(),
+                    (list, tuple) =>
+                    {
+                        if (list.None(selectedTuple =>
+                                selectedTuple.entity.Equals(tuple.entity) && selectedTuple.rival.Equals(tuple.rival)
+                                || selectedTuple.entity.Equals(tuple.rival) && selectedTuple.rival.Equals(tuple.entity)))
+                        {
+                            list.Add(tuple);
+                        }
 
+                        return list;
+                    });
+
+            entitiesWithRivals.ForEach(
+                tuple => resolveRivals(realm, tuple.entity, tuple.rival, resolver, results));
+        }
+
+        private TRealmEntity findRival(
+            Realms.Realm realm,
+            TRealmEntity entity,
+            IRivalsResolver<TModel> resolver)
+            => (TRealmEntity)realm.All<TRealmEntity>()
+                .SingleOrDefault(resolver.AreRivals(entity));
+
+        private void resolveRivals(
+            Realms.Realm realm,
+            TRealmEntity entity,
+            TRealmEntity rival,
+            IRivalsResolver<TModel> resolver,
+            List<IConflictResolutionResult<TModel>> results)
+        {
             var originalRivalId = getId(rival);
 
             var (fixedEntity, fixedRival) = resolver.FixRivals(entity, rival, realm.All<TRealmEntity>());

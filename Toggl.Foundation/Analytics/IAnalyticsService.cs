@@ -55,6 +55,8 @@ namespace Toggl.Foundation.Analytics
 
         IAnalyticsEvent<string, string> HandledException { get; }
 
+        IAnalyticsEvent TwoRunningTimeEntriesInconsistencyFixed { get; }
+
         void Track(string eventName, Dictionary<string, string> parameters = null);
 
         void Track(Exception exception);

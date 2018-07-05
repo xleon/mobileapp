@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Reports;
@@ -38,7 +40,8 @@ namespace Toggl.Foundation.DataSources
             IBackgroundService backgroundService,
             Func<ITogglDataSource, ISyncManager> createSyncManager,
             TimeSpan minimumTimeInBackgroundForFullSync,
-            IApplicationShortcutCreator shortcutCreator)
+            IApplicationShortcutCreator shortcutCreator,
+            IAnalyticsService analyticsService)
         {
             Ensure.Argument.IsNotNull(api, nameof(api));
             Ensure.Argument.IsNotNull(database, nameof(database));
@@ -47,6 +50,7 @@ namespace Toggl.Foundation.DataSources
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(createSyncManager, nameof(createSyncManager));
             Ensure.Argument.IsNotNull(shortcutCreator, nameof(shortcutCreator));
+            Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
 
             this.database = database;
             this.errorHandlingService = errorHandlingService;
@@ -61,7 +65,7 @@ namespace Toggl.Foundation.DataSources
             Clients = new ClientsDataSource(database.IdProvider, database.Clients, timeService);
             Preferences = new PreferencesDataSource(database.Preferences);
             Projects = new ProjectsDataSource(database.IdProvider, database.Projects, timeService);
-            TimeEntries = new TimeEntriesDataSource(database.TimeEntries, timeService);
+            TimeEntries = new TimeEntriesDataSource(database.TimeEntries, timeService, analyticsService);
             Workspaces = new WorkspacesDataSource(database.Workspaces);
             WorkspaceFeatures = new WorkspaceFeaturesDataSource(database.WorkspaceFeatures);
 
