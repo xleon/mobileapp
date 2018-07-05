@@ -14,8 +14,11 @@ using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Views.Attributes;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.MvvmCross.Extensions;
+using Toggl.Foundation.MvvmCross.Onboarding.StartTimeEntryView;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
+using Toggl.Giskard.Helper;
+using Toggl.Giskard.Views;
 using Toggl.Multivac.Extensions;
 using static Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
 
@@ -24,9 +27,12 @@ namespace Toggl.Giskard.Activities
     [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme",
               ScreenOrientation = ScreenOrientation.Portrait,
+              WindowSoftInputMode = SoftInput.StateVisible,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class StartTimeEntryActivity : MvxAppCompatActivity<StartTimeEntryViewModel>, IReactiveBindingHolder
     {
+        private PopupWindow onboardingPopupWindow;
+
         public CompositeDisposable DisposeBag { get; } = new CompositeDisposable();
 
         protected override void OnCreate(Bundle bundle)
@@ -38,6 +44,7 @@ namespace Toggl.Giskard.Activities
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
 
             initializeViews();
+            setupStartTimeEntryOnboardingStep();
 
             this.Bind(ViewModel.TextFieldInfoObservable, onTextFieldInfo);
             this.Bind(durationLabel.Tapped(), _ => ViewModel.SelectTimeCommand.Execute(Duration));
@@ -48,6 +55,18 @@ namespace Toggl.Giskard.Activities
                 .ObserveOn(SynchronizationContext.Current)
                 .Subscribe(async spans => await ViewModel.OnTextFieldInfoFromView(spans))
                 .DisposedBy(DisposeBag);
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            editText.RequestFocus();
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+            onboardingPopupWindow.Dismiss();
         }
 
         public override void Finish()
@@ -67,10 +86,26 @@ namespace Toggl.Giskard.Activities
             return base.OnKeyDown(keyCode, e);
         }
 
-        protected override void OnResume()
+        private void setupStartTimeEntryOnboardingStep()
         {
-            base.OnResume();
-            FindViewById<EditText>(Resource.Id.StartTimeEntryDescriptionTextField).RequestFocus();
+            if (onboardingPopupWindow == null)
+            {
+                onboardingPopupWindow = PopupWindowFactory.PopupWindowWithText(
+                    this,
+                    Resource.Layout.TooltipWithCenteredBottomArrow,
+                    Resource.Id.TooltipText,
+                    Resource.String.OnboardingAddProjectOrTag);
+            }
+
+            var storage = ViewModel.OnboardingStorage;
+
+            new AddProjectOrTagOnboardingStep(storage, ViewModel.DataSource)
+                .ManageDismissableTooltip(
+                    onboardingPopupWindow,
+                    selectProjectToolbarButton,
+                    (popup, anchor) => popup.TopHorizontallyCenteredOffsetsTo(anchor, 8),
+                    storage)
+                .DisposedBy(DisposeBag);
         }
 
         protected override void Dispose(bool disposing)
