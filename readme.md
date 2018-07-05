@@ -1,4 +1,4 @@
-# Toggl Mobile App [![Build Status](https://www.bitrise.io/app/31fd88fdcf5f2329.svg?token=Tv76Nt2zEuMJNnmlfoWrjw&branch=develop)](https://www.bitrise.io/app/31fd88fdcf5f2329)
+# Toggl Mobile App [![Build Status](https://app.bitrise.io/app/31fd88fdcf5f2329/status.svg?token=Tv76Nt2zEuMJNnmlfoWrjw&branch=develop)](https://app.bitrise.io/app/31fd88fdcf5f2329)
 
 This is the codebase of the Toggl Mobile App.
 
