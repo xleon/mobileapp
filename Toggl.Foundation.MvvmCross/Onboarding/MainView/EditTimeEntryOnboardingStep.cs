@@ -17,8 +17,24 @@ namespace Toggl.Foundation.MvvmCross.Onboarding.MainView
 
             ShouldBeVisible = onboardingStorage.UserSignedUpUsingTheApp.CombineLatest(
                 onboardingStorage.HasTappedTimeEntry,
+                onboardingStorage.NavigatedAwayFromMainViewAfterTappingStopButton,
+                onboardingStorage.HasTimeEntryBeenContinued,
                 isTimeEntriesLogEmpty,
-                (signedUpUsingTheApp, hasTappedTimeEntry, isEmpty) => signedUpUsingTheApp && !hasTappedTimeEntry && !isEmpty);
+                shouldBeVisible);
+        }
+
+        private bool shouldBeVisible(
+            bool signedUpUsingTheApp,
+            bool hasTappedTimeEntry,
+            bool navigatedAwayFromMainViewAfterTappingStopButton,
+            bool hasTimeEntryBeenContinued,
+            bool isEmpty)
+        {
+            return signedUpUsingTheApp 
+                && !navigatedAwayFromMainViewAfterTappingStopButton 
+                && !hasTimeEntryBeenContinued 
+                && !hasTappedTimeEntry 
+                && !isEmpty;
         }
     }
 }

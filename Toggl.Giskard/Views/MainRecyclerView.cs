@@ -1,19 +1,30 @@
 ﻿using System;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Android.Content;
 using Android.Runtime;
+using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
 using Android.Util;
 using Android.Views;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Giskard.Adapters;
+using Toggl.Giskard.TemplateSelectors;
+using System.Reactive;
 
 namespace Toggl.Giskard.Views
 {
     [Register("toggl.giskard.views.TimeEntriesLogRecyclerView")]
     public sealed class MainRecyclerView : MvxRecyclerView
     {
+        private BehaviorSubject<View> firstTimeEntryViewSubject = new BehaviorSubject<View>(null);
+        private IDisposable firstTimeEntryViewUpdateDisposable;
+
         public MainRecyclerAdapter MainRecyclerAdapter => (MainRecyclerAdapter)Adapter;
+
+        public IObservable<View> FirstTimeEntryView { get; }
 
         public SuggestionsViewModel SuggestionsViewModel
         {
@@ -53,6 +64,56 @@ namespace Toggl.Giskard.Views
             var callback = new MainRecyclerViewTouchCallback(context, this);
             ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
             mItemTouchHelper.AttachToRecyclerView(this);
+
+            firstTimeEntryViewUpdateDisposable = Observable
+                .FromEventPattern<ScrollChangeEventArgs>(e => ScrollChange += e, e => ScrollChange -= e)
+                .Select(_ => Unit.Default)
+                .Merge(MainRecyclerAdapter.CollectionChange)
+                .VoidSubscribe(onFirstTimeEntryViewUpdate);
+
+            FirstTimeEntryView = firstTimeEntryViewSubject
+                .AsObservable()
+                .DistinctUntilChanged();
+        }
+
+        private void onFirstTimeEntryViewUpdate()
+        {
+            var view = findOldestTimeEntryView();
+            firstTimeEntryViewSubject.OnNext(view);
+        }
+
+        private View findOldestTimeEntryView()
+        {
+            var layoutManager = (LinearLayoutManager)GetLayoutManager();
+
+            for (var position = MainRecyclerAdapter.ItemCount - 1; position >= 0; position--)
+            {
+                var item = MainRecyclerAdapter.GetItem(position);
+                if (item is TimeEntryViewModel)
+                {
+                    View view = layoutManager.FindViewByPosition(position);
+                    if (view == null || layoutManager.GetItemViewType(view) != MainTemplateSelector.Item)
+                        return null;
+
+                    var isVisible = 
+                        layoutManager.IsViewPartiallyVisible(view, true, true) 
+                        || layoutManager.IsViewPartiallyVisible(view, false, true);
+
+                    return isVisible ? view : null;
+                }
+            }
+
+            return null;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (!disposing)
+                return;
+
+            firstTimeEntryViewUpdateDisposable?.Dispose();
         }
     }
 }

@@ -13,12 +13,16 @@ namespace Toggl.PrimeRadiant.Settings
         IObservable<bool> StopButtonWasTappedBefore { get; }
         IObservable<bool> HasSelectedProject { get; }
         IObservable<bool> ProjectOrTagWasAddedBefore { get; }
+        IObservable<bool> NavigatedAwayFromMainViewAfterTappingStopButton { get; }
+        IObservable<bool> HasTimeEntryBeenContinued { get; }
 
         void SetCompletedOnboarding();
         void SetIsNewUser(bool isNewUser);
         void SetLastOpened(DateTimeOffset dateString);
         void SetFirstOpened(DateTimeOffset dateTime);
         void SetUserSignedUp();
+        void SetNavigatedAwayFromMainViewAfterStopButton();
+        void SetTimeEntryContinued();
 
         string GetLastOpened();
         DateTimeOffset? GetFirstOpened();

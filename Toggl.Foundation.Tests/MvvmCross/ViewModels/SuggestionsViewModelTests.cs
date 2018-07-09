@@ -28,7 +28,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected ISuggestionProviderContainer Container { get; } = Substitute.For<ISuggestionProviderContainer>();
 
             protected override SuggestionsViewModel CreateViewModel()
-                => new SuggestionsViewModel(DataSource, InteractorFactory, Container);
+                => new SuggestionsViewModel(DataSource, InteractorFactory, OnboardingStorage, Container);
 
             protected void SetProviders(params ISuggestionProvider[] providers)
             {
@@ -39,18 +39,20 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheConstructor : SuggestionsViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(ThreeParameterConstructorTestData))]
+            [ClassData(typeof(FourParameterConstructorTestData))]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
                 bool useContainer,
+                bool useOnboardingStorage,
                 bool useInteractorFactory)
             {
                 var container = useContainer ? Container : null;
                 var dataSource = useDataSource ? DataSource : null;
+                var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SuggestionsViewModel(dataSource, interactorFactory, container);
+                    () => new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, container);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -195,6 +197,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.StartTimeEntryCommand.ExecuteAsync(suggestion);
 
                 InteractorFactory.Received(2).StartSuggestion(suggestion);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task MarksTheActionForOnboardingPurposes()
+            {
+                var suggestion = createSuggestion();
+
+                await ViewModel.StartTimeEntryCommand.ExecuteAsync(suggestion);
+
+                OnboardingStorage.Received().SetTimeEntryContinued();
             }
 
             private Suggestion createSuggestion()

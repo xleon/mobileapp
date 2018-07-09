@@ -251,6 +251,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             areContineButtonsEnabled = false;
             ContinueTimeEntryCommand.RaiseCanExecuteChanged();
 
+            onboardingStorage.SetTimeEntryContinued();
+
             await interactorFactory
                 .ContinueTimeEntry(timeEntryViewModel)
                 .Execute()

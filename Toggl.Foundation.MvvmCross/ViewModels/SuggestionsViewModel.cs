@@ -8,6 +8,7 @@ using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Suggestions;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
+using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -16,6 +17,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     {
         private readonly ITogglDataSource dataSource;
         private readonly IInteractorFactory interactorFactory;
+        private readonly IOnboardingStorage onboardingStorage;
         private readonly ISuggestionProviderContainer suggestionProviders;
 
         private bool areStartButtonsEnabled = true;
@@ -31,14 +33,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public SuggestionsViewModel(
             ITogglDataSource dataSource,
             IInteractorFactory interactorFactory,
+            IOnboardingStorage onboardingStorage,
             ISuggestionProviderContainer suggestionProviders)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(suggestionProviders, nameof(suggestionProviders));
+            Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
 
             this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
+            this.onboardingStorage = onboardingStorage;
             this.suggestionProviders = suggestionProviders;
 
             StartTimeEntryCommand = new MvxAsyncCommand<Suggestion>(startTimeEntry, _ => areStartButtonsEnabled);
@@ -79,6 +84,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             areStartButtonsEnabled = false;
             StartTimeEntryCommand.RaiseCanExecuteChanged();
+
+            onboardingStorage.SetTimeEntryContinued();
 
             await interactorFactory
                 .StartSuggestion(suggestion)

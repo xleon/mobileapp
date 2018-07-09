@@ -26,12 +26,14 @@ namespace Toggl.PrimeRadiant.Settings
         private const string projectOrTagWasAddedBeforeKey = "ProjectOrTagWasAddedBefore";
         private const string stopButtonWasTappedBeforeKey = "StopButtonWasTappedBefore";
         private const string hasSelectedProjectKey = "HasSelectedProject";
+        private const string navigatedAwayFromMainViewAfterTappingStopButtonKey = "NavigatedAwayFromMainView";
+        private const string hasTimeEntryBeenContinuedKey = "HasTimeEntryBeenContinued";
 
         private const string onboardingPrefix = "Onboarding_";
 
         private const string ratingViewOutcomeKey = "RatingViewOutcome";
         private const string ratingViewOutcomeTimeKey = "RatingViewOutcomeTime";
-        
+
         private const string lastSyncAttemptKey = "LastSyncAttempt";
         private const string lastSuccessfulSyncKey = "LastSuccessfulSync";
         private const string lastLoginKey = "LastLogin";
@@ -48,6 +50,8 @@ namespace Toggl.PrimeRadiant.Settings
         private readonly ISubject<bool> stopButtonWasTappedSubject;
         private readonly ISubject<bool> hasSelectedProjectSubject;
         private readonly ISubject<bool> isManualModeEnabledSubject;
+        private readonly ISubject<bool> navigatedAwayFromMainViewAfterTappingStopButtonSubject;
+        private readonly ISubject<bool> hasTimeEntryBeenContinuedSubject;
 
         public SettingsStorage(Version version, IKeyValueStorage keyValueStorage)
         {
@@ -65,6 +69,8 @@ namespace Toggl.PrimeRadiant.Settings
             (userSignedUpUsingTheAppSubject, UserSignedUpUsingTheApp) = prepareSubjectAndObservable(userSignedUpUsingTheAppKey);
             (startButtonWasTappedSubject, StartButtonWasTappedBefore) = prepareSubjectAndObservable(startButtonWasTappedBeforeKey);
             (projectOrTagWasAddedSubject, ProjectOrTagWasAddedBefore) = prepareSubjectAndObservable(projectOrTagWasAddedBeforeKey);
+            (navigatedAwayFromMainViewAfterTappingStopButtonSubject, NavigatedAwayFromMainViewAfterTappingStopButton) = prepareSubjectAndObservable(navigatedAwayFromMainViewAfterTappingStopButtonKey);
+            (hasTimeEntryBeenContinuedSubject, HasTimeEntryBeenContinued) = prepareSubjectAndObservable(hasTimeEntryBeenContinuedKey);
         }
 
         #region IAccessRestrictionStorage
@@ -125,6 +131,10 @@ namespace Toggl.PrimeRadiant.Settings
 
         public IObservable<bool> HasSelectedProject { get; }
 
+        public IObservable<bool> NavigatedAwayFromMainViewAfterTappingStopButton { get; }
+
+        public IObservable<bool> HasTimeEntryBeenContinued { get; }
+
         public void SetLastOpened(DateTimeOffset date)
         {
             var dateString = date.ToString();
@@ -141,6 +151,18 @@ namespace Toggl.PrimeRadiant.Settings
         {
             userSignedUpUsingTheAppSubject.OnNext(true);
             keyValueStorage.SetBool(userSignedUpUsingTheAppKey, true);
+        }
+
+        public void SetNavigatedAwayFromMainViewAfterStopButton()
+        {
+            navigatedAwayFromMainViewAfterTappingStopButtonSubject.OnNext(true);
+            keyValueStorage.SetBool(navigatedAwayFromMainViewAfterTappingStopButtonKey, true);
+        }
+
+        public void SetTimeEntryContinued()
+        {
+            hasTimeEntryBeenContinuedSubject.OnNext(true);
+            keyValueStorage.SetBool(hasTimeEntryBeenContinuedKey, true);
         }
 
         public void SetIsNewUser(bool isNewUser)
@@ -231,6 +253,9 @@ namespace Toggl.PrimeRadiant.Settings
             keyValueStorage.SetBool(startButtonWasTappedBeforeKey, false);
             startButtonWasTappedSubject.OnNext(false);
 
+            keyValueStorage.SetBool(hasTappedTimeEntryKey, false);
+            hasTappedTimeEntrySubject.OnNext(false);
+
             keyValueStorage.SetBool(userSignedUpUsingTheAppKey, false);
             userSignedUpUsingTheAppSubject.OnNext(false);
 
@@ -242,6 +267,12 @@ namespace Toggl.PrimeRadiant.Settings
 
             keyValueStorage.SetBool(projectOrTagWasAddedBeforeKey, false);
             projectOrTagWasAddedSubject.OnNext(false);
+
+            keyValueStorage.SetBool(navigatedAwayFromMainViewAfterTappingStopButtonKey, false);
+            navigatedAwayFromMainViewAfterTappingStopButtonSubject.OnNext(false);
+
+            keyValueStorage.SetBool(hasTimeEntryBeenContinuedKey, false);
+            hasTimeEntryBeenContinuedSubject.OnNext(false);
 
             keyValueStorage.RemoveAllWithPrefix(onboardingPrefix);
         }
@@ -282,6 +313,7 @@ namespace Toggl.PrimeRadiant.Settings
         public DateTimeOffset? LastSuccessfulSync => keyValueStorage.GetDateTimeOffset(lastSuccessfulSyncKey);
 
         public DateTimeOffset? LastLogin => keyValueStorage.GetDateTimeOffset(lastLoginKey);
+
 
         public void SetFullSyncAttempt(DateTimeOffset now)
         {

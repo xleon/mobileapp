@@ -317,6 +317,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Is<long>(p => p == threadSafeTimeEntry.Id)
                 );
             }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask MarksTheActionForOnboardingPurposes()
+            {
+                var threadSafeTimeEntry = Substitute.For<IThreadSafeTimeEntry>();
+                threadSafeTimeEntry.Duration.Returns(100);
+                var timeEntryViewModel = new TimeEntryViewModel(threadSafeTimeEntry, DurationFormat.Improved);
+
+                await ViewModel.EditCommand.ExecuteAsync(timeEntryViewModel);
+
+                OnboardingStorage.Received().TimeEntryWasTapped();
+            }
         }
 
         public sealed class TheContinueTimeEntryCommand : TimeEntriesLogViewModelTest
@@ -381,6 +393,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
 
                 InteractorFactory.Received(2).ContinueTimeEntry(timeEntryViewModel);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask MarksTheActionForOnboardingPurposes()
+            {
+                var timeEntryViewModel = createTimeEntryViewModel();
+
+                await ViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntryViewModel);
+
+                OnboardingStorage.Received().SetTimeEntryContinued();
             }
 
             private TimeEntryViewModel createTimeEntryViewModel()
