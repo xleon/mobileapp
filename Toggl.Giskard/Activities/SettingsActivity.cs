@@ -1,11 +1,11 @@
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.Graphics;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Droid.Views.Attributes;
+using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions;

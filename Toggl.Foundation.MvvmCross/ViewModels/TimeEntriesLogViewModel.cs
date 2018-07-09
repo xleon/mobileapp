@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
-using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Collections;
@@ -209,7 +208,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void onMidnight(DateTimeOffset midnight)
         {
-            ChangePresentation(new ReloadLogHint());
+            navigationService.ChangePresentation(new ReloadLogHint());
         }
 
         private void onPreferencesChanged(IThreadSafePreferences preferences)

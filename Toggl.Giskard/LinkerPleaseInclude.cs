@@ -1,18 +1,19 @@
-using System;
+﻿using System;
 using System.Collections.Specialized;
 using System.Windows.Input;
 using Android.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using MvvmCross.Binding.BindingContext;
-using MvvmCross.Binding.Droid.Target;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
-using V4Space = Android.Support.V4.Widget.Space;
-using Newtonsoft.Json.Converters;
 using Firebase.Provider;
-using MvvmCross.Binding.Droid.Views;
+using MvvmCross.Binding.BindingContext;
+using MvvmCross.IoC;
+using MvvmCross.Navigation;
+using MvvmCross.Platforms.Android.Binding.Target;
+using MvvmCross.Platforms.Android.Binding.Views;
+using MvvmCross.ViewModels;
+using Newtonsoft.Json.Converters;
+using V4Space = Android.Support.V4.Widget.Space;
 
 namespace Toggl.Giskard
 {
@@ -102,9 +103,9 @@ namespace Toggl.Giskard
             command.CanExecuteChanged += (s, e) => { if (command.CanExecute(null)) command.Execute(null); };
         }
         
-        public void Include(MvvmCross.Platform.IoC.MvxPropertyInjector injector)
+        public void Include(MvxPropertyInjector injector)
         {
-            injector = new MvvmCross.Platform.IoC.MvxPropertyInjector ();
+            injector = new MvxPropertyInjector ();
         } 
 
         public void Include(System.ComponentModel.INotifyPropertyChanged changed)
@@ -119,6 +120,11 @@ namespace Toggl.Giskard
             context.Dispose();
             var context2 = new MvxTaskBasedBindingContext();
             context2.Dispose();
+        }
+
+        public void Include(MvxViewModelViewTypeFinder typeFinder)
+        {
+            typeFinder = new MvxViewModelViewTypeFinder(null, null);
         }
 
         public void Include(MvxNavigationService service, IMvxViewModelLoader loader)

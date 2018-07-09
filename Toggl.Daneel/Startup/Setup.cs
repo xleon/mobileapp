@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using Foundation;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.iOS.Platform;
-using MvvmCross.iOS.Views.Presenters;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Platform;
-using MvvmCross.Platform.Plugins;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
+using MvvmCross;
+using MvvmCross.Plugin;
 using Toggl.Daneel.Presentation;
 using Toggl.Daneel.Services;
 using Toggl.Foundation;
@@ -22,11 +19,16 @@ using Toggl.PrimeRadiant.Realm;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
-using UIKit;
+using MvvmCross.Platforms.Ios.Core;
+using MvvmCross.Platforms.Ios.Presenters;
+using System.Collections.Generic;
+using System.Reflection;
+using ColorPlugin = MvvmCross.Plugin.Color.Platforms.Ios.Plugin;
+using VisibilityPlugin = MvvmCross.Plugin.Visibility.Platforms.Ios.Plugin;
 
 namespace Toggl.Daneel
 {
-    public partial class Setup : MvxIosSetup
+    public partial class Setup : MvxIosSetup<App<OnboardingViewModel>>
     {
         private const int maxNumberOfSuggestions = 3;
 
@@ -39,19 +41,8 @@ namespace Toggl.Daneel
         private const ApiEnvironment environment = ApiEnvironment.Staging;
 #endif
 
-        public Setup(MvxApplicationDelegate applicationDelegate, UIWindow window)
-            : this(applicationDelegate, new TogglPresenter(applicationDelegate, window))
-        {
-        }
-
-        private Setup(MvxApplicationDelegate applicationDelegate, IMvxIosViewPresenter presenter)
-            : base(applicationDelegate, presenter)
-        {
-        }
-
-        protected override IMvxTrace CreateDebugTrace() => new DebugTrace();
-
-        protected override IMvxApplication CreateApp() => new App<OnboardingViewModel>();
+        protected override IMvxIosViewPresenter CreateViewPresenter()
+            => new TogglPresenter(ApplicationDelegate, Window);
 
         protected override IMvxNavigationService InitializeNavigationService(IMvxViewModelLocatorCollection collection)
         {
@@ -64,7 +55,12 @@ namespace Toggl.Daneel
 
             Mvx.RegisterSingleton<IMvxNavigationService>(navigationService);
             return navigationService;
+        }
 
+        public override IEnumerable<Assembly> GetPluginAssemblies()
+        {
+            yield return typeof(ColorPlugin).Assembly;
+            yield return typeof(VisibilityPlugin).Assembly;
         }
 
         protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)

@@ -11,8 +11,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         public abstract class OutdatedAppViewModelTest : BaseViewModelTests<OutdatedAppViewModel>
         {
-            protected IBrowserService BrowserService { get; } = Substitute.For<IBrowserService>();
-
             protected override OutdatedAppViewModel CreateViewModel()
                 => new OutdatedAppViewModel(BrowserService);
         }

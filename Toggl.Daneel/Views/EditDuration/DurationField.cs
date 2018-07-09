@@ -1,14 +1,15 @@
 ﻿using System;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Platform.Core;
+using MvvmCross.Core;
 using Toggl.Daneel.Extensions;
 using Toggl.Foundation;
 using UIKit;
 using CoreText;
 using Toggl.Foundation.MvvmCross.Helper;
-using MvvmCross.Plugins.Color.iOS;
+using MvvmCross.Plugin.Color.Platforms.Ios;
 using ObjCRuntime;
+using MvvmCross.Base;
 
 namespace Toggl.Daneel.Views.EditDuration
 {

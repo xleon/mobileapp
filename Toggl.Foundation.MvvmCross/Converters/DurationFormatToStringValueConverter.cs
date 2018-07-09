@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using MvvmCross.Platform.Converters;
+using MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Transformations;
 using Toggl.Multivac;
 using static Toggl.Multivac.DurationFormat;

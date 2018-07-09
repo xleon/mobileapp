@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation.Helper;
 using Toggl.Foundation.MvvmCross.Parameters;
@@ -306,9 +307,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
         }
 
-        public override void ViewDestroy()
+        public override void ViewDestroy(bool viewFinishing)
         {
-            base.ViewDestroy();
+            base.ViewDestroy(viewFinishing);
             timeServiceDisposable?.Dispose();
         }
 

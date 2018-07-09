@@ -3,9 +3,9 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.Core;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
@@ -284,9 +284,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             RaisePropertyChanged(nameof(DurationFormat));
         }
 
-        public override void ViewDestroy()
+        public override void ViewDestroy(bool viewFinishing)
         {
-            base.ViewDestroy();
+            base.ViewDestroy(viewFinishing);
             runningTimeEntryDisposable?.Dispose();
             preferencesDisposable?.Dispose();
         }

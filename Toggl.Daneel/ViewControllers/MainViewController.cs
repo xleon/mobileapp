@@ -7,13 +7,13 @@ using System.Threading;
 using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.Binding.iOS;
-using MvvmCross.iOS.Views;
-using MvvmCross.iOS.Views.Presenters.Attributes;
-using MvvmCross.Platform.WeakSubscription;
-using MvvmCross.Plugins.Color;
-using MvvmCross.Plugins.Color.iOS;
-using MvvmCross.Plugins.Visibility;
+using MvvmCross.Platforms.Ios.Binding;
+using MvvmCross.Platforms.Ios.Views;
+using MvvmCross.Platforms.Ios.Presenters.Attributes;
+using MvvmCross.WeakSubscription;
+using MvvmCross.Plugin.Color;
+using MvvmCross.Plugin.Color.Platforms.Ios;
+using MvvmCross.Plugin.Visibility;
 using Toggl.Daneel.Combiners;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Suggestions;
@@ -159,7 +159,7 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.EditTimeEntryCommand);
 
             bindingSet.Bind(source)
-                      .For(v => v.SelectionChangedCommand)
+                      .For(v => v.OnSelectionChangedCommand)
                       .To(vm => vm.TimeEntriesLogViewModel.EditCommand);
 
             bindingSet.Bind(source)

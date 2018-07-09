@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using FluentAssertions;
+using MvvmCross.Tests;
 using Toggl.Foundation.MvvmCross.Converters;
 using Xunit;
 
@@ -8,7 +9,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Converters
 {
     public sealed class TimeSpanToDurationWithUnitValueConverterTests
     {
-        public sealed class TheConvertMethod
+        public sealed class TheConvertMethod : MvxIoCSupportingTest
         {
             [Fact, LogIfTooSlow]
             public void DoesNotAppendUnitIfTimeSpanIsLongerThanOneHour()

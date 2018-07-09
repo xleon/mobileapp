@@ -18,13 +18,11 @@ using Toggl.Foundation.Suggestions;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.Mocks;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Settings;
-using Xunit;
-using ThreadingTask = System.Threading.Tasks.Task;
-using static Toggl.Foundation.Helper.Constants;
 using Toggl.Multivac;
-using Toggl.Foundation.Extensions;
+using Toggl.PrimeRadiant;
+using Xunit;
+using static Toggl.Foundation.Helper.Constants;
+using ThreadingTask = System.Threading.Tasks.Task;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {

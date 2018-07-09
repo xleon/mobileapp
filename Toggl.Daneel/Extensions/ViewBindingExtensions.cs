@@ -1,7 +1,7 @@
-﻿﻿using Toggl.Daneel.Binding;
+﻿using Toggl.Daneel.Binding;
 using UIKit;
 using Toggl.Daneel.Views;
-using MvvmCross.Binding.iOS.Views;
+using MvvmCross.Platforms.Ios.Binding.Views;
 using System.Collections.Generic;
 
 namespace Toggl.Daneel.Extensions

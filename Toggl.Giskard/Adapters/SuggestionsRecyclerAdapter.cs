@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Binding.Droid.BindingContext;
-using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using Toggl.Foundation.MvvmCross.Collections;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
 using Toggl.Giskard.Views;
 
 namespace Toggl.Giskard.Adapters

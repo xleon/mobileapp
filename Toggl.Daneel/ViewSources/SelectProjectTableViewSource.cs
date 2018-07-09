@@ -1,7 +1,8 @@
 ﻿using System;
 using Foundation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Plugins.Color.iOS;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
+using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Views;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.MvvmCross.Collections;

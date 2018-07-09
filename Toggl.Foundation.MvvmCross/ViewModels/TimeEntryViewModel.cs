@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.ViewModels;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;

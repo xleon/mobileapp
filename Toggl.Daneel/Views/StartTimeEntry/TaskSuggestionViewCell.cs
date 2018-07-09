@@ -1,7 +1,7 @@
 ﻿using System;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.Binding.iOS.Views;
+using MvvmCross.Platforms.Ios.Binding.Views;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using UIKit;
 
@@ -17,7 +17,7 @@ namespace Toggl.Daneel.Views
             Nib = UINib.FromName(nameof(TaskSuggestionViewCell), NSBundle.MainBundle);
         }
 
-        protected TaskSuggestionViewCell(IntPtr handle) : base(handle)
+        public TaskSuggestionViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }

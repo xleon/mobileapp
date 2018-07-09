@@ -3,7 +3,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Android.Views;
 using Android.Widget;
-using MvvmCross.Platform.Core;
+using MvvmCross.Base;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Extensions;
 using Toggl.PrimeRadiant.Onboarding;

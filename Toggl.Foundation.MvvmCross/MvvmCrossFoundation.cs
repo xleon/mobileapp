@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reactive.Concurrency;
-using MvvmCross.Core.Navigation;
+using MvvmCross.Navigation;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Services;

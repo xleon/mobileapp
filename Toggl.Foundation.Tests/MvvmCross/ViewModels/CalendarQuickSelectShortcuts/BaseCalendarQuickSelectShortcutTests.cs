@@ -9,8 +9,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.CalendarQuickSelectShortcu
     public abstract class BaseCalendarQuickSelectShortcutTests<T> : BaseMvvmCrossTests
         where T : CalendarBaseQuickSelectShortcut
     {
-        protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
-
         protected BaseCalendarQuickSelectShortcutTests()
         {
             TimeService.CurrentDateTime.Returns(CurrentTime);

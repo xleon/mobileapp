@@ -1,13 +1,14 @@
 using System;
 using Foundation;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.iOS.Platform;
-using MvvmCross.Platform;
-using MvvmCross.Plugins.Color.iOS;
+using MvvmCross;
+using MvvmCross.Navigation;
+using MvvmCross.Platforms.Ios.Core;
+using MvvmCross.Plugin.Color.Platforms.Ios;
+using MvvmCross.ViewModels;
 using Toggl.Daneel.Extensions;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Interactors;
+using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Services;
@@ -21,7 +22,7 @@ using System.Linq;
 namespace Toggl.Daneel
 {
     [Register(nameof(AppDelegate))]
-    public sealed class AppDelegate : MvxApplicationDelegate
+    public sealed class AppDelegate : MvxApplicationDelegate<Setup, App<OnboardingViewModel>>
     {
         private IAnalyticsService analyticsService;
         private IBackgroundService backgroundService;
@@ -31,21 +32,7 @@ namespace Toggl.Daneel
 
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
-            Window = new UIWindow(UIScreen.MainScreen.Bounds);
-
-            var setup = new Setup(this, Window);
-            setup.Initialize();
-
-            var startup = Mvx.Resolve<IMvxAppStart>();
-            startup.Start();
-
-            analyticsService = Mvx.Resolve<IAnalyticsService>();
-            backgroundService = Mvx.Resolve<IBackgroundService>();
-            navigationService = Mvx.Resolve<IMvxNavigationService>();
-
-            Window.MakeKeyAndVisible();
-
-            setupNavigationBar();
+            base.FinishedLaunching(application, launchOptions);
 
             #if ENABLE_TEST_CLOUD
             Xamarin.Calabash.Start();
@@ -62,6 +49,16 @@ namespace Toggl.Daneel
             #endif
 
             return true;
+        }
+
+        protected override void RunAppStart(object hint = null)
+        {
+            base.RunAppStart(hint);
+
+            analyticsService = Mvx.Resolve<IAnalyticsService>();
+            backgroundService = Mvx.Resolve<IBackgroundService>();
+            navigationService = Mvx.Resolve<IMvxNavigationService>();
+            setupNavigationBar();
         }
 
         #if USE_ANALYTICS

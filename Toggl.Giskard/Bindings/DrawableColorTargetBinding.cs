@@ -1,12 +1,8 @@
-﻿using System;
+﻿using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Views;
 using MvvmCross.Binding;
-using MvvmCross.Binding.Droid.Target;
-using Toggl.Giskard.Extensions;
-using MvvmCross.Plugins.Color.Droid;
-using MvvmCross.Platform.UI;
-using Android.Graphics;
+using MvvmCross.Platforms.Android.Binding.Target;
 
 namespace Toggl.Giskard.Bindings
 {

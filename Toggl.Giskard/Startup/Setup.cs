@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using Android.Content;
+using MvvmCross;
 using MvvmCross.Binding;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Support.V7.AppCompat;
-using MvvmCross.Droid.Views;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Platform;
-using MvvmCross.Platform.Plugins;
+using MvvmCross.Navigation;
+using MvvmCross.Platforms.Android.Presenters;
+using MvvmCross.Plugin;
+using MvvmCross.ViewModels;
+using MvvmCross.Views;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Login;
@@ -26,7 +26,7 @@ using Toggl.Ultrawave.Network;
 
 namespace Toggl.Giskard
 {
-    public sealed partial class Setup : MvxAppCompatSetup
+    public sealed partial class Setup : MvxAppCompatSetup<App<LoginViewModel>>
     {
         private const int maxNumberOfSuggestions = 5;
 
@@ -38,15 +38,6 @@ namespace Toggl.Giskard
 #else
         private const ApiEnvironment environment = ApiEnvironment.Staging;
 #endif
-
-        public Setup(Context applicationContext) 
-            : base(applicationContext)
-        {
-        }
-
-        protected override IMvxApplication CreateApp() => new App<LoginViewModel>();
-
-        protected override IMvxTrace CreateDebugTrace() => new DebugTrace();
 
         protected override MvxBindingBuilder CreateBindingBuilder() => new TogglBindingBuilder();
 

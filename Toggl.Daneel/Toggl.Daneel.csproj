@@ -127,27 +127,6 @@
     <Reference Include="Google.SignIn">
       <HintPath>..\packages\Xamarin.Google.iOS.SignIn.4.1.0\lib\Xamarin.iOS10\Google.SignIn.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Platform">
-      <HintPath>..\packages\MvvmCross.Platform.5.5.2\lib\Xamarin.iOS10\MvvmCross.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Platform.iOS">
-      <HintPath>..\packages\MvvmCross.Platform.5.5.2\lib\Xamarin.iOS10\MvvmCross.Platform.iOS.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Core">
-      <HintPath>..\packages\MvvmCross.Core.5.5.2\lib\Xamarin.iOS10\MvvmCross.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.iOS">
-      <HintPath>..\packages\MvvmCross.Core.5.5.2\lib\Xamarin.iOS10\MvvmCross.iOS.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Binding">
-      <HintPath>..\packages\MvvmCross.Binding.5.5.2\lib\Xamarin.iOS10\MvvmCross.Binding.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Binding.iOS">
-      <HintPath>..\packages\MvvmCross.Binding.5.5.2\lib\Xamarin.iOS10\MvvmCross.Binding.iOS.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Localization">
-      <HintPath>..\packages\MvvmCross.Binding.5.5.2\lib\Xamarin.iOS10\MvvmCross.Localization.dll</HintPath>
-    </Reference>
     <Reference Include="DotNetCross.Memory.Unsafe">
       <HintPath>..\packages\DotNetCross.Memory.Unsafe.0.2.3.4\lib\netstandard1.0\DotNetCross.Memory.Unsafe.dll</HintPath>
     </Reference>
@@ -156,18 +135,6 @@
     </Reference>
     <Reference Include="Remotion.Linq">
       <HintPath>..\packages\Remotion.Linq.2.1.2\lib\portable-net45+win+wpa81+wp80\Remotion.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugins.Color">
-      <HintPath>..\packages\MvvmCross.Plugin.Color.5.5.2\lib\Xamarin.iOS10\MvvmCross.Plugins.Color.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugins.Color.iOS">
-      <HintPath>..\packages\MvvmCross.Plugin.Color.5.5.2\lib\Xamarin.iOS10\MvvmCross.Plugins.Color.iOS.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugins.Visibility">
-      <HintPath>..\packages\MvvmCross.Plugin.Visibility.5.5.2\lib\Xamarin.iOS10\MvvmCross.Plugins.Visibility.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugins.Visibility.iOS">
-      <HintPath>..\packages\MvvmCross.Plugin.Visibility.5.5.2\lib\Xamarin.iOS10\MvvmCross.Plugins.Visibility.iOS.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter">
       <HintPath>..\packages\Microsoft.AppCenter.1.6.1\lib\Xamarin.iOS10\Microsoft.AppCenter.dll</HintPath>
@@ -249,6 +216,15 @@
     </Reference>
     <Reference Include="Firebase.PerformanceMonitoring">
       <HintPath>..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.1.1.0.1\lib\Xamarin.iOS10\Firebase.PerformanceMonitoring.dll</HintPath>
+    </Reference>
+    <Reference Include="MvvmCross">
+      <HintPath>..\packages\MvvmCross.6.1.2\lib\xamarinios10\MvvmCross.dll</HintPath>
+    </Reference>
+    <Reference Include="MvvmCross.Plugin.Color">
+      <HintPath>..\packages\MvvmCross.Plugin.Color.6.1.2\lib\xamarinios10\MvvmCross.Plugin.Color.dll</HintPath>
+    </Reference>
+    <Reference Include="MvvmCross.Plugin.Visibility">
+      <HintPath>..\packages\MvvmCross.Plugin.Visibility.6.1.2\lib\xamarinios10\MvvmCross.Plugin.Visibility.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -674,8 +650,6 @@
     </Compile>
     <Compile Include="Extensions\FontExtensions.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
-    <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
-    <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="ViewSources\StartTimeEntryTableViewSource.cs" />
     <Compile Include="Presentation\Attributes\ModalDialogPresentationAttribute.cs" />
     <Compile Include="Presentation\Transition\ModalDialogPresentationController.cs" />
@@ -749,7 +723,6 @@
     <Compile Include="Views\TextViewWithPlaceholder.cs" />
     <Compile Include="Binding\TextViewWithPlaceholderTextTargetBinding.cs" />
     <Compile Include="Binding\TextFieldPlaceholderTargetBinding.cs" />
-    <Compile Include="Startup\DebugTrace.cs" />
     <Compile Include="Startup\AppDelegate.cs" />
     <Compile Include="Startup\Main.cs" />
     <Compile Include="ViewControllers\OutdatedAppViewController.cs" />

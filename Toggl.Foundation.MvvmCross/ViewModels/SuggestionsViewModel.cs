@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Suggestions;
@@ -97,9 +98,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 });
         }
 
-        public override void ViewDestroy()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            base.ViewDestroy();
+            base.ViewDestroy(viewFinishing);
             emptyDatabaseDisposable?.Dispose();
         }
     }

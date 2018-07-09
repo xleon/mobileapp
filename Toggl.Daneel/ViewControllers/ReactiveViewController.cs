@@ -1,7 +1,6 @@
-﻿using System;
-using System.Reactive.Disposables;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.iOS.Views;
+﻿using System.Reactive.Disposables;
+using MvvmCross.Platforms.Ios.Views;
+using MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels;
 
 namespace Toggl.Daneel.ViewControllers

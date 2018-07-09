@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Platform.Core;
-using MvvmCross.Plugins.Color.iOS;
+using MvvmCross.Base;
+using MvvmCross.Core;
+using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Foundation.MvvmCross.Helper;
 using UIKit;
 

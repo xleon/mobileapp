@@ -2,13 +2,13 @@
 using Android.Content;
 using Android.OS;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.Binding.Droid.BindingContext;
-using MvvmCross.Binding.Droid.Views;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Core.Views;
+using MvvmCross.Views;
 using MvvmCross.Droid.Support.V7.AppCompat.EventSource;
-using MvvmCross.Droid.Views;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using MvvmCross.ViewModels;
+using MvvmCross.Platforms.Android.Views;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
+using MvvmCross.Platforms.Android.Binding.Views;
 
 namespace Toggl.Giskard.Activities
 {

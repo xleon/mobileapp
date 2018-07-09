@@ -1,19 +1,20 @@
-using System;
+﻿using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Input;
 using Foundation;
 using Google.SignIn;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.Binding.iOS.Target;
-using MvvmCross.iOS.Views;
-using MvvmCross.Platform.IoC;
-using MvvmCross.Platform.UI;
-using MvvmCross.Plugins.Color;
-using MvvmCross.Plugins.Color.iOS;
-using MvvmCross.Plugins.Visibility;
+using MvvmCross.Platforms.Ios.Binding.Target;
+using MvvmCross.Platforms.Ios.Views;
+using MvvmCross.IoC;
+using MvvmCross.UI;
+using MvvmCross.Plugin.Color;
+using MvvmCross.Plugin.Color.Platforms.Ios;
+using MvvmCross.Plugin.Visibility;
 using Newtonsoft.Json.Converters;
 using UIKit;
+using MvvmCross.ViewModels;
 
 namespace Toggl.Daneel
 {
@@ -58,6 +59,7 @@ namespace Toggl.Daneel
             textField.TextColor = UIColor.White;
             textField.Text = textField.Text + "";
             textField.EditingChanged += (sender, args) => { textField.Text = ""; };
+            textField.EditingDidEnd += (sender, args) => { textField.Text = ""; };
         }
 
         public void Include(UITextView textView)
@@ -65,6 +67,7 @@ namespace Toggl.Daneel
             textView.Hidden = true;
             textView.Text = textView.Text + "";
             textView.Changed += (sender, args) => { textView.Text = ""; };
+            textView.TextStorage.DidProcessEditing += (sender, e) => textView.Text = "";
         }
 
         public void Include(UILabel label)
@@ -153,7 +156,7 @@ namespace Toggl.Daneel
 
         public void Include(MvxUISwitchOnTargetBinding binding)
         {
-            binding = new MvxUISwitchOnTargetBinding(null, null);
+            binding = new MvxUISwitchOnTargetBinding(null);
         }
 
         public void Include(MvxVisibilityValueConverter converter)
@@ -166,6 +169,11 @@ namespace Toggl.Daneel
         {
             converter.Convert(null, null, null, null);
             converter.ConvertBack(null, null, null, null);
+        }
+
+        public void Include(MvxViewModelViewTypeFinder typeFinder)
+        {
+            typeFinder = new MvxViewModelViewTypeFinder(null, null);
         }
 
         public void Include(MvxNativeColorValueConverter converter)

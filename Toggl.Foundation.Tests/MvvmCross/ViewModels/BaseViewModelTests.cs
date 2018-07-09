@@ -1,5 +1,5 @@
-﻿using Microsoft.Reactive.Testing;
-using MvvmCross.Core.ViewModels;
+using Microsoft.Reactive.Testing;
+using MvvmCross.ViewModels;
 using NSubstitute;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Login;

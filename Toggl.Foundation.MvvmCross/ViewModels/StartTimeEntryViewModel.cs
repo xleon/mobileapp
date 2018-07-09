@@ -6,8 +6,9 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Autocomplete;
@@ -293,9 +294,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             hasAnyProjects = (await dataSource.Projects.GetAll()).Any();
         }
 
-        public override void ViewDestroy()
+        public override void ViewDestroy(bool viewFinishing)
         {
-            base.ViewDestroy();
+            base.ViewDestroy(viewFinishing);
             disposeBag?.Dispose();
         }
 

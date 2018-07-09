@@ -1,5 +1,5 @@
 ﻿using System;
-using MvvmCross.Platform;
+using MvvmCross;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Interactors;

@@ -1,15 +1,15 @@
-using System;
+﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Binding.iOS.Views;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.Platforms.Ios.Binding.Views;
 using ObjCRuntime;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
-using static Toggl.Multivac.Extensions.CommonFunctions;
 using static Toggl.Daneel.Extensions.UIExtensions;
+using static Toggl.Multivac.Extensions.CommonFunctions;
 
 namespace Toggl.Daneel
 {

@@ -1,12 +1,14 @@
 using Android.App;
 using Android.Content.PM;
 using Android.Graphics;
-using Android.OS;
 using Android.Support.V4.Content;
-using MvvmCross.Droid.Views;
 using Toggl.Giskard.Extensions;
-using MvvmCross.Platform;
-using MvvmCross.Core.Navigation;
+using Android.OS;
+using Toggl.Foundation.MvvmCross;
+using Toggl.Foundation.MvvmCross.ViewModels;
+using MvvmCross.Droid.Support.V7.AppCompat;
+using MvvmCross;
+using MvvmCross.Navigation;
 
 namespace Toggl.Giskard
 {
@@ -22,39 +24,33 @@ namespace Toggl.Giskard
         Categories = new[] { "android.intent.category.BROWSABLE", "android.intent.category.DEFAULT" },
         DataSchemes = new[] { "toggl" },
         DataHost = "*")]
-    public class SplashScreen : MvxSplashScreenActivity
+    public class SplashScreen : MvxSplashScreenAppCompatActivity<Setup, App<LoginViewModel>>
     {
         public SplashScreen()
             : base(Resource.Layout.SplashScreen)
         {
 
         }
-
-        protected override void TriggerFirstNavigate()
+        protected override void OnCreate(Bundle bundle)
         {
-            base.TriggerFirstNavigate();
+            base.OnCreate(bundle);
 
             var navigationUrl = Intent.Data?.ToString();
             if (string.IsNullOrEmpty(navigationUrl))
                 return;
 
             Mvx.Resolve<IMvxNavigationService>().Navigate(navigationUrl);
-        }
-
-        protected override void OnCreate(Android.OS.Bundle bundle)
-        {
-            base.OnCreate(bundle);
 
             var statusBarColor = new Color(ContextCompat.GetColor(this, Resource.Color.lightGray));
             this.ChangeStatusBarColor(statusBarColor);
 
-            #if USE_ANALYTICS
+#if USE_ANALYTICS
             Firebase.FirebaseApp.InitializeApp(this);
             Microsoft.AppCenter.AppCenter.Start(
                 "{TOGGL_APP_CENTER_ID_DROID}",
                 typeof(Microsoft.AppCenter.Crashes.Crashes),
                 typeof(Microsoft.AppCenter.Analytics.Analytics));
-            #endif
+#endif
         }
     }
 }

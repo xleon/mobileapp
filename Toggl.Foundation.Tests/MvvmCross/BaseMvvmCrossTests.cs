@@ -1,4 +1,7 @@
-﻿using MvvmCross.Core.Navigation;
+﻿using MvvmCross.IoC;
+using MvvmCross.Logging;
+using MvvmCross.Navigation;
+using MvvmCross.Tests;
 using NSubstitute;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
