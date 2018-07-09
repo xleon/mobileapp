@@ -10,12 +10,14 @@ namespace Toggl.Giskard.Activities
         private View startTimeArea;
         private View stopTimeArea;
         private View durationArea;
+        private View projectContainer;
 
         private void initializeViews()
         {
             startTimeArea = FindViewById(EditTimeLeftPart);
             stopTimeArea = FindViewById(EditTimeRightPart);
             durationArea = FindViewById(EditDuration);
+            projectContainer = FindViewById(EditTimeEntryProjectContainer);
         }
     }
 }

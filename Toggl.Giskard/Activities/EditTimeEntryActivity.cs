@@ -1,13 +1,22 @@
-﻿using System.Reactive.Disposables;
+﻿using System;
+using System.ComponentModel;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Android.App;
 using Android.Graphics;
 using Android.OS;
 using Android.Support.V4.Content;
 using Android.Views;
+using Android.Widget;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Views.Attributes;
+using MvvmCross.Platform.WeakSubscription;
+using Toggl.Foundation.MvvmCross.Onboarding.EditView;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
+using Toggl.Giskard.Helper;
+using Toggl.Multivac.Extensions;
 using static Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
 
 namespace Toggl.Giskard.Activities
@@ -16,18 +25,54 @@ namespace Toggl.Giskard.Activities
     [Activity(Theme = "@style/AppTheme")]
     public sealed partial class EditTimeEntryActivity : MvxAppCompatActivity<EditTimeEntryViewModel>, IReactiveBindingHolder
     {
+        private PopupWindow projectTooltip;
+
         public CompositeDisposable DisposeBag { get; private set; } = new CompositeDisposable();
 
         protected override void OnCreate(Bundle bundle)
         {
             this.ChangeStatusBarColor(new Color(ContextCompat.GetColor(this, Resource.Color.blueStatusBarBackground)));
-            
+
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.EditTimeEntryActivity);
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
 
             initializeViews();
             setupBindings();
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            projectTooltip = projectTooltip 
+                ?? PopupWindowFactory.PopupWindowWithText(
+                    this,
+                    Resource.Layout.TooltipWithLeftTopArrow,
+                    Resource.Id.TooltipText,
+                    Resource.String.CategorizeWithProjects);
+            
+            prepareOnboarding();
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+            projectTooltip.Dismiss();
+            projectTooltip = null;
+        }
+
+        private void prepareOnboarding()
+        {
+            var storage = ViewModel.OnboardingStorage;
+
+            new CategorizeTimeUsingProjectsOnboardingStep(storage, ViewModel.HasProject)
+                .ManageDismissableTooltip(
+                    projectTooltip, 
+                    projectContainer, 
+                    (window, view) => PopupOffsets.FromDp(16, 8, this), 
+                    storage)
+                .DisposedBy(DisposeBag);
         }
 
         public override void Finish()

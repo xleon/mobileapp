@@ -1392,5 +1392,33 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                                 .Track(Arg.Is(EditViewTapSource.StopTime));
             }
         }
+
+        public sealed class TheHasProjectProperty : EditTimeEntryViewModelTest
+        {
+            [Fact]
+            public void EmitsTrueWhenTimeEntryHasProject()
+            {
+                const string selectedProject = "Some random project";
+
+                bool actualHasProjectValue = false;
+                ViewModel.HasProject.Subscribe(hasProject => actualHasProjectValue = hasProject);
+                ViewModel.Project = selectedProject;
+
+                actualHasProjectValue.Should().BeTrue();
+            }
+
+            [Fact]
+            public void EmitsFalseWhenTimeEntryDoesNotHaveProject()
+            {
+                const string selectedProject = "Some random project";
+
+                ViewModel.Project = selectedProject;
+                bool actualHasProjectValue = true;
+                ViewModel.HasProject.Subscribe(hasProject => actualHasProjectValue = hasProject);
+                ViewModel.Project = null;
+
+                actualHasProjectValue.Should().BeFalse();
+            }
+        }
     }
 }

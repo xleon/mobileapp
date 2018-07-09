@@ -1,4 +1,6 @@
-﻿namespace Toggl.Giskard.Extensions
+﻿using Android.Content;
+
+namespace Toggl.Giskard.Extensions
 {
     public struct PopupOffsets
     {
@@ -10,5 +12,8 @@
             HorizontalOffset = horizontalOffset;
             VerticalOffset = verticalOffset;
         }
+
+        public static PopupOffsets FromDp(int width, int height, Context context) 
+            => new PopupOffsets(width.DpToPixels(context), height.DpToPixels(context));
     }
 }

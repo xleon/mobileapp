@@ -20,6 +20,7 @@ using Toggl.Foundation.Models.Interfaces;
 using static Toggl.Foundation.Helper.Constants;
 using Toggl.Foundation.Extensions;
 using SelectTimeOrigin = Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
+using System.Reactive.Subjects;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -47,6 +48,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private long? taskId;
         private long workspaceId;
         private DurationFormat durationFormat;
+
+        private BehaviorSubject<bool> hasProjectSubject = new BehaviorSubject<bool>(false);
+
+        public IObservable<bool> HasProject { get; }
 
         private bool isDirty
             => originalTimeEntry.Description != Description
@@ -231,6 +236,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             DismissSyncErrorMessageCommand = new MvxCommand(dismissSyncErrorMessageCommand);
             ToggleBillableCommand = new MvxCommand(toggleBillable);
             StartEditingDescriptionCommand = new MvxCommand(startEditingDescriptionCommand);
+
+            HasProject = hasProjectSubject.AsObservable();
         }
 
         public override void Prepare(long parameter)
@@ -582,6 +589,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             confirmDisposable?.Dispose();
             tickingDisposable?.Dispose();
             preferencesDisposable?.Dispose();
+        }
+
+        private void OnProjectChanged()
+        {
+            hasProjectSubject.OnNext(!string.IsNullOrWhiteSpace(Project));
         }
     }
 }
