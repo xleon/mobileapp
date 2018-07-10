@@ -64,7 +64,6 @@ namespace Toggl.Giskard.Views
             if (direction == ItemTouchHelper.Right)
             {
                 recyclerView.MainRecyclerAdapter.ContinueTimeEntry(swipedPosition);
-                recyclerView.MainRecyclerAdapter.NotifyItemChanged(swipedPosition);
             }
             else
             {
