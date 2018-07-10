@@ -88,8 +88,10 @@ understand and agree to Toggl\'s</string>
     <string name="AboutPrivacyPolicy">Privacy Policy</string>
     <string name="AboutLicenses">Licenses</string>
     <string name="OnboardingTapToStartTimer">Tap to start timer</string>
+    <string name="OnboardingTapToEdit">You have created your first time entry 🙌\nTap to edit</string>
     <string name="OnboardingTapToStopTimer">Tap to stop timer</string>
     <string name="OnboardingAddProjectOrTag">Add a project and tags on the fly</string>
+    <string name="CategorizeWithProjects">Categorize your time by adding a project</string>
 
     <string name="MainTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.MainTemplateSelector, Toggl.Giskard</string>
     <string name="ReportsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsTemplateSelector, Toggl.Giskard</string>

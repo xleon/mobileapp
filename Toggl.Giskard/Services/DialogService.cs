@@ -3,15 +3,15 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Android.Support.V7.App;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Core;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross;
+using MvvmCross.Platforms.Android;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Services;
+using Object = Java.Lang.Object;
 
 namespace Toggl.Giskard.Services
 {
-    public sealed class DialogService : IDialogService
+    public sealed class DialogService : Object, IDialogService
     {
         public IObservable<bool> Confirm(string title, string message, string confirmButtonText, string dismissButtonText)
         {
@@ -19,7 +19,7 @@ namespace Toggl.Giskard.Services
 
             return Observable.Create<bool>(observer =>
             {
-                MvxSingleton<IMvxMainThreadDispatcher>.Instance.RequestMainThreadAction(() =>
+                activity.RunOnUiThread(() =>
                 {
                     var builder = new AlertDialog.Builder(activity, Resource.Style.TogglDialog)
                         .SetMessage(message)

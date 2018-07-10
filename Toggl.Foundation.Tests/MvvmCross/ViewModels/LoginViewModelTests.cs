@@ -2,23 +2,23 @@
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FsCheck;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Exceptions;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
+using Toggl.Foundation.Tests.TestExtensions;
 using Toggl.Multivac;
+using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using Xunit;
-using Toggl.Foundation.Tests.TestExtensions;
-using FsCheck;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {

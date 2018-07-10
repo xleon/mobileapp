@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Foundation;
-using MvvmCross.Binding.ExtensionMethods;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Plugins.Color.iOS;
+using MvvmCross.Commands;
+using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Views;
 using Toggl.Daneel.Views.StartTimeEntry;
 using Toggl.Foundation;

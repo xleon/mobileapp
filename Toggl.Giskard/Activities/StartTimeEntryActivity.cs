@@ -11,7 +11,7 @@ using Android.Support.V4.Content;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Droid.Support.V7.AppCompat;
-using MvvmCross.Droid.Views.Attributes;
+using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Onboarding.StartTimeEntryView;

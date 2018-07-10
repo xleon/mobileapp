@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.UI;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.UI;
+using MvvmCross.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DTOs;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Multivac;
-using static Toggl.Foundation.Helper.Constants;
-using static Toggl.Multivac.Extensions.StringExtensions;
-using Toggl.Multivac.Extensions;
-using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Foundation.MvvmCross.Parameters;
+using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
+using static Toggl.Foundation.Helper.Constants;
+using static Toggl.Multivac.Extensions.StringExtensions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {

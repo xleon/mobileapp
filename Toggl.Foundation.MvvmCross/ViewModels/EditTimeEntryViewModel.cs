@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 using PropertyChanged;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DTOs;
+using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
+using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
-using Toggl.Foundation.Models;
 using Toggl.PrimeRadiant.Settings;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Models.Interfaces;
 using static Toggl.Foundation.Helper.Constants;
-using Toggl.Foundation.Extensions;
 using SelectTimeOrigin = Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
+using System.Reactive.Subjects;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -47,6 +48,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private long? taskId;
         private long workspaceId;
         private DurationFormat durationFormat;
+
+        private BehaviorSubject<bool> hasProjectSubject = new BehaviorSubject<bool>(false);
+
+        public IObservable<bool> HasProject { get; }
 
         private bool isDirty
             => originalTimeEntry.Description != Description
@@ -231,6 +236,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             DismissSyncErrorMessageCommand = new MvxCommand(dismissSyncErrorMessageCommand);
             ToggleBillableCommand = new MvxCommand(toggleBillable);
             StartEditingDescriptionCommand = new MvxCommand(startEditingDescriptionCommand);
+
+            HasProject = hasProjectSubject.AsObservable();
         }
 
         public override void Prepare(long parameter)
@@ -576,12 +583,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IsBillableAvailable = await interactorFactory.IsBillableAvailableForWorkspace(workspaceId).Execute();
         }
 
-        public override void ViewDestroy()
+        public override void ViewDestroy(bool viewFinishing)
         {
-            base.ViewDestroy();
+            base.ViewDestroy(viewFinishing);
             confirmDisposable?.Dispose();
             tickingDisposable?.Dispose();
             preferencesDisposable?.Dispose();
+        }
+
+        private void OnProjectChanged()
+        {
+            hasProjectSubject.OnNext(!string.IsNullOrWhiteSpace(Project));
         }
     }
 }

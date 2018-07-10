@@ -1,5 +1,5 @@
 ﻿using Toggl.Foundation.MvvmCross.Combiners;
-using MvvmCross.Binding.Droid;
+using MvvmCross.Platforms.Android.Binding;
 using System;
 
 namespace Toggl.Giskard

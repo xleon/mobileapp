@@ -1,4 +1,4 @@
-﻿using MvvmCross.iOS.Views;
+﻿using MvvmCross.Platforms.Ios.Views;
 using Toggl.Daneel.Cells.Settings;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation;

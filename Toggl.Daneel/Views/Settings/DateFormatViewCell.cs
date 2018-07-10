@@ -1,8 +1,8 @@
 ﻿using System;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.Binding.iOS;
-using MvvmCross.Binding.iOS.Views;
+using MvvmCross.Platforms.Ios.Binding;
+using MvvmCross.Platforms.Ios.Binding.Views;
 using Toggl.Foundation.MvvmCross.ViewModels.Selectable;
 using UIKit;
 
@@ -18,7 +18,7 @@ namespace Toggl.Daneel.Views.Settings
             Nib = UINib.FromName(nameof(DateFormatViewCell), NSBundle.MainBundle);
         }
 
-        protected DateFormatViewCell(IntPtr handle) : base(handle)
+        public DateFormatViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }

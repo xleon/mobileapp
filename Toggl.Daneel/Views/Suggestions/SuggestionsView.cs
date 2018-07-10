@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.Binding.iOS;
-using MvvmCross.Binding.iOS.Views;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Plugins.Color.iOS;
-using MvvmCross.Plugins.Visibility;
+using MvvmCross.Commands;
+using MvvmCross.Platforms.Ios.Binding;
+using MvvmCross.Platforms.Ios.Binding.Views;
+using MvvmCross.ViewModels;
+using MvvmCross.Plugin.Color.Platforms.Ios;
+using MvvmCross.Plugin.Visibility;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;

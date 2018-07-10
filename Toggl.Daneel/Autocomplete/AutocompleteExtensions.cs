@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
-using System.Reactive.Linq;
 using Foundation;
-using MvvmCross.Platform.UI;
-using MvvmCross.Plugins.Color.iOS;
+using MvvmCross.Plugin.Color.Platforms.Ios;
+using MvvmCross.UI;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Span;
 using Toggl.Foundation.MvvmCross.Helper;

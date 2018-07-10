@@ -1,6 +1,6 @@
 ﻿using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
 using UIKit;
 
 namespace Toggl.Daneel.Binding

@@ -1,6 +1,6 @@
 ﻿using System;
-using MvvmCross.iOS.Views.Presenters.Attributes;
-using MvvmCross.Plugins.Color.iOS;
+using MvvmCross.Platforms.Ios.Presenters.Attributes;
+using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;

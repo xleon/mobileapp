@@ -1,8 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.UI;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
+using MvvmCross.UI;
 using PropertyChanged;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.MvvmCross.Helper;

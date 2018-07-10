@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.Multivac.Extensions;

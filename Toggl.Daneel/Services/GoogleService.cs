@@ -4,15 +4,15 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Foundation;
 using Google.SignIn;
-using MvvmCross.iOS.Views.Presenters;
-using MvvmCross.Platform;
+using MvvmCross.Platforms.Ios.Presenters;
+using MvvmCross;
 using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Login;
 using UIKit;
 
 namespace Toggl.Daneel.Services
 {
-    [Preserve(AllMembers = true)]
+    [MvvmCross.Preserve(AllMembers = true)]
     public sealed class GoogleService : NSObject, IGoogleService, ISignInDelegate, ISignInUIDelegate
     {
         private const int cancelErrorCode = -5;

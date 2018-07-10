@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
@@ -10,8 +10,8 @@ using Android.Support.Design.Widget;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Droid.Support.V7.AppCompat;
-using MvvmCross.Droid.Views.Attributes;
-using MvvmCross.Platform.WeakSubscription;
+using MvvmCross.Platforms.Android.Presenters.Attributes;
+using MvvmCross.WeakSubscription;
 using Toggl.Foundation.MvvmCross.Onboarding.MainView;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
@@ -21,6 +21,9 @@ using static Toggl.Foundation.Sync.SyncProgress;
 using static Toggl.Giskard.Extensions.CircularRevealAnimation.AnimationType;
 using FoundationResources = Toggl.Foundation.Resources;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
+using Toggl.Giskard.Views;
+using System.Reactive.Linq;
+using System.Threading;
 
 namespace Toggl.Giskard.Activities
 {
@@ -39,6 +42,11 @@ namespace Toggl.Giskard.Activities
         private CoordinatorLayout coordinatorLayout;
         private PopupWindow playButtonTooltipPopupWindow;
         private PopupWindow stopButtonTooltipPopupWindow;
+        private PopupWindow tapToEditPopup;
+        
+        private IDisposable editTimeEntryOnboardingStepDisposable;
+
+        private MainRecyclerView mainRecyclerView;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -66,6 +74,7 @@ namespace Toggl.Giskard.Activities
 
             setupStartTimeEntryOnboardingStep();
             setupStopTimeEntryOnboardingStep();
+            setupTapToEditOnboardingStep();
         }
 
         protected override void Dispose(bool disposing)
@@ -183,6 +192,54 @@ namespace Toggl.Giskard.Activities
                     (popup, anchor) => popup.TopRightFrom(anchor, dpExtraBottomMargin: 8),
                     ViewModel.OnboardingStorage)
                 .DisposedBy(disposeBag);
+        }
+
+        private void setupTapToEditOnboardingStep()
+        {
+            mainRecyclerView = FindViewById<MainRecyclerView>(Resource.Id.MainRecyclerView);
+            mainRecyclerView.FirstTimeEntryView
+                            .ObserveOn(SynchronizationContext.Current)
+                            .Subscribe(updateTapToEditOnboardingStep)
+                            .DisposedBy(disposeBag);
+        }
+
+        private void updateTapToEditOnboardingStep(View firstTimeEntry)
+        {
+            tapToEditPopup?.Dismiss();
+            tapToEditPopup = null;
+
+            if (firstTimeEntry == null)
+                return;
+
+            updateTapToEditPopupWindow(firstTimeEntry);
+        }
+
+        private void updateTapToEditPopupWindow(View firstTimeEntry)
+        {
+            if (editTimeEntryOnboardingStepDisposable != null)
+            {
+                editTimeEntryOnboardingStepDisposable.Dispose();
+                editTimeEntryOnboardingStepDisposable = null;
+            }
+
+            if (tapToEditPopup != null)
+                tapToEditPopup.Dismiss();
+
+            tapToEditPopup = tapToEditPopup
+                ?? PopupWindowFactory.PopupWindowWithText(
+                    this,
+                    Resource.Layout.TooltipWithLeftTopArrow,
+                    Resource.Id.TooltipText,
+                    Resource.String.OnboardingTapToEdit);
+
+            var storage = ViewModel.OnboardingStorage;
+
+            editTimeEntryOnboardingStepDisposable = new EditTimeEntryOnboardingStep(storage, Observable.Return(false))
+                .ManageDismissableTooltip(
+                    tapToEditPopup,
+                    firstTimeEntry,
+                    (window, view) => PopupOffsets.FromDp(16, -4, this),
+                    storage);
         }
 
         private sealed class FabAsyncHideListener : FloatingActionButton.OnVisibilityChangedListener

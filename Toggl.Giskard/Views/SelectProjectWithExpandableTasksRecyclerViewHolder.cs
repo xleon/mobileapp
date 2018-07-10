@@ -2,9 +2,9 @@
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using MvvmCross.Binding.Droid.BindingContext;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
 using MvvmCross.Droid.Support.V7.RecyclerView;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
 using Toggl.Foundation.Autocomplete.Suggestions;
 
 namespace Toggl.Giskard.Views

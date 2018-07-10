@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using CoreAnimation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Core.Views;
-using MvvmCross.iOS.Views;
-using MvvmCross.iOS.Views.Presenters;
-using MvvmCross.iOS.Views.Presenters.Attributes;
+using MvvmCross.ViewModels;
+using MvvmCross.Platforms.Ios.Views;
+using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Presentation.Transition;
@@ -17,6 +15,9 @@ using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using UIKit;
+using MvvmCross.Presenters.Attributes;
+using MvvmCross.Platforms.Ios.Presenters;
+using MvvmCross.Presenters;
 
 namespace Toggl.Daneel.Presentation
 {
@@ -126,7 +127,7 @@ namespace Toggl.Daneel.Presentation
             base.ShowChildViewController(viewController, attribute, request);
         }
 
-        protected override void SetWindowRootViewController(UIViewController controller)
+        protected override void SetWindowRootViewController(UIViewController controller, MvxRootPresentationAttribute attribute = null)
         {
             UIView.Transition(
                 _window,
@@ -135,7 +136,6 @@ namespace Toggl.Daneel.Presentation
                 () => _window.RootViewController = controller,
                 null
             );
-
         }
 
         public override void Show(MvxViewModelRequest request)

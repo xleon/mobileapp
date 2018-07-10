@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Reactive;
+using System.Reactive.Subjects;
+using System.Reactive.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Android.Runtime;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Base;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using MvvmCross.Platform.Core;
+using MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.Collections;
 
 namespace Toggl.Giskard.Adapters
@@ -14,6 +17,8 @@ namespace Toggl.Giskard.Adapters
     public abstract class SegmentedRecyclerAdapter<TCollection, TItem> : MvxRecyclerAdapter
         where TCollection : MvxObservableCollection<TItem>
     {
+        private BehaviorSubject<Unit> collectionChangedSubject = new BehaviorSubject<Unit>(Unit.Default);
+
         private readonly object headerListLock = new object();
         private readonly List<int> headerIndexes = new List<int>();
 
@@ -23,6 +28,8 @@ namespace Toggl.Giskard.Adapters
             => ItemsSource as NestableObservableCollection<TCollection, TItem>;
 
         protected abstract MvxObservableCollection<TCollection> Collection { get; }
+
+        public IObservable<Unit> CollectionChange { get; }
 
         public override IEnumerable ItemsSource
         {
@@ -45,6 +52,7 @@ namespace Toggl.Giskard.Adapters
 
         protected SegmentedRecyclerAdapter()
         {
+            CollectionChange = collectionChangedSubject.AsObservable();
         }
 
         protected SegmentedRecyclerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
@@ -64,6 +72,8 @@ namespace Toggl.Giskard.Adapters
             base.OnItemsSourceCollectionChanged(sender, e);
 
             calculateHeaderIndexes();
+
+            collectionChangedSubject.OnNext(Unit.Default);
         }
 
         protected void OnChildCollectionChanged(object sender, ChildCollectionChangedEventArgs args)
@@ -73,6 +83,8 @@ namespace Toggl.Giskard.Adapters
             MvxSingleton<IMvxMainThreadDispatcher>
                 .Instance
                 .RequestMainThreadAction(() => notifyForChanges(args));
+                
+            collectionChangedSubject.OnNext(Unit.Default);
         }
 
         private void notifyForChanges(ChildCollectionChangedEventArgs args)
@@ -148,14 +160,6 @@ namespace Toggl.Giskard.Adapters
             }
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-
-            if (!disposing || AnimatableCollection == null) return;
-            AnimatableCollection.OnChildCollectionChanged -= OnChildCollectionChanged;
-        }
-
         private void calculateHeaderIndexes()
         {
             lock (headerListLock)
@@ -195,6 +199,21 @@ namespace Toggl.Giskard.Adapters
                 var indexInGroup = viewPosition - offset;
                 return collection[currentGroupIndex][indexInGroup];
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (!disposing)
+                return;
+
+            collectionChangedSubject?.Dispose();
+
+            if (AnimatableCollection == null)
+                return;
+
+            AnimatableCollection.OnChildCollectionChanged -= OnChildCollectionChanged;
         }
     }
 }

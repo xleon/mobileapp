@@ -1,13 +1,11 @@
 ﻿using System;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Binding.ExtensionMethods;
-using MvvmCross.Binding.iOS.Views;
+using MvvmCross.Binding.Extensions;
+using MvvmCross.Platforms.Ios.Binding.Views;
 using Toggl.Daneel.Views.Reports;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts;
 using Toggl.Multivac;
 using UIKit;
-using Math = System.Math;
 
 namespace Toggl.Daneel.ViewSources
 {

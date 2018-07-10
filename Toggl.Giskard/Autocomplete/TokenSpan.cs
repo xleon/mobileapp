@@ -1,8 +1,9 @@
 ﻿using Android.Graphics;
 using Android.Text.Style;
 using Java.Lang;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Droid;
+using MvvmCross;
+using MvvmCross.Droid;
+using MvvmCross.Platforms.Android;
 using Toggl.Giskard.Extensions;
 
 namespace Toggl.Giskard.Autocomplete

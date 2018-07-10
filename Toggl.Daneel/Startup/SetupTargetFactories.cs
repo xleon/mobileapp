@@ -1,14 +1,12 @@
-﻿﻿using MvvmCross.Binding.Bindings.Target.Construction;
-using MvvmCross.iOS.Platform;
+﻿using MvvmCross.Binding.Bindings.Target.Construction;
+using MvvmCross.Platforms.Ios.Core;
 using Toggl.Daneel.Binding;
 using UIKit;
 using Toggl.Daneel.Views;
-using System.Collections.Generic;
-using MvvmCross.Binding.iOS.Views;
 
 namespace Toggl.Daneel
 {
-    public partial class Setup : MvxIosSetup
+    public partial class Setup
     {
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {

@@ -3,10 +3,10 @@ using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Views;
-using MvvmCross.Binding.Droid.BindingContext;
+using MvvmCross;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Droid;
+using MvvmCross.Platforms.Android;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
 using Toggl.Giskard.Extensions;
 
 namespace Toggl.Giskard.Views

@@ -4,8 +4,9 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
@@ -34,6 +35,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     {
         private bool isStopButtonEnabled = false;
         private string urlNavigationAction;
+        private bool hasStopButtonEverBeenUsed;
 
         private CompositeDisposable disposeBag = new CompositeDisposable();
 
@@ -161,7 +163,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.navigationService = navigationService;
             this.onboardingStorage = onboardingStorage;
 
-            SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, suggestionProviders);
+            SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, suggestionProviders);
             RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, feedbackService, analyticsService, onboardingStorage, navigationService);
             TimeEntriesLogViewModel = new TimeEntriesLogViewModel(timeService, dataSource, interactorFactory, onboardingStorage, analyticsService, navigationService);
 
@@ -252,6 +254,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .RatingViewShouldBeVisible
                 .Subscribe(presentRatingViewIfNeeded)
                 .DisposedBy(disposeBag);
+
+            onboardingStorage.StopButtonWasTappedBefore
+                             .Subscribe(hasBeen => hasStopButtonEverBeenUsed = hasBeen)
+                             .DisposedBy(disposeBag);
         }
 
         private void presentRatingViewIfNeeded(bool shouldBevisible)
@@ -308,16 +314,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private Task openSettings()
-            => navigationService.Navigate<SettingsViewModel>();
+            => navigate<SettingsViewModel>();
 
         private async Task openReports()
         {
             var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
-            await navigationService.Navigate<ReportsViewModel, long>(workspace.Id);
+            await navigate<ReportsViewModel, long>(workspace.Id);
         }
 
         private Task openSyncFailures()
-            => navigationService.Navigate<SyncFailuresViewModel>();
+            => navigate<SyncFailuresViewModel>();
 
         private Task startTimeEntry()
             => startTimeEntry(IsInManualMode);
@@ -329,10 +335,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             OnboardingStorage.StartButtonWasTapped();
 
+            if (hasStopButtonEverBeenUsed)
+                onboardingStorage.SetNavigatedAwayFromMainViewAfterStopButton();
+
             var parameter = initializeInManualMode
                 ? StartTimeEntryParameters.ForManualMode(timeService.CurrentDateTime)
                 : StartTimeEntryParameters.ForTimerMode(timeService.CurrentDateTime);
-            return navigationService.Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(parameter);
+
+            return navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(parameter);
         }
 
         private async Task stopTimeEntry()
@@ -349,6 +359,24 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private Task editTimeEntry()
-            => navigationService.Navigate<EditTimeEntryViewModel, long>(CurrentTimeEntryId.Value);
+            => navigate<EditTimeEntryViewModel, long>(CurrentTimeEntryId.Value);
+
+        private Task navigate<TModel, TParameters>(TParameters value)
+            where TModel : IMvxViewModel<TParameters>
+        {
+            if (hasStopButtonEverBeenUsed)
+                onboardingStorage.SetNavigatedAwayFromMainViewAfterStopButton();
+            
+            return navigationService.Navigate<TModel, TParameters>(value);
+        }
+
+        private Task navigate<TModel>()
+            where TModel : IMvxViewModel
+        {
+            if (hasStopButtonEverBeenUsed)
+                onboardingStorage.SetNavigatedAwayFromMainViewAfterStopButton();
+            
+            return navigationService.Navigate<TModel>();
+        }
     }
 }

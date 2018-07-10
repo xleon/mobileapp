@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using Foundation;
-using MvvmCross.Binding.iOS.Views;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.Platforms.Ios.Binding.Views;
 using Toggl.Daneel.Views;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Sync;
@@ -66,7 +66,7 @@ namespace Toggl.Daneel.ViewSources
             set => timeEntriesLogViewSource.DeleteTimeEntryCommand = value;
         }
 
-        public new IMvxCommand<TimeEntryViewModel> SelectionChangedCommand
+        public IMvxCommand<TimeEntryViewModel> OnSelectionChangedCommand
         {
             get => timeEntriesLogViewSource.SelectionChangedCommand;
             set => timeEntriesLogViewSource.SelectionChangedCommand = value;

@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using MvvmCross.ViewModels;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Login;
@@ -20,6 +21,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
         public abstract class AppStartTest : BaseMvvmCrossTests
         {
             protected AppStart<OnboardingViewModel> AppStart { get; }
+            protected IMvxApplication App { get; } = Substitute.For<IMvxApplication>();
             protected ISyncManager SyncManager { get; } = Substitute.For<ISyncManager>();
             protected ILoginManager LoginManager { get; } = Substitute.For<ILoginManager>();
             protected IOnboardingStorage OnboardingStorage { get; } = Substitute.For<IOnboardingStorage>();
@@ -28,7 +30,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
 
             protected AppStartTest()
             {
-                AppStart = new AppStart<OnboardingViewModel>(TimeService, LoginManager, OnboardingStorage, NavigationService, AccessRestrictionStorage);
+                AppStart = new AppStart<OnboardingViewModel>(App, TimeService, LoginManager, OnboardingStorage, NavigationService, AccessRestrictionStorage);
                 DataSource.SyncManager.Returns(SyncManager);
                 LoginManager.GetDataSourceIfLoggedIn().Returns(DataSource);
             }
@@ -53,6 +55,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new AppStart<OnboardingViewModel>(
+                        App,
                         timeService,
                         loginManager,
                         onboardingStorage,

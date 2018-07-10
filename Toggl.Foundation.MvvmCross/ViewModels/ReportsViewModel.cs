@@ -6,8 +6,9 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
@@ -209,13 +210,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void toggleCalendar()
         {
-            ChangePresentation(new ToggleCalendarVisibilityHint());
+            navigationService.ChangePresentation(new ToggleCalendarVisibilityHint());
             calendarViewModel.OnToggleCalendar();
         }
 
         private void hideCalendar()
         {
-            ChangePresentation(new ToggleCalendarVisibilityHint(forceHide: true));
+            navigationService.ChangePresentation(new ToggleCalendarVisibilityHint(forceHide: true));
             calendarViewModel.OnHideCalendar();
         }
 

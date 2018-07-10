@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Plugins.Color.iOS;
+using MvvmCross.Commands;
+using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Views;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Helper;

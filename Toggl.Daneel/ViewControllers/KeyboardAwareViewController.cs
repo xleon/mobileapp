@@ -1,4 +1,4 @@
-﻿using MvvmCross.Core.ViewModels;
+﻿using MvvmCross.ViewModels;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers

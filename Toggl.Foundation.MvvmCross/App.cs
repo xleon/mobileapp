@@ -1,6 +1,6 @@
 ﻿using System.Reactive.Linq;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac;
@@ -18,7 +18,7 @@ namespace Toggl.Foundation.MvvmCross
     }
 
     [Preserve(AllMembers = true)]
-    public sealed class AppStart<TFirstViewModelWhenNotLoggedIn> : IMvxAppStart
+    public sealed class AppStart<TFirstViewModelWhenNotLoggedIn> : MvxAppStart
         where TFirstViewModelWhenNotLoggedIn : MvxViewModel
     {
         private readonly ITimeService timeService;
@@ -28,11 +28,13 @@ namespace Toggl.Foundation.MvvmCross
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
 
         public AppStart(
+            IMvxApplication app,
             ITimeService timeService,
             ILoginManager loginManager,
             IOnboardingStorage onboardingStorage,
             IMvxNavigationService navigationService,
             IAccessRestrictionStorage accessRestrictionStorage)
+            : base (app, navigationService)
         {
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(loginManager, nameof(loginManager));
@@ -47,7 +49,7 @@ namespace Toggl.Foundation.MvvmCross
             this.accessRestrictionStorage = accessRestrictionStorage;
         }
 
-        public async void Start(object hint = null)
+        protected override async void NavigateToFirstViewModel(object hint = null)
         {
             onboardingStorage.SetFirstOpened(timeService.CurrentDateTime);
 

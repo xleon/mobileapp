@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using FluentAssertions;
-using MvvmCross.Platform.Converters;
+using MvvmCross;
+using MvvmCross.Converters;
+using MvvmCross.IoC;
+using MvvmCross.Logging;
+using MvvmCross.Tests;
+using NSubstitute;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Multivac;
 using Xunit;
@@ -14,6 +19,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.Converters
 
         public sealed class TheConvertMethod
         {
+            static TheConvertMethod()
+            {
+                var log = Substitute.For<IMvxLog>();
+                var logProvider = Substitute.For<IMvxLogProvider>();
+
+                var ioc = MvxIoCProvider.Initialize();
+                ioc.RegisterSingleton(ioc);
+                ioc.RegisterSingleton(logProvider);
+
+                logProvider.GetLogFor(Arg.Any<Type>()).Returns(log);
+            }
+
             [Theory, LogIfTooSlow]
             [InlineData(null)]
             [InlineData((int)DurationFormat.Classic)]

@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Linq;
 using Android.Content;
-using Android.OS;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Java.Lang;
-using MvvmCross.Platform.Droid.Platform;
-using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Helper;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
 using JavaBool = Java.Lang.Boolean;
 
 namespace Toggl.Giskard.Views

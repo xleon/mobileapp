@@ -1,11 +1,11 @@
-﻿﻿<#@ template language="C#" hostspecific="True"
+﻿<#@ template language="C#" hostspecific="True"
 #><#@ assembly name="System.Core"
 #><#@ import namespace="System.IO"
 #><#@ import namespace="System.Linq"
 #>using Toggl.Daneel.Binding;
 using UIKit;
 using Toggl.Daneel.Views;
-using MvvmCross.Binding.iOS.Views;
+using MvvmCross.Platforms.Ios.Binding.Views;
 using System.Collections.Generic;
 
 namespace Toggl.Daneel.Extensions

@@ -18,13 +18,11 @@ using Toggl.Foundation.Suggestions;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.Mocks;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Settings;
-using Xunit;
-using ThreadingTask = System.Threading.Tasks.Task;
-using static Toggl.Foundation.Helper.Constants;
 using Toggl.Multivac;
-using Toggl.Foundation.Extensions;
+using Toggl.PrimeRadiant;
+using Xunit;
+using static Toggl.Foundation.Helper.Constants;
+using ThreadingTask = System.Threading.Tasks.Task;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -234,11 +232,36 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async ThreadingTask MarksTheActionForOnboardingPurposes()
+            public async ThreadingTask MarksTheActionButtonTappedForOnboardingPurposes()
             {
                 await CallCommand();
 
                 OnboardingStorage.Received().StartButtonWasTapped();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask MarksTheActionNavigatedAwayBeforeStopButtonForOnboardingPurposes()
+            {
+                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(false));
+                ViewModel.Initialize().Wait();
+
+                await CallCommand();
+
+                OnboardingStorage.DidNotReceive().SetNavigatedAwayFromMainViewAfterStopButton();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask MarksTheActionNavigatedAwayAfterStopButtonForOnboardingPurposes()
+            {
+                var timeEntry = Substitute.For<IThreadSafeTimeEntry>();
+                var observable = Observable.Return<IThreadSafeTimeEntry>(null);
+                DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(observable);
+                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(true));
+                ViewModel.Initialize().Wait();
+
+                await CallCommand();
+
+                OnboardingStorage.Received().SetNavigatedAwayFromMainViewAfterStopButton();
             }
         }
 
@@ -269,6 +292,28 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await NavigationService.Received().Navigate<SettingsViewModel>();
             }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask MarksTheActionBeforeStopButtonForOnboardingPurposes()
+            {
+                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(false));
+                ViewModel.Initialize().Wait();
+
+                await ViewModel.OpenSettingsCommand.ExecuteAsync();
+
+                OnboardingStorage.DidNotReceive().SetNavigatedAwayFromMainViewAfterStopButton();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask MarksTheActionAfterStopButtonForOnboardingPurposes()
+            {
+                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(true));
+                ViewModel.Initialize().Wait();
+
+                await ViewModel.OpenSettingsCommand.ExecuteAsync();
+
+                OnboardingStorage.Received().SetNavigatedAwayFromMainViewAfterStopButton();
+            }
         }
 
         public sealed class TheOpenReportsCommand : MainViewModelTest
@@ -280,10 +325,41 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var workspace = Substitute.For<IThreadSafeWorkspace>();
                 workspace.Id.Returns(workspaceId);
                 InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(workspace));
+                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(false));
 
                 await ViewModel.OpenReportsCommand.ExecuteAsync();
 
                 await NavigationService.Received().Navigate<ReportsViewModel, long>(workspaceId);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask MarksTheActionBeforeStopButtonForOnboardingPurposes()
+            {
+                const long workspaceId = 10;
+                var workspace = Substitute.For<IThreadSafeWorkspace>();
+                workspace.Id.Returns(workspaceId);
+                InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(workspace));
+                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(false));
+                ViewModel.Initialize().Wait();
+
+                await ViewModel.OpenReportsCommand.ExecuteAsync();
+
+                OnboardingStorage.DidNotReceive().SetNavigatedAwayFromMainViewAfterStopButton();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask MarksTheActionAfterStopButtonForOnboardingPurposes()
+            {
+                const long workspaceId = 10;
+                var workspace = Substitute.For<IThreadSafeWorkspace>();
+                workspace.Id.Returns(workspaceId);
+                InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(workspace));
+                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(true));
+                ViewModel.Initialize().Wait();
+
+                await ViewModel.OpenReportsCommand.ExecuteAsync();
+
+                OnboardingStorage.Received().SetNavigatedAwayFromMainViewAfterStopButton();
             }
         }
 
@@ -448,6 +524,38 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await NavigationService.DidNotReceive()
                     .Navigate<EditTimeEntryViewModel, long>(Arg.Any<long>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public void MarksTheActionBeforeStopButtonForOnboardingPurposes()
+            {
+                const long timeEntryId = 100;
+                var timeEntry = Substitute.For<IThreadSafeTimeEntry>();
+                timeEntry.Id.Returns(timeEntryId);
+                var observable = Observable.Return(timeEntry);
+                DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(observable);
+                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(false));
+                ViewModel.Initialize().Wait();
+
+                ViewModel.EditTimeEntryCommand.ExecuteAsync().Wait();
+
+                OnboardingStorage.DidNotReceive().SetNavigatedAwayFromMainViewAfterStopButton();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void MarksTheActionAfterStopButtonForOnboardingPurposes()
+            {
+                const long timeEntryId = 100;
+                var timeEntry = Substitute.For<IThreadSafeTimeEntry>();
+                timeEntry.Id.Returns(timeEntryId);
+                var observable = Observable.Return(timeEntry);
+                DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(observable);
+                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(true));
+                ViewModel.Initialize().Wait();
+
+                ViewModel.EditTimeEntryCommand.ExecuteAsync().Wait();
+
+                OnboardingStorage.Received().SetNavigatedAwayFromMainViewAfterStopButton();
             }
         }
 
