@@ -6,9 +6,9 @@ using Toggl.PrimeRadiant;
 
 namespace Toggl.Foundation
 {
-    public static class IRepositoryExtensions
+    public static class BaseStorageExtensions
     {
-        public static IObservable<TModel> Update<TModel>(this IRepository<TModel> repository, TModel entity)
+        public static IObservable<TModel> Update<TModel>(this IBaseStorage<TModel> repository, TModel entity)
             where TModel : IIdentifiable, IDatabaseSyncable
             => repository.Update(entity.Id, entity);
 

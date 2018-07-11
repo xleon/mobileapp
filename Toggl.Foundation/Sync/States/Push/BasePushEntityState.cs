@@ -12,7 +12,6 @@ namespace Toggl.Foundation.Sync.States.Push
     public abstract class BasePushEntityState<T> : IPushEntityState<T>
         where T : class, IThreadSafeModel
     {
-        private readonly IBaseDataSource<T> dataSource;
         protected readonly IAnalyticsService AnalyticsService;
 
         public StateResult<(Exception, T)> ServerError { get; } = new StateResult<(Exception, T)>();
@@ -21,14 +20,10 @@ namespace Toggl.Foundation.Sync.States.Push
 
         public StateResult<(Exception, T)> UnknownError { get; } = new StateResult<(Exception, T)>();
 
-        protected BasePushEntityState(IBaseDataSource<T> dataSource, IAnalyticsService analyticsService)
+        protected BasePushEntityState(IAnalyticsService analyticsService)
         {
-            this.dataSource = dataSource;
             AnalyticsService = analyticsService;
         }
-
-        protected Func<T, IObservable<T>> Overwrite(T entity)
-            => pushedEntity => dataSource.Overwrite(entity, pushedEntity);
 
         protected Func<Exception, IObservable<ITransition>> Fail(T entity, PushSyncOperation operation)
             => exception
