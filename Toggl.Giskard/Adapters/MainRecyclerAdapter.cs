@@ -33,7 +33,6 @@ namespace Toggl.Giskard.Adapters
                     return;
 
                 isTimeEntryRunning = value;
-                NotifyItemChanged(ItemCount - 1);
             }
         }
 
@@ -101,6 +100,7 @@ namespace Toggl.Giskard.Adapters
 
         internal void ContinueTimeEntry(int viewPosition)
         {
+            NotifyItemChanged(viewPosition);
             var timeEntry = GetItem(viewPosition) as TimeEntryViewModel;
             if (timeEntry == null) return;
             TimeEntriesLogViewModel.ContinueTimeEntryCommand.ExecuteAsync(timeEntry);
