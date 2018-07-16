@@ -13,7 +13,7 @@ namespace Toggl.Foundation
             => repository.Update(entity.Id, entity);
 
         public static IObservable<IEnumerable<IConflictResolutionResult<TModel>>> UpdateWithConflictResolution<TModel>(
-            this IRepository<TModel> repository,
+            this IBaseStorage<TModel> repository,
             long id,
             TModel entity,
             Func<TModel, TModel, ConflictResolutionMode> conflictResolution,

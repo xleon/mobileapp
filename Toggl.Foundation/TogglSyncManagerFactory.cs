@@ -233,9 +233,9 @@ namespace Toggl.Foundation
 
             var push = new PushState<TDatabase, TThreadsafe>(dataSource);
             var pushOne = new PushOneEntityState<TThreadsafe>();
-            var create = new CreateEntityState<TModel, TDatabase, TThreadsafe>(creatingApi, dataSource, toClean);
-            var update = new UpdateEntityState<TModel, TThreadsafe>(updatingApi, dataSource, toClean);
-            var delete = new DeleteEntityState<TModel, TDatabase, TThreadsafe>(deletingApi, dataSource);
+            var create = new CreateEntityState<TModel, TDatabase, TThreadsafe>(creatingApi, dataSource, analyticsService, toClean);
+            var update = new UpdateEntityState<TModel, TThreadsafe>(updatingApi, dataSource, analyticsService, toClean);
+            var delete = new DeleteEntityState<TModel, TDatabase, TThreadsafe>(deletingApi, analyticsService, dataSource);
             var deleteLocal = new DeleteLocalEntityState<TDatabase, TThreadsafe>(dataSource);
             var tryResolveClientError = new TryResolveClientErrorState<TThreadsafe>();
             var unsyncable = new UnsyncableEntityState<TThreadsafe>(dataSource, toUnsyncable);
@@ -302,7 +302,7 @@ namespace Toggl.Foundation
 
             var push = new PushState<TDatabase, TThreadsafe>(dataSource);
             var pushOne = new PushOneEntityState<TThreadsafe>();
-            var create = new CreateEntityState<TModel, TDatabase, TThreadsafe>(creatingApi, dataSource, toClean);
+            var create = new CreateEntityState<TModel, TDatabase, TThreadsafe>(creatingApi, dataSource, analyticsService, toClean);
             var tryResolveClientError = new TryResolveClientErrorState<TThreadsafe>();
             var unsyncable = new UnsyncableEntityState<TThreadsafe>(dataSource, toUnsyncable);
             var checkServerStatus = new CheckServerStatusState(api, scheduler, apiDelay, statusDelay, delayCancellation);
@@ -346,7 +346,7 @@ namespace Toggl.Foundation
             IScheduler scheduler,
             IObservable<Unit> delayCancellation)
             where TModel : class
-            where TThreadsafe : class, TModel, IThreadSafeModel, IDatabaseSyncable
+            where TThreadsafe : class, TModel, IThreadSafeModel, IDatabaseSyncable, IIdentifiable
         {
             var rnd = new Random();
             var apiDelay = new RetryDelayService(rnd);

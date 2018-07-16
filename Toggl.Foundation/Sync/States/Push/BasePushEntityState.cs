@@ -5,6 +5,7 @@ using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Sync.States.Push.Interfaces;
+using Toggl.Multivac;
 using Toggl.Ultrawave.Exceptions;
 
 namespace Toggl.Foundation.Sync.States.Push
@@ -22,6 +23,8 @@ namespace Toggl.Foundation.Sync.States.Push
 
         protected BasePushEntityState(IAnalyticsService analyticsService)
         {
+            Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
+
             AnalyticsService = analyticsService;
         }
 
