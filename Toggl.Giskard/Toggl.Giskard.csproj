@@ -404,6 +404,7 @@
       <DependentUpon>AboutActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\AutocompleteEditText.cs" />
+    <Compile Include="Views\NonSwipingViewPager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
