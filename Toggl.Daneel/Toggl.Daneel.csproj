@@ -974,6 +974,8 @@
       <DependentUpon>LicensesViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Combiners\TImeEntryLogViewCellFadeViewConstraintValueCombiner.cs" />
+    <Compile Include="Autocomplete\ProjectTextAttachment.cs" />
+    <Compile Include="Autocomplete\TagTextAttachment.cs" />
     <Compile Include="Autocomplete\EmptyInputDelegate.cs" />
   </ItemGroup>
   <ItemGroup>
