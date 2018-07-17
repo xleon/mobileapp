@@ -498,6 +498,26 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Navigate<EditTimeEntryViewModel, long>(Arg.Any<long>());
             }
 
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask NavigatesToTheEditViewOnlyOnceOnMultipleTaps()
+            {
+                var timeEntry = Substitute.For<IThreadSafeTimeEntry>();
+                var observable = Observable.Return(timeEntry);
+                DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(observable);
+                ViewModel.Initialize().Wait();
+                NavigationService
+                    .Navigate<EditTimeEntryViewModel, long>(Arg.Any<long>())
+                    .Returns(ThreadingTask.Delay(10));
+
+                for (int i = 0; i < 10; i++)
+                {
+                    ThreadingTask runSynchronously = ViewModel.EditTimeEntryCommand.ExecuteAsync();
+                }
+
+                await NavigationService.Received(1)
+                    .Navigate<EditTimeEntryViewModel, long>(Arg.Any<long>());
+            }
+
             [Property]
             public void PassesTheCurrentDateToTheStartTimeEntryViewModel(long id)
             {
@@ -707,30 +727,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheIsWelcomeProperty : MainViewModelTest
         {
-            [Theory]
-            [InlineData(0)]
-            [InlineData(1)]
-            [InlineData(28)]
-            public async ThreadingTask ReturnsTheSameValueAsTimeEntriesLogViewModel(
-                int timeEntryCount)
-            {
-                var timeEntries = Enumerable
-                    .Range(0, timeEntryCount)
-                    .Select(createTimeEntry);
-                InteractorFactory.GetAllNonDeletedTimeEntries().Execute()
-                    .Returns(Observable.Return(timeEntries));
-                DataSource
-                    .TimeEntries
-                    .Updated
-                    .Returns(Observable.Never<EntityUpdate<IThreadSafeTimeEntry>>());
-                await ViewModel.Initialize();
-
-                ViewModel
-                    .IsWelcome
-                    .Should()
-                    .Be(ViewModel.TimeEntriesLogViewModel.IsWelcome);
-            }
-
             private IThreadSafeTimeEntry createTimeEntry(int id)
             {
                 var timeEntry = Substitute.For<IThreadSafeTimeEntry>();

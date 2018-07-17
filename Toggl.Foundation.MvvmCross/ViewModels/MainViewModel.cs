@@ -49,6 +49,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private RatingViewExperiment ratingViewExperiment;
 
+        private bool isEditViewOpen = false;
+        private object isEditViewOpenLock = new object();
+
         private readonly TimeSpan ratingViewTimeout = TimeSpan.FromMinutes(5);
 
         public TimeSpan CurrentTimeEntryElapsedTime { get; private set; } = TimeSpan.Zero;
@@ -98,7 +101,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public int TimeEntriesCount => TimeEntriesLogViewModel.TimeEntries?.Select(section => section.Count).Sum() ?? 0;
 
-        public bool IsWelcome => TimeEntriesLogViewModel.IsWelcome;
+        public bool IsWelcome { get; private set; }
 
         public bool IsInManualMode { get; set; } = false;
 
@@ -173,7 +176,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             OpenReportsCommand = new MvxAsyncCommand(openReports);
             OpenSettingsCommand = new MvxAsyncCommand(openSettings);
             OpenSyncFailuresCommand = new MvxAsyncCommand(openSyncFailures);
-            EditTimeEntryCommand = new MvxAsyncCommand(editTimeEntry, () => CurrentTimeEntryId.HasValue);
+            EditTimeEntryCommand = new MvxAsyncCommand(editTimeEntry, canExecuteEditTimeEntryCommand);
             StopTimeEntryCommand = new MvxAsyncCommand(stopTimeEntry, () => isStopButtonEnabled);
             StartTimeEntryCommand = new MvxAsyncCommand(startTimeEntry, () => CurrentTimeEntryId.HasValue == false);
             AlternativeStartTimeEntryCommand = new MvxAsyncCommand(alternativeStartTimeEntry, () => CurrentTimeEntryId.HasValue == false);
@@ -187,6 +190,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public override async Task Initialize()
         {
             await base.Initialize();
+
+            IsWelcome = await onboardingStorage.IsNewUser.FirstAsync();
 
             await TimeEntriesLogViewModel.Initialize();
             await SuggestionsViewModel.Initialize();
@@ -205,17 +210,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             IsTimeEntryRunning = connectableTimeEntryIsRunning;
 
-            var tickDisposable = timeService
+            timeService
                 .CurrentDateTimeObservable
                 .Where(_ => currentTimeEntryStart != null)
-                .Subscribe(currentTime => CurrentTimeEntryElapsedTime = currentTime - currentTimeEntryStart.Value);
+                .Subscribe(currentTime => CurrentTimeEntryElapsedTime = currentTime - currentTimeEntryStart.Value)
+                .DisposedBy(disposeBag);
 
-            var syncManagerDisposable = dataSource
+            dataSource
                 .SyncManager
                 .ProgressObservable
-                .Subscribe(progress => SyncingProgress = progress);
+                .Subscribe(progress => SyncingProgress = progress)
+                .DisposedBy(disposeBag);
 
-            var isEmptyChangedDisposable = Observable.Empty<Unit>()
+            Observable.Empty<Unit>()
                 .Merge(dataSource.TimeEntries.Updated.Select(_ => Unit.Default))
                 .Merge(dataSource.TimeEntries.Deleted.Select(_ => Unit.Default))
                 .Merge(dataSource.TimeEntries.Created.Select(_ => Unit.Default))
@@ -226,18 +233,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     RaisePropertyChanged(nameof(ShouldShowEmptyState));
                     RaisePropertyChanged(nameof(IsLogEmpty));
                     RaisePropertyChanged(nameof(TimeEntriesCount));
-                });
+                })
+                .DisposedBy(disposeBag);
 
-            var getNumberOfSyncFailuresDisposable = interactorFactory
+            interactorFactory
                 .GetItemsThatFailedToSync()
                 .Execute()
                 .Select(i => i.Count())
-                .Subscribe(n => NumberOfSyncFailures = n);
+                .Subscribe(n => NumberOfSyncFailures = n)
+                .DisposedBy(disposeBag);
 
-            disposeBag.Add(tickDisposable);
-            disposeBag.Add(syncManagerDisposable);
-            disposeBag.Add(isEmptyChangedDisposable);
-            disposeBag.Add(getNumberOfSyncFailuresDisposable);
+            timeService.MidnightObservable
+                .Subscribe(onMidnight)
+                .DisposedBy(disposeBag);
 
             switch (urlNavigationAction)
             {
@@ -313,6 +321,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             dataSource.SyncManager.ForceFullSync();
         }
 
+        private void onMidnight(DateTimeOffset midnight)
+        {
+            navigationService.ChangePresentation(new ReloadLogHint());
+        }
+
         private Task openSettings()
             => navigate<SettingsViewModel>();
 
@@ -358,15 +371,38 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             CurrentTimeEntryElapsedTime = TimeSpan.Zero;
         }
 
-        private Task editTimeEntry()
-            => navigate<EditTimeEntryViewModel, long>(CurrentTimeEntryId.Value);
+        private async Task editTimeEntry()
+        {
+            lock (isEditViewOpenLock)
+            {
+                isEditViewOpen = true;
+            }
+
+            await navigate<EditTimeEntryViewModel, long>(CurrentTimeEntryId.Value);
+
+            lock (isEditViewOpenLock)
+            {
+                isEditViewOpen = false;
+            }
+        }
+
+        private bool canExecuteEditTimeEntryCommand()
+        {
+            lock (isEditViewOpenLock)
+            {
+                if (isEditViewOpen)
+                    return false;
+            }
+
+            return CurrentTimeEntryId.HasValue;
+        }
 
         private Task navigate<TModel, TParameters>(TParameters value)
             where TModel : IMvxViewModel<TParameters>
         {
             if (hasStopButtonEverBeenUsed)
                 onboardingStorage.SetNavigatedAwayFromMainViewAfterStopButton();
-            
+
             return navigationService.Navigate<TModel, TParameters>(value);
         }
 
@@ -375,7 +411,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             if (hasStopButtonEverBeenUsed)
                 onboardingStorage.SetNavigatedAwayFromMainViewAfterStopButton();
-            
+
             return navigationService.Navigate<TModel>();
         }
     }
