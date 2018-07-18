@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using CoreGraphics;
 using Toggl.Foundation.MvvmCross.Helper;
 using UIKit;
 
@@ -19,7 +20,6 @@ namespace Toggl.Daneel.Extensions
                 return Disposable.Create(() => view.RemoveGestureRecognizer(gestureRecognizer));
             });
 
-
         public static Action<bool> BindIsVisible(this UIView view)
             => isVisible => view.Hidden = !isVisible;
 
@@ -31,6 +31,25 @@ namespace Toggl.Daneel.Extensions
                     Animation.Timings.EnterTiming,
                     Animation.Curves.EaseIn,
                     () => view.Alpha = alpha
+                );
+            };
+
+        public static Action<UIColor> BindTintColor(this UIView view)
+            => color => view.TintColor = color;
+
+        public static Action<bool> BindAnimatedIsVisible(this UIView view)
+            => isVisible =>
+            {
+                view.Transform = CGAffineTransform.MakeTranslation(0, 20);
+
+                AnimationExtensions.Animate(
+                    Animation.Timings.EnterTiming,
+                    Animation.Curves.SharpCurve,
+                    () =>
+                    {
+                        view.Hidden = !isVisible;
+                        view.Transform = CGAffineTransform.MakeTranslation(0, 0);
+                    }
                 );
             };
     }
