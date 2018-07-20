@@ -92,7 +92,7 @@ namespace Toggl.Giskard.Views
                 if (item is TimeEntryViewModel)
                 {
                     View view = layoutManager.FindViewByPosition(position);
-                    if (view == null || layoutManager.GetItemViewType(view) != MainTemplateSelector.Item)
+                    if (view == null || layoutManager.GetItemViewType(view) != MainTemplateSelector.TimeEntry)
                         return null;
 
                     var isVisible = 

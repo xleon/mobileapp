@@ -49,8 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
-            android:id="@+id/TimeEntriesLogCellDescription"
-            local:MvxBind="Text Description; TopMargin LogDescriptionTopOffset(HasProject)"
+            local:MvxBind="Text Description"
             android:maxLines="1"
             android:textSize="15sp"
             android:textColor="@android:color/black"
@@ -58,7 +57,7 @@
             android:layout_marginLeft="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true" />
         <TextView
             local:MvxBind="Visibility InvertedVisibility(HasDescription); TopMargin LogDescriptionTopOffset(HasProject)"
@@ -69,46 +68,6 @@
             android:layout_marginLeft="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/TimeEntriesLogCellProjectLabel"
-            local:MvxBind="Text ProjectName; TextColor RGBA(ProjectColor); Visibility Visibility(HasProject)"
-            tools:text="Design"
-            tools:textColor="#c56bff"
-            android:maxLines="1"
-            android:textSize="15sp"
-            android:fontFamily="sans-serif-medium"
-            android:layout_marginLeft="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/TimeEntriesLogCellDescription" />
-        <TextView
-            android:id="@+id/TimeEntriesLogCellTaskLabel"
-            local:MvxBind="Text Format(': {0}', TaskName); TextColor RGBA(ProjectColor); Visibility Visibility(TaskName), ConverterParameter=true"
-            tools:text=": Droid"
-            tools:textColor="#c56bff"
-            android:maxLines="1"
-            android:textSize="15sp"
-            android:fontFamily="sans-serif-medium"
-            android:layout_marginBottom="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/TimeEntriesLogCellProjectLabel"
-            android:layout_alignBaseline="@id/TimeEntriesLogCellProjectLabel" />
-        <TextView
-            local:MvxBind="Text ClientName; Visibility Visibility(HasProject)"
-            tools:text="Toggl"
-            android:maxLines="1"
-            android:textSize="15sp"
-            android:fontFamily="sans-serif"
-            android:textColor="@color/clientName"
-            android:layout_marginLeft="4dp"
-            android:layout_marginBottom="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/TimeEntriesLogCellProjectLabel"
-            android:layout_alignBaseline="@id/TimeEntriesLogCellProjectLabel" />
         <View
             android:background="@drawable/TransparentToWhiteGradient"
             android:layout_width="144dp"
