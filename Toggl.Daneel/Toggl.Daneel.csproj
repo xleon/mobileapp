@@ -984,6 +984,7 @@
     <Compile Include="Autocomplete\TagTextAttachment.cs" />
     <Compile Include="Autocomplete\EmptyInputDelegate.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UITextFieldRxExtensions.cs" />
+    <Compile Include="Binding\TextViewWithPlaceholderDidBecomeFirstResponderTargetBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
