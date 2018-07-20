@@ -31,7 +31,7 @@ namespace Toggl.Giskard.Activities
     [Activity(Theme = "@style/AppTheme",
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
-    public sealed class MainActivity : MvxAppCompatActivity<MainViewModel>
+    public sealed partial class MainActivity : MvxAppCompatActivity<MainViewModel>
     {
         private const int snackbarDuration = 5000;
 
@@ -43,7 +43,7 @@ namespace Toggl.Giskard.Activities
         private PopupWindow playButtonTooltipPopupWindow;
         private PopupWindow stopButtonTooltipPopupWindow;
         private PopupWindow tapToEditPopup;
-        
+
         private IDisposable editTimeEntryOnboardingStepDisposable;
 
         private MainRecyclerView mainRecyclerView;
@@ -55,6 +55,8 @@ namespace Toggl.Giskard.Activities
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.MainActivity);
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
+
+            initializeViews();
 
             SetSupportActionBar(FindViewById<Toolbar>(Resource.Id.Toolbar));
             SupportActionBar.SetDisplayShowHomeEnabled(false);
@@ -75,6 +77,8 @@ namespace Toggl.Giskard.Activities
             setupStartTimeEntryOnboardingStep();
             setupStopTimeEntryOnboardingStep();
             setupTapToEditOnboardingStep();
+
+            setupProjectDotMargin();
         }
 
         protected override void Dispose(bool disposing)
@@ -92,6 +96,20 @@ namespace Toggl.Giskard.Activities
             base.OnStop();
             playButtonTooltipPopupWindow.Dismiss();
             stopButtonTooltipPopupWindow.Dismiss();
+        }
+
+        private void setupProjectDotMargin()
+        {
+            ViewModel.CurrentTimeEntryHasDescription
+                .ObserveOn(SynchronizationContext.Current)
+                .Subscribe(hasDescription =>
+                {
+                    var leftMargin = hasDescription ? 8.DpToPixels(this) : 0;
+                    var layoutParams = (RelativeLayout.LayoutParams)projectDotView.LayoutParameters;
+                    layoutParams.LeftMargin = leftMargin;
+                    projectDotView.LayoutParameters = layoutParams;
+                    projectDotView.RequestLayout();
+                }).DisposedBy(disposeBag);
         }
 
         private void onSyncChanged(object sender, PropertyChangedEventArgs args)

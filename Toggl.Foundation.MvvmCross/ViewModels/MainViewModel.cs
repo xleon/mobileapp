@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
@@ -75,6 +76,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public int NumberOfSyncFailures { get; private set; }
 
         public IObservable<bool> IsTimeEntryRunning { get; private set; }
+
+        public IObservable<bool> CurrentTimeEntryHasDescription { get; private set; }
 
         [DependsOn(nameof(SyncingProgress))]
         public bool ShowSyncIndicator => SyncingProgress == SyncProgress.Syncing;
@@ -209,6 +212,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             connectableTimeEntryIsRunning.Connect();
 
             IsTimeEntryRunning = connectableTimeEntryIsRunning;
+
+            CurrentTimeEntryHasDescription = dataSource
+                .TimeEntries
+                .CurrentlyRunningTimeEntry
+                .Select(te => !string.IsNullOrWhiteSpace(te?.Description))
+                .DistinctUntilChanged();
 
             timeService
                 .CurrentDateTimeObservable
