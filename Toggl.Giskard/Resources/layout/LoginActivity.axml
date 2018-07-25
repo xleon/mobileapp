@@ -4,6 +4,11 @@
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ImageView
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_noise_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
     <ScrollView
         android:scrollbars="none"
         android:fillViewport="true"
@@ -16,11 +21,6 @@
             android:gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <ImageView
-                android:scaleType="centerCrop"
-                android:src="@drawable/bg_noise_login"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
             <ImageView
                 android:id="@+id/LoginLogo"
                 android:src="@drawable/logo_black"
