@@ -335,6 +335,7 @@ namespace Toggl.Daneel.ViewControllers
             ratingView.DataContext = ViewModel.RatingViewModel;
             ratingViewContainer.AddSubview(ratingView);
             ratingView.ConstrainInView(ratingViewContainer);
+            Reload();
         }
 
         public void HideRatingView()
