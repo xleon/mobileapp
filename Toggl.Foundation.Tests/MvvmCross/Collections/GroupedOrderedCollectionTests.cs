@@ -444,5 +444,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 CollectionAssert.AreEqual(collection, expected);
             }
         }
+
+        public sealed class TheTotalCountProperty
+        {
+            [Fact, LogIfTooSlow]
+            public void GetsTheTotalNumberOfItems()
+            {
+                var intCollection = new GroupedOrderedCollection<int>(i => i, i => i, i => i.ToString().Length);
+                List<int> list = new List<int> { 40, 70, 8, 3, 1, 2 };
+                intCollection.ReplaceWith(list);
+
+                intCollection.TotalCount.Should().Be(6);
+                intCollection.Count.Should().Be(2);
+            }
+        }
     }
 }

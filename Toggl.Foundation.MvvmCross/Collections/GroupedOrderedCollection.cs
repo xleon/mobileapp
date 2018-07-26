@@ -17,8 +17,11 @@ namespace Toggl.Foundation.MvvmCross.Collections
         public bool IsEmpty
             => sections.Count == 0;
 
-        public int Count
+        public int TotalCount
             => sections.Sum(section => section.Count);
+
+        public int Count
+            => sections.Count;
 
         public GroupedOrderedCollection(
             Func<TItem, IComparable> indexKey,
