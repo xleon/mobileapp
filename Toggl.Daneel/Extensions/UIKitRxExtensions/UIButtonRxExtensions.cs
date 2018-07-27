@@ -31,5 +31,27 @@ namespace Toggl.Daneel.Extensions
                     null
                 );
             };
+
+        public static void BindToAction<TInput, TOutput>(this UIButton button, RxAction<TInput, TOutput> action, Func<UIButton, TInput> transform)
+        {
+            button.Tapped()
+                .Select(_ => transform(button))
+                .Subscribe(action.Inputs)
+                .DisposedBy(action.DisposeBag);
+
+            action.Enabled
+                .Subscribe(e => { button.Enabled = e; })
+                .DisposedBy(action.DisposeBag);
+        }
+
+        public static void BindToAction<TInput, TOutput>(this UIButton button, RxAction<TInput, TOutput> action, TInput input)
+        {
+            button.BindToAction(action, _ => input);
+        }
+
+        public static void BindToAction<TOutput>(this UIButton button, RxAction<Unit, TOutput> action)
+        {
+            button.BindToAction(action, Unit.Default);
+        }
     }
 }
