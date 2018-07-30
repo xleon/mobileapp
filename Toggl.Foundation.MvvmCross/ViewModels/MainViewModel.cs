@@ -57,6 +57,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public TimeSpan CurrentTimeEntryElapsedTime { get; private set; } = TimeSpan.Zero;
 
+        public DurationFormat CurrentTimeEntryElapsedTimeFormat { get; } = DurationFormat.Improved;
+
         private DateTimeOffset? currentTimeEntryStart;
 
         public long? CurrentTimeEntryId { get; private set; }
