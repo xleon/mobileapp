@@ -67,7 +67,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheConstructor : SettingsViewModelTest
         {
             [Theory, LogIfTooSlow]
-            [ClassData(typeof(ElevenParameterConstructorTestData))]
+            [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useUserAgent,
                 bool useDataSource,
