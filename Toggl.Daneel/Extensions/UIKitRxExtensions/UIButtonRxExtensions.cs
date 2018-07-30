@@ -53,5 +53,10 @@ namespace Toggl.Daneel.Extensions
         {
             button.BindToAction(action, Unit.Default);
         }
+
+        public static void BindToAction(this UIButton button, UIAction action)
+        {
+            button.BindToAction(action, Unit.Default);
+        }
     }
 }

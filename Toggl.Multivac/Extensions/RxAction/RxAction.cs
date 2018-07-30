@@ -1,5 +1,4 @@
 using System;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -10,7 +9,7 @@ namespace Toggl.Multivac.Extensions
     {
     }
 
-    public sealed class RxAction<TInput, TElement> : IDisposable
+    public class RxAction<TInput, TElement> : IDisposable
     {
         public IObservable<Exception> Errors { get; }
         public IObservable<TElement> Elements { get; }
@@ -103,14 +102,6 @@ namespace Toggl.Multivac.Extensions
         public void Dispose()
         {
             DisposeBag?.Dispose();
-        }
-    }
-
-    public static class RxActionExtensions
-    {
-        public static IObservable<TElement> Execute<TElement>(this RxAction<Unit, TElement> action)
-        {
-            return action.Execute(Unit.Default);
         }
     }
 }
