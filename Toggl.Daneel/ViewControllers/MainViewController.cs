@@ -36,7 +36,7 @@ using static Toggl.Foundation.MvvmCross.Helper.Animation;
 namespace Toggl.Daneel.ViewControllers
 {
     [MvxRootPresentation(WrapInNavigationController = true)]
-    public partial class MainViewController : MvxViewController<MainViewModel>
+    public partial class MainViewController : ReactiveViewController<MainViewModel>
     {
         private const float showCardDelay = 0.1f;
 
@@ -93,7 +93,7 @@ namespace Toggl.Daneel.ViewControllers
         private readonly SuggestionsView suggestionsView = new SuggestionsView { TranslatesAutoresizingMaskIntoConstraints = false };
 
         public MainViewController()
-            : base(nameof(MainViewController), null)
+            : base(nameof(MainViewController))
         {
         }
 
@@ -232,6 +232,10 @@ namespace Toggl.Daneel.ViewControllers
                 .WithConversion(visibilityConverter);
 
             bindingSet.Apply();
+
+            this.Bind(ViewModel.RatingViewModel.IsFeedbackSuccessViewShowing,
+                SendFeedbackSuccessView.BindAnimatedIsVisible());
+            this.BindVoid(SendFeedbackSuccessView.Tapped(), ViewModel.RatingViewModel.CloseFeedbackSuccessView);
 
             View.SetNeedsLayout();
             View.LayoutIfNeeded();
@@ -388,6 +392,9 @@ namespace Toggl.Daneel.ViewControllers
 
             RunningEntryDescriptionFadeView.FadeLeft = true;
             RunningEntryDescriptionFadeView.FadeRight = true;
+
+            // Send Feedback Success View Setup
+            SendFeedbackSuccessView.Hidden = true;
 
             prepareSpiderViews();
             prepareEmptyStateView();

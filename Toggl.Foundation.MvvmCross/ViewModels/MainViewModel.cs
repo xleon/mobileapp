@@ -143,7 +143,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ITimeService timeService,
             IRatingService ratingService,
             IUserPreferences userPreferences,
-            IFeedbackService feedbackService,
             IAnalyticsService analyticsService,
             IOnboardingStorage onboardingStorage,
             IInteractorFactory interactorFactory,
@@ -155,7 +154,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(ratingService, nameof(ratingService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
-            Ensure.Argument.IsNotNull(feedbackService, nameof(feedbackService));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
@@ -172,7 +170,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.onboardingStorage = onboardingStorage;
 
             SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, suggestionProviders);
-            RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, feedbackService, analyticsService, onboardingStorage, navigationService);
+            RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService);
             TimeEntriesLogViewModel = new TimeEntriesLogViewModel(timeService, dataSource, interactorFactory, onboardingStorage, analyticsService, navigationService);
 
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService);
