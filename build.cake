@@ -273,8 +273,8 @@ private TemporaryFileTransformation GetAndroidManifestTransformation()
 
     if (target == "Build.Release.Android.AdHoc")
     {
-        packageName = "com.toggl.giskard";
-        appName = "Toggl for Tests";
+        packageName = "com.toggl.giskard.calendar";
+        appName = "Toggl for Calendar Tests";
     }
     else if (target == "Build.Release.Android.PlayStore")
     {
