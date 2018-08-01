@@ -546,7 +546,7 @@
     <InterfaceDefinition Include="ViewControllers\TokenResetViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\ReportsViewController.xib" />
     <InterfaceDefinition Include="Views\Color\ColorSelectionViewCell.xib" />
-    <InterfaceDefinition Include="Views\Log\TimeEntriesLogHeaderViewCell.xib" />
+    <InterfaceDefinition Include="Views\Log\TimeEntriesLogHeaderView.xib" />
     <InterfaceDefinition Include="Views\Log\TimeEntriesLogViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\ProjectSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\StartTimeEntryEmptyViewCell.xib" />
@@ -604,6 +604,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding\DatePickerDateTimeOffsetTargetBinding.cs" />
+    <Compile Include="Extensions\Binders\ReactiveTableViewBinder.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\NSConstraintRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UIApplicationRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UIButtonRxExtensions.cs" />
@@ -611,6 +612,7 @@
     <Compile Include="Extensions\UIKitRxExtensions\UIDatePickerRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UILabelRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UISwitchRxExtensions.cs" />
+    <Compile Include="Extensions\UIKitRxExtensions\UITableViewRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UITextViewRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UIViewRxExtensions.cs" />
     <Compile Include="Services\UserDefaultsStorage.cs" />
@@ -623,6 +625,8 @@
     </Compile>
     <Compile Include="Extensions\AnimationExtensions.cs" />
     <Compile Include="Binding\ScrollViewAnimatedCurrentPageTargetBinding.cs" />
+    <Compile Include="Transformations\DateToTitleString.cs" />
+    <Compile Include="Transformations\ProjectTaskClientToAttributedString.cs" />
     <Compile Include="ViewControllers\OnboardingViewController.cs" />
     <Compile Include="ViewControllers\OnboardingViewController.designer.cs">
       <DependentUpon>OnboardingViewController.cs</DependentUpon>
@@ -633,7 +637,9 @@
     <Compile Include="Binding\BarButtonCommandTargetBinding.cs" />
     <Compile Include="Binding\ViewAnimatedVisibilityTargetBinding.cs" />
     <Compile Include="ViewControllers\SyncFailuresViewController.cs" />
-    <Compile Include="ViewSources\ListTableViewSource.cs" />
+    <Compile Include="ViewSources\Generic\ListTableViewSource.cs" />
+    <Compile Include="ViewSources\Generic\ReactiveSectionedListTableViewSource.cs" />
+    <Compile Include="ViewSources\Generic\SectionedListTableViewSource.cs" />
     <Compile Include="ViewSources\SelectProjectTableViewSource.cs" />
     <Compile Include="Binding\TextFieldSecureTextEntryTargetBinding.cs" />
     <Compile Include="Binding\BarButtonAnimatedEnabledTargetBinding.cs" />
@@ -687,6 +693,8 @@
     <Compile Include="ViewSources\SelectTagsTableViewSource.cs" />
     <Compile Include="ViewSources\GroupedCollectionTableViewSource.cs" />
     <Compile Include="Views\EditDuration\DurationFieldTextFormatter.cs" />
+    <Compile Include="Views\Log\RefreshControl.cs" />
+    <Compile Include="Views\Log\TimeEntriesLogTableView.cs" />
     <Compile Include="Views\MarqueeView.cs" />
     <Compile Include="Binding\SwitchAnimatedOnTargetBinding.cs" />
     <Compile Include="Views\Onboarding\TrackPage.cs" />
@@ -760,9 +768,9 @@
       <DependentUpon>ColorSelectionViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Color\HueSaturationPickerView.cs" />
-    <Compile Include="Views\Log\TimeEntriesLogHeaderViewCell.cs" />
-    <Compile Include="Views\Log\TimeEntriesLogHeaderViewCell.designer.cs">
-      <DependentUpon>TimeEntriesLogHeaderViewCell.cs</DependentUpon>
+    <Compile Include="Views\Log\TimeEntriesLogHeaderView.cs" />
+    <Compile Include="Views\Log\TimeEntriesLogHeaderView.designer.cs">
+      <DependentUpon>TimeEntriesLogHeaderView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Log\TimeEntriesLogViewCell.cs" />
     <Compile Include="Views\Log\TimeEntriesLogViewCell.designer.cs">
@@ -876,8 +884,6 @@
     <Compile Include="Views\Suggestions\SuggestionView.designer.cs">
       <DependentUpon>SuggestionView.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewSources\MainTableViewSource.cs" />
-    <Compile Include="ViewSources\SwipeToRefreshTableViewDelegate.cs" />
     <Compile Include="Converters\CollectionSizeToHeightConverter.cs" />
     <Compile Include="Binding\LayoutConstraintConstantTargetBinding.cs" />
     <Compile Include="Services\LicenseProvider.cs" />
@@ -982,7 +988,6 @@
     <Compile Include="Cells\Settings\LicensesViewCell.designer.cs">
       <DependentUpon>LicensesViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Combiners\TImeEntryLogViewCellFadeViewConstraintValueCombiner.cs" />
     <Compile Include="Autocomplete\ProjectTextAttachment.cs" />
     <Compile Include="Autocomplete\TagTextAttachment.cs" />
     <Compile Include="Autocomplete\EmptyInputDelegate.cs" />
