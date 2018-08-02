@@ -592,6 +592,7 @@
     <InterfaceDefinition Include="Cells\Settings\LicensesViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\NoWorkspaceViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\SendFeedbackViewController.xib" />
+    <InterfaceDefinition Include="Views\SnackBar.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -1001,6 +1002,10 @@
       <DependentUpon>SendFeedbackViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Binding\TextViewWithPlaceholderDidBecomeFirstResponderTargetBinding.cs" />
+    <Compile Include="Views\SnackBar.cs" />
+    <Compile Include="Views\SnackBar.designer.cs">
+      <DependentUpon>SnackBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\NoWorkspaceViewController.cs" />
     <Compile Include="ViewControllers\NoWorkspaceViewController.designer.cs">
       <DependentUpon>NoWorkspaceViewController.cs</DependentUpon>
