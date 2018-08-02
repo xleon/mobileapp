@@ -524,6 +524,10 @@
     <ImageAsset Include="Resources\Images.xcassets\icWarning.imageset\icWarning.png" />
     <ImageAsset Include="Resources\Images.xcassets\icWarning.imageset\icWarning%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icWarning.imageset\icWarning%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationErrorWorkspace.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationErrorWorkspace%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationErrorWorkspace%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -586,6 +590,7 @@
     <InterfaceDefinition Include="Cells\SyncFailures\SyncFailureCell.xib" />
     <InterfaceDefinition Include="Cells\Settings\LicensesHeaderViewCell.xib" />
     <InterfaceDefinition Include="Cells\Settings\LicensesViewCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\NoWorkspaceViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\SendFeedbackViewController.xib" />
   </ItemGroup>
   <ItemGroup>
@@ -608,7 +613,6 @@
     <Compile Include="Extensions\UIKitRxExtensions\NSConstraintRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UIApplicationRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UIButtonRxExtensions.cs" />
-    <Compile Include="Extensions\UIKitRxExtensions\UIControlRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UIDatePickerRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UILabelRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UISwitchRxExtensions.cs" />
@@ -997,6 +1001,11 @@
       <DependentUpon>SendFeedbackViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Binding\TextViewWithPlaceholderDidBecomeFirstResponderTargetBinding.cs" />
+    <Compile Include="ViewControllers\NoWorkspaceViewController.cs" />
+    <Compile Include="ViewControllers\NoWorkspaceViewController.designer.cs">
+      <DependentUpon>NoWorkspaceViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\UIKitRxExtensions\UIControlRxExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
@@ -1052,6 +1061,7 @@
     <Folder Include="Resources\Images.xcassets\paws.imageset\" />
     <Folder Include="Resources\Images.xcassets\icBackNoPadding.imageset\" />
     <Folder Include="Resources\Images.xcassets\icWarning.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />
