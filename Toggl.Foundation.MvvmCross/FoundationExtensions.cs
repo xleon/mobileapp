@@ -97,6 +97,7 @@ namespace Toggl.Foundation.MvvmCross
             Mvx.RegisterSingleton(foundation.ErrorHandlingService);
             Mvx.RegisterSingleton(foundation.PasswordManagerService ?? new StubPasswordManagerService());
             Mvx.RegisterSingleton(foundation.PermissionsService);
+            Mvx.RegisterSingleton(foundation.CalendarService);
         }
     }
 }

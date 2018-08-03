@@ -616,6 +616,7 @@
     <Compile Include="Extensions\UIKitRxExtensions\UITextViewRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UIViewRxExtensions.cs" />
     <Compile Include="Services\PermissionsService.cs" />
+    <Compile Include="Services\CalendarService.cs" />
     <Compile Include="Services\UserDefaultsStorage.cs" />
     <Compile Include="Startup\Setup.cs" />
     <Compile Include="Startup\SetupTargetFactories.cs">

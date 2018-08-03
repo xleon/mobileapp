@@ -108,6 +108,7 @@ namespace Toggl.Giskard
                     .WithAccessRestrictionStorage(settingsStorage)
                     .WithErrorHandlingService(new ErrorHandlingService(navigationService, settingsStorage))
                     .WithPermissionsService<PermissionsService>()
+                    .WithCalendarService<CalendarService>()
                     .Build();
 
             foundation.RevokeNewUserIfNeeded().Initialize();

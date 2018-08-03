@@ -46,6 +46,7 @@ namespace Toggl.Foundation.MvvmCross
         public IAccessRestrictionStorage AccessRestrictionStorage { get; }
         public ILastTimeUsageStorage LastTimeUsageStorage { get; }
         public IPermissionsService PermissionsService { get; }
+        public ICalendarService CalendarService { get; }
 
         private MvvmCrossFoundation(Builder builder)
         {
@@ -62,6 +63,7 @@ namespace Toggl.Foundation.MvvmCross
             AccessRestrictionStorage = builder.AccessRestrictionStorage;
             LastTimeUsageStorage = builder.LastTimeUsageStorage;
             PermissionsService = builder.PermissionsService;
+            CalendarService = builder.CalendarService;
 
             Version = builder.Foundation.Version;
             Database = builder.Foundation.Database;
@@ -96,6 +98,7 @@ namespace Toggl.Foundation.MvvmCross
             public IAccessRestrictionStorage AccessRestrictionStorage { get; private set; }
             public ILastTimeUsageStorage LastTimeUsageStorage { get; private set; }
             public IPermissionsService PermissionsService { get; private set; }
+            public ICalendarService CalendarService { get; private set; }
 
             public Builder(TogglFoundation foundation)
             {
@@ -170,6 +173,12 @@ namespace Toggl.Foundation.MvvmCross
                 return this;
             }
 
+            public Builder WithCalendarService(ICalendarService calendarService)
+            {
+                CalendarService = calendarService;
+                return this;
+            }
+
             public Builder WithDialogService<TDialogService>()
                 where TDialogService : IDialogService, new()
                 => WithDialogService(new TDialogService());
@@ -210,6 +219,10 @@ namespace Toggl.Foundation.MvvmCross
                 where TPermissionsService : IPermissionsService, new()
                 => WithPermissionsService(new TPermissionsService());
 
+            public Builder WithCalendarService<TCalendarService>()
+                where TCalendarService : ICalendarService, new()
+                => WithCalendarService(new TCalendarService());
+
             public MvvmCrossFoundation Build()
                 => new MvvmCrossFoundation(this);
 
@@ -225,6 +238,7 @@ namespace Toggl.Foundation.MvvmCross
                 Ensure.Argument.IsNotNull(AccessRestrictionStorage, nameof(AccessRestrictionStorage));
                 Ensure.Argument.IsNotNull(LastTimeUsageStorage, nameof(LastTimeUsageStorage));
                 Ensure.Argument.IsNotNull(PermissionsService, nameof(PermissionsService));
+                Ensure.Argument.IsNotNull(CalendarService, nameof(CalendarService));
             }
         }
     }

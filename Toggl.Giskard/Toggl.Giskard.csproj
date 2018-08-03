@@ -263,6 +263,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Services\PermissionsService.cs" />
+    <Compile Include="Services\CalendarService.cs" />
     <Compile Include="Startup\Setup.cs" />
     <Compile Include="Startup\SplashScreen.cs" />
     <Compile Include="Services\GoogleService.cs" />
