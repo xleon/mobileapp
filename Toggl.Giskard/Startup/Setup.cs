@@ -107,6 +107,7 @@ namespace Toggl.Giskard
                     .WithNavigationService(navigationService)
                     .WithAccessRestrictionStorage(settingsStorage)
                     .WithErrorHandlingService(new ErrorHandlingService(navigationService, settingsStorage))
+                    .WithPermissionsService<PermissionsService>()
                     .Build();
 
             foundation.RevokeNewUserIfNeeded().Initialize();

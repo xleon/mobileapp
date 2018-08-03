@@ -45,6 +45,7 @@ namespace Toggl.Foundation.MvvmCross
         public IErrorHandlingService ErrorHandlingService { get; }
         public IAccessRestrictionStorage AccessRestrictionStorage { get; }
         public ILastTimeUsageStorage LastTimeUsageStorage { get; }
+        public IPermissionsService PermissionsService { get; }
 
         private MvvmCrossFoundation(Builder builder)
         {
@@ -60,6 +61,7 @@ namespace Toggl.Foundation.MvvmCross
             ErrorHandlingService = builder.ErrorHandlingService;
             AccessRestrictionStorage = builder.AccessRestrictionStorage;
             LastTimeUsageStorage = builder.LastTimeUsageStorage;
+            PermissionsService = builder.PermissionsService;
 
             Version = builder.Foundation.Version;
             Database = builder.Foundation.Database;
@@ -93,6 +95,7 @@ namespace Toggl.Foundation.MvvmCross
             public IErrorHandlingService ErrorHandlingService { get; private set; }
             public IAccessRestrictionStorage AccessRestrictionStorage { get; private set; }
             public ILastTimeUsageStorage LastTimeUsageStorage { get; private set; }
+            public IPermissionsService PermissionsService { get; private set; }
 
             public Builder(TogglFoundation foundation)
             {
@@ -161,6 +164,12 @@ namespace Toggl.Foundation.MvvmCross
                 return this;
             }
 
+            public Builder WithPermissionsService(IPermissionsService permissionsService)
+            {
+                PermissionsService = permissionsService;
+                return this;
+            }
+
             public Builder WithDialogService<TDialogService>()
                 where TDialogService : IDialogService, new()
                 => WithDialogService(new TDialogService());
@@ -197,6 +206,10 @@ namespace Toggl.Foundation.MvvmCross
                 where TErrorHandlingService : IErrorHandlingService, new()
                 => WithErrorHandlingService(new TErrorHandlingService());
 
+            public Builder WithPermissionsService<TPermissionsService>()
+                where TPermissionsService : IPermissionsService, new()
+                => WithPermissionsService(new TPermissionsService());
+
             public MvvmCrossFoundation Build()
                 => new MvvmCrossFoundation(this);
 
@@ -211,6 +224,7 @@ namespace Toggl.Foundation.MvvmCross
                 Ensure.Argument.IsNotNull(ErrorHandlingService, nameof(ErrorHandlingService));
                 Ensure.Argument.IsNotNull(AccessRestrictionStorage, nameof(AccessRestrictionStorage));
                 Ensure.Argument.IsNotNull(LastTimeUsageStorage, nameof(LastTimeUsageStorage));
+                Ensure.Argument.IsNotNull(PermissionsService, nameof(PermissionsService));
             }
         }
     }

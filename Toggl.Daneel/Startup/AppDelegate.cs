@@ -10,6 +10,7 @@ using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Shortcuts;
@@ -27,6 +28,7 @@ namespace Toggl.Daneel
         private IAnalyticsService analyticsService;
         private IBackgroundService backgroundService;
         private IMvxNavigationService navigationService;
+        private IPermissionsService permissionsService;
 
         public override UIWindow Window { get; set; }
 
@@ -61,6 +63,7 @@ namespace Toggl.Daneel
             analyticsService = Mvx.Resolve<IAnalyticsService>();
             backgroundService = Mvx.Resolve<IBackgroundService>();
             navigationService = Mvx.Resolve<IMvxNavigationService>();
+            permissionsService = Mvx.Resolve<IPermissionsService>();
             setupNavigationBar();
         }
 
@@ -86,6 +89,7 @@ namespace Toggl.Daneel
         {
             base.WillEnterForeground(application);
             backgroundService.EnterForeground();
+            permissionsService.EnterForeground();
         }
 
         public override void DidEnterBackground(UIApplication application)
