@@ -587,6 +587,7 @@
     <InterfaceDefinition Include="Cells\Settings\LicensesHeaderViewCell.xib" />
     <InterfaceDefinition Include="Cells\Settings\LicensesViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\SendFeedbackViewController.xib" />
+    <InterfaceDefinition Include="Views\CalendarItemView.xib" />
     <InterfaceDefinition Include="ViewControllers\CalendarViewController.xib" />
   </ItemGroup>
   <ItemGroup>
@@ -1000,6 +1001,11 @@
       <DependentUpon>SendFeedbackViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Binding\TextViewWithPlaceholderDidBecomeFirstResponderTargetBinding.cs" />
+    <Compile Include="Views\CalendarItemView.cs" />
+    <Compile Include="Views\CalendarItemView.designer.cs">
+      <DependentUpon>CalendarItemView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReactiveCollectionViewCell.cs" />
     <Compile Include="ViewControllers\CalendarViewController.cs" />
     <Compile Include="ViewControllers\CalendarViewController.designer.cs">
       <DependentUpon>CalendarViewController.cs</DependentUpon>
