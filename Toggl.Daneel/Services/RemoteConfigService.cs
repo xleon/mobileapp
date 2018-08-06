@@ -31,6 +31,9 @@ namespace Toggl.Daneel.Services
                 return Disposable.Empty;
             });
 
+        public IObservable<bool> IsCalendarFeatureEnabled
+            => Observable.Return(true);
+
         private RatingViewCriterion criterionStringToEnum(string criterion)
         {
             switch (criterion)
