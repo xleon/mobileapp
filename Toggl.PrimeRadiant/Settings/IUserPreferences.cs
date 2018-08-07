@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 
 namespace Toggl.PrimeRadiant.Settings
 {
     public interface IUserPreferences
     {
         IObservable<bool> IsManualModeEnabledObservable { get; }
+
+        IObservable<List<string>> EnabledCalendars { get; }
 
         bool IsManualModeEnabled { get; }
 
@@ -13,5 +16,9 @@ namespace Toggl.PrimeRadiant.Settings
         void EnableTimerMode();
 
         void Reset();
+
+        List<string> EnabledCalendarIds();
+
+        void SetEnabledCalendars(params string[] ids);
     }
 }

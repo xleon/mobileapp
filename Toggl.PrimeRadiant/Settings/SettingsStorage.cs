@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Onboarding;
 
 namespace Toggl.PrimeRadiant.Settings
@@ -39,6 +42,9 @@ namespace Toggl.PrimeRadiant.Settings
         private const string lastSuccessfulSyncKey = "LastSuccessfulSync";
         private const string lastLoginKey = "LastLogin";
 
+        private const string enabledCalendarsKey = "EnabledCalendars";
+        private const char calendarIdSeparator = ';';
+
         private readonly Version version;
         private readonly IKeyValueStorage keyValueStorage;
 
@@ -51,8 +57,10 @@ namespace Toggl.PrimeRadiant.Settings
         private readonly ISubject<bool> stopButtonWasTappedSubject;
         private readonly ISubject<bool> hasSelectedProjectSubject;
         private readonly ISubject<bool> isManualModeEnabledSubject;
-        private readonly ISubject<bool> navigatedAwayFromMainViewAfterTappingStopButtonSubject;
         private readonly ISubject<bool> hasTimeEntryBeenContinuedSubject;
+        private readonly ISubject<bool> navigatedAwayFromMainViewAfterTappingStopButtonSubject;
+        private readonly ISubject<List<string>> enabledCalendarsSubject;
+
 
         public SettingsStorage(Version version, IKeyValueStorage keyValueStorage)
         {
@@ -61,6 +69,7 @@ namespace Toggl.PrimeRadiant.Settings
             this.version = version;
             this.keyValueStorage = keyValueStorage;
 
+            (enabledCalendarsSubject, EnabledCalendars) = prepareCalendarIdsSubjectAndObservable(enabledCalendarsKey);
             (isNewUserSubject, IsNewUser) = prepareSubjectAndObservable(isNewUserKey);
             (isManualModeEnabledSubject, IsManualModeEnabledObservable) = prepareSubjectAndObservable(preferManualModeKey);
             (hasTappedTimeEntrySubject, HasTappedTimeEntry) = prepareSubjectAndObservable(hasTappedTimeEntryKey);
@@ -294,6 +303,8 @@ namespace Toggl.PrimeRadiant.Settings
 
         public IObservable<bool> IsManualModeEnabledObservable { get; }
 
+        public IObservable<List<string>> EnabledCalendars { get; }
+
         public bool IsManualModeEnabled
             => keyValueStorage.GetBool(preferManualModeKey);
 
@@ -313,6 +324,40 @@ namespace Toggl.PrimeRadiant.Settings
         {
             EnableTimerMode();
             isManualModeEnabledSubject.OnNext(false);
+        }
+
+        public List<string> EnabledCalendarIds()
+        {
+            var aggregatedIds = keyValueStorage.GetString(enabledCalendarsKey);
+            if (string.IsNullOrEmpty(aggregatedIds))
+                return new List<string>();
+
+            return aggregatedIds
+                .Split(calendarIdSeparator)
+                .ToList();
+        }
+
+        public void SetEnabledCalendars(params string[] ids)
+        {
+            enabledCalendarsSubject.OnNext(ids?.ToList() ?? new List<string>());
+
+            if (ids == null)
+            {
+                keyValueStorage.Remove(enabledCalendarsKey);
+                return;
+            }
+
+            if (ids.None())
+            {
+                keyValueStorage.Remove(enabledCalendarsKey);
+                return;
+            }
+
+            if (ids.Any(id => id.Contains(calendarIdSeparator)))
+                throw new ArgumentException($"One of the ids contains a character that's used as a separator ({calendarIdSeparator})");
+
+            var aggregatedIds = ids.Aggregate((accumulator, id) => $"{accumulator}{calendarIdSeparator}{id}");
+            keyValueStorage.SetString(enabledCalendarsKey, aggregatedIds);
         }
 
         #endregion
@@ -347,6 +392,15 @@ namespace Toggl.PrimeRadiant.Settings
         {
             var initialValue = keyValueStorage.GetBool(key);
             var subject = new BehaviorSubject<bool>(initialValue);
+            var observable = subject.AsObservable().DistinctUntilChanged();
+
+            return (subject, observable);
+        }
+
+        private (ISubject<List<string>>, IObservable<List<string>>) prepareCalendarIdsSubjectAndObservable(string key)
+        {
+            var initialValue = EnabledCalendarIds();
+            var subject = new BehaviorSubject<List<string>>(initialValue);
             var observable = subject.AsObservable().DistinctUntilChanged();
 
             return (subject, observable);
