@@ -524,6 +524,10 @@
     <ImageAsset Include="Resources\Images.xcassets\icWarning.imageset\icWarning.png" />
     <ImageAsset Include="Resources\Images.xcassets\icWarning.imageset\icWarning%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icWarning.imageset\icWarning%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icCalendar.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icCalendar.imageset\icCalendar.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icCalendar.imageset\icCalendar%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icCalendar.imageset\icCalendar%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -1065,6 +1069,7 @@
     <Folder Include="Resources\Images.xcassets\paws.imageset\" />
     <Folder Include="Resources\Images.xcassets\icBackNoPadding.imageset\" />
     <Folder Include="Resources\Images.xcassets\icWarning.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icCalendar.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />

@@ -46,6 +46,7 @@ namespace Toggl.Daneel.ViewControllers
         private readonly SpiderOnARopeView spiderBroView = new SpiderOnARopeView();
         private readonly UIButton reportsButton = new UIButton(new CGRect(0, 0, 30, 40));
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 30, 40));
+        private readonly UIButton calendarButton = new UIButton(new CGRect(0, 0, 30, 40));
         private readonly UIButton syncFailuresButton = new UIButton(new CGRect(0, 0, 30, 40));
         private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
         private readonly TimeEntriesEmptyLogView emptyStateView = TimeEntriesEmptyLogView.Create();
@@ -161,6 +162,8 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindLongPress())
                       .To(vm => vm.AlternativeStartTimeEntryCommand);
 
+            this.Bind(calendarButton.Tapped(), ViewModel.OpenCalendarAction);
+
             //Visibility
             var shouldWelcomeBack = ViewModel.ShouldShowWelcomeBack.AsDriver();
             this.Bind(ViewModel.ShouldShowEmptyState.AsDriver(), visible => emptyStateView.Hidden = !visible);
@@ -242,7 +245,8 @@ namespace Toggl.Daneel.ViewControllers
             NavigationItem.RightBarButtonItems = new[]
             {
                 new UIBarButtonItem(settingsButton),
-                new UIBarButtonItem(reportsButton)
+                new UIBarButtonItem(reportsButton),
+                new UIBarButtonItem(calendarButton),
             };
 
 #if DEBUG
@@ -341,6 +345,7 @@ namespace Toggl.Daneel.ViewControllers
             //Prepare Navigation bar images
             reportsButton.SetImage(UIImage.FromBundle("icReports"), UIControlState.Normal);
             settingsButton.SetImage(UIImage.FromBundle("icSettings"), UIControlState.Normal);
+            calendarButton.SetImage(UIImage.FromBundle("icCalendar"), UIControlState.Normal);
             syncFailuresButton.SetImage(UIImage.FromBundle("icWarning"), UIControlState.Normal);
 
             RunningEntryDescriptionFadeView.FadeLeft = true;
