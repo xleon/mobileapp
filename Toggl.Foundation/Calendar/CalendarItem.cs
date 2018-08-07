@@ -1,5 +1,6 @@
 ﻿using System;
 using Toggl.Foundation.Models.Interfaces;
+using ColorHelper = Toggl.Foundation.Helper.Color;
 
 namespace Toggl.Foundation.Calendar
 {
@@ -39,9 +40,12 @@ namespace Toggl.Foundation.Calendar
                 timeEntry.Start,
                 TimeSpan.FromSeconds(timeEntry.Duration.Value),
                 timeEntry.Description,
-                timeEntry.Project.Color,
+                timeEntry.Project?.Color ?? ColorHelper.NoProject,
                 timeEntry.Id)
         {
         }
+
+        public static CalendarItem From(IThreadSafeTimeEntry timeEntry)
+            => new CalendarItem(timeEntry);
     }
 }
