@@ -74,10 +74,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxCommand ToggleManualMode { get; }
 
         // Inputs
-        public InputAction<TimeEntryViewModel> ContinueTimeEntry { get; }
+        public UIAction RefreshAction { get; }
+        public UIAction OpenCalendarAction { get; }
         public InputAction<TimeEntryViewModel> DeleteTimeEntry { get; }
         public InputAction<TimeEntryViewModel> SelectTimeEntry { get; }
-        public UIAction RefreshAction { get; }
+        public InputAction<TimeEntryViewModel> ContinueTimeEntry { get; }
 
         // Private
         private const int ratingViewTimeout = 5;
@@ -168,10 +169,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             StartTimeEntryCommand = new MvxAsyncCommand(startTimeEntry, () => CurrentTimeEntryId.HasValue == false);
             AlternativeStartTimeEntryCommand = new MvxAsyncCommand(alternativeStartTimeEntry, () => CurrentTimeEntryId.HasValue == false);
 
-            ContinueTimeEntry = new InputAction<TimeEntryViewModel>(continueTimeEntry);
+            RefreshAction = new UIAction(refresh);
             DeleteTimeEntry = new InputAction<TimeEntryViewModel>(deleteTimeEntry);
             SelectTimeEntry = new InputAction<TimeEntryViewModel>(timeEntrySelected);
-            RefreshAction = new UIAction(refresh);
+            ContinueTimeEntry = new InputAction<TimeEntryViewModel>(continueTimeEntry);
+            OpenCalendarAction = new UIAction(openCalendarAction, remoteConfigService.IsCalendarFeatureEnabled);
         }
 
         public void Init(string action)
@@ -357,6 +359,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private Task openSyncFailures()
             => navigate<SyncFailuresViewModel>();
+
+        private IObservable<Unit> openCalendarAction()
+            => Observable
+                .FromAsync(async () => await navigationService.Navigate<CalendarViewModel>())
+                .SelectUnit();
 
         private Task startTimeEntry()
             => startTimeEntry(IsInManualMode);

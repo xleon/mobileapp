@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using FluentAssertions;
@@ -956,6 +957,37 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     await interactor.Received().Execute();
                 }
+            }
+        }
+
+        public sealed class TheOpenCalendarAction : MainViewModelTest
+        {
+            [Property]
+            public void IsEnabledBasedOnRemoteConfig(bool enabled)
+            {
+                RemoteConfigService
+                    .IsCalendarFeatureEnabled
+                    .Returns(Observable.Return(enabled));
+                var viewModel = CreateViewModel();
+                var observer = TestScheduler.CreateObserver<bool>();
+                viewModel.OpenCalendarAction.Enabled.Subscribe(observer);
+
+                observer.Messages.AssertEqual(
+                    ReactiveTest.OnNext(0, enabled)
+                );
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask NavigatesToTheCalendarViewModel()
+            {
+                RemoteConfigService
+                    .IsCalendarFeatureEnabled
+                    .Returns(Observable.Return(true));
+                var viewModel = CreateViewModel();
+
+                await viewModel.OpenCalendarAction.Execute(Unit.Default);
+
+                await NavigationService.Received().Navigate<CalendarViewModel>();
             }
         }
     }
