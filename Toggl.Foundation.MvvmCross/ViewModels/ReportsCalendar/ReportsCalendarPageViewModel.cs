@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using MvvmCross.Binding.Bindings.Target;
 using Toggl.Multivac;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
+namespace Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar
 {
-    public sealed class CalendarPageViewModel
+    public sealed class ReportsCalendarPageViewModel
     {
         private readonly BeginningOfWeek beginningOfWeek;
         private readonly DateTimeOffset today;
 
-        public List<CalendarDayViewModel> Days { get; }
-            = new List<CalendarDayViewModel>();
+        public List<ReportsCalendarDayViewModel> Days { get; }
+            = new List<ReportsCalendarDayViewModel>();
 
         public CalendarMonth CalendarMonth { get; }
 
         public int RowCount { get; }
 
-        public CalendarPageViewModel(
+        public ReportsCalendarPageViewModel(
             CalendarMonth calendarMonth, BeginningOfWeek beginningOfWeek, DateTimeOffset today)
         {
             this.beginningOfWeek = beginningOfWeek;
@@ -68,7 +68,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
         private void addDay(int day, CalendarMonth month, bool isCurrentMonth)
         {
-            Days.Add(new CalendarDayViewModel(day, month, isCurrentMonth, today));
+            Days.Add(new ReportsCalendarDayViewModel(day, month, isCurrentMonth, today));
         }
     }
 }

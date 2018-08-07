@@ -1,15 +1,15 @@
 ﻿using System;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts;
+using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.CalendarQuickSelectShortcuts
+namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.ReportsCalendarQuickSelectShortcuts
 {
-    public abstract class BaseCalendarQuickSelectShortcutTests<T> : BaseMvvmCrossTests
-        where T : CalendarBaseQuickSelectShortcut
+    public abstract class BaseReportsCalendarQuickSelectShortcutTests<T> : BaseMvvmCrossTests
+        where T : ReportsCalendarBaseQuickSelectShortcut
     {
-        protected BaseCalendarQuickSelectShortcutTests()
+        protected BaseReportsCalendarQuickSelectShortcutTests()
         {
             TimeService.CurrentDateTime.Returns(CurrentTime);
         }

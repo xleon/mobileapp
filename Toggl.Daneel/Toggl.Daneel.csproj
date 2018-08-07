@@ -834,7 +834,7 @@
     <Compile Include="ReportsCalendarCollectionViewLayout.cs" />
     <Compile Include="Binding\ScrollViewCurrentPageTargetBinding.cs" />
     <Compile Include="Binding\LayoutConstraintAnimatedConstantTargetBinding.cs" />
-    <Compile Include="Converters\CalendarRowCountToCalendarHeightConverter.cs" />
+    <Compile Include="Converters\ReportsCalendarRowCountToCalendarHeightConverter.cs" />
     <Compile Include="Views\Reports\ReportsCalendarViewCell.cs" />
     <Compile Include="Views\Reports\ReportsCalendarViewCell.designer.cs">
       <DependentUpon>ReportsCalendarViewCell.cs</DependentUpon>
@@ -845,7 +845,7 @@
       <DependentUpon>ReportsCalendarQuickSelectViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\RoundedView.cs" />
-    <Compile Include="Combiners\CalendarCellTextColorValueCombiner.cs" />
+    <Compile Include="Combiners\ReportsCalendarCellTextColorValueCombiner.cs" />
     <Compile Include="Views\Reports\PieChartView.cs" />
     <Compile Include="Converters\ReportTimeSpanLabelValueConverter.cs" />
     <Compile Include="Converters\ReportPercentageLabelValueConverter.cs" />

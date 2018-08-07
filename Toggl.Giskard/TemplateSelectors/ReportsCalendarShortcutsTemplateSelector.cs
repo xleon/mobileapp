@@ -2,9 +2,9 @@
 
 namespace Toggl.Giskard.TemplateSelectors
 {
-    public sealed class CalendarShortcutsTemplateSelector : MvxDefaultTemplateSelector
+    public sealed class ReportsCalendarShortcutsTemplateSelector : MvxDefaultTemplateSelector
     {
-        public CalendarShortcutsTemplateSelector()
+        public ReportsCalendarShortcutsTemplateSelector()
             : base(Resource.Layout.ReportsCalendarShortcutCell) { }
     }
 }

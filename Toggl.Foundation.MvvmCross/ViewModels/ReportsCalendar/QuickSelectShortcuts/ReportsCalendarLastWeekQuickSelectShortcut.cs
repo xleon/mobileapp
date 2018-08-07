@@ -2,16 +2,16 @@
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts
+namespace Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts
 {
-    public sealed class CalendarThisWeekQuickSelectShortcut
-        : CalendarBaseQuickSelectShortcut
+    public sealed class ReportsCalendarLastWeekQuickSelectShortcut
+        : ReportsCalendarBaseQuickSelectShortcut
     {
         private readonly BeginningOfWeek beginningOfWeek;
 
-        public CalendarThisWeekQuickSelectShortcut
-            (ITimeService timeService, BeginningOfWeek beginningOfWeek)
-            : base(timeService, Resources.ThisWeek)
+        public ReportsCalendarLastWeekQuickSelectShortcut(
+            ITimeService timeService, BeginningOfWeek beginningOfWeek)
+            : base(timeService, Resources.LastWeek)
         {
             this.beginningOfWeek = beginningOfWeek;
         }
@@ -20,11 +20,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts
         {
             var now = TimeService.CurrentDateTime.Date;
             var difference = (now.DayOfWeek - beginningOfWeek.ToDayOfWeekEnum() + 7) % 7;
-            var start = now.AddDays(-difference);
+            var start = now.AddDays(-(difference + 7));
             var end = start.AddDays(6);
             return DateRangeParameter
                 .WithDates(start, end)
-                .WithSource(ReportsSource.ShortcutThisWeek);
+                .WithSource(ReportsSource.ShortcutLastWeek);
         }
     }
 }

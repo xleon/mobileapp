@@ -4,13 +4,13 @@ using MvvmCross.Converters;
 
 namespace Toggl.Daneel.Converters
 {
-    public sealed class CalendarRowCountToCalendarHeightConverter
+    public sealed class ReportsCalendarRowCountToCalendarHeightConverter
         : MvxValueConverter<int, nfloat>
     {
         private readonly nfloat rowHeight;
         private readonly nfloat additionalHeight;
 
-        public CalendarRowCountToCalendarHeightConverter(
+        public ReportsCalendarRowCountToCalendarHeightConverter(
             nfloat rowHeight, nfloat additionalHeight)
         {
             this.rowHeight = rowHeight;

@@ -2,9 +2,9 @@
 
 namespace Toggl.Giskard.TemplateSelectors
 {
-    public sealed class CalendarTemplateSelector : MvxDefaultTemplateSelector
+    public sealed class ReportsCalendarTemplateSelector : MvxDefaultTemplateSelector
     {
-        public CalendarTemplateSelector()
+        public ReportsCalendarTemplateSelector()
             : base(Resource.Layout.ReportsCalendarFragmentDayCell) { }
     }
 }

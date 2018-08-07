@@ -9,11 +9,11 @@ using UIKit;
 
 namespace Toggl.Daneel.Combiners
 {
-    public sealed class CalendarCellTextColorValueCombiner : MvxValueCombiner
+    public sealed class ReportsCalendarCellTextColorValueCombiner : MvxValueCombiner
     {
-        private readonly UIColor otherMonthColor = Color.Calendar.CellTextColorOutOfCurrentMonth.ToNativeColor();
-        private readonly UIColor thisMonthColor = Color.Calendar.CellTextColorInCurrentMonth.ToNativeColor();
-        private readonly UIColor selectedColor = Color.Calendar.CellTextColorSelected.ToNativeColor();
+        private readonly UIColor otherMonthColor = Color.ReportsCalendar.CellTextColorOutOfCurrentMonth.ToNativeColor();
+        private readonly UIColor thisMonthColor = Color.ReportsCalendar.CellTextColorInCurrentMonth.ToNativeColor();
+        private readonly UIColor selectedColor = Color.ReportsCalendar.CellTextColorSelected.ToNativeColor();
 
         public override bool TryGetValue(IEnumerable<IMvxSourceStep> steps, out object value)
         {

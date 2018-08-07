@@ -3,10 +3,10 @@ using System.ComponentModel;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
+namespace Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar
 {
     [Preserve(AllMembers = true)]
-    public sealed class CalendarDayViewModel : INotifyPropertyChanged
+    public sealed class ReportsCalendarDayViewModel : INotifyPropertyChanged
     {
         private readonly DateTimeOffset dateTime;
 
@@ -28,7 +28,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
         public DateTimeOffset DateTimeOffset => dateTime;
 
-        public CalendarDayViewModel(int day, CalendarMonth month, bool isInCurrentMonth, DateTimeOffset today)
+        public ReportsCalendarDayViewModel(int day, CalendarMonth month, bool isInCurrentMonth, DateTimeOffset today)
         {
             Day = day;
             CalendarMonth = month;

@@ -3,11 +3,11 @@ using MvvmCross.ViewModels;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.Hints
 {
-    public sealed class ToggleCalendarVisibilityHint : MvxPresentationHint
+    public sealed class ToggleReportsCalendarVisibilityHint : MvxPresentationHint
     {
         public bool ForceHide { get; }
 
-        public ToggleCalendarVisibilityHint(bool forceHide = false)
+        public ToggleReportsCalendarVisibilityHint(bool forceHide = false)
         {
             ForceHide = forceHide;
         }

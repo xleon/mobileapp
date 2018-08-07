@@ -11,8 +11,8 @@ using static Toggl.Foundation.MvvmCross.Helper.Color;
 
 namespace Toggl.Giskard.Views
 {
-    [Register("toggl.giskard.views.CalendarDayView")]
-    public sealed class CalendarDayView : TextView
+    [Register("toggl.giskard.views.ReportsCalendarDayView")]
+    public sealed class ReportsCalendarDayView : TextView
     {
         private readonly int cornerRadius;
         private readonly Paint circlePaint;
@@ -63,17 +63,17 @@ namespace Toggl.Giskard.Views
             }
         }
 
-        public CalendarDayView(IntPtr javaReference, JniHandleOwnership transfer)
+        public ReportsCalendarDayView(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
         }
 
-        public CalendarDayView(Context context, IAttributeSet attrs)
+        public ReportsCalendarDayView(Context context, IAttributeSet attrs)
             : this(context, attrs, 0)
         {
         }
 
-        public CalendarDayView(Context context, IAttributeSet attrs, int defStyle)
+        public ReportsCalendarDayView(Context context, IAttributeSet attrs, int defStyle)
             : base(context, attrs, defStyle)
         {
             cornerRadius = (int)22.DpToPixels(context);

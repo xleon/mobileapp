@@ -2,10 +2,10 @@
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts
+namespace Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts
 {
     [Preserve(AllMembers = true)]
-    public abstract class CalendarBaseQuickSelectShortcut : MvxNotifyPropertyChanged
+    public abstract class ReportsCalendarBaseQuickSelectShortcut : MvxNotifyPropertyChanged
     {
         protected ITimeService TimeService { get; private set; }
 
@@ -13,7 +13,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts
 
         public bool Selected { get; private set; }
 
-        protected CalendarBaseQuickSelectShortcut(
+        protected ReportsCalendarBaseQuickSelectShortcut(
             ITimeService timeService, string title)
         {
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));

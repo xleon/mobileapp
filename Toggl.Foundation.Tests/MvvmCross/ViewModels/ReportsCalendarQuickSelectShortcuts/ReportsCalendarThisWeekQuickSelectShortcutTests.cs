@@ -1,22 +1,22 @@
 ﻿using System;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts;
+using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 using Toggl.Multivac;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.CalendarQuickSelectShortcuts
+namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.ReportsCalendarQuickSelectShortcuts
 {
-    public abstract class CalendarThisWeekQuickSelectShortcutTests
-            : BaseCalendarQuickSelectShortcutTests<CalendarThisWeekQuickSelectShortcut>
+    public abstract class ReportsCalendarThisWeekQuickSelectShortcutTests
+            : BaseReportsCalendarQuickSelectShortcutTests<ReportsCalendarThisWeekQuickSelectShortcut>
     {
         protected abstract BeginningOfWeek BeginningOfWeek { get; }
 
-        protected sealed override CalendarThisWeekQuickSelectShortcut CreateQuickSelectShortcut()
-            => new CalendarThisWeekQuickSelectShortcut(TimeService, BeginningOfWeek);
+        protected sealed override ReportsCalendarThisWeekQuickSelectShortcut CreateQuickSelectShortcut()
+            => new ReportsCalendarThisWeekQuickSelectShortcut(TimeService, BeginningOfWeek);
 
-        protected sealed override CalendarThisWeekQuickSelectShortcut TryToCreateQuickSelectShortCutWithNull()
-            => new CalendarThisWeekQuickSelectShortcut(null, BeginningOfWeek);
+        protected sealed override ReportsCalendarThisWeekQuickSelectShortcut TryToCreateQuickSelectShortCutWithNull()
+            => new ReportsCalendarThisWeekQuickSelectShortcut(null, BeginningOfWeek);
 
         public sealed class WhenBeginningOfWeekIsMonday
-            : CalendarThisWeekQuickSelectShortcutTests
+            : ReportsCalendarThisWeekQuickSelectShortcutTests
         {
             protected override BeginningOfWeek BeginningOfWeek => BeginningOfWeek.Monday;
             protected override DateTimeOffset CurrentTime => new DateTimeOffset(2017, 12, 26, 0, 0, 0, TimeSpan.Zero);
@@ -25,7 +25,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.CalendarQuickSelectShortcu
         }
 
         public sealed class WhenBeginningOfWeekIsTuesday
-           : CalendarThisWeekQuickSelectShortcutTests
+           : ReportsCalendarThisWeekQuickSelectShortcutTests
         {
             protected override BeginningOfWeek BeginningOfWeek => BeginningOfWeek.Tuesday;
             protected override DateTimeOffset CurrentTime => new DateTimeOffset(2017, 12, 26, 0, 0, 0, TimeSpan.Zero);
@@ -34,7 +34,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.CalendarQuickSelectShortcu
         }
 
         public sealed class WhenBeginningOfWeekIsWednesday
-           : CalendarThisWeekQuickSelectShortcutTests
+           : ReportsCalendarThisWeekQuickSelectShortcutTests
         {
             protected override BeginningOfWeek BeginningOfWeek => BeginningOfWeek.Wednesday;
             protected override DateTimeOffset CurrentTime => new DateTimeOffset(2017, 12, 26, 0, 0, 0, TimeSpan.Zero);
@@ -43,7 +43,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.CalendarQuickSelectShortcu
         }
 
         public sealed class WhenBeginningOfWeekIsThursday
-           : CalendarThisWeekQuickSelectShortcutTests
+           : ReportsCalendarThisWeekQuickSelectShortcutTests
         {
             protected override BeginningOfWeek BeginningOfWeek => BeginningOfWeek.Thursday;
             protected override DateTimeOffset CurrentTime => new DateTimeOffset(2017, 12, 26, 0, 0, 0, TimeSpan.Zero);
@@ -52,7 +52,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.CalendarQuickSelectShortcu
         }
 
         public sealed class WhenBeginningOfWeekIsFriday
-           : CalendarThisWeekQuickSelectShortcutTests
+           : ReportsCalendarThisWeekQuickSelectShortcutTests
         {
             protected override BeginningOfWeek BeginningOfWeek => BeginningOfWeek.Friday;
             protected override DateTimeOffset CurrentTime => new DateTimeOffset(2017, 12, 26, 0, 0, 0, TimeSpan.Zero);
@@ -61,7 +61,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.CalendarQuickSelectShortcu
         }
 
         public sealed class WhenBeginningOfWeekIsSaturday
-           : CalendarThisWeekQuickSelectShortcutTests
+           : ReportsCalendarThisWeekQuickSelectShortcutTests
         {
             protected override BeginningOfWeek BeginningOfWeek => BeginningOfWeek.Saturday;
             protected override DateTimeOffset CurrentTime => new DateTimeOffset(2017, 12, 26, 0, 0, 0, TimeSpan.Zero);
@@ -70,7 +70,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.CalendarQuickSelectShortcu
         }
 
         public sealed class WhenBeginningOfWeekIsSunday
-           : CalendarThisWeekQuickSelectShortcutTests
+           : ReportsCalendarThisWeekQuickSelectShortcutTests
         {
             protected override BeginningOfWeek BeginningOfWeek => BeginningOfWeek.Sunday;
             protected override DateTimeOffset CurrentTime => new DateTimeOffset(2017, 12, 26, 0, 0, 0, TimeSpan.Zero);

@@ -9,24 +9,24 @@ using Object = Java.Lang.Object;
 
 namespace Toggl.Giskard.Adapters
 {
-    public sealed class CalendarPagerAdapter : PagerAdapter
+    public sealed class ReportsCalendarPagerAdapter : PagerAdapter
     {
         private static readonly int itemWidth;
 
         private readonly Context context;
         private readonly ReportsCalendarViewModel viewModel;
 
-        static CalendarPagerAdapter()
+        static ReportsCalendarPagerAdapter()
         {
         }
 
-        public CalendarPagerAdapter(Context context, ReportsCalendarViewModel viewModel)
+        public ReportsCalendarPagerAdapter(Context context, ReportsCalendarViewModel viewModel)
         {
             this.context = context;
             this.viewModel = viewModel;
         }
 
-        public CalendarPagerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
+        public ReportsCalendarPagerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
         }
@@ -39,7 +39,7 @@ namespace Toggl.Giskard.Adapters
             var inflater = LayoutInflater.FromContext(context);
             var inflatedView = inflater.Inflate(Resource.Layout.ReportsCalendarFragmentPage, container, false);
 
-            var calendarRecyclerView = (CalendarRecyclerView)inflatedView;
+            var calendarRecyclerView = (ReportsCalendarRecyclerView)inflatedView;
             calendarRecyclerView.ItemClick = viewModel.CalendarDayTappedCommand;
             calendarRecyclerView.ItemsSource = viewModel.Months[position].Days;
             calendarRecyclerView.GetAdapter().NotifyItemRangeChanged(0, viewModel.Months[position].Days.Count);

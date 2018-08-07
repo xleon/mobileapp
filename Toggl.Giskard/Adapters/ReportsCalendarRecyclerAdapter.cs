@@ -10,11 +10,11 @@ using MvvmCross.Platforms.Android;
 
 namespace Toggl.Giskard.Adapters
 {
-    public sealed class CalendarRecyclerAdapter : MvxRecyclerAdapter
+    public sealed class ReportsCalendarRecyclerAdapter : MvxRecyclerAdapter
     {
         private static readonly int itemWidth;
 
-        static CalendarRecyclerAdapter()
+        static ReportsCalendarRecyclerAdapter()
         {
             var context = Mvx.Resolve<IMvxAndroidGlobals>().ApplicationContext;
             var service = context.GetSystemService(Context.WindowService).JavaCast<IWindowManager>();
@@ -25,16 +25,16 @@ namespace Toggl.Giskard.Adapters
             itemWidth = size.X / 7;
         }
 
-        public CalendarRecyclerAdapter()
+        public ReportsCalendarRecyclerAdapter()
         {
         }
 
-        public CalendarRecyclerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
+        public ReportsCalendarRecyclerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
         }
 
-        public override int ItemCount 
+        public override int ItemCount
             => base.ItemCount;
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)

@@ -2,12 +2,12 @@
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.MvvmCross.Parameters;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts
+namespace Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts
 {
-    public sealed class CalendarThisYearQuickSelectShortcut
-        : CalendarBaseQuickSelectShortcut
+    public sealed class ReportsCalendarThisYearQuickSelectShortcut
+        : ReportsCalendarBaseQuickSelectShortcut
     {
-        public CalendarThisYearQuickSelectShortcut(ITimeService timeService)
+        public ReportsCalendarThisYearQuickSelectShortcut(ITimeService timeService)
             : base(timeService, Resources.ThisYear)
         {
         }
