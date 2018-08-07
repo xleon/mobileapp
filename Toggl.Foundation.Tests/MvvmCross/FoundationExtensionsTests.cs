@@ -68,7 +68,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
         }
 
         [Theory, LogIfTooSlow]
-        [ClassData(typeof(ElevenParameterConstructorTestData))]
+        [ConstructorData]
         public void ThrowsIfAnyOfTheParametersIsNull(
             bool useFoundation,
             bool useDialogService,
