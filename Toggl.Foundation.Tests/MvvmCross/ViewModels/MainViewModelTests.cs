@@ -48,7 +48,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     InteractorFactory,
                     NavigationService,
                     RemoteConfigService,
-                    SuggestionProviderContainer);
+                    SuggestionProviderContainer,
+                    SchedulerProvider);
 
                 vm.Prepare();
 
@@ -83,7 +84,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useInteractorFactory,
                 bool useNavigationService,
                 bool useRemoteConfigService,
-                bool useSuggestionProviderContainer)
+                bool useSuggestionProviderContainer,
+                bool useSchedulerProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
@@ -95,6 +97,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
                 var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
+                var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainViewModel(
@@ -107,7 +110,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         interactorFactory,
                         navigationService,
                         remoteConfigService,
-                        suggestionProviderContainer);
+                        suggestionProviderContainer,
+                        schedulerProvider);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -780,14 +784,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PrepareIsWelcome(true);
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowEmptyState.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, true)
+                    ReactiveTest.OnNext(1, true)
                 );
             }
 
@@ -795,16 +798,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask ReturnsFalseWhenThereAreSomeSuggestions()
             {
                 PrepareSuggestion();
-
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowEmptyState.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, false)
+                    ReactiveTest.OnNext(1, false)
                 );
             }
 
@@ -812,16 +813,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask ReturnsFalseWhenThereAreSomeTimeEntries()
             {
                 PrepareTimeEntry();
-
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowEmptyState.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, false)
+                    ReactiveTest.OnNext(1, false)
                 );
             }
 
@@ -830,14 +829,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PrepareIsWelcome(false);
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowEmptyState.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, false)
+                    ReactiveTest.OnNext(1, false)
                 );
             }
         }
@@ -849,15 +847,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PrepareIsWelcome(false);
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowWelcomeBack.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, false),
-                    ReactiveTest.OnNext(0, true)
+                    ReactiveTest.OnNext(1, false),
+                    ReactiveTest.OnNext(2, true)
                 );
             }
 
@@ -866,14 +863,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PrepareSuggestion();
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowWelcomeBack.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, false)
+                    ReactiveTest.OnNext(1, false)
                 );
             }
 
@@ -882,14 +878,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PrepareTimeEntry();
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowWelcomeBack.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, false)
+                    ReactiveTest.OnNext(1, false)
                 );
             }
 
@@ -898,14 +893,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PrepareIsWelcome(true);
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowWelcomeBack.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, false)
+                    ReactiveTest.OnNext(1, false)
                 );
             }
         }

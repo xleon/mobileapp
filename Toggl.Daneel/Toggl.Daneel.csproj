@@ -625,6 +625,7 @@
     <Compile Include="Extensions\UIKitRxExtensions\UITextViewRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UIViewRxExtensions.cs" />
     <Compile Include="Services\UserDefaultsStorage.cs" />
+    <Compile Include="Startup\IOSSchedulerProvider.cs" />
     <Compile Include="Startup\Setup.cs" />
     <Compile Include="Startup\SetupTargetFactories.cs">
       <DependentUpon>SetupTargetFactories.tt</DependentUpon>
@@ -1005,6 +1006,7 @@
       <DependentUpon>SendFeedbackViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Binding\TextViewWithPlaceholderDidBecomeFirstResponderTargetBinding.cs" />
+    <Compile Include="Startup\NSRunLoopScheduler.cs" />
     <Compile Include="Converters\LambdaConverter.cs" />
     <Compile Include="Views\SnackBar.cs" />
     <Compile Include="Views\SnackBar.designer.cs">
