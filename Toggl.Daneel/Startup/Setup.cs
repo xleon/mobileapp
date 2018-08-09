@@ -121,6 +121,7 @@ namespace Toggl.Daneel
                     .WithAccessRestrictionStorage(settingsStorage)
                     .WithPasswordManagerService<OnePasswordService>()
                     .WithErrorHandlingService(new ErrorHandlingService(navigationService, settingsStorage))
+                    .WithFeedbackService(new FeedbackService(userAgent, mailService, dialogService, platformConstants))
                     .Build();
 
             foundation.RevokeNewUserIfNeeded().Initialize();
