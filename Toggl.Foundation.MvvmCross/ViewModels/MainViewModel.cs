@@ -15,12 +15,12 @@ using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Experiments;
 using Toggl.Foundation.Extensions;
+using Toggl.Foundation.Helper;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Foundation.Services;
@@ -38,7 +38,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     public sealed class MainViewModel : MvxViewModel
     {
         // Outputs
-        public ObservableGroupedOrderedCollection<TimeEntryViewModel> TimeEntries => timeEntriesViewModel.TimeEntries;
+        public ObservableGroupedOrderedCollection<TimeEntryViewModel> TimeEntries => TimeEntriesViewModel.TimeEntries;
         public IObservable<bool> LogEmpty { get; }
         public IObservable<int> TimeEntriesCount { get; }
         public IObservable<SyncProgress> SyncProgressState { get; private set; }
@@ -82,7 +82,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         // Inputs
         public InputAction<TimeEntryViewModel> ContinueTimeEntry { get; }
-        public InputAction<TimeEntryViewModel> DeleteTimeEntry { get; }
         public InputAction<TimeEntryViewModel> SelectTimeEntry { get; }
         public UIAction RefreshAction { get; }
 
@@ -100,7 +99,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private CompositeDisposable disposeBag = new CompositeDisposable();
 
-        private TimeEntriesViewModel timeEntriesViewModel;
         private RatingViewExperiment ratingViewExperiment;
 
         private bool isStopButtonEnabled = false;
@@ -110,6 +108,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private object isEditViewOpenLock = new object();
 
         private DateTimeOffset? currentTimeEntryStart;
+
+        public TimeEntriesViewModel TimeEntriesViewModel { get; }
 
         // Deprecated properties
 
@@ -164,12 +164,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.schedulerProvider = schedulerProvider;
 
             SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, suggestionProviders);
-            RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService, this.schedulerProvider);
+            RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService, schedulerProvider);
             TimeEntriesLogViewModel = new TimeEntriesLogViewModel(timeService, dataSource, interactorFactory, onboardingStorage, analyticsService, navigationService);
-            timeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory);
+            TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider);
 
-            LogEmpty = timeEntriesViewModel.Empty.AsDriver(this.schedulerProvider);
-            TimeEntriesCount = timeEntriesViewModel.Count.AsDriver(this.schedulerProvider);
+            LogEmpty = TimeEntriesViewModel.Empty.AsDriver(this.schedulerProvider);
+            TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(this.schedulerProvider);
 
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService);
 
@@ -183,7 +183,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             AlternativeStartTimeEntryCommand = new MvxAsyncCommand(alternativeStartTimeEntry, () => CurrentTimeEntryId.HasValue == false);
 
             ContinueTimeEntry = new InputAction<TimeEntryViewModel>(continueTimeEntry);
-            DeleteTimeEntry = new InputAction<TimeEntryViewModel>(deleteTimeEntry);
             SelectTimeEntry = new InputAction<TimeEntryViewModel>(timeEntrySelected);
             RefreshAction = new UIAction(refresh);
         }
@@ -197,7 +196,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             await base.Initialize();
 
-            await timeEntriesViewModel.Initialize();
+            await TimeEntriesViewModel.Initialize();
             await TimeEntriesLogViewModel.Initialize();
             await SuggestionsViewModel.Initialize();
             await RatingViewModel.Initialize();
@@ -207,7 +206,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             var isWelcome = onboardingStorage.IsNewUser;
 
-            var noTimeEntries = timeEntriesViewModel.Empty
+            var noTimeEntries = TimeEntriesViewModel.Empty
                 .Select( e => e && SuggestionsViewModel.IsEmpty )
                 .DistinctUntilChanged();
 
@@ -413,17 +412,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             onboardingStorage.TimeEntryWasTapped();
             return navigate<EditTimeEntryViewModel, long>(timeEntry.Id).ToObservable();
-        }
-
-        private IObservable<Unit> deleteTimeEntry(TimeEntryViewModel timeEntry)
-        {
-            return interactorFactory
-                .DeleteTimeEntry(timeEntry.Id)
-                .Execute()
-                .Do( _ => {
-                    analyticsService.DeleteTimeEntry.Track();
-                    dataSource.SyncManager.PushSync();
-                });
         }
 
         private IObservable<Unit> refresh()

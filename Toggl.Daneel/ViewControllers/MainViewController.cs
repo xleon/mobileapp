@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
@@ -20,7 +21,6 @@ using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Onboarding.MainView;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Extensions;
 using Toggl.PrimeRadiant.Onboarding;
@@ -73,6 +73,8 @@ namespace Toggl.Daneel.ViewControllers
 
         private TimeEntriesLogViewSource tableViewSource;
 
+        private SnackBar snackBar;
+
         public MainViewController()
             : base(nameof(MainViewController))
         {
@@ -119,8 +121,9 @@ namespace Toggl.Daneel.ViewControllers
                 tableViewSource.SwipeToContinue
             );
             this.Bind(continueTimeEntry, ViewModel.ContinueTimeEntry);
-            this.Bind(tableViewSource.SwipeToDelete, ViewModel.DeleteTimeEntry);
+            this.Bind(tableViewSource.SwipeToDelete, ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntry);
             this.Bind(tableViewSource.ItemSelected, ViewModel.SelectTimeEntry);
+            this.Bind(ViewModel.TimeEntriesViewModel.ShouldShowUndo, toggleUndoDeletion);
 
             tableViewSource.SwipeToContinue
                 .VoidSubscribe(() =>
@@ -251,6 +254,24 @@ namespace Toggl.Daneel.ViewControllers
                 new UIBarButtonItem(syncFailuresButton)
             };
 #endif
+        }
+
+        private void toggleUndoDeletion(bool show)
+        {
+            if (snackBar != null)
+            {
+                snackBar.Hide();
+                snackBar = null;
+            }
+
+            if (!show)
+                return;
+
+            snackBar = SnackBar.Factory.CreateUndoSnackBar(
+                onUndo: () => ViewModel.TimeEntriesViewModel.CancelDeleteTimeEntry.Execute(Unit.Default));
+
+            snackBar.SnackBottomAnchor = StartTimeEntryButton.TopAnchor;
+            snackBar.Show(superView: View);
         }
 
         protected override void Dispose(bool disposing)

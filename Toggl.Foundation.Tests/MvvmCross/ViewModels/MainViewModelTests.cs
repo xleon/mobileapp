@@ -34,8 +34,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         {
             protected ISubject<SyncProgress> ProgressSubject { get; } = new Subject<SyncProgress>();
 
-            protected TestScheduler Scheduler { get; } = new TestScheduler();
-
             protected override MainViewModel CreateViewModel()
             {
                 var vm = new MainViewModel(
@@ -386,7 +384,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(observable);
 
                 ViewModel.Initialize().Wait();
-                Scheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
             }
 
             [Fact, LogIfTooSlow]
@@ -461,7 +459,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask CannotBeExecutedWhenNoTimeEntryIsRunning()
             {
                 subject.OnNext(null);
-                Scheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
 
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
 
@@ -475,7 +473,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
                 subject.OnNext(secondTimeEntry);
-                Scheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
 
                 await DataSource.TimeEntries.Received(2).Stop(Arg.Any<DateTimeOffset>());
@@ -615,7 +613,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.Initialize();
                 currentTimeEntrySubject.OnNext(timeEntry);
-                Scheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
             }
 
             [Fact, LogIfTooSlow]
@@ -631,7 +629,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await prepare();
                 currentTimeEntrySubject.OnNext(null);
-                Scheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
 
                 ActualValue.Should().Be(ExpectedEmptyValue);
             }
