@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
@@ -19,6 +20,7 @@ using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.Mocks;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Xunit;
 using static Toggl.Foundation.Helper.Constants;
@@ -504,15 +506,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var timeEntry = Substitute.For<IThreadSafeTimeEntry>();
                 var observable = Observable.Return(timeEntry);
                 DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(observable);
-                ViewModel.Initialize().Wait();
+                await ViewModel.Initialize();
+                var tcs = new TaskCompletionSource<bool>();
+                var blockingTask = new ThreadingTask(async () => await tcs.Task);
                 NavigationService
                     .Navigate<EditTimeEntryViewModel, long>(Arg.Any<long>())
-                    .Returns(ThreadingTask.Delay(10));
+                    .Returns(blockingTask);
 
-                for (int i = 0; i < 10; i++)
-                {
-                    ThreadingTask runSynchronously = ViewModel.EditTimeEntryCommand.ExecuteAsync();
-                }
+                Enumerable.Range(0, 10).Do(_ => ViewModel.EditTimeEntryCommand.ExecuteAsync());
 
                 await NavigationService.Received(1)
                     .Navigate<EditTimeEntryViewModel, long>(Arg.Any<long>());
