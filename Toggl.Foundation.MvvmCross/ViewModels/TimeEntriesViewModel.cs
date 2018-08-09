@@ -23,7 +23,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IInteractorFactory interactorFactory;
 
         private CompositeDisposable disposeBag = new CompositeDisposable();
-        private bool areContineButtonsEnabled = true;
         private DurationFormat durationFormat;
 
         public ObservableGroupedOrderedCollection<TimeEntryViewModel> TimeEntries { get; }
@@ -116,7 +115,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void onPreferencesChanged(IThreadSafePreferences preferences)
         {
             durationFormat = preferences.DurationFormat;
-            fetchSectionedTimeEntries();
+            var _ = fetchSectionedTimeEntries();
         }
 
         private bool isNotRunning(IThreadSafeTimeEntry timeEntry) => !timeEntry.IsRunning();

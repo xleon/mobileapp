@@ -291,6 +291,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     OnboardingStorage.Received().SetRatingViewOutcome(ExpectedStorageOutcome, CurrentDateTime);
                 }
 
+                [Fact, LogIfTooSlow]
                 public void TracksTheAppropriateEventWithTheExpectedParameter()
                 {
                     ViewModel.Dismiss();

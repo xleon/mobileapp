@@ -627,7 +627,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task TracksThePasswordManagerButtonClicked()
             {
                 PasswordManagerService.IsAvailable.Returns(true);
-                arrangeCallToPasswordManagerWithInvalidCredentials();
+                var observable = arrangeCallToPasswordManagerWithInvalidCredentials();
 
                 await ViewModel.StartPasswordManager();
 
@@ -655,7 +655,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task TracksThePasswordManagerContainsValidPassword()
             {
                 PasswordManagerService.IsAvailable.Returns(true);
-                arrangeCallToPasswordManagerWithValidCredentials();
+                var observable = arrangeCallToPasswordManagerWithValidCredentials();
 
                 await ViewModel.StartPasswordManager();
 

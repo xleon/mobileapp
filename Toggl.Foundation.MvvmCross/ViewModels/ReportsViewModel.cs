@@ -47,7 +47,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private DateTimeOffset endDate;
         private int totalDays => (endDate - startDate).Days + 1;
         private ReportsSource source;
-        private int projectsNotSyncedCount;
+        [Obsolete("This should be removed, replaced by something that is actually used or turned into a constant.")]
+        private int projectsNotSyncedCount = 0;
         private DateTime reportSubjectStartTime;
         private long workspaceId;
         private DateFormat dateFormat;
@@ -103,7 +104,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand ToggleCalendarCommand { get; }
 
-        public IMvxCommand<DateRangeParameter> ChangeDateRangeCommand { get; }
+        public IMvxCommand<ReportsDateRangeParameter> ChangeDateRangeCommand { get; }
 
         public IMvxAsyncCommand SelectWorkspace { get; }
 
@@ -132,7 +133,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             HideCalendarCommand = new MvxCommand(hideCalendar);
             ToggleCalendarCommand = new MvxCommand(toggleCalendar);
-            ChangeDateRangeCommand = new MvxCommand<DateRangeParameter>(changeDateRange);
+            ChangeDateRangeCommand = new MvxCommand<ReportsDateRangeParameter>(changeDateRange);
             SelectWorkspace = new MvxAsyncCommand(selectWorkspace);
         }
 
@@ -231,7 +232,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             calendarViewModel.OnHideCalendar();
         }
 
-        private void changeDateRange(DateRangeParameter dateRange)
+        private void changeDateRange(ReportsDateRangeParameter dateRange)
         {
             startDate = dateRange.StartDate;
             endDate = dateRange.EndDate;
