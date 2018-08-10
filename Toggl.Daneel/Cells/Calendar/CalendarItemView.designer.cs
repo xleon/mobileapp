@@ -7,14 +7,14 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.Daneel.Cells.Calendar
 {
 	[Register ("CalendarItemView")]
 	partial class CalendarItemView
 	{
 		[Outlet]
 		UIKit.UILabel DescriptionLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (DescriptionLabel != null) {

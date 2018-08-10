@@ -1,9 +1,10 @@
 ﻿using System;
 using Foundation;
+using Toggl.Daneel.Views;
 using Toggl.Foundation.Calendar;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.Daneel.Cells.Calendar
 {
     public sealed partial class CalendarItemView : ReactiveCollectionViewCell<CalendarItem>
     {
