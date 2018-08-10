@@ -42,7 +42,6 @@ namespace Toggl.Daneel.ViewControllers
         private const float spiderHingeHeight = 2;
 
         private const float tooltipOffset = 7;
-        private const float emptyViewTopMargin = 32;
 
         private readonly UIView spiderContainerView = new UIView();
         private readonly SpiderOnARopeView spiderBroView = new SpiderOnARopeView();
@@ -467,7 +466,7 @@ namespace Toggl.Daneel.ViewControllers
             emptyStateView.WidthAnchor.ConstraintEqualTo(TimeEntriesLogTableView.WidthAnchor).Active = true;
             emptyStateView.HeightAnchor.ConstraintEqualTo(TimeEntriesLogTableView.HeightAnchor).Active = true;
             emptyStateView.CenterYAnchor.ConstraintEqualTo(TimeEntriesLogTableView.CenterYAnchor).Active = true;
-            emptyStateView.TopAnchor.ConstraintEqualTo(TimeEntriesLogTableView.TopAnchor, emptyViewTopMargin).Active = true;
+            emptyStateView.TopAnchor.ConstraintEqualTo(TimeEntriesLogTableView.TopAnchor).Active = true;
         }
 
         private void prepareOnboarding()
