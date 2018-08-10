@@ -8,7 +8,9 @@ using Toggl.Foundation.Calendar;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
+using Toggl.Foundation.Tests.Mocks;
 using Xunit;
+using ITimeEntryPrototype = Toggl.Foundation.Models.ITimeEntryPrototype;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -71,6 +73,104 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.Initialize();
 
                 ViewModel.CalendarItems[0].Should().BeEquivalentTo(items);
+            }
+        }
+
+        public abstract class TheOnItemTappedAction : CalendarViewModelTest
+        {
+            protected const long TimeEntryId = 10;
+
+            private static readonly DateTimeOffset now = new DateTimeOffset(2018, 8, 10, 12, 0, 0, TimeSpan.Zero);
+            private static readonly IInteractor<IObservable<IEnumerable<CalendarItem>>> interactor = Substitute.For<IInteractor<IObservable<IEnumerable<CalendarItem>>>>();
+
+            protected abstract CalendarItem CalendarItem { get; }
+
+            protected TheOnItemTappedAction()
+            {
+                TimeService.CurrentDateTime.Returns(now);
+
+                InteractorFactory
+                    .GetCalendarItemsForDate(Arg.Any<DateTime>())
+                    .Returns(interactor);
+
+            }
+
+            [Fact]
+            public async Task NavigatesToTheEditTimeEntryViewModelUsingTheTimeEntryId()
+            {
+                await ViewModel.OnItemTapped.Execute(CalendarItem);
+
+                await NavigationService.Received().Navigate<EditTimeEntryViewModel, long>(Arg.Is(TimeEntryId));
+            }
+
+            [Fact]
+            public async Task RefetchesTheTimeEntryItemsUsingTheInteractor()
+            {
+                await ViewModel.OnItemTapped.Execute(CalendarItem);
+
+                await interactor.Received().Execute();
+            }
+
+            public sealed class WhenHandlingTimeEntryItems : TheOnItemTappedAction
+            {
+                protected override CalendarItem CalendarItem { get; } = new CalendarItem(
+                    CalendarItemSource.TimeEntry,
+                    new DateTimeOffset(2018, 08, 10, 0, 0, 0, TimeSpan.Zero),
+                    TimeSpan.FromMinutes(10),
+                    "Working on something",
+                    "#00FF00",
+                    TimeEntryId
+                );
+            }
+
+            public sealed class WhenHandlingCalendarItems : TheOnItemTappedAction
+            {
+                private const long defaultWorkspaceId = 1;
+
+                protected override CalendarItem CalendarItem { get; } = new CalendarItem(
+                    CalendarItemSource.Calendar,
+                    new DateTimeOffset(2018, 08, 10, 0, 15, 0, TimeSpan.Zero),
+                    TimeSpan.FromMinutes(10),
+                    "Meeting with someone"
+                );
+
+                public WhenHandlingCalendarItems()
+                {
+                    var workspace = new MockWorkspace { Id = defaultWorkspaceId };
+                    var timeEntry = new MockTimeEntry { Id = TimeEntryId };
+
+                    InteractorFactory
+                        .GetDefaultWorkspace()
+                        .Execute()
+                        .Returns(Observable.Return(workspace));
+                    
+                    InteractorFactory
+                        .CreateTimeEntry(Arg.Any<ITimeEntryPrototype>())
+                        .Execute()
+                        .Returns(Observable.Return(timeEntry));
+                }
+
+                [Fact]
+                public async Task CreatesATimeEntryUsingTheCalendarItemInfo()
+                {
+                    await ViewModel.OnItemTapped.Execute(CalendarItem);
+
+                    await InteractorFactory
+                        .CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(p => p.Description == CalendarItem.Description))
+                        .Received()
+                        .Execute();
+                }
+
+                [Fact]
+                public async Task CreatesATimeEntryInTheDefaultWorkspace()
+                {
+                    await ViewModel.OnItemTapped.Execute(CalendarItem);
+
+                    await InteractorFactory
+                        .CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(p => p.WorkspaceId == defaultWorkspaceId))
+                        .Received()
+                        .Execute();
+                }
             }
         }
     }
