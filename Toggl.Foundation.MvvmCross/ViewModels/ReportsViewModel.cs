@@ -31,8 +31,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class ReportsViewModel : MvxViewModel
     {
-
-
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
@@ -43,6 +41,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly Subject<Unit> reportSubject = new Subject<Unit>();
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
+        private bool didNavigateToCalendar;
         private DateTimeOffset startDate;
         private DateTimeOffset endDate;
         private int totalDays => (endDate - startDate).Days + 1;
@@ -174,7 +173,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public override void ViewAppeared()
         {
             base.ViewAppeared();
-            navigationService.Navigate(calendarViewModel);
+
+            if (!didNavigateToCalendar)
+            {
+                navigationService.Navigate(calendarViewModel);
+                didNavigateToCalendar = true;
+            }
         }
 
         private void setLoadingState(Unit obj)
