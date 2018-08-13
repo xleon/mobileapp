@@ -6,6 +6,7 @@ using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Shortcuts;
+using Toggl.Multivac;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 
@@ -25,5 +26,6 @@ namespace Toggl.Foundation.Tests.MvvmCross
             = Substitute.For<IApplicationShortcutCreator>();
 
         protected IMvxNavigationService NavigationService { get; } = Substitute.For<IMvxNavigationService>();
+        protected TestSchedulerProvider SchedulerProvider { get; } = new TestSchedulerProvider();
     }
 }

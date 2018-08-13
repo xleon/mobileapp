@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using FluentAssertions;
+using Microsoft.Reactive.Testing;
 using MvvmCross.Navigation;
 using NSubstitute;
 using Toggl.Foundation.Analytics;
@@ -11,6 +12,7 @@ using Toggl.Foundation.Services;
 using Toggl.Foundation.Shortcuts;
 using Toggl.Foundation.Suggestions;
 using Toggl.Foundation.Tests.Generators;
+using Toggl.Multivac;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Network;
@@ -38,6 +40,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
         private readonly IRemoteConfigService remoteConfigService = Substitute.For<IRemoteConfigService>();
         private readonly IApplicationShortcutCreator applicationShortcutCreator = Substitute.For<IApplicationShortcutCreator>();
         private readonly ISuggestionProviderContainer suggestionProviderContainer = Substitute.For<ISuggestionProviderContainer>();
+        private readonly ISchedulerProvider schedulerProvider = new TestSchedulerProvider();
 
         private readonly IDialogService dialogService = Substitute.For<IDialogService>();
         private readonly IBrowserService browserService = Substitute.For<IBrowserService>();
@@ -79,6 +82,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
             bool useBrowserService,
             bool useKeyValueStorage,
             bool useUserPreferences,
+            bool useFeedbackService,
             bool useOnboardingStorage,
             bool useNavigationService,
             bool useApiErrorHandlingService,
@@ -92,6 +96,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
             var actualBrowserService = useBrowserService ? Substitute.For<IBrowserService>() : null;
             var actualKeyValueStorage = useKeyValueStorage ? Substitute.For<IKeyValueStorage>() : null;
             var actualUserPreferences = useUserPreferences ? Substitute.For<IUserPreferences>() : null;
+            var actualFeedbackService = useFeedbackService ? Substitute.For<IFeedbackService>() : null;
             var actualOnboardingStorage = useOnboardingStorage ? Substitute.For<IOnboardingStorage>() : null;
             var actualNavigationService = useNavigationService ? Substitute.For<IMvxNavigationService>() : null;
             var actualApiErrorHandlingService = useApiErrorHandlingService ? Substitute.For<IErrorHandlingService>() : null;
@@ -105,6 +110,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                     .WithDialogService(actualDialogService)
                     .WithBrowserService(actualBrowserService)
                     .WithKeyValueStorage(actualKeyValueStorage)
+                    .WithFeedbackService(actualFeedbackService)
                     .WithUserPreferences(actualUserPreferences)
                     .WithOnboardingStorage(actualOnboardingStorage)
                     .WithNavigationService(actualNavigationService)
@@ -181,6 +187,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                     .WithLicenseProvider(licenseProvider)
                     .WithAnalyticsService(analyticsService)
                     .WithBackgroundService(backgroundService)
+                    .WithSchedulerProvider(schedulerProvider)
                     .WithPlatformConstants(platformConstants)
                     .WithRemoteConfigService(remoteConfigService)
                     .WithApplicationShortcutCreator(applicationShortcutCreator)

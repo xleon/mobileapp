@@ -30,6 +30,7 @@ namespace Toggl.Foundation.MvvmCross
         public ILicenseProvider LicenseProvider { get; }
         public IAnalyticsService AnalyticsService { get; }
         public IBackgroundService BackgroundService { get; }
+        public ISchedulerProvider SchedulerProvider { get; }
         public IPlatformConstants PlatformConstants { get; }
         public IRemoteConfigService RemoteConfigService { get; }
         public IApplicationShortcutCreator ShortcutCreator { get; }
@@ -81,6 +82,7 @@ namespace Toggl.Foundation.MvvmCross
             ShortcutCreator = builder.Foundation.ShortcutCreator;
             AnalyticsService = builder.Foundation.AnalyticsService;
             PlatformConstants = builder.Foundation.PlatformConstants;
+            SchedulerProvider = builder.Foundation.SchedulerProvider;
             BackgroundService = builder.Foundation.BackgroundService;
             RemoteConfigService = builder.Foundation.RemoteConfigService;
             SuggestionProviderContainer = builder.Foundation.SuggestionProviderContainer;
@@ -245,6 +247,7 @@ namespace Toggl.Foundation.MvvmCross
                 Ensure.Argument.IsNotNull(BrowserService, nameof(BrowserService));
                 Ensure.Argument.IsNotNull(KeyValueStorage, nameof(KeyValueStorage));
                 Ensure.Argument.IsNotNull(UserPreferences, nameof(UserPreferences));
+                Ensure.Argument.IsNotNull(FeedbackService, nameof(FeedbackService));
                 Ensure.Argument.IsNotNull(OnboardingStorage, nameof(OnboardingStorage));
                 Ensure.Argument.IsNotNull(NavigationService, nameof(NavigationService));
                 Ensure.Argument.IsNotNull(ErrorHandlingService, nameof(ErrorHandlingService));

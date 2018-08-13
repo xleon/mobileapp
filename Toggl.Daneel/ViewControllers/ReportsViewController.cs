@@ -4,7 +4,6 @@ using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Platforms.Ios.Views;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -17,7 +16,6 @@ using System.Collections.Generic;
 
 namespace Toggl.Daneel.ViewControllers
 {
-    [MvxChildPresentation]
     public sealed partial class ReportsViewController : MvxViewController<ReportsViewModel>
     {
         private const string boundsKey = "bounds";
@@ -170,10 +168,7 @@ namespace Toggl.Daneel.ViewControllers
 
         private void onCalendarSizeChanged(NSObservedChange change)
         {
-            if (CalendarIsVisible)
-                TopCalendarConstraint.Constant = 0;
-            else
-                TopCalendarConstraint.Constant = calendarHeight;
+            TopCalendarConstraint.Constant = CalendarIsVisible ? 0 : calendarHeight;
         }
     }
 }

@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using ColorPlugin = MvvmCross.Plugin.Color.Platforms.Ios.Plugin;
 using VisibilityPlugin = MvvmCross.Plugin.Visibility.Platforms.Ios.Plugin;
+using Toggl.Multivac.Extensions;
 
 namespace Toggl.Daneel
 {
@@ -88,7 +89,11 @@ namespace Toggl.Daneel
             var permissionsService = new PermissionsService();
             var userAgent = new UserAgent(clientName, version);
             var settingsStorage = new SettingsStorage(Version.Parse(version), keyValueStorage);
+<<<<<<< HEAD
             var calendarService = new CalendarService(settingsStorage, permissionsService);
+=======
+            var schedulerProvider = new IOSSchedulerProvider();
+>>>>>>> develop
 
             var foundation =
                 TogglFoundation
@@ -102,6 +107,7 @@ namespace Toggl.Daneel
                     .WithRatingService<RatingService>()
                     .WithLicenseProvider<LicenseProvider>()
                     .WithAnalyticsService(analyticsService)
+                    .WithSchedulerProvider(schedulerProvider)
                     .WithPlatformConstants(platformConstants)
                     .WithRemoteConfigService<RemoteConfigService>()
                     .WithApiFactory(new ApiFactory(environment, userAgent))
@@ -122,6 +128,7 @@ namespace Toggl.Daneel
                     .WithAccessRestrictionStorage(settingsStorage)
                     .WithPasswordManagerService<OnePasswordService>()
                     .WithErrorHandlingService(new ErrorHandlingService(navigationService, settingsStorage))
+                    .WithFeedbackService(new FeedbackService(userAgent, mailService, dialogService, platformConstants))
                     .Build();
 
             foundation.RevokeNewUserIfNeeded().Initialize();

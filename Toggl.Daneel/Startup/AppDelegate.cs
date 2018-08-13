@@ -63,6 +63,7 @@ namespace Toggl.Daneel
             backgroundService = Mvx.Resolve<IBackgroundService>();
             navigationService = Mvx.Resolve<IMvxNavigationService>();
             setupNavigationBar();
+            setupTabBar();
         }
 
         #if USE_ANALYTICS
@@ -112,6 +113,7 @@ namespace Toggl.Daneel
             switch (shortcutType)
             {
                 case ShortcutType.ContinueLastTimeEntry:
+                    navigationService.Navigate<MainViewModel>();
                     var interactorFactory = Mvx.Resolve<IInteractorFactory>();
                     if (interactorFactory == null) return;
                     IDisposable subscription = null;
@@ -130,9 +132,16 @@ namespace Toggl.Daneel
                     break;
 
                 case ShortcutType.StartTimeEntry:
+                    navigationService.Navigate<MainViewModel>();
                     navigationService.Navigate<StartTimeEntryViewModel>();
                     break;
             }
+        }
+
+        private void setupTabBar()
+        {
+            UITabBar.Appearance.SelectedImageTintColor = Color.TabBar.SelectedImageTintColor.ToNativeColor();
+            UITabBarItem.Appearance.TitlePositionAdjustment = new UIOffset(0, 200);
         }
 
         private void setupNavigationBar()
