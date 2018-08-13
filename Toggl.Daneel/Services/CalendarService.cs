@@ -5,60 +5,32 @@ using System.Reactive.Linq;
 using EventKit;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.Services;
 using Toggl.Multivac;
-using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Daneel.Services
 {
-    public sealed class CalendarService : ICalendarService
+    public sealed class CalendarService : BaseCalendarService
     {
-        private readonly IUserPreferences userPreferences;
-        private readonly IPermissionsService permissionsService;
         private readonly EKEventStore eventStore = new EKEventStore();
 
-        public CalendarService(
-            IUserPreferences userPreferences,
-            IPermissionsService permissionsService)
+        public CalendarService(IPermissionsService permissionsService)
+            : base (permissionsService)
         {
-            Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
-            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
-
-            this.userPreferences = userPreferences;
-            this.permissionsService = permissionsService;
         }
 
-        public IObservable<IEnumerable<CalendarItem>> GetEventsForDate(DateTime date)
+        public override IObservable<IEnumerable<CalendarItem>> GetEventsForDate(DateTime date)
             => Observable.Return(new List<CalendarItem>());
 
-        public IObservable<IEnumerable<UserCalendar>> UserCalendars
-            => Observable.Defer(() =>
-                {
-                    var isAuthorized = permissionsService.CalendarPermissionGranted;
-                    if (!isAuthorized)
-                    {
-                        return Observable.Throw<IEnumerable<UserCalendar>>(
-                            new NotAuthorizedException("You don't have permission to access calendars")
-                        );
-                    }
-
-                    var enabledIds = userPreferences.EnabledCalendarIds().ToHashSet();
-                    return Observable.Return(selectCalendars(enabledIds));
-                });
-
-        private IEnumerable<UserCalendar> selectCalendars(HashSet<string> selectedIds)
+        protected override IEnumerable<UserCalendar> NativeGetUserCalendars()
             => eventStore
                 .GetCalendars(EKEntityType.Event)
-                .Select(ekCalendar => userCalendarFromEKCalendar(
-                    calendar: ekCalendar,
-                    selected: selectedIds.Contains(ekCalendar.CalendarIdentifier))
-                );
+                .Select(userCalendarFromEKCalendar);
         
-        private UserCalendar userCalendarFromEKCalendar(EKCalendar calendar, bool selected)
+        private UserCalendar userCalendarFromEKCalendar(EKCalendar calendar)
             => new UserCalendar(
                 calendar.CalendarIdentifier,
                 calendar.Title,
-                calendar.Source.Title,
-                selected);
+                calendar.Source.Title
+            );
     }
 }
