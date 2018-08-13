@@ -107,8 +107,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand SelectWorkspace { get; }
 
-        public IMvxAsyncCommand SelectWorkspace { get; }
-
         public ReportsViewModel(ITogglDataSource dataSource,
                                 ITimeService timeService,
                                 IMvxNavigationService navigationService,

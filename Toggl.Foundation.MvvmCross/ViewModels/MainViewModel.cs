@@ -130,6 +130,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         [DependsOn(nameof(SyncingProgress))]
         public bool ShowSyncIndicator => SyncingProgress == SyncProgress.Syncing;
 
+        public IMvxAsyncCommand OpenReportsCommand { get; }
+
         public MainViewModel(
             ITogglDataSource dataSource,
             ITimeService timeService,
@@ -175,6 +177,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService);
 
             RefreshCommand = new MvxCommand(Refresh);
+            OpenReportsCommand = new MvxAsyncCommand(openReports);
             OpenSettingsCommand = new MvxAsyncCommand(openSettings);
             OpenSyncFailuresCommand = new MvxAsyncCommand(openSyncFailures);
             EditTimeEntryCommand = new MvxAsyncCommand(editTimeEntry, canExecuteEditTimeEntryCommand);
@@ -368,10 +371,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private Task openSettings()
             => navigate<SettingsViewModel>();
 
-        private async Task openReports()
-        {
-            await navigate<ReportsViewModel>();
-        }
+        private Task openReports()
+            => navigate<ReportsViewModel>();
 
         private Task openSyncFailures()
             => navigate<SyncFailuresViewModel>();
@@ -425,6 +426,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             return dataSource.SyncManager.ForceFullSync()
                 .SelectUnit();
+        }
+
+        private IObservable<Unit> deleteTimeEntry(TimeEntryViewModel timeEntry)
+        {
+            return interactorFactory
+                .DeleteTimeEntry(timeEntry.Id)
+                .Execute()
+                .Do( _ => {
+                    analyticsService.DeleteTimeEntry.Track();
+                    dataSource.SyncManager.PushSync();
+                });
         }
 
         private async Task stopTimeEntry()

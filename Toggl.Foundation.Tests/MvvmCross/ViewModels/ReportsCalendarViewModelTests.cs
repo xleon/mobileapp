@@ -14,7 +14,6 @@ using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar;
 using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac;
-using Toggl.PrimeRadiant.Models;
 using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
@@ -234,8 +233,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         private static bool ensureDateRangeIsCorrect(
             ReportsDateRangeParameter dateRange,
-            CalendarDayViewModel expectedStart,
-            CalendarDayViewModel expectedEnd)
+            ReportsCalendarDayViewModel expectedStart,
+            ReportsCalendarDayViewModel expectedEnd)
             => dateRange.StartDate.Year == expectedStart.CalendarMonth.Year
                && dateRange.StartDate.Month == expectedStart.CalendarMonth.Month
                && dateRange.StartDate.Day == expectedStart.Day

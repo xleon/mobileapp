@@ -819,18 +819,12 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("Success", resourceCulture);
             }
         }
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> develop
         public static string SelectWorkspace {
             get {
                 return ResourceManager.GetString("SelectWorkspace", resourceCulture);
             }
         }
-<<<<<<< HEAD
-=======
 
         public static string EntryDeleted {
             get {
@@ -843,6 +837,5 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("UndoButtonTitle", resourceCulture);
             }
         }
->>>>>>> develop
     }
 }
