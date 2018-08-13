@@ -21,12 +21,15 @@ namespace Toggl.Foundation.Calendar
 
         public long? TimeEntryId { get; }
 
+        public string CalendarId { get; }
+
         public CalendarItem(CalendarItemSource source,
             DateTimeOffset startTime,
             TimeSpan duration,
             string description,
             string color = "",
-            long? timeEntryId = null)
+            long? timeEntryId = null,
+            string calendarId = "")
         {
             Source = source;
             StartTime = startTime;
@@ -34,6 +37,7 @@ namespace Toggl.Foundation.Calendar
             Description = description;
             Color = color;
             TimeEntryId = timeEntryId;
+            CalendarId = calendarId;
         }
 
         public CalendarItem(IThreadSafeTimeEntry timeEntry)
