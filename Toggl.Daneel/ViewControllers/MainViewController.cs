@@ -42,9 +42,7 @@ namespace Toggl.Daneel.ViewControllers
         private readonly UIView spiderContainerView = new UIView();
         private readonly SpiderOnARopeView spiderBroView = new SpiderOnARopeView();
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 30, 40));
-        private readonly UIButton calendarButton = new UIButton(new CGRect(0, 0, 30, 40));
         private readonly UIButton syncFailuresButton = new UIButton(new CGRect(0, 0, 30, 40));
-        private readonly UIButton reportsButton = new UIButton(new CGRect(0, 0, 30, 40));
         private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
         private readonly TimeEntriesEmptyLogView emptyStateView = TimeEntriesEmptyLogView.Create();
 
@@ -143,7 +141,6 @@ namespace Toggl.Daneel.ViewControllers
             TimeEntriesLogTableView.CustomRefreshControl = refreshControl;
 
             //Commands
-            bindingSet.Bind(reportsButton).To(vm => vm.OpenReportsCommand); 
             bindingSet.Bind(settingsButton).To(vm => vm.OpenSettingsCommand);
             bindingSet.Bind(StopTimeEntryButton).To(vm => vm.StopTimeEntryCommand);
             bindingSet.Bind(StartTimeEntryButton).To(vm => vm.StartTimeEntryCommand);
@@ -161,8 +158,6 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(StartTimeEntryButton)
                       .For(v => v.BindLongPress())
                       .To(vm => vm.AlternativeStartTimeEntryCommand);
-
-            this.Bind(calendarButton.Tapped(), ViewModel.OpenCalendarAction);
 
             //Visibility
             var shouldWelcomeBack = ViewModel.ShouldShowWelcomeBack;
@@ -244,9 +239,7 @@ namespace Toggl.Daneel.ViewControllers
             NavigationItem.TitleView = titleImage;
             NavigationItem.RightBarButtonItems = new[]
             {
-                new UIBarButtonItem(settingsButton),
-                new UIBarButtonItem(reportsButton),
-                new UIBarButtonItem(calendarButton),
+                new UIBarButtonItem(settingsButton)
             };
 
 #if DEBUG
@@ -361,9 +354,7 @@ namespace Toggl.Daneel.ViewControllers
             StartTimeEntryButton.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f);
 
             //Prepare Navigation bar images
-            reportsButton.SetImage(UIImage.FromBundle("icReports"), UIControlState.Normal);
             settingsButton.SetImage(UIImage.FromBundle("icSettings"), UIControlState.Normal);
-            calendarButton.SetImage(UIImage.FromBundle("icCalendar"), UIControlState.Normal);
             syncFailuresButton.SetImage(UIImage.FromBundle("icWarning"), UIControlState.Normal);
 
             RunningEntryDescriptionFadeView.FadeLeft = true;

@@ -81,7 +81,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         // Inputs
         public UIAction RefreshAction { get; }
-        public UIAction OpenCalendarAction { get; }
         public InputAction<TimeEntryViewModel> DeleteTimeEntry { get; }
         public InputAction<TimeEntryViewModel> SelectTimeEntry { get; }
         public InputAction<TimeEntryViewModel> ContinueTimeEntry { get; }
@@ -189,7 +188,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             DeleteTimeEntry = new InputAction<TimeEntryViewModel>(deleteTimeEntry);
             SelectTimeEntry = new InputAction<TimeEntryViewModel>(timeEntrySelected);
             ContinueTimeEntry = new InputAction<TimeEntryViewModel>(continueTimeEntry);
-            OpenCalendarAction = new UIAction(openCalendarAction, remoteConfigService.IsCalendarFeatureEnabled);
         }
 
         public void Init(string action)
@@ -376,11 +374,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private Task openSyncFailures()
             => navigate<SyncFailuresViewModel>();
-
-        private IObservable<Unit> openCalendarAction()
-            => Observable
-                .FromAsync(async () => await navigationService.Navigate<CalendarViewModel>())
-                .SelectUnit();
 
         private Task startTimeEntry()
             => startTimeEntry(IsInManualMode);
