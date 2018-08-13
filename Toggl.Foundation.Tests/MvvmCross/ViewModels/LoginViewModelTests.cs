@@ -709,9 +709,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class ThePrepareMethod : LoginViewModelTest
         {
-            //Todo: fix flaky test
-            //[FsCheck.Xunit.Property(Replay = "1149693933,296482725")]
-            //[FsCheck.Xunit.Property(Replay = "1503434587,296482728")]
             [FsCheck.Xunit.Property]
             public void SetsTheEmail(NonEmptyString emailString)
             {
@@ -719,7 +716,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var email = Email.From(emailString.Get);
                 var password = Password.Empty;
                 var parameter = CredentialsParameter.With(email, password);
-                var expectedValues = new[] { Email.Empty.ToString(),  email.TrimmedEnd().ToString() };
+                var expectedValues = new[] { Email.Empty.ToString(), email.TrimmedEnd().ToString() }.Distinct();
                 var actualValues = new List<string>();
                 viewModel.Email.Subscribe(actualValues.Add);
 
