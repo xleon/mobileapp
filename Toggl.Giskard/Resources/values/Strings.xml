@@ -94,7 +94,6 @@ understand and agree to Toggl\'s</string>
     <string name="CategorizeWithProjects">Categorize your time by adding a project</string>
     <string name="Continue">Continue</string>
     <string name="Delete">Delete</string>
-
     <string name="MainTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.MainTemplateSelector, Toggl.Giskard</string>
     <string name="ReportsCalendarShortcutsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsCalendarShortcutsTemplateSelector, Toggl.Giskard</string>
     <string name="ReportsCalendarTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsCalendarTemplateSelector, Toggl.Giskard</string>

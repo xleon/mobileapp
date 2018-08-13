@@ -5,16 +5,15 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Text;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DTOs;
+using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.Transformations;
@@ -302,7 +301,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return;
 
             await dataSource.User.Update(new EditUserDTO { BeginningOfWeek = newBeginningOfWeek });
-            dataSource.SyncManager.PushSync();
+            dataSource.SyncManager.InitiatePushSync();
         }
 
         public async Task SelectDurationFormat()
@@ -353,7 +352,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             };
 
             await dataSource.Preferences.Update(preferencesDto);
-            dataSource.SyncManager.PushSync();
+            dataSource.SyncManager.InitiatePushSync();
         }
 
         private async Task changeDefaultWorkspace(long selectedWorkspaceId)
@@ -361,7 +360,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (selectedWorkspaceId == currentUser.DefaultWorkspaceId) return;
 
             await dataSource.User.UpdateWorkspace(selectedWorkspaceId);
-            dataSource.SyncManager.PushSync();
+            dataSource.SyncManager.InitiatePushSync();
         }
 
         private WorkspaceToSelectableWorkspaceLambda selectableWorkspacesFromWorkspaces(IThreadSafeUser user)

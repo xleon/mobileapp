@@ -10,10 +10,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShort
         {
         }
 
-        public override DateRangeParameter GetDateRange()
+        public override ReportsDateRangeParameter GetDateRange()
         {
             var yesterday = TimeService.CurrentDateTime.Date.AddDays(-1);
-            return DateRangeParameter
+            return ReportsDateRangeParameter
                 .WithDates(yesterday, yesterday)
                 .WithSource(ReportsSource.ShortcutYesterday);
         }

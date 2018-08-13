@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
@@ -21,6 +22,7 @@ using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.Mocks;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Xunit;
 using static Toggl.Foundation.Helper.Constants;
@@ -32,11 +34,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         public abstract class MainViewModelTest : BaseViewModelTests<MainViewModel>
         {
-            private IDisposable disposable;
-
             protected ISubject<SyncProgress> ProgressSubject { get; } = new Subject<SyncProgress>();
-
-            protected TestScheduler Scheduler { get; } = new TestScheduler();
 
             protected override MainViewModel CreateViewModel()
             {
@@ -50,7 +48,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     InteractorFactory,
                     NavigationService,
                     RemoteConfigService,
-                    SuggestionProviderContainer);
+                    SuggestionProviderContainer,
+                    SchedulerProvider);
 
                 vm.Prepare();
 
@@ -85,7 +84,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useInteractorFactory,
                 bool useNavigationService,
                 bool useRemoteConfigService,
-                bool useSuggestionProviderContainer)
+                bool useSuggestionProviderContainer,
+                bool useSchedulerProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
@@ -97,6 +97,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
                 var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
+                var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainViewModel(
@@ -109,7 +110,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         interactorFactory,
                         navigationService,
                         remoteConfigService,
-                        suggestionProviderContainer);
+                        suggestionProviderContainer,
+                        schedulerProvider);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -384,7 +386,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(observable);
 
                 ViewModel.Initialize().Wait();
-                Scheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
             }
 
             [Fact, LogIfTooSlow]
@@ -459,7 +461,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask CannotBeExecutedWhenNoTimeEntryIsRunning()
             {
                 subject.OnNext(null);
-                Scheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
 
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
 
@@ -473,7 +475,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
                 subject.OnNext(secondTimeEntry);
-                Scheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
 
                 await DataSource.TimeEntries.Received(2).Stop(Arg.Any<DateTimeOffset>());
@@ -502,15 +504,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var timeEntry = Substitute.For<IThreadSafeTimeEntry>();
                 var observable = Observable.Return(timeEntry);
                 DataSource.TimeEntries.CurrentlyRunningTimeEntry.Returns(observable);
-                ViewModel.Initialize().Wait();
+                await ViewModel.Initialize();
+                var tcs = new TaskCompletionSource<bool>();
+                var blockingTask = new ThreadingTask(async () => await tcs.Task);
                 NavigationService
                     .Navigate<EditTimeEntryViewModel, long>(Arg.Any<long>())
-                    .Returns(ThreadingTask.Delay(10));
+                    .Returns(blockingTask);
 
-                for (int i = 0; i < 10; i++)
-                {
-                    ThreadingTask runSynchronously = ViewModel.EditTimeEntryCommand.ExecuteAsync();
-                }
+                Enumerable.Range(0, 10).Do(_ => ViewModel.EditTimeEntryCommand.ExecuteAsync());
 
                 await NavigationService.Received(1)
                     .Navigate<EditTimeEntryViewModel, long>(Arg.Any<long>());
@@ -614,7 +615,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.Initialize();
                 currentTimeEntrySubject.OnNext(timeEntry);
-                Scheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
             }
 
             [Fact, LogIfTooSlow]
@@ -630,7 +631,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await prepare();
                 currentTimeEntrySubject.OnNext(null);
-                Scheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
 
                 ActualValue.Should().Be(ExpectedEmptyValue);
             }
@@ -782,14 +783,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PrepareIsWelcome(true);
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowEmptyState.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, true)
+                    ReactiveTest.OnNext(1, true)
                 );
             }
 
@@ -797,16 +797,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask ReturnsFalseWhenThereAreSomeSuggestions()
             {
                 PrepareSuggestion();
-
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowEmptyState.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, false)
+                    ReactiveTest.OnNext(1, false)
                 );
             }
 
@@ -814,16 +812,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask ReturnsFalseWhenThereAreSomeTimeEntries()
             {
                 PrepareTimeEntry();
-
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowEmptyState.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, false)
+                    ReactiveTest.OnNext(1, false)
                 );
             }
 
@@ -832,14 +828,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PrepareIsWelcome(false);
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowEmptyState.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, false)
+                    ReactiveTest.OnNext(1, false)
                 );
             }
         }
@@ -851,15 +846,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PrepareIsWelcome(false);
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowWelcomeBack.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, false),
-                    ReactiveTest.OnNext(0, true)
+                    ReactiveTest.OnNext(1, false),
+                    ReactiveTest.OnNext(2, true)
                 );
             }
 
@@ -868,14 +862,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PrepareSuggestion();
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowWelcomeBack.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, false)
+                    ReactiveTest.OnNext(1, false)
                 );
             }
 
@@ -884,14 +877,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PrepareTimeEntry();
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowWelcomeBack.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, false)
+                    ReactiveTest.OnNext(1, false)
                 );
             }
 
@@ -900,14 +892,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PrepareIsWelcome(true);
                 await ViewModel.Initialize();
-
-                var testScheduler = new TestScheduler();
-                var observer = testScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<bool>();
 
                 ViewModel.ShouldShowWelcomeBack.Subscribe(observer);
 
+                TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(0, false)
+                    ReactiveTest.OnNext(1, false)
                 );
             }
         }

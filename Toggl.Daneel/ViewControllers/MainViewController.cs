@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
@@ -6,7 +7,6 @@ using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.Plugin.Visibility;
 using Toggl.Daneel.Combiners;
@@ -20,7 +20,6 @@ using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Onboarding.MainView;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Extensions;
 using Toggl.PrimeRadiant.Onboarding;
@@ -30,7 +29,6 @@ using static Toggl.Foundation.MvvmCross.Helper.Animation;
 
 namespace Toggl.Daneel.ViewControllers
 {
-    [MvxRootPresentation(WrapInNavigationController = true)]
     public partial class MainViewController : ReactiveViewController<MainViewModel>
     {
         private const float showCardDelay = 0.1f;
@@ -40,14 +38,13 @@ namespace Toggl.Daneel.ViewControllers
         private const float spiderHingeHeight = 2;
 
         private const float tooltipOffset = 7;
-        private const float emptyViewTopMargin = 32;
 
         private readonly UIView spiderContainerView = new UIView();
         private readonly SpiderOnARopeView spiderBroView = new SpiderOnARopeView();
-        private readonly UIButton reportsButton = new UIButton(new CGRect(0, 0, 30, 40));
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 30, 40));
         private readonly UIButton calendarButton = new UIButton(new CGRect(0, 0, 30, 40));
         private readonly UIButton syncFailuresButton = new UIButton(new CGRect(0, 0, 30, 40));
+        private readonly UIButton reportsButton = new UIButton(new CGRect(0, 0, 30, 40));
         private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
         private readonly TimeEntriesEmptyLogView emptyStateView = TimeEntriesEmptyLogView.Create();
 
@@ -73,6 +70,8 @@ namespace Toggl.Daneel.ViewControllers
         private readonly SuggestionsView suggestionsView = new SuggestionsView { TranslatesAutoresizingMaskIntoConstraints = false };
 
         private TimeEntriesLogViewSource tableViewSource;
+
+        private SnackBar snackBar;
 
         public MainViewController()
             : base(nameof(MainViewController))
@@ -120,8 +119,9 @@ namespace Toggl.Daneel.ViewControllers
                 tableViewSource.SwipeToContinue
             );
             this.Bind(continueTimeEntry, ViewModel.ContinueTimeEntry);
-            this.Bind(tableViewSource.SwipeToDelete, ViewModel.DeleteTimeEntry);
+            this.Bind(tableViewSource.SwipeToDelete, ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntry);
             this.Bind(tableViewSource.ItemSelected, ViewModel.SelectTimeEntry);
+            this.Bind(ViewModel.TimeEntriesViewModel.ShouldShowUndo, toggleUndoDeletion);
 
             tableViewSource.SwipeToContinue
                 .VoidSubscribe(() =>
@@ -138,12 +138,12 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(disposeBag);
 
             // Refresh Control
-            var refreshControl = new RefreshControl(ViewModel.SyncProgressState.AsDriver(), tableViewSource);
+            var refreshControl = new RefreshControl(ViewModel.SyncProgressState, tableViewSource);
             this.Bind(refreshControl.Refresh, ViewModel.RefreshAction);
             TimeEntriesLogTableView.CustomRefreshControl = refreshControl;
 
             //Commands
-            bindingSet.Bind(reportsButton).To(vm => vm.OpenReportsCommand);
+            bindingSet.Bind(reportsButton).To(vm => vm.OpenReportsCommand); 
             bindingSet.Bind(settingsButton).To(vm => vm.OpenSettingsCommand);
             bindingSet.Bind(StopTimeEntryButton).To(vm => vm.StopTimeEntryCommand);
             bindingSet.Bind(StartTimeEntryButton).To(vm => vm.StartTimeEntryCommand);
@@ -165,8 +165,8 @@ namespace Toggl.Daneel.ViewControllers
             this.Bind(calendarButton.Tapped(), ViewModel.OpenCalendarAction);
 
             //Visibility
-            var shouldWelcomeBack = ViewModel.ShouldShowWelcomeBack.AsDriver();
-            this.Bind(ViewModel.ShouldShowEmptyState.AsDriver(), visible => emptyStateView.Hidden = !visible);
+            var shouldWelcomeBack = ViewModel.ShouldShowWelcomeBack;
+            this.Bind(ViewModel.ShouldShowEmptyState, visible => emptyStateView.Hidden = !visible);
             this.Bind(shouldWelcomeBack, WelcomeBackView.BindIsVisible());
             this.Bind(shouldWelcomeBack, spiderContainerView.BindIsVisible());
             this.Bind(shouldWelcomeBack, visible =>
@@ -255,6 +255,24 @@ namespace Toggl.Daneel.ViewControllers
                 new UIBarButtonItem(syncFailuresButton)
             };
 #endif
+        }
+
+        private void toggleUndoDeletion(bool show)
+        {
+            if (snackBar != null)
+            {
+                snackBar.Hide();
+                snackBar = null;
+            }
+
+            if (!show)
+                return;
+
+            snackBar = SnackBar.Factory.CreateUndoSnackBar(
+                onUndo: () => ViewModel.TimeEntriesViewModel.CancelDeleteTimeEntry.Execute(Unit.Default));
+
+            snackBar.SnackBottomAnchor = StartTimeEntryButton.TopAnchor;
+            snackBar.Show(superView: View);
         }
 
         protected override void Dispose(bool disposing)
@@ -453,14 +471,14 @@ namespace Toggl.Daneel.ViewControllers
             emptyStateView.WidthAnchor.ConstraintEqualTo(TimeEntriesLogTableView.WidthAnchor).Active = true;
             emptyStateView.HeightAnchor.ConstraintEqualTo(TimeEntriesLogTableView.HeightAnchor).Active = true;
             emptyStateView.CenterYAnchor.ConstraintEqualTo(TimeEntriesLogTableView.CenterYAnchor).Active = true;
-            emptyStateView.TopAnchor.ConstraintEqualTo(TimeEntriesLogTableView.TopAnchor, emptyViewTopMargin).Active = true;
+            emptyStateView.TopAnchor.ConstraintEqualTo(TimeEntriesLogTableView.TopAnchor).Active = true;
         }
 
         private void prepareOnboarding()
         {
             var storage = ViewModel.OnboardingStorage;
 
-            var timelineIsEmpty = ViewModel.LogEmpty.AsDriver();
+            var timelineIsEmpty = ViewModel.LogEmpty;
 
             new StartTimeEntryOnboardingStep(storage)
                 .ManageDismissableTooltip(StartTimeEntryOnboardingBubbleView, storage)
@@ -483,7 +501,7 @@ namespace Toggl.Daneel.ViewControllers
 
         private void prepareSwipeGesturesOnboarding(IOnboardingStorage storage, IObservable<bool> tapToEditStepIsVisible)
         {
-            var timeEntriesCount = ViewModel.TimeEntriesCount.AsDriver();
+            var timeEntriesCount = ViewModel.TimeEntriesCount;
 
             var swipeRightCanBeShown =
                 UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
