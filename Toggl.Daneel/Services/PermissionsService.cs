@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using EventKit;
 using Foundation;
 using Toggl.Foundation.MvvmCross.Services;
@@ -11,59 +10,35 @@ namespace Toggl.Daneel.Services
     [Preserve(AllMembers = true)]
     public sealed class PermissionsService : IPermissionsService
     {
-        private readonly BehaviorSubject<bool> calendarAuthorizationStatusSubject;
-
-        public IObservable<bool> CalendarAuthorizationStatus { get; }
-
-        public PermissionsService()
-        {
-            calendarAuthorizationStatusSubject = new BehaviorSubject<bool>(isCalendarAuthorized());
-            CalendarAuthorizationStatus = calendarAuthorizationStatusSubject
-                .AsObservable()
-                .DistinctUntilChanged();
-        }
-
-        #region Calendar
-
-        public void RequestCalendarAuthorization(bool force = false)
-        {
-            switch (EKEventStore.GetAuthorizationStatus(EKEntityType.Event))
-            {
-                case EKAuthorizationStatus.Authorized:
-                    calendarAuthorizationStatusSubject.OnNext(true);
-                    return;
-                case EKAuthorizationStatus.NotDetermined:
-                    requestCalendarAuthorization();
-                    return;
-                case EKAuthorizationStatus.Denied when force:
-                    openAppSettings();
-                    return;
-                default:
-                    calendarAuthorizationStatusSubject.OnNext(false);
-                    return;
-            }
-        }
-
-        private bool isCalendarAuthorized()
+        public bool CalendarPermissionGranted
             => EKEventStore.GetAuthorizationStatus(EKEntityType.Event) == EKAuthorizationStatus.Authorized;
 
-        private void requestCalendarAuthorization()
+        public IObservable<bool> RequestCalendarAuthorization(bool force = false)
         {
-            var eventStore = new EKEventStore();
-            eventStore.RequestAccess(EKEntityType.Event, (granted, error) =>
+            if (CalendarPermissionGranted)
+                return Observable.Return(true);
+
+            if (force)
             {
-                calendarAuthorizationStatusSubject.OnNext(granted);
-            });
+                //Fact: If the user changes any permissions through the settings, this app gets restarted
+                //and in that case we don't care about the value returned from this method.
+                //We care about the returned value in the case, when user opens settings
+                //and comes back to this app without altering any permissions. In that case
+                //returning the current permission status is the correct behaviour.
+                OpenAppSettings();
+                return Observable.Return(CalendarPermissionGranted);
+            }
+
+            return Observable
+                .FromAsync(async _ => await new EKEventStore().RequestAccessAsync(EKEntityType.Event))
+                .Select(tuple => tuple.Item1);
         }
 
-        #endregion
-
-        public void EnterForeground()
+        public void OpenAppSettings()
         {
-            calendarAuthorizationStatusSubject.OnNext(isCalendarAuthorized());
+            UIApplication.SharedApplication.OpenUrl(
+                NSUrl.FromString(UIApplication.OpenSettingsUrlString)
+            );
         }
-
-        private void openAppSettings()
-            => UIApplication.SharedApplication.OpenUrl(NSUrl.FromString(UIApplication.OpenSettingsUrlString));
     }
 }
