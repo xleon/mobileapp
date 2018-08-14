@@ -126,7 +126,7 @@ namespace Toggl.Daneel.Views.Calendar
             var yMins = hourHeight * attrs.StartTime.Minute / 60;
 
             var width = (CollectionViewContentSize.Width - leftPadding - rightPadding) / attrs.OverlappingItemsCount;
-            var height = Math.Max(minItemHeight, hourHeight * attrs.Duration.Minutes / 60);
+            var height = Math.Max(minItemHeight, hourHeight * attrs.Duration.TotalMinutes / 60);
             var x = leftPadding + width * attrs.PositionInOverlappingGroup;
             var y = yHour + yMins;
 

@@ -1065,6 +1065,7 @@
       <DependentUpon>NoWorkspaceViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\UIKitRxExtensions\UIControlRxExtensions.cs" />
+    <Compile Include="ViewSources\CalendarCollectionViewSource.cs" />
     <Compile Include="Binding\LayoutConstraintActiveTargetBinding.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
   </ItemGroup>

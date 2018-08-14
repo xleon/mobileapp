@@ -13,6 +13,9 @@ namespace Toggl.Daneel.ViewControllers
 	partial class CalendarViewController
 	{
 		[Outlet]
+		UIKit.UICollectionView CalendarCollectionView { get; set; }
+
+		[Outlet]
 		UIKit.UIButton GetStartedButton { get; set; }
 
 		[Outlet]
@@ -20,14 +23,19 @@ namespace Toggl.Daneel.ViewControllers
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (GetStartedButton != null) {
+				GetStartedButton.Dispose ();
+				GetStartedButton = null;
+			}
+
 			if (OnboardingView != null) {
 				OnboardingView.Dispose ();
 				OnboardingView = null;
 			}
 
-			if (GetStartedButton != null) {
-				GetStartedButton.Dispose ();
-				GetStartedButton = null;
+			if (CalendarCollectionView != null) {
+				CalendarCollectionView.Dispose ();
+				CalendarCollectionView = null;
 			}
 		}
 	}

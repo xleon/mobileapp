@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CalendarViewController">
             <connections>
+                <outlet property="CalendarCollectionView" destination="NhI-Kn-KUq" id="MHb-E0-Sdr"/>
                 <outlet property="GetStartedButton" destination="a5y-Zp-fr2" id="02r-oY-SLb"/>
                 <outlet property="OnboardingView" destination="4HD-Ed-Lag" id="5B3-LC-ez0"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
@@ -22,6 +23,16 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="NhI-Kn-KUq">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="xJA-hD-XsC">
+                        <size key="itemSize" width="50" height="50"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4HD-Ed-Lag" userLabel="Onboarding View">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
@@ -82,11 +93,15 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstItem="NhI-Kn-KUq" firstAttribute="bottom" secondItem="Gmd-lW-ZGB" secondAttribute="bottom" id="4Vh-60-csU"/>
                 <constraint firstAttribute="bottom" secondItem="4HD-Ed-Lag" secondAttribute="bottom" id="7kd-gh-CMu"/>
                 <constraint firstAttribute="trailing" secondItem="4HD-Ed-Lag" secondAttribute="trailing" id="AKw-sA-S7u"/>
+                <constraint firstItem="NhI-Kn-KUq" firstAttribute="leading" secondItem="Gmd-lW-ZGB" secondAttribute="leading" id="BBh-t4-ydr"/>
+                <constraint firstItem="NhI-Kn-KUq" firstAttribute="top" secondItem="2" secondAttribute="top" id="PrH-nw-NVE"/>
                 <constraint firstItem="4HD-Ed-Lag" firstAttribute="top" secondItem="2" secondAttribute="top" id="PyK-SL-wQm"/>
                 <constraint firstAttribute="trailing" secondItem="3RA-hC-Bqf" secondAttribute="trailing" id="gmv-li-nfu"/>
                 <constraint firstItem="3RA-hC-Bqf" firstAttribute="top" secondItem="Gmd-lW-ZGB" secondAttribute="top" id="iDN-oq-Xoi"/>
+                <constraint firstItem="NhI-Kn-KUq" firstAttribute="trailing" secondItem="Gmd-lW-ZGB" secondAttribute="trailing" id="xyG-4v-H5P"/>
                 <constraint firstItem="3RA-hC-Bqf" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="yGO-jS-eul"/>
                 <constraint firstItem="4HD-Ed-Lag" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="yS4-uj-tTO"/>
             </constraints>
