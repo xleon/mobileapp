@@ -22,6 +22,9 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIView ColorCircleView { get; set; }
 
 		[Outlet]
+		UIKit.UIView ColorPickerOpeningView { get; set; }
+
+		[Outlet]
 		UIKit.UIButton DoneButton { get; set; }
 
 		[Outlet]
@@ -63,6 +66,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (ColorCircleView != null) {
 				ColorCircleView.Dispose ();
 				ColorCircleView = null;
+			}
+
+			if (ColorPickerOpeningView != null) {
+				ColorPickerOpeningView.Dispose ();
+				ColorPickerOpeningView = null;
 			}
 
 			if (DoneButton != null) {
@@ -108,11 +116,6 @@ namespace Toggl.Daneel.ViewControllers
 			if (WorkspaceLabel != null) {
 				WorkspaceLabel.Dispose ();
 				WorkspaceLabel = null;
-			}
-
-			if (ProjectNameUsedErrorTextHeight != null) {
-				ProjectNameUsedErrorTextHeight.Dispose ();
-				ProjectNameUsedErrorTextHeight = null;
 			}
 		}
 	}

@@ -10,17 +10,21 @@ namespace Toggl.Daneel.Services
 {
     public sealed class RemoteConfigService : IRemoteConfigService
     {
+        public void SetupDefaults(string plistName)
+        {
+            var remoteConfig = RemoteConfig.SharedInstance;
+            remoteConfig.SetDefaults(plistFileName: plistName);
+        }
+
         public IObservable<RatingViewConfiguration> RatingViewConfiguration
             => Observable.Create<RatingViewConfiguration>( observer =>
             {
                 var remoteConfig = RemoteConfig.SharedInstance;
                 remoteConfig.Fetch((status, error) =>
                 {
-                    if (error != null)
-                        observer.OnError(
-                            new RemoteConfigFetchFailedException(error.ToString()));
+                    if (error == null)
+                        remoteConfig.ActivateFetched();
 
-                    remoteConfig.ActivateFetched();
                     var configuration = new RatingViewConfiguration(
                         remoteConfig["day_count"].NumberValue.Int32Value,
                         criterionStringToEnum(remoteConfig["criterion"].StringValue)

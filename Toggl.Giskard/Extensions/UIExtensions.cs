@@ -27,7 +27,12 @@ namespace Toggl.Giskard.Extensions
             => Observable
                 .FromEventPattern<TextChangedEventArgs>(e => textView.TextChanged += e, e => textView.TextChanged -= e)
                 .Select(args => ((EditText)args.Sender).TextFormatted);
-        
+
+        public static IObservable<Unit> EditorActionSent(this EditText text)
+            => Observable
+                .FromEventPattern<TextView.EditorActionEventArgs>(e => text.EditorAction += e, e => text.EditorAction -= e)
+                .SelectUnit();
+
         public static Action<bool> BindIsVisible(this View view)
             => isVisible => view.Visibility = isVisible.ToVisibility();
 

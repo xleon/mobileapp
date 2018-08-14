@@ -31,8 +31,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class ReportsViewModel : MvxViewModel
     {
-
-
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
@@ -43,11 +41,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly Subject<Unit> reportSubject = new Subject<Unit>();
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
+        private bool didNavigateToCalendar;
         private DateTimeOffset startDate;
         private DateTimeOffset endDate;
         private int totalDays => (endDate - startDate).Days + 1;
         private ReportsSource source;
-        private int projectsNotSyncedCount;
+        [Obsolete("This should be removed, replaced by something that is actually used or turned into a constant.")]
+        private int projectsNotSyncedCount = 0;
         private DateTime reportSubjectStartTime;
         private long workspaceId;
         private DateFormat dateFormat;
@@ -103,7 +103,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand ToggleCalendarCommand { get; }
 
-        public IMvxCommand<DateRangeParameter> ChangeDateRangeCommand { get; }
+        public IMvxCommand<ReportsDateRangeParameter> ChangeDateRangeCommand { get; }
 
         public IMvxAsyncCommand SelectWorkspace { get; }
 
@@ -132,7 +132,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             HideCalendarCommand = new MvxCommand(hideCalendar);
             ToggleCalendarCommand = new MvxCommand(toggleCalendar);
-            ChangeDateRangeCommand = new MvxCommand<DateRangeParameter>(changeDateRange);
+            ChangeDateRangeCommand = new MvxCommand<ReportsDateRangeParameter>(changeDateRange);
             SelectWorkspace = new MvxAsyncCommand(selectWorkspace);
         }
 
@@ -173,7 +173,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public override void ViewAppeared()
         {
             base.ViewAppeared();
-            navigationService.Navigate(calendarViewModel);
+
+            if (!didNavigateToCalendar)
+            {
+                navigationService.Navigate(calendarViewModel);
+                didNavigateToCalendar = true;
+            }
         }
 
         private void setLoadingState(Unit obj)
@@ -231,7 +236,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             calendarViewModel.OnHideCalendar();
         }
 
-        private void changeDateRange(DateRangeParameter dateRange)
+        private void changeDateRange(ReportsDateRangeParameter dateRange)
         {
             startDate = dateRange.StartDate;
             endDate = dateRange.EndDate;
