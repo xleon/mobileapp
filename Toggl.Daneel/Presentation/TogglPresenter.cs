@@ -36,10 +36,13 @@ namespace Toggl.Daneel.Presentation
         };
 
         private UITabBarController mainTabBarController
-            => UIApplication.SharedApplication.KeyWindow?.RootViewController as UITabBarController;
+            => mainViewController as UITabBarController;
+
+        private UIViewController mainViewController
+            => UIApplication.SharedApplication.KeyWindow?.RootViewController;
 
         public UIViewController TopViewController
-            => getPresentedViewController(mainTabBarController);
+            => getPresentedViewController(mainViewController);
 
         public TogglPresenter(IUIApplicationDelegate applicationDelegate, UIWindow window)
             : base(applicationDelegate, window)
