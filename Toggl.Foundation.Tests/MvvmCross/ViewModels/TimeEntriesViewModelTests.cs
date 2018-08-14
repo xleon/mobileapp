@@ -311,6 +311,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await viewModel.DelayDeleteTimeEntry.Execute(timeEntry);
 
+                SchedulerProvider.TestScheduler.Start();
                 observer.Received().OnNext(true);
             }
 
@@ -332,6 +333,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks);
                 await observable;
 
+                SchedulerProvider.TestScheduler.Start();
                 observer.Received().OnNext(true);
                 observer.Received().OnNext(false);
             }
@@ -409,6 +411,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await viewModel.CancelDeleteTimeEntry.Execute();
                 await observable;
 
+                SchedulerProvider.TestScheduler.Start();
                 observer.Received().OnNext(true);
                 observer.Received().OnNext(false);
             }
