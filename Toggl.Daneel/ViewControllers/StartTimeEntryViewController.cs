@@ -46,7 +46,7 @@ namespace Toggl.Daneel.ViewControllers
         private IDisposable addProjectOrTagOnboardingDisposable;
         private IDisposable disabledConfirmationButtonOnboardingDisposable;
 
-        private ISubject<bool> isDescriptionEmptySubject;
+        private ISubject<bool> isDescriptionEmptySubject = new BehaviorSubject<bool>(true);
 
         private IUITextInputDelegate emptyInputDelegate = new EmptyInputDelegate();
 
@@ -195,6 +195,12 @@ namespace Toggl.Daneel.ViewControllers
             // Reactive
             this.Bind(ViewModel.TextFieldInfoObservable, onTextFieldInfo);
 
+            this.Bind(
+                DescriptionTextView
+                    .AttributedText()
+                    .Select(attributedString => attributedString.Length == 0),
+                isDescriptionEmptySubject);
+
             DescriptionTextView.AttributedText()
                 .CombineLatest(DescriptionTextView.CursorPosition(), (text, _) => text)
                 .Where(_ => !isUpdatingDescriptionField)
@@ -224,6 +230,9 @@ namespace Toggl.Daneel.ViewControllers
         {
             TimeLabel.Hidden = !TimeLabel.Hidden;
             TimeInput.Hidden = !TimeInput.Hidden;
+
+            TimeLabelTrailingConstraint.Active = !TimeLabel.Hidden;
+            TimeInputTrailingConstraint.Active = !TimeInput.Hidden;
         }
 
         private void updatePlaceholder()
@@ -346,10 +355,6 @@ namespace Toggl.Daneel.ViewControllers
             greyCheckmarkButtonImage = UIImage.FromBundle("icCheckGrey");
             greenCheckmarkButtonImage = UIImage.FromBundle("doneGreen");
 
-            isDescriptionEmptySubject = new BehaviorSubject<bool>(String.IsNullOrEmpty(ViewModel.Description));
-
-            descriptionDisposable = ViewModel.WeakSubscribe(() => ViewModel.Description, onDescriptionChanged);
-
             var disabledConfirmationButtonOnboardingStep
                 = new DisabledConfirmationButtonOnboardingStep(
                     ViewModel.OnboardingStorage,
@@ -363,11 +368,6 @@ namespace Toggl.Daneel.ViewControllers
                         var image = visible ? greyCheckmarkButtonImage : greenCheckmarkButtonImage;
                         DoneButton.SetImage(image, UIControlState.Normal);
                     }));
-        }
-
-        private void onDescriptionChanged(object sender, PropertyChangedEventArgs args)
-        {
-            isDescriptionEmptySubject.OnNext(String.IsNullOrEmpty(ViewModel.Description));
         }
     }
 }

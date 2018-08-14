@@ -3,8 +3,6 @@ using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using System.Reactive.Linq;
-using Toggl.Daneel.Views;
 using Toggl.Multivac.Extensions;
 using UIKit;
 
@@ -35,12 +33,12 @@ namespace Toggl.Daneel.ViewControllers.Settings
 
             this.Bind(ViewModel.IsFeedbackEmpty, FeedbackPlaceholderTextView.BindIsVisible());
             this.Bind(ViewModel.ErrorViewVisible, ErrorView.BindAnimatedIsVisible());
-            this.Bind(ViewModel.SendEnabled, SendButton.BindIsEnabled());
+            this.Bind(ViewModel.SendEnabled, SendButton.BindEnabled());
 
-            var isLoading = ViewModel.IsLoading.AsDriver(false);
-            this.Bind(isLoading.Invert(), SendButton.BindIsVisible());
-            this.Bind(isLoading, IndicatorView.BindIsVisible());
-            this.Bind(isLoading, UIApplication.SharedApplication.BindNetworkActivityIndicatorVisible());
+            this.Bind(ViewModel.IsLoading.Invert(), SendButton.BindIsVisible());
+            this.Bind(ViewModel.IsLoading.Invert(), CloseButton.BindIsVisible());
+            this.Bind(ViewModel.IsLoading, IndicatorView.BindIsVisible());
+            this.Bind(ViewModel.IsLoading, UIApplication.SharedApplication.BindNetworkActivityIndicatorVisible());
         }
 
         public override void ViewWillAppear(bool animated)
