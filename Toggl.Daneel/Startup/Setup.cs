@@ -72,6 +72,7 @@ namespace Toggl.Daneel
 #endif
 
             const string clientName = "Daneel";
+            const string remoteConfigDefaultsFileName = "RemoteConfigDefaults";
             var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"].ToString();
             var database = new Database();
             var scheduler = Scheduler.Default;
@@ -88,6 +89,8 @@ namespace Toggl.Daneel
             var userAgent = new UserAgent(clientName, version);
             var keyValueStorage = new UserDefaultsStorage();
             var settingsStorage = new SettingsStorage(Version.Parse(version), keyValueStorage);
+            var remoteConfigService = new RemoteConfigService();
+            remoteConfigService.SetupDefaults(remoteConfigDefaultsFileName);
             var schedulerProvider = new IOSSchedulerProvider();
 
             var foundation =
@@ -104,7 +107,7 @@ namespace Toggl.Daneel
                     .WithAnalyticsService(analyticsService)
                     .WithSchedulerProvider(schedulerProvider)
                     .WithPlatformConstants(platformConstants)
-                    .WithRemoteConfigService<RemoteConfigService>()
+                    .WithRemoteConfigService(remoteConfigService)
                     .WithApiFactory(new ApiFactory(environment, userAgent))
                     .WithBackgroundService(new BackgroundService(timeService))
                     .WithApplicationShortcutCreator<ApplicationShortcutCreator>()

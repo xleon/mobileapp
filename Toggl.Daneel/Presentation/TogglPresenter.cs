@@ -230,7 +230,7 @@ namespace Toggl.Daneel.Presentation
                     {
                         if ((mainTabBarController.SelectedViewController as UINavigationController).TopViewController is MainViewController mainViewController)
                         {
-                            if (ratingViewVisibilityHint.ForceHide)
+                            if (ratingViewVisibilityHint.ShouldHide)
                                 mainViewController.HideRatingView();
                             else
                                 mainViewController.ShowRatingView();
