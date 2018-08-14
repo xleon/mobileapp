@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading;
 using Foundation;
 using MvvmCross.Platforms.Ios.Binding.Views;
@@ -17,8 +18,7 @@ using UIKit;
 
 namespace Toggl.Daneel.ViewSources
 {
-    public sealed class CalendarCollectionViewSource
-        : MvxCollectionViewSource, ICalendarCollectionViewLayoutDataSource
+    public sealed class CalendarCollectionViewSource : MvxCollectionViewSource, ICalendarCollectionViewLayoutDataSource
     {
         private readonly string itemReuseIdentifier = nameof(CalendarItemView);
         private readonly string hourReuseIdentifier = nameof(HourSupplementaryView);
@@ -29,6 +29,9 @@ namespace Toggl.Daneel.ViewSources
         private IList<CalendarCollectionViewItemLayoutAttributes> layoutAttributes;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
+        private readonly ISubject<CalendarItem> itemTappedSubject = new Subject<CalendarItem>();
+
+        public IObservable<CalendarItem> ItemTapped => itemTappedSubject.AsObservable();
 
         public CalendarCollectionViewSource(UICollectionView collectionView, ObservableGroupedOrderedCollection<CalendarItem> collection)
             : base(collectionView)
@@ -60,14 +63,20 @@ namespace Toggl.Daneel.ViewSources
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
             => calendarItems.Count;
 
-        [Export("collectionView:viewForSupplementaryElementOfKind:atIndexPath:")]
-        public UICollectionReusableView GetViewForSupplementaryElement(UICollectionView collectionView, NSString elementKind, NSIndexPath indexPath)
+        public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
+        {
+            var item = calendarItems[indexPath.Row];
+            itemTappedSubject.OnNext(item);
+        }
+
+        public override UICollectionReusableView GetViewForSupplementaryElement(UICollectionView collectionView, NSString elementKind, NSIndexPath indexPath)
         {
             if (elementKind == CalendarCollectionViewLayout.HourSupplementaryViewKind)
             {
                 var reusableView = collectionView.DequeueReusableSupplementaryView(elementKind, hourReuseIdentifier, indexPath) as HourSupplementaryView;
                 return reusableView;
             }
+
             return collectionView.DequeueReusableSupplementaryView(elementKind, currentTimeReuseIdentifier, indexPath);
         }
 
@@ -91,11 +100,11 @@ namespace Toggl.Daneel.ViewSources
             return layoutAttributes[(int)indexPath.Item];
         }
 
-        protected override void Dispose(bool isDisposing)
+        protected override void Dispose(bool disposing)
         {
-            base.Dispose(isDisposing);
+            base.Dispose(disposing);
 
-            if (!isDisposing) return;
+            if (!disposing) return;
 
             disposeBag.Dispose();
         }

@@ -32,7 +32,10 @@ namespace Toggl.Daneel.ViewControllers
             layout = new CalendarCollectionViewLayout(timeService, dataSource);
 
             CalendarCollectionView.SetCollectionViewLayout(layout, false);
+            CalendarCollectionView.Delegate = dataSource;
             CalendarCollectionView.DataSource = dataSource;
+
+            this.Bind(dataSource.ItemTapped, ViewModel.OnItemTapped);
         }
     }
 }
