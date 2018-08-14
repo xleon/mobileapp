@@ -36,6 +36,7 @@ namespace Toggl.Daneel.ViewControllers.Settings
             this.Bind(ViewModel.SendEnabled, SendButton.BindEnabled());
 
             this.Bind(ViewModel.IsLoading.Invert(), SendButton.BindIsVisible());
+            this.Bind(ViewModel.IsLoading.Invert(), CloseButton.BindIsVisible());
             this.Bind(ViewModel.IsLoading, IndicatorView.BindIsVisible());
             this.Bind(ViewModel.IsLoading, UIApplication.SharedApplication.BindNetworkActivityIndicatorVisible());
         }
