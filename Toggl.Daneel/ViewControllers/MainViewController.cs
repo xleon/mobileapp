@@ -74,6 +74,7 @@ namespace Toggl.Daneel.ViewControllers
         private TimeEntriesLogViewSource tableViewSource;
 
         private SnackBar snackBar;
+        private RatingView ratingView;
 
         public MainViewController()
             : base(nameof(MainViewController))
@@ -306,7 +307,6 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(disposeBag);
         }
 
-        RatingView ratingView;
         public void ShowRatingView()
         {
             ratingView = RatingView.Create();
@@ -319,6 +319,8 @@ namespace Toggl.Daneel.ViewControllers
 
         public void HideRatingView()
         {
+            if (ratingView == null) return;
+
             ratingView.RemoveFromSuperview();
             ratingView.Dispose();
             ratingView = null;
