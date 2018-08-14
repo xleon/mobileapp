@@ -17,5 +17,10 @@ namespace Toggl.Daneel.Cells.Calendar
         protected HourSupplementaryView(IntPtr handle) : base(handle)
         {
         }
+
+        public void SetLabel(string label)
+        {
+            HourLabel.Text = label;
+        }
     }
 }

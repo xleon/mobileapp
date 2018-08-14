@@ -20,6 +20,8 @@ namespace Toggl.Daneel.Views.Calendar
         private static readonly nfloat rightPadding = 16;
         private static readonly nfloat hourSupplementaryLabelHeight = 20;
         private static readonly nfloat currentTimeSupplementaryLeftOffset = -18;
+        private static readonly nfloat horizontalItemSpacing = 4;
+        private static readonly nfloat verticalItemSpacing = 1;
 
         private readonly ITimeService timeService;
         private readonly ICalendarCollectionViewLayoutDataSource dataSource;
@@ -125,10 +127,11 @@ namespace Toggl.Daneel.Views.Calendar
             var yHour = hourHeight * attrs.StartTime.Hour;
             var yMins = hourHeight * attrs.StartTime.Minute / 60;
 
-            var width = (CollectionViewContentSize.Width - leftPadding - rightPadding) / attrs.OverlappingItemsCount;
-            var height = Math.Max(minItemHeight, hourHeight * attrs.Duration.TotalMinutes / 60);
-            var x = leftPadding + width * attrs.PositionInOverlappingGroup;
-            var y = yHour + yMins;
+            var totalInterItemSpacing = (attrs.OverlappingItemsCount - 1) * horizontalItemSpacing;
+            var width = (CollectionViewContentSize.Width - leftPadding - rightPadding - totalInterItemSpacing) / attrs.OverlappingItemsCount;
+            var height = Math.Max(minItemHeight, hourHeight * attrs.Duration.TotalMinutes / 60) - verticalItemSpacing;
+            var x = leftPadding + (width + horizontalItemSpacing) * attrs.PositionInOverlappingGroup;
+            var y = yHour + yMins + verticalItemSpacing;
 
             return new CGRect(x, y, width, height);
         }

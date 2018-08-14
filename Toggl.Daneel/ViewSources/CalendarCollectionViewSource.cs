@@ -9,7 +9,9 @@ using Foundation;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using Toggl.Daneel.Cells.Calendar;
 using Toggl.Daneel.Views.Calendar;
+using Toggl.Foundation;
 using Toggl.Foundation.Calendar;
+using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Multivac;
@@ -24,19 +26,31 @@ namespace Toggl.Daneel.ViewSources
         private readonly string hourReuseIdentifier = nameof(HourSupplementaryView);
         private readonly string currentTimeReuseIdentifier = nameof(CurrentTimeSupplementaryView);
 
+        private readonly IObservable<DateTime> date;
+        private readonly IObservable<TimeFormat> timeOfDayFormatObservable;
         private readonly ObservableGroupedOrderedCollection<CalendarItem> collection;
+
         private IList<CalendarItem> calendarItems;
         private IList<CalendarCollectionViewItemLayoutAttributes> layoutAttributes;
+        private TimeFormat timeOfDayFormat = TimeFormat.TwelveHoursFormat;
+        private DateTime currentDate;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
         private readonly ISubject<CalendarItem> itemTappedSubject = new Subject<CalendarItem>();
 
         public IObservable<CalendarItem> ItemTapped => itemTappedSubject.AsObservable();
 
-        public CalendarCollectionViewSource(UICollectionView collectionView, ObservableGroupedOrderedCollection<CalendarItem> collection)
+        public CalendarCollectionViewSource(
+            UICollectionView collectionView,
+            IObservable<DateTime> date,
+            IObservable<TimeFormat> timeOfDayFormat,
+            ObservableGroupedOrderedCollection<CalendarItem> collection)
             : base(collectionView)
         {
+            Ensure.Argument.IsNotNull(date, nameof(date));
+            Ensure.Argument.IsNotNull(timeOfDayFormat, nameof(timeOfDayFormat));
             Ensure.Argument.IsNotNull(collection, nameof(collection));
+            this.timeOfDayFormatObservable = timeOfDayFormat;
             this.collection = collection;
 
             calendarItems = new List<CalendarItem>();
@@ -44,10 +58,17 @@ namespace Toggl.Daneel.ViewSources
 
             registerCells();
 
+            timeOfDayFormat
+                .Subscribe(timeOfDayFormatChanged)
+                .DisposedBy(disposeBag);
+
             collection
                 .CollectionChanges
                 .ObserveOn(SynchronizationContext.Current)
                 .VoidSubscribe(onCollectionChanges)
+                .DisposedBy(disposeBag);
+
+            date.Subscribe(dateChanged)
                 .DisposedBy(disposeBag);
 
             onCollectionChanges();
@@ -74,6 +95,8 @@ namespace Toggl.Daneel.ViewSources
             if (elementKind == CalendarCollectionViewLayout.HourSupplementaryViewKind)
             {
                 var reusableView = collectionView.DequeueReusableSupplementaryView(elementKind, hourReuseIdentifier, indexPath) as HourSupplementaryView;
+                var hour = currentDate.AddHours((int)indexPath.Item);
+                reusableView.SetLabel(hour.ToString(timeOfDayFormat.Format));
                 return reusableView;
             }
 
@@ -109,11 +132,22 @@ namespace Toggl.Daneel.ViewSources
             disposeBag.Dispose();
         }
 
+        private void timeOfDayFormatChanged(TimeFormat timeFormat)
+        {
+            timeOfDayFormat = timeFormat;
+            CollectionView.ReloadData();
+        }
+
         private void onCollectionChanges()
         {
             calendarItems = collection.IsEmpty ? new List<CalendarItem>() : collection[0].ToList();
             layoutAttributes = calculateLayoutAttributes();
             CollectionView.ReloadData();
+        }
+
+        private void dateChanged(DateTime date)
+        {
+            this.currentDate = date;
         }
 
         private void registerCells()
@@ -143,7 +177,7 @@ namespace Toggl.Daneel.ViewSources
                 {
                     var bucket = buckets.Last();
                     var endTime = bucket.Any() ? bucket.Last().EndTime : default(DateTime);
-                    if (item.StartTime <= endTime)
+                    if (item.StartTime < endTime)
                         bucket.Add(item);
                     else
                         buckets.Add(new List<CalendarItem>() { item });
@@ -162,7 +196,7 @@ namespace Toggl.Daneel.ViewSources
             int overlappingItemsCount,
             int positionInOverlappingGroup)
             => new CalendarCollectionViewItemLayoutAttributes(
-                calendarItem.StartTime.DateTime,
+                calendarItem.StartTime.LocalDateTime,
                 calendarItem.Duration,
                 overlappingItemsCount,
                 positionInOverlappingGroup

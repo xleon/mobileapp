@@ -28,7 +28,11 @@ namespace Toggl.Daneel.ViewControllers
 
             var timeService = Mvx.Resolve<ITimeService>();
 
-            dataSource = new CalendarCollectionViewSource(CalendarCollectionView, ViewModel.CalendarItems);
+            dataSource = new CalendarCollectionViewSource(
+                CalendarCollectionView,
+                ViewModel.Date,
+                ViewModel.TimeOfDayFormat,
+                ViewModel.CalendarItems);
             layout = new CalendarCollectionViewLayout(timeService, dataSource);
 
             CalendarCollectionView.SetCollectionViewLayout(layout, false);

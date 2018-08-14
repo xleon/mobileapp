@@ -10,7 +10,16 @@ namespace Toggl.Daneel.Views
     {
         public CompositeDisposable DisposeBag { get; private set; } = new CompositeDisposable();
 
-        public TViewModel Item { get; set; }
+        private TViewModel item;
+        public TViewModel Item
+        {
+            get => item;
+            set
+            {
+                item = value;
+                UpdateView();
+            }
+        }
 
         protected internal ReactiveCollectionViewCell(IntPtr handle) : base(handle)
         {
@@ -19,6 +28,8 @@ namespace Toggl.Daneel.Views
         public ReactiveCollectionViewCell(CGRect frame) : base(frame)
         {
         }
+
+        protected abstract void UpdateView();
 
         protected override void Dispose(bool disposing)
         {
