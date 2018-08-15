@@ -1,5 +1,6 @@
 ﻿using System;
 using Toggl.Foundation.Models.Interfaces;
+using Toggl.PrimeRadiant;
 using ColorHelper = Toggl.Foundation.Helper.Color;
 
 namespace Toggl.Foundation.Calendar
@@ -22,7 +23,12 @@ namespace Toggl.Foundation.Calendar
 
         public string CalendarId { get; }
 
-        public CalendarItem(CalendarItemSource source,
+        public bool CanBeSynced { get; }
+
+        public bool IsSynced { get; }
+
+        public CalendarItem(
+            CalendarItemSource source,
             DateTimeOffset startTime,
             TimeSpan duration,
             string description,
@@ -37,16 +43,21 @@ namespace Toggl.Foundation.Calendar
             Color = color;
             TimeEntryId = timeEntryId;
             CalendarId = calendarId;
+            IsSynced = true;
+            CanBeSynced = true;
         }
 
-        public CalendarItem(IThreadSafeTimeEntry timeEntry)
-            : this(CalendarItemSource.TimeEntry,
+        private CalendarItem(IThreadSafeTimeEntry timeEntry)
+            : this(
+                CalendarItemSource.TimeEntry,
                 timeEntry.Start,
-                TimeSpan.FromSeconds(timeEntry.Duration.Value),
+                TimeSpan.FromSeconds(timeEntry.Duration ?? 0),
                 timeEntry.Description,
                 timeEntry.Project?.Color ?? ColorHelper.NoProject,
                 timeEntry.Id)
         {
+            IsSynced = timeEntry.SyncStatus == SyncStatus.InSync;
+            CanBeSynced = timeEntry.SyncStatus != SyncStatus.SyncFailed;
         }
 
         public static CalendarItem From(IThreadSafeTimeEntry timeEntry)
