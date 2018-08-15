@@ -106,7 +106,7 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidAppear(animated);
             ActivityIndicator.Alpha = 0;
-            ActivityIndicator.StartAnimation();
+            ActivityIndicator.StartSpinning();
             PasswordTextField.ResignFirstResponder();
         }
 
