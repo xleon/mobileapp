@@ -112,14 +112,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 switch (calendarItem.Source)
                 {
                     case CalendarItemSource.TimeEntry when calendarItem.TimeEntryId.HasValue:
-                        await navigationService.Navigate<EditTimeEntryViewModel, long>(calendarItem.TimeEntryId.Value);
+                        await navigationService.Navigate<EditTimeEntryViewModel, long, Unit>(calendarItem.TimeEntryId.Value);
                         break;
 
                     case CalendarItemSource.Calendar:
                         var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
                         var prototype = calendarItem.AsTimeEntryPrototype(workspace.Id);
                         var timeEntry = await interactorFactory.CreateTimeEntry(prototype).Execute();
-                        await navigationService.Navigate<EditTimeEntryViewModel, long>(timeEntry.Id);
+                        await navigationService.Navigate<EditTimeEntryViewModel, long, Unit>(timeEntry.Id);
                         break;
                 }
 

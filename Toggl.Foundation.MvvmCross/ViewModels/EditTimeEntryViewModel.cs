@@ -21,11 +21,12 @@ using Toggl.PrimeRadiant.Settings;
 using static Toggl.Foundation.Helper.Constants;
 using SelectTimeOrigin = Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
 using System.Reactive.Subjects;
+using System.Reactive;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class EditTimeEntryViewModel : MvxViewModel<long>
+    public sealed class EditTimeEntryViewModel : MvxViewModel<long, Unit>
     {
         private const int maxTagLength = 30;
 
@@ -296,7 +297,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
                 analyticsService.DeleteTimeEntry.Track();
                 dataSource.SyncManager.InitiatePushSync();
-                await navigationService.Close(this);
+                await close();
             }
             catch
             {
@@ -351,7 +352,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private Task close()
-            => navigationService.Close(this);
+            => navigationService.Close(this, Unit.Default);
 
         private async Task selectStartTime()
         {

@@ -123,7 +123,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.CloseCommand.ExecuteAsync();
 
-                await NavigationService.Received().Close(Arg.Is(ViewModel));
+                await NavigationService.Received().Close(Arg.Is(ViewModel), Unit.Default);
             }
 
             [Fact, LogIfTooSlow]
@@ -242,7 +242,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Billable = !ViewModel.Billable;
                 await ViewModel.CloseCommand.ExecuteAsync();
 
-                await NavigationService.Received().Close(ViewModel);
+                await NavigationService.Received().Close(ViewModel, Unit.Default);
             }
 
             [Fact, LogIfTooSlow]
