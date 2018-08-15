@@ -87,6 +87,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         }
 
         public override async Task Initialize()
+            => ReloadData();
+
+        public async Task ReloadData()
         {
             var today = timeService.CurrentDateTime.Date;
             await fetchCalendarItems(today);
