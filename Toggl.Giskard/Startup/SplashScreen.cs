@@ -6,8 +6,9 @@ using Toggl.Giskard.Extensions;
 using Android.OS;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross;
+using MvvmCross.Droid.Support.V7.AppCompat;
+using MvvmCross.Platforms.Android.Core;
 using MvvmCross.Navigation;
 
 namespace Toggl.Giskard
@@ -23,7 +24,7 @@ namespace Toggl.Giskard
         Categories = new[] { "android.intent.category.BROWSABLE", "android.intent.category.DEFAULT" },
         DataSchemes = new[] { "toggl" },
         DataHost = "*")]
-    public class SplashScreen : MvxSplashScreenAppCompatActivity
+    public class SplashScreen : MvxSplashScreenAppCompatActivity<Setup, App<LoginViewModel>>
     {
         public SplashScreen()
             : base(Resource.Layout.SplashScreen)
@@ -43,6 +44,9 @@ namespace Toggl.Giskard
 
         protected override void OnCreate(Bundle bundle)
         {
+            var MvxSetup = MvxAndroidSetupSingleton.EnsureSingletonAvailable(ApplicationContext);
+            MvxSetup.EnsureInitialized();
+
             base.OnCreate(bundle);
 
             var statusBarColor = new Color(ContextCompat.GetColor(this, Resource.Color.lightGray));
