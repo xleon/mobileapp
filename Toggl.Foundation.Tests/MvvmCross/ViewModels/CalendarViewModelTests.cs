@@ -20,6 +20,37 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         public abstract class CalendarViewModelTest : BaseViewModelTests<CalendarViewModel>
         {
+            protected const long TimeEntryId = 10;
+            protected const long DefaultWorkspaceId = 1;
+
+            protected static DateTimeOffset Now { get; } = new DateTimeOffset(2018, 8, 10, 12, 0, 0, TimeSpan.Zero);
+
+            protected IInteractor<IObservable<IEnumerable<CalendarItem>>> CalendarInteractor { get; }
+
+            protected CalendarViewModelTest()
+            {
+                CalendarInteractor = Substitute.For<IInteractor<IObservable<IEnumerable<CalendarItem>>>>();
+
+                var workspace = new MockWorkspace { Id = DefaultWorkspaceId };
+                var timeEntry = new MockTimeEntry { Id = TimeEntryId };
+
+                TimeService.CurrentDateTime.Returns(Now);
+
+                InteractorFactory
+                    .GetCalendarItemsForDate(Arg.Any<DateTime>())
+                    .Returns(CalendarInteractor);
+
+                InteractorFactory
+                    .GetDefaultWorkspace()
+                    .Execute()
+                    .Returns(Observable.Return(workspace));
+
+                InteractorFactory
+                    .CreateTimeEntry(Arg.Any<ITimeEntryPrototype>())
+                    .Execute()
+                    .Returns(Observable.Return(timeEntry));
+            }
+
             protected override CalendarViewModel CreateViewModel()
                 => new CalendarViewModel(
                     DataSource,
@@ -27,7 +58,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     InteractorFactory,
                     OnboardingStorage,
                     PermissionsService,
-                    NavigationService);
+                    NavigationService
+                );
         }
 
         public sealed class TheConstructor : CalendarViewModelTest
@@ -127,22 +159,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public abstract class TheOnItemTappedAction : CalendarViewModelTest
         {
-            protected const long TimeEntryId = 10;
-
-            private static readonly DateTimeOffset now = new DateTimeOffset(2018, 8, 10, 12, 0, 0, TimeSpan.Zero);
-            private static readonly IInteractor<IObservable<IEnumerable<CalendarItem>>> interactor = Substitute.For<IInteractor<IObservable<IEnumerable<CalendarItem>>>>();
-
             protected abstract CalendarItem CalendarItem { get; }
-
-            protected TheOnItemTappedAction()
-            {
-                TimeService.CurrentDateTime.Returns(now);
-
-                InteractorFactory
-                    .GetCalendarItemsForDate(Arg.Any<DateTime>())
-                    .Returns(interactor);
-
-            }
 
             [Fact]
             public async Task NavigatesToTheEditTimeEntryViewModelUsingTheTimeEntryId()
@@ -157,7 +174,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.OnItemTapped.Execute(CalendarItem);
 
-                await interactor.Received().Execute();
+                await CalendarInteractor.Received().Execute();
             }
 
             public sealed class WhenHandlingTimeEntryItems : TheOnItemTappedAction
@@ -174,30 +191,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             public sealed class WhenHandlingCalendarItems : TheOnItemTappedAction
             {
-                private const long defaultWorkspaceId = 1;
-
                 protected override CalendarItem CalendarItem { get; } = new CalendarItem(
                     CalendarItemSource.Calendar,
                     new DateTimeOffset(2018, 08, 10, 0, 15, 0, TimeSpan.Zero),
                     TimeSpan.FromMinutes(10),
                     "Meeting with someone"
                 );
-
-                public WhenHandlingCalendarItems()
-                {
-                    var workspace = new MockWorkspace { Id = defaultWorkspaceId };
-                    var timeEntry = new MockTimeEntry { Id = TimeEntryId };
-
-                    InteractorFactory
-                        .GetDefaultWorkspace()
-                        .Execute()
-                        .Returns(Observable.Return(workspace));
-
-                    InteractorFactory
-                        .CreateTimeEntry(Arg.Any<ITimeEntryPrototype>())
-                        .Execute()
-                        .Returns(Observable.Return(timeEntry));
-                }
 
                 [Fact]
                 public async Task CreatesATimeEntryUsingTheCalendarItemInfo()
@@ -216,10 +215,70 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     await ViewModel.OnItemTapped.Execute(CalendarItem);
 
                     await InteractorFactory
-                        .CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(p => p.WorkspaceId == defaultWorkspaceId))
+                        .CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(p => p.WorkspaceId == DefaultWorkspaceId))
                         .Received()
                         .Execute();
                 }
+            }
+        }
+
+        public sealed class TheOnDurationSelectedAction : CalendarViewModelTest
+        {
+            [Fact]
+            public async Task CreatesATimeEntryWithTheSelectedStartDate()
+            {
+                var now = DateTimeOffset.UtcNow;
+                var duration = TimeSpan.FromMinutes(30);
+                var tuple = (now, duration);
+
+                await ViewModel.OnDurationSelected.Execute(tuple);
+
+                await InteractorFactory
+                    .CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(p => p.StartTime == now))
+                    .Received()
+                    .Execute();
+            }
+
+            [Fact]
+            public async Task CreatesATimeEntryWithTheSelectedDuration()
+            {
+                var now = DateTimeOffset.UtcNow;
+                var duration = TimeSpan.FromMinutes(30);
+                var tuple = (now, duration);
+
+                await ViewModel.OnDurationSelected.Execute(tuple);
+
+                await InteractorFactory
+                    .CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(p => p.Duration == duration))
+                    .Received()
+                    .Execute();
+            }
+
+            [Fact]
+            public async Task CreatesATimeEntryInTheDefaultWorkspace()
+            {
+                var now = DateTimeOffset.UtcNow;
+                var duration = TimeSpan.FromMinutes(30);
+                var tuple = (now, duration);
+
+                await ViewModel.OnDurationSelected.Execute(tuple);
+
+                await InteractorFactory
+                    .CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(p => p.WorkspaceId == DefaultWorkspaceId))
+                    .Received()
+                    .Execute();
+            }
+
+            [Fact]
+            public async Task RefetchesTheTimeEntryItemsUsingTheInteractor()
+            {
+                var now = DateTimeOffset.UtcNow;
+                var duration = TimeSpan.FromMinutes(30);
+                var tuple = (now, duration);
+
+                await ViewModel.OnDurationSelected.Execute(tuple);
+
+                await CalendarInteractor.Received().Execute();
             }
         }
     }
