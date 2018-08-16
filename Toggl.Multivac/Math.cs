@@ -63,6 +63,11 @@ namespace Toggl.Multivac
 
         public static int PingPongClamp(this int number, int length)
         {
+            if (length <= 0) throw new ArgumentOutOfRangeException($"The length for clamping must be at positive integer, {length} given.");
+            if (number < 0) throw new ArgumentOutOfRangeException($"The clamped number a non-negative integer, {number} given.");
+
+            if (length == 1) return 0;
+
             var lengthOfFoldedSequence = 2 * length - 2;
             var indexInFoldedSequence = number % lengthOfFoldedSequence;
             return indexInFoldedSequence < length ? indexInFoldedSequence : lengthOfFoldedSequence - indexInFoldedSequence;

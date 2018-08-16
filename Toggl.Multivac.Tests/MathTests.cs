@@ -186,6 +186,32 @@ namespace Toggl.Multivac.Tests
                 System.Math.Abs(indexA - indexB).Should().Be(1);
             }
 
+            [Property(MaxTest = 100000)]
+            public void NeverReturnsIndexOutOfTheRange(NonNegativeInt number, PositiveInt length)
+            {
+                var index = number.Get.PingPongClamp(length.Get);
+
+                index.Should().BeLessThan(length.Get);
+            }
+
+            [Property]
+            public void ThrowsWhenTheNumberIsLessThanZero(NegativeInt number, PositiveInt length)
+            {
+                Action withNegativeNumber = () => number.Get.PingPongClamp(length.Get);
+
+                withNegativeNumber.Should().Throw<ArgumentOutOfRangeException>();
+            }
+
+            [Property]
+            public void ThrowsWhenTheLengthIsAZeroOrLess(NonNegativeInt number, NonNegativeInt length)
+            {
+                var nonPositiveLength = -1 * length.Get;
+
+                Action withNegativeNumber = () => number.Get.PingPongClamp(nonPositiveLength);
+
+                withNegativeNumber.Should().Throw<ArgumentOutOfRangeException>();
+            }
+
             public static IEnumerable<object[]> PingPongTestData()
                 => new[]
                 {
