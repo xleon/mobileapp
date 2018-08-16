@@ -30,6 +30,7 @@
                 <outlet property="TapToEditBubbleView" destination="r2K-j0-0fe" id="5NI-TL-kin"/>
                 <outlet property="TapToEditBubbleViewTopConstraint" destination="ont-yx-MAU" id="QCK-PQ-IXf"/>
                 <outlet property="TimeEntriesLogTableView" destination="hoP-Tg-vBM" id="cct-0m-nqm"/>
+                <outlet property="TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint" destination="oMA-0v-07i" id="FXw-Sl-GcF"/>
                 <outlet property="TopConstraint" destination="cO8-xe-txr" id="qX1-k2-wHZ"/>
                 <outlet property="TopSeparator" destination="niU-tX-YTJ" id="xUr-AE-63C"/>
                 <outlet property="WelcomeBackView" destination="Xqe-XF-nVb" id="fHK-W8-vN4"/>
@@ -42,7 +43,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jhd-oR-xIN" userLabel="Time Entries Log">
-                    <rect key="frame" x="0.0" y="23" width="375" height="644"/>
+                    <rect key="frame" x="0.0" y="23" width="375" height="595"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xqe-XF-nVb" userLabel="Welcome Back Container">
                             <rect key="frame" x="70" y="239" width="234" height="83.5"/>
@@ -74,7 +75,7 @@ time entries will appear here.</string>
                             </constraints>
                         </view>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="64" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hoP-Tg-vBM" customClass="TimeEntriesLogTableView">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="644"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="595"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </tableView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="niU-tX-YTJ" userLabel="TopSeparator">
@@ -418,7 +419,7 @@ time entries will appear here.</string>
                     </userDefinedRuntimeAttributes>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fge-d2-Ud2">
-                    <rect key="frame" x="8" y="485.5" width="359" height="85.5"/>
+                    <rect key="frame" x="8" y="436.5" width="359" height="85.5"/>
                     <subviews>
                         <visualEffectView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dOM-nz-0rF">
                             <rect key="frame" x="0.0" y="0.0" width="359" height="85.5"/>
@@ -487,7 +488,8 @@ time entries will appear here.</string>
                 <constraint firstAttribute="trailing" secondItem="Jhd-oR-xIN" secondAttribute="trailing" id="TAP-Mf-VjB"/>
                 <constraint firstItem="Jhd-oR-xIN" firstAttribute="top" secondItem="S4t-q9-ct9" secondAttribute="top" constant="3" id="cO8-xe-txr"/>
                 <constraint firstAttribute="bottom" secondItem="vou-B4-go4" secondAttribute="bottom" id="eTc-gF-8yE"/>
-                <constraint firstAttribute="bottom" secondItem="Jhd-oR-xIN" secondAttribute="bottom" id="jk0-Wh-1za"/>
+                <constraint firstItem="S4t-q9-ct9" firstAttribute="bottom" secondItem="Jhd-oR-xIN" secondAttribute="bottom" priority="750" id="jk0-Wh-1za"/>
+                <constraint firstItem="Jhd-oR-xIN" firstAttribute="bottom" secondItem="vou-B4-go4" secondAttribute="top" id="oMA-0v-07i"/>
                 <constraint firstItem="vou-B4-go4" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="q3O-7e-AfR"/>
                 <constraint firstItem="fge-d2-Ud2" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="8" id="r4o-tI-pyA"/>
                 <constraint firstItem="Ddo-IW-xE3" firstAttribute="top" secondItem="vou-B4-go4" secondAttribute="top" constant="8" id="rDp-HB-uui"/>
@@ -496,6 +498,11 @@ time entries will appear here.</string>
             </constraints>
             <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
             <viewLayoutGuide key="safeArea" id="S4t-q9-ct9"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="oMA-0v-07i"/>
+                </mask>
+            </variation>
             <point key="canvasLocation" x="103.5" y="23.5"/>
         </view>
     </objects>
