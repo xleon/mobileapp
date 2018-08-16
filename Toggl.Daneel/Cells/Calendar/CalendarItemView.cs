@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.UI;
@@ -10,21 +12,36 @@ namespace Toggl.Daneel.Cells.Calendar
 {
     public sealed partial class CalendarItemView : ReactiveCollectionViewCell<CalendarItem>
     {
+        private static readonly Dictionary<CalendarIconKind, UIImage> images;
+
         public static readonly NSString Key = new NSString(nameof(CalendarItemView));
         public static readonly UINib Nib;
 
         static CalendarItemView()
         {
             Nib = UINib.FromName(nameof(CalendarItemView), NSBundle.MainBundle);
+
+            images = new Dictionary<CalendarIconKind, UIImage>
+            {
+                { CalendarIconKind.Unsynced, templateImage("icUnsynced") },
+                { CalendarIconKind.Event, templateImage("icCalendarSmall") },
+                { CalendarIconKind.Unsyncable, templateImage("icErrorSmall") }
+            };
+
+            UIImage templateImage(string iconName)
+                => UIImage.FromBundle(iconName)
+                      .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
         }
 
-        protected CalendarItemView(IntPtr handle) : base(handle)
+        public CalendarItemView(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }
 
         public override void AwakeFromNib()
         {
+
+
             base.AwakeFromNib();
             CalendarIconImageView.Image = UIImage
                 .FromBundle("icCalendarSmall")
@@ -35,9 +52,9 @@ namespace Toggl.Daneel.Cells.Calendar
         {
             var color = MvxColor.ParseHexString(Item.Color).ToNativeColor();
             DescriptionLabel.Text = Item.Description;
-            DescriptionLabel.TextColor = textColor(Item.Source, color);
+            DescriptionLabel.TextColor = textColor(color);
             ColorView.BackgroundColor = backgroundColor(Item.Source, color);
-            setCalendarIconVisibility(Item.Source, color);
+            updateIcon(color);
         }
 
         private UIColor backgroundColor(CalendarItemSource source, UIColor color)
@@ -53,9 +70,9 @@ namespace Toggl.Daneel.Cells.Calendar
             }
         }
 
-        private UIColor textColor(CalendarItemSource source, UIColor color)
+        private UIColor textColor(UIColor color)
         {
-            switch (source)
+            switch (Item.Source)
             {
                 case CalendarItemSource.Calendar:
                     return color;
@@ -66,24 +83,21 @@ namespace Toggl.Daneel.Cells.Calendar
             }
         }
 
-        private void setCalendarIconVisibility(CalendarItemSource source, UIColor color)
+        private void updateIcon(UIColor color)
         {
-            switch (Item.Source)
+            if (Item.IconKind == CalendarIconKind.None)
             {
-                case CalendarItemSource.Calendar:
-                    CalendarIconImageView.TintColor = color;
-                    CalendarIconImageView.Hidden = false;
-                    CalendarIconLeadingConstraint.Active = true;
-                    CalendarIconTrailingConstraint.Active = true;
-                    break;
-                case CalendarItemSource.TimeEntry:
-                    CalendarIconImageView.Hidden = true;
-                    CalendarIconLeadingConstraint.Active = false;
-                    CalendarIconTrailingConstraint.Active = false;
-                    break;
-                default:
-                    throw new ArgumentException("Unexpected calendar item source");
+                CalendarIconImageView.Hidden = true;
+                CalendarIconLeadingConstraint.Active = false;
+                CalendarIconTrailingConstraint.Active = false;
+                return;
             }
+
+            CalendarIconImageView.Hidden = false;
+            CalendarIconLeadingConstraint.Active = true;
+            CalendarIconTrailingConstraint.Active = true;
+            CalendarIconImageView.TintColor = textColor(color);
+            CalendarIconImageView.Image = images[Item.IconKind];
         }
     }
 }

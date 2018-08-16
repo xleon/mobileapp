@@ -34,16 +34,19 @@ namespace Toggl.Foundation.Tests.Interactors.Calendar
                         new DateTimeOffset(2018, 08, 06, 10, 30, 00, TimeSpan.Zero),
                         TimeSpan.FromMinutes(30),
                         "Important meeting",
+                        CalendarIconKind.Event,
                         "#0000ff"),
                     new CalendarItem(CalendarItemSource.Calendar,
                         new DateTimeOffset(2018, 08, 06, 10, 00, 00, TimeSpan.Zero),
                         TimeSpan.FromMinutes(90),
                         "F**** timesheets",
+                        CalendarIconKind.Event,
                         "#0000ff"),
                     new CalendarItem(CalendarItemSource.Calendar,
                         new DateTimeOffset(2018, 08, 06, 09, 00, 00, TimeSpan.Zero),
                         TimeSpan.FromMinutes(15),
                         "Not so important meeting",
+                        CalendarIconKind.Event,
                         "#0000ff")
                 };
 
@@ -115,12 +118,14 @@ namespace Toggl.Foundation.Tests.Interactors.Calendar
                             new DateTimeOffset(2018, 08, 06, 10, 30, 00, TimeSpan.Zero),
                             TimeSpan.FromHours(24),
                             "Day off",
+                            CalendarIconKind.Event,
                             "#0000ff"))
                     .Append(
                         new CalendarItem(CalendarItemSource.Calendar,
                             new DateTimeOffset(2018, 08, 06, 10, 30, 00, TimeSpan.Zero),
                             TimeSpan.FromDays(7),
                             "Team meetup",
+                            CalendarIconKind.Event,
                             "#0000ff")
                     );
 

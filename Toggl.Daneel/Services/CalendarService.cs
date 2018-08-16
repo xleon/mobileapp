@@ -60,6 +60,7 @@ namespace Toggl.Daneel.Services
                 startDate,
                 duration,
                 ev.Title,
+                CalendarIconKind.Event,
                 ev.Calendar.CGColor.ToHexColor(),
                 calendarId: ev.Calendar.CalendarIdentifier
             );

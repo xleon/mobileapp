@@ -143,9 +143,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 var items = new List<CalendarItem>
                 {
-                    new CalendarItem(CalendarItemSource.Calendar, now.AddMinutes(30), TimeSpan.FromMinutes(15), "Weekly meeting", "#ff0000"),
-                    new CalendarItem(CalendarItemSource.TimeEntry, now.AddHours(-3), TimeSpan.FromMinutes(30), "Bug fixes", "#00ff00"),
-                    new CalendarItem(CalendarItemSource.Calendar, now.AddHours(2), TimeSpan.FromMinutes(30), "F**** timesheets", "#ff0000")
+                    new CalendarItem(CalendarItemSource.Calendar, now.AddMinutes(30), TimeSpan.FromMinutes(15), "Weekly meeting", CalendarIconKind.Event, "#ff0000"),
+                    new CalendarItem(CalendarItemSource.TimeEntry, now.AddHours(-3), TimeSpan.FromMinutes(30), "Bug fixes", CalendarIconKind.None, "#00ff00"),
+                    new CalendarItem(CalendarItemSource.Calendar, now.AddHours(2), TimeSpan.FromMinutes(30), "F**** timesheets", CalendarIconKind.Event, "#ff0000")
                 };
                 var interactor = Substitute.For<IInteractor<IObservable<IEnumerable<CalendarItem>>>>();
                 interactor.Execute().Returns(Observable.Return(items));
@@ -184,6 +184,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     new DateTimeOffset(2018, 08, 10, 0, 0, 0, TimeSpan.Zero),
                     TimeSpan.FromMinutes(10),
                     "Working on something",
+                    CalendarIconKind.None,
                     "#00FF00",
                     TimeEntryId
                 );
@@ -195,7 +196,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     CalendarItemSource.Calendar,
                     new DateTimeOffset(2018, 08, 10, 0, 15, 0, TimeSpan.Zero),
                     TimeSpan.FromMinutes(10),
-                    "Meeting with someone"
+                    "Meeting with someone",
+                    CalendarIconKind.Event
                 );
 
                 [Fact]

@@ -23,15 +23,14 @@ namespace Toggl.Foundation.Calendar
 
         public string CalendarId { get; }
 
-        public bool CanBeSynced { get; }
-
-        public bool IsSynced { get; }
+        public CalendarIconKind IconKind { get; }
 
         public CalendarItem(
             CalendarItemSource source,
             DateTimeOffset startTime,
             TimeSpan duration,
             string description,
+            CalendarIconKind iconKind,
             string color = "",
             long? timeEntryId = null,
             string calendarId = "")
@@ -43,8 +42,7 @@ namespace Toggl.Foundation.Calendar
             Color = color;
             TimeEntryId = timeEntryId;
             CalendarId = calendarId;
-            IsSynced = true;
-            CanBeSynced = true;
+            IconKind = iconKind;
         }
 
         private CalendarItem(IThreadSafeTimeEntry timeEntry)
@@ -53,11 +51,19 @@ namespace Toggl.Foundation.Calendar
                 timeEntry.Start,
                 TimeSpan.FromSeconds(timeEntry.Duration ?? 0),
                 timeEntry.Description,
+                CalendarIconKind.None,
                 timeEntry.Project?.Color ?? ColorHelper.NoProject,
                 timeEntry.Id)
         {
-            IsSynced = timeEntry.SyncStatus == SyncStatus.InSync;
-            CanBeSynced = timeEntry.SyncStatus != SyncStatus.SyncFailed;
+            switch (timeEntry.SyncStatus)
+            {
+                case SyncStatus.SyncNeeded:
+                    IconKind = CalendarIconKind.Unsynced;
+                    break;
+                case SyncStatus.SyncFailed:
+                    IconKind = CalendarIconKind.Unsyncable;
+                    break;
+            }
         }
 
         public static CalendarItem From(IThreadSafeTimeEntry timeEntry)
