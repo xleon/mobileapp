@@ -14,6 +14,7 @@ namespace Toggl.Daneel.ViewControllers
     {
         private CalendarCollectionViewLayout layout;
         private CalendarCollectionViewSource dataSource;
+        private CalendarCollectionViewLongPressHelper longPressHelper;
 
         public CalendarViewController() : base(nameof(CalendarViewController))
         {
@@ -33,13 +34,17 @@ namespace Toggl.Daneel.ViewControllers
                 ViewModel.Date,
                 ViewModel.TimeOfDayFormat,
                 ViewModel.CalendarItems);
+
             layout = new CalendarCollectionViewLayout(timeService, dataSource);
+
+            longPressHelper = new CalendarCollectionViewLongPressHelper(CalendarCollectionView, dataSource, layout);
 
             CalendarCollectionView.SetCollectionViewLayout(layout, false);
             CalendarCollectionView.Delegate = dataSource;
             CalendarCollectionView.DataSource = dataSource;
 
             this.Bind(dataSource.ItemTapped, ViewModel.OnItemTapped);
+            this.Bind(longPressHelper.CreateFromSpan, ViewModel.OnDurationSelected);
         }
 
         public override void ViewDidAppear(bool animated)

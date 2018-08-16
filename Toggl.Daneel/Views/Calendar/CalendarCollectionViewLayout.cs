@@ -23,11 +23,13 @@ namespace Toggl.Daneel.Views.Calendar
         private static readonly nfloat horizontalItemSpacing = 4;
         private static readonly nfloat verticalItemSpacing = 1;
 
+        public DateTime date;
         private readonly ITimeService timeService;
         private readonly ICalendarCollectionViewLayoutDataSource dataSource;
 
         public static NSString HourSupplementaryViewKind = new NSString("Hour");
         public static NSString CurrentTimeSupplementaryViewKind = new NSString("CurrentTime");
+        public nfloat HourHeight => hourHeight;
 
         public CalendarCollectionViewLayout(ITimeService timeService, ICalendarCollectionViewLayoutDataSource dataSource)
             : base()
@@ -37,6 +39,8 @@ namespace Toggl.Daneel.Views.Calendar
 
             this.timeService = timeService;
             this.dataSource = dataSource;
+
+            date = timeService.CurrentDateTime.Date;
         }
 
         public override CGSize CollectionViewContentSize
@@ -47,6 +51,13 @@ namespace Toggl.Daneel.Views.Calendar
                 var height = hoursPerDay * hourHeight;
                 return new CGSize(width, height);
             }
+        }
+
+        public DateTimeOffset DateAtPoint(CGPoint point)
+        {
+            var seconds = (point.Y / hourHeight) * 60 * 60;
+            var timespan = TimeSpan.FromSeconds(seconds);
+            return date + timespan;
         }
 
         public override bool ShouldInvalidateLayoutForBoundsChange(CGRect newBounds)
@@ -89,7 +100,8 @@ namespace Toggl.Daneel.Views.Calendar
                 attributes.ZIndex = 0;
                 return attributes;
             }
-            else {
+            else
+            {
                 var attributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(kind, indexPath);
                 attributes.Frame = frameForCurrentTime();
                 attributes.ZIndex = 2;
@@ -148,7 +160,7 @@ namespace Toggl.Daneel.Views.Calendar
 
         private CGRect frameForCurrentTime()
         {
-            var now = timeService.CurrentDateTime;
+            var now = timeService.CurrentDateTime.LocalDateTime;
 
             var yHour = hourHeight * now.Hour;
             var yMins = hourHeight * now.Minute / 60;

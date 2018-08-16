@@ -1072,6 +1072,7 @@
     <Compile Include="ViewSources\CalendarCollectionViewSource.cs" />
     <Compile Include="Binding\LayoutConstraintActiveTargetBinding.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Views\Calendar\CalendarCollectionViewLongPressHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

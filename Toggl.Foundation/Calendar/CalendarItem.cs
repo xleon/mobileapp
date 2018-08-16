@@ -31,7 +31,7 @@ namespace Toggl.Foundation.Calendar
             TimeSpan duration,
             string description,
             CalendarIconKind iconKind,
-            string color = "",
+            string color = ColorHelper.NoProject,
             long? timeEntryId = null,
             string calendarId = "")
         {
@@ -68,5 +68,27 @@ namespace Toggl.Foundation.Calendar
 
         public static CalendarItem From(IThreadSafeTimeEntry timeEntry)
             => new CalendarItem(timeEntry);
+
+        public CalendarItem WithStartTime(DateTimeOffset startTime)
+            => new CalendarItem(
+                this.Source,
+                startTime,
+                this.Duration,
+                this.Description,
+                this.IconKind,
+                this.Color,
+                this.TimeEntryId,
+                this.CalendarId);
+
+        public CalendarItem WithDuration(TimeSpan duration)
+            => new CalendarItem(
+                this.Source,
+                this.StartTime,
+                duration,
+                this.Description,
+                this.IconKind,
+                this.Color,
+                this.TimeEntryId,
+                this.CalendarId);
     }
 }

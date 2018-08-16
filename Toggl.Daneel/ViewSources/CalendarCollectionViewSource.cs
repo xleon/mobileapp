@@ -9,9 +9,7 @@ using Foundation;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using Toggl.Daneel.Cells.Calendar;
 using Toggl.Daneel.Views.Calendar;
-using Toggl.Foundation;
 using Toggl.Foundation.Calendar;
-using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Multivac;
@@ -38,6 +36,8 @@ namespace Toggl.Daneel.ViewSources
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
         private readonly ISubject<CalendarItem> itemTappedSubject = new Subject<CalendarItem>();
 
+        private bool isAddingItem = false;
+
         public IObservable<CalendarItem> ItemTapped => itemTappedSubject.AsObservable();
 
         public CalendarCollectionViewSource(
@@ -50,6 +50,7 @@ namespace Toggl.Daneel.ViewSources
             Ensure.Argument.IsNotNull(date, nameof(date));
             Ensure.Argument.IsNotNull(timeOfDayFormat, nameof(timeOfDayFormat));
             Ensure.Argument.IsNotNull(collection, nameof(collection));
+            this.date = date;
             this.timeOfDayFormatObservable = timeOfDayFormat;
             this.collection = collection;
 
@@ -123,6 +124,34 @@ namespace Toggl.Daneel.ViewSources
             return layoutAttributes[(int)indexPath.Item];
         }
 
+        public NSIndexPath InsertPlaceholder(DateTimeOffset startTime, TimeSpan duration)
+        {
+            isAddingItem = true;
+            var indexPath = insertPlaceholder(startTime, duration);
+            CollectionView.InsertItems(new NSIndexPath[] { indexPath });
+            return indexPath;
+        }
+
+        public NSIndexPath UpdatePlaceholder(NSIndexPath indexPath, DateTimeOffset startTime, TimeSpan duration)
+        {
+            if (isAddingItem)
+            {
+                var updatedIndexPath = updatePlaceholder(indexPath, startTime, duration);
+                CollectionView.ReloadItems(new NSIndexPath[] { indexPath });
+                return updatedIndexPath;
+            }
+            return indexPath;
+        }
+
+        public void RemovePlaceholder(NSIndexPath indexPath)
+        {
+            if (!isAddingItem)
+                return;
+
+            removePlaceholder(indexPath);
+            CollectionView.DeleteItems(new NSIndexPath[] { indexPath });
+        }
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -168,15 +197,13 @@ namespace Toggl.Daneel.ViewSources
             if (calendarItems.None())
                 return new List<CalendarCollectionViewItemLayoutAttributes>();
 
-            var firstItem = calendarItems[0];
-
             var seed = new List<List<CalendarItem>>() { new List<CalendarItem>() };
 
             var attributes = calendarItems
                 .Aggregate(seed, (buckets, item) =>
                 {
                     var bucket = buckets.Last();
-                    var endTime = bucket.Any() ? bucket.Last().EndTime : default(DateTime);
+                    var endTime = bucket.Any() ? bucket.Last().EndTime.LocalDateTime : currentDate;
                     if (item.StartTime < endTime)
                         bucket.Add(item);
                     else
@@ -201,5 +228,58 @@ namespace Toggl.Daneel.ViewSources
                 overlappingItemsCount,
                 positionInOverlappingGroup
             );
+
+        private NSIndexPath insertPlaceholder(DateTimeOffset startTime, TimeSpan duration)
+        {
+            var calendarItem = new CalendarItem(CalendarItemSource.TimeEntry, startTime, duration, string.Empty, CalendarIconKind.None);
+
+            var insertPosition = calendarItems.IndexOf(item => item.StartTime > calendarItem.StartTime);
+            if (insertPosition >= 0)
+            {
+                calendarItems.Insert(insertPosition, calendarItem);
+            }
+            else
+            {
+                calendarItems.Add(calendarItem);
+                insertPosition = calendarItems.Count - 1;
+            }
+
+            layoutAttributes = calculateLayoutAttributes();
+
+            var indexPath = NSIndexPath.FromItemSection(insertPosition, 0);
+            return indexPath;
+        }
+
+        private NSIndexPath updatePlaceholder(NSIndexPath indexPath, DateTimeOffset startTime, TimeSpan duration)
+        {
+            var oldCalendarItem = calendarItems[(int)indexPath.Item];
+            calendarItems.RemoveAt((int)indexPath.Item);
+
+            var calendarItem = oldCalendarItem
+                .WithStartTime(startTime)
+                .WithDuration(duration);
+
+            var insertPosition = calendarItems.IndexOf(item => item.StartTime > calendarItem.StartTime);
+            if (insertPosition >= 0)
+            {
+                calendarItems.Insert(insertPosition, calendarItem);
+            }
+            else
+            {
+                calendarItems.Add(calendarItem);
+                insertPosition = calendarItems.Count - 1;
+            }
+
+            layoutAttributes = calculateLayoutAttributes();
+
+            var updatedIndexPath = NSIndexPath.FromItemSection(insertPosition, 0);
+            return updatedIndexPath;
+        }
+
+        private void removePlaceholder(NSIndexPath indexPath)
+        {
+            calendarItems.RemoveAt((int)indexPath.Item);
+            layoutAttributes = calculateLayoutAttributes();
+        }
     }
 }
