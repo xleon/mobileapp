@@ -388,7 +388,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
 
                 var expected = new SectionedIndex(0, 3);
 
-                intCollection.InsertItem(4).Should().Be(expected);
+                intCollection.InsertItem(4).index.Should().Be(expected);
             }
 
             [Fact, LogIfTooSlow]

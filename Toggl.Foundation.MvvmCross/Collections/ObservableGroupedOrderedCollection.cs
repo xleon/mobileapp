@@ -4,17 +4,18 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using Toggl.Foundation.MvvmCross.Collections.Changes;
 using Toggl.Multivac.Extensions;
 
 namespace Toggl.Foundation.MvvmCross.Collections
 {
     public class ObservableGroupedOrderedCollection<TItem> : IGroupOrderedCollection<TItem>
     {
-        private ISubject<IEnumerable<CollectionChange>> collectionChangesSubject = new Subject<IEnumerable<CollectionChange>>();
+        private ISubject<IReadOnlyCollection<ICollectionChange>> collectionChangesSubject = new Subject<IReadOnlyCollection<ICollectionChange>>();
         private GroupedOrderedCollection<TItem> collection;
         private Func<TItem, IComparable> indexKey;
 
-        public IObservable<IEnumerable<CollectionChange>> CollectionChanges
+        public IObservable<IReadOnlyCollection<ICollectionChange>> CollectionChanges
             => collectionChangesSubject.AsObservable();
 
         public IObservable<bool> Empty
@@ -62,83 +63,58 @@ namespace Toggl.Foundation.MvvmCross.Collections
             return collection.IndexOf(itemId);
         }
 
-        public SectionedIndex InsertItem(TItem item)
+        public (SectionedIndex index, bool needsNewSection) InsertItem(TItem item)
         {
-            var index = collection.InsertItem(item);
+            var (index, needsNewSection) = collection.InsertItem(item);
 
-            var changes = new List<CollectionChange>();
-            if (collection[index.Section].Count == 1)
-                changes.Add(
-                    new CollectionChange { Index = index, Type = CollectionChangeType.AddSection }
-                );
+            var changes = new CollectionChangesListBuilder<TItem>();
+
+            if (needsNewSection)
+            {
+                changes.InsertSection(index.Section, item);
+            }
             else
-                changes.Add(
-                    new CollectionChange { Index = index, Type = CollectionChangeType.AddRow }
-                );
+            {
+                changes.AddRow(index, item);
+            }
 
-            collectionChangesSubject.OnNext(changes);
+            collectionChangesSubject.OnNext(changes.Build());
 
-            return index;
+            return (index, needsNewSection);
         }
 
         public SectionedIndex? UpdateItem(IComparable key, TItem item)
         {
-            var changes = new List<CollectionChange>();
-
             var oldIndex = collection.IndexOf(key);
-            var shouldDeleteSection = false;
-            var shouldAddSection = false;
-
-            if (oldIndex.HasValue)
+            if (!oldIndex.HasValue)
             {
-                shouldDeleteSection = collection[oldIndex.Value.Section].Count == 1;
-                collection.RemoveItemAt(oldIndex.Value.Section, oldIndex.Value.Row);
+                return InsertItem(item).index;
             }
 
-            var newIndex = collection.InsertItem(item);
-            shouldAddSection = collection[newIndex.Section].Count == 1;
+            var changes = new CollectionChangesListBuilder<TItem>();
 
+            var section = collection.FitsIntoSection(item);
+            var movesToDifferentSection = !section.HasValue || section.Value != oldIndex.Value.Section;
+            collection.RemoveItemAt(oldIndex.Value.Section, oldIndex.Value.Row);
+            var (newIndex, needsNewSection) = collection.InsertItem(item);
 
-            if (oldIndex.HasValue)
+            if (!movesToDifferentSection && oldIndex.Value.Equals(newIndex))
             {
-                if (oldIndex.Value.Equals(newIndex)) // Not moving, just updating item in place
+                changes.UpdateRow(newIndex, item);
+            }
+            else
+            {
+                if (needsNewSection)
                 {
-                    changes.Add(
-                        new CollectionChange { Index = newIndex, Type = CollectionChangeType.UpdateRow }
-                    );
+                    changes.MoveRowToNewSection(oldIndex.Value, newIndex.Section, item);
                 }
                 else
                 {
-                    changes.Add(
-                        new CollectionChange { Index = newIndex, OldIndex = oldIndex, Type = CollectionChangeType.MoveRow }
-                    );
-                    if (shouldDeleteSection)
-                    {
-                        changes.Add(
-                            new CollectionChange { Index = oldIndex.Value, Type = CollectionChangeType.RemoveSection }
-                        );
-                    }
-                    if (shouldAddSection)
-                    {
-                        changes.Add(
-                            new CollectionChange { Index = newIndex, Type = CollectionChangeType.AddSection }
-                        );
-                    }
+                    changes.MoveRowWithinExistingSections(oldIndex.Value, newIndex, item, movesToDifferentSection);
                 }
             }
-            else // Not updating, adding a new item
-            {
-                if (collection[newIndex.Section].Count == 1)
-                    changes.Add(
-                        new CollectionChange { Index = newIndex, Type = CollectionChangeType.AddSection }
-                    );
-                else
-                    changes.Add(
-                        new CollectionChange { Index = newIndex, Type = CollectionChangeType.AddRow }
-                    );
-            }
 
-            collectionChangesSubject.OnNext(changes);
+            collectionChangesSubject.OnNext(changes.Build());
             return newIndex;
         }
 
@@ -146,30 +122,19 @@ namespace Toggl.Foundation.MvvmCross.Collections
         {
             collection.ReplaceWith(items);
 
-            var changes = new List<CollectionChange>();
-            changes.Add(
-                new CollectionChange { Type = CollectionChangeType.Reload }
-            );
-            collectionChangesSubject.OnNext(changes);
+            var changes = new CollectionChangesListBuilder<TItem>();
+            changes.Reload();
+            collectionChangesSubject.OnNext(changes.Build());
         }
 
         public TItem RemoveItemAt(int section, int row)
         {
             var index = new SectionedIndex(section, row);
-
-            var changes = new List<CollectionChange>();
-            if (collection[section].Count == 1)
-                changes.Add(
-                    new CollectionChange { Index = index, Type = CollectionChangeType.RemoveSection }
-                );
-            else
-                changes.Add(
-                    new CollectionChange { Index = index, Type = CollectionChangeType.RemoveRow }
-                );
-
             var item = collection.RemoveItemAt(section, row);
 
-            collectionChangesSubject.OnNext(changes);
+            var changes = new CollectionChangesListBuilder<TItem>();
+            changes.RemoveRow(index);
+            collectionChangesSubject.OnNext(changes.Build());
 
             return item;
         }
