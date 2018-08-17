@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Threading.Tasks;
+using System.Linq;
 using Foundation;
 using Toggl.Daneel.Cells;
+using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Foundation.MvvmCross.Collections.Changes;
 using UIKit;
 
 namespace Toggl.Daneel.ViewSources
@@ -14,30 +15,111 @@ namespace Toggl.Daneel.ViewSources
         private readonly string cellIdentifier;
         protected readonly IReadOnlyList<IReadOnlyList<TModel>> items;
 
+        private IList<IList<TModel>> displayedItems;
+
         public Action<TModel> OnItemTapped { get; set; }
 
         public SectionedListTableViewSource(IReadOnlyList<IReadOnlyList<TModel>> items, string cellIdentifier)
         {
             this.items = items;
             this.cellIdentifier = cellIdentifier;
+
+            reloadDisplayedData();
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             var cell = tableView.DequeueReusableCell(cellIdentifier, indexPath) as BaseTableViewCell<TModel>;
-            cell.Item = items[indexPath.Section][indexPath.Row];
+            cell.Item = displayedItems[indexPath.Section][indexPath.Row];
             return cell;
         }
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            OnItemTapped?.Invoke(items[indexPath.Section][indexPath.Row]);
+            OnItemTapped?.Invoke(displayedItems[indexPath.Section][indexPath.Row]);
         }
 
         public override nint NumberOfSections(UITableView tableView)
-            => items.Count;
+            => displayedItems.Count;
 
         public override nint RowsInSection(UITableView tableview, nint section)
-            => items[(int)section].Count;
+            => displayedItems[(int)section].Count;
+
+        public bool HasSection(int section)
+            => displayedItems.Count > section;
+
+        public bool SectionContainsOnlyOneRow(int section)
+            => HasSection(section) && displayedItems[section].Count == 1;
+
+        public void ChangeDisplayedCollection(ICollectionChange change)
+        {
+            switch (change)
+            {
+                case InsertSectionCollectionChange<TModel> insert:
+                    insertSection(insert.Index, insert.Item);
+                    break;
+
+                case AddRowCollectionChange<TModel> addRow:
+                    add(addRow.Index, addRow.Item);
+                    break;
+
+                case RemoveRowCollectionChange removeRow:
+                    remove(removeRow.Index);
+                    break;
+
+                case MoveRowToNewSectionCollectionChange<TModel> moveRowToNewSection:
+                    remove(moveRowToNewSection.OldIndex);
+                    insertSection(moveRowToNewSection.Index, moveRowToNewSection.Item);
+                    break;
+
+                case MoveRowWithinExistingSectionsCollectionChange<TModel> moveRow:
+                    remove(moveRow.OldIndex);
+                    add(moveRow.Index, moveRow.Item);
+                    break;
+
+                case UpdateRowCollectionChange<TModel> updateRow:
+                    update(updateRow.Index, updateRow.Item);
+                    break;
+
+                case ReloadCollectionChange _:
+                    reloadDisplayedData();
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void insertSection(int index, TModel item)
+        {
+            displayedItems.Insert(index, new List<TModel> { item });
+        }
+
+        private void add(SectionedIndex index, TModel item)
+        {
+            displayedItems[index.Section].Insert(index.Row, item);
+        }
+
+        private void remove(SectionedIndex index)
+        {
+            if (displayedItems[index.Section].Count == 1)
+            {
+                displayedItems.RemoveAt(index.Section);
+            }
+            else
+            {
+                displayedItems[index.Section].RemoveAt(index.Row);
+            }
+        }
+
+        private void update(SectionedIndex index, TModel item)
+        {
+            displayedItems[index.Section][index.Row] = item;
+        }
+
+        private void reloadDisplayedData()
+        {
+            displayedItems = new List<IList<TModel>>(items.Select(list => new List<TModel>(list)));
+        }
     }
 }

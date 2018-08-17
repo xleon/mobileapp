@@ -10,6 +10,7 @@ using Xunit;
 using Microsoft.Reactive.Testing;
 using NUnit.Framework;
 using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Foundation.MvvmCross.Collections.Changes;
 
 namespace Toggl.Foundation.Tests.MvvmCross.Collections
 {
@@ -49,7 +50,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 collection.ReplaceWith(list);
 
                 var scheduler = new TestScheduler();
-                var observer = scheduler.CreateObserver<CollectionChange>();
+                var observer = scheduler.CreateObserver<ICollectionChange>();
 
                 collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
 
@@ -89,7 +90,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 collection.ReplaceWith(list);
 
                 var scheduler = new TestScheduler();
-                var observer = scheduler.CreateObserver<CollectionChange>();
+                var observer = scheduler.CreateObserver<ICollectionChange>();
 
                 collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
 
@@ -120,42 +121,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 collection.ReplaceWith(list);
 
                 var scheduler = new TestScheduler();
-                var observer = scheduler.CreateObserver<CollectionChange>();
+                var observer = scheduler.CreateObserver<ICollectionChange>();
 
                 collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
 
                 collection.RemoveItemAt(0, 2);
 
-                var change = new CollectionChange
-                {
-                    Index = new SectionedIndex(0, 2),
-                    Type = CollectionChangeType.RemoveRow
-                };
-
-                observer.Messages.AssertEqual(
-                    OnNext(0, change)
-                );
-            }
-
-            [Fact, LogIfTooSlow]
-            public void SendsSectionEventWhenLastItemFromSectionRemoved()
-            {
-                List<int> list = new List<int> { 70, 8, 3, 1, 2 };
-                var collection = new ObservableGroupedOrderedCollection<int>(i => i, i => i, i => i.ToString().Length);
-                collection.ReplaceWith(list);
-
-                var scheduler = new TestScheduler();
-                var observer = scheduler.CreateObserver<CollectionChange>();
-
-                collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
-
-                collection.RemoveItemAt(1, 0);
-
-                var change = new CollectionChange
-                {
-                    Index = new SectionedIndex(1, 0),
-                    Type = CollectionChangeType.RemoveSection
-                };
+                ICollectionChange change = new RemoveRowCollectionChange(new SectionedIndex(0, 2));
 
                 observer.Messages.AssertEqual(
                     OnNext(0, change)
@@ -170,42 +142,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 collection.ReplaceWith(list);
 
                 var scheduler = new TestScheduler();
-                var observer = scheduler.CreateObserver<CollectionChange>();
+                var observer = scheduler.CreateObserver<ICollectionChange>();
 
                 collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
 
                 collection.InsertItem(20);
 
-                var change = new CollectionChange
-                {
-                    Index = new SectionedIndex(1, 0),
-                    Type = CollectionChangeType.AddRow
-                };
-
-                observer.Messages.AssertEqual(
-                    OnNext(0, change)
-                );
-            }
-
-            [Fact, LogIfTooSlow]
-            public void SendsEventWhenFirstItemOfSectionAdded()
-            {
-                List<int> list = new List<int> { 8, 3, 1, 2 };
-                var collection = new ObservableGroupedOrderedCollection<int>(i => i, i => i, i => i.ToString().Length);
-                collection.ReplaceWith(list);
-
-                var scheduler = new TestScheduler();
-                var observer = scheduler.CreateObserver<CollectionChange>();
-
-                collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
-
-                collection.InsertItem(20);
-
-                var change = new CollectionChange
-                {
-                    Index = new SectionedIndex(1, 0),
-                    Type = CollectionChangeType.AddSection
-                };
+                ICollectionChange change = new AddRowCollectionChange<int>(new SectionedIndex(1, 0), 20);
 
                 observer.Messages.AssertEqual(
                     OnNext(0, change)
@@ -220,17 +163,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 collection.ReplaceWith(list);
 
                 var scheduler = new TestScheduler();
-                var observer = scheduler.CreateObserver<CollectionChange>();
+                var observer = scheduler.CreateObserver<ICollectionChange>();
 
                 collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
 
                 int[] newItems = { 0, 10, 100, 1000 };
                 collection.ReplaceWith(newItems);
 
-                var change = new CollectionChange
-                {
-                    Type = CollectionChangeType.Reload
-                };
+                ICollectionChange change = new ReloadCollectionChange();
 
                 observer.Messages.AssertEqual(
                     OnNext(0, change)
@@ -250,93 +190,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 collection.ReplaceWith(list);
 
                 var scheduler = new TestScheduler();
-                var observer = scheduler.CreateObserver<CollectionChange>();
+                var observer = scheduler.CreateObserver<ICollectionChange>();
 
                 collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
 
                 var updated = new MockItem { Id = 1, Description = "C" };
                 collection.UpdateItem(updated.Id, updated);
 
-                var change = new CollectionChange
-                {
-                    Type = CollectionChangeType.UpdateRow,
-                    Index = new SectionedIndex(0, 1)
-                };
+                ICollectionChange change = new UpdateRowCollectionChange<MockItem>(new SectionedIndex(0, 1), updated);
 
                 observer.Messages.AssertEqual(
                     OnNext(0, change)
-                );
-            }
-
-            [Fact, LogIfTooSlow]
-            public void SendsEventWhenMoved()
-            {
-                List<MockItem> list = new List<MockItem>
-                {
-                    new MockItem { Id = 0, Description = "A" },
-                    new MockItem { Id = 1, Description = "B" },
-                    new MockItem { Id = 3, Description = "D" }
-                };
-                var collection = new ObservableGroupedOrderedCollection<MockItem>(i => i.Id, i => i.Description, i => i.Description.Length);
-                collection.ReplaceWith(list);
-
-                var scheduler = new TestScheduler();
-                var observer = scheduler.CreateObserver<CollectionChange>();
-
-                collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
-
-                var updated = new MockItem { Id = 1, Description = "E" };
-                collection.UpdateItem(updated.Id, updated);
-
-                var change = new CollectionChange
-                {
-                    Type = CollectionChangeType.MoveRow,
-                    Index = new SectionedIndex(0, 2),
-                    OldIndex = new SectionedIndex(0, 1)
-                };
-
-                observer.Messages.AssertEqual(
-                    OnNext(0, change)
-                );
-            }
-
-            [Fact, LogIfTooSlow]
-            public void SendsSectionCreationEventWhenMovedToNewSection()
-            {
-                List<MockItem> list = new List<MockItem>
-                {
-                    new MockItem { Id = 0, Description = "A" },
-                    new MockItem { Id = 1, Description = "B" },
-                    new MockItem { Id = 3, Description = "D" },
-                    new MockItem { Id = 8, Description = "DFE" }
-                };
-                var collection = new ObservableGroupedOrderedCollection<MockItem>(i => i.Id, i => i.Description, i => i.Description.Length);
-                collection.ReplaceWith(list);
-
-                var scheduler = new TestScheduler();
-                var observer = scheduler.CreateObserver<CollectionChange>();
-
-                collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
-
-                var updated = new MockItem { Id = 1, Description = "ED" };
-                collection.UpdateItem(updated.Id, updated);
-
-                var change = new CollectionChange
-                {
-                    Type = CollectionChangeType.MoveRow,
-                    Index = new SectionedIndex(1, 0),
-                    OldIndex = new SectionedIndex(0, 1)
-                };
-
-                var sectionChange = new CollectionChange
-                {
-                    Type = CollectionChangeType.AddSection,
-                    Index = new SectionedIndex(1, 0)
-                };
-
-                observer.Messages.AssertEqual(
-                    OnNext(0, change),
-                    OnNext(0, sectionChange)
                 );
             }
 
@@ -354,50 +218,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 collection.ReplaceWith(list);
 
                 var scheduler = new TestScheduler();
-                var observer = scheduler.CreateObserver<CollectionChange>();
+                var observer = scheduler.CreateObserver<ICollectionChange>();
 
                 collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
 
                 var updated = new MockItem { Id = 5, Description = "E" };
                 collection.UpdateItem(updated.Id, updated);
 
-                var change = new CollectionChange
-                {
-                    Type = CollectionChangeType.AddRow,
-                    Index = new SectionedIndex(0, 4)
-                };
-
-                observer.Messages.AssertEqual(
-                    OnNext(0, change)
-                );
-            }
-
-            [Fact, LogIfTooSlow]
-            public void SendsSectionCreationEventIfNewItemIsInAnotherSection()
-            {
-                List<MockItem> list = new List<MockItem>
-                {
-                    new MockItem { Id = 0, Description = "A" },
-                    new MockItem { Id = 1, Description = "B" },
-                    new MockItem { Id = 2, Description = "C" },
-                    new MockItem { Id = 3, Description = "D" }
-                };
-                var collection = new ObservableGroupedOrderedCollection<MockItem>(i => i.Id, i => i.Description, i => i.Description.Length);
-                collection.ReplaceWith(list);
-
-                var scheduler = new TestScheduler();
-                var observer = scheduler.CreateObserver<CollectionChange>();
-
-                collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
-
-                var updated = new MockItem { Id = 5, Description = "DE" };
-                collection.UpdateItem(updated.Id, updated);
-
-                var change = new CollectionChange
-                {
-                    Type = CollectionChangeType.AddSection,
-                    Index = new SectionedIndex(1, 0)
-                };
+                ICollectionChange change = new AddRowCollectionChange<MockItem>(new SectionedIndex(0, 4), updated);
 
                 observer.Messages.AssertEqual(
                     OnNext(0, change)
@@ -421,7 +249,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 collection.ReplaceWith(list);
 
                 var scheduler = new TestScheduler();
-                var observer = scheduler.CreateObserver<CollectionChange>();
+                var observer = scheduler.CreateObserver<ICollectionChange>();
 
                 collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
 

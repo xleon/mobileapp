@@ -383,6 +383,8 @@ namespace Toggl.Daneel.ViewControllers
             cardAnimationCancellation?.Cancel();
             cardAnimationCancellation = new CancellationTokenSource();
 
+            TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint.Active = true;
+
             AnimationExtensions.Animate(Timings.EnterTiming, showCardDelay, Curves.EaseOut,
                 () => StartTimeEntryButton.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f),
                 () =>
@@ -402,6 +404,8 @@ namespace Toggl.Daneel.ViewControllers
         {
             cardAnimationCancellation?.Cancel();
             cardAnimationCancellation = new CancellationTokenSource();
+
+            TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint.Active = false;
 
             AnimationExtensions.Animate(Timings.LeaveTimingFaster, Curves.EaseIn,
                 () => StopTimeEntryButton.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f),
