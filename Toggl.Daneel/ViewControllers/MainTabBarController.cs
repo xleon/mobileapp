@@ -23,6 +23,13 @@ namespace Toggl.Daneel.ViewControllers
             setupViewControllers();
         }
 
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+
+            TabBar.Translucent = UIDevice.CurrentDevice.CheckSystemVersion(11, 0);
+        }
+
         private void setupViewControllers()
         {
             var viewControllers = ViewModel.ViewModels.Select(vm => createTabFor(vm)).ToArray();
