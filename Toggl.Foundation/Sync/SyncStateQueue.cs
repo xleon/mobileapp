@@ -7,7 +7,8 @@ namespace Toggl.Foundation.Sync
         private bool pulledLast;
         private bool pullSyncQueued;
         private bool pushSyncQueued;
-        
+        private bool cleanUpQueued;
+
         public void QueuePushSync()
         {
             pushSyncQueued = true;
@@ -16,6 +17,11 @@ namespace Toggl.Foundation.Sync
         public void QueuePullSync()
         {
             pullSyncQueued = true;
+        }
+
+        public void QueueCleanUp()
+        {
+            cleanUpQueued = true;
         }
 
         public SyncState Dequeue()
@@ -29,7 +35,10 @@ namespace Toggl.Foundation.Sync
             if (pushSyncQueued)
                 return push();
 
-            return sleep();
+            if (cleanUpQueued)
+                return cleanUp();
+
+            return Sleep;
         }
 
         public void Clear()
@@ -37,6 +46,7 @@ namespace Toggl.Foundation.Sync
             pulledLast = false;
             pullSyncQueued = false;
             pushSyncQueued = false;
+            cleanUpQueued = false;
         }
 
         private SyncState pull()
@@ -53,7 +63,10 @@ namespace Toggl.Foundation.Sync
             return Push;
         }
 
-        private SyncState sleep()
-            => Sleep;
+        private SyncState cleanUp()
+        {
+            cleanUpQueued = false;
+            return CleanUp;
+        }
     }
 }

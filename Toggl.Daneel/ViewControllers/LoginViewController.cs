@@ -91,6 +91,18 @@ namespace Toggl.Daneel.ViewControllers
                 : Color.Login.DisabledButtonColor.ToNativeColor();
         }
 
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            NavigationController?.SetNavigationBarHidden(true, true);
+        }
+
+        public override void ViewWillDisappear(bool animated)
+        {
+            base.ViewWillDisappear(animated);
+            NavigationController?.SetNavigationBarHidden(false, true);
+        }
+
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
@@ -106,7 +118,7 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidAppear(animated);
             ActivityIndicator.Alpha = 0;
-            ActivityIndicator.StartAnimation();
+            ActivityIndicator.StartSpinning();
             PasswordTextField.ResignFirstResponder();
         }
 

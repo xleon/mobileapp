@@ -45,13 +45,12 @@ namespace Toggl.Daneel.ViewControllers
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            ActivityIndicatorView.StartAnimation();
+            ActivityIndicatorView.StartSpinning();
         }
 
         private void prepareViews()
         {
-            ActivityIndicatorView.TintColor = Color.NoWorkspace.ActivityIndicator.ToNativeColor();
-            ActivityIndicatorView.Image = ActivityIndicatorView.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
+            ActivityIndicatorView.IndicatorColor = Color.NoWorkspace.ActivityIndicator.ToNativeColor();
             CreateWorkspaceButton.SetTitleColor(Color.NoWorkspace.DisabledCreateWorkspaceButton.ToNativeColor(), UIControlState.Disabled);
         }
     }

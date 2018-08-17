@@ -120,7 +120,7 @@ namespace Toggl.Daneel.ViewSources
             activityIndicatorView.HeightAnchor.ConstraintEqualTo(activityIndicatorSize).Active = true;
             activityIndicatorView.CenterYAnchor.ConstraintEqualTo(syncStateLabel.CenterYAnchor).Active = true;
             activityIndicatorView.LeadingAnchor.ConstraintEqualTo(syncStateLabel.TrailingAnchor, 6).Active = true;
-            activityIndicatorView.StartAnimation();
+            activityIndicatorView.StartSpinning();
         }
 
         private void prepareDismissSyncBarImageView()
@@ -289,9 +289,9 @@ namespace Toggl.Daneel.ViewSources
             activityIndicatorView.Hidden = !visible;
 
             if (visible)
-                activityIndicatorView.StartAnimation();
+                activityIndicatorView.StartSpinning();
             else
-                activityIndicatorView.StopAnimation();
+                activityIndicatorView.StopSpinning();
         }
 
         private void onStatusLabelTap()

@@ -44,7 +44,7 @@ namespace Toggl.Daneel.ViewControllers.Settings
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            IndicatorView.StartAnimation();
+            IndicatorView.StartSpinning();
         }
 
         private void prepareViews()
@@ -56,8 +56,7 @@ namespace Toggl.Daneel.ViewControllers.Settings
 
         private void prepareIndicatorView()
         {
-            IndicatorView.Image = IndicatorView.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-            IndicatorView.TintColor = Color.Feedback.ActivityIndicator.ToNativeColor();
+            IndicatorView.IndicatorColor = Color.Feedback.ActivityIndicator.ToNativeColor();
             IndicatorView.Hidden = true;
         }
     }
