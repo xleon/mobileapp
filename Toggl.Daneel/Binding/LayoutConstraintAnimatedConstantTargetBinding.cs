@@ -25,8 +25,7 @@ namespace Toggl.Daneel.Binding
             AnimationExtensions.Animate(
                 Animation.Timings.EnterTiming,
                 Animation.Curves.SharpCurve,
-                () => ((UIView)Target.FirstItem).Superview.LayoutSubviews()
-            );
+                () => ((UIView)Target.FirstItem).Superview.LayoutIfNeeded());
         }
     }
 }

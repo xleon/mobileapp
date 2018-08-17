@@ -24,11 +24,15 @@ namespace Toggl.Foundation.MvvmCross.Collections
                 .StartWith(IsEmpty)
                 .DistinctUntilChanged();
 
+        public IObservable<int> TotalCount
+            => collectionChangesSubject
+                .AsObservable()
+                .Select(_ => collection.TotalCount)
+                .StartWith(0)
+                .DistinctUntilChanged();
+
         public bool IsEmpty
             => collection.IsEmpty;
-
-        public int TotalCount
-            => collection.TotalCount;
 
         public int Count
             => collection.Count;
@@ -77,11 +81,11 @@ namespace Toggl.Foundation.MvvmCross.Collections
             return index;
         }
 
-        public SectionedIndex? UpdateItem(TItem item)
+        public SectionedIndex? UpdateItem(IComparable key, TItem item)
         {
             var changes = new List<CollectionChange>();
 
-            var oldIndex = collection.IndexOf(indexKey(item));
+            var oldIndex = collection.IndexOf(key);
             var shouldDeleteSection = false;
             var shouldAddSection = false;
 

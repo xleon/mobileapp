@@ -5,16 +5,15 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Text;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DTOs;
+using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.Transformations;
@@ -42,6 +41,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ITogglDataSource dataSource;
         private readonly IDialogService dialogService;
         private readonly IUserPreferences userPreferences;
+        private readonly IFeedbackService feedbackService;
         private readonly IAnalyticsService analyticsService;
         private readonly IPlatformConstants platformConstants;
         private readonly IOnboardingStorage onboardingStorage;
@@ -91,6 +91,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ITogglDataSource dataSource,
             IDialogService dialogService,
             IUserPreferences userPreferences,
+            IFeedbackService feedbackService,
             IAnalyticsService analyticsService,
             IInteractorFactory interactorFactory,
             IPlatformConstants platformConstants,
@@ -102,6 +103,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(mailService, nameof(mailService));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
+            Ensure.Argument.IsNotNull(feedbackService, nameof(feedbackService));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
@@ -113,6 +115,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.mailService = mailService;
             this.dialogService = dialogService;
             this.userPreferences = userPreferences;
+            this.feedbackService = feedbackService;
             this.analyticsService = analyticsService;
             this.interactorFactory = interactorFactory;
             this.navigationService = navigationService;
@@ -230,6 +233,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             isFeedbackSuccessViewShowing.OnNext(sendFeedbackSucceed);
         }
 
+        public async Task SubmitFeedbackUsingEmail()
+        {
+            feedbackService.SubmitFeedback();
+        }
+
         public Task SelectDefaultWorkspace(SelectableWorkspaceViewModel workspace)
             => changeDefaultWorkspace(workspace.WorkspaceId);
 
@@ -293,7 +301,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return;
 
             await dataSource.User.Update(new EditUserDTO { BeginningOfWeek = newBeginningOfWeek });
-            dataSource.SyncManager.PushSync();
+            dataSource.SyncManager.InitiatePushSync();
         }
 
         public async Task SelectDurationFormat()
@@ -344,7 +352,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             };
 
             await dataSource.Preferences.Update(preferencesDto);
-            dataSource.SyncManager.PushSync();
+            dataSource.SyncManager.InitiatePushSync();
         }
 
         private async Task changeDefaultWorkspace(long selectedWorkspaceId)
@@ -352,7 +360,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (selectedWorkspaceId == currentUser.DefaultWorkspaceId) return;
 
             await dataSource.User.UpdateWorkspace(selectedWorkspaceId);
-            dataSource.SyncManager.PushSync();
+            dataSource.SyncManager.InitiatePushSync();
         }
 
         private WorkspaceToSelectableWorkspaceLambda selectableWorkspacesFromWorkspaces(IThreadSafeUser user)

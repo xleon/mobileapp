@@ -126,7 +126,7 @@ namespace Toggl.Daneel.ViewControllers
                 return false;
             };
 
-            ActivityIndicator.StartAnimation();
+            ActivityIndicator.StartSpinning();
 
             prepareBackbutton();
         }

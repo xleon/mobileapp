@@ -54,6 +54,11 @@ namespace Toggl.Foundation.MvvmCross.Helper
             public static readonly MvxColor BackgroundColor = nearlyWhite;
         }
 
+        public static class TabBar
+        {
+            public static readonly MvxColor SelectedImageTintColor = new MvxColor(6, 170, 245);
+        }
+
         public static class Main
         {
             private static readonly MvxColor lightGrey = new MvxColor(181, 188, 192);
@@ -114,6 +119,12 @@ namespace Toggl.Foundation.MvvmCross.Helper
         public static class DurationField
         {
             public static readonly MvxColor Cursor = lightishGreen;
+        }
+
+        public static class NoWorkspace
+        {
+            public static readonly MvxColor ActivityIndicator = lightishGreen;
+            public static readonly MvxColor DisabledCreateWorkspaceButton = new MvxColor(255, 255, 255, 122);
         }
 
         internal static MvxColor FromHSV(float hue, float saturation, float value)
