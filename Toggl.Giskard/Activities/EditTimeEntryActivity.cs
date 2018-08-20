@@ -1,9 +1,7 @@
 ﻿using System.Reactive.Disposables;
 using Android.App;
 using Android.Content.PM;
-using Android.Graphics;
 using Android.OS;
-using Android.Support.V4.Content;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Droid.Support.V7.AppCompat;
@@ -18,7 +16,7 @@ using static Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
 namespace Toggl.Giskard.Activities
 {
     [MvxActivityPresentation]
-    [Activity(Theme = "@style/AppTheme",
+    [Activity(Theme = "@style/AppTheme.BlueStatusBar",
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class EditTimeEntryActivity : MvxAppCompatActivity<EditTimeEntryViewModel>, IReactiveBindingHolder
@@ -29,8 +27,6 @@ namespace Toggl.Giskard.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
-            this.ChangeStatusBarColor(new Color(ContextCompat.GetColor(this, Resource.Color.blueStatusBarBackground)));
-
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.EditTimeEntryActivity);
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
@@ -43,13 +39,13 @@ namespace Toggl.Giskard.Activities
         {
             base.OnResume();
 
-            projectTooltip = projectTooltip 
+            projectTooltip = projectTooltip
                 ?? PopupWindowFactory.PopupWindowWithText(
                     this,
                     Resource.Layout.TooltipWithLeftTopArrow,
                     Resource.Id.TooltipText,
                     Resource.String.CategorizeWithProjects);
-            
+
             prepareOnboarding();
         }
 
@@ -66,9 +62,9 @@ namespace Toggl.Giskard.Activities
 
             new CategorizeTimeUsingProjectsOnboardingStep(storage, ViewModel.HasProject)
                 .ManageDismissableTooltip(
-                    projectTooltip, 
-                    projectContainer, 
-                    (window, view) => PopupOffsets.FromDp(16, 8, this), 
+                    projectTooltip,
+                    projectContainer,
+                    (window, view) => PopupOffsets.FromDp(16, 8, this),
                     storage)
                 .DisposedBy(DisposeBag);
         }

@@ -115,6 +115,8 @@ namespace Toggl.Giskard
 
             foundation.RevokeNewUserIfNeeded().Initialize();
 
+            ensureDataSourceInitializationIfLoggedIn();
+
             base.InitializeApp(pluginManager, app);
         }
 
@@ -124,6 +126,19 @@ namespace Toggl.Giskard
             var activityLifecycleCallbacksManager = new QueryableMvxLifecycleMonitorCurrentTopActivity();
             mvxApplication.RegisterActivityLifecycleCallbacks(activityLifecycleCallbacksManager);
             return activityLifecycleCallbacksManager;
+        }
+
+        private void ensureDataSourceInitializationIfLoggedIn()
+        {
+            /* Why? The ITogglDataSource is lazily initialized by the login manager
+             * during some of it's methods calls.
+             * The App.cs code that makes those calls don't have time to
+             * do so during rehydration and on starup on some phones.
+             * This call makes sure the ITogglDataSource singleton is registered
+             * and ready to be injected during those times.
+             */
+            var loginManager = Mvx.Resolve<ILoginManager>();
+            var dataSource = loginManager.GetDataSourceIfLoggedIn();
         }
     }
 }
