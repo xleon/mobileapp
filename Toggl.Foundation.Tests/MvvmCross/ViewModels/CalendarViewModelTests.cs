@@ -17,6 +17,7 @@ using FsCheck.Xunit;
 using FsCheck;
 using System.Linq;
 using Microsoft.Reactive.Testing;
+using Toggl.Multivac;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -182,22 +183,41 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task NavigatesToTheSelectUserCalendarsViewModel()
+            public async Task NavigatesToTheSelectUserCalendarsViewModelWhenThereAreCalendars()
             {
                 PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                InteractorFactory.GetUserCalendars().Execute().Returns(
+                    Observable.Return(new UserCalendar[] { new UserCalendar() })
+                );
 
                 await ViewModel.GetStartedAction.Execute(Unit.Default);
 
                 await NavigationService.Received().Navigate<SelectUserCalendarsViewModel, string[]>();
             }
 
+            [Fact, LogIfTooSlow]
+            public async Task DoesNotNavigateToTheSelectUserCalendarsViewModelWhenThereAreNoCalendars()
+            {
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                InteractorFactory.GetUserCalendars().Execute().Returns(
+                    Observable.Return(new UserCalendar[0])
+                );
+
+                await ViewModel.GetStartedAction.Execute(Unit.Default);
+
+                await NavigationService.DidNotReceive().Navigate<SelectUserCalendarsViewModel, string[]>();
+            }
+
             [Property]
-            public void SetsTheEnabledCalendars(NonEmptyString[] nonEmptyStrings)
+            public void SetsTheEnabledCalendarsWhenThereAreCalendars(NonEmptyString[] nonEmptyStrings)
             {
                 if (nonEmptyStrings == null) return;
                 var calendarIds = nonEmptyStrings.Select(str => str.Get).ToArray();
                 NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(calendarIds);
                 PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                InteractorFactory.GetUserCalendars().Execute().Returns(
+                    Observable.Return(new UserCalendar[] { new UserCalendar() })
+                );
 
                 ViewModel.GetStartedAction.Execute(Unit.Default).Wait();
 

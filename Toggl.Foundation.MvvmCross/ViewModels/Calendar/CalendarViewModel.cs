@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -114,8 +115,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             {
                 if (permissionGranted)
                 {
-                    var calendarIds = await navigationService.Navigate<SelectUserCalendarsViewModel, string[]>();
-                    interactorFactory.SetEnabledCalendars(calendarIds).Execute();
+                    await selectUserCalendars();
                 }
                 else
                 {
@@ -124,6 +124,20 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 onboardingStorage.SetCompletedCalendarOnboarding();
                 shouldShowOnboardingSubject.OnNext(false);
             });
+
+        private async Task selectUserCalendars()
+        {
+            var calendarsExist = await interactorFactory
+                .GetUserCalendars()
+                .Execute()
+                .Select(calendars => calendars.Any());
+            
+            if (calendarsExist)
+            {
+                var calendarIds = await navigationService.Navigate<SelectUserCalendarsViewModel, string[]>();
+                interactorFactory.SetEnabledCalendars(calendarIds).Execute();
+            }
+        }
 
         private IObservable<Unit> onItemTapped(CalendarItem calendarItem)
             => Observable.FromAsync(async () =>
