@@ -117,7 +117,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await Initialize();
                 ViewModel.ChangeDateRangeCommand.Execute(
-                    DateRangeParameter.WithDates(start, end));
+                    ReportsDateRangeParameter.WithDates(start, end));
 
                 await delayed;
                 ViewModel.Segments.Count.Should().Be(segments.Length);
@@ -206,7 +206,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task IsSetToTrueWhenAReportIsLoading()
             {
                 var now = DateTimeOffset.Now;
-                var projectsNotSyncedCount = 0;
                 TimeService.CurrentDateTime.Returns(now);
                 ReportsProvider.GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
                     .Returns(Observable.Never<ProjectSummaryReport>());
@@ -272,7 +271,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var end = new DateTimeOffset(endYear, endMonth, endDay, 0, 0, 0, TimeSpan.Zero);
                 TimeService.CurrentDateTime.Returns(currentDate);
                 ViewModel.ChangeDateRangeCommand.Execute(
-                    DateRangeParameter.WithDates(start, end).WithSource(ReportsSource.Calendar));
+                    ReportsDateRangeParameter.WithDates(start, end).WithSource(ReportsSource.Calendar));
 
                 ViewModel.CurrentDateRangeString.Should().Be($"{Resources.ThisWeek} ▾");
             }
@@ -294,7 +293,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 preferencesSubject.OnNext(preferences);
 
                 ViewModel.ChangeDateRangeCommand.Execute(
-                    DateRangeParameter.WithDates(start, end).WithSource(ReportsSource.Calendar));
+                    ReportsDateRangeParameter.WithDates(start, end).WithSource(ReportsSource.Calendar));
 
                 ViewModel.CurrentDateRangeString.Should().Be(expectedResult);
             }
@@ -503,7 +502,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.SelectWorkspace.ExecuteAsync();
 
-                ReportsProvider.Received().GetProjectSummary(Arg.Is(mockWorkspace.Id), Arg.Any<DateTimeOffset>(),
+                await ReportsProvider.Received().GetProjectSummary(Arg.Is(mockWorkspace.Id), Arg.Any<DateTimeOffset>(),
                     Arg.Any<DateTimeOffset>());
             }
 
@@ -524,13 +523,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task ShouldNotTriggerAReportReloadWhenSelectionIsCancelled()
             {
                 await ViewModel.Initialize();
-                var mockChartSegmentCount = 100;
                 DialogService.Select(Arg.Any<string>(), Arg.Any<IDictionary<string, IThreadSafeWorkspace>>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(null));
 
                 await ViewModel.SelectWorkspace.ExecuteAsync();
 
-                ReportsProvider.DidNotReceive().GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(),
+                await ReportsProvider.DidNotReceive().GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(),
                     Arg.Any<DateTimeOffset>());
             }
 
@@ -538,14 +536,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task ShouldNotTriggerAReportReloadWhenTheSameWorkspaceIsSelected()
             {
                 await ViewModel.Initialize();
-                var mockChartSegmentCount = 100;
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId };
                 DialogService.Select(Arg.Any<string>(), Arg.Any<IDictionary<string, IThreadSafeWorkspace>>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(mockWorkspace));
 
                 await ViewModel.SelectWorkspace.ExecuteAsync();
 
-                ReportsProvider.DidNotReceive().GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(),
+                await ReportsProvider.DidNotReceive().GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(),
                     Arg.Any<DateTimeOffset>());
             }
         }

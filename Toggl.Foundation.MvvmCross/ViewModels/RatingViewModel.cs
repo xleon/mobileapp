@@ -7,10 +7,12 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Foundation.Services;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 
@@ -25,6 +27,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IAnalyticsService analyticsService;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IMvxNavigationService navigationService;
+        private readonly ISchedulerProvider schedulerProvider;
 
         private readonly BehaviorSubject<bool?> impressionSubject = new BehaviorSubject<bool?>(null);
         private readonly ISubject<bool> isFeedbackSuccessViewShowing = new Subject<bool>();
@@ -45,7 +48,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IRatingService ratingService,
             IAnalyticsService analyticsService,
             IOnboardingStorage onboardingStorage,
-            IMvxNavigationService navigationService)
+            IMvxNavigationService navigationService,
+            ISchedulerProvider schedulerProvider)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
@@ -53,6 +57,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
+            Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
@@ -60,13 +65,23 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.analyticsService = analyticsService;
             this.onboardingStorage = onboardingStorage;
             this.navigationService = navigationService;
+            this.schedulerProvider = schedulerProvider;
 
-            Impression = impressionSubject.AsObservable();
-            CtaTitle = Impression.Select(ctaTitle);
-            CtaDescription = Impression.Select(ctaDescription);
-            CtaButtonTitle = Impression.Select(ctaButtonTitle);
+            Impression = impressionSubject.AsDriver(this.schedulerProvider);
 
-            IsFeedbackSuccessViewShowing = isFeedbackSuccessViewShowing.AsObservable();
+            CtaTitle = impressionSubject
+                .Select(ctaTitle)
+                .AsDriver(this.schedulerProvider);
+
+            CtaDescription = impressionSubject
+                .Select(ctaDescription)
+                .AsDriver(this.schedulerProvider);
+
+            CtaButtonTitle = impressionSubject
+                .Select(ctaButtonTitle)
+                .AsDriver(this.schedulerProvider);
+
+            IsFeedbackSuccessViewShowing = isFeedbackSuccessViewShowing.AsDriver(this.schedulerProvider);
         }
 
         public void CloseFeedbackSuccessView()
@@ -79,10 +94,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             impressionSubject.OnNext(isPositive);
             analyticsService.UserFinishedRatingViewFirstStep.Track(isPositive);
 
-            var outcome = isPositive
-                ? RatingViewOutcome.PositiveImpression
-                : RatingViewOutcome.NegativeImpression;
-            onboardingStorage.SetRatingViewOutcome(outcome, timeService.CurrentDateTime);
+            if (isPositive)
+            {
+                analyticsService.RatingViewFirstStepLike.Track();
+                onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.PositiveImpression, timeService.CurrentDateTime);
+            }
+            else
+            {
+                analyticsService.RatingViewFirstStepDislike.Track();
+                onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.NegativeImpression, timeService.CurrentDateTime);
+            }
         }
 
         private string ctaTitle(bool? impressionIsPositive)
@@ -126,6 +147,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 ratingService.AskForRating();
                 //We can't really know whether the user actually rated
                 //We only know that we presented the iOS rating view
+                analyticsService.RatingViewSecondStepRate.Track();
                 analyticsService.UserFinishedRatingViewSecondStep.Track(RatingViewSecondStepOutcome.AppWasRated);
                 onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.AppWasRated, timeService.CurrentDateTime);
             }
@@ -133,6 +155,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             {
                 var sendFeedbackSucceed = await navigationService.Navigate<SendFeedbackViewModel, bool>();
                 isFeedbackSuccessViewShowing.OnNext(sendFeedbackSucceed);
+                analyticsService.RatingViewSecondStepSendFeedback.Track();
                 analyticsService.UserFinishedRatingViewSecondStep.Track(RatingViewSecondStepOutcome.FeedbackWasLeft);
                 onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.FeedbackWasLeft, timeService.CurrentDateTime);
             }
@@ -141,7 +164,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public void Dismiss()
         {
             navigationService.ChangePresentation(
-                new ToggleRatingViewVisibilityHint(forceHide: true)
+                ToggleRatingViewVisibilityHint.Hide()
             );
 
             if (impressionSubject.Value == null) return;
@@ -149,11 +172,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (impressionSubject.Value.Value)
             {
                 onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.AppWasNotRated, timeService.CurrentDateTime);
+                analyticsService.RatingViewSecondStepDontRate.Track();
                 analyticsService.UserFinishedRatingViewSecondStep.Track(RatingViewSecondStepOutcome.AppWasNotRated);
             }
             else
             {
                 onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.FeedbackWasNotLeft, timeService.CurrentDateTime);
+                analyticsService.RatingViewSecondStepDontSendFeedback.Track();
                 analyticsService.UserFinishedRatingViewSecondStep.Track(RatingViewSecondStepOutcome.FeedbackWasNotLeft);
             }
 

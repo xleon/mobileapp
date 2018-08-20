@@ -388,7 +388,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
 
                 var expected = new SectionedIndex(0, 3);
 
-                intCollection.InsertItem(4).Should().Be(expected);
+                intCollection.InsertItem(4).index.Should().Be(expected);
             }
 
             [Fact, LogIfTooSlow]
@@ -456,6 +456,49 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
 
                 intCollection.TotalCount.Should().Be(6);
                 intCollection.Count.Should().Be(2);
+            }
+        }
+
+        public sealed class TheUpdateItemMethod
+        {
+            private GroupedOrderedCollection<int> intCollection;
+
+            public TheUpdateItemMethod()
+            {
+                intCollection = new GroupedOrderedCollection<int>(i => i, i => i, i => i.ToString().Length);
+            }
+
+            [Fact]
+            public void IgnoresUpdatesWhenTheKeyDoesNotExist()
+            {
+                intCollection.InsertItem(1);
+
+                intCollection.UpdateItem(2, 3);
+                var indexOfItemThree = intCollection.IndexOf(3);
+
+                indexOfItemThree.Should().BeNull();
+            }
+
+            [Fact]
+            public void RemovesTheOldItem()
+            {
+                intCollection.InsertItem(1);
+
+                intCollection.UpdateItem(1, 2);
+                var indexOfOldIndex = intCollection.IndexOf(1);
+
+                indexOfOldIndex.Should().BeNull();
+            }
+
+            [Fact]
+            public void AddsTheNewItem()
+            {
+                intCollection.InsertItem(1);
+
+                intCollection.UpdateItem(1, 2);
+                var indexOfOldIndex = intCollection.IndexOf(2);
+
+                indexOfOldIndex.Should().NotBeNull();
             }
         }
     }

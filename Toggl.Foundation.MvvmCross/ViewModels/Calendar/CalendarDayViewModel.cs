@@ -1,16 +1,16 @@
 ﻿using System;
 using System.ComponentModel;
+using PropertyChanged;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 {
     [Preserve(AllMembers = true)]
-    public sealed class CalendarDayViewModel : INotifyPropertyChanged
+    [AddINotifyPropertyChangedInterface]
+    public sealed class CalendarDayViewModel
     {
         private readonly DateTimeOffset dateTime;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public int Day { get; }
 
@@ -37,7 +37,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             IsToday = today.Date == dateTime.Date;
         }
 
-        public void OnSelectedRangeChanged(DateRangeParameter selectedRange)
+        public void OnSelectedRangeChanged(ReportsDateRangeParameter selectedRange)
         {
             Selected = selectedRange != null && selectedRange.StartDate.Date <= dateTime.Date && selectedRange.EndDate.Date >= dateTime.Date;
 

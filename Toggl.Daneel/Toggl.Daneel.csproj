@@ -524,6 +524,10 @@
     <ImageAsset Include="Resources\Images.xcassets\icWarning.imageset\icWarning.png" />
     <ImageAsset Include="Resources\Images.xcassets\icWarning.imageset\icWarning%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icWarning.imageset\icWarning%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icTime.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icTime.imageset\icTime.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icTime.imageset\icTime%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icTime.imageset\icTime%403x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icWorkspace.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\icWorkspace.imageset\icWorkspace.png" />
     <ImageAsset Include="Resources\Images.xcassets\icWorkspace.imageset\icWorkspace%402x.png" />
@@ -615,6 +619,7 @@
   <ItemGroup>
     <Compile Include="Binding\DatePickerDateTimeOffsetTargetBinding.cs" />
     <Compile Include="Extensions\Binders\ReactiveTableViewBinder.cs" />
+    <Compile Include="Extensions\SectionedIndexExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\NSConstraintRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UIApplicationRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UIButtonRxExtensions.cs" />
@@ -625,6 +630,7 @@
     <Compile Include="Extensions\UIKitRxExtensions\UITextViewRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UIViewRxExtensions.cs" />
     <Compile Include="Services\UserDefaultsStorage.cs" />
+    <Compile Include="Startup\IOSSchedulerProvider.cs" />
     <Compile Include="Startup\Setup.cs" />
     <Compile Include="Startup\SetupTargetFactories.cs">
       <DependentUpon>SetupTargetFactories.tt</DependentUpon>
@@ -1005,6 +1011,8 @@
       <DependentUpon>SendFeedbackViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Binding\TextViewWithPlaceholderDidBecomeFirstResponderTargetBinding.cs" />
+    <Compile Include="ViewControllers\MainTabBarController.cs" />
+    <Compile Include="Startup\NSRunLoopScheduler.cs" />
     <Compile Include="Converters\LambdaConverter.cs" />
     <Compile Include="Views\SnackBar.cs" />
     <Compile Include="Views\SnackBar.designer.cs">
@@ -1015,6 +1023,7 @@
       <DependentUpon>NoWorkspaceViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\UIKitRxExtensions\UIControlRxExtensions.cs" />
+    <Compile Include="Binding\LayoutConstraintActiveTargetBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
@@ -1070,6 +1079,7 @@
     <Folder Include="Resources\Images.xcassets\paws.imageset\" />
     <Folder Include="Resources\Images.xcassets\icBackNoPadding.imageset\" />
     <Folder Include="Resources\Images.xcassets\icWarning.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icTime.imageset\" />
     <Folder Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\" />
   </ItemGroup>
   <ItemGroup>

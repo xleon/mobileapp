@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
 using Foundation;
 using Toggl.Daneel.Cells;
-using Toggl.Daneel.Views;
+using Toggl.Daneel.Extensions;
 using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Foundation.MvvmCross.Collections.Changes;
 using Toggl.Multivac.Extensions;
 using UIKit;
-
 
 namespace Toggl.Daneel.ViewSources
 {
@@ -36,56 +36,60 @@ namespace Toggl.Daneel.ViewSources
                 .DisposedBy(disposeBag);
         }
 
-        public void handleCollectionChanges(IEnumerable<CollectionChange> changes)
+        public void handleCollectionChanges(IReadOnlyCollection<ICollectionChange> changes)
         {
             lock (animationLock)
             {
+                if (changes.Any(c => c is ReloadCollectionChange))
+                {
+                    tableView.ReloadData();
+                    return;
+                }
+
                 tableView.BeginUpdates();
 
                 foreach (var change in changes)
                 {
-                    NSIndexPath indexPath = NSIndexPath.FromRowSection(change.Index.Row, change.Index.Section);
-                    NSIndexPath[] indexPaths = {indexPath};
-                    NSMutableIndexSet indexSet = (NSMutableIndexSet) NSIndexSet.FromIndex(change.Index.Section).MutableCopy();
+                    var affectedSections = new List<int>();
 
-                    switch (change.Type)
+                    switch (change)
                     {
-                        case CollectionChangeType.AddRow:
-                            tableView.InsertRows(indexPaths, UITableViewRowAnimation.Automatic);
+                        case AddRowCollectionChange<TModel> addRow:
+                            var addedToSection = add(addRow);
+                            affectedSections.Add(addedToSection);
                             break;
 
-                        case CollectionChangeType.RemoveRow:
-                            tableView.DeleteRows(indexPaths, UITableViewRowAnimation.Automatic);
+                        case InsertSectionCollectionChange<TModel> insert:
+                            insertSection(insert);
                             break;
 
-                        case CollectionChangeType.UpdateRow:
-                            tableView.ReloadRows(indexPaths, UITableViewRowAnimation.Automatic);
+                        case RemoveRowCollectionChange removeRow:
+                            var removedFromSection = remove(removeRow);
+                            affectedSections.Add(removedFromSection);
                             break;
 
-                        case CollectionChangeType.MoveRow:
-                            if (change.OldIndex.HasValue)
-                            {
-                                NSIndexPath oldIndexPath = NSIndexPath.FromRowSection(change.OldIndex.Value.Row, change.OldIndex.Value.Section);
-                                tableView.MoveRow(oldIndexPath, indexPath);
-                                dataSource.RefreshHeader(tableView, change.OldIndex.Value.Section);
-                            }
+                        case MoveRowWithinExistingSectionsCollectionChange<TModel> moveRow:
+                            var oldAndNewSection = move(moveRow);
+                            affectedSections.AddRange(oldAndNewSection);
                             break;
 
-                        case CollectionChangeType.AddSection:
-                            tableView.InsertSections(indexSet, UITableViewRowAnimation.Automatic);
+                        case MoveRowToNewSectionCollectionChange<TModel> moveRowToNewSection:
+                            var oldSection = move(moveRowToNewSection);
+                            affectedSections.Add(oldSection);
                             break;
 
-                        case CollectionChangeType.RemoveSection:
-                            tableView.DeleteSections(indexSet, UITableViewRowAnimation.Automatic);
-                            break;
-
-                        case CollectionChangeType.Reload:
-                            tableView.ReloadData();
-
+                        case UpdateRowCollectionChange<TModel> updateRow:
+                            var updatedInSection = update(updateRow);
+                            affectedSections.Add(updatedInSection);
                             break;
                     }
 
-                    dataSource.RefreshHeader(tableView, change.Index.Section);
+                    dataSource.ChangeDisplayedCollection(change);
+
+                    affectedSections
+                        .Distinct()
+                        .Where(index => index < dataSource.NumberOfSections(tableView))
+                        .ForEach(index => dataSource.RefreshHeader(tableView, index));
                 }
 
                 tableView.EndUpdates();
@@ -98,5 +102,70 @@ namespace Toggl.Daneel.ViewSources
             dataSource?.Dispose();
             tableView?.Dispose();
         }
+
+        private void insertSection(InsertSectionCollectionChange<TModel> change)
+        {
+            tableView.InsertSections(indexSet(change.Index), UITableViewRowAnimation.Automatic);
+            tableView.InsertRows(new SectionedIndex(change.Index, 0).ToIndexPaths(), UITableViewRowAnimation.Automatic);
+        }
+
+        private int add(AddRowCollectionChange<TModel> change)
+        {
+            tableView.InsertRows(change.Index.ToIndexPaths(), UITableViewRowAnimation.Automatic);
+            return change.Index.Section;
+        }
+
+        private int remove(RemoveRowCollectionChange change)
+        {
+            remove(change.Index);
+            return change.Index.Section;
+        }
+
+        private bool remove(SectionedIndex index)
+        {
+            if (dataSource.SectionContainsOnlyOneRow(index.Section))
+            {
+                tableView.DeleteSections(indexSet(index.Section), UITableViewRowAnimation.Automatic);
+                return true;
+            }
+
+            tableView.DeleteRows(index.ToIndexPaths(), UITableViewRowAnimation.Automatic);
+            return false;
+        }
+
+        private int move(MoveRowToNewSectionCollectionChange<TModel> change)
+        {
+            remove(change.OldIndex);
+            tableView.InsertSections(indexSet(change.Index), UITableViewRowAnimation.Automatic);
+            tableView.InsertRows(new SectionedIndex(change.Index, 0).ToIndexPaths(), UITableViewRowAnimation.Automatic);
+
+            return change.OldIndex.Section;
+        }
+
+        private int[] move(MoveRowWithinExistingSectionsCollectionChange<TModel> change)
+        {
+            var oldSectionWasRemoved = remove(change.OldIndex);
+            tableView.InsertRows(change.Index.ToIndexPaths(), UITableViewRowAnimation.Automatic);
+
+            if (oldSectionWasRemoved)
+            {
+                // The index of the section which needs refreshing must be the index before the changes happen.
+                // The index of the target section might change if the old section was in front of the target one
+                // and the old one was removed. The original index of the target section would then be a one more
+                // than the index after hte operation (which is the value of `change.Index.Section`).
+                return new[] { change.Index.Section + change.OldIndex.Section <= change.Index.Section ? 1 : 0 };
+            }
+
+            return new[] { change.OldIndex.Section, change.Index.Section };
+        }
+
+        private int update(UpdateRowCollectionChange<TModel> change)
+        {
+            tableView.ReloadRows(change.Index.ToIndexPaths(), UITableViewRowAnimation.Automatic);
+            return change.Index.Section;
+        }
+
+        private NSMutableIndexSet indexSet(int section)
+            => (NSMutableIndexSet)NSIndexSet.FromIndex(section).MutableCopy();
     }
 }

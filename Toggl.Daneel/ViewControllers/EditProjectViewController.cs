@@ -34,7 +34,7 @@ namespace Toggl.Daneel.ViewControllers
             //Commands
             bindingSet.Bind(DoneButton).To(vm => vm.DoneCommand);
             bindingSet.Bind(CloseButton).To(vm => vm.CloseCommand);
-            bindingSet.Bind(ColorCircleView)
+            bindingSet.Bind(ColorPickerOpeningView)
                       .For(v => v.BindTap())
                       .To(vm => vm.PickColorCommand);
 

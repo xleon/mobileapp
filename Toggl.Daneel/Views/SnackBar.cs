@@ -1,9 +1,8 @@
 using System;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
+using Toggl.Foundation;
 using UIKit;
 
 namespace Toggl.Daneel
@@ -35,14 +34,15 @@ namespace Toggl.Daneel
         private NSLayoutYAxisAnchor bottomAnchor;
         private NSLayoutConstraint bottomConstraint;
         private ButtonPositionType buttonPosition = ButtonPositionType.Right;
-        private Func<Task> startTimer;
+
         private bool showing = false;
+        private string text;
 
         public SnackBar (IntPtr handle) : base (handle)
         {
         }
 
-        public static SnackBar Create()
+        public static SnackBar Create(string text)
         {
             var arr = NSBundle.MainBundle.LoadNib("SnackBar", null, null);
             var snackBar = Runtime.GetNSObject<SnackBar>(arr.ValueAt(0));
@@ -57,6 +57,7 @@ namespace Toggl.Daneel
                 Font = UIFont.SystemFontOfSize(14, UIFontWeight.Semibold)
             };
 
+            snackBar.text = text;
             snackBar.configure();
             return snackBar;
         }
@@ -66,7 +67,6 @@ namespace Toggl.Daneel
             var button = new UIButton(UIButtonType.Plain);
             button.TouchUpInside += (sender, e) =>
             {
-                Hide();
                 onTap();
             };
             button.SetAttributedTitle(new NSAttributedString(title, ButtonAttributes), UIControlState.Normal);
@@ -77,23 +77,14 @@ namespace Toggl.Daneel
             SetNeedsLayout();
         }
 
-        public void SetTimer(float seconds, Action onTimer)
-        {
-            startTimer = async () =>
-            {
-                await Task.Delay((int) seconds * 1000);
-                if (!showing) return;
-                Hide();
-                onTimer();
-            };
-        }
-
-        public void Show(string text, UIView superView)
+        public void Show(UIView superView)
         {
             if (Superview != null) // Only show it once
             {
                 return;
             }
+
+            if (showing) return;
 
             showing = true;
             Alpha = 0;
@@ -115,12 +106,12 @@ namespace Toggl.Daneel
                     Alpha = 1;
                 }
             );
-
-            startTimer?.Invoke();
         }
 
         public void Hide()
         {
+            if (!showing) return;
+
             showing = false;
             UIView.Animate(
                 0.3,
@@ -187,6 +178,16 @@ namespace Toggl.Daneel
             }
 
             SetNeedsLayout();
+        }
+
+        public static class Factory
+        {
+            public static SnackBar CreateUndoSnackBar(Action onUndo)
+            {
+                var snackBar = SnackBar.Create(Resources.EntryDeleted);
+                snackBar.AddButton(Resources.UndoButtonTitle, onUndo);
+                return snackBar;
+            }
         }
     }
 }

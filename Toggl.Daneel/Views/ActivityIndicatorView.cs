@@ -2,6 +2,7 @@
 using CoreAnimation;
 using Foundation;
 using Toggl.Daneel.Extensions;
+using Toggl.Foundation.Helper;
 using UIKit;
 using static Toggl.Foundation.MvvmCross.Helper.Animation;
 using static Toggl.Multivac.Math;
@@ -14,15 +15,10 @@ namespace Toggl.Daneel.Views
         private const float animationDuration = 1f;
 
         private string imageResource = "icLoader";
-        public string ImageResource
-        {
-            get => imageResource;
-            set => Image = UIImage.FromBundle(imageResource = value);
-        }
 
-        public ActivityIndicatorView()
+        public ActivityIndicatorView(UIColor color = null)
         {
-            init();
+            init(color);
         }
 
         public ActivityIndicatorView(IntPtr handle)
@@ -30,35 +26,45 @@ namespace Toggl.Daneel.Views
         {
         }
 
+        public UIColor IndicatorColor
+        {
+            set
+            {
+                Image = Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
+                TintColor = value;
+            }
+        }
+
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
-            init();
+            init(null);
         }
 
         /// <summary>
         /// Starts the spinning animation of the activity indicator.
         /// NOTE: may not work when called from ViewDidLoad, use ViewWillAppear or ViewDidAppear.
         /// </summary>
-        public void StartAnimation()
+        public void StartSpinning()
         {
             var animation = createAnimation();
             Layer.RemoveAllAnimations();
             Layer.AddAnimation(animation, "spinning");
         }
 
-        /// <summary>
-        /// Stops the spinning animation.
-        /// </summary>
-        public void StopAnimation()
+        public void StopSpinning()
         {
             Layer.RemoveAllAnimations();
         }
 
-        private void init()
+        private void init(UIColor color)
         {
-            Image = UIImage.FromBundle(ImageResource);
+            Image = UIImage.FromBundle(imageResource);
             ContentMode = UIViewContentMode.Center;
+            if (color != null)
+            {
+                IndicatorColor = color;
+            }
         }
 
         private CAAnimation createAnimation()
