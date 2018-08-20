@@ -94,10 +94,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             impressionSubject.OnNext(isPositive);
             analyticsService.UserFinishedRatingViewFirstStep.Track(isPositive);
 
-            var outcome = isPositive
-                ? RatingViewOutcome.PositiveImpression
-                : RatingViewOutcome.NegativeImpression;
-            onboardingStorage.SetRatingViewOutcome(outcome, timeService.CurrentDateTime);
+            if (isPositive)
+            {
+                analyticsService.RatingViewFirstStepLike.Track();
+                onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.PositiveImpression, timeService.CurrentDateTime);
+            }
+            else
+            {
+                analyticsService.RatingViewFirstStepDislike.Track();
+                onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.NegativeImpression, timeService.CurrentDateTime);
+            }
         }
 
         private string ctaTitle(bool? impressionIsPositive)
@@ -141,6 +147,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 ratingService.AskForRating();
                 //We can't really know whether the user actually rated
                 //We only know that we presented the iOS rating view
+                analyticsService.RatingViewSecondStepRate.Track();
                 analyticsService.UserFinishedRatingViewSecondStep.Track(RatingViewSecondStepOutcome.AppWasRated);
                 onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.AppWasRated, timeService.CurrentDateTime);
             }
@@ -148,6 +155,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             {
                 var sendFeedbackSucceed = await navigationService.Navigate<SendFeedbackViewModel, bool>();
                 isFeedbackSuccessViewShowing.OnNext(sendFeedbackSucceed);
+                analyticsService.RatingViewSecondStepSendFeedback.Track();
                 analyticsService.UserFinishedRatingViewSecondStep.Track(RatingViewSecondStepOutcome.FeedbackWasLeft);
                 onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.FeedbackWasLeft, timeService.CurrentDateTime);
             }
@@ -164,11 +172,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (impressionSubject.Value.Value)
             {
                 onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.AppWasNotRated, timeService.CurrentDateTime);
+                analyticsService.RatingViewSecondStepDontRate.Track();
                 analyticsService.UserFinishedRatingViewSecondStep.Track(RatingViewSecondStepOutcome.AppWasNotRated);
             }
             else
             {
                 onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.FeedbackWasNotLeft, timeService.CurrentDateTime);
+                analyticsService.RatingViewSecondStepDontSendFeedback.Track();
                 analyticsService.UserFinishedRatingViewSecondStep.Track(RatingViewSecondStepOutcome.FeedbackWasNotLeft);
             }
 
