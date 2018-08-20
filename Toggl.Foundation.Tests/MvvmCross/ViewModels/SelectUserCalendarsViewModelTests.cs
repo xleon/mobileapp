@@ -19,7 +19,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public abstract class SelectUserCalendarsViewModelTest : BaseViewModelTests<SelectUserCalendarsViewModel>
         {
             protected override SelectUserCalendarsViewModel CreateViewModel()
-                => new SelectUserCalendarsViewModel(InteractorFactory, SchedulerProvider, NavigationService);
+                => new SelectUserCalendarsViewModel(InteractorFactory, NavigationService);
         }
 
         public sealed class TheConstructor : SelectUserCalendarsViewModelTest
@@ -28,40 +28,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useInteractorFactory,
-                bool useSchedulerProvider,
                 bool useNavigationService)
             {
                 Action tryingToConstructWithEmptyParameters =
                     () => new SelectUserCalendarsViewModel(
                         useInteractorFactory ? InteractorFactory : null,
-                        useSchedulerProvider ? SchedulerProvider : null,
                         useNavigationService ? NavigationService : null
                     );
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
-            }
-        }
-
-        public sealed class TheInitializeMethod : SelectUserCalendarsViewModelTest
-        {
-            [Fact, LogIfTooSlow]
-            public async Task FillsTheCalendarList()
-            {
-                var userCalendarsObservable = Enumerable
-                    .Range(0, 9)
-                    .Select(id => new UserCalendar(
-                        id.ToString(),
-                        $"Calendar #{id}",
-                        $"Source #{id % 3}",
-                        false))
-                    .Apply(Observable.Return);
-                InteractorFactory.GetUserCalendars().Execute().Returns(userCalendarsObservable);
-
-                await ViewModel.Initialize();
-
-                ViewModel.Calendars.Should().HaveCount(3);
-                ViewModel.Calendars.ForEach(group => group.Should().HaveCount(3));
             }
         }
 
