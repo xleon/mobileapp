@@ -86,6 +86,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 timeService,
                 interactorFactory,
                 onboardingStorage,
+                schedulerProvider,
                 permissionsService,
                 navigationService);
         }

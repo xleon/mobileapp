@@ -622,6 +622,9 @@
     <InterfaceDefinition Include="Cells\Calendar\CurrentTimeSupplementaryView.xib" />
     <InterfaceDefinition Include="Cells\Calendar\HourSupplementaryView.xib" />
     <InterfaceDefinition Include="Views\SnackBar.xib" />
+    <InterfaceDefinition Include="ViewControllers\Calendar\SelectUserCalendarsViewController.xib" />
+    <InterfaceDefinition Include="Cells\Calendar\SelectableUserCalendarViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Calendar\UserCalendarListHeaderViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -1069,6 +1072,19 @@
       <DependentUpon>NoWorkspaceViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\UIKitRxExtensions\UIControlRxExtensions.cs" />
+    <Compile Include="ViewControllers\Calendar\SelectUserCalendarsViewController.cs" />
+    <Compile Include="ViewControllers\Calendar\SelectUserCalendarsViewController.designer.cs">
+      <DependentUpon>SelectUserCalendarsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSources\SelectUserCalendarsTableViewSource.cs" />
+    <Compile Include="Cells\Calendar\SelectableUserCalendarViewCell.cs" />
+    <Compile Include="Cells\Calendar\SelectableUserCalendarViewCell.designer.cs">
+      <DependentUpon>SelectableUserCalendarViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Calendar\UserCalendarListHeaderViewCell.cs" />
+    <Compile Include="Cells\Calendar\UserCalendarListHeaderViewCell.designer.cs">
+      <DependentUpon>UserCalendarListHeaderViewCell.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewSources\CalendarCollectionViewSource.cs" />
     <Compile Include="Binding\LayoutConstraintActiveTargetBinding.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
@@ -1135,6 +1151,9 @@
     <Folder Include="Cells\Calendar\" />
     <Folder Include="Resources\Images.xcassets\icTime.imageset\" />
     <Folder Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\" />
+    <Folder Include="Views\Calendar\" />
+    <Folder Include="ViewControllers\Calendar\" />
+    <Folder Include="Cells\Calendar\" />
     <Folder Include="Resources\Images.xcassets\icCalendarSmall.imageset\" />
   </ItemGroup>
   <ItemGroup>

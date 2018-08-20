@@ -13,6 +13,10 @@ using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.Mocks;
 using Xunit;
 using ITimeEntryPrototype = Toggl.Foundation.Models.ITimeEntryPrototype;
+using FsCheck.Xunit;
+using FsCheck;
+using System.Linq;
+using Microsoft.Reactive.Testing;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -57,6 +61,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     TimeService,
                     InteractorFactory,
                     OnboardingStorage,
+                    SchedulerProvider,
                     PermissionsService,
                     NavigationService
                 );
@@ -71,6 +76,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useTimeService,
                 bool useInteractorFactory,
                 bool useOnboardingStorage,
+                bool useSchedulerProvider,
                 bool useNavigationService,
                 bool usePermissionsService)
             {
@@ -78,6 +84,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var timeService = useTimeService ? TimeService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
+                var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var permissionsService = usePermissionsService ? PermissionsService : null;
 
@@ -87,6 +94,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         timeService,
                         interactorFactory,
                         onboardingStorage,
+                        schedulerProvider,
                         permissionsService,
                         navigationService);
 
@@ -97,18 +105,59 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheShouldShowOnboardingProperty : CalendarViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task ReturnsTrueIfCalendarOnboardingHasntBeenCompleted()
+            public void ReturnsTrueIfCalendarOnboardingHasntBeenCompleted()
             {
-                (await ViewModel.ShouldShowOnboarding).Should().BeTrue();
+                OnboardingStorage.CompletedCalendarOnboarding().Returns(false);
+                var viewModel = CreateViewModel();
+                var observer = TestScheduler.CreateObserver<bool>();
+
+                viewModel.ShouldShowOnboarding.Subscribe(observer);
+
+                TestScheduler.Start();
+                observer.Messages.Single().Value.Value.Should().BeTrue();
             }
 
             [Fact, LogIfTooSlow]
-            public async Task ReturnsFalseIfCalendarOnboardingHasBeenCompleted()
+            public void ReturnsFalseIfCalendarOnboardingHasBeenCompleted()
             {
                 OnboardingStorage.CompletedCalendarOnboarding().Returns(true);
                 var viewModel = CreateViewModel();
+                var observer = TestScheduler.CreateObserver<bool>();
 
-                (await viewModel.ShouldShowOnboarding).Should().BeFalse();
+                viewModel.ShouldShowOnboarding.Subscribe(observer);
+
+                TestScheduler.Start();
+                observer.Messages.Single().Value.Value.Should().BeFalse();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task EmitsFalseWhenUserGrantsCalendarAccess()
+            {
+                OnboardingStorage.CompletedCalendarOnboarding().Returns(false);
+                var observer = TestScheduler.CreateObserver<bool>();
+                ViewModel.ShouldShowOnboarding.Subscribe(observer);
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(new string[0]);
+
+                await ViewModel.GetStartedAction.Execute(Unit.Default);
+
+                TestScheduler.Start();
+                observer.Messages.Select(message => message.Value.Value).AssertEqual(true, false);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task EmitsFalseWhenUserWantsToContinueWithoutCalendarAccess()
+            {
+                OnboardingStorage.CompletedCalendarOnboarding().Returns(false);
+                var observer = TestScheduler.CreateObserver<bool>();
+                ViewModel.ShouldShowOnboarding.Subscribe(observer);
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(false));
+                NavigationService.Navigate<CalendarPermissionDeniedViewModel, Unit>().Returns(Unit.Default);
+
+                await ViewModel.GetStartedAction.Execute(Unit.Default);
+
+                TestScheduler.Start();
+                observer.Messages.Select(message => message.Value.Value).AssertEqual(true, false);
             }
         }
 
@@ -129,7 +178,52 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.GetStartedAction.Execute(Unit.Default);
 
-                await NavigationService.Received().Navigate<CalendarPermissionDeniedViewModel>();
+                await NavigationService.Received().Navigate<CalendarPermissionDeniedViewModel, Unit>();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task NavigatesToTheSelectUserCalendarsViewModel()
+            {
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+
+                await ViewModel.GetStartedAction.Execute(Unit.Default);
+
+                await NavigationService.Received().Navigate<SelectUserCalendarsViewModel, string[]>();
+            }
+
+            [Property]
+            public void SetsTheEnabledCalendars(NonEmptyString[] nonEmptyStrings)
+            {
+                if (nonEmptyStrings == null) return;
+                var calendarIds = nonEmptyStrings.Select(str => str.Get).ToArray();
+                NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(calendarIds);
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+
+                ViewModel.GetStartedAction.Execute(Unit.Default).Wait();
+
+                InteractorFactory.Received().SetEnabledCalendars(calendarIds).Execute();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SetsCalendarOnboardingAsCompletedIfUserGrantsAccess()
+            {
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(new string[0]);
+
+                await ViewModel.GetStartedAction.Execute(Unit.Default);
+
+                OnboardingStorage.Received().SetCompletedCalendarOnboarding();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SetsCalendarOnboardingAsCompletedIfUserWantsToContinueWithoutGivingPermission()
+            {
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(false));
+                NavigationService.Navigate<CalendarPermissionDeniedViewModel, Unit>().Returns(Unit.Default);
+
+                await ViewModel.GetStartedAction.Execute(Unit.Default);
+
+                OnboardingStorage.Received().SetCompletedCalendarOnboarding();
             }
         }
 

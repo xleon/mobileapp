@@ -54,5 +54,15 @@ namespace Toggl.Daneel.Extensions
                     }
                 );
             };
+
+        public static Action<float> BindAnimatedAlpha(this UIView view)
+            => alpha =>
+            {
+                AnimationExtensions.Animate(
+                    Animation.Timings.EnterTiming,
+                    Animation.Curves.SharpCurve,
+                    () => view.Alpha = alpha
+                );
+            };
     }
 }

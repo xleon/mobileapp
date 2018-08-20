@@ -10,7 +10,7 @@ using Toggl.Multivac.Extensions;
 namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 {
     [Preserve(AllMembers = true)]
-    public sealed class CalendarPermissionDeniedViewModel : MvxViewModel
+    public sealed class CalendarPermissionDeniedViewModel : MvxViewModelResult<Unit>
     {
         private readonly IPermissionsService permissionsService;
         private readonly IMvxNavigationService navigationService;
@@ -35,7 +35,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
         private IObservable<Unit> continueWithoutAccessAction()
             => Observable
-                .FromAsync(async () => await navigationService.Close(this))
+                .FromAsync(async () => await navigationService.Close(this, Unit.Default))
                 .SelectUnit();
 
         private IObservable<Unit> enableAccess()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
@@ -26,6 +27,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         private readonly IPermissionsService permissionsService;
         private readonly IMvxNavigationService navigationService;
 
+        private readonly ISubject<bool> shouldShowOnboardingSubject;
+
         public IObservable<bool> ShouldShowOnboarding { get; }
 
         public IObservable<TimeFormat> TimeOfDayFormat { get; }
@@ -45,6 +48,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             ITimeService timeService,
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
+            ISchedulerProvider schedulerProvider,
             IPermissionsService permissionsService,
             IMvxNavigationService navigationService)
         {
@@ -52,6 +56,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
+            Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
 
@@ -62,8 +67,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             this.navigationService = navigationService;
             this.permissionsService = permissionsService;
 
-            ShouldShowOnboarding = Observable
-                .Return(!onboardingStorage.CompletedCalendarOnboarding());
+            var isCompleted = onboardingStorage.CompletedCalendarOnboarding();
+            shouldShowOnboardingSubject = new BehaviorSubject<bool>(!isCompleted);
+            ShouldShowOnboarding = shouldShowOnboardingSubject
+                .AsObservable()
+                .DistinctUntilChanged()
+                .AsDriver(false, schedulerProvider);
 
             TimeOfDayFormat = dataSource
                 .Preferences
@@ -98,16 +107,23 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         private IObservable<Unit> getStarted()
             => permissionsService
                 .RequestCalendarAuthorization()
-                .Do(handlePermissionRequestResult)
-                .SelectUnit();
+                .SelectMany(handlePermissionRequestResult);
 
-        private void handlePermissionRequestResult(bool permissionGranted)
-        {
-            if (permissionGranted)
-                Console.WriteLine("Great success");
-            else
-                navigationService.Navigate<CalendarPermissionDeniedViewModel>();
-        }
+        private IObservable<Unit> handlePermissionRequestResult(bool permissionGranted)
+            => Observable.FromAsync(async () =>
+            {
+                if (permissionGranted)
+                {
+                    var calendarIds = await navigationService.Navigate<SelectUserCalendarsViewModel, string[]>();
+                    interactorFactory.SetEnabledCalendars(calendarIds).Execute();
+                }
+                else
+                {
+                    await navigationService.Navigate<CalendarPermissionDeniedViewModel, Unit>();
+                }
+                onboardingStorage.SetCompletedCalendarOnboarding();
+                shouldShowOnboardingSubject.OnNext(false);
+            });
 
         private IObservable<Unit> onItemTapped(CalendarItem calendarItem)
             => Observable.FromAsync(async () =>
