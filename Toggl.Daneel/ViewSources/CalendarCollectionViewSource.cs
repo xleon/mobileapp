@@ -113,7 +113,7 @@ namespace Toggl.Daneel.ViewSources
 
             var indices = calendarItems
                 .Select((value, index) => new { value, index })
-                .Where(t => t.value.StartTime.Hour >= minHour && t.value.EndTime.Hour <= maxHour)
+                .Where(t => t.value.StartTime.ToLocalTime().Hour >= minHour && t.value.EndTime.ToLocalTime().Hour <= maxHour)
                 .Select(t => t.index);
 
             return indices.Select(index => NSIndexPath.FromItemSection(index, 0));
