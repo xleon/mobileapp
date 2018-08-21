@@ -9,6 +9,7 @@ using Toggl.Multivac.Extensions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
 {
+    [Preserve(AllMembers = true)]
     public sealed class CalendarSettingsViewModel : SelectUserCalendarsViewModelBase
     {
         private readonly IPermissionsService permissionsService;

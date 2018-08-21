@@ -22,6 +22,15 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIView BeginningOfWeekView { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint CalendarSectionTopConstraint { get; set; }
+
+		[Outlet]
+		UIKit.UIView CalendarSettingsSection { get; set; }
+
+		[Outlet]
+		UIKit.UIView CalendarSettingsView { get; set; }
+
+		[Outlet]
 		UIKit.UILabel DateFormatLabel { get; set; }
 
 		[Outlet]
@@ -128,6 +137,11 @@ namespace Toggl.Daneel.ViewControllers
 				AboutView = null;
 			}
 
+			if (CalendarSectionTopConstraint != null) {
+				CalendarSectionTopConstraint.Dispose ();
+				CalendarSectionTopConstraint = null;
+			}
+
 			if (BeginningOfWeekLabel != null) {
 				BeginningOfWeekLabel.Dispose ();
 				BeginningOfWeekLabel = null;
@@ -136,6 +150,16 @@ namespace Toggl.Daneel.ViewControllers
 			if (BeginningOfWeekView != null) {
 				BeginningOfWeekView.Dispose ();
 				BeginningOfWeekView = null;
+			}
+
+			if (CalendarSettingsSection != null) {
+				CalendarSettingsSection.Dispose ();
+				CalendarSettingsSection = null;
+			}
+
+			if (CalendarSettingsView != null) {
+				CalendarSettingsView.Dispose ();
+				CalendarSettingsView = null;
 			}
 
 			if (DateFormatLabel != null) {
@@ -233,6 +257,11 @@ namespace Toggl.Daneel.ViewControllers
 				ScrollView = null;
 			}
 
+			if (SendFeedbackSuccessView != null) {
+				SendFeedbackSuccessView.Dispose ();
+				SendFeedbackSuccessView = null;
+			}
+
 			if (SyncedIcon != null) {
 				SyncedIcon.Dispose ();
 				SyncedIcon = null;
@@ -296,11 +325,6 @@ namespace Toggl.Daneel.ViewControllers
 			if (WorkspaceView != null) {
 				WorkspaceView.Dispose ();
 				WorkspaceView = null;
-			}
-
-			if (SendFeedbackSuccessView != null) {
-				SendFeedbackSuccessView.Dispose ();
-				SendFeedbackSuccessView = null;
 			}
 		}
 	}

@@ -58,12 +58,16 @@ namespace Toggl.Daneel.ViewControllers
             this.BindVoid(ManualModeView.Tapped(), ViewModel.ToggleManualMode);
             this.Bind(DurationFormatView.Tapped(), ViewModel.SelectDurationFormat);
             this.Bind(BeginningOfWeekView.Tapped(), ViewModel.SelectBeginningOfWeek);
+            this.Bind(CalendarSettingsView.Tapped(), ViewModel.OpenCalendarSettingsAction);
             this.Bind(TwentyFourHourClockView.Tapped(), ViewModel.ToggleUseTwentyFourHourClock);
             this.BindVoid(SendFeedbackSuccessView.Tapped(), ViewModel.CloseFeedbackSuccessView);
 
             UIApplication.Notifications
                 .ObserveWillEnterForeground((sender, e) => startAnimations())
                 .DisposedBy(DisposeBag);
+
+            if (!ViewModel.CalendarSettingsEnabled)
+                hideCalendarSettingsSection();
         }
 
         public override void ViewWillAppear(bool animated)
@@ -88,6 +92,13 @@ namespace Toggl.Daneel.ViewControllers
             // Resize Switches
             TwentyFourHourClockSwitch.Resize();
             ManualModeSwitch.Resize();
+        }
+
+        private void hideCalendarSettingsSection()
+        {
+            CalendarSettingsSection.Hidden = true;
+            CalendarSectionTopConstraint.Constant = 0;
+            CalendarSettingsSection.HeightAnchor.ConstraintEqualTo(0).Active = true;
         }
 
         private void setIndicatorSyncColor(UIImageView imageView)
