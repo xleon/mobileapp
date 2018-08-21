@@ -72,10 +72,21 @@ namespace Toggl.Foundation.Tests.Interactors.Calendar
                         Description = "Something without project",
                         Start = new DateTimeOffset(2018, 08, 06, 09, 45, 00, TimeSpan.Zero),
                         Duration = 10
+                    },
+                    new MockTimeEntry()
+                    {
+                        Id = 4,
+                        Description = "My deleted time entry",
+                        Start = new DateTimeOffset(2018, 08, 06, 15, 45, 00, TimeSpan.Zero),
+                        Duration = 10,
+                        IsDeleted = true
                     }
                 };
 
-                calendarItemsFromTimeEntries = timeEntries.Select(CalendarItem.From).ToList();
+                calendarItemsFromTimeEntries = timeEntries
+                    .Where(te => te.IsDeleted == false)
+                    .Select(CalendarItem.From)
+                    .ToList();
 
                 date = new DateTime(2018, 08, 06);
 
@@ -86,13 +97,18 @@ namespace Toggl.Foundation.Tests.Interactors.Calendar
                 DataSource
                     .TimeEntries
                     .GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>())
-                    .Returns(Observable.Return(timeEntries));
+                    .Returns(callInfo =>
+                    {
+                        var filterFunc = callInfo.Arg<Func<IDatabaseTimeEntry, bool>>();
+                        var filteredTimeEntries = timeEntries.Where(filterFunc).Cast<IThreadSafeTimeEntry>().ToList();
+                        return Observable.Return(filteredTimeEntries);
+                    });
 
                 interactor = new GetCalendarItemsForDateInteractor(DataSource.TimeEntries, CalendarService, date);
             }
 
             [Fact, LogIfTooSlow]
-            public async Task ReturnsAllCalendarItemsForTheGivenDate()
+            public async Task ReturnsAllNonDeletedCalendarItemsForTheGivenDate()
             {
                 var calendarItems = await interactor.Execute();
 

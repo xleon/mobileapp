@@ -41,7 +41,11 @@ namespace Toggl.Foundation.Interactors.Calendar
                 .Select(orderByStartTime);
 
         private IObservable<IEnumerable<CalendarItem>> calendarItemsFromTimeEntries()
-            => timeEntriesDataSource.GetAll(timeEntry => timeEntry.Start >= date.Date && timeEntry.Start <= date.AddDays(1).Date && timeEntry.Duration != null)
+            => timeEntriesDataSource.GetAll(timeEntry 
+                    => timeEntry.IsDeleted == false
+                    && timeEntry.Start >= date.Date 
+                    && timeEntry.Start <= date.AddDays(1).Date 
+                    && timeEntry.Duration != null)
                 .Select(convertTimeEntriesToCalendarItems);
 
         private IObservable<IEnumerable<CalendarItem>> calendarItemsFromEvents()
