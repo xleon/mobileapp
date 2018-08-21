@@ -203,11 +203,18 @@ namespace Toggl.Daneel.ViewSources
                 .Aggregate(seed, (buckets, item) =>
                 {
                     var bucket = buckets.Last();
-                    var endTime = bucket.Any() ? bucket.Last().EndTime.LocalDateTime : currentDate;
-                    if (item.StartTime < endTime)
+                    if (bucket.None())
+                    {
                         bucket.Add(item);
+                    }
                     else
-                        buckets.Add(new List<CalendarItem>() { item });
+                    {
+                        var endTime = bucket.Max(i => i.EndTime.LocalDateTime);
+                        if (item.StartTime.LocalDateTime < endTime)
+                            bucket.Add(item);
+                        else
+                            buckets.Add(new List<CalendarItem>() { item });
+                    }
 
                     return buckets;
                 })
