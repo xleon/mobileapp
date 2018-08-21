@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
@@ -29,6 +31,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         private readonly IMvxNavigationService navigationService;
 
         private readonly ISubject<bool> shouldShowOnboardingSubject;
+        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         public IObservable<bool> ShouldShowOnboarding { get; }
 
@@ -96,13 +99,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 groupingKey: _ => 0);
         }
 
-        public override async Task Initialize()
-            => ReloadData();
-
-        public async Task ReloadData()
+        public async override Task Initialize()
         {
-            var today = timeService.CurrentDateTime.Date;
-            await fetchCalendarItems(today);
+            var dayChangedObservable = timeService
+                .MidnightObservable
+                .SelectUnit();
+            
+            dataSource.TimeEntries
+                .ItemsChanged()
+                .Merge(dayChangedObservable)
+                .Subscribe(reloadData)
+                .DisposedBy(disposeBag);
+                  
+            await reloadData();
         }
 
         private IObservable<Unit> getStarted()
@@ -145,19 +154,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 switch (calendarItem.Source)
                 {
                     case CalendarItemSource.TimeEntry when calendarItem.TimeEntryId.HasValue:
-                        await navigationService.Navigate<EditTimeEntryViewModel, long, Unit>(calendarItem.TimeEntryId.Value);
+                        await navigationService.Navigate<EditTimeEntryViewModel, long>(calendarItem.TimeEntryId.Value);
                         break;
 
                     case CalendarItemSource.Calendar:
                         var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
                         var prototype = calendarItem.AsTimeEntryPrototype(workspace.Id);
                         var timeEntry = await interactorFactory.CreateTimeEntry(prototype).Execute();
-                        await navigationService.Navigate<EditTimeEntryViewModel, long, Unit>(timeEntry.Id);
+                        await navigationService.Navigate<EditTimeEntryViewModel, long>(timeEntry.Id);
                         break;
                 }
-
-                await fetchCalendarItems(timeService.CurrentDateTime.Date);
-
             });
 
         private IObservable<Unit> onDurationSelected(DateTimeOffset startTime, TimeSpan duration)
@@ -167,13 +173,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 var prototype = duration.AsTimeEntryPrototype(startTime, workspace.Id);
                 await interactorFactory.CreateTimeEntry(prototype).Execute();
 
-                await fetchCalendarItems(timeService.CurrentDateTime.Date);
+                await reloadData();
             });
 
-        private async Task fetchCalendarItems(DateTime date)
-        {
-            var calendarItems = await interactorFactory.GetCalendarItemsForDate(date).Execute();
-            CalendarItems.ReplaceWith(calendarItems);
-        }
+        private async Task reloadData()
+            => await interactorFactory
+                .GetCalendarItemsForDate(timeService.CurrentDateTime.Date)
+                .Execute()
+                .Do(CalendarItems.ReplaceWith);
     }
 }

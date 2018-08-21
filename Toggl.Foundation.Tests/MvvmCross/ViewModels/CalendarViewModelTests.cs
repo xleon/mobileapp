@@ -18,6 +18,9 @@ using FsCheck;
 using System.Linq;
 using Microsoft.Reactive.Testing;
 using Toggl.Multivac;
+using System.Reactive.Subjects;
+using Toggl.Foundation.Models.Interfaces;
+using Toggl.Foundation.DataSources;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -269,6 +272,82 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.CalendarItems[0].Should().BeEquivalentTo(items);
             }
+
+            [Fact]
+            public async Task RefetchesWheneverATimeEntryIsAdded()
+            {
+                var deletedSubject = new Subject<long>();
+                var midnightSubject = new Subject<DateTimeOffset>();
+                var createdSubject = new Subject<IThreadSafeTimeEntry>();
+                var updatedSubject = new Subject<EntityUpdate<IThreadSafeTimeEntry>>();
+                DataSource.TimeEntries.Deleted.Returns(deletedSubject);
+                DataSource.TimeEntries.Updated.Returns(updatedSubject);
+                DataSource.TimeEntries.Created.Returns(createdSubject);
+                TimeService.MidnightObservable.Returns(midnightSubject);
+                await ViewModel.Initialize();
+                CalendarInteractor.ClearReceivedCalls();
+
+                createdSubject.OnNext(new MockTimeEntry());
+
+                await CalendarInteractor.Received().Execute();
+            }
+
+            [Fact]
+            public async Task RefetchesWheneverATimeEntryIsUpdated()
+            {
+                var deletedSubject = new Subject<long>();
+                var midnightSubject = new Subject<DateTimeOffset>();
+                var createdSubject = new Subject<IThreadSafeTimeEntry>();
+                var updatedSubject = new Subject<EntityUpdate<IThreadSafeTimeEntry>>();
+                DataSource.TimeEntries.Deleted.Returns(deletedSubject);
+                DataSource.TimeEntries.Updated.Returns(updatedSubject);
+                DataSource.TimeEntries.Created.Returns(createdSubject);
+                TimeService.MidnightObservable.Returns(midnightSubject);
+                await ViewModel.Initialize();
+                CalendarInteractor.ClearReceivedCalls();
+
+                updatedSubject.OnNext(new EntityUpdate<IThreadSafeTimeEntry>(0, new MockTimeEntry()));
+
+                await CalendarInteractor.Received().Execute();
+            }
+
+            [Fact]
+            public async Task RefetchesWheneverATimeEntryIsDeleted()
+            {
+                var deletedSubject = new Subject<long>();
+                var midnightSubject = new Subject<DateTimeOffset>();
+                var createdSubject = new Subject<IThreadSafeTimeEntry>();
+                var updatedSubject = new Subject<EntityUpdate<IThreadSafeTimeEntry>>();
+                DataSource.TimeEntries.Deleted.Returns(deletedSubject);
+                DataSource.TimeEntries.Updated.Returns(updatedSubject);
+                DataSource.TimeEntries.Created.Returns(createdSubject);
+                TimeService.MidnightObservable.Returns(midnightSubject);
+                await ViewModel.Initialize();
+                CalendarInteractor.ClearReceivedCalls();
+
+                deletedSubject.OnNext(0);
+
+                await CalendarInteractor.Received().Execute();
+            }
+
+            [Fact]
+            public async Task RefetchesWheneverTheDayChanges()
+            {
+                var deletedSubject = new Subject<long>();
+                var midnightSubject = new Subject<DateTimeOffset>();
+                var createdSubject = new Subject<IThreadSafeTimeEntry>();
+                var updatedSubject = new Subject<EntityUpdate<IThreadSafeTimeEntry>>();
+                DataSource.TimeEntries.Deleted.Returns(deletedSubject);
+                DataSource.TimeEntries.Updated.Returns(updatedSubject);
+                DataSource.TimeEntries.Created.Returns(createdSubject);
+                TimeService.MidnightObservable.Returns(midnightSubject);
+                await ViewModel.Initialize();
+                CalendarInteractor.ClearReceivedCalls();
+
+                midnightSubject.OnNext(DateTimeOffset.Now);
+
+                await CalendarInteractor.Received().Execute();
+            }
         }
 
         public abstract class TheOnItemTappedAction : CalendarViewModelTest
@@ -280,15 +359,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.OnItemTapped.Execute(CalendarItem);
 
-                await NavigationService.Received().Navigate<EditTimeEntryViewModel, long, Unit>(Arg.Is(TimeEntryId));
-            }
-
-            [Fact]
-            public async Task RefetchesTheTimeEntryItemsUsingTheInteractor()
-            {
-                await ViewModel.OnItemTapped.Execute(CalendarItem);
-
-                await CalendarInteractor.Received().Execute();
+                await NavigationService.Received().Navigate<EditTimeEntryViewModel, long>(Arg.Is(TimeEntryId));
             }
 
             public sealed class WhenHandlingTimeEntryItems : TheOnItemTappedAction

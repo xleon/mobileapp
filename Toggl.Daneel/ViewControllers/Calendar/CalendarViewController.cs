@@ -46,11 +46,5 @@ namespace Toggl.Daneel.ViewControllers
             this.Bind(dataSource.ItemTapped, ViewModel.OnItemTapped);
             this.Bind(longPressHelper.CreateFromSpan, ViewModel.OnDurationSelected);
         }
-
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
-            ViewModel.ReloadData();
-        }
     }
 }

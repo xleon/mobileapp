@@ -26,7 +26,7 @@ using System.Reactive;
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class EditTimeEntryViewModel : MvxViewModel<long, Unit>
+    public sealed class EditTimeEntryViewModel : MvxViewModel<long>
     {
         private const int maxTagLength = 30;
 
@@ -352,7 +352,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private Task close()
-            => navigationService.Close(this, Unit.Default);
+            => navigationService.Close(this);
 
         private async Task selectStartTime()
         {
