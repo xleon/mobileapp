@@ -193,7 +193,11 @@ namespace Toggl.Daneel.ViewSources
         {
             if (!scrollView.Dragging || wasReleased) return;
 
-            if (offset.Y >= 0) return;
+            if (offset.Y >= 0) 
+            {
+                heightConstraint.Constant = 0;
+                return;
+            }
 
             heightConstraint.Constant = -offset.Y;
             syncStateView.SetNeedsLayout();
