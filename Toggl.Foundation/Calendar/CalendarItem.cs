@@ -39,7 +39,7 @@ namespace Toggl.Foundation.Calendar
             StartTime = startTime;
             Duration = duration;
             Description = description;
-            Color = color;
+            Color = ColorHelper.IsValidHexColor(color) ? color : ColorHelper.NoProject;
             TimeEntryId = timeEntryId;
             CalendarId = calendarId;
             IconKind = iconKind;
