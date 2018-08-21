@@ -40,12 +40,9 @@ namespace Toggl.Daneel.Cells.Calendar
 
         public override void AwakeFromNib()
         {
-
-
             base.AwakeFromNib();
-            CalendarIconImageView.Image = UIImage
-                .FromBundle("icCalendarSmall")
-                .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
+            CalendarIconWidthConstrarint.Constant = 8;
+            CalendarIconHeightConstrarint.Constant = 8;
         }
 
         protected override void UpdateView()
@@ -55,6 +52,7 @@ namespace Toggl.Daneel.Cells.Calendar
             DescriptionLabel.TextColor = textColor(color);
             ColorView.BackgroundColor = backgroundColor(Item.Source, color);
             updateIcon(color);
+            updateSizes();
         }
 
         private UIColor backgroundColor(CalendarItemSource source, UIColor color)
@@ -98,6 +96,26 @@ namespace Toggl.Daneel.Cells.Calendar
             CalendarIconTrailingConstraint.Active = true;
             CalendarIconImageView.TintColor = textColor(color);
             CalendarIconImageView.Image = images[Item.IconKind];
+        }
+
+        private void updateSizes()
+        {
+            if (Item.Duration < TimeSpan.FromMinutes(30))
+            {
+                DescriptionLabelTopConstraint.Constant = 0;
+                DescriptionLabelBottomConstraint.Constant = 0;
+                CalendarIconWidthConstrarint.Active = true;
+                CalendarIconHeightConstrarint.Active = true;
+                CalendarIconBaselineConstraint.Active = false;
+            }
+            else
+            {
+                DescriptionLabelTopConstraint.Constant = 6;
+                DescriptionLabelBottomConstraint.Constant = 6;
+                CalendarIconWidthConstrarint.Active = false;
+                CalendarIconHeightConstrarint.Active = false;
+                CalendarIconBaselineConstraint.Active = true;
+            }
         }
     }
 }

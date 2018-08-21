@@ -13,6 +13,12 @@ namespace Toggl.Daneel.Cells.Calendar
 	partial class CalendarItemView
 	{
 		[Outlet]
+		UIKit.NSLayoutConstraint CalendarIconBaselineConstraint { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint CalendarIconHeightConstrarint { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView CalendarIconImageView { get; set; }
 
 		[Outlet]
@@ -22,13 +28,27 @@ namespace Toggl.Daneel.Cells.Calendar
 		UIKit.NSLayoutConstraint CalendarIconTrailingConstraint { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint CalendarIconWidthConstrarint { get; set; }
+
+		[Outlet]
 		UIKit.UIView ColorView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel DescriptionLabel { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint DescriptionLabelBottomConstraint { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint DescriptionLabelTopConstraint { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (CalendarIconHeightConstrarint != null) {
+				CalendarIconHeightConstrarint.Dispose ();
+				CalendarIconHeightConstrarint = null;
+			}
+
 			if (CalendarIconImageView != null) {
 				CalendarIconImageView.Dispose ();
 				CalendarIconImageView = null;
@@ -44,14 +64,34 @@ namespace Toggl.Daneel.Cells.Calendar
 				CalendarIconTrailingConstraint = null;
 			}
 
-			if (DescriptionLabel != null) {
-				DescriptionLabel.Dispose ();
-				DescriptionLabel = null;
+			if (CalendarIconWidthConstrarint != null) {
+				CalendarIconWidthConstrarint.Dispose ();
+				CalendarIconWidthConstrarint = null;
+			}
+
+			if (CalendarIconBaselineConstraint != null) {
+				CalendarIconBaselineConstraint.Dispose ();
+				CalendarIconBaselineConstraint = null;
 			}
 
 			if (ColorView != null) {
 				ColorView.Dispose ();
 				ColorView = null;
+			}
+
+			if (DescriptionLabel != null) {
+				DescriptionLabel.Dispose ();
+				DescriptionLabel = null;
+			}
+
+			if (DescriptionLabelBottomConstraint != null) {
+				DescriptionLabelBottomConstraint.Dispose ();
+				DescriptionLabelBottomConstraint = null;
+			}
+
+			if (DescriptionLabelTopConstraint != null) {
+				DescriptionLabelTopConstraint.Dispose ();
+				DescriptionLabelTopConstraint = null;
 			}
 		}
 	}
