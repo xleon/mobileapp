@@ -32,8 +32,9 @@ namespace Toggl.Daneel.Services
 
             var calendarItems = eventStore
                 .EventsMatching(predicate)
-                .Where(isValidEvent)
-                .Select(calendarItemFromEvent);
+                ?.Where(isValidEvent)
+                ?.Select(calendarItemFromEvent)
+                ?? new CalendarItem[0];
 
             return Observable.Return(calendarItems);
         }
