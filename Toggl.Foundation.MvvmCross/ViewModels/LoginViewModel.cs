@@ -1,15 +1,14 @@
 using System;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Login;
+using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
@@ -34,11 +33,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ILoginManager loginManager;
         private readonly IAnalyticsService analyticsService;
         private readonly IOnboardingStorage onboardingStorage;
-        private readonly IMvxNavigationService navigationService;
+        private readonly IForkingNavigationService navigationService;
         private readonly IPasswordManagerService passwordManagerService;
         private readonly IErrorHandlingService errorHandlingService;
         private readonly ILastTimeUsageStorage lastTimeUsageStorage;
         private readonly ITimeService timeService;
+        private readonly ISchedulerProvider schedulerProvider;
 
         private IDisposable loginDisposable;
 
@@ -63,7 +63,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IObservable<bool> LoginEnabled { get; }
 
         public IObservable<ShakeTargets> Shake { get; }
-        
+
         public IObservable<string> ErrorMessage { get; }
 
         public IObservable<bool> IsPasswordMasked { get; }
@@ -74,11 +74,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ILoginManager loginManager,
             IAnalyticsService analyticsService,
             IOnboardingStorage onboardingStorage,
-            IMvxNavigationService navigationService,
+            IForkingNavigationService navigationService,
             IPasswordManagerService passwordManagerService,
             IErrorHandlingService errorHandlingService,
             ILastTimeUsageStorage lastTimeUsageStorage,
-            ITimeService timeService)
+            ITimeService timeService,
+            ISchedulerProvider schedulerProvider)
         {
             Ensure.Argument.IsNotNull(loginManager, nameof(loginManager));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
@@ -88,6 +89,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(errorHandlingService, nameof(errorHandlingService));
             Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
             this.timeService = timeService;
             this.loginManager = loginManager;
@@ -97,48 +99,53 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.errorHandlingService = errorHandlingService;
             this.lastTimeUsageStorage = lastTimeUsageStorage;
             this.passwordManagerService = passwordManagerService;
+            this.schedulerProvider = schedulerProvider;
 
-            var passwordObservable = passwordSubject.AsObservable();
-            var emailObservable = emailSubject.AsObservable().Select(email => email.TrimmedEnd());
+            var emailObservable = emailSubject.Select(email => email.TrimmedEnd());
 
-            Shake = shakeSubject.AsObservable();
+            Shake = shakeSubject.AsDriver(this.schedulerProvider);
 
             Email = emailObservable
                 .Select(email => email.ToString())
-                .DistinctUntilChanged();
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
 
             Password = passwordSubject
                 .Select(password => password.ToString())
-                .DistinctUntilChanged();
-            
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
+
             IsLoading = isLoadingSubject
-                .AsObservable()
-                .DistinctUntilChanged();
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
 
             ErrorMessage = errorMessageSubject
-                .AsObservable()
-                .DistinctUntilChanged();
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
 
             IsPasswordMasked = isPasswordMaskedSubject
-                .AsObservable()
-                .DistinctUntilChanged();
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
 
             IsShowPasswordButtonVisible = Password
                 .Select(password => password.Length > 1)
                 .CombineLatest(isShowPasswordButtonVisibleSubject.AsObservable(), CommonFunctions.And)
-                .DistinctUntilChanged();
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
 
             HasError = ErrorMessage
                 .Select(string.IsNullOrEmpty)
-                .Select(CommonFunctions.Invert);
+                .Select(CommonFunctions.Invert)
+                .AsDriver(this.schedulerProvider);
 
             LoginEnabled = emailObservable
                 .CombineLatest(
-                    passwordObservable,
+                    passwordSubject.AsObservable(),
                     IsLoading,
                     (email, password, isLoading) => email.IsValid && password.IsValid && !isLoading)
-                .DistinctUntilChanged();
-            
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
+
             IsPasswordManagerAvailable = passwordManagerService.IsAvailable;
         }
 
@@ -246,7 +253,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             onboardingStorage.SetIsNewUser(false);
 
-            await navigationService.Navigate<MainViewModel>();
+            await navigationService.ForkNavigate<MainTabBarViewModel, MainViewModel>();
         }
 
         private void onError(Exception exception)

@@ -67,9 +67,6 @@ namespace Toggl.Foundation.Analytics
 
         [AnalyticsEvent("Source")]
         public IAnalyticsEvent<ProjectTagSuggestionSource> StartEntrySelectTag { get; protected set; }
-
-        [AnalyticsEvent]
-        public IAnalyticsEvent AppWasRated { get; protected set; }
       
         [AnalyticsEvent]
         public IAnalyticsEvent RatingViewWasShown { get; protected set; }
@@ -79,6 +76,24 @@ namespace Toggl.Foundation.Analytics
       
         [AnalyticsEvent("outcome")]
         public IAnalyticsEvent<RatingViewSecondStepOutcome> UserFinishedRatingViewSecondStep { get; protected set; }
+
+        [AnalyticsEvent]
+        public IAnalyticsEvent RatingViewFirstStepLike { get; protected set; }
+
+        [AnalyticsEvent]
+        public IAnalyticsEvent RatingViewFirstStepDislike { get; protected set; }
+
+        [AnalyticsEvent]
+        public IAnalyticsEvent RatingViewSecondStepRate { get; protected set; }
+        
+        [AnalyticsEvent]
+        public IAnalyticsEvent RatingViewSecondStepDontRate { get; protected set; }
+
+        [AnalyticsEvent]
+        public IAnalyticsEvent RatingViewSecondStepSendFeedback { get; protected set; }
+
+        [AnalyticsEvent]
+        public IAnalyticsEvent RatingViewSecondStepDontSendFeedback { get; protected set; }
 
         [AnalyticsEvent("Source", "TotalDays", "ProjectsNotSynced", "LoadingTime")]
         public IAnalyticsEvent<ReportsSource, int, int, double> ReportsSuccess { get; protected set; }

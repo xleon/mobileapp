@@ -7,6 +7,7 @@ using Android.Views;
 using MvvmCross;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platforms.Android;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
 
 namespace Toggl.Giskard.Adapters
 {
@@ -33,9 +34,6 @@ namespace Toggl.Giskard.Adapters
             : base(javaReference, transfer)
         {
         }
-
-        public override int ItemCount 
-            => base.ItemCount;
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {

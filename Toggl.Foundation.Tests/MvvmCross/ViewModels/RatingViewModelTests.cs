@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
-using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
+using NUnit.Framework;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
@@ -36,12 +35,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     RatingService,
                     AnalyticsService,
                     OnboardingStorage,
-                    NavigationService);
+                    NavigationService,
+                    SchedulerProvider);
         }
 
         public sealed class TheConstructor : RatingViewModelTest
         {
-            [Theory, LogIfTooSlow]
+            [Xunit.Theory, LogIfTooSlow]
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
@@ -49,7 +49,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useRatingService,
                 bool useAnalyticsService,
                 bool useOnboardingStorage,
-                bool useNavigationService)
+                bool useNavigationService,
+                bool useSchedulerProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
@@ -57,6 +58,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var navigationService = useNavigationService ? NavigationService : null;
+                var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new RatingViewModel(
@@ -65,7 +67,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         ratingService,
                         analyticsService,
                         onboardingStorage,
-                        navigationService);
+                        navigationService,
+                        schedulerProvider);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -74,18 +77,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheRegisterImpressionMethod : RatingViewModelTest
         {
-            [Property]
+            [FsCheck.Xunit.Property]
             public void EmitsNewImpression(bool impressionIsPositive)
             {
-                var observer = Substitute.For<IObserver<bool?>>();
-                ViewModel.Impression.Subscribe(observer);
+                var expectedValues = new[] { (bool?)null, impressionIsPositive };
+                var actualValues = new List<bool?>();
+                var viewModel = CreateViewModel();
+                viewModel.Impression.Subscribe(actualValues.Add);
 
-                ViewModel.RegisterImpression(impressionIsPositive);
+                viewModel.RegisterImpression(impressionIsPositive);
 
-                observer.Received().OnNext(impressionIsPositive);
+                TestScheduler.Start();
+                CollectionAssert.AreEqual(expectedValues, actualValues);
             }
 
-            [Property]
+            [FsCheck.Xunit.Property]
             public void TracksTheUserFinishedRatingViewFirstStepEvent(bool impressionIsPositive)
             {
                 ViewModel.RegisterImpression(impressionIsPositive);
@@ -100,35 +106,48 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 protected abstract string ExpectedCtaDescription { get; }
                 protected abstract string ExpectedCtaButtonTitle { get; }
                 protected abstract RatingViewOutcome ExpectedStorageOucome { get; }
+                protected abstract IAnalyticsEvent ExpectedEvent { get; }
 
                 [Fact, LogIfTooSlow]
                 public void SetsTheAppropriateCtaTitle()
                 {
-                    var observer = Substitute.For<IObserver<string>>();
+                    var observer = TestScheduler.CreateObserver<string>();
                     ViewModel.CtaTitle.Subscribe(observer);
                     ViewModel.RegisterImpression(ImpressionIsPositive);
 
-                    observer.Received().OnNext(ExpectedCtaTitle);
+                    TestScheduler.Start();
+                    observer.Messages.AssertEqual(
+                        ReactiveTest.OnNext(1, ""),
+                        ReactiveTest.OnNext(2, ExpectedCtaTitle)
+                    );
                 }
 
                 [Fact, LogIfTooSlow]
                 public void SetsTheAppropriateCtaDescription()
                 {
-                    var observer = Substitute.For<IObserver<string>>();
+                    var observer = TestScheduler.CreateObserver<string>();
                     ViewModel.CtaDescription.Subscribe(observer);
                     ViewModel.RegisterImpression(ImpressionIsPositive);
 
-                    observer.Received().OnNext(ExpectedCtaDescription);
+                    TestScheduler.Start();
+                    observer.Messages.AssertEqual(
+                        ReactiveTest.OnNext(1, ""),
+                        ReactiveTest.OnNext(2, ExpectedCtaDescription)
+                    );
                 }
 
                 [Fact, LogIfTooSlow]
                 public void SetsTheAppropriateCtaButtonTitle()
                 {
-                    var observer = Substitute.For<IObserver<string>>();
+                    var observer = TestScheduler.CreateObserver<string>();
                     ViewModel.CtaButtonTitle.Subscribe(observer);
                     ViewModel.RegisterImpression(ImpressionIsPositive);
 
-                    observer.Received().OnNext(ExpectedCtaButtonTitle);
+                    TestScheduler.Start();
+                    observer.Messages.AssertEqual(
+                        ReactiveTest.OnNext(1, ""),
+                        ReactiveTest.OnNext(2, ExpectedCtaButtonTitle)
+                    );
                 }
 
                 [Fact, LogIfTooSlow]
@@ -137,6 +156,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.RegisterImpression(ImpressionIsPositive);
 
                     OnboardingStorage.Received().SetRatingViewOutcome(ExpectedStorageOucome, CurrentDateTime);
+                }
+
+                [Fact, LogIfTooSlow]
+                public void TracksTheCorrectEvent()
+                {
+                    ViewModel.RegisterImpression(ImpressionIsPositive);
+
+                    ExpectedEvent.Received().Track();
                 }
             }
 
@@ -147,6 +174,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 protected override string ExpectedCtaDescription => Resources.RatingViewPositiveCTADescription;
                 protected override string ExpectedCtaButtonTitle => Resources.RatingViewPositiveCTAButtonTitle;
                 protected override RatingViewOutcome ExpectedStorageOucome => RatingViewOutcome.PositiveImpression;
+                protected override IAnalyticsEvent ExpectedEvent => AnalyticsService.RatingViewFirstStepLike;
             }
 
             public sealed class WhenImpressionIsNegative : RegisterImpressionMethodTest
@@ -156,6 +184,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 protected override string ExpectedCtaDescription => Resources.RatingViewNegativeCTADescription;
                 protected override string ExpectedCtaButtonTitle => Resources.RatingViewNegativeCTAButtonTitle;
                 protected override RatingViewOutcome ExpectedStorageOucome => RatingViewOutcome.NegativeImpression;
+                protected override IAnalyticsEvent ExpectedEvent => AnalyticsService.RatingViewFirstStepDislike;
             }
         }
 
@@ -163,9 +192,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         {
             public abstract class PerformMainActionMethodTest : RatingViewModelTest
             {
+                protected abstract bool ImpressionIsPositive { get; }
                 protected abstract void EnsureCorrectActionWasPerformed();
                 protected abstract RatingViewSecondStepOutcome ExpectedEventParameterToTrack { get; }
                 protected abstract RatingViewOutcome ExpectedStoragetOutcome { get; }
+                protected abstract IAnalyticsEvent ExpectedEvent { get; }
+
+                protected override void AdditionalViewModelSetup()
+                {
+                    ViewModel.RegisterImpression(ImpressionIsPositive);
+                }
 
                 [Fact, LogIfTooSlow]
                 public async Task PerformsTheCorrectAction()
@@ -187,6 +223,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
+                public async Task TracksTheCorrectEvent()
+                {
+                    await ViewModel.PerformMainAction();
+
+                    ExpectedEvent.Received().Track();
+                }
+
+                [Fact, LogIfTooSlow]
                 public async Task StoresTheAppropriateRatingViewOutcomeAndTime()
                 {
                     await ViewModel.PerformMainAction();
@@ -199,17 +243,28 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             public sealed class WhenImpressionIsPositive : PerformMainActionMethodTest
             {
+                protected override bool ImpressionIsPositive => true;
                 protected override RatingViewOutcome ExpectedStoragetOutcome => RatingViewOutcome.AppWasRated;
                 protected override RatingViewSecondStepOutcome ExpectedEventParameterToTrack => RatingViewSecondStepOutcome.AppWasRated;
-
-                protected override void AdditionalViewModelSetup()
-                {
-                    ViewModel.RegisterImpression(true);
-                }
+                protected override IAnalyticsEvent ExpectedEvent => AnalyticsService.RatingViewSecondStepRate;
 
                 protected override void EnsureCorrectActionWasPerformed()
                 {
                     RatingService.Received().AskForRating();
+                }
+            }
+
+            public sealed class WhenImpressionIsNegative : PerformMainActionMethodTest
+            {
+                protected override bool ImpressionIsPositive => false;
+                protected override RatingViewOutcome ExpectedStoragetOutcome => RatingViewOutcome.FeedbackWasLeft;
+                protected override RatingViewSecondStepOutcome ExpectedEventParameterToTrack => RatingViewSecondStepOutcome.FeedbackWasLeft;
+                protected override IAnalyticsEvent ExpectedEvent => AnalyticsService.RatingViewSecondStepSendFeedback;
+
+                protected override void EnsureCorrectActionWasPerformed()
+                {
+                    NavigationService.Received().Navigate<SendFeedbackViewModel, bool>()
+                        .Wait();
                 }
             }
 
@@ -233,7 +288,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Dismiss();
 
                 NavigationService.Received().ChangePresentation(
-                    Arg.Is<ToggleRatingViewVisibilityHint>(hint => hint.ForceHide == true)
+                    Arg.Is<ToggleRatingViewVisibilityHint>(hint => hint.ShouldHide == true)
                 );
             }
 
@@ -259,6 +314,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 protected abstract bool ImpressionIsPositive { get; }
                 protected abstract RatingViewOutcome ExpectedStorageOutcome { get; }
                 protected abstract RatingViewSecondStepOutcome ExpectedEventParameterToTrack { get; }
+                protected abstract IAnalyticsEvent ExpectedEvent { get; }
 
                 protected override void AdditionalViewModelSetup()
                 {
@@ -273,11 +329,20 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     OnboardingStorage.Received().SetRatingViewOutcome(ExpectedStorageOutcome, CurrentDateTime);
                 }
 
+                [Fact, LogIfTooSlow]
                 public void TracksTheAppropriateEventWithTheExpectedParameter()
                 {
                     ViewModel.Dismiss();
 
                     AnalyticsService.UserFinishedRatingViewSecondStep.Received().Track(ExpectedEventParameterToTrack);
+                }
+
+                [Fact, LogIfTooSlow]
+                public async Task TracksTheCorrectEvent()
+                {
+                    ViewModel.Dismiss();
+
+                    ExpectedEvent.Received().Track();
                 }
             }
 
@@ -286,6 +351,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 protected override bool ImpressionIsPositive => true;
                 protected override RatingViewOutcome ExpectedStorageOutcome => RatingViewOutcome.AppWasNotRated;
                 protected override RatingViewSecondStepOutcome ExpectedEventParameterToTrack => RatingViewSecondStepOutcome.AppWasNotRated;
+                protected override IAnalyticsEvent ExpectedEvent => AnalyticsService.RatingViewSecondStepDontRate;
             }
 
             public sealed class WhenImpressionIsNegative : DismissMethodTest
@@ -293,6 +359,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 protected override bool ImpressionIsPositive => false;
                 protected override RatingViewOutcome ExpectedStorageOutcome => RatingViewOutcome.FeedbackWasNotLeft;
                 protected override RatingViewSecondStepOutcome ExpectedEventParameterToTrack => RatingViewSecondStepOutcome.FeedbackWasNotLeft;
+                protected override IAnalyticsEvent ExpectedEvent => AnalyticsService.RatingViewSecondStepDontSendFeedback;
             }
 
             public sealed class TheIsFeedBackSuccessViewShowingProperty : RatingViewModelTest
@@ -303,9 +370,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     var observer = TestScheduler.CreateObserver<bool>();
                     var viewModel = CreateViewModel();
 
-                    viewModel.IsFeedbackSuccessViewShowing.StartWith(true).Subscribe(observer);
+                    viewModel.IsFeedbackSuccessViewShowing.Subscribe(observer);
                     viewModel.CloseFeedbackSuccessView();
-                    observer.Messages.Last().Value.Value.Should().BeFalse();
+                    TestScheduler.Start();
+                    observer.Messages.AssertEqual(
+                        ReactiveTest.OnNext(1, false)
+                    );
                 }
             }
         }

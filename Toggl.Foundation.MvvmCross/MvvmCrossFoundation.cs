@@ -30,18 +30,20 @@ namespace Toggl.Foundation.MvvmCross
         public ILicenseProvider LicenseProvider { get; }
         public IAnalyticsService AnalyticsService { get; }
         public IBackgroundService BackgroundService { get; }
+        public ISchedulerProvider SchedulerProvider { get; }
         public IPlatformConstants PlatformConstants { get; }
         public IRemoteConfigService RemoteConfigService { get; }
         public IApplicationShortcutCreator ShortcutCreator { get; }
         public ISuggestionProviderContainer SuggestionProviderContainer { get; }
 
+        public PlatformInfo PlatformInfo { get; }
         public IDialogService DialogService { get; }
         public IBrowserService BrowserService { get; }
         public IKeyValueStorage KeyValueStorage { get; }
         public IUserPreferences UserPreferences { get; }
         public IFeedbackService FeedbackService { get; }
         public IOnboardingStorage OnboardingStorage { get; }
-        public IMvxNavigationService NavigationService { get; }
+        public IForkingNavigationService NavigationService { get; }
         public IPasswordManagerService PasswordManagerService { get; }
         public IErrorHandlingService ErrorHandlingService { get; }
         public IAccessRestrictionStorage AccessRestrictionStorage { get; }
@@ -70,6 +72,7 @@ namespace Toggl.Foundation.MvvmCross
             ApiFactory = builder.Foundation.ApiFactory;
             TimeService = builder.Foundation.TimeService;
             MailService = builder.Foundation.MailService;
+            PlatformInfo = builder.Foundation.PlatformInfo;
             RatingService = builder.Foundation.RatingService;
             GoogleService = builder.Foundation.GoogleService;
             ApiEnvironment = builder.Foundation.ApiEnvironment;
@@ -77,6 +80,7 @@ namespace Toggl.Foundation.MvvmCross
             ShortcutCreator = builder.Foundation.ShortcutCreator;
             AnalyticsService = builder.Foundation.AnalyticsService;
             PlatformConstants = builder.Foundation.PlatformConstants;
+            SchedulerProvider = builder.Foundation.SchedulerProvider;
             BackgroundService = builder.Foundation.BackgroundService;
             RemoteConfigService = builder.Foundation.RemoteConfigService;
             SuggestionProviderContainer = builder.Foundation.SuggestionProviderContainer;
@@ -91,7 +95,7 @@ namespace Toggl.Foundation.MvvmCross
             public IUserPreferences UserPreferences { get; private set; }
             public IFeedbackService FeedbackService { get; private set; }
             public IOnboardingStorage OnboardingStorage { get; private set; }
-            public IMvxNavigationService NavigationService { get; private set; }
+            public IForkingNavigationService NavigationService { get; private set; }
             public IPasswordManagerService PasswordManagerService { get; private set; }
             public IErrorHandlingService ErrorHandlingService { get; private set; }
             public IAccessRestrictionStorage AccessRestrictionStorage { get; private set; }
@@ -146,7 +150,7 @@ namespace Toggl.Foundation.MvvmCross
                 return this;
             }
 
-            public Builder WithNavigationService(IMvxNavigationService navigationService)
+            public Builder WithNavigationService(IForkingNavigationService navigationService)
             {
                 NavigationService = navigationService;
                 return this;
@@ -195,7 +199,7 @@ namespace Toggl.Foundation.MvvmCross
                 => WithOnboardingStorage(new TOnboardingStorage());
 
             public Builder WithNavigationService<TNavigationService>()
-                where TNavigationService : IMvxNavigationService, new()
+                where TNavigationService : IForkingNavigationService, new()
                 => WithNavigationService(new TNavigationService());
 
             public Builder WithPasswordManagerService<TPasswordManagerService>()

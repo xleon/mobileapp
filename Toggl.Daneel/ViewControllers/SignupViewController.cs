@@ -148,7 +148,7 @@ namespace Toggl.Daneel.ViewControllers
             NavigationController.NavigationBarHidden = true;
 
             ActivityIndicator.Alpha = 0;
-            ActivityIndicator.StartAnimation();
+            ActivityIndicator.StartSpinning();
 
             SignupButton.SetTitleColor(
                 Color.Login.DisabledButtonColor.ToNativeColor(),

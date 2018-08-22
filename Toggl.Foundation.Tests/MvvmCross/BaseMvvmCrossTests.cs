@@ -1,12 +1,11 @@
-﻿using MvvmCross.IoC;
-using MvvmCross.Logging;
-using MvvmCross.Navigation;
-using MvvmCross.Tests;
+﻿using MvvmCross.Navigation;
 using NSubstitute;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Interactors;
+using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Shortcuts;
+using Toggl.Multivac;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 
@@ -23,6 +22,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
         protected IApplicationShortcutCreator ApplicationShortcutCreator { get; }
             = Substitute.For<IApplicationShortcutCreator>();
 
-        protected IMvxNavigationService NavigationService { get; } = Substitute.For<IMvxNavigationService>();
+        protected IForkingNavigationService NavigationService { get; } = Substitute.For<IForkingNavigationService>();
+        protected TestSchedulerProvider SchedulerProvider { get; } = new TestSchedulerProvider();
     }
 }

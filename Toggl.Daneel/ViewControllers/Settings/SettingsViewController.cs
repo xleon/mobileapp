@@ -98,8 +98,8 @@ namespace Toggl.Daneel.ViewControllers
 
         private void startAnimations()
         {
-            SyncingActivityIndicatorView.StartAnimation();
-            LoggingOutActivityIndicatorView.StartAnimation();
+            SyncingActivityIndicatorView.StartSpinning();
+            LoggingOutActivityIndicatorView.StartSpinning();
         }
 
         private void tryAlignLogoutButtonWithBottomEdge()

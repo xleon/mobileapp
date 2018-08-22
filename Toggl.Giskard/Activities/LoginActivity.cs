@@ -3,6 +3,7 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using Android.Views.InputMethods;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
@@ -42,6 +43,7 @@ namespace Toggl.Giskard.Activities
             //Commands
             this.Bind(signupCard.Tapped(), ViewModel.Signup);
             this.BindVoid(loginButton.Tapped(), ViewModel.Login);
+            this.BindVoid(passwordEditText.EditorActionSent(), ViewModel.Login);
             this.BindVoid(googleLoginButton.Tapped(), ViewModel.GoogleLogin);
             this.Bind(forgotPasswordView.Tapped(), ViewModel.ForgotPassword);
 

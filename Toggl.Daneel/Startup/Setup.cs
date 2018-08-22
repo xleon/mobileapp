@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using ColorPlugin = MvvmCross.Plugin.Color.Platforms.Ios.Plugin;
 using VisibilityPlugin = MvvmCross.Plugin.Visibility.Platforms.Ios.Plugin;
+using Toggl.Multivac.Extensions;
 
 namespace Toggl.Daneel
 {
@@ -33,7 +34,8 @@ namespace Toggl.Daneel
         private const int maxNumberOfSuggestions = 3;
 
         private IAnalyticsService analyticsService;
-        private IMvxNavigationService navigationService;
+        private IForkingNavigationService navigationService;
+        private PlatformInfo platformInfo;
 
 #if USE_PRODUCTION_API
         private const ApiEnvironment environment = ApiEnvironment.Production;
@@ -47,12 +49,14 @@ namespace Toggl.Daneel
         protected override IMvxNavigationService InitializeNavigationService(IMvxViewModelLocatorCollection collection)
         {
             analyticsService = new AnalyticsService();
+            platformInfo = new PlatformInfo { Platform = Platform.Daneel };
 
             var loader = CreateViewModelLoader(collection);
             Mvx.RegisterSingleton<IMvxViewModelLoader>(loader);
 
-            navigationService = new TrackingNavigationService(null, loader, analyticsService);
+            navigationService = new NavigationService(null, loader, analyticsService, platformInfo);
 
+            Mvx.RegisterSingleton<IForkingNavigationService>(navigationService);
             Mvx.RegisterSingleton<IMvxNavigationService>(navigationService);
             return navigationService;
         }
@@ -71,6 +75,7 @@ namespace Toggl.Daneel
 #endif
 
             const string clientName = "Daneel";
+            const string remoteConfigDefaultsFileName = "RemoteConfigDefaults";
             var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"].ToString();
             var database = new Database();
             var scheduler = Scheduler.Default;
@@ -87,6 +92,9 @@ namespace Toggl.Daneel
             var userAgent = new UserAgent(clientName, version);
             var keyValueStorage = new UserDefaultsStorage();
             var settingsStorage = new SettingsStorage(Version.Parse(version), keyValueStorage);
+            var remoteConfigService = new RemoteConfigService();
+            remoteConfigService.SetupDefaults(remoteConfigDefaultsFileName);
+            var schedulerProvider = new IOSSchedulerProvider();
 
             var foundation =
                 TogglFoundation
@@ -100,12 +108,14 @@ namespace Toggl.Daneel
                     .WithRatingService<RatingService>()
                     .WithLicenseProvider<LicenseProvider>()
                     .WithAnalyticsService(analyticsService)
+                    .WithSchedulerProvider(schedulerProvider)
                     .WithPlatformConstants(platformConstants)
-                    .WithRemoteConfigService<RemoteConfigService>()
+                    .WithRemoteConfigService(remoteConfigService)
                     .WithApiFactory(new ApiFactory(environment, userAgent))
                     .WithBackgroundService(new BackgroundService(timeService))
                     .WithApplicationShortcutCreator<ApplicationShortcutCreator>()
                     .WithSuggestionProviderContainer(suggestionProviderContainer)
+                    .WithPlatformInfo(platformInfo)
 
                     .StartRegisteringPlatformServices()
                     .WithDialogService(dialogService)
@@ -118,6 +128,7 @@ namespace Toggl.Daneel
                     .WithAccessRestrictionStorage(settingsStorage)
                     .WithPasswordManagerService<OnePasswordService>()
                     .WithErrorHandlingService(new ErrorHandlingService(navigationService, settingsStorage))
+                    .WithFeedbackService(new FeedbackService(userAgent, mailService, dialogService, platformConstants))
                     .Build();
 
             foundation.RevokeNewUserIfNeeded().Initialize();

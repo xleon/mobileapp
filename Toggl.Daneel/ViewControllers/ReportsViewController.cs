@@ -4,7 +4,6 @@ using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Platforms.Ios.Views;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -17,7 +16,6 @@ using System.Collections.Generic;
 
 namespace Toggl.Daneel.ViewControllers
 {
-    [MvxChildPresentation]
     public sealed partial class ReportsViewController : MvxViewController<ReportsViewModel>
     {
         private const string boundsKey = "bounds";
@@ -48,7 +46,7 @@ namespace Toggl.Daneel.ViewControllers
 
             calendarSizeDisposable = CalendarContainer.AddObserver(boundsKey, NSKeyValueObservingOptions.New, onCalendarSizeChanged);
 
-            source = new ReportsTableViewSource(ReportsTableView);
+            source = new ReportsTableViewSource(ReportsTableView, ViewModel);
             source.OnScroll += onReportsTableScrolled;
             ReportsTableView.Source = source;
 
@@ -67,10 +65,6 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(titleButton)
                       .For(v => v.BindTitle())
                       .To(vm => vm.CurrentDateRangeString);
-
-            bindingSet.Bind(source)
-                      .For(v => v.ViewModel)
-                      .To(vm => vm);
 
             bindingSet.Bind(ReportsTableView)
                       .For(v => v.BindTap())
@@ -170,10 +164,7 @@ namespace Toggl.Daneel.ViewControllers
 
         private void onCalendarSizeChanged(NSObservedChange change)
         {
-            if (CalendarIsVisible)
-                TopCalendarConstraint.Constant = 0;
-            else
-                TopCalendarConstraint.Constant = calendarHeight;
+            TopCalendarConstraint.Constant = CalendarIsVisible ? 0 : calendarHeight;
         }
     }
 }

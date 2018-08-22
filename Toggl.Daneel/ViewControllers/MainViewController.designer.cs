@@ -9,12 +9,12 @@ using System.CodeDom.Compiler;
 
 namespace Toggl.Daneel.ViewControllers
 {
-    [Register ("MainViewController")]
-    partial class MainViewController
-    {
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIView CurrentTimeEntryCard { get; set; }
+	[Register ("MainViewController")]
+	partial class MainViewController
+	{
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIKit.UIView CurrentTimeEntryCard { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -35,8 +35,8 @@ namespace Toggl.Daneel.ViewControllers
 		[GeneratedCode ("iOS Designer", "1.0")]
 		Toggl.Daneel.Views.FadeView RunningEntryDescriptionFadeView { get; set; }
 
-        [Outlet]
-        UIKit.UIView SendFeedbackSuccessView { get; set; }
+		[Outlet]
+		UIKit.UIView SendFeedbackSuccessView { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -71,7 +71,10 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.NSLayoutConstraint TapToEditBubbleViewTopConstraint { get; set; }
 
 		[Outlet]
-        Toggl.Daneel.Views.TimeEntriesLogTableView TimeEntriesLogTableView { get; set; }
+		Toggl.Daneel.Views.TimeEntriesLogTableView TimeEntriesLogTableView { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint { get; set; }
 
 		[Outlet]
 		UIKit.NSLayoutConstraint TopConstraint { get; set; }
@@ -81,7 +84,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.UIView WelcomeBackView { get; set; }
-
+		
 		void ReleaseDesignerOutlets ()
 		{
 			if (CurrentTimeEntryCard != null) {
@@ -114,6 +117,11 @@ namespace Toggl.Daneel.ViewControllers
 				RunningEntryDescriptionFadeView = null;
 			}
 
+			if (SendFeedbackSuccessView != null) {
+				SendFeedbackSuccessView.Dispose ();
+				SendFeedbackSuccessView = null;
+			}
+
 			if (StartTimeEntryButton != null) {
 				StartTimeEntryButton.Dispose ();
 				StartTimeEntryButton = null;
@@ -129,6 +137,31 @@ namespace Toggl.Daneel.ViewControllers
 				StopTimeEntryButton = null;
 			}
 
+			if (StopTimeEntryOnboardingBubbleView != null) {
+				StopTimeEntryOnboardingBubbleView.Dispose ();
+				StopTimeEntryOnboardingBubbleView = null;
+			}
+
+			if (SwipeLeftBubbleView != null) {
+				SwipeLeftBubbleView.Dispose ();
+				SwipeLeftBubbleView = null;
+			}
+
+			if (SwipeLeftTopConstraint != null) {
+				SwipeLeftTopConstraint.Dispose ();
+				SwipeLeftTopConstraint = null;
+			}
+
+			if (SwipeRightBubbleView != null) {
+				SwipeRightBubbleView.Dispose ();
+				SwipeRightBubbleView = null;
+			}
+
+			if (SwipeRightTopConstraint != null) {
+				SwipeRightTopConstraint.Dispose ();
+				SwipeRightTopConstraint = null;
+			}
+
 			if (TapToEditBubbleView != null) {
 				TapToEditBubbleView.Dispose ();
 				TapToEditBubbleView = null;
@@ -139,14 +172,14 @@ namespace Toggl.Daneel.ViewControllers
 				TapToEditBubbleViewTopConstraint = null;
 			}
 
-			if (StopTimeEntryOnboardingBubbleView != null) {
-				StopTimeEntryOnboardingBubbleView.Dispose ();
-				StopTimeEntryOnboardingBubbleView = null;
-			}
-
 			if (TimeEntriesLogTableView != null) {
 				TimeEntriesLogTableView.Dispose ();
 				TimeEntriesLogTableView = null;
+			}
+
+			if (TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint != null) {
+				TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint.Dispose ();
+				TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint = null;
 			}
 
 			if (TopConstraint != null) {
@@ -162,31 +195,6 @@ namespace Toggl.Daneel.ViewControllers
 			if (WelcomeBackView != null) {
 				WelcomeBackView.Dispose ();
 				WelcomeBackView = null;
-			}
-
-		    if (SendFeedbackSuccessView != null) {
-		        SendFeedbackSuccessView.Dispose ();
-		        SendFeedbackSuccessView = null;
-		    }
-
-			if (SwipeRightBubbleView != null) {
-				SwipeRightBubbleView.Dispose ();
-				SwipeRightBubbleView = null;
-			}
-
-			if (SwipeLeftBubbleView != null) {
-				SwipeLeftBubbleView.Dispose ();
-				SwipeLeftBubbleView = null;
-			}
-
-			if (SwipeLeftTopConstraint != null) {
-				SwipeLeftTopConstraint.Dispose ();
-				SwipeLeftTopConstraint = null;
-			}
-
-			if (SwipeRightTopConstraint != null) {
-				SwipeRightTopConstraint.Dispose ();
-				SwipeRightTopConstraint = null;
 			}
 		}
 	}

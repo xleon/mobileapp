@@ -10,6 +10,7 @@ using Xunit;
 using Toggl.Foundation.Suggestions;
 using Toggl.Foundation.Analytics;
 using System.Reactive.Concurrency;
+using Toggl.Multivac;
 using Toggl.Ultrawave.Network;
 
 namespace Toggl.Foundation.Tests
@@ -28,17 +29,20 @@ namespace Toggl.Foundation.Tests
                 bool useApiFactory,
                 bool useTimeService,
                 bool useMailService,
+                bool usePlatformInfo,
                 bool useRatingService,
                 bool useGoogleService,
                 bool useLicenseProvider,
                 bool useAnalyticsService,
                 bool useBackgroundService,
+                bool useSchedulerProvider,
                 bool usePlatformConstants,
                 bool useRemoteConfigService,
                 bool useApplicationShortcutCreator,
                 bool useSuggestionProviderContainer)
             {
                 var version = useVersion ? Version.Parse("1.0") : null;
+                var platformInfo = usePlatformInfo ? new PlatformInfo() : null;
                 var agent = userAgent ? new UserAgent("Some Client", "1.0") : null;
                 var scheduler = useScheduler ? Substitute.For<IScheduler>() : null;
                 var database = useDatabase ? Substitute.For<ITogglDatabase>() : null;
@@ -54,6 +58,7 @@ namespace Toggl.Foundation.Tests
                 var remoteConfigService = useRemoteConfigService ? Substitute.For<IRemoteConfigService>() : null;
                 var applicationShortcutCreator = useApplicationShortcutCreator ? Substitute.For<IApplicationShortcutCreator>() : null;
                 var suggestionProviderContainer = useSuggestionProviderContainer ? Substitute.For<ISuggestionProviderContainer>() : null;
+                var schedulerProvider = useSchedulerProvider ? Substitute.For<ISchedulerProvider>() : null;
 
                 Action tryingToConstructWithEmptyParameters = () =>
                     TogglFoundation
@@ -63,11 +68,13 @@ namespace Toggl.Foundation.Tests
                         .WithApiFactory(apiFactory)
                         .WithTimeService(timeService)
                         .WithMailService(mailService)
+                        .WithPlatformInfo(platformInfo)
                         .WithRatingService(ratinService)
                         .WithGoogleService(googleService)
                         .WithLicenseProvider(licenseProvider)
                         .WithAnalyticsService(analyticsService)
                         .WithBackgroundService(backgroundService)
+                        .WithSchedulerProvider(schedulerProvider)
                         .WithPlatformConstants(platformConstants)
                         .WithRemoteConfigService(remoteConfigService)
                         .WithApplicationShortcutCreator(applicationShortcutCreator)
@@ -81,6 +88,7 @@ namespace Toggl.Foundation.Tests
             public void BuildingWorksIfAllParametersAreProvided()
             {
                 var version = Version.Parse("1.0");
+                var platformInfo = new PlatformInfo();
                 var scheduler = Substitute.For<IScheduler>();
                 var apiFactory = Substitute.For<IApiFactory>();
                 var agent = new UserAgent("Some Client", "1.0");
@@ -91,6 +99,7 @@ namespace Toggl.Foundation.Tests
                 var googleService = Substitute.For<IGoogleService>();
                 var licenseProvider = Substitute.For<ILicenseProvider>();
                 var analyticsService = Substitute.For<IAnalyticsService>();
+                var schedulerProvider = Substitute.For<ISchedulerProvider>();
                 var platformConstants = Substitute.For<IPlatformConstants>();
                 var backgroundService = Substitute.For<IBackgroundService>();
                 var remoteConfigService = Substitute.For<IRemoteConfigService>();
@@ -105,11 +114,13 @@ namespace Toggl.Foundation.Tests
                         .WithApiFactory(apiFactory)
                         .WithTimeService(timeService)
                         .WithMailService(mailService)
+                        .WithPlatformInfo(platformInfo)
                         .WithRatingService(ratingService)
                         .WithGoogleService(googleService)
                         .WithLicenseProvider(licenseProvider)
                         .WithAnalyticsService(analyticsService)
                         .WithBackgroundService(backgroundService)
+                        .WithSchedulerProvider(schedulerProvider)
                         .WithPlatformConstants(platformConstants)
                         .WithRemoteConfigService(remoteConfigService)
                         .WithApplicationShortcutCreator(applicationShortcutCreator)

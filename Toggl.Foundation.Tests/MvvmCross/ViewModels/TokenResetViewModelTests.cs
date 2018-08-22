@@ -25,8 +25,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected static readonly Password ValidPassword = "123456".ToPassword();
             protected static readonly Password InvalidPassword = Password.Empty;
 
-            protected ILoginManager LoginManager { get; } = Substitute.For<ILoginManager>();
-
             protected override TokenResetViewModel CreateViewModel()
                 => new TokenResetViewModel(
                     LoginManager,
@@ -131,7 +129,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.DoneCommand.Execute();
 
-                NavigationService.Received().Navigate<MainViewModel>();
+                NavigationService.Received().ForkNavigate<MainTabBarViewModel, MainViewModel>();
             }
 
             [Fact, LogIfTooSlow]
@@ -224,7 +222,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task TracksLogoutEvent()
+            public void TracksLogoutEvent()
             {
                 ViewModel.SignOutCommand.Execute();
 
