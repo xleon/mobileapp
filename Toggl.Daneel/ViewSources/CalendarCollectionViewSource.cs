@@ -16,6 +16,7 @@ using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using UIKit;
+using FoundationResources = Toggl.Foundation.Resources;
 
 namespace Toggl.Daneel.ViewSources
 {
@@ -280,7 +281,7 @@ namespace Toggl.Daneel.ViewSources
 
         private NSIndexPath insertPlaceholder(DateTimeOffset startTime, TimeSpan duration)
         {
-            var calendarItem = new CalendarItem(CalendarItemSource.TimeEntry, startTime, duration, string.Empty, CalendarIconKind.None);
+            var calendarItem = new CalendarItem(CalendarItemSource.TimeEntry, startTime, duration, FoundationResources.NewTimeEntry, CalendarIconKind.None);
 
             var insertPosition = calendarItems.IndexOf(item => item.StartTime > calendarItem.StartTime);
             if (insertPosition >= 0)

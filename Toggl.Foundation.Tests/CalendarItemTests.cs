@@ -29,6 +29,21 @@ namespace Toggl.Foundation.Tests
             }
         }
 
+        public sealed class TheDescriptionProperty
+        {
+            [Theory, LogIfTooSlow]
+            [InlineData(null)]
+            [InlineData("")]
+            public void ShouldUseTheDefaultValueIfNullOrEmpty(string description)
+            {
+                var startTime = new DateTimeOffset(2018, 8, 22, 12, 0, 0, TimeSpan.Zero);
+                var duration = TimeSpan.FromMinutes(30);
+
+                var calendarItem = new CalendarItem(CalendarItemSource.Calendar, startTime, duration, description, CalendarIconKind.None);
+                calendarItem.Description.Should().Be(Resources.NoDescription);
+            }
+        }
+
         public sealed class TheColorProperty
         {
             [Fact, LogIfTooSlow]

@@ -417,4 +417,12 @@ account is not set up</value>
     <data name="SelectWorkspace">
         <value>Select workspace</value>
     </data>
+    
+    <data name="NoDescription">
+        <value>No description</value>
+    </data>
+    
+    <data name="NewTimeEntry">
+        <value>New Time Entry</value>
+    </data>
 </root>
