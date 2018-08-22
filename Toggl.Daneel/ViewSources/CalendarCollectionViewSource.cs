@@ -5,6 +5,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
+using CoreGraphics;
 using Foundation;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using Toggl.Daneel.Cells.Calendar;
@@ -32,11 +33,13 @@ namespace Toggl.Daneel.ViewSources
         private IList<CalendarCollectionViewItemLayoutAttributes> layoutAttributes;
         private TimeFormat timeOfDayFormat = TimeFormat.TwelveHoursFormat;
         private DateTime currentDate;
+        private NSIndexPath editingItemIndexPath;
+        private bool isEditing;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
         private readonly ISubject<CalendarItem> itemTappedSubject = new Subject<CalendarItem>();
 
-        private bool isAddingItem = false;
+        public bool IsEditing => isEditing;
 
         public IObservable<CalendarItem> ItemTapped => itemTappedSubject.AsObservable();
 
@@ -79,6 +82,7 @@ namespace Toggl.Daneel.ViewSources
         {
             var cell = collectionView.DequeueReusableCell(itemReuseIdentifier, indexPath) as CalendarItemView;
             cell.Item = calendarItems[(int)indexPath.Item];
+            cell.IsEditing = IsEditing && indexPath == editingItemIndexPath;
             return cell;
         }
 
@@ -124,29 +128,67 @@ namespace Toggl.Daneel.ViewSources
             return layoutAttributes[(int)indexPath.Item];
         }
 
-        public NSIndexPath InsertPlaceholder(DateTimeOffset startTime, TimeSpan duration)
+        public CalendarItem? CalendarItemAtPoint(CGPoint point)
         {
-            isAddingItem = true;
-            var indexPath = insertPlaceholder(startTime, duration);
-            CollectionView.InsertItems(new NSIndexPath[] { indexPath });
-            return indexPath;
-        }
-
-        public NSIndexPath UpdatePlaceholder(NSIndexPath indexPath, DateTimeOffset startTime, TimeSpan duration)
-        {
-            if (isAddingItem)
+            var indexPath = CollectionView.IndexPathForItemAtPoint(point);
+            if (indexPath != null && indexPath.Item < calendarItems.Count)
             {
-                var updatedIndexPath = updatePlaceholder(indexPath, startTime, duration);
-                CollectionView.ReloadItems(new NSIndexPath[] { indexPath });
-                return updatedIndexPath;
+                return calendarItems[(int)indexPath.Item];
             }
-            return indexPath;
+            return null;
         }
 
-        public void RemovePlaceholder(NSIndexPath indexPath)
+        public void StartEditing()
         {
-            if (!isAddingItem)
-                return;
+            isEditing = true;
+        }
+
+        public void StartEditing(NSIndexPath indexPath)
+        {
+            isEditing = true;
+            editingItemIndexPath = indexPath;
+            CollectionView.ReloadItems(new NSIndexPath[] { indexPath });
+        }
+
+        public void StopEditing()
+        {
+            isEditing = false;
+            if (editingItemIndexPath != null)
+            {
+                CollectionView.ReloadItems(new NSIndexPath[] { editingItemIndexPath });
+                editingItemIndexPath = null;
+            }
+        }
+
+        public NSIndexPath InsertItemView(DateTimeOffset startTime, TimeSpan duration)
+        {
+            if (!IsEditing)
+                throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
+
+            editingItemIndexPath = insertPlaceholder(startTime, duration);
+            CollectionView.InsertItems(new NSIndexPath[] { editingItemIndexPath });
+            return editingItemIndexPath;
+        }
+
+        public NSIndexPath UpdateItemView(NSIndexPath indexPath, DateTimeOffset startTime, TimeSpan duration)
+        {
+            if (!IsEditing)
+                throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
+
+            editingItemIndexPath = updatePlaceholder(indexPath, startTime, duration);
+
+            bool animationsEnabled = UIView.AnimationsEnabled;
+            UIView.AnimationsEnabled = false;
+            CollectionView.ReloadItems(new NSIndexPath[] { editingItemIndexPath });
+            UIView.AnimationsEnabled = animationsEnabled;
+
+            return editingItemIndexPath;
+        }
+
+        public void RemoveItemView(NSIndexPath indexPath)
+        {
+            if (!IsEditing)
+                throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
 
             removePlaceholder(indexPath);
             CollectionView.DeleteItems(new NSIndexPath[] { indexPath });

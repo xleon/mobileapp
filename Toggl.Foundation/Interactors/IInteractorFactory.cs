@@ -22,6 +22,8 @@ namespace Toggl.Foundation.Interactors
 
         IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueMostRecentTimeEntry();
 
+        IInteractor<IObservable<IThreadSafeTimeEntry>> UpdateTimeEntry(DTOs.EditTimeEntryDto dto);
+
         IInteractor<IObservable<Unit>> DeleteTimeEntry(long id);
 
         IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> GetAllNonDeletedTimeEntries();

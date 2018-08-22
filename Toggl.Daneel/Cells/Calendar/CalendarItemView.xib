@@ -13,7 +13,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="cZE-iV-UFb" customClass="CalendarItemView">
+        <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" id="cZE-iV-UFb" customClass="CalendarItemView">
             <rect key="frame" x="0.0" y="0.0" width="381" height="53"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -45,16 +45,46 @@
                             <constraint firstAttribute="width" constant="14" id="lLv-rp-Uuy"/>
                         </constraints>
                     </imageView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EdB-CQ-dXu">
+                        <rect key="frame" x="367" y="-4" width="6" height="6"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="6" id="7yT-A1-fec"/>
+                            <constraint firstAttribute="height" constant="6" id="g8c-Bn-0wC"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="3"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ftH-hb-JkM">
+                        <rect key="frame" x="8" y="51" width="6" height="6"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="6" id="iJj-Ha-Wcv"/>
+                            <constraint firstAttribute="width" constant="6" id="jas-2I-uo6"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="3"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
                 </subviews>
             </view>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="hQ2-1w-4A4" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" id="2HP-BG-hEF"/>
                 <constraint firstItem="BRg-DN-wNT" firstAttribute="bottom" secondItem="sob-Bq-eUc" secondAttribute="firstBaseline" id="A7o-lf-wBh"/>
+                <constraint firstAttribute="trailing" secondItem="EdB-CQ-dXu" secondAttribute="trailing" constant="8" id="BdH-Gs-onQ"/>
+                <constraint firstItem="ftH-hb-JkM" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="8" id="Bxu-MG-OxF"/>
+                <constraint firstAttribute="bottom" secondItem="ftH-hb-JkM" secondAttribute="top" constant="2" id="QGa-uA-Ast"/>
                 <constraint firstAttribute="bottom" secondItem="hQ2-1w-4A4" secondAttribute="bottom" id="Qva-Rw-8ct"/>
                 <constraint firstItem="sob-Bq-eUc" firstAttribute="leading" secondItem="BRg-DN-wNT" secondAttribute="trailing" constant="5" id="RyV-JV-g7x"/>
                 <constraint firstAttribute="trailing" secondItem="hQ2-1w-4A4" secondAttribute="trailing" id="Tsn-Q1-p09"/>
                 <constraint firstItem="sob-Bq-eUc" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" priority="750" constant="8" id="UKC-Ev-HO9"/>
+                <constraint firstAttribute="top" secondItem="EdB-CQ-dXu" secondAttribute="bottom" constant="-2" id="apn-Rs-dhc"/>
                 <constraint firstItem="sob-Bq-eUc" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="6" id="cNL-RC-bio"/>
                 <constraint firstItem="BRg-DN-wNT" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="6" id="fNB-5f-4hR"/>
                 <constraint firstItem="hQ2-1w-4A4" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" id="hDT-7r-crp"/>
@@ -69,6 +99,7 @@
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
             <connections>
+                <outlet property="BottomDragIndicator" destination="ftH-hb-JkM" id="qab-cG-Hu5"/>
                 <outlet property="CalendarIconBaselineConstraint" destination="A7o-lf-wBh" id="C65-8f-nM0"/>
                 <outlet property="CalendarIconHeightConstrarint" destination="5iW-EI-Uvb" id="Wpr-Cp-VKp"/>
                 <outlet property="CalendarIconImageView" destination="BRg-DN-wNT" id="UGi-Sp-7ge"/>
@@ -79,6 +110,7 @@
                 <outlet property="DescriptionLabel" destination="sob-Bq-eUc" id="rqZ-Gq-87D"/>
                 <outlet property="DescriptionLabelBottomConstraint" destination="uos-rx-IuC" id="piK-28-8sx"/>
                 <outlet property="DescriptionLabelTopConstraint" destination="cNL-RC-bio" id="cvH-Ok-o8x"/>
+                <outlet property="TopDragIndicator" destination="EdB-CQ-dXu" id="TwD-B0-2Ok"/>
             </connections>
             <point key="canvasLocation" x="199.5" y="55.5"/>
         </collectionViewCell>

@@ -45,6 +45,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
         public InputAction<(DateTimeOffset, TimeSpan)> OnDurationSelected { get; }
 
+        public InputAction<CalendarItem> OnUpdateTimeEntry { get; }
+
         public ObservableGroupedOrderedCollection<CalendarItem> CalendarItems { get; }
 
         public CalendarViewModel(
@@ -93,6 +95,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 tuple => onDurationSelected(tuple.StartTime, tuple.Duration)
             );
 
+            OnUpdateTimeEntry = new InputAction<CalendarItem>(onUpdateTimeEntry);
+
             CalendarItems = new ObservableGroupedOrderedCollection<CalendarItem>(
                 indexKey: item => item.StartTime,
                 orderingKey: item => item.StartTime,
@@ -104,13 +108,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             var dayChangedObservable = timeService
                 .MidnightObservable
                 .SelectUnit();
-            
+
             dataSource.TimeEntries
                 .ItemsChanged()
                 .Merge(dayChangedObservable)
                 .Subscribe(reloadData)
                 .DisposedBy(disposeBag);
-                  
+
             await reloadData();
         }
 
@@ -140,7 +144,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 .GetUserCalendars()
                 .Execute()
                 .Select(calendars => calendars.Any());
-            
+
             if (calendarsExist)
             {
                 var calendarIds = await navigationService.Navigate<SelectUserCalendarsViewModel, string[]>();
@@ -173,6 +177,31 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 var prototype = duration.AsTimeEntryPrototype(startTime, workspace.Id);
                 await interactorFactory.CreateTimeEntry(prototype).Execute();
 
+                await reloadData();
+            });
+
+        private IObservable<Unit> onUpdateTimeEntry(CalendarItem calendarItem)
+            => Observable.FromAsync(async () =>
+            {
+                if (!calendarItem.IsEditable() || calendarItem.TimeEntryId == null)
+                    return;
+
+                var timeEntry = await dataSource.TimeEntries.GetById((calendarItem.TimeEntryId.Value));
+
+                var dto = new DTOs.EditTimeEntryDto
+                {
+                    Id = timeEntry.Id,
+                    Description = timeEntry.Description,
+                    StartTime = calendarItem.StartTime,
+                    StopTime = calendarItem.EndTime,
+                    ProjectId = timeEntry.ProjectId,
+                    TaskId = timeEntry.TaskId,
+                    Billable = timeEntry.Billable,
+                    WorkspaceId = timeEntry.WorkspaceId,
+                    TagIds = timeEntry.TagIds
+                };
+
+                await interactorFactory.UpdateTimeEntry(dto).Execute();
                 await reloadData();
             });
 

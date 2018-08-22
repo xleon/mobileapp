@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CoreAnimation;
+using CoreGraphics;
 using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.UI;
@@ -14,8 +16,25 @@ namespace Toggl.Daneel.Cells.Calendar
     {
         private static readonly Dictionary<CalendarIconKind, UIImage> images;
 
+        private CAShapeLayer topDragIndicatorBorderLayer;
+        private CAShapeLayer bottomDragIndicatorBorderLayer;
+
         public static readonly NSString Key = new NSString(nameof(CalendarItemView));
         public static readonly UINib Nib;
+
+        public CGRect TopDragTouchArea => TopDragIndicator.Frame.Inset(-20, -20);
+        public CGRect BottomDragTouchArea => BottomDragIndicator.Frame.Inset(-20, -20);
+
+        private bool isEditing;
+        public bool IsEditing
+        {
+            get => isEditing;
+            set
+            {
+                isEditing = value;
+                updateDragIndicators(itemColor());
+            }
+        }
 
         static CalendarItemView()
         {
@@ -41,19 +60,38 @@ namespace Toggl.Daneel.Cells.Calendar
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
+
             CalendarIconWidthConstrarint.Constant = 8;
             CalendarIconHeightConstrarint.Constant = 8;
+
+            topDragIndicatorBorderLayer = new CAShapeLayer();
+            configureDragIndicatorBorderLayer(TopDragIndicator, topDragIndicatorBorderLayer);
+            bottomDragIndicatorBorderLayer = new CAShapeLayer();
+            configureDragIndicatorBorderLayer(BottomDragIndicator, bottomDragIndicatorBorderLayer);
+
+            void configureDragIndicatorBorderLayer(UIView dragIndicator, CAShapeLayer borderLayer)
+            {
+                var rect = dragIndicator.Bounds.Inset(1, 1);
+                borderLayer.Path = UIBezierPath.FromOval(rect).CGPath;
+                borderLayer.BorderWidth = 2;
+                borderLayer.FillColor = UIColor.Clear.CGColor;
+                dragIndicator.Layer.AddSublayer(borderLayer);
+            }
         }
 
         protected override void UpdateView()
         {
-            var color = MvxColor.ParseHexString(Item.Color).ToNativeColor();
+            var color = itemColor();
             DescriptionLabel.Text = Item.Description;
             DescriptionLabel.TextColor = textColor(color);
             ColorView.BackgroundColor = backgroundColor(Item.Source, color);
             updateIcon(color);
             updateSizes();
+            updateDragIndicators(color);
         }
+
+        private UIColor itemColor()
+            => MvxColor.ParseHexString(Item.Color).ToNativeColor();
 
         private UIColor backgroundColor(CalendarItemSource source, UIColor color)
         {
@@ -96,6 +134,14 @@ namespace Toggl.Daneel.Cells.Calendar
             CalendarIconTrailingConstraint.Active = true;
             CalendarIconImageView.TintColor = textColor(color);
             CalendarIconImageView.Image = images[Item.IconKind];
+        }
+
+        private void updateDragIndicators(UIColor color)
+        {
+            TopDragIndicator.Hidden = !IsEditing;
+            BottomDragIndicator.Hidden = !IsEditing;
+            topDragIndicatorBorderLayer.StrokeColor = color.CGColor;
+            bottomDragIndicatorBorderLayer.StrokeColor = color.CGColor;
         }
 
         private void updateSizes()

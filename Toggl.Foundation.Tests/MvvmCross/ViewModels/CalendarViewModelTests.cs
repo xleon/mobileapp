@@ -7,6 +7,7 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Foundation.Calendar;
+using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
@@ -55,6 +56,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 InteractorFactory
                     .CreateTimeEntry(Arg.Any<ITimeEntryPrototype>())
+                    .Execute()
+                    .Returns(Observable.Return(timeEntry));
+
+                InteractorFactory
+                    .UpdateTimeEntry(Arg.Any<DTOs.EditTimeEntryDto>())
                     .Execute()
                     .Returns(Observable.Return(timeEntry));
             }
@@ -464,6 +470,41 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var tuple = (now, duration);
 
                 await ViewModel.OnDurationSelected.Execute(tuple);
+
+                await CalendarInteractor.Received().Execute();
+            }
+        }
+
+        public sealed class TheEditTimeEntryAction : CalendarViewModelTest
+        {
+            private CalendarItem calendarItem = new CalendarItem(
+                CalendarItemSource.TimeEntry,
+                new DateTimeOffset(2018, 8, 20, 10, 0, 0, TimeSpan.Zero),
+                new TimeSpan(45),
+                "This is a time entry",
+                CalendarIconKind.None,
+                color: "#ff0000",
+                timeEntryId: TimeEntryId,
+                calendarId: "abcd-1234-abcd-1234");
+
+            [Fact, LogIfTooSlow]
+            public async Task UpdatesATimeEntry()
+            {
+                await ViewModel.OnUpdateTimeEntry.Execute(calendarItem);
+
+                await InteractorFactory
+                    .UpdateTimeEntry(Arg.Is<DTOs.EditTimeEntryDto>(dto =>
+                        dto.Id == TimeEntryId
+                        && dto.StartTime == calendarItem.StartTime
+                        && dto.StopTime == calendarItem.EndTime))
+                    .Received()
+                    .Execute();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task RefetchesTheTimeEntryItemsUsingTheInteractor()
+            {
+                await ViewModel.OnUpdateTimeEntry.Execute(calendarItem);
 
                 await CalendarInteractor.Received().Execute();
             }

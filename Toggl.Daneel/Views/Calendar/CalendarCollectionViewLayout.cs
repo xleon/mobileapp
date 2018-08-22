@@ -60,6 +60,9 @@ namespace Toggl.Daneel.Views.Calendar
             return date + timespan;
         }
 
+        public CGPoint PointAtDate(DateTimeOffset time)
+            => new CGPoint(0, time.Hour * hourHeight + time.Minute / hourHeight);
+
         public override bool ShouldInvalidateLayoutForBoundsChange(CGRect newBounds)
             => true;
 

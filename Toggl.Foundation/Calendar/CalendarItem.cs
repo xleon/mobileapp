@@ -63,6 +63,8 @@ namespace Toggl.Foundation.Calendar
                 case SyncStatus.SyncFailed:
                     IconKind = CalendarIconKind.Unsyncable;
                     break;
+                default:
+                    break;
             }
         }
 
