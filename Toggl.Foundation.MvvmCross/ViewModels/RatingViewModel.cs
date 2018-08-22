@@ -32,6 +32,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly BehaviorSubject<bool?> impressionSubject = new BehaviorSubject<bool?>(null);
         private readonly ISubject<bool> isFeedbackSuccessViewShowing = new Subject<bool>();
 
+        private bool impressionWasRegistered => impressionSubject.Value != null;
+
+        // Warning: this property will throw if no impression has been registered yet.
+        private bool impressionIsPositive => impressionSubject.Value.Value;
+
         public IObservable<bool?> Impression { get; }
 
         public IObservable<string> CtaTitle { get; }
@@ -96,13 +101,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             if (isPositive)
             {
-                analyticsService.RatingViewFirstStepLike.Track();
-                onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.PositiveImpression, timeService.CurrentDateTime);
+                trackStepOutcome(
+                    RatingViewOutcome.PositiveImpression,
+                    analyticsService.RatingViewFirstStepLike);
             }
             else
             {
-                analyticsService.RatingViewFirstStepDislike.Track();
-                onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.NegativeImpression, timeService.CurrentDateTime);
+                trackStepOutcome(
+                    RatingViewOutcome.NegativeImpression,
+                    analyticsService.RatingViewFirstStepDislike);
             }
         }
 
@@ -138,51 +145,74 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public async Task PerformMainAction()
         {
-            var impressionIsPositive = impressionSubject.Value;
+            hide();
 
-            if (impressionIsPositive == null) return;
+            if (!impressionWasRegistered)
+                return;
 
-            if (impressionIsPositive.Value)
+            if (impressionIsPositive)
             {
                 ratingService.AskForRating();
                 //We can't really know whether the user actually rated
                 //We only know that we presented the iOS rating view
-                analyticsService.RatingViewSecondStepRate.Track();
-                analyticsService.UserFinishedRatingViewSecondStep.Track(RatingViewSecondStepOutcome.AppWasRated);
-                onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.AppWasRated, timeService.CurrentDateTime);
+
+                trackSecondStepOutcome(
+                    RatingViewOutcome.AppWasRated,
+                    RatingViewSecondStepOutcome.AppWasRated,
+                    analyticsService.RatingViewSecondStepRate);
             }
             else
             {
                 var sendFeedbackSucceed = await navigationService.Navigate<SendFeedbackViewModel, bool>();
                 isFeedbackSuccessViewShowing.OnNext(sendFeedbackSucceed);
-                analyticsService.RatingViewSecondStepSendFeedback.Track();
-                analyticsService.UserFinishedRatingViewSecondStep.Track(RatingViewSecondStepOutcome.FeedbackWasLeft);
-                onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.FeedbackWasLeft, timeService.CurrentDateTime);
+
+                trackSecondStepOutcome(
+                    RatingViewOutcome.FeedbackWasLeft,
+                    RatingViewSecondStepOutcome.FeedbackWasLeft,
+                    analyticsService.RatingViewSecondStepSendFeedback);
             }
         }
 
         public void Dismiss()
         {
-            navigationService.ChangePresentation(
-                ToggleRatingViewVisibilityHint.Hide()
-            );
+            hide();
 
-            if (impressionSubject.Value == null) return;
+            if (!impressionWasRegistered)
+                return;
 
-            if (impressionSubject.Value.Value)
+            if (impressionIsPositive)
             {
-                onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.AppWasNotRated, timeService.CurrentDateTime);
-                analyticsService.RatingViewSecondStepDontRate.Track();
-                analyticsService.UserFinishedRatingViewSecondStep.Track(RatingViewSecondStepOutcome.AppWasNotRated);
+                trackSecondStepOutcome(
+                    RatingViewOutcome.AppWasNotRated,
+                    RatingViewSecondStepOutcome.AppWasNotRated,
+                    analyticsService.RatingViewSecondStepDontRate);
             }
             else
             {
-                onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.FeedbackWasNotLeft, timeService.CurrentDateTime);
-                analyticsService.RatingViewSecondStepDontSendFeedback.Track();
-                analyticsService.UserFinishedRatingViewSecondStep.Track(RatingViewSecondStepOutcome.FeedbackWasNotLeft);
+                trackSecondStepOutcome(
+                    RatingViewOutcome.FeedbackWasNotLeft,
+                    RatingViewSecondStepOutcome.FeedbackWasNotLeft,
+                    analyticsService.RatingViewSecondStepDontSendFeedback);
             }
+        }
 
-            impressionSubject.OnNext(null);
+        private void trackSecondStepOutcome(RatingViewOutcome outcome, RatingViewSecondStepOutcome genericEventParameter, IAnalyticsEvent specificEvent)
+        {
+            trackStepOutcome(outcome, specificEvent);
+            analyticsService.UserFinishedRatingViewSecondStep.Track(genericEventParameter);
+        }
+
+        private void trackStepOutcome(RatingViewOutcome outcome, IAnalyticsEvent specificEvent)
+        {
+            onboardingStorage.SetRatingViewOutcome(outcome, timeService.CurrentDateTime);
+            specificEvent.Track();
+        }
+
+        private void hide()
+        {
+            navigationService.ChangePresentation(
+                ToggleRatingViewVisibilityHint.Hide()
+            );
         }
     }
 }
