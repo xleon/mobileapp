@@ -1050,6 +1050,11 @@
       <Project>{6AF7BE5E-AF9D-4EA7-AF7F-28D07B8DEF24}</Project>
       <Name>Toggl.Multivac</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SiriExtension\SiriExtension.csproj">
+      <IsAppExtension>true</IsAppExtension>
+      <Project>{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}</Project>
+      <Name>SiriExtension</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Images.xcassets\line.imageset\" />
