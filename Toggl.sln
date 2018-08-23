@@ -57,7 +57,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{A48D346E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncDiagramGenerator", "Toggl.Tools\SyncDiagramGenerator\SyncDiagramGenerator.csproj", "{148C791B-9824-4DC6-9494-4FEEB21988C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Daneel.SiriExtension", "SiriExtension\Toggl.Daneel.SiriExtension.csproj", "{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Daneel.SiriExtension", "Toggl.Daneel.SiriExtension\Toggl.Daneel.SiriExtension.csproj", "{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
