@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
@@ -27,11 +27,7 @@
 			<key>IntentsRestrictedWhileLocked</key>
 			<array/>
 			<key>IntentsSupported</key>
-			<array>
-				<string>INSendMessageIntent</string>
-				<string>INSearchForMessagesIntent</string>
-				<string>INSetMessageAttributeIntent</string>
-			</array>
+			<array/>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.intents-service</string>
