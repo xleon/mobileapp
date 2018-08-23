@@ -9,6 +9,7 @@ using Toggl.Foundation.Calendar;
 using Toggl.Foundation.Interactors.Calendar;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Tests.Mocks;
+using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 
@@ -35,19 +36,22 @@ namespace Toggl.Foundation.Tests.Interactors.Calendar
                         TimeSpan.FromMinutes(30),
                         "Important meeting",
                         CalendarIconKind.Event,
-                        "#0000ff"),
+                        color: "#0000ff",
+                        calendarId: "1"),
                     new CalendarItem(CalendarItemSource.Calendar,
                         new DateTimeOffset(2018, 08, 06, 10, 00, 00, TimeSpan.Zero),
                         TimeSpan.FromMinutes(90),
                         "F**** timesheets",
                         CalendarIconKind.Event,
-                        "#0000ff"),
+                        color: "#0000ff",
+                        calendarId: "1"),
                     new CalendarItem(CalendarItemSource.Calendar,
                         new DateTimeOffset(2018, 08, 06, 09, 00, 00, TimeSpan.Zero),
                         TimeSpan.FromMinutes(15),
                         "Not so important meeting",
                         CalendarIconKind.Event,
-                        "#0000ff")
+                        color: "#0000ff",
+                        calendarId: "2")
                 };
 
                 timeEntries = new List<IThreadSafeTimeEntry>
@@ -104,7 +108,9 @@ namespace Toggl.Foundation.Tests.Interactors.Calendar
                         return Observable.Return(filteredTimeEntries);
                     });
 
-                interactor = new GetCalendarItemsForDateInteractor(DataSource.TimeEntries, CalendarService, date);
+                UserPreferences.EnabledCalendarIds().Returns(new[] { "1", "2" }.ToList());
+
+                interactor = new GetCalendarItemsForDateInteractor(DataSource.TimeEntries, CalendarService, UserPreferences, date);
             }
 
             [Fact, LogIfTooSlow]
@@ -123,6 +129,16 @@ namespace Toggl.Foundation.Tests.Interactors.Calendar
                 var calendarItems = await interactor.Execute();
 
                 calendarItems.Should().BeInAscendingOrder(calendarItem => calendarItem.StartTime);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task OnlyRetunsCalendarItemsThatComeFromEnabledCalendars()
+            {
+                UserPreferences.EnabledCalendarIds().Returns("1".Yield().ToList());
+
+                var calendarItems = await interactor.Execute();
+
+                calendarItems.Count().Should().Be(calendarEvents.Count + calendarItemsFromTimeEntries.Count - 1);
             }
 
             [Fact, LogIfTooSlow]

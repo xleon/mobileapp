@@ -69,6 +69,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 => new CalendarViewModel(
                     DataSource,
                     TimeService,
+                    UserPreferences,
                     InteractorFactory,
                     OnboardingStorage,
                     SchedulerProvider,
@@ -84,6 +85,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
                 bool useTimeService,
+                bool useUserPreferences,
                 bool useInteractorFactory,
                 bool useOnboardingStorage,
                 bool useSchedulerProvider,
@@ -92,6 +94,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
+                var userPreferences = useUserPreferences ? UserPreferences : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
@@ -102,6 +105,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     () => new CalendarViewModel(
                         dataSource,
                         timeService,
+                        userPreferences,
                         interactorFactory,
                         onboardingStorage,
                         schedulerProvider,
@@ -279,7 +283,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.CalendarItems[0].Should().BeEquivalentTo(items);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task RefetchesWheneverATimeEntryIsAdded()
             {
                 var deletedSubject = new Subject<long>();
@@ -298,7 +302,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await CalendarInteractor.Received().Execute();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task RefetchesWheneverATimeEntryIsUpdated()
             {
                 var deletedSubject = new Subject<long>();
@@ -317,7 +321,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await CalendarInteractor.Received().Execute();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task RefetchesWheneverATimeEntryIsDeleted()
             {
                 var deletedSubject = new Subject<long>();
@@ -336,7 +340,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await CalendarInteractor.Received().Execute();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task RefetchesWheneverTheDayChanges()
             {
                 var deletedSubject = new Subject<long>();
@@ -354,13 +358,34 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await CalendarInteractor.Received().Execute();
             }
+
+            [Fact, LogIfTooSlow]
+            public async Task RefetchesWheneverTheSelectedCalendarsChange()
+            {
+                var deletedSubject = new Subject<long>();
+                var calendarSubject = new Subject<List<string>>();
+                var midnightSubject = new Subject<DateTimeOffset>();
+                var createdSubject = new Subject<IThreadSafeTimeEntry>();
+                var updatedSubject = new Subject<EntityUpdate<IThreadSafeTimeEntry>>();
+                DataSource.TimeEntries.Deleted.Returns(deletedSubject);
+                DataSource.TimeEntries.Updated.Returns(updatedSubject);
+                DataSource.TimeEntries.Created.Returns(createdSubject);
+                TimeService.MidnightObservable.Returns(midnightSubject);
+                UserPreferences.EnabledCalendars.Returns(calendarSubject);
+                await ViewModel.Initialize();
+                CalendarInteractor.ClearReceivedCalls();
+
+                calendarSubject.OnNext(new List<string>());
+
+                await CalendarInteractor.Received().Execute();
+            }
         }
 
         public abstract class TheOnItemTappedAction : CalendarViewModelTest
         {
             protected abstract CalendarItem CalendarItem { get; }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task NavigatesToTheEditTimeEntryViewModelUsingTheTimeEntryId()
             {
                 await ViewModel.OnItemTapped.Execute(CalendarItem);
@@ -391,7 +416,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     CalendarIconKind.Event
                 );
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task CreatesATimeEntryUsingTheCalendarItemInfo()
                 {
                     await ViewModel.OnItemTapped.Execute(CalendarItem);
@@ -402,7 +427,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         .Execute();
                 }
 
-                [Fact]
+                [Fact, LogIfTooSlow]
                 public async Task CreatesATimeEntryInTheDefaultWorkspace()
                 {
                     await ViewModel.OnItemTapped.Execute(CalendarItem);
@@ -417,7 +442,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheOnDurationSelectedAction : CalendarViewModelTest
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task CreatesATimeEntryWithTheSelectedStartDate()
             {
                 var now = DateTimeOffset.UtcNow;
@@ -432,7 +457,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Execute();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task CreatesATimeEntryWithTheSelectedDuration()
             {
                 var now = DateTimeOffset.UtcNow;
@@ -447,7 +472,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Execute();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task CreatesATimeEntryInTheDefaultWorkspace()
             {
                 var now = DateTimeOffset.UtcNow;
@@ -462,7 +487,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Execute();
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public async Task RefetchesTheTimeEntryItemsUsingTheInteractor()
             {
                 var now = DateTimeOffset.UtcNow;

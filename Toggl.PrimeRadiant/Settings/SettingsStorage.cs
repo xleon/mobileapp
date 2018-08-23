@@ -347,8 +347,6 @@ namespace Toggl.PrimeRadiant.Settings
 
         public void SetEnabledCalendars(params string[] ids)
         {
-            enabledCalendarsSubject.OnNext(ids?.ToList() ?? new List<string>());
-
             if (ids == null)
             {
                 keyValueStorage.Remove(enabledCalendarsKey);
@@ -366,6 +364,8 @@ namespace Toggl.PrimeRadiant.Settings
 
             var aggregatedIds = ids.Aggregate((accumulator, id) => $"{accumulator}{calendarIdSeparator}{id}");
             keyValueStorage.SetString(enabledCalendarsKey, aggregatedIds);
+
+            enabledCalendarsSubject.OnNext(ids?.ToList() ?? new List<string>());
         }
 
         #endregion

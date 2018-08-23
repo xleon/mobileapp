@@ -23,8 +23,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
     [Preserve(AllMembers = true)]
     public sealed class CalendarViewModel : MvxViewModel
     {
-        private readonly ITogglDataSource dataSource;
         private readonly ITimeService timeService;
+        private readonly ITogglDataSource dataSource;
+        private readonly IUserPreferences userPreferences;
         private readonly IInteractorFactory interactorFactory;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IPermissionsService permissionsService;
@@ -52,6 +53,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         public CalendarViewModel(
             ITogglDataSource dataSource,
             ITimeService timeService,
+            IUserPreferences userPreferences,
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
             ISchedulerProvider schedulerProvider,
@@ -60,6 +62,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
@@ -68,6 +71,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
             this.dataSource = dataSource;
             this.timeService = timeService;
+            this.userPreferences = userPreferences;
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
             this.navigationService = navigationService;
@@ -109,9 +113,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 .MidnightObservable
                 .SelectUnit();
 
+            var selectedCalendarsChangedObservable = userPreferences
+                .EnabledCalendars
+                .SelectUnit();
+
             dataSource.TimeEntries
                 .ItemsChanged()
                 .Merge(dayChangedObservable)
+                .Merge(selectedCalendarsChangedObservable)
                 .Subscribe(reloadData)
                 .DisposedBy(disposeBag);
 

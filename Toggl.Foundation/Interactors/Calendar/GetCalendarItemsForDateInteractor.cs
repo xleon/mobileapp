@@ -7,6 +7,7 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Services;
 using Toggl.Multivac;
+using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.Interactors.Calendar
 {
@@ -16,19 +17,23 @@ namespace Toggl.Foundation.Interactors.Calendar
 
         private readonly ITimeEntriesSource timeEntriesDataSource;
         private readonly ICalendarService calendarService;
+        private readonly IUserPreferences userPreferences;
         private readonly DateTime date;
 
         public GetCalendarItemsForDateInteractor(
             ITimeEntriesSource timeEntriesDataSource,
             ICalendarService calendarService,
+            IUserPreferences userPreferences,
             DateTime date)
         {
             Ensure.Argument.IsNotNull(timeEntriesDataSource, nameof(timeEntriesDataSource));
             Ensure.Argument.IsNotNull(calendarService, nameof(calendarService));
+            Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(date, nameof(date));
 
             this.timeEntriesDataSource = timeEntriesDataSource;
             this.calendarService = calendarService;
+            this.userPreferences = userPreferences;
             this.date = date;
         }
 
@@ -49,7 +54,13 @@ namespace Toggl.Foundation.Interactors.Calendar
                 .Select(convertTimeEntriesToCalendarItems);
 
         private IObservable<IEnumerable<CalendarItem>> calendarItemsFromEvents()
-            => calendarService.GetEventsForDate(date);
+            => calendarService.GetEventsForDate(date).Select(enabledCalendarItems);
+
+        private IEnumerable<CalendarItem> enabledCalendarItems(IEnumerable<CalendarItem> calendarItems)
+            => calendarItems.Where(userCalendarIsEnabled);
+
+        private bool userCalendarIsEnabled(CalendarItem calendarItem)
+            => userPreferences.EnabledCalendarIds().Contains(calendarItem.CalendarId);
 
         private IEnumerable<CalendarItem> convertTimeEntriesToCalendarItems(IEnumerable<IThreadSafeTimeEntry> timeEntries)
             => timeEntries.Select(CalendarItem.From);
