@@ -1,8 +1,6 @@
-using System.Linq;
 using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
-using Android.Graphics;
 using Android.OS;
 using Android.Views;
 using Android.Views.InputMethods;
@@ -14,7 +12,7 @@ using Toggl.Multivac;
 namespace Toggl.Giskard.Activities
 {
     [MvxActivityPresentation]
-    [Activity(Theme = "@style/AppTheme",
+    [Activity(Theme = "@style/AppTheme.WhiteStatusBar",
               ScreenOrientation = ScreenOrientation.Portrait,
               WindowSoftInputMode = SoftInput.AdjustPan | SoftInput.StateHidden,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
@@ -22,8 +20,6 @@ namespace Toggl.Giskard.Activities
     {
         protected override void OnCreate(Bundle bundle)
         {
-            this.ChangeStatusBarColor(Color.White, true);
-
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.LoginActivity);
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);

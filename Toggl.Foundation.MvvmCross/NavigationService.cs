@@ -4,19 +4,23 @@ using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.Analytics;
+using Toggl.Foundation.MvvmCross.Services;
 
 namespace Toggl.Foundation.MvvmCross
 {
-    public sealed class TrackingNavigationService : MvxNavigationService
+    public sealed class NavigationService : MvxNavigationService, IForkingNavigationService
     {
         private readonly IAnalyticsService analyticsService;
+        private readonly PlatformInfo platformInfo;
 
-        public TrackingNavigationService(
+        public NavigationService(
             IMvxNavigationCache navigationCache,
             IMvxViewModelLoader viewModelLoader,
-            IAnalyticsService analyticsService) : base(navigationCache, viewModelLoader)
+            IAnalyticsService analyticsService,
+            PlatformInfo platformInfo) : base(navigationCache, viewModelLoader)
         {
             this.analyticsService = analyticsService;
+            this.platformInfo = platformInfo;
         }
 
         public override Task Navigate(IMvxViewModel viewModel, IMvxBundle presentationBundle = null)
@@ -65,6 +69,18 @@ namespace Toggl.Foundation.MvvmCross
         {
             analyticsService.CurrentPage.Track(viewModelType);
             return base.Navigate<TParameter, TResult>(viewModelType, param, presentationBundle, cancellationToken);
+        }
+
+        public Task ForkNavigate<TDaneelViewModel, TGiskardViewModel>()
+            where TDaneelViewModel : IMvxViewModel
+            where TGiskardViewModel : IMvxViewModel
+        {
+            if (platformInfo.Platform == Platform.Daneel)
+            {
+                return Navigate<TDaneelViewModel>();
+            }
+
+            return Navigate<TGiskardViewModel>();
         }
     }
 }

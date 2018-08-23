@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using Android.App;
 using Android.Content.PM;
-using Android.Graphics;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
@@ -16,7 +15,7 @@ using Toolbar = Android.Support.V7.Widget.Toolbar;
 namespace Toggl.Giskard.Activities
 {
     [MvxActivityPresentation]
-    [Activity(Theme = "@style/AppTheme",
+    [Activity(Theme = "@style/AppTheme.WhiteStatusBar",
         ScreenOrientation = ScreenOrientation.Portrait,
         WindowSoftInputMode = SoftInput.StateVisible,
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
@@ -28,8 +27,6 @@ namespace Toggl.Giskard.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
-            this.ChangeStatusBarColor(Color.White, true);
-
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.ForgotPasswordActivity);
             OverridePendingTransition(Resource.Animation.abc_slide_in_right, Resource.Animation.abc_fade_out);

@@ -21,6 +21,7 @@ namespace Toggl.Foundation
         public ITimeService TimeService { get; }
         public IScheduler Scheduler { get; }
         public IMailService MailService { get; }
+        public PlatformInfo PlatformInfo { get; }
         public IGoogleService GoogleService { get; }
         public IRatingService RatingService { get; }
         public ApiEnvironment ApiEnvironment { get; }
@@ -47,6 +48,7 @@ namespace Toggl.Foundation
             ApiFactory = builder.ApiFactory;
             TimeService = builder.TimeService;
             MailService = builder.MailService;
+            PlatformInfo = builder.PlatformInfo;
             GoogleService = builder.GoogleService;
             RatingService = builder.RatingService;
             ApiEnvironment = builder.ApiEnvironment;
@@ -69,6 +71,7 @@ namespace Toggl.Foundation
             public ITimeService TimeService { get; internal set; }
             public IScheduler Scheduler { get; internal set; }
             public IMailService MailService { get; internal set; }
+            public PlatformInfo PlatformInfo { get; internal set; }
             public IRatingService RatingService { get; internal set; }
             public IGoogleService GoogleService { get; internal set; }
             public ApiEnvironment ApiEnvironment { get; internal set; }
@@ -184,6 +187,12 @@ namespace Toggl.Foundation
                 return this;
             }
 
+            public Builder WithPlatformInfo(PlatformInfo platformInfo)
+            {
+                PlatformInfo = platformInfo;
+                return this;
+            }
+
             public Builder WithDatabase<TDatabase>()
                 where TDatabase : ITogglDatabase, new()
                 => WithDatabase(new TDatabase());
@@ -248,6 +257,7 @@ namespace Toggl.Foundation
                 Ensure.Argument.IsNotNull(ApiFactory, nameof(ApiFactory));
                 Ensure.Argument.IsNotNull(TimeService, nameof(TimeService));
                 Ensure.Argument.IsNotNull(MailService, nameof(MailService));
+                Ensure.Argument.IsNotNull(PlatformInfo, nameof(PlatformInfo));
                 Ensure.Argument.IsNotNull(GoogleService, nameof(GoogleService));
                 Ensure.Argument.IsNotNull(RatingService, nameof(RatingService));
                 Ensure.Argument.IsNotNull(LicenseProvider, nameof(LicenseProvider));

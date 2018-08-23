@@ -16,18 +16,20 @@ namespace Toggl.Daneel.ViewSources
         private const string cellIdentifier = nameof(ReportsLegendViewCell);
         private const string headerCellIdentifier = nameof(ReportsHeaderView);
 
-        public ReportsViewModel ViewModel { get; set; }
+        private readonly ReportsViewModel viewModel;
 
         public event EventHandler<CGPoint> OnScroll;
 
         private readonly nfloat headerHeight;
+        private readonly nfloat bottomHeight = 78;
 
-        public ReportsTableViewSource(UITableView tableView)
+        public ReportsTableViewSource(UITableView tableView, ReportsViewModel viewModel)
             : base(tableView)
         {
+            this.viewModel = viewModel;
             headerHeight = summaryHeight + UIScreen.MainScreen.Bounds.Width;
             tableView.TableHeaderView = new UIView(new CGRect(0, 0, tableView.Bounds.Size.Width, headerHeight));
-            tableView.ContentInset = new UIEdgeInsets(-headerHeight, 0, 0, 0);
+            tableView.ContentInset = new UIEdgeInsets(-headerHeight, 0, viewModel.Workspaces.Count > 1 ? bottomHeight : 0, 0);
             tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             tableView.RegisterNibForCellReuse(ReportsLegendViewCell.Nib, cellIdentifier);
             tableView.RegisterNibForHeaderFooterViewReuse(ReportsHeaderView.Nib, headerCellIdentifier);
@@ -39,7 +41,7 @@ namespace Toggl.Daneel.ViewSources
             var header = tableView.DequeueReusableHeaderFooterView(headerCellIdentifier);
 
             if (header is IMvxBindable bindable)
-                bindable.DataContext = ViewModel;
+                bindable.DataContext = viewModel;
 
             return header;
         }

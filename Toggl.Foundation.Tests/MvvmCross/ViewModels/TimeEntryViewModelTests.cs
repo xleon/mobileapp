@@ -6,6 +6,7 @@ using NSubstitute;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
@@ -53,6 +54,22 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var viewModel = new TimeEntryViewModel(MockTimeEntry, DurationFormat.Improved);
 
                 viewModel.HasProject.Should().Be(hasProject);
+            }
+        }
+
+        public sealed class TheIsGhostProperty : TimeEntryViewModelTest
+        {
+            [Theory, LogIfTooSlow]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void ShouldBeTakenFromTimeEntry(bool isGhost)
+            {
+                MockTimeEntry.Duration.Returns((long)TimeSpan.FromHours(1).TotalSeconds);
+                MockTimeEntry.IsGhost.Returns(isGhost);
+
+                var viewModel = new TimeEntryViewModel(MockTimeEntry, DurationFormat.Improved);
+
+                viewModel.IsGhost.Should().Be(isGhost);
             }
         }
 

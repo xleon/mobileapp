@@ -70,8 +70,6 @@ namespace Toggl.Daneel.Views
             underlineLayer.BackgroundColor = placeholderColor;
             VerticalAlignment = UIControlContentVerticalAlignment.Top;
             DrawPlaceholder(Frame);
-
-            EditingDidBegin += onEditingDidBegin;
         }
 
         public override void LayoutSubviews()
@@ -104,15 +102,6 @@ namespace Toggl.Daneel.Views
             //For antialiasing
             placeholderLayer.ContentsScale = UIScreen.MainScreen.Scale;
             placeholderDrawn = true;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-
-            if (!disposing) return;
-
-            EditingDidBegin -= onEditingDidBegin;
         }
 
         public override bool BecomeFirstResponder()
@@ -177,12 +166,6 @@ namespace Toggl.Daneel.Views
             placeholderLayer.AffineTransform = CGAffineTransform.MakeIdentity();
             placeholderLayer.FontSize = bigPlaceholderSize;
             CATransaction.Commit();
-        }
-
-        private void onEditingDidBegin(object sender, EventArgs e)
-        {
-            if (!SecureTextEntry) return;
-            InsertText(Text);
         }
     }
 }

@@ -10,11 +10,13 @@ using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Experiments;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Foundation.Suggestions;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
@@ -62,9 +64,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 syncManager.ProgressObservable.Returns(ProgressSubject.AsObservable());
                 DataSource.SyncManager.Returns(syncManager);
 
+                var defaultRemoteConfiguration = new RatingViewConfiguration(5, RatingViewCriterion.None);
                 RemoteConfigService
                     .RatingViewConfiguration
-                    .Returns(Observable.Never<RatingViewConfiguration>());
+                    .Returns(Observable.Return(defaultRemoteConfiguration));
             }
         }
 
@@ -946,6 +949,82 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     await ViewModel.Initialize();
 
                     await interactor.Received().Execute();
+                }
+            }
+
+            public sealed class WhenShowingTheRatingsView : MainViewModelTest
+            {
+                [Fact, LogIfTooSlow]
+                public async void DoesNotShowTheRatingViewByDefault()
+                {
+                    await ViewModel.Initialize();
+                    await NavigationService.DidNotReceive().ChangePresentation(
+                        Arg.Is<ToggleRatingViewVisibilityHint>(hint => hint.ShouldHide == false)
+                    );
+                }
+
+                [Fact, LogIfTooSlow]
+                public async void ShowsTheRatingView()
+                {
+                    var defaultRemoteConfiguration = new RatingViewConfiguration(5, RatingViewCriterion.Start);
+                    RemoteConfigService
+                        .RatingViewConfiguration
+                        .Returns(Observable.Return(defaultRemoteConfiguration));
+
+                    var now = DateTimeOffset.Now;
+                    var firstOpened = now - TimeSpan.FromDays(5);
+
+                    TimeService.CurrentDateTime.Returns(now);
+                    OnboardingStorage.GetFirstOpened().Returns(firstOpened);
+
+                    await ViewModel.Initialize();
+                    await NavigationService.Received().ChangePresentation(
+                        Arg.Is<ToggleRatingViewVisibilityHint>(hint => hint.ShouldHide == false)
+                    );
+                }
+
+                [Fact, LogIfTooSlow]
+                public async void DoesNotShowTheRatingViewIfThereWasAnInteraction()
+                {
+                    var defaultRemoteConfiguration = new RatingViewConfiguration(5, RatingViewCriterion.Start);
+                    RemoteConfigService
+                        .RatingViewConfiguration
+                        .Returns(Observable.Return(defaultRemoteConfiguration));
+
+                    var now = DateTimeOffset.Now;
+                    var firstOpened = now - TimeSpan.FromDays(6);
+
+                    TimeService.CurrentDateTime.Returns(now);
+                    OnboardingStorage.GetFirstOpened().Returns(firstOpened);
+                    OnboardingStorage.RatingViewOutcome().Returns(RatingViewOutcome.AppWasNotRated);
+
+                    await ViewModel.Initialize();
+                    await NavigationService.DidNotReceive().ChangePresentation(
+                        Arg.Is<ToggleRatingViewVisibilityHint>(hint => hint.ShouldHide == false)
+                    );
+                }
+
+                [Fact, LogIfTooSlow]
+                public async void DoesNotShowTheRatingViewIfAfter24HourSnooze()
+                {
+                    var defaultRemoteConfiguration = new RatingViewConfiguration(5, RatingViewCriterion.Start);
+                    RemoteConfigService
+                        .RatingViewConfiguration
+                        .Returns(Observable.Return(defaultRemoteConfiguration));
+
+                    var now = DateTimeOffset.Now;
+                    var firstOpened = now - TimeSpan.FromDays(6);
+                    var lastInteraction = now - TimeSpan.FromDays(2);
+
+                    TimeService.CurrentDateTime.Returns(now);
+                    OnboardingStorage.GetFirstOpened().Returns(firstOpened);
+                    OnboardingStorage.RatingViewOutcome().Returns(RatingViewOutcome.AppWasNotRated);
+                    OnboardingStorage.RatingViewOutcomeTime().Returns(lastInteraction);
+
+                    await ViewModel.Initialize();
+                    await NavigationService.DidNotReceive().ChangePresentation(
+                        Arg.Is<ToggleRatingViewVisibilityHint>(hint => hint.ShouldHide == false)
+                    );
                 }
             }
         }

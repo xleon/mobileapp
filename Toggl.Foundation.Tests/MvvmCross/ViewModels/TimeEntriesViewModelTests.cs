@@ -178,29 +178,41 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected Subject<IThreadSafeTimeEntry> TimeEntryCreatedSubject = new Subject<IThreadSafeTimeEntry>();
             protected Subject<EntityUpdate<IThreadSafeTimeEntry>> TimeEntryUpdatedSubject = new Subject<EntityUpdate<IThreadSafeTimeEntry>>();
             protected Subject<long> TimeEntryDeletedSubject = new Subject<long>();
-            protected IThreadSafeTimeEntry NewTimeEntry =
-                TimeEntry.Builder.Create(21)
-                         .SetUserId(10)
-                         .SetWorkspaceId(12)
-                         .SetDescription("")
-                         .SetAt(now)
-                         .SetStart(now)
-                         .Build();
+
+            protected IThreadSafeTimeEntry NewTimeEntry(long? duration = null)
+            {
+                return new MockTimeEntry
+                {
+                    Id = 21,
+                    UserId = 10,
+                    WorkspaceId = 12,
+                    Description = "",
+                    At = now,
+                    Duration = duration,
+                    Start = now,
+                    TagIds = new long[] { 1, 2, 3 },
+                    Workspace = new MockWorkspace()
+                };
+            }
 
             protected TimeEntryDataSourceObservableTest()
             {
                 var startTime = now.AddHours(-2);
 
                 var observable = Enumerable.Range(1, InitialAmountOfTimeEntries)
-                    .Select(i => TimeEntry.Builder.Create(i))
-                    .Select(builder => builder
-                        .SetStart(startTime.AddHours(builder.Id * 2))
-                        .SetUserId(11)
-                        .SetWorkspaceId(12)
-                        .SetDescription("")
-                        .SetAt(now)
-                        .Build())
-                  .Select(te => te.With((long)TimeSpan.FromHours(te.Id * 2 + 2).TotalSeconds))
+                    .Select(i =>
+                        new MockTimeEntry {
+                            Id = i,
+                            Start = startTime.AddHours(i * 2),
+                            Duration = (long)TimeSpan.FromHours(i * 2 + 2).TotalSeconds,
+                            UserId = 11,
+                            WorkspaceId = 12,
+                            Description = "",
+                            At = now,
+                            TagIds = new long[] { 1, 2, 3 },
+                            Workspace = new MockWorkspace { IsGhost = false }
+                        }
+                    )
                   .Apply(Observable.Return);
 
                 InteractorFactory.GetAllNonDeletedTimeEntries().Execute().Returns(observable);
@@ -216,7 +228,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask AddsTheCreatedTimeEntryToTheList()
             {
                 await ViewModel.Initialize();
-                var newTimeEntry = NewTimeEntry.With((long)TimeSpan.FromHours(1).TotalSeconds);
+                var newTimeEntry = NewTimeEntry((long)TimeSpan.FromHours(1).TotalSeconds);
 
                 TimeEntryCreatedSubject.OnNext(newTimeEntry);
 
@@ -229,7 +241,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.Initialize();
 
-                TimeEntryCreatedSubject.OnNext(NewTimeEntry);
+                TimeEntryCreatedSubject.OnNext(NewTimeEntry());
 
                 ViewModel.TimeEntries.Any(c => c.Any(te => te.Id == 21)).Should().BeFalse();
                 ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries);
@@ -243,7 +255,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask AddsTheTimeEntryIfItWasNotAddedPreviously()
             {
                 await ViewModel.Initialize();
-                var newTimeEntry = NewTimeEntry.With((long)TimeSpan.FromHours(1).TotalSeconds);
+                var newTimeEntry = NewTimeEntry((long)TimeSpan.FromHours(1).TotalSeconds);
 
                 TimeEntryUpdatedSubject.OnNext(new EntityUpdate<IThreadSafeTimeEntry>(newTimeEntry.Id, newTimeEntry));
 
@@ -256,7 +268,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.Initialize();
 
-                TimeEntryCreatedSubject.OnNext(NewTimeEntry);
+                TimeEntryCreatedSubject.OnNext(NewTimeEntry());
 
                 ViewModel.TimeEntries.Any(c => c.Any(te => te.Id == 21)).Should().BeFalse();
                 ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries);
@@ -297,7 +309,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheDelayDeleteTimeEntryAction : TimeEntriesViewModelTest
         {
             private readonly TimeEntriesViewModel viewModel;
-            private readonly TimeEntryViewModel timeEntry = new TimeEntryViewModel(new MockTimeEntry { Id = 1, Duration = 123, TagIds = Array.Empty<long>() }, DurationFormat.Classic);
+            private readonly TimeEntryViewModel timeEntry = new TimeEntryViewModel(new MockTimeEntry { Id = 1, Duration = 123, TagIds = Array.Empty<long>(), Workspace = new MockWorkspace() }, DurationFormat.Classic);
             private readonly IObserver<bool> observer = Substitute.For<IObserver<bool>>();
 
             public TheDelayDeleteTimeEntryAction()
@@ -311,6 +323,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await viewModel.DelayDeleteTimeEntry.Execute(timeEntry);
 
+                SchedulerProvider.TestScheduler.Start();
                 observer.Received().OnNext(true);
             }
 
@@ -332,6 +345,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks);
                 await observable;
 
+                SchedulerProvider.TestScheduler.Start();
                 observer.Received().OnNext(true);
                 observer.Received().OnNext(false);
             }
@@ -339,8 +353,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async ThreadingTask DoesNotHideTheUndoUIIfAnotherItemWasDeletedWhileWaiting()
             {
-                var timeEntryA = new TimeEntryViewModel(new MockTimeEntry { Id = 1, Duration = 123, TagIds = Array.Empty<long>() }, DurationFormat.Classic);
-                var timeEntryB = new TimeEntryViewModel(new MockTimeEntry { Id = 1, Duration = 123, TagIds = Array.Empty<long>() }, DurationFormat.Classic);
+                var timeEntryA = new TimeEntryViewModel(new MockTimeEntry { Id = 1, Duration = 123, TagIds = Array.Empty<long>(), Workspace = new MockWorkspace() }, DurationFormat.Classic);
+                var timeEntryB = new TimeEntryViewModel(new MockTimeEntry { Id = 1, Duration = 123, TagIds = Array.Empty<long>(), Workspace = new MockWorkspace() }, DurationFormat.Classic);
 
                 var observableA = viewModel.DelayDeleteTimeEntry.Execute(timeEntryA);
                 SchedulerProvider.TestScheduler.AdvanceBy((long)(Constants.UndoTime.Ticks * 0.5));
@@ -354,8 +368,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async ThreadingTask ImmediatelyHardDeletesTheTimeEntryWhenAnotherTimeEntryIsDeletedBeforeTheUndoTimeRunsOut()
             {
-                var timeEntryA = new TimeEntryViewModel(new MockTimeEntry { Id = 1, Duration = 123, TagIds = Array.Empty<long>() }, DurationFormat.Classic);
-                var timeEntryB = new TimeEntryViewModel(new MockTimeEntry { Id = 1, Duration = 123, TagIds = Array.Empty<long>() }, DurationFormat.Classic);
+                var timeEntryA = new TimeEntryViewModel(new MockTimeEntry { Id = 1, Duration = 123, TagIds = Array.Empty<long>(), Workspace = new MockWorkspace() }, DurationFormat.Classic);
+                var timeEntryB = new TimeEntryViewModel(new MockTimeEntry { Id = 1, Duration = 123, TagIds = Array.Empty<long>(), Workspace = new MockWorkspace() }, DurationFormat.Classic);
 
                 var observableA = viewModel.DelayDeleteTimeEntry.Execute(timeEntryA);
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks / 2);
@@ -369,7 +383,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheCancelDeleteTimeEntryAction : TimeEntriesViewModelTest
         {
             private readonly TimeEntriesViewModel viewModel;
-            private readonly TimeEntryViewModel timeEntry = new TimeEntryViewModel(new MockTimeEntry { Id = 1, Duration = 123, TagIds = Array.Empty<long>() }, DurationFormat.Classic);
+            private readonly TimeEntryViewModel timeEntry = new TimeEntryViewModel(new MockTimeEntry { Id = 1, Duration = 123, TagIds = Array.Empty<long>(), Workspace = new MockWorkspace() }, DurationFormat.Classic);
             private readonly IObserver<bool> observer = Substitute.For<IObserver<bool>>();
 
             public TheCancelDeleteTimeEntryAction()
@@ -409,6 +423,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await viewModel.CancelDeleteTimeEntry.Execute();
                 await observable;
 
+                SchedulerProvider.TestScheduler.Start();
                 observer.Received().OnNext(true);
                 observer.Received().OnNext(false);
             }

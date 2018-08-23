@@ -46,7 +46,7 @@ namespace Toggl.Daneel.ViewControllers
 
             calendarSizeDisposable = CalendarContainer.AddObserver(boundsKey, NSKeyValueObservingOptions.New, onCalendarSizeChanged);
 
-            source = new ReportsTableViewSource(ReportsTableView);
+            source = new ReportsTableViewSource(ReportsTableView, ViewModel);
             source.OnScroll += onReportsTableScrolled;
             ReportsTableView.Source = source;
 
@@ -65,10 +65,6 @@ namespace Toggl.Daneel.ViewControllers
             bindingSet.Bind(titleButton)
                       .For(v => v.BindTitle())
                       .To(vm => vm.CurrentDateRangeString);
-
-            bindingSet.Bind(source)
-                      .For(v => v.ViewModel)
-                      .To(vm => vm);
 
             bindingSet.Bind(ReportsTableView)
                       .For(v => v.BindTap())

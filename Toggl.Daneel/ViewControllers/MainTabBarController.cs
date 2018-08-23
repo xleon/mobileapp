@@ -37,5 +37,12 @@ namespace Toggl.Daneel.ViewControllers
                 return controller;
             }
         }
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+
+            TabBar.Translucent = UIDevice.CurrentDevice.CheckSystemVersion(11, 0);
+        }
     }
 }

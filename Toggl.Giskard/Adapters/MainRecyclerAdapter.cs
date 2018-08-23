@@ -83,7 +83,7 @@ namespace Toggl.Giskard.Adapters
             if (holder is MainRecyclerViewLogViewHolder timeEntriesLogRecyclerViewHolder
                 && GetItem(position) is TimeEntryViewModel timeEntry)
             {
-                timeEntriesLogRecyclerViewHolder.CanSync = timeEntry.CanSync;
+                timeEntriesLogRecyclerViewHolder.CanSync = timeEntry.CanSync && !timeEntry.IsGhost;
             }
         }
 
