@@ -6,6 +6,7 @@ using Toggl.Daneel.ViewSources;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
+using UIKit;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -44,6 +45,7 @@ namespace Toggl.Daneel.ViewControllers
             CalendarCollectionView.SetCollectionViewLayout(layout, false);
             CalendarCollectionView.Delegate = dataSource;
             CalendarCollectionView.DataSource = dataSource;
+            CalendarCollectionView.ContentInset = new UIEdgeInsets(20, 0, 20, 0);
 
             this.Bind(dataSource.ItemTapped, ViewModel.OnItemTapped);
             this.Bind(createFromSpanHelper.CreateFromSpan, ViewModel.OnDurationSelected);
