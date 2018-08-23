@@ -625,6 +625,8 @@
     <InterfaceDefinition Include="ViewControllers\Calendar\SelectUserCalendarsViewController.xib" />
     <InterfaceDefinition Include="Cells\Calendar\SelectableUserCalendarViewCell.xib" />
     <InterfaceDefinition Include="Cells\Calendar\UserCalendarListHeaderViewCell.xib" />
+    <InterfaceDefinition Include="Views\Settings\CalendarSettingsTableViewHeader.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\CalendarSettingsViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -1088,6 +1090,14 @@
     <Compile Include="ViewSources\CalendarCollectionViewSource.cs" />
     <Compile Include="Binding\LayoutConstraintActiveTargetBinding.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Views\Settings\CalendarSettingsTableViewHeader.cs" />
+    <Compile Include="Views\Settings\CalendarSettingsTableViewHeader.designer.cs">
+      <DependentUpon>CalendarSettingsTableViewHeader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\CalendarSettingsViewController.cs" />
+    <Compile Include="ViewControllers\Settings\CalendarSettingsViewController.designer.cs">
+      <DependentUpon>CalendarSettingsViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\Calendar\CalendarCollectionViewCreateFromSpanHelper.cs" />
     <Compile Include="Views\Calendar\CalendarCollectionViewEditItemHelper.cs" />
   </ItemGroup>

@@ -839,6 +839,18 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string On {
+            get {
+                return ResourceManager.GetString("On", resourceCulture);
+            }
+        }
+        
+        public static string Off {
+            get {
+                return ResourceManager.GetString("Off", resourceCulture);
+            }
+        }
+        
         public static string NoDescription {
             get {
                 return ResourceManager.GetString("NoDescription", resourceCulture);

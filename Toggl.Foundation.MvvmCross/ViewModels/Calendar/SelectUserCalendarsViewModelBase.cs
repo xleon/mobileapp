@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels.Selectable;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
@@ -44,12 +45,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             await InteractorFactory
                 .GetUserCalendars()
                 .Execute()
+                .Catch((NotAuthorizedException _) => Observable.Return(new List<UserCalendar>()))
                 .Select(calendars => calendars.Select(toSelectable))
                 .Do(calendars => calendars.ForEach(calendar => Calendars.InsertItem(calendar)));
         }
 
         private SelectableUserCalendarViewModel toSelectable(UserCalendar calendar)
-            => new SelectableUserCalendarViewModel(calendar, false);
+            => new SelectableUserCalendarViewModel(calendar, SelectedCalendarIds.Contains(calendar.Id));
 
         private IObservable<Unit> selectCalendar(SelectableUserCalendarViewModel calendar)
         {

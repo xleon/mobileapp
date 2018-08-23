@@ -17,6 +17,8 @@ namespace Toggl.Daneel.ViewSources
         private const string cellIdentifier = nameof(SelectableUserCalendarViewCell);
         private const string headerIdentifier = nameof(UserCalendarListHeaderViewCell);
 
+        public UIColor SectionHeaderBackgroundColor { get; set; } = UIColor.White;
+
         public SelectUserCalendarsTableViewSource(
             UITableView tableView,
             ObservableGroupedOrderedCollection<SelectableUserCalendarViewModel> items
@@ -37,6 +39,7 @@ namespace Toggl.Daneel.ViewSources
         {
             var header = (UserCalendarListHeaderViewCell)tableView.DequeueReusableHeaderFooterView(headerIdentifier);
             header.Item = collection[(int)section].First().SourceName;
+            header.ContentView.BackgroundColor = SectionHeaderBackgroundColor;
             return header;
         }
 

@@ -242,6 +242,7 @@ namespace Toggl.Foundation.MvvmCross.Helper
         public static class Settings
         {
             public static readonly MvxColor SyncStatusText = new MvxColor(144, 146, 147);
+            public static readonly MvxColor Background = nearlyWhite;
         }
 
         public static class Feedback
