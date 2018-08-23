@@ -166,7 +166,7 @@ namespace Toggl.Daneel.ViewSources
             if (!IsEditing)
                 throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
 
-            editingItemIndexPath = insertPlaceholder(startTime, duration);
+            editingItemIndexPath = insertCalendarItem(startTime, duration);
             CollectionView.InsertItems(new NSIndexPath[] { editingItemIndexPath });
             return editingItemIndexPath;
         }
@@ -176,7 +176,7 @@ namespace Toggl.Daneel.ViewSources
             if (!IsEditing)
                 throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
 
-            editingItemIndexPath = updatePlaceholder(indexPath, startTime, duration);
+            editingItemIndexPath = updateCalendarItem(indexPath, startTime, duration);
 
             bool animationsEnabled = UIView.AnimationsEnabled;
             UIView.AnimationsEnabled = false;
@@ -191,7 +191,7 @@ namespace Toggl.Daneel.ViewSources
             if (!IsEditing)
                 throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
 
-            removePlaceholder(indexPath);
+            removeCalendarItem(indexPath);
             CollectionView.DeleteItems(new NSIndexPath[] { indexPath });
         }
 
@@ -240,32 +240,47 @@ namespace Toggl.Daneel.ViewSources
             if (calendarItems.None())
                 return new List<CalendarCollectionViewItemLayoutAttributes>();
 
-            var seed = new List<List<CalendarItem>>() { new List<CalendarItem>() };
+            var initialValue = new List<List<(CalendarItem item, int index)>>() { new List<(CalendarItem item, int index)>() };
 
-            var attributes = calendarItems
-                .Aggregate(seed, (buckets, item) =>
-                {
-                    var bucket = buckets.Last();
-                    if (bucket.None())
-                    {
-                        bucket.Add(item);
-                    }
-                    else
-                    {
-                        var endTime = bucket.Max(i => i.EndTime.LocalDateTime);
-                        if (item.StartTime.LocalDateTime < endTime)
-                            bucket.Add(item);
-                        else
-                            buckets.Add(new List<CalendarItem>() { item });
-                    }
+            var pairs = calendarItems
+                .Select((item, index) => (item: item, index: index))
+                .OrderBy(pair => pair.item.StartTime)
+                .ToList();
 
-                    return buckets;
-                })
-                .Select(bucket => bucket.Select((item, index) => attributesForItem(item, bucket.Count, index)))
+            var attributes = pairs
+                .Aggregate(initialValue, groupOverlappingItems)
+                .Select(toLayoutAttributes)
                 .SelectMany(CommonFunctions.Identity)
+                .OrderBy(pair => pair.index)
+                .Select(pair => pair.attributes)
                 .ToList();
 
             return attributes;
+
+            List<List<(CalendarItem item, int index)>> groupOverlappingItems(
+                List<List<(CalendarItem item, int index)>> previous,
+                (CalendarItem item, int index) pair)
+            {
+                var group = previous.Last();
+                if (group.None())
+                {
+                    group.Add(pair);
+                }
+                else
+                {
+                    var endTime = group.Max(i => i.item.EndTime.LocalDateTime);
+                    if (pair.item.StartTime.LocalDateTime < endTime)
+                        group.Add(pair);
+                    else
+                        previous.Add(new List<(CalendarItem, int)>() { pair });
+                }
+
+                return previous;
+            }
+
+            IEnumerable<(CalendarCollectionViewItemLayoutAttributes attributes, int index)> toLayoutAttributes(
+                List<(CalendarItem item, int index)> group)
+                => group.Select((pair, index) => (attributesForItem(pair.item, group.Count, index), pair.index));
         }
 
         private CalendarCollectionViewItemLayoutAttributes attributesForItem(
@@ -279,54 +294,37 @@ namespace Toggl.Daneel.ViewSources
                 positionInOverlappingGroup
             );
 
-        private NSIndexPath insertPlaceholder(DateTimeOffset startTime, TimeSpan duration)
+        private NSIndexPath insertCalendarItem(DateTimeOffset startTime, TimeSpan duration)
         {
             var calendarItem = new CalendarItem(CalendarItemSource.TimeEntry, startTime, duration, FoundationResources.NewTimeEntry, CalendarIconKind.None);
 
-            var insertPosition = calendarItems.IndexOf(item => item.StartTime > calendarItem.StartTime);
-            if (insertPosition >= 0)
-            {
-                calendarItems.Insert(insertPosition, calendarItem);
-            }
-            else
-            {
-                calendarItems.Add(calendarItem);
-                insertPosition = calendarItems.Count - 1;
-            }
+            calendarItems.Add(calendarItem);
+            var position = calendarItems.Count - 1;
 
             layoutAttributes = calculateLayoutAttributes();
 
-            var indexPath = NSIndexPath.FromItemSection(insertPosition, 0);
+            var indexPath = NSIndexPath.FromItemSection(position, 0);
             return indexPath;
         }
 
-        private NSIndexPath updatePlaceholder(NSIndexPath indexPath, DateTimeOffset startTime, TimeSpan duration)
+        private NSIndexPath updateCalendarItem(NSIndexPath indexPath, DateTimeOffset startTime, TimeSpan duration)
         {
-            var oldCalendarItem = calendarItems[(int)indexPath.Item];
+            var position = (int)indexPath.Item;
+            var oldCalendarItem = calendarItems[position];
             calendarItems.RemoveAt((int)indexPath.Item);
 
             var calendarItem = oldCalendarItem
                 .WithStartTime(startTime)
                 .WithDuration(duration);
 
-            var insertPosition = calendarItems.IndexOf(item => item.StartTime > calendarItem.StartTime);
-            if (insertPosition >= 0)
-            {
-                calendarItems.Insert(insertPosition, calendarItem);
-            }
-            else
-            {
-                calendarItems.Add(calendarItem);
-                insertPosition = calendarItems.Count - 1;
-            }
-
+            calendarItems.Insert(position, calendarItem);
             layoutAttributes = calculateLayoutAttributes();
 
-            var updatedIndexPath = NSIndexPath.FromItemSection(insertPosition, 0);
+            var updatedIndexPath = NSIndexPath.FromItemSection(position, 0);
             return updatedIndexPath;
         }
 
-        private void removePlaceholder(NSIndexPath indexPath)
+        private void removeCalendarItem(NSIndexPath indexPath)
         {
             calendarItems.RemoveAt((int)indexPath.Item);
             layoutAttributes = calculateLayoutAttributes();
