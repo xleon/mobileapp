@@ -149,7 +149,7 @@ namespace Toggl.Daneel.ViewControllers
             //Commands
             bindingSet.Bind(CloseButton).To(vm => vm.CloseCommand);
             bindingSet.Bind(DeleteButton).To(vm => vm.DeleteCommand);
-            bindingSet.Bind(ConfirmButton).To(vm => vm.ConfirmCommand);
+            bindingSet.Bind(ConfirmButton).To(vm => vm.SaveCommand);
 
             bindingSet.Bind(DurationView)
                       .For(v => v.BindTap())
