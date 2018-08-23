@@ -1053,7 +1053,7 @@
     <ProjectReference Include="..\SiriExtension\SiriExtension.csproj">
       <IsAppExtension>true</IsAppExtension>
       <Project>{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}</Project>
-      <Name>SiriExtension</Name>
+      <Name>Toggl.Daneel.SiriExtension</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
