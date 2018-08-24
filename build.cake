@@ -272,7 +272,6 @@ private TemporaryFileTransformation GetIosExtensionInfoConfigurationTransformati
 
     var bundleId = bundleIdToReplace;
     var appName = appNameToReplace;
-    var iconSet = iconSetToReplace;
 
     if (target == "Build.Release.iOS.AdHoc")
     {
