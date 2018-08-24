@@ -226,7 +226,7 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
     var commitCount = GetCommitCount();
     var reversedClientId = EnvironmentVariable("TOGGL_REVERSED_CLIENT_ID");
     var facebookAppId = EnvironmentVariable("TOGGL_FACEBOOK_APP_ID");
-    
+
     var bundleId = bundleIdToReplace;
     var appName = appNameToReplace;
     var iconSet = iconSetToReplace;
@@ -257,6 +257,43 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
                         .Replace(bundleIdToReplace, bundleId)
                         .Replace(appNameToReplace, appName)
                         .Replace(iconSetToReplace, iconSet)
+    };
+}
+
+private TemporaryFileTransformation GetIosExtensionInfoConfigurationTransformation()
+{
+    const string path = "Toggl.Daneel.SiriExtension/Info.plist";
+    const string bundleIdToReplace = "com.toggl.daneel.debug.SiriExtension";
+    const string appNameToReplace = "Siri Extension Development";
+
+    var commitCount = GetCommitCount();
+    var reversedClientId = EnvironmentVariable("TOGGL_REVERSED_CLIENT_ID");
+    var facebookAppId = EnvironmentVariable("TOGGL_FACEBOOK_APP_ID");
+
+    var bundleId = bundleIdToReplace;
+    var appName = appNameToReplace;
+
+    if (target == "Build.Release.iOS.AdHoc")
+    {
+        bundleId = "com.toggl.daneel.adhoc.SiriExtension";
+        appName = "Siri Extension Development";
+    }
+    else if (target == "Build.Release.iOS.AppStore")
+    {
+        bundleId = "com.toggl.daneel.SiriExtension";
+        appName = "Siri Extension";
+    }
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    {
+        Path = path,
+        Original = file,
+        Temporary = file.Replace("IOS_BUNDLE_VERSION", commitCount)
+                        .Replace(bundleIdToReplace, bundleId)
+                        .Replace(appNameToReplace, appName)
     };
 }
 
@@ -299,7 +336,7 @@ private TemporaryFileTransformation GetAndroidSplashScreenTransformation()
 {
     const string path = "Toggl.Giskard/Startup/SplashScreen.cs";
     const string appNameToReplace = "Toggl for Devs";
- 
+
     var appName = appNameToReplace;
 
     if (target == "Build.Release.Android.AdHoc")
@@ -356,6 +393,7 @@ private TemporaryFileTransformation GetIntegrationTestsConfigurationTransformati
 var transformations = new List<TemporaryFileTransformation>
 {
     GetIosInfoConfigurationTransformation(),
+    GetIosExtensionInfoConfigurationTransformation(),
     GetIosCrashConfigurationTransformation(),
     GetIntegrationTestsConfigurationTransformation(),
     GetIosAnalyticsServicesConfigurationTransformation(),
@@ -407,6 +445,7 @@ Task("Clean")
         {
             CleanDirectory("./bin");
             CleanDirectory("./Toggl.Daneel/obj");
+            CleanDirectory("./Toggl.Daneel.SiriExtension/obj");
             CleanDirectory("./Toggl.Daneel.Tests/obj");
             CleanDirectory("./Toggl.Daneel.Tests.UI/obj");
             CleanDirectory("./Toggl.Giskard/obj");

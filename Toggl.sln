@@ -57,6 +57,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{A48D346E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncDiagramGenerator", "Toggl.Tools\SyncDiagramGenerator\SyncDiagramGenerator.csproj", "{148C791B-9824-4DC6-9494-4FEEB21988C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Daneel.SiriExtension", "Toggl.Daneel.SiriExtension\Toggl.Daneel.SiriExtension.csproj", "{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		ApiTests|Any CPU = ApiTests|Any CPU
@@ -495,6 +497,16 @@ Global
 		{148C791B-9824-4DC6-9494-4FEEB21988C7}.UnitTests|Any CPU.Build.0 = Debug|Any CPU
 		{148C791B-9824-4DC6-9494-4FEEB21988C7}.SyncDiagramGenerator|Any CPU.ActiveCfg = Debug|Any CPU
 		{148C791B-9824-4DC6-9494-4FEEB21988C7}.SyncDiagramGenerator|Any CPU.Build.0 = Debug|Any CPU
+		{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
+		{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}.Debug|iPhone.Build.0 = Debug|iPhone
+		{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}.Release.AppStore|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}.Release.AppStore|Any CPU.Build.0 = Debug|iPhoneSimulator
+		{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}.Release.AdHoc|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}.Release.AdHoc|Any CPU.Build.0 = Debug|iPhoneSimulator
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -519,5 +531,6 @@ Global
 		{3098288F-5579-435C-94CC-311ACFEDA7F0} = {707BB64D-7A0C-46D0-BFC3-CC64D708FEBA}
 		{D8346459-DE6B-4511-8697-3B35D35F1E90} = {4796CD10-F5B5-4843-AD7A-2691438E5A6C}
 		{148C791B-9824-4DC6-9494-4FEEB21988C7} = {A48D346E-2233-479A-8F90-3EFBFEA97ED5}
+		{48C970FE-E13F-4664-A2FD-4EBFD2DD131E} = {4796CD10-F5B5-4843-AD7A-2691438E5A6C}
 	EndGlobalSection
 EndGlobal
