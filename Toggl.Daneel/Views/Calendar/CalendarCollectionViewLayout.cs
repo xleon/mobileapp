@@ -5,6 +5,7 @@ using CoreGraphics;
 using Foundation;
 using Toggl.Foundation;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using UIKit;
 using Math = System.Math;
 
@@ -48,7 +49,7 @@ namespace Toggl.Daneel.Views.Calendar
             get
             {
                 var width = CollectionView.Bounds.Width;
-                var height = hoursPerDay * hourHeight;
+                var height = hoursPerDay * hourHeight + hourSupplementaryLabelHeight;
                 return new CGSize(width, height);
             }
         }
@@ -128,11 +129,11 @@ namespace Toggl.Daneel.Views.Calendar
 
         private IEnumerable<NSIndexPath> indexPathsForHoursInRect(CGRect rect)
         {
-            var minHour = (int)Math.Max(0, Math.Floor(rect.GetMinY() / hourHeight));
-            var maxHour = (int)Math.Min(24, Math.Floor(rect.GetMaxY() / hourHeight));
+            var minHour = (int)Math.Floor(rect.GetMinY() / hourHeight).Clamp(0, 24);
+            var maxHour = (int)Math.Floor(rect.GetMaxY() / hourHeight).Clamp(0, 25);
 
             return Enumerable
-                .Range(minHour, maxHour)
+                .Range(minHour, maxHour - minHour)
                 .Select(hour => NSIndexPath.FromItemSection(hour, 0))
                 .ToArray();
         }

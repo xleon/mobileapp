@@ -22,6 +22,9 @@ namespace Toggl.Daneel.ViewSources
 {
     public sealed class CalendarCollectionViewSource : MvxCollectionViewSource, ICalendarCollectionViewLayoutDataSource
     {
+        private static readonly string twelveHoursFormat = "h tt";
+        private static readonly string twentyFourHoursFormat = "HH:mm";
+
         private readonly string itemReuseIdentifier = nameof(CalendarItemView);
         private readonly string hourReuseIdentifier = nameof(HourSupplementaryView);
         private readonly string currentTimeReuseIdentifier = nameof(CurrentTimeSupplementaryView);
@@ -102,7 +105,7 @@ namespace Toggl.Daneel.ViewSources
             {
                 var reusableView = collectionView.DequeueReusableSupplementaryView(elementKind, hourReuseIdentifier, indexPath) as HourSupplementaryView;
                 var hour = currentDate.AddHours((int)indexPath.Item);
-                reusableView.SetLabel(hour.ToString(timeOfDayFormat.Format));
+                reusableView.SetLabel(hour.ToString(supplementaryHourFormat()));
                 return reusableView;
             }
 
@@ -329,5 +332,8 @@ namespace Toggl.Daneel.ViewSources
             calendarItems.RemoveAt((int)indexPath.Item);
             layoutAttributes = calculateLayoutAttributes();
         }
+
+        private string supplementaryHourFormat()
+            => timeOfDayFormat.IsTwentyFourHoursFormat ? twentyFourHoursFormat : twelveHoursFormat;
     }
 }
