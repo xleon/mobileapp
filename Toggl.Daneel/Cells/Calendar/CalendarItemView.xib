@@ -25,7 +25,7 @@
                         <color key="backgroundColor" red="0.023529411760000001" green="0.66666666669999997" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="sob-Bq-eUc">
-                        <rect key="frame" x="25" y="6" width="90" height="14.5"/>
+                        <rect key="frame" x="25" y="6" width="348" height="14.5"/>
                         <attributedString key="attributedText">
                             <fragment content="Weekly meeting">
                                 <attributes>
@@ -88,7 +88,7 @@
                 <constraint firstItem="sob-Bq-eUc" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="6" id="cNL-RC-bio"/>
                 <constraint firstItem="BRg-DN-wNT" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="6" id="fNB-5f-4hR"/>
                 <constraint firstItem="hQ2-1w-4A4" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" id="hDT-7r-crp"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="sob-Bq-eUc" secondAttribute="trailing" constant="20" id="nG5-Cj-bRF"/>
+                <constraint firstAttribute="trailing" secondItem="sob-Bq-eUc" secondAttribute="trailing" constant="8" id="nG5-Cj-bRF"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sob-Bq-eUc" secondAttribute="bottom" constant="6" id="uos-rx-IuC"/>
                 <constraint firstItem="BRg-DN-wNT" firstAttribute="centerY" secondItem="sob-Bq-eUc" secondAttribute="centerY" priority="750" id="x5Z-AO-BnV"/>
             </constraints>
