@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
@@ -33,6 +32,7 @@ namespace Toggl.Daneel.Cells.Calendar
             {
                 isEditing = value;
                 updateDragIndicators(itemColor());
+                updateShadow();
             }
         }
 
@@ -161,6 +161,27 @@ namespace Toggl.Daneel.Cells.Calendar
                 CalendarIconWidthConstrarint.Active = false;
                 CalendarIconHeightConstrarint.Active = false;
                 CalendarIconBaselineConstraint.Active = true;
+            }
+        }
+
+        private void updateShadow()
+        {
+            if (isEditing)
+            {
+                var shadowPath = UIBezierPath.FromRect(Bounds);
+                Layer.ShadowPath?.Dispose();
+                Layer.ShadowPath = shadowPath.CGPath;
+
+                Layer.CornerRadius = 2;
+                Layer.ShadowRadius = 4;
+                Layer.ShadowOpacity = 0.1f;
+                Layer.MasksToBounds = false;
+                Layer.ShadowOffset = new CGSize(0, 4);
+                Layer.ShadowColor = UIColor.Black.CGColor;
+            }
+            else
+            {
+                Layer.ShadowOpacity = 0;
             }
         }
     }
