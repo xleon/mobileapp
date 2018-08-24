@@ -5,7 +5,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>SiriExtension</string>
 	<key>CFBundleName</key>
-	<string>SiriExtension</string>
+	<string>Siri Extension Development</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.toggl.daneel.debug.SiriExtension</string>
 	<key>CFBundleDevelopmentRegion</key>
