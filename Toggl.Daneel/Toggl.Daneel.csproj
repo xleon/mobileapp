@@ -629,6 +629,7 @@
     <Compile Include="Extensions\UIKitRxExtensions\UITableViewRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UITextViewRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UIViewRxExtensions.cs" />
+    <Compile Include="Services\IntentDonationService.cs" />
     <Compile Include="Services\UserDefaultsStorage.cs" />
     <Compile Include="Startup\IOSSchedulerProvider.cs" />
     <Compile Include="Startup\Setup.cs" />

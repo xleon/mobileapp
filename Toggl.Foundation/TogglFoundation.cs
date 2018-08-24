@@ -33,6 +33,7 @@ namespace Toggl.Foundation
         public IRemoteConfigService RemoteConfigService { get; }
         public IApplicationShortcutCreator ShortcutCreator { get; }
         public ISuggestionProviderContainer SuggestionProviderContainer { get; }
+        public IIntentDonationService IntentDonationService { get; }
 
         public static Builder ForClient(UserAgent userAgent, Version version)
             => new Builder(userAgent, version);
@@ -60,6 +61,7 @@ namespace Toggl.Foundation
             SchedulerProvider = builder.SchedulerProvider;
             RemoteConfigService = builder.RemoteConfigService;
             SuggestionProviderContainer = builder.SuggestionProviderContainer;
+            IntentDonationService = builder.IntentDonationService;
         }
 
         public class Builder
@@ -84,6 +86,7 @@ namespace Toggl.Foundation
             public IBackgroundService BackgroundService { get; internal set; }
             public IPlatformConstants PlatformConstants { get; internal set; }
             public ISuggestionProviderContainer SuggestionProviderContainer { get; internal set; }
+            public IIntentDonationService IntentDonationService { get; internal set; }
 
             public Builder(UserAgent agent, Version version)
             {
@@ -172,6 +175,12 @@ namespace Toggl.Foundation
             public Builder WithSuggestionProviderContainer(ISuggestionProviderContainer suggestionProviderContainer)
             {
                 SuggestionProviderContainer = suggestionProviderContainer;
+                return this;
+            }
+
+            public Builder WithIntentDonationService(IIntentDonationService intentDonationService)
+            {
+                IntentDonationService = intentDonationService;
                 return this;
             }
 
@@ -268,6 +277,7 @@ namespace Toggl.Foundation
                 Ensure.Argument.IsNotNull(PlatformConstants, nameof(PlatformConstants));
                 Ensure.Argument.IsNotNull(RemoteConfigService, nameof(RemoteConfigService));
                 Ensure.Argument.IsNotNull(SuggestionProviderContainer, nameof(SuggestionProviderContainer));
+                Ensure.Argument.IsNotNull(IntentDonationService, nameof(IntentDonationService));
             }
         }
     }
