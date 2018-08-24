@@ -74,39 +74,26 @@ namespace Toggl.Foundation.MvvmCross.Collections
             return null;
         }
 
-        public SectionedIndex InsertItem(TItem item)
+        public int? FitsIntoSection(TItem item)
         {
             var sectionIndex = sections.GroupIndexOf(item, groupingKey);
+            return sectionIndex == -1 ? (int?)null : sectionIndex;
+        }
 
+        public (SectionedIndex index, bool needsNewSection) InsertItem(TItem item)
+        {
+            var sectionIndex = sections.GroupIndexOf(item, groupingKey);
             if (sectionIndex == -1)
             {
                 var insertionIndex = sections.FindLastIndex(g => areInOrder(g.First(), item, groupingKey));
                 List<TItem> list = new List<TItem> { item };
-                if (insertionIndex == -1)
-                {
-                    sections.Insert(0, list);
-                    return new SectionedIndex(0, 0);
-                }
-                else
-                {
-                    sections.Insert(insertionIndex + 1, list);
-                    return new SectionedIndex(insertionIndex + 1, 0);
-                }
+                sections.Insert(insertionIndex + 1, list); // when there are no sections the insertionIndex will be -1
+                return (new SectionedIndex(insertionIndex + 1, 0), true);
             }
-            else
-            {
-                var rowIndex = sections[sectionIndex].FindLastIndex(i => areInOrder(i, item, orderingKey));
-                if (rowIndex == -1)
-                {
-                    sections[sectionIndex].Insert(0, item);
-                    return new SectionedIndex(sectionIndex, 0);
-                }
-                else
-                {
-                    sections[sectionIndex].Insert(rowIndex + 1, item);
-                    return new SectionedIndex(sectionIndex, rowIndex + 1 );
-                }
-            }
+
+            var rowIndex = sections[sectionIndex].FindLastIndex(i => areInOrder(i, item, orderingKey));
+            sections[sectionIndex].Insert(rowIndex + 1, item); // when the section is empty, the rowIndex will be -1
+            return (new SectionedIndex(sectionIndex, rowIndex + 1 ), false);
         }
 
         public SectionedIndex? UpdateItem(IComparable key, TItem item)
@@ -117,7 +104,7 @@ namespace Toggl.Foundation.MvvmCross.Collections
                 return null;
 
             RemoveItemAt(oldIndex.Value.Section, oldIndex.Value.Row);
-            return InsertItem(item);
+            return InsertItem(item).index;
          }
 
         public void ReplaceWith(IEnumerable<TItem> items)

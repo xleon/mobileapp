@@ -6,6 +6,7 @@ using CoreGraphics;
 using Foundation;
 using Toggl.Daneel.Cells;
 using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Foundation.MvvmCross.Collections.Changes;
 using UIKit;
 
 namespace Toggl.Daneel.ViewSources
@@ -21,7 +22,7 @@ namespace Toggl.Daneel.ViewSources
     {
         protected ObservableGroupedOrderedCollection<TModel> collection;
 
-        public IObservable<IEnumerable<CollectionChange>> CollectionChanges
+        public IObservable<IReadOnlyCollection<ICollectionChange>> CollectionChanges
             => collection.CollectionChanges;
 
         public IObservable<TModel> ItemSelected

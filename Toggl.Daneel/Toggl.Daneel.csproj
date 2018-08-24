@@ -645,6 +645,7 @@
   <ItemGroup>
     <Compile Include="Binding\DatePickerDateTimeOffsetTargetBinding.cs" />
     <Compile Include="Extensions\Binders\ReactiveTableViewBinder.cs" />
+    <Compile Include="Extensions\SectionedIndexExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\NSConstraintRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UIApplicationRxExtensions.cs" />
     <Compile Include="Extensions\UIKitRxExtensions\UIButtonRxExtensions.cs" />

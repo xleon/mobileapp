@@ -489,12 +489,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public sealed class TheConfirmCommand : EditTimeEntryViewModelTest
+        public sealed class TheSaveCommand : EditTimeEntryViewModelTest
         {
             [Fact, LogIfTooSlow]
             public void SetsTheOnboardingStorageFlag()
             {
-                ViewModel.ConfirmCommand.Execute();
+                ViewModel.SaveCommand.Execute();
 
                 OnboardingStorage.Received().EditedTimeEntry();
             }
@@ -502,8 +502,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task InitiatesPushSync()
             {
-                ViewModel.IsEditingDescription = false;
-                ViewModel.ConfirmCommand.Execute();
+                ViewModel.SaveCommand.Execute();
 
                 await DataSource.SyncManager.Received().PushSync();
             }
@@ -514,8 +513,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DataSource.TimeEntries.Update(Arg.Any<EditTimeEntryDto>())
                     .Returns(Observable.Throw<IThreadSafeTimeEntry>(new Exception()));
 
-                ViewModel.IsEditingDescription = false;
-                ViewModel.ConfirmCommand.Execute();
+                ViewModel.SaveCommand.Execute();
 
                 await DataSource.SyncManager.DidNotReceive().PushSync();
             }
@@ -543,8 +541,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Returns(parameter);
                 await ViewModel.SelectProjectCommand.ExecuteAsync();
 
-                ViewModel.IsEditingDescription = false;
-                ViewModel.ConfirmCommand.Execute();
+                ViewModel.SaveCommand.Execute();
 
                 await DataSource.TimeEntries.Received().Update(
                     Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == project.WorkspaceId));
@@ -573,8 +570,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Returns(SelectProjectParameter.WithIds(newProjectId, null, workspaceId));
                 await ViewModel.SelectProjectCommand.ExecuteAsync();
 
-                ViewModel.IsEditingDescription = false;
-                ViewModel.ConfirmCommand.Execute();
+                ViewModel.SaveCommand.Execute();
 
                 await DataSource.TimeEntries.Received().Update(
                     Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == workspaceId));
@@ -598,8 +594,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Returns(SelectProjectParameter.WithIds(null, null, newWorkspaceId));
                 await ViewModel.SelectProjectCommand.ExecuteAsync();
 
-                ViewModel.IsEditingDescription = false;
-                ViewModel.ConfirmCommand.Execute();
+                ViewModel.SaveCommand.Execute();
 
                 await DataSource.TimeEntries.Received().Update(
                     Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == newWorkspaceId));
@@ -615,28 +610,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Prepare(timeEntry.Id);
                 await ViewModel.Initialize();
 
-                ViewModel.IsEditingDescription = true;
-                ViewModel.ConfirmCommand.Execute();
+                ViewModel.SaveCommand.Execute();
 
                 ViewModel.IsEditingDescription.Should().Be(false);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task DidNotCallUpdateIfDescriptionWasBeingEdited()
-            {
-                var timeEntry = Substitute.For<IThreadSafeTimeEntry>();
-                timeEntry.Id.Returns(1);
-                DataSource.TimeEntries.GetById(Arg.Is(timeEntry.Id))
-                  .Returns(Observable.Return(timeEntry));
-                ViewModel.Prepare(timeEntry.Id);
-                await ViewModel.Initialize();
-
-                ViewModel.IsEditingDescription = true;
-                ViewModel.ConfirmCommand.Execute();
-
-                ViewModel.IsEditingDescription.Should().Be(false);
-
-                await DataSource.TimeEntries.DidNotReceive().Update(Arg.Any<EditTimeEntryDto>());
             }
 
             [Theory, LogIfTooSlow]
@@ -650,8 +626,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ViewModel.Description = description;
 
-                ViewModel.IsEditingDescription = false;
-                ViewModel.ConfirmCommand.Execute();
+                ViewModel.SaveCommand.Execute();
 
                 await DataSource.TimeEntries.Received().Update(Arg.Is<EditTimeEntryDto>(dto =>
                     dto.Description.Length == 0
@@ -669,12 +644,32 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ViewModel.Description = description;
 
-                ViewModel.IsEditingDescription = false;
-                ViewModel.ConfirmCommand.Execute();
+                ViewModel.SaveCommand.Execute();
 
                 await DataSource.TimeEntries.Received().Update(Arg.Is<EditTimeEntryDto>(dto =>
                     dto.Description == trimmed
                 ));
+            }
+        }
+
+        public sealed class TheConfirmCommand : EditTimeEntryViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task DidNotCallUpdateIfDescriptionWasBeingEdited()
+            {
+                var timeEntry = Substitute.For<IThreadSafeTimeEntry>();
+                timeEntry.Id.Returns(1);
+                DataSource.TimeEntries.GetById(Arg.Is(timeEntry.Id))
+                    .Returns(Observable.Return(timeEntry));
+                ViewModel.Prepare(timeEntry.Id);
+                await ViewModel.Initialize();
+
+                ViewModel.IsEditingDescription = true;
+                ViewModel.ConfirmCommand.Execute();
+
+                ViewModel.IsEditingDescription.Should().Be(false);
+
+                await DataSource.TimeEntries.DidNotReceive().Update(Arg.Any<EditTimeEntryDto>());
             }
         }
 

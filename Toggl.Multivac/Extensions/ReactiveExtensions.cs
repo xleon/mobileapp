@@ -104,6 +104,13 @@ namespace Toggl.Multivac.Extensions
                 () => Console.WriteLine($"OnCompleted {tag}")
         );
 
+        public static IObservable<T> DoIf<T>(this IObservable<T> observable, Predicate<T> predicate, Action<T> action)
+            => observable.Do(value =>
+            {
+                if (predicate(value))
+                    action(value);
+            });
+
         public static IObservable<bool> Invert(this IObservable<bool> observable) => observable.Select(b => !b);
 
         public static IObservable<T> WhereAsync<T>(this IObservable<T> observable, Func<T, IObservable<bool>> asyncPredicate)

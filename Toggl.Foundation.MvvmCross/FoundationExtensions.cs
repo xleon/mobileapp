@@ -100,6 +100,7 @@ namespace Toggl.Foundation.MvvmCross
             Mvx.RegisterSingleton(foundation.PermissionsService);
             Mvx.RegisterSingleton(foundation.CalendarService);
             Mvx.RegisterSingleton(foundation.SchedulerProvider);
+            Mvx.RegisterSingleton(foundation.PlatformInfo);
 
             // Feedback service is obsolete and is used only in the Android App and should be removed soon
             if (foundation.FeedbackService != null)

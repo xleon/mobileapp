@@ -37,7 +37,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Converters
             [Property]
             public Property ReturnsAFormattedStringForAnyOtherDate()
             {
-                var arb = Arb.Default.DateTimeOffset().Filter(d => d < DateTime.UtcNow.AddDays(-1));
+                var arb = Arb.Default.DateTimeOffset().Filter(d => d < DateTimeOffset.Now.AddDays(-1));
 
                 return Prop.ForAll(arb, date =>
                 {

@@ -9,7 +9,34 @@
         <item name="android:windowDisablePreview">true</item>
         <item name="android:colorAccent">#328FFF</item>
         <item name="colorControlActivated">#328FFF</item>
+        <item name="android:statusBarColor">#2C2C2C</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
     </style>
+
+    <style name="AppTheme.BlueStatusBar">
+        <item name="android:statusBarColor">@color/blueStatusBarBackground</item>
+    </style>
+
+    <style name="AppTheme.WhiteStatusBar">
+    </style>
+
+    <style name="AppTheme.WhiteStatusBarLightIcons">
+        <item name="android:statusBarColor">@android:color/white</item>
+    </style>
+
+    <style name="AppTheme.LighGrayStatusBar">
+        <item name="android:statusBarColor">@color/lightGray</item>
+    </style>
+    
+    <style name="AppTheme.OnboardingStatusBarColor">
+        <item name="android:statusBarColor">@color/onboardingStatusBarColor</item>
+    </style>
+
+    <style name="AppTheme.OutdatedAppStatusBarColor">
+        <item name="android:statusBarColor">#BDBDBD</item>
+    </style>
+    
     <style name="AppTheme.TransparentActionBar">
         <item name="windowActionBarOverlay">true</item>
         <item name="android:windowActionBarOverlay">true</item>

@@ -219,7 +219,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 {
                     ViewModel.Login();
 
-                    NavigationService.Received().Navigate<MainTabBarViewModel>();
+                    NavigationService.Received().ForkNavigate<MainTabBarViewModel, MainViewModel>();
                 }
 
                 [Fact, LogIfTooSlow]
@@ -383,7 +383,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.GoogleLogin();
 
-                NavigationService.Received().Navigate<MainTabBarViewModel>();
+                NavigationService.Received().ForkNavigate<MainTabBarViewModel, MainViewModel>();
             }
 
             [Fact, LogIfTooSlow]

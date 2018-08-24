@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using MvvmCross.Navigation;
@@ -14,18 +13,23 @@ using Toggl.Multivac.Extensions;
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public class SendFeedbackViewModel : MvxViewModelResult<bool>
+    public sealed class SendFeedbackViewModel : MvxViewModelResult<bool>
     {
+        private readonly IDialogService dialogService;
+        private readonly IInteractorFactory interactorFactory;
+        private readonly IMvxNavigationService navigationService;
+
         // Internal States
-        private CompositeDisposable disposeBag = new CompositeDisposable();
-        private ISubject<bool> errorViewVisible = new BehaviorSubject<bool>(false);
-        private ISubject<bool> isLoading = new BehaviorSubject<bool>(false);
+        private readonly ISubject<bool> errorViewVisibleSubject = new BehaviorSubject<bool>(false);
+        private readonly ISubject<bool> isLoadingSubject = new BehaviorSubject<bool>(false);
+
+        // Actions
+        public UIAction CloseButtonTapped { get; }
+        public UIAction ErrorViewTapped { get; }
+        public UIAction SendButtonTapped { get; }
 
         // Inputs
-        public ISubject<Unit> CloseButtonTapped = new Subject<Unit>();
-        public ISubject<string> FeedbackText = new Subject<string>();
-        public ISubject<Unit> ErrorViewTapped = new Subject<Unit>();
-        public ISubject<Unit> SendButtonTapped = new Subject<Unit>();
+        public ISubject<string> FeedbackText { get; } = new BehaviorSubject<string>(string.Empty);
 
         // Outputs
         public IObservable<bool> IsFeedbackEmpty { get; }
@@ -33,84 +37,78 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IObservable<bool> SendEnabled { get; }
         public IObservable<bool> IsLoading { get; }
 
+        private IObservable<bool> isEmptyObservable => FeedbackText.Select(string.IsNullOrEmpty);
+        private IObservable<bool> sendingIsEnabledObservable =>
+            isEmptyObservable.CombineLatest(
+                isLoadingSubject.AsObservable(),
+                (isEmpty, isLoading) => !isEmpty && !isLoading);
+
         public SendFeedbackViewModel(
             IMvxNavigationService navigationService,
             IInteractorFactory interactorFactory,
             IDialogService dialogService,
-            ISchedulerProvider schedulerProvider
-        )
+            ISchedulerProvider schedulerProvider)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
-            IsFeedbackEmpty = FeedbackText
-                .Select(text => string.IsNullOrEmpty(text))
-                .DistinctUntilChanged()
-                .StartWith(true)
-                .AsDriver(schedulerProvider);
+            this.dialogService = dialogService;
+            this.interactorFactory = interactorFactory;
+            this.navigationService = navigationService;
 
-            SendEnabled = Observable.CombineLatest(
-                IsFeedbackEmpty,
-                isLoading.AsObservable(),
-                (isEmpty, isLoading) => !isEmpty && !isLoading
-            )
-            .AsDriver(schedulerProvider);
+            IsFeedbackEmpty = isEmptyObservable.DistinctUntilChanged().AsDriver(schedulerProvider);
+            SendEnabled = sendingIsEnabledObservable.DistinctUntilChanged().AsDriver(schedulerProvider);
 
-            CloseButtonTapped
-                .WithLatestFrom(IsFeedbackEmpty, (_, isEmpty) => isEmpty)
-                .SelectMany(isEmpty =>
-                {
-                    if (isEmpty)
-                    {
-                        return Observable.Return(true);
-                    }
-                    return dialogService.ConfirmDestructiveAction(ActionType.DiscardFeedback);
-                })
-                .Where(shouldDiscard => shouldDiscard)
+            CloseButtonTapped = new UIAction(cancel);
+            ErrorViewTapped = new UIAction(dismissError);
+            SendButtonTapped = new UIAction(sendFeedback, sendingIsEnabledObservable);
+
+            ErrorViewVisible = errorViewVisibleSubject.AsDriver(true, schedulerProvider);
+            IsLoading = isLoadingSubject.AsDriver(false, schedulerProvider);
+        }
+
+        private IObservable<Unit> dismissError()
+        {
+            errorViewVisibleSubject.OnNext(false);
+            return Observable.Return(Unit.Default);
+        }
+
+        private IObservable<Unit> cancel()
+            => FeedbackText.FirstAsync()
+                .Select(string.IsNullOrEmpty)
+                .SelectMany(isEmpty => isEmpty
+                    ? Observable.Return(true)
+                    : dialogService.ConfirmDestructiveAction(ActionType.DiscardFeedback))
+                .DoIf(shouldBeClosed => shouldBeClosed, _ => navigationService.Close(this, false))
+                .SelectUnit();
+
+        private IObservable<Unit> sendFeedback()
+            => FeedbackText.FirstAsync()
                 .Do(_ =>
                 {
-                    navigationService.Close(this, false);
-                })
-                .Subscribe()
-                .DisposedBy(disposeBag);
-
-            ErrorViewTapped
-                .Do(e => errorViewVisible.OnNext(false))
-                .Subscribe()
-                .DisposedBy(disposeBag);
-
-            SendButtonTapped
-                .WithLatestFrom(FeedbackText, (_, text) => text)
-                .Do(_ =>
-                {
-                    isLoading.OnNext(true);
-                    errorViewVisible.OnNext(false);
+                    isLoadingSubject.OnNext(true);
+                    errorViewVisibleSubject.OnNext(false);
                 })
                 .SelectMany(text => interactorFactory
                     .SendFeedback(text)
                     .Execute()
-                    .Materialize()
-                )
+                    .Materialize())
                 .Do(notification =>
                 {
-                    isLoading.OnNext(false);
                     switch (notification.Kind)
                     {
                         case NotificationKind.OnError:
-                            errorViewVisible.OnNext(true);
+                            isLoadingSubject.OnNext(false);
+                            errorViewVisibleSubject.OnNext(true);
                             break;
+
                         default:
                             navigationService.Close(this, true);
                             break;
                     }
                 })
-                .Subscribe()
-                .DisposedBy(disposeBag);
-
-            ErrorViewVisible = errorViewVisible.AsDriver(true, schedulerProvider);
-            IsLoading = isLoading.AsDriver(false, schedulerProvider);
-        }
+                .SelectUnit();
     }
 }

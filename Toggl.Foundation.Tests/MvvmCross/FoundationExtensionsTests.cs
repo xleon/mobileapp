@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using MvvmCross.Navigation;
 using NSubstitute;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Login;
@@ -25,9 +23,10 @@ namespace Toggl.Foundation.Tests.MvvmCross
         private readonly MvvmCrossFoundation mvvmCrossFoundation;
 
         private readonly Version version = Version.Parse("1.0");
-        private readonly UserAgent userAgent = new UserAgent("Some Client", "1.0");
+        private readonly PlatformInfo platformInfo = new PlatformInfo();
         private readonly IScheduler scheduler = Substitute.For<IScheduler>();
         private readonly IApiFactory apiFactory = Substitute.For<IApiFactory>();
+        private readonly UserAgent userAgent = new UserAgent("Some Client", "1.0");
         private readonly ITimeService timeService = Substitute.For<ITimeService>();
         private readonly IMailService mailService = Substitute.For<IMailService>();
         private readonly ITogglDatabase database = Substitute.For<ITogglDatabase>();
@@ -48,7 +47,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
         private readonly IFeedbackService feedbackService = Substitute.For<IFeedbackService>();
         private readonly IUserPreferences userPreferences = Substitute.For<IUserPreferences>();
         private readonly IOnboardingStorage onboardingStorage = Substitute.For<IOnboardingStorage>();
-        private readonly IMvxNavigationService navigationService = Substitute.For<IMvxNavigationService>();
+        private readonly IForkingNavigationService navigationService = Substitute.For<IForkingNavigationService>();
         private readonly IErrorHandlingService errorHandlingService = Substitute.For<IErrorHandlingService>();
         private readonly IAccessRestrictionStorage accessRestrictionStorage = Substitute.For<IAccessRestrictionStorage>();
         private readonly ILastTimeUsageStorage lastTimeUsageStorage = Substitute.For<ILastTimeUsageStorage>();
@@ -98,7 +97,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
             var actualUserPreferences = useUserPreferences ? Substitute.For<IUserPreferences>() : null;
             var actualFeedbackService = useFeedbackService ? Substitute.For<IFeedbackService>() : null;
             var actualOnboardingStorage = useOnboardingStorage ? Substitute.For<IOnboardingStorage>() : null;
-            var actualNavigationService = useNavigationService ? Substitute.For<IMvxNavigationService>() : null;
+            var actualNavigationService = useNavigationService ? Substitute.For<IForkingNavigationService>() : null;
             var actualApiErrorHandlingService = useApiErrorHandlingService ? Substitute.For<IErrorHandlingService>() : null;
             var actualAccessRestrictionStorage = useAccessRestrictionStorage ? Substitute.For<IAccessRestrictionStorage>() : null;
             var actualLastTimeUsageStorage = useLastTimeUsageStorage ? Substitute.For<ILastTimeUsageStorage>() : null;
@@ -135,7 +134,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
             var actualFeedbackService = Substitute.For<IFeedbackService>();
             var actualUserPreferences = Substitute.For<IUserPreferences>();
             var actualOnboardingStorage = Substitute.For<IOnboardingStorage>();
-            var actualNavigationService = Substitute.For<IMvxNavigationService>();
+            var actualNavigationService = Substitute.For<IForkingNavigationService>();
             var actualApiErrorHandlingService = Substitute.For<IErrorHandlingService>();
             var actualAccessRestrictionStorage = Substitute.For<IAccessRestrictionStorage>();
             var actualLastTimeUsageStorage = Substitute.For<ILastTimeUsageStorage>();
@@ -182,6 +181,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                     .WithApiFactory(apiFactory)
                     .WithTimeService(timeService)
                     .WithMailService(mailService)
+                    .WithPlatformInfo(platformInfo)
                     .WithRatingService(ratingService)
                     .WithGoogleService(googleService)
                     .WithLicenseProvider(licenseProvider)

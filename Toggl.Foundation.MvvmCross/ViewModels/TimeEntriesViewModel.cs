@@ -11,6 +11,7 @@ using Toggl.Foundation.Helper;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 
@@ -35,7 +36,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IDisposable delayedDeletionDisposable;
         private TimeEntryViewModel timeEntryToDelete;
 
-        public IObservable<bool> ShouldShowUndo => showUndoSubject.AsObservable();
+        public IObservable<bool> ShouldShowUndo { get; }
 
         public InputAction<TimeEntryViewModel> DelayDeleteTimeEntry { get; }
         public UIAction CancelDeleteTimeEntry { get; }
@@ -64,6 +65,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             DelayDeleteTimeEntry = new InputAction<TimeEntryViewModel>(delayDeleteTimeEntry);
             CancelDeleteTimeEntry = new UIAction(cancelDeleteTimeEntry);
+
+            ShouldShowUndo = showUndoSubject.AsObservable().AsDriver(schedulerProvider);
         }
 
         public async Task Initialize()
