@@ -49,6 +49,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     NavigationService,
                     RemoteConfigService,
                     SuggestionProviderContainer,
+                    IntentDonationService,
                     SchedulerProvider);
 
                 vm.Prepare();
@@ -86,6 +87,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useNavigationService,
                 bool useRemoteConfigService,
                 bool useSuggestionProviderContainer,
+                bool useIntentDonationService,
                 bool useSchedulerProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
@@ -98,6 +100,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
                 var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
+                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
@@ -112,6 +115,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         navigationService,
                         remoteConfigService,
                         suggestionProviderContainer,
+                        intentDonationService,
                         schedulerProvider);
 
                 tryingToConstructWithEmptyParameters

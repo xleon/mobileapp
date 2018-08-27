@@ -24,5 +24,6 @@ namespace Toggl.Foundation.Tests.MvvmCross
 
         protected IForkingNavigationService NavigationService { get; } = Substitute.For<IForkingNavigationService>();
         protected TestSchedulerProvider SchedulerProvider { get; } = new TestSchedulerProvider();
+        protected IIntentDonationService IntentDonationService { get; } = Substitute.For<IIntentDonationService>();
     }
 }
