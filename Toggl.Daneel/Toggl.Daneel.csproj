@@ -627,6 +627,7 @@
     <InterfaceDefinition Include="Cells\Calendar\UserCalendarListHeaderViewCell.xib" />
     <InterfaceDefinition Include="Views\Settings\CalendarSettingsTableViewHeader.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\CalendarSettingsViewController.xib" />
+    <InterfaceDefinition Include="Cells\Calendar\EditingHourSupplementaryView.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -1101,6 +1102,10 @@
     </Compile>
     <Compile Include="Views\Calendar\CalendarCollectionViewCreateFromSpanHelper.cs" />
     <Compile Include="Views\Calendar\CalendarCollectionViewEditItemHelper.cs" />
+    <Compile Include="Cells\Calendar\EditingHourSupplementaryView.cs" />
+    <Compile Include="Cells\Calendar\EditingHourSupplementaryView.designer.cs">
+      <DependentUpon>EditingHourSupplementaryView.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

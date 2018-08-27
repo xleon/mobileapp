@@ -24,13 +24,25 @@ namespace Toggl.Daneel.Views.Calendar
         private static readonly nfloat horizontalItemSpacing = 4;
         private static readonly nfloat verticalItemSpacing = 1;
 
-        public DateTime date;
+        private DateTime date;
         private readonly ITimeService timeService;
         private readonly ICalendarCollectionViewLayoutDataSource dataSource;
 
         public static NSString HourSupplementaryViewKind = new NSString("Hour");
+        public static NSString EditingHourSupplementaryViewKind = new NSString("EditingHour");
         public static NSString CurrentTimeSupplementaryViewKind = new NSString("CurrentTime");
         public nfloat HourHeight => hourHeight;
+
+        private bool isEditing;
+        public bool IsEditing
+        {
+            get => isEditing;
+            set
+            {
+                isEditing = value;
+                InvalidateLayoutForEditingItem();
+            }
+        }
 
         public CalendarCollectionViewLayout(ITimeService timeService, ICalendarCollectionViewLayoutDataSource dataSource)
             : base()
@@ -64,6 +76,14 @@ namespace Toggl.Daneel.Views.Calendar
         public CGPoint PointAtDate(DateTimeOffset time)
             => new CGPoint(0, time.Hour * hourHeight + time.Minute / hourHeight);
 
+        public void InvalidateLayoutForEditingItem()
+        {
+            var context = new UICollectionViewLayoutInvalidationContext();
+            context.InvalidateItems(CollectionView.IndexPathsForVisibleItems);
+            context.InvalidateSupplementaryElements(EditingHourSupplementaryViewKind, indexPathsForEditingHours().ToArray());
+            InvalidateLayout(context);
+        }
+
         public override bool ShouldInvalidateLayoutForBoundsChange(CGRect newBounds)
             => true;
 
@@ -75,10 +95,14 @@ namespace Toggl.Daneel.Views.Calendar
             var hoursIndexPaths = indexPathsForHoursInRect(rect);
             var hoursAttributes = hoursIndexPaths.Select(layoutAttributesForHourView);
 
+            var editingHoursIndexPaths = indexPathsForEditingHours();
+            var editingHoursAttributes = editingHoursIndexPaths.Select(layoutAttributesForHourView);
+
             var currentTimeAttributes = layoutAttributesForCurrentTime();
 
             var attributes = itemsAttributes
                 .Concat(hoursAttributes)
+                .Concat(editingHoursAttributes)
                 .Append(currentTimeAttributes);
 
             return attributes.ToArray();
@@ -104,17 +128,27 @@ namespace Toggl.Daneel.Views.Calendar
                 attributes.ZIndex = 0;
                 return attributes;
             }
+            else if (kind == EditingHourSupplementaryViewKind)
+            {
+                var attributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(kind, indexPath);
+                attributes.Frame = frameForEditingHour(indexPath);
+                attributes.ZIndex = 2;
+                return attributes;
+            }
             else
             {
                 var attributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(kind, indexPath);
                 attributes.Frame = frameForCurrentTime();
-                attributes.ZIndex = 2;
+                attributes.ZIndex = 3;
                 return attributes;
             }
         }
 
         private UICollectionViewLayoutAttributes layoutAttributesForHourView(NSIndexPath indexPath)
             => LayoutAttributesForSupplementaryView(HourSupplementaryViewKind, indexPath);
+
+        private UICollectionViewLayoutAttributes layoutAttributesForEditingHourView(NSIndexPath indexPath)
+            => LayoutAttributesForSupplementaryView(EditingHourSupplementaryViewKind, indexPath);
 
         private UICollectionViewLayoutAttributes layoutAttributesForCurrentTime()
             => LayoutAttributesForSupplementaryView(CurrentTimeSupplementaryViewKind, NSIndexPath.FromItemSection(0, 0));
@@ -138,6 +172,11 @@ namespace Toggl.Daneel.Views.Calendar
                 .ToArray();
         }
 
+        private IEnumerable<NSIndexPath> indexPathsForEditingHours()
+            => IsEditing
+                ? new NSIndexPath[] { NSIndexPath.FromItemSection(0, 0), NSIndexPath.FromItemSection(1, 0) }
+                : Enumerable.Empty<NSIndexPath>();
+
         private CGRect frameForItemWithLayoutAttributes(CalendarCollectionViewItemLayoutAttributes attrs)
         {
             var yHour = hourHeight * attrs.StartTime.Hour;
@@ -158,6 +197,23 @@ namespace Toggl.Daneel.Views.Calendar
             var height = hourSupplementaryLabelHeight;
             var x = 0;
             var y = hourHeight * hour - height / 2;
+
+            return new CGRect(x, y, width, height);
+        }
+
+        private CGRect frameForEditingHour(NSIndexPath indexPath)
+        {
+            var editingItemIndexPath = dataSource.IndexPathForEditingItem();
+            var attrs = dataSource.LayoutAttributesForItemAtIndexPath(editingItemIndexPath);
+
+            var time = (int)indexPath.Item == 0 ? attrs.StartTime : attrs.EndTime;
+            var yHour = hourHeight * time.Hour;
+            var yMins = hourHeight * time.Minute / 60;
+
+            var width = CollectionViewContentSize.Width - rightPadding;
+            var height = hourSupplementaryLabelHeight;
+            var x = 0;
+            var y = yHour + yMins - height / 2;
 
             return new CGRect(x, y, width, height);
         }

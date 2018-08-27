@@ -24,9 +24,12 @@ namespace Toggl.Daneel.ViewSources
     {
         private static readonly string twelveHoursFormat = "h tt";
         private static readonly string twentyFourHoursFormat = "HH:mm";
+        private static readonly string editingTwelveHoursFormat = "h:mm tt";
+        private static readonly string editingTwentyFourHoursFormat = "HH:mm";
 
         private readonly string itemReuseIdentifier = nameof(CalendarItemView);
         private readonly string hourReuseIdentifier = nameof(HourSupplementaryView);
+        private readonly string editingHourReuseIdentifier = nameof(HourSupplementaryView);
         private readonly string currentTimeReuseIdentifier = nameof(CurrentTimeSupplementaryView);
 
         private readonly IObservable<DateTime> date;
@@ -42,6 +45,8 @@ namespace Toggl.Daneel.ViewSources
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
         private readonly ISubject<CalendarItem> itemTappedSubject = new Subject<CalendarItem>();
+
+        private CalendarCollectionViewLayout layout => CollectionView.CollectionViewLayout as CalendarCollectionViewLayout;
 
         public bool IsEditing => isEditing;
 
@@ -108,6 +113,14 @@ namespace Toggl.Daneel.ViewSources
                 reusableView.SetLabel(hour.ToString(supplementaryHourFormat()));
                 return reusableView;
             }
+            else if (elementKind == CalendarCollectionViewLayout.EditingHourSupplementaryViewKind)
+            {
+                var reusableView = collectionView.DequeueReusableSupplementaryView(elementKind, editingHourReuseIdentifier, indexPath) as EditingHourSupplementaryView;
+                var attrs = layoutAttributes[(int)editingItemIndexPath.Item];
+                var hour = (int)indexPath.Item == 0 ? attrs.StartTime.ToLocalTime() : attrs.EndTime.ToLocalTime();
+                reusableView.SetLabel(hour.ToString(editingHourFormat()));
+                return reusableView;
+            }
 
             return collectionView.DequeueReusableSupplementaryView(elementKind, currentTimeReuseIdentifier, indexPath);
         }
@@ -128,9 +141,10 @@ namespace Toggl.Daneel.ViewSources
         }
 
         public CalendarCollectionViewItemLayoutAttributes LayoutAttributesForItemAtIndexPath(NSIndexPath indexPath)
-        {
-            return layoutAttributes[(int)indexPath.Item];
-        }
+            => layoutAttributes[(int)indexPath.Item];
+
+        public NSIndexPath IndexPathForEditingItem()
+            => editingItemIndexPath;
 
         public CalendarItem? CalendarItemAtPoint(CGPoint point)
         {
@@ -145,11 +159,13 @@ namespace Toggl.Daneel.ViewSources
         public void StartEditing()
         {
             isEditing = true;
+            layout.IsEditing = true;
         }
 
         public void StartEditing(NSIndexPath indexPath)
         {
             isEditing = true;
+            layout.IsEditing = true;
             editingItemIndexPath = indexPath;
             CollectionView.ReloadItems(new NSIndexPath[] { indexPath });
         }
@@ -157,6 +173,7 @@ namespace Toggl.Daneel.ViewSources
         public void StopEditing()
         {
             isEditing = false;
+            layout.IsEditing = false;
             if (editingItemIndexPath != null)
             {
                 CollectionView.ReloadItems(new NSIndexPath[] { editingItemIndexPath });
@@ -182,9 +199,8 @@ namespace Toggl.Daneel.ViewSources
             editingItemIndexPath = updateCalendarItem(indexPath, startTime, duration);
 
             bool animationsEnabled = UIView.AnimationsEnabled;
-            UIView.AnimationsEnabled = false;
-            CollectionView.ReloadItems(new NSIndexPath[] { editingItemIndexPath });
-            UIView.AnimationsEnabled = animationsEnabled;
+            updateEditingHours();
+            layout.InvalidateLayoutForEditingItem();
 
             return editingItemIndexPath;
         }
@@ -232,6 +248,10 @@ namespace Toggl.Daneel.ViewSources
             CollectionView.RegisterNibForSupplementaryView(HourSupplementaryView.Nib,
                                                            CalendarCollectionViewLayout.HourSupplementaryViewKind,
                                                            new NSString(hourReuseIdentifier));
+
+            CollectionView.RegisterNibForSupplementaryView(EditingHourSupplementaryView.Nib,
+                                                           CalendarCollectionViewLayout.EditingHourSupplementaryViewKind,
+                                                           new NSString(editingHourReuseIdentifier));
 
             CollectionView.RegisterNibForSupplementaryView(CurrentTimeSupplementaryView.Nib,
                                                            CalendarCollectionViewLayout.CurrentTimeSupplementaryViewKind,
@@ -333,7 +353,30 @@ namespace Toggl.Daneel.ViewSources
             layoutAttributes = calculateLayoutAttributes();
         }
 
+        private void updateEditingHours()
+        {
+            var startEditingHour = CollectionView
+                .GetSupplementaryView(CalendarCollectionViewLayout.EditingHourSupplementaryViewKind, NSIndexPath.FromItemSection(0, 0)) as EditingHourSupplementaryView;
+            var endEditingHour = CollectionView
+                .GetSupplementaryView(CalendarCollectionViewLayout.EditingHourSupplementaryViewKind, NSIndexPath.FromItemSection(1, 0)) as EditingHourSupplementaryView;
+
+            var attrs = layoutAttributes[(int)editingItemIndexPath.Item];
+            if (startEditingHour != null)
+            {
+                var hour = attrs.StartTime.ToLocalTime();
+                startEditingHour.SetLabel(hour.ToString(editingHourFormat()));
+            }
+            if (endEditingHour != null)
+            {
+                var hour = attrs.EndTime.ToLocalTime();
+                endEditingHour.SetLabel(hour.ToString(editingHourFormat()));
+            }
+        }
+
         private string supplementaryHourFormat()
             => timeOfDayFormat.IsTwentyFourHoursFormat ? twentyFourHoursFormat : twelveHoursFormat;
+
+        private string editingHourFormat()
+            => timeOfDayFormat.IsTwentyFourHoursFormat ? editingTwentyFourHoursFormat : editingTwelveHoursFormat;
     }
 }

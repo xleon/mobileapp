@@ -9,5 +9,7 @@ namespace Toggl.Daneel.Views.Calendar
         IEnumerable<NSIndexPath> IndexPathsOfCalendarItemsBetweenHours(int minHour, int maxHour);
 
         CalendarCollectionViewItemLayoutAttributes LayoutAttributesForItemAtIndexPath(NSIndexPath indexPath);
+
+        NSIndexPath IndexPathForEditingItem();
     }
 }

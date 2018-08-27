@@ -232,6 +232,9 @@ namespace Toggl.Daneel.Views.Calendar
             var startTime = layout.DateAtPoint(lastPoint).ToLocalTime().RoundDownToClosestQuarter();
             var duration = calendarItem.EndTime - startTime;
 
+            if (duration <= TimeSpan.Zero)
+                return;
+
             calendarItem = calendarItem
                 .WithStartTime(startTime)
                 .WithDuration(duration);
@@ -250,6 +253,9 @@ namespace Toggl.Daneel.Views.Calendar
             lastPoint = point;
             var endTime = layout.DateAtPoint(lastPoint).ToLocalTime().RoundUpToClosestQuarter();
             var duration = endTime - calendarItem.StartTime;
+
+            if (duration <= TimeSpan.Zero)
+                return;
 
             calendarItem = calendarItem
                 .WithDuration(duration);
