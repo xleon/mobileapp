@@ -58,7 +58,7 @@ namespace Toggl.Giskard.Services
             });
         }
 
-        public IObservable<T> Select<T>(string title, IDictionary<string, T> options)
+        public IObservable<T> Select<T>(string title, IEnumerable<(string ItemName, T Item)> options)
             where T : class
         {
             throw new NotImplementedException("This feature has not been implemented in Giskard yet.");
