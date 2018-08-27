@@ -7,6 +7,7 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
+using Toggl.Foundation;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Extensions;
@@ -14,10 +15,12 @@ using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Settings;
 
+[assembly: MvxNavigation(typeof(CalendarViewModel), ApplicationUrls.Calendar.Regex)]
 namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 {
     [Preserve(AllMembers = true)]
@@ -105,6 +108,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 indexKey: item => item.StartTime,
                 orderingKey: item => item.StartTime,
                 groupingKey: _ => 0);
+        }
+
+        public void Init(string eventId)
+        {
         }
 
         public async override Task Initialize()

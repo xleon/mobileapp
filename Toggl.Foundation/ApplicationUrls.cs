@@ -20,5 +20,10 @@
 
             public static readonly string ContinueLastEntry = $"toggl://main?action={Action.Continue}";
         }
+
+        public static class Calendar
+        {
+            public const string Regex = @"toggl://calendar\?eventId=(?<eventId>.+)";
+        }
     }
 }
