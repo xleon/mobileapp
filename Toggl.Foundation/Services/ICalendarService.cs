@@ -9,6 +9,8 @@ namespace Toggl.Foundation.Services
     {
         IObservable<IEnumerable<CalendarItem>> GetEventsForDate(DateTime date);
 
+        IObservable<IEnumerable<CalendarItem>> GetEventsInRange(DateTimeOffset start, DateTimeOffset end);
+
         IObservable<IEnumerable<UserCalendar>> GetUserCalendars();
     }
 }

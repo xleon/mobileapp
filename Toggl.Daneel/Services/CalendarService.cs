@@ -22,13 +22,17 @@ namespace Toggl.Daneel.Services
         public override IObservable<IEnumerable<CalendarItem>> GetEventsForDate(DateTime date)
         {
             var startOfDay = new DateTimeOffset(date.Date);
-            var startDate = startOfDay.ToNSDate();
-            var endDate = startOfDay.AddDays(1).ToNSDate();
+            var endOfDay = startOfDay.AddDays(1);
 
+            return GetEventsInRange(startOfDay, endOfDay);
+        }
+
+        public override IObservable<IEnumerable<CalendarItem>> GetEventsInRange(DateTimeOffset start, DateTimeOffset end)
+        {
             var calendars = eventStore.GetCalendars(EKEntityType.Event);
 
             var predicate = eventStore
-                .PredicateForEvents(startDate, endDate, calendars);
+                .PredicateForEvents(start.ToNSDate(), end.ToNSDate(), calendars);
 
             var calendarItems = eventStore
                 .EventsMatching(predicate)

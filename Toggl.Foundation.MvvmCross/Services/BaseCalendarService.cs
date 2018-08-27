@@ -36,5 +36,7 @@ namespace Toggl.Foundation.Calendar
         public abstract IObservable<IEnumerable<CalendarItem>> GetEventsForDate(DateTime date);
 
         protected abstract IEnumerable<UserCalendar> NativeGetUserCalendars();
+
+        public abstract IObservable<IEnumerable<CalendarItem>> GetEventsInRange(DateTimeOffset start, DateTimeOffset end);
     }
 }

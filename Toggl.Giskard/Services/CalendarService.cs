@@ -21,5 +21,8 @@ namespace Toggl.Giskard.Services
 
         protected override IEnumerable<UserCalendar> NativeGetUserCalendars()
             => new List<UserCalendar>();
+
+        public override IObservable<IEnumerable<CalendarItem>> GetEventsInRange(DateTimeOffset start, DateTimeOffset end)
+            => Observable.Return(new List<CalendarItem>());
     }
 }
