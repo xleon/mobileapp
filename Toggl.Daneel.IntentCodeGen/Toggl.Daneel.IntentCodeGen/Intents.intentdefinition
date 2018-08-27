@@ -18,7 +18,7 @@
 			<key>INIntentCategory</key>
 			<string>generic</string>
 			<key>INIntentDescription</key>
-			<string>Stop a time entry</string>
+			<string>Stop current running time entry</string>
 			<key>INIntentDescriptionID</key>
 			<string>EA0ujz</string>
 			<key>INIntentLastParameterTag</key>
