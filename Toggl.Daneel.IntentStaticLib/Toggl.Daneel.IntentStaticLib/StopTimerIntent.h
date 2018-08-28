@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 API_AVAILABLE(ios(12.0), watchos(5.0))
 @interface StopTimerIntent : INIntent
 
-@property (readwrite, copy, nullable, nonatomic) INObject *time_entry;
+
 
 @end
 
@@ -63,6 +63,7 @@ typedef NS_ENUM(NSInteger, StopTimerIntentResponseCode) {
     StopTimerIntentResponseCodeSuccess,
     StopTimerIntentResponseCodeFailure,
     StopTimerIntentResponseCodeFailureRequiringAppLaunch,
+    StopTimerIntentResponseCodeFailureNoRunningEntry = 100
 } API_AVAILABLE(ios(12.0), watchos(5.0));
 
 API_AVAILABLE(ios(12.0), watchos(5.0))
@@ -82,9 +83,10 @@ API_AVAILABLE(ios(12.0), watchos(5.0))
 /*!
  @abstract Initializes and returns the response object with the success code.
  */
-+ (instancetype)successIntentResponseWithTime_entry:(INObject *)time_entry NS_SWIFT_NAME(success(time_entry:));
++ (instancetype)successIntentResponseWithEntry_description:(NSString *)entry_description entry_duration:(NSString *)entry_duration NS_SWIFT_NAME(success(entry_description:entry_duration:));
 
-@property (readwrite, copy, nullable, nonatomic) INObject *time_entry;
+@property (readwrite, copy, nullable, nonatomic) NSString *entry_description;
+@property (readwrite, copy, nullable, nonatomic) NSString *entry_duration;
 
 /*!
  @abstract The response code indicating your success or failure in confirming or handling the intent.

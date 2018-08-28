@@ -107,6 +107,7 @@ namespace Toggl.Giskard
                     .WithSuggestionProviderContainer(suggestionProviderContainer)
                     .WithApplicationShortcutCreator(new ApplicationShortcutCreator(ApplicationContext))
                     .WithPlatformInfo(platformInfo)
+                    .WithIntentDonationService(new DummyIntentDonationService())
 
                     .StartRegisteringPlatformServices()
                     .WithDialogService(dialogService)

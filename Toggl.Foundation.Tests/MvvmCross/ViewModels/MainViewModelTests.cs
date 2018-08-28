@@ -49,6 +49,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     NavigationService,
                     RemoteConfigService,
                     SuggestionProviderContainer,
+                    IntentDonationService,
                     SchedulerProvider);
 
                 vm.Prepare();
@@ -86,6 +87,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useNavigationService,
                 bool useRemoteConfigService,
                 bool useSuggestionProviderContainer,
+                bool useIntentDonationService,
                 bool useSchedulerProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
@@ -98,6 +100,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
                 var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
+                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
@@ -112,6 +115,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         navigationService,
                         remoteConfigService,
                         suggestionProviderContainer,
+                        intentDonationService,
                         schedulerProvider);
 
                 tryingToConstructWithEmptyParameters
@@ -433,6 +437,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
 
                 await DataSource.TimeEntries.Received(2).Stop(Arg.Any<DateTimeOffset>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask ShouldDonateStopTimerIntent()
+            {
+                var secondTimeEntry = Substitute.For<IThreadSafeTimeEntry>();
+
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+                subject.OnNext(secondTimeEntry);
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+
+                IntentDonationService.Received().DonateStopCurrentTimeEntry();
             }
         }
 

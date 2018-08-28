@@ -8,7 +8,7 @@
 
 @implementation StopTimerIntent
 
-@dynamic time_entry;
+
 
 @end
 
@@ -22,7 +22,7 @@
 
 @synthesize code = _code;
 
-@dynamic time_entry;
+@dynamic entry_description, entry_duration;
 
 - (instancetype)initWithCode:(StopTimerIntentResponseCode)code userActivity:(nullable NSUserActivity *)userActivity {
     self = [super init];
@@ -33,9 +33,10 @@
     return self;
 }
 
-+ (instancetype)successIntentResponseWithTime_entry:(INObject *)time_entry {
++ (instancetype)successIntentResponseWithEntry_description:(NSString *)entry_description entry_duration:(NSString *)entry_duration {
     StopTimerIntentResponse *intentResponse = [[StopTimerIntentResponse alloc] initWithCode:StopTimerIntentResponseCodeSuccess userActivity:nil];
-    intentResponse.time_entry = time_entry;
+    intentResponse.entry_description = entry_description;
+    intentResponse.entry_duration = entry_duration;
     return intentResponse;
 }
 

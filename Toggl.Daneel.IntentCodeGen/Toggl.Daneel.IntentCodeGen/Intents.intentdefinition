@@ -18,7 +18,7 @@
 			<key>INIntentCategory</key>
 			<string>generic</string>
 			<key>INIntentDescription</key>
-			<string>Stop a time entry</string>
+			<string>Stop current running time entry</string>
 			<key>INIntentDescriptionID</key>
 			<string>EA0ujz</string>
 			<key>INIntentLastParameterTag</key>
@@ -27,7 +27,7 @@
 			<string>StopTimer</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
-				<key>time_entry</key>
+				<key></key>
 				<dict>
 					<key>INIntentParameterCombinationIsPrimary</key>
 					<false/>
@@ -38,26 +38,13 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Stop ${time_entry}</string>
+					<string>Stop current running time entry</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>UHcyyr</string>
 				</dict>
 			</dict>
 			<key>INIntentParameters</key>
-			<array>
-				<dict>
-					<key>INIntentParameterDisplayPriority</key>
-					<integer>1</integer>
-					<key>INIntentParameterName</key>
-					<string>time_entry</string>
-					<key>INIntentParameterSupportsMultipleValues</key>
-					<false/>
-					<key>INIntentParameterTag</key>
-					<integer>3</integer>
-					<key>INIntentParameterType</key>
-					<string>Object</string>
-				</dict>
-			</array>
+			<array/>
 			<key>INIntentResponse</key>
 			<dict>
 				<key>INIntentResponseCodes</key>
@@ -74,7 +61,7 @@
 					</dict>
 					<dict>
 						<key>INIntentResponseCodeFormatString</key>
-						<string>${time_entry} has been stopped successfully.</string>
+						<string>Stopped. You've been doing ${entry_description} for ${entry_duration}.</string>
 						<key>INIntentResponseCodeFormatStringID</key>
 						<string>akQb1h</string>
 						<key>INIntentResponseCodeName</key>
@@ -82,22 +69,44 @@
 						<key>INIntentResponseCodeSuccess</key>
 						<true/>
 					</dict>
+					<dict>
+						<key>INIntentResponseCodeFormatString</key>
+						<string>There's no entry currently running.</string>
+						<key>INIntentResponseCodeFormatStringID</key>
+						<string>JuvQpB</string>
+						<key>INIntentResponseCodeName</key>
+						<string>failureNoRunningEntry</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<false/>
+					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>3</integer>
+				<integer>5</integer>
 				<key>INIntentResponseParameters</key>
 				<array>
 					<dict>
 						<key>INIntentResponseParameterDisplayPriority</key>
 						<integer>1</integer>
 						<key>INIntentResponseParameterName</key>
-						<string>time_entry</string>
+						<string>entry_description</string>
 						<key>INIntentResponseParameterSupportsMultipleValues</key>
 						<false/>
 						<key>INIntentResponseParameterTag</key>
-						<integer>3</integer>
+						<integer>5</integer>
 						<key>INIntentResponseParameterType</key>
-						<string>Object</string>
+						<string>String</string>
+					</dict>
+					<dict>
+						<key>INIntentResponseParameterDisplayPriority</key>
+						<integer>2</integer>
+						<key>INIntentResponseParameterName</key>
+						<string>entry_duration</string>
+						<key>INIntentResponseParameterSupportsMultipleValues</key>
+						<false/>
+						<key>INIntentResponseParameterTag</key>
+						<integer>4</integer>
+						<key>INIntentResponseParameterType</key>
+						<string>String</string>
 					</dict>
 				</array>
 			</dict>
