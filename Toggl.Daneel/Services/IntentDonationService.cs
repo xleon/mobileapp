@@ -12,7 +12,7 @@ namespace Toggl.Daneel.Services
         public void DonateStopCurrentTimeEntry()
         {
             var intent = new StopTimerIntent();
-            intent.SuggestedInvocationPhrase = "Stop timer.";
+            intent.SuggestedInvocationPhrase = "Stop timer";
 
             var interaction = new INInteraction(intent, null);
             interaction.DonateInteraction(error =>
