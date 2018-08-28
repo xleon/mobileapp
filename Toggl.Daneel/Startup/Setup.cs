@@ -113,6 +113,7 @@ namespace Toggl.Daneel
                     .WithSchedulerProvider(schedulerProvider)
                     .WithPlatformConstants(platformConstants)
                     .WithRemoteConfigService(remoteConfigService)
+                    .WithNotificationService<NotificationService>()
                     .WithApiFactory(new ApiFactory(environment, userAgent))
                     .WithBackgroundService(new BackgroundService(timeService))
                     .WithApplicationShortcutCreator<ApplicationShortcutCreator>()

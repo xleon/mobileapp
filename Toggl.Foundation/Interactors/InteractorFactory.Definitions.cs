@@ -17,6 +17,7 @@ namespace Toggl.Foundation.Interactors
         private readonly ITogglDataSource dataSource;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
+        private readonly INotificationService notificationService;
         private readonly IApplicationShortcutCreator shortcutCreator;
         private readonly ILastTimeUsageStorage lastTimeUsageStorage;
         private readonly IPlatformConstants platformConstants;
@@ -29,6 +30,7 @@ namespace Toggl.Foundation.Interactors
             ITogglDataSource dataSource,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
+            INotificationService notificationService,
             IApplicationShortcutCreator shortcutCreator,
             ILastTimeUsageStorage lastTimeUsageStorage,
             IPlatformConstants platformConstants,
@@ -41,6 +43,7 @@ namespace Toggl.Foundation.Interactors
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(shortcutCreator, nameof(shortcutCreator));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
+            Ensure.Argument.IsNotNull(notificationService, nameof(notificationService));
             Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
             Ensure.Argument.IsNotNull(platformConstants, nameof(platformConstants));
             Ensure.Argument.IsNotNull(userAgent, nameof(userAgent));
@@ -52,6 +55,7 @@ namespace Toggl.Foundation.Interactors
             this.userPreferences = userPreferences;
             this.shortcutCreator = shortcutCreator;
             this.analyticsService = analyticsService;
+            this.notificationService = notificationService;
             this.lastTimeUsageStorage = lastTimeUsageStorage;
             this.platformConstants = platformConstants;
             this.userAgent = userAgent;

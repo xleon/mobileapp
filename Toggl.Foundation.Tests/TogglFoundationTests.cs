@@ -37,6 +37,7 @@ namespace Toggl.Foundation.Tests
                 bool useBackgroundService,
                 bool useSchedulerProvider,
                 bool usePlatformConstants,
+                bool useNotificationService,
                 bool useRemoteConfigService,
                 bool useApplicationShortcutCreator,
                 bool useSuggestionProviderContainer)
@@ -55,6 +56,7 @@ namespace Toggl.Foundation.Tests
                 var analyticsService = useAnalyticsService ? Substitute.For<IAnalyticsService>() : null;
                 var backgroundService = useBackgroundService ? Substitute.For<IBackgroundService>() : null;
                 var platformConstants = usePlatformConstants ? Substitute.For<IPlatformConstants>() : null;
+                var notificationService = useNotificationService ? Substitute.For<INotificationService>() : null;
                 var remoteConfigService = useRemoteConfigService ? Substitute.For<IRemoteConfigService>() : null;
                 var applicationShortcutCreator = useApplicationShortcutCreator ? Substitute.For<IApplicationShortcutCreator>() : null;
                 var suggestionProviderContainer = useSuggestionProviderContainer ? Substitute.For<ISuggestionProviderContainer>() : null;
@@ -76,6 +78,7 @@ namespace Toggl.Foundation.Tests
                         .WithBackgroundService(backgroundService)
                         .WithSchedulerProvider(schedulerProvider)
                         .WithPlatformConstants(platformConstants)
+                        .WithNotificationService(notificationService)
                         .WithRemoteConfigService(remoteConfigService)
                         .WithApplicationShortcutCreator(applicationShortcutCreator)
                         .WithSuggestionProviderContainer(suggestionProviderContainer)
@@ -102,6 +105,7 @@ namespace Toggl.Foundation.Tests
                 var schedulerProvider = Substitute.For<ISchedulerProvider>();
                 var platformConstants = Substitute.For<IPlatformConstants>();
                 var backgroundService = Substitute.For<IBackgroundService>();
+                var notificationService = Substitute.For<INotificationService>();
                 var remoteConfigService = Substitute.For<IRemoteConfigService>();
                 var applicationShortcutCreator = Substitute.For<IApplicationShortcutCreator>();
                 var suggestionProviderContainer = Substitute.For<ISuggestionProviderContainer>();
@@ -122,6 +126,7 @@ namespace Toggl.Foundation.Tests
                         .WithBackgroundService(backgroundService)
                         .WithSchedulerProvider(schedulerProvider)
                         .WithPlatformConstants(platformConstants)
+                        .WithNotificationService(notificationService)
                         .WithRemoteConfigService(remoteConfigService)
                         .WithApplicationShortcutCreator(applicationShortcutCreator)
                         .WithSuggestionProviderContainer(suggestionProviderContainer)

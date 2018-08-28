@@ -102,5 +102,11 @@ namespace Toggl.Foundation.Interactors
         IInteractor<Unit> SetEnabledCalendars(params string[] ids);
 
         #endregion
+
+        #region Notifications
+
+        IInteractor<Unit> UnshceduleAllNotifications();
+
+        #endregion
     }
 }

@@ -47,6 +47,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
         private readonly IFeedbackService feedbackService = Substitute.For<IFeedbackService>();
         private readonly IUserPreferences userPreferences = Substitute.For<IUserPreferences>();
         private readonly IOnboardingStorage onboardingStorage = Substitute.For<IOnboardingStorage>();
+        private readonly INotificationService notificationService = Substitute.For<INotificationService>();
         private readonly IForkingNavigationService navigationService = Substitute.For<IForkingNavigationService>();
         private readonly IErrorHandlingService errorHandlingService = Substitute.For<IErrorHandlingService>();
         private readonly IAccessRestrictionStorage accessRestrictionStorage = Substitute.For<IAccessRestrictionStorage>();
@@ -189,6 +190,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                     .WithBackgroundService(backgroundService)
                     .WithSchedulerProvider(schedulerProvider)
                     .WithPlatformConstants(platformConstants)
+                    .WithNotificationService(notificationService)
                     .WithRemoteConfigService(remoteConfigService)
                     .WithApplicationShortcutCreator(applicationShortcutCreator)
                     .WithSuggestionProviderContainer(suggestionProviderContainer)

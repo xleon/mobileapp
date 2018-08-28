@@ -37,6 +37,7 @@
     <Folder Include="Interactors\Sync\" />
     <Folder Include="Serialization\" />
     <Folder Include="Experiments\" />
+    <Folder Include="Interactors\Notifications\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />

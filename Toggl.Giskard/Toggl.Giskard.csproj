@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Toggl.Giskard</RootNamespace>
     <AssemblyName>Toggl.Giskard</AssemblyName>
-    <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -420,6 +420,7 @@
     <Compile Include="Views\NonSwipingViewPager.cs" />
     <Compile Include="Activities\MainActivity.ViewBinds.cs" />
     <Compile Include="Startup\HandlerScheduler.cs" />
+    <Compile Include="Services\NotificationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

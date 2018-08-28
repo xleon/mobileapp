@@ -103,6 +103,7 @@ namespace Toggl.Giskard
                     .WithAnalyticsService(analyticsService)
                     .WithSchedulerProvider(schedulerProvider)
                     .WithPlatformConstants(platformConstants)
+                    .WithNotificationService<NotificationService>()
                     .WithRemoteConfigService<RemoteConfigService>()
                     .WithApiFactory(new ApiFactory(environment, userAgent))
                     .WithBackgroundService(new BackgroundService(timeService))

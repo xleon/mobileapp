@@ -1106,6 +1106,7 @@
     <Compile Include="Cells\Calendar\EditingHourSupplementaryView.designer.cs">
       <DependentUpon>EditingHourSupplementaryView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\NotificationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
