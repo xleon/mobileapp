@@ -1050,7 +1050,11 @@
       <Project>{6AF7BE5E-AF9D-4EA7-AF7F-28D07B8DEF24}</Project>
       <Name>Toggl.Multivac</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SiriExtension\SiriExtension.csproj">
+    <ProjectReference Include="..\Toggl.Daneel.IntentBinding\Toggl.Daneel.IntentBinding.csproj">
+      <Project>{A1BBF640-E712-4E35-8E3F-AE07C7C7EDB0}</Project>
+      <Name>Toggl.Daneel.IntentBinding</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Toggl.Daneel.SiriExtension\Toggl.Daneel.SiriExtension.csproj">
       <IsAppExtension>true</IsAppExtension>
       <Project>{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}</Project>
       <Name>Toggl.Daneel.SiriExtension</Name>
@@ -1089,6 +1093,11 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Toggl.Daneel.IntentCodeGen\Toggl.Daneel.IntentCodeGen\Intents.intentdefinition">
+      <Link>Intents.intentdefinition</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Firebase.iOS.RemoteConfig.2.0.3.2\build\Xamarin.Firebase.iOS.RemoteConfig.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.RemoteConfig.2.0.3.2\build\Xamarin.Firebase.iOS.RemoteConfig.targets')" />
