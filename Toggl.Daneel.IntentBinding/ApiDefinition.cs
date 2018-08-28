@@ -1,7 +1,6 @@
 ﻿using System;
 using Foundation;
 using Intents;
-using ObjCRuntime;
 
 namespace Toggl.Daneel.Intents
 {
@@ -9,9 +8,6 @@ namespace Toggl.Daneel.Intents
 	[BaseType (typeof(INIntent))]
 	interface StopTimerIntent
 	{
-		// @property (readwrite, copy, nonatomic) INObject * _Nullable time_entry;
-		[NullAllowed, Export ("time_entry", ArgumentSemantic.Copy)]
-		INObject Time_entry { get; set; }
 	}
 
 	// @protocol StopTimerIntentHandling <NSObject>
@@ -39,17 +35,22 @@ namespace Toggl.Daneel.Intents
 		[DesignatedInitializer]
 		IntPtr Constructor (StopTimerIntentResponseCode code, [NullAllowed] NSUserActivity userActivity);
 
-		// +(instancetype _Nonnull)successIntentResponseWithTime_entry:(INObject * _Nonnull)time_entry;
+		// +(instancetype _Nonnull)successIntentResponseWithEntry_description:(NSString * _Nonnull)entry_description entry_duration:(NSString * _Nonnull)entry_duration;
 		[Static]
-		[Export ("successIntentResponseWithTime_entry:")]
-		StopTimerIntentResponse SuccessIntentResponseWithTime_entry (INObject time_entry);
+		[Export ("successIntentResponseWithEntry_description:entry_duration:")]
+		StopTimerIntentResponse SuccessIntentResponseWithEntry_description (string entry_description, string entry_duration);
 
-		// @property (readwrite, copy, nonatomic) INObject * _Nullable time_entry;
-		[NullAllowed, Export ("time_entry", ArgumentSemantic.Copy)]
-		INObject Time_entry { get; set; }
+		// @property (readwrite, copy, nonatomic) NSString * _Nullable entry_description;
+		[NullAllowed, Export ("entry_description")]
+		string Entry_description { get; set; }
+
+		// @property (readwrite, copy, nonatomic) NSString * _Nullable entry_duration;
+		[NullAllowed, Export ("entry_duration")]
+		string Entry_duration { get; set; }
 
 		// @property (readonly, nonatomic) StopTimerIntentResponseCode code;
 		[Export ("code")]
 		StopTimerIntentResponseCode Code { get; }
 	}
 }
+

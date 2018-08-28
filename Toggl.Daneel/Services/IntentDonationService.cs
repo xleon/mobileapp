@@ -11,13 +11,11 @@ namespace Toggl.Daneel.Services
         public void StopTimeEntry(ITimeEntry te)
         {
             var intent = new StopTimerIntent();
-            intent.Time_entry = new INObject(te.Id.ToString(), te.Description);
-            intent.SuggestedInvocationPhrase = $"Suggested invocation phrase for {te.Description}";
+            intent.SuggestedInvocationPhrase = "Stop timer.";
 
-            var response = StopTimerIntentResponse.SuccessIntentResponseWithTime_entry(intent.Time_entry);
+            var response = StopTimerIntentResponse.SuccessIntentResponseWithEntry_description(te.Description, "Duration");
 
             var interaction = new INInteraction(intent, response);
-            interaction.Identifier = te.Id.ToString();
             interaction.DonateInteraction(error =>
             {
                 if (!(error is null))

@@ -12,6 +12,7 @@ namespace Toggl.Daneel.Intents
         InProgress,
         Success,
         Failure,
-        FailureRequiringAppLaunch
+        FailureRequiringAppLaunch,
+        FailureNoRunningEntry = 100
     }
 }
