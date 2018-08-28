@@ -13,9 +13,7 @@ namespace Toggl.Daneel.Services
             var intent = new StopTimerIntent();
             intent.SuggestedInvocationPhrase = "Stop timer.";
 
-            var response = StopTimerIntentResponse.SuccessIntentResponseWithEntry_description(te.Description, "Duration");
-
-            var interaction = new INInteraction(intent, response);
+            var interaction = new INInteraction(intent, null);
             interaction.DonateInteraction(error =>
             {
                 if (!(error is null))
