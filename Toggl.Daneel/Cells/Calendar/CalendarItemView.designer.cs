@@ -9,112 +9,106 @@ using System.CodeDom.Compiler;
 
 namespace Toggl.Daneel.Cells.Calendar
 {
-    [Register ("CalendarItemView")]
-    partial class CalendarItemView
-    {
-        [Outlet]
-        UIKit.UIView BottomDragIndicator { get; set; }
+	[Register ("CalendarItemView")]
+	partial class CalendarItemView
+	{
+		[Outlet]
+		UIKit.UIView BottomDragIndicator { get; set; }
 
-        [Outlet]
-        UIKit.NSLayoutConstraint CalendarIconBaselineConstraint { get; set; }
+		[Outlet]
+		UIKit.NSLayoutConstraint CalendarIconBaselineConstraint { get; set; }
 
-        [Outlet]
-        UIKit.NSLayoutConstraint CalendarIconHeightConstrarint { get; set; }
+		[Outlet]
+		UIKit.NSLayoutConstraint CalendarIconCenterVerticallyConstraint { get; set; }
 
-        [Outlet]
-        UIKit.UIImageView CalendarIconImageView { get; set; }
+		[Outlet]
+		UIKit.NSLayoutConstraint CalendarIconHeightConstrarint { get; set; }
 
-        [Outlet]
-        UIKit.NSLayoutConstraint CalendarIconLeadingConstraint { get; set; }
+		[Outlet]
+		UIKit.UIImageView CalendarIconImageView { get; set; }
 
-        [Outlet]
-        UIKit.NSLayoutConstraint CalendarIconTrailingConstraint { get; set; }
+		[Outlet]
+		UIKit.NSLayoutConstraint CalendarIconLeadingConstraint { get; set; }
 
-        [Outlet]
-        UIKit.NSLayoutConstraint CalendarIconWidthConstrarint { get; set; }
+		[Outlet]
+		UIKit.NSLayoutConstraint CalendarIconWidthConstrarint { get; set; }
 
-        [Outlet]
-        UIKit.UIView ColorView { get; set; }
+		[Outlet]
+		UIKit.UILabel DescriptionLabel { get; set; }
 
-        [Outlet]
-        UIKit.UILabel DescriptionLabel { get; set; }
+		[Outlet]
+		UIKit.NSLayoutConstraint DescriptionLabelBottomConstraint { get; set; }
 
-        [Outlet]
-        UIKit.UIView TopDragIndicator { get; set; }
+		[Outlet]
+		UIKit.NSLayoutConstraint DescriptionLabelLeadingConstraint { get; set; }
 
-        [Outlet]
-        UIKit.NSLayoutConstraint DescriptionLabelBottomConstraint { get; set; }
+		[Outlet]
+		UIKit.NSLayoutConstraint DescriptionLabelTopConstraint { get; set; }
 
-        [Outlet]
-        UIKit.NSLayoutConstraint DescriptionLabelTopConstraint { get; set; }
+		[Outlet]
+		UIKit.UIView TopDragIndicator { get; set; }
+		
+		void ReleaseDesignerOutlets ()
+		{
+			if (DescriptionLabelLeadingConstraint != null) {
+				DescriptionLabelLeadingConstraint.Dispose ();
+				DescriptionLabelLeadingConstraint = null;
+			}
 
-        void ReleaseDesignerOutlets ()
-        {
-            if (CalendarIconHeightConstrarint != null) {
-                CalendarIconHeightConstrarint.Dispose ();
-                CalendarIconHeightConstrarint = null;
-            }
+			if (BottomDragIndicator != null) {
+				BottomDragIndicator.Dispose ();
+				BottomDragIndicator = null;
+			}
 
-            if (CalendarIconImageView != null) {
-                CalendarIconImageView.Dispose ();
-                CalendarIconImageView = null;
-            }
+			if (CalendarIconHeightConstrarint != null) {
+				CalendarIconHeightConstrarint.Dispose ();
+				CalendarIconHeightConstrarint = null;
+			}
 
-            if (CalendarIconLeadingConstraint != null) {
-                CalendarIconLeadingConstraint.Dispose ();
-                CalendarIconLeadingConstraint = null;
-            }
+			if (CalendarIconImageView != null) {
+				CalendarIconImageView.Dispose ();
+				CalendarIconImageView = null;
+			}
 
-            if (CalendarIconTrailingConstraint != null) {
-                CalendarIconTrailingConstraint.Dispose ();
-                CalendarIconTrailingConstraint = null;
-            }
+			if (CalendarIconLeadingConstraint != null) {
+				CalendarIconLeadingConstraint.Dispose ();
+				CalendarIconLeadingConstraint = null;
+			}
 
-            if (ColorView != null) {
-                ColorView.Dispose ();
-                ColorView = null;
-            }
+			if (CalendarIconWidthConstrarint != null) {
+				CalendarIconWidthConstrarint.Dispose ();
+				CalendarIconWidthConstrarint = null;
+			}
 
-            if (DescriptionLabel != null)
-            {
-                DescriptionLabel.Dispose();
-                DescriptionLabel = null;
-            }
+			if (DescriptionLabel != null) {
+				DescriptionLabel.Dispose ();
+				DescriptionLabel = null;
+			}
 
-            if (CalendarIconWidthConstrarint != null) {
-                CalendarIconWidthConstrarint.Dispose ();
-                CalendarIconWidthConstrarint = null;
-            }
+			if (TopDragIndicator != null) {
+				TopDragIndicator.Dispose ();
+				TopDragIndicator = null;
+			}
 
-            if (CalendarIconBaselineConstraint != null) {
-                CalendarIconBaselineConstraint.Dispose ();
-                CalendarIconBaselineConstraint = null;
-            }
+			if (CalendarIconBaselineConstraint != null) {
+				CalendarIconBaselineConstraint.Dispose ();
+				CalendarIconBaselineConstraint = null;
+			}
 
-            if (TopDragIndicator != null) {
-                TopDragIndicator.Dispose ();
-                TopDragIndicator = null;
-            }
+			if (CalendarIconCenterVerticallyConstraint != null) {
+				CalendarIconCenterVerticallyConstraint.Dispose ();
+				CalendarIconCenterVerticallyConstraint = null;
+			}
 
-            if (BottomDragIndicator != null) {
-                BottomDragIndicator.Dispose ();
-                BottomDragIndicator = null;
-            }
+			if (DescriptionLabelTopConstraint != null) {
+				DescriptionLabelTopConstraint.Dispose ();
+				DescriptionLabelTopConstraint = null;
+			}
 
-            if (DescriptionLabel != null) {
-                DescriptionLabel.Dispose ();
-                DescriptionLabel = null;
-            }
-
-            if (DescriptionLabelBottomConstraint != null) {
-                DescriptionLabelBottomConstraint.Dispose ();
-                DescriptionLabelBottomConstraint = null;
-            }
-
-            if (DescriptionLabelTopConstraint != null) {
-                DescriptionLabelTopConstraint.Dispose ();
-                DescriptionLabelTopConstraint = null;
-            }
-        }
-    }
+			if (DescriptionLabelBottomConstraint != null) {
+				DescriptionLabelBottomConstraint.Dispose ();
+				DescriptionLabelBottomConstraint = null;
+			}
+		}
+	}
 }

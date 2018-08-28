@@ -7,7 +7,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,28 +19,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="381" height="53"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hQ2-1w-4A4">
-                        <rect key="frame" x="0.0" y="0.0" width="381" height="53"/>
-                        <color key="backgroundColor" red="0.023529411760000001" green="0.66666666669999997" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="sob-Bq-eUc">
-                        <rect key="frame" x="25" y="6" width="348" height="14.5"/>
-                        <attributedString key="attributedText">
-                            <fragment content="Weekly meeting">
-                                <attributes>
-                                    <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                    <font key="NSFont" metaFont="cellTitle"/>
-                                    <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                </attributes>
-                            </fragment>
-                        </attributedString>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" image="icCalendarSmall" translatesAutoresizingMaskIntoConstraints="NO" id="BRg-DN-wNT">
-                        <rect key="frame" x="6" y="3.5" width="14" height="14"/>
+                        <rect key="frame" x="5" y="3.5" width="14" height="14"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="14" id="5iW-EI-Uvb"/>
-                            <constraint firstAttribute="width" secondItem="BRg-DN-wNT" secondAttribute="height" multiplier="1:1" id="Bnd-Vz-Q4T"/>
                             <constraint firstAttribute="width" constant="14" id="lLv-rp-Uuy"/>
                         </constraints>
                     </imageView>
@@ -71,26 +52,27 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Weekly meeting" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="sob-Bq-eUc">
+                        <rect key="frame" x="24" y="6" width="351" height="14.5"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
             </view>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" red="0.86420355900000001" green="0.7443847656" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="hQ2-1w-4A4" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" id="2HP-BG-hEF"/>
-                <constraint firstItem="BRg-DN-wNT" firstAttribute="bottom" secondItem="sob-Bq-eUc" secondAttribute="firstBaseline" id="A7o-lf-wBh"/>
+                <constraint firstItem="BRg-DN-wNT" firstAttribute="baseline" secondItem="sob-Bq-eUc" secondAttribute="firstBaseline" id="20g-ZE-uFH"/>
+                <constraint firstItem="sob-Bq-eUc" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="24" id="5hY-Qw-D80"/>
                 <constraint firstAttribute="trailing" secondItem="EdB-CQ-dXu" secondAttribute="trailing" constant="8" id="BdH-Gs-onQ"/>
                 <constraint firstItem="ftH-hb-JkM" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="8" id="Bxu-MG-OxF"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sob-Bq-eUc" secondAttribute="bottom" constant="6" id="Cbs-P9-Q2X"/>
                 <constraint firstAttribute="bottom" secondItem="ftH-hb-JkM" secondAttribute="top" constant="2" id="QGa-uA-Ast"/>
-                <constraint firstAttribute="bottom" secondItem="hQ2-1w-4A4" secondAttribute="bottom" id="Qva-Rw-8ct"/>
-                <constraint firstItem="sob-Bq-eUc" firstAttribute="leading" secondItem="BRg-DN-wNT" secondAttribute="trailing" constant="5" id="RyV-JV-g7x"/>
-                <constraint firstAttribute="trailing" secondItem="hQ2-1w-4A4" secondAttribute="trailing" id="Tsn-Q1-p09"/>
-                <constraint firstItem="sob-Bq-eUc" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" priority="750" constant="8" id="UKC-Ev-HO9"/>
+                <constraint firstAttribute="trailing" secondItem="sob-Bq-eUc" secondAttribute="trailing" constant="6" id="a5G-aI-edH"/>
                 <constraint firstAttribute="top" secondItem="EdB-CQ-dXu" secondAttribute="bottom" constant="-2" id="apn-Rs-dhc"/>
-                <constraint firstItem="sob-Bq-eUc" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="6" id="cNL-RC-bio"/>
-                <constraint firstItem="BRg-DN-wNT" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="6" id="fNB-5f-4hR"/>
-                <constraint firstItem="hQ2-1w-4A4" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" id="hDT-7r-crp"/>
-                <constraint firstAttribute="trailing" secondItem="sob-Bq-eUc" secondAttribute="trailing" constant="8" id="nG5-Cj-bRF"/>
-                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sob-Bq-eUc" secondAttribute="bottom" constant="6" id="uos-rx-IuC"/>
-                <constraint firstItem="BRg-DN-wNT" firstAttribute="centerY" secondItem="sob-Bq-eUc" secondAttribute="centerY" priority="750" id="x5Z-AO-BnV"/>
+                <constraint firstItem="BRg-DN-wNT" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="5" id="fNB-5f-4hR"/>
+                <constraint firstItem="sob-Bq-eUc" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="6" id="oL7-XU-f2d"/>
+                <constraint firstItem="BRg-DN-wNT" firstAttribute="centerY" secondItem="cZE-iV-UFb" secondAttribute="centerY" id="y9Z-2d-x6z"/>
             </constraints>
             <size key="customSize" width="381" height="53"/>
             <userDefinedRuntimeAttributes>
@@ -98,18 +80,23 @@
                     <integer key="value" value="2"/>
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="y9Z-2d-x6z"/>
+                </mask>
+            </variation>
             <connections>
                 <outlet property="BottomDragIndicator" destination="ftH-hb-JkM" id="qab-cG-Hu5"/>
-                <outlet property="CalendarIconBaselineConstraint" destination="A7o-lf-wBh" id="C65-8f-nM0"/>
+                <outlet property="CalendarIconBaselineConstraint" destination="20g-ZE-uFH" id="o5h-5z-VYe"/>
+                <outlet property="CalendarIconCenterVerticallyConstraint" destination="y9Z-2d-x6z" id="dki-E5-yRN"/>
                 <outlet property="CalendarIconHeightConstrarint" destination="5iW-EI-Uvb" id="Wpr-Cp-VKp"/>
                 <outlet property="CalendarIconImageView" destination="BRg-DN-wNT" id="UGi-Sp-7ge"/>
                 <outlet property="CalendarIconLeadingConstraint" destination="fNB-5f-4hR" id="e1M-Qy-OLa"/>
-                <outlet property="CalendarIconTrailingConstraint" destination="RyV-JV-g7x" id="cVF-Vl-ots"/>
                 <outlet property="CalendarIconWidthConstrarint" destination="lLv-rp-Uuy" id="Fu7-Rk-hSe"/>
-                <outlet property="ColorView" destination="hQ2-1w-4A4" id="SSz-ZE-6o3"/>
                 <outlet property="DescriptionLabel" destination="sob-Bq-eUc" id="rqZ-Gq-87D"/>
-                <outlet property="DescriptionLabelBottomConstraint" destination="uos-rx-IuC" id="piK-28-8sx"/>
-                <outlet property="DescriptionLabelTopConstraint" destination="cNL-RC-bio" id="cvH-Ok-o8x"/>
+                <outlet property="DescriptionLabelBottomConstraint" destination="Cbs-P9-Q2X" id="gAp-Dl-6EU"/>
+                <outlet property="DescriptionLabelLeadingConstraint" destination="5hY-Qw-D80" id="313-ic-3JE"/>
+                <outlet property="DescriptionLabelTopConstraint" destination="oL7-XU-f2d" id="1m5-dl-otz"/>
                 <outlet property="TopDragIndicator" destination="EdB-CQ-dXu" id="TwD-B0-2Ok"/>
             </connections>
             <point key="canvasLocation" x="199.5" y="55.5"/>

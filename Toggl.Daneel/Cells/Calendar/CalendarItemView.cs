@@ -24,6 +24,9 @@ namespace Toggl.Daneel.Cells.Calendar
         public CGRect TopDragTouchArea => TopDragIndicator.Frame.Inset(-20, -20);
         public CGRect BottomDragTouchArea => BottomDragIndicator.Frame.Inset(-20, -20);
 
+        private static readonly TimeSpan thirtyMinutes = TimeSpan.FromMinutes(30);
+        private bool shortCalendarItem => Item.Duration < thirtyMinutes;
+
         private bool isEditing;
         public bool IsEditing
         {
@@ -61,8 +64,10 @@ namespace Toggl.Daneel.Cells.Calendar
         {
             base.AwakeFromNib();
 
-            CalendarIconWidthConstrarint.Constant = 8;
-            CalendarIconHeightConstrarint.Constant = 8;
+            BackgroundView = new UIView()
+            {
+                BackgroundColor = UIColor.White
+            };
 
             topDragIndicatorBorderLayer = new CAShapeLayer();
             configureDragIndicatorBorderLayer(TopDragIndicator, topDragIndicatorBorderLayer);
@@ -76,7 +81,7 @@ namespace Toggl.Daneel.Cells.Calendar
                 borderLayer.BorderWidth = 2;
                 borderLayer.FillColor = UIColor.Clear.CGColor;
                 dragIndicator.Layer.AddSublayer(borderLayer);
-            }
+            } 
         }
 
         protected override void UpdateView()
@@ -84,9 +89,9 @@ namespace Toggl.Daneel.Cells.Calendar
             var color = itemColor();
             DescriptionLabel.Text = Item.Description;
             DescriptionLabel.TextColor = textColor(color);
-            ColorView.BackgroundColor = backgroundColor(Item.Source, color);
+            ContentView.BackgroundColor = backgroundColor(Item.Source, color);
             updateIcon(color);
-            updateSizes();
+            updateConstraints();
             updateDragIndicators(color);
         }
 
@@ -94,7 +99,7 @@ namespace Toggl.Daneel.Cells.Calendar
             => MvxColor.ParseHexString(Item.Color).ToNativeColor();
 
         private UIColor backgroundColor(CalendarItemSource source, UIColor color)
-        {
+        { 
             switch (source)
             {
                 case CalendarItemSource.Calendar:
@@ -124,14 +129,10 @@ namespace Toggl.Daneel.Cells.Calendar
             if (Item.IconKind == CalendarIconKind.None)
             {
                 CalendarIconImageView.Hidden = true;
-                CalendarIconLeadingConstraint.Active = false;
-                CalendarIconTrailingConstraint.Active = false;
                 return;
             }
 
             CalendarIconImageView.Hidden = false;
-            CalendarIconLeadingConstraint.Active = true;
-            CalendarIconTrailingConstraint.Active = true;
             CalendarIconImageView.TintColor = textColor(color);
             CalendarIconImageView.Image = images[Item.IconKind];
         }
@@ -144,25 +145,35 @@ namespace Toggl.Daneel.Cells.Calendar
             bottomDragIndicatorBorderLayer.StrokeColor = color.CGColor;
         }
 
-        private void updateSizes()
+        private void updateConstraints()
         {
-            if (Item.Duration < TimeSpan.FromMinutes(30))
-            {
-                DescriptionLabelTopConstraint.Constant = 0;
-                DescriptionLabelBottomConstraint.Constant = 0;
-                CalendarIconWidthConstrarint.Active = true;
-                CalendarIconHeightConstrarint.Active = true;
-                CalendarIconBaselineConstraint.Active = false;
-            }
-            else
-            {
-                DescriptionLabelTopConstraint.Constant = 6;
-                DescriptionLabelBottomConstraint.Constant = 6;
-                CalendarIconWidthConstrarint.Active = false;
-                CalendarIconHeightConstrarint.Active = false;
-                CalendarIconBaselineConstraint.Active = true;
-            }
+            CalendarIconWidthConstrarint.Constant
+                = CalendarIconHeightConstrarint.Constant
+                = iconSize();
+
+            CalendarIconBaselineConstraint.Active = !shortCalendarItem;
+            CalendarIconCenterVerticallyConstraint.Active = shortCalendarItem;
+
+            DescriptionLabelLeadingConstraint.Constant = descriptionLabelLeadingConstraintConstant();
+            DescriptionLabelTopConstraint.Constant
+                = DescriptionLabelBottomConstraint.Constant
+                = descriptionLabelTopAndBottomConstraintConstant();
+
         }
+
+        private int descriptionLabelLeadingConstraintConstant()
+        {
+            if (Item.IconKind == CalendarIconKind.None)
+                return 5;
+
+            return shortCalendarItem ? 18 : 24;
+        }
+
+        private int iconSize()
+            => shortCalendarItem ? 8 : 14;
+
+        private int descriptionLabelTopAndBottomConstraintConstant()
+            => shortCalendarItem ? 0 : 6;
 
         private void updateShadow()
         {
