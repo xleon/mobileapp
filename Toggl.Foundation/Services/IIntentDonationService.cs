@@ -1,10 +1,9 @@
-using Toggl.Foundation.Models;
 using Toggl.Multivac.Models;
 
-namespace Toggl.Foundation
+namespace Toggl.Foundation.Services
 {
     public interface IIntentDonationService
     {
-        void StopTimeEntry(ITimeEntry te);
+        void StopCurrentTimeEntry();
     }
 }

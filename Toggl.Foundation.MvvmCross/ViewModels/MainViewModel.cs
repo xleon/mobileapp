@@ -425,7 +425,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             StopTimeEntryCommand.RaiseCanExecuteChanged();
 
             await dataSource.TimeEntries.Stop(timeService.CurrentDateTime)
-                .Do(te => intentDonationService.StopTimeEntry(te))
+                .Do(_ => intentDonationService.StopCurrentTimeEntry())
                 .Do(dataSource.SyncManager.InitiatePushSync);
 
             CurrentTimeEntryElapsedTime = TimeSpan.Zero;

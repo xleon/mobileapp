@@ -2,13 +2,14 @@ using System;
 using Intents;
 using Toggl.Daneel.Intents;
 using Toggl.Foundation;
+using Toggl.Foundation.Services;
 using Toggl.Multivac.Models;
 
 namespace Toggl.Daneel.Services
 {
     public class IntentDonationService: IIntentDonationService
     {
-        public void StopTimeEntry(ITimeEntry te)
+        public void StopCurrentTimeEntry()
         {
             var intent = new StopTimerIntent();
             intent.SuggestedInvocationPhrase = "Stop timer.";
