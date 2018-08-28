@@ -438,6 +438,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await DataSource.TimeEntries.Received(2).Stop(Arg.Any<DateTimeOffset>());
             }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask ShouldDonateStopTimerIntent()
+            {
+                var secondTimeEntry = Substitute.For<IThreadSafeTimeEntry>();
+
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+                subject.OnNext(secondTimeEntry);
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+
+                IntentDonationService.Received().DonateStopCurrentTimeEntry();
+            }
         }
 
         public sealed class TheEditTimeEntryCommand : MainViewModelTest
