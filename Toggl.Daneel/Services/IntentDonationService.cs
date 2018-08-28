@@ -9,7 +9,7 @@ namespace Toggl.Daneel.Services
 {
     public class IntentDonationService: IIntentDonationService
     {
-        public void StopCurrentTimeEntry()
+        public void DonateStopCurrentTimeEntry()
         {
             var intent = new StopTimerIntent();
             intent.SuggestedInvocationPhrase = "Stop timer.";

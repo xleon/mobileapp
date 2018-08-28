@@ -4,6 +4,6 @@ namespace Toggl.Foundation.Services
 {
     public interface IIntentDonationService
     {
-        void StopCurrentTimeEntry();
+        void DonateStopCurrentTimeEntry();
     }
 }
