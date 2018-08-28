@@ -61,7 +61,7 @@
 					</dict>
 					<dict>
 						<key>INIntentResponseCodeFormatString</key>
-						<string>Stopped. You've been ${entry_description} for ${entry_duration}.</string>
+						<string>Stopped. You've been doing ${entry_description} for ${entry_duration}.</string>
 						<key>INIntentResponseCodeFormatStringID</key>
 						<string>akQb1h</string>
 						<key>INIntentResponseCodeName</key>
