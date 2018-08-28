@@ -10,11 +10,4 @@ namespace Toggl.Foundation.MvvmCross.Services
 
         void OpenAppSettings();
     }
-
-    public sealed class NotAuthorizedException : Exception
-    {
-        public NotAuthorizedException(string message) : base(message)
-        {
-        }
-    }
 }

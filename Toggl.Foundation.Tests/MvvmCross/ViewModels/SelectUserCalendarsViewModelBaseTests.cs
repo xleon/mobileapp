@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
+using Toggl.Foundation.Exceptions;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.Interactors;
-using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Multivac;
 using Xunit;

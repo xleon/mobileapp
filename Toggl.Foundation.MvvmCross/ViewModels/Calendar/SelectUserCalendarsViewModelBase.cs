@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
+using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Services;

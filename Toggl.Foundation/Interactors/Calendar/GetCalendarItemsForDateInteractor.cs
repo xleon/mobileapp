@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Services;
 using Toggl.Multivac;
@@ -43,7 +44,8 @@ namespace Toggl.Foundation.Interactors.Calendar
                     calendarItemsFromEvents(),
                     (timeEntries, events) => timeEntries.Concat(events))
                 .Select(validEvents)
-                .Select(orderByStartTime);
+                .Select(orderByStartTime)
+                .Catch((NotAuthorizedException _) => Observable.Return(new List<CalendarItem>()));
 
         private IObservable<IEnumerable<CalendarItem>> calendarItemsFromTimeEntries()
             => timeEntriesDataSource.GetAll(timeEntry 
