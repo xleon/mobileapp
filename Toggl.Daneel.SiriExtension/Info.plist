@@ -30,6 +30,7 @@
 			<array>
 				<string>StopTimerIntent</string>
 				<string>ShowReportIntent</string>
+				<string>ShowReportPeriodIntent</string>
 			</array>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>

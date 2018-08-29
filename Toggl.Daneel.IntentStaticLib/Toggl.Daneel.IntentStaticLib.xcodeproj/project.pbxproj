@@ -10,8 +10,9 @@
 		D62EA1B7212F172800350CA9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D62EA1B6212F172800350CA9 /* Foundation.framework */; };
 		D62EA1B9212F172B00350CA9 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D62EA1B8212F172B00350CA9 /* Intents.framework */; };
 		D62EA1BB212FAD4900350CA9 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = D62EA1BA212FAD4900350CA9 /* Makefile */; };
-		D6CDE99721365DBD00AB5CC2 /* ShowReportIntent.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CDE99521365DBD00AB5CC2 /* ShowReportIntent.m */; };
-		D6CDE99821365DBD00AB5CC2 /* StopTimerIntent.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CDE99621365DBD00AB5CC2 /* StopTimerIntent.m */; };
+		D67C01572136B38200B52EAC /* StopTimerIntent.m in Sources */ = {isa = PBXBuildFile; fileRef = D67C01512136B38200B52EAC /* StopTimerIntent.m */; };
+		D67C01582136B38200B52EAC /* ShowReportIntent.m in Sources */ = {isa = PBXBuildFile; fileRef = D67C01522136B38200B52EAC /* ShowReportIntent.m */; };
+		D67C01592136B38200B52EAC /* ShowReportPeriodIntent.m in Sources */ = {isa = PBXBuildFile; fileRef = D67C01542136B38200B52EAC /* ShowReportPeriodIntent.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,10 +32,12 @@
 		D62EA1B6212F172800350CA9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D62EA1B8212F172B00350CA9 /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		D62EA1BA212FAD4900350CA9 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		D6CDE99321365DBC00AB5CC2 /* ShowReportIntent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowReportIntent.h; sourceTree = "<group>"; };
-		D6CDE99421365DBD00AB5CC2 /* StopTimerIntent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StopTimerIntent.h; sourceTree = "<group>"; };
-		D6CDE99521365DBD00AB5CC2 /* ShowReportIntent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowReportIntent.m; sourceTree = "<group>"; };
-		D6CDE99621365DBD00AB5CC2 /* StopTimerIntent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StopTimerIntent.m; sourceTree = "<group>"; };
+		D67C01512136B38200B52EAC /* StopTimerIntent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StopTimerIntent.m; sourceTree = "<group>"; };
+		D67C01522136B38200B52EAC /* ShowReportIntent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowReportIntent.m; sourceTree = "<group>"; };
+		D67C01532136B38200B52EAC /* ShowReportPeriodIntent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowReportPeriodIntent.h; sourceTree = "<group>"; };
+		D67C01542136B38200B52EAC /* ShowReportPeriodIntent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowReportPeriodIntent.m; sourceTree = "<group>"; };
+		D67C01552136B38200B52EAC /* ShowReportIntent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowReportIntent.h; sourceTree = "<group>"; };
+		D67C01562136B38200B52EAC /* StopTimerIntent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StopTimerIntent.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,10 +74,12 @@
 		D62EA1A8212F145200350CA9 /* Toggl.Daneel.IntentStaticLib */ = {
 			isa = PBXGroup;
 			children = (
-				D6CDE99321365DBC00AB5CC2 /* ShowReportIntent.h */,
-				D6CDE99521365DBD00AB5CC2 /* ShowReportIntent.m */,
-				D6CDE99421365DBD00AB5CC2 /* StopTimerIntent.h */,
-				D6CDE99621365DBD00AB5CC2 /* StopTimerIntent.m */,
+				D67C01552136B38200B52EAC /* ShowReportIntent.h */,
+				D67C01522136B38200B52EAC /* ShowReportIntent.m */,
+				D67C01532136B38200B52EAC /* ShowReportPeriodIntent.h */,
+				D67C01542136B38200B52EAC /* ShowReportPeriodIntent.m */,
+				D67C01562136B38200B52EAC /* StopTimerIntent.h */,
+				D67C01512136B38200B52EAC /* StopTimerIntent.m */,
 			);
 			path = Toggl.Daneel.IntentStaticLib;
 			sourceTree = "<group>";
@@ -144,9 +149,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6CDE99821365DBD00AB5CC2 /* StopTimerIntent.m in Sources */,
-				D6CDE99721365DBD00AB5CC2 /* ShowReportIntent.m in Sources */,
 				D62EA1BB212FAD4900350CA9 /* Makefile in Sources */,
+				D67C01592136B38200B52EAC /* ShowReportPeriodIntent.m in Sources */,
+				D67C01572136B38200B52EAC /* StopTimerIntent.m in Sources */,
+				D67C01582136B38200B52EAC /* ShowReportIntent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

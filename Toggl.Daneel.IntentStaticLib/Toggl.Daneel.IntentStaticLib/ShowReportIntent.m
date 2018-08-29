@@ -8,7 +8,7 @@
 
 @implementation ShowReportIntent
 
-@dynamic period;
+
 
 @end
 
@@ -22,8 +22,6 @@
 
 @synthesize code = _code;
 
-@dynamic period;
-
 - (instancetype)initWithCode:(ShowReportIntentResponseCode)code userActivity:(nullable NSUserActivity *)userActivity {
     self = [super init];
     if (self) {
@@ -31,12 +29,6 @@
         self.userActivity = userActivity;
     }
     return self;
-}
-
-+ (instancetype)successIntentResponseWithPeriod:(ShowReportReportPeriod)period {
-    ShowReportIntentResponse *intentResponse = [[ShowReportIntentResponse alloc] initWithCode:ShowReportIntentResponseCodeSuccess userActivity:nil];
-    intentResponse.period = period;
-    return intentResponse;
 }
 
 @end

@@ -6,23 +6,12 @@
 
 #import <Intents/Intents.h>
 
-typedef NS_ENUM(NSInteger, ShowReportReportPeriod) {
-    ShowReportReportPeriodUnknown = 0,
-    ShowReportReportPeriodToday = 1,
-    ShowReportReportPeriodYesterday = 2,
-    ShowReportReportPeriodThisWeek = 3,
-    ShowReportReportPeriodLastWeek = 4,
-    ShowReportReportPeriodThisMonth = 5,
-    ShowReportReportPeriodLastMonth = 6,
-    ShowReportReportPeriodThisYear = 7
-} API_AVAILABLE(ios(12.0), watchos(5.0));
-
 NS_ASSUME_NONNULL_BEGIN
 
 API_AVAILABLE(ios(12.0), watchos(5.0))
 @interface ShowReportIntent : INIntent
 
-@property (readwrite, assign, nonatomic) ShowReportReportPeriod period;
+
 
 @end
 
@@ -90,12 +79,7 @@ API_AVAILABLE(ios(12.0), watchos(5.0))
  */
 - (instancetype)initWithCode:(ShowReportIntentResponseCode)code userActivity:(nullable NSUserActivity *)userActivity NS_DESIGNATED_INITIALIZER;
 
-/*!
- @abstract Initializes and returns the response object with the success code.
- */
-+ (instancetype)successIntentResponseWithPeriod:(ShowReportReportPeriod)period NS_SWIFT_NAME(success(period:));
 
-@property (readwrite, assign, nonatomic) ShowReportReportPeriod period;
 
 /*!
  @abstract The response code indicating your success or failure in confirming or handling the intent.

@@ -23,6 +23,7 @@
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>ShowReportIntent</string>
+		<string>ShowReportPeriodIntent</string>
 		<string>StopTimerIntent</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

@@ -4,7 +4,19 @@ using ObjCRuntime;
 namespace Toggl.Daneel.Intents
 {
 	[Native]
-	public enum ShowReportReportPeriod : long
+	public enum ShowReportIntentResponseCode : long
+	{
+		Unspecified = 0,
+		Ready,
+		ContinueInApp,
+		InProgress,
+		Success,
+		Failure,
+		FailureRequiringAppLaunch
+	}
+
+	[Native]
+	public enum ShowReportPeriodReportPeriod : long
 	{
 		Unknown = 0,
 		Today = 1,
@@ -17,7 +29,7 @@ namespace Toggl.Daneel.Intents
 	}
 
 	[Native]
-	public enum ShowReportIntentResponseCode : long
+	public enum ShowReportPeriodIntentResponseCode : long
 	{
 		Unspecified = 0,
 		Ready,

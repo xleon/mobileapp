@@ -9,9 +9,6 @@ namespace Toggl.Daneel.Intents
 	[BaseType (typeof(INIntent))]
 	interface ShowReportIntent
 	{
-		// @property (assign, readwrite, nonatomic) ShowReportReportPeriod period;
-		[Export ("period", ArgumentSemantic.Assign)]
-		ShowReportReportPeriod Period { get; set; }
 	}
 
 	// @protocol ShowReportIntentHandling <NSObject>
@@ -39,18 +36,57 @@ namespace Toggl.Daneel.Intents
 		[DesignatedInitializer]
 		IntPtr Constructor (ShowReportIntentResponseCode code, [NullAllowed] NSUserActivity userActivity);
 
-		// +(instancetype _Nonnull)successIntentResponseWithPeriod:(ShowReportReportPeriod)period;
-		[Static]
-		[Export ("successIntentResponseWithPeriod:")]
-		ShowReportIntentResponse SuccessIntentResponseWithPeriod (ShowReportReportPeriod period);
-
-		// @property (assign, readwrite, nonatomic) ShowReportReportPeriod period;
-		[Export ("period", ArgumentSemantic.Assign)]
-		ShowReportReportPeriod Period { get; set; }
-
 		// @property (readonly, nonatomic) ShowReportIntentResponseCode code;
 		[Export ("code")]
 		ShowReportIntentResponseCode Code { get; }
+	}
+
+	// @interface ShowReportPeriodIntent : INIntent
+	[BaseType (typeof(INIntent))]
+	interface ShowReportPeriodIntent
+	{
+		// @property (assign, readwrite, nonatomic) ShowReportPeriodReportPeriod period;
+		[Export ("period", ArgumentSemantic.Assign)]
+		ShowReportPeriodReportPeriod Period { get; set; }
+	}
+
+	// @protocol ShowReportPeriodIntentHandling <NSObject>
+	[Protocol, Model]
+	[BaseType (typeof(NSObject))]
+	interface ShowReportPeriodIntentHandling
+	{
+		// @required -(void)handleShowReportPeriod:(ShowReportPeriodIntent * _Nonnull)intent completion:(void (^ _Nonnull)(ShowReportPeriodIntentResponse * _Nonnull))completion;
+		[Abstract]
+		[Export ("handleShowReportPeriod:completion:")]
+		void HandleShowReportPeriod (ShowReportPeriodIntent intent, Action<ShowReportPeriodIntentResponse> completion);
+
+		// @optional -(void)confirmShowReportPeriod:(ShowReportPeriodIntent * _Nonnull)intent completion:(void (^ _Nonnull)(ShowReportPeriodIntentResponse * _Nonnull))completion;
+		[Export ("confirmShowReportPeriod:completion:")]
+		void ConfirmShowReportPeriod (ShowReportPeriodIntent intent, Action<ShowReportPeriodIntentResponse> completion);
+	}
+
+	// @interface ShowReportPeriodIntentResponse : INIntentResponse
+	[BaseType (typeof(INIntentResponse))]
+	[DisableDefaultCtor]
+	interface ShowReportPeriodIntentResponse
+	{
+		// -(instancetype _Nonnull)initWithCode:(ShowReportPeriodIntentResponseCode)code userActivity:(NSUserActivity * _Nullable)userActivity __attribute__((objc_designated_initializer));
+		[Export ("initWithCode:userActivity:")]
+		[DesignatedInitializer]
+		IntPtr Constructor (ShowReportPeriodIntentResponseCode code, [NullAllowed] NSUserActivity userActivity);
+
+		// +(instancetype _Nonnull)successIntentResponseWithPeriod:(ShowReportPeriodReportPeriod)period;
+		[Static]
+		[Export ("successIntentResponseWithPeriod:")]
+		ShowReportPeriodIntentResponse SuccessIntentResponseWithPeriod (ShowReportPeriodReportPeriod period);
+
+		// @property (assign, readwrite, nonatomic) ShowReportPeriodReportPeriod period;
+		[Export ("period", ArgumentSemantic.Assign)]
+		ShowReportPeriodReportPeriod Period { get; set; }
+
+		// @property (readonly, nonatomic) ShowReportPeriodIntentResponseCode code;
+		[Export ("code")]
+		ShowReportPeriodIntentResponseCode Code { get; }
 	}
 
 	// @interface StopTimerIntent : INIntent
