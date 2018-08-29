@@ -29,6 +29,7 @@
 			<key>IntentsSupported</key>
 			<array>
 				<string>StopTimerIntent</string>
+				<string>ShowReportIntent</string>
 			</array>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
