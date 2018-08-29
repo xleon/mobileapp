@@ -190,6 +190,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void quickSelect(CalendarBaseQuickSelectShortcut quickSelectShortCut)
         {
+            intentDonationService.DonateShowReport(quickSelectShortCut.DonationPeriod);
             changeDateRange(quickSelectShortCut.GetDateRange());
         }
 
