@@ -86,7 +86,6 @@ namespace Toggl.Daneel
             this.BindVoid(YesView.Tapped(), () => DataContext.RegisterImpression(true));
             this.BindVoid(NotReallyView.Tapped(), () => DataContext.RegisterImpression(false));
             this.Bind(CtaButton.Tapped(), DataContext.PerformMainAction);
-            this.BindVoid(CtaButton.Tapped(), DataContext.Dismiss);
             this.BindVoid(DismissButton.Tapped(), DataContext.Dismiss);
         }
 
