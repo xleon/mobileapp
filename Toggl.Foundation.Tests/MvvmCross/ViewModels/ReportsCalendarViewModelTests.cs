@@ -25,7 +25,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             : BaseViewModelTests<ReportsCalendarViewModel>
         {
             protected override ReportsCalendarViewModel CreateViewModel()
-                => new ReportsCalendarViewModel(TimeService, DataSource);
+                => new ReportsCalendarViewModel(TimeService, DataSource, IntentDonationService);
         }
 
         public sealed class TheConstructor : ReportsCalendarViewModelTest
@@ -35,7 +35,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useTimeService,
                 bool useDataSource,
-                bool useIntentDonationService,
+                bool useIntentDonationService
                 )
             {
                 var timeService = useTimeService ? TimeService : null;
@@ -43,7 +43,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var intentDonationService = useIntentDonationService ? IntentDonationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new ReportsCalendarViewModel(timeService, dataSource);
+                    () => new ReportsCalendarViewModel(timeService, dataSource, intentDonationService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
