@@ -1,7 +1,7 @@
 ﻿using System.Reactive.Linq;
-using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.Login;
+using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Settings;
@@ -24,7 +24,7 @@ namespace Toggl.Foundation.MvvmCross
         private readonly ITimeService timeService;
         private readonly ILoginManager loginManager;
         private readonly IOnboardingStorage onboardingStorage;
-        private readonly IMvxNavigationService navigationService;
+        private readonly IForkingNavigationService navigationService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
 
         public AppStart(
@@ -32,7 +32,7 @@ namespace Toggl.Foundation.MvvmCross
             ITimeService timeService,
             ILoginManager loginManager,
             IOnboardingStorage onboardingStorage,
-            IMvxNavigationService navigationService,
+            IForkingNavigationService navigationService,
             IAccessRestrictionStorage accessRestrictionStorage)
             : base (app, navigationService)
         {
@@ -76,7 +76,7 @@ namespace Toggl.Foundation.MvvmCross
 
             var _ = dataSource.StartSyncing();
 
-            await navigationService.Navigate<MainTabBarViewModel>();
+            await navigationService.ForkNavigate<MainTabBarViewModel, MainViewModel>();
         }
     }
 }

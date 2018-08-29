@@ -72,7 +72,7 @@ namespace Toggl.Foundation.Tests.Mocks
 
         public IThreadSafeProject Project { get; }
 
-        public IThreadSafeWorkspace Workspace { get; }
+        public IThreadSafeWorkspace Workspace { get; set; }
 
         public IEnumerable<IThreadSafeTag> Tags { get; }
 

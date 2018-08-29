@@ -29,6 +29,7 @@ namespace Toggl.Foundation.Tests
                 bool useApiFactory,
                 bool useTimeService,
                 bool useMailService,
+                bool usePlatformInfo,
                 bool useRatingService,
                 bool useGoogleService,
                 bool useLicenseProvider,
@@ -41,6 +42,7 @@ namespace Toggl.Foundation.Tests
                 bool useSuggestionProviderContainer)
             {
                 var version = useVersion ? Version.Parse("1.0") : null;
+                var platformInfo = usePlatformInfo ? new PlatformInfo() : null;
                 var agent = userAgent ? new UserAgent("Some Client", "1.0") : null;
                 var scheduler = useScheduler ? Substitute.For<IScheduler>() : null;
                 var database = useDatabase ? Substitute.For<ITogglDatabase>() : null;
@@ -66,6 +68,7 @@ namespace Toggl.Foundation.Tests
                         .WithApiFactory(apiFactory)
                         .WithTimeService(timeService)
                         .WithMailService(mailService)
+                        .WithPlatformInfo(platformInfo)
                         .WithRatingService(ratinService)
                         .WithGoogleService(googleService)
                         .WithLicenseProvider(licenseProvider)
@@ -85,6 +88,7 @@ namespace Toggl.Foundation.Tests
             public void BuildingWorksIfAllParametersAreProvided()
             {
                 var version = Version.Parse("1.0");
+                var platformInfo = new PlatformInfo();
                 var scheduler = Substitute.For<IScheduler>();
                 var apiFactory = Substitute.For<IApiFactory>();
                 var agent = new UserAgent("Some Client", "1.0");
@@ -110,6 +114,7 @@ namespace Toggl.Foundation.Tests
                         .WithApiFactory(apiFactory)
                         .WithTimeService(timeService)
                         .WithMailService(mailService)
+                        .WithPlatformInfo(platformInfo)
                         .WithRatingService(ratingService)
                         .WithGoogleService(googleService)
                         .WithLicenseProvider(licenseProvider)

@@ -13,6 +13,7 @@ using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
+using Toggl.Foundation.Tests.Mocks;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
@@ -128,13 +129,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                         var observable = dateTimes
                             .Select(newDateWithGenerator(monthsGenerator, year))
-                            .Select(d => TimeEntry.Builder
-                                    .Create(-1)
-                                    .SetUserId(-2)
-                                    .SetWorkspaceId(-3)
-                                    .SetStart(d)
-                                    .SetDescription("")
-                                    .SetAt(now).Build())
+                            .Select(d =>
+                                new MockTimeEntry
+                                {
+                                    Id = -1,
+                                    UserId = -2,
+                                    WorkspaceId = -3,
+                                    Start = d,
+                                    Description = "",
+                                    At = now,
+                                    Workspace = new MockWorkspace()
+                                }
+                            )
                             .Apply(Observable.Return);
 
                         InteractorFactory.GetAllNonDeletedTimeEntries().Execute().Returns(observable);
@@ -162,29 +168,41 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected Subject<IThreadSafeTimeEntry> TimeEntryCreatedSubject = new Subject<IThreadSafeTimeEntry>();
             protected Subject<EntityUpdate<IThreadSafeTimeEntry>> TimeEntryUpdatedSubject = new Subject<EntityUpdate<IThreadSafeTimeEntry>>();
             protected Subject<long> TimeEntryDeletedSubject = new Subject<long>();
-            protected IThreadSafeTimeEntry NewTimeEntry =
-                TimeEntry.Builder.Create(21)
-                         .SetUserId(10)
-                         .SetWorkspaceId(12)
-                         .SetDescription("")
-                         .SetAt(now)
-                         .SetStart(now)
-                         .Build();
+
+            protected IThreadSafeTimeEntry NewTimeEntry(long? duration = null)
+            {
+                return new MockTimeEntry
+                {
+                    Id = 21,
+                    UserId = 10,
+                    WorkspaceId = 12,
+                    Description = "",
+                    At = now,
+                    Duration = duration,
+                    Start = now,
+                    TagIds = new long[] { 1, 2, 3 },
+                    Workspace = new MockWorkspace()
+                };
+            }
 
             protected TimeEntryDataSourceObservableTest()
             {
                 var startTime = now.AddHours(-2);
 
                 var observable = Enumerable.Range(1, InitialAmountOfTimeEntries)
-                    .Select(i => TimeEntry.Builder.Create(i))
-                    .Select(builder => builder
-                        .SetStart(startTime.AddHours(builder.Id * 2))
-                        .SetUserId(11)
-                        .SetWorkspaceId(12)
-                        .SetDescription("")
-                        .SetAt(now)
-                        .Build())
-                  .Select(te => te.With((long)TimeSpan.FromHours(te.Id * 2 + 2).TotalSeconds))
+                    .Select(i =>
+                        new MockTimeEntry {
+                            Id = i,
+                            Start = startTime.AddHours(i * 2),
+                            Duration = (long)TimeSpan.FromHours(i * 2 + 2).TotalSeconds,
+                            UserId = 11,
+                            WorkspaceId = 12,
+                            Description = "",
+                            At = now,
+                            TagIds = new long[] { 1, 2, 3 },
+                            Workspace = new MockWorkspace { IsGhost = false }
+                        }
+                    )
                   .Apply(Observable.Return);
 
                 InteractorFactory.GetAllNonDeletedTimeEntries().Execute().Returns(observable);
@@ -200,7 +218,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask AddsTheCreatedTimeEntryToTheList()
             {
                 await ViewModel.Initialize();
-                var newTimeEntry = NewTimeEntry.With((long)TimeSpan.FromHours(1).TotalSeconds);
+
+                var newTimeEntry = NewTimeEntry((long)TimeSpan.FromHours(1).TotalSeconds);
 
                 TimeEntryCreatedSubject.OnNext(newTimeEntry);
 
@@ -213,7 +232,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.Initialize();
 
-                TimeEntryCreatedSubject.OnNext(NewTimeEntry);
+                TimeEntryCreatedSubject.OnNext(NewTimeEntry());
 
                 ViewModel.TimeEntries.Any(c => c.Any(te => te.Id == 21)).Should().BeFalse();
                 ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries);
@@ -227,7 +246,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask AddsTheTimeEntryIfItWasNotAddedPreviously()
             {
                 await ViewModel.Initialize();
-                var newTimeEntry = NewTimeEntry.With((long)TimeSpan.FromHours(1).TotalSeconds);
+
+                var newTimeEntry = NewTimeEntry((long)TimeSpan.FromHours(1).TotalSeconds);
 
                 TimeEntryUpdatedSubject.OnNext(new EntityUpdate<IThreadSafeTimeEntry>(newTimeEntry.Id, newTimeEntry));
 
@@ -240,7 +260,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.Initialize();
 
-                TimeEntryCreatedSubject.OnNext(NewTimeEntry);
+                TimeEntryCreatedSubject.OnNext(NewTimeEntry());
 
                 ViewModel.TimeEntries.Any(c => c.Any(te => te.Id == 21)).Should().BeFalse();
                 ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries);
@@ -386,6 +406,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var timeEntry = Substitute.For<IThreadSafeTimeEntry>();
                 timeEntry.Duration.Returns(100);
                 timeEntry.WorkspaceId.Returns(10);
+                timeEntry.IsGhost.Returns(false);
                 return new TimeEntryViewModel(timeEntry, DurationFormat.Improved);
             }
         }

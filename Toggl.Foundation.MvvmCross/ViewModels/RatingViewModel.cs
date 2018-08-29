@@ -155,7 +155,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 ratingService.AskForRating();
                 //We can't really know whether the user actually rated
                 //We only know that we presented the iOS rating view
-
                 trackSecondStepOutcome(
                     RatingViewOutcome.AppWasRated,
                     RatingViewSecondStepOutcome.AppWasRated,

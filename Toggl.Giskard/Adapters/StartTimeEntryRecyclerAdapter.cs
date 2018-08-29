@@ -54,6 +54,10 @@ namespace Toggl.Giskard.Adapters
                 return GetCreateSuggestionItem();
 
             var actualViewPosition = viewPosition - (IsSuggestingCreation ? 1 : 0);
+
+            if (Collection.FirstOrDefault()?.Count < actualViewPosition)
+                return null;
+
             return Collection.First()[actualViewPosition];
         }
 

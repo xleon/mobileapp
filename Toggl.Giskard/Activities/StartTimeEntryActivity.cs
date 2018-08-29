@@ -2,30 +2,25 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading;
 using Android.App;
 using Android.Content.PM;
-using Android.Graphics;
 using Android.OS;
-using Android.Support.V4.Content;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Onboarding.StartTimeEntryView;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Helper;
-using Toggl.Giskard.Views;
 using Toggl.Multivac.Extensions;
 using static Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
 
 namespace Toggl.Giskard.Activities
 {
     [MvxActivityPresentation]
-    [Activity(Theme = "@style/AppTheme",
+    [Activity(Theme = "@style/AppTheme.BlueStatusBar",
               ScreenOrientation = ScreenOrientation.Portrait,
               WindowSoftInputMode = SoftInput.StateVisible,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
@@ -40,8 +35,6 @@ namespace Toggl.Giskard.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
-            this.ChangeStatusBarColor(new Color(ContextCompat.GetColor(this, Resource.Color.blueStatusBarBackground)));
-
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.StartTimeEntryActivity);
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
