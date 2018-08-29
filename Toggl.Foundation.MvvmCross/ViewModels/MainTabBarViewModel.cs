@@ -74,7 +74,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 navigationService,
                 interactorFactory,
                 analyticsService,
-                dialogService);
+                dialogService,
+                intentDonationService);
         }
 
         public override async Task Initialize()

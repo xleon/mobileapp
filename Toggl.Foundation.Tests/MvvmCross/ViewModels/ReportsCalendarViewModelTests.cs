@@ -32,10 +32,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         {
             [Theory, LogIfTooSlow]
             [ConstructorData]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useTimeService, bool useDataSource)
+            public void ThrowsIfAnyOfTheArgumentsIsNull(
+                bool useTimeService,
+                bool useDataSource,
+                bool useIntentDonationService,
+                )
             {
                 var timeService = useTimeService ? TimeService : null;
                 var dataSource = useDataSource ? DataSource : null;
+                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new ReportsCalendarViewModel(timeService, dataSource);
