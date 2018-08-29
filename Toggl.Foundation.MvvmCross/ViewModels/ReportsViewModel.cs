@@ -38,6 +38,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
         private readonly IDialogService dialogService;
+        private readonly IIntentDonationService intentDonationService;
         private readonly ReportsCalendarViewModel calendarViewModel;
         private readonly Subject<Unit> reportSubject = new Subject<Unit>();
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
@@ -130,6 +131,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
             this.dialogService = dialogService;
+            this.intentDonationService = intentDonationService;
 
             calendarViewModel = new ReportsCalendarViewModel(timeService, dataSource, intentDonationService);
 
@@ -171,6 +173,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             disposeBag.Add(preferencesDisposable);
 
             IsLoading = true;
+
+            intentDonationService.DonateShowReport();
         }
 
         public override void ViewAppeared()

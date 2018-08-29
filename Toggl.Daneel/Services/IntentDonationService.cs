@@ -21,35 +21,42 @@ namespace Toggl.Daneel.Services
 
         public void DonateShowReport(DonationReportPeriod period)
         {
-            var intent = new ShowReportIntent();
+            var intent = new ShowReportPeriodIntent();
             switch (period)
             {
                 case DonationReportPeriod.Today:
-                    intent.Period = ShowReportReportPeriod.Today;
+                    intent.Period = ShowReportPeriodReportPeriod.Today;
                     break;
                 case DonationReportPeriod.Yesterday:
-                    intent.Period = ShowReportReportPeriod.Yesterday;
+                    intent.Period = ShowReportPeriodReportPeriod.Yesterday;
                     break;
                 case DonationReportPeriod.LastWeek:
-                    intent.Period = ShowReportReportPeriod.LastWeek;
+                    intent.Period = ShowReportPeriodReportPeriod.LastWeek;
                     break;
                 case DonationReportPeriod.LastMonth:
-                    intent.Period = ShowReportReportPeriod.LastMonth;
+                    intent.Period = ShowReportPeriodReportPeriod.LastMonth;
                     break;
                 case DonationReportPeriod.ThisMonth:
-                    intent.Period = ShowReportReportPeriod.ThisMonth;
+                    intent.Period = ShowReportPeriodReportPeriod.ThisMonth;
                     break;
                 case DonationReportPeriod.ThisWeek:
-                    intent.Period = ShowReportReportPeriod.ThisWeek;
+                    intent.Period = ShowReportPeriodReportPeriod.ThisWeek;
                     break;
                 case DonationReportPeriod.ThisYear:
-                    intent.Period = ShowReportReportPeriod.ThisYear;
+                    intent.Period = ShowReportPeriodReportPeriod.ThisYear;
                     break;
                 case DonationReportPeriod.Unknown:
-                    intent.Period = ShowReportReportPeriod.Unknown;
+                    intent.Period = ShowReportPeriodReportPeriod.Unknown;
                     break;
             }
 
+            var interaction = new INInteraction(intent, null);
+            interaction.DonateInteraction(onCompletion);
+        }
+
+        public void DonateShowReport()
+        {
+            var intent = new ShowReportIntent();
             var interaction = new INInteraction(intent, null);
             interaction.DonateInteraction(onCompletion);
         }
