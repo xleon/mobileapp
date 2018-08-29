@@ -135,21 +135,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         }
 
         private IObservable<Unit> getStarted()
-            => permissionsService
-                .RequestCalendarAuthorization()
-                .SelectMany(handlePermissionRequestResult);
-
-        private IObservable<Unit> handlePermissionRequestResult(bool permissionGranted)
             => Observable.FromAsync(async () =>
             {
-                if (permissionGranted)
+                var calendarPermissionGranted = await permissionsService.RequestCalendarAuthorization();
+                if (calendarPermissionGranted)
                 {
                     await selectUserCalendars();
+                    await permissionsService.RequestNotificationAuthorization();
                 }
                 else
                 {
                     await navigationService.Navigate<CalendarPermissionDeniedViewModel, Unit>();
                 }
+
                 onboardingStorage.SetCompletedCalendarOnboarding();
                 shouldShowOnboardingSubject.OnNext(false);
             });

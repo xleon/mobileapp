@@ -258,6 +258,28 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 OnboardingStorage.Received().SetCompletedCalendarOnboarding();
             }
+
+            [Fact, LogIfTooSlow]
+            public async Task RequestsNotificationsPermissionIfCalendarPermissionWasGranted()
+            {
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(new string[0]);
+
+                await ViewModel.GetStartedAction.Execute(Unit.Default);
+
+                await PermissionsService.Received().RequestNotificationAuthorization();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task DoesNotRequestNotificationsPermissionIfCalendarPermissionWasNotGranted()
+            {
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(false));
+                NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(new string[0]);
+
+                await ViewModel.GetStartedAction.Execute(Unit.Default);
+
+                await PermissionsService.DidNotReceive().RequestNotificationAuthorization();
+            }
         }
 
         public sealed class TheCalendarItemsProperty : CalendarViewModelTest
