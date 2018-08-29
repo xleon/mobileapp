@@ -19,7 +19,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
         private readonly IPermissionsService permissionsService;
         private readonly IUserPreferences userPreferences;
 
-        public bool PermissionGranted { get; }
+        public bool PermissionGranted { get; private set; }
 
         public UIAction RequestAccessAction { get; }
 
@@ -34,8 +34,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
             this.userPreferences = userPreferences;
             this.permissionsService = permissionsService;
 
-            PermissionGranted = permissionsService.CalendarPermissionGranted;
-
             RequestAccessAction = new UIAction(requestAccess);
 
             SelectCalendarAction
@@ -43,10 +41,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
                 .VoidSubscribe(onCalendarSelected);
         }
 
-        public override Task Initialize()
+        public async override Task Initialize()
         {
+            PermissionGranted = await permissionsService.CalendarPermissionGranted;
             SelectedCalendarIds.AddRange(userPreferences.EnabledCalendarIds());
-            return base.Initialize();
         }
 
         private IObservable<Unit> requestAccess()

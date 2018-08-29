@@ -8,7 +8,7 @@ namespace Toggl.Multivac
 
         public string Title { get; }
 
-        string Description { get; }
+        public string Description { get; }
 
         public DateTimeOffset ScheduledTime { get; }
 

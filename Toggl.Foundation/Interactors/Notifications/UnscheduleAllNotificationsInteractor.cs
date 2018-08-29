@@ -1,10 +1,13 @@
-﻿using System.Reactive;
+﻿using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Services;
 using Toggl.Multivac;
 
 namespace Toggl.Foundation.Interactors.Notifications
 {
-    public class UnscheduleAllNotificationsInteractor : IInteractor<Unit>
+    public class UnscheduleAllNotificationsInteractor : IInteractor<IObservable<Unit>>
     {
         private readonly INotificationService notificationService;
 
@@ -15,10 +18,11 @@ namespace Toggl.Foundation.Interactors.Notifications
             this.notificationService = notificationService;
         }
 
-        public Unit Execute()
-        {
-            notificationService.UnscheduleAllNotifications();
-            return Unit.Default;
-        }
+        public IObservable<Unit> Execute()
+            => notificationService
+                .UnscheduleAllNotifications()
+                .Catch<Unit, NotAuthorizedException>(
+                    ex => Observable.Return(Unit.Default)
+                );
     }
 }

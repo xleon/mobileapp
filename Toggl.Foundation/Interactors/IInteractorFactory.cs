@@ -105,7 +105,7 @@ namespace Toggl.Foundation.Interactors
 
         #region Notifications
 
-        IInteractor<Unit> UnshceduleAllNotifications();
+        IInteractor<IObservable<Unit>> UnscheduleAllNotifications();
 
         #endregion
     }

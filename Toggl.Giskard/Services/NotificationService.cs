@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Reactive;
 using Toggl.Foundation.Services;
 using Toggl.Multivac;
 
@@ -7,12 +8,12 @@ namespace Toggl.Giskard.Services
 {
     public sealed class NotificationService : INotificationService
     {
-        public void Schedule(IImmutableList<Notification> notifications)
+        public IObservable<Unit> Schedule(IImmutableList<Multivac.Notification> notifications)
         {
             throw new NotImplementedException();
         }
 
-        public void UnscheduleAllNotifications()
+        public IObservable<Unit> UnscheduleAllNotifications()
         {
             throw new NotImplementedException();
         }

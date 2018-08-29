@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -45,13 +46,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class ThePermissionGrantedProperty : CalendarSettingsViewModelTest
         {
-            [Property]
-            public void GetsInitialisedToTheProperValue(bool permissionGranted)
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public async Task GetsInitialisedToTheProperValue(bool permissionGranted)
             {
-                PermissionsService.CalendarPermissionGranted.Returns(permissionGranted);
-                var viewModel = CreateViewModel();
+                UserPreferences.EnabledCalendarIds().Returns(new List<string>());
+                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(permissionGranted));
 
-                viewModel.PermissionGranted.Should().Be(permissionGranted);
+                await ViewModel.Initialize();
+
+                ViewModel.PermissionGranted.Should().Be(permissionGranted);
             }
         }
 

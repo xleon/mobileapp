@@ -97,6 +97,7 @@ namespace Toggl.Daneel
             remoteConfigService.SetupDefaults(remoteConfigDefaultsFileName);
             var schedulerProvider = new IOSSchedulerProvider();
             var calendarService = new CalendarService(permissionsService);
+            var notificationService = new NotificationService(permissionsService, timeService);
 
             var foundation =
                 TogglFoundation
@@ -113,7 +114,7 @@ namespace Toggl.Daneel
                     .WithSchedulerProvider(schedulerProvider)
                     .WithPlatformConstants(platformConstants)
                     .WithRemoteConfigService(remoteConfigService)
-                    .WithNotificationService<NotificationService>()
+                    .WithNotificationService(notificationService)
                     .WithApiFactory(new ApiFactory(environment, userAgent))
                     .WithBackgroundService(new BackgroundService(timeService))
                     .WithApplicationShortcutCreator<ApplicationShortcutCreator>()

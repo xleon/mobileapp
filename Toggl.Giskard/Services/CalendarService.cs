@@ -6,7 +6,7 @@ using Toggl.Multivac;
 
 namespace Toggl.Giskard.Services
 {
-    public sealed class CalendarService : BaseCalendarService
+    public sealed class CalendarService : PermissionAwareCalendarService
     {
         public CalendarService(IPermissionsService permissionsService) 
             : base(permissionsService)

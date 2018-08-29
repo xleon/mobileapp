@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
@@ -27,8 +28,12 @@ namespace Toggl.Foundation.Interactors.Calendar
         {
             var enabledIds = userPreferences.EnabledCalendarIds().ToHashSet();
             
-            return calendarService.GetUserCalendars()
-                .Select(calendarsWithTheSelectedProperty(enabledIds));
+            return calendarService
+                .GetUserCalendars()
+                .Select(calendarsWithTheSelectedProperty(enabledIds))
+                .Catch<IEnumerable<UserCalendar>, NotAuthorizedException>(
+                    ex => Observable.Return(new List<UserCalendar>())
+                );
         }
 
         private Func<IEnumerable<UserCalendar>, IEnumerable<UserCalendar>> calendarsWithTheSelectedProperty(HashSet<string> enabledIds)

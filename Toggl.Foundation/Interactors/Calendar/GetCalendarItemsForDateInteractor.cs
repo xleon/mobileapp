@@ -44,8 +44,7 @@ namespace Toggl.Foundation.Interactors.Calendar
                     calendarItemsFromEvents(),
                     (timeEntries, events) => timeEntries.Concat(events))
                 .Select(validEvents)
-                .Select(orderByStartTime)
-                .Catch((NotAuthorizedException _) => Observable.Return(new List<CalendarItem>()));
+                .Select(orderByStartTime);
 
         private IObservable<IEnumerable<CalendarItem>> calendarItemsFromTimeEntries()
             => timeEntriesDataSource.GetAll(timeEntry 
@@ -56,7 +55,12 @@ namespace Toggl.Foundation.Interactors.Calendar
                 .Select(convertTimeEntriesToCalendarItems);
 
         private IObservable<IEnumerable<CalendarItem>> calendarItemsFromEvents()
-            => calendarService.GetEventsForDate(date).Select(enabledCalendarItems);
+            => calendarService
+                .GetEventsForDate(date)
+                .Select(enabledCalendarItems)
+                .Catch<IEnumerable<CalendarItem>, NotAuthorizedException>(
+                    ex => Observable.Return(new List<CalendarItem>())
+                );
 
         private IEnumerable<CalendarItem> enabledCalendarItems(IEnumerable<CalendarItem> calendarItems)
             => calendarItems.Where(userCalendarIsEnabled);

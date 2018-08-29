@@ -1107,6 +1107,7 @@
       <DependentUpon>EditingHourSupplementaryView.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Extensions\NotificationExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

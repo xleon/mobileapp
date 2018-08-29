@@ -10,7 +10,7 @@ using Toggl.Multivac;
 
 namespace Toggl.Daneel.Services
 {
-    public sealed class CalendarService : BaseCalendarService
+    public sealed class CalendarService : PermissionAwareCalendarService
     {
         private EKEventStore eventStore => new EKEventStore();
 
