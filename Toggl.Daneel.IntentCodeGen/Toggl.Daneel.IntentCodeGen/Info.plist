@@ -22,6 +22,7 @@
 	<true/>
 	<key>NSUserActivityTypes</key>
 	<array>
+		<string>ShowReportIntent</string>
 		<string>StopTimerIntent</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
