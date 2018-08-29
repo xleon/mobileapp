@@ -76,12 +76,12 @@ namespace Toggl.Daneel.Cells.Calendar
 
             void configureDragIndicatorBorderLayer(UIView dragIndicator, CAShapeLayer borderLayer)
             {
-                var rect = dragIndicator.Bounds.Inset(1, 1);
+                var rect = dragIndicator.Bounds;
                 borderLayer.Path = UIBezierPath.FromOval(rect).CGPath;
                 borderLayer.BorderWidth = 2;
                 borderLayer.FillColor = UIColor.Clear.CGColor;
                 dragIndicator.Layer.AddSublayer(borderLayer);
-            } 
+            }
         }
 
         protected override void UpdateView()
@@ -99,7 +99,7 @@ namespace Toggl.Daneel.Cells.Calendar
             => MvxColor.ParseHexString(Item.Color).ToNativeColor();
 
         private UIColor backgroundColor(CalendarItemSource source, UIColor color)
-        { 
+        {
             switch (source)
             {
                 case CalendarItemSource.Calendar:

@@ -27,11 +27,11 @@
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EdB-CQ-dXu">
-                        <rect key="frame" x="367" y="-4" width="6" height="6"/>
+                        <rect key="frame" x="365" y="-4" width="8" height="8"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="6" id="7yT-A1-fec"/>
-                            <constraint firstAttribute="height" constant="6" id="g8c-Bn-0wC"/>
+                            <constraint firstAttribute="width" constant="8" id="7yT-A1-fec"/>
+                            <constraint firstAttribute="height" constant="8" id="g8c-Bn-0wC"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -40,11 +40,11 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ftH-hb-JkM">
-                        <rect key="frame" x="8" y="51" width="6" height="6"/>
+                        <rect key="frame" x="8" y="49" width="8" height="8"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="6" id="iJj-Ha-Wcv"/>
-                            <constraint firstAttribute="width" constant="6" id="jas-2I-uo6"/>
+                            <constraint firstAttribute="height" constant="8" id="iJj-Ha-Wcv"/>
+                            <constraint firstAttribute="width" constant="8" id="jas-2I-uo6"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -67,9 +67,9 @@
                 <constraint firstAttribute="trailing" secondItem="EdB-CQ-dXu" secondAttribute="trailing" constant="8" id="BdH-Gs-onQ"/>
                 <constraint firstItem="ftH-hb-JkM" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="8" id="Bxu-MG-OxF"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sob-Bq-eUc" secondAttribute="bottom" constant="6" id="Cbs-P9-Q2X"/>
-                <constraint firstAttribute="bottom" secondItem="ftH-hb-JkM" secondAttribute="top" constant="2" id="QGa-uA-Ast"/>
+                <constraint firstAttribute="bottom" secondItem="ftH-hb-JkM" secondAttribute="top" constant="4" id="QGa-uA-Ast"/>
                 <constraint firstAttribute="trailing" secondItem="sob-Bq-eUc" secondAttribute="trailing" constant="6" id="a5G-aI-edH"/>
-                <constraint firstAttribute="top" secondItem="EdB-CQ-dXu" secondAttribute="bottom" constant="-2" id="apn-Rs-dhc"/>
+                <constraint firstAttribute="top" secondItem="EdB-CQ-dXu" secondAttribute="bottom" constant="-4" id="apn-Rs-dhc"/>
                 <constraint firstItem="BRg-DN-wNT" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="5" id="fNB-5f-4hR"/>
                 <constraint firstItem="sob-Bq-eUc" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" constant="6" id="oL7-XU-f2d"/>
                 <constraint firstItem="BRg-DN-wNT" firstAttribute="centerY" secondItem="cZE-iV-UFb" secondAttribute="centerY" id="y9Z-2d-x6z"/>
