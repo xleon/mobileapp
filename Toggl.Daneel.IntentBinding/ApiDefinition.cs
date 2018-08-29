@@ -1,9 +1,58 @@
 ﻿using System;
 using Foundation;
 using Intents;
+using ObjCRuntime;
 
 namespace Toggl.Daneel.Intents
 {
+	// @interface ShowReportIntent : INIntent
+	[BaseType (typeof(INIntent))]
+	interface ShowReportIntent
+	{
+		// @property (assign, readwrite, nonatomic) ShowReportReportPeriod period;
+		[Export ("period", ArgumentSemantic.Assign)]
+		ShowReportReportPeriod Period { get; set; }
+	}
+
+	// @protocol ShowReportIntentHandling <NSObject>
+	[Protocol, Model]
+	[BaseType (typeof(NSObject))]
+	interface ShowReportIntentHandling
+	{
+		// @required -(void)handleShowReport:(ShowReportIntent * _Nonnull)intent completion:(void (^ _Nonnull)(ShowReportIntentResponse * _Nonnull))completion;
+		[Abstract]
+		[Export ("handleShowReport:completion:")]
+		void HandleShowReport (ShowReportIntent intent, Action<ShowReportIntentResponse> completion);
+
+		// @optional -(void)confirmShowReport:(ShowReportIntent * _Nonnull)intent completion:(void (^ _Nonnull)(ShowReportIntentResponse * _Nonnull))completion;
+		[Export ("confirmShowReport:completion:")]
+		void ConfirmShowReport (ShowReportIntent intent, Action<ShowReportIntentResponse> completion);
+	}
+
+	// @interface ShowReportIntentResponse : INIntentResponse
+	[BaseType (typeof(INIntentResponse))]
+	[DisableDefaultCtor]
+	interface ShowReportIntentResponse
+	{
+		// -(instancetype _Nonnull)initWithCode:(ShowReportIntentResponseCode)code userActivity:(NSUserActivity * _Nullable)userActivity __attribute__((objc_designated_initializer));
+		[Export ("initWithCode:userActivity:")]
+		[DesignatedInitializer]
+		IntPtr Constructor (ShowReportIntentResponseCode code, [NullAllowed] NSUserActivity userActivity);
+
+		// +(instancetype _Nonnull)successIntentResponseWithPeriod:(ShowReportReportPeriod)period;
+		[Static]
+		[Export ("successIntentResponseWithPeriod:")]
+		ShowReportIntentResponse SuccessIntentResponseWithPeriod (ShowReportReportPeriod period);
+
+		// @property (assign, readwrite, nonatomic) ShowReportReportPeriod period;
+		[Export ("period", ArgumentSemantic.Assign)]
+		ShowReportReportPeriod Period { get; set; }
+
+		// @property (readonly, nonatomic) ShowReportIntentResponseCode code;
+		[Export ("code")]
+		ShowReportIntentResponseCode Code { get; }
+	}
+
 	// @interface StopTimerIntent : INIntent
 	[BaseType (typeof(INIntent))]
 	interface StopTimerIntent
@@ -53,4 +102,3 @@ namespace Toggl.Daneel.Intents
 		StopTimerIntentResponseCode Code { get; }
 	}
 }
-
