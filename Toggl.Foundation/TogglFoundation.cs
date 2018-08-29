@@ -34,6 +34,7 @@ namespace Toggl.Foundation
         public IApplicationShortcutCreator ShortcutCreator { get; }
         public ISuggestionProviderContainer SuggestionProviderContainer { get; }
         public IIntentDonationService IntentDonationService { get; }
+        public IPrivateSharedStorageService PrivateSharedStorageService { get; }
 
         public static Builder ForClient(UserAgent userAgent, Version version)
             => new Builder(userAgent, version);
@@ -62,6 +63,7 @@ namespace Toggl.Foundation
             RemoteConfigService = builder.RemoteConfigService;
             SuggestionProviderContainer = builder.SuggestionProviderContainer;
             IntentDonationService = builder.IntentDonationService;
+            PrivateSharedStorageService = builder.PrivateSharedStorageService;
         }
 
         public class Builder
@@ -87,6 +89,7 @@ namespace Toggl.Foundation
             public IPlatformConstants PlatformConstants { get; internal set; }
             public ISuggestionProviderContainer SuggestionProviderContainer { get; internal set; }
             public IIntentDonationService IntentDonationService { get; internal set; }
+            public IPrivateSharedStorageService PrivateSharedStorageService { get; internal set; }
 
             public Builder(UserAgent agent, Version version)
             {
@@ -184,6 +187,12 @@ namespace Toggl.Foundation
                 return this;
             }
 
+            public Builder WithPrivateSharedStorageService(IPrivateSharedStorageService privateSharedStorageService)
+            {
+                PrivateSharedStorageService = privateSharedStorageService;
+                return this;
+            }
+
             public Builder WithRemoteConfigService(IRemoteConfigService remoteConfigService)
             {
                 RemoteConfigService = remoteConfigService;
@@ -278,6 +287,7 @@ namespace Toggl.Foundation
                 Ensure.Argument.IsNotNull(RemoteConfigService, nameof(RemoteConfigService));
                 Ensure.Argument.IsNotNull(SuggestionProviderContainer, nameof(SuggestionProviderContainer));
                 Ensure.Argument.IsNotNull(IntentDonationService, nameof(IntentDonationService));
+                Ensure.Argument.IsNotNull(PrivateSharedStorageService, nameof(PrivateSharedStorageService));
             }
         }
     }

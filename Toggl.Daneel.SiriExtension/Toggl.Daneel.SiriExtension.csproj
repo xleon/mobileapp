@@ -95,6 +95,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IntentHandler.cs" />
+    <Compile Include="StopTimerIntentHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Toggl.Daneel.IntentBinding\Toggl.Daneel.IntentBinding.csproj">
+      <Project>{A1BBF640-E712-4E35-8E3F-AE07C7C7EDB0}</Project>
+      <Name>Toggl.Daneel.IntentBinding</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.AppExtension.CSharp.targets" />
 </Project>

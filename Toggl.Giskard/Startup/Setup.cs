@@ -108,6 +108,7 @@ namespace Toggl.Giskard
                     .WithApplicationShortcutCreator(new ApplicationShortcutCreator(ApplicationContext))
                     .WithPlatformInfo(platformInfo)
                     .WithIntentDonationService(new DummyIntentDonationService())
+                    .WithPrivateSharedStorageService(new DummyPrivateSharedStorageService())
 
                     .StartRegisteringPlatformServices()
                     .WithDialogService(dialogService)

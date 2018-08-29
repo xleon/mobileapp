@@ -423,6 +423,7 @@
     <Compile Include="Views\NonSwipingViewPager.cs" />
     <Compile Include="Activities\MainActivity.ViewBinds.cs" />
     <Compile Include="Startup\HandlerScheduler.cs" />
+    <Compile Include="Services\DummyPrivateSharedStorageService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

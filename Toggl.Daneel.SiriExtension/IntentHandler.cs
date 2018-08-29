@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Toggl.Daneel.Intents;
 using Foundation;
 using Intents;
 
@@ -16,10 +16,15 @@ namespace SiriExtension
 
         public override NSObject GetHandler(INIntent intent)
         {
-            // This is the default implementation.  If you want different objects to handle different intents,
-            // you can override this and return the handler you want for that particular intent.
-
-            return this;
+            var bundleId = NSBundle.MainBundle.BundleIdentifier;
+            bundleId = bundleId.Substring(0, bundleId.LastIndexOf("."));
+            var userDefaults = new NSUserDefaults($"group.{bundleId}.extensions", NSUserDefaultsType.SuiteName);
+           
+            if (intent is StopTimerIntent)
+            {
+                return new StopTimerIntentHandler();
+            }
+            throw new Exception("Unhandled intent type: ${intent}");
         }
     }
 }

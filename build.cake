@@ -297,6 +297,60 @@ private TemporaryFileTransformation GetIosExtensionInfoConfigurationTransformati
     };
 }
 
+private TemporaryFileTransformation GetIosEntitlementsConfigurationTransformation()
+{
+    const string path = "Toggl.Daneel/Entitlements.plist";
+    const string groupIdToReplace = "group.com.toggl.daneel.debug.extensions";
+
+    var groupId = groupIdToReplace;
+
+    if (target == "Build.Release.iOS.AdHoc")
+    {
+        groupId = "group.com.toggl.daneel.adhoc.extensions";
+    }
+    else if (target == "Build.Release.iOS.AppStore")
+    {
+        groupId = "group.com.toggl.daneel.extensions";
+    }
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    {
+        Path = path,
+        Original = file,
+        Temporary = file.Replace(groupIdToReplace, groupId)
+    };
+}
+
+private TemporaryFileTransformation GetIosExtensionEntitlementsConfigurationTransformation()
+{
+    const string path = "Toggl.Daneel.SiriExtension/Entitlements.plist";
+    const string groupIdToReplace = "group.com.toggl.daneel.debug.extensions";
+
+    var groupId = groupIdToReplace;
+
+    if (target == "Build.Release.iOS.AdHoc")
+    {
+        groupId = "group.com.toggl.daneel.adhoc.extensions";
+    }
+    else if (target == "Build.Release.iOS.AppStore")
+    {
+        groupId = "group.com.toggl.daneel.extensions";
+    }
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    {
+        Path = path,
+        Original = file,
+        Temporary = file.Replace(groupIdToReplace, groupId)
+    };
+}
+
 private TemporaryFileTransformation GetAndroidManifestTransformation()
 {
     const string path = "Toggl.Giskard/Properties/AndroidManifest.xml";
@@ -397,6 +451,8 @@ var transformations = new List<TemporaryFileTransformation>
     GetIosCrashConfigurationTransformation(),
     GetIntegrationTestsConfigurationTransformation(),
     GetIosAnalyticsServicesConfigurationTransformation(),
+    GetIosEntitlementsConfigurationTransformation(),
+    GetIosExtensionEntitlementsConfigurationTransformation(),
     GetAndroidProjectConfigurationTransformation(),
     GetAndroidGoogleServicesTransformation(),
     GetAndroidGoogleLoginTransformation(),
