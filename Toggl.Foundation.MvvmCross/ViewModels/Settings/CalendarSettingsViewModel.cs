@@ -45,6 +45,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
         {
             PermissionGranted = await permissionsService.CalendarPermissionGranted;
             SelectedCalendarIds.AddRange(userPreferences.EnabledCalendarIds());
+
+            await base.Initialize();
         }
 
         private IObservable<Unit> requestAccess()
