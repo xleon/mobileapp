@@ -123,9 +123,6 @@ namespace Toggl.Daneel.Views.Calendar
         {
             var point = gesture.LocationInView(collectionView);
 
-            if (collectionView.IndexPathForItemAtPoint(point) == itemIndexPath)
-                return;
-
             resignActive();
             dataSource.StopEditing();
             editCalendarItemSuject.OnNext(calendarItem);
