@@ -211,6 +211,9 @@ namespace Toggl.Daneel.Views.Calendar
             var startPoint = new CGPoint(lastPoint.X, lastPoint.Y - verticalOffset);
             var startTime = layout.DateAtPoint(startPoint).ToLocalTime().RoundDownToClosestQuarter();
 
+            if (startTime + calendarItem.Duration > startTime.Date.AddDays(1))
+                return;
+
             calendarItem = calendarItem
                 .WithStartTime(startTime);
 
@@ -223,6 +226,9 @@ namespace Toggl.Daneel.Views.Calendar
                 return;
 
             if (Math.Abs(lastPoint.Y - point.Y) < layout.HourHeight / 4)
+                return;
+
+            if (point.Y < 0 || point.Y >= layout.ContentViewHeight)
                 return;
 
             lastPoint = point;
@@ -245,6 +251,9 @@ namespace Toggl.Daneel.Views.Calendar
                 return;
 
             if (Math.Abs(lastPoint.Y - point.Y) < layout.HourHeight / 4)
+                return;
+
+            if (point.Y < 0 || point.Y >= layout.ContentViewHeight)
                 return;
 
             lastPoint = point;

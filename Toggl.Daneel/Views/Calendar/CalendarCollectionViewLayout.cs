@@ -32,6 +32,7 @@ namespace Toggl.Daneel.Views.Calendar
         public static NSString EditingHourSupplementaryViewKind = new NSString("EditingHour");
         public static NSString CurrentTimeSupplementaryViewKind = new NSString("CurrentTime");
         public nfloat HourHeight => hourHeight;
+        public nfloat ContentViewHeight => hoursPerDay * hourHeight;
 
         private bool isEditing;
         public bool IsEditing
@@ -61,7 +62,7 @@ namespace Toggl.Daneel.Views.Calendar
             get
             {
                 var width = CollectionView.Bounds.Width;
-                var height = hoursPerDay * hourHeight + hourSupplementaryLabelHeight;
+                var height = ContentViewHeight + hourSupplementaryLabelHeight;
                 return new CGSize(width, height);
             }
         }
@@ -70,6 +71,15 @@ namespace Toggl.Daneel.Views.Calendar
         {
             var seconds = (point.Y / hourHeight) * 60 * 60;
             var timespan = TimeSpan.FromSeconds(seconds);
+            var nextDay = date.AddDays(1);
+
+            var offset = date + timespan;
+
+            if (offset < date)
+                return date;
+            if (offset > nextDay)
+                return nextDay;
+
             return date + timespan;
         }
 
@@ -163,8 +173,8 @@ namespace Toggl.Daneel.Views.Calendar
 
         private IEnumerable<NSIndexPath> indexPathsForHoursInRect(CGRect rect)
         {
-            var minHour = (int)Math.Floor(rect.GetMinY() / hourHeight).Clamp(0, 24);
-            var maxHour = (int)Math.Floor(rect.GetMaxY() / hourHeight).Clamp(0, 25);
+            var minHour = (int)Math.Floor(rect.GetMinY() / hourHeight).Clamp(0, hoursPerDay);
+            var maxHour = (int)Math.Floor(rect.GetMaxY() / hourHeight).Clamp(0, hoursPerDay + 1);
 
             return Enumerable
                 .Range(minHour, maxHour - minHour)

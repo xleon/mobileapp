@@ -115,7 +115,7 @@ namespace Toggl.Daneel.Views.Calendar
             else
             {
                 startTime = layout.DateAtPoint(lastPoint).RoundDownToClosestQuarter();
-                endTime = layout.DateAtPoint(firstPoint).RoundUpToClosestQuarter();
+                endTime = layout.DateAtPoint(firstPoint).RoundDownToClosestQuarter();
             }
 
             var duration = endTime - startTime;
@@ -140,7 +140,7 @@ namespace Toggl.Daneel.Views.Calendar
             else
             {
                 startTime = layout.DateAtPoint(lastPoint).RoundDownToClosestQuarter();
-                endTime = layout.DateAtPoint(firstPoint).RoundUpToClosestQuarter();
+                endTime = layout.DateAtPoint(firstPoint).RoundDownToClosestQuarter();
             }
 
             var duration = endTime - startTime;
