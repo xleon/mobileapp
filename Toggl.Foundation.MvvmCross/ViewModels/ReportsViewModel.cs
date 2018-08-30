@@ -173,8 +173,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             disposeBag.Add(preferencesDisposable);
 
             IsLoading = true;
-
-            intentDonationService.DonateShowReport();
         }
 
         public override void ViewAppeared()
@@ -185,6 +183,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             {
                 navigationService.Navigate(calendarViewModel);
                 didNavigateToCalendar = true;
+                intentDonationService.DonateShowReport();
             }
         }
 
