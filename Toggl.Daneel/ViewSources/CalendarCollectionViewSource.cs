@@ -272,6 +272,7 @@ namespace Toggl.Daneel.ViewSources
 
             var attributes = pairs
                 .Aggregate(initialValue, groupOverlappingItems)
+                .Select(orderByEventFirst)
                 .Select(toLayoutAttributes)
                 .SelectMany(CommonFunctions.Identity)
                 .OrderBy(pair => pair.index)
@@ -300,6 +301,9 @@ namespace Toggl.Daneel.ViewSources
 
                 return previous;
             }
+
+            List<(CalendarItem item, int index)> orderByEventFirst(List<(CalendarItem item, int index)> group)
+                => group.OrderBy((pair) => pair.item.Source == CalendarItemSource.Calendar, true).ToList();
 
             IEnumerable<(CalendarCollectionViewItemLayoutAttributes attributes, int index)> toLayoutAttributes(
                 List<(CalendarItem item, int index)> group)
