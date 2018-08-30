@@ -862,5 +862,11 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("NewTimeEntry", resourceCulture);
             }
         }
+        
+        public static string EventReminder {
+            get {
+                return ResourceManager.GetString("EventReminder", resourceCulture);
+            }
+        }
     }
 }

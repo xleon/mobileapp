@@ -429,4 +429,7 @@ account is not set up</value>
     <data name="NewTimeEntry">
         <value>New Time Entry</value>
     </data>
+    <data name="EventReminder">
+        <value>Event reminder</value>
+    </data>
 </root>

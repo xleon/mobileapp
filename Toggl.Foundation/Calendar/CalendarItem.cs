@@ -7,6 +7,8 @@ namespace Toggl.Foundation.Calendar
 {
     public struct CalendarItem
     {
+        public string Id { get; }
+
         public CalendarItemSource Source { get; }
 
         public TimeSpan Duration { get; }
@@ -26,6 +28,7 @@ namespace Toggl.Foundation.Calendar
         public CalendarIconKind IconKind { get; }
 
         public CalendarItem(
+            string id,
             CalendarItemSource source,
             DateTimeOffset startTime,
             TimeSpan duration,
@@ -35,6 +38,7 @@ namespace Toggl.Foundation.Calendar
             long? timeEntryId = null,
             string calendarId = "")
         {
+            Id = id;
             Source = source;
             StartTime = startTime;
             Duration = duration;
@@ -47,6 +51,7 @@ namespace Toggl.Foundation.Calendar
 
         private CalendarItem(IThreadSafeTimeEntry timeEntry)
             : this(
+                timeEntry.Id.ToString(),
                 CalendarItemSource.TimeEntry,
                 timeEntry.Start,
                 TimeSpan.FromSeconds(timeEntry.Duration ?? 0),
@@ -73,6 +78,7 @@ namespace Toggl.Foundation.Calendar
 
         public CalendarItem WithStartTime(DateTimeOffset startTime)
             => new CalendarItem(
+                this.Id,
                 this.Source,
                 startTime,
                 this.Duration,
@@ -84,6 +90,7 @@ namespace Toggl.Foundation.Calendar
 
         public CalendarItem WithDuration(TimeSpan duration)
             => new CalendarItem(
+                this.Id,
                 this.Source,
                 this.StartTime,
                 duration,

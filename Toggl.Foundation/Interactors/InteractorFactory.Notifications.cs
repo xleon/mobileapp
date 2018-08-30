@@ -8,5 +8,8 @@ namespace Toggl.Foundation.Interactors
     {
         public IInteractor<IObservable<Unit>> UnscheduleAllNotifications()
             => new UnscheduleAllNotificationsInteractor(notificationService);
+
+        public IInteractor<IObservable<Unit>> ScheduleEventNotificationsForNextWeek()
+            => new ScheduleEventNotificationsInteractor(timeService, calendarService, notificationService);
     }
 }

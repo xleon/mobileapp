@@ -292,9 +292,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 var items = new List<CalendarItem>
                 {
-                    new CalendarItem(CalendarItemSource.Calendar, now.AddMinutes(30), TimeSpan.FromMinutes(15), "Weekly meeting", CalendarIconKind.Event, "#ff0000"),
-                    new CalendarItem(CalendarItemSource.TimeEntry, now.AddHours(-3), TimeSpan.FromMinutes(30), "Bug fixes", CalendarIconKind.None, "#00ff00"),
-                    new CalendarItem(CalendarItemSource.Calendar, now.AddHours(2), TimeSpan.FromMinutes(30), "F**** timesheets", CalendarIconKind.Event, "#ff0000")
+                    new CalendarItem("id", CalendarItemSource.Calendar, now.AddMinutes(30), TimeSpan.FromMinutes(15), "Weekly meeting", CalendarIconKind.Event, "#ff0000"),
+                    new CalendarItem("id", CalendarItemSource.TimeEntry, now.AddHours(-3), TimeSpan.FromMinutes(30), "Bug fixes", CalendarIconKind.None, "#00ff00"),
+                    new CalendarItem("id", CalendarItemSource.Calendar, now.AddHours(2), TimeSpan.FromMinutes(30), "F**** timesheets", CalendarIconKind.Event, "#ff0000")
                 };
                 var interactor = Substitute.For<IInteractor<IObservable<IEnumerable<CalendarItem>>>>();
                 interactor.Execute().Returns(Observable.Return(items));
@@ -418,6 +418,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public sealed class WhenHandlingTimeEntryItems : TheOnItemTappedAction
             {
                 protected override CalendarItem CalendarItem { get; } = new CalendarItem(
+                    "id",
                     CalendarItemSource.TimeEntry,
                     new DateTimeOffset(2018, 08, 10, 0, 0, 0, TimeSpan.Zero),
                     TimeSpan.FromMinutes(10),
@@ -431,6 +432,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public sealed class WhenHandlingCalendarItems : TheOnItemTappedAction
             {
                 protected override CalendarItem CalendarItem { get; } = new CalendarItem(
+                    "id",
                     CalendarItemSource.Calendar,
                     new DateTimeOffset(2018, 08, 10, 0, 15, 0, TimeSpan.Zero),
                     TimeSpan.FromMinutes(10),
@@ -525,6 +527,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheEditTimeEntryAction : CalendarViewModelTest
         {
             private CalendarItem calendarItem = new CalendarItem(
+                "id",
                 CalendarItemSource.TimeEntry,
                 new DateTimeOffset(2018, 8, 20, 10, 0, 0, TimeSpan.Zero),
                 new TimeSpan(45),

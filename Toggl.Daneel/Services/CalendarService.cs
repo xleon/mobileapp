@@ -53,6 +53,7 @@ namespace Toggl.Daneel.Services
             var duration = endDate - startDate;
 
             return new CalendarItem(
+                ev.EventIdentifier,
                 CalendarItemSource.Calendar,
                 startDate,
                 duration,

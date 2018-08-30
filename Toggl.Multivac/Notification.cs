@@ -4,7 +4,7 @@ namespace Toggl.Multivac
 {
     public struct Notification
     {
-        public long Id { get; }
+        public string Id { get; }
 
         public string Title { get; }
 
@@ -12,8 +12,9 @@ namespace Toggl.Multivac
 
         public DateTimeOffset ScheduledTime { get; }
 
-        public Notification(long id, string title, string description, DateTimeOffset scheduledTime)
+        public Notification(string id, string title, string description, DateTimeOffset scheduledTime)
         {
+            Ensure.Argument.IsNotNullOrEmpty(id, nameof(id));
             Ensure.Argument.IsNotNullOrEmpty(title, nameof(title));
 
             Id = id;

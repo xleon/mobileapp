@@ -31,21 +31,27 @@ namespace Toggl.Foundation.Tests.Interactors.Calendar
             {
                 calendarEvents = new List<CalendarItem>
                 {
-                    new CalendarItem(CalendarItemSource.Calendar,
+                    new CalendarItem(
+                        "id",
+                        CalendarItemSource.Calendar,
                         new DateTimeOffset(2018, 08, 06, 10, 30, 00, TimeSpan.Zero),
                         TimeSpan.FromMinutes(30),
                         "Important meeting",
                         CalendarIconKind.Event,
                         color: "#0000ff",
                         calendarId: "1"),
-                    new CalendarItem(CalendarItemSource.Calendar,
+                    new CalendarItem(
+                        "id",
+                        CalendarItemSource.Calendar,
                         new DateTimeOffset(2018, 08, 06, 10, 00, 00, TimeSpan.Zero),
                         TimeSpan.FromMinutes(90),
                         "F**** timesheets",
                         CalendarIconKind.Event,
                         color: "#0000ff",
                         calendarId: "1"),
-                    new CalendarItem(CalendarItemSource.Calendar,
+                    new CalendarItem(
+                        "id",
+                        CalendarItemSource.Calendar,
                         new DateTimeOffset(2018, 08, 06, 09, 00, 00, TimeSpan.Zero),
                         TimeSpan.FromMinutes(15),
                         "Not so important meeting",
@@ -146,14 +152,18 @@ namespace Toggl.Foundation.Tests.Interactors.Calendar
             {
                 var newCalendarEvents = calendarEvents
                     .Append(
-                        new CalendarItem(CalendarItemSource.Calendar,
+                        new CalendarItem(
+                            "id",
+                            CalendarItemSource.Calendar,
                             new DateTimeOffset(2018, 08, 06, 10, 30, 00, TimeSpan.Zero),
                             TimeSpan.FromHours(24),
                             "Day off",
                             CalendarIconKind.Event,
                             "#0000ff"))
                     .Append(
-                        new CalendarItem(CalendarItemSource.Calendar,
+                        new CalendarItem(
+                            "id",
+                            CalendarItemSource.Calendar,
                             new DateTimeOffset(2018, 08, 06, 10, 30, 00, TimeSpan.Zero),
                             TimeSpan.FromDays(7),
                             "Team meetup",

@@ -319,7 +319,7 @@ namespace Toggl.Daneel.ViewSources
 
         private NSIndexPath insertCalendarItem(DateTimeOffset startTime, TimeSpan duration)
         {
-            var calendarItem = new CalendarItem(CalendarItemSource.TimeEntry, startTime, duration, FoundationResources.NewTimeEntry, CalendarIconKind.None);
+            var calendarItem = new CalendarItem("", CalendarItemSource.TimeEntry, startTime, duration, FoundationResources.NewTimeEntry, CalendarIconKind.None);
 
             calendarItems.Add(calendarItem);
             var position = calendarItems.Count - 1;

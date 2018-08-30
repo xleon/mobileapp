@@ -107,6 +107,8 @@ namespace Toggl.Foundation.Interactors
 
         IInteractor<IObservable<Unit>> UnscheduleAllNotifications();
 
+        IInteractor<IObservable<Unit>> ScheduleEventNotificationsForNextWeek();
+
         #endregion
     }
 }
