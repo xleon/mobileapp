@@ -1,5 +1,11 @@
 ## Create a new Siri intent
 
+### Prerequisites
+
+- Xcode 10 
+- Xamarin version compatible with Xcode 10 
+- [Objective Sharpie](https://docs.microsoft.com/en-us/xamarin/cross-platform/macios/binding/objective-sharpie/)
+
 ### Generate intent code
 
 1. Open `Toggl.Daneel.IntentCodeGen/Toggl.Daneel.IntentCodeGen.xcodeproj` using Xcode.
