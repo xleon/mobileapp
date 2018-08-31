@@ -3,16 +3,15 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Toggl.Giskard.Extensions;
 
-namespace Toggl.Giskard.Views
+namespace Toggl.Giskard.ViewHelpers
 {     public sealed class SuggestionsRecyclerViewSnapHelper : LinearSnapHelper
     {
         private OrientationHelper horizontalHelper;
         private readonly int startMargin;
         private readonly BehaviorSubject<int> subject = new BehaviorSubject<int>(1);
 
-        public IObservable<int> CurrentIndexObservable 
+        public IObservable<int> CurrentIndexObservable
             => subject.AsObservable()
                 .Where(index => index > 0)
                 .DistinctUntilChanged();
@@ -39,13 +38,13 @@ namespace Toggl.Giskard.Views
             var linearLayoutManager = (LinearLayoutManager)layoutManager;
 
             var firstChildIndex = linearLayoutManager.FindFirstVisibleItemPosition();
-            if (firstChildIndex == RecyclerView.NoPosition) 
+            if (firstChildIndex == RecyclerView.NoPosition)
                 return null;
 
             subject.OnNext(linearLayoutManager.FindFirstCompletelyVisibleItemPosition() + 1);
             var lastItemIndex = linearLayoutManager.ItemCount - 1;
             var isLastItem = linearLayoutManager.FindLastCompletelyVisibleItemPosition() == lastItemIndex;
-            if (isLastItem) 
+            if (isLastItem)
                 return null;
 
             var firstView = layoutManager.FindViewByPosition(firstChildIndex);

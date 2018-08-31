@@ -82,6 +82,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         // Inputs
         public InputAction<TimeEntryViewModel> ContinueTimeEntry { get; }
         public InputAction<TimeEntryViewModel> SelectTimeEntry { get; }
+
         public UIAction RefreshAction { get; }
 
         // Private
@@ -111,22 +112,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public TimeEntriesViewModel TimeEntriesViewModel { get; }
 
         // Deprecated properties
-
-        [Obsolete("Use TimeEntriesViewModel and MainViewModel methods instead")]
-        public TimeEntriesLogViewModel TimeEntriesLogViewModel { get; }
-
         [Obsolete("Use SelectTimeEntry RxAction instead")]
         public IMvxAsyncCommand EditTimeEntryCommand { get; }
-
-        [Obsolete("Use RefreshAction RxAction instead")]
-        public IMvxCommand RefreshCommand { get; }
-
-        [Obsolete("Use SyncProgressState instead")]
-        public SyncProgress SyncingProgress { get; private set; }
-
-        [Obsolete("Use SyncProgressState instead")]
-        [DependsOn(nameof(SyncingProgress))]
-        public bool ShowSyncIndicator => SyncingProgress == SyncProgress.Syncing;
 
         public MainViewModel(
             ITogglDataSource dataSource,
@@ -164,7 +151,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, suggestionProviders);
             RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService, schedulerProvider);
-            TimeEntriesLogViewModel = new TimeEntriesLogViewModel(timeService, dataSource, interactorFactory, onboardingStorage, analyticsService, navigationService);
             TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider);
 
             LogEmpty = TimeEntriesViewModel.Empty.AsDriver(this.schedulerProvider);
@@ -172,7 +158,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService);
 
-            RefreshCommand = new MvxCommand(Refresh);
             OpenSettingsCommand = new MvxAsyncCommand(openSettings);
             OpenSyncFailuresCommand = new MvxAsyncCommand(openSyncFailures);
             EditTimeEntryCommand = new MvxAsyncCommand(editTimeEntry, canExecuteEditTimeEntryCommand);
@@ -195,12 +180,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             await base.Initialize();
 
             await TimeEntriesViewModel.Initialize();
-            await TimeEntriesLogViewModel.Initialize();
             await SuggestionsViewModel.Initialize();
             await RatingViewModel.Initialize();
 
-            SyncProgressState = dataSource.SyncManager
-                .ProgressObservable.AsDriver(schedulerProvider);
+            SyncProgressState = dataSource
+                .SyncManager
+                .ProgressObservable
+                .AsDriver(schedulerProvider);
 
             var isWelcome = onboardingStorage.IsNewUser;
 
@@ -247,12 +233,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .CurrentDateTimeObservable
                 .Where(_ => currentTimeEntryStart != null)
                 .Subscribe(currentTime => CurrentTimeEntryElapsedTime = currentTime - currentTimeEntryStart.Value)
-                .DisposedBy(disposeBag);
-
-            dataSource
-                .SyncManager
-                .ProgressObservable
-                .Subscribe(progress => SyncingProgress = progress)
                 .DisposedBy(disposeBag);
 
             interactorFactory
@@ -349,11 +329,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             EditTimeEntryCommand.RaiseCanExecuteChanged();
 
             RaisePropertyChanged(nameof(IsTimeEntryRunning));
-        }
-
-        public void Refresh()
-        {
-            dataSource.SyncManager.InitiateFullSync();
         }
 
         private void onMidnight(DateTimeOffset midnight)

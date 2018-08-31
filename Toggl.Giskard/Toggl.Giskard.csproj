@@ -252,6 +252,9 @@
   <ItemGroup>
     <Compile Include="Activities\ForgotPasswordActivity.cs" />
     <Compile Include="Activities\SelectTagsActivity.cs" />
+    <Compile Include="Adapters\MainRecyclerAdapter.cs" />
+    <Compile Include="Adapters\MainSuggestionsRecyclerAdapter.cs" />
+    <Compile Include="Adapters\ReactiveSectionedRecyclerAdapter.cs" />
     <Compile Include="Adapters\SelectCreatableEntityRecyclerAdapter.cs" />
     <Compile Include="Adapters\SelectTagsRecyclerAdapter.cs" />
     <Compile Include="Activities\SelectProjectActivity.cs" />
@@ -280,11 +283,14 @@
     <Compile Include="Activities\MainActivity.cs" />
     <Compile Include="Startup\TogglApplication.cs" />
     <Compile Include="TemplateSelectors\SelectTagsTemplateSelector.cs" />
+    <Compile Include="ViewHelpers\MainRecyclerViewTouchCallback.cs" />
+    <Compile Include="ViewHelpers\SuggestionsRecyclerViewSnapHelper.cs" />
+    <Compile Include="ViewHolders\MainLogCellViewHolder.cs" />
+    <Compile Include="ViewHolders\MainLogSectionViewHolder.cs" />
+    <Compile Include="ViewHolders\MainLogSuggestionItemViewHolder.cs" />
+    <Compile Include="ViewHolders\MainLogSuggestionsListViewHolder.cs" />
     <Compile Include="Views\SelectProjectRecyclerView.cs" />
-    <Compile Include="TemplateSelectors\MainTemplateSelector.cs" />
-    <Compile Include="Adapters\MainRecyclerAdapter.cs" />
     <Compile Include="Views\SelectTagsRecyclerView.cs" />
-    <Compile Include="Views\MainRecyclerView.cs" />
     <Compile Include="TemplateSelectors\SelectProjectTemplateSelector.cs" />
     <Compile Include="Startup\SetupTargetFactories.cs">
       <DependentUpon>SetupTargetFactories.tt</DependentUpon>
@@ -294,15 +300,10 @@
     <Compile Include="Extensions\NumberExtensions.cs" />
     <Compile Include="Converters\BoolToConstantOverrides.cs" />
     <Compile Include="Bindings\DrawableColorTargetBinding.cs" />
-    <Compile Include="Views\SuggestionsRecyclerView.cs" />
     <Compile Include="TemplateSelectors\SuggestionsTemplateSelector.cs" />
     <Compile Include="Activities\SettingsActivity.cs" />
     <Compile Include="Bindings\EditTextFocusTargetBinding.cs" />
     <Compile Include="Presenters\TogglPresenter.cs" />
-    <Compile Include="Views\MainRecyclerViewLogViewHolder.cs" />
-    <Compile Include="Views\SuggestionsRecyclerViewSnapHelper.cs" />
-    <Compile Include="Views\SuggestionsRecyclerViewHolder.cs" />
-    <Compile Include="Adapters\SuggestionsRecyclerAdapter.cs" />
     <Compile Include="PlatformConstants.cs" />
     <Compile Include="Activities\StartTimeEntryActivity.cs" />
     <Compile Include="Extensions\VisibilityExtensions.cs" />
@@ -349,8 +350,6 @@
     <Compile Include="TemplateSelectors\SelectBeginningOfWeekTemplateSelector.cs" />
     <Compile Include="Fragments\SelectDurationFormatFragment.cs" />
     <Compile Include="TemplateSelectors\SelectDurationFormatTemplateSelector.cs" />
-    <Compile Include="Views\MainRecyclerViewSuggestionsViewHolder.cs" />
-    <Compile Include="Views\MainRecyclerViewTouchCallback.cs" />
     <Compile Include="Converters\TransparentColorValueConverter.cs" />
     <Compile Include="Adapters\ReportsRecyclerAdapter.cs" />
     <Compile Include="Extensions\ViewExtensions.cs" />
@@ -416,7 +415,12 @@
     </Compile>
     <Compile Include="Views\AutocompleteEditText.cs" />
     <Compile Include="Views\NonSwipingViewPager.cs" />
-    <Compile Include="Activities\MainActivity.ViewBinds.cs" />
+    <Compile Include="Activities\MainActivity.ViewBinds.cs">
+      <DependentUpon>MainActivity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Activities\MainActivity.Onboardings.cs">
+        <DependentUpon>MainActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Startup\HandlerScheduler.cs" />
   </ItemGroup>
   <ItemGroup>

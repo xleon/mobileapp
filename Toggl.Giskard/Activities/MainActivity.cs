@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Android.App;
@@ -7,22 +6,22 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Views;
-using Android.Widget;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
-using MvvmCross.WeakSubscription;
-using Toggl.Foundation.MvvmCross.Onboarding.MainView;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Helper;
 using Toggl.Multivac.Extensions;
 using static Toggl.Foundation.Sync.SyncProgress;
 using static Toggl.Giskard.Extensions.CircularRevealAnimation.AnimationType;
 using FoundationResources = Toggl.Foundation.Resources;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
-using Toggl.Giskard.Views;
 using System.Reactive.Linq;
 using System.Threading;
+using Android.Support.V7.Widget;
+using Android.Support.V7.Widget.Helper;
+using Toggl.Foundation.Sync;
+using Toggl.Giskard.Adapters;
+using Toggl.Giskard.ViewHelpers;
 
 namespace Toggl.Giskard.Activities
 {
@@ -30,22 +29,11 @@ namespace Toggl.Giskard.Activities
     [Activity(Theme = "@style/AppTheme",
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
-    public sealed partial class MainActivity : MvxAppCompatActivity<MainViewModel>
+    public sealed partial class MainActivity : MvxAppCompatActivity<MainViewModel>, IReactiveBindingHolder
     {
         private const int snackbarDuration = 5000;
 
-        private CompositeDisposable disposeBag;
-        private View runningEntryCardFrame;
-        private FloatingActionButton playButton;
-        private FloatingActionButton stopButton;
-        private CoordinatorLayout coordinatorLayout;
-        private PopupWindow playButtonTooltipPopupWindow;
-        private PopupWindow stopButtonTooltipPopupWindow;
-        private PopupWindow tapToEditPopup;
-
-        private IDisposable editTimeEntryOnboardingStepDisposable;
-
-        private MainRecyclerView mainRecyclerView;
+        public CompositeDisposable DisposeBag { get; } = new CompositeDisposable();
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -53,55 +41,85 @@ namespace Toggl.Giskard.Activities
             SetContentView(Resource.Layout.MainActivity);
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
 
-            initializeViews();
+            InitializeViews();
 
             SetSupportActionBar(FindViewById<Toolbar>(Resource.Id.Toolbar));
             SupportActionBar.SetDisplayShowHomeEnabled(false);
             SupportActionBar.SetDisplayShowTitleEnabled(false);
 
-            runningEntryCardFrame = FindViewById(Resource.Id.MainRunningTimeEntryFrame);
             runningEntryCardFrame.Visibility = ViewStates.Invisible;
 
-            playButton = FindViewById<FloatingActionButton>(Resource.Id.MainPlayButton);
-            stopButton = FindViewById<FloatingActionButton>(Resource.Id.MainStopButton);
-            coordinatorLayout = FindViewById<CoordinatorLayout>(Resource.Id.MainCoordinatorLayout);
+            this.Bind(ViewModel.IsTimeEntryRunning, onTimeEntryCardVisibilityChanged);
+            this.Bind(ViewModel.SyncProgressState, onSyncChanged);
 
-            disposeBag = new CompositeDisposable();
+            var mainAdapter = new MainRecyclerAdapter(ViewModel.TimeEntries)
+            {
+                SuggestionsViewModel = ViewModel.SuggestionsViewModel
+            };
 
-            disposeBag.Add(ViewModel.IsTimeEntryRunning.Subscribe(onTimeEntryCardVisibilityChanged));
-            disposeBag.Add(ViewModel.WeakSubscribe<PropertyChangedEventArgs>(nameof(ViewModel.SyncingProgress), onSyncChanged));
+            this.Bind(mainAdapter.TimeEntryTaps, ViewModel.SelectTimeEntry.Inputs);
+            this.Bind(mainAdapter.ContinueTimeEntrySubject, ViewModel.ContinueTimeEntry.Inputs);
+            this.Bind(mainAdapter.DeleteTimeEntrySubject, ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntry.Inputs);
+
+            this.Bind(ViewModel.SyncProgressState, updateSyncingIndicator);
+            this.Bind(refreshLayout.Refreshed(), ViewModel.RefreshAction);
+
+            setupLayoutManager(mainAdapter);
+
+            var mainLogChanges = ViewModel
+                .TimeEntries
+                .CollectionChanges
+                .ObserveOn(SynchronizationContext.Current);
+            this.Bind(mainLogChanges, mainAdapter.UpdateChanges);
+
+            var isTimeEntryRunning = ViewModel
+                .IsTimeEntryRunning
+                .ObserveOn(SynchronizationContext.Current);
+            this.Bind(isTimeEntryRunning, updateRecyclerViewPadding);
+
+            setupItemTouchHelper(mainAdapter);
 
             setupStartTimeEntryOnboardingStep();
             setupStopTimeEntryOnboardingStep();
             setupTapToEditOnboardingStep();
         }
 
-        protected override void Dispose(bool disposing)
+        private void setupLayoutManager(MainRecyclerAdapter mainAdapter) 
         {
-            base.Dispose(disposing);
-
-            if (!disposing) return;
-
-            disposeBag?.Dispose();
-            disposeBag = null;
+            var layoutManager = new LinearLayoutManager(this);
+            layoutManager.ItemPrefetchEnabled = true;
+            layoutManager.InitialPrefetchItemCount = 4;
+            mainRecyclerView.SetLayoutManager(layoutManager);
+            mainRecyclerView.SetAdapter(mainAdapter);
         }
 
-        protected override void OnStop()
+        private void setupItemTouchHelper(MainRecyclerAdapter mainAdapter)
         {
-            base.OnStop();
-            playButtonTooltipPopupWindow.Dismiss();
-            stopButtonTooltipPopupWindow.Dismiss();
+            var callback = new MainRecyclerViewTouchCallback(mainAdapter);
+            var itemTouchHelper = new ItemTouchHelper(callback);
+            itemTouchHelper.AttachToRecyclerView(mainRecyclerView);
         }
 
-        private void onSyncChanged(object sender, PropertyChangedEventArgs args)
+        private void updateSyncingIndicator(SyncProgress state)
         {
-            switch (ViewModel.SyncingProgress)
+            refreshLayout.Refreshing = state == Syncing;
+        }
+
+        private void updateRecyclerViewPadding(bool isRunning)
+        {
+            var newPadding = isRunning ? 104.DpToPixels(this) : 70.DpToPixels(this);
+            mainRecyclerView.SetPadding(0, 0, 0, newPadding);
+        }
+
+        private void onSyncChanged(SyncProgress syncProgress)
+        {
+            switch (syncProgress)
             {
                 case Failed:
                 case Unknown:
                 case OfflineModeDetected:
 
-                    var errorMessage = ViewModel.SyncingProgress == OfflineModeDetected
+                    var errorMessage = syncProgress == OfflineModeDetected
                                      ? FoundationResources.Offline
                                      : FoundationResources.SyncFailed;
 
@@ -114,7 +132,7 @@ namespace Toggl.Giskard.Activities
 
             void onRetryTapped(View view)
             {
-                ViewModel.RefreshCommand.Execute();
+                ViewModel.RefreshAction.Execute();
             }
         }
 
@@ -151,94 +169,6 @@ namespace Toggl.Giskard.Activities
                     .OnAnimationEnd(_ => playButton.Show())
                     .Start();
             }
-        }
-
-        private void setupStartTimeEntryOnboardingStep()
-        {
-            if (playButtonTooltipPopupWindow == null)
-            {
-                playButtonTooltipPopupWindow = PopupWindowFactory.PopupWindowWithText(
-                    this,
-                    Resource.Layout.TooltipWithRightArrow,
-                    Resource.Id.TooltipText,
-                    Resource.String.OnboardingTapToStartTimer);
-            }
-
-            new StartTimeEntryOnboardingStep(ViewModel.OnboardingStorage)
-                .ManageDismissableTooltip(
-                    playButtonTooltipPopupWindow,
-                    playButton,
-                    (popup, anchor) => popup.LeftVerticallyCenteredOffsetsTo(anchor, dpExtraRightMargin: 8),
-                    ViewModel.OnboardingStorage)
-                .DisposedBy(disposeBag);
-        }
-
-        private void setupStopTimeEntryOnboardingStep()
-        {
-            if (stopButtonTooltipPopupWindow == null)
-            {
-                stopButtonTooltipPopupWindow = PopupWindowFactory.PopupWindowWithText(
-                    this,
-                    Resource.Layout.TooltipWithRightBottomArrow,
-                    Resource.Id.TooltipText,
-                    Resource.String.OnboardingTapToStopTimer);
-            }
-
-            new StopTimeEntryOnboardingStep(ViewModel.OnboardingStorage, ViewModel.IsTimeEntryRunning)
-                .ManageDismissableTooltip(
-                    stopButtonTooltipPopupWindow,
-                    stopButton,
-                    (popup, anchor) => popup.TopRightFrom(anchor, dpExtraBottomMargin: 8),
-                    ViewModel.OnboardingStorage)
-                .DisposedBy(disposeBag);
-        }
-
-        private void setupTapToEditOnboardingStep()
-        {
-            mainRecyclerView = FindViewById<MainRecyclerView>(Resource.Id.MainRecyclerView);
-            mainRecyclerView.FirstTimeEntryView
-                            .ObserveOn(SynchronizationContext.Current)
-                            .Subscribe(updateTapToEditOnboardingStep)
-                            .DisposedBy(disposeBag);
-        }
-
-        private void updateTapToEditOnboardingStep(View firstTimeEntry)
-        {
-            tapToEditPopup?.Dismiss();
-            tapToEditPopup = null;
-
-            if (firstTimeEntry == null)
-                return;
-
-            updateTapToEditPopupWindow(firstTimeEntry);
-        }
-
-        private void updateTapToEditPopupWindow(View firstTimeEntry)
-        {
-            if (editTimeEntryOnboardingStepDisposable != null)
-            {
-                editTimeEntryOnboardingStepDisposable.Dispose();
-                editTimeEntryOnboardingStepDisposable = null;
-            }
-
-            if (tapToEditPopup != null)
-                tapToEditPopup.Dismiss();
-
-            tapToEditPopup = tapToEditPopup
-                ?? PopupWindowFactory.PopupWindowWithText(
-                    this,
-                    Resource.Layout.TooltipWithLeftTopArrow,
-                    Resource.Id.TooltipText,
-                    Resource.String.OnboardingTapToEdit);
-
-            var storage = ViewModel.OnboardingStorage;
-
-            editTimeEntryOnboardingStepDisposable = new EditTimeEntryOnboardingStep(storage, Observable.Return(false))
-                .ManageDismissableTooltip(
-                    tapToEditPopup,
-                    firstTimeEntry,
-                    (window, view) => PopupOffsets.FromDp(16, -4, this),
-                    storage);
         }
 
         private sealed class FabAsyncHideListener : FloatingActionButton.OnVisibilityChangedListener

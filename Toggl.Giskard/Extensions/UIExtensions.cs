@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
+using Android.Support.V4.Widget;
 using Android.Text;
 using Android.Views;
 using Android.Widget;
@@ -16,6 +17,11 @@ namespace Toggl.Giskard.Extensions
         public static IObservable<Unit> Tapped(this View button)
             => Observable
                 .FromEventPattern(e => button.Click += e, e => button.Click -= e)
+                .SelectUnit();
+
+        public static IObservable<Unit> Refreshed(this SwipeRefreshLayout swipeLayout)
+            => Observable
+                .FromEventPattern(e => swipeLayout.Refresh += e, e => swipeLayout.Refresh -= e)
                 .SelectUnit();
 
         public static IObservable<string> Text(this TextView textView)

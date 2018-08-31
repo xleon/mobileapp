@@ -5,20 +5,19 @@
     android:background="@color/lightGray"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <mvvmcross.droid.support.v4.MvxSwipeRefreshLayout
+    <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/MainSwipeRefreshLayout"
-        local:MvxBind="RefreshCommand RefreshCommand; Refreshing ShowSyncIndicator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize">
-        <toggl.giskard.views.MainRecyclerView
-            android:id="@+id/MainRecyclerView"
-            local:MvxBind="ItemsSource TimeEntriesLogViewModel.TimeEntries; SuggestionsViewModel SuggestionsViewModel; TimeEntriesLogViewModel TimeEntriesLogViewModel; IsTimeEntryRunning IsTimeEntryRunning; IsSyncRunning ShowSyncIndicator"
-            android:scrollbars="vertical"
-            local:MvxTemplateSelector="@string/MainTemplateSelector"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </mvvmcross.droid.support.v4.MvxSwipeRefreshLayout>
+        
+        <android.support.v7.widget.RecyclerView
+                android:clipToPadding="false"
+                android:id="@+id/MainRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        
+    </android.support.v4.widget.SwipeRefreshLayout>
     <include
         layout="@layout/MainRunningTimeEntry" />
     <android.support.design.widget.FloatingActionButton
@@ -46,6 +45,7 @@
             android:layout_gravity="start"
             android:layout_width="wrap_content" />
         <ImageView
+            android:id="@+id/ToolbarSettingsImageView"    
             local:MvxBind="Click OpenSettingsCommand"
             android:clickable="true"
             android:paddingTop="16dp"
@@ -57,6 +57,7 @@
             android:layout_height="56dp"
             android:layout_gravity="end" />
         <ImageView
+            android:id="@+id/ToolbarReportsImageView"
             local:MvxBind="Click OpenReportsCommand"
             android:clickable="true"
             android:paddingTop="16dp"
