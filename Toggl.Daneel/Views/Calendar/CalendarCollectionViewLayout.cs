@@ -165,8 +165,8 @@ namespace Toggl.Daneel.Views.Calendar
 
         private IEnumerable<NSIndexPath> indexPathsForVisibleItemsInRect(CGRect rect)
         {
-            var minHour = (int)Math.Floor(rect.GetMinY() / hourHeight);
-            var maxHour = (int)Math.Floor(rect.GetMaxY() / hourHeight);
+            var minHour = (int)Math.Floor(rect.GetMinY() / hourHeight).Clamp(0, hoursPerDay);
+            var maxHour = (int)Math.Floor(rect.GetMaxY() / hourHeight).Clamp(0, hoursPerDay);
 
             return dataSource.IndexPathsOfCalendarItemsBetweenHours(minHour, maxHour);
         }
