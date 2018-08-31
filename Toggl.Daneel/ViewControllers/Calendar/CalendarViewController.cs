@@ -13,6 +13,8 @@ namespace Toggl.Daneel.ViewControllers
     [MvxChildPresentation]
     public sealed partial class CalendarViewController : ReactiveViewController<CalendarViewModel>
     {
+        private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
+
         private CalendarCollectionViewLayout layout;
         private CalendarCollectionViewSource dataSource;
         private CalendarCollectionViewCreateFromSpanHelper createFromSpanHelper;
@@ -50,6 +52,12 @@ namespace Toggl.Daneel.ViewControllers
             this.Bind(dataSource.ItemTapped, ViewModel.OnItemTapped);
             this.Bind(createFromSpanHelper.CreateFromSpan, ViewModel.OnDurationSelected);
             this.Bind(editItemHelper.EditCalendarItem, ViewModel.OnUpdateTimeEntry);
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            NavigationItem.TitleView = titleImage;
         }
     }
 }
