@@ -1,27 +1,27 @@
-﻿using System;
-using System.Reactive;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
+using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Calendar;
-using Toggl.Foundation.DTOs;
+using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Interactors;
+using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.Mocks;
+using Toggl.Multivac;
 using Xunit;
 using ITimeEntryPrototype = Toggl.Foundation.Models.ITimeEntryPrototype;
-using FsCheck.Xunit;
-using FsCheck;
-using System.Linq;
-using Microsoft.Reactive.Testing;
-using Toggl.Multivac;
-using System.Reactive.Subjects;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.DataSources;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -70,6 +70,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     DataSource,
                     TimeService,
                     UserPreferences,
+                    AnalyticsService,
                     InteractorFactory,
                     OnboardingStorage,
                     SchedulerProvider,
@@ -86,6 +87,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useDataSource,
                 bool useTimeService,
                 bool useUserPreferences,
+                bool useAnalyticsService,
                 bool useInteractorFactory,
                 bool useOnboardingStorage,
                 bool useSchedulerProvider,
@@ -95,6 +97,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
+                var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
@@ -106,6 +109,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         dataSource,
                         timeService,
                         userPreferences,
+                        analyticsService,
                         interactorFactory,
                         onboardingStorage,
                         schedulerProvider,
@@ -260,6 +264,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
+            public async Task TracksTheCalendarOnbardingStartedEvent()
+            {
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(false));
+
+                await ViewModel.GetStartedAction.Execute(Unit.Default);
+
+                AnalyticsService.CalendarOnboardingStarted.Received().Track();
+            }
+
             public async Task RequestsNotificationsPermissionIfCalendarPermissionWasGranted()
             {
                 PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
@@ -405,6 +418,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public abstract class TheOnItemTappedAction : CalendarViewModelTest
         {
+            protected abstract void EnsureEventWasTracked();
+
             protected abstract CalendarItem CalendarItem { get; }
 
             [Fact, LogIfTooSlow]
@@ -415,8 +430,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await NavigationService.Received().Navigate<EditTimeEntryViewModel, long>(Arg.Is(TimeEntryId));
             }
 
+            [Fact, LogIfTooSlow]
+            public async Task TracksTheAppropriateEventToTheAnalyticsService()
+            {
+                await ViewModel.OnItemTapped.Execute(CalendarItem);
+
+                EnsureEventWasTracked();
+            }
+
             public sealed class WhenHandlingTimeEntryItems : TheOnItemTappedAction
             {
+                protected override void EnsureEventWasTracked()
+                {
+                    AnalyticsService.EditViewOpenedFromCalendar.Received().Track();
+                }
+
                 protected override CalendarItem CalendarItem { get; } = new CalendarItem(
                     "id",
                     CalendarItemSource.TimeEntry,
@@ -431,6 +459,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             public sealed class WhenHandlingCalendarItems : TheOnItemTappedAction
             {
+                protected override void EnsureEventWasTracked()
+                {
+                    AnalyticsService.TimeEntryStarted.Received().Track(TimeEntryStartOrigin.CalendarEvent);
+                } 
+
                 protected override CalendarItem CalendarItem { get; } = new CalendarItem(
                     "id",
                     CalendarItemSource.Calendar,
@@ -512,15 +545,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task RefetchesTheTimeEntryItemsUsingTheInteractor()
+            public async Task TracksTheTimeEntryCreatedFromCalendarTappingEventToTheAnalyticsService()
             {
                 var now = DateTimeOffset.UtcNow;
                 var duration = TimeSpan.FromMinutes(30);
                 var tuple = (now, duration);
-
+                    
                 await ViewModel.OnDurationSelected.Execute(tuple);
 
-                await CalendarInteractor.Received().Execute();
+                AnalyticsService.TimeEntryStarted.Received().Track(TimeEntryStartOrigin.CalendarTapAndDrag);
             }
         }
 
@@ -552,11 +585,55 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task RefetchesTheTimeEntryItemsUsingTheInteractor()
+            public async Task TracksTheTimeEntryEditedFromCalendarEventWhenDurationChanges()
             {
+                var timeEntry = new MockTimeEntry
+                {
+                    Start = calendarItem.StartTime,
+                    Duration = (long)calendarItem.Duration.TotalSeconds + 10
+                };
+                DataSource.TimeEntries
+                    .GetById(Arg.Any<long>())
+                    .Returns(Observable.Return(timeEntry));
+
                 await ViewModel.OnUpdateTimeEntry.Execute(calendarItem);
 
-                await CalendarInteractor.Received().Execute();
+                AnalyticsService.TimeEntryChangedFromCalendar.Received().Track(CalendarChangeEvent.Duration);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksTheTimeEntryEditedFromCalendarEventWhenStartTimeChanges()
+            {
+                var timeEntry = new MockTimeEntry
+                {
+                    Start = calendarItem.StartTime.Add(TimeSpan.FromHours(1)),
+                    Duration = (long)calendarItem.Duration.TotalSeconds
+                };
+                DataSource.TimeEntries
+                    .GetById(Arg.Any<long>())
+                    .Returns(Observable.Return(timeEntry));
+
+                await ViewModel.OnUpdateTimeEntry.Execute(calendarItem);
+
+                AnalyticsService.TimeEntryChangedFromCalendar.Received().Track(CalendarChangeEvent.StartTime);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksTheTimeEntryEditedFromCalendarEventWhenBothStartTimeAndDurationChange()
+            {
+                var timeEntry = new MockTimeEntry
+                {
+                    Start = calendarItem.StartTime.Add(TimeSpan.FromHours(1)),
+                    Duration = (long)calendarItem.Duration.TotalSeconds + 10
+                };
+                DataSource.TimeEntries
+                    .GetById(Arg.Any<long>())
+                    .Returns(Observable.Return(timeEntry));
+
+                await ViewModel.OnUpdateTimeEntry.Execute(calendarItem);
+
+                AnalyticsService.TimeEntryChangedFromCalendar.Received().Track(CalendarChangeEvent.Duration);
+                AnalyticsService.TimeEntryChangedFromCalendar.Received().Track(CalendarChangeEvent.StartTime);
             }
         }
     }
