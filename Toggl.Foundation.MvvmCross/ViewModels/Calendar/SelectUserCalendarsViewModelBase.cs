@@ -8,15 +8,19 @@ using MvvmCross.ViewModels;
 using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels.Selectable;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
+using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 {
-    public abstract class SelectUserCalendarsViewModelBase : MvxViewModelResult<string[]>
+    public abstract class SelectUserCalendarsViewModelBase : MvxViewModel<bool, string[]>
     {
+        private readonly IUserPreferences userPreferences;
+
+        protected bool ForceItemSelection { get; private set; }
+
         protected IInteractorFactory InteractorFactory { get; }
 
         protected HashSet<string> SelectedCalendarIds { get; } = new HashSet<string>();
@@ -30,18 +34,29 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
         public InputAction<SelectableUserCalendarViewModel> SelectCalendarAction { get; }
 
-        protected SelectUserCalendarsViewModelBase(IInteractorFactory interactorFactory)
+        protected SelectUserCalendarsViewModelBase(
+            IUserPreferences userPreferences, 
+            IInteractorFactory interactorFactory)
         {
+            Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
 
+            this.userPreferences = userPreferences;
             InteractorFactory = interactorFactory;
 
             SelectCalendarAction = new InputAction<SelectableUserCalendarViewModel>(selectCalendar);
         }
 
+        public override sealed void Prepare(bool parameter)
+        {
+            ForceItemSelection = parameter;
+        }
+
         public override async Task Initialize()
         {
             await base.Initialize();
+
+            SelectedCalendarIds.AddRange(userPreferences.EnabledCalendarIds());
 
             await InteractorFactory
                 .GetUserCalendars()

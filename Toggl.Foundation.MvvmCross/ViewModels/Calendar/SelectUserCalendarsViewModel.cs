@@ -2,10 +2,12 @@
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using Toggl.Foundation.Interactors;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
+using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 {
@@ -14,23 +16,30 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
     {
         private readonly IMvxNavigationService navigationService;
 
-        public UIAction DoneAction { get; }
+        public UIAction DoneAction { get; private set; }
 
         public SelectUserCalendarsViewModel(
+            IUserPreferences userPreferences,
             IInteractorFactory interactorFactory,
-            IMvxNavigationService navigationService) : base(interactorFactory)
+            IMvxNavigationService navigationService) 
+            : base(userPreferences, interactorFactory)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.navigationService = navigationService;
+        }
 
-            DoneAction = new UIAction(
-                done,
-                SelectCalendarAction
-                    .Elements
+        public override Task Initialize()
+        {
+            var enabledObservable = ForceItemSelection
+                ? SelectCalendarAction.Elements
                     .Select(_ => SelectedCalendarIds.Any())
                     .DistinctUntilChanged()
-            );
+                : Observable.Return(true);
+
+            DoneAction = new UIAction(done, enabledObservable);
+
+            return base.Initialize();
         }
 
         private IObservable<Unit> done()

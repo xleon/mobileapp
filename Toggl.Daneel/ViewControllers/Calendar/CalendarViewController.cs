@@ -1,3 +1,4 @@
+using CoreGraphics;
 using MvvmCross;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.Daneel.Extensions;
@@ -17,8 +18,10 @@ namespace Toggl.Daneel.ViewControllers
 
         private CalendarCollectionViewLayout layout;
         private CalendarCollectionViewSource dataSource;
-        private CalendarCollectionViewCreateFromSpanHelper createFromSpanHelper;
         private CalendarCollectionViewEditItemHelper editItemHelper;
+        private CalendarCollectionViewCreateFromSpanHelper createFromSpanHelper;
+
+        private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 30, 40));
 
         public CalendarViewController() : base(nameof(CalendarViewController))
         {
@@ -27,6 +30,8 @@ namespace Toggl.Daneel.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            settingsButton.SetImage(UIImage.FromBundle("icSettings"), UIControlState.Normal);
 
             this.Bind(ViewModel.ShouldShowOnboarding, OnboardingView.BindIsVisibleWithFade());
             this.Bind(GetStartedButton.Tapped(), ViewModel.GetStartedAction);
@@ -41,8 +46,8 @@ namespace Toggl.Daneel.ViewControllers
 
             layout = new CalendarCollectionViewLayout(timeService, dataSource);
 
-            createFromSpanHelper = new CalendarCollectionViewCreateFromSpanHelper(CalendarCollectionView, dataSource, layout);
             editItemHelper = new CalendarCollectionViewEditItemHelper(CalendarCollectionView, dataSource, layout);
+            createFromSpanHelper = new CalendarCollectionViewCreateFromSpanHelper(CalendarCollectionView, dataSource, layout);
 
             CalendarCollectionView.SetCollectionViewLayout(layout, false);
             CalendarCollectionView.Delegate = dataSource;
@@ -50,14 +55,21 @@ namespace Toggl.Daneel.ViewControllers
             CalendarCollectionView.ContentInset = new UIEdgeInsets(20, 0, 20, 0);
 
             this.Bind(dataSource.ItemTapped, ViewModel.OnItemTapped);
-            this.Bind(createFromSpanHelper.CreateFromSpan, ViewModel.OnDurationSelected);
+            this.Bind(settingsButton.Tapped(), ViewModel.SelectCalendars);
             this.Bind(editItemHelper.EditCalendarItem, ViewModel.OnUpdateTimeEntry);
+            this.Bind(ViewModel.SettingsAreVisible , settingsButton.BindIsVisible());
+            this.Bind(createFromSpanHelper.CreateFromSpan, ViewModel.OnDurationSelected);
         }
 
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+
             NavigationItem.TitleView = titleImage;
+            NavigationItem.RightBarButtonItems = new[]
+            {
+                new UIBarButtonItem(settingsButton)
+            };
         }
     }
 }

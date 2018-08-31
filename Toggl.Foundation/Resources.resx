@@ -432,4 +432,10 @@ account is not set up</value>
     <data name="EventReminder">
         <value>Event reminder</value>
     </data>
+    <data name="Oops">
+        <value>Oops</value>
+    </data>
+    <data name="NoCalendarsFoundMessage">
+        <value>It looks like you don't have any calendars</value>
+    </data>
 </root>

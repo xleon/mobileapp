@@ -868,5 +868,17 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("EventReminder", resourceCulture);
             }
         }
+        
+        public static string Oops {
+            get {
+                return ResourceManager.GetString("Oops", resourceCulture);
+            }
+        }
+        
+        public static string NoCalendarsFoundMessage {
+            get {
+                return ResourceManager.GetString("NoCalendarsFoundMessage", resourceCulture);
+            }
+        }
     }
 }

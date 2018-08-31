@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -18,8 +19,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         public abstract class SelectUserCalendarsViewModelTest : BaseViewModelTests<SelectUserCalendarsViewModel>
         {
+            protected SelectUserCalendarsViewModelTest()
+            {
+                UserPreferences.EnabledCalendarIds().Returns(new List<string>());
+            }
+
             protected override SelectUserCalendarsViewModel CreateViewModel()
-                => new SelectUserCalendarsViewModel(InteractorFactory, NavigationService);
+                => new SelectUserCalendarsViewModel(UserPreferences, InteractorFactory, NavigationService);
         }
 
         public sealed class TheConstructor : SelectUserCalendarsViewModelTest
@@ -27,11 +33,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Theory, LogIfTooSlow]
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
+                bool useUserPreferences,
                 bool useInteractorFactory,
                 bool useNavigationService)
             {
                 Action tryingToConstructWithEmptyParameters =
                     () => new SelectUserCalendarsViewModel(
+                        useUserPreferences ? UserPreferences : null,
                         useInteractorFactory ? InteractorFactory : null,
                         useNavigationService ? NavigationService : null
                     );
@@ -70,90 +78,119 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public sealed class TheDoneActionEnabledProperty : SelectUserCalendarsViewModelTest
+        public abstract class TheDoneActionEnabledProperty
         {
-            [Fact, LogIfTooSlow]
-            public void StartsWithFalse()
+            public class WhenYouDoNotForceItemSelection : SelectUserCalendarsViewModelTest
             {
-                var observer = Substitute.For<IObserver<bool>>();
-
-                ViewModel.DoneAction.Enabled.Subscribe(observer);
-                SchedulerProvider.TestScheduler.AdvanceBy(1);
-
-                observer.Received().OnNext(false);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task EmitsTrueAfterOneCalendarHasBeenSelected()
-            {
-                var observer = Substitute.For<IObserver<bool>>();
-                ViewModel.DoneAction.Enabled.Subscribe(observer);
-                var selectableUserCalendar = new SelectableUserCalendarViewModel(
-                    new UserCalendar(),
-                    false
-                );
-
-                await ViewModel.SelectCalendarAction.Execute(selectableUserCalendar);
-                SchedulerProvider.TestScheduler.AdvanceBy(2);
-
-                Received.InOrder(() =>
+                public WhenYouDoNotForceItemSelection()
                 {
-                    observer.OnNext(false);
-                    observer.OnNext(true);
-                });
-            }
+                    ViewModel.Prepare(false);
+                    ViewModel.Initialize().Wait();
+                }
 
-            [Fact, LogIfTooSlow]
-            public void DoesNotEmitAnythingWhenSelectingAdditionalCalendars()
+                [Fact, LogIfTooSlow]
+                public void ReturnsTrue()
+                {
+                    var observer = Substitute.For<IObserver<bool>>();
+
+                    ViewModel.DoneAction.Enabled.Subscribe(observer);
+                    SchedulerProvider.TestScheduler.AdvanceBy(1);
+
+                    observer.Received().OnNext(true);
+                }
+            }
+         
+            public class WhenYouForceItemSelection : SelectUserCalendarsViewModelTest
             {
-                var observer = Substitute.For<IObserver<bool>>();
-                ViewModel.DoneAction.Enabled.Subscribe(observer);
-                var selectedableUserCalendars = Enumerable
-                    .Range(0, 10)
-                    .Select(id =>
+                public WhenYouForceItemSelection()
+                {
+                    ViewModel.Prepare(true);
+                    ViewModel.Initialize().Wait();
+                }
+
+                [Fact, LogIfTooSlow]
+                public void StartsWithFalse()
+                {
+                    var observer = Substitute.For<IObserver<bool>>();
+
+                    ViewModel.DoneAction.Enabled.Subscribe(observer);
+                    SchedulerProvider.TestScheduler.AdvanceBy(1);
+
+                    observer.Received().OnNext(false);
+                }
+
+                [Fact, LogIfTooSlow]
+                public async Task EmitsTrueAfterOneCalendarHasBeenSelected()
+                {
+                    var observer = Substitute.For<IObserver<bool>>();
+                    ViewModel.DoneAction.Enabled.Subscribe(observer);
+                    var selectableUserCalendar = new SelectableUserCalendarViewModel(
+                        new UserCalendar(),
+                        false
+                    );
+
+                    await ViewModel.SelectCalendarAction.Execute(selectableUserCalendar);
+                    SchedulerProvider.TestScheduler.AdvanceBy(2);
+
+                    Received.InOrder(() =>
                     {
-                        var userCalendar = new UserCalendar(id.ToString(), id.ToString(), "Doenst matter");
-                        return new SelectableUserCalendarViewModel(userCalendar, false);
+                        observer.OnNext(false);
+                        observer.OnNext(true);
                     });
+                }
 
-                selectedableUserCalendars
-                    .ForEach(calendar => ViewModel.SelectCalendarAction.Execute(calendar).Wait());
-                SchedulerProvider.TestScheduler.AdvanceBy(2);
-
-                Received.InOrder(() =>
+                [Fact, LogIfTooSlow]
+                public void DoesNotEmitAnythingWhenSelectingAdditionalCalendars()
                 {
-                    observer.OnNext(false);
-                    observer.OnNext(true);
-                });
-            }
+                    var observer = Substitute.For<IObserver<bool>>();
+                    ViewModel.DoneAction.Enabled.Subscribe(observer);
+                    var selectedableUserCalendars = Enumerable
+                        .Range(0, 10)
+                        .Select(id =>
+                        {
+                            var userCalendar = new UserCalendar(id.ToString(), id.ToString(), "Doenst matter");
+                            return new SelectableUserCalendarViewModel(userCalendar, false);
+                        });
 
-            [Fact, LogIfTooSlow]
-            public void EmitsFalseAfterAllTheCalendarsHaveBeenDeselected()
-            {
-                var observer = Substitute.For<IObserver<bool>>();
-                ViewModel.DoneAction.Enabled.Subscribe(observer);
-                var selectedableUserCalendars = Enumerable
-                    .Range(0, 10)
-                    .Select(id =>
+                    selectedableUserCalendars
+                        .ForEach(calendar => ViewModel.SelectCalendarAction.Execute(calendar).Wait());
+                    SchedulerProvider.TestScheduler.AdvanceBy(2);
+
+                    Received.InOrder(() =>
                     {
-                        var userCalendar = new UserCalendar(id.ToString(), id.ToString(), "Doenst matter");
-                        return new SelectableUserCalendarViewModel(userCalendar, false);
+                        observer.OnNext(false);
+                        observer.OnNext(true);
                     });
+                }
 
-                //Select all the calendars
-                selectedableUserCalendars
-                    .ForEach(calendar => ViewModel.SelectCalendarAction.Execute(calendar).Wait());
-                //Deselect all the calendars
-                selectedableUserCalendars
-                    .ForEach(calendar => ViewModel.SelectCalendarAction.Execute(calendar).Wait());
-                SchedulerProvider.TestScheduler.AdvanceBy(3);
-
-                Received.InOrder(() =>
+                [Fact, LogIfTooSlow]
+                public void EmitsFalseAfterAllTheCalendarsHaveBeenDeselected()
                 {
-                    observer.OnNext(false);
-                    observer.OnNext(true);
-                    observer.OnNext(false);
-                });
+                    var observer = Substitute.For<IObserver<bool>>();
+                    ViewModel.DoneAction.Enabled.Subscribe(observer);
+                    var selectedableUserCalendars = Enumerable
+                        .Range(0, 10)
+                        .Select(id =>
+                        {
+                            var userCalendar = new UserCalendar(id.ToString(), id.ToString(), "Doenst matter");
+                            return new SelectableUserCalendarViewModel(userCalendar, false);
+                        });
+
+                    //Select all the calendars
+                    selectedableUserCalendars
+                        .ForEach(calendar => ViewModel.SelectCalendarAction.Execute(calendar).Wait());
+                    //Deselect all the calendars
+                    selectedableUserCalendars
+                        .ForEach(calendar => ViewModel.SelectCalendarAction.Execute(calendar).Wait());
+                    SchedulerProvider.TestScheduler.AdvanceBy(3);
+
+                    Received.InOrder(() =>
+                    {
+                        observer.OnNext(false);
+                        observer.OnNext(true);
+                        observer.OnNext(false);
+                    });
+                }
             }
         }
     }

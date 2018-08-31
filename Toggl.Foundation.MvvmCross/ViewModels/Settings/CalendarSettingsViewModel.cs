@@ -26,7 +26,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
         public CalendarSettingsViewModel(
             IUserPreferences userPreferences,
             IInteractorFactory interactorFactory,
-            IPermissionsService permissionsService) : base(interactorFactory)
+            IPermissionsService permissionsService) 
+            : base(userPreferences, interactorFactory)
         {
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
@@ -44,7 +45,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
         public async override Task Initialize()
         {
             PermissionGranted = await permissionsService.CalendarPermissionGranted;
-            SelectedCalendarIds.AddRange(userPreferences.EnabledCalendarIds());
 
             await base.Initialize();
         }

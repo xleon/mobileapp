@@ -29,6 +29,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
     {
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
+        private readonly IDialogService dialogService;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
         private readonly IInteractorFactory interactorFactory;
@@ -39,6 +40,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         private readonly ISubject<bool> shouldShowOnboardingSubject;
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
+        public IObservable<bool> SettingsAreVisible { get; }
+
         public IObservable<bool> ShouldShowOnboarding { get; }
 
         public IObservable<TimeFormat> TimeOfDayFormat { get; }
@@ -46,6 +49,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         public IObservable<DateTime> Date { get; }
 
         public UIAction GetStartedAction { get; }
+
+        public UIAction SelectCalendars { get; }
 
         public InputAction<CalendarItem> OnItemTapped { get; }
 
@@ -58,6 +63,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         public CalendarViewModel(
             ITogglDataSource dataSource,
             ITimeService timeService,
+            IDialogService dialogService,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
             IInteractorFactory interactorFactory,
@@ -68,6 +74,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
@@ -78,6 +85,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
             this.dataSource = dataSource;
             this.timeService = timeService;
+            this.dialogService = dialogService;
             this.userPreferences = userPreferences;
             this.analyticsService = analyticsService;
             this.interactorFactory = interactorFactory;
@@ -87,10 +95,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
             var isCompleted = onboardingStorage.CompletedCalendarOnboarding();
             shouldShowOnboardingSubject = new BehaviorSubject<bool>(!isCompleted);
-            ShouldShowOnboarding = shouldShowOnboardingSubject
+
+            var onboardingObservable = shouldShowOnboardingSubject
                 .AsObservable()
-                .DistinctUntilChanged()
-                .AsDriver(false, schedulerProvider);
+                .DistinctUntilChanged();
+
+            ShouldShowOnboarding = onboardingObservable.AsDriver(false, schedulerProvider);
 
             TimeOfDayFormat = dataSource
                 .Preferences
@@ -102,6 +112,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             GetStartedAction = new UIAction(getStarted);
 
             OnItemTapped = new InputAction<CalendarItem>(onItemTapped);
+
+            SettingsAreVisible = onboardingObservable
+                .SelectMany(_ => permissionsService.CalendarPermissionGranted)
+                .DistinctUntilChanged();
+
+            SelectCalendars = new UIAction(() => selectUserCalendars(false), SettingsAreVisible);
 
             OnDurationSelected = new InputAction<(DateTimeOffset StartTime, TimeSpan Duration)>(
                 tuple => onDurationSelected(tuple.StartTime, tuple.Duration)
@@ -146,7 +162,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 var calendarPermissionGranted = await permissionsService.RequestCalendarAuthorization();
                 if (calendarPermissionGranted)
                 {
-                    await selectUserCalendars();
+                    await selectUserCalendars(true);
                     await permissionsService.RequestNotificationAuthorization();
                 }
                 else
@@ -158,19 +174,26 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 shouldShowOnboardingSubject.OnNext(false);
             });
 
-        private async Task selectUserCalendars()
-        {
-            var calendarsExist = await interactorFactory
-                .GetUserCalendars()
-                .Execute()
-                .Select(calendars => calendars.Any());
-
-            if (calendarsExist)
+        private IObservable<Unit> selectUserCalendars(bool isOnboarding)
+            => Observable.FromAsync(async () =>
             {
-                var calendarIds = await navigationService.Navigate<SelectUserCalendarsViewModel, string[]>();
-                interactorFactory.SetEnabledCalendars(calendarIds).Execute();
-            }
-        }
+                var calendarsExist = await interactorFactory
+                    .GetUserCalendars()
+                    .Execute()
+                    .Select(calendars => calendars.Any());
+
+                if (calendarsExist)
+                {
+                    var calendarIds = await navigationService
+                        .Navigate<SelectUserCalendarsViewModel, bool, string[]>(isOnboarding);
+
+                    interactorFactory.SetEnabledCalendars(calendarIds).Execute();
+                }
+                else if (!isOnboarding)
+                {
+                    await dialogService.Alert(Resources.Oops, Resources.NoCalendarsFoundMessage, Resources.Ok);
+                }
+            });
 
         private IObservable<Unit> onItemTapped(CalendarItem calendarItem)
             => Observable.FromAsync(async () =>

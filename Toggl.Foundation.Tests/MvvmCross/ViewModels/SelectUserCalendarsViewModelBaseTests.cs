@@ -10,6 +10,7 @@ using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Multivac;
 using Xunit;
 using static Toggl.Multivac.Extensions.FunctionalExtensions;
+using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -17,16 +18,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         public sealed class MockSelectUserCalendarsViewModel : SelectUserCalendarsViewModelBase
         {
-            public MockSelectUserCalendarsViewModel(IInteractorFactory interactorFactory)
-                : base(interactorFactory)
+            public MockSelectUserCalendarsViewModel(IUserPreferences userPreferences, IInteractorFactory interactorFactory)
+                : base(userPreferences, interactorFactory)
             {
             }
         }
 
         public abstract class SelectUserCalendarsViewModelBaseTest : BaseViewModelTests<MockSelectUserCalendarsViewModel>
         {
+            protected SelectUserCalendarsViewModelBaseTest()
+            {
+                UserPreferences.EnabledCalendarIds().Returns(new List<string>());
+            }
+
             protected override MockSelectUserCalendarsViewModel CreateViewModel()
-                => new MockSelectUserCalendarsViewModel(InteractorFactory);
+                => new MockSelectUserCalendarsViewModel(UserPreferences, InteractorFactory);
         }
 
         public sealed class TheInitializeMethod : SelectUserCalendarsViewModelBaseTest

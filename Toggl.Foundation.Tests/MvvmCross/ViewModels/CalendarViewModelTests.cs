@@ -13,6 +13,7 @@ using NSubstitute;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -20,6 +21,7 @@ using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.Mocks;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using Xunit;
 using ITimeEntryPrototype = Toggl.Foundation.Models.ITimeEntryPrototype;
 
@@ -60,7 +62,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Returns(Observable.Return(timeEntry));
 
                 InteractorFactory
-                    .UpdateTimeEntry(Arg.Any<DTOs.EditTimeEntryDto>())
+                    .UpdateTimeEntry(Arg.Any<EditTimeEntryDto>())
                     .Execute()
                     .Returns(Observable.Return(timeEntry));
             }
@@ -69,6 +71,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 => new CalendarViewModel(
                     DataSource,
                     TimeService,
+                    DialogService,
                     UserPreferences,
                     AnalyticsService,
                     InteractorFactory,
@@ -86,6 +89,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
                 bool useTimeService,
+                bool useDialogService,
                 bool useUserPreferences,
                 bool useAnalyticsService,
                 bool useInteractorFactory,
@@ -96,6 +100,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
+                var dialogService = useDialogService ? DialogService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
@@ -108,6 +113,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     () => new CalendarViewModel(
                         dataSource,
                         timeService,
+                        dialogService,
                         userPreferences,
                         analyticsService,
                         interactorFactory,
@@ -179,6 +185,111 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
+        public sealed class TheSettingsAreVisibleObservable : CalendarViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task EmitsWheneverTheShouldShowOnboardingObservablesOmits()
+            {
+                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(false));
+                var observer = TestScheduler.CreateObserver<bool>();
+                ViewModel.SettingsAreVisible.Subscribe(observer);
+                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                await ViewModel.GetStartedAction.Execute(Unit.Default);
+
+                TestScheduler.AdvanceBy(1);
+
+                observer.Messages.AssertEqual(
+                    ReactiveTest.OnNext(0, false),
+                    ReactiveTest.OnNext(0, true)
+                );
+            }
+        }
+
+        public sealed class TheSelectCalendarsAction : CalendarViewModelTest
+        {
+            protected override void AdditionalSetup()
+            {
+                OnboardingStorage
+                    .CompletedCalendarOnboarding()
+                    .Returns(true);
+
+                PermissionsService
+                    .CalendarPermissionGranted
+                    .Returns(Observable.Return(true));
+
+                NavigationService
+                    .Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>())
+                    .Returns(new string[0]);
+
+                InteractorFactory
+                    .GetUserCalendars()
+                    .Execute()
+                    .Returns(Observable.Return(new UserCalendar().Yield()));
+
+                DialogService
+                    .Alert(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
+                    .Returns(Observable.Return(Unit.Default));
+
+                TestScheduler.AdvanceBy(1);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task NavigatesToTheSelectUserCalendarsViewModelWhenThereAreCalendars()
+            {
+                await ViewModel.SelectCalendars.Execute(Unit.Default);
+
+                await NavigationService
+                    .Received()
+                    .Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task DoesNotNavigateToTheSelectUserCalendarsViewModelWhenThereAreNoCalendars()
+            {
+                InteractorFactory.GetUserCalendars().Execute().Returns(
+                    Observable.Return(new UserCalendar[0])
+                );
+
+                await ViewModel.SelectCalendars.Execute(Unit.Default);
+
+                await DialogService
+                    .Received()
+                    .Alert(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task ShowsADialogWhenThereAreNoCalendars()
+            {
+                InteractorFactory.GetUserCalendars().Execute().Returns(
+                    Observable.Return(new UserCalendar[0])
+                );
+
+                await ViewModel.SelectCalendars.Execute(Unit.Default);
+
+                await NavigationService.DidNotReceive().Navigate<SelectUserCalendarsViewModel, string[]>();
+            }
+
+            [Property]
+            public void SetsTheEnabledCalendarsWhenThereAreCalendars(NonEmptyString[] nonEmptyStrings)
+            {
+                if (nonEmptyStrings == null) return;
+
+                InteractorFactory.ClearReceivedCalls();
+                var viewModel = CreateViewModel();
+
+                var calendarIds = nonEmptyStrings.Select(str => str.Get).ToArray();
+                NavigationService.Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>()).Returns(calendarIds);
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                InteractorFactory.GetUserCalendars().Execute().Returns(
+                    Observable.Return(new UserCalendar[] { new UserCalendar() })
+                );
+
+                viewModel.SelectCalendars.Execute(Unit.Default).Wait();
+
+                InteractorFactory.Received().SetEnabledCalendars(calendarIds).Execute();
+            }
+        }
+
         public sealed class TheGetStartedAction : CalendarViewModelTest
         {
             [Fact, LogIfTooSlow]
@@ -209,7 +320,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.GetStartedAction.Execute(Unit.Default);
 
-                await NavigationService.Received().Navigate<SelectUserCalendarsViewModel, string[]>();
+                await NavigationService
+                    .Received()
+                    .Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>());
             }
 
             [Fact, LogIfTooSlow]
@@ -229,14 +342,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void SetsTheEnabledCalendarsWhenThereAreCalendars(NonEmptyString[] nonEmptyStrings)
             {
                 if (nonEmptyStrings == null) return;
+
+                InteractorFactory.ClearReceivedCalls();
+                var viewModel = CreateViewModel();
+
                 var calendarIds = nonEmptyStrings.Select(str => str.Get).ToArray();
-                NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(calendarIds);
+                NavigationService.Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>()).Returns(calendarIds);
                 PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
                 InteractorFactory.GetUserCalendars().Execute().Returns(
                     Observable.Return(new UserCalendar[] { new UserCalendar() })
                 );
 
-                ViewModel.GetStartedAction.Execute(Unit.Default).Wait();
+                viewModel.GetStartedAction.Execute(Unit.Default).Wait();
 
                 InteractorFactory.Received().SetEnabledCalendars(calendarIds).Execute();
             }
