@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
@@ -32,6 +34,7 @@ namespace Toggl.PrimeRadiant.Tests.Settings
                 private readonly Dictionary<string, string> strings = new Dictionary<string, string>();
                 private readonly Dictionary<string, int> ints = new Dictionary<string, int>();
                 private readonly Dictionary<string, DateTimeOffset> dates = new Dictionary<string, DateTimeOffset>();
+                private readonly Dictionary<string, TimeSpan> timeSpans = new Dictionary<string, TimeSpan>();
 
                 public bool GetBool(string key)
                 {
@@ -73,6 +76,14 @@ namespace Toggl.PrimeRadiant.Tests.Settings
                 public void SetDateTimeOffset(string key, DateTimeOffset value)
                 {
                     dates[key] = value;
+                }
+
+                public TimeSpan? GetTimeSpan(string key)
+                    => timeSpans.TryGetValue(key, out var value) ? value : (TimeSpan?)null;
+
+                public void SetTimeSpan(string key, TimeSpan timeSpan)
+                {
+                    timeSpans[key] = timeSpan;
                 }
 
                 public void Remove(string key)
@@ -252,7 +263,7 @@ namespace Toggl.PrimeRadiant.Tests.Settings
             }
         }
 
-        public sealed class TheEnabledClaendarsProperty : SettingsStorageTest
+        public sealed class TheEnabledCalendarsProperty : SettingsStorageTest
         {
             [Property]
             public void EmitsNewIdsWheneverNewCalendarsAreEnabled(NonEmptyArray<NonEmptyString> strings)
@@ -293,6 +304,108 @@ namespace Toggl.PrimeRadiant.Tests.Settings
                 SettingsStorage.SetEnabledCalendars(new string[0]);
 
                 observer.Received().OnNext(Arg.Is<List<string>>(list => list.None()));
+            }
+        }
+
+        public sealed class TheCalendarNotificationsEnabledProperty : SettingsStorageTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task StartsWithFalse()
+            {
+                var firstValue = await SettingsStorage.CalendarNotificationsEnabled.FirstAsync();
+
+                firstValue.Should().BeFalse();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void EmitsTrueWhenTurnedOn()
+            {
+                var observer = Substitute.For<IObserver<bool>>();
+                SettingsStorage.CalendarNotificationsEnabled.Subscribe(observer);
+
+                SettingsStorage.SetCalendarNotificationsEnabled(true);
+
+                Received.InOrder(() =>
+                {
+                    observer.OnNext(false);
+                    observer.OnNext(true);
+                });
+            }
+
+            [Fact, LogIfTooSlow]
+            public void EmitsFalseWhenTurnedOff()
+            {
+                var observer = Substitute.For<IObserver<bool>>();
+                SettingsStorage.CalendarNotificationsEnabled.Subscribe(observer);
+
+                SettingsStorage.SetCalendarNotificationsEnabled(true);
+                SettingsStorage.SetCalendarNotificationsEnabled(false);
+
+                Received.InOrder(() =>
+                {
+                    observer.OnNext(false);
+                    observer.OnNext(true);
+                    observer.OnNext(false);
+                });
+            }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNotEmitAnyAdditionalTrueValues()
+            {
+                var observer = Substitute.For<IObserver<bool>>();
+                SettingsStorage.CalendarNotificationsEnabled.Subscribe(observer);
+
+                SettingsStorage.SetCalendarNotificationsEnabled(true);
+                SettingsStorage.SetCalendarNotificationsEnabled(true);
+                SettingsStorage.SetCalendarNotificationsEnabled(true);
+                SettingsStorage.SetCalendarNotificationsEnabled(true);
+
+                Received.InOrder(() =>
+                {
+                    observer.OnNext(false);
+                    observer.OnNext(true);
+                });
+            }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNotEmitAnyAdditionalFalseValues()
+            {
+                var observer = Substitute.For<IObserver<bool>>();
+                SettingsStorage.CalendarNotificationsEnabled.Subscribe(observer);
+
+                SettingsStorage.SetCalendarNotificationsEnabled(false);
+                SettingsStorage.SetCalendarNotificationsEnabled(false);
+                SettingsStorage.SetCalendarNotificationsEnabled(false);
+
+                Received.InOrder(() =>
+                {
+                    observer.OnNext(false);
+                });
+            }
+        }
+
+        public sealed class TheTimeSpanBeforeCalendarNotificationsProperty : SettingsStorageTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task StartsWithTheDefaultValue()
+            {
+                var firstValue = await SettingsStorage.TimeSpanBeforeCalendarNotifications.FirstAsync();
+
+                firstValue.Should().Be(TimeSpan.FromMinutes(10));
+            }
+
+            [Property(MaxTest = 1)]
+            public void EmitsNewValueWheneverNewValueIsSet(TimeSpan timeSpan)
+            {
+                var observer = Substitute.For<IObserver<TimeSpan>>();
+                SettingsStorage.TimeSpanBeforeCalendarNotifications.Subscribe(observer);
+                SettingsStorage.SetTimeSpanBeforeCalendarNotifications(timeSpan);
+
+                Received.InOrder(() =>
+                {
+                    observer.OnNext(TimeSpan.FromMinutes(10));
+                    observer.OnNext(timeSpan);
+                });
             }
         }
     }

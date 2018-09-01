@@ -46,6 +46,9 @@ namespace Toggl.PrimeRadiant.Settings
         private const string enabledCalendarsKey = "EnabledCalendars";
         private const char calendarIdSeparator = ';';
 
+        private const string calendarNotificationsEnabledKey = "CalendarNotificationsEnabled";
+        private const string timeSpanBeforeCalendarNotificationsKey = "TimeSpanBeforeCalendarNotifications";
+
         private readonly Version version;
         private readonly IKeyValueStorage keyValueStorage;
 
@@ -61,7 +64,10 @@ namespace Toggl.PrimeRadiant.Settings
         private readonly ISubject<bool> hasTimeEntryBeenContinuedSubject;
         private readonly ISubject<bool> navigatedAwayFromMainViewAfterTappingStopButtonSubject;
         private readonly ISubject<List<string>> enabledCalendarsSubject;
+        private readonly ISubject<bool> calendarNotificationsEnabledSubject;
+        private readonly ISubject<TimeSpan> timeSpanBeforeCalendarNotificationsSubject;
 
+        private readonly TimeSpan defaultTimeSpanBeforeCalendarNotificationsSubject = TimeSpan.FromMinutes(10);
 
         public SettingsStorage(Version version, IKeyValueStorage keyValueStorage)
         {
@@ -70,18 +76,20 @@ namespace Toggl.PrimeRadiant.Settings
             this.version = version;
             this.keyValueStorage = keyValueStorage;
 
-            (enabledCalendarsSubject, EnabledCalendars) = prepareCalendarIdsSubjectAndObservable(enabledCalendarsKey);
-            (isNewUserSubject, IsNewUser) = prepareSubjectAndObservable(isNewUserKey);
-            (isManualModeEnabledSubject, IsManualModeEnabledObservable) = prepareSubjectAndObservable(preferManualModeKey);
-            (hasTappedTimeEntrySubject, HasTappedTimeEntry) = prepareSubjectAndObservable(hasTappedTimeEntryKey);
-            (hasEditedTimeEntrySubject, HasEditedTimeEntry) = prepareSubjectAndObservable(hasEditedTimeEntryKey);
-            (hasSelectedProjectSubject, HasSelectedProject) = prepareSubjectAndObservable(hasSelectedProjectKey);
-            (stopButtonWasTappedSubject, StopButtonWasTappedBefore) = prepareSubjectAndObservable(stopButtonWasTappedBeforeKey);
-            (userSignedUpUsingTheAppSubject, UserSignedUpUsingTheApp) = prepareSubjectAndObservable(userSignedUpUsingTheAppKey);
-            (startButtonWasTappedSubject, StartButtonWasTappedBefore) = prepareSubjectAndObservable(startButtonWasTappedBeforeKey);
-            (projectOrTagWasAddedSubject, ProjectOrTagWasAddedBefore) = prepareSubjectAndObservable(projectOrTagWasAddedBeforeKey);
-            (navigatedAwayFromMainViewAfterTappingStopButtonSubject, NavigatedAwayFromMainViewAfterTappingStopButton) = prepareSubjectAndObservable(navigatedAwayFromMainViewAfterTappingStopButtonKey);
-            (hasTimeEntryBeenContinuedSubject, HasTimeEntryBeenContinued) = prepareSubjectAndObservable(hasTimeEntryBeenContinuedKey);
+            (isNewUserSubject, IsNewUser) = prepareSubjectAndObservable(isNewUserKey, keyValueStorage.GetBool);
+            (enabledCalendarsSubject, EnabledCalendars) = prepareSubjectAndObservable(EnabledCalendarIds());
+            (hasTappedTimeEntrySubject, HasTappedTimeEntry) = prepareSubjectAndObservable(hasTappedTimeEntryKey, keyValueStorage.GetBool);
+            (hasEditedTimeEntrySubject, HasEditedTimeEntry) = prepareSubjectAndObservable(hasEditedTimeEntryKey, keyValueStorage.GetBool);
+            (hasSelectedProjectSubject, HasSelectedProject) = prepareSubjectAndObservable(hasSelectedProjectKey, keyValueStorage.GetBool);
+            (isManualModeEnabledSubject, IsManualModeEnabledObservable) = prepareSubjectAndObservable(preferManualModeKey, keyValueStorage.GetBool);
+            (stopButtonWasTappedSubject, StopButtonWasTappedBefore) = prepareSubjectAndObservable(stopButtonWasTappedBeforeKey, keyValueStorage.GetBool);
+            (userSignedUpUsingTheAppSubject, UserSignedUpUsingTheApp) = prepareSubjectAndObservable(userSignedUpUsingTheAppKey, keyValueStorage.GetBool);
+            (startButtonWasTappedSubject, StartButtonWasTappedBefore) = prepareSubjectAndObservable(startButtonWasTappedBeforeKey, keyValueStorage.GetBool);
+            (projectOrTagWasAddedSubject, ProjectOrTagWasAddedBefore) = prepareSubjectAndObservable(projectOrTagWasAddedBeforeKey, keyValueStorage.GetBool);
+            (hasTimeEntryBeenContinuedSubject, HasTimeEntryBeenContinued) = prepareSubjectAndObservable(hasTimeEntryBeenContinuedKey, keyValueStorage.GetBool);
+            (calendarNotificationsEnabledSubject, CalendarNotificationsEnabled) = prepareSubjectAndObservable(calendarNotificationsEnabledKey, keyValueStorage.GetBool);
+            (navigatedAwayFromMainViewAfterTappingStopButtonSubject, NavigatedAwayFromMainViewAfterTappingStopButton) = prepareSubjectAndObservable(navigatedAwayFromMainViewAfterTappingStopButtonKey, keyValueStorage.GetBool);
+            (timeSpanBeforeCalendarNotificationsSubject, TimeSpanBeforeCalendarNotifications) = prepareSubjectAndObservable(keyValueStorage.GetTimeSpan(timeSpanBeforeCalendarNotificationsKey) ?? defaultTimeSpanBeforeCalendarNotificationsSubject);
         }
 
         #region IAccessRestrictionStorage
@@ -313,6 +321,10 @@ namespace Toggl.PrimeRadiant.Settings
 
         public IObservable<List<string>> EnabledCalendars { get; }
 
+        public IObservable<bool> CalendarNotificationsEnabled { get; }
+
+        public IObservable<TimeSpan> TimeSpanBeforeCalendarNotifications { get; }
+
         public bool IsManualModeEnabled
             => keyValueStorage.GetBool(preferManualModeKey);
 
@@ -368,6 +380,18 @@ namespace Toggl.PrimeRadiant.Settings
             enabledCalendarsSubject.OnNext(ids?.ToList() ?? new List<string>());
         }
 
+        public void SetCalendarNotificationsEnabled(bool enabled)
+        {
+            keyValueStorage.SetBool(calendarNotificationsEnabledKey, enabled);
+            calendarNotificationsEnabledSubject.OnNext(enabled);
+        }
+
+        public void SetTimeSpanBeforeCalendarNotifications(TimeSpan timeSpan)
+        {
+            keyValueStorage.SetTimeSpan(timeSpanBeforeCalendarNotificationsKey, timeSpan);
+            timeSpanBeforeCalendarNotificationsSubject.OnNext(timeSpan);
+        }
+
         #endregion
 
         #region ILastTimeUsageStorage
@@ -396,19 +420,12 @@ namespace Toggl.PrimeRadiant.Settings
 
         #endregion
 
-        private (ISubject<bool>, IObservable<bool>) prepareSubjectAndObservable(string key)
-        {
-            var initialValue = keyValueStorage.GetBool(key);
-            var subject = new BehaviorSubject<bool>(initialValue);
-            var observable = subject.AsObservable().DistinctUntilChanged();
+        private (ISubject<T>, IObservable<T>) prepareSubjectAndObservable<T>(string key, Func<string, T> initialValueSelector)
+            => prepareSubjectAndObservable(initialValueSelector(key));
 
-            return (subject, observable);
-        }
-
-        private (ISubject<List<string>>, IObservable<List<string>>) prepareCalendarIdsSubjectAndObservable(string key)
+        private (ISubject<T>, IObservable<T>) prepareSubjectAndObservable<T>(T initialValue)
         {
-            var initialValue = EnabledCalendarIds();
-            var subject = new BehaviorSubject<List<string>>(initialValue);
+            var subject = new BehaviorSubject<T>(initialValue);
             var observable = subject.AsObservable().DistinctUntilChanged();
 
             return (subject, observable);

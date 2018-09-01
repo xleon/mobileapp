@@ -9,6 +9,10 @@ namespace Toggl.PrimeRadiant.Settings
 
         IObservable<List<string>> EnabledCalendars { get; }
 
+        IObservable<bool> CalendarNotificationsEnabled { get; }
+
+        IObservable<TimeSpan> TimeSpanBeforeCalendarNotifications { get; }
+
         bool IsManualModeEnabled { get; }
 
         void EnableManualMode();
@@ -20,5 +24,9 @@ namespace Toggl.PrimeRadiant.Settings
         List<string> EnabledCalendarIds();
 
         void SetEnabledCalendars(params string[] ids);
+
+        void SetCalendarNotificationsEnabled(bool enabled);
+
+        void SetTimeSpanBeforeCalendarNotifications(TimeSpan timeSpan);
     }
 }
