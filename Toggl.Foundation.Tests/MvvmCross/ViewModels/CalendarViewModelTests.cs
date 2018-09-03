@@ -540,14 +540,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected abstract CalendarItem CalendarItem { get; }
 
             [Fact, LogIfTooSlow]
-            public async Task NavigatesToTheEditTimeEntryViewModelUsingTheTimeEntryId()
-            {
-                await ViewModel.OnItemTapped.Execute(CalendarItem);
-
-                await NavigationService.Received().Navigate<EditTimeEntryViewModel, long>(Arg.Is(TimeEntryId));
-            }
-
-            [Fact, LogIfTooSlow]
             public async Task TracksTheAppropriateEventToTheAnalyticsService()
             {
                 await ViewModel.OnItemTapped.Execute(CalendarItem);
@@ -572,6 +564,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     "#00FF00",
                     TimeEntryId
                 );
+
+                [Fact]
+                public async Task NavigatesToTheEditTimeEntryViewModelUsingTheTimeEntryId()
+                {
+                    await ViewModel.OnItemTapped.Execute(CalendarItem);
+
+                    await NavigationService.Received().Navigate<EditTimeEntryViewModel, long>(Arg.Is(TimeEntryId));
+                }
             }
 
             public sealed class WhenHandlingCalendarItems : TheOnItemTappedAction
@@ -659,6 +659,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(p => p.WorkspaceId == DefaultWorkspaceId))
                     .Received()
                     .Execute();
+            }
+
+            [Fact]
+            public async Task NavigatesToTheEditTimeEntryViewModelUsingTheTimeEntryId()
+            {
+                var now = DateTimeOffset.UtcNow;
+                var duration = TimeSpan.FromMinutes(30);
+                var tuple = (now, duration);
+                    
+                await ViewModel.OnDurationSelected.Execute(tuple);
+  
+                await NavigationService.Received().Navigate<EditTimeEntryViewModel, long>(Arg.Is(TimeEntryId));
             }
 
             [Fact, LogIfTooSlow]

@@ -208,9 +208,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                     case CalendarItemSource.Calendar:
                         var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
                         var prototype = calendarItem.AsTimeEntryPrototype(workspace.Id);
-                        var timeEntry = await interactorFactory.CreateTimeEntry(prototype).Execute();
                         analyticsService.TimeEntryStarted.Track(TimeEntryStartOrigin.CalendarEvent);
-                        await navigationService.Navigate<EditTimeEntryViewModel, long>(timeEntry.Id);
+                        await interactorFactory.CreateTimeEntry(prototype).Execute();
                         break;
                 }
             });
@@ -220,8 +219,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             {
                 var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
                 var prototype = duration.AsTimeEntryPrototype(startTime, workspace.Id);
-                await interactorFactory.CreateTimeEntry(prototype).Execute();
+                var timeEntry = await interactorFactory.CreateTimeEntry(prototype).Execute();
                 analyticsService.TimeEntryStarted.Track(TimeEntryStartOrigin.CalendarTapAndDrag);
+                await navigationService.Navigate<EditTimeEntryViewModel, long>(timeEntry.Id);
             });
 
         private IObservable<Unit> onUpdateTimeEntry(CalendarItem calendarItem)
