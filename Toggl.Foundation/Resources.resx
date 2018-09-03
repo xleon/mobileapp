@@ -438,4 +438,25 @@ account is not set up</value>
     <data name="NoCalendarsFoundMessage">
         <value>It looks like you don't have any calendars</value>
     </data>
+    <data name="Disabled">
+        <value>Disabled</value>
+    </data>
+    <data name="WhenEventStarts">
+        <value>When event starts</value>
+    </data>
+    <data name="FiveMinutes">
+        <value>5 minutes before</value>
+    </data>
+    <data name="TenMinutes">
+        <value>10 minutes before</value>
+    </data>
+    <data name="FifteenMinutes">
+        <value>15 minutes before</value>
+    </data>
+    <data name="ThirtyMinutes">
+        <value>30 minutes before</value>
+    </data>
+    <data name="OneHour">
+        <value>1 hour before</value>
+    </data>
 </root>

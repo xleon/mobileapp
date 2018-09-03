@@ -880,5 +880,47 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("NoCalendarsFoundMessage", resourceCulture);
             }
         }
+        
+        public static string Disabled {
+            get {
+                return ResourceManager.GetString("Disabled", resourceCulture);
+            }
+        }
+        
+        public static string WhenEventStarts {
+            get {
+                return ResourceManager.GetString("WhenEventStarts", resourceCulture);
+            }
+        }
+        
+        public static string FiveMinutes {
+            get {
+                return ResourceManager.GetString("FiveMinutes", resourceCulture);
+            }
+        }
+        
+        public static string TenMinutes {
+            get {
+                return ResourceManager.GetString("TenMinutes", resourceCulture);
+            }
+        }
+        
+        public static string FifteenMinutes {
+            get {
+                return ResourceManager.GetString("FifteenMinutes", resourceCulture);
+            }
+        }
+        
+        public static string ThirtyMinutes {
+            get {
+                return ResourceManager.GetString("ThirtyMinutes", resourceCulture);
+            }
+        }
+        
+        public static string OneHour {
+            get {
+                return ResourceManager.GetString("OneHour", resourceCulture);
+            }
+        }
     }
 }
