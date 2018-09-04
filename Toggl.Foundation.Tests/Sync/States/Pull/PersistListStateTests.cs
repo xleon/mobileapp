@@ -102,6 +102,21 @@ namespace Toggl.Foundation.Tests.Sync.States
             startingState.Should().Throw<OfflineException>();
         }
 
+        [Fact, LogIfTooSlow]
+        public async Task UsesBatchUpdateToPersistFetchedData()
+        {
+            var observables = createObservables(new List<ITestModel>
+            {
+                new TestModel { Id = 1 },
+                new TestModel { Id = 2 }
+            });
+
+            await state.Start(observables).SingleAsync();
+
+            dataSource.Received(1).BatchUpdate(Arg.Is<IEnumerable<IThreadSafeTestModel>>(
+                items => items.Count() == 2 && items.Any(item => item.Id == 1) && items.Any(item => item.Id == 2)));
+        }
+
         private IFetchObservables createObservables(List<ITestModel> entities = null)
             => createFetchObservables(Observable.Return(entities));
 
