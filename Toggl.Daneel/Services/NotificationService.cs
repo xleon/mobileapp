@@ -18,7 +18,7 @@ namespace Toggl.Daneel.Services
 {
     public sealed class NotificationService : PermissionAwareNotificationService
     {
-        private const string calendarEventIdKey = "Id";
+        public const string CalendarEventIdKey = "Id";
 
         private readonly ITimeService timeService;
 
@@ -59,7 +59,7 @@ namespace Toggl.Daneel.Services
                 Title = notification.Title,
                 Body = notification.Description,
                 Sound = UNNotificationSound.Default,
-                UserInfo = new NSDictionary(calendarEventIdKey, notification.Id)
+                UserInfo = new NSDictionary(CalendarEventIdKey, notification.Id)
             };
 
             return UNNotificationRequest.FromIdentifier(identifier, content, trigger);

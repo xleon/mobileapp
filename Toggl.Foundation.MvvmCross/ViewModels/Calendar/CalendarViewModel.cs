@@ -17,6 +17,7 @@ using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
+using Toggl.Foundation.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Settings;
@@ -32,6 +33,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         private readonly IDialogService dialogService;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
+        private readonly IBackgroundService backgroundService;
         private readonly IInteractorFactory interactorFactory;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IPermissionsService permissionsService;
@@ -66,6 +68,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             IDialogService dialogService,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
+            IBackgroundService backgroundService,
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
             ISchedulerProvider schedulerProvider,
@@ -77,6 +80,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
+            Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
@@ -88,6 +92,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             this.dialogService = dialogService;
             this.userPreferences = userPreferences;
             this.analyticsService = analyticsService;
+            this.backgroundService = backgroundService;
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
             this.navigationService = navigationService;
@@ -111,7 +116,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
             GetStartedAction = new UIAction(getStarted);
 
-            OnItemTapped = new InputAction<CalendarItem>(onItemTapped);
+            OnItemTapped = new InputAction<CalendarItem>(handleCalendarItem);
 
             SettingsAreVisible = onboardingObservable
                 .SelectMany(_ => permissionsService.CalendarPermissionGranted)
@@ -133,6 +138,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
         public void Init(string eventId)
         {
+            if (string.IsNullOrWhiteSpace(eventId))
+                return;
+
+            interactorFactory
+                .GetCalendarItemWithId(eventId)
+                .Execute()
+                .SelectMany(handleCalendarItem)
+                .Subscribe()
+                .DisposedBy(disposeBag);
         }
 
         public async override Task Initialize()
@@ -145,6 +159,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 .EnabledCalendars
                 .SelectUnit();
 
+            var foregroundObservable = backgroundService
+                .AppResumedFromBackground
+                .Select(_ => timeService.CurrentDateTime)
+                .DistinctUntilChanged(time => time.Hour)
+                .SelectUnit();
+
             dataSource.TimeEntries
                 .ItemsChanged()
                 .Merge(dayChangedObservable)
@@ -152,8 +172,28 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 .Subscribe(reloadData)
                 .DisposedBy(disposeBag);
 
+            selectedCalendarsChangedObservable
+                .Merge(dayChangedObservable)
+                .Merge(foregroundObservable)
+                .StartWith(Unit.Default)
+                .CombineLatest(userPreferences.CalendarNotificationsEnabled, CommonFunctions.Second)
+                .SelectMany(refreshNotifications)
+                .Subscribe()
+                .DisposedBy(disposeBag);
+
             await reloadData();
         }
+
+        private IObservable<Unit> refreshNotifications(bool notificationsAreEnabled)
+            => Observable.FromAsync(async () =>
+            {
+                await interactorFactory.UnscheduleAllNotifications().Execute();
+
+                if (!notificationsAreEnabled)
+                    return;
+
+                await interactorFactory.ScheduleEventNotificationsForNextWeek().Execute();
+            });
 
         private IObservable<Unit> getStarted()
             => Observable.FromAsync(async () =>
@@ -163,7 +203,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 if (calendarPermissionGranted)
                 {
                     await selectUserCalendars(true);
-                    await permissionsService.RequestNotificationAuthorization();
+                    var notificationPermissionGranted = await permissionsService.RequestNotificationAuthorization();
+                    userPreferences.SetCalendarNotificationsEnabled(notificationPermissionGranted);
                 }
                 else
                 {
@@ -195,7 +236,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 }
             });
 
-        private IObservable<Unit> onItemTapped(CalendarItem calendarItem)
+        private IObservable<Unit> handleCalendarItem(CalendarItem calendarItem)
             => Observable.FromAsync(async () =>
             {
                 switch (calendarItem.Source)

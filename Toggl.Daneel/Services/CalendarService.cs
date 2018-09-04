@@ -40,6 +40,16 @@ namespace Toggl.Daneel.Services
                 .GetCalendars(EKEntityType.Event)
                 .Select(userCalendarFromEKCalendar);
 
+        protected override CalendarItem NativeGetCalendarWithId(string id)
+        {
+            var calendarEvent = eventStore.EventFromIdentifier(id);
+            if (calendarEvent == null)
+                throw new InvalidOperationException("An invalid calendar Id was provided");
+
+            var calendarItem = calendarItemFromEvent(calendarEvent);
+            return calendarItem;
+        }
+
         private UserCalendar userCalendarFromEKCalendar(EKCalendar calendar)
             => new UserCalendar(
                 calendar.CalendarIdentifier,

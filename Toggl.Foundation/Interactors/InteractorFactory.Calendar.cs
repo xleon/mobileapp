@@ -9,6 +9,9 @@ namespace Toggl.Foundation.Interactors
 {
     public sealed partial class InteractorFactory : IInteractorFactory
     {
+        public IInteractor<IObservable<CalendarItem>> GetCalendarItemWithId(string eventId)
+            => new GetCalendarItemWithIdInteractor(calendarService, eventId);
+
         public IInteractor<IObservable<IEnumerable<CalendarItem>>> GetCalendarItemsForDate(DateTime date)
             => new GetCalendarItemsForDateInteractor(dataSource.TimeEntries, calendarService, userPreferences, date);
 

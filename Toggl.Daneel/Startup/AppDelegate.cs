@@ -4,17 +4,18 @@ using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Ios.Core;
 using MvvmCross.Plugin.Color.Platforms.Ios;
-using MvvmCross.ViewModels;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Services;
+using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Shortcuts;
 using UIKit;
+using UserNotifications;
 
 #if USE_ANALYTICS
 using System.Linq;
@@ -23,7 +24,7 @@ using System.Linq;
 namespace Toggl.Daneel
 {
     [Register(nameof(AppDelegate))]
-    public sealed class AppDelegate : MvxApplicationDelegate<Setup, App<OnboardingViewModel>>
+    public sealed class AppDelegate : MvxApplicationDelegate<Setup, App<OnboardingViewModel>>, IUNUserNotificationCenterDelegate
     {
         private IAnalyticsService analyticsService;
         private IBackgroundService backgroundService;
@@ -44,6 +45,8 @@ namespace Toggl.Daneel
             #endif
 
             base.FinishedLaunching(application, launchOptions);
+
+            UNUserNotificationCenter.Current.Delegate = this;
 
             #if ENABLE_TEST_CLOUD
             Xamarin.Calabash.Start();
@@ -94,6 +97,14 @@ namespace Toggl.Daneel
         {
             base.DidEnterBackground(application);
             backgroundService.EnterBackground();
+        }
+
+        [Export("userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:")]
+        public void DidReceiveNotificationResponse(UNUserNotificationCenter center, UNNotificationResponse response, Action completionHandler)
+        {
+            var eventId = response.Notification.Request.Content.UserInfo[NotificationService.CalendarEventIdKey] as NSString;
+            var url = ApplicationUrls.Calendar.ForId(eventId.ToString());
+            navigationService.Navigate(url);
         }
 
         public override void PerformActionForShortcutItem(UIApplication application, UIApplicationShortcutItem shortcutItem, UIOperationHandler completionHandler)

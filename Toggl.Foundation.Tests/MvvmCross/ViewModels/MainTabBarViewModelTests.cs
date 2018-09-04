@@ -22,6 +22,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     RatingService,
                     UserPreferences,
                     AnalyticsService,
+                    BackgroundService,
                     InteractorFactory,
                     OnboardingStorage,
                     SchedulerProvider,
@@ -43,6 +44,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     bool useRatingService,
                     bool useUserPreferences,
                     bool useAnalyticsService,
+                    bool useBackgroundService,
                     bool useInteractorFactory,
                     bool useOnboardingStorage,
                     bool useSchedulerProvider,
@@ -59,6 +61,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
+                var backgroundService = useBackgroundService ? BackgroundService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var permissionsService = usePermissionsService ? PermissionsService : null;
                 var navigationService = useNavigationService ? NavigationService : null;
@@ -73,6 +76,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         ratingService,
                         userPreferences,
                         analyticsService,
+                        backgroundService,
                         interactorFactory,
                         onboardingStorage,
                         schedulerProvider,

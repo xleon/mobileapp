@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Foundation.Calendar;
+using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
@@ -42,9 +43,16 @@ namespace Toggl.Foundation.Interactors.Notifications
 
             return calendarService
                 .GetEventsInRange(start, end)
-                .Select(calendarItems => calendarItems.Select(eventNotification).ToImmutableList())
-                .SelectMany(notificationService.Schedule);
+                .Select(calendarItems => calendarItems
+                    .Where(startTimeIsInTheFuture(start + intervalBeforeEvent))
+                    .Select(eventNotification)
+                    .ToImmutableList())
+                .SelectMany(notificationService.Schedule)
+                .Catch<Unit, NotAuthorizedException>(ex => Observable.Return(Unit.Default));
         }
+
+        private Func<CalendarItem, bool> startTimeIsInTheFuture(DateTimeOffset start)
+            => calendarItem => calendarItem.StartTime >= start;
 
         private Notification eventNotification(CalendarItem calendarItem)
             => new Notification(

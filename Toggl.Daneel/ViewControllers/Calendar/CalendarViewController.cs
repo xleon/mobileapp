@@ -1,7 +1,7 @@
 using CoreGraphics;
 using MvvmCross;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Views.Calendar;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation;
@@ -11,7 +11,7 @@ using UIKit;
 
 namespace Toggl.Daneel.ViewControllers
 {
-    [MvxChildPresentation]
+    [TabPresentation]
     public sealed partial class CalendarViewController : ReactiveViewController<CalendarViewModel>
     {
         private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
@@ -23,7 +23,8 @@ namespace Toggl.Daneel.ViewControllers
 
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 30, 40));
 
-        public CalendarViewController() : base(nameof(CalendarViewController))
+        public CalendarViewController() 
+            : base(nameof(CalendarViewController))
         {
         }
 

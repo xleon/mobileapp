@@ -36,6 +36,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IRatingService ratingService,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
+            IBackgroundService backgroundService,
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
             ISchedulerProvider schedulerProvider,
@@ -50,6 +51,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
+            Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
@@ -87,6 +89,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 dialogService,
                 userPreferences,
                 analyticsService,
+                backgroundService,
                 interactorFactory,
                 onboardingStorage,
                 schedulerProvider,

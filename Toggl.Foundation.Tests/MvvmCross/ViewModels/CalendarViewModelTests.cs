@@ -74,6 +74,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     DialogService,
                     UserPreferences,
                     AnalyticsService,
+                    BackgroundService,
                     InteractorFactory,
                     OnboardingStorage,
                     SchedulerProvider,
@@ -92,6 +93,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useDialogService,
                 bool useUserPreferences,
                 bool useAnalyticsService,
+                bool useBackgroundService,
                 bool useInteractorFactory,
                 bool useOnboardingStorage,
                 bool useSchedulerProvider,
@@ -103,6 +105,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var dialogService = useDialogService ? DialogService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
+                var backgroundService = useBackgroundService ? BackgroundService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
@@ -116,6 +119,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         dialogService,
                         userPreferences,
                         analyticsService,
+                        backgroundService,
                         interactorFactory,
                         onboardingStorage,
                         schedulerProvider,
@@ -123,6 +127,71 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         navigationService);
 
                 tryingToConstructWithEmptyParameters.Should().Throw<ArgumentNullException>();
+            }
+        }
+
+        public sealed class TheInitMethod : CalendarViewModelTest
+        {
+            private const string eventId = "1337";
+
+            private readonly CalendarItem calendarItem = new CalendarItem(
+                eventId,
+                CalendarItemSource.Calendar,
+                new DateTimeOffset(2018, 08, 10, 0, 15, 0, TimeSpan.Zero),
+                TimeSpan.FromMinutes(10),
+                "Meeting with someone",
+                CalendarIconKind.Event
+            );
+
+            public TheInitMethod()
+            {
+                InteractorFactory
+                    .GetCalendarItemWithId(Arg.Is(eventId))
+                    .Execute()
+                    .Returns(Observable.Return(calendarItem));
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData("")]
+            [InlineData(" ")]
+            [InlineData("  ")]
+            public void DoesNothingWithInvalidStrings(string invalidId)
+            {
+                ViewModel.Init(invalidId);
+
+                InteractorFactory
+                    .DidNotReceive()
+                    .GetCalendarItemWithId(Arg.Any<string>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public void TracksTheAppropriateEventToTheAnalyticsService()
+            {
+                ViewModel.Init(eventId);
+
+                AnalyticsService.TimeEntryStarted.Received().Track(TimeEntryStartOrigin.CalendarEvent);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task CreatesATimeEntryUsingTheCalendarItemInfo()
+            {
+                ViewModel.Init(eventId);
+
+                await InteractorFactory
+                    .CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(p => p.Description == calendarItem.Description))
+                    .Received()
+                    .Execute();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task CreatesATimeEntryInTheDefaultWorkspace()
+            {
+                ViewModel.Init(eventId);
+
+                await InteractorFactory
+                    .CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(p => p.WorkspaceId == DefaultWorkspaceId))
+                    .Received()
+                    .Execute();
             }
         }
 
@@ -390,6 +459,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 AnalyticsService.CalendarOnboardingStarted.Received().Track();
             }
 
+            [Fact, LogIfTooSlow]
             public async Task RequestsNotificationsPermissionIfCalendarPermissionWasGranted()
             {
                 PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
@@ -398,6 +468,20 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.GetStartedAction.Execute(Unit.Default);
 
                 await PermissionsService.Received().RequestNotificationAuthorization();
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData(true)]
+            [InlineData(false)]
+            public async Task SetsTheNotificationPropertyAfterAskingForPermission(bool permissionWasGiven)
+            {
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(new string[0]);
+                PermissionsService.RequestNotificationAuthorization().Returns(Observable.Return(permissionWasGiven));
+
+                await ViewModel.GetStartedAction.Execute(Unit.Default);
+
+                UserPreferences.Received().SetCalendarNotificationsEnabled(Arg.Is(permissionWasGiven));
             }
 
             [Fact, LogIfTooSlow]

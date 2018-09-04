@@ -28,6 +28,13 @@ namespace Toggl.Foundation.Calendar
             return GetEventsInRange(startOfDay, endOfDay);
         }
 
+        public IObservable<CalendarItem> GetEventWithId(string id)
+            => permissionsService
+                .CalendarPermissionGranted
+                .DeferAndThrowIfPermissionNotGranted(
+                    () => Observable.Return(NativeGetCalendarWithId(id))
+                );
+
         public IObservable<IEnumerable<CalendarItem>> GetEventsInRange(DateTimeOffset start, DateTimeOffset end)
             => permissionsService
                 .CalendarPermissionGranted
@@ -41,6 +48,8 @@ namespace Toggl.Foundation.Calendar
                 .DeferAndThrowIfPermissionNotGranted(
                     () => Observable.Return(NativeGetUserCalendars())
                 );
+
+        protected abstract CalendarItem NativeGetCalendarWithId(string id);
 
         protected abstract IEnumerable<UserCalendar> NativeGetUserCalendars();
 

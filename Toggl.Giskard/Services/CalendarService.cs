@@ -18,5 +18,8 @@ namespace Toggl.Giskard.Services
 
         protected override IEnumerable<CalendarItem> NativeGetEventsInRange(DateTimeOffset start, DateTimeOffset end)
             => new List<CalendarItem>();
+
+        protected override CalendarItem NativeGetCalendarWithId(string id)
+            => throw new NotImplementedException();
     }
 }

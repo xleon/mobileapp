@@ -7,6 +7,8 @@ namespace Toggl.Foundation.Services
 {
     public interface ICalendarService
     {
+        IObservable<CalendarItem> GetEventWithId(string id);
+
         IObservable<IEnumerable<CalendarItem>> GetEventsForDate(DateTime date);
 
         IObservable<IEnumerable<CalendarItem>> GetEventsInRange(DateTimeOffset start, DateTimeOffset end);

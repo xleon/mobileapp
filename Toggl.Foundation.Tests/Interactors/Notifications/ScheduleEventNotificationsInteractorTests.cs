@@ -27,7 +27,7 @@ namespace Toggl.Foundation.Tests.Interactors.Notifications
             }
 
             [Fact, LogIfTooSlow]
-            public async Task SchedulesNotificationsForAllUpcomingEventsInTheNextWeek()
+            public async Task SchedulesNotificationsForAllUpcomingEventsInTheNextWeekThatBeginAfterTheCurrentDate()
             {
                 var now = new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.Zero);
                 var endOfWeek = now.AddDays(7);
@@ -44,6 +44,7 @@ namespace Toggl.Foundation.Tests.Interactors.Notifications
                         iconKind: CalendarIconKind.None
                     ));
                 var expectedNotifications = events
+                    .Where(calendarItem => calendarItem.StartTime >= now + tenMinutes)
                     .Select(@event => new Notification(
                         @event.Id,
                         "Event reminder",
@@ -57,10 +58,11 @@ namespace Toggl.Foundation.Tests.Interactors.Notifications
 
                 await interactor.Execute();
 
-                NotificationService
+                await NotificationService
                     .Received()
                     .Schedule(Arg.Is<IImmutableList<Notification>>(
-                        notifications => notifications.SequenceEqual(expectedNotifications)));
+                        notifications => notifications.SequenceEqual(expectedNotifications))
+                    );
             }
         }
     }

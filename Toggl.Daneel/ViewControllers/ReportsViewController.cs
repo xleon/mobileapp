@@ -1,21 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Platforms.Ios.Views;
+using Toggl.Daneel.Converters;
+using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
+using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac.Extensions;
 using UIKit;
 using static Toggl.Daneel.Extensions.AnimationExtensions;
-using Toggl.Daneel.Converters;
-using Toggl.Foundation.Models.Interfaces;
-using System.Collections.Generic;
 
 namespace Toggl.Daneel.ViewControllers
 {
+    [TabPresentation]
     public sealed partial class ReportsViewController : MvxViewController<ReportsViewModel>
     {
         private const string boundsKey = "bounds";

@@ -95,6 +95,8 @@ namespace Toggl.Foundation.Interactors
 
         #region Calendar
 
+        IInteractor<IObservable<CalendarItem>> GetCalendarItemWithId(string eventId);
+
         IInteractor<IObservable<IEnumerable<CalendarItem>>> GetCalendarItemsForDate(DateTime date);
 
         IInteractor<IObservable<IEnumerable<UserCalendar>>> GetUserCalendars();
