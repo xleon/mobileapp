@@ -44,6 +44,6 @@ namespace Toggl.Foundation.Sync.States.Pull
                 .OnErrorReturnResult(ErrorOccured);
 
         private IList<TThreadsafeInterface> toThreadsafeList(IEnumerable<TInterface> entities)
-            => entities?.Select(convertToThreadsafeEntity).ToList() ?? new List<TThreadsafeInterface>();
+            => entities.Select(convertToThreadsafeEntity).ToList();
     }
 }

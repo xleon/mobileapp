@@ -15,7 +15,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 {
     public sealed class TagsApiTests
     {
-        public sealed class TheGetAllMethod : AuthenticatedGetEndpointBaseTests<List<ITag>>
+        public sealed class TheGetAllMethod : AuthenticatedGetAllEndpointBaseTests<ITag>
         {
             protected override IObservable<List<ITag>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Tags.GetAll();

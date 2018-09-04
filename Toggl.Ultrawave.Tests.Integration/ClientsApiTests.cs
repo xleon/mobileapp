@@ -17,7 +17,7 @@ namespace Toggl.Ultrawave.Tests.Integration
         private static Expression<Func<IClient, bool>> clientWithSameIdNameAndWorkspaceAs(IClient client)
             => c => c.Id == client.Id && c.Name == client.Name && c.WorkspaceId == client.WorkspaceId;
 
-        public sealed class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<IClient>>
+        public sealed class TheGetAllMethod : AuthenticatedGetAllEndpointBaseTests<IClient>
         {
             protected override IObservable<List<IClient>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Clients.GetAll();
