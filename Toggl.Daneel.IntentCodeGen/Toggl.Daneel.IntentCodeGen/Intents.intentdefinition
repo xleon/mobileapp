@@ -9,7 +9,7 @@
 	<key>INIntentDefinitionSystemVersion</key>
 	<string>17G2208</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>10L221o</string>
+	<string>10L232m</string>
 	<key>INIntentDefinitionToolsVersion</key>
 	<string>10.0</string>
 	<key>INIntents</key>
@@ -76,6 +76,16 @@
 						<string>JuvQpB</string>
 						<key>INIntentResponseCodeName</key>
 						<string>failureNoRunningEntry</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<false/>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeFormatString</key>
+						<string>You need to log in to continue.</string>
+						<key>INIntentResponseCodeFormatStringID</key>
+						<string>C84CvN</string>
+						<key>INIntentResponseCodeName</key>
+						<string>failureNoApiToken</string>
 						<key>INIntentResponseCodeSuccess</key>
 						<false/>
 					</dict>
