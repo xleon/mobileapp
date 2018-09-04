@@ -148,10 +148,25 @@ namespace Toggl.Daneel.Views.Calendar
             else
             {
                 var attributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(kind, indexPath);
-                attributes.Frame = frameForCurrentTime();
+                attributes.Frame = FrameForCurrentTime();
                 attributes.ZIndex = 3;
                 return attributes;
             }
+        }
+
+        internal CGRect FrameForCurrentTime()
+        {
+            var now = timeService.CurrentDateTime.LocalDateTime;
+
+            var yHour = hourHeight * now.Hour;
+            var yMins = hourHeight * now.Minute / 60;
+
+            var width = CollectionViewContentSize.Width - leftPadding - rightPadding - currentTimeSupplementaryLeftOffset;
+            var height = 8;
+            var x = leftPadding + currentTimeSupplementaryLeftOffset;
+            var y = yHour + yMins - height / 2;
+
+            return new CGRect(x, y, width, height);
         }
 
         private UICollectionViewLayoutAttributes layoutAttributesForHourView(NSIndexPath indexPath)
@@ -223,21 +238,6 @@ namespace Toggl.Daneel.Views.Calendar
             var width = CollectionViewContentSize.Width - rightPadding;
             var height = hourSupplementaryLabelHeight;
             var x = 0;
-            var y = yHour + yMins - height / 2;
-
-            return new CGRect(x, y, width, height);
-        }
-
-        private CGRect frameForCurrentTime()
-        {
-            var now = timeService.CurrentDateTime.LocalDateTime;
-
-            var yHour = hourHeight * now.Hour;
-            var yMins = hourHeight * now.Minute / 60;
-
-            var width = CollectionViewContentSize.Width - leftPadding - rightPadding - currentTimeSupplementaryLeftOffset;
-            var height = 8;
-            var x = leftPadding + currentTimeSupplementaryLeftOffset;
             var y = yHour + yMins - height / 2;
 
             return new CGRect(x, y, width, height);

@@ -7,6 +7,7 @@ using Toggl.Daneel.ViewSources;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
+using Toggl.Multivac.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers
@@ -60,6 +61,12 @@ namespace Toggl.Daneel.ViewControllers
             this.Bind(editItemHelper.EditCalendarItem, ViewModel.OnUpdateTimeEntry);
             this.Bind(ViewModel.SettingsAreVisible , settingsButton.BindIsVisible());
             this.Bind(createFromSpanHelper.CreateFromSpan, ViewModel.OnDurationSelected);
+
+            CalendarCollectionView.LayoutIfNeeded();
+            var currentTimeY = layout.FrameForCurrentTime().Y;
+            var scrollPointY = currentTimeY - View.Frame.Height / 2;
+            var currentTimePoint = new CGPoint(0, scrollPointY.Clamp(0, CalendarCollectionView.ContentSize.Height));
+            CalendarCollectionView.SetContentOffset(currentTimePoint, false);
         }
 
         public override void ViewWillAppear(bool animated)
