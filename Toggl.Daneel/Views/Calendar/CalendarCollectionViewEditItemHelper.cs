@@ -133,7 +133,11 @@ namespace Toggl.Daneel.Views.Calendar
             if (dataSource.IsEditing || isActive)
                 return;
 
-            calendarItem = dataSource.CalendarItemAtPoint(point).Value;
+            var itemAtPoint = dataSource.CalendarItemAtPoint(point);
+            if (!itemAtPoint.HasValue)
+                return;
+
+            calendarItem = itemAtPoint.Value;
             if (!calendarItem.IsEditable())
                 return;
 
