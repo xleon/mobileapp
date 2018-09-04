@@ -291,6 +291,25 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidLayoutSubviews();
 
+            if (TimeEntriesLogTableView.TableHeaderView != null)
+            {
+                var header = TimeEntriesLogTableView.TableHeaderView;
+                var size = header.SystemLayoutSizeFittingSize(UIView.UILayoutFittingCompressedSize);
+                if (header.Frame.Size.Height != size.Height)
+                {
+                    var headerRect = new CGRect
+                    {
+                        X = header.Frame.X,
+                        Y = header.Frame.Y,
+                        Width = header.Frame.Width,
+                        Height = size.Height
+                    };
+                    header.Frame = headerRect;
+                }
+                TimeEntriesLogTableView.TableHeaderView = header;
+                TimeEntriesLogTableView.SetNeedsLayout();
+            }
+
             if (viewInitialized) return;
 
             viewInitialized = true;
@@ -315,30 +334,20 @@ namespace Toggl.Daneel.ViewControllers
             ratingView.DataContext = ViewModel.RatingViewModel;
             ratingViewContainer.AddSubview(ratingView);
             ratingView.ConstrainInView(ratingViewContainer);
-            Reload();
+            View.SetNeedsLayout();
         }
 
         public void HideRatingView()
         {
             if (ratingView == null) return;
 
+            var ratingViewContainerHeight = ratingViewContainer.Frame.Height;
+
             ratingView.RemoveFromSuperview();
             ratingView.Dispose();
             ratingView = null;
 
-            //We have to scroll a little to update the header size.
-            //Using LayoutSubviews(), SetNeedsLayout(), LayoutIfNeeded() etc. does not work.
-            var offset = TimeEntriesLogTableView.ContentOffset;
-            var rect = new CGRect
-            {
-                X = offset.X,
-                Y = offset.Y == 0
-                    ? TimeEntriesLogTableView.Frame.Height + 1
-                    : offset.Y - 1,
-                Width = 1,
-                Height = 1
-            };
-            TimeEntriesLogTableView.ScrollRectToVisible(rect, true);
+            View.SetNeedsLayout();
         }
 
         private void prepareViews()

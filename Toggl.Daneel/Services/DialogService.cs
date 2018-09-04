@@ -110,7 +110,7 @@ namespace Toggl.Daneel.Services
             });
         }
 
-        public IObservable<T> Select<T>(string title, IDictionary<string, T> options)
+        public IObservable<T> Select<T>(string title, IEnumerable<(string ItemName, T Item)> options)
             where T : class
         {
             return Observable.Create<T>(observer =>
@@ -120,11 +120,11 @@ namespace Toggl.Daneel.Services
                     message: null,
                     preferredStyle : UIAlertControllerStyle.ActionSheet);
 
-                foreach (var (key, value) in options)
+                foreach (var (itemName, item) in options)
                 {
-                    var action = UIAlertAction.Create(key, UIAlertActionStyle.Default, _ =>
+                    var action = UIAlertAction.Create(itemName, UIAlertActionStyle.Default, _ =>
                     {
-                        observer.OnNext(value);
+                        observer.OnNext(item);
                         observer.OnCompleted();
                     });
 

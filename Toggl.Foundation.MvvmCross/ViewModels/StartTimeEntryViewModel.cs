@@ -603,13 +603,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void onSuggestions(IEnumerable<AutocompleteSuggestion> suggestions)
         {
-            Suggestions.Clear();
-
             var filteredSuggestions = filterSuggestions(suggestions);
             var groupedSuggestions = groupSuggestions(filteredSuggestions).ToList();
 
             UseGrouping = groupedSuggestions.Count > 1;
-            Suggestions.AddRange(groupedSuggestions);
+            Suggestions.ReplaceWith(groupedSuggestions);
 
             RaisePropertyChanged(nameof(SuggestCreation));
         }

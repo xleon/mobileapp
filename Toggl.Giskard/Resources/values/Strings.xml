@@ -15,6 +15,7 @@
     <string name="SelectColorTitle">Project color</string>
     <string name="Done">Done</string>
     <string name="Cancel">Cancel</string>
+    <string name="Ok">Ok</string>
     <string name="AddTags">Add tags</string>
     <string name="AddClientHint">Add/filter clients</string>
     <string name="AddProjectHint">Add/filter projects</string>
@@ -94,7 +95,7 @@ understand and agree to Toggl\'s</string>
     <string name="CategorizeWithProjects">Categorize your time by adding a project</string>
     <string name="Continue">Continue</string>
     <string name="Delete">Delete</string>
-    <string name="MainTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.MainTemplateSelector, Toggl.Giskard</string>
+
     <string name="ReportsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsTemplateSelector, Toggl.Giskard</string>
     <string name="CalendarTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.CalendarTemplateSelector, Toggl.Giskard</string>
     <string name="SettingsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SettingsTemplateSelector, Toggl.Giskard</string>

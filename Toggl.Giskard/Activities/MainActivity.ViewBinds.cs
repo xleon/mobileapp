@@ -1,39 +1,49 @@
-﻿using System;
-using System.ComponentModel;
-using System.Reactive.Disposables;
-using System.Threading.Tasks;
-using Android.App;
-using Android.Content.PM;
-using Android.Graphics;
-using Android.OS;
-using Android.Support.Design.Widget;
-using Android.Views;
+﻿using Android.Support.Design.Widget;
 using Android.Widget;
-using MvvmCross.Droid.Support.V7.AppCompat;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
-using MvvmCross.WeakSubscription;
-using Toggl.Foundation.MvvmCross.Onboarding.MainView;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Helper;
-using Toggl.Multivac.Extensions;
-using static Toggl.Foundation.Sync.SyncProgress;
-using static Toggl.Giskard.Extensions.CircularRevealAnimation.AnimationType;
 using FoundationResources = Toggl.Foundation.Resources;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
-using Toggl.Giskard.Views;
-using System.Reactive.Linq;
-using System.Threading;
+using Android.Support.V7.Widget;
+using Android.Views;
+using MvvmCross.Droid.Support.V4;
+using Android.Support.V4.Widget;
 
 namespace Toggl.Giskard.Activities
 {
-    public sealed partial class MainActivity : MvxAppCompatActivity<MainViewModel>
+    public sealed partial class MainActivity
     {
-        private FrameLayout projectDotView;
+        private View runningEntryCardFrame;
+        private FloatingActionButton playButton;
+        private FloatingActionButton stopButton;
+        private CoordinatorLayout coordinatorLayout;
+        private ImageView toolbarReportsImageView;
+        private View mainContentArea;
+        private TextView mainRunningTimeEntryTimerLabel;
+        private TextView mainRunningTimeEntryDescription;
+        private TextView mainRunningTimeEntryAddDescriptionLabel;
+        private View mainRunningTimeEntryProjectDotContainer;
+        private View mainRunningTimeEntryProjectDotView;
+        private TextView mainRunningTimeEntryProjectLabel;
+        private TextView mainRunningTimeEntryClientLabel;
+        private SwipeRefreshLayout refreshLayout;
 
-        private void initializeViews()
+        private RecyclerView mainRecyclerView;
+
+        protected void InitializeViews()
         {
-            projectDotView = FindViewById<FrameLayout>(Resource.Id.MainRunningTimeEntryProjectDot);
+            mainRecyclerView = FindViewById<RecyclerView>(Resource.Id.MainRecyclerView);
+            runningEntryCardFrame = FindViewById(Resource.Id.MainRunningTimeEntryFrame);
+            playButton = FindViewById<FloatingActionButton>(Resource.Id.MainPlayButton);
+            stopButton = FindViewById<FloatingActionButton>(Resource.Id.MainStopButton);
+            coordinatorLayout = FindViewById<CoordinatorLayout>(Resource.Id.MainCoordinatorLayout);
+            toolbarReportsImageView = FindViewById<ImageView>(Resource.Id.ToolbarReportsImageView);
+            mainContentArea = FindViewById(Resource.Id.MainContentArea);
+            mainRunningTimeEntryTimerLabel = FindViewById<TextView>(Resource.Id.MainRunningTimeEntryTimerLabel);
+            mainRunningTimeEntryDescription = FindViewById<TextView>(Resource.Id.MainRunningTimeEntryDescription);
+            mainRunningTimeEntryAddDescriptionLabel = FindViewById<TextView>(Resource.Id.MainRunningTimeEntryAddDescriptionLabel);
+            mainRunningTimeEntryProjectDotContainer = FindViewById(Resource.Id.MainRunningTimeEntryProjectDotContainer);
+            mainRunningTimeEntryProjectDotView = FindViewById(Resource.Id.MainRunningTimeEntryProjectDotView);
+            mainRunningTimeEntryProjectLabel = FindViewById<TextView>(Resource.Id.MainRunningTimeEntryProjectLabel);
+            mainRunningTimeEntryClientLabel = FindViewById<TextView>(Resource.Id.MainRunningTimeEntryClientLabel);
+            refreshLayout = FindViewById<SwipeRefreshLayout>(Resource.Id.MainSwipeRefreshLayout);
         }
     }
 }

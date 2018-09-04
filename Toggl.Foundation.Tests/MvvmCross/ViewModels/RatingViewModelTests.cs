@@ -198,6 +198,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 protected abstract RatingViewOutcome ExpectedStoragetOutcome { get; }
                 protected abstract IAnalyticsEvent ExpectedEvent { get; }
 
+                [Fact, LogIfTooSlow]
+                public async Task HidesTheViewModel()
+                {
+                    await ViewModel.PerformMainAction();
+
+                    NavigationService.Received().ChangePresentation(
+                        Arg.Is<ToggleRatingViewVisibilityHint>(hint => hint.ShouldHide == true)
+                    );
+                }
+
                 protected override void AdditionalViewModelSetup()
                 {
                     ViewModel.RegisterImpression(ImpressionIsPositive);

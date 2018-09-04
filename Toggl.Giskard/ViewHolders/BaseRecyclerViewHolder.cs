@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Android.Runtime;
 using Android.Support.V7.Widget;
@@ -9,10 +10,11 @@ namespace Toggl.Giskard.ViewHolders
     public abstract class BaseRecyclerViewHolder<T> : RecyclerView.ViewHolder
     {
         public Func<T, Task> Tapped { get; set; }
+        public Subject<T> TappedSubject { get; set; }
 
         private T item;
-        public T Item 
-        { 
+        public T Item
+        {
             get => item;
             set
             {
@@ -45,9 +47,11 @@ namespace Toggl.Giskard.ViewHolders
             ItemView.Click -= onItemViewClick;
         }
 
+
         private void onItemViewClick(object sender, EventArgs args)
         {
             Tapped?.Invoke(Item);
+            TappedSubject?.OnNext(Item);
         }
     }
 }
