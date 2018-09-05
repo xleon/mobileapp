@@ -69,6 +69,8 @@ namespace Toggl.Foundation.Tests.DataSources
 
                 Repository.Update(Arg.Any<long>(), Arg.Any<IDatabaseTimeEntry>())
                           .Returns(info => Observable.Return(info.Arg<IDatabaseTimeEntry>()));
+
+                TimeService.CurrentDateTime.Returns(Now);
             }
         }
 
@@ -271,6 +273,14 @@ namespace Toggl.Foundation.Tests.DataSources
                 await TimeEntriesSource.Stop(Now);
 
                 await Repository.Received().Update(Arg.Any<long>(), Arg.Is<IDatabaseTimeEntry>(te => te.SyncStatus == SyncStatus.SyncNeeded));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask SetsTheCurrentTimeAsAt()
+            {
+                await TimeEntriesSource.Stop(Now);
+
+                await Repository.Received().Update(Arg.Any<long>(), Arg.Is<IDatabaseTimeEntry>(te => te.At == Now));
             }
 
             [Fact, LogIfTooSlow]
