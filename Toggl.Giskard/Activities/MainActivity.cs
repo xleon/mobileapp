@@ -60,6 +60,7 @@ namespace Toggl.Giskard.Activities
             this.Bind(mainAdapter.TimeEntryTaps, ViewModel.SelectTimeEntry.Inputs);
             this.Bind(mainAdapter.ContinueTimeEntrySubject, ViewModel.ContinueTimeEntry.Inputs);
             this.Bind(mainAdapter.DeleteTimeEntrySubject, ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntry.Inputs);
+            this.Bind(ViewModel.TimeEntriesViewModel.ShouldShowUndo, showUndoDeletion);
 
             this.Bind(ViewModel.SyncProgressState, updateSyncingIndicator);
             this.Bind(refreshLayout.Refreshed(), ViewModel.RefreshAction);
@@ -169,6 +170,16 @@ namespace Toggl.Giskard.Activities
                     .OnAnimationEnd(_ => playButton.Show())
                     .Start();
             }
+        }
+
+        private void showUndoDeletion(bool show)
+        {
+            if (!show)
+                return;
+
+            Snackbar.Make(coordinatorLayout, FoundationResources.EntryDeleted, snackbarDuration)
+                .SetAction(FoundationResources.UndoButtonTitle, view => ViewModel.TimeEntriesViewModel.CancelDeleteTimeEntry.Execute())
+                .Show();
         }
 
         private sealed class FabAsyncHideListener : FloatingActionButton.OnVisibilityChangedListener
