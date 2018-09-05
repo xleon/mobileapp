@@ -124,6 +124,10 @@
       <Project>{6AF7BE5E-AF9D-4EA7-AF7F-28D07B8DEF24}</Project>
       <Name>Toggl.Multivac</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Toggl.Daneel.ExtensionKit\Toggl.Daneel.ExtensionKit.csproj">
+      <Project>{ACA2821E-0FF9-4036-BFF6-E775BB4E6732}</Project>
+      <Name>Toggl.Daneel.ExtensionKit</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.AppExtension.CSharp.targets" />
 </Project>

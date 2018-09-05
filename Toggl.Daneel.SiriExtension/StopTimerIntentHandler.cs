@@ -11,6 +11,7 @@ using Foundation;
 using Toggl.Multivac.Models;
 using SiriExtension.Models;
 using SiriExtension.Exceptions;
+using Toggl.Daneel.ExtensionKit;
 
 namespace SiriExtension
 {
@@ -48,6 +49,7 @@ namespace SiriExtension
                     .Subscribe(
                     te =>
                     {
+                        SharedStorage.instance.setNeedsSync(true);
                         /*
                         var response = StopTimerIntentResponse.SuccessIntentResponseWithEntry_description(
                             te.Description,
@@ -66,7 +68,7 @@ namespace SiriExtension
 
         private TogglApi getTogglAPI()
         {
-            var apiToken = getAPIToken();
+            var apiToken = SharedStorage.instance.getApiToken();
             if (apiToken == null)
             {
                 return null;
@@ -75,21 +77,6 @@ namespace SiriExtension
             var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"].ToString();
             var userAgent = new UserAgent("Daneel", $"{version}.SiriExtension");
             return new TogglApi(new ApiConfiguration(environment, Credentials.WithApiToken(apiToken), userAgent));
-        }
-
-        private string getAPIToken()
-        {
-            var bundleId = NSBundle.MainBundle.BundleIdentifier;
-            bundleId = bundleId.Substring(0, bundleId.LastIndexOf("."));
-            var userDefaults = new NSUserDefaults($"group.{bundleId}.extensions", NSUserDefaultsType.SuiteName);
-            var apiToken = userDefaults.StringForKey("api-token");
-
-            if (apiToken == null)
-            {
-                return null;
-            }
-
-            return apiToken;
         }
 
         private ITimeEntry getRunningTimeEntry(IList<ITimeEntry> timeEntries)

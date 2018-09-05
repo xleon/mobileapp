@@ -1062,6 +1062,10 @@
       <Project>{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}</Project>
       <Name>Toggl.Daneel.SiriExtension</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Toggl.Daneel.ExtensionKit\Toggl.Daneel.ExtensionKit.csproj">
+      <Project>{ACA2821E-0FF9-4036-BFF6-E775BB4E6732}</Project>
+      <Name>Toggl.Daneel.ExtensionKit</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Images.xcassets\line.imageset\" />
