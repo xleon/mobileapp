@@ -72,7 +72,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                                                         bool useNavigationService,
                                                         bool useAnalyticsService,
                                                         bool useInteractorFactory,
-                                                        bool useDialogService)
+                                                        bool useDialogService,
+                                                        bool useIntentDonationService)
             {
                 var timeService = useTimeService ? TimeService : null;
                 var reportsProvider = useDataSource ? DataSource : null;
@@ -80,9 +81,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var dialogService = useDialogService ? DialogService : null;
+                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new ReportsViewModel(reportsProvider, timeService, navigationService, interactorFactory, analyticsService, dialogService);
+                    () => new ReportsViewModel(reportsProvider, timeService, navigationService, interactorFactory, analyticsService, dialogService, intentDonationService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();

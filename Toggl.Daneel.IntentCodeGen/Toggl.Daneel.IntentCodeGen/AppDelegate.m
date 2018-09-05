@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "StopTimerIntent.h"
+#import "ShowReportIntent.h"
+#import "ShowReportPeriodIntent.h"
 
 @interface AppDelegate ()
 
@@ -26,6 +28,8 @@
     // at the location of the generated code.
     //
     StopTimerIntent;
+    ShowReportIntent;
+    ShowReportPeriodIntent;
     
     return YES;
 }

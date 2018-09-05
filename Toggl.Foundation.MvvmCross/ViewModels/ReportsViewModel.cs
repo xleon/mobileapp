@@ -22,6 +22,7 @@ using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Foundation.Reports;
+using Toggl.Foundation.Services;
 using Toggl.Multivac;
 using CommonFunctions = Toggl.Multivac.Extensions.CommonFunctions;
 using static Toggl.Multivac.Extensions.EnumerableExtensions;
@@ -38,6 +39,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
         private readonly IDialogService dialogService;
+        private readonly IIntentDonationService intentDonationService;
         private readonly ReportsCalendarViewModel calendarViewModel;
         private readonly Subject<Unit> reportSubject = new Subject<Unit>();
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
@@ -113,7 +115,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                                 IMvxNavigationService navigationService,
                                 IInteractorFactory interactorFactory,
                                 IAnalyticsService analyticsService,
-                                IDialogService dialogService)
+                                IDialogService dialogService,
+                                IIntentDonationService intentDonationService)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -121,6 +124,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
+            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
 
             this.timeService = timeService;
             this.navigationService = navigationService;
@@ -128,8 +132,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
             this.dialogService = dialogService;
+            this.intentDonationService = intentDonationService;
 
-            calendarViewModel = new ReportsCalendarViewModel(timeService, dataSource);
+            calendarViewModel = new ReportsCalendarViewModel(timeService, dataSource, intentDonationService);
 
             HideCalendarCommand = new MvxCommand(hideCalendar);
             ToggleCalendarCommand = new MvxCommand(toggleCalendar);
@@ -185,6 +190,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             {
                 navigationService.Navigate(calendarViewModel);
                 didNavigateToCalendar = true;
+                intentDonationService.DonateShowReport();
             }
         }
 
