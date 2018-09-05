@@ -165,6 +165,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand ConfirmCommand { get; }
 
+        public IMvxCommand SaveCommand { get; }
+
         public IMvxCommand DismissSyncErrorMessageCommand { get; }
 
         public IMvxCommand StopCommand { get; }
@@ -220,6 +222,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             DeleteCommand = new MvxAsyncCommand(delete);
             ConfirmCommand = new MvxCommand(confirm);
+            SaveCommand = new MvxCommand(save);
             CloseCommand = new MvxAsyncCommand(closeWithConfirmation);
 
             StopCommand = new MvxCommand(stopTimeEntry, () => IsTimeEntryRunning);

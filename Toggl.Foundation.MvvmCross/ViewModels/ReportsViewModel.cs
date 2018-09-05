@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -99,7 +100,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public string WorkspaceName { get; private set; }
 
-        public IDictionary<string, IThreadSafeWorkspace> Workspaces { get; private set; }
+        public ICollection<(string ItemName, IThreadSafeWorkspace Item)> Workspaces { get; private set; }
 
         public IMvxCommand HideCalendarCommand { get; }
 
@@ -143,10 +144,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public override async Task Initialize()
         {
-            Workspaces = await dataSource.Workspaces
-                .GetAll()
-                .SelectMany(CommonFunctions.Identity)
-                .ToDictionary(ws => ws.Name, ws => ws);
+            Workspaces = await dataSource.Workspaces.GetAll().Select(readOnlyWorkspaceNameTuples);
 
             var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
 
@@ -173,6 +171,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             disposeBag.Add(preferencesDisposable);
 
             IsLoading = true;
+        }
+
+        private static ReadOnlyCollection<(string, IThreadSafeWorkspace)>
+            readOnlyWorkspaceNameTuples(IEnumerable<IThreadSafeWorkspace> workspaces)
+        {
+            return workspaces
+                .Select(ws => (ws.Name, ws))
+                .ToList()
+                .AsReadOnly();
         }
 
         public override void ViewAppeared()

@@ -50,7 +50,7 @@ namespace Toggl.Daneel.ViewControllers
             source.OnScroll += onReportsTableScrolled;
             ReportsTableView.Source = source;
 
-            var areThereEnoughWorkspaces = new LambdaConverter<IDictionary<string, IThreadSafeWorkspace>, bool>(workspaces => workspaces.Count > 1);
+            var areThereEnoughWorkspaces = new LambdaConverter<ICollection<(string, IThreadSafeWorkspace)>, bool>(workspaces => workspaces.Count > 1);
             var isWorkspaceNameTooLong = new LambdaConverter<string, bool>(workspaceName =>
             {
                 var attributes = new UIStringAttributes { Font = WorkspaceLabel.Font };

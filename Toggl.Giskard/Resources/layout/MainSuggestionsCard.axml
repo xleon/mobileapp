@@ -38,6 +38,7 @@
                 android:layout_below="@+id/TimeEntriesLogCellDescriptionLabel"
                 android:layout_alignParentLeft="true" />
             <TextView
+                android:id="@+id/TimeEntriesLogCellClientLabel"
                 local:MvxBind="Text ClientName; Visibility Visibility(HasProject)"
                 tools:text="Toggl"
                 android:maxLines="1"

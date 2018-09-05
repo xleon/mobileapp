@@ -4,11 +4,12 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:minHeight="1px"
     android:layout_height="wrap_content">
     <TextView
         android:id="@+id/SuggestionsHintTextView"
         android:textSize="12sp"
-        android:textAllCaps="true"
+        android:textAllCaps="true"  
         android:letterSpacing="0.04"
         android:text="Working on these?"
         android:textColor="@color/defaultText"
@@ -29,10 +30,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true" />
-    <toggl.giskard.views.SuggestionsRecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/SuggestionsRecyclerView"
-        local:MvxBind="ItemsSource Suggestions; ItemClick StartTimeEntryCommand"
-        local:MvxTemplateSelector="@string/SuggestionsTemplateSelector"
         android:layout_marginTop="12dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

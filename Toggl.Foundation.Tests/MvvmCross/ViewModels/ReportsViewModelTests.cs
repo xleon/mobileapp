@@ -499,7 +499,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.Initialize();
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId + 1 };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IDictionary<string, IThreadSafeWorkspace>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
                     .Returns(Observable.Return(mockWorkspace));
 
                 await ViewModel.SelectWorkspace.ExecuteAsync();
@@ -513,7 +513,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.Initialize();
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId + 1, Name = "Selected workspace" };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IDictionary<string, IThreadSafeWorkspace>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
                     .Returns(Observable.Return(mockWorkspace));
 
                 await ViewModel.SelectWorkspace.ExecuteAsync();
@@ -525,7 +525,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task ShouldNotTriggerAReportReloadWhenSelectionIsCancelled()
             {
                 await ViewModel.Initialize();
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IDictionary<string, IThreadSafeWorkspace>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(null));
 
                 await ViewModel.SelectWorkspace.ExecuteAsync();
@@ -539,7 +539,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.Initialize();
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IDictionary<string, IThreadSafeWorkspace>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(mockWorkspace));
 
                 await ViewModel.SelectWorkspace.ExecuteAsync();

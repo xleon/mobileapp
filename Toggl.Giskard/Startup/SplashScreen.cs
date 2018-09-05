@@ -1,14 +1,10 @@
 using Android.App;
 using Android.Content.PM;
-using Android.Graphics;
-using Android.Support.V4.Content;
-using Toggl.Giskard.Extensions;
 using Android.OS;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using MvvmCross;
 using MvvmCross.Droid.Support.V7.AppCompat;
-using MvvmCross.Platforms.Android.Core;
 using MvvmCross.Navigation;
 
 namespace Toggl.Giskard
@@ -40,17 +36,6 @@ namespace Toggl.Giskard
                 return;
 
             Mvx.Resolve<IMvxNavigationService>().Navigate(navigationUrl);
-        }
-
-        protected override void OnCreate(Bundle bundle)
-        {
-            var MvxSetup = MvxAndroidSetupSingleton.EnsureSingletonAvailable(ApplicationContext);
-            MvxSetup.EnsureInitialized();
-
-            base.OnCreate(bundle);
-
-            var statusBarColor = new Color(ContextCompat.GetColor(this, Resource.Color.lightGray));
-            this.ChangeStatusBarColor(statusBarColor);
         }
     }
 }

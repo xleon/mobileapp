@@ -1,12 +1,10 @@
 ﻿using Android.App;
 using Android.Content.PM;
-using Android.Graphics;
 using Android.OS;
 using Android.Support.V7.Widget;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Giskard.Extensions;
 using static Toggl.Foundation.Resources;
 
 namespace Toggl.Giskard.Activities
@@ -21,8 +19,6 @@ namespace Toggl.Giskard.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
-            this.ChangeStatusBarColor(Color.ParseColor("#2C2C2C"));
-
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.TokenResetActivity);
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
