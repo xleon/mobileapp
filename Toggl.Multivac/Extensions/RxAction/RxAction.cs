@@ -48,7 +48,7 @@ namespace Toggl.Multivac.Extensions
                     if (enabled)
                     {
                         var ob = workFactory(input)
-                            .Do(_ => { }, error => errorsSubject.OnNext(error))
+                            .Do(CommonFunctions.DoNothing, error => errorsSubject.OnNext(error))
                             .Replay(1).RefCount();
 
                         return Observable.Return(ob);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Toggl.Multivac.Extensions
 {
@@ -55,6 +56,12 @@ namespace Toggl.Multivac.Extensions
             Ensure.Argument.IsNotNull(action, nameof(action));
 
             self.ForEach(action);
+            return self;
+        }
+
+        public static IEnumerable<T> Do<T>(this IEnumerable<T> self, Action action)
+        {
+            self.Do(_ => action());
             return self;
         }
     }
