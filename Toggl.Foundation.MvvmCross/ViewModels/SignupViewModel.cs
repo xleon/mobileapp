@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -12,10 +13,12 @@ using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Interactors.Location;
 using Toggl.Foundation.Login;
+using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Exceptions;
@@ -26,6 +29,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class SignupViewModel : MvxViewModel<CredentialsParameter>
     {
+        [Flags]
+        public enum ShakeTargets
+        {
+            None = 0,
+            Email = 1 << 0,
+            Password = 1 << 1,
+            Country = 1 << 2
+        }
+
         private readonly IApiFactory apiFactory;
         private readonly ILoginManager loginManager;
         private readonly IAnalyticsService analyticsService;
@@ -34,6 +46,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IErrorHandlingService errorHandlingService;
         private readonly ILastTimeUsageStorage lastTimeUsageStorage;
         private readonly ITimeService timeService;
+        private readonly ISchedulerProvider schedulerProvider;
 
         private IDisposable getCountrySubscription;
         private IDisposable signupDisposable;
@@ -41,41 +54,37 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private List<ICountry> allCountries;
         private long? countryId;
 
-        public string CountryButtonTitle { get; private set; } = Resources.SelectCountry;
+        private readonly Subject<ShakeTargets> shakeSubject = new Subject<ShakeTargets>();
+        private readonly Subject<bool> isShowPasswordButtonVisibleSubject = new Subject<bool>();
+        private readonly BehaviorSubject<bool> isLoadingSubject = new BehaviorSubject<bool>(false);
+        private readonly BehaviorSubject<string> errorMessageSubject = new BehaviorSubject<string>("");
+        private readonly BehaviorSubject<bool> isPasswordMaskedSubject = new BehaviorSubject<bool>(true);
+        private readonly BehaviorSubject<Email> emailSubject = new BehaviorSubject<Email>(Multivac.Email.Empty);
+        private readonly BehaviorSubject<Password> passwordSubject = new BehaviorSubject<Password>(Multivac.Password.Empty);
+        private readonly BehaviorSubject<string> countryNameSubject = new BehaviorSubject<string>(Resources.SelectCountry);
+        private readonly BehaviorSubject<bool> isCountryErrorVisibleSubject = new BehaviorSubject<bool>(false);
 
-        public bool IsCountryErrorVisible { get; private set; } = false;
+        public IObservable<string> CountryButtonTitle { get; }
 
-        public bool IsCountryValid => countryId.HasValue;
+        public IObservable<bool> IsCountryErrorVisible { get; }
 
-        public Email Email { get; set; } = Email.Empty;
+        public IObservable<string> Email { get; }
 
-        public Password Password { get; set; } = Password.Empty;
+        public IObservable<string> Password { get; }
 
-        public bool IsLoading { get; private set; }
+        public IObservable<bool> HasError { get; }
 
-        public string ErrorText { get; private set; }
+        public IObservable<bool> IsLoading { get; }
 
-        public bool HasError => !string.IsNullOrEmpty(ErrorText);
+        public IObservable<bool> SignupEnabled { get; }
 
-        public bool IsPasswordMasked { get; private set; } = true;
+        public IObservable<ShakeTargets> Shake { get; }
 
-        public bool SignupEnabled
-            => Email.IsValid
-            && Password.IsValid
-            && !IsLoading
-            && countryId.HasValue;
+        public IObservable<string> ErrorMessage { get; }
 
-        public bool IsShowPasswordButtonVisible { get; set; }
+        public IObservable<bool> IsPasswordMasked { get; }
 
-        public IMvxCommand GoogleSignupCommand { get; }
-
-        public IMvxCommand TogglePasswordVisibilityCommand { get; }
-
-        public IMvxAsyncCommand SignupCommand { get; }
-
-        public IMvxAsyncCommand LoginCommand { get; }
-
-        public IMvxAsyncCommand PickCountryCommand { get; }
+        public IObservable<bool> IsShowPasswordButtonVisible { get; }
 
         public SignupViewModel(
             IApiFactory apiFactory,
@@ -85,7 +94,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IForkingNavigationService navigationService,
             IErrorHandlingService errorHandlingService,
             ILastTimeUsageStorage lastTimeUsageStorage,
-            ITimeService timeService)
+            ITimeService timeService,
+            ISchedulerProvider schedulerProvider)
         {
             Ensure.Argument.IsNotNull(apiFactory, nameof(apiFactory));
             Ensure.Argument.IsNotNull(loginManager, nameof(loginManager));
@@ -95,6 +105,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(errorHandlingService, nameof(errorHandlingService));
             Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
             this.apiFactory = apiFactory;
             this.loginManager = loginManager;
@@ -104,20 +115,77 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.errorHandlingService = errorHandlingService;
             this.lastTimeUsageStorage = lastTimeUsageStorage;
             this.timeService = timeService;
+            this.schedulerProvider = schedulerProvider;
 
-            LoginCommand = new MvxAsyncCommand(login);
-            GoogleSignupCommand = new MvxCommand(googleSignup);
-            PickCountryCommand = new MvxAsyncCommand(pickCountry);
-            SignupCommand = new MvxAsyncCommand(signup, () => SignupEnabled);
-            TogglePasswordVisibilityCommand = new MvxCommand(togglePasswordVisibility);
+            var emailObservable = emailSubject.Select(email => email.TrimmedEnd());
+
+            Shake = shakeSubject.AsDriver(this.schedulerProvider);
+
+            Email = emailObservable
+                .Select(email => email.ToString())
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
+
+            Password = passwordSubject
+                .Select(password => password.ToString())
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
+
+            IsLoading = isLoadingSubject
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
+
+            IsCountryErrorVisible = isCountryErrorVisibleSubject
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
+
+            ErrorMessage = errorMessageSubject
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
+
+            CountryButtonTitle = countryNameSubject
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
+
+            IsPasswordMasked = isPasswordMaskedSubject
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
+
+            IsShowPasswordButtonVisible = Password
+                .Select(password => password.Length > 1)
+                .CombineLatest(isShowPasswordButtonVisibleSubject.AsObservable(), CommonFunctions.And)
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
+
+            HasError = ErrorMessage
+                .Select(string.IsNullOrEmpty)
+                .Select(CommonFunctions.Invert)
+                .AsDriver(this.schedulerProvider);
+
+            SignupEnabled = emailObservable
+                .CombineLatest(
+                    passwordSubject.AsObservable(),
+                    IsLoading,
+                    countryNameSubject.AsObservable(),
+                    (email, password, isLoading, countryName) => email.IsValid && password.IsValid && !isLoading && (countryName != Resources.SelectCountry))
+                .DistinctUntilChanged()
+                .AsDriver(this.schedulerProvider);
         }
-
 
         public override void Prepare(CredentialsParameter parameter)
         {
-            Email = parameter.Email;
-            Password = parameter.Password;
+            emailSubject.OnNext(parameter.Email);
+            passwordSubject.OnNext(parameter.Password);
         }
+
+        public void SetEmail(Email email)
+            => emailSubject.OnNext(email);
+
+        public void SetPassword(Password password)
+            => passwordSubject.OnNext(password);
+
+        public void SetIsShowPasswordButtonVisible(bool visible)
+            => isShowPasswordButtonVisibleSubject.OnNext(visible);
 
         public override async Task Initialize()
         {
@@ -144,29 +212,52 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             if (countryId.HasValue) return;
             countryId = country.Id;
-            CountryButtonTitle = country.Name;
+            countryNameSubject.OnNext(country.Name);
         }
 
         private void setCountryErrorIfNeeded()
         {
             if (countryId.HasValue) return;
 
-            IsCountryErrorVisible = true;
+            isCountryErrorVisibleSubject.OnNext(true);
         }
 
-        private async Task signup()
+        public async Task Signup()
         {
+            var shakeTargets = ShakeTargets.None;
+            if (!emailSubject.Value.IsValid)
+            {
+                shakeTargets |= ShakeTargets.Email;
+            }
+            if (!passwordSubject.Value.IsValid)
+            {
+                shakeTargets |= ShakeTargets.Password;
+            }
+            if (!countryId.HasValue)
+            {
+                shakeTargets |= ShakeTargets.Country;
+            }
+
+            if (shakeTargets != ShakeTargets.None)
+            {
+                shakeSubject.OnNext(shakeTargets);
+                return;
+            }
+
             if (!termsOfServiceAccepted)
                 termsOfServiceAccepted = await navigationService.Navigate<bool>(typeof(TermsOfServiceViewModel));
 
             if (!termsOfServiceAccepted)
                 return;
+            
+            if (isLoadingSubject.Value) return;
 
-            IsLoading = true;
+            isLoadingSubject.OnNext(true);
+            errorMessageSubject.OnNext("");
 
             signupDisposable =
                 loginManager
-                    .SignUp(Email, Password, true, (int)countryId.Value)
+                    .SignUp(emailSubject.Value, passwordSubject.Value, true, (int)countryId.Value)
                     .Track(analyticsService.SignUp, AuthenticationMethod.EmailAndPassword)
                     .Subscribe(onDataSource, onError, onCompleted);
         }
@@ -185,7 +276,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void onError(Exception exception)
         {
-            IsLoading = false;
+            isLoadingSubject.OnNext(false);
             onCompleted();
 
             if (errorHandlingService.TryHandleDeprecationError(exception))
@@ -194,16 +285,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             switch (exception)
             {
                 case UnauthorizedException forbidden:
-                    ErrorText = Resources.IncorrectEmailOrPassword;
+                    errorMessageSubject.OnNext(Resources.IncorrectEmailOrPassword);
                     break;
                 case GoogleLoginException googleEx when googleEx.LoginWasCanceled:
-                    ErrorText = "";
+                    errorMessageSubject.OnNext("");
                     break;
                 case EmailIsAlreadyUsedException _:
-                    ErrorText = Resources.EmailIsAlreadyUsedError;
+                    errorMessageSubject.OnNext(Resources.EmailIsAlreadyUsedError);
                     break;
                 default:
-                    ErrorText = Resources.GenericSignUpError;
+                    errorMessageSubject.OnNext(Resources.GenericSignUpError);
                     break;
             }
         }
@@ -214,11 +305,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             signupDisposable = null;
         }
 
-        private void googleSignup()
+        public void GoogleSignup()
         {
-            if (IsLoading) return;
+            if (isLoadingSubject.Value) return;
 
-            IsLoading = true;
+            isLoadingSubject.OnNext(true);
 
             signupDisposable = loginManager
                 .SignUpWithGoogle()
@@ -226,10 +317,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Subscribe(onDataSource, onError, onCompleted);
         }
 
-        private void togglePasswordVisibility()
-            => IsPasswordMasked = !IsPasswordMasked;
+        public void TogglePasswordVisibility()
+            => isPasswordMaskedSubject.OnNext(!isPasswordMaskedSubject.Value);
 
-        private async Task pickCountry()
+        public async Task PickCountry()
         {
             getCountrySubscription?.Dispose();
             getCountrySubscription = null;
@@ -246,25 +337,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var selectedCountry = allCountries
                 .Single(country => country.Id == selectedCountryId.Value);
 
-            IsCountryErrorVisible = false;
+            isCountryErrorVisibleSubject.OnNext(false);
             countryId = selectedCountry.Id;
-            CountryButtonTitle = selectedCountry.Name;
-            SignupCommand.RaiseCanExecuteChanged();
-       }
-
-        private Task login()
-        {
-            var parameter = CredentialsParameter.With(Email, Password);
-            return navigationService.Navigate<LoginViewModel, CredentialsParameter>(parameter);
+            countryNameSubject.OnNext(selectedCountry.Name);
         }
 
-        private void OnEmailChanged()
-            => SignupCommand.RaiseCanExecuteChanged();
+        public Task Login()
+        {
+            if (isLoadingSubject.Value)
+                return Task.CompletedTask;
 
-        private void OnPasswordChanged()
-            => SignupCommand.RaiseCanExecuteChanged();
-
-        private void OnIsLoadingChanged()
-            => SignupCommand.RaiseCanExecuteChanged();
+            var parameter = CredentialsParameter.With(emailSubject.Value, passwordSubject.Value);
+            return navigationService.Navigate<LoginViewModel, CredentialsParameter>(parameter);
+        }
     }
 }
