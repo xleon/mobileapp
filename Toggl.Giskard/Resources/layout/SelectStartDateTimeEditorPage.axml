@@ -57,6 +57,7 @@
         android:id="@+id/SelectStartTimeCalendarView"
         local:MvxBind="Value StartTime; Visibility Visibility(IsCalendarView); Boundaries StartTimeBoundaries"
         android:layout_marginTop="96dp"
+        android:layout_marginBottom="-52dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <FrameLayout
