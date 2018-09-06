@@ -923,6 +923,18 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string CalendarSettingsTitle {
+            get {
+                return ResourceManager.GetString("CalendarSettingsTitle", resourceCulture);
+            }
+        }
+        
+        public static string NotificationSettingsTitle {
+            get {
+                return ResourceManager.GetString("NotificationSettingsTitle", resourceCulture);
+            }
+        }
+        
         public static string OpenAppAndStartAction {
             get {
                 return ResourceManager.GetString("OpenAppAndStartAction", resourceCulture);

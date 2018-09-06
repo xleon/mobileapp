@@ -137,7 +137,7 @@ namespace Toggl.Daneel.Views.Calendar
 
             var attributes = UICollectionViewLayoutAttributes.CreateForCell(indexPath);
             attributes.Frame = frameForItemWithLayoutAttributes(calendarItemLayoutAttributes);
-            attributes.ZIndex = 1;
+            attributes.ZIndex = calendarItemLayoutAttributes.IsEditing ? 150 : 100;
 
             return attributes;
         }
@@ -155,14 +155,14 @@ namespace Toggl.Daneel.Views.Calendar
             {
                 var attributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(kind, indexPath);
                 attributes.Frame = frameForEditingHour(indexPath);
-                attributes.ZIndex = 2;
+                attributes.ZIndex = 200;
                 return attributes;
             }
             else
             {
                 var attributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(kind, indexPath);
                 attributes.Frame = FrameForCurrentTime();
-                attributes.ZIndex = 3;
+                attributes.ZIndex = 300;
                 return attributes;
             }
         }

@@ -15,11 +15,14 @@ namespace Toggl.Daneel.Views.Calendar
 
         public int PositionInOverlappingGroup { get; }
 
+        public bool IsEditing { get; }
+
         public CalendarCollectionViewItemLayoutAttributes(
             DateTime startTime,
             TimeSpan duration,
             int overlappingItemsCount,
-            int positionInOverlappingGroup)
+            int positionInOverlappingGroup,
+            bool isEditing)
         {
             Ensure.Argument.IsNotZero(overlappingItemsCount, nameof(overlappingItemsCount));
             Ensure.Argument.IsInClosedRange(positionInOverlappingGroup, 0, overlappingItemsCount - 1, nameof(overlappingItemsCount));
@@ -28,6 +31,7 @@ namespace Toggl.Daneel.Views.Calendar
             Duration = duration;
             OverlappingItemsCount = overlappingItemsCount;
             PositionInOverlappingGroup = positionInOverlappingGroup;
+            IsEditing = isEditing;
         }
     }
 }

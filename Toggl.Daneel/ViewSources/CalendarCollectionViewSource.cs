@@ -41,14 +41,13 @@ namespace Toggl.Daneel.ViewSources
         private TimeFormat timeOfDayFormat = TimeFormat.TwelveHoursFormat;
         private DateTime currentDate;
         private NSIndexPath editingItemIndexPath;
-        private bool isEditing;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
         private readonly ISubject<CalendarItem> itemTappedSubject = new Subject<CalendarItem>();
 
         private CalendarCollectionViewLayout layout => CollectionView.CollectionViewLayout as CalendarCollectionViewLayout;
 
-        public bool IsEditing => isEditing;
+        public bool IsEditing { get; private set; }
 
         public IObservable<CalendarItem> ItemTapped => itemTappedSubject.AsObservable();
 
@@ -158,13 +157,13 @@ namespace Toggl.Daneel.ViewSources
 
         public void StartEditing()
         {
-            isEditing = true;
+            IsEditing = true;
             layout.IsEditing = true;
         }
 
         public void StartEditing(NSIndexPath indexPath)
         {
-            isEditing = true;
+            IsEditing = true;
             layout.IsEditing = true;
             editingItemIndexPath = indexPath;
             CollectionView.ReloadItems(new NSIndexPath[] { indexPath });
@@ -172,7 +171,7 @@ namespace Toggl.Daneel.ViewSources
 
         public void StopEditing()
         {
-            isEditing = false;
+            IsEditing = false;
             layout.IsEditing = false;
             if (editingItemIndexPath != null)
             {
@@ -307,19 +306,24 @@ namespace Toggl.Daneel.ViewSources
 
             IEnumerable<(CalendarCollectionViewItemLayoutAttributes attributes, int index)> toLayoutAttributes(
                 List<(CalendarItem item, int index)> group)
-                => group.Select((pair, index) => (attributesForItem(pair.item, group.Count, index), pair.index));
+                => group.Select((pair, index) => (attributesForItem(index, pair.item, group.Count, index), pair.index));
         }
 
         private CalendarCollectionViewItemLayoutAttributes attributesForItem(
+            int index,
             CalendarItem calendarItem,
             int overlappingItemsCount,
             int positionInOverlappingGroup)
-            => new CalendarCollectionViewItemLayoutAttributes(
+        {
+            var isEditing = IsEditing && editingItemIndexPath != null && index == editingItemIndexPath.Item;
+            return new CalendarCollectionViewItemLayoutAttributes(
                 calendarItem.StartTime.LocalDateTime,
                 calendarItem.Duration,
                 overlappingItemsCount,
-                positionInOverlappingGroup
+                positionInOverlappingGroup,
+                isEditing
             );
+        }
 
         private NSIndexPath insertCalendarItem(DateTimeOffset startTime, TimeSpan duration)
         {
