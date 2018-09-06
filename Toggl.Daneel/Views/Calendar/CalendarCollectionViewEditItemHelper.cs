@@ -4,6 +4,7 @@ using System.Reactive.Subjects;
 using CoreGraphics;
 using Foundation;
 using Toggl.Daneel.Cells.Calendar;
+using Toggl.Daneel.Extensions;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.Extensions;
@@ -14,7 +15,7 @@ using Math = System.Math;
 
 namespace Toggl.Daneel.Views.Calendar
 {
-    public sealed class CalendarCollectionViewEditItemHelper : NSObject, IUIGestureRecognizerDelegate
+    public sealed class CalendarCollectionViewEditItemHelper : CalendarCollectionViewAutoScrollHelper, IUIGestureRecognizerDelegate
     {
         enum EditAction
         {
@@ -26,9 +27,7 @@ namespace Toggl.Daneel.Views.Calendar
 
         private static readonly TimeSpan defaultDuration = TimeSpan.FromMinutes(15);
 
-        private readonly UICollectionView collectionView;
         private readonly CalendarCollectionViewSource dataSource;
-        private readonly CalendarCollectionViewLayout layout;
 
         private UILongPressGestureRecognizer longPressGestureRecognizer;
         private UIPanGestureRecognizer panGestureRecognizer;
@@ -39,7 +38,6 @@ namespace Toggl.Daneel.Views.Calendar
         private NSIndexPath itemIndexPath;
         private nfloat verticalOffset;
         private CGPoint firstPoint;
-        private CGPoint lastPoint;
 
         private bool isActive;
         private EditAction action;
@@ -48,21 +46,17 @@ namespace Toggl.Daneel.Views.Calendar
         public IObservable<CalendarItem> EditCalendarItem => editCalendarItemSuject.AsObservable();
 
         public CalendarCollectionViewEditItemHelper(
-            UICollectionView collectionView,
+            UICollectionView CollectionView,
             CalendarCollectionViewSource dataSource,
-            CalendarCollectionViewLayout layout)
+            CalendarCollectionViewLayout Layout) : base(CollectionView, Layout)
         {
-            Ensure.Argument.IsNotNull(collectionView, nameof(collectionView));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(layout, nameof(layout));
 
-            this.collectionView = collectionView;
             this.dataSource = dataSource;
-            this.layout = layout;
 
             longPressGestureRecognizer = new UILongPressGestureRecognizer(onLongPress);
             longPressGestureRecognizer.Delegate = this;
-            collectionView.AddGestureRecognizer(longPressGestureRecognizer);
+            CollectionView.AddGestureRecognizer(longPressGestureRecognizer);
 
             panGestureRecognizer = new UIPanGestureRecognizer(onPan);
             panGestureRecognizer.Delegate = this;
@@ -86,7 +80,7 @@ namespace Toggl.Daneel.Views.Calendar
 
         private void onLongPress(UILongPressGestureRecognizer gesture)
         {
-            var point = gesture.LocationInView(collectionView);
+            var point = gesture.LocationInView(CollectionView);
 
             switch (gesture.State)
             {
@@ -105,7 +99,7 @@ namespace Toggl.Daneel.Views.Calendar
 
         private void onPan(UIPanGestureRecognizer gesture)
         {
-            var point = gesture.LocationInView(collectionView);
+            var point = gesture.LocationInView(CollectionView);
 
             switch (gesture.State)
             {
@@ -116,12 +110,16 @@ namespace Toggl.Daneel.Views.Calendar
                 case UIGestureRecognizerState.Changed:
                     panChanged(point);
                     break;
+
+                case UIGestureRecognizerState.Ended:
+                    panEnded();
+                    break;
             }
         }
 
         private void onTap(UITapGestureRecognizer gesture)
         {
-            var point = gesture.LocationInView(collectionView);
+            var point = gesture.LocationInView(CollectionView);
 
             resignActive();
             dataSource.StopEditing();
@@ -141,13 +139,13 @@ namespace Toggl.Daneel.Views.Calendar
             if (!calendarItem.IsEditable())
                 return;
 
-            itemIndexPath = collectionView.IndexPathForItemAtPoint(point);
+            itemIndexPath = CollectionView.IndexPathForItemAtPoint(point);
             dataSource.StartEditing(itemIndexPath);
             becomeActive();
 
-            var startPoint = layout.PointAtDate(calendarItem.StartTime.ToLocalTime());
+            var startPoint = Layout.PointAtDate(calendarItem.StartTime.ToLocalTime());
             firstPoint = point;
-            lastPoint = point;
+            LastPoint = point;
             verticalOffset = firstPoint.Y - startPoint.Y;
         }
 
@@ -162,7 +160,7 @@ namespace Toggl.Daneel.Views.Calendar
             if (!isActive)
                 return;
 
-            collectionView.RemoveGestureRecognizer(longPressGestureRecognizer);
+            CollectionView.RemoveGestureRecognizer(longPressGestureRecognizer);
         }
 
         private void panBegan(CGPoint point)
@@ -171,11 +169,11 @@ namespace Toggl.Daneel.Views.Calendar
                 return;
 
             firstPoint = point;
-            lastPoint = point;
+            LastPoint = point;
 
-            var cell = collectionView.CellForItem(itemIndexPath) as CalendarItemView;
-            var topDragRect = collectionView.ConvertRectFromView(cell.TopDragTouchArea, cell);
-            var bottomDragRect = collectionView.ConvertRectFromView(cell.BottomDragTouchArea, cell);
+            var cell = CollectionView.CellForItem(itemIndexPath) as CalendarItemView;
+            var topDragRect = CollectionView.ConvertRectFromView(cell.TopDragTouchArea, cell);
+            var bottomDragRect = CollectionView.ConvertRectFromView(cell.BottomDragTouchArea, cell);
 
             if (topDragRect.Contains(point))
                 action = EditAction.ChangeStartTime;
@@ -208,12 +206,12 @@ namespace Toggl.Daneel.Views.Calendar
             if (!isActive || itemIndexPath == null)
                 return;
 
-            if (Math.Abs(lastPoint.Y - point.Y) < layout.HourHeight / 4)
+            if (Math.Abs(LastPoint.Y - point.Y) < Layout.HourHeight / 4)
                 return;
 
-            lastPoint = point;
-            var startPoint = new CGPoint(lastPoint.X, lastPoint.Y - verticalOffset);
-            var startTime = layout.DateAtPoint(startPoint).ToLocalTime().RoundDownToClosestQuarter();
+            LastPoint = point;
+            var startPoint = new CGPoint(LastPoint.X, LastPoint.Y - verticalOffset);
+            var startTime = Layout.DateAtPoint(startPoint).ToLocalTime().RoundDownToClosestQuarter();
 
             if (startTime + calendarItem.Duration > startTime.Date.AddDays(1))
                 return;
@@ -222,6 +220,15 @@ namespace Toggl.Daneel.Views.Calendar
                 .WithStartTime(startTime);
 
             itemIndexPath = dataSource.UpdateItemView(itemIndexPath, calendarItem.StartTime, calendarItem.Duration);
+
+            var topY = Layout.PointAtDate(calendarItem.StartTime).Y;
+            var bottomY = Layout.PointAtDate(calendarItem.EndTime).Y;
+            if (topY < TopAutoScrollLine && !CollectionView.IsAtTop())
+                StartAutoScrollUp(changeOffset);
+            else if (bottomY > BottomAutoScrollLine && !CollectionView.IsAtBottom())
+                StartAutoScrolDown(changeOffset);
+            else
+                StopAutoScroll();
         }
 
         private void changeStartTime(CGPoint point)
@@ -229,14 +236,14 @@ namespace Toggl.Daneel.Views.Calendar
             if (!isActive || itemIndexPath == null)
                 return;
 
-            if (Math.Abs(lastPoint.Y - point.Y) < layout.HourHeight / 4)
+            if (Math.Abs(LastPoint.Y - point.Y) < Layout.HourHeight / 4)
                 return;
 
-            if (point.Y < 0 || point.Y >= layout.ContentViewHeight)
+            if (point.Y < 0 || point.Y >= Layout.ContentViewHeight)
                 return;
 
-            lastPoint = point;
-            var startTime = layout.DateAtPoint(lastPoint).ToLocalTime().RoundDownToClosestQuarter();
+            LastPoint = point;
+            var startTime = Layout.DateAtPoint(LastPoint).ToLocalTime().RoundDownToClosestQuarter();
             var duration = calendarItem.EndTime - startTime;
 
             if (duration <= TimeSpan.Zero)
@@ -247,6 +254,13 @@ namespace Toggl.Daneel.Views.Calendar
                 .WithDuration(duration);
 
             itemIndexPath = dataSource.UpdateItemView(itemIndexPath, calendarItem.StartTime, calendarItem.Duration);
+
+            if (point.Y < TopAutoScrollLine && !CollectionView.IsAtTop())
+                StartAutoScrollUp(changeStartTime);
+            else if (point.Y > BottomAutoScrollLine && calendarItem.Duration > defaultDuration)
+                StartAutoScrolDown(changeStartTime);
+            else
+                StopAutoScroll();
         }
 
         private void changeEndTime(CGPoint point)
@@ -254,14 +268,14 @@ namespace Toggl.Daneel.Views.Calendar
             if (!isActive || itemIndexPath == null)
                 return;
 
-            if (Math.Abs(lastPoint.Y - point.Y) < layout.HourHeight / 4)
+            if (Math.Abs(LastPoint.Y - point.Y) < Layout.HourHeight / 4)
                 return;
 
-            if (point.Y < 0 || point.Y >= layout.ContentViewHeight)
+            if (point.Y < 0 || point.Y >= Layout.ContentViewHeight)
                 return;
 
-            lastPoint = point;
-            var endTime = layout.DateAtPoint(lastPoint).ToLocalTime().RoundUpToClosestQuarter();
+            LastPoint = point;
+            var endTime = Layout.DateAtPoint(LastPoint).ToLocalTime().RoundUpToClosestQuarter();
             var duration = endTime - calendarItem.StartTime;
 
             if (duration <= TimeSpan.Zero)
@@ -271,21 +285,33 @@ namespace Toggl.Daneel.Views.Calendar
                 .WithDuration(duration);
 
             itemIndexPath = dataSource.UpdateItemView(itemIndexPath, calendarItem.StartTime, calendarItem.Duration);
+
+            if (point.Y > BottomAutoScrollLine && !CollectionView.IsAtBottom())
+                StartAutoScrolDown(changeEndTime);
+            else if (point.Y < TopAutoScrollLine && calendarItem.Duration > defaultDuration)
+                StartAutoScrollUp(changeEndTime);
+            else
+                StopAutoScroll();
+        }
+
+        private void panEnded()
+        {
+            StopAutoScroll();
         }
 
         private void becomeActive()
         {
             isActive = true;
-            collectionView.AddGestureRecognizer(panGestureRecognizer);
-            collectionView.AddGestureRecognizer(tapGestureRecognizer);
+            CollectionView.AddGestureRecognizer(panGestureRecognizer);
+            CollectionView.AddGestureRecognizer(tapGestureRecognizer);
         }
 
         private void resignActive()
         {
             isActive = false;
-            collectionView.AddGestureRecognizer(longPressGestureRecognizer);
-            collectionView.RemoveGestureRecognizer(panGestureRecognizer);
-            collectionView.RemoveGestureRecognizer(tapGestureRecognizer);
+            CollectionView.AddGestureRecognizer(longPressGestureRecognizer);
+            CollectionView.RemoveGestureRecognizer(panGestureRecognizer);
+            CollectionView.RemoveGestureRecognizer(tapGestureRecognizer);
         }
     }
 }
