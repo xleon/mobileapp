@@ -32,7 +32,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         private static Expression<Func<TRealmEntity, bool>> matchById<TRealmEntity>(long id)
             where TRealmEntity : RealmObject, IIdentifiable, IModifiableId, TModel, IUpdatesFrom<TModel>
-            => x => x.Id == id;
+            => x => x.Id == id || x.OriginalId == id;
 
         private static long getId<TRealmEntity>(TRealmEntity entity)
             where TRealmEntity : RealmObject, IIdentifiable, TModel

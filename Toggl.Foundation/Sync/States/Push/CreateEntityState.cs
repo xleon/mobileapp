@@ -65,36 +65,34 @@ namespace Toggl.Foundation.Sync.States.Push
         private Func<TThreadsafeModel, IObservable<ITransition>> tryOverwrite(TThreadsafeModel originalEntity)
             => serverEntity
                 => dataSource.OverwriteIfOriginalDidNotChange(originalEntity, serverEntity)
-                             .SelectMany(results => updateIdIfNeeded(results, originalEntity, serverEntity));
+                             .SelectMany(results => updateId(results, originalEntity, serverEntity));
 
-        private IObservable<ITransition> updateIdIfNeeded(
+        private IObservable<ITransition> updateId(
             IEnumerable<IConflictResolutionResult<TThreadsafeModel>> results,
             TThreadsafeModel originalEntity,
             TThreadsafeModel serverEntity)
+        {
+            return dataSource.ChangeId(originalEntity.Id, serverEntity.Id)
+                .Select(transitionBasedOnResolutionResult(results, originalEntity, serverEntity));
+        }
+
+        private Func<TThreadsafeModel, Transition<TThreadsafeModel>> transitionBasedOnResolutionResult(
+            IEnumerable<IConflictResolutionResult<TThreadsafeModel>> results,
+            TThreadsafeModel originalEntity, TThreadsafeModel serverEntity)
         {
             foreach (var result in results)
             {
                 switch (result)
                 {
                     case UpdateResult<TThreadsafeModel> u when u.OriginalId == originalEntity.Id:
-                        return Observable.Return(Finished.Transition(extractFrom(result)));
-                    
+                        return Finished.Transition;
+
                     case IgnoreResult<TThreadsafeModel> i when i.Id == originalEntity.Id || i.Id == serverEntity.Id:
-                        return updateId(originalEntity.Id, serverEntity.Id);
+                        return EntityChanged.Transition;
                 }
             }
+
             throw new ArgumentException("Results must contain result with one of the specified ids.");
-        }
-
-        private IObservable<ITransition> updateId(long originalId, long id)
-            => dataSource.ChangeId(originalId, id).Select(EntityChanged.Transition);
-
-        private TThreadsafeModel extractFrom(IConflictResolutionResult<TThreadsafeModel> result)
-        {
-            if (result is UpdateResult<TThreadsafeModel> updateResult)
-                return updateResult.Entity;
-
-            throw new ArgumentOutOfRangeException(nameof(result));
         }
     }
 }
