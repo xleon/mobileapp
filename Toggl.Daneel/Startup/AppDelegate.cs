@@ -1,4 +1,6 @@
 using System;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Foundation;
 using MvvmCross;
 using MvvmCross.Navigation;
@@ -8,9 +10,13 @@ using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Services;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
+using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
+using Toggl.Foundation.Models;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Shortcuts;
@@ -103,8 +109,26 @@ namespace Toggl.Daneel
         public void DidReceiveNotificationResponse(UNUserNotificationCenter center, UNNotificationResponse response, Action completionHandler)
         {
             var eventId = response.Notification.Request.Content.UserInfo[NotificationService.CalendarEventIdKey] as NSString;
-            var url = ApplicationUrls.Calendar.ForId(eventId.ToString());
-            navigationService.Navigate(url);
+
+            if (response.IsCustomAction)
+            {
+                switch (response.ActionIdentifier.ToString())
+                {
+                    case NotificationService.OpenAndCreateFromCalendarEvent:
+                        openAndStartTimeEntryFromCalendarEvent(eventId.ToString(), completionHandler);
+                        break;
+                    case NotificationService.OpenAndNavigateToCalendar:
+                        openAndNavigateToCalendar(completionHandler);
+                        break;
+                    case NotificationService.StartTimeEntryInBackground:
+                        startTimeEntryInBackground(eventId.ToString(), completionHandler);
+                        break;
+                }
+            }
+            else if (response.IsDefaultAction)
+            {
+                openAndStartTimeEntryFromCalendarEvent(eventId.ToString(), completionHandler);
+            }
         }
 
         public override void PerformActionForShortcutItem(UIApplication application, UIApplicationShortcutItem shortcutItem, UIOperationHandler completionHandler)
@@ -185,5 +209,37 @@ namespace Toggl.Daneel
                 ForegroundColor = UIColor.Black
             };
         }
+
+        #region Notification Actions
+
+        private void openAndStartTimeEntryFromCalendarEvent(string eventId, Action completionHandler)
+        {
+            completionHandler();
+            var url = ApplicationUrls.Calendar.ForId(eventId);
+            navigationService.Navigate(url);
+        }
+
+        private void openAndNavigateToCalendar(Action completionHandler)
+        {
+            completionHandler();
+            var url = ApplicationUrls.Calendar.Default;
+            navigationService.Navigate(url);
+        }
+
+        private void startTimeEntryInBackground(string eventId, Action completionHandler)
+        {
+            var interactorFactory = Mvx.Resolve<IInteractorFactory>();
+
+            Task.Run(async () =>
+            {
+                var calendarItem = await interactorFactory.GetCalendarItemWithId(eventId).Execute();
+                var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
+                var prototype = calendarItem.AsTimeEntryPrototype(workspace.Id);
+                await interactorFactory.CreateTimeEntry(prototype).Execute();
+                completionHandler();
+            });
+        }
+
+        #endregion
     }
 }

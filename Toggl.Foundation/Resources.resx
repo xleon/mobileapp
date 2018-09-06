@@ -459,4 +459,13 @@ account is not set up</value>
     <data name="OneHour">
         <value>1 hour before</value>
     </data>
+    <data name="OpenAppAndStartAction">
+        <value>Open app and start</value>
+    </data>
+    <data name="StartInBackgroundAction">
+        <value>Start in background</value>
+    </data>
+    <data name="OpenAppAction">
+        <value>Open app</value>
+    </data>
 </root>

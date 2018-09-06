@@ -23,7 +23,9 @@
 
         public static class Calendar
         {
-            public const string Regex = @"toggl://calendar\?eventId=(?<eventId>.+)";
+            public const string Regex = @"toggl://calendar(\?eventId=(?<eventId>.+))?";
+
+            public static string Default => ForId(null);
 
             public static string ForId(string eventId)
                 => $"toggl://calendar?eventId={eventId}";

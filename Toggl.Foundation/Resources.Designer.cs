@@ -922,5 +922,23 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("OneHour", resourceCulture);
             }
         }
+        
+        public static string OpenAppAndStartAction {
+            get {
+                return ResourceManager.GetString("OpenAppAndStartAction", resourceCulture);
+            }
+        }
+        
+        public static string StartInBackgroundAction {
+            get {
+                return ResourceManager.GetString("StartInBackgroundAction", resourceCulture);
+            }
+        }
+        
+        public static string OpenAppAction {
+            get {
+                return ResourceManager.GetString("OpenAppAction", resourceCulture);
+            }
+        }
     }
 }

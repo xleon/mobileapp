@@ -13,12 +13,19 @@ using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using UserNotifications;
 using Notification = Toggl.Multivac.Notification;
+using FoundationResources = Toggl.Foundation.Resources;
 
 namespace Toggl.Daneel.Services
 {
     public sealed class NotificationService : PermissionAwareNotificationService
     {
         public const string CalendarEventIdKey = "Id";
+
+        public const string CalendarEventCategory = "CalendarEventCategory";
+
+        public const string OpenAndCreateFromCalendarEvent = "OpenAndStartTimeEntryFromCalendarEvent";
+        public const string OpenAndNavigateToCalendar = "OpenAndNavigateToCalendar";
+        public const string StartTimeEntryInBackground = "StartTimeEntryInBackground";
 
         private readonly ITimeService timeService;
 
@@ -28,6 +35,33 @@ namespace Toggl.Daneel.Services
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
 
             this.timeService = timeService;
+
+            var openAndCreateFromCalendarEventAction = UNNotificationAction.FromIdentifier(
+                OpenAndCreateFromCalendarEvent,
+                FoundationResources.OpenAppAndStartAction,
+                UNNotificationActionOptions.AuthenticationRequired | UNNotificationActionOptions.Foreground
+            );
+
+            var openAndNavigateToCalendarAction = UNNotificationAction.FromIdentifier(
+                OpenAndNavigateToCalendar,
+                FoundationResources.OpenAppAction,
+                UNNotificationActionOptions.AuthenticationRequired | UNNotificationActionOptions.Foreground
+            );
+
+            var startTimeEntryInBackgroundAction = UNNotificationAction.FromIdentifier(
+                StartTimeEntryInBackground,
+                FoundationResources.StartInBackgroundAction,
+                UNNotificationActionOptions.AuthenticationRequired
+            );
+
+            var calendarEventCategory = UNNotificationCategory.FromIdentifier(
+                CalendarEventCategory,
+                new UNNotificationAction[] { openAndCreateFromCalendarEventAction, startTimeEntryInBackgroundAction, openAndNavigateToCalendarAction },
+                new string[] { },
+                UNNotificationCategoryOptions.None
+            );
+
+            UNUserNotificationCenter.Current.SetNotificationCategories(new NSSet<UNNotificationCategory>(calendarEventCategory));
         }
 
         protected override IObservable<Unit> NativeSchedule(IImmutableList<Notification> notifications)
@@ -59,7 +93,8 @@ namespace Toggl.Daneel.Services
                 Title = notification.Title,
                 Body = notification.Description,
                 Sound = UNNotificationSound.Default,
-                UserInfo = new NSDictionary(CalendarEventIdKey, notification.Id)
+                UserInfo = new NSDictionary(CalendarEventIdKey, notification.Id),
+                CategoryIdentifier = CalendarEventCategory
             };
 
             return UNNotificationRequest.FromIdentifier(identifier, content, trigger);
