@@ -105,6 +105,8 @@ understand and agree to Toggl\'s</string>
     <string name="SendFeedbackTitle">Submit feedback</string>
     <string name="SendFeedbackSuccessMessage">Message sent. Thank you for your feedback. If you had any questions, we\'ll get back to you soon.</string>
 
+    <string name="ReportsCalendarShortcutsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsCalendarShortcutsTemplateSelector, Toggl.Giskard</string>
+    <string name="ReportsCalendarTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsCalendarTemplateSelector, Toggl.Giskard</string>
     <string name="ReportsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsTemplateSelector, Toggl.Giskard</string>
     <string name="SelectBeginningOfWeekTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectBeginningOfWeekTemplateSelector, Toggl.Giskard</string>
     <string name="SelectClientTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.SelectClientTemplateSelector, Toggl.Giskard</string>
