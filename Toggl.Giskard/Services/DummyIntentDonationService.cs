@@ -4,7 +4,7 @@ namespace Toggl.Giskard.Services
 {
     public class DummyIntentDonationService: IIntentDonationService
     {
-        public Void DonateStartTimeEntry()
+        public void DonateStartTimeEntry()
         {
             throw new NotImplementedException();
         }
