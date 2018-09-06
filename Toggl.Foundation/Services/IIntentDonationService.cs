@@ -14,6 +14,7 @@ namespace Toggl.Foundation.Services
 
     public interface IIntentDonationService
     {
+        void DonateStartTimeEntry();
         void DonateStopCurrentTimeEntry();
         void DonateShowReport(DonationReportPeriod period);
         void DonateShowReport();
