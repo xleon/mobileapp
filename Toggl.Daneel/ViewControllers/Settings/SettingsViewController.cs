@@ -59,6 +59,7 @@ namespace Toggl.Daneel.ViewControllers
             this.Bind(DurationFormatView.Tapped(), ViewModel.SelectDurationFormat);
             this.Bind(BeginningOfWeekView.Tapped(), ViewModel.SelectBeginningOfWeek);
             this.Bind(CalendarSettingsView.Tapped(), ViewModel.OpenCalendarSettingsAction);
+            this.Bind(NotificationSettingsView.Tapped(), ViewModel.OpenNotificationSettingsAction);
             this.Bind(TwentyFourHourClockView.Tapped(), ViewModel.ToggleUseTwentyFourHourClock);
             this.BindVoid(SendFeedbackSuccessView.Tapped(), ViewModel.CloseFeedbackSuccessView);
 

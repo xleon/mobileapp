@@ -90,6 +90,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public UIAction OpenCalendarSettingsAction { get; }
 
+        public UIAction OpenNotificationSettingsAction { get; }
+
         public SettingsViewModel(
             UserAgent userAgent,
             IMailService mailService,
@@ -206,6 +208,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IsFeedbackSuccessViewShowing = isFeedbackSuccessViewShowing.AsObservable();
 
             OpenCalendarSettingsAction = new UIAction(openCalendarSettings);
+
+            OpenNotificationSettingsAction = new UIAction(openNotificationSettings);
         }
 
         public void CloseFeedbackSuccessView()
@@ -324,6 +328,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private IObservable<Unit> openCalendarSettings()
             => Observable.FromAsync(async () => await navigationService.Navigate<CalendarSettingsViewModel>());
+
+        private IObservable<Unit> openNotificationSettings()
+            => Observable.FromAsync(async () => await navigationService.Navigate<NotificationSettingsViewModel>());
 
         private IObservable<Unit> logout()
         {

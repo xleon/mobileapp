@@ -628,6 +628,9 @@
     <InterfaceDefinition Include="Views\Settings\CalendarSettingsTableViewHeader.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\CalendarSettingsViewController.xib" />
     <InterfaceDefinition Include="Cells\Calendar\EditingHourSupplementaryView.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\NotificationSettingsViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\UpcomingEventsNotificationSettingsViewController.xib" />
+    <InterfaceDefinition Include="Cells\Settings\UpcomingEventsOptionCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -1108,6 +1111,19 @@
     </Compile>
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Extensions\NotificationExtensions.cs" />
+    <Compile Include="ViewControllers\Settings\NotificationSettingsViewController.cs" />
+    <Compile Include="ViewControllers\Settings\NotificationSettingsViewController.designer.cs">
+      <DependentUpon>NotificationSettingsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\UpcomingEventsNotificationSettingsViewController.cs" />
+    <Compile Include="ViewControllers\Settings\UpcomingEventsNotificationSettingsViewController.designer.cs">
+      <DependentUpon>UpcomingEventsNotificationSettingsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Settings\UpcomingEventsOptionCell.cs" />
+    <Compile Include="Cells\Settings\UpcomingEventsOptionCell.designer.cs">
+      <DependentUpon>UpcomingEventsOptionCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSources\UpcomingEventsNotificationSettingsSource.cs" />
     <Compile Include="Extensions\ScrollViewExtensions.cs" />
     <Compile Include="Presentation\Attributes\TabPresentationAttribute.cs" />
     <Compile Include="Views\Calendar\CalendarCollectionViewAutoScrollHelper.cs" />

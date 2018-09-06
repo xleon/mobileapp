@@ -86,6 +86,9 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIView ManualModeView { get; set; }
 
 		[Outlet]
+		UIKit.UIView NotificationSettingsView { get; set; }
+
+		[Outlet]
 		UIKit.UIScrollView ScrollView { get; set; }
 
 		[Outlet]
@@ -137,11 +140,6 @@ namespace Toggl.Daneel.ViewControllers
 				AboutView = null;
 			}
 
-			if (CalendarSectionTopConstraint != null) {
-				CalendarSectionTopConstraint.Dispose ();
-				CalendarSectionTopConstraint = null;
-			}
-
 			if (BeginningOfWeekLabel != null) {
 				BeginningOfWeekLabel.Dispose ();
 				BeginningOfWeekLabel = null;
@@ -150,6 +148,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (BeginningOfWeekView != null) {
 				BeginningOfWeekView.Dispose ();
 				BeginningOfWeekView = null;
+			}
+
+			if (CalendarSectionTopConstraint != null) {
+				CalendarSectionTopConstraint.Dispose ();
+				CalendarSectionTopConstraint = null;
 			}
 
 			if (CalendarSettingsSection != null) {
@@ -260,6 +263,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (SendFeedbackSuccessView != null) {
 				SendFeedbackSuccessView.Dispose ();
 				SendFeedbackSuccessView = null;
+			}
+
+			if (NotificationSettingsView != null) {
+				NotificationSettingsView.Dispose ();
+				NotificationSettingsView = null;
 			}
 
 			if (SyncedIcon != null) {

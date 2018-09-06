@@ -1,17 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.Parameters;
+using Toggl.Foundation.Extensions;
+using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Foundation.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Settings;
-using Toggl.Foundation.MvvmCross.Helper;
-using FoundationResources = Toggl.Foundation.Resources;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
 {
@@ -19,12 +20,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
     public sealed class NotificationSettingsViewModel : MvxViewModel
     {
         private readonly IMvxNavigationService navigationService;
+        private readonly IBackgroundService backgroundService;
         private readonly IPermissionsService permissionsService;
         private readonly IUserPreferences userPreferences;
 
-        public bool PermissionGranted { get; private set; }
+        private readonly ISubject<bool> permissionGrantedSubject = new BehaviorSubject<bool>(false);
+        private readonly ISubject<string> upcomingEventSubject = new BehaviorSubject<string>(Resources.Disabled);
 
-        public IObservable<string> UpcomingEvents { get; }
+        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
+
+        public IObservable<bool> PermissionGranted => permissionGrantedSubject.AsObservable().DistinctUntilChanged();
+
+        public IObservable<string> UpcomingEvents => upcomingEventSubject.AsObservable().DistinctUntilChanged();
 
         public UIAction RequestAccessAction { get; }
 
@@ -32,16 +39,25 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
 
         public NotificationSettingsViewModel(
             IMvxNavigationService navigationService,
+            IBackgroundService backgroundService,
             IPermissionsService permissionsService,
             IUserPreferences userPreferences)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
+            Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
 
             this.navigationService = navigationService;
+            this.backgroundService = backgroundService;
             this.permissionsService = permissionsService;
             this.userPreferences = userPreferences;
+
+            backgroundService
+                .AppResumedFromBackground
+                .SelectUnit()
+                .Subscribe(refreshPermissionGranted)
+                .DisposedBy(disposeBag);
 
             RequestAccessAction = new UIAction(requestAccess);
             OpenUpcomingEvents = new UIAction(openUpcomingEvents);
@@ -49,8 +65,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
 
         public override async Task Initialize()
         {
-            PermissionGranted = await permissionsService.NotificationPermissionGranted;
             await base.Initialize();
+            await refreshPermissionGranted();
+            await refreshUpcomingEventsValue();
         }
 
         private IObservable<Unit> requestAccess()
@@ -60,81 +77,22 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
         }
 
         private IObservable<Unit> openUpcomingEvents()
-        {
-            var options = new List<SelectableItem<UpcomingEventsOption>>
+            => Observable.FromAsync(async () =>
             {
-                new SelectableItem<UpcomingEventsOption> { Title = FoundationResources.Disabled, Value = UpcomingEventsOption.Disabled },
-                new SelectableItem<UpcomingEventsOption> { Title = FoundationResources.WhenEventStarts, Value = UpcomingEventsOption.WhenEventStarts },
-                new SelectableItem<UpcomingEventsOption> { Title = FoundationResources.FiveMinutes, Value = UpcomingEventsOption.FiveMinutes },
-                new SelectableItem<UpcomingEventsOption> { Title = FoundationResources.TenMinutes, Value = UpcomingEventsOption.TenMinutes },
-                new SelectableItem<UpcomingEventsOption> { Title = FoundationResources.FifteenMinutes, Value = UpcomingEventsOption.FifteenMinutes },
-                new SelectableItem<UpcomingEventsOption> { Title = FoundationResources.ThirtyMinutes, Value = UpcomingEventsOption.ThirtyMinutes },
-                new SelectableItem<UpcomingEventsOption> { Title = FoundationResources.OneHour, Value = UpcomingEventsOption.OneHour },
-            };
-
-            return Observable.FromAsync(async () =>
-            {
-                var selectedIndex = await currentUpcomingEventsOptionIndex();
-                var parameters = new SelectFromListParameters<UpcomingEventsOption>
-                {
-                    Items = options,
-                    SelectedIndex = selectedIndex,
-                };
-
-                var selection = await navigationService
-                    .Navigate<UpcomingEventsNotificationSettingsViewModel, SelectFromListParameters<UpcomingEventsOption>, UpcomingEventsOption>(parameters);
-                saveUpcomingEventsOption(selection);
-            }).SelectUnit();
-        }
-
-        private IObservable<int> currentUpcomingEventsOptionIndex()
-        {
-            return Observable.FromAsync(async () =>
-            {
-                var notificationsEnabled = await userPreferences.CalendarNotificationsEnabled;
-                var timeSpan = await userPreferences.TimeSpanBeforeCalendarNotifications;
-
-                if (!notificationsEnabled)
-                    return 0;
-                if (timeSpan == TimeSpan.Zero)
-                    return 1;
-                if (timeSpan == TimeSpan.FromMinutes(5))
-                    return 2;
-                if (timeSpan == TimeSpan.FromMinutes(10))
-                    return 3;
-                if (timeSpan == TimeSpan.FromMinutes(15))
-                    return 4;
-                if (timeSpan == TimeSpan.FromMinutes(30))
-                    return 5;
-                return 6;
+                await navigationService.Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
+                await refreshUpcomingEventsValue();
             });
+
+        private async Task refreshPermissionGranted()
+        {
+            var permissionGranted = await permissionsService.NotificationPermissionGranted.FirstAsync();
+            permissionGrantedSubject.OnNext(permissionGranted);
         }
 
-        private void saveUpcomingEventsOption(UpcomingEventsOption option)
+        private async Task refreshUpcomingEventsValue()
         {
-            userPreferences.SetCalendarNotificationsEnabled(option != UpcomingEventsOption.Disabled);
-
-            switch (option)
-            {
-                case UpcomingEventsOption.WhenEventStarts:
-                    userPreferences.SetTimeSpanBeforeCalendarNotifications(TimeSpan.Zero);
-                    break;
-                case UpcomingEventsOption.FiveMinutes:
-                    userPreferences.SetTimeSpanBeforeCalendarNotifications(TimeSpan.FromMinutes(5));
-                    break;
-                case UpcomingEventsOption.TenMinutes:
-                    userPreferences.SetTimeSpanBeforeCalendarNotifications(TimeSpan.FromMinutes(10));
-                    break;
-                case UpcomingEventsOption.FifteenMinutes:
-                    userPreferences.SetTimeSpanBeforeCalendarNotifications(TimeSpan.FromMinutes(15));
-                    break;
-                case UpcomingEventsOption.ThirtyMinutes:
-                    userPreferences.SetTimeSpanBeforeCalendarNotifications(TimeSpan.FromMinutes(30));
-                    break;
-                case UpcomingEventsOption.OneHour:
-                    userPreferences.SetTimeSpanBeforeCalendarNotifications(TimeSpan.FromHours(1));
-                    break;
-            }
+            var calendarNotificationsOption = await userPreferences.CalendarNotificationsSettings().FirstAsync();
+            upcomingEventSubject.OnNext(calendarNotificationsOption.Title());
         }
     }
 }

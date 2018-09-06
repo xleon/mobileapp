@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public abstract class NotificationSettingsViewModelTest : BaseViewModelTests<NotificationSettingsViewModel>
         {
             protected override NotificationSettingsViewModel CreateViewModel()
-                => new NotificationSettingsViewModel(NavigationService, PermissionsService, UserPreferences);
+                => new NotificationSettingsViewModel(NavigationService, BackgroundService, PermissionsService, UserPreferences);
         }
 
         public sealed class TheConstructor : NotificationSettingsViewModelTest
@@ -27,12 +28,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useNavigationService,
+                bool useBackgroundService,
                 bool usePermissionsService,
                 bool useUserPreferences)
             {
                 Action tryingToConstructWithEmptyParameters =
                     () => new NotificationSettingsViewModel(
                         useNavigationService ? NavigationService : null,
+                        useBackgroundService ? BackgroundService : null,
                         usePermissionsService ? PermissionsService : null,
                         useUserPreferences ? UserPreferences : null
                     );
@@ -48,11 +51,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [InlineData(false)]
             public async Task GetsInitialisedToTheProperValue(bool permissionGranted)
             {
+                var observer = TestScheduler.CreateObserver<bool>();
                 PermissionsService.NotificationPermissionGranted.Returns(Observable.Return(permissionGranted));
 
-                await ViewModel.Initialize();
+                var viewModel = new NotificationSettingsViewModel(NavigationService, BackgroundService, PermissionsService, UserPreferences);
+                viewModel.PermissionGranted.Subscribe(observer);
 
-                ViewModel.PermissionGranted.Should().Be(permissionGranted);
+                await viewModel.Initialize();
+
+                observer.Messages.First().Value.Value.Should().Be(permissionGranted);
             }
         }
 
@@ -69,30 +76,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheOpenUpcomingEventsAction : NotificationSettingsViewModelTest
         {
-            [Theory, LogIfTooSlow]
-            [InlineData(UpcomingEventsOption.Disabled, false, 0)]
-            [InlineData(UpcomingEventsOption.WhenEventStarts, true, 0)]
-            [InlineData(UpcomingEventsOption.FiveMinutes, true, 5)]
-            [InlineData(UpcomingEventsOption.TenMinutes, true, 10)]
-            [InlineData(UpcomingEventsOption.FifteenMinutes, true, 15)]
-            [InlineData(UpcomingEventsOption.ThirtyMinutes, true, 30)]
-            [InlineData(UpcomingEventsOption.OneHour, true, 60)]
-            public async Task UpdatesTheCalendarNotificationsSettingsWhenAnOptionIsSelected(UpcomingEventsOption option, bool enabled, int minutes)
+            [Fact, LogIfTooSlow]
+            public async Task NavigatesToTheUpcomingEvents()
             {
-                NavigationService
-                    .Navigate<UpcomingEventsNotificationSettingsViewModel,
-                        SelectFromListParameters<UpcomingEventsOption>,
-                        UpcomingEventsOption>(Arg.Any<SelectFromListParameters<UpcomingEventsOption>>())
-                    .Returns(option);
-
                 await ViewModel.OpenUpcomingEvents.Execute(Unit.Default);
-
-                UserPreferences.Received().SetCalendarNotificationsEnabled(enabled);
-
-                if (enabled)
-                    UserPreferences.Received().SetTimeSpanBeforeCalendarNotifications(Arg.Is<TimeSpan>(arg => arg == TimeSpan.FromMinutes(minutes)));
-                else
-                    UserPreferences.DidNotReceive().SetTimeSpanBeforeCalendarNotifications(Arg.Any<TimeSpan>());
+                NavigationService.Received().Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
             }
         }
     }
