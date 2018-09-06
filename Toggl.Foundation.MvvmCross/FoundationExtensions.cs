@@ -54,6 +54,7 @@ namespace Toggl.Foundation.MvvmCross
                         foundation.BackgroundService,
                         createSyncManager(api),
                         TimeSpan.FromMinutes(5),
+                        foundation.NotificationService,
                         foundation.ShortcutCreator,
                         foundation.AnalyticsService)
                     .RegisterServices();
