@@ -50,7 +50,6 @@
             android:layout_width="wrap_content" />
         <TextView
             android:id="@+id/TimeEntriesLogCellDescription"
-            local:MvxBind="Text Description; Visibility Visibility(HasDescription)"
             tools:visibility="visible"
             android:maxLines="1"
             android:textSize="15sp"
@@ -67,7 +66,6 @@
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/AddDescriptionLabel"
-            local:MvxBind="Visibility InvertedVisibility(HasDescription)"
             tools:visibility="gone"
             android:maxLines="1"
             android:textSize="15sp"
@@ -82,7 +80,6 @@
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/TimeEntriesLogCellProjectLabel"
-            local:MvxBind="Text ProjectName; TextColor RGBA(ProjectColor); Visibility Visibility(HasProject)"
             tools:text="Design"
             tools:textColor="#c56bff"
             tools:visibility="visible"
@@ -100,7 +97,6 @@
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/TimeEntriesLogCellTaskLabel"
-            local:MvxBind="Text Format(': {0}', TaskName); TextColor RGBA(ProjectColor); Visibility Visibility(TaskName), ConverterParameter=true"
             tools:text=": Droid"
             tools:textColor="#c56bff"
             android:maxLines="1"
@@ -114,7 +110,6 @@
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/TimeEntryLogCellClientLabel"
-            local:MvxBind="Text ClientName; Visibility Visibility(HasProject)"
             tools:text="Toggl"
             android:maxLines="1"
             android:textSize="15sp"
@@ -135,7 +130,6 @@
             android:layout_width="144dp" />
         <TextView
             android:id="@+id/TimeEntriesLogCellDuration"
-            local:MvxBind="Text Duration(Duration, DurationFormat)"
             tools:text="0:23:01"
             android:maxLines="1"
             android:gravity="end"
@@ -153,7 +147,6 @@
             android:layout_alignParentTop="true" />
         <ImageView
             android:id="@+id/TimeEntriesLogCellContinueImage"
-            local:MvxBind="Visibility Visibility(CanSync)"
             android:src="@drawable/play"
             local:layout_constraintRight_toRightOf="parent"
             local:layout_constraintBottom_toTopOf="@+id/ErrorImageView"
@@ -164,7 +157,6 @@
             android:layout_marginBottom="8dp" />
         <ImageView
             android:id="@+id/ErrorImageView"
-            local:MvxBind="Visibility InvertedVisibility(CanSync)"
             tools:visibility="gone"
             android:src="@drawable/error_baddata"
             local:layout_constraintEnd_toEndOf="parent"
@@ -175,7 +167,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp" />
         <ImageView
-            local:MvxBind="Visibility Visibility(NeedsSync)"
+            android:id="@+id/ErrorNeedsSync"
             android:src="@drawable/unsynced"
             local:layout_constraintTop_toTopOf="@id/TimeEntriesLogCellContinueImage"
             local:layout_constraintEnd_toStartOf="@id/TimeEntriesLogCellContinueImage"
@@ -185,7 +177,6 @@
             android:layout_alignParentBottom="true" />
         <Button
             android:id="@+id/TimeEntriesLogCellContinueButton"
-            local:MvxBind="Visibility Visibility(CanSync)"
             local:layout_constraintEnd_toEndOf="parent"
             android:background="@android:color/transparent"
             android:layout_width="70dp"

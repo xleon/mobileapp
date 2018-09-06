@@ -1,23 +1,22 @@
-using MvvmCross.Binding;
-using MvvmCross.Binding.BindingContext;
-using MvvmCross.Platforms.Ios.Binding;
-using MvvmCross.Platforms.Ios.Views;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Plugin.Color.Platforms.Ios;
-using MvvmCross.Plugin.Visibility;
 using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Multivac;
 using UIKit;
-using static Toggl.Daneel.Extensions.ViewBindingExtensions;
 using static Toggl.Daneel.Extensions.LoginSignupViewExtensions;
+using static Toggl.Daneel.Extensions.UIKitRxExtensions;
 using static Toggl.Daneel.Extensions.ViewExtensions;
+
 
 namespace Toggl.Daneel.ViewControllers
 {
     [MvxRootPresentation(WrapInNavigationController = true)]
-    public sealed partial class SignupViewController : MvxViewController<SignupViewModel>
+    public sealed partial class SignupViewController : ReactiveViewController<SignupViewModel>
     {
         private const int iPhoneSeScreenHeight = 568;
 
@@ -29,7 +28,7 @@ namespace Toggl.Daneel.ViewControllers
         private const int emailTopConstraint = 42;
         private const int emailTopConstraintWithKeyboard = 12;
 
-        public SignupViewController() : base(nameof(SignupViewController), null)
+        public SignupViewController() : base(nameof(SignupViewController))
         {
         }
 
@@ -37,71 +36,60 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidLoad();
 
-            var signupButtonTitleConverter = new BoolToConstantValueConverter<string>("", Resources.SignUpTitle);
-            var invertedVisibilityConverter = new MvxInvertedVisibilityValueConverter();
-
-            var bindingSet = this.CreateBindingSet<SignupViewController, SignupViewModel>();
+            NavigationController.NavigationBarHidden = true;
 
             UIKeyboard.Notifications.ObserveWillShow(KeyboardWillShow);
             UIKeyboard.Notifications.ObserveWillHide(KeyboardWillHide);
 
             //Text
-            bindingSet.Bind(ErrorLabel).To(vm => vm.ErrorText);
-            bindingSet.Bind(EmailTextField)
-                      .To(vm => vm.Email)
-                      .WithConversion(new EmailToStringValueConverter());
-
-            bindingSet.Bind(PasswordTextField)
-                      .To(vm => vm.Password)
-                      .WithConversion(new PasswordToStringValueConverter());
-
-            bindingSet.Bind(SignupButton)
-                      .For(v => v.BindAnimatedTitle())
-                      .To(vm => vm.IsLoading)
-                      .WithConversion(signupButtonTitleConverter);
-
-            bindingSet.Bind(SelectCountryButton)
-                      .For(v => v.BindAnimatedTitle())
-                      .To(vm => vm.CountryButtonTitle);
-
-            //Commands
-            bindingSet.Bind(SignupButton).To(vm => vm.SignupCommand);
-            bindingSet.Bind(GoogleSignupButton).To(vm => vm.GoogleSignupCommand);
-            bindingSet.Bind(ShowPasswordButton).To(vm => vm.TogglePasswordVisibilityCommand);
-            bindingSet.Bind(SelectCountryButton).To(vm => vm.PickCountryCommand);
-            bindingSet.Bind(LoginCard)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.LoginCommand);
+            this.Bind(ViewModel.Email, EmailTextField.BindText());
+            this.Bind(ViewModel.ErrorMessage, ErrorLabel.BindText());
+            this.Bind(ViewModel.Password, PasswordTextField.BindText());
+            this.Bind(EmailTextField.Text().Select(Email.From), ViewModel.SetEmail);
+            this.Bind(PasswordTextField.Text().Select(Password.From), ViewModel.SetPassword);
+            this.Bind(ViewModel.IsLoading.Select(signupButtonTitle), SignupButton.BindAnimatedTitle());
+            this.Bind(ViewModel.CountryButtonTitle, SelectCountryButton.BindAnimatedTitle());
 
             //Visibility
-            bindingSet.Bind(ErrorLabel)
-                      .For(v => v.BindAnimatedVisibility())
-                      .To(vm => vm.HasError);
+            this.Bind(ViewModel.HasError, ErrorLabel.BindAnimatedIsVisible());
+            this.Bind(ViewModel.IsLoading, ActivityIndicator.BindIsVisibleWithFade());
+            this.Bind(ViewModel.IsPasswordMasked.Skip(1), PasswordTextField.BindSecureTextEntry());
+            this.Bind(ViewModel.IsShowPasswordButtonVisible, ShowPasswordButton.BindIsVisible());
+            this.Bind(PasswordTextField.FirstResponder, ViewModel.SetIsShowPasswordButtonVisible);
+            this.Bind(ViewModel.IsCountryErrorVisible, CountryNotSelectedImageView.BindAnimatedIsVisible());
 
-            bindingSet.Bind(ActivityIndicator)
-                      .For(v => v.BindVisibilityWithFade())
-                      .To(vm => vm.IsLoading);
+            //Commands
+            this.Bind(LoginCard.Tapped(), ViewModel.Login);
+            this.Bind(SignupButton.Tapped(), ViewModel.Signup);
+            this.BindVoid(GoogleSignupButton.Tapped(), ViewModel.GoogleSignup);
+            this.BindVoid(ShowPasswordButton.Tapped(), ViewModel.TogglePasswordVisibility);
+            this.Bind(SelectCountryButton.Tapped(), ViewModel.PickCountry);
 
-            bindingSet.Bind(PasswordTextField)
-                      .For(v => v.BindSecureTextEntry())
-                      .To(vm => vm.IsPasswordMasked);
+            //Color
+            this.Bind(ViewModel.HasError.Select(signupButtonTintColor), SignupButton.BindTintColor());
+            this.Bind(ViewModel.SignupEnabled.Select(signupButtonTitleColor), SignupButton.BindTitleColor());
 
-            bindingSet.Bind(ShowPasswordButton)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.IsShowPasswordButtonVisible);
+            //Animation
+            this.Bind(ViewModel.Shake, shakeTargets =>
+            {
+                if (shakeTargets.HasFlag(SignupViewModel.ShakeTargets.Email))
+                    EmailTextField.Shake();
 
-            bindingSet.Bind(PasswordTextField)
-                      .For(v => v.BindFirstResponder())
-                      .To(vm => vm.IsShowPasswordButtonVisible)
-                      .Mode(MvxBindingMode.OneWayToSource);
+                if (shakeTargets.HasFlag(SignupViewModel.ShakeTargets.Password))
+                    PasswordTextField.Shake();
 
-            bindingSet.Bind(CountryNotSelectedImageView)
-                      .For(v => v.BindAnimatedVisibility())
-                      .To(vm => vm.IsCountryErrorVisible);
-
-            bindingSet.Apply();
+                if (shakeTargets.HasFlag(SignupViewModel.ShakeTargets.Country))
+                    SelectCountryButton.Shake();
+            });
 
             prepareViews();
+
+            UIColor signupButtonTintColor(bool hasError)
+                => hasError ? UIColor.White : UIColor.Black;
+
+            UIColor signupButtonTitleColor(bool enabled) => enabled
+                ? Color.Login.EnabledButtonColor.ToNativeColor()
+                : Color.Login.DisabledButtonColor.ToNativeColor();
         }
 
         public override void ViewDidLayoutSubviews()
@@ -162,7 +150,7 @@ namespace Toggl.Daneel.ViewControllers
 
             PasswordTextField.ShouldReturn += _ =>
             {
-                ViewModel.SignupCommand.Execute();
+                ViewModel.Signup();
                 PasswordTextField.ResignFirstResponder();
                 return false;
             };
@@ -173,29 +161,11 @@ namespace Toggl.Daneel.ViewControllers
                 PasswordTextField.ResignFirstResponder();
             }));
 
-            SignupShakeTriggerButton.TouchUpInside += (sender, e) =>
-            {
-                if (!ViewModel.Email.IsValid)
-                {
-                    EmailTextField.Shake();
-                }
-                if (!ViewModel.Password.IsValid)
-                {
-                    PasswordTextField.Shake();
-                }
-                if (!ViewModel.IsCountryValid)
-                {
-                    SelectCountryButton.Shake();
-                    CountryNotSelectedImageView.Shake();
-                    CountryDropDownCaretImageView.Shake();
-                }
-            };
-
             ShowPasswordButton.SetupShowPasswordButton();
-
-            EmailTextField.ResignFirstResponder();
-            PasswordTextField.ResignFirstResponder();
         }
+
+        private string signupButtonTitle(bool isLoading)
+            => isLoading ? "" : Resources.SignUpTitle;
     }
 }
 

@@ -46,21 +46,29 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
         {
             var state = (CreateEntityState<ITestModel, IDatabaseTestModel, IThreadSafeTestModel>)CreateState();
             var entity = new TestModel(-1, SyncStatus.SyncFailed);
-            var withPositiveId = new TestModel(Math.Abs(entity.Id), SyncStatus.InSync);
+            var withPositiveId = new TestModel(13, SyncStatus.InSync);
             api.Create(Arg.Any<ITestModel>())
                 .Returns(Observable.Return(withPositiveId));
             dataSource.OverwriteIfOriginalDidNotChange(Arg.Any<IThreadSafeTestModel>(), Arg.Any<IThreadSafeTestModel>())
                       .Returns(x => Observable.Return(new[] {
-                            new UpdateResult<IThreadSafeTestModel>(entity.Id, (IThreadSafeTestModel)x[1])
+                            new UpdateResult<IThreadSafeTestModel>(entity.Id, entityWithId((IThreadSafeTestModel)x[1], entity.Id))
                       }));
+            dataSource.ChangeId(entity.Id, withPositiveId.Id).Returns(Observable.Return(withPositiveId));
 
             var transition = state.Start(entity).SingleAsync().Wait();
             var persistedEntity = ((Transition<IThreadSafeTestModel>)transition).Parameter;
 
+            dataSource.Received().ChangeId(entity.Id, withPositiveId.Id);
             transition.Result.Should().Be(state.Finished);
-            persistedEntity.Id.Should().NotBe(entity.Id);
-            persistedEntity.Id.Should().BeGreaterThan(0);
+            persistedEntity.Id.Should().Be(withPositiveId.Id);
             persistedEntity.SyncStatus.Should().Be(SyncStatus.InSync);
+        }
+
+        private static IThreadSafeTestModel entityWithId(IThreadSafeTestModel testModel, long id)
+        {
+            var newModel = TestModel.From(testModel);
+            newModel.Id = id;
+            return newModel;
         }
 
         [Fact, LogIfTooSlow]
@@ -115,6 +123,25 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
 
             transition.Result.Should().Be(state.EntityChanged);
             parameter.Id.Should().Be(entity.Id);
+        }
+
+        [Fact, LogIfTooSlow]
+        public void ChangesIdIfTheEntityChangedLocally()
+        {
+            var state = (CreateEntityState<ITestModel, IDatabaseTestModel, IThreadSafeTestModel>)CreateState();
+            var at = new DateTimeOffset(2017, 9, 1, 12, 34, 56, TimeSpan.Zero);
+            var entity = new TestModel { Id = -1, At = at, SyncStatus = SyncStatus.SyncNeeded };
+            var updatedEntity = new TestModel { Id = 13, At = at, SyncStatus = SyncStatus.SyncNeeded };
+            api.Create(Arg.Any<ITestModel>())
+                .Returns(Observable.Return(updatedEntity));
+            dataSource
+                .OverwriteIfOriginalDidNotChange(Arg.Any<IThreadSafeTestModel>(), Arg.Any<IThreadSafeTestModel>())
+                .Returns(Observable.Return(new[] { new IgnoreResult<IThreadSafeTestModel>(entity.Id) }));
+            dataSource.ChangeId(Arg.Any<long>(), updatedEntity.Id).Returns(Observable.Return(entity));
+
+            _ = state.Start(entity).SingleAsync().Wait();
+
+            dataSource.Received().ChangeId(entity.Id, updatedEntity.Id);
         }
 
         [Fact, LogIfTooSlow]

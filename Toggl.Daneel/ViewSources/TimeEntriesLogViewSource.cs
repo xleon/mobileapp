@@ -104,7 +104,10 @@ namespace Toggl.Daneel.ViewSources
         public override void RefreshHeader(UITableView tableView, int section)
         {
             if (tableView.GetHeaderView(section) is TimeEntriesLogHeaderView header)
+            {
+                header.Items = collection[section];
                 header.UpdateView();
+            }
         }
 
         private void handleDeleteTableViewRowAction(UITableViewRowAction rowAction, NSIndexPath indexPath)

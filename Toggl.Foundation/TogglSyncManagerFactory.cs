@@ -276,8 +276,8 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(checkServerStatus.Retry, checkServerStatus);
             transitions.ConfigureTransition(checkServerStatus.ServerIsAvailable, push);
 
-            transitions.ConfigureTransition(create.EntityChanged, create);
-            transitions.ConfigureTransition(update.EntityChanged, update);
+            transitions.ConfigureTransition(create.EntityChanged, push);
+            transitions.ConfigureTransition(update.EntityChanged, push);
 
             transitions.ConfigureTransition(create.Finished, finished);
             transitions.ConfigureTransition(update.Finished, finished);
@@ -335,7 +335,7 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(checkServerStatus.Retry, checkServerStatus);
             transitions.ConfigureTransition(checkServerStatus.ServerIsAvailable, push);
 
-            transitions.ConfigureTransition(create.EntityChanged, create);
+            transitions.ConfigureTransition(create.EntityChanged, new InvalidTransitionState($"Entity cannot have changed since updating is not supported for {typeof(TModel).Name} during Push sync."));
             transitions.ConfigureTransition(create.Finished, finished);
 
             transitions.ConfigureTransition(finished.Continue, push);

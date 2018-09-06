@@ -5,6 +5,7 @@ using Android.Graphics;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Android.Widget;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Adapters;
@@ -49,15 +50,24 @@ namespace Toggl.Giskard.Activities
                 avatarView.SetImageBitmap(bitmap);
                 avatarContainer.Visibility = ViewStates.Visible;
             });
+            this.Bind(ViewModel.IsFeedbackSuccessViewShowing, showFeedbackSuccessToast);
 
             this.Bind(logoutView.Tapped(), ViewModel.TryLogout);
             this.Bind(helpView.Tapped(), ViewModel.OpenHelpView);
             this.Bind(aboutView.Tapped(), ViewModel.OpenAboutView);
-            this.Bind(feedbackView.Tapped(), ViewModel.SubmitFeedbackUsingEmail);
+            this.Bind(feedbackView.Tapped(), ViewModel.SubmitFeedback);
             this.BindVoid(manualModeView.Tapped(), ViewModel.ToggleManualMode);
             this.Bind(beginningOfWeekView.Tapped(), ViewModel.SelectBeginningOfWeek);
-
             setupToolbar();
+        }
+
+        private void showFeedbackSuccessToast(bool succeeeded)
+        {
+            if (!succeeeded) return;
+
+            var toast = Toast.MakeText(this, Resource.String.SendFeedbackSuccessMessage, ToastLength.Long);
+            toast.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.Bottom, 0, 0);
+            toast.Show();
         }
 
         private Bitmap userImageFromBytes(byte[] imageBytes)

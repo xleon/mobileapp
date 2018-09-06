@@ -39,7 +39,7 @@ namespace Toggl.Giskard.Fragments
             EditingDuration
         }
 
-        private readonly int[] heights = { 450, 400, 224, 204, 164 };
+        private readonly int[] heights = { 484, 400, 224, 204, 164 };
         private const int vibrationDuration = 250;
 
         private EditorMode editorMode = Date;

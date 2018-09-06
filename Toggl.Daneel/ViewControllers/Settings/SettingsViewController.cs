@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
@@ -38,9 +39,7 @@ namespace Toggl.Daneel.ViewControllers
             this.Bind(ViewModel.DurationFormat, DurationFormatLabel.BindText());
             this.Bind(ViewModel.IsRunningSync, SyncingView.BindIsVisible());
             this.Bind(ViewModel.DateFormat, DateFormatLabel.BindText());
-            this.Bind(ViewModel.IsManualModeEnabled, ManualModeSwitch.BindIsOn());
             this.Bind(ViewModel.BeginningOfWeek, BeginningOfWeekLabel.BindText());
-            this.Bind(ViewModel.UseTwentyFourHourFormat, TwentyFourHourClockSwitch.BindIsOn());
             this.BindVoid(ViewModel.LoggingOut, () =>
             {
                 LoggingOutView.Hidden = false;
@@ -55,13 +54,13 @@ namespace Toggl.Daneel.ViewControllers
             this.Bind(FeedbackView.Tapped(), ViewModel.SubmitFeedback);
             this.Bind(DateFormatView.Tapped(), ViewModel.SelectDateFormat);
             this.Bind(WorkspaceView.Tapped(), ViewModel.PickDefaultWorkspace);
-            this.BindVoid(ManualModeView.Tapped(), ViewModel.ToggleManualMode);
+            this.BindVoid(ManualModeSwitch.Changed(), ViewModel.ToggleManualMode);
             this.Bind(DurationFormatView.Tapped(), ViewModel.SelectDurationFormat);
             this.Bind(BeginningOfWeekView.Tapped(), ViewModel.SelectBeginningOfWeek);
             this.Bind(CalendarSettingsView.Tapped(), ViewModel.OpenCalendarSettingsAction);
-            this.Bind(NotificationSettingsView.Tapped(), ViewModel.OpenNotificationSettingsAction);
-            this.Bind(TwentyFourHourClockView.Tapped(), ViewModel.ToggleUseTwentyFourHourClock);
             this.BindVoid(SendFeedbackSuccessView.Tapped(), ViewModel.CloseFeedbackSuccessView);
+            this.Bind(NotificationSettingsView.Tapped(), ViewModel.OpenNotificationSettingsAction);
+            this.Bind(TwentyFourHourClockSwitch.Changed(), ViewModel.ToggleUseTwentyFourHourClock);
 
             UIApplication.Notifications
                 .ObserveWillEnterForeground((sender, e) => startAnimations())
@@ -69,6 +68,16 @@ namespace Toggl.Daneel.ViewControllers
 
             if (!ViewModel.CalendarSettingsEnabled)
                 hideCalendarSettingsSection();
+
+            ViewModel.IsManualModeEnabled
+                .FirstAsync()
+                .Subscribe(isEnabled => ManualModeSwitch.SetState(isEnabled, false))
+                .DisposedBy(DisposeBag);
+
+            ViewModel.UseTwentyFourHourFormat
+                .FirstAsync()
+                .Subscribe(useTwentyFourHourFormat => TwentyFourHourClockSwitch.SetState(useTwentyFourHourFormat, false))
+                .DisposedBy(DisposeBag);
         }
 
         public override void ViewWillAppear(bool animated)

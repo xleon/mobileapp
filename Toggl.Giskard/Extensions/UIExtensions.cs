@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
+using Android.Support.V4.Widget;
 using Android.Text;
 using Android.Views;
 using Android.Widget;
@@ -16,6 +17,11 @@ namespace Toggl.Giskard.Extensions
         public static IObservable<Unit> Tapped(this View button)
             => Observable
                 .FromEventPattern(e => button.Click += e, e => button.Click -= e)
+                .SelectUnit();
+
+        public static IObservable<Unit> Refreshed(this SwipeRefreshLayout swipeLayout)
+            => Observable
+                .FromEventPattern(e => swipeLayout.Refresh += e, e => swipeLayout.Refresh -= e)
                 .SelectUnit();
 
         public static IObservable<string> Text(this TextView textView)
@@ -33,15 +39,15 @@ namespace Toggl.Giskard.Extensions
                 .FromEventPattern<TextView.EditorActionEventArgs>(e => text.EditorAction += e, e => text.EditorAction -= e)
                 .SelectUnit();
 
-        public static Action<bool> BindIsVisible(this View view)
-            => isVisible => view.Visibility = isVisible.ToVisibility();
+        public static Action<bool> BindIsVisible(this View view, bool useGone = false)
+            => isVisible => view.Visibility = isVisible.ToVisibility(useGone);
 
         public static Action<string> BindText(this TextView textView)
             => text => textView.Text = text;
 
         public static Action<bool> BindChecked(this CompoundButton compoundButton)
             => isChecked => compoundButton.Checked = isChecked;
-        
+
         public static Action<IList<T>> BindItems<T>(this BaseRecyclerAdapter<T> adapter)
             => collection => adapter.Items = collection;
 

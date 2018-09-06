@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
+using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Base;
+using Toggl.Giskard.ViewHolders;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Extensions;
 using Toggl.PrimeRadiant.Onboarding;
 using Toggl.PrimeRadiant.Settings;
+using AnimationSide = Toggl.Giskard.ViewHolders.MainLogCellViewHolder.AnimationSide;
 
 namespace Toggl.Giskard.Extensions
 {
@@ -17,40 +21,76 @@ namespace Toggl.Giskard.Extensions
 
         public static IDisposable ManageDismissableTooltip(this IOnboardingStep step, PopupWindow tooltip, View anchor, Func<PopupWindow, View, PopupOffsets> popupOffsetsGenerator, IOnboardingStorage storage)
         {
-            Ensure.Argument.IsNotNull(anchor, nameof(tooltip));
+            Ensure.Argument.IsNotNull(tooltip, nameof(tooltip));
             Ensure.Argument.IsNotNull(anchor, nameof(anchor));
 
             var dismissableStep = step.ToDismissable(step.GetType().FullName, storage);
 
-            void OnDismiss(object sender, EventArgs args)
-            {
-                tooltip.Dismiss();
-                dismissableStep.Dismiss();
-            }
-
-            tooltip.ContentView.Click += OnDismiss;
+            dismissableStep.DismissByTapping(tooltip, () => { });
 
             return dismissableStep.ManageVisibilityOf(tooltip, anchor, popupOffsetsGenerator);
         }
 
-        private static IDisposable ManageVisibilityOf(this IOnboardingStep step, PopupWindow popupWindowTooltip, View anchor, Func<PopupWindow, View, PopupOffsets> popupOffsetsGenerator)
+        public static IDisposable ManageVisibilityOf(this IOnboardingStep step, PopupWindow tooltip, View anchor, Func<PopupWindow, View, PopupOffsets> popupOffsetsGenerator)
         {
+            Ensure.Argument.IsNotNull(tooltip, nameof(tooltip));
+            Ensure.Argument.IsNotNull(anchor, nameof(anchor));
 
             void toggleVisibilityOnMainThread(bool shouldBeVisible)
             {
                 if (shouldBeVisible)
                 {
-                    showPopupTooltip(popupWindowTooltip, anchor, popupOffsetsGenerator);
+                    showPopupTooltip(tooltip, anchor, popupOffsetsGenerator);
                 }
                 else
                 {
-                    popupWindowTooltip.Dismiss();
+                    tooltip.Dismiss();
                 }
             }
 
             return step.ShouldBeVisible
+                .ObserveOn(SynchronizationContext.Current)
                 .combineWithWindowTokenAvailabilityFrom(anchor)
                 .Subscribe(toggleVisibilityOnMainThread);
+        }
+
+        public static IDisposable ManageSwipeActionAnimationOf(this IOnboardingStep step, RecyclerView recyclerView, MainLogCellViewHolder viewHolder, AnimationSide side)
+        {
+            Ensure.Argument.IsNotNull(viewHolder, nameof(viewHolder));
+
+            void toggleVisibilityOnMainThread(bool shouldBeVisible)
+            {
+                if (shouldBeVisible && !viewHolder.IsAnimating)
+                {
+                    viewHolder.StartAnimating(side);
+                    recyclerView.ScrollBy(0, 1);
+                }
+            }
+
+            var subscriptionDisposable = step.ShouldBeVisible
+                .ObserveOn(SynchronizationContext.Current)
+                .Subscribe(toggleVisibilityOnMainThread);
+
+            return Disposable.Create(() =>
+            {
+                viewHolder.StopAnimating();
+                subscriptionDisposable?.Dispose();
+                subscriptionDisposable = null;
+            });
+        }
+
+        public static void DismissByTapping(this IDismissable step, PopupWindow popupWindow, Action cleanup = null)
+        {
+            Ensure.Argument.IsNotNull(popupWindow, nameof(popupWindow));
+
+            void OnDismiss(object sender, EventArgs args)
+            {
+                popupWindow.Dismiss();
+                step.Dismiss();
+                cleanup();
+            }
+
+            popupWindow.ContentView.Click += OnDismiss;
         }
 
         private static void showPopupTooltip(PopupWindow popupWindow, View anchor, Func<PopupWindow, View, PopupOffsets> popupOffsetsGenerator)

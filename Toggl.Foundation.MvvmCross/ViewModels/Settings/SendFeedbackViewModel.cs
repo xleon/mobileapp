@@ -20,8 +20,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IMvxNavigationService navigationService;
 
         // Internal States
-        private readonly ISubject<bool> errorViewVisibleSubject = new BehaviorSubject<bool>(false);
         private readonly ISubject<bool> isLoadingSubject = new BehaviorSubject<bool>(false);
+        private readonly ISubject<Exception> currentErrorSubject = new BehaviorSubject<Exception>(null);
 
         // Actions
         public UIAction CloseButtonTapped { get; }
@@ -33,9 +33,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         // Outputs
         public IObservable<bool> IsFeedbackEmpty { get; }
-        public IObservable<bool> ErrorViewVisible { get; }
         public IObservable<bool> SendEnabled { get; }
         public IObservable<bool> IsLoading { get; }
+        public IObservable<Exception> Error { get; }
 
         private IObservable<bool> isEmptyObservable => FeedbackText.Select(string.IsNullOrEmpty);
         private IObservable<bool> sendingIsEnabledObservable =>
@@ -65,13 +65,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ErrorViewTapped = new UIAction(dismissError);
             SendButtonTapped = new UIAction(sendFeedback, sendingIsEnabledObservable);
 
-            ErrorViewVisible = errorViewVisibleSubject.AsDriver(true, schedulerProvider);
             IsLoading = isLoadingSubject.AsDriver(false, schedulerProvider);
+            Error = currentErrorSubject.AsDriver(default(Exception), schedulerProvider);
         }
 
         private IObservable<Unit> dismissError()
         {
-            errorViewVisibleSubject.OnNext(false);
+            currentErrorSubject.OnNext(null);
             return Observable.Return(Unit.Default);
         }
 
@@ -89,7 +89,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Do(_ =>
                 {
                     isLoadingSubject.OnNext(true);
-                    errorViewVisibleSubject.OnNext(false);
+                    currentErrorSubject.OnNext(null);
                 })
                 .SelectMany(text => interactorFactory
                     .SendFeedback(text)
@@ -101,7 +101,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     {
                         case NotificationKind.OnError:
                             isLoadingSubject.OnNext(false);
-                            errorViewVisibleSubject.OnNext(true);
+                            currentErrorSubject.OnNext(notification.Exception);
                             break;
 
                         default:

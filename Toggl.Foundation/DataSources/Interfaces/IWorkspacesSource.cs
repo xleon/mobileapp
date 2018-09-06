@@ -6,7 +6,7 @@ using Toggl.PrimeRadiant.Models;
 namespace Toggl.Foundation.DataSources.Interfaces
 {
     public interface IWorkspacesSource
-        : IDataSource<IThreadSafeWorkspace, IDatabaseWorkspace>
+        : IObservableDataSource<IThreadSafeWorkspace, IDatabaseWorkspace>
     {
         IObservable<IThreadSafeWorkspace> Create(string name);
     }

@@ -13,7 +13,7 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
     <data name="OnboardingTrackPageCopy">
-        <value>Track your hours 
+        <value>Track your hours
 with a single tap</value>
     </data>
     <data name="OnboardingMostUsedPageCopy">
@@ -341,30 +341,30 @@ account is not set up</value>
     </data>
     <data name="ContinueLastEntry">
         <value>Continue last entry</value>
-     </data>
-     <data name="TapToRetry">
+    </data>
+    <data name="TapToRetry">
         <value>Tap to retry</value>
     </data>
-    <data name="TimeEntrySuggestion">       
-        <value>Time entry suggestion</value>      
+    <data name="TimeEntrySuggestion">
+        <value>Time entry suggestion</value>
     </data>
-    <data name="EmailIsAlreadyUsedError">       
-        <value>User with this email already exists.</value>     
-    </data>       
-    <data name="TryLoggingInInstead">     
-        <value>Try logging in instead.</value>      
+    <data name="EmailIsAlreadyUsedError">
+        <value>User with this email already exists.</value>
+    </data>
+    <data name="TryLoggingInInstead">
+        <value>Try logging in instead.</value>
     </data>
     <data name="About">
-        <value>About</value>      
+        <value>About</value>
     </data>
     <data name="Licenses">
         <value>Licenses</value>
     </data>
-     <data name="Save">     
-        <value>Save</value>      
+    <data name="Save">
+        <value>Save</value>
     </data>
-     <data name="Done">     
-        <value>Done</value>      
+    <data name="Done">
+        <value>Done</value>
     </data>
     <data name="SignUpCountryRequired">
         <value>Please select your country.</value>
@@ -383,7 +383,7 @@ account is not set up</value>
     </data>
     <data name="RatingViewPositiveCTATitle">
         <value>Awesome!</value>
-    </data>    
+    </data>
     <data name="RatingViewNegativeCTATitle">
         <value>Ok, no worries</value>
     </data>
@@ -473,5 +473,8 @@ account is not set up</value>
     </data>
     <data name="OpenAppAction">
         <value>Open app</value>
+    </data>
+    <data name="DiscardMessage">
+        <value>Discard message?</value>
     </data>
 </root>

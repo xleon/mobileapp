@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentAssertions;
-using Toggl.PrimeRadiant;
 using Xunit;
 
 namespace Toggl.Multivac.Tests
@@ -132,7 +131,7 @@ namespace Toggl.Multivac.Tests
                 const string argumentName = "argument";
 
                 Action whenTheCalledArgumentIsNotADefinedEnumValue =
-                    () => Ensure.Argument.IsADefinedEnumValue<SyncStatus>((SyncStatus)10, argumentName);
+                    () => Ensure.Argument.IsADefinedEnumValue<BeginningOfWeek>((BeginningOfWeek)10, argumentName);
 
                 whenTheCalledArgumentIsNotADefinedEnumValue
                     .Should().Throw<ArgumentException>()
@@ -143,7 +142,7 @@ namespace Toggl.Multivac.Tests
             public void DoesNotThrowWhenTheArgumentIsNotNull()
             {
                 Action whenTheCalledArgumentIsNotADefinedEnumValue =
-                    () => Ensure.Argument.IsADefinedEnumValue<SyncStatus>(SyncStatus.SyncNeeded, "argument");
+                    () => Ensure.Argument.IsADefinedEnumValue<BeginningOfWeek>(BeginningOfWeek.Monday, "argument");
 
                 whenTheCalledArgumentIsNotADefinedEnumValue.Should().NotThrow();
             }

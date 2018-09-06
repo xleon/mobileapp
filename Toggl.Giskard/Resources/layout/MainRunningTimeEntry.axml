@@ -13,6 +13,7 @@
         android:layout_height="0dp"
         android:layout_width="wrap_content" />
     <View
+        android:id="@+id/MainContentArea"
         local:MvxBind="Click EditTimeEntryCommand"
         android:background="@android:color/white"
         local:layout_constraintLeft_toLeftOf="parent"
@@ -71,11 +72,11 @@
         android:textColor="@color/defaultText"
         local:layout_constraintBaseline_toBaselineOf="@id/LeadingTextView"
         local:layout_constraintLeft_toRightOf="@id/MainRunningTimeEntryDescription"
-        local:layout_constraintRight_toLeftOf="@+id/MainRunningTimeEntryProjectDot"
+        local:layout_constraintRight_toLeftOf="@+id/MainRunningTimeEntryProjectDotContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <FrameLayout
-        android:id="@+id/MainRunningTimeEntryProjectDot"
+        android:id="@+id/MainRunningTimeEntryProjectDotContainer"
         local:MvxBind="Visibility Visibility(HasProject)"
         local:layout_constraintTop_toTopOf="@+id/MainRunningTimeEntryProjectLabel"
         local:layout_constraintRight_toLeftOf="@id/MainRunningTimeEntryProjectLabel"
@@ -85,6 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <View
+            android:id="@+id/MainRunningTimeEntryProjectDotView"    
             local:MvxBind="DrawableColor ARGB(CurrentTimeEntryProjectColor);"
             android:background="@drawable/SmallDot"
             android:layout_width="4dp"
@@ -101,7 +103,7 @@
         android:singleLine="true"
         android:fontFamily="sans-serif-medium"
         local:layout_constraintBaseline_toBaselineOf="@id/LeadingTextView"
-        local:layout_constraintLeft_toRightOf="@id/MainRunningTimeEntryProjectDot"
+        local:layout_constraintLeft_toRightOf="@id/MainRunningTimeEntryProjectDotContainer"
         local:layout_constraintRight_toLeftOf="@+id/MainRunningTimeEntryClientLabel"
         android:layout_marginLeft="4dp"
         android:layout_marginBottom="16dp"

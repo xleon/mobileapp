@@ -18,6 +18,7 @@ using Toggl.Foundation.Tests.Mocks;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Xunit;
+using Microsoft.Reactive.Testing;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -38,7 +39,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected override ReportsViewModel CreateViewModel()
             {
                 DataSource.ReportsProvider.Returns(ReportsProvider);
-                return new ReportsViewModel(DataSource, TimeService, NavigationService, InteractorFactory, AnalyticsService, DialogService);
+                return new ReportsViewModel(DataSource, TimeService, NavigationService, InteractorFactory, AnalyticsService, DialogService, SchedulerProvider);
             }
 
             protected async Task Initialize()
@@ -72,7 +73,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                                                         bool useNavigationService,
                                                         bool useAnalyticsService,
                                                         bool useInteractorFactory,
-                                                        bool useDialogService)
+                                                        bool useDialogService,
+                                                        bool useSchedulerProvider)
             {
                 var timeService = useTimeService ? TimeService : null;
                 var reportsProvider = useDataSource ? DataSource : null;
@@ -80,9 +82,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var dialogService = useDialogService ? DialogService : null;
+                var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new ReportsViewModel(reportsProvider, timeService, navigationService, interactorFactory, analyticsService, dialogService);
+                    () => new ReportsViewModel(reportsProvider, timeService, navigationService, interactorFactory, analyticsService, dialogService, schedulerProvider);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -266,6 +269,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 int startYear, int startMonth, int startDay,
                 int endYear, int endMonth, int endDay)
             {
+                var observer = TestScheduler.CreateObserver<string>();
+                ViewModel.CurrentDateRangeStringObservable.Subscribe(observer);
+
                 var currentDate = new DateTimeOffset(currentYear, currentMonth, currentDay, 0, 0, 0, TimeSpan.Zero);
                 var start = new DateTimeOffset(startYear, startMonth, startDay, 0, 0, 0, TimeSpan.Zero);
                 var end = new DateTimeOffset(endYear, endMonth, endDay, 0, 0, 0, TimeSpan.Zero);
@@ -273,7 +279,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.ChangeDateRangeCommand.Execute(
                     ReportsDateRangeParameter.WithDates(start, end).WithSource(ReportsSource.Calendar));
 
-                ViewModel.CurrentDateRangeString.Should().Be($"{Resources.ThisWeek} ▾");
+                TestScheduler.Start();
+                observer.Messages.AssertEqual(
+                    ReactiveTest.OnNext(1, ""),
+                    ReactiveTest.OnNext(2, $"{Resources.ThisWeek} ▾")
+                );
             }
 
             [Theory]
@@ -284,6 +294,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DateFormat dateFormat,
                 string expectedResult)
             {
+                var observer = TestScheduler.CreateObserver<string>();
+                ViewModel.CurrentDateRangeStringObservable.Subscribe(observer);
+
                 TimeService.CurrentDateTime.Returns(DateTimeOffset.UtcNow);
                 var preferences = Substitute.For<IThreadSafePreferences>();
                 preferences.DateFormat.Returns(dateFormat);
@@ -295,7 +308,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.ChangeDateRangeCommand.Execute(
                     ReportsDateRangeParameter.WithDates(start, end).WithSource(ReportsSource.Calendar));
 
-                ViewModel.CurrentDateRangeString.Should().Be(expectedResult);
+                TestScheduler.Start();
+                observer.Messages.AssertEqual(
+                    ReactiveTest.OnNext(1, ""),
+                    ReactiveTest.OnNext(2, expectedResult)
+                );
             }
 
             public static IEnumerable<object[]> DateRangeFormattingTestData()
@@ -497,7 +514,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.Initialize();
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId + 1 };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IDictionary<string, IThreadSafeWorkspace>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
                     .Returns(Observable.Return(mockWorkspace));
 
                 await ViewModel.SelectWorkspace.ExecuteAsync();
@@ -509,21 +526,30 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ShouldChangeCurrentWorkspaceName()
             {
-                await ViewModel.Initialize();
+                var observer = TestScheduler.CreateObserver<string>();
+                ViewModel.WorkspaceNameObservable.Subscribe(observer);
+
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId + 1, Name = "Selected workspace" };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IDictionary<string, IThreadSafeWorkspace>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
                     .Returns(Observable.Return(mockWorkspace));
+                InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(mockWorkspace));
 
-                await ViewModel.SelectWorkspace.ExecuteAsync();
+                await ViewModel.Initialize();
 
-                ViewModel.WorkspaceName.Should().Be(mockWorkspace.Name);
+                await ViewModel.SelectWorkspaceMethod();
+
+                TestScheduler.Start();
+                observer.Messages.AssertEqual(
+                    ReactiveTest.OnNext(1, ""),
+                    ReactiveTest.OnNext(2, mockWorkspace.Name)
+                );
             }
 
             [Fact, LogIfTooSlow]
             public async Task ShouldNotTriggerAReportReloadWhenSelectionIsCancelled()
             {
                 await ViewModel.Initialize();
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IDictionary<string, IThreadSafeWorkspace>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(null));
 
                 await ViewModel.SelectWorkspace.ExecuteAsync();
@@ -538,7 +564,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.Initialize();
 
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IDictionary<string, IThreadSafeWorkspace>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(mockWorkspace));
 
                 await ViewModel.SelectWorkspace.ExecuteAsync();

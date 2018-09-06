@@ -32,11 +32,13 @@
     <Folder Include="Interactors\Project\" />
     <Folder Include="Interactors\Workspace\" />
     <Folder Include="Interactors\Sync\" />
-    <Folder Include="Interactors\Notifications\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="MvvmCross\ViewModels\ReportsCalendarQuickSelectShortcuts\ReportsCalendarLastWeekQuickSelectShortcutTests.cs" />
   </ItemGroup>
 </Project>

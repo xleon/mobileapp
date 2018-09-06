@@ -81,7 +81,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 navigationService,
                 interactorFactory,
                 analyticsService,
-                dialogService);
+                dialogService,
+                schedulerProvider);
 
             calendarViewModel = new CalendarViewModel(
                 dataSource,

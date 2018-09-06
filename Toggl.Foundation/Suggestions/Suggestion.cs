@@ -1,4 +1,5 @@
 using System;
+using Toggl.Foundation.Helper;
 using Toggl.Foundation.Models;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
@@ -14,7 +15,7 @@ namespace Toggl.Foundation.Suggestions
 
         public long? TaskId { get; } = null;
 
-        public string ProjectColor { get; } = "";
+        public string ProjectColor { get; } = Color.NoProject;
 
         public string ProjectName { get; } = "";
 

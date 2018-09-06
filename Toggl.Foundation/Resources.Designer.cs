@@ -952,5 +952,11 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("OpenAppAction", resourceCulture);
             }
         }
+        
+        public static string DiscardMessage {
+            get {
+                return ResourceManager.GetString("DiscardMessage", resourceCulture);
+            }
+        }
     }
 }

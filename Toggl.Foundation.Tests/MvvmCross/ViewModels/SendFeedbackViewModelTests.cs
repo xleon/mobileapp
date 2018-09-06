@@ -194,37 +194,37 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public sealed class TheErrorViewVisibleProperty : SendFeedbackViewModelTest
+        public sealed class TheErrorObservable : SendFeedbackViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public void EmitsFalseWhenUserTapOnErrorView()
+            public void EmitsNullWhenUserTapOnErrorView()
             {
-                var observer = TestScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<Exception>();
                 var viewModel = CreateViewModel();
 
-                viewModel.ErrorViewVisible.StartWith(true).Subscribe(observer);
+                viewModel.Error.StartWith(new Exception()).Subscribe(observer);
                 viewModel.ErrorViewTapped.Execute();
 
                 TestScheduler.Start();
-                observer.Messages.Last().Value.Value.Should().BeFalse();
+                observer.Messages.Last().Value.Value.Should().BeNull();
             }
 
             [Fact, LogIfTooSlow]
-            public void EmitsTrueWhenNetworkFails()
+            public void PassTheExceptionsForward()
             {
-
                 var mockedFeedbackInteractor = Substitute.For<IInteractor<IObservable<Unit>>>();
                 InteractorFactory.SendFeedback(Arg.Any<string>()).Returns(mockedFeedbackInteractor);
-                var observer = TestScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<Exception>();
                 var viewModel = CreateViewModel();
+                var exception = new Exception("nasty exception");
 
-                viewModel.ErrorViewVisible.StartWith(false).Subscribe(observer);
-                mockedFeedbackInteractor.Execute().Returns(Observable.Throw<Unit>(new Exception()));
+                viewModel.Error.Subscribe(observer);
+                mockedFeedbackInteractor.Execute().Returns(Observable.Throw<Unit>(exception));
                 viewModel.FeedbackText.OnNext("some value");
                 viewModel.SendButtonTapped.Execute();
 
                 TestScheduler.Start();
-                observer.Messages.Last().Value.Value.Should().BeTrue();
+                observer.Messages.Last().Value.Value.Should().Be(exception);
             }
         }
 
@@ -282,18 +282,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task HidesTheErrorView()
             {
-                var observer = TestScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<Exception>();
                 InteractorFactory.SendFeedback(Arg.Any<string>())
                     .Execute()
                     .Returns(Observable.Throw<Unit>(new Exception()));
                 ViewModel.FeedbackText.OnNext("some feedback");
-                ViewModel.ErrorViewVisible.Subscribe(observer);
+                ViewModel.Error.Subscribe(observer);
 
                 await ViewModel.SendButtonTapped.Execute();
                 await ViewModel.ErrorViewTapped.Execute();
 
                 TestScheduler.Start();
-                observer.Messages.Last().Value.Value.Should().BeFalse();
+                observer.Messages.Last().Value.Value.Should().BeNull();
             }
         }
 
@@ -316,17 +316,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact]
             public async Task ShowsErrorWhenSendingFeedbackFails()
             {
-                var observer = TestScheduler.CreateObserver<bool>();
+                var observer = TestScheduler.CreateObserver<Exception>();
                 ViewModel.FeedbackText.OnNext("feedback");
+                var expectedException = new Exception("damn boom");
                 InteractorFactory.SendFeedback(Arg.Any<string>())
                     .Execute()
-                    .Returns(Observable.Throw<Unit>(new Exception()));
-                ViewModel.ErrorViewVisible.Subscribe(observer);
+                    .Returns(Observable.Throw<Unit>(expectedException));
+                ViewModel.Error.Subscribe(observer);
 
                 await ViewModel.SendButtonTapped.Execute();
 
                 TestScheduler.Start();
-                observer.Messages.Last().Value.Value.Should().BeTrue();
+                observer.Messages.Last().Value.Value.Should().Be(expectedException);
             }
         }
     }

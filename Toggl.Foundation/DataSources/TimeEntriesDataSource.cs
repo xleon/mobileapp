@@ -103,6 +103,7 @@ namespace Toggl.Foundation.DataSources
                 .Select(timeEntries => timeEntries.SingleOrDefault() ?? throw new NoRunningTimeEntryException())
                 .SelectMany(timeEntry => timeEntry
                     .With((long)(stopTime - timeEntry.Start).TotalSeconds)
+                    .UpdatedAt(timeService.CurrentDateTime)
                     .Apply(Update))
                 .Do(timeEntryStoppedSubject.OnNext);
 

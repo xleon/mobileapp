@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 
 namespace Toggl.Foundation
 {
@@ -47,7 +48,7 @@ namespace Toggl.Foundation
             return Observable
                 .Return(Unit.Default)
                 .Delay(delay, scheduler)
-                .Do(_ => action())
+                .Do(action)
                 .ToTask();
         }
 

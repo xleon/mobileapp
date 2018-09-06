@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Realms;
-using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Models;
 using Toggl.PrimeRadiant.Realm.Models;
 
@@ -29,6 +28,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmClient(IDatabaseClient entity, Realms.Realm realm)
         {
+            Id = entity.Id;
             SetPropertiesFrom(entity, realm);
         }
 
@@ -44,7 +44,6 @@ namespace Toggl.PrimeRadiant.Realm
             IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
-            Id = entity.Id;
             var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
             RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId || x.OriginalId == entity.WorkspaceId);
             Name = entity.Name;
@@ -108,6 +107,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmProject(IDatabaseProject entity, Realms.Realm realm)
         {
+            Id = entity.Id;
             SetPropertiesFrom(entity, realm);
         }
 
@@ -123,7 +123,6 @@ namespace Toggl.PrimeRadiant.Realm
             IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
-            Id = entity.Id;
             var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
             RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId || x.OriginalId == entity.WorkspaceId);
             var skipClientFetch = entity?.ClientId == null || entity.ClientId == 0;
@@ -165,6 +164,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmTag(IDatabaseTag entity, Realms.Realm realm)
         {
+            Id = entity.Id;
             SetPropertiesFrom(entity, realm);
         }
 
@@ -180,7 +180,6 @@ namespace Toggl.PrimeRadiant.Realm
             IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
-            Id = entity.Id;
             var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
             RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId || x.OriginalId == entity.WorkspaceId);
             Name = entity.Name;
@@ -210,6 +209,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmTask(IDatabaseTask entity, Realms.Realm realm)
         {
+            Id = entity.Id;
             SetPropertiesFrom(entity, realm);
         }
 
@@ -224,7 +224,6 @@ namespace Toggl.PrimeRadiant.Realm
             IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
-            Id = entity.Id;
             Name = entity.Name;
             var skipProjectFetch = entity?.ProjectId == null || entity.ProjectId == 0;
             RealmProject = skipProjectFetch ? null : realm.All<RealmProject>().Single(x => x.Id == entity.ProjectId || x.OriginalId == entity.ProjectId);
@@ -261,6 +260,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmTimeEntry(IDatabaseTimeEntry entity, Realms.Realm realm)
         {
+            Id = entity.Id;
             SetPropertiesFrom(entity, realm);
         }
 
@@ -276,23 +276,23 @@ namespace Toggl.PrimeRadiant.Realm
             IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
-            Id = entity.Id;
             var skipWorkspaceFetch = entity?.WorkspaceId == null || entity.WorkspaceId == 0;
             RealmWorkspace = skipWorkspaceFetch ? null : realm.All<RealmWorkspace>().Single(x => x.Id == entity.WorkspaceId || x.OriginalId == entity.WorkspaceId);
             var skipProjectFetch = entity?.ProjectId == null || entity.ProjectId == 0;
-            RealmProject = skipProjectFetch ? null : realm.All<RealmProject>().SingleOrDefault(x => x.Id == entity.ProjectId || x.OriginalId == entity.ProjectId);
-            var skipTaskFetch = RealmProject == null || entity?.TaskId == null || entity.TaskId == 0;
-            RealmTask = skipTaskFetch ? null : realm.All<RealmTask>().SingleOrDefault(x => x.Id == entity.TaskId || x.OriginalId == entity.TaskId);
+            RealmProject = skipProjectFetch ? null : realm.All<RealmProject>().Single(x => x.Id == entity.ProjectId || x.OriginalId == entity.ProjectId);
+            var skipTaskFetch = entity?.TaskId == null || entity.TaskId == 0;
+            RealmTask = skipTaskFetch ? null : realm.All<RealmTask>().Single(x => x.Id == entity.TaskId || x.OriginalId == entity.TaskId);
             Billable = entity.Billable;
             Start = entity.Start;
             Duration = entity.Duration;
             Description = entity.Description;
-
-            var tags = entity.TagIds?.Select(id =>
-                realm.All<RealmTag>().Single(x => x.Id == id || x.OriginalId == id)) ?? new RealmTag[0];
             RealmTags.Clear();
-            tags.ForEach(RealmTags.Add);
-
+            if (entity.TagIds != null)
+            {
+                var allRealmTags = entity.TagIds.Select(id => realm.All<RealmTag>().Single(x => x.Id == id || x.OriginalId == id));
+                foreach (var oneOfRealmTags in allRealmTags)
+                    RealmTags.Add(oneOfRealmTags);
+            }
             var skipUserFetch = entity?.UserId == null || entity.UserId == 0;
             RealmUser = skipUserFetch ? null : realm.All<RealmUser>().Single(x => x.Id == entity.UserId || x.OriginalId == entity.UserId);
         }
@@ -321,6 +321,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmUser(IDatabaseUser entity, Realms.Realm realm)
         {
+            Id = entity.Id;
             SetPropertiesFrom(entity, realm);
         }
 
@@ -335,7 +336,6 @@ namespace Toggl.PrimeRadiant.Realm
             IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
-            Id = entity.Id;
             ApiToken = entity.ApiToken;
             DefaultWorkspaceId = entity.DefaultWorkspaceId;
             Email = entity.Email;
@@ -369,6 +369,7 @@ namespace Toggl.PrimeRadiant.Realm
 
         public RealmWorkspace(IDatabaseWorkspace entity, Realms.Realm realm)
         {
+            Id = entity.Id;
             SetPropertiesFrom(entity, realm);
         }
 
@@ -384,7 +385,6 @@ namespace Toggl.PrimeRadiant.Realm
             IsDeleted = entity.IsDeleted;
             SyncStatus = entity.SyncStatus;
             LastSyncErrorMessage = entity.LastSyncErrorMessage;
-            Id = entity.Id;
             Name = entity.Name;
             Admin = entity.Admin;
             SuspendedAt = entity.SuspendedAt;
@@ -397,7 +397,6 @@ namespace Toggl.PrimeRadiant.Realm
             Rounding = entity.Rounding;
             RoundingMinutes = entity.RoundingMinutes;
             LogoUrl = entity.LogoUrl;
-            IsGhost = entity.IsGhost;
         }
     }
 

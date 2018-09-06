@@ -16,7 +16,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 {
     public sealed class ProjectsApiTests
     {
-        public sealed class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<IProject>>
+        public sealed class TheGetAllMethod : AuthenticatedGetAllEndpointBaseTests<IProject>
         {
             protected override IObservable<List<IProject>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Projects.GetAll();
