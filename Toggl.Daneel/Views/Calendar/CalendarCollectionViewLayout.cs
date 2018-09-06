@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Threading;
 using CoreGraphics;
 using Foundation;
 using Toggl.Foundation;
+using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using UIKit;
@@ -27,6 +31,8 @@ namespace Toggl.Daneel.Views.Calendar
         private DateTime date;
         private readonly ITimeService timeService;
         private readonly ICalendarCollectionViewLayoutDataSource dataSource;
+
+        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         public static NSString HourSupplementaryViewKind = new NSString("Hour");
         public static NSString EditingHourSupplementaryViewKind = new NSString("EditingHour");
@@ -55,6 +61,13 @@ namespace Toggl.Daneel.Views.Calendar
             this.dataSource = dataSource;
 
             date = timeService.CurrentDateTime.Date;
+
+            timeService
+                .CurrentDateTimeObservable
+                .DistinctUntilChanged(offset => offset.Minute)
+                .ObserveOn(SynchronizationContext.Current)
+                .VoidSubscribe(invalidateCurrentTimeLayout)
+                .DisposedBy(disposeBag);
         }
 
         public override CGSize CollectionViewContentSize
@@ -241,6 +254,13 @@ namespace Toggl.Daneel.Views.Calendar
             var y = yHour + yMins - height / 2;
 
             return new CGRect(x, y, width, height);
+        }
+
+        private void invalidateCurrentTimeLayout()
+        {
+            var context = new UICollectionViewLayoutInvalidationContext();
+            context.InvalidateSupplementaryElements(CurrentTimeSupplementaryViewKind, new NSIndexPath[] { NSIndexPath.FromItemSection(0, 0) });
+            InvalidateLayout(context);
         }
     }
 }
