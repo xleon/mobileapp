@@ -1,11 +1,14 @@
 using System;
 using Foundation;
+using Intents;
 using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Ios.Core;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.ViewModels;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Intents;
+using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross;
@@ -134,6 +137,21 @@ namespace Toggl.Daneel
                     navigationService.Navigate<MainViewModel>();
                     navigationService.Navigate<StartTimeEntryViewModel>();
                     break;
+            }
+        }
+
+        public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,
+            UIApplicationRestorationHandler completionHandler)
+        {
+            var intent = userActivity.GetInteraction()?.Intent;
+
+            switch (intent)
+            {
+                case StopTimerIntent _:
+                    navigationService.Navigate(ApplicationUrls.Main.StopTimeEntry);
+                    return true;
+                default:
+                    return false;
             }
         }
 
