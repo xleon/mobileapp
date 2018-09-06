@@ -459,6 +459,12 @@ account is not set up</value>
     <data name="OneHour">
         <value>1 hour before</value>
     </data>
+    <data name="CalendarSettingsTitle">
+        <value>Calendar Settings</value>
+    </data>
+    <data name="NotificationSettingsTitle">
+        <value>Smart Alerts</value>
+    </data>
     <data name="OpenAppAndStartAction">
         <value>Open app and start</value>
     </data>

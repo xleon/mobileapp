@@ -5,6 +5,7 @@ using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels.Settings;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
+using FoundationResources = Toggl.Foundation.Resources;
 
 namespace Toggl.Daneel.ViewControllers.Settings
 {
@@ -12,7 +13,7 @@ namespace Toggl.Daneel.ViewControllers.Settings
     public sealed partial class CalendarSettingsViewController : ReactiveViewController<CalendarSettingsViewModel>
     {
         private const int tableViewHeaderHeight = 106;
-        
+
         public CalendarSettingsViewController() : base(nameof(CalendarSettingsViewController))
         {
         }
@@ -20,6 +21,8 @@ namespace Toggl.Daneel.ViewControllers.Settings
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            NavigationItem.Title = FoundationResources.CalendarSettingsTitle;
 
             var header = CalendarSettingsTableViewHeader.Create();
             UserCalendarsTableView.TableHeaderView = header;

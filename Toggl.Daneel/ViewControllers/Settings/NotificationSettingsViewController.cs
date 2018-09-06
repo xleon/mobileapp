@@ -4,6 +4,7 @@ using Toggl.Daneel.Extensions;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Settings;
 using Toggl.Multivac.Extensions;
+using FoundationResources = Toggl.Foundation.Resources;
 
 namespace Toggl.Daneel.ViewControllers.Settings
 {
@@ -17,6 +18,8 @@ namespace Toggl.Daneel.ViewControllers.Settings
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            NavigationItem.Title = FoundationResources.NotificationSettingsTitle;
 
             this.Bind(ViewModel.PermissionGranted.Invert(), OpenSettingsContainer.BindIsVisible());
             this.Bind(ViewModel.PermissionGranted, CalendarNotificationsContainer.BindIsVisible());
