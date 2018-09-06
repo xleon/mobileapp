@@ -405,7 +405,7 @@
 			<key>INIntentCategory</key>
 			<string>generic</string>
 			<key>INIntentDescription</key>
-			<string>Start a new timer</string>
+			<string>Start a new time tracking</string>
 			<key>INIntentDescriptionID</key>
 			<string>kSGACm</string>
 			<key>INIntentLastParameterTag</key>
@@ -425,7 +425,7 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Start a new timer</string>
+					<string>Start a new time tracking</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>NKqa7K</string>
 				</dict>
@@ -448,7 +448,7 @@
 					</dict>
 					<dict>
 						<key>INIntentResponseCodeFormatString</key>
-						<string>A new time entry has been started.</string>
+						<string>Time tracking started.</string>
 						<key>INIntentResponseCodeFormatStringID</key>
 						<string>0vfpVe</string>
 						<key>INIntentResponseCodeName</key>
@@ -485,7 +485,7 @@
 			<key>INIntentRestrictions</key>
 			<integer>0</integer>
 			<key>INIntentTitle</key>
-			<string>Start timer</string>
+			<string>Start time tracking</string>
 			<key>INIntentTitleID</key>
 			<string>ieGUw3</string>
 			<key>INIntentType</key>
