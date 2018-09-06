@@ -7,6 +7,7 @@ using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.UI;
 using Toggl.Daneel.Views;
 using Toggl.Foundation.Calendar;
+using Toggl.Foundation.MvvmCross.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.Cells.Calendar
@@ -118,7 +119,7 @@ namespace Toggl.Daneel.Cells.Calendar
                 case CalendarItemSource.Calendar:
                     return color;
                 case CalendarItemSource.TimeEntry:
-                    return UIColor.White;
+                    return Item.ForegroundColor().ToNativeColor();
                 default:
                     throw new ArgumentException("Unexpected calendar item source");
             }
