@@ -1,18 +1,12 @@
-using System;
-using System.Collections.Generic;
+﻿﻿using System;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
-using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Binding.BindingContext;
-using MvvmCross.Platforms.Android.Binding.BindingContext;
-using MvvmCross.WeakSubscription;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.ViewHolders;
-using Toggl.Giskard.Views;
 
 namespace Toggl.Giskard.Adapters
 {
@@ -52,7 +46,7 @@ namespace Toggl.Giskard.Adapters
             deleteTimeEntrySubject.OnNext(deletedTimeEntry);
         }
 
-        protected override int HeaderOffset => 1;
+        public override int HeaderOffset => 1;
 
         protected override bool TryBindCustomViewType(RecyclerView.ViewHolder holder, int position)
         {

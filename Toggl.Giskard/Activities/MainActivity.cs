@@ -31,6 +31,9 @@ namespace Toggl.Giskard.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class MainActivity : MvxAppCompatActivity<MainViewModel>, IReactiveBindingHolder
     {
+        private MainRecyclerAdapter mainRecyclerAdapter;
+        private LinearLayoutManager layoutManager;
+
         private const int snackbarDuration = 5000;
 
         public CompositeDisposable DisposeBag { get; } = new CompositeDisposable();
@@ -52,42 +55,42 @@ namespace Toggl.Giskard.Activities
             this.Bind(ViewModel.IsTimeEntryRunning, onTimeEntryCardVisibilityChanged);
             this.Bind(ViewModel.SyncProgressState, onSyncChanged);
 
-            var mainAdapter = new MainRecyclerAdapter(ViewModel.TimeEntries)
+            mainRecyclerAdapter = new MainRecyclerAdapter(ViewModel.TimeEntries)
             {
                 SuggestionsViewModel = ViewModel.SuggestionsViewModel
             };
 
-            this.Bind(mainAdapter.TimeEntryTaps, ViewModel.SelectTimeEntry.Inputs);
-            this.Bind(mainAdapter.ContinueTimeEntrySubject, ViewModel.ContinueTimeEntry.Inputs);
-            this.Bind(mainAdapter.DeleteTimeEntrySubject, ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntry.Inputs);
+            this.Bind(mainRecyclerAdapter.TimeEntryTaps, ViewModel.SelectTimeEntry.Inputs);
+            this.Bind(mainRecyclerAdapter.ContinueTimeEntrySubject, ViewModel.ContinueTimeEntry.Inputs);
+            this.Bind(mainRecyclerAdapter.DeleteTimeEntrySubject, ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntry.Inputs);
             this.Bind(ViewModel.TimeEntriesViewModel.ShouldShowUndo, showUndoDeletion);
 
             this.Bind(ViewModel.SyncProgressState, updateSyncingIndicator);
             this.Bind(refreshLayout.Refreshed(), ViewModel.RefreshAction);
 
-            setupLayoutManager(mainAdapter);
+            setupLayoutManager(mainRecyclerAdapter);
 
             var mainLogChanges = ViewModel
                 .TimeEntries
                 .CollectionChanges
                 .ObserveOn(SynchronizationContext.Current);
-            this.Bind(mainLogChanges, mainAdapter.UpdateChanges);
+            this.Bind(mainLogChanges, mainRecyclerAdapter.UpdateChanges);
 
             var isTimeEntryRunning = ViewModel
                 .IsTimeEntryRunning
                 .ObserveOn(SynchronizationContext.Current);
             this.Bind(isTimeEntryRunning, updateRecyclerViewPadding);
 
-            setupItemTouchHelper(mainAdapter);
+            setupItemTouchHelper(mainRecyclerAdapter);
 
-            setupStartTimeEntryOnboardingStep();
-            setupStopTimeEntryOnboardingStep();
-            setupTapToEditOnboardingStep();
+            this.Bind(ViewModel.TimeEntriesCount, timeEntriesCountSubject);
+
+            setupOnboardingSteps();
         }
 
-        private void setupLayoutManager(MainRecyclerAdapter mainAdapter) 
+        private void setupLayoutManager(MainRecyclerAdapter mainAdapter)
         {
-            var layoutManager = new LinearLayoutManager(this);
+            layoutManager = new LinearLayoutManager(this);
             layoutManager.ItemPrefetchEnabled = true;
             layoutManager.InitialPrefetchItemCount = 4;
             mainRecyclerView.SetLayoutManager(layoutManager);
