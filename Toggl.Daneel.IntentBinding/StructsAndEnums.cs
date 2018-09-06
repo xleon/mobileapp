@@ -50,8 +50,7 @@ namespace Toggl.Daneel.Intents
 		Success,
 		Failure,
 		FailureRequiringAppLaunch,
-		FailureRunningEntry = 100,
-		FailureNoApiToken
+		FailureNoApiToken = 100
 	}
 
 	[Native]

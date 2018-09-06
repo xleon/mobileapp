@@ -458,16 +458,6 @@
 					</dict>
 					<dict>
 						<key>INIntentResponseCodeFormatString</key>
-						<string>There is already a time entry running.</string>
-						<key>INIntentResponseCodeFormatStringID</key>
-						<string>2TW1ae</string>
-						<key>INIntentResponseCodeName</key>
-						<string>failureRunningEntry</string>
-						<key>INIntentResponseCodeSuccess</key>
-						<false/>
-					</dict>
-					<dict>
-						<key>INIntentResponseCodeFormatString</key>
 						<string>You need to log in to continue.</string>
 						<key>INIntentResponseCodeFormatStringID</key>
 						<string>sC56D6</string>
