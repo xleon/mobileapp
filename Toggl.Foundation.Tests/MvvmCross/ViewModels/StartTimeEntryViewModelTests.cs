@@ -1038,7 +1038,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact]
-            public async Task OpensTheSelectDateTimeViewModelWithCorrectLimitsForARunnningTimeEntry()
+            public async Task OpensTheSelectDateTimeViewModelWithCorrectLimitsForARunningTimeEntry()
             {
                 ViewModel.Prepare();
                 ViewModel.Prepare(prepareParameters);

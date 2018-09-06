@@ -88,6 +88,12 @@ namespace Toggl.PrimeRadiant.Realm
 
                 WriteLine($"        public {realmClassName}({updatesFromInterface} entity, Realms.Realm realm)");
                 WriteLine( "        {");
+                
+                if (implementsIIdentifiable)
+                {
+                    WriteLine( "            Id = entity.Id;");
+                }
+                
                 WriteLine( "            SetPropertiesFrom(entity, realm);");
                 WriteLine( "        }\n");
 
@@ -117,11 +123,6 @@ namespace Toggl.PrimeRadiant.Realm
                     WriteLine("            IsDeleted = entity.IsDeleted;");
                     WriteLine("            SyncStatus = entity.SyncStatus;");
                     WriteLine("            LastSyncErrorMessage = entity.LastSyncErrorMessage;");
-                }
-
-                if (implementsIIdentifiable)
-                {
-                    WriteLine("            Id = entity.Id;");
                 }
 
                 continue;

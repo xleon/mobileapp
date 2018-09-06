@@ -33,7 +33,7 @@ namespace Toggl.Foundation.Tests.Sync.States
         [Fact, LogIfTooSlow]
         public async Task EmitsTransitionToPersistFinished()
         {
-            var observables = createObservables();
+            var observables = createObservables(new List<ITestModel>());
 
             var transition = await state.Start(observables).SingleAsync();
 
@@ -69,21 +69,9 @@ namespace Toggl.Foundation.Tests.Sync.States
         }
 
         [Fact, LogIfTooSlow]
-        public async Task HandlesNullValueReceivedFromTheServerAsAnEmptyList()
-        {
-            List<ITestModel> entities = null;
-            var observables = createObservables(entities);
-
-            var transition = (Transition<IFetchObservables>)(await state.Start(observables).SingleAsync());
-
-            transition.Result.Should().Be(state.FinishedPersisting);
-            await dataSource.Received().BatchUpdate(Arg.Is<IEnumerable<IThreadSafeTestModel>>(batch => batch.Count() == 0));
-        }
-
-        [Fact, LogIfTooSlow]
         public void ThrowsWhenBatchUpdateThrows()
         {
-            var observables = createObservables();
+            var observables = createObservables(new List<ITestModel>());
             dataSource.BatchUpdate(Arg.Any<IEnumerable<IThreadSafeTestModel>>()).Returns(
                 Observable.Throw<IEnumerable<IConflictResolutionResult<IThreadSafeTestModel>>>(new TestException()));
 
@@ -102,10 +90,25 @@ namespace Toggl.Foundation.Tests.Sync.States
             startingState.Should().Throw<OfflineException>();
         }
 
-        private IFetchObservables createObservables(List<ITestModel> entities = null)
+        [Fact, LogIfTooSlow]
+        public async Task UsesBatchUpdateToPersistFetchedData()
+        {
+            var observables = createObservables(new List<ITestModel>
+            {
+                new TestModel { Id = 1 },
+                new TestModel { Id = 2 }
+            });
+
+            await state.Start(observables).SingleAsync();
+
+            dataSource.Received(1).BatchUpdate(Arg.Is<IEnumerable<IThreadSafeTestModel>>(
+                items => items.Count() == 2 && items.Any(item => item.Id == 1) && items.Any(item => item.Id == 2)));
+        }
+
+        private IFetchObservables createObservables(List<ITestModel> entities)
             => createFetchObservables(Observable.Return(entities));
 
-        private IFetchObservables createFetchObservables(IObservable<List<ITestModel>> observable = null)
+        private IFetchObservables createFetchObservables(IObservable<List<ITestModel>> observable)
         {
             var observables = Substitute.For<IFetchObservables>();
             observables.GetList<ITestModel>().Returns(observable);

@@ -58,7 +58,7 @@ namespace Toggl.Giskard.Services
             });
         }
 
-        public IObservable<T> Select<T>(string title, IDictionary<string, T> options)
+        public IObservable<T> Select<T>(string title, IEnumerable<(string ItemName, T Item)> options)
             where T : class
         {
             throw new NotImplementedException("This feature has not been implemented in Giskard yet.");
@@ -78,7 +78,7 @@ namespace Toggl.Giskard.Services
                 case ActionType.DeleteExistingTimeEntry:
                     return Confirm(null, Resources.DeleteThisTimeEntry, Resources.Delete, Resources.Cancel);
                 case ActionType.DiscardFeedback:
-                    return Confirm(null, Resources.Discard, Resources.Discard, Resources.ContinueEditing);
+                    return Confirm(null, Resources.DiscardMessage, Resources.Discard, Resources.ContinueEditing);
             }
 
             throw new ArgumentOutOfRangeException(nameof(type));

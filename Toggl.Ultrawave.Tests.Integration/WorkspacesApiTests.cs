@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reactive.Linq;
 using FluentAssertions;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Exceptions;
+using Toggl.Ultrawave.Extensions;
+using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Models;
+using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Tests.Integration.BaseTests;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
@@ -21,6 +25,17 @@ namespace Toggl.Ultrawave.Tests.Integration
                 => togglApi.Workspaces.GetAll();
 
             [Fact, LogTestInfo]
+            public async Task ReturnsOneWorkspaceForANewUser()
+            {
+                var (togglClient, user) = await SetupTestUser();
+
+                var workspaces = await CallEndpointWith(togglClient);
+
+                workspaces.Should().HaveCount(1);
+                workspaces.Should().Contain(ws => ws.Id == user.DefaultWorkspaceId);
+            }
+
+            [Fact, LogTestInfo]
             public async Task ReturnsAllWorkspaces()
             {
                 var (togglClient, user) = await SetupTestUser();
@@ -32,6 +47,27 @@ namespace Toggl.Ultrawave.Tests.Integration
                 workspaces.Should().HaveCount(2);
                 workspaces.Should().Contain(ws => ws.Id == user.DefaultWorkspaceId);
                 workspaces.Should().Contain(ws => ws.Id == secondWorkspace.Id);
+            }
+
+            [Fact, LogTestInfo]
+            public async Task ReturnsEmptyListWhenTheDefaultWorkspaceIsDeleted()
+            {
+                var (togglClient, user) = await SetupTestUser();
+                await deleteDefaultWorkspaceUsingV8Api(user);
+
+                var workspaces = await CallEndpointWith(togglClient);
+
+                workspaces.Should().BeEmpty();
+            }
+
+            private async Task deleteDefaultWorkspaceUsingV8Api(IUser user)
+            {
+                var credentials = Credentials.WithApiToken(user.ApiToken);
+                var httpClient = new HttpClient();
+                var urlPrefixForV8 = BaseUrls.ForApi(ApiEnvironment.Staging).AbsoluteUri.Replace("/v9/", "/v8/");
+                var requestMessage = new HttpRequestMessage(HttpMethod.Delete, $"{urlPrefixForV8}/workspaces/{user.DefaultWorkspaceId}/leave");
+                requestMessage.Headers.AddRange(new[] { credentials.Header });
+                await httpClient.SendAsync(requestMessage).ConfigureAwait(false);
             }
         }
 

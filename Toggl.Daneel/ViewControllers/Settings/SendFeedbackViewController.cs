@@ -1,10 +1,12 @@
-﻿using MvvmCross.Plugin.Color.Platforms.Ios;
+﻿using System.Reactive.Linq;
+using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac.Extensions;
 using UIKit;
+using static Toggl.Multivac.Extensions.CommonFunctions;
 
 namespace Toggl.Daneel.ViewControllers.Settings
 {
@@ -32,7 +34,7 @@ namespace Toggl.Daneel.ViewControllers.Settings
             SendButton.TouchUpInside += (sender, args) => { FeedbackTextView.ResignFirstResponder(); };
 
             this.Bind(ViewModel.IsFeedbackEmpty, FeedbackPlaceholderTextView.BindIsVisible());
-            this.Bind(ViewModel.ErrorViewVisible, ErrorView.BindAnimatedIsVisible());
+            this.Bind(ViewModel.Error.Select(NotNull), ErrorView.BindAnimatedIsVisible());
             this.Bind(ViewModel.SendEnabled, SendButton.BindEnabled());
 
             this.Bind(ViewModel.IsLoading.Invert(), SendButton.BindIsVisible());

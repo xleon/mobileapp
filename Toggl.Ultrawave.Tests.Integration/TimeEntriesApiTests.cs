@@ -16,7 +16,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 {
     public sealed class TimeEntriesApiTests
     {
-        public sealed class TheGetAllMethod : AuthenticatedGetEndpointBaseTests<List<ITimeEntry>>
+        public sealed class TheGetAllMethod : AuthenticatedGetAllEndpointBaseTests<ITimeEntry>
         {
             [Fact, LogTestInfo]
             public async Task ReturnsAllTimeEntries()
@@ -40,16 +40,6 @@ namespace Toggl.Ultrawave.Tests.Integration
                     && entry.WorkspaceId == user.DefaultWorkspaceId
                     && entry.Start == secondTimeEntryPosted.Start
                     && entry.UserId == user.Id);
-            }
-
-            [Fact, LogTestInfo]
-            public async Task ReturnsNullInsteadOfAnEmptyListWhenThereIsNoTimeEntryOnTheServer()
-            {
-                var (togglClient, user) = await SetupTestUser();
-
-                var timeEntries = await togglClient.TimeEntries.GetAll();
-
-                timeEntries.Should().BeNull();
             }
 
             protected override IObservable<List<ITimeEntry>> CallEndpointWith(ITogglApi togglApi)
@@ -383,7 +373,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var timeEntriesOnServerAfter = await togglApi.TimeEntries.GetAll();
 
                 timeEntriesOnServerBefore.Should().HaveCount(1);
-                timeEntriesOnServerAfter.Should().BeNull();
+                timeEntriesOnServerAfter.Should().BeEmpty();
             }
 
             [Fact, LogTestInfo]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using Toggl.Multivac.Extensions;
 
 namespace Toggl.Foundation.Sync.States.Push
 {
@@ -16,6 +17,6 @@ namespace Toggl.Foundation.Sync.States.Push
 
         public IObservable<ITransition> Start()
             => Observable.Return(Continue.Transition())
-                .Do(_ => delay.Reset());
+                .Do(delay.Reset);
     }
 }

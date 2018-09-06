@@ -170,6 +170,12 @@ namespace Toggl.Foundation.Models
             Duration = duration;
         }
 
+        public TimeEntry(IDatabaseTimeEntry timeEntry, DateTimeOffset at)
+            : this(timeEntry, SyncStatus.SyncNeeded, null)
+        {
+            At = at;
+        }
+
         private TimeEntry(Builder builder)
         {
             Id = builder.Id;
@@ -192,5 +198,7 @@ namespace Toggl.Foundation.Models
     internal static class TimeEntryExtensions
     {
         public static TimeEntry With(this IDatabaseTimeEntry self, long duration) => new TimeEntry(self, duration);
+
+        public static TimeEntry UpdatedAt(this IDatabaseTimeEntry self, DateTimeOffset at) => new TimeEntry(self, at);
     }
 }

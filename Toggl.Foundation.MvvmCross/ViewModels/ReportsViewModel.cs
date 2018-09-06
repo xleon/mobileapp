@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -24,6 +25,7 @@ using Toggl.Foundation.Reports;
 using Toggl.Multivac;
 using CommonFunctions = Toggl.Multivac.Extensions.CommonFunctions;
 using static Toggl.Multivac.Extensions.EnumerableExtensions;
+using Toggl.Foundation.MvvmCross.Extensions;
 
 [assembly: MvxNavigation(typeof(ReportsViewModel), ApplicationUrls.Reports)]
 namespace Toggl.Foundation.MvvmCross.ViewModels
@@ -53,6 +55,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private DateFormat dateFormat;
         private IReadOnlyList<ChartSegment> segments = new ChartSegment[0];
         private IReadOnlyList<ChartSegment> groupedSegments = new ChartSegment[0];
+        private readonly BehaviorSubject<string> workspaceNameSubject = new BehaviorSubject<string>("");
+        private readonly BehaviorSubject<string> currentDateRangeStringSubject = new BehaviorSubject<string>("");
 
         public bool IsLoading { get; private set; }
 
@@ -80,7 +84,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public bool ShowEmptyState => segments.None() && !IsLoading;
 
+        [Obsolete("Use CurrentDateRangeStringObservable instead")]
         public string CurrentDateRangeString { get; private set; }
+        public IObservable<string> CurrentDateRangeStringObservable { get; }
 
         public bool IsCurrentWeek
         {
@@ -95,16 +101,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
         }
 
+        [Obsolete("Use WorkspaceNameObservable instead")]
         public string WorkspaceName { get; private set; }
+        public IObservable<string> WorkspaceNameObservable { get; }
 
-        public IDictionary<string, IThreadSafeWorkspace> Workspaces { get; private set; }
+        [Obsolete("Use WorkspacesObservable instead")]
+        public ICollection<(string ItemName, IThreadSafeWorkspace Item)> Workspaces { get; private set; }
+        public IObservable<ICollection<(string ItemName, IThreadSafeWorkspace Item)>> WorkspacesObservable { get; }
 
+        [Obsolete("Use HideCalendar instead")]
         public IMvxCommand HideCalendarCommand { get; }
-
+        [Obsolete("Use ToggleCalendar instead")]
         public IMvxCommand ToggleCalendarCommand { get; }
 
         public IMvxCommand<ReportsDateRangeParameter> ChangeDateRangeCommand { get; }
-
+        [Obsolete("Use SelectWorkspaceAction instead")]
         public IMvxAsyncCommand SelectWorkspace { get; }
 
         public ReportsViewModel(ITogglDataSource dataSource,
@@ -112,7 +123,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                                 IMvxNavigationService navigationService,
                                 IInteractorFactory interactorFactory,
                                 IAnalyticsService analyticsService,
-                                IDialogService dialogService)
+                                IDialogService dialogService,
+                                ISchedulerProvider schedulerProvider)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -120,6 +132,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
+            Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
             this.timeService = timeService;
             this.navigationService = navigationService;
@@ -130,23 +143,47 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             calendarViewModel = new ReportsCalendarViewModel(timeService, dataSource);
 
-            HideCalendarCommand = new MvxCommand(hideCalendar);
-            ToggleCalendarCommand = new MvxCommand(toggleCalendar);
+            HideCalendarCommand = new MvxCommand(HideCalendar);
+            ToggleCalendarCommand = new MvxCommand(ToggleCalendar);
             ChangeDateRangeCommand = new MvxCommand<ReportsDateRangeParameter>(changeDateRange);
-            SelectWorkspace = new MvxAsyncCommand(selectWorkspace);
+            SelectWorkspace = new MvxAsyncCommand(SelectWorkspaceMethod);
+
+            WorkspaceNameObservable = workspaceNameSubject
+                .DistinctUntilChanged()
+                .AsDriver(schedulerProvider);
+
+            CurrentDateRangeStringObservable = currentDateRangeStringSubject
+                .DistinctUntilChanged()
+                .AsDriver(schedulerProvider);
+
+            var workspaces = dataSource.Workspaces;
+
+            WorkspacesObservable = Observable.Merge(
+                    workspaces.Created.Select(_ => Unit.Default),
+                    workspaces.Updated.Select(_ => Unit.Default),
+                    workspaces.Deleted.Select(_ => Unit.Default)
+                )
+                .StartWith(Unit.Default)
+                .SelectMany(_ => dataSource.Workspaces.GetAll())
+                .DistinctUntilChanged()
+                .Select(list => list.Where(w => !(w.IsGhost)))
+                .Select(readOnlyWorkspaceNameTuples)
+                .AsDriver(schedulerProvider);
+
+            //Depricated properties still used in android
+            CurrentDateRangeStringObservable.Subscribe(range => CurrentDateRangeString = range);
+            WorkspaceNameObservable.Subscribe(name => WorkspaceName = name);
+            WorkspacesObservable.Subscribe(data => Workspaces = data);
         }
 
         public override async Task Initialize()
         {
-            Workspaces = await dataSource.Workspaces
-                .GetAll()
-                .SelectMany(CommonFunctions.Identity)
-                .ToDictionary(ws => ws.Name, ws => ws);
+            Workspaces = await dataSource.Workspaces.GetAll().Select(readOnlyWorkspaceNameTuples);
 
             var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
 
             workspaceId = workspace.Id;
-            WorkspaceName = workspace.Name;
+            workspaceNameSubject.OnNext(workspace.Name);
 
             disposeBag.Add(
                 reportSubject
@@ -168,6 +205,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             disposeBag.Add(preferencesDisposable);
 
             IsLoading = true;
+        }
+
+        private static ReadOnlyCollection<(string, IThreadSafeWorkspace)>
+            readOnlyWorkspaceNameTuples(IEnumerable<IThreadSafeWorkspace> workspaces)
+        {
+            return workspaces
+                .Select(ws => (ws.Name, ws))
+                .ToList()
+                .AsReadOnly();
         }
 
         public override void ViewAppeared()
@@ -224,13 +270,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
         }
 
-        private void toggleCalendar()
+        public void ToggleCalendar()
         {
             navigationService.ChangePresentation(new ToggleReportsCalendarVisibilityHint());
             calendarViewModel.OnToggleCalendar();
         }
 
-        private void hideCalendar()
+        public void HideCalendar()
         {
             navigationService.ChangePresentation(new ToggleReportsCalendarVisibilityHint(forceHide: true));
             calendarViewModel.OnHideCalendar();
@@ -252,13 +298,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             if (startDate == endDate)
             {
-                CurrentDateRangeString = $"{startDate.ToString(dateFormat.Short)} ▾";
+                currentDateRangeStringSubject.OnNext($"{startDate.ToString(dateFormat.Short)} ▾");
                 return;
             }
 
-            CurrentDateRangeString = IsCurrentWeek
+            currentDateRangeStringSubject.OnNext(IsCurrentWeek
                 ? $"{Resources.ThisWeek} ▾"
-                : $"{startDate.ToString(dateFormat.Short)} - {endDate.ToString(dateFormat.Short)} ▾";
+                : $"{startDate.ToString(dateFormat.Short)} - {endDate.ToString(dateFormat.Short)} ▾");
         }
 
         private void onPreferencesChanged(IThreadSafePreferences preferences)
@@ -353,14 +399,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .AsReadOnly();
         }
 
-        private async Task selectWorkspace()
+        public async Task SelectWorkspaceMethod()
         {
             var workspace = await dialogService.Select(Resources.SelectWorkspace, Workspaces);
 
             if (workspace == null || workspace.Id == workspaceId) return;
 
             workspaceId = workspace.Id;
-            WorkspaceName = workspace.Name;
+            workspaceNameSubject.OnNext(workspace.Name);
             reportSubject.OnNext(Unit.Default);
         }
 

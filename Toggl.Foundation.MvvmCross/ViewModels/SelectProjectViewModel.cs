@@ -153,8 +153,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void onSuggestions(IEnumerable<ProjectSuggestion> suggestions)
         {
-            Suggestions.Clear();
-
             var workspaces = groupByWorkspace(suggestions, !UsesFilter);
             if (!UsesFilter)
                 workspaces = addMissingWorkspacesTo(workspaces);
@@ -163,7 +161,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .OrderByDescending(ws => ws.WorkspaceId == workspaceId)
                 .ThenBy(ws => ws.WorkspaceName);
 
-            Suggestions.AddRange(workspaces);
+            Suggestions.ReplaceWith(workspaces);
         }
 
         private IEnumerable<WorkspaceGroupedSuggestionsCollection> addMissingWorkspacesTo(IEnumerable<WorkspaceGroupedSuggestionsCollection> workspaces)

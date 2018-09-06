@@ -1,6 +1,5 @@
 ﻿using System;
 using Toggl.Multivac;
-using FoundationResources = Toggl.Foundation.Resources;
 
 namespace Toggl.Foundation.Extensions
 {
@@ -11,19 +10,19 @@ namespace Toggl.Foundation.Extensions
             switch (option)
             {
                 case CalendarNotificationsOption.Disabled:
-                    return FoundationResources.Disabled;
+                    return Resources.Disabled;
                 case CalendarNotificationsOption.WhenEventStarts:
-                    return FoundationResources.WhenEventStarts;
+                    return Resources.WhenEventStarts;
                 case CalendarNotificationsOption.FiveMinutes:
-                    return FoundationResources.FiveMinutes;
+                    return Resources.FiveMinutes;
                 case CalendarNotificationsOption.TenMinutes:
-                    return FoundationResources.TenMinutes;
+                    return Resources.TenMinutes;
                 case CalendarNotificationsOption.FifteenMinutes:
-                    return FoundationResources.FifteenMinutes;
+                    return Resources.FifteenMinutes;
                 case CalendarNotificationsOption.ThirtyMinutes:
-                    return FoundationResources.ThirtyMinutes;
+                    return Resources.ThirtyMinutes;
                 case CalendarNotificationsOption.OneHour:
-                    return FoundationResources.OneHour;
+                    return Resources.OneHour;
             }
             return "";
         }

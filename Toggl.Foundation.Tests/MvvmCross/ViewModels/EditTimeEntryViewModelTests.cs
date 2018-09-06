@@ -1255,7 +1255,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact]
-            public async Task OpensTheSelectDateTimeViewModelWithCorrectLimitsForARunnningTimeEntry()
+            public async Task OpensTheSelectDateTimeViewModelWithCorrectLimitsForARunningTimeEntry()
             {
                 var now = DateTimeOffset.UtcNow;
                 ConfigureEditedTimeEntry(now, true);

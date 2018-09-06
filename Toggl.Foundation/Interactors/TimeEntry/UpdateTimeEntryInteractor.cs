@@ -4,6 +4,7 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 
 namespace Toggl.Foundation.Interactors
 {
