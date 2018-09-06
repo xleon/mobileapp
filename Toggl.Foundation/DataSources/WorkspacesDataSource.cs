@@ -11,7 +11,7 @@ using Toggl.PrimeRadiant.Models;
 namespace Toggl.Foundation.DataSources
 {
     public sealed class WorkspacesDataSource
-        : DataSource<IThreadSafeWorkspace, IDatabaseWorkspace>, IWorkspacesSource
+        : ObservableDataSource<IThreadSafeWorkspace, IDatabaseWorkspace>, IWorkspacesSource
     {
         private readonly IIdProvider idProvider;
         private readonly ITimeService timeService;

@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Reactive.Linq;
 using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Platforms.Ios.Views;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.MvvmCross.Helper;
@@ -10,13 +10,14 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac.Extensions;
 using UIKit;
 using static Toggl.Daneel.Extensions.AnimationExtensions;
+using static Toggl.Daneel.Extensions.UIKitRxExtensions;
 using Toggl.Daneel.Converters;
 using Toggl.Foundation.Models.Interfaces;
 using System.Collections.Generic;
 
 namespace Toggl.Daneel.ViewControllers
 {
-    public sealed partial class ReportsViewController : MvxViewController<ReportsViewModel>
+    public sealed partial class ReportsViewController : ReactiveViewController<ReportsViewModel>
     {
         private const string boundsKey = "bounds";
 
@@ -34,7 +35,7 @@ namespace Toggl.Daneel.ViewControllers
 
         internal bool CalendarIsVisible { get; private set; }
 
-        public ReportsViewController() : base(nameof(ReportsViewController), null)
+        public ReportsViewController() : base(nameof(ReportsViewController))
         {
         }
 
@@ -50,42 +51,32 @@ namespace Toggl.Daneel.ViewControllers
             source.OnScroll += onReportsTableScrolled;
             ReportsTableView.Source = source;
 
-            var areThereEnoughWorkspaces = new LambdaConverter<ICollection<(string, IThreadSafeWorkspace)>, bool>(workspaces => workspaces.Count > 1);
-            var isWorkspaceNameTooLong = new LambdaConverter<string, bool>(workspaceName =>
+            bool areThereEnoughWorkspaces(ICollection<(string ItemName, IThreadSafeWorkspace Item)> workspaces) => workspaces.Count > 1;
+
+            bool isWorkspaceNameTooLong(string workspaceName) 
             {
                 var attributes = new UIStringAttributes { Font = WorkspaceLabel.Font };
                 var size = new NSString(workspaceName).GetSizeUsingAttributes(attributes);
                 return size.Width >= maximumWorkspaceNameLabelWidth;
-            });
+            };
+
+            //Text
+            this.Bind(ViewModel.WorkspaceNameObservable, WorkspaceLabel.BindText());
+            this.Bind(ViewModel.CurrentDateRangeStringObservable, titleButton.BindTitle());
+
+            //Visibility
+            this.Bind(ViewModel.WorkspacesObservable.Select(areThereEnoughWorkspaces), WorkspaceButton.BindIsVisible());
+            this.Bind(ViewModel.WorkspaceNameObservable.Select(isWorkspaceNameTooLong), WorkspaceFadeView.BindFadeRight());
+
+            //Commands
+            this.BindVoid(titleButton.Tapped(), ViewModel.ToggleCalendar);
+            this.BindVoid(ReportsTableView.Tapped(), ViewModel.HideCalendar);
+            this.Bind(WorkspaceButton.Tapped(), ViewModel.SelectWorkspaceMethod);
+
 
             var bindingSet = this.CreateBindingSet<ReportsViewController, ReportsViewModel>();
 
             bindingSet.Bind(source).To(vm => vm.Segments);
-            bindingSet.Bind(titleButton).To(vm => vm.ToggleCalendarCommand);
-            bindingSet.Bind(titleButton)
-                      .For(v => v.BindTitle())
-                      .To(vm => vm.CurrentDateRangeString);
-
-            bindingSet.Bind(ReportsTableView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.HideCalendarCommand);
-
-            bindingSet.Bind(WorkspaceButton)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.Workspaces)
-                      .WithConversion(areThereEnoughWorkspaces);
-
-            bindingSet.Bind(WorkspaceButton)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectWorkspace);
-
-            bindingSet.Bind(WorkspaceLabel)
-                      .To(vm => vm.WorkspaceName);
-
-            bindingSet.Bind(WorkspaceFadeView)
-                      .For(v => v.FadeRight)
-                      .To(vm => vm.WorkspaceName)
-                      .WithConversion(isWorkspaceNameTooLong);
 
             bindingSet.Apply();
         }

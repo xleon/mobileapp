@@ -1013,7 +1013,6 @@
     <Compile Include="Binding\TextViewWithPlaceholderDidBecomeFirstResponderTargetBinding.cs" />
     <Compile Include="ViewControllers\MainTabBarController.cs" />
     <Compile Include="Startup\NSRunLoopScheduler.cs" />
-    <Compile Include="Converters\LambdaConverter.cs" />
     <Compile Include="Views\SnackBar.cs" />
     <Compile Include="Views\SnackBar.designer.cs">
       <DependentUpon>SnackBar.cs</DependentUpon>
@@ -1024,6 +1023,7 @@
     </Compile>
     <Compile Include="Extensions\UIKitRxExtensions\UIControlRxExtensions.cs" />
     <Compile Include="Binding\LayoutConstraintActiveTargetBinding.cs" />
+    <Compile Include="Extensions\UIKitRxExtensions\FadeViewRxExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
