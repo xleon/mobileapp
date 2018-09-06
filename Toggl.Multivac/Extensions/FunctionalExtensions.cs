@@ -13,6 +13,8 @@ namespace Toggl.Multivac.Extensions
 
         public static bool Invert(bool x) => !x;
 
+        public static bool NotNull(object obj) => obj != null;
+
         public static void DoNothing<T>(T x) { }
     }
 

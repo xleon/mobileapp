@@ -9,6 +9,6 @@ namespace Toggl.Giskard.Extensions
             => state == ViewStates.Visible;
 
         public static ViewStates ToVisibility(this bool state, bool useGone = false)
-            => state ? ViewStates.Visible : useGone ? ViewStates.Gone : ViewStates.Invisible;
+            => state ? ViewStates.Visible : (useGone ? ViewStates.Gone : ViewStates.Invisible);
     }
 }

@@ -1,0 +1,111 @@
+﻿using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using Android.App;
+using Android.Content.PM;
+using Android.OS;
+using Android.Support.V7.Widget;
+using Android.Views;
+using MvvmCross.Binding.BindingContext;
+using MvvmCross.Platforms.Android.Presenters.Attributes;
+using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Giskard.Extensions;
+using Toggl.Multivac.Extensions;
+using Toggl.Ultrawave.Exceptions;
+
+namespace Toggl.Giskard.Activities
+{
+    [MvxActivityPresentation]
+    [Activity(Theme = "@style/AppTheme",
+        ScreenOrientation = ScreenOrientation.Portrait,
+        WindowSoftInputMode = SoftInput.StateVisible,
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
+    public partial class SendFeedbackActivity : ReactiveActivity<SendFeedbackViewModel>
+    {
+        private bool sendEnabled;
+        private Subject<Unit> sendFeedbackSubject = new Subject<Unit>();
+        private Subject<Unit> closeSubject = new Subject<Unit>();
+        private Subject<string> errorTextSubject = new Subject<string>();
+
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+            SetContentView(Resource.Layout.SendFeedbackActivity);
+            OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
+
+            InitializeViews();
+            SetSupportActionBar(toolbar);
+            SupportActionBar.Title = GetString(Resource.String.SendFeedbackTitle);
+            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+            SupportActionBar.SetDisplayShowHomeEnabled(true);
+
+            this.Bind(feedbackEditText.Text(), ViewModel.FeedbackText);
+            this.Bind(errorCard.Tapped(), ViewModel.ErrorViewTapped);
+
+            var sendButtonEnabled = ViewModel.SendEnabled.CombineLatest(ViewModel.IsLoading,
+                (sendIsEnabled, isLoading) => sendIsEnabled && !isLoading);
+           sendButtonEnabled
+                .Subscribe(onSendEnabled)
+                .DisposedBy(DisposeBag);
+
+            ViewModel.Error
+                .Select(selectErrorMessage)
+                .Subscribe(errorTextSubject.OnNext)
+                .DisposedBy(DisposeBag);
+            this.Bind(errorTextSubject, errorInfoText.BindText());
+
+            this.Bind(sendFeedbackSubject, ViewModel.SendButtonTapped);
+            this.Bind(closeSubject, ViewModel.CloseButtonTapped);
+            this.Bind(ViewModel.Error.Select(error => error != null), errorCard.BindIsVisible(useGone: true));
+            this.Bind(ViewModel.IsLoading, progressBar.BindIsVisible(useGone: true));
+            this.Bind(ViewModel.IsLoading.Invert(), feedbackEditText.BindEnabled());
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.SendFeedbackMenu, menu);
+            return true;
+        }
+
+        public override bool OnPrepareOptionsMenu(IMenu menu)
+        {
+            var sendMenuItem = menu.FindItem(Resource.Id.SendMenuItem);
+            sendMenuItem.SetEnabled(sendEnabled);
+            return true;
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Resource.Id.SendMenuItem:
+                    sendFeedbackSubject.OnNext(Unit.Default);
+                    return true;
+
+                case Android.Resource.Id.Home:
+                    closeSubject.OnNext(Unit.Default);
+                    return true;
+
+                default:
+                    return base.OnOptionsItemSelected(item);
+            }
+        }
+
+        public override void OnBackPressed()
+        {
+            closeSubject.OnNext(Unit.Default);
+        }
+
+        private void onSendEnabled(bool enabled)
+        {
+            sendEnabled = enabled;
+            InvalidateOptionsMenu();
+        }
+
+        private string selectErrorMessage(Exception exception)
+            => exception is OfflineException
+                ? GetString(Resource.String.GenericInternetConnectionErrorMessage)
+                : GetString(Resource.String.GenericErrorMessage);
+    }
+}

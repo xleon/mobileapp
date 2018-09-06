@@ -417,4 +417,7 @@ account is not set up</value>
     <data name="SelectWorkspace">
         <value>Select workspace</value>
     </data>
+    <data name="DiscardMessage">
+        <value>Discard message?</value>
+    </data>
 </root>

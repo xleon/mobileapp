@@ -252,6 +252,10 @@
   <ItemGroup>
     <Compile Include="Activities\ForgotPasswordActivity.cs" />
     <Compile Include="Activities\SelectTagsActivity.cs" />
+    <Compile Include="Activities\SendFeedbackActivity.cs" />
+    <Compile Include="Activities\SendFeedbackActivity.ViewBinds.cs">
+      <DependentUpon>SendFeedbackActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Adapters\MainRecyclerAdapter.cs" />
     <Compile Include="Adapters\MainSuggestionsRecyclerAdapter.cs" />
     <Compile Include="Adapters\ReactiveSectionedRecyclerAdapter.cs" />
@@ -808,6 +812,8 @@
     <AndroidResource Include="Resources\anim\abc_slide_in_left.xml" />
     <AndroidResource Include="Resources\anim\abc_slide_out_right.xml" />
     <AndroidResource Include="Resources\layout\MainSuggestionsCardDescriptionOnly.axml" />
+    <AndroidResource Include="Resources\layout\SendFeedbackActivity.axml" />
+    <AndroidResource Include="Resources\menu\SendFeedbackMenu.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">

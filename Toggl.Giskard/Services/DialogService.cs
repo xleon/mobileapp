@@ -78,7 +78,7 @@ namespace Toggl.Giskard.Services
                 case ActionType.DeleteExistingTimeEntry:
                     return Confirm(null, Resources.DeleteThisTimeEntry, Resources.Delete, Resources.Cancel);
                 case ActionType.DiscardFeedback:
-                    return Confirm(null, Resources.Discard, Resources.Discard, Resources.ContinueEditing);
+                    return Confirm(null, Resources.DiscardMessage, Resources.Discard, Resources.ContinueEditing);
             }
 
             throw new ArgumentOutOfRangeException(nameof(type));

@@ -832,6 +832,11 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("UndoButtonTitle", resourceCulture);
             }
         }
+        public static string DiscardMessage {
+            get {
+                return ResourceManager.GetString("DiscardMessage", resourceCulture);
+            }
+        }
         
         public static string SelectWorkspace {
             get {
