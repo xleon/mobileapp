@@ -39,7 +39,7 @@ namespace Toggl.Giskard.Extensions
                 .FromEventPattern<TextView.EditorActionEventArgs>(e => text.EditorAction += e, e => text.EditorAction -= e)
                 .SelectUnit();
 
-        public static Action<bool> BindIsVisible(this View view, bool useGone = false)
+        public static Action<bool> BindIsVisible(this View view, bool useGone = true)
             => isVisible => view.Visibility = isVisible.ToVisibility(useGone);
 
         public static Action<string> BindText(this TextView textView)

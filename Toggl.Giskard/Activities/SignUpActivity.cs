@@ -40,10 +40,10 @@ namespace Toggl.Giskard.Activities
             this.Bind(ViewModel.CountryButtonTitle, countryNameTextView.BindText());
 
             //Visibility
-            this.Bind(ViewModel.HasError, errorTextView.BindIsVisible());
-            this.Bind(ViewModel.IsLoading, progressBar.BindIsVisible());
+            this.Bind(ViewModel.HasError, errorTextView.BindIsVisible(useGone: false));
+            this.Bind(ViewModel.IsLoading, progressBar.BindIsVisible(useGone: false));
             this.Bind(ViewModel.SignupEnabled, signupButton.BindEnabled());
-            this.Bind(ViewModel.IsCountryErrorVisible, countryErrorView.BindIsVisible());
+            this.Bind(ViewModel.IsCountryErrorVisible, countryErrorView.BindIsVisible(useGone: false));
 
             //Commands
             this.Bind(loginCard.Tapped(), ViewModel.Login);

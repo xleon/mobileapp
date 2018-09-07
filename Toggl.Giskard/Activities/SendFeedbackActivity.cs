@@ -57,8 +57,8 @@ namespace Toggl.Giskard.Activities
 
             this.Bind(sendFeedbackSubject, ViewModel.SendButtonTapped);
             this.Bind(closeSubject, ViewModel.CloseButtonTapped);
-            this.Bind(ViewModel.Error.Select(error => error != null), errorCard.BindIsVisible(useGone: true));
-            this.Bind(ViewModel.IsLoading, progressBar.BindIsVisible(useGone: true));
+            this.Bind(ViewModel.Error.Select(error => error != null), errorCard.BindIsVisible());
+            this.Bind(ViewModel.IsLoading, progressBar.BindIsVisible());
             this.Bind(ViewModel.IsLoading.Invert(), feedbackEditText.BindEnabled());
         }
 

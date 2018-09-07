@@ -34,7 +34,7 @@ namespace Toggl.Giskard.ViewHolders
         protected override void UpdateView()
         {
             workspaceName.Text = Item.WorkspaceName;
-            checkedImage.Visibility = Item.Selected.ToVisibility();
+            checkedImage.Visibility = Item.Selected.ToVisibility(useGone: false);
         }
     }
 }
