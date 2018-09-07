@@ -29,6 +29,9 @@ namespace Toggl.Daneel.Views.Calendar
         private const int autoScrollsPerSecond = 8;
         private readonly float autoScrollAmount;
 
+        protected UISelectionFeedbackGenerator selectionFeedback = new UISelectionFeedbackGenerator();
+        protected UIImpactFeedbackGenerator impactFeedback = new UIImpactFeedbackGenerator(UIImpactFeedbackStyle.Medium);
+
         protected CalendarCollectionViewAutoScrollHelper(
             UICollectionView collectionView,
             CalendarCollectionViewLayout layout)

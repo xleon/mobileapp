@@ -124,6 +124,8 @@ namespace Toggl.Daneel.Views.Calendar
             resignActive();
             dataSource.StopEditing();
             editCalendarItemSuject.OnNext(calendarItem);
+
+            impactFeedback.ImpactOccurred();
         }
 
         private void longPressBegan(CGPoint point)
@@ -147,6 +149,9 @@ namespace Toggl.Daneel.Views.Calendar
             firstPoint = point;
             LastPoint = point;
             verticalOffset = firstPoint.Y - startPoint.Y;
+
+            impactFeedback.ImpactOccurred();
+            selectionFeedback.Prepare();
         }
 
         private void longPressChanged(CGPoint point)
@@ -183,6 +188,8 @@ namespace Toggl.Daneel.Views.Calendar
                 action = EditAction.ChangeOffset;
             else
                 action = EditAction.None;
+
+            selectionFeedback.Prepare();
         }
 
         private void panChanged(CGPoint point)
@@ -220,6 +227,7 @@ namespace Toggl.Daneel.Views.Calendar
                 .WithStartTime(startTime);
 
             itemIndexPath = dataSource.UpdateItemView(itemIndexPath, calendarItem.StartTime, calendarItem.Duration);
+            selectionFeedback.SelectionChanged();
 
             var topY = Layout.PointAtDate(calendarItem.StartTime).Y;
             var bottomY = Layout.PointAtDate(calendarItem.EndTime).Y;
@@ -254,6 +262,7 @@ namespace Toggl.Daneel.Views.Calendar
                 .WithDuration(duration);
 
             itemIndexPath = dataSource.UpdateItemView(itemIndexPath, calendarItem.StartTime, calendarItem.Duration);
+            selectionFeedback.SelectionChanged();
 
             if (point.Y < TopAutoScrollLine && !CollectionView.IsAtTop())
                 StartAutoScrollUp(changeStartTime);
@@ -285,6 +294,7 @@ namespace Toggl.Daneel.Views.Calendar
                 .WithDuration(duration);
 
             itemIndexPath = dataSource.UpdateItemView(itemIndexPath, calendarItem.StartTime, calendarItem.Duration);
+            selectionFeedback.SelectionChanged();
 
             if (point.Y > BottomAutoScrollLine && !CollectionView.IsAtBottom())
                 StartAutoScrolDown(changeEndTime);

@@ -85,6 +85,8 @@ namespace Toggl.Daneel.Views.Calendar
             LastPoint = point;
             var startTime = Layout.DateAtPoint(firstPoint).RoundDownToClosestQuarter();
             itemIndexPath = dataSource.InsertItemView(startTime, defaultDuration);
+            impactFeedback.ImpactOccurred();
+            selectionFeedback.Prepare();
         }
 
         private bool isDraggingDown(CGPoint point) => firstPoint.Y < point.Y;
@@ -124,7 +126,9 @@ namespace Toggl.Daneel.Views.Calendar
             }
 
             var duration = endTime - startTime;
+
             dataSource.UpdateItemView(itemIndexPath, startTime, duration);
+            selectionFeedback.SelectionChanged();
         }
 
         private void longPressEnded(CGPoint point)
@@ -154,6 +158,8 @@ namespace Toggl.Daneel.Views.Calendar
             dataSource.StopEditing();
             itemIndexPath = null;
             StopAutoScroll();
+
+            impactFeedback.ImpactOccurred();
         }
     }
 }
