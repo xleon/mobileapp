@@ -41,6 +41,19 @@ namespace Toggl.Daneel.Intents
 	}
 
 	[Native]
+	public enum StartTimerIntentResponseCode : long
+	{
+		Unspecified = 0,
+		Ready,
+		ContinueInApp,
+		InProgress,
+		Success,
+		Failure,
+		FailureRequiringAppLaunch,
+		FailureNoApiToken = 100
+	}
+
+	[Native]
 	public enum StopTimerIntentResponseCode : long
 	{
 		Unspecified = 0,

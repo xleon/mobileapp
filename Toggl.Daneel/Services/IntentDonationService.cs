@@ -10,6 +10,15 @@ namespace Toggl.Daneel.Services
 {
     public class IntentDonationService : IIntentDonationService
     {
+        public void DonateStartTimeEntry()
+        {
+            var intent = new StartTimerIntent();
+            intent.SuggestedInvocationPhrase = "Start timer";
+
+            var interaction = new INInteraction(intent, null);
+            interaction.DonateInteraction(onCompletion);
+        }
+
         public void DonateStopCurrentTimeEntry()
         {
             var intent = new StopTimerIntent();

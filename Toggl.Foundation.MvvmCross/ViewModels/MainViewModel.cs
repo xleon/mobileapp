@@ -363,6 +363,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 ? StartTimeEntryParameters.ForManualMode(timeService.CurrentDateTime)
                 : StartTimeEntryParameters.ForTimerMode(timeService.CurrentDateTime);
 
+            intentDonationService.DonateStartTimeEntry();
+
             return navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(parameter);
         }
 

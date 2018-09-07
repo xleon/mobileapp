@@ -10,6 +10,7 @@
 #import "StopTimerIntent.h"
 #import "ShowReportIntent.h"
 #import "ShowReportPeriodIntent.h"
+#import "StartTimerIntent.h"
 
 @interface AppDelegate ()
 
@@ -30,6 +31,7 @@
     StopTimerIntent;
     ShowReportIntent;
     ShowReportPeriodIntent;
+    StartTimerIntent;
     
     return YES;
 }

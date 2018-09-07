@@ -89,6 +89,42 @@ namespace Toggl.Daneel.Intents
 		ShowReportPeriodIntentResponseCode Code { get; }
 	}
 
+	// @interface StartTimerIntent : INIntent
+	[BaseType (typeof(INIntent))]
+	interface StartTimerIntent
+	{
+	}
+
+	// @protocol StartTimerIntentHandling <NSObject>
+	[Protocol, Model]
+	[BaseType (typeof(NSObject))]
+	interface StartTimerIntentHandling
+	{
+		// @required -(void)handleStartTimer:(StartTimerIntent * _Nonnull)intent completion:(void (^ _Nonnull)(StartTimerIntentResponse * _Nonnull))completion;
+		[Abstract]
+		[Export ("handleStartTimer:completion:")]
+		void HandleStartTimer (StartTimerIntent intent, Action<StartTimerIntentResponse> completion);
+
+		// @optional -(void)confirmStartTimer:(StartTimerIntent * _Nonnull)intent completion:(void (^ _Nonnull)(StartTimerIntentResponse * _Nonnull))completion;
+		[Export ("confirmStartTimer:completion:")]
+		void ConfirmStartTimer (StartTimerIntent intent, Action<StartTimerIntentResponse> completion);
+	}
+
+	// @interface StartTimerIntentResponse : INIntentResponse
+	[BaseType (typeof(INIntentResponse))]
+	[DisableDefaultCtor]
+	interface StartTimerIntentResponse
+	{
+		// -(instancetype _Nonnull)initWithCode:(StartTimerIntentResponseCode)code userActivity:(NSUserActivity * _Nullable)userActivity __attribute__((objc_designated_initializer));
+		[Export ("initWithCode:userActivity:")]
+		[DesignatedInitializer]
+		IntPtr Constructor (StartTimerIntentResponseCode code, [NullAllowed] NSUserActivity userActivity);
+
+		// @property (readonly, nonatomic) StartTimerIntentResponseCode code;
+		[Export ("code")]
+		StartTimerIntentResponseCode Code { get; }
+	}
+
 	// @interface StopTimerIntent : INIntent
 	[BaseType (typeof(INIntent))]
 	interface StopTimerIntent
