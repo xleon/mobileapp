@@ -3,13 +3,13 @@ using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Commands;
-using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.ViewModels;
+using Toggl.Giskard.ViewHolders;
 
 namespace Toggl.Giskard.Adapters
 {
-    public abstract class CreateSuggestionGroupedTableViewSource<TCollection, TItem> 
+    public abstract class CreateSuggestionGroupedTableViewSource<TCollection, TItem>
         : SegmentedRecyclerAdapter<TCollection, TItem>
         where TCollection : MvxObservableCollection<TItem>
     {
@@ -37,7 +37,7 @@ namespace Toggl.Giskard.Adapters
 
         public IMvxAsyncCommand CreateCommand { get; set; }
 
-        public override int ItemCount 
+        public override int ItemCount
             => base.ItemCount + (IsSuggestingCreation ? 1 : 0);
 
         protected abstract int SuggestCreationViewType { get; }
@@ -53,7 +53,7 @@ namespace Toggl.Giskard.Adapters
 
         public override object GetItem(int viewPosition)
         {
-            if (!IsSuggestingCreation) 
+            if (!IsSuggestingCreation)
                 return base.GetItem(viewPosition);
 
             if (viewPosition == 0)
@@ -66,10 +66,11 @@ namespace Toggl.Giskard.Adapters
         {
             var itemBindingContext = new MvxAndroidBindingContext(parent.Context, BindingContext.LayoutInflaterHolder);
             var inflatedView = InflateViewForHolder(parent, viewType, itemBindingContext);
-            var viewHolder = new MvxRecyclerViewHolder(inflatedView, itemBindingContext)
+            var viewHolder = new GuardedMvxRecyclerViewHolder(inflatedView, itemBindingContext)
             {
                 Click = viewType == SuggestCreationViewType ? CreateCommand : ItemClick,
                 LongClick = ItemLongClick,
+                CanExecute = item => !(item is TCollection)
             };
 
             return viewHolder;

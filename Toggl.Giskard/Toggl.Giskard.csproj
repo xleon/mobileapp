@@ -293,6 +293,7 @@
     <Compile Include="ViewHolders\MainLogSectionViewHolder.cs" />
     <Compile Include="ViewHolders\MainLogSuggestionItemViewHolder.cs" />
     <Compile Include="ViewHolders\MainLogSuggestionsListViewHolder.cs" />
+    <Compile Include="ViewHolders\GuardedMvxRecyclerViewHolder.cs" />
     <Compile Include="Views\SelectProjectRecyclerView.cs" />
     <Compile Include="Views\SelectTagsRecyclerView.cs" />
     <Compile Include="TemplateSelectors\SelectProjectTemplateSelector.cs" />
