@@ -28,33 +28,33 @@ namespace Toggl.Daneel.Services
             interaction.DonateInteraction(onCompletion);
         }
 
-        public void DonateShowReport(DonationReportPeriod period)
+        public void DonateShowReport(ReportPeriod period)
         {
             var intent = new ShowReportPeriodIntent();
             switch (period)
             {
-                case DonationReportPeriod.Today:
+                case ReportPeriod.Today:
                     intent.Period = ShowReportPeriodReportPeriod.Today;
                     break;
-                case DonationReportPeriod.Yesterday:
+                case ReportPeriod.Yesterday:
                     intent.Period = ShowReportPeriodReportPeriod.Yesterday;
                     break;
-                case DonationReportPeriod.LastWeek:
+                case ReportPeriod.LastWeek:
                     intent.Period = ShowReportPeriodReportPeriod.LastWeek;
                     break;
-                case DonationReportPeriod.LastMonth:
+                case ReportPeriod.LastMonth:
                     intent.Period = ShowReportPeriodReportPeriod.LastMonth;
                     break;
-                case DonationReportPeriod.ThisMonth:
+                case ReportPeriod.ThisMonth:
                     intent.Period = ShowReportPeriodReportPeriod.ThisMonth;
                     break;
-                case DonationReportPeriod.ThisWeek:
+                case ReportPeriod.ThisWeek:
                     intent.Period = ShowReportPeriodReportPeriod.ThisWeek;
                     break;
-                case DonationReportPeriod.ThisYear:
+                case ReportPeriod.ThisYear:
                     intent.Period = ShowReportPeriodReportPeriod.ThisYear;
                     break;
-                case DonationReportPeriod.Unknown:
+                case ReportPeriod.Unknown:
                     intent.Period = ShowReportPeriodReportPeriod.Unknown;
                     break;
             }

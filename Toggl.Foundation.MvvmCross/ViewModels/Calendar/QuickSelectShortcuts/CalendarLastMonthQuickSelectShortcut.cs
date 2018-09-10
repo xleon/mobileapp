@@ -9,7 +9,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts
         : CalendarBaseQuickSelectShortcut
     {
         public CalendarLastMonthQuickSelectShortcut(ITimeService timeService)
-            : base(timeService, Resources.LastMonth, DonationReportPeriod.LastMonth)
+            : base(timeService, Resources.LastMonth, ReportPeriod.LastMonth)
         {
         }
 

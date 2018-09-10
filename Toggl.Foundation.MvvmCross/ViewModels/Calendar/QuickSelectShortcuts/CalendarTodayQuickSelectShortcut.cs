@@ -7,7 +7,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts
     public sealed class CalendarTodayQuickSelectShortcut : CalendarBaseQuickSelectShortcut
     {
         public CalendarTodayQuickSelectShortcut(ITimeService timeService)
-            : base(timeService, Resources.Today, DonationReportPeriod.Today)
+            : base(timeService, Resources.Today, ReportPeriod.Today)
         {
         }
 

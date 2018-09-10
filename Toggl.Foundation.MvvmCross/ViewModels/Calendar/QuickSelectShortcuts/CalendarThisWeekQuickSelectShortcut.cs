@@ -12,7 +12,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts
 
         public CalendarThisWeekQuickSelectShortcut
             (ITimeService timeService, BeginningOfWeek beginningOfWeek)
-            : base(timeService, Resources.ThisWeek, DonationReportPeriod.ThisWeek)
+            : base(timeService, Resources.ThisWeek, ReportPeriod.ThisWeek)
         {
             this.beginningOfWeek = beginningOfWeek;
         }

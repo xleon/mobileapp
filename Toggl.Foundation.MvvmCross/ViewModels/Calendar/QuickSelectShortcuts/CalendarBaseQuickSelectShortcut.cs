@@ -14,18 +14,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts
 
         public bool Selected { get; private set; }
 
-        public DonationReportPeriod DonationPeriod { get; private set; }
+        public ReportPeriod Period { get; private set; }
 
         protected CalendarBaseQuickSelectShortcut(
-            ITimeService timeService, string title, DonationReportPeriod donationReportPeriod)
+            ITimeService timeService, string title, ReportPeriod reportPeriod)
         {
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(title, nameof(title));
-            Ensure.Argument.IsNotNull(donationReportPeriod, nameof(donationReportPeriod));
+            Ensure.Argument.IsNotNull(reportPeriod, nameof(reportPeriod));
 
             TimeService = timeService;
             Title = title;
-            DonationPeriod = donationReportPeriod;
+            Period = reportPeriod;
         }
 
         public void OnDateRangeChanged(ReportsDateRangeParameter dateRange)

@@ -1,6 +1,6 @@
 namespace Toggl.Foundation.Services
 {
-    public enum DonationReportPeriod
+    public enum ReportPeriod
     {
         Unknown,
         LastMonth,
@@ -16,7 +16,7 @@ namespace Toggl.Foundation.Services
     {
         void DonateStartTimeEntry();
         void DonateStopCurrentTimeEntry();
-        void DonateShowReport(DonationReportPeriod period);
+        void DonateShowReport(ReportPeriod period);
         void DonateShowReport();
     }
 }

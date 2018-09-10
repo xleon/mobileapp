@@ -1,13 +1,14 @@
 using System;
+using System.Linq;
 using Foundation;
 using Intents;
 using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Ios.Core;
 using MvvmCross.Plugin.Color.Platforms.Ios;
-using MvvmCross.ViewModels;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Intents;
+using Toggl.Daneel.ViewControllers;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Interactors;
@@ -149,6 +150,14 @@ namespace Toggl.Daneel
             {
                 case StopTimerIntent _:
                     navigationService.Navigate(ApplicationUrls.Main.StopTimeEntry);
+                    return true;
+                case ShowReportIntent _:
+                    navigationService.Navigate(ApplicationUrls.Reports);
+                    return true;
+                case ShowReportPeriodIntent periodIntent:
+                    var tabbarVC = (MainTabBarController)UIApplication.SharedApplication.KeyWindow.RootViewController;
+                    var reportViewModel = (ReportsViewModel)tabbarVC.ViewModel.ViewModels.Single(viewModel => viewModel is ReportsViewModel);
+                    navigationService.Navigate(reportViewModel, periodIntent.Period.ToReportPeriod());
                     return true;
                 default:
                     return false;

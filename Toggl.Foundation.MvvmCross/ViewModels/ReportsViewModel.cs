@@ -32,7 +32,7 @@ using Toggl.Foundation.MvvmCross.Extensions;
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class ReportsViewModel : MvxViewModel
+    public sealed class ReportsViewModel : MvxViewModel<ReportPeriod>
     {
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
@@ -179,6 +179,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             CurrentDateRangeStringObservable.Subscribe(range => CurrentDateRangeString = range);
             WorkspaceNameObservable.Subscribe(name => WorkspaceName = name);
             WorkspacesObservable.Subscribe(data => Workspaces = data);
+        }
+
+        public override void Prepare(ReportPeriod parameter)
+        {
+            base.Prepare();
+            calendarViewModel.SelectPeriod(parameter);
         }
 
         public override async Task Initialize()

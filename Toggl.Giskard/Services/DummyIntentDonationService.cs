@@ -14,7 +14,7 @@ namespace Toggl.Giskard.Services
             throw new System.NotImplementedException();
         }
 
-        public void DonateShowReport(DonationReportPeriod period)
+        public void DonateShowReport(ReportPeriod period)
         {
             throw new System.NotImplementedException();
         }
