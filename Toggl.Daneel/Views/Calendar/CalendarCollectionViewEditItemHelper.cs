@@ -156,12 +156,13 @@ namespace Toggl.Daneel.Views.Calendar
 
         private void longPressChanged(CGPoint point)
         {
-            action = EditAction.ChangeOffset;
             changeOffset(point);
         }
 
         private void longPressEnded()
         {
+            StopAutoScroll();
+
             if (!isActive)
                 return;
 
