@@ -5,13 +5,9 @@ namespace Toggl.Giskard.Services
 {
     public class DummyPrivateSharedStorageService : IPrivateSharedStorageService
     {
-        public DummyPrivateSharedStorageService()
+        public void SaveApiToken(string apiToken)
         {
-        }
-
-        void SaveApiToken(string apiToken)
-        {
-            
+            throw new NotImplementedException();
         }
     }
 }
