@@ -110,6 +110,7 @@ namespace Toggl.Foundation.DataSources
         public IObservable<Unit> SoftDelete(IThreadSafeTimeEntry timeEntry)
             => Observable.Return(timeEntry)
                 .Select(TimeEntry.DirtyDeleted)
+                .Select(te => te.UpdatedAt(timeService.CurrentDateTime))
                 .SelectMany(repository.Update)
                 .Do(entity => DeletedSubject.OnNext(entity.Id))
                 .Select(_ => Unit.Default);
