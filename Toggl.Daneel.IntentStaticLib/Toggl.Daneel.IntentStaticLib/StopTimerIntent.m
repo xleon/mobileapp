@@ -22,7 +22,7 @@
 
 @synthesize code = _code;
 
-@dynamic entry_description, entry_duration;
+@dynamic entryDescription, entryDurationString, entryStart, entryDuration;
 
 - (instancetype)initWithCode:(StopTimerIntentResponseCode)code userActivity:(nullable NSUserActivity *)userActivity {
     self = [super init];
@@ -33,10 +33,10 @@
     return self;
 }
 
-+ (instancetype)successIntentResponseWithEntry_description:(NSString *)entry_description entry_duration:(NSString *)entry_duration {
++ (instancetype)successIntentResponseWithEntryDescription:(NSString *)entryDescription entryDurationString:(NSString *)entryDurationString {
     StopTimerIntentResponse *intentResponse = [[StopTimerIntentResponse alloc] initWithCode:StopTimerIntentResponseCodeSuccess userActivity:nil];
-    intentResponse.entry_description = entry_description;
-    intentResponse.entry_duration = entry_duration;
+    intentResponse.entryDescription = entryDescription;
+    intentResponse.entryDurationString = entryDurationString;
     return intentResponse;
 }
 

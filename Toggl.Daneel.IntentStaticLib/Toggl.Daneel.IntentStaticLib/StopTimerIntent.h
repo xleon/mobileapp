@@ -84,10 +84,12 @@ API_AVAILABLE(ios(12.0), watchos(5.0))
 /*!
  @abstract Initializes and returns the response object with the success code.
  */
-+ (instancetype)successIntentResponseWithEntry_description:(NSString *)entry_description entry_duration:(NSString *)entry_duration NS_SWIFT_NAME(success(entry_description:entry_duration:));
++ (instancetype)successIntentResponseWithEntryDescription:(NSString *)entryDescription entryDurationString:(NSString *)entryDurationString NS_SWIFT_NAME(success(entryDescription:entryDurationString:));
 
-@property (readwrite, copy, nullable, nonatomic) NSString *entry_description;
-@property (readwrite, copy, nullable, nonatomic) NSString *entry_duration;
+@property (readwrite, copy, nullable, nonatomic) NSString *entryDescription;
+@property (readwrite, copy, nullable, nonatomic) NSString *entryDurationString;
+@property (readwrite, copy, nullable, nonatomic) NSNumber *entryStart;
+@property (readwrite, copy, nullable, nonatomic) NSNumber *entryDuration;
 
 /*!
  @abstract The response code indicating your success or failure in confirming or handling the intent.

@@ -50,14 +50,19 @@ namespace SiriExtension
                     te =>
                     {
                         SharedStorage.instance.setNeedsSync(true);
-                        /*
-                        var response = StopTimerIntentResponse.SuccessIntentResponseWithEntry_description(
+
+                        var timeSpan = TimeSpan.FromSeconds(te.Duration ?? 0);
+                        var durationString = $"{timeSpan.Hours} hours, {timeSpan.Minutes} minutes and {timeSpan.Seconds} seconds";
+                        
+                        var response = StopTimerIntentResponse.SuccessIntentResponseWithEntryDescription(
                             te.Description,
-                            $"(te.Duration) seconds"
+                            durationString
                         );
-                        */
+                        response.EntryStart = te.Start.ToUnixTimeSeconds();
+                        response.EntryDuration = te.Duration;
+                        
                         // Once Xamarin's bug if fixed we have to use tha above response instead of this one.
-                        var response = new StopTimerIntentResponse(StopTimerIntentResponseCode.Success, null);
+                        //var response = new StopTimerIntentResponse(StopTimerIntentResponseCode.Success, null);
                         completion(response);
                     },
                     exception =>

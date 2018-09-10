@@ -1066,6 +1066,11 @@
       <Project>{ACA2821E-0FF9-4036-BFF6-E775BB4E6732}</Project>
       <Name>Toggl.Daneel.ExtensionKit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Toggl.Daneel.SiriExtension.UI\Toggl.Daneel.SiriExtension.UI.csproj">
+      <IsAppExtension>true</IsAppExtension>
+      <Project>{BC329A24-95D6-4D02-95B5-2AA699D8873A}</Project>
+      <Name>Toggl.Daneel.SiriExtension.UI</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Images.xcassets\line.imageset\" />
@@ -1100,11 +1105,6 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\Toggl.Daneel.IntentCodeGen\Toggl.Daneel.IntentCodeGen\Intents.intentdefinition">
-      <Link>Intents.intentdefinition</Link>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Firebase.iOS.RemoteConfig.2.0.3.2\build\Xamarin.Firebase.iOS.RemoteConfig.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.RemoteConfig.2.0.3.2\build\Xamarin.Firebase.iOS.RemoteConfig.targets')" />
