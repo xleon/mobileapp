@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive.Linq;
@@ -44,7 +45,8 @@ namespace Toggl.Foundation.Tests.Interactors.Notifications
                         startTime: now.Add(eightHours * number),
                         duration: eightHours,
                         description: number.ToString(),
-                        iconKind: CalendarIconKind.None
+                        iconKind: CalendarIconKind.None,
+                        calendarId: "1"
                     ));
                 var expectedNotifications = events
                     .Where(calendarItem => calendarItem.StartTime >= now + tenMinutes)
@@ -61,6 +63,7 @@ namespace Toggl.Foundation.Tests.Interactors.Notifications
                     .GetEventsInRange(now, endOfWeek)
                     .Returns(Observable.Return(events));
                 TimeService.CurrentDateTime.Returns(now);
+                UserPreferences.EnabledCalendarIds().Returns(new List<string> { "1" });
 
                 await interactor.Execute();
 
@@ -89,7 +92,8 @@ namespace Toggl.Foundation.Tests.Interactors.Notifications
                         startTime: now.Add(eightHours * number),
                         duration: eightHours,
                         description: number.ToString(),
-                        iconKind: CalendarIconKind.None
+                        iconKind: CalendarIconKind.None,
+                        calendarId: "1"
                     ));
                 var expectedNotifications = events
                     .Where(calendarItem => calendarItem.StartTime >= now + timeSpan)
@@ -102,6 +106,9 @@ namespace Toggl.Foundation.Tests.Interactors.Notifications
                 UserPreferences
                     .TimeSpanBeforeCalendarNotifications
                     .Returns(Observable.Return(timeSpan));
+                UserPreferences
+                    .EnabledCalendarIds()
+                    .Returns(new List<string> { "1" });
                 CalendarService
                     .GetEventsInRange(now, endOfWeek)
                     .Returns(Observable.Return(events));
@@ -115,6 +122,50 @@ namespace Toggl.Foundation.Tests.Interactors.Notifications
                     .Schedule(Arg.Is<IImmutableList<Notification>>(
                         notifications => notifications.SequenceEqual(expectedNotifications))
                     );
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SchedulesEventsOnlyFromEnabledCalendars()
+            {
+                const int eventsPerCalendar = 4;
+                var now = new DateTimeOffset(2020, 1, 2, 3, 4, 5, TimeSpan.Zero);
+                IEnumerable<CalendarItem> eventsForCalendar(UserCalendar calendar)
+                {
+                    return Enumerable
+                        .Range(1, eventsPerCalendar)
+                        .Select(id => new CalendarItem(
+                            id.ToString(),
+                            CalendarItemSource.Calendar,
+                            now.AddHours(id),
+                            TimeSpan.FromHours(1),
+                            "description",
+                            CalendarIconKind.None,
+                            calendarId: calendar.Id
+                        ));
+                }
+                var calendars = Enumerable
+                    .Range(0, 3)
+                    .Select(id => id.ToString())
+                    .Select(id => new UserCalendar(
+                        id,
+                        id,
+                        "Does not matter"
+                    ))
+                    .ToArray();
+                CalendarService.GetUserCalendars().Returns(Observable.Return(calendars));
+                var events = calendars
+                    .SelectMany(eventsForCalendar);
+                CalendarService
+                    .GetEventsInRange(Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
+                    .Returns(Observable.Return(events));
+                UserPreferences.EnabledCalendarIds().Returns(new List<string> { "1" });
+                TimeService.CurrentDateTime.Returns(now);
+
+                await interactor.Execute();
+
+                await NotificationService.Received().Schedule(Arg.Is<ImmutableList<Notification>>(
+                    notifications => notifications.Count == eventsPerCalendar
+                ));
             }
         }
     }

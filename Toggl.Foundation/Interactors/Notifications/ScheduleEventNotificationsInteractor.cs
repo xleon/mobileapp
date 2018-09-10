@@ -42,12 +42,14 @@ namespace Toggl.Foundation.Interactors.Notifications
         {
             var start = timeService.CurrentDateTime;
             var end = start.Add(period);
+            var enabledCalendarIds = userPreferences.EnabledCalendarIds().ToHashSet();
 
             return userPreferences
                 .TimeSpanBeforeCalendarNotifications
                 .SelectMany(intervalBeforeEvent => calendarService
                     .GetEventsInRange(start, end)
                     .Select(calendarItems => calendarItems
+                        .Where(calendarItem => enabledCalendarIds.Contains(calendarItem.CalendarId))
                         .Where(startTimeIsInTheFuture(start + intervalBeforeEvent))
                         .Select(eventNotificationWithOffset(intervalBeforeEvent))
                         .ToImmutableList())
