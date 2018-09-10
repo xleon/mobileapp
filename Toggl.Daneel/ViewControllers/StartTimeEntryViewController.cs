@@ -205,7 +205,7 @@ namespace Toggl.Daneel.ViewControllers
                 .CombineLatest(DescriptionTextView.CursorPosition(), (text, _) => text)
                 .Where(_ => !isUpdatingDescriptionField)
                 .SubscribeOn(ThreadPoolScheduler.Instance)
-                .Do(_ => updatePlaceholder())
+                .Do(updatePlaceholder)
                 .Select(text => text.AsImmutableSpans((int)DescriptionTextView.SelectedRange.Location))
                 .ObserveOn(SynchronizationContext.Current)
                 .Subscribe(async info => await ViewModel.OnTextFieldInfoFromView(info))

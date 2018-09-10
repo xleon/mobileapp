@@ -76,6 +76,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxAsyncCommand AlternativeStartTimeEntryCommand { get; }
         public IMvxAsyncCommand StopTimeEntryCommand { get; }
         public IMvxAsyncCommand OpenSettingsCommand { get; }
+        public IMvxAsyncCommand OpenReportsCommand { get; }
         public IMvxAsyncCommand OpenSyncFailuresCommand { get; }
         public IMvxCommand ToggleManualMode { get; }
 
@@ -163,6 +164,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService);
 
             OpenSettingsCommand = new MvxAsyncCommand(openSettings);
+            OpenReportsCommand = new MvxAsyncCommand(openReports);
             OpenSyncFailuresCommand = new MvxAsyncCommand(openSyncFailures);
             EditTimeEntryCommand = new MvxAsyncCommand(editTimeEntry, canExecuteEditTimeEntryCommand);
             StopTimeEntryCommand = new MvxAsyncCommand(stopTimeEntry, () => isStopButtonEnabled);
@@ -342,6 +344,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private Task openSettings()
             => navigate<SettingsViewModel>();
+
+        private Task openReports()
+            => navigate<ReportsViewModel>();
 
         private Task openSyncFailures()
             => navigate<SyncFailuresViewModel>();

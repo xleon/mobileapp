@@ -145,5 +145,8 @@ namespace Toggl.Multivac.Extensions
                 });
             });
         }
+
+        public static IObservable<T> Do<T>(this IObservable<T> observable, Action action)
+            => observable.Do(_ => action());
     }
 }

@@ -15,7 +15,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 {
     public sealed class TasksApiTests
     {
-        public sealed class TheGetAllMethod : AuthenticatedEndpointBaseTests<List<ITask>>
+        public sealed class TheGetAllMethod : AuthenticatedGetAllEndpointBaseTests<ITask>
         {
             private readonly SubscriptionPlanActivator plans = new SubscriptionPlanActivator();
 
@@ -133,8 +133,6 @@ namespace Toggl.Ultrawave.Tests.Integration
             [InlineData(PricingPlans.StarterAnnual)]
             [InlineData(PricingPlans.PremiumMonthly)]
             [InlineData(PricingPlans.PremiumAnnual)]
-            [InlineData(PricingPlans.EnterpriseMonthly)]
-            [InlineData(PricingPlans.EnterpriseAnnual)]
             public async void CreatingTaskWorksForAllPricingPlansOtherThanTheFreePlan(PricingPlans plan)
             {
                 var (togglApi, user) = await SetupTestUser();

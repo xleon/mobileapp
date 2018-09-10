@@ -143,9 +143,9 @@ namespace Toggl.Foundation.DataSources
             => SyncManager.Freeze()
                 .FirstAsync()
                 .Do(_ => isLoggedIn = false)
-                .Do(_ => stopSyncingOnSignal())
+                .Do(stopSyncingOnSignal)
                 .SelectMany(_ => database.Clear())
-                .Do(_ => shortcutCreator.OnLogout())
+                .Do(shortcutCreator.OnLogout)
                 .FirstAsync();
 
         private IObservable<bool> hasUnsyncedData<TModel>(IBaseStorage<TModel> repository)

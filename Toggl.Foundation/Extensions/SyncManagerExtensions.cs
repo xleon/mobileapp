@@ -8,10 +8,5 @@ namespace Toggl.Foundation.Extensions
         {
             var _ = syncManager.PushSync();
         }
-
-        public static void InitiatePushSync<T>(this ISyncManager syncManager, T _)
-        {
-            syncManager.InitiatePushSync();
-        }
     }
 }

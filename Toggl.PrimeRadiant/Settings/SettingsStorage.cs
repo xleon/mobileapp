@@ -188,7 +188,11 @@ namespace Toggl.PrimeRadiant.Settings
             if (string.IsNullOrEmpty(dateString))
                 return null;
 
-            return DateTimeOffset.Parse(dateString);
+            if (DateTimeOffset.TryParse(dateString, out var parsedDate))
+            {
+                return parsedDate;
+            }
+            return null;
         }
 
         public void StartButtonWasTapped()

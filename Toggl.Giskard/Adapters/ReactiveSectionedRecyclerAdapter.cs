@@ -17,7 +17,7 @@ namespace Toggl.Giskard.Adapters
         public const int SectionViewType = 0;
         public const int ItemViewType = 1;
 
-        protected virtual int HeaderOffset { get; } = 0;
+        public virtual int HeaderOffset { get; } = 0;
 
         private readonly ObservableGroupedOrderedCollection<TModel> items;
         private ImmutableList<FlattenedItemInfo> collectionToAdapterIndexesMap = ImmutableList<FlattenedItemInfo>.Empty;

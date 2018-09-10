@@ -7,6 +7,7 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac.Extensions;
 using UIKit;
 using Math = System.Math;
+using System.Reactive.Linq;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -38,9 +39,7 @@ namespace Toggl.Daneel.ViewControllers
             this.Bind(ViewModel.DurationFormat, DurationFormatLabel.BindText());
             this.Bind(ViewModel.IsRunningSync, SyncingView.BindIsVisible());
             this.Bind(ViewModel.DateFormat, DateFormatLabel.BindText());
-            this.Bind(ViewModel.IsManualModeEnabled, ManualModeSwitch.BindIsOn());
             this.Bind(ViewModel.BeginningOfWeek, BeginningOfWeekLabel.BindText());
-            this.Bind(ViewModel.UseTwentyFourHourFormat, TwentyFourHourClockSwitch.BindIsOn());
             this.BindVoid(ViewModel.LoggingOut, () =>
             {
                 LoggingOutView.Hidden = false;
@@ -55,14 +54,24 @@ namespace Toggl.Daneel.ViewControllers
             this.Bind(FeedbackView.Tapped(), ViewModel.SubmitFeedback);
             this.Bind(DateFormatView.Tapped(), ViewModel.SelectDateFormat);
             this.Bind(WorkspaceView.Tapped(), ViewModel.PickDefaultWorkspace);
-            this.BindVoid(ManualModeView.Tapped(), ViewModel.ToggleManualMode);
+            this.BindVoid(ManualModeSwitch.Changed(), ViewModel.ToggleManualMode);
             this.Bind(DurationFormatView.Tapped(), ViewModel.SelectDurationFormat);
             this.Bind(BeginningOfWeekView.Tapped(), ViewModel.SelectBeginningOfWeek);
-            this.Bind(TwentyFourHourClockView.Tapped(), ViewModel.ToggleUseTwentyFourHourClock);
+            this.Bind(TwentyFourHourClockSwitch.Changed(), ViewModel.ToggleUseTwentyFourHourClock);
             this.BindVoid(SendFeedbackSuccessView.Tapped(), ViewModel.CloseFeedbackSuccessView);
 
             UIApplication.Notifications
                 .ObserveWillEnterForeground((sender, e) => startAnimations())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.IsManualModeEnabled
+                .FirstAsync()
+                .Subscribe(isEnabled => ManualModeSwitch.SetState(isEnabled, false))
+                .DisposedBy(DisposeBag);
+
+            ViewModel.UseTwentyFourHourFormat
+                .FirstAsync()
+                .Subscribe(useTwentyFourHourFormat => TwentyFourHourClockSwitch.SetState(useTwentyFourHourFormat, false))
                 .DisposedBy(DisposeBag);
         }
 

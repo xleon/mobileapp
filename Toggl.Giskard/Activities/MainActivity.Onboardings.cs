@@ -8,12 +8,15 @@ using Android.Views;
 using Android.Widget;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Onboarding.MainView;
-using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Sync;
 using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Helper;
+using Toggl.Giskard.ViewHolders;
 using Toggl.Multivac.Extensions;
+using Toggl.PrimeRadiant.Extensions;
+using Toggl.PrimeRadiant.Onboarding;
+using static Toggl.Giskard.ViewHolders.MainLogCellViewHolder;
 
 namespace Toggl.Giskard.Activities
 {
@@ -22,16 +25,49 @@ namespace Toggl.Giskard.Activities
         private PopupWindow playButtonTooltipPopupWindow;
         private PopupWindow stopButtonTooltipPopupWindow;
         private PopupWindow tapToEditPopup;
+        private PopupWindow swipeRightPopup;
+        private PopupWindow swipeLeftPopup;
 
-        private readonly BehaviorSubject<View> firstTimeEntryViewSubject = new BehaviorSubject<View>(null);
+        private DismissableOnboardingStep swipeRightOnboardingStep;
+        private IDisposable swipeRightOnboardingStepDisposable;
+        private IDisposable swipeRightOnboardingAnimationStepDisposable;
+        private IDisposable swipeToContinueWasUsedDisposable;
+
+        private DismissableOnboardingStep swipeLeftOnboardingStep;
+        private IDisposable swipeLeftOnboardingStepDisposable;
+        private IDisposable swipeLeftOnboardingAnimationStepDisposable;
+        private IDisposable swipeToDeleteWasUsedDisposable;
+
+        private readonly BehaviorSubject<int> timeEntriesCountSubject = new BehaviorSubject<int>(0);
         private EditTimeEntryOnboardingStep editTimeEntryOnboardingStep;
         private IDisposable editTimeEntryOnboardingStepDisposable;
+
+        private IObservable<Unit> mainRecyclerViewChangesObservable;
 
         protected override void OnStop()
         {
             base.OnStop();
             playButtonTooltipPopupWindow.Dismiss();
             stopButtonTooltipPopupWindow.Dismiss();
+        }
+
+        private void setupOnboardingSteps()
+        {
+            setupMainLogObservables();
+            setupStartTimeEntryOnboardingStep();
+            setupStopTimeEntryOnboardingStep();
+            setupTapToEditOnboardingStep();
+            setupSwipeRightOnboardingStep();
+            setupSwipeLeftOnboardingStep();
+        }
+
+        private void setupMainLogObservables()
+        {
+            var collectionChanges = ViewModel.TimeEntries.CollectionChanges.SelectUnit();
+            mainRecyclerViewChangesObservable = Observable
+                .FromEventPattern<View.ScrollChangeEventArgs>(e => mainRecyclerView.ScrollChange += e, e => mainRecyclerView.ScrollChange -= e)
+                .Select(_ => Unit.Default)
+                .Merge(collectionChanges);
         }
 
         private void setupStartTimeEntryOnboardingStep()
@@ -76,105 +112,261 @@ namespace Toggl.Giskard.Activities
 
         private void setupTapToEditOnboardingStep()
         {
+            tapToEditPopup = PopupWindowFactory.PopupWindowWithText(
+                this,
+                Resource.Layout.TooltipWithLeftTopArrow,
+                Resource.Id.TooltipText,
+                Resource.String.OnboardingTapToEdit);
+
             editTimeEntryOnboardingStep = new EditTimeEntryOnboardingStep(
                 ViewModel.OnboardingStorage, Observable.Return(false));
-
-            var mainRecyclerViewScrollsObservable =
-                Observable
-                    .FromEventPattern<View.ScrollChangeEventArgs>(e => mainRecyclerView.ScrollChange += e, e => mainRecyclerView.ScrollChange -= e)
-                    .Select(_ => Unit.Default);
 
             var showTapToEditOnboardingStepObservable =
                 Observable.CombineLatest(
                     editTimeEntryOnboardingStep.ShouldBeVisible,
-                    mainRecyclerViewScrollsObservable,
+                    mainRecyclerViewChangesObservable,
                     ViewModel.SyncProgressState,
                     (shouldShowStep, unit, syncState) => shouldShowStep && syncState == SyncProgress.Synced);
 
             showTapToEditOnboardingStepObservable
                 .Where(shouldShowStep => shouldShowStep)
-                .VoidSubscribe(onFirstTimeEntryViewUpdate)
-                .DisposedBy(DisposeBag);
-
-            firstTimeEntryViewSubject
+                .Select(_ => findOldestTimeEntryView())
                 .ObserveOn(SynchronizationContext.Current)
                 .Subscribe(updateTapToEditOnboardingStep)
                 .DisposedBy(DisposeBag);
         }
 
-        private void onFirstTimeEntryViewUpdate()
-        {
-            var view = findOldestTimeEntryView();
-            firstTimeEntryViewSubject.OnNext(view);
-        }
-
-        private View findOldestTimeEntryView()
-        {
-            var layoutManager = (LinearLayoutManager) mainRecyclerView.GetLayoutManager();
-            var adapter = mainRecyclerView.GetAdapter() as MainRecyclerAdapter;
-            if (adapter == null)
-            {
-                return null;
-            }
-
-            for (var position = layoutManager.FindLastVisibleItemPosition(); position >= 0; position--)
-            {
-                var viewType = adapter.GetItemViewType(position);
-                if (viewType != MainRecyclerAdapter.ItemViewType)
-                {
-                    continue;
-                }
-
-                var view = layoutManager.FindViewByPosition(position);
-                if (view == null || layoutManager.GetItemViewType(view) != MainRecyclerAdapter.ItemViewType)
-                    return null;
-
-                var isVisible =
-                    layoutManager.IsViewPartiallyVisible(view, true, true)
-                    || layoutManager.IsViewPartiallyVisible(view, false, true);
-
-                return isVisible ? view : null;
-            }
-
-            return null;
-        }
-
-        private void updateTapToEditOnboardingStep(View firstTimeEntry)
+        private void updateTapToEditOnboardingStep(MainLogCellViewHolder oldestVisibleTimeEntryViewHolder)
         {
             tapToEditPopup?.Dismiss();
-            tapToEditPopup = null;
 
-            if (firstTimeEntry == null)
+            if (oldestVisibleTimeEntryViewHolder == null)
                 return;
 
-            updateTapToEditPopupWindow(firstTimeEntry);
-        }
-
-        private void updateTapToEditPopupWindow(View firstTimeEntry)
-        {
             if (editTimeEntryOnboardingStepDisposable != null)
             {
                 editTimeEntryOnboardingStepDisposable.Dispose();
                 editTimeEntryOnboardingStepDisposable = null;
             }
 
-            tapToEditPopup?.Dismiss();
-
-            tapToEditPopup = tapToEditPopup
-                ?? PopupWindowFactory.PopupWindowWithText(
-                    this,
-                    Resource.Layout.TooltipWithLeftTopArrow,
-                    Resource.Id.TooltipText,
-                    Resource.String.OnboardingTapToEdit);
-
-            var storage = ViewModel.OnboardingStorage;
-
-            editTimeEntryOnboardingStepDisposable = new EditTimeEntryOnboardingStep(storage, Observable.Return(false))
-                .ManageDismissableTooltip(
+            editTimeEntryOnboardingStepDisposable = editTimeEntryOnboardingStep
+                .ManageVisibilityOf(
                     tapToEditPopup,
-                    firstTimeEntry,
-                    (window, view) => PopupOffsets.FromDp(16, -4, this),
-                    storage);
+                    oldestVisibleTimeEntryViewHolder.ItemView,
+                    (window, view) => PopupOffsets.FromDp(16, -4, this));
+        }
+
+        private void setupSwipeRightOnboardingStep()
+        {
+            var shouldBeVisible = editTimeEntryOnboardingStep
+                .ShouldBeVisible
+                .Select(visible => !visible);
+
+            var showSwipeRightOnboardingStep = Observable.CombineLatest(
+                shouldBeVisible,
+                mainRecyclerViewChangesObservable,
+                ViewModel.SyncProgressState,
+                (shouldShowStep, unit, syncState) => shouldShowStep && syncState == SyncProgress.Synced);
+
+
+            swipeRightPopup = PopupWindowFactory.PopupWindowWithText(
+                this,
+                Resource.Layout.TooltipWithLeftTopArrow,
+                Resource.Id.TooltipText,
+                Resource.String.OnboardingSwipeRight);
+
+            swipeRightOnboardingStep = new SwipeRightOnboardingStep(shouldBeVisible, timeEntriesCountSubject.AsObservable())
+                .ToDismissable(nameof(SwipeRightOnboardingStep), ViewModel.OnboardingStorage);
+            swipeRightOnboardingStep.DismissByTapping(swipeRightPopup, () =>
+            {
+                if (swipeRightOnboardingAnimationStepDisposable != null)
+                {
+                    swipeRightOnboardingAnimationStepDisposable.Dispose();
+                    swipeRightOnboardingAnimationStepDisposable = null;
+                }
+            });
+
+            swipeToContinueWasUsedDisposable = mainRecyclerAdapter.ContinueTimeEntrySubject
+                .VoidSubscribe(() =>
+                {
+                    swipeRightOnboardingStep.Dismiss();
+                    swipeToContinueWasUsedDisposable.Dispose();
+                    swipeToContinueWasUsedDisposable = null;
+                });
+
+            showSwipeRightOnboardingStep
+                .Where(shouldShowStep => shouldShowStep)
+                .Select(_ => findEarliestTimeEntryView())
+                .DistinctUntilChanged()
+                .ObserveOn(SynchronizationContext.Current)
+                .Subscribe(updateSwipeRightOnboardingStep)
+                .DisposedBy(DisposeBag);
+        }
+
+        private void updateSwipeRightOnboardingStep(MainLogCellViewHolder lastTimeEntry)
+        {
+            swipeRightPopup?.Dismiss();
+
+            if (lastTimeEntry == null)
+                return;
+
+            if (swipeRightOnboardingStepDisposable != null)
+            {
+                swipeRightOnboardingStepDisposable.Dispose();
+                swipeRightOnboardingStepDisposable = null;
+            }
+
+            swipeRightOnboardingStepDisposable = swipeRightOnboardingStep
+                .ManageVisibilityOf(
+                    swipeRightPopup,
+                    lastTimeEntry.ItemView,
+                    (window, view) => PopupOffsets.FromDp(16, -4, this));
+
+            if (swipeRightOnboardingAnimationStepDisposable != null)
+            {
+                swipeRightOnboardingAnimationStepDisposable.Dispose();
+                swipeRightOnboardingAnimationStepDisposable = null;
+            }
+
+            swipeRightOnboardingAnimationStepDisposable = swipeRightOnboardingStep
+                .ManageSwipeActionAnimationOf(mainRecyclerView, lastTimeEntry, AnimationSide.Right);
+        }
+
+        private void setupSwipeLeftOnboardingStep()
+        {
+            var shouldBeVisible = Observable.CombineLatest(
+                editTimeEntryOnboardingStep.ShouldBeVisible,
+                swipeRightOnboardingStep.ShouldBeVisible,
+                (editTimeEntryVisible, swipeRightVisible) => !editTimeEntryVisible && !swipeRightVisible
+            );
+
+            var showSwipeLeftOnboardingStep = Observable.CombineLatest(
+                shouldBeVisible,
+                mainRecyclerViewChangesObservable,
+                ViewModel.SyncProgressState,
+                (shouldShowStep, unit, syncState) => shouldShowStep && syncState == SyncProgress.Synced);
+
+            swipeLeftPopup = PopupWindowFactory.PopupWindowWithText(
+                this,
+                Resource.Layout.TooltipWithRightTopArrow,
+                Resource.Id.TooltipText,
+                Resource.String.OnboardingSwipeLeft);
+
+            swipeLeftOnboardingStep = new SwipeLeftOnboardingStep(shouldBeVisible, timeEntriesCountSubject.AsObservable())
+                .ToDismissable(nameof(SwipeLeftOnboardingStep), ViewModel.OnboardingStorage);
+
+            swipeLeftOnboardingStep.DismissByTapping(swipeLeftPopup, () =>
+            {
+                if (swipeLeftOnboardingAnimationStepDisposable != null)
+                {
+                    swipeLeftOnboardingAnimationStepDisposable.Dispose();
+                    swipeLeftOnboardingAnimationStepDisposable = null;
+                }
+            });
+
+            swipeToDeleteWasUsedDisposable = mainRecyclerAdapter.DeleteTimeEntrySubject
+                .VoidSubscribe(() =>
+                {
+                    swipeLeftOnboardingStep.Dismiss();
+                    swipeToDeleteWasUsedDisposable.Dispose();
+                    swipeToDeleteWasUsedDisposable = null;
+                });
+
+            showSwipeLeftOnboardingStep
+                .Where(shouldShowStep => shouldShowStep)
+                .Select(_ => findEarliestTimeEntryView())
+                .DistinctUntilChanged()
+                .ObserveOn(SynchronizationContext.Current)
+                .Subscribe(updateSwipeLeftOnboardingStep)
+                .DisposedBy(DisposeBag);
+        }
+
+        private void updateSwipeLeftOnboardingStep(MainLogCellViewHolder lastTimeEntry)
+        {
+            swipeLeftPopup?.Dismiss();
+
+            if (lastTimeEntry == null)
+                return;
+
+            if (swipeLeftOnboardingStepDisposable != null)
+            {
+                swipeLeftOnboardingStepDisposable.Dispose();
+                swipeLeftOnboardingStepDisposable = null;
+            }
+
+            swipeLeftOnboardingStepDisposable = swipeLeftOnboardingStep
+                .ManageVisibilityOf(
+                    swipeLeftPopup,
+                    lastTimeEntry.ItemView,
+                    (window, view) => window.BottomRightOffsetsTo(view, -16, -4));
+
+            if (swipeLeftOnboardingAnimationStepDisposable != null)
+            {
+                swipeLeftOnboardingAnimationStepDisposable.Dispose();
+                swipeLeftOnboardingAnimationStepDisposable = null;
+            }
+
+            swipeLeftOnboardingAnimationStepDisposable = swipeLeftOnboardingStep
+                .ManageSwipeActionAnimationOf(mainRecyclerView, lastTimeEntry, AnimationSide.Left);
+        }
+
+        private MainLogCellViewHolder findOldestTimeEntryView()
+        {
+            if (mainRecyclerAdapter == null)
+            {
+                return null;
+            }
+
+            for (var position = layoutManager.FindLastVisibleItemPosition(); position >= 0; position--)
+            {
+                var viewType = mainRecyclerAdapter.GetItemViewType(position);
+                if (viewType != MainRecyclerAdapter.ItemViewType)
+                {
+                    continue;
+                }
+
+                var viewHolder = findLogCellViewHolderAtPosition(position);
+                if (viewHolder == null)
+                    return null;
+
+                return isVisible(viewHolder)
+                    ? viewHolder
+                    : null;
+            }
+
+            return null;
+        }
+
+        private MainLogCellViewHolder findEarliestTimeEntryView()
+        {
+            var position = mainRecyclerAdapter.HeaderOffset + 1;
+            var viewHolder = findLogCellViewHolderAtPosition(position);
+
+            if (viewHolder == null)
+            {
+                return null;
+            }
+
+            return isVisible(viewHolder) ? viewHolder : null;
+        }
+
+        private MainLogCellViewHolder findLogCellViewHolderAtPosition(int position)
+        {
+            var viewHolder = mainRecyclerView.FindViewHolderForLayoutPosition(position);
+
+            if (viewHolder == null)
+                return null;
+
+            if (viewHolder is MainLogCellViewHolder logViewHolder)
+                return logViewHolder;
+
+            return null;
+        }
+
+        private bool isVisible(RecyclerView.ViewHolder view)
+        {
+            return layoutManager.IsViewPartiallyVisible(view.ItemView, true, true)
+                   || layoutManager.IsViewPartiallyVisible(view.ItemView, false, true);
         }
     }
 }

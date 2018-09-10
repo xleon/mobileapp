@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Toggl.Multivac.Extensions
 {
@@ -11,6 +12,8 @@ namespace Toggl.Multivac.Extensions
         public static bool And(bool x, bool y) => x && y;
 
         public static bool Invert(bool x) => !x;
+
+        public static bool NotNull(object obj) => obj != null;
 
         public static void DoNothing<T>(T x) { }
     }
@@ -55,6 +58,12 @@ namespace Toggl.Multivac.Extensions
             Ensure.Argument.IsNotNull(action, nameof(action));
 
             self.ForEach(action);
+            return self;
+        }
+
+        public static IEnumerable<T> Do<T>(this IEnumerable<T> self, Action action)
+        {
+            self.Do(_ => action());
             return self;
         }
     }

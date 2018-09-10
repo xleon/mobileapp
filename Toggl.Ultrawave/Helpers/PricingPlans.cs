@@ -6,8 +6,6 @@
         StarterMonthly = 100,
         StarterAnnual = 101,
         PremiumMonthly = 102,
-        PremiumAnnual = 103,
-        EnterpriseMonthly = 15,
-        EnterpriseAnnual = 16
+        PremiumAnnual = 103
     }
 }

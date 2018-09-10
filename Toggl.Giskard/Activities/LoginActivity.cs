@@ -36,8 +36,8 @@ namespace Toggl.Giskard.Activities
             this.Bind(ViewModel.IsLoading.Select(loginButtonTitle), loginButton.BindText());
 
             //Visibility
-            this.Bind(ViewModel.HasError, errorTextView.BindIsVisible());
-            this.Bind(ViewModel.IsLoading, progressBar.BindIsVisible());
+            this.Bind(ViewModel.HasError, errorTextView.BindIsVisible(useGone: false));
+            this.Bind(ViewModel.IsLoading, progressBar.BindIsVisible(useGone: false));
             this.Bind(ViewModel.LoginEnabled, loginButton.BindEnabled());
 
             //Commands

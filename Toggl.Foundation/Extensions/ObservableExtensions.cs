@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Sync;
+using Toggl.Multivac.Extensions;
 
 namespace Toggl.Foundation.Extensions
 {
@@ -14,7 +15,7 @@ namespace Toggl.Foundation.Extensions
             => observable.Do(value => service.Track(eventFactory(value)));
 
         public static IObservable<T> Track<T>(this IObservable<T> observable, IAnalyticsEvent analyticsEvent)
-            => observable.Do(_ => analyticsEvent.Track());
+            => observable.Do(analyticsEvent.Track);
 
         public static IObservable<T> Track<T>(this IObservable<T> observable, IAnalyticsEvent<T> analyticsEvent)
             => observable.Do(analyticsEvent.Track);

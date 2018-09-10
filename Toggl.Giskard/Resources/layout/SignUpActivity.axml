@@ -23,7 +23,6 @@
             android:layout_height="wrap_content">
             <LinearLayout
                 android:id="@+id/SignUpCountrySelection"
-                local:MvxBind="Click PickCountryCommand"
                 android:padding="8dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
@@ -31,13 +30,12 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true">
                 <ImageView
-                    local:MvxBind="Visibility Visibility(IsCountryErrorVisible)"
+                    android:id="@+id/SignUpCountryErrorView"
                     android:src="@drawable/error_baddata"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/SignUpCountryName"
-                    local:MvxBind="Text CountryButtonTitle"
                     android:textSize="15sp"
                     android:textStyle="normal"
                     android:lineSpacingExtra="3sp"
@@ -71,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/SignUpLogo">
                 <EditText
-                    local:MvxBind="Text EmailToString(Email)"
+                    android:id="@+id/SignUpEmailEditText"
                     android:inputType="textEmailAddress"
                     android:backgroundTint="@color/textEditBackgroundTint"
                     android:layout_width="match_parent"
@@ -88,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/SignUpEmail">
                 <android.support.design.widget.TextInputEditText
-                    local:MvxBind="Text PasswordToString(Password)"
+                    android:id="@+id/SignUpPasswordEditText"
                     android:inputType="textPassword"
                     android:backgroundTint="@color/textEditBackgroundTint"
                     android:layout_width="match_parent"
@@ -96,7 +94,6 @@
             </android.support.design.widget.TextInputLayout>
             <TextView
                 android:id="@+id/SignUpError"
-                local:MvxBind="Text ErrorText; Visibility Visibility(HasError)"
                 android:textSize="12sp"
                 android:textColor="@color/errorText"
                 android:fontFamily="sans-serif-medium"
@@ -108,7 +105,6 @@
                 android:layout_below="@id/SignUpPassword" />
             <Button
                 android:id="@+id/SignUpButton"
-                local:MvxBind="Click SignupCommand; Text If(IsLoading, '', 'Sign up for free')"
                 android:text="@string/SignUpForFree"
                 android:background="@color/buttonBlue"
                 android:textColor="@color/BlueButtonTextColor"
@@ -120,7 +116,7 @@
                 android:layout_width="match_parent"
                 android:layout_below="@id/SignUpError" />
             <ProgressBar
-                local:MvxBind="Visibility Visibility(IsLoading)"
+                android:id="@+id/SignUpProgressBar"
                 style="?android:attr/progressBarStyleLarge"
                 android:indeterminateTintMode="src_in"
                 android:indeterminateTint="@android:color/white"
@@ -159,7 +155,6 @@
                 android:layout_toLeftOf="@id/SignUpOrLabel" />
             <LinearLayout
                 android:id="@+id/SignUpWithGoogleButton"
-                local:MvxBind="Click GoogleSignupCommand"
                 android:elevation="2dp"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -189,7 +184,6 @@
     </ScrollView>
     <android.support.v7.widget.CardView
         android:id="@+id/LoginSignupCardView"
-        local:MvxBind="Click LoginCommand"
         local:cardCornerRadius="8dp"
         android:layout_height="80dp"
         android:layout_gravity="bottom"

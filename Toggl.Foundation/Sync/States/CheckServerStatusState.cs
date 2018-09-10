@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using Toggl.Multivac.Extensions;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Exceptions;
 
@@ -29,7 +30,7 @@ namespace Toggl.Foundation.Sync.States
 
         public IObservable<ITransition> Start()
             => delay(api.Status.IsAvailable())
-                .Do(_ => statusDelay.Reset())
+                .Do(statusDelay.Reset)
                 .SelectMany(proceed)
                 .Catch((Exception e) => delayedRetry(getDelay(e)));
 
