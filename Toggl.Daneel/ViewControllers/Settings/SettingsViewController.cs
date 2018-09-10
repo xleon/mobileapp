@@ -93,10 +93,6 @@ namespace Toggl.Daneel.ViewControllers
             setIndicatorSyncColor(SyncedIcon);
             setIndicatorSyncColor(SyncingIndicator);
             setIndicatorSyncColor(LoggingOutIndicator);
-
-            // Resize Switches
-            TwentyFourHourClockSwitch.Resize();
-            ManualModeSwitch.Resize();
         }
 
         private void setIndicatorSyncColor(UIImageView imageView)
