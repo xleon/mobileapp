@@ -35,8 +35,13 @@ namespace Toggl.Daneel.Cells.Calendar
 
         protected override void UpdateView()
         {
+            UpdateView(false);
+        }
+
+        public void UpdateView(bool animate)
+        {
             CalendarNameLabel.Text = Item.Name;
-            IsSelectedSwitch.SetState(Item.Selected, true);
+            IsSelectedSwitch.SetState(Item.Selected, animate);
         }
     }
 }

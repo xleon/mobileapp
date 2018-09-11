@@ -76,6 +76,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             else
                 SelectedCalendarIds.Add(calendar.Id);
 
+            calendar.Selected = !calendar.Selected;
+
             return Observable.Return(Unit.Default);
         }
     }

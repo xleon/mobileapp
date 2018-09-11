@@ -48,7 +48,7 @@ namespace Toggl.Daneel.ViewSources
             base.RowSelected(tableView, indexPath);
 
             var cell = (SelectableUserCalendarViewCell)tableView.CellAt(indexPath);
-            cell.Item = cell.Item.InvertSelected();
+            cell.UpdateView(true);
 
             tableView.DeselectRow(indexPath, true);
         }

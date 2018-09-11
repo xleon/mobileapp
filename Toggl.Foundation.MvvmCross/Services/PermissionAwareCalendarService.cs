@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 
 namespace Toggl.Foundation.Calendar
 {
