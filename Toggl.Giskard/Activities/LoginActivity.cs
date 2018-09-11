@@ -49,6 +49,8 @@ namespace Toggl.Giskard.Activities
 
             string loginButtonTitle(bool isLoading)
                 => isLoading ? "" : Resources.GetString(Resource.String.Login);
+
+            this.CancelAllNotifications();
         }
     }
 }

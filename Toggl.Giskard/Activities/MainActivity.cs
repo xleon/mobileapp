@@ -21,6 +21,7 @@ using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
 using Toggl.Foundation.Sync;
 using Toggl.Giskard.Adapters;
+using Toggl.Giskard.Helper;
 using Toggl.Giskard.ViewHelpers;
 
 namespace Toggl.Giskard.Activities
@@ -31,10 +32,10 @@ namespace Toggl.Giskard.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class MainActivity : MvxAppCompatActivity<MainViewModel>, IReactiveBindingHolder
     {
+        private const int snackbarDuration = 5000;
+        private NotificationManager notificationManager;
         private MainRecyclerAdapter mainRecyclerAdapter;
         private LinearLayoutManager layoutManager;
-
-        private const int snackbarDuration = 5000;
 
         public CompositeDisposable DisposeBag { get; } = new CompositeDisposable();
 
@@ -81,6 +82,9 @@ namespace Toggl.Giskard.Activities
                 .ObserveOn(SynchronizationContext.Current);
             this.Bind(isTimeEntryRunning, updateRecyclerViewPadding);
 
+            notificationManager = GetSystemService(NotificationService) as NotificationManager;
+            this.BindRunningTimeEntry(notificationManager, ViewModel.CurrentRunningTimeEntry, ViewModel.ShouldShowRunningTimeEntryNotification);
+            this.BindIdleTimer(notificationManager, ViewModel.IsTimeEntryRunning, ViewModel.ShouldShowStoppedTimeEntryNotification);
             setupItemTouchHelper(mainRecyclerAdapter);
 
             this.Bind(ViewModel.TimeEntriesCount, timeEntriesCountSubject);
