@@ -40,6 +40,7 @@ namespace Toggl.Daneel.ViewControllers
         private const float spiderHingeCornerRadius = 0.8f;
         private const float spiderHingeWidth = 16;
         private const float spiderHingeHeight = 2;
+        private const float welcomeViewTopDistance = 239;
 
         private const float tooltipOffset = 7;
 
@@ -378,7 +379,7 @@ namespace Toggl.Daneel.ViewControllers
             // Send Feedback Success View Setup
             SendFeedbackSuccessView.Hidden = true;
 
-            prepareSpiderViews();
+            prepareWelcomeBackViews();
             prepareEmptyStateView();
 
             View.BackgroundColor = Color.Main.BackgroundColor.ToNativeColor();
@@ -437,8 +438,16 @@ namespace Toggl.Daneel.ViewControllers
         //Spider is added in code, because IB doesn't allow adding subviews
         //to a UITableView and the spider needs to be a subview of the table
         //view so it reacts to pulling down to refresh
-        private void prepareSpiderViews()
+        private void prepareWelcomeBackViews()
         {
+            // Welcome back view must be placed inside of the time entries
+            // log table view below the spider so that it does not overlay
+            // the spider at any time.
+            WelcomeBackView.RemoveFromSuperview();
+            TimeEntriesLogTableView.AddSubview(WelcomeBackView);
+            WelcomeBackView.CenterXAnchor.ConstraintEqualTo(TimeEntriesLogTableView.CenterXAnchor).Active = true;
+            WelcomeBackView.TopAnchor.ConstraintEqualTo(TimeEntriesLogTableView.TopAnchor, welcomeViewTopDistance).Active = true;
+
             var spiderHinge = new UIView();
 
             spiderHinge.Layer.CornerRadius = spiderHingeCornerRadius;
