@@ -18,5 +18,6 @@ namespace Toggl.Foundation.Services
         void DonateStopCurrentTimeEntry();
         void DonateShowReport(ReportPeriod period);
         void DonateShowReport();
+        void ClearAll();
     }
 }

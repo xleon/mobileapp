@@ -23,5 +23,10 @@ namespace Toggl.Giskard.Services
         {
             throw new System.NotImplementedException();
         }
+
+        public void ClearAll()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -22,20 +22,27 @@ namespace Toggl.Daneel.ExtensionKit
 
         public static SharedStorage instance => new SharedStorage();
 
-        public void setApiToken(string apiToken)
+        public void SetApiToken(string apiToken)
         {
             userDefaults.SetString(apiToken, ApiTokenKey);
             userDefaults.Synchronize();
         }
 
-        public void setNeedsSync(bool value)
+        public void SetNeedsSync(bool value)
         {
             userDefaults.SetBool(value, NeedsSyncKey);
             userDefaults.Synchronize();
         }
 
-        public string getApiToken() => userDefaults.StringForKey(ApiTokenKey);
+        public string GetApiToken() => userDefaults.StringForKey(ApiTokenKey);
 
-        public bool getNeedsSync() => userDefaults.BoolForKey(NeedsSyncKey);
+        public bool GetNeedsSync() => userDefaults.BoolForKey(NeedsSyncKey);
+
+        public void DeleteEverything() 
+        {
+            userDefaults.RemoveObject(ApiTokenKey);
+            userDefaults.RemoveObject(NeedsSyncKey);
+            userDefaults.Synchronize();
+        }
     }
 }

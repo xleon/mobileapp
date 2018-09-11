@@ -260,9 +260,9 @@ namespace Toggl.Daneel.ViewControllers
 
         private void onApplicationDidBecomeActive(NSNotification notification)
         {
-            if (SharedStorage.instance.getNeedsSync())
+            if (SharedStorage.instance.GetNeedsSync())
             {
-                SharedStorage.instance.setNeedsSync(false);
+                SharedStorage.instance.SetNeedsSync(false);
                 ViewModel.RefreshAction.Execute();
             }
         }

@@ -70,6 +70,11 @@ namespace Toggl.Daneel.Services
             interaction.DonateInteraction(onCompletion);
         }
 
+        public void ClearAll()
+        {
+            INInteraction.DeleteAllInteractions(_ => { });
+        }
+
         private Action<NSError> onCompletion
         {
             get

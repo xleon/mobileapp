@@ -49,7 +49,7 @@ namespace SiriExtension
                     .Subscribe(
                     te =>
                     {
-                        SharedStorage.instance.setNeedsSync(true);
+                        SharedStorage.instance.SetNeedsSync(true);
 
                         var timeSpan = TimeSpan.FromSeconds(te.Duration ?? 0);
                         var durationString = $"{timeSpan.Hours} hours, {timeSpan.Minutes} minutes and {timeSpan.Seconds} seconds";
@@ -73,7 +73,7 @@ namespace SiriExtension
 
         private TogglApi getTogglAPI()
         {
-            var apiToken = SharedStorage.instance.getApiToken();
+            var apiToken = SharedStorage.instance.GetApiToken();
             if (apiToken == null)
             {
                 return null;

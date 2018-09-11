@@ -9,7 +9,12 @@ namespace Toggl.Daneel.Services
     {        
         public void SaveApiToken(string apiToken)
         {
-            SharedStorage.instance.setApiToken(apiToken);
+            SharedStorage.instance.SetApiToken(apiToken);
+        }
+
+        public void ClearAll()
+        {
+            SharedStorage.instance.DeleteEverything();
         }
     }
 }
