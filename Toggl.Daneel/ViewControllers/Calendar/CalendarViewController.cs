@@ -22,7 +22,7 @@ namespace Toggl.Daneel.ViewControllers
         private CalendarCollectionViewEditItemHelper editItemHelper;
         private CalendarCollectionViewCreateFromSpanHelper createFromSpanHelper;
 
-        private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 30, 40));
+        private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 50));
 
         public CalendarViewController() 
             : base(nameof(CalendarViewController))
