@@ -1,12 +1,13 @@
+using Toggl.Foundation.Models;
 using Toggl.Foundation.Services;
 
 namespace Toggl.Giskard.Services
 {
     public class DummyIntentDonationService: IIntentDonationService
     {
-        public void DonateStartTimeEntry()
+        public void DonateStartTimeEntry(ITimeEntryPrototype timeEntry, string workspaceName)
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
         public void DonateStopCurrentTimeEntry()

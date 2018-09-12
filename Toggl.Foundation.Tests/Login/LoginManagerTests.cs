@@ -400,6 +400,14 @@ namespace Toggl.Foundation.Tests.Login
 
                 PrivateSharedStorageService.Received().SaveApiToken(Arg.Any<string>());
             }
+
+            [Fact, LogIfTooSlow]
+            public async Task SavesTheUserIdToPrivateSharedStorage()
+            {
+                await LoginManager.SignUp(Email, Password, TermsAccepted, CountryId);
+
+                PrivateSharedStorageService.Received().SaveUserId(Arg.Any<long>());
+            }
         }
 
         public sealed class TheRefreshTokenMethod : LoginManagerTest
@@ -462,6 +470,14 @@ namespace Toggl.Foundation.Tests.Login
                 await LoginManager.RefreshToken(Password);
 
                 PrivateSharedStorageService.Received().SaveApiToken(Arg.Any<string>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SavesTheUserIdToPrivateSharedStorage()
+            {
+                await LoginManager.RefreshToken(Password);
+
+                PrivateSharedStorageService.Received().SaveUserId(Arg.Any<long>());
             }
         }
 
@@ -555,6 +571,14 @@ namespace Toggl.Foundation.Tests.Login
                 await LoginManager.LoginWithGoogle();
 
                 PrivateSharedStorageService.Received().SaveApiToken(Arg.Any<string>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SavesTheUserIdToPrivateSharedStorage()
+            {
+                await LoginManager.LoginWithGoogle();
+
+                PrivateSharedStorageService.Received().SaveUserId(Arg.Any<long>());
             }
         }
 

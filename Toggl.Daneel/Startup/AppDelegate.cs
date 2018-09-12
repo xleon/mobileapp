@@ -14,6 +14,7 @@ using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Shortcuts;
@@ -158,6 +159,12 @@ namespace Toggl.Daneel
                     var tabbarVC = (MainTabBarController)UIApplication.SharedApplication.KeyWindow.RootViewController;
                     var reportViewModel = (ReportsViewModel)tabbarVC.ViewModel.ViewModels.Single(viewModel => viewModel is ReportsViewModel);
                     navigationService.Navigate(reportViewModel, periodIntent.Period.ToReportPeriod());
+                    return true;
+                case StartTimerIntent startTimerIntent:
+                    var workspaceId = (long)Convert.ToDouble(startTimerIntent.Workspace.Identifier);
+                    var timeEntryParams = new StartTimeEntryParameters(DateTimeOffset.Now, "", null, workspaceId);
+                    navigationService.Navigate<MainViewModel>();
+                    navigationService.Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(timeEntryParams);
                     return true;
                 default:
                     return false;

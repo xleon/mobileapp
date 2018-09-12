@@ -16,11 +16,15 @@ namespace SiriExtension
 
         public override NSObject GetHandler(INIntent intent)
         {
-            if (intent is StopTimerIntent)
+            switch (intent)
             {
-                return new StopTimerIntentHandler();
+                case StopTimerIntent _:
+                    return new StopTimerIntentHandler(APIHelper.GetTogglAPI());
+                case StartTimerIntent _:
+                    return new StartTimerIntentHandler(APIHelper.GetTogglAPI());
+                default:
+                    throw new Exception("Unhandled intent type: ${intent}");
             }
-            throw new Exception("Unhandled intent type: ${intent}");
         }
     }
 }

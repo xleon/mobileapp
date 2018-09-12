@@ -39,7 +39,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected override ReportsViewModel CreateViewModel()
             {
                 DataSource.ReportsProvider.Returns(ReportsProvider);
-                return new ReportsViewModel(DataSource, TimeService, NavigationService, InteractorFactory, AnalyticsService, DialogService, SchedulerProvider);
+                return new ReportsViewModel(DataSource, TimeService, NavigationService, InteractorFactory, AnalyticsService, DialogService, IntentDonationService, SchedulerProvider);
             }
 
             protected async Task Initialize()

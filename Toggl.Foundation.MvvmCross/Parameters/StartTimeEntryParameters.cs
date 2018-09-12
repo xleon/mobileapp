@@ -14,20 +14,24 @@ namespace Toggl.Foundation.MvvmCross.Parameters
 
         public TimeSpan? Duration { get; }
 
-        public StartTimeEntryParameters(DateTimeOffset startTime, string placeholderText, TimeSpan? duration)
+        public long? WorkspaceId { get; }
+
+        public StartTimeEntryParameters(DateTimeOffset startTime, string placeholderText, TimeSpan? duration, long? workspaceId)
         {
             StartTime = startTime;
             PlaceholderText = placeholderText;
             Duration = duration;
+            WorkspaceId = workspaceId;
         }
 
         public static StartTimeEntryParameters ForManualMode(DateTimeOffset now)
             => new StartTimeEntryParameters(
                 now.Subtract(defaultManualModeDuration),
                 Resources.ManualTimeEntryPlaceholder,
-                defaultManualModeDuration);
+                defaultManualModeDuration,
+                null);
         
         public static StartTimeEntryParameters ForTimerMode(DateTimeOffset now)
-            => new StartTimeEntryParameters(now, Resources.StartTimeEntryPlaceholder, null);
+            => new StartTimeEntryParameters(now, Resources.StartTimeEntryPlaceholder, null, null);
     }
 }

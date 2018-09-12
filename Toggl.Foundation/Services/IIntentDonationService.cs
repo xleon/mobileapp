@@ -1,3 +1,5 @@
+using Toggl.Foundation.Models;
+
 namespace Toggl.Foundation.Services
 {
     public enum ReportPeriod
@@ -14,7 +16,7 @@ namespace Toggl.Foundation.Services
 
     public interface IIntentDonationService
     {
-        void DonateStartTimeEntry();
+        void DonateStartTimeEntry(ITimeEntryPrototype timeEntry, string workspaceName);
         void DonateStopCurrentTimeEntry();
         void DonateShowReport(ReportPeriod period);
         void DonateShowReport();

@@ -19,7 +19,7 @@ namespace SiriExtension.Models
         public DateTimeOffset? ServerDeletedAt { get; }
         public DateTimeOffset At { get; }
 
-        private TimeEntry(long workspaceId, long? projectId, long? taskId, bool billable, DateTimeOffset start, long? duration, 
+        public TimeEntry(long workspaceId, long? projectId, long? taskId, bool billable, DateTimeOffset start, long? duration,
                          string description, IEnumerable<long> tagIds, long userId, long id, DateTimeOffset? serverDeletedAt, DateTimeOffset at)
         {
             WorkspaceId = workspaceId;

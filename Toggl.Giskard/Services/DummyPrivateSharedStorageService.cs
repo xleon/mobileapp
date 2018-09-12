@@ -10,9 +10,14 @@ namespace Toggl.Giskard.Services
             throw new NotImplementedException();
         }
 
-        void ClearAll()
+        public void SaveUserId(long userId)
         {
+            throw new NotImplementedException();
+        }
 
+        public void ClearAll()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -16,5 +16,10 @@ namespace Toggl.Daneel.Services
         {
             SharedStorage.instance.DeleteEverything();
         }
+
+        public void SaveUserId(long userId)
+        {
+            SharedStorage.instance.SetUserId(userId);
+        }
     }
 }

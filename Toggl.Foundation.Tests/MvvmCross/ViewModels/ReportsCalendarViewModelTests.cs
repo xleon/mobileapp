@@ -12,6 +12,7 @@ using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts;
+using Toggl.Foundation.Services;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Models;
@@ -435,7 +436,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 private ReportsDateRangeParameter range;
 
-                public CustomShortcut(ReportsDateRangeParameter range, ITimeService timeService) : base(timeService, "")
+                public CustomShortcut(ReportsDateRangeParameter range, ITimeService timeService) : base(timeService, "", ReportPeriod.Unknown)
                 {
                     this.range = range;
                 }

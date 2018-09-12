@@ -7,6 +7,7 @@ namespace Toggl.Daneel.ExtensionKit
     {
         private const string ApiTokenKey = "APITokenKey";
         private const string NeedsSyncKey = "NeedsSyncKey";
+        private const string UserIdKey = "UserId";
 
         private NSUserDefaults userDefaults;
 
@@ -34,6 +35,14 @@ namespace Toggl.Daneel.ExtensionKit
             userDefaults.Synchronize();
         }
 
+        public void SetUserId(double userId)
+        {
+            userDefaults.SetDouble(userId, UserIdKey);
+            userDefaults.Synchronize();
+        }
+
+        public double GetUserId() => userDefaults.DoubleForKey(UserIdKey);
+
         public string GetApiToken() => userDefaults.StringForKey(ApiTokenKey);
 
         public bool GetNeedsSync() => userDefaults.BoolForKey(NeedsSyncKey);
@@ -42,6 +51,7 @@ namespace Toggl.Daneel.ExtensionKit
         {
             userDefaults.RemoveObject(ApiTokenKey);
             userDefaults.RemoveObject(NeedsSyncKey);
+            userDefaults.RemoveObject(UserIdKey);
             userDefaults.Synchronize();
         }
     }

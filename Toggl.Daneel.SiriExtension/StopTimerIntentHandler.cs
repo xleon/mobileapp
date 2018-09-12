@@ -17,22 +17,16 @@ namespace SiriExtension
 {
     public class StopTimerIntentHandler : StopTimerIntentHandling
     {
-        #if USE_PRODUCTION_API
-        private const ApiEnvironment environment = ApiEnvironment.Production;
-        #else
-        private const ApiEnvironment environment = ApiEnvironment.Staging;
-        #endif
+        private ITogglApi togglAPI;
 
-        private static TogglApi togglApi;
-
-        public StopTimerIntentHandler()
+        public StopTimerIntentHandler(ITogglApi togglAPI)
         {
+            this.togglAPI = togglAPI;
         }
 
         public override void ConfirmStopTimer(StopTimerIntent intent, Action<StopTimerIntentResponse> completion)
         {
-            StopTimerIntentHandler.togglApi = getTogglAPI();
-            if (togglApi == null)
+            if (togglAPI == null)
             {
                 completion(new StopTimerIntentResponse(StopTimerIntentResponseCode.FailureNoApiToken, null));
                 return;
@@ -43,7 +37,7 @@ namespace SiriExtension
 
         public override void HandleStopTimer(StopTimerIntent intent, Action<StopTimerIntentResponse> completion)
         {
-            StopTimerIntentHandler.togglApi.TimeEntries.GetAll()                
+            togglAPI.TimeEntries.GetAll()
                     .Select(getRunningTimeEntry)
                     .SelectMany(stopTimeEntry)
                     .Subscribe(
@@ -71,19 +65,6 @@ namespace SiriExtension
                     });
         }
 
-        private TogglApi getTogglAPI()
-        {
-            var apiToken = SharedStorage.instance.GetApiToken();
-            if (apiToken == null)
-            {
-                return null;
-            }
-
-            var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"].ToString();
-            var userAgent = new UserAgent("Daneel", $"{version}.SiriExtension");
-            return new TogglApi(new ApiConfiguration(environment, Credentials.WithApiToken(apiToken), userAgent));
-        }
-
         private ITimeEntry getRunningTimeEntry(IList<ITimeEntry> timeEntries)
         {
             try
@@ -98,7 +79,7 @@ namespace SiriExtension
         private IObservable<ITimeEntry> stopTimeEntry(ITimeEntry timeEntry)
         {
             var duration = (long)(DateTime.Now - timeEntry.Start).TotalSeconds;
-            return StopTimerIntentHandler.togglApi.TimeEntries.Update(
+            return togglAPI.TimeEntries.Update(
                 TimeEntry.from(timeEntry).with(duration)
             );
         }

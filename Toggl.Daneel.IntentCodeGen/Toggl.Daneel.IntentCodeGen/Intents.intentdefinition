@@ -433,29 +433,42 @@
 			<key>INIntentDescriptionID</key>
 			<string>kSGACm</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>0</integer>
+			<integer>4</integer>
 			<key>INIntentName</key>
 			<string>StartTimer</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
-				<key></key>
+				<key>workspace</key>
 				<dict>
 					<key>INIntentParameterCombinationIsPrimary</key>
 					<true/>
 					<key>INIntentParameterCombinationSubtitle</key>
-					<string></string>
+					<string>in ${workspace}</string>
 					<key>INIntentParameterCombinationSubtitleID</key>
-					<string>FaKA4p</string>
+					<string>A6lrEf</string>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Start a new time tracking</string>
+					<string>Start timer</string>
 					<key>INIntentParameterCombinationTitleID</key>
-					<string>NKqa7K</string>
+					<string>VbS2we</string>
 				</dict>
 			</dict>
 			<key>INIntentParameters</key>
-			<array/>
+			<array>
+				<dict>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>1</integer>
+					<key>INIntentParameterName</key>
+					<string>workspace</string>
+					<key>INIntentParameterSupportsMultipleValues</key>
+					<false/>
+					<key>INIntentParameterTag</key>
+					<integer>4</integer>
+					<key>INIntentParameterType</key>
+					<string>Object</string>
+				</dict>
+			</array>
 			<key>INIntentResponse</key>
 			<dict>
 				<key>INIntentResponseCodes</key>

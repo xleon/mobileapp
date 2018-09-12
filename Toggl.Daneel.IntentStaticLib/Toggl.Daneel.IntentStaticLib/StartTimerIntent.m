@@ -8,7 +8,7 @@
 
 @implementation StartTimerIntent
 
-
+@dynamic workspace;
 
 @end
 

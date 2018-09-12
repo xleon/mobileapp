@@ -159,6 +159,7 @@ namespace Toggl.Foundation.Login
         private ITogglDataSource dataSourceFromUser(IUser user)
         {
             privateSharedStorageService.SaveApiToken(user.ApiToken);
+            privateSharedStorageService.SaveUserId(user.Id);
 
             var newCredentials = Credentials.WithApiToken(user.ApiToken);
             var api = apiFactory.CreateApiWith(newCredentials);

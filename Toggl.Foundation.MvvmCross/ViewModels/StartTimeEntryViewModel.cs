@@ -17,11 +17,13 @@ using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models;
+using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Settings;
@@ -45,6 +47,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IAnalyticsService analyticsService;
         private readonly IAutocompleteProvider autocompleteProvider;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly IIntentDonationService intentDonationService;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
         private readonly ISubject<TextFieldInfo> uiSubject = new Subject<TextFieldInfo>();
@@ -53,7 +56,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private bool hasAnyTags;
         private bool hasAnyProjects;
-        private long defaultWorkspaceId;
+        private IThreadSafeWorkspace defaultWorkspace;
         private StartTimeEntryParameters parameter;
         private TextFieldInfo textFieldInfo = TextFieldInfo.Empty(0);
 
@@ -202,7 +205,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IMvxNavigationService navigationService,
             IAnalyticsService analyticsService,
             IAutocompleteProvider autocompleteProvider,
-            ISchedulerProvider schedulerProvider
+            ISchedulerProvider schedulerProvider,
+            IIntentDonationService intentDonationService
         )
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -215,6 +219,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(autocompleteProvider, nameof(autocompleteProvider));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
+            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
@@ -225,6 +230,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.analyticsService = analyticsService;
             this.autocompleteProvider = autocompleteProvider;
             this.schedulerProvider = schedulerProvider;
+            this.intentDonationService = intentDonationService;
 
             OnboardingStorage = onboardingStorage;
 
@@ -287,10 +293,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             await base.Initialize();
 
-            var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
-            defaultWorkspaceId = workspace.Id;
+            defaultWorkspace = await interactorFactory.GetDefaultWorkspace().Execute();
 
-            textFieldInfo = TextFieldInfo.Empty(workspace.Id);
+            textFieldInfo = TextFieldInfo.Empty(parameter?.WorkspaceId ?? defaultWorkspace.Id);
 
             await setBillableValues(textFieldInfo.ProjectId);
 
@@ -577,6 +582,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task done()
         {
+            intentDonationService.DonateStartTimeEntry(this, defaultWorkspace.Name);
             await interactorFactory.CreateTimeEntry(this).Execute();
             await navigationService.Close(this);
         }
@@ -632,7 +638,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (firstSuggestion is ProjectSuggestion)
                 return suggestions
                     .GroupByWorkspaceAddingNoProject()
-                    .OrderByDefaultWorkspaceAndName(defaultWorkspaceId);
+                    .OrderByDefaultWorkspaceAndName(defaultWorkspace?.Id ?? 0);
 
             if (IsSuggestingTags)
                 suggestions = suggestions.Where(suggestion => suggestion.WorkspaceId == textFieldInfo.WorkspaceId);

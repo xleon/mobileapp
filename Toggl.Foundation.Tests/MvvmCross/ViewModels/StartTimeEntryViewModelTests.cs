@@ -50,7 +50,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected const string Description = "Testing Toggl mobile apps";
 
             protected ITestableObserver<TextFieldInfo> Observer { get; private set; }
-            protected StartTimeEntryParameters DefaultParameter { get; } = new StartTimeEntryParameters(DateTimeOffset.UtcNow, "", null);
+            protected StartTimeEntryParameters DefaultParameter { get; } = new StartTimeEntryParameters(DateTimeOffset.UtcNow, "", null, null);
 
             protected override void AdditionalSetup()
             {
@@ -79,7 +79,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     NavigationService,
                     AnalyticsService,
                     AutocompleteProvider,
-                    SchedulerProvider
+                    SchedulerProvider,
+                    IntentDonationService
             );
         }
 
@@ -97,7 +98,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useNavigationService,
                 bool useAnalyticsService,
                 bool useAutocompleteProvider,
-                bool useSchedulerProvider)
+                bool useSchedulerProvider,
+                bool useIntentDonationService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
@@ -109,6 +111,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var autocompleteProvider = useAutocompleteProvider ? AutocompleteProvider : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
+                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new StartTimeEntryViewModel(
@@ -121,7 +124,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         navigationService,
                         analyticsService,
                         autocompleteProvider,
-                        schedulerProvider);
+                        schedulerProvider,
+                        intentDonationService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -133,7 +137,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Property]
             public void SetsTheDateAccordingToTheDateParameterReceived(DateTimeOffset date, string placeholder, TimeSpan? duration)
             {
-                var parameter = new StartTimeEntryParameters(date, placeholder, duration);
+                var parameter = new StartTimeEntryParameters(date, placeholder, duration, null);
 
                 ViewModel.Prepare(parameter);
 
@@ -158,7 +162,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void SetsTheDisplayedTimeToTheValueOfTheDurationParameter()
             {
                 var duration = TimeSpan.FromSeconds(130);
-                var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", duration);
+                var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", duration, null);
 
                 ViewModel.Prepare(parameter);
 
@@ -168,7 +172,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public void ClearsTheIsDirtyFlag()
             {
-                var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null);
+                var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null, null);
 
                 ViewModel.Prepare(parameter);
 
@@ -192,7 +196,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .IsBillableAvailableForWorkspace(workspace.Id)
                     .Execute()
                     .Returns(Observable.Return(billableValue));
-                var parameter = new StartTimeEntryParameters(DateTimeOffset.UtcNow, "", null);
+                var parameter = new StartTimeEntryParameters(DateTimeOffset.UtcNow, "", null, null);
                 ViewModel.Prepare(parameter);
 
                 await ViewModel.Initialize();
@@ -316,6 +320,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 public async Task TracksProjectSelection()
                 {
                     ViewModel.Prepare();
+                    await ViewModel.Initialize();
 
                     await ViewModel.OnTextFieldInfoFromView(new QueryTextSpan("abcde @fgh", 10));
 
@@ -688,6 +693,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 AutocompleteProvider.Query(Arg.Any<QueryInfo>()).Returns(Observable.Return(projects));
                 ViewModel.Prepare();
                 ViewModel.Prepare(DefaultParameter);
+                await ViewModel.Initialize();
                 await ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(Description, Description.Length));
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
@@ -706,6 +712,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 AutocompleteProvider.Query(Arg.Any<QueryInfo>()).Returns(Observable.Return(projects));
                 ViewModel.Prepare();
                 ViewModel.Prepare(DefaultParameter);
+                await ViewModel.Initialize();
                 await ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(Description, Description.Length));
 
                 ViewModel.ToggleProjectSuggestionsCommand.Execute();
@@ -913,7 +920,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task SetsTheStartDateToTheValueReturnedByTheEditDurationViewModel()
             {
                 var now = DateTimeOffset.UtcNow;
-                var parameter = new StartTimeEntryParameters(now, "", null);
+                var parameter = new StartTimeEntryParameters(now, "", null, null);
                 var parameterToReturn = DurationParameter.WithStartAndDuration(now.AddHours(-2), null);
                 NavigationService
                     .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>())
@@ -930,7 +937,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var now = DateTimeOffset.UtcNow;
                 var currentTimeSubject = new Subject<DateTimeOffset>();
-                var parameter = new StartTimeEntryParameters(now, "", null);
+                var parameter = new StartTimeEntryParameters(now, "", null, null);
                 var observable = currentTimeSubject.AsObservable().Replay();
                 observable.Connect();
                 TimeService.CurrentDateTimeObservable.Returns(observable);
@@ -956,7 +963,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task DoesNotSetTheIsDirtyFlagIfNothingChanges()
             {
                 var now = DateTimeOffset.UtcNow;
-                var parameter = new StartTimeEntryParameters(now, "", null);
+                var parameter = new StartTimeEntryParameters(now, "", null,  null);
                 ViewModel.Prepare(parameter);
                 var parameterToReturn = DurationParameter.WithStartAndDuration(now, null);
                 NavigationService
@@ -972,7 +979,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task SetsTheIsDirtyFlagWhenStartTimeChanges()
             {
                 var now = DateTimeOffset.UtcNow;
-                var parameter = new StartTimeEntryParameters(now, "", null);
+                var parameter = new StartTimeEntryParameters(now, "", null,  null);
                 var parameterToReturn = DurationParameter.WithStartAndDuration(now.AddHours(-2), null);
                 NavigationService
                     .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>())
@@ -988,7 +995,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task SetsTheIsDirtyFlagWhenDurationChanges()
             {
                 var now = DateTimeOffset.UtcNow;
-                var parameter = new StartTimeEntryParameters(now, "", null);
+                var parameter = new StartTimeEntryParameters(now, "", null,  null);
                 var parameterToReturn = DurationParameter.WithStartAndDuration(now, TimeSpan.FromMinutes(10));
                 NavigationService
                     .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>())
@@ -1175,7 +1182,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                          .GetById(projectId)
                          .Returns(Observable.Return(project));
 
-                    var parameter = new StartTimeEntryParameters(startDate, "", null);
+                    var parameter = new StartTimeEntryParameters(startDate, "", null, null);
                     ViewModel.Prepare(parameter);
                     ViewModel.Initialize().GetAwaiter().GetResult();
                 }
@@ -1238,7 +1245,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 {
                     if (duration < TimeSpan.Zero) return;
 
-                    var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", duration);
+                    var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", duration, null);
 
                     ViewModel.Prepare(parameter);
                     ViewModel.DoneCommand.ExecuteAsync().Wait();
@@ -1251,7 +1258,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 [Fact, LogIfTooSlow]
                 public async Task CreatesARunningTimeEntryWhenDurationIsNull()
                 {
-                    var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null);
+                    var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null, null);
 
                     ViewModel.Prepare(parameter);
                     await ViewModel.DoneCommand.ExecuteAsync();
@@ -1278,7 +1285,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 user.Id.Returns(1);
                 user.DefaultWorkspaceId.Returns(10);
                 DataSource.User.Current.Returns(Observable.Return(user));
-                var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null);
+                var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null, null);
                 ViewModel.Prepare(parameter);
                 await ViewModel.Initialize();
 
@@ -1286,6 +1293,23 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await NavigationService.Received().Close(ViewModel);
             }
+
+            [Fact, LogIfTooSlow]
+            public async Task ShouldDonateStartTimerIntent()
+            {
+                var user = Substitute.For<IThreadSafeUser>();
+                user.Id.Returns(1);
+                user.DefaultWorkspaceId.Returns(10);
+                DataSource.User.Current.Returns(Observable.Return(user));
+                var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null, null);
+                ViewModel.Prepare(parameter);
+                await ViewModel.Initialize();
+
+                await ViewModel.DoneCommand.ExecuteAsync();
+
+                IntentDonationService.Received().DonateStartTimeEntry(Arg.Any<ITimeEntryPrototype>(), Arg.Any<string>());
+            }
+
         }
 
         public sealed class TheSelectSuggestionCommand
