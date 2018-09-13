@@ -12,6 +12,9 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
+    <data name="AppTitle">
+        <value>Toggl</value>
+    </data>
     <data name="OnboardingTrackPageCopy">
         <value>Track your hours
 with a single tap</value>
@@ -108,6 +111,9 @@ Please try again.</value>
     </data>
     <data name="NoProject">
         <value>No Project</value>
+    </data>
+    <data name="NoDescription">
+        <value>No Description</value>
     </data>
     <data name="InaccessibleProject">
         <value>(inaccessible project)</value>
@@ -473,6 +479,9 @@ account is not set up</value>
     </data>
     <data name="OpenAppAction">
         <value>Open app</value>
+    </data>
+    <data name="IdleTimerNotification">
+        <value>What are you working on?</value>
     </data>
     <data name="DiscardMessage">
         <value>Discard message?</value>

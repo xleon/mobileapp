@@ -17,6 +17,8 @@ namespace Toggl.Giskard.Bindings
 
         protected override void SetValueImpl(View target, bool value)
         {
+            if (target == null) return;
+
             var angle = value ? 180.0f : 0.0f;
             target.Animate().SetDuration(1).Rotation(angle);
         }

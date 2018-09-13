@@ -23,6 +23,8 @@ namespace Toggl.PrimeRadiant.Settings
         private const string completedCalendarOnboardingKey = "CompletedCalendarOnboarding";
 
         private const string preferManualModeKey = "PreferManualMode";
+        private const string runningTimerNotificationsKey = "RunningTimerNotifications";
+        private const string stoppedTimerNotificationsKey = "StoppedTimerNotifications";
 
         private const string startButtonWasTappedBeforeKey = "StartButtonWasTappedBefore";
         private const string hasTappedTimeEntryKey = "HasTappedTimeEntry";
@@ -61,6 +63,8 @@ namespace Toggl.PrimeRadiant.Settings
         private readonly ISubject<bool> stopButtonWasTappedSubject;
         private readonly ISubject<bool> hasSelectedProjectSubject;
         private readonly ISubject<bool> isManualModeEnabledSubject;
+        private readonly ISubject<bool> areRunningTimerNotificationsEnabledSubject;
+        private readonly ISubject<bool> areStoppedTimerNotificationsEnabledSubject;
         private readonly ISubject<bool> hasTimeEntryBeenContinuedSubject;
         private readonly ISubject<bool> navigatedAwayFromMainViewAfterTappingStopButtonSubject;
         private readonly ISubject<List<string>> enabledCalendarsSubject;
@@ -76,19 +80,21 @@ namespace Toggl.PrimeRadiant.Settings
             this.version = version;
             this.keyValueStorage = keyValueStorage;
 
-            (isNewUserSubject, IsNewUser) = prepareSubjectAndObservable(isNewUserKey, keyValueStorage.GetBool);
+            (isNewUserSubject, IsNewUser) = prepareSubjectAndObservable(isNewUserKey);
             (enabledCalendarsSubject, EnabledCalendars) = prepareSubjectAndObservable(EnabledCalendarIds());
-            (hasTappedTimeEntrySubject, HasTappedTimeEntry) = prepareSubjectAndObservable(hasTappedTimeEntryKey, keyValueStorage.GetBool);
-            (hasEditedTimeEntrySubject, HasEditedTimeEntry) = prepareSubjectAndObservable(hasEditedTimeEntryKey, keyValueStorage.GetBool);
-            (hasSelectedProjectSubject, HasSelectedProject) = prepareSubjectAndObservable(hasSelectedProjectKey, keyValueStorage.GetBool);
-            (isManualModeEnabledSubject, IsManualModeEnabledObservable) = prepareSubjectAndObservable(preferManualModeKey, keyValueStorage.GetBool);
-            (stopButtonWasTappedSubject, StopButtonWasTappedBefore) = prepareSubjectAndObservable(stopButtonWasTappedBeforeKey, keyValueStorage.GetBool);
-            (userSignedUpUsingTheAppSubject, UserSignedUpUsingTheApp) = prepareSubjectAndObservable(userSignedUpUsingTheAppKey, keyValueStorage.GetBool);
-            (startButtonWasTappedSubject, StartButtonWasTappedBefore) = prepareSubjectAndObservable(startButtonWasTappedBeforeKey, keyValueStorage.GetBool);
-            (projectOrTagWasAddedSubject, ProjectOrTagWasAddedBefore) = prepareSubjectAndObservable(projectOrTagWasAddedBeforeKey, keyValueStorage.GetBool);
-            (hasTimeEntryBeenContinuedSubject, HasTimeEntryBeenContinued) = prepareSubjectAndObservable(hasTimeEntryBeenContinuedKey, keyValueStorage.GetBool);
+            (isManualModeEnabledSubject, IsManualModeEnabledObservable) = prepareSubjectAndObservable(preferManualModeKey);
+            (areRunningTimerNotificationsEnabledSubject, AreRunningTimerNotificationsEnabledObservable) = prepareSubjectAndObservable(runningTimerNotificationsKey);
+            (areStoppedTimerNotificationsEnabledSubject, AreStoppedTimerNotificationsEnabledObservable) = prepareSubjectAndObservable(stoppedTimerNotificationsKey);
+            (hasTappedTimeEntrySubject, HasTappedTimeEntry) = prepareSubjectAndObservable(hasTappedTimeEntryKey);
+            (hasEditedTimeEntrySubject, HasEditedTimeEntry) = prepareSubjectAndObservable(hasEditedTimeEntryKey);
+            (hasSelectedProjectSubject, HasSelectedProject) = prepareSubjectAndObservable(hasSelectedProjectKey);
+            (stopButtonWasTappedSubject, StopButtonWasTappedBefore) = prepareSubjectAndObservable(stopButtonWasTappedBeforeKey);
+            (userSignedUpUsingTheAppSubject, UserSignedUpUsingTheApp) = prepareSubjectAndObservable(userSignedUpUsingTheAppKey);
+            (startButtonWasTappedSubject, StartButtonWasTappedBefore) = prepareSubjectAndObservable(startButtonWasTappedBeforeKey);
+            (projectOrTagWasAddedSubject, ProjectOrTagWasAddedBefore) = prepareSubjectAndObservable(projectOrTagWasAddedBeforeKey);
             (calendarNotificationsEnabledSubject, CalendarNotificationsEnabled) = prepareSubjectAndObservable(calendarNotificationsEnabledKey, keyValueStorage.GetBool);
-            (navigatedAwayFromMainViewAfterTappingStopButtonSubject, NavigatedAwayFromMainViewAfterTappingStopButton) = prepareSubjectAndObservable(navigatedAwayFromMainViewAfterTappingStopButtonKey, keyValueStorage.GetBool);
+            (navigatedAwayFromMainViewAfterTappingStopButtonSubject, NavigatedAwayFromMainViewAfterTappingStopButton) = prepareSubjectAndObservable(navigatedAwayFromMainViewAfterTappingStopButtonKey);
+            (hasTimeEntryBeenContinuedSubject, HasTimeEntryBeenContinued) = prepareSubjectAndObservable(hasTimeEntryBeenContinuedKey);
             (timeSpanBeforeCalendarNotificationsSubject, TimeSpanBeforeCalendarNotifications) = prepareSubjectAndObservable(keyValueStorage.GetTimeSpan(timeSpanBeforeCalendarNotificationsKey) ?? defaultTimeSpanBeforeCalendarNotificationsSubject);
         }
 
@@ -213,7 +219,11 @@ namespace Toggl.PrimeRadiant.Settings
             if (string.IsNullOrEmpty(dateString))
                 return null;
 
-            return DateTimeOffset.Parse(dateString);
+            if (DateTimeOffset.TryParse(dateString, out var parsedDate))
+            {
+                return parsedDate;
+            }
+            return null;
         }
 
         public void StartButtonWasTapped()
@@ -318,6 +328,8 @@ namespace Toggl.PrimeRadiant.Settings
         #region IUserPreferences
 
         public IObservable<bool> IsManualModeEnabledObservable { get; }
+        public IObservable<bool> AreRunningTimerNotificationsEnabledObservable { get; }
+        public IObservable<bool> AreStoppedTimerNotificationsEnabledObservable { get; }
 
         public IObservable<List<string>> EnabledCalendars { get; }
 
@@ -327,6 +339,12 @@ namespace Toggl.PrimeRadiant.Settings
 
         public bool IsManualModeEnabled
             => keyValueStorage.GetBool(preferManualModeKey);
+
+        public bool AreRunningTimerNotificationsEnabled
+            => keyValueStorage.GetBool(runningTimerNotificationsKey);
+
+        public bool AreStoppedTimerNotificationsEnabled
+            => keyValueStorage.GetBool(stoppedTimerNotificationsKey);
 
         public void EnableManualMode()
         {
@@ -340,9 +358,23 @@ namespace Toggl.PrimeRadiant.Settings
             isManualModeEnabledSubject.OnNext(false);
         }
 
+        public void SetRunningTimerNotifications(bool state)
+        {
+            keyValueStorage.SetBool(runningTimerNotificationsKey, state);
+            areRunningTimerNotificationsEnabledSubject.OnNext(state);
+        }
+
+        public void SetStoppedTimerNotifications(bool state)
+        {
+            keyValueStorage.SetBool(stoppedTimerNotificationsKey, state);
+            areStoppedTimerNotificationsEnabledSubject.OnNext(state);
+        }
+
         void IUserPreferences.Reset()
         {
             EnableTimerMode();
+            SetStoppedTimerNotifications(false);
+            SetRunningTimerNotifications(false);
             isManualModeEnabledSubject.OnNext(false);
         }
 

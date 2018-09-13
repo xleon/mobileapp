@@ -63,9 +63,9 @@ namespace Toggl.Giskard.ViewHolders
             timeEntriesLogCellDescriptionLabel.Text = Item.Description;
             timeEntriesLogCellProjectLabel.Text = Item.ProjectName;
             timeEntriesLogCellProjectLabel.SetTextColor(Color.ParseColor(Item.ProjectColor));
-            timeEntriesLogCellProjectLabel.Visibility = Item.HasProject.ToVisibility(useGone: true);
+            timeEntriesLogCellProjectLabel.Visibility = Item.HasProject.ToVisibility();
             timeEntriesLogCellClientLabel.Text = Item.ClientName;
-            timeEntriesLogCellClientLabel.Visibility = Item.HasProject.ToVisibility(useGone: true);
+            timeEntriesLogCellClientLabel.Visibility = Item.HasProject.ToVisibility();
         }
     }
 

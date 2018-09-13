@@ -4,6 +4,8 @@ using System.Reactive.Linq;
 using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
+using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.Models.Interfaces;
@@ -12,7 +14,6 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac.Extensions;
 using UIKit;
 using static Toggl.Daneel.Extensions.AnimationExtensions;
-using static Toggl.Daneel.Extensions.UIKitRxExtensions;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -61,18 +62,17 @@ namespace Toggl.Daneel.ViewControllers
             };
 
             //Text
-            this.Bind(ViewModel.WorkspaceNameObservable, WorkspaceLabel.BindText());
-            this.Bind(ViewModel.CurrentDateRangeStringObservable, titleButton.BindTitle());
+            this.Bind(ViewModel.WorkspaceNameObservable, WorkspaceLabel.Rx().Text());
+            this.Bind(ViewModel.CurrentDateRangeStringObservable, titleButton.Rx().Title());
 
             //Visibility
-            this.Bind(ViewModel.WorkspacesObservable.Select(areThereEnoughWorkspaces), WorkspaceButton.BindIsVisible());
-            this.Bind(ViewModel.WorkspaceNameObservable.Select(isWorkspaceNameTooLong), WorkspaceFadeView.BindFadeRight());
+            this.Bind(ViewModel.WorkspacesObservable.Select(areThereEnoughWorkspaces), WorkspaceButton.Rx().IsVisible());
+            this.Bind(ViewModel.WorkspaceNameObservable.Select(isWorkspaceNameTooLong), WorkspaceFadeView.Rx().FadeRight());
 
             //Commands
-            this.BindVoid(titleButton.Tapped(), ViewModel.ToggleCalendar);
-            this.BindVoid(ReportsTableView.Tapped(), ViewModel.HideCalendar);
-            this.Bind(WorkspaceButton.Tapped(), ViewModel.SelectWorkspaceMethod);
-
+            this.BindVoid(titleButton.Rx().Tap(), ViewModel.ToggleCalendar);
+            this.BindVoid(ReportsTableView.Rx().Tap(), ViewModel.HideCalendar);
+            this.Bind(WorkspaceButton.Rx().Tap(), ViewModel.SelectWorkspaceMethod);
 
             var bindingSet = this.CreateBindingSet<ReportsViewController, ReportsViewModel>();
 

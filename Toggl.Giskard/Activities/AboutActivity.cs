@@ -4,7 +4,7 @@ using Android.OS;
 using Android.Support.V7.Widget;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Giskard.Extensions;
+using Toggl.Giskard.Extensions.Reactive;
 
 namespace Toggl.Giskard.Activities
 {
@@ -22,9 +22,9 @@ namespace Toggl.Giskard.Activities
 
             InitializeViews();
 
-            this.Bind(licensesButton.Tapped(), ViewModel.OpenLicensesView);
-            this.Bind(privacyPolicyButton.Tapped(), ViewModel.OpenPrivacyPolicyView);
-            this.Bind(termsOfServiceButton.Tapped(), ViewModel.OpenTermsOfServiceView);
+            this.Bind(licensesButton.Rx().Tap(), ViewModel.OpenLicensesView);
+            this.Bind(privacyPolicyButton.Rx().Tap(), ViewModel.OpenPrivacyPolicyView);
+            this.Bind(termsOfServiceButton.Rx().Tap(), ViewModel.OpenTermsOfServiceView);
 
             setupToolbar();
         }
