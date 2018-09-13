@@ -217,12 +217,16 @@ namespace Toggl.Daneel.Views.Calendar
 
         private CGRect frameForItemWithLayoutAttributes(CalendarCollectionViewItemLayoutAttributes attrs)
         {
-            var yHour = hourHeight * attrs.StartTime.Hour;
-            var yMins = hourHeight * attrs.StartTime.Minute / 60;
+            var startTime = attrs.StartTime < date ? date : attrs.StartTime;
+            var endTime = attrs.EndTime > date.AddDays(1) ? date.AddDays(1) : attrs.EndTime;
+            var duration = endTime - startTime;
+
+            var yHour = hourHeight * startTime.Hour;
+            var yMins = hourHeight * startTime.Minute / 60;
 
             var totalInterItemSpacing = (attrs.OverlappingItemsCount - 1) * horizontalItemSpacing;
             var width = (CollectionViewContentSize.Width - leftPadding - rightPadding - totalInterItemSpacing) / attrs.OverlappingItemsCount;
-            var height = Math.Max(minItemHeight, hourHeight * attrs.Duration.TotalMinutes / 60) - verticalItemSpacing;
+            var height = Math.Max(minItemHeight, hourHeight * duration.TotalMinutes / 60) - verticalItemSpacing;
             var x = leftPadding + (width + horizontalItemSpacing) * attrs.PositionInOverlappingGroup;
             var y = yHour + yMins + verticalItemSpacing;
 
