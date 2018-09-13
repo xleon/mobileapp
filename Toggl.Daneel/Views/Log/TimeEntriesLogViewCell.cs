@@ -6,6 +6,7 @@ using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.UI;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Transformations;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Transformations;
@@ -32,7 +33,7 @@ namespace Toggl.Daneel.Views
         public CompositeDisposable DisposeBag = new CompositeDisposable();
 
         public IObservable<Unit> ContinueButtonTap
-            => ContinueButton.Tapped();
+            => ContinueButton.Rx().Tap();
 
         static TimeEntriesLogViewCell()
         {

@@ -5,12 +5,11 @@ using System.Reactive.Subjects;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Giskard.Extensions;
+using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Multivac.Extensions;
 using Toggl.Ultrawave.Exceptions;
 
@@ -40,8 +39,8 @@ namespace Toggl.Giskard.Activities
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.SetDisplayShowHomeEnabled(true);
 
-            this.Bind(feedbackEditText.Text(), ViewModel.FeedbackText);
-            this.Bind(errorCard.Tapped(), ViewModel.ErrorViewTapped);
+            this.Bind(feedbackEditText.Rx().Text(), ViewModel.FeedbackText);
+            this.Bind(errorCard.Rx().Tap(), ViewModel.ErrorViewTapped);
 
             var sendButtonEnabled = ViewModel.SendEnabled.CombineLatest(ViewModel.IsLoading,
                 (sendIsEnabled, isLoading) => sendIsEnabled && !isLoading);
@@ -53,13 +52,13 @@ namespace Toggl.Giskard.Activities
                 .Select(selectErrorMessage)
                 .Subscribe(errorTextSubject.OnNext)
                 .DisposedBy(DisposeBag);
-            this.Bind(errorTextSubject, errorInfoText.BindText());
+            this.Bind(errorTextSubject, errorInfoText.Rx().TextObserver());
 
             this.Bind(sendFeedbackSubject, ViewModel.SendButtonTapped);
             this.Bind(closeSubject, ViewModel.CloseButtonTapped);
-            this.Bind(ViewModel.Error.Select(error => error != null), errorCard.BindIsVisible());
-            this.Bind(ViewModel.IsLoading, progressBar.BindIsVisible());
-            this.Bind(ViewModel.IsLoading.Invert(), feedbackEditText.BindEnabled());
+            this.Bind(ViewModel.Error.Select(error => error != null), errorCard.Rx().IsVisible());
+            this.Bind(ViewModel.IsLoading, progressBar.Rx().IsVisible());
+            this.Bind(ViewModel.IsLoading.Invert(), feedbackEditText.Rx().Enabled());
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

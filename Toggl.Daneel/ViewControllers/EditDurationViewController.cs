@@ -1,26 +1,25 @@
 ﻿using System;
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using CoreGraphics;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Plugin.Color.Platforms.Ios;
+using Toggl.Daneel.Converters;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Presentation.Transition;
-using Toggl.Foundation.MvvmCross.Converters;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.MvvmCross.Combiners;
+using Toggl.Foundation.MvvmCross.Converters;
+using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Multivac.Extensions;
 using UIKit;
 using static Toggl.Daneel.Extensions.FontExtensions;
-using Toggl.Daneel.Converters;
-using System.Reactive;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DTOs;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Multivac.Extensions;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -208,16 +207,16 @@ namespace Toggl.Daneel.ViewControllers
             // Interaction observables for analytics
 
             var editingStart = Observable.Merge(
-                StartView.Tapped().Select(true),
-                EndView.Tapped().Select(false)
+                StartView.Rx().Tap().Select(true),
+                EndView.Rx().Tap().Select(false)
             );
 
-            var dateComponentChanged = DatePicker.DateComponentChanged()
+            var dateComponentChanged = DatePicker.Rx().DateComponent()
                 .WithLatestFrom(editingStart,
                     (_, isStart) => isStart ? EditTimeSource.BarrelStartDate : EditTimeSource.BarrelStopDate
                  );
 
-            var timeComponentChanged = DatePicker.TimeComponentChanged()
+            var timeComponentChanged = DatePicker.Rx().TimeComponent()
                 .WithLatestFrom(editingStart,
                     (_, isStart) => isStart ? EditTimeSource.BarrelStartTime : EditTimeSource.BarrelStopTime
                  );

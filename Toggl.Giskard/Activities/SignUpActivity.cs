@@ -4,10 +4,10 @@ using Android.Content.PM;
 using Android.Graphics;
 using Android.OS;
 using Android.Views;
-using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
+using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Multivac;
 
 namespace Toggl.Giskard.Activities
@@ -33,24 +33,24 @@ namespace Toggl.Giskard.Activities
             passwordEditText.Text = ViewModel.Password.FirstAsync().GetAwaiter().GetResult();
 
             //Text
-            this.Bind(ViewModel.ErrorMessage, errorTextView.BindText());
-            this.Bind(emailEditText.Text().Select(Email.From), ViewModel.SetEmail);
-            this.Bind(passwordEditText.Text().Select(Password.From), ViewModel.SetPassword);
-            this.Bind(ViewModel.IsLoading.Select(signupButtonTitle), signupButton.BindText());
-            this.Bind(ViewModel.CountryButtonTitle, countryNameTextView.BindText());
+            this.Bind(ViewModel.ErrorMessage, errorTextView.Rx().TextObserver());
+            this.Bind(emailEditText.Rx().Text().Select(Email.From), ViewModel.SetEmail);
+            this.Bind(passwordEditText.Rx().Text().Select(Password.From), ViewModel.SetPassword);
+            this.Bind(ViewModel.IsLoading.Select(signupButtonTitle), signupButton.Rx().TextObserver());
+            this.Bind(ViewModel.CountryButtonTitle, countryNameTextView.Rx().TextObserver());
 
             //Visibility
-            this.Bind(ViewModel.HasError, errorTextView.BindIsVisible(useGone: false));
-            this.Bind(ViewModel.IsLoading, progressBar.BindIsVisible(useGone: false));
-            this.Bind(ViewModel.SignupEnabled, signupButton.BindEnabled());
-            this.Bind(ViewModel.IsCountryErrorVisible, countryErrorView.BindIsVisible(useGone: false));
+            this.Bind(ViewModel.HasError, errorTextView.Rx().IsVisible(useGone: false));
+            this.Bind(ViewModel.IsLoading, progressBar.Rx().IsVisible(useGone: false));
+            this.Bind(ViewModel.SignupEnabled, signupButton.Rx().Enabled());
+            this.Bind(ViewModel.IsCountryErrorVisible, countryErrorView.Rx().IsVisible(useGone: false));
 
             //Commands
-            this.Bind(loginCard.Tapped(), ViewModel.Login);
-            this.Bind(signupButton.Tapped(), ViewModel.Signup);
-            this.Bind(passwordEditText.EditorActionSent(), ViewModel.Signup);
-            this.BindVoid(googleSignupButton.Tapped(), ViewModel.GoogleSignup);
-            this.Bind(countrySelection.Tapped(), ViewModel.PickCountry);
+            this.Bind(loginCard.Rx().Tap(), ViewModel.Login);
+            this.Bind(signupButton.Rx().Tap(), ViewModel.Signup);
+            this.Bind(passwordEditText.Rx().EditorActionSent(), ViewModel.Signup);
+            this.BindVoid(googleSignupButton.Rx().Tap(), ViewModel.GoogleSignup);
+            this.Bind(countrySelection.Rx().Tap(), ViewModel.PickCountry);
 
             string signupButtonTitle(bool isLoading)
                 => isLoading ? "" : Resources.GetString(Resource.String.SignUpForFree);
