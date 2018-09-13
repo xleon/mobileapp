@@ -1,3 +1,5 @@
+using System;
+using System.Reactive.Linq;
 using CoreGraphics;
 using MvvmCross;
 using Toggl.Daneel.Extensions;
@@ -5,6 +7,7 @@ using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Views.Calendar;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation;
+using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Multivac.Extensions;
@@ -34,6 +37,13 @@ namespace Toggl.Daneel.ViewControllers
             base.ViewDidLoad();
 
             settingsButton.SetImage(UIImage.FromBundle("icSettings"), UIControlState.Normal);
+
+            ViewModel
+                .ShouldShowOnboarding
+                .FirstAsync()
+                .Subscribe(
+                    shouldShowOnboarding => OnboardingView.Alpha = shouldShowOnboarding ? 1: 0)
+                .DisposedBy(DisposeBag);
 
             this.Bind(ViewModel.ShouldShowOnboarding, OnboardingView.BindIsVisibleWithFade());
             this.Bind(GetStartedButton.Tapped(), ViewModel.GetStartedAction);
