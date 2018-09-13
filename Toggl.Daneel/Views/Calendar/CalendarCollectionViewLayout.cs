@@ -47,7 +47,7 @@ namespace Toggl.Daneel.Views.Calendar
             set
             {
                 isEditing = value;
-                InvalidateLayoutForEditingItem();
+                InvalidateLayoutForVisibleItems();
             }
         }
 
@@ -99,7 +99,7 @@ namespace Toggl.Daneel.Views.Calendar
         public CGPoint PointAtDate(DateTimeOffset time)
             => new CGPoint(0, time.Hour * hourHeight + time.Minute / hourHeight);
 
-        public void InvalidateLayoutForEditingItem()
+        public void InvalidateLayoutForVisibleItems()
         {
             var context = new UICollectionViewLayoutInvalidationContext();
             context.InvalidateItems(CollectionView.IndexPathsForVisibleItems);

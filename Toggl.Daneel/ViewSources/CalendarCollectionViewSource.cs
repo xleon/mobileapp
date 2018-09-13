@@ -173,11 +173,9 @@ namespace Toggl.Daneel.ViewSources
         {
             IsEditing = false;
             layout.IsEditing = false;
-            if (editingItemIndexPath != null)
-            {
-                CollectionView.ReloadItems(new NSIndexPath[] { editingItemIndexPath });
-                editingItemIndexPath = null;
-            }
+            layoutAttributes = calculateLayoutAttributes();
+            layout.InvalidateLayoutForVisibleItems();
+            editingItemIndexPath = null;
         }
 
         public NSIndexPath InsertItemView(DateTimeOffset startTime, TimeSpan duration)
@@ -197,9 +195,8 @@ namespace Toggl.Daneel.ViewSources
 
             editingItemIndexPath = updateCalendarItem(indexPath, startTime, duration);
 
-            bool animationsEnabled = UIView.AnimationsEnabled;
             updateEditingHours();
-            layout.InvalidateLayoutForEditingItem();
+            layout.InvalidateLayoutForVisibleItems();
 
             return editingItemIndexPath;
         }
@@ -341,14 +338,11 @@ namespace Toggl.Daneel.ViewSources
         private NSIndexPath updateCalendarItem(NSIndexPath indexPath, DateTimeOffset startTime, TimeSpan duration)
         {
             var position = (int)indexPath.Item;
-            var oldCalendarItem = calendarItems[position];
-            calendarItems.RemoveAt((int)indexPath.Item);
 
-            var calendarItem = oldCalendarItem
+            calendarItems[position] = calendarItems[position]
                 .WithStartTime(startTime)
                 .WithDuration(duration);
 
-            calendarItems.Insert(position, calendarItem);
             layoutAttributes = calculateLayoutAttributes();
 
             var updatedIndexPath = NSIndexPath.FromItemSection(position, 0);

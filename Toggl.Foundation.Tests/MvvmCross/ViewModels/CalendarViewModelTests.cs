@@ -531,7 +531,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DataSource.TimeEntries.Created.Returns(createdSubject);
                 TimeService.MidnightObservable.Returns(midnightSubject);
                 await ViewModel.Initialize();
-                CalendarInteractor.ClearReceivedCalls();
 
                 createdSubject.OnNext(new MockTimeEntry());
 
@@ -550,7 +549,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DataSource.TimeEntries.Created.Returns(createdSubject);
                 TimeService.MidnightObservable.Returns(midnightSubject);
                 await ViewModel.Initialize();
-                CalendarInteractor.ClearReceivedCalls();
 
                 updatedSubject.OnNext(new EntityUpdate<IThreadSafeTimeEntry>(0, new MockTimeEntry()));
 
@@ -569,7 +567,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DataSource.TimeEntries.Created.Returns(createdSubject);
                 TimeService.MidnightObservable.Returns(midnightSubject);
                 await ViewModel.Initialize();
-                CalendarInteractor.ClearReceivedCalls();
 
                 deletedSubject.OnNext(0);
 
@@ -663,7 +660,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 protected override void EnsureEventWasTracked()
                 {
                     AnalyticsService.TimeEntryStarted.Received().Track(TimeEntryStartOrigin.CalendarEvent);
-                } 
+                }
 
                 protected override CalendarItem CalendarItem { get; } = new CalendarItem(
                     "id",
@@ -751,9 +748,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var now = DateTimeOffset.UtcNow;
                 var duration = TimeSpan.FromMinutes(30);
                 var tuple = (now, duration);
-                    
+
                 await ViewModel.OnDurationSelected.Execute(tuple);
-  
+
                 await NavigationService.Received().Navigate<EditTimeEntryViewModel, long>(Arg.Is(TimeEntryId));
             }
 
@@ -763,7 +760,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var now = DateTimeOffset.UtcNow;
                 var duration = TimeSpan.FromMinutes(30);
                 var tuple = (now, duration);
-                    
+
                 await ViewModel.OnDurationSelected.Execute(tuple);
 
                 AnalyticsService.TimeEntryStarted.Received().Track(TimeEntryStartOrigin.CalendarTapAndDrag);
