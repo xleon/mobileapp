@@ -1091,7 +1091,6 @@
       <DependentUpon>UserCalendarListHeaderViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\CalendarCollectionViewSource.cs" />
-    <Compile Include="Binding\LayoutConstraintActiveTargetBinding.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Views\Settings\CalendarSettingsTableViewHeader.cs" />
     <Compile Include="Views\Settings\CalendarSettingsTableViewHeader.designer.cs">
@@ -1125,7 +1124,6 @@
     <Compile Include="Extensions\ScrollViewExtensions.cs" />
     <Compile Include="Presentation\Attributes\TabPresentationAttribute.cs" />
     <Compile Include="Views\Calendar\CalendarCollectionViewAutoScrollHelper.cs" />
-    <Compile Include="Extensions\UIKitRxExtensions\FadeViewRxExtensions.cs" />
     <Compile Include="Extensions\Reactive\UIControlExtensions.cs" />
     <Compile Include="Binding\LayoutConstraintActiveTargetBinding.cs" />
     <Compile Include="Extensions\Reactive\FadeViewExtensions.cs" />

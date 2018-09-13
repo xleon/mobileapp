@@ -231,13 +231,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public void ToggleCalendar()
         {
-            navigationService.ChangePresentation(new ToggleCalendarVisibilityHint());
+            navigationService.ChangePresentation(new ToggleReportsCalendarVisibilityHint());
             calendarViewModel.OnToggleCalendar();
         }
 
         public void HideCalendar()
         {
-            navigationService.ChangePresentation(new ToggleCalendarVisibilityHint(forceHide: true));
+            navigationService.ChangePresentation(new ToggleReportsCalendarVisibilityHint(forceHide: true));
             calendarViewModel.OnHideCalendar();
         }
 
