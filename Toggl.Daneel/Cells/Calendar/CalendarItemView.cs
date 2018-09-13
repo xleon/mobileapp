@@ -96,6 +96,13 @@ namespace Toggl.Daneel.Cells.Calendar
             updateDragIndicators(color);
         }
 
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
+
+            updateShadow();
+        }
+
         private UIColor itemColor()
             => MvxColor.ParseHexString(Item.Color).ToNativeColor();
 
