@@ -159,29 +159,26 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 .EnabledCalendars
                 .SelectUnit();
 
-            var foregroundObservable = backgroundService
+            var appResumedFromBackgroundObservable = backgroundService
                 .AppResumedFromBackground
-                .Select(_ => timeService.CurrentDateTime)
-                .DistinctUntilChanged(time => time.Hour)
                 .SelectUnit();
 
             dataSource.TimeEntries
                 .ItemsChanged()
                 .Merge(dayChangedObservable)
                 .Merge(selectedCalendarsChangedObservable)
+                .Merge(appResumedFromBackgroundObservable)
                 .Subscribe(reloadData)
                 .DisposedBy(disposeBag);
 
             selectedCalendarsChangedObservable
                 .Merge(dayChangedObservable)
-                .Merge(foregroundObservable)
+                .Merge(appResumedFromBackgroundObservable)
                 .StartWith(Unit.Default)
                 .CombineLatest(userPreferences.CalendarNotificationsEnabled, CommonFunctions.Second)
                 .SelectMany(refreshNotifications)
                 .Subscribe()
                 .DisposedBy(disposeBag);
-
-            await reloadData();
         }
 
         private IObservable<Unit> refreshNotifications(bool notificationsAreEnabled)
