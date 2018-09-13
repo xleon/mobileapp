@@ -114,10 +114,6 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindDidBecomeFirstResponder())
                       .To(vm => vm.StartEditingDescriptionCommand);
 
-            bindingSet.Bind(BillableSwitch)
-                      .For(v => v.BindAnimatedOn())
-                      .To(vm => vm.Billable);
-
             bindingSet.Bind(DurationLabel)
                       .ByCombining(durationCombiner,
                           vm => vm.Duration,
@@ -187,8 +183,8 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindTap())
                       .To(vm => vm.SelectTagsCommand);
 
-            bindingSet.Bind(BillableView)
-                      .For(v => v.BindTap())
+            bindingSet.Bind(BillableSwitch)
+                      .For(v => v.BindValueChanged())
                       .To(vm => vm.ToggleBillableCommand);
 
             //End time and the stop button visibility
@@ -265,10 +261,10 @@ namespace Toggl.Daneel.ViewControllers
         {
             DurationLabel.Font = DurationLabel.Font.GetMonospacedDigitFont();
             PreferredContentSize = View.Frame.Size;
-            BillableSwitch.Resize();
             prepareDescriptionField();
             centerTextVertically(TagsTextView);
             TagsTextView.TextContainer.LineFragmentPadding = 0;
+            BillableSwitch.SetState(ViewModel.Billable, false);
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
             {

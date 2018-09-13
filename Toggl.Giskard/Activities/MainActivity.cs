@@ -1,27 +1,29 @@
 ﻿using System;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.Design.Widget;
+using Android.Support.V7.Widget;
+using Android.Support.V7.Widget.Helper;
 using Android.Views;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.Sync;
+using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions;
+using Toggl.Giskard.Extensions.Reactive;
+using Toggl.Giskard.Helper;
+using Toggl.Giskard.ViewHelpers;
 using Toggl.Multivac.Extensions;
 using static Toggl.Foundation.Sync.SyncProgress;
 using static Toggl.Giskard.Extensions.CircularRevealAnimation.AnimationType;
 using FoundationResources = Toggl.Foundation.Resources;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
-using System.Reactive.Linq;
-using System.Threading;
-using Android.Support.V7.Widget;
-using Android.Support.V7.Widget.Helper;
-using Toggl.Foundation.Sync;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.ViewHelpers;
 
 namespace Toggl.Giskard.Activities
 {
@@ -31,10 +33,10 @@ namespace Toggl.Giskard.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class MainActivity : MvxAppCompatActivity<MainViewModel>, IReactiveBindingHolder
     {
+        private const int snackbarDuration = 5000;
+        private NotificationManager notificationManager;
         private MainRecyclerAdapter mainRecyclerAdapter;
         private LinearLayoutManager layoutManager;
-
-        private const int snackbarDuration = 5000;
 
         public CompositeDisposable DisposeBag { get; } = new CompositeDisposable();
 
@@ -66,7 +68,7 @@ namespace Toggl.Giskard.Activities
             this.Bind(ViewModel.TimeEntriesViewModel.ShouldShowUndo, showUndoDeletion);
 
             this.Bind(ViewModel.SyncProgressState, updateSyncingIndicator);
-            this.Bind(refreshLayout.Refreshed(), ViewModel.RefreshAction);
+            this.Bind(refreshLayout.Rx().Refreshed(), ViewModel.RefreshAction);
 
             setupLayoutManager(mainRecyclerAdapter);
 
@@ -81,6 +83,9 @@ namespace Toggl.Giskard.Activities
                 .ObserveOn(SynchronizationContext.Current);
             this.Bind(isTimeEntryRunning, updateRecyclerViewPadding);
 
+            notificationManager = GetSystemService(NotificationService) as NotificationManager;
+            this.BindRunningTimeEntry(notificationManager, ViewModel.CurrentRunningTimeEntry, ViewModel.ShouldShowRunningTimeEntryNotification);
+            this.BindIdleTimer(notificationManager, ViewModel.IsTimeEntryRunning, ViewModel.ShouldShowStoppedTimeEntryNotification);
             setupItemTouchHelper(mainRecyclerAdapter);
 
             this.Bind(ViewModel.TimeEntriesCount, timeEntriesCountSubject);

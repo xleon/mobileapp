@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Linq;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -26,21 +27,21 @@ namespace Toggl.Daneel.ViewControllers.Settings
             prepareViews();
             prepareIndicatorView();
 
-            this.Bind(CloseButton.Tapped(), ViewModel.CloseButtonTapped);
-            this.Bind(FeedbackTextView.Text(), ViewModel.FeedbackText);
-            this.Bind(ErrorView.Tapped(), ViewModel.ErrorViewTapped);
+            this.Bind(CloseButton.Rx().Tap(), ViewModel.CloseButtonTapped);
+            this.Bind(FeedbackTextView.Rx().Text(), ViewModel.FeedbackText);
+            this.Bind(ErrorView.Rx().Tap(), ViewModel.ErrorViewTapped);
 
-            this.Bind(SendButton.Tapped(), ViewModel.SendButtonTapped);
+            this.Bind(SendButton.Rx().Tap(), ViewModel.SendButtonTapped);
             SendButton.TouchUpInside += (sender, args) => { FeedbackTextView.ResignFirstResponder(); };
 
-            this.Bind(ViewModel.IsFeedbackEmpty, FeedbackPlaceholderTextView.BindIsVisible());
-            this.Bind(ViewModel.Error.Select(NotNull), ErrorView.BindAnimatedIsVisible());
-            this.Bind(ViewModel.SendEnabled, SendButton.BindEnabled());
+            this.Bind(ViewModel.IsFeedbackEmpty, FeedbackPlaceholderTextView.Rx().IsVisible());
+            this.Bind(ViewModel.Error.Select(NotNull), ErrorView.Rx().AnimatedIsVisible());
+            this.Bind(ViewModel.SendEnabled, SendButton.Rx().Enabled());
 
-            this.Bind(ViewModel.IsLoading.Invert(), SendButton.BindIsVisible());
-            this.Bind(ViewModel.IsLoading.Invert(), CloseButton.BindIsVisible());
-            this.Bind(ViewModel.IsLoading, IndicatorView.BindIsVisible());
-            this.Bind(ViewModel.IsLoading, UIApplication.SharedApplication.BindNetworkActivityIndicatorVisible());
+            this.Bind(ViewModel.IsLoading.Invert(), SendButton.Rx().IsVisible());
+            this.Bind(ViewModel.IsLoading.Invert(), CloseButton.Rx().IsVisible());
+            this.Bind(ViewModel.IsLoading, IndicatorView.Rx().IsVisible());
+            this.Bind(ViewModel.IsLoading, UIApplication.SharedApplication.Rx().NetworkActivityIndicatorVisible());
         }
 
         public override void ViewWillAppear(bool animated)

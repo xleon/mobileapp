@@ -9,6 +9,8 @@ namespace Toggl.Ultrawave.Network.Reports
 
         public ProjectEndpoints Projects => new ProjectEndpoints(baseUrl);
 
+        public TimeEntriesEndpoints TimeEntries => new TimeEntriesEndpoints(baseUrl);
+
         public Endpoints(ApiEnvironment environment)
         {
             baseUrl = BaseUrls.ForReports(environment);

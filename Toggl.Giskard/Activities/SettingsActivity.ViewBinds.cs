@@ -12,6 +12,8 @@ namespace Toggl.Giskard.Activities
         private View logoutView;
         private View feedbackView;
         private View manualModeView;
+        private View runningTimerNotificationsView;
+        private View stoppedTimerNotificationsView;
         private View avatarContainer;
         private View beginningOfWeekView;
 
@@ -23,6 +25,8 @@ namespace Toggl.Giskard.Activities
         private ImageView avatarView;
 
         private Switch manualModeSwitch;
+        private Switch runningTimerNotificationsSwitch;
+        private Switch stoppedTimerNotificationsSwitch;
 
         private RecyclerView workspacesRecyclerView;
 
@@ -35,6 +39,8 @@ namespace Toggl.Giskard.Activities
             manualModeView = FindViewById(Resource.Id.SettingsToggleManualModeView);
             avatarContainer = FindViewById(Resource.Id.SettingsViewAvatarImageContainer);
             beginningOfWeekView = FindViewById(Resource.Id.SettingsSelectBeginningOfWeekView);
+            runningTimerNotificationsView = FindViewById(Resource.Id.SettingsRunningTimerNotificationsView);
+            stoppedTimerNotificationsView = FindViewById(Resource.Id.SettingsStoppedTimerNotificationsView);
 
             nameTextView = FindViewById<TextView>(Resource.Id.SettingsNameTextView);
             emailTextView = FindViewById<TextView>(Resource.Id.SettingsEmailTextView);
@@ -43,6 +49,8 @@ namespace Toggl.Giskard.Activities
 
             avatarView = FindViewById<ImageView>(Resource.Id.SettingsViewAvatarImage);
             manualModeSwitch = FindViewById<Switch>(Resource.Id.SettingsIsManualModeEnabledSwitch);
+            runningTimerNotificationsSwitch = FindViewById<Switch>(Resource.Id.SettingsAreRunningTimerNotificationsEnabledSwitch);
+            stoppedTimerNotificationsSwitch = FindViewById<Switch>(Resource.Id.SettingsAreStoppedTimerNotificationsEnabledSwitch);
 
             workspacesRecyclerView = FindViewById<RecyclerView>(Resource.Id.SettingsWorkspacesRecyclerView);
         }

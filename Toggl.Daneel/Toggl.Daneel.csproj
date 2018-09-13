@@ -620,15 +620,15 @@
     <Compile Include="Binding\DatePickerDateTimeOffsetTargetBinding.cs" />
     <Compile Include="Extensions\Binders\ReactiveTableViewBinder.cs" />
     <Compile Include="Extensions\SectionedIndexExtensions.cs" />
-    <Compile Include="Extensions\UIKitRxExtensions\NSConstraintRxExtensions.cs" />
-    <Compile Include="Extensions\UIKitRxExtensions\UIApplicationRxExtensions.cs" />
-    <Compile Include="Extensions\UIKitRxExtensions\UIButtonRxExtensions.cs" />
-    <Compile Include="Extensions\UIKitRxExtensions\UIDatePickerRxExtensions.cs" />
-    <Compile Include="Extensions\UIKitRxExtensions\UILabelRxExtensions.cs" />
-    <Compile Include="Extensions\UIKitRxExtensions\UISwitchRxExtensions.cs" />
-    <Compile Include="Extensions\UIKitRxExtensions\UITableViewRxExtensions.cs" />
-    <Compile Include="Extensions\UIKitRxExtensions\UITextViewRxExtensions.cs" />
-    <Compile Include="Extensions\UIKitRxExtensions\UIViewRxExtensions.cs" />
+    <Compile Include="Extensions\Reactive\NSConstraintExtensions.cs" />
+    <Compile Include="Extensions\Reactive\UIApplicationExtensions.cs" />
+    <Compile Include="Extensions\Reactive\UIButtonExtensions.cs" />
+    <Compile Include="Extensions\Reactive\UIDatePickerExtensions.cs" />
+    <Compile Include="Extensions\Reactive\UILabelExtensions.cs" />
+    <Compile Include="Extensions\Reactive\UISwitchExtensions.cs" />
+    <Compile Include="Extensions\Reactive\UITableViewExtensions.cs" />
+    <Compile Include="Extensions\Reactive\UITextViewExtensions.cs" />
+    <Compile Include="Extensions\Reactive\UIViewExtensions.cs" />
     <Compile Include="Services\UserDefaultsStorage.cs" />
     <Compile Include="Startup\IOSSchedulerProvider.cs" />
     <Compile Include="Startup\Setup.cs" />
@@ -1005,7 +1005,7 @@
     <Compile Include="Autocomplete\ProjectTextAttachment.cs" />
     <Compile Include="Autocomplete\TagTextAttachment.cs" />
     <Compile Include="Autocomplete\EmptyInputDelegate.cs" />
-    <Compile Include="Extensions\UIKitRxExtensions\UITextFieldRxExtensions.cs" />
+    <Compile Include="Extensions\Reactive\UITextFieldExtensions.cs" />
     <Compile Include="ViewControllers\Settings\SendFeedbackViewController.cs" />
     <Compile Include="ViewControllers\Settings\SendFeedbackViewController.designer.cs">
       <DependentUpon>SendFeedbackViewController.cs</DependentUpon>
@@ -1021,9 +1021,10 @@
     <Compile Include="ViewControllers\NoWorkspaceViewController.designer.cs">
       <DependentUpon>NoWorkspaceViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\UIKitRxExtensions\UIControlRxExtensions.cs" />
+    <Compile Include="Extensions\Reactive\UIControlExtensions.cs" />
     <Compile Include="Binding\LayoutConstraintActiveTargetBinding.cs" />
-    <Compile Include="Extensions\UIKitRxExtensions\FadeViewRxExtensions.cs" />
+    <Compile Include="Extensions\Reactive\FadeViewExtensions.cs" />
+    <Compile Include="Extensions\Reactive\NSObjectExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

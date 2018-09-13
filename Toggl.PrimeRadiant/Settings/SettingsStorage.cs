@@ -19,6 +19,8 @@ namespace Toggl.PrimeRadiant.Settings
         private const string completedOnboardingKey = "CompletedOnboarding";
 
         private const string preferManualModeKey = "PreferManualMode";
+        private const string runningTimerNotificationsKey = "RunningTimerNotifications";
+        private const string stoppedTimerNotificationsKey = "StoppedTimerNotifications";
 
         private const string startButtonWasTappedBeforeKey = "StartButtonWasTappedBefore";
         private const string hasTappedTimeEntryKey = "HasTappedTimeEntry";
@@ -51,6 +53,8 @@ namespace Toggl.PrimeRadiant.Settings
         private readonly ISubject<bool> stopButtonWasTappedSubject;
         private readonly ISubject<bool> hasSelectedProjectSubject;
         private readonly ISubject<bool> isManualModeEnabledSubject;
+        private readonly ISubject<bool> areRunningTimerNotificationsEnabledSubject;
+        private readonly ISubject<bool> areStoppedTimerNotificationsEnabledSubject;
         private readonly ISubject<bool> navigatedAwayFromMainViewAfterTappingStopButtonSubject;
         private readonly ISubject<bool> hasTimeEntryBeenContinuedSubject;
 
@@ -63,6 +67,8 @@ namespace Toggl.PrimeRadiant.Settings
 
             (isNewUserSubject, IsNewUser) = prepareSubjectAndObservable(isNewUserKey);
             (isManualModeEnabledSubject, IsManualModeEnabledObservable) = prepareSubjectAndObservable(preferManualModeKey);
+            (areRunningTimerNotificationsEnabledSubject, AreRunningTimerNotificationsEnabledObservable) = prepareSubjectAndObservable(runningTimerNotificationsKey);
+            (areStoppedTimerNotificationsEnabledSubject, AreStoppedTimerNotificationsEnabledObservable) = prepareSubjectAndObservable(stoppedTimerNotificationsKey);
             (hasTappedTimeEntrySubject, HasTappedTimeEntry) = prepareSubjectAndObservable(hasTappedTimeEntryKey);
             (hasEditedTimeEntrySubject, HasEditedTimeEntry) = prepareSubjectAndObservable(hasEditedTimeEntryKey);
             (hasSelectedProjectSubject, HasSelectedProject) = prepareSubjectAndObservable(hasSelectedProjectKey);
@@ -188,7 +194,11 @@ namespace Toggl.PrimeRadiant.Settings
             if (string.IsNullOrEmpty(dateString))
                 return null;
 
-            return DateTimeOffset.Parse(dateString);
+            if (DateTimeOffset.TryParse(dateString, out var parsedDate))
+            {
+                return parsedDate;
+            }
+            return null;
         }
 
         public void StartButtonWasTapped()
@@ -293,9 +303,17 @@ namespace Toggl.PrimeRadiant.Settings
         #region IUserPreferences
 
         public IObservable<bool> IsManualModeEnabledObservable { get; }
+        public IObservable<bool> AreRunningTimerNotificationsEnabledObservable { get; }
+        public IObservable<bool> AreStoppedTimerNotificationsEnabledObservable { get; }
 
         public bool IsManualModeEnabled
             => keyValueStorage.GetBool(preferManualModeKey);
+
+        public bool AreRunningTimerNotificationsEnabled
+            => keyValueStorage.GetBool(runningTimerNotificationsKey);
+
+        public bool AreStoppedTimerNotificationsEnabled
+            => keyValueStorage.GetBool(stoppedTimerNotificationsKey);
 
         public void EnableManualMode()
         {
@@ -309,9 +327,23 @@ namespace Toggl.PrimeRadiant.Settings
             isManualModeEnabledSubject.OnNext(false);
         }
 
+        public void SetRunningTimerNotifications(bool state)
+        {
+            keyValueStorage.SetBool(runningTimerNotificationsKey, state);
+            areRunningTimerNotificationsEnabledSubject.OnNext(state);
+        }
+
+        public void SetStoppedTimerNotifications(bool state)
+        {
+            keyValueStorage.SetBool(stoppedTimerNotificationsKey, state);
+            areStoppedTimerNotificationsEnabledSubject.OnNext(state);
+        }
+
         void IUserPreferences.Reset()
         {
             EnableTimerMode();
+            SetStoppedTimerNotifications(false);
+            SetRunningTimerNotifications(false);
             isManualModeEnabledSubject.OnNext(false);
         }
 

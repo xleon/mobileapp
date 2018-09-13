@@ -1,19 +1,30 @@
 using System;
+using System.Reactive.Subjects;
+using Android.Graphics;
+using Android.Runtime;
 using System.Linq;
 using System.Reactive.Subjects;
 using Android.Animation;
 using Android.Graphics;
 using Android.Runtime;
+using Android.Support.Constraints;
 using Android.Views;
 using Android.Widget;
 using Toggl.Foundation.MvvmCross.Transformations;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
+using static Toggl.Giskard.Resource.Id;
 
 namespace Toggl.Giskard.ViewHolders
 {
     public class MainLogCellViewHolder : BaseRecyclerViewHolder<TimeEntryViewModel>
     {
+        public enum AnimationSide
+        {
+            Left,
+            Right
+        }
+
         public MainLogCellViewHolder(View itemView) : base(itemView)
         {
         }
@@ -22,18 +33,7 @@ namespace Toggl.Giskard.ViewHolders
         {
         }
 
-        public enum AnimationSide
-        {
-            Left,
-            Right
-        }
-
-        public Subject<TimeEntryViewModel> ContinueButtonTappedSubject { get; set; }
-
         private static readonly int animationDuration = 1000;
-        private ObjectAnimator animator;
-
-        public bool IsAnimating => animator?.IsRunning ?? false;
 
         private TextView timeEntriesLogCellDescription;
         private TextView addDescriptionLabel;
@@ -47,24 +47,39 @@ namespace Toggl.Giskard.ViewHolders
         private View timeEntriesLogCellContinueButton;
         private View mainLogBackgroundContinue;
         private View mainLogBackgroundDelete;
+        private View billableIcon;
+        private View hasTagsIcon;
+        private View whitePadding;
+
+        private ObjectAnimator animator;
+
+        public bool IsAnimating => animator?.IsRunning ?? false;
+
+        public bool CanSync => Item.CanSync;
+
         public View MainLogContentView { get; private set; }
+        public Subject<TimeEntryViewModel> ContinueButtonTappedSubject { get; set; }
 
         protected override void InitializeViews()
         {
-            timeEntriesLogCellDescription = ItemView.FindViewById<TextView>(Resource.Id.TimeEntriesLogCellDescription);
-            addDescriptionLabel = ItemView.FindViewById<TextView>(Resource.Id.AddDescriptionLabel);
-            timeEntriesLogCellProjectLabel = ItemView.FindViewById<TextView>(Resource.Id.TimeEntriesLogCellProjectLabel);
-            timeEntriesLogCellTaskLabel = ItemView.FindViewById<TextView>(Resource.Id.TimeEntriesLogCellTaskLabel);
-            timeEntryLogCellClientLabel = ItemView.FindViewById<TextView>(Resource.Id.TimeEntryLogCellClientLabel);
-            timeEntriesLogCellDuration = ItemView.FindViewById<TextView>(Resource.Id.TimeEntriesLogCellDuration);
-            timeEntriesLogCellContinueImage = ItemView.FindViewById(Resource.Id.TimeEntriesLogCellContinueImage);
-            errorImageView = ItemView.FindViewById(Resource.Id.ErrorImageView);
-            errorNeedsSync = ItemView.FindViewById(Resource.Id.ErrorNeedsSync);
-            timeEntriesLogCellContinueButton = ItemView.FindViewById(Resource.Id.TimeEntriesLogCellContinueButton);
-            mainLogBackgroundContinue = ItemView.FindViewById(Resource.Id.MainLogBackgroundContinue);
-            mainLogBackgroundDelete = ItemView.FindViewById(Resource.Id.MainLogBackgroundDelete);
-            timeEntriesLogCellContinueButton.Click += onContinueClick;
+            timeEntriesLogCellDescription = ItemView.FindViewById<TextView>(TimeEntriesLogCellDescription);
+            addDescriptionLabel = ItemView.FindViewById<TextView>(AddDescriptionLabel);
+            timeEntriesLogCellProjectLabel = ItemView.FindViewById<TextView>(TimeEntriesLogCellProjectLabel);
+            timeEntriesLogCellTaskLabel = ItemView.FindViewById<TextView>(TimeEntriesLogCellTaskLabel);
+            timeEntryLogCellClientLabel = ItemView.FindViewById<TextView>(TimeEntryLogCellClientLabel);
+            timeEntriesLogCellDuration = ItemView.FindViewById<TextView>(TimeEntriesLogCellDuration);
+            timeEntriesLogCellContinueImage = ItemView.FindViewById(TimeEntriesLogCellContinueImage);
+            errorImageView = ItemView.FindViewById(ErrorImageView);
+            errorNeedsSync = ItemView.FindViewById(ErrorNeedsSync);
+            timeEntriesLogCellContinueButton = ItemView.FindViewById(TimeEntriesLogCellContinueButton);
+            mainLogBackgroundContinue = ItemView.FindViewById(MainLogBackgroundContinue);
+            mainLogBackgroundDelete = ItemView.FindViewById(MainLogBackgroundDelete);
+            billableIcon = ItemView.FindViewById(TimeEntriesLogCellBillable);
+            hasTagsIcon = ItemView.FindViewById(TimeEntriesLogCellTags);
+            whitePadding = ItemView.FindViewById(TimeEntriesLogCellDurationWhiteArea);
             MainLogContentView = ItemView.FindViewById(Resource.Id.MainLogContentView);
+            
+            timeEntriesLogCellContinueButton.Click += onContinueClick;
         }
 
         public void ShowSwipeToContinueBackground()
@@ -101,36 +116,52 @@ namespace Toggl.Giskard.ViewHolders
             ContinueButtonTappedSubject?.OnNext(Item);
         }
 
+        private ConstraintLayout.LayoutParams getWhitePaddingWidthDependentOnIcons()
+        {
+            var whitePaddingWidth =
+                72
+                + (Item.IsBillable ? 22 : 0)
+                + (Item.HasTags ? 22 : 0);
+
+            var layoutParameters = (ConstraintLayout.LayoutParams)whitePadding.LayoutParameters;
+            layoutParameters.Width = whitePaddingWidth.DpToPixels(ItemView.Context);
+            return layoutParameters;
+        }
+        
         protected override void UpdateView()
         {
             StopAnimating();
             timeEntriesLogCellDescription.Text = Item.Description;
-            timeEntriesLogCellDescription.Visibility = Item.HasDescription.ToVisibility(true);
+            timeEntriesLogCellDescription.Visibility = Item.HasDescription.ToVisibility();
 
-            addDescriptionLabel.Visibility = (!Item.HasDescription).ToVisibility(true);
+            addDescriptionLabel.Visibility = (!Item.HasDescription).ToVisibility();
 
             timeEntriesLogCellProjectLabel.Text = Item.ProjectName;
             timeEntriesLogCellProjectLabel.SetTextColor(Color.ParseColor(Item.ProjectColor));
-            timeEntriesLogCellProjectLabel.Visibility = Item.HasProject.ToVisibility(true);
+            timeEntriesLogCellProjectLabel.Visibility = Item.HasProject.ToVisibility();
 
             timeEntriesLogCellTaskLabel.Text = $": {Item.TaskName}";
             timeEntriesLogCellTaskLabel.SetTextColor(Color.ParseColor(Item.ProjectColor));
-            timeEntriesLogCellTaskLabel.Visibility = (!string.IsNullOrEmpty(Item.TaskName)).ToVisibility(true);
+            timeEntriesLogCellTaskLabel.Visibility = (!string.IsNullOrEmpty(Item.TaskName)).ToVisibility();
 
             timeEntryLogCellClientLabel.Text = Item.ClientName;
-            timeEntryLogCellClientLabel.Visibility = Item.HasProject.ToVisibility(true);
+            timeEntryLogCellClientLabel.Visibility = Item.HasProject.ToVisibility();
 
             timeEntriesLogCellDuration.Text = Item.Duration.HasValue
                 ? DurationAndFormatToString.Convert(Item.Duration.Value, Item.DurationFormat)
                 : "";
 
-            timeEntriesLogCellContinueImage.Visibility = Item.CanSync.ToVisibility(true);
-            errorImageView.Visibility = (!Item.CanSync).ToVisibility(true);
-            errorNeedsSync.Visibility = Item.NeedsSync.ToVisibility(true);
-            timeEntriesLogCellContinueButton.Visibility = Item.CanSync.ToVisibility(true);
-        }
+            timeEntriesLogCellContinueImage.Visibility = Item.CanContinue.ToVisibility();
+            errorImageView.Visibility = (!Item.CanContinue).ToVisibility();
 
-        public bool CanSync => Item.CanSync;
+            errorNeedsSync.Visibility = Item.NeedsSync.ToVisibility();
+            timeEntriesLogCellContinueButton.Visibility = Item.CanContinue.ToVisibility();
+
+            billableIcon.Visibility = Item.IsBillable.ToVisibility();
+            hasTagsIcon.Visibility = Item.HasTags.ToVisibility();
+
+            whitePadding.LayoutParameters = getWhitePaddingWidthDependentOnIcons();
+        }
 
         public void StartAnimating(AnimationSide side)
         {

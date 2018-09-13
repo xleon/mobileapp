@@ -1,9 +1,14 @@
-﻿﻿using System;
-using System.Linq;
+using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using Android.Support.V7.Widget;
 using Android.Views;
+using MvvmCross.Binding.BindingContext;
+using MvvmCross.Droid.Support.V7.RecyclerView;
+using MvvmCross.WeakSubscription;
+using MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.ViewHolders;
