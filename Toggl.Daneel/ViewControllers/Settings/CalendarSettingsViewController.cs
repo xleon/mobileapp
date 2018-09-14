@@ -1,10 +1,9 @@
-﻿using System;
+﻿using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels.Settings;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
+using Toggl.Foundation.MvvmCross.ViewModels.Settings;
 using FoundationResources = Toggl.Foundation.Resources;
 
 namespace Toggl.Daneel.ViewControllers.Settings

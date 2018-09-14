@@ -1,6 +1,7 @@
 ﻿using CoreGraphics;
 using Foundation;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -27,7 +28,7 @@ namespace Toggl.Daneel.ViewControllers.Settings
             TableView.SelectRow(NSIndexPath.FromRowSection(ViewModel.SelectedOptionIndex, 0), false, UITableViewScrollPosition.None);
 
             this.Bind(dataSource.SelectedOptionChanged, ViewModel.SelectOption);
-            this.Bind(CloseButton.Tapped(), ViewModel.Close);
+            this.Bind(CloseButton.Rx().Tap(), ViewModel.Close);
         }
     }
 }

@@ -6,6 +6,7 @@ using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.UI;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Transformations;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Transformations;
@@ -32,7 +33,7 @@ namespace Toggl.Daneel.Views
         public CompositeDisposable DisposeBag = new CompositeDisposable();
 
         public IObservable<Unit> ContinueButtonTap
-            => ContinueButton.Tapped();
+            => ContinueButton.Rx().Tap();
 
         static TimeEntriesLogViewCell()
         {
@@ -83,14 +84,12 @@ namespace Toggl.Daneel.Views
             BillableImageViewSpacingConstraint.Constant = Item.HasTags ? hasTagsBillableSpacing : noTagsBillableSpacing;
 
             // Visibility
-            var itemCanSync = Item.CanSync && !Item.IsGhost;
-
             ProjectTaskClientLabel.Hidden = !Item.HasProject;
             AddDescriptionLabel.Hidden = Item.HasDescription;
-            SyncErrorImageView.Hidden = itemCanSync;
+            SyncErrorImageView.Hidden = Item.CanContinue;
             UnsyncedImageView.Hidden = !Item.NeedsSync;
-            ContinueButton.Hidden = !itemCanSync;
-            ContinueImageView.Hidden = !itemCanSync;
+            ContinueButton.Hidden = !Item.CanContinue;
+            ContinueImageView.Hidden = !Item.CanContinue;
             BillableImageView.Hidden = !Item.IsBillable;
             TagsImageView.Hidden = !Item.HasTags;
         }

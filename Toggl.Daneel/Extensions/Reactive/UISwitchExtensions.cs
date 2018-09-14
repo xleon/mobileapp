@@ -2,13 +2,14 @@
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Toggl.Foundation.MvvmCross.Reactive;
 using UIKit;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.Daneel.Extensions.Reactive
 {
-    public static partial class UIKitRxExtensions
+    public static class UISwitchExtensions
     {
-        public static IObservable<Unit> Changed(this UISwitch uiSwitch)
+        public static IObservable<Unit> Changed(this IReactive<UISwitch> reactive)
             => Observable.Create<Unit>(observer =>
             {
                 void changed(object sender, EventArgs args)
@@ -16,9 +17,9 @@ namespace Toggl.Daneel.Extensions
                     observer.OnNext(Unit.Default);
                 }
 
-                uiSwitch.ValueChanged += changed;
+                reactive.Base.ValueChanged += changed;
 
-                return Disposable.Create(() => uiSwitch.ValueChanged -= changed);
+                return Disposable.Create(() => reactive.Base.ValueChanged -= changed);
             });
     }
 }

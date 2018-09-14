@@ -13,6 +13,7 @@ using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.MvvmCross.Onboarding.StartTimeEntryView;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
+using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.Helper;
 using Toggl.Multivac.Extensions;
 using static Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
@@ -42,7 +43,7 @@ namespace Toggl.Giskard.Activities
             initializeViews();
 
             this.Bind(ViewModel.TextFieldInfoObservable, onTextFieldInfo);
-            this.Bind(durationLabel.Tapped(), _ => ViewModel.SelectTimeCommand.Execute(Duration));
+            this.Bind(durationLabel.Rx().Tap(), _ => ViewModel.SelectTimeCommand.Execute(Duration));
 
             editText.TextObservable
                 .SubscribeOn(ThreadPoolScheduler.Instance)

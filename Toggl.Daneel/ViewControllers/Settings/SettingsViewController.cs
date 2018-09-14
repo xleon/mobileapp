@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac.Extensions;
@@ -33,34 +34,34 @@ namespace Toggl.Daneel.ViewControllers
             LoggingOutView.Hidden = true;
             SendFeedbackSuccessView.Hidden = true;
 
-            this.Bind(ViewModel.Email, EmailLabel.BindText());
-            this.Bind(ViewModel.IsSynced, SyncedView.BindIsVisible());
-            this.Bind(ViewModel.WorkspaceName, WorkspaceLabel.BindText());
-            this.Bind(ViewModel.DurationFormat, DurationFormatLabel.BindText());
-            this.Bind(ViewModel.IsRunningSync, SyncingView.BindIsVisible());
-            this.Bind(ViewModel.DateFormat, DateFormatLabel.BindText());
-            this.Bind(ViewModel.BeginningOfWeek, BeginningOfWeekLabel.BindText());
+            this.Bind(ViewModel.Email, EmailLabel.Rx().Text());
+            this.Bind(ViewModel.IsSynced, SyncedView.Rx().IsVisible());
+            this.Bind(ViewModel.WorkspaceName, WorkspaceLabel.Rx().Text());
+            this.Bind(ViewModel.DurationFormat, DurationFormatLabel.Rx().Text());
+            this.Bind(ViewModel.IsRunningSync, SyncingView.Rx().IsVisible());
+            this.Bind(ViewModel.DateFormat, DateFormatLabel.Rx().Text());
+            this.Bind(ViewModel.BeginningOfWeek, BeginningOfWeekLabel.Rx().Text());
+            this.Bind(ViewModel.IsFeedbackSuccessViewShowing, SendFeedbackSuccessView.Rx().AnimatedIsVisible());
             this.BindVoid(ViewModel.LoggingOut, () =>
             {
                 LoggingOutView.Hidden = false;
                 SyncingView.Hidden = true;
                 SyncedView.Hidden = true;
             });
-            this.Bind(ViewModel.IsFeedbackSuccessViewShowing, SendFeedbackSuccessView.BindAnimatedIsVisible());
 
-            this.Bind(HelpView.Tapped(), ViewModel.OpenHelpView);
-            this.Bind(LogoutButton.Tapped(), ViewModel.TryLogout);
-            this.Bind(AboutView.Tapped(), ViewModel.OpenAboutView);
-            this.Bind(FeedbackView.Tapped(), ViewModel.SubmitFeedback);
-            this.Bind(DateFormatView.Tapped(), ViewModel.SelectDateFormat);
-            this.Bind(WorkspaceView.Tapped(), ViewModel.PickDefaultWorkspace);
-            this.BindVoid(ManualModeSwitch.Changed(), ViewModel.ToggleManualMode);
-            this.Bind(DurationFormatView.Tapped(), ViewModel.SelectDurationFormat);
-            this.Bind(BeginningOfWeekView.Tapped(), ViewModel.SelectBeginningOfWeek);
-            this.Bind(CalendarSettingsView.Tapped(), ViewModel.OpenCalendarSettingsAction);
-            this.BindVoid(SendFeedbackSuccessView.Tapped(), ViewModel.CloseFeedbackSuccessView);
-            this.Bind(NotificationSettingsView.Tapped(), ViewModel.OpenNotificationSettingsAction);
-            this.Bind(TwentyFourHourClockSwitch.Changed(), ViewModel.ToggleUseTwentyFourHourClock);
+            this.Bind(HelpView.Rx().Tap(), ViewModel.OpenHelpView);
+            this.Bind(LogoutButton.Rx().Tap(), ViewModel.TryLogout);
+            this.Bind(AboutView.Rx().Tap(), ViewModel.OpenAboutView);
+            this.Bind(FeedbackView.Rx().Tap(), ViewModel.SubmitFeedback);
+            this.Bind(DateFormatView.Rx().Tap(), ViewModel.SelectDateFormat);
+            this.Bind(WorkspaceView.Rx().Tap(), ViewModel.PickDefaultWorkspace);
+            this.Bind(DurationFormatView.Rx().Tap(), ViewModel.SelectDurationFormat);
+            this.BindVoid(ManualModeSwitch.Rx().Changed(), ViewModel.ToggleManualMode);
+            this.Bind(BeginningOfWeekView.Rx().Tap(), ViewModel.SelectBeginningOfWeek);
+            this.Bind(CalendarSettingsView.Rx().Tap(), ViewModel.OpenCalendarSettingsAction);
+            this.BindVoid(SendFeedbackSuccessView.Rx().Tap(), ViewModel.CloseFeedbackSuccessView);
+            this.Bind(NotificationSettingsView.Rx().Tap(), ViewModel.OpenNotificationSettingsAction);
+            this.Bind(TwentyFourHourClockSwitch.Rx().Changed(), ViewModel.ToggleUseTwentyFourHourClock);
 
             UIApplication.Notifications
                 .ObserveWillEnterForeground((sender, e) => startAnimations())
@@ -98,10 +99,6 @@ namespace Toggl.Daneel.ViewControllers
             setIndicatorSyncColor(SyncedIcon);
             setIndicatorSyncColor(SyncingIndicator);
             setIndicatorSyncColor(LoggingOutIndicator);
-
-            // Resize Switches
-            TwentyFourHourClockSwitch.Resize();
-            ManualModeSwitch.Resize();
         }
 
         private void hideCalendarSettingsSection()

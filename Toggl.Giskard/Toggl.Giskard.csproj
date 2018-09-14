@@ -260,6 +260,7 @@
     <Compile Include="Extensions\OnboardingExtensions.cs" />
     <Compile Include="Extensions\PopupOffsets.cs" />
     <Compile Include="Extensions\PopupWindowWithDefaultGravityExtenstions.cs" />
+    <Compile Include="Helper\PersistentNotificationsHelper.cs" />
     <Compile Include="Helper\PopupWindowFactory.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -282,6 +283,11 @@
     <Compile Include="Activities\MainActivity.cs" />
     <Compile Include="Startup\TogglApplication.cs" />
     <Compile Include="TemplateSelectors\SelectTagsTemplateSelector.cs" />
+    <Compile Include="ViewHelpers\SuggestionsRecyclerViewSnapHelper.cs" />
+    <Compile Include="ViewHolders\MainLogCellViewHolder.cs" />
+    <Compile Include="ViewHolders\MainLogSuggestionItemViewHolder.cs" />
+    <Compile Include="ViewHolders\MainLogSuggestionsListViewHolder.cs" />
+    <Compile Include="ViewHolders\GuardedMvxRecyclerViewHolder.cs" />
     <Compile Include="Views\SelectProjectRecyclerView.cs" />
     <Compile Include="Adapters\MainRecyclerAdapter.cs" />
     <Compile Include="Views\SelectTagsRecyclerView.cs" />
@@ -387,7 +393,6 @@
     <Compile Include="Fragments\TermsOfServiceFragment.cs" />
     <Compile Include="Views\TogglDroidTimePicker.cs" />
     <Compile Include="Activities\ReactiveActivity.cs" />
-    <Compile Include="Extensions\UIExtensions.cs" />
     <Compile Include="Adapters\BaseRecyclerAdapter.cs" />
     <Compile Include="ViewHolders\BaseRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\WorkspaceSelectionViewHolder.cs" />
@@ -409,14 +414,9 @@
     </Compile>
     <Compile Include="Views\AutocompleteEditText.cs" />
     <Compile Include="Views\NonSwipingViewPager.cs" />
-    <Compile Include="Startup\HandlerScheduler.cs" />
     <Compile Include="Services\NotificationService.cs" />
-    <Compile Include="ViewHolders\MainLogSuggestionsListViewHolder.cs" />
-    <Compile Include="ViewHolders\MainLogSuggestionItemViewHolder.cs" />
     <Compile Include="ViewHolders\MainLogSectionViewHolder.cs" />
-    <Compile Include="ViewHolders\MainLogCellViewHolder.cs" />
     <Compile Include="ViewHelpers\MainRecyclerViewTouchCallback.cs" />
-    <Compile Include="ViewHelpers\SuggestionsRecyclerViewSnapHelper.cs" />
     <Compile Include="Adapters\ReactiveSectionedRecyclerAdapter.cs" />
     <Compile Include="Adapters\MainSuggestionsRecyclerAdapter.cs" />
     <Compile Include="Activities\SignUpActivity.ViewBinds.cs">
@@ -428,6 +428,14 @@
     <Compile Include="Activities\MainActivity.Onboardings.cs">
         <DependentUpon>MainActivity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Startup\HandlerScheduler.cs" />
+    <Compile Include="Extensions\Reactive\ViewExtensions.cs" />
+    <Compile Include="Extensions\Reactive\TextViewExtensions.cs" />
+    <Compile Include="Extensions\Reactive\CompoundButtonExtensions.cs" />
+    <Compile Include="Extensions\Reactive\EditTextExtensions.cs" />
+    <Compile Include="Extensions\Reactive\RecyclerAdapterExtensions.cs" />
+    <Compile Include="Extensions\Reactive\SwipeRefreshLayoutExtensions.cs" />
+    <Compile Include="Extensions\Reactive\JavaObjectExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -811,6 +819,10 @@
     <AndroidResource Include="Resources\anim\abc_slide_in_left.xml" />
     <AndroidResource Include="Resources\anim\abc_slide_out_right.xml" />
     <AndroidResource Include="Resources\layout\MainSuggestionsCardDescriptionOnly.axml" />
+    <AndroidResource Include="Resources\drawable\ic_icon_running.xml" />
+    <AndroidResource Include="Resources\drawable\ic_icon_notrunning.xml" />
+    <AndroidResource Include="Resources\layout\SendFeedbackActivity.axml" />
+    <AndroidResource Include="Resources\menu\SendFeedbackMenu.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">
@@ -840,6 +852,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Presenters\" />
+    <Folder Include="Extensions\Reactive\" />
   </ItemGroup>
   <ItemGroup>
     <ProguardConfiguration Include="ProGuard.cfg" />

@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Linq;
 using CoreGraphics;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -31,10 +32,10 @@ namespace Toggl.Daneel.ViewControllers.Calendar
             var source = new SelectUserCalendarsTableViewSource(TableView, ViewModel.Calendars);
             TableView.Source = source;
 
-            this.Bind(DoneButton.Tapped(), ViewModel.DoneAction);
+            this.Bind(DoneButton.Rx().Tap(), ViewModel.DoneAction);
             this.Bind(source.ItemSelected, ViewModel.SelectCalendarAction);
-            this.Bind(ViewModel.DoneAction.Enabled, DoneButton.BindEnabled());
-            this.Bind(ViewModel.DoneAction.Enabled.Select(alphaForEnabled), DoneButton.BindAnimatedAlpha());
+            this.Bind(ViewModel.DoneAction.Enabled, DoneButton.Rx().Enabled());
+            this.Bind(ViewModel.DoneAction.Enabled.Select(alphaForEnabled), DoneButton.Rx().AnimatedAlpha());
         }
 
         public override void ViewDidLayoutSubviews()

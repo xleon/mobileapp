@@ -122,12 +122,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <View
+            android:id="@+id/TimeEntriesLogCellDurationWhiteArea"
             local:layout_constraintTop_toTopOf="parent"
             local:layout_constraintRight_toRightOf="parent"
             local:layout_constraintBottom_toBottomOf="parent"
+            android:background="#ffffff"
+            android:layout_height="0dp"
+            android:layout_width="72dp" />
+        <View
+            local:layout_constraintTop_toTopOf="parent"
+            local:layout_constraintBottom_toBottomOf="parent"
+            local:layout_constraintRight_toLeftOf="@id/TimeEntriesLogCellDurationWhiteArea"
             android:background="@drawable/TransparentToWhiteGradient"
             android:layout_height="0dp"
-            android:layout_width="144dp" />
+            android:layout_width="48dp" />
         <TextView
             android:id="@+id/TimeEntriesLogCellDuration"
             tools:text="0:23:01"
@@ -145,6 +153,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true" />
+        <ImageView
+            android:id="@+id/TimeEntriesLogCellBillable"
+            android:src="@drawable/billable"
+            local:layout_constraintRight_toLeftOf="@id/TimeEntriesLogCellDuration"
+            local:layout_constraintTop_toTopOf="@id/TimeEntriesLogCellDuration"
+            local:layout_constraintBottom_toBottomOf="@id/TimeEntriesLogCellDuration"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginRight="4dp" />
+        <ImageView
+            android:id="@+id/TimeEntriesLogCellTags"
+            android:src="@drawable/tag"
+            local:layout_constraintRight_toLeftOf="@id/TimeEntriesLogCellBillable"
+            local:layout_constraintTop_toTopOf="@id/TimeEntriesLogCellDuration"
+            local:layout_constraintBottom_toBottomOf="@id/TimeEntriesLogCellDuration"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginRight="4dp" />
         <ImageView
             android:id="@+id/TimeEntriesLogCellContinueImage"
             android:src="@drawable/play"
@@ -173,8 +199,7 @@
             local:layout_constraintEnd_toStartOf="@id/TimeEntriesLogCellContinueImage"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginEnd="2dp"
-            android:layout_alignParentBottom="true" />
+            android:layout_marginEnd="2dp" />
         <Button
             android:id="@+id/TimeEntriesLogCellContinueButton"
             local:layout_constraintEnd_toEndOf="parent"

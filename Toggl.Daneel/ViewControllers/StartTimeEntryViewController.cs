@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -13,10 +12,9 @@ using MvvmCross.Commands;
 using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.Plugin.Visibility;
-using MvvmCross.ViewModels;
-using MvvmCross.WeakSubscription;
 using Toggl.Daneel.Autocomplete;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation;
@@ -197,12 +195,13 @@ namespace Toggl.Daneel.ViewControllers
 
             this.Bind(
                 DescriptionTextView
+                    .Rx()
                     .AttributedText()
                     .Select(attributedString => attributedString.Length == 0),
                 isDescriptionEmptySubject);
 
-            DescriptionTextView.AttributedText()
-                .CombineLatest(DescriptionTextView.CursorPosition(), (text, _) => text)
+            DescriptionTextView.Rx().AttributedText()
+                .CombineLatest(DescriptionTextView.Rx().CursorPosition(), (text, _) => text)
                 .Where(_ => !isUpdatingDescriptionField)
                 .SubscribeOn(ThreadPoolScheduler.Instance)
                 .Do(updatePlaceholder)

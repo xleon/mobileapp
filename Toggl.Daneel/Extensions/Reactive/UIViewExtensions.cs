@@ -4,26 +4,27 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CoreGraphics;
 using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Foundation.MvvmCross.Reactive;
 using UIKit;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.Daneel.Extensions.Reactive
 {
-    public static partial class UIKitRxExtensions
+    public static class UIViewExtensions
     {
-        public static IObservable<Unit> Tapped(this UIView view)
+        public static IObservable<Unit> Tap(this IReactive<UIView> reactive)
             => Observable.Create<Unit>(observer =>
             {
                 var gestureRecognizer = new UITapGestureRecognizer(() => observer.OnNext(Unit.Default));
                 gestureRecognizer.ShouldRecognizeSimultaneously = (recognizer, otherRecognizer) => true;
-                view.AddGestureRecognizer(gestureRecognizer);
+                reactive.Base.AddGestureRecognizer(gestureRecognizer);
 
-                return Disposable.Create(() => view.RemoveGestureRecognizer(gestureRecognizer));
+                return Disposable.Create(() => reactive.Base.RemoveGestureRecognizer(gestureRecognizer));
             });
 
-        public static Action<bool> BindIsVisible(this UIView view)
-            => isVisible => view.Hidden = !isVisible;
+        public static Action<bool> IsVisible(this IReactive<UIView> reactive)
+            => isVisible => reactive.Base.Hidden = !isVisible;
 
-        public static Action<bool> BindIsVisibleWithFade(this UIView view)
+        public static Action<bool> IsVisibleWithFade(this IReactive<UIView> reactive)
             => isVisible =>
             {
                 var alpha = isVisible ? 1 : 0;
@@ -32,37 +33,38 @@ namespace Toggl.Daneel.Extensions
                     Animation.Curves.EaseIn,
                     () =>
                     {
-                        view.Alpha = alpha;
+                        reactive.Base.Alpha = alpha;
                     });
             };
 
-        public static Action<UIColor> BindTintColor(this UIView view)
-            => color => view.TintColor = color;
+        public static Action<UIColor> TintColor(this IReactive<UIView> reactive)
+            => color => reactive.Base.TintColor = color;
 
-        public static Action<bool> BindAnimatedIsVisible(this UIView view)
+        public static Action<bool> AnimatedIsVisible(this IReactive<UIView> reactive)
             => isVisible =>
             {
-                view.Transform = CGAffineTransform.MakeTranslation(0, 20);
+                reactive.Base.Transform = CGAffineTransform.MakeTranslation(0, 20);
 
                 AnimationExtensions.Animate(
                     Animation.Timings.EnterTiming,
                     Animation.Curves.SharpCurve,
                     () =>
                     {
-                        view.Hidden = !isVisible;
-                        view.Transform = CGAffineTransform.MakeTranslation(0, 0);
+                        reactive.Base.Hidden = !isVisible;
+                        reactive.Base.Transform = CGAffineTransform.MakeTranslation(0, 0);
                     }
                 );
             };
 
-        public static Action<float> BindAnimatedAlpha(this UIView view)
+        public static Action<float> AnimatedAlpha(this IReactive<UIView> reactive)
             => alpha =>
             {
                 AnimationExtensions.Animate(
                     Animation.Timings.EnterTiming,
                     Animation.Curves.SharpCurve,
-                    () => view.Alpha = alpha
+                    () => reactive.Base.Alpha = alpha
                 );
             };
+
     }
 }

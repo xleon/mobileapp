@@ -10,6 +10,7 @@ using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions;
+using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.ViewHolders;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
@@ -40,24 +41,30 @@ namespace Toggl.Giskard.Activities
 
             versionTextView.Text = ViewModel.Version;
 
-            this.Bind(ViewModel.Name, nameTextView.BindText());
-            this.Bind(ViewModel.Email, emailTextView.BindText());
-            this.Bind(ViewModel.Workspaces, adapter.BindItems());
-            this.Bind(ViewModel.IsManualModeEnabled, manualModeSwitch.BindChecked());
-            this.Bind(ViewModel.BeginningOfWeek, beginningOfWeekTextView.BindText());
+            this.Bind(ViewModel.Name, nameTextView.Rx().TextObserver());
+            this.Bind(ViewModel.Email, emailTextView.Rx().TextObserver());
+            this.Bind(ViewModel.Workspaces, adapter.Rx().Items());
+            this.Bind(ViewModel.IsManualModeEnabled, manualModeSwitch.Rx().Checked());
+            this.Bind(ViewModel.AreRunningTimerNotificationsEnabled, runningTimerNotificationsSwitch.Rx().Checked());
+            this.Bind(ViewModel.AreStoppedTimerNotificationsEnabled, stoppedTimerNotificationsSwitch.Rx().Checked());
+            this.Bind(ViewModel.BeginningOfWeek, beginningOfWeekTextView.Rx().TextObserver());
             this.Bind(ViewModel.UserAvatar.Select(userImageFromBytes), bitmap =>
             {
                 avatarView.SetImageBitmap(bitmap);
                 avatarContainer.Visibility = ViewStates.Visible;
             });
+            
+            this.BindVoid(ViewModel.LoggingOut, this.CancelAllNotifications);
             this.Bind(ViewModel.IsFeedbackSuccessViewShowing, showFeedbackSuccessToast);
 
-            this.Bind(logoutView.Tapped(), ViewModel.TryLogout);
-            this.Bind(helpView.Tapped(), ViewModel.OpenHelpView);
-            this.Bind(aboutView.Tapped(), ViewModel.OpenAboutView);
-            this.Bind(feedbackView.Tapped(), ViewModel.SubmitFeedback);
-            this.BindVoid(manualModeView.Tapped(), ViewModel.ToggleManualMode);
-            this.Bind(beginningOfWeekView.Tapped(), ViewModel.SelectBeginningOfWeek);
+            this.Bind(logoutView.Rx().Tap(), ViewModel.TryLogout);
+            this.Bind(helpView.Rx().Tap(), ViewModel.OpenHelpView);
+            this.Bind(aboutView.Rx().Tap(), ViewModel.OpenAboutView);
+            this.Bind(feedbackView.Rx().Tap(), ViewModel.SubmitFeedback);
+            this.BindVoid(manualModeView.Rx().Tap(), ViewModel.ToggleManualMode);
+            this.BindVoid(runningTimerNotificationsView.Rx().Tap(), ViewModel.ToggleRunningTimerNotifications);
+            this.BindVoid(stoppedTimerNotificationsView.Rx().Tap(), ViewModel.ToggleStoppedTimerNotifications);
+            this.Bind(beginningOfWeekView.Rx().Tap(), ViewModel.SelectBeginningOfWeek);
             setupToolbar();
         }
 

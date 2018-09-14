@@ -16,6 +16,7 @@ using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
+using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
@@ -23,9 +24,8 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Foundation.Reports;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 using CommonFunctions = Toggl.Multivac.Extensions.CommonFunctions;
-using static Toggl.Multivac.Extensions.EnumerableExtensions;
-using Toggl.Foundation.MvvmCross.Extensions;
 
 [assembly: MvxNavigation(typeof(ReportsViewModel), ApplicationUrls.Reports)]
 namespace Toggl.Foundation.MvvmCross.ViewModels
@@ -33,15 +33,25 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class ReportsViewModel : MvxViewModel
     {
+        private const float minimumSegmentPercentageToBeOnItsOwn = 5f;
+        private const float maximumSegmentPercentageToEndUpInOther = 1f;
+        private const float minimumOtherSegmentDisplayPercentage = 1f;
+        private const float maximumOtherProjectPercentageWithSegmentsBetweenOneAndFivePercent = 5f;
+
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
         private readonly IMvxNavigationService navigationService;
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
         private readonly IDialogService dialogService;
+
         private readonly ReportsCalendarViewModel calendarViewModel;
-        private readonly Subject<Unit> reportSubject = new Subject<Unit>();
+
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
+
+        private readonly Subject<Unit> reportSubject = new Subject<Unit>();
+        private readonly BehaviorSubject<string> workspaceNameSubject = new BehaviorSubject<string>(string.Empty);
+        private readonly BehaviorSubject<string> currentDateRangeStringSubject = new BehaviorSubject<string>(string.Empty);
 
         private bool didNavigateToCalendar;
         private DateTimeOffset startDate;
@@ -55,8 +65,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private DateFormat dateFormat;
         private IReadOnlyList<ChartSegment> segments = new ChartSegment[0];
         private IReadOnlyList<ChartSegment> groupedSegments = new ChartSegment[0];
-        private readonly BehaviorSubject<string> workspaceNameSubject = new BehaviorSubject<string>("");
-        private readonly BehaviorSubject<string> currentDateRangeStringSubject = new BehaviorSubject<string>("");
 
         public bool IsLoading { get; private set; }
 
@@ -66,7 +74,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public bool TotalTimeIsZero => TotalTime.Ticks == 0;
 
-        public float? BillablePercentage { get; private set; } = null;
+        public float? BillablePercentage { get; private set; }
 
         public IReadOnlyList<ChartSegment> Segments
         {
@@ -113,18 +121,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxCommand HideCalendarCommand { get; }
         [Obsolete("Use ToggleCalendar instead")]
         public IMvxCommand ToggleCalendarCommand { get; }
-
+        [Obsolete]
         public IMvxCommand<ReportsDateRangeParameter> ChangeDateRangeCommand { get; }
         [Obsolete("Use SelectWorkspaceAction instead")]
         public IMvxAsyncCommand SelectWorkspace { get; }
 
-        public ReportsViewModel(ITogglDataSource dataSource,
-                                ITimeService timeService,
-                                IMvxNavigationService navigationService,
-                                IInteractorFactory interactorFactory,
-                                IAnalyticsService analyticsService,
-                                IDialogService dialogService,
-                                ISchedulerProvider schedulerProvider)
+        public ReportsViewModel(
+            ITogglDataSource dataSource,
+            ITimeService timeService,
+            IMvxNavigationService navigationService,
+            IInteractorFactory interactorFactory,
+            IAnalyticsService analyticsService,
+            IDialogService dialogService,
+            ISchedulerProvider schedulerProvider)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -159,21 +168,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var workspaces = dataSource.Workspaces;
 
             WorkspacesObservable = Observable.Merge(
-                    workspaces.Created.Select(_ => Unit.Default),
-                    workspaces.Updated.Select(_ => Unit.Default),
-                    workspaces.Deleted.Select(_ => Unit.Default)
-                )
+                    workspaces.Created.SelectUnit(),
+                    workspaces.Updated.SelectUnit(),
+                    workspaces.Deleted.SelectUnit())
                 .StartWith(Unit.Default)
                 .SelectMany(_ => dataSource.Workspaces.GetAll())
                 .DistinctUntilChanged()
-                .Select(list => list.Where(w => !(w.IsGhost)))
+                .Select(list => list.Where(w => !w.IsGhost))
                 .Select(readOnlyWorkspaceNameTuples)
                 .AsDriver(schedulerProvider);
-
-            //Depricated properties still used in android
-            CurrentDateRangeStringObservable.Subscribe(range => CurrentDateRangeString = range);
-            WorkspaceNameObservable.Subscribe(name => WorkspaceName = name);
-            WorkspacesObservable.Subscribe(data => Workspaces = data);
         }
 
         public override async Task Initialize()
@@ -181,39 +184,38 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Workspaces = await dataSource.Workspaces.GetAll().Select(readOnlyWorkspaceNameTuples);
 
             var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
-
             workspaceId = workspace.Id;
             workspaceNameSubject.OnNext(workspace.Name);
 
-            disposeBag.Add(
-                reportSubject
-                    .AsObservable()
-                    .Do(setLoadingState)
-                    .SelectMany(_ => dataSource.ReportsProvider.GetProjectSummary(workspaceId, startDate, endDate))
-                    .Subscribe(onReport, onError)
-            );
+            reportSubject
+                .AsObservable()
+                .Do(setLoadingState)
+                .SelectMany(_ => dataSource.ReportsProvider.GetProjectSummary(workspaceId, startDate, endDate))
+                .Subscribe(onReport, onError)
+                .DisposedBy(disposeBag);
 
-            disposeBag.Add(
-                calendarViewModel.SelectedDateRangeObservable.Subscribe(
-                    newDateRange => ChangeDateRangeCommand.Execute(newDateRange)
-                )
-            );
+            calendarViewModel.SelectedDateRangeObservable
+                .Subscribe(changeDateRange)
+                .DisposedBy(disposeBag);
 
-            var preferencesDisposable = dataSource.Preferences.Current
-                .Subscribe(onPreferencesChanged);
+            dataSource.Preferences.Current
+                .Subscribe(onPreferencesChanged)
+                .DisposedBy(disposeBag);
 
-            disposeBag.Add(preferencesDisposable);
+            //Depricated properties still used in android
+            CurrentDateRangeStringObservable
+                .Subscribe(range => CurrentDateRangeString = range)
+                .DisposedBy(disposeBag);
+
+            WorkspaceNameObservable
+                .Subscribe(name => WorkspaceName = name)
+                .DisposedBy(disposeBag);
+
+            WorkspacesObservable
+                .Subscribe(data => Workspaces = data)
+                .DisposedBy(disposeBag);
 
             IsLoading = true;
-        }
-
-        private static ReadOnlyCollection<(string, IThreadSafeWorkspace)>
-            readOnlyWorkspaceNameTuples(IEnumerable<IThreadSafeWorkspace> workspaces)
-        {
-            return workspaces
-                .Select(ws => (ws.Name, ws))
-                .ToList()
-                .AsReadOnly();
         }
 
         public override void ViewAppeared()
@@ -227,6 +229,36 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
         }
 
+        public void ToggleCalendar()
+        {
+            navigationService.ChangePresentation(new ToggleReportsCalendarVisibilityHint());
+            calendarViewModel.OnToggleCalendar();
+        }
+
+        public void HideCalendar()
+        {
+            navigationService.ChangePresentation(new ToggleReportsCalendarVisibilityHint(forceHide: true));
+            calendarViewModel.OnHideCalendar();
+        }
+
+        public async Task SelectWorkspaceMethod()
+        {
+            var workspace = await dialogService.Select(Resources.SelectWorkspace, Workspaces);
+
+            if (workspace == null || workspace.Id == workspaceId)
+                return;
+
+            workspaceId = workspace.Id;
+            workspaceNameSubject.OnNext(workspace.Name);
+            reportSubject.OnNext(Unit.Default);
+        }
+
+        private static ReadOnlyCollection<(string, IThreadSafeWorkspace)> readOnlyWorkspaceNameTuples(IEnumerable<IThreadSafeWorkspace> workspaces)
+            => workspaces
+                .Select(ws => (ws.Name, ws))
+                .ToList()
+                .AsReadOnly();
+
         private void setLoadingState(Unit obj)
         {
             reportSubjectStartTime = timeService.CurrentDateTime.UtcDateTime;
@@ -237,7 +269,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void onReport(ProjectSummaryReport report)
         {
             TotalTime = TimeSpan.FromSeconds(report.TotalSeconds);
-            BillablePercentage = report.TotalSeconds == 0 ? null : (float?)report.BillablePercentage;
+            BillablePercentage = report.TotalSeconds is 0 ? null : (float?)report.BillablePercentage;
 
             Segments = report.Segments
                              .Select(segment => segment.WithDurationFormat(DurationFormat))
@@ -268,18 +300,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             {
                 analyticsService.ReportsFailure.Track(source, totalDays, loadingTime.TotalMilliseconds);
             }
-        }
-
-        public void ToggleCalendar()
-        {
-            navigationService.ChangePresentation(new ToggleReportsCalendarVisibilityHint());
-            calendarViewModel.OnToggleCalendar();
-        }
-
-        public void HideCalendar()
-        {
-            navigationService.ChangePresentation(new ToggleReportsCalendarVisibilityHint(forceHide: true));
-            calendarViewModel.OnHideCalendar();
         }
 
         private void changeDateRange(ReportsDateRangeParameter dateRange)
@@ -319,14 +339,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             updateCurrentDateRangeString();
         }
 
-        private const float minimumSegmentPercentageToBeOnItsOwn = 5f;
-        private const float maximumSegmentPercentageToEndUpInOther = 1f;
-        private const float minimumOtherSegmentDisplayPercentage = 1f;
-        private const float maximumOtherProjectPercentageWithSegmentsBetweenOneAndFivePercent = 5f;
-
         private IReadOnlyList<ChartSegment> groupSegments()
         {
-            var groupedData = segments.GroupBy(segment => segment.Percentage >= minimumSegmentPercentageToBeOnItsOwn);
+            var groupedData = segments.GroupBy(segment => segment.Percentage >= minimumSegmentPercentageToBeOnItsOwn).ToList();
 
             var aboveStandAloneThresholdSegments = groupedData
                 .Where(group => group.Key)
@@ -397,17 +412,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Append(lastSegment)
                 .ToList()
                 .AsReadOnly();
-        }
-
-        public async Task SelectWorkspaceMethod()
-        {
-            var workspace = await dialogService.Select(Resources.SelectWorkspace, Workspaces);
-
-            if (workspace == null || workspace.Id == workspaceId) return;
-
-            workspaceId = workspace.Id;
-            workspaceNameSubject.OnNext(workspace.Name);
-            reportSubject.OnNext(Unit.Default);
         }
 
         private float percentageOf(List<ChartSegment> list)

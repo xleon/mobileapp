@@ -83,6 +83,9 @@ your app to continue.</string>
     <string name="ReviewTheTerms">Review the Terms</string>
     <string name="TermsMessage">By tapping "I Agree", you
 understand and agree to Toggl\'s</string>
+    <string name="Notifications">Notifications</string>
+    <string name="NotificationsRunningTimer">Running timer</string>
+    <string name="NotificationsStoppedTimer">Stopped timer</string>
     <string name="NothingHere">Nothing here</string>
     <string name="NoTimeEntries">You have no time entries\nfor selected time period.</string>
     <string name="AboutTermsOfService">Terms of Service</string>

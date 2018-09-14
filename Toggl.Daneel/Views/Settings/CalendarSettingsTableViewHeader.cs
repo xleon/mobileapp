@@ -5,6 +5,7 @@ using UIKit;
 using Toggl.Daneel.Extensions;
 using System.Reactive;
 using Toggl.Foundation;
+using Toggl.Daneel.Extensions.Reactive;
 
 namespace Toggl.Daneel
 {
@@ -19,7 +20,7 @@ namespace Toggl.Daneel
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
-            EnableCalendarAccessTapped = EnableCalendarAccessView.Tapped();
+            EnableCalendarAccessTapped = EnableCalendarAccessView.Rx().Tap();
         }
 
         public static CalendarSettingsTableViewHeader Create()

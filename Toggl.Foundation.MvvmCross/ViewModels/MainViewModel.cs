@@ -44,6 +44,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IObservable<SyncProgress> SyncProgressState { get; private set; }
         public IObservable<bool> ShouldShowEmptyState { get; private set; }
         public IObservable<bool> ShouldShowWelcomeBack { get; private set; }
+        public IObservable<IThreadSafeTimeEntry> CurrentRunningTimeEntry { get; private set; }
+        public IObservable<bool> ShouldShowRunningTimeEntryNotification { get; private set; }
+        public IObservable<bool> ShouldShowStoppedTimeEntryNotification { get; private set; }
 
         public TimeSpan CurrentTimeEntryElapsedTime { get; private set; } = TimeSpan.Zero;
         public DurationFormat CurrentTimeEntryElapsedTimeFormat { get; } = DurationFormat.Improved;
@@ -212,25 +215,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
-            var connectableTimeEntryIsRunning =
-                dataSource
-                    .TimeEntries
-                    .CurrentlyRunningTimeEntry
-                    .Do(setRunningEntry)
-                    .Select(timeEntry => timeEntry != null)
-                    .DistinctUntilChanged()
-                    .Replay(1);
+            ShouldShowRunningTimeEntryNotification = userPreferences.AreRunningTimerNotificationsEnabledObservable;
+            ShouldShowStoppedTimeEntryNotification = userPreferences.AreStoppedTimerNotificationsEnabledObservable;
 
-            connectableTimeEntryIsRunning.Connect();
-
-            IsTimeEntryRunning = connectableTimeEntryIsRunning.AsDriver(schedulerProvider);
-
-            CurrentTimeEntryHasDescription = dataSource
+            CurrentRunningTimeEntry = dataSource
                 .TimeEntries
                 .CurrentlyRunningTimeEntry
-                .Select(te => !string.IsNullOrWhiteSpace(te?.Description))
-                .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
+
+            CurrentTimeEntryHasDescription = CurrentRunningTimeEntry
+                .Select(te => !string.IsNullOrWhiteSpace(te?.Description))
+                .DistinctUntilChanged();
+
+            IsTimeEntryRunning = CurrentRunningTimeEntry
+                .Select(te => te != null)
+                .DistinctUntilChanged();
 
             timeService
                 .CurrentDateTimeObservable
@@ -268,6 +267,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             onboardingStorage.StopButtonWasTappedBefore
                              .Subscribe(hasBeen => hasStopButtonEverBeenUsed = hasBeen)
                              .DisposedBy(disposeBag);
+
+            dataSource
+                .TimeEntries
+                .CurrentlyRunningTimeEntry
+                .Subscribe(setRunningEntry)
+                .DisposedBy(disposeBag);
         }
 
         private void presentRatingViewIfNeeded(bool shouldBevisible)
