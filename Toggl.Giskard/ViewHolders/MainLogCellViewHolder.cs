@@ -1,4 +1,7 @@
 using System;
+using System.Reactive.Subjects;
+using Android.Graphics;
+using Android.Runtime;
 using System.Linq;
 using System.Reactive.Subjects;
 using Android.Animation;
@@ -22,6 +25,16 @@ namespace Toggl.Giskard.ViewHolders
             Right
         }
 
+        public MainLogCellViewHolder(View itemView) : base(itemView)
+        {
+        }
+
+        public MainLogCellViewHolder(IntPtr handle, JniHandleOwnership ownership) : base(handle, ownership)
+        {
+        }
+
+        private static readonly int animationDuration = 1000;
+
         private TextView timeEntriesLogCellDescription;
         private TextView addDescriptionLabel;
         private TextView timeEntriesLogCellProjectLabel;
@@ -38,17 +51,6 @@ namespace Toggl.Giskard.ViewHolders
         private View hasTagsIcon;
         private View whitePadding;
 
-        public MainLogCellViewHolder(View itemView) : base(itemView)
-        {
-        }
-
-        public MainLogCellViewHolder(IntPtr handle, JniHandleOwnership ownership) : base(handle, ownership)
-        {
-        }
-
-        public Subject<TimeEntryViewModel> ContinueButtonTappedSubject { get; set; }
-
-        private static readonly int animationDuration = 1000;
         private ObjectAnimator animator;
 
         public bool IsAnimating => animator?.IsRunning ?? false;
@@ -56,6 +58,7 @@ namespace Toggl.Giskard.ViewHolders
         public bool CanSync => Item.CanSync;
 
         public View MainLogContentView { get; private set; }
+        public Subject<TimeEntryViewModel> ContinueButtonTappedSubject { get; set; }
 
         protected override void InitializeViews()
         {
@@ -71,11 +74,12 @@ namespace Toggl.Giskard.ViewHolders
             timeEntriesLogCellContinueButton = ItemView.FindViewById(TimeEntriesLogCellContinueButton);
             mainLogBackgroundContinue = ItemView.FindViewById(MainLogBackgroundContinue);
             mainLogBackgroundDelete = ItemView.FindViewById(MainLogBackgroundDelete);
-            timeEntriesLogCellContinueButton.Click += onContinueClick;
             billableIcon = ItemView.FindViewById(TimeEntriesLogCellBillable);
             hasTagsIcon = ItemView.FindViewById(TimeEntriesLogCellTags);
             whitePadding = ItemView.FindViewById(TimeEntriesLogCellDurationWhiteArea);
             MainLogContentView = ItemView.FindViewById(Resource.Id.MainLogContentView);
+            
+            timeEntriesLogCellContinueButton.Click += onContinueClick;
         }
 
         public void ShowSwipeToContinueBackground()
@@ -112,7 +116,7 @@ namespace Toggl.Giskard.ViewHolders
             ContinueButtonTappedSubject?.OnNext(Item);
         }
 
-        private ConstraintLayout.LayoutParams getWhitePaddingWidthDependentOnIcons() 
+        private ConstraintLayout.LayoutParams getWhitePaddingWidthDependentOnIcons()
         {
             var whitePaddingWidth =
                 72
@@ -123,7 +127,7 @@ namespace Toggl.Giskard.ViewHolders
             layoutParameters.Width = whitePaddingWidth.DpToPixels(ItemView.Context);
             return layoutParameters;
         }
-
+        
         protected override void UpdateView()
         {
             StopAnimating();
@@ -147,10 +151,11 @@ namespace Toggl.Giskard.ViewHolders
                 ? DurationAndFormatToString.Convert(Item.Duration.Value, Item.DurationFormat)
                 : "";
 
-            timeEntriesLogCellContinueImage.Visibility = Item.CanSync.ToVisibility();
-            errorImageView.Visibility = (!Item.CanSync).ToVisibility();
+            timeEntriesLogCellContinueImage.Visibility = Item.CanContinue.ToVisibility();
+            errorImageView.Visibility = (!Item.CanContinue).ToVisibility();
+
             errorNeedsSync.Visibility = Item.NeedsSync.ToVisibility();
-            timeEntriesLogCellContinueButton.Visibility = Item.CanSync.ToVisibility();
+            timeEntriesLogCellContinueButton.Visibility = Item.CanContinue.ToVisibility();
 
             billableIcon.Visibility = Item.IsBillable.ToVisibility();
             hasTagsIcon.Visibility = Item.HasTags.ToVisibility();

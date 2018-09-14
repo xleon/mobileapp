@@ -5,6 +5,7 @@ using Android.Support.V7.Widget;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Giskard.Extensions;
 using static Toggl.Foundation.Resources;
 
 namespace Toggl.Giskard.Activities
@@ -35,6 +36,7 @@ namespace Toggl.Giskard.Activities
 
             SupportActionBar.SetDisplayHomeAsUpEnabled(false);
             SupportActionBar.SetDisplayShowHomeEnabled(false);
+            this.CancelAllNotifications();
         }
     }
 }

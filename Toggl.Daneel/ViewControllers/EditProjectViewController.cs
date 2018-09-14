@@ -25,11 +25,11 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidLoad();
 
-            prepareViews();
-
             var heightConverter = new BoolToConstantValueConverter<nfloat>(nameAlreadyTakenHeight, 0);
 
             var bindingSet = this.CreateBindingSet<EditProjectViewController, EditProjectViewModel>();
+
+            PrivateProjectSwitch.SetState(ViewModel.IsPrivate, false);
 
             //Commands
             bindingSet.Bind(DoneButton).To(vm => vm.DoneCommand);
@@ -55,17 +55,9 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.BindValueChanged())
                       .To(vm => vm.TogglePrivateProjectCommand);
 
-            bindingSet.Bind(PrivateProjectSwitchContainer)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.TogglePrivateProjectCommand);
-
             //State
             bindingSet.Bind(NameTextField).To(vm => vm.Name);
             bindingSet.Bind(WorkspaceLabel).To(vm => vm.WorkspaceName);
-
-            bindingSet.Bind(PrivateProjectSwitch)
-                      .For(v => v.BindAnimatedOn())
-                      .To(vm => vm.IsPrivate);
 
             bindingSet.Bind(ColorCircleView)
                       .For(v => v.BackgroundColor)
@@ -82,11 +74,6 @@ namespace Toggl.Daneel.ViewControllers
                       .WithConversion(new AddNewAttributedStringConverter(Resources.AddClient, ClientLabel.Font.CapHeight));
 
             bindingSet.Apply();
-        }
-
-        private void prepareViews()
-        {
-            PrivateProjectSwitch.Resize();
         }
     }
 }

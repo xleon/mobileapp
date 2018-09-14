@@ -47,6 +47,12 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string AppTitle {
+            get {
+                return ResourceManager.GetString("AppTitle", resourceCulture);
+            }
+        }
+        
         public static string OnboardingTrackPageCopy {
             get {
                 return ResourceManager.GetString("OnboardingTrackPageCopy", resourceCulture);
@@ -230,6 +236,12 @@ namespace Toggl.Foundation {
         public static string NoProject {
             get {
                 return ResourceManager.GetString("NoProject", resourceCulture);
+            }
+        }
+        
+        public static string NoDescription {
+            get {
+                return ResourceManager.GetString("NoDescription", resourceCulture);
             }
         }
         
@@ -832,6 +844,7 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("UndoButtonTitle", resourceCulture);
             }
         }
+        
         public static string DiscardMessage {
             get {
                 return ResourceManager.GetString("DiscardMessage", resourceCulture);
@@ -841,6 +854,12 @@ namespace Toggl.Foundation {
         public static string SelectWorkspace {
             get {
                 return ResourceManager.GetString("SelectWorkspace", resourceCulture);
+            }
+        }
+        
+        public static string IdleTimerNotification {
+            get {
+                return ResourceManager.GetString("IdleTimerNotification", resourceCulture);
             }
         }
     }

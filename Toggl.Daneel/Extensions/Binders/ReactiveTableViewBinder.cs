@@ -15,7 +15,7 @@ using UIKit;
 namespace Toggl.Daneel.ViewSources
 {
     public class ReactiveTableViewBinder<TModel, TCell> : IDisposable
-    where TCell : BaseTableViewCell<TModel>
+        where TCell : BaseTableViewCell<TModel>
     {
         private readonly object animationLock = new object();
         private CompositeDisposable disposeBag = new CompositeDisposable();

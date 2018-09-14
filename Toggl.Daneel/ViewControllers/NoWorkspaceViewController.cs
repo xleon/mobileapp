@@ -2,6 +2,7 @@
 using CoreGraphics;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -34,12 +35,12 @@ namespace Toggl.Daneel.ViewControllers
 
             prepareViews();
 
-            this.Bind(CreateWorkspaceButton.Tapped(), ViewModel.CreateWorkspaceWithDefaultName);
-            this.Bind(TryAgainButton.Tapped(), ViewModel.TryAgain);
+            this.Bind(CreateWorkspaceButton.Rx().Tap(), ViewModel.CreateWorkspaceWithDefaultName);
+            this.Bind(TryAgainButton.Rx().Tap(), ViewModel.TryAgain);
 
-            this.Bind(ViewModel.IsLoading.Select(CommonFunctions.Invert), CreateWorkspaceButton.BindEnabled());
-            this.Bind(ViewModel.IsLoading.Select(CommonFunctions.Invert), TryAgainButton.BindIsVisibleWithFade());
-            this.Bind(ViewModel.IsLoading.StartWith(false), ActivityIndicatorView.BindIsVisibleWithFade());
+            this.Bind(ViewModel.IsLoading.Select(CommonFunctions.Invert), CreateWorkspaceButton.Rx().Enabled());
+            this.Bind(ViewModel.IsLoading.Select(CommonFunctions.Invert), TryAgainButton.Rx().IsVisibleWithFade());
+            this.Bind(ViewModel.IsLoading.StartWith(false), ActivityIndicatorView.Rx().IsVisibleWithFade());
         }
 
         public override void ViewDidAppear(bool animated)

@@ -353,6 +353,17 @@ namespace Toggl.Foundation.Tests.DataSources
             }
 
             [Fact, LogIfTooSlow]
+            public async ThreadingTask SetsTheAtDateToCurrentTime()
+            {
+                var now = new DateTimeOffset(2018, 09, 01, 11, 22, 33, TimeSpan.Zero);
+                TimeService.CurrentDateTime.Returns(now);
+
+                await TimeEntriesSource.SoftDelete(TimeEntry).LastOrDefaultAsync();
+
+                await Repository.Received().Update(Arg.Is(TimeEntry.Id), Arg.Is<IDatabaseTimeEntry>(te => te.At == now));
+            }
+
+            [Fact, LogIfTooSlow]
             public async ThreadingTask UpdatesTheCorrectTimeEntry()
             {
                 await TimeEntriesSource.SoftDelete(TimeEntry).LastOrDefaultAsync();

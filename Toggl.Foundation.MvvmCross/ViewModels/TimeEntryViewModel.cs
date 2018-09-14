@@ -53,6 +53,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public bool IsGhost { get; }
 
+        public bool CanContinue => CanSync && !IsGhost;
+
         public TimeEntryViewModel(IThreadSafeTimeEntry timeEntry, DurationFormat durationFormat)
         {
             Ensure.Argument.IsNotNull(timeEntry, nameof(timeEntry));

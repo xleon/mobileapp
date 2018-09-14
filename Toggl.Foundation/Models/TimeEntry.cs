@@ -171,7 +171,7 @@ namespace Toggl.Foundation.Models
         }
 
         public TimeEntry(IDatabaseTimeEntry timeEntry, DateTimeOffset at)
-            : this(timeEntry, SyncStatus.SyncNeeded, null)
+            : this(timeEntry, SyncStatus.SyncNeeded, null, timeEntry.IsDeleted)
         {
             At = at;
         }

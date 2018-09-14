@@ -1,0 +1,161 @@
+﻿using System;
+using Toggl.Ultrawave.Tests.Integration.BaseTests;
+using Toggl.Multivac.Models.Reports;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using Toggl.Ultrawave.ApiClients;
+using Xunit;
+using Toggl.Multivac.Models;
+using FluentAssertions;
+using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
+using Toggl.Ultrawave.Tests.Integration.Helper;
+using Toggl.Ultrawave.Helpers;
+
+namespace Toggl.Ultrawave.Tests.Integration
+{
+    public sealed class TimeEntriesReportsApiTests : AuthenticatedEndpointBaseTests<ITimeEntriesTotals>
+    {
+        [Fact, LogTestInfo]
+        public async Task ReturnsZerosWhenTheUserDoesNotHaveAnyTimeEntries()
+        {
+            var (api, user) = await SetupTestUser();
+            var start = DateTimeOffset.UtcNow.AddDays(-8);
+            var end = start.AddDays(5);
+
+            var totals = await api.TimeEntriesReports.GetTotals(user.DefaultWorkspaceId.Value, start, end);
+
+            totals.Resolution.Should().Be(Resolution.Day);
+            totals.Groups.Should().HaveCount(6);
+            totals.Groups.ForEach(group =>
+            {
+                group.Total.Should().Be(TimeSpan.Zero);
+                group.Billable.Should().Be(TimeSpan.Zero);
+            });
+        }
+
+        [Fact, LogTestInfo]
+        public async Task ReturnsTrackedSecondsSumWithZeroBillableForAFreeWorkspace()
+        {
+            var (api, user) = await SetupTestUser();
+            var start = DateTimeOffset.UtcNow.AddDays(-8);
+            var end = start.AddDays(5);
+
+            await createTimeEntry(api.TimeEntries, user, start, 1, false);
+            await createTimeEntry(api.TimeEntries, user, start, 2, false);
+            await createTimeEntry(api.TimeEntries, user, start.AddDays(1), 3, false);
+            await createTimeEntry(api.TimeEntries, user, start.AddDays(1), 4, false);
+
+            var totals = await api.TimeEntriesReports.GetTotals(user.DefaultWorkspaceId.Value, start, end);
+
+            totals.Resolution.Should().Be(Resolution.Day);
+            totals.Groups.Should().HaveCount(6);
+            totals.Groups[0].Total.Should().Be(TimeSpan.FromSeconds(3));
+            totals.Groups[0].Billable.Should().Be(TimeSpan.Zero);
+            totals.Groups[1].Total.Should().Be(TimeSpan.FromSeconds(7));
+            totals.Groups[1].Billable.Should().Be(TimeSpan.Zero);
+        }
+
+        [Fact, LogTestInfo]
+        public async Task ReturnsTrackedBillableSecondsSumsForAPaidWorkspace()
+        {
+            var (api, user) = await SetupTestUser();
+            await WorkspaceHelper.SetSubscription(user, user.DefaultWorkspaceId.Value, PricingPlans.StarterAnnual);
+            var start = DateTimeOffset.UtcNow.AddDays(-8);
+            var end = start.AddDays(5);
+
+            await createTimeEntry(api.TimeEntries, user, start, 1, false);
+            await createTimeEntry(api.TimeEntries, user, start, 2, true);
+            await createTimeEntry(api.TimeEntries, user, start.AddDays(1), 3, false);
+            await createTimeEntry(api.TimeEntries, user, start.AddDays(1), 4, true);
+
+            var totals = await api.TimeEntriesReports.GetTotals(user.DefaultWorkspaceId.Value, start, end);
+
+            totals.Resolution.Should().Be(Resolution.Day);
+            totals.Groups.Should().HaveCount(6);
+            totals.Groups[0].Total.Should().Be(TimeSpan.FromSeconds(3));
+            totals.Groups[0].Billable.Should().Be(TimeSpan.FromSeconds(2));
+            totals.Groups[1].Total.Should().Be(TimeSpan.FromSeconds(7));
+            totals.Groups[1].Billable.Should().Be(TimeSpan.FromSeconds(4));
+        }
+
+        [Theory, LogTestInfo]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(33)]
+        [InlineData(34)]
+        public async Task ReturnsDayResolutionForLessThan34Days(int days)
+        {
+            var (api, user) = await SetupTestUser();
+            var start = DateTimeOffset.UtcNow.AddDays(-days);
+            var end = DateTimeOffset.UtcNow;
+
+            var totals = await api.TimeEntriesReports.GetTotals(user.DefaultWorkspaceId.Value, start, end);
+
+            totals.Resolution.Should().Be(Resolution.Day);
+        }
+
+        [Theory, LogTestInfo]
+        [InlineData(35)]
+        [InlineData(182)]
+        public async Task ReturnsWeekResolutionForMoreThan34Days(int days)
+        {
+            var (api, user) = await SetupTestUser();
+            var start = DateTimeOffset.UtcNow.AddDays(-days);
+            var end = DateTimeOffset.UtcNow;
+
+            var totals = await api.TimeEntriesReports.GetTotals(user.DefaultWorkspaceId.Value, start, end);
+
+            totals.Resolution.Should().Be(Resolution.Week);
+        }
+
+
+        [Theory, LogTestInfo]
+        [InlineData(183)]
+        [InlineData(365)]
+        public async Task ReturnsWeekResolutionForMoreThan182Days(int days)
+        {
+            var (api, user) = await SetupTestUser();
+            var start = DateTimeOffset.UtcNow.AddDays(-days);
+            var end = DateTimeOffset.UtcNow;
+
+            var totals = await api.TimeEntriesReports.GetTotals(user.DefaultWorkspaceId.Value, start, end);
+
+            totals.Resolution.Should().Be(Resolution.Month);
+        }
+
+        [Fact, LogTestInfo]
+        public async Task DoesNotAllowToUseMoreThan365DaysRange()
+        {
+            var (api, user) = await SetupTestUser();
+            var start = DateTimeOffset.UtcNow.AddDays(-366);
+            var end = DateTimeOffset.UtcNow;
+
+            Action callingTheApi = () => api.TimeEntriesReports.GetTotals(user.DefaultWorkspaceId.Value, start, end).Wait();
+
+            callingTheApi.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        private async Task<ITimeEntry> createTimeEntry(ITimeEntriesApi api, IUser user, DateTimeOffset start, long? duration, bool billable)
+            => await api.Create(new Models.TimeEntry
+            {
+                At = start,
+                Description = Guid.NewGuid().ToString(),
+                Start = start,
+                Duration = duration,
+                UserId = user.Id,
+                WorkspaceId = user.DefaultWorkspaceId.Value,
+                TagIds = new long[0],
+                Billable = billable
+            });
+
+        protected override IObservable<ITimeEntriesTotals> CallEndpointWith(ITogglApi togglApi)
+        {
+            var start = new DateTimeOffset(2017, 01, 10, 11, 22, 33, TimeSpan.Zero);
+            var end = start.AddMonths(5);
+            return togglApi.User.Get()
+                .SelectMany(user =>
+                    togglApi.TimeEntriesReports.GetTotals(user.DefaultWorkspaceId.Value, start, end));
+        }
+    }
+}
