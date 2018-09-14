@@ -38,9 +38,13 @@ namespace Toggl.Daneel.Views.Calendar
         private NSIndexPath itemIndexPath;
         private nfloat verticalOffset;
         private CGPoint firstPoint;
+        private CGPoint previousPoint;
 
         private bool isActive;
         private EditAction action;
+
+        private bool didDragUp;
+        private bool didDragDown;
 
         private readonly ISubject<CalendarItem> editCalendarItemSuject = new Subject<CalendarItem>();
         public IObservable<CalendarItem> EditCalendarItem => editCalendarItemSuject.AsObservable();
@@ -148,6 +152,7 @@ namespace Toggl.Daneel.Views.Calendar
             var startPoint = Layout.PointAtDate(calendarItem.StartTime.ToLocalTime());
             firstPoint = point;
             LastPoint = point;
+            previousPoint = point;
             verticalOffset = firstPoint.Y - startPoint.Y;
 
             impactFeedback.ImpactOccurred();
@@ -156,13 +161,15 @@ namespace Toggl.Daneel.Views.Calendar
 
         private void longPressChanged(CGPoint point)
         {
+            onCurrentPointChanged(point);
             changeOffset(point);
+            previousPoint = point;
         }
 
         private void longPressEnded()
         {
             StopAutoScroll();
-
+            onCurrentPointChanged(null);
             if (!isActive)
                 return;
 
@@ -195,6 +202,7 @@ namespace Toggl.Daneel.Views.Calendar
 
         private void panChanged(CGPoint point)
         {
+            onCurrentPointChanged(point);
             switch (action)
             {
                 case EditAction.ChangeOffset:
@@ -207,6 +215,7 @@ namespace Toggl.Daneel.Views.Calendar
                     changeEndTime(point);
                     break;
             }
+            previousPoint = point;
         }
 
         private void changeOffset(CGPoint point)
@@ -232,9 +241,9 @@ namespace Toggl.Daneel.Views.Calendar
 
             var topY = Layout.PointAtDate(calendarItem.StartTime).Y;
             var bottomY = Layout.PointAtDate(calendarItem.EndTime).Y;
-            if (topY < TopAutoScrollLine && !CollectionView.IsAtTop())
+            if (topY < TopAutoScrollLine && !CollectionView.IsAtTop() && didDragUp)
                 StartAutoScrollUp(changeOffset);
-            else if (bottomY > BottomAutoScrollLine && !CollectionView.IsAtBottom())
+            else if (bottomY > BottomAutoScrollLine && !CollectionView.IsAtBottom() && didDragDown)
                 StartAutoScrolDown(changeOffset);
             else
                 StopAutoScroll();
@@ -307,6 +316,7 @@ namespace Toggl.Daneel.Views.Calendar
 
         private void panEnded()
         {
+            onCurrentPointChanged(null);
             StopAutoScroll();
         }
 
@@ -323,6 +333,28 @@ namespace Toggl.Daneel.Views.Calendar
             CollectionView.AddGestureRecognizer(longPressGestureRecognizer);
             CollectionView.RemoveGestureRecognizer(panGestureRecognizer);
             CollectionView.RemoveGestureRecognizer(tapGestureRecognizer);
+        }
+
+        private void onCurrentPointChanged(CGPoint? currentPoint)
+        {
+            if (currentPoint == null)
+            {
+                didDragUp = false;
+                didDragDown = false;
+                return;
+            }
+
+            if (currentPoint.Value.Y > previousPoint.Y)
+            {
+                didDragDown = true;
+                didDragUp = false;
+            }
+
+            if (currentPoint.Value.Y < previousPoint.Y)
+            {
+                didDragUp = true;
+                didDragDown = false;
+            }
         }
     }
 }
