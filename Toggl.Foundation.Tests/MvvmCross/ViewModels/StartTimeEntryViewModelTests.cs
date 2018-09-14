@@ -1293,23 +1293,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await NavigationService.Received().Close(ViewModel);
             }
-
-            [Fact, LogIfTooSlow]
-            public async Task ShouldDonateStartTimerIntent()
-            {
-                var user = Substitute.For<IThreadSafeUser>();
-                user.Id.Returns(1);
-                user.DefaultWorkspaceId.Returns(10);
-                DataSource.User.Current.Returns(Observable.Return(user));
-                var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null, null);
-                ViewModel.Prepare(parameter);
-                await ViewModel.Initialize();
-
-                await ViewModel.DoneCommand.ExecuteAsync();
-
-                IntentDonationService.Received().DonateStartTimeEntry(Arg.Any<ITimeEntryPrototype>(), Arg.Any<string>());
-            }
-
         }
 
         public sealed class TheSelectSuggestionCommand

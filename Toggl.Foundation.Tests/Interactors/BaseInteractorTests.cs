@@ -6,6 +6,7 @@ using Toggl.Foundation.Shortcuts;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Network;
+using Toggl.Foundation.Services;
 
 namespace Toggl.Foundation.Tests
 {
@@ -16,6 +17,7 @@ namespace Toggl.Foundation.Tests
         protected ITogglDataSource DataSource { get; } = Substitute.For<ITogglDataSource>();
         protected IUserPreferences UserPreferences { get; } = Substitute.For<IUserPreferences>();
         protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
+        protected IIntentDonationService IntentDonationService { get; } = Substitute.For<IIntentDonationService>();
         protected IPlatformConstants PlatformConstants { get; } = Substitute.For<IPlatformConstants>();
         protected ILastTimeUsageStorage LastTimeUsageStorage { get; } = Substitute.For<ILastTimeUsageStorage>();
         protected IApplicationShortcutCreator ApplicationShortcutCreator { get; }
@@ -32,6 +34,7 @@ namespace Toggl.Foundation.Tests
                 DataSource,
                 UserPreferences,
                 AnalyticsService,
+                IntentDonationService,
                 ApplicationShortcutCreator,
                 LastTimeUsageStorage,
                 PlatformConstants,

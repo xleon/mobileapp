@@ -29,7 +29,7 @@ namespace SiriExtension
         {
             var workspaceId = (long)Convert.ToDouble(intent.Workspace.Identifier);
             var timeEntry = new TimeEntry(workspaceId, null, null, false, DateTimeOffset.Now, null,
-                "", new long[0], (long) SharedStorage.instance.GetUserId(), 0, null, DateTimeOffset.Now);
+                                          intent.EntryDescription ?? "", new long[0], (long) SharedStorage.instance.GetUserId(), 0, null, DateTimeOffset.Now);
             togglAPI.TimeEntries.Create(timeEntry).Subscribe(te =>
             {
                 SharedStorage.instance.SetNeedsSync(true);

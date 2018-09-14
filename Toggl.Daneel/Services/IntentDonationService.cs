@@ -3,7 +3,7 @@ using Foundation;
 using Intents;
 using Toggl.Daneel.Intents;
 using Toggl.Foundation;
-using Toggl.Foundation.Models;
+using Toggl.Multivac.Models;
 using Toggl.Foundation.Services;
 using Toggl.Multivac.Models;
 
@@ -11,10 +11,15 @@ namespace Toggl.Daneel.Services
 {
     public class IntentDonationService : IIntentDonationService
     {
-        public void DonateStartTimeEntry(ITimeEntryPrototype timeEntry, string workspaceName)
+        public void DonateStartTimeEntry(IWorkspace workspace, ITimeEntry timeEntry)
         {
             var intent = new StartTimerIntent();
-            intent.Workspace = new INObject(timeEntry.WorkspaceId.ToString(), workspaceName);
+            intent.Workspace = new INObject(workspace.Id.ToString(), workspace.Name);
+            if (!string.IsNullOrEmpty(timeEntry.Description)) 
+            {
+                intent.EntryDescription = timeEntry.Description;
+            }
+
             intent.SuggestedInvocationPhrase = "Start timer";
 
             var interaction = new INInteraction(intent, null);

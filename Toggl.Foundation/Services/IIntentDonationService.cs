@@ -1,4 +1,4 @@
-using Toggl.Foundation.Models;
+using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.Services
 {
@@ -16,7 +16,7 @@ namespace Toggl.Foundation.Services
 
     public interface IIntentDonationService
     {
-        void DonateStartTimeEntry(ITimeEntryPrototype timeEntry, string workspaceName);
+        void DonateStartTimeEntry(IWorkspace workspace, ITimeEntry timeEntry);
         void DonateStopCurrentTimeEntry();
         void DonateShowReport(ReportPeriod period);
         void DonateShowReport();

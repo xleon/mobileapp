@@ -12,16 +12,19 @@ namespace Toggl.Foundation.MvvmCross.Parameters
 
         public string PlaceholderText { get; }
 
+        public string EntryDescription { get; }
+
         public TimeSpan? Duration { get; }
 
         public long? WorkspaceId { get; }
 
-        public StartTimeEntryParameters(DateTimeOffset startTime, string placeholderText, TimeSpan? duration, long? workspaceId)
+        public StartTimeEntryParameters(DateTimeOffset startTime, string placeholderText, TimeSpan? duration, long? workspaceId, string entryDescription = "")
         {
             StartTime = startTime;
-            PlaceholderText = placeholderText;
+            PlaceholderText = placeholderText;        
             Duration = duration;
             WorkspaceId = workspaceId;
+            EntryDescription = entryDescription;
         }
 
         public static StartTimeEntryParameters ForManualMode(DateTimeOffset now)

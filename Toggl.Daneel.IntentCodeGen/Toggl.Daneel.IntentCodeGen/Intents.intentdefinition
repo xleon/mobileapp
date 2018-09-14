@@ -433,7 +433,7 @@
 			<key>INIntentDescriptionID</key>
 			<string>kSGACm</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>4</integer>
+			<integer>5</integer>
 			<key>INIntentName</key>
 			<string>StartTimer</string>
 			<key>INIntentParameterCombinations</key>
@@ -453,6 +453,21 @@
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>VbS2we</string>
 				</dict>
+				<key>workspace,entryDescription</key>
+				<dict>
+					<key>INIntentParameterCombinationIsPrimary</key>
+					<false/>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>in ${workspace}</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>DJav0d</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Start timer for ${entryDescription}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>H7rfbw</string>
+				</dict>
 			</dict>
 			<key>INIntentParameters</key>
 			<array>
@@ -467,6 +482,18 @@
 					<integer>4</integer>
 					<key>INIntentParameterType</key>
 					<string>Object</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>2</integer>
+					<key>INIntentParameterName</key>
+					<string>entryDescription</string>
+					<key>INIntentParameterSupportsMultipleValues</key>
+					<false/>
+					<key>INIntentParameterTag</key>
+					<integer>5</integer>
+					<key>INIntentParameterType</key>
+					<string>String</string>
 				</dict>
 			</array>
 			<key>INIntentResponse</key>
@@ -501,7 +528,7 @@
 						<key>INIntentResponseCodeName</key>
 						<string>failureNoApiToken</string>
 						<key>INIntentResponseCodeSuccess</key>
-						<true/>
+						<false/>
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
