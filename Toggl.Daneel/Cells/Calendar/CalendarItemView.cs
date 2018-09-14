@@ -70,6 +70,9 @@ namespace Toggl.Daneel.Cells.Calendar
                 BackgroundColor = UIColor.White
             };
 
+            ContentView.BringSubviewToFront(TopDragIndicator);
+            ContentView.BringSubviewToFront(BottomDragIndicator);
+
             topDragIndicatorBorderLayer = new CAShapeLayer();
             configureDragIndicatorBorderLayer(TopDragIndicator, topDragIndicatorBorderLayer);
             bottomDragIndicatorBorderLayer = new CAShapeLayer();

@@ -1,4 +1,5 @@
 ﻿using System;
+using Toggl.Foundation.Helper;
 using Toggl.Multivac;
 
 namespace Toggl.Daneel.Views.Calendar
@@ -27,8 +28,10 @@ namespace Toggl.Daneel.Views.Calendar
             Ensure.Argument.IsNotZero(overlappingItemsCount, nameof(overlappingItemsCount));
             Ensure.Argument.IsInClosedRange(positionInOverlappingGroup, 0, overlappingItemsCount - 1, nameof(overlappingItemsCount));
 
+            var defaultDuration = Constants.CalendarItemViewDefaultDuration;
+
             StartTime = startTime;
-            Duration = duration;
+            Duration = duration < defaultDuration ? defaultDuration : duration;
             OverlappingItemsCount = overlappingItemsCount;
             PositionInOverlappingGroup = positionInOverlappingGroup;
             IsEditing = isEditing;

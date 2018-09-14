@@ -8,6 +8,7 @@ using Toggl.Daneel.Extensions;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.Extensions;
+using Toggl.Foundation.Helper;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using UIKit;
@@ -25,7 +26,7 @@ namespace Toggl.Daneel.Views.Calendar
             None
         }
 
-        private static readonly TimeSpan defaultDuration = TimeSpan.FromMinutes(15);
+        private static readonly TimeSpan defaultDuration = Constants.CalendarItemViewDefaultDuration;
 
         private readonly CalendarCollectionViewSource dataSource;
 

@@ -4,6 +4,7 @@ using System.Reactive.Subjects;
 using CoreGraphics;
 using Foundation;
 using Toggl.Daneel.ViewSources;
+using Toggl.Foundation.Helper;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using UIKit;
@@ -13,7 +14,7 @@ namespace Toggl.Daneel.Views.Calendar
 {
     public sealed class CalendarCollectionViewCreateFromSpanHelper : CalendarCollectionViewAutoScrollHelper, IUIGestureRecognizerDelegate
     {
-        private static readonly TimeSpan defaultDuration = TimeSpan.FromMinutes(15);
+        private static readonly TimeSpan defaultDuration = Constants.CalendarItemViewDefaultDuration;
 
         private readonly CalendarCollectionViewSource dataSource;
 
