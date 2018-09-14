@@ -12,6 +12,7 @@ API_AVAILABLE(ios(12.0), watchos(5.0))
 @interface StartTimerIntent : INIntent
 
 @property (readwrite, copy, nullable, nonatomic) INObject *workspace;
+@property (readwrite, copy, nullable, nonatomic) NSString *entryDescription;
 
 @end
 

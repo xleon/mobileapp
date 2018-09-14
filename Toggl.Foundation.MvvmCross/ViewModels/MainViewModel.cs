@@ -376,9 +376,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             return interactorFactory
                 .ContinueTimeEntry(timeEntry)
                 .Execute()
-                .Do( _ => {
-                    onboardingStorage.SetTimeEntryContinued();
-                })
+                .Do( _ => onboardingStorage.SetTimeEntryContinued())
                 .SelectUnit();
         }
 

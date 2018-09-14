@@ -145,7 +145,12 @@ namespace Toggl.Daneel
         public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,
             UIApplicationRestorationHandler completionHandler)
         {
-            var intent = userActivity.GetInteraction()?.Intent;
+            var interaction = userActivity.GetInteraction();
+            if (interaction == null || interaction.IntentHandlingStatus != INIntentHandlingStatus.DeferredToApplication) {
+                return false;
+            }
+
+            var intent = interaction?.Intent;
 
             switch (intent)
             {
@@ -162,7 +167,7 @@ namespace Toggl.Daneel
                     return true;
                 case StartTimerIntent startTimerIntent:
                     var workspaceId = (long)Convert.ToDouble(startTimerIntent.Workspace.Identifier);
-                    var timeEntryParams = new StartTimeEntryParameters(DateTimeOffset.Now, "", null, workspaceId);
+                    var timeEntryParams = new StartTimeEntryParameters(DateTimeOffset.Now, "", null, workspaceId, startTimerIntent.EntryDescription ?? "");
                     navigationService.Navigate<MainViewModel>();
                     navigationService.Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(timeEntryParams);
                     return true;

@@ -50,7 +50,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IIntentDonationService intentDonationService;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
-        private readonly ISubject<TextFieldInfo> uiSubject = new Subject<TextFieldInfo>();
+        private readonly ISubject<TextFieldInfo> uiSubject = new ReplaySubject<TextFieldInfo>();
         private readonly ISubject<TextFieldInfo> querySubject = new Subject<TextFieldInfo>();
         private readonly ISubject<AutocompleteSuggestionType> queryByTypeSubject = new Subject<AutocompleteSuggestionType>();
 
@@ -59,6 +59,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IThreadSafeWorkspace defaultWorkspace;
         private StartTimeEntryParameters parameter;
         private TextFieldInfo textFieldInfo = TextFieldInfo.Empty(0);
+        private string initialDescription;
 
         //Properties
         public IObservable<TextFieldInfo> TextFieldInfoObservable { get; }
@@ -282,6 +283,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Duration = parameter.Duration;
 
             PlaceholderText = parameter.PlaceholderText;
+            initialDescription = parameter.EntryDescription;
 
             timeService.CurrentDateTimeObservable
                 .Where(_ => isRunning)
@@ -295,9 +297,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             defaultWorkspace = await interactorFactory.GetDefaultWorkspace().Execute();
 
-            textFieldInfo = TextFieldInfo.Empty(parameter?.WorkspaceId ?? defaultWorkspace.Id);
+            if (string.IsNullOrEmpty(initialDescription))
+            {
+                textFieldInfo = TextFieldInfo.Empty(parameter?.WorkspaceId ?? defaultWorkspace.Id);
+            }
+            else 
+            {
+                textFieldInfo = TextFieldInfo.WithDescription(parameter?.WorkspaceId ?? defaultWorkspace.Id, initialDescription);
+            }
 
             await setBillableValues(textFieldInfo.ProjectId);
+            uiSubject.OnNext(textFieldInfo);
 
             hasAnyTags = (await dataSource.Tags.GetAll()).Any();
             hasAnyProjects = (await dataSource.Projects.GetAll()).Any();
@@ -582,7 +592,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task done()
         {
-            intentDonationService.DonateStartTimeEntry(this, defaultWorkspace.Name);
             await interactorFactory.CreateTimeEntry(this).Execute();
             await navigationService.Close(this);
         }
