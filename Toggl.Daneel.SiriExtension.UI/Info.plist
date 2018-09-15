@@ -27,6 +27,7 @@
 			<key>IntentsSupported</key>
 			<array>
 				<string>StopTimerIntent</string>
+				<string>StartTimerIntent</string>
 			</array>
 		</dict>
 		<key>NSExtensionMainStoryboard</key>

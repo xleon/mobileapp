@@ -5,6 +5,7 @@ using Intents;
 using IntentsUI;
 using UIKit;
 using CoreFoundation;
+using CoreAnimation;
 using Toggl.Daneel.Intents;
 
 namespace Toggl.Daneel.SiriExtension.UI
@@ -24,35 +25,58 @@ namespace Toggl.Daneel.SiriExtension.UI
                  INUIHostedViewContext context,
                  INUIHostedViewControllingConfigureViewHandler completion)
         {
-
-            var intent = interaction.Intent as StopTimerIntent;
-            if (intent is null)
+            switch (interaction.Intent)
             {
-                completion(false, new NSSet<INParameter>(), CGSize.Empty);
-            }
+                case StartTimerIntent startTimerIntent:
+                    var desiredSize = CGSize.Empty;
 
-            var desiredSize = CGSize.Empty;
-                      
-            if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Success)
-            {
-                Console.WriteLine("Success");
-                var response = interaction.IntentResponse as StopTimerIntentResponse;
-                if (!(response is null))
-                {
-                    showStopResponse(response);
-                    desiredSize = new CGSize(300, 60);
-                }
-            }
+                    if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Success)
+                    {
+                        showStartTimerSuccess(startTimerIntent.EntryDescription);
+                        desiredSize = new CGSize(200, 60);
+                    }
 
-            completion(true, parameters, new CGSize(300, 60));
+                    completion(true, parameters, desiredSize);
+                    break;
+                case StopTimerIntent _:
+                    desiredSize = CGSize.Empty;
+
+                    if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Success)
+                    {
+                        var response = interaction.IntentResponse as StopTimerIntentResponse;
+                        if (!(response is null))
+                        {
+                            showStopResponse(response);
+                            desiredSize = new CGSize(300, 60);
+                        }
+                    }
+                    completion(true, parameters, desiredSize);
+                    break;
+                default:
+                    completion(false, new NSSet<INParameter>(), CGSize.Empty);
+                    break;
+            }
+        }
+
+        private void showStartTimerSuccess(string description)
+        {
+            descriptionLabel.Text = string.IsNullOrEmpty(description) ? "No Description" : description;
+            timeLabel.Text = "";
+            timeFrameLabel.Text = "";
+
+            var start = DateTimeOffset.Now;
+            var displayLink = CADisplayLink.Create(() => {
+                var passed = DateTimeOffset.Now - start;
+                timeLabel.Text = secondsToString(passed.Seconds);
+            });
+            displayLink.AddToRunLoop(NSRunLoop.Current, NSRunLoopMode.Default);
         }
 
         private void showStopResponse(StopTimerIntentResponse response)
         {
             descriptionLabel.Text = response.EntryDescription;
 
-            var timeSpan = TimeSpan.FromSeconds(response.EntryDuration.DoubleValue);
-            timeLabel.Text = timeSpan.ToString(@"hh\:mm\:ss");
+            timeLabel.Text = secondsToString(response.EntryDuration.DoubleValue);
 
             var startTime = DateTimeOffset.FromUnixTimeSeconds(response.EntryStart.LongValue).ToLocalTime();
             var endTime = DateTimeOffset.FromUnixTimeSeconds(response.EntryStart.LongValue + response.EntryDuration.LongValue).ToLocalTime();
@@ -65,6 +89,12 @@ namespace Toggl.Daneel.SiriExtension.UI
         public void Configure(INInteraction interaction, INUIHostedViewContext context, Action<CGSize> completion)
         {
             throw new NotImplementedException();
+        }
+
+        private string secondsToString(Double seconds)
+        {
+            var timeSpan = TimeSpan.FromSeconds(seconds);
+            return timeSpan.ToString(@"hh\:mm\:ss");
         }
     }
 }

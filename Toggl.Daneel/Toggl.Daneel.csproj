@@ -620,7 +620,7 @@
   <ItemGroup>
     <Compile Include="Binding\DatePickerDateTimeOffsetTargetBinding.cs" />
     <Compile Include="Extensions\Binders\ReactiveTableViewBinder.cs" />
-      <Compile Include="Extensions\IntentPeriod.cs"/>
+    <Compile Include="Extensions\IntentPeriod.cs" />
     <Compile Include="Extensions\SectionedIndexExtensions.cs" />
     <Compile Include="Extensions\Reactive\NSConstraintExtensions.cs" />
     <Compile Include="Extensions\Reactive\UIApplicationExtensions.cs" />
@@ -1026,13 +1026,9 @@
     </Compile>
     <Compile Include="Extensions\Reactive\UIControlExtensions.cs" />
     <Compile Include="Binding\LayoutConstraintActiveTargetBinding.cs" />
-<<<<<<< HEAD
-    <Compile Include="Extensions\UIKitRxExtensions\FadeViewRxExtensions.cs" />
     <Compile Include="Services\PrivateSharedStorageService.cs" />
-=======
     <Compile Include="Extensions\Reactive\FadeViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\NSObjectExtensions.cs" />
->>>>>>> develop
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
