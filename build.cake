@@ -260,15 +260,13 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
     };
 }
 
-private TemporaryFileTransformation GetIosExtensionInfoConfigurationTransformation()
+private TemporaryFileTransformation GetIosSiriExtensionInfoConfigurationTransformation()
 {
     const string path = "Toggl.Daneel.SiriExtension/Info.plist";
     const string bundleIdToReplace = "com.toggl.daneel.debug.SiriExtension";
     const string appNameToReplace = "Siri Extension Development";
 
     var commitCount = GetCommitCount();
-    var reversedClientId = EnvironmentVariable("TOGGL_REVERSED_CLIENT_ID");
-    var facebookAppId = EnvironmentVariable("TOGGL_FACEBOOK_APP_ID");
 
     var bundleId = bundleIdToReplace;
     var appName = appNameToReplace;
@@ -282,6 +280,41 @@ private TemporaryFileTransformation GetIosExtensionInfoConfigurationTransformati
     {
         bundleId = "com.toggl.daneel.SiriExtension";
         appName = "Siri Extension";
+    }
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    {
+        Path = path,
+        Original = file,
+        Temporary = file.Replace("IOS_BUNDLE_VERSION", commitCount)
+                        .Replace(bundleIdToReplace, bundleId)
+                        .Replace(appNameToReplace, appName)
+    };
+}
+
+private TemporaryFileTransformation GetIosSiriUIExtensionInfoConfigurationTransformation()
+{
+    const string path = "Toggl.Daneel.SiriExtension.UI/Info.plist";
+    const string bundleIdToReplace = "com.toggl.daneel.debug.Toggl-Daneel-SiriExtension-UI";
+    const string appNameToReplace = "Toggl.Daneel.SiriExtension.UI";
+
+    var commitCount = GetCommitCount();
+
+    var bundleId = bundleIdToReplace;
+    var appName = appNameToReplace;
+
+    if (target == "Build.Release.iOS.AdHoc")
+    {
+        bundleId = "com.toggl.daneel.adhoc.SiriUIExtension";
+        appName = "Siri UI Extension Development";
+    }
+    else if (target == "Build.Release.iOS.AppStore")
+    {
+        bundleId = "com.toggl.daneel.SiriUIExtension";
+        appName = "Siri UI Extension";
     }
 
     var filePath = GetFiles(path).Single();
@@ -447,7 +480,8 @@ private TemporaryFileTransformation GetIntegrationTestsConfigurationTransformati
 var transformations = new List<TemporaryFileTransformation>
 {
     GetIosInfoConfigurationTransformation(),
-    GetIosExtensionInfoConfigurationTransformation(),
+    GetIosSiriExtensionInfoConfigurationTransformation(),
+    GetIosSiriUIExtensionInfoConfigurationTransformation(),
     GetIosCrashConfigurationTransformation(),
     GetIntegrationTestsConfigurationTransformation(),
     GetIosAnalyticsServicesConfigurationTransformation(),
@@ -502,6 +536,7 @@ Task("Clean")
             CleanDirectory("./bin");
             CleanDirectory("./Toggl.Daneel/obj");
             CleanDirectory("./Toggl.Daneel.SiriExtension/obj");
+            CleanDirectory("./Toggl.Daneel.SiriExtension.UI/obj");
             CleanDirectory("./Toggl.Daneel.Tests/obj");
             CleanDirectory("./Toggl.Daneel.Tests.UI/obj");
             CleanDirectory("./Toggl.Giskard/obj");
