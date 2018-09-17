@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Services;
@@ -63,7 +64,7 @@ namespace Toggl.Foundation.MvvmCross.Services
         {
             if (error is NoWorkspaceException)
             {
-                navigationService.Navigate<NoWorkspaceViewModel>();
+                accessRestrictionStorage.SetNoWorkspaceStateReached(true);
                 return true;
             }
 

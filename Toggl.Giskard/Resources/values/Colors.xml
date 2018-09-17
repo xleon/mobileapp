@@ -21,6 +21,7 @@
     <color name="runningEntryDescription">#000000</color>
     <color name="darkLabel">#000000</color>
     <color name="buttonBlue">#328FFF</color>
+    <color name="buttonBlueDisabled">#7a328fff</color>
     <color name="runningEntryTimer">#328FFF</color>
     <color name="calendarSelected">#328FFF</color>
     <color name="editTimeEntryText">#000000</color>

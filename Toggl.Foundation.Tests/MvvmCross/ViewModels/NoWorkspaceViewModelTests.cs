@@ -18,7 +18,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public abstract class NoWorkspaceViewModelTest : BaseViewModelTests<NoWorkspaceViewModel>
         {
             protected override NoWorkspaceViewModel CreateViewModel()
-                => new NoWorkspaceViewModel(DataSource, InteractorFactory, NavigationService);
+                => new NoWorkspaceViewModel(DataSource, InteractorFactory, NavigationService, AccessRestrictionStorage);
         }
 
         public sealed class TheConstructor : NoWorkspaceViewModelTest
@@ -27,15 +27,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
+                bool useAccessRestrictionStorage,
                 bool useInteractorFactory,
                 bool useNavigationService)
             {
                 var dataSource = useDataSource ? DataSource : null;
+                var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new NoWorkspaceViewModel(dataSource, interactorFactory, navigationService);
+                    () => new NoWorkspaceViewModel(dataSource, interactorFactory, navigationService, accessRestrictionStorage);
 
                 tryingToConstructWithEmptyParameters.Should().Throw<ArgumentNullException>();
             }
@@ -55,6 +57,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
+            public async Task ResetsNoWorkspaceStateWhenAnotherWorkspaceIsFetched()
+            {
+                var workspace = Substitute.For<IThreadSafeWorkspace>();
+                DataSource.Workspaces.GetAll().Returns(Observable.Return(new List<IThreadSafeWorkspace>() { workspace }));
+
+                await ViewModel.TryAgain();
+
+                AccessRestrictionStorage.Received().SetNoWorkspaceStateReached(Arg.Is(false));
+            }
+
+            [Fact, LogIfTooSlow]
             public async Task DoesNothingWhenNoWorkspacesAreFetched()
             {
                 DataSource.Workspaces.GetAll().Returns(Observable.Return(new List<IThreadSafeWorkspace>()));
@@ -62,6 +75,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.TryAgain();
 
                 await NavigationService.DidNotReceive().Close(Arg.Is(ViewModel));
+                AccessRestrictionStorage.DidNotReceive().SetNoWorkspaceStateReached(Arg.Any<bool>());
             }
 
             [Fact, LogIfTooSlow]
@@ -107,6 +121,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.CreateWorkspaceWithDefaultName();
 
                 await NavigationService.Received().Close(Arg.Is(ViewModel));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task ResetsNoWorkspaceStateWhenAfterNewWorkspaceIsCreated()
+            {
+                var workspace = Substitute.For<IThreadSafeWorkspace>();
+                InteractorFactory.CreateDefaultWorkspace().Execute().Returns(Observable.Return(Unit.Default));
+                DataSource.Workspaces.GetAll().Returns(Observable.Return(new List<IThreadSafeWorkspace> { workspace }));
+
+                await ViewModel.CreateWorkspaceWithDefaultName();
+
+                AccessRestrictionStorage.Received().SetNoWorkspaceStateReached(Arg.Is(false));
             }
 
             [Fact, LogIfTooSlow]

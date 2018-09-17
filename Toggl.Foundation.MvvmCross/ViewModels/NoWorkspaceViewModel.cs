@@ -9,6 +9,7 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
+using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -16,6 +17,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     public sealed class NoWorkspaceViewModel : MvxViewModel
     {
         private readonly ITogglDataSource dataSource;
+        private readonly IAccessRestrictionStorage accessRestrictionStorage;
         private readonly IInteractorFactory interactorFactory;
         private readonly IMvxNavigationService navigationService;
         private readonly Subject<bool> isLoading = new Subject<bool>();
@@ -25,13 +27,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public NoWorkspaceViewModel(
             ITogglDataSource dataSource,
             IInteractorFactory interactorFactory,
-            IMvxNavigationService navigationService)
+            IMvxNavigationService navigationService,
+            IAccessRestrictionStorage accessRestrictionStorage)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.dataSource = dataSource;
+            this.accessRestrictionStorage = accessRestrictionStorage;
             this.navigationService = navigationService;
             this.interactorFactory = interactorFactory;
         }
@@ -42,15 +47,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             dataSource.CreateNewSyncManager();
 
-            var workspaces = await dataSource
+            var anyWorkspaceIsAvailable = await dataSource
                 .SyncManager
                 .ForceFullSync()
                 .Where(state => state == SyncState.Sleep)
-                .SelectMany(dataSource.Workspaces.GetAll());
+                .SelectMany(dataSource.Workspaces.GetAll())
+                .Any(workspaces => workspaces.Any());
 
             isLoading.OnNext(false);
 
-            if (workspaces.Any())
+            if (anyWorkspaceIsAvailable)
             {
                 close();
             }
@@ -74,6 +80,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void close()
         {
+            accessRestrictionStorage.SetNoWorkspaceStateReached(false);
             navigationService.Close(this);
         }
     }

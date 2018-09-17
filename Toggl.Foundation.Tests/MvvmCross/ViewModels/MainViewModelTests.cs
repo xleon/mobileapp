@@ -49,6 +49,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     NavigationService,
                     RemoteConfigService,
                     SuggestionProviderContainer,
+                    AccessRestrictionStorage,
                     SchedulerProvider);
 
                 vm.Prepare();
@@ -86,6 +87,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useNavigationService,
                 bool useRemoteConfigService,
                 bool useSuggestionProviderContainer,
+                bool useAccessRestrictionStorage,
                 bool useSchedulerProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
@@ -99,6 +101,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
                 var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
+                var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainViewModel(
@@ -112,6 +115,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         navigationService,
                         remoteConfigService,
                         suggestionProviderContainer,
+                        accessRestrictionStorage,
                         schedulerProvider);
 
                 tryingToConstructWithEmptyParameters
@@ -137,6 +141,26 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.ViewAppearing();
 
                 ViewModel.IsInManualMode.Should().Be(isEnabled);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask NavigatesToNoWorkspaceViewModelWhenNoWorkspaceStateIsSet()
+            {
+                AccessRestrictionStorage.HasNoWorkspace().Returns(true);
+
+                ViewModel.ViewAppearing();
+
+                await NavigationService.Received().Navigate<NoWorkspaceViewModel>();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask DoesNotNavigateToNoWorkspaceViewModelWhenNoWorkspaceStateIsNotSet()
+            {
+                AccessRestrictionStorage.HasNoWorkspace().Returns(false);
+
+                ViewModel.ViewAppearing();
+
+                await NavigationService.DidNotReceive().Navigate<NoWorkspaceViewModel>();
             }
         }
 
