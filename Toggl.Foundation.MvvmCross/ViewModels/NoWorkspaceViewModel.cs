@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
 
@@ -14,21 +15,25 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class NoWorkspaceViewModel : MvxViewModel
     {
-        private readonly IMvxNavigationService navigationService;
         private readonly ITogglDataSource dataSource;
+        private readonly IInteractorFactory interactorFactory;
+        private readonly IMvxNavigationService navigationService;
         private readonly Subject<bool> isLoading = new Subject<bool>();
 
         public IObservable<bool> IsLoading => isLoading.AsObservable();
 
         public NoWorkspaceViewModel(
-            IMvxNavigationService navigationService,
-            ITogglDataSource dataSource)
+            ITogglDataSource dataSource,
+            IInteractorFactory interactorFactory,
+            IMvxNavigationService navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
+            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
-            this.navigationService = navigationService;
             this.dataSource = dataSource;
+            this.navigationService = navigationService;
+            this.interactorFactory = interactorFactory;
         }
 
         public async Task TryAgain()
@@ -57,13 +62,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             dataSource.CreateNewSyncManager();
 
-            await dataSource
-                .User
-                .Current
-                .FirstAsync()
-                .Select(user => $"{user.Fullname}'s Workspace")
-                .SelectMany(dataSource.Workspaces.Create)
-                .SelectMany(workspace => dataSource.User.UpdateWorkspace(workspace.Id));
+            await interactorFactory.CreateDefaultWorkspace().Execute();
 
             await dataSource
                 .SyncManager

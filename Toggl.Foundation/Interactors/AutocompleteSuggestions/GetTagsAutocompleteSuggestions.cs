@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Interactors.AutocompleteSuggestions
 {
     internal sealed class GetTagsAutocompleteSuggestions : IInteractor<IObservable<IEnumerable<AutocompleteSuggestion>>>
     {
-        private readonly ITagsSource dataSource;
+        private readonly IDataSource<IThreadSafeTag, IDatabaseTag> dataSource;
 
         private readonly IEnumerable<string> wordsToQuery;
 
-        public GetTagsAutocompleteSuggestions(ITagsSource dataSource, IEnumerable<string> wordsToQuery)
+        public GetTagsAutocompleteSuggestions(IDataSource<IThreadSafeTag, IDatabaseTag> dataSource, IEnumerable<string> wordsToQuery)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(wordsToQuery, nameof(wordsToQuery));

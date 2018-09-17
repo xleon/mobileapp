@@ -461,8 +461,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 {
                     await ViewModel.CreateCommand.ExecuteAsync();
 
-                    await DataSource.Tags.Received()
-                        .Create(Arg.Is(currentQuery), Arg.Any<long>());
+                    await InteractorFactory
+                        .Received()
+                        .CreateTag(Arg.Is(currentQuery), Arg.Any<long>())
+                        .Execute();
                 }
 
                 [Fact, LogIfTooSlow]
@@ -483,8 +485,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     await ViewModel.CreateCommand.ExecuteAsync();
 
-                    await DataSource.Tags.Received()
-                        .Create(Arg.Any<string>(), Arg.Is(workspaceId));
+                    await InteractorFactory
+                        .Received()
+                        .CreateTag(Arg.Any<string>(), Arg.Is(workspaceId))
+                        .Execute();
                 }
 
                 [Fact, LogIfTooSlow]
@@ -500,19 +504,25 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     await ViewModel.CreateCommand.ExecuteAsync();
 
-                    await DataSource.Tags.Received()
-                        .Create(Arg.Any<string>(), Arg.Is(workspaceId));
+                    await InteractorFactory
+                        .Received()
+                        .CreateTag(Arg.Any<string>(), Arg.Is(workspaceId))
+                        .Execute();
                 }
 
                 [Fact, LogIfTooSlow]
                 public async Task SelectsTheCreatedTag()
                 {
-                    DataSource.Tags.Create(Arg.Any<string>(), Arg.Any<long>())
+                    InteractorFactory
+                        .CreateTag(Arg.Any<string>(), Arg.Any<long>())
                         .Returns(callInfo =>
                         {
+                            var tagName = callInfo.Arg<string>();
                             var tag = Substitute.For<IThreadSafeTag>();
-                            tag.Name.Returns(callInfo.Arg<string>());
-                            return Observable.Return(tag);
+                            tag.Name.Returns(tagName);
+                            var interactor = Substitute.For<IInteractor<IObservable<IThreadSafeTag>>>();
+                            interactor.Execute().Returns(Observable.Return(tag));
+                            return interactor;
                         });
 
                     await ViewModel.CreateCommand.ExecuteAsync();
@@ -2039,8 +2049,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task ReturnsFalseAfterCreatingATag(string query)
             {
                 var tag = Substitute.For<IThreadSafeTag>();
-                DataSource
-                    .Tags.Create(Arg.Any<string>(), Arg.Any<long>())
+                InteractorFactory.CreateTag(Arg.Any<string>(), Arg.Any<long>())
+                    .Execute()
                     .Returns(Observable.Return(tag));
                 ViewModel.Prepare(DefaultParameter);
                 await ViewModel.Initialize();

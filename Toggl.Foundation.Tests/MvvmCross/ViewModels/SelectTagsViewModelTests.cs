@@ -192,10 +192,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                                      })
                                      .ToList();
 
-                var tagsSource = Substitute.For<ITagsSource>();
-                tagsSource.GetAll().Returns(Observable.Return(tags));
-
-                DataSource.Tags.Returns(tagsSource);
+                DataSource.Tags.GetAll().Returns(Observable.Return(tags));
             }
 
             [Fact, LogIfTooSlow]
@@ -243,17 +240,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ReturnsFalseIfTagIsCreated()
             {
-                var tagsSource = Substitute.For<ITagsSource>();
-                tagsSource.GetAll().Returns(Observable.Return(new List<IThreadSafeTag>()));
+                DataSource.Tags.GetAll().Returns(Observable.Return(new List<IThreadSafeTag>()));
 
                 var newTag = Substitute.For<IThreadSafeTag>();
                 newTag.Id.Returns(12345);
 
-                tagsSource
-                    .Create(Arg.Any<string>(), Arg.Any<long>())
+                InteractorFactory
+                    .CreateTag(Arg.Any<string>(), Arg.Any<long>())
+                    .Execute()
                     .Returns(Observable.Return(newTag));
-
-                DataSource.Tags.Returns(tagsSource);
 
                 ViewModel.Prepare((new long[] { }, workspaceId));
                 await ViewModel.Initialize();
@@ -474,9 +469,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var createdTag = Substitute.For<IThreadSafeTag>();
                 createdTag.Id.Returns(tagId);
                 createdTag.WorkspaceId.Returns(workspaceId);
-                DataSource
-                    .Tags
-                    .Create(Arg.Any<string>(), Arg.Any<long>())
+                InteractorFactory
+                    .CreateTag(Arg.Any<string>(), Arg.Any<long>())
+                    .Execute()
                     .Returns(Observable.Return(createdTag));
 
                 var observable = Observable
@@ -496,9 +491,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.CreateTagCommand.ExecuteAsync(name).Wait();
 
-                DataSource.Tags
+                InteractorFactory
+                    .CreateTag(Arg.Is(name), Arg.Any<long>())
                     .Received()
-                    .Create(Arg.Is(name), Arg.Any<long>())
+                    .Execute()
                     .Wait();
             }
 
@@ -511,10 +507,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.CreateTagCommand.ExecuteAsync(tagName).Wait();
 
-                DataSource
-                    .Tags
+                InteractorFactory
+                    .CreateTag(Arg.Any<string>(), Arg.Is(workspaceId))
                     .Received()
-                    .Create(Arg.Any<string>(), Arg.Is(workspaceId))
+                    .Execute()
                     .Wait();
             }
 
@@ -541,7 +537,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Returns(Observable.Return(initialTags));
                 var createdTag = CreateTagSubstitute(0, tagName);
                 createdTag.WorkspaceId.Returns(workspaceId);
-                DataSource.Tags.Create(Arg.Is(tagName), Arg.Any<long>())
+                InteractorFactory.CreateTag(Arg.Is(tagName), Arg.Any<long>())
+                    .Execute()
                     .Returns(Observable.Return(createdTag));
                 ViewModel.Prepare((new long[0], workspaceId));
                 ViewModel.Initialize().Wait();
@@ -589,10 +586,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.CreateTagCommand.ExecuteAsync(text);
 
-                await DataSource
-                    .Tags
+                await InteractorFactory
+                    .CreateTag(Arg.Is(expectedName), Arg.Any<long>())
                     .Received()
-                    .Create(Arg.Is(expectedName), Arg.Any<long>());
+                    .Execute();
             }
         }
 

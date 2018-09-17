@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive;
 using Toggl.Foundation.Autocomplete.Suggestions;
+using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Suggestions;
@@ -32,6 +33,8 @@ namespace Toggl.Foundation.Interactors
 
         IInteractor<IObservable<bool>> IsBillableAvailableForProject(long projectId);
 
+        IInteractor<IObservable<IThreadSafeProject>> CreateProject(CreateProjectDTO dto);
+
         #endregion
 
         #region Workspaces
@@ -49,6 +52,8 @@ namespace Toggl.Foundation.Interactors
         IInteractor<IObservable<bool>> AreCustomColorsEnabledForWorkspace(long workspaceId);
 
         IInteractor<IObservable<bool>> IsBillableAvailableForWorkspace(long workspaceId);
+
+        IInteractor<IObservable<Unit>> CreateDefaultWorkspace();
 
         #endregion
 
@@ -75,17 +80,37 @@ namespace Toggl.Foundation.Interactors
 
         IInteractor<IObservable<IThreadSafePreferences>> GetPreferences();
 
+        IInteractor<IObservable<IThreadSafePreferences>> UpdatePreferences(EditPreferencesDTO dto);
+
         #endregion
 
         #region User
 
         IInteractor<IObservable<byte[]>> GetUserAvatar(string url);
 
+        IInteractor<IObservable<IThreadSafeUser>> UpdateUser(EditUserDTO dto);
+
+        IInteractor<IObservable<IThreadSafeUser>> UpdateDefaultWorkspace(long selectedWorkspaceId);
+
         #endregion
 
         #region Settings
 
         IInteractor<IObservable<Unit>> SendFeedback(string message);
+
+        #endregion
+
+        #region Clients
+
+        IInteractor<IObservable<IThreadSafeClient>> CreateClient(string clientName, long workspaceId);
+
+        IInteractor<IObservable<IEnumerable<IThreadSafeClient>>> GetAllClientsInWorkspace(long workspaceId);
+
+        #endregion
+
+        #region Tags
+
+        IInteractor<IObservable<IThreadSafeTag>> CreateTag(string tagName, long workspaceId);
 
         #endregion
     }

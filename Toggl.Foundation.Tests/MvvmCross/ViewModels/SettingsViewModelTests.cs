@@ -404,7 +404,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.PickDefaultWorkspace();
 
-                await DataSource.User.Received().UpdateWorkspace(Arg.Is(workspaceId));
+                await InteractorFactory
+                    .Received()
+                    .UpdateDefaultWorkspace(Arg.Is(workspaceId))
+                    .Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -522,10 +525,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.SelectDateFormat();
 
-                await DataSource
-                    .Preferences
+                await InteractorFactory
                     .Received()
-                    .Update(Arg.Is<EditPreferencesDTO>(dto => dto.DateFormat.Equals(New<DateFormat>.Value(newDateFormat))));
+                    .UpdatePreferences(Arg.Is<EditPreferencesDTO>(dto => dto.DateFormat.Equals(New<DateFormat>.Value(newDateFormat))))
+                    .Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -539,15 +542,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 NavigationService
                     .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(Arg.Any<DateFormat>())
                     .Returns(Task.FromResult(newDateFormat));
-                DataSource
-                    .Preferences
-                    .Update(Arg.Any<EditPreferencesDTO>())
+                InteractorFactory.UpdatePreferences(Arg.Any<EditPreferencesDTO>())
+                    .Execute()
                     .Returns(Observable.Return(newPreferences));
 
                 await ViewModel.SelectDateFormat();
 
-                await DataSource.Preferences.Received()
-                    .Update(Arg.Is<EditPreferencesDTO>(dto => dto.DateFormat.ValueOr(oldDateFormat) == newDateFormat));
+                await InteractorFactory
+                    .Received()
+                    .UpdatePreferences(Arg.Is<EditPreferencesDTO>(dto => dto.DateFormat.ValueOr(oldDateFormat) == newDateFormat))
+                    .Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -579,8 +583,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.ToggleUseTwentyFourHourClock();
 
-                await DataSource.Preferences.Received().Update(Arg.Is<EditPreferencesDTO>(
-                    dto => dto.TimeOfDayFormat.ValueOr(default(TimeFormat)).IsTwentyFourHoursFormat != originalValue));
+                await InteractorFactory
+                    .Received()
+                    .UpdatePreferences(Arg.Is<EditPreferencesDTO>(
+                        dto => dto.TimeOfDayFormat.ValueOr(default(TimeFormat)).IsTwentyFourHoursFormat != originalValue)
+                    ).Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -589,7 +596,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var preferences = new MockPreferences();
                 PreferencesSubject.OnNext(preferences);
                 var observable = Observable.Return(preferences);
-                DataSource.Preferences.Update(Arg.Any<EditPreferencesDTO>()).Returns(observable);
+                InteractorFactory.UpdatePreferences(Arg.Any<EditPreferencesDTO>()).Execute().Returns(observable);
 
                 await ViewModel.ToggleUseTwentyFourHourClock();
 
@@ -626,10 +633,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.SelectDurationFormat();
 
-                await DataSource
-                    .Preferences
+                await InteractorFactory
                     .Received()
-                    .Update(Arg.Is<EditPreferencesDTO>(dto => dto.DurationFormat.Equals(New<DurationFormat>.Value(newDurationFormat))));
+                    .UpdatePreferences(Arg.Is<EditPreferencesDTO>(dto => dto.DurationFormat.Equals(New<DurationFormat>.Value(newDurationFormat))))
+                    .Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -661,15 +668,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 NavigationService
                     .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(Arg.Any<DurationFormat>())
                     .Returns(Task.FromResult(newDurationFormat));
-                DataSource
-                    .Preferences
-                    .Update(Arg.Any<EditPreferencesDTO>())
+                InteractorFactory
+                    .UpdatePreferences(Arg.Any<EditPreferencesDTO>())
+                    .Execute()
                     .Returns(Observable.Return(newPreferences));
 
                 await ViewModel.SelectDurationFormat();
 
-                await DataSource.Preferences.Received()
-                    .Update(Arg.Is<EditPreferencesDTO>(dto => dto.DurationFormat.ValueOr(oldDurationFormat) == newDurationFormat));
+                await InteractorFactory
+                    .UpdatePreferences(Arg.Is<EditPreferencesDTO>(dto => dto.DurationFormat.ValueOr(oldDurationFormat) == newDurationFormat))
+                    .Received()
+                    .Execute();
             }
         }
 
@@ -704,10 +713,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.SelectBeginningOfWeek();
 
-                await DataSource
-                    .User
+                await InteractorFactory
                     .Received()
-                    .Update(Arg.Is<EditUserDTO>(dto => dto.BeginningOfWeek == newBeginningOfWeek));
+                    .UpdateUser(Arg.Is<EditUserDTO>(dto => dto.BeginningOfWeek == newBeginningOfWeek))
+                    .Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -739,16 +748,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 NavigationService
                     .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(Arg.Any<BeginningOfWeek>())
                     .Returns(Task.FromResult(newBeginningOfWeek));
-                DataSource
-                    .User
-                    .Update(Arg.Any<EditUserDTO>())
+                InteractorFactory
+                    .UpdateUser(Arg.Any<EditUserDTO>())
+                    .Execute()
                     .Returns(Observable.Return(newUser));
 
                 await ViewModel.SelectBeginningOfWeek();
 
-                await DataSource.User.Received().Update(
+                await InteractorFactory.UpdateUser(
                     Arg.Is<EditUserDTO>(dto => dto.BeginningOfWeek == newBeginningOfWeek
-                ));
+                )).Received().Execute();
             }
         }
 

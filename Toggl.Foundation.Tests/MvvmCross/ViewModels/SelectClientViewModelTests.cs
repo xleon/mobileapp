@@ -24,7 +24,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 = SelectClientParameters.WithIds(10, null);
 
             protected override SelectClientViewModel CreateViewModel()
-               => new SelectClientViewModel(DataSource, NavigationService);
+               => new SelectClientViewModel(InteractorFactory, NavigationService);
 
             protected List<IThreadSafeClient> GenerateClientList() =>
                 Enumerable.Range(1, 10).Select(i =>
@@ -40,13 +40,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         {
             [Theory, LogIfTooSlow]
             [ConstructorData]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useNavigationService)
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useInteractorFactory, bool useNavigationService)
             {
-                var dataSource = useDataSource ? DataSource : null;
+                var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SelectClientViewModel(dataSource, navigationService);
+                    () => new SelectClientViewModel(interactorFactory, navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -59,7 +59,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task AddsAllClientsToTheListOfSuggestions()
             {
                 var clients = GenerateClientList();
-                DataSource.Clients.GetAllInWorkspace(Arg.Any<long>())
+                InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
+                    .Execute()
                     .Returns(Observable.Return(clients));
                 ViewModel.Prepare(Parameters);
 
@@ -72,7 +73,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task AddsANoClientSuggestion()
             {
                 var clients = GenerateClientList();
-                DataSource.Clients.GetAllInWorkspace(Arg.Any<long>())
+                InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
+                    .Execute()
                     .Returns(Observable.Return(clients));
                 ViewModel.Prepare(Parameters);
 
@@ -85,7 +87,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task SetsNoClientAsSelectedIfTheParameterDoesNotSpecifyTheCurrentClient()
             {
                 var clients = GenerateClientList();
-                DataSource.Clients.GetAllInWorkspace(Arg.Any<long>())
+                InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
+                    .Execute()
                     .Returns(Observable.Return(clients));
                 ViewModel.Prepare(Parameters);
 
@@ -108,7 +111,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var parameter = SelectClientParameters.WithIds(10, id);
                 var clients = GenerateClientList();
-                DataSource.Clients.GetAllInWorkspace(Arg.Any<long>())
+                InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
+                    .Execute()
                     .Returns(Observable.Return(clients));
                 ViewModel.Prepare(parameter);
 
@@ -151,7 +155,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public TheSelectClientCommand()
             {
                 var clients = GenerateClientList();
-                DataSource.Clients.GetAllInWorkspace(Arg.Any<long>())
+                InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
+                    .Execute()
                     .Returns(Observable.Return(clients));
                 ViewModel.Prepare(Parameters);
             }
@@ -201,7 +206,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task FiltersTheSuggestionsWhenItChanges()
             {
                 var clients = GenerateClientList();
-                DataSource.Clients.GetAllInWorkspace(Arg.Any<long>())
+                InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
+                    .Execute()
                     .Returns(Observable.Return(clients));
                 ViewModel.Prepare(Parameters);
                 await ViewModel.Initialize();
@@ -220,8 +226,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var client = Substitute.For<IThreadSafeClient>();
                 client.Name.Returns(name);
-                DataSource.Clients
-                    .GetAllInWorkspace(Arg.Any<long>())
+                InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
+                    .Execute()
                     .Returns(Observable.Return(new List<IThreadSafeClient> { client }));
                 ViewModel.Prepare(Parameters);
             }
@@ -279,7 +285,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.CreateClientCommand.ExecuteAsync();
 
-                await DataSource.Clients.Received().Create(Arg.Is(ViewModel.Text), Arg.Is(workspaceId));
+                await InteractorFactory
+                    .Received()
+                    .CreateClient(Arg.Is(ViewModel.Text), Arg.Is(workspaceId))
+                    .Execute();
             }
 
             [Theory, LogIfTooSlow]
@@ -295,7 +304,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.CreateClientCommand.ExecuteAsync();
 
-                await DataSource.Clients.Received().Create(Arg.Is(trimmed), Arg.Any<long>());
+                await InteractorFactory
+                    .Received()
+                    .CreateClient(Arg.Is(trimmed), Arg.Any<long>())
+                    .Execute();
             }
 
             [Theory, LogIfTooSlow]
@@ -326,7 +338,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.CreateClientCommand.ExecuteAsync();
 
-                await DataSource.Clients.DidNotReceiveWithAnyArgs().Create(null, 0);
+                await InteractorFactory.DidNotReceiveWithAnyArgs().CreateClient(null, 0).Execute();
             }
         }
     }

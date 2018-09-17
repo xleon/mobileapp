@@ -6,6 +6,7 @@ using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Multivac;
@@ -18,10 +19,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class SelectClientViewModel : MvxViewModel<SelectClientParameters, long?>
     {
-
-        private readonly ITogglDataSource dataSource;
+        private readonly IInteractorFactory interactorFactory;
         private readonly IMvxNavigationService navigationService;
-
         private long workspaceId;
         private long selectedClientId;
         private SelectableClientViewModel noClient;
@@ -49,12 +48,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public MvxObservableCollection<SelectableClientViewModel> Suggestions { get; }
             = new MvxObservableCollection<SelectableClientViewModel>();
 
-        public SelectClientViewModel(ITogglDataSource dataSource, IMvxNavigationService navigationService)
+        public SelectClientViewModel(IInteractorFactory interactorFactory, IMvxNavigationService navigationService)
         {
-            Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
-            this.dataSource = dataSource;
+            this.interactorFactory = interactorFactory;
             this.navigationService = navigationService;
 
             CloseCommand = new MvxAsyncCommand(close);
@@ -73,7 +72,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             await base.Initialize();
 
-            allClients = await dataSource.Clients.GetAllInWorkspace(workspaceId);
+            allClients = await interactorFactory.GetAllClientsInWorkspace(workspaceId).Execute();
 
             Suggestions.Add(noClient);
             Suggestions.AddRange(allClients.Select(c => new SelectableClientViewModel(c.Name, c.Id == selectedClientId)));
@@ -106,7 +105,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             if (!SuggestCreation) return;
 
-            var client = await dataSource.Clients.Create(Text.Trim(), workspaceId);
+            var client = await interactorFactory.CreateClient(Text.Trim(), workspaceId).Execute();
             await navigationService.Close(this, client.Id);
         }
     }

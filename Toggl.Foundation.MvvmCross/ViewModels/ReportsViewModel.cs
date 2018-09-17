@@ -14,6 +14,7 @@ using PropertyChanged;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Extensions;
@@ -165,12 +166,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
-            var workspaces = dataSource.Workspaces;
-
-            WorkspacesObservable = Observable.Merge(
-                    workspaces.Created.SelectUnit(),
-                    workspaces.Updated.SelectUnit(),
-                    workspaces.Deleted.SelectUnit())
+            WorkspacesObservable = dataSource.Workspaces
+                .ItemsChanged()
                 .StartWith(Unit.Default)
                 .SelectMany(_ => dataSource.Workspaces.GetAll())
                 .DistinctUntilChanged()
