@@ -430,6 +430,10 @@
         <DependentUpon>MainActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="Startup\HandlerScheduler.cs" />
+    <Compile Include="Activities\ReportsActivity.ViewBinds.cs">
+      <DependentUpon>ReportsActivity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ListSelectionDialog.cs" />
     <Compile Include="Extensions\Reactive\ViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\TextViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\CompoundButtonExtensions.cs" />
@@ -824,6 +828,8 @@
     <AndroidResource Include="Resources\drawable\ic_icon_notrunning.xml" />
     <AndroidResource Include="Resources\layout\SendFeedbackActivity.axml" />
     <AndroidResource Include="Resources\menu\SendFeedbackMenu.xml" />
+    <AndroidResource Include="Resources\layout\ReportsActivityWorkspaceName.axml" />
+    <AndroidResource Include="Resources\drawable\workspace_white.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">

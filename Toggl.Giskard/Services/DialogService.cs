@@ -8,6 +8,9 @@ using MvvmCross;
 using MvvmCross.Platforms.Android;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Services;
+using System.Linq;
+using Toggl.Giskard.Views;
+using Toggl.Multivac.Extensions;
 using Object = Java.Lang.Object;
 
 namespace Toggl.Giskard.Services
@@ -24,11 +27,7 @@ namespace Toggl.Giskard.Services
                 {
                     var builder = new AlertDialog.Builder(activity, Resource.Style.TogglDialog)
                         .SetMessage(message)
-                        .SetPositiveButton(confirmButtonText, (s, e) =>
-                        {
-                            observer.OnNext(true);
-                            observer.OnCompleted();
-                        });
+                        .SetPositiveButton(confirmButtonText, (s, e) => observer.CompleteWith(true));
 
                     if (!string.IsNullOrWhiteSpace(title))
                     {
@@ -37,19 +36,11 @@ namespace Toggl.Giskard.Services
 
                     if (!string.IsNullOrEmpty(dismissButtonText))
                     {
-                        builder = builder.SetNegativeButton(dismissButtonText, (s, e) =>
-                        {
-                            observer.OnNext(false);
-                            observer.OnCompleted();
-                        });
+                        builder = builder.SetNegativeButton(dismissButtonText, (s, e) => observer.CompleteWith(false));
                     }
 
                     var dialog = builder.Create();
-                    dialog.CancelEvent += (s, e) =>
-                    {
-                        observer.OnNext(false);
-                        observer.OnCompleted();
-                    };
+                    dialog.CancelEvent += (s, e) => observer.CompleteWith(false);
 
                     dialog.Show();
                 });
@@ -58,10 +49,17 @@ namespace Toggl.Giskard.Services
             });
         }
 
-        public IObservable<T> Select<T>(string title, IEnumerable<(string ItemName, T Item)> options)
+        public IObservable<T> Select<T>(string title, IEnumerable<(string ItemName, T Item)> options, int initialSelectionIndex = 0)
             where T : class
         {
-            throw new NotImplementedException("This feature has not been implemented in Giskard yet.");
+            var activity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
+
+            return Observable.Create<T>(observer =>
+            {
+                var dialog = new ListSelectionDialog<T>(activity, title, options, initialSelectionIndex, observer.CompleteWith);
+                activity.RunOnUiThread(dialog.Show);
+                return Disposable.Empty;
+            });
         }
 
         public IObservable<Unit> Alert(string title, string message, string buttonTitle)

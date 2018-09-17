@@ -24,7 +24,9 @@
         <toggl.giskard.views.ReportsRecyclerView
             android:id="@+id/ReportsActivityRecyclerView"
             local:MvxBind="ViewModel .; ItemsSource Segments"
-            android:scrollbars="vertical"
+            android:scrollbars="none"
+            android:paddingBottom="64dp"
+            android:clipToPadding="false"
             local:MvxTemplateSelector="@string/ReportsTemplateSelector"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -50,4 +52,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical" />
     </android.support.v7.widget.Toolbar>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/SelectWorkspaceFAB"
+        local:elevation="4dp"
+        android:src="@drawable/workspace_white"
+        android:scaleType="center"
+        local:fabSize="mini"
+        local:backgroundTint="@color/playButtonGreen"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_gravity="bottom|right" />
 </android.support.design.widget.CoordinatorLayout>
