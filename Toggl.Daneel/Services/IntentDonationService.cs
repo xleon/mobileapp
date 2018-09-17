@@ -6,6 +6,7 @@ using Toggl.Foundation;
 using Toggl.Multivac.Models;
 using Toggl.Foundation.Services;
 using Toggl.Multivac.Models;
+using UIKit;
 
 namespace Toggl.Daneel.Services
 {
@@ -13,6 +14,11 @@ namespace Toggl.Daneel.Services
     {
         public void DonateStartTimeEntry(IWorkspace workspace, ITimeEntry timeEntry)
         {
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+            {
+                return;
+            }
+
             var intent = new StartTimerIntent();
             intent.Workspace = new INObject(workspace.Id.ToString(), workspace.Name);
             if (!string.IsNullOrEmpty(timeEntry.Description)) 
@@ -28,6 +34,11 @@ namespace Toggl.Daneel.Services
 
         public void DonateStopCurrentTimeEntry()
         {
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+            {
+                return;
+            }
+
             var intent = new StopTimerIntent();
             intent.SuggestedInvocationPhrase = "Stop timer";
 
@@ -37,6 +48,11 @@ namespace Toggl.Daneel.Services
 
         public void DonateShowReport(ReportPeriod period)
         {
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+            {
+                return;
+            }
+
             var intent = new ShowReportPeriodIntent();
             switch (period)
             {
@@ -72,6 +88,11 @@ namespace Toggl.Daneel.Services
 
         public void DonateShowReport()
         {
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+            {
+                return;
+            }
+
             var intent = new ShowReportIntent();
             var interaction = new INInteraction(intent, null);
             interaction.DonateInteraction(onCompletion);
@@ -79,6 +100,11 @@ namespace Toggl.Daneel.Services
 
         public void ClearAll()
         {
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+            {
+                return;
+            }
+
             INInteraction.DeleteAllInteractions(_ => { });
         }
 
