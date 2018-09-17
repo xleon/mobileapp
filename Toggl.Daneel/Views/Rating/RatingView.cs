@@ -6,9 +6,10 @@ using Foundation;
 using MvvmCross.Commands;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using ObjCRuntime;
+using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
-using static Toggl.Daneel.Extensions.UIKitRxExtensions;
 using static Toggl.Multivac.Extensions.CommonFunctions;
 
 namespace Toggl.Daneel
@@ -55,38 +56,38 @@ namespace Toggl.Daneel
 
         private void updateBindings()
         {
-            this.Bind(DataContext.CtaTitle, CtaTitle.BindText());
-            this.Bind(DataContext.CtaButtonTitle, CtaButton.BindTitle());
+            this.Bind(DataContext.CtaTitle, CtaTitle.Rx().Text());
+            this.Bind(DataContext.CtaButtonTitle, CtaButton.Rx().Title());
             this.Bind(
                 DataContext.Impression.Select(impression => impression.HasValue),
-                CtaView.BindIsVisibleWithFade());
+                CtaView.Rx().IsVisibleWithFade());
             this.Bind(
                 DataContext.CtaDescription.Select(attributedDescription),
-                CtaDescription.BindAttributedText());
+                CtaDescription.Rx().AttributedText());
             this.Bind(
                 DataContext
                     .Impression
                     .Select(impression => impression.HasValue)
                     .Select(Invert),
-                QuestionView.BindIsVisibleWithFade());
+                QuestionView.Rx().IsVisibleWithFade());
 
             this.Bind(
                 DataContext
                     .Impression
                     .Select(impression => impression.HasValue),
-                CtaViewBottomConstraint.BindActive());
+                CtaViewBottomConstraint.Rx().Active());
 
             this.Bind(
                 DataContext
                     .Impression
                     .Select(impression => impression.HasValue)
                     .Select(Invert),
-                QuestionViewBottomConstraint.BindActive());
+                QuestionViewBottomConstraint.Rx().Active());
 
-            this.BindVoid(YesView.Tapped(), () => DataContext.RegisterImpression(true));
-            this.BindVoid(NotReallyView.Tapped(), () => DataContext.RegisterImpression(false));
-            this.Bind(CtaButton.Tapped(), DataContext.PerformMainAction);
-            this.BindVoid(DismissButton.Tapped(), DataContext.Dismiss);
+            this.BindVoid(YesView.Rx().Tap(), () => DataContext.RegisterImpression(true));
+            this.BindVoid(NotReallyView.Rx().Tap(), () => DataContext.RegisterImpression(false));
+            this.Bind(CtaButton.Rx().Tap(), DataContext.PerformMainAction);
+            this.BindVoid(DismissButton.Rx().Tap(), DataContext.Dismiss);
         }
 
         protected override void Dispose(bool disposing)
@@ -125,6 +126,5 @@ namespace Toggl.Daneel
             view.Layer.ShadowOffset = new CGSize(0, 2);
             view.Layer.ShadowColor = UIColor.Black.CGColor;
         }
-
     }
 }

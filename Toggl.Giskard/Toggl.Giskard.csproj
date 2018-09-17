@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Toggl.Giskard</RootNamespace>
     <AssemblyName>Toggl.Giskard</AssemblyName>
-    <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -402,7 +402,6 @@
     <Compile Include="Fragments\TermsOfServiceFragment.cs" />
     <Compile Include="Views\TogglDroidTimePicker.cs" />
     <Compile Include="Activities\ReactiveActivity.cs" />
-    <Compile Include="Extensions\UIExtensions.cs" />
     <Compile Include="Adapters\BaseRecyclerAdapter.cs" />
     <Compile Include="ViewHolders\BaseRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\WorkspaceSelectionViewHolder.cs" />
@@ -431,6 +430,13 @@
         <DependentUpon>MainActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="Startup\HandlerScheduler.cs" />
+    <Compile Include="Extensions\Reactive\ViewExtensions.cs" />
+    <Compile Include="Extensions\Reactive\TextViewExtensions.cs" />
+    <Compile Include="Extensions\Reactive\CompoundButtonExtensions.cs" />
+    <Compile Include="Extensions\Reactive\EditTextExtensions.cs" />
+    <Compile Include="Extensions\Reactive\RecyclerAdapterExtensions.cs" />
+    <Compile Include="Extensions\Reactive\SwipeRefreshLayoutExtensions.cs" />
+    <Compile Include="Extensions\Reactive\JavaObjectExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -847,6 +853,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Presenters\" />
+    <Folder Include="Extensions\Reactive\" />
   </ItemGroup>
   <ItemGroup>
     <ProguardConfiguration Include="ProGuard.cfg" />

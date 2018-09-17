@@ -10,7 +10,7 @@ using Android.Util;
 using Android.Widget;
 using Java.Lang;
 using Toggl.Giskard.Autocomplete;
-using Toggl.Giskard.Extensions;
+using Toggl.Giskard.Extensions.Reactive;
 
 namespace Toggl.Giskard.Views
 {
@@ -29,7 +29,7 @@ namespace Toggl.Giskard.Views
             AddTextChangedListener(this);
             
             TextObservable =
-                this.TextFormatted().CombineLatest(positionChanged.AsObservable(), (text, _) => text);
+                this.Rx().TextFormatted().CombineLatest(positionChanged.AsObservable(), (text, _) => text);
         }
 
         public AutocompleteEditText(IntPtr javaReference, JniHandleOwnership transfer)

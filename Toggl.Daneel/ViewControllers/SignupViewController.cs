@@ -1,15 +1,15 @@
-using System;
 using System.Linq;
 using System.Reactive.Linq;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Plugin.Color.Platforms.Ios;
+using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac;
 using UIKit;
 using static Toggl.Daneel.Extensions.LoginSignupViewExtensions;
-using static Toggl.Daneel.Extensions.UIKitRxExtensions;
 using static Toggl.Daneel.Extensions.ViewExtensions;
 
 
@@ -42,32 +42,32 @@ namespace Toggl.Daneel.ViewControllers
             UIKeyboard.Notifications.ObserveWillHide(KeyboardWillHide);
 
             //Text
-            this.Bind(ViewModel.Email, EmailTextField.BindText());
-            this.Bind(ViewModel.ErrorMessage, ErrorLabel.BindText());
-            this.Bind(ViewModel.Password, PasswordTextField.BindText());
-            this.Bind(EmailTextField.Text().Select(Email.From), ViewModel.SetEmail);
-            this.Bind(PasswordTextField.Text().Select(Password.From), ViewModel.SetPassword);
-            this.Bind(ViewModel.IsLoading.Select(signupButtonTitle), SignupButton.BindAnimatedTitle());
-            this.Bind(ViewModel.CountryButtonTitle, SelectCountryButton.BindAnimatedTitle());
+            this.Bind(ViewModel.ErrorMessage, ErrorLabel.Rx().Text());
+            this.Bind(ViewModel.Email, EmailTextField.Rx().TextObserver());
+            this.Bind(ViewModel.Password, PasswordTextField.Rx().TextObserver());
+            this.Bind(EmailTextField.Rx().Text().Select(Email.From), ViewModel.SetEmail);
+            this.Bind(PasswordTextField.Rx().Text().Select(Password.From), ViewModel.SetPassword);
+            this.Bind(ViewModel.IsLoading.Select(signupButtonTitle), SignupButton.Rx().AnimatedTitle());
+            this.Bind(ViewModel.CountryButtonTitle, SelectCountryButton.Rx().AnimatedTitle());
 
             //Visibility
-            this.Bind(ViewModel.HasError, ErrorLabel.BindAnimatedIsVisible());
-            this.Bind(ViewModel.IsLoading, ActivityIndicator.BindIsVisibleWithFade());
-            this.Bind(ViewModel.IsPasswordMasked.Skip(1), PasswordTextField.BindSecureTextEntry());
-            this.Bind(ViewModel.IsShowPasswordButtonVisible, ShowPasswordButton.BindIsVisible());
+            this.Bind(ViewModel.HasError, ErrorLabel.Rx().AnimatedIsVisible());
+            this.Bind(ViewModel.IsLoading, ActivityIndicator.Rx().IsVisibleWithFade());
+            this.Bind(ViewModel.IsPasswordMasked.Skip(1), PasswordTextField.Rx().SecureTextEntry());
+            this.Bind(ViewModel.IsShowPasswordButtonVisible, ShowPasswordButton.Rx().IsVisible());
             this.Bind(PasswordTextField.FirstResponder, ViewModel.SetIsShowPasswordButtonVisible);
-            this.Bind(ViewModel.IsCountryErrorVisible, CountryNotSelectedImageView.BindAnimatedIsVisible());
+            this.Bind(ViewModel.IsCountryErrorVisible, CountryNotSelectedImageView.Rx().AnimatedIsVisible());
 
             //Commands
-            this.Bind(LoginCard.Tapped(), ViewModel.Login);
-            this.Bind(SignupButton.Tapped(), ViewModel.Signup);
-            this.BindVoid(GoogleSignupButton.Tapped(), ViewModel.GoogleSignup);
-            this.BindVoid(ShowPasswordButton.Tapped(), ViewModel.TogglePasswordVisibility);
-            this.Bind(SelectCountryButton.Tapped(), ViewModel.PickCountry);
+            this.Bind(LoginCard.Rx().Tap(), ViewModel.Login);
+            this.Bind(SignupButton.Rx().Tap(), ViewModel.Signup);
+            this.BindVoid(GoogleSignupButton.Rx().Tap(), ViewModel.GoogleSignup);
+            this.BindVoid(ShowPasswordButton.Rx().Tap(), ViewModel.TogglePasswordVisibility);
+            this.Bind(SelectCountryButton.Rx().Tap(), ViewModel.PickCountry);
 
             //Color
-            this.Bind(ViewModel.HasError.Select(signupButtonTintColor), SignupButton.BindTintColor());
-            this.Bind(ViewModel.SignupEnabled.Select(signupButtonTitleColor), SignupButton.BindTitleColor());
+            this.Bind(ViewModel.HasError.Select(signupButtonTintColor), SignupButton.Rx().TintColor());
+            this.Bind(ViewModel.SignupEnabled.Select(signupButtonTitleColor), SignupButton.Rx().TitleColor());
 
             //Animation
             this.Bind(ViewModel.Shake, shakeTargets =>

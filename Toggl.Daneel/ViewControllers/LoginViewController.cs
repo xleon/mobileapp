@@ -5,13 +5,14 @@ using Foundation;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.Plugin.Color.Platforms.Ios;
+using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac;
 using UIKit;
 using static Toggl.Daneel.Extensions.LoginSignupViewExtensions;
-using static Toggl.Daneel.Extensions.UIKitRxExtensions;
 using static Toggl.Daneel.Extensions.ViewExtensions;
 
 namespace Toggl.Daneel.ViewControllers
@@ -45,31 +46,31 @@ namespace Toggl.Daneel.ViewControllers
             UIKeyboard.Notifications.ObserveWillHide(KeyboardWillHide);
 
             //Text
-            this.Bind(ViewModel.Email, EmailTextField.BindText());
-            this.Bind(ViewModel.ErrorMessage, ErrorLabel.BindText());
-            this.Bind(ViewModel.Password, PasswordTextField.BindText());
-            this.Bind(EmailTextField.Text().Select(Email.From), ViewModel.SetEmail);
-            this.Bind(PasswordTextField.Text().Select(Password.From), ViewModel.SetPassword);
-            this.Bind(ViewModel.IsLoading.Select(loginButtonTitle), LoginButton.BindAnimatedTitle());
+            this.Bind(ViewModel.Email, EmailTextField.Rx().TextObserver());
+            this.Bind(ViewModel.ErrorMessage, ErrorLabel.Rx().Text());
+            this.Bind(ViewModel.Password, PasswordTextField.Rx().TextObserver());
+            this.Bind(EmailTextField.Rx().Text().Select(Email.From), ViewModel.SetEmail);
+            this.Bind(PasswordTextField.Rx().Text().Select(Password.From), ViewModel.SetPassword);
+            this.Bind(ViewModel.IsLoading.Select(loginButtonTitle), LoginButton.Rx().AnimatedTitle());
 
             //Visibility
-            this.Bind(ViewModel.HasError, ErrorLabel.BindAnimatedIsVisible());
-            this.Bind(ViewModel.IsLoading, ActivityIndicator.BindIsVisibleWithFade());
-            this.Bind(ViewModel.IsPasswordMasked.Skip(1), PasswordTextField.BindSecureTextEntry());
-            this.Bind(ViewModel.IsShowPasswordButtonVisible, ShowPasswordButton.BindIsVisible());
+            this.Bind(ViewModel.HasError, ErrorLabel.Rx().AnimatedIsVisible());
+            this.Bind(ViewModel.IsLoading, ActivityIndicator.Rx().IsVisibleWithFade());
+            this.Bind(ViewModel.IsPasswordMasked.Skip(1), PasswordTextField.Rx().SecureTextEntry());
+            this.Bind(ViewModel.IsShowPasswordButtonVisible, ShowPasswordButton.Rx().IsVisible());
             this.Bind(PasswordTextField.FirstResponder, ViewModel.SetIsShowPasswordButtonVisible);
 
             //Commands
-            this.Bind(SignupCard.Tapped(), ViewModel.Signup);
-            this.BindVoid(LoginButton.Tapped(), ViewModel.Login);
-            this.BindVoid(GoogleLoginButton.Tapped(), ViewModel.GoogleLogin);
-            this.Bind(ForgotPasswordButton.Tapped(), ViewModel.ForgotPassword);
-            this.Bind(PasswordManagerButton.Tapped(), ViewModel.StartPasswordManager);
-            this.BindVoid(ShowPasswordButton.Tapped(), ViewModel.TogglePasswordVisibility);
+            this.Bind(SignupCard.Rx().Tap(), ViewModel.Signup);
+            this.BindVoid(LoginButton.Rx().Tap(), ViewModel.Login);
+            this.BindVoid(GoogleLoginButton.Rx().Tap(), ViewModel.GoogleLogin);
+            this.Bind(ForgotPasswordButton.Rx().Tap(), ViewModel.ForgotPassword);
+            this.Bind(PasswordManagerButton.Rx().Tap(), ViewModel.StartPasswordManager);
+            this.BindVoid(ShowPasswordButton.Rx().Tap(), ViewModel.TogglePasswordVisibility);
 
             //Color
-            this.Bind(ViewModel.HasError.Select(loginButtonTintColor), LoginButton.BindTintColor());
-            this.Bind(ViewModel.LoginEnabled.Select(loginButtonTitleColor), LoginButton.BindTitleColor());
+            this.Bind(ViewModel.HasError.Select(loginButtonTintColor), LoginButton.Rx().TintColor());
+            this.Bind(ViewModel.LoginEnabled.Select(loginButtonTitleColor), LoginButton.Rx().TitleColor());
 
             //Animation
             this.Bind(ViewModel.Shake, shakeTargets =>

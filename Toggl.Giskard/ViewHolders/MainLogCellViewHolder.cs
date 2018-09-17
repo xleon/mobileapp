@@ -116,7 +116,7 @@ namespace Toggl.Giskard.ViewHolders
             ContinueButtonTappedSubject?.OnNext(Item);
         }
 
-        private ConstraintLayout.LayoutParams getWhitePaddingWidthDependentOnIcons() 
+        private ConstraintLayout.LayoutParams getWhitePaddingWidthDependentOnIcons()
         {
             var whitePaddingWidth =
                 72
@@ -150,11 +150,12 @@ namespace Toggl.Giskard.ViewHolders
             timeEntriesLogCellDuration.Text = Item.Duration.HasValue
                 ? DurationAndFormatToString.Convert(Item.Duration.Value, Item.DurationFormat)
                 : "";
-            
-            timeEntriesLogCellContinueImage.Visibility = Item.CanSync.ToVisibility();
-            errorImageView.Visibility = (!Item.CanSync).ToVisibility();
+
+            timeEntriesLogCellContinueImage.Visibility = Item.CanContinue.ToVisibility();
+            errorImageView.Visibility = (!Item.CanContinue).ToVisibility();
+
             errorNeedsSync.Visibility = Item.NeedsSync.ToVisibility();
-            timeEntriesLogCellContinueButton.Visibility = Item.CanSync.ToVisibility();
+            timeEntriesLogCellContinueButton.Visibility = Item.CanContinue.ToVisibility();
 
             billableIcon.Visibility = Item.IsBillable.ToVisibility();
             hasTagsIcon.Visibility = Item.HasTags.ToVisibility();

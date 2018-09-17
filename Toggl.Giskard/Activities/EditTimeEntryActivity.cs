@@ -9,6 +9,7 @@ using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.Onboarding.EditView;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
+using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.Helper;
 using Toggl.Multivac.Extensions;
 using static Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
@@ -77,9 +78,9 @@ namespace Toggl.Giskard.Activities
 
         private void setupBindings()
         {
-            this.Bind(startTimeArea.Tapped(), _ => ViewModel.SelectTimeCommand.Execute(StartTime));
-            this.Bind(stopTimeArea.Tapped(), _ => ViewModel.StopTimeEntryCommand.Execute(StopTime));
-            this.Bind(durationArea.Tapped(), _ => ViewModel.SelectTimeCommand.Execute(Duration));
+            this.Bind(startTimeArea.Rx().Tap(), _ => ViewModel.SelectTimeCommand.Execute(StartTime));
+            this.Bind(stopTimeArea.Rx().Tap(), _ => ViewModel.StopTimeEntryCommand.Execute(StopTime));
+            this.Bind(durationArea.Rx().Tap(), _ => ViewModel.SelectTimeCommand.Execute(Duration));
         }
 
         public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
