@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Multivac;
@@ -12,12 +11,14 @@ using Toggl.Ultrawave.ApiClients;
 using System.Collections.Generic;
 using Toggl.Foundation.Extensions;
 using Toggl.Ultrawave.Exceptions;
+using Toggl.Foundation.DataSources.Interfaces;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Sync.States.Pull
 {
     public sealed class TryFetchInaccessibleProjectsState : IPersistState
     {
-        private readonly IProjectsSource dataSource;
+        private readonly IDataSource<IThreadSafeProject, IDatabaseProject> dataSource;
 
         private readonly ITimeService timeService;
 
@@ -32,7 +33,7 @@ namespace Toggl.Foundation.Sync.States.Pull
         private DateTimeOffset yesterdayThisTime => timeService.CurrentDateTime.AddDays(-1);
 
         public TryFetchInaccessibleProjectsState(
-            IProjectsSource dataSource,
+            IDataSource<IThreadSafeProject, IDatabaseProject> dataSource,
             ITimeService timeService,
             IProjectsApi projectsApi)
         {

@@ -38,7 +38,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ISuggestionProviderContainer suggestionProviders,
             IIntentDonationService intentDonationService,
             IDialogService dialogService,
-            ISchedulerProvider schedulerProvider)
+            ISchedulerProvider schedulerProvider,
+            IAccessRestrictionStorage accessRestrictionStorage)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
@@ -61,11 +62,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 userPreferences,
                 analyticsService,
                 onboardingStorage,
-                interactorFactory, 
-                navigationService, 
-                remoteConfigService, 
+                interactorFactory,
+                navigationService,
+                remoteConfigService,
                 suggestionProviders,
                 intentDonationService,
+                accessRestrictionStorage,
                 schedulerProvider);
 
             reportsViewModel = new ReportsViewModel(

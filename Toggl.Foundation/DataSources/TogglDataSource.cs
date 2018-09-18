@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -65,16 +64,15 @@ namespace Toggl.Foundation.DataSources
 
             this.minimumTimeInBackgroundForFullSync = minimumTimeInBackgroundForFullSync;
 
-            User = new UserDataSource(database.User, timeService);
-            Tags = new TagsDataSource(database.IdProvider, database.Tags, timeService);
+            User = new UserDataSource(database.User);
+            Tags = new TagsDataSource(database.Tags);
             Tasks = new TasksDataSource(database.Tasks);
-            Clients = new ClientsDataSource(database.IdProvider, database.Clients, timeService);
+            Clients = new ClientsDataSource(database.Clients);
+            Projects = new ProjectsDataSource(database.Projects);
+            Workspaces = new WorkspacesDataSource(database.Workspaces);
             Preferences = new PreferencesDataSource(database.Preferences);
-            Projects = new ProjectsDataSource(database.IdProvider, database.Projects, timeService);
-            TimeEntries = new TimeEntriesDataSource(database.TimeEntries, timeService, analyticsService);
-            Workspaces = new WorkspacesDataSource(database.IdProvider, database.Workspaces, timeService);
             WorkspaceFeatures = new WorkspaceFeaturesDataSource(database.WorkspaceFeatures);
-
+            TimeEntries = new TimeEntriesDataSource(database.TimeEntries, timeService, analyticsService);
 
             this.createSyncManager = createSyncManager;
             CreateNewSyncManager();
@@ -85,15 +83,22 @@ namespace Toggl.Foundation.DataSources
 
             isLoggedIn = true;
         }
-
-        public IUserSource User { get; }
-        public ITagsSource Tags { get; }
-        public ITasksSource Tasks { get; }
-        public IClientsSource Clients { get; }
-        public IPreferencesSource Preferences { get; }
-        public IProjectsSource Projects { get; }
         public ITimeEntriesSource TimeEntries { get; }
-        public IWorkspacesSource Workspaces { get; }
+
+        public ISingletonDataSource<IThreadSafeUser> User { get; }
+
+        public IDataSource<IThreadSafeTag, IDatabaseTag> Tags { get; }
+
+        public IDataSource<IThreadSafeTask, IDatabaseTask> Tasks { get; }
+
+        public IDataSource<IThreadSafeClient, IDatabaseClient> Clients { get; }
+
+        public ISingletonDataSource<IThreadSafePreferences> Preferences { get; }
+
+        public IDataSource<IThreadSafeProject, IDatabaseProject> Projects { get; }
+
+        public IObservableDataSource<IThreadSafeWorkspace, IDatabaseWorkspace> Workspaces { get; }
+
         public IDataSource<IThreadSafeWorkspaceFeatureCollection, IDatabaseWorkspaceFeatureCollection> WorkspaceFeatures { get; }
 
         public ISyncManager SyncManager { get; private set; }

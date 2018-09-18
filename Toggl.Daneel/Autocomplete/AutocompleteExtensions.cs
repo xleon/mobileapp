@@ -83,6 +83,7 @@ namespace Toggl.Daneel.Autocomplete
         private static IEnumerable<ISpan> AsSpans(this NSAttributedString text, int cursorPosition)
         {
             var start = 0;
+            bool queryTextSpanAlreadyUsed = false;
 
             while (start != text.Length)
             {
@@ -104,8 +105,9 @@ namespace Toggl.Daneel.Autocomplete
                 else if (length > 0)
                 {
                     var subText = text.Substring(start, length).ToString().Substring(0, length);
-                    if (cursorPosition.IsInRange(start, end))
+                    if (queryTextSpanAlreadyUsed == false && cursorPosition.IsInRange(start, end))
                     {
+                        queryTextSpanAlreadyUsed = true;
                         yield return new QueryTextSpan(subText, cursorPosition - start);
                     }
                     else

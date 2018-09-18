@@ -5,12 +5,14 @@ using FluentAssertions;
 using MvvmCross.ViewModels;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
+using Toggl.PrimeRadiant.Models;
 using Toggl.PrimeRadiant.Settings;
 using Xunit;
 
@@ -138,7 +140,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                 var newApiToken = Guid.NewGuid().ToString();
                 var user = Substitute.For<IThreadSafeUser>();
                 var dataSource = Substitute.For<ITogglDataSource>();
-                var userSource = Substitute.For<IUserSource>();
+                var userSource = Substitute.For<ISingletonDataSource<IThreadSafeUser>>();
                 user.ApiToken.Returns(newApiToken);
                 userSource.Current.Returns(Observable.Return(user));
                 dataSource.User.Returns(userSource);

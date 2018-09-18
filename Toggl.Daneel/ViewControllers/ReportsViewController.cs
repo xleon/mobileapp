@@ -70,7 +70,7 @@ namespace Toggl.Daneel.ViewControllers
             //Commands
             this.BindVoid(titleButton.Rx().Tap(), ViewModel.ToggleCalendar);
             this.BindVoid(ReportsTableView.Rx().Tap(), ViewModel.HideCalendar);
-            this.Bind(WorkspaceButton.Rx().Tap(), ViewModel.SelectWorkspaceMethod);
+            this.Bind(WorkspaceButton.Rx().Tap(), ViewModel.SelectWorkspace);
 
             var bindingSet = this.CreateBindingSet<ReportsViewController, ReportsViewModel>();
 

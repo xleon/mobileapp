@@ -516,10 +516,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.Initialize();
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId + 1 };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
                     .Returns(Observable.Return(mockWorkspace));
 
-                await ViewModel.SelectWorkspace.ExecuteAsync();
+                await ViewModel.SelectWorkspace();
 
                 await ReportsProvider.Received().GetProjectSummary(Arg.Is(mockWorkspace.Id), Arg.Any<DateTimeOffset>(),
                     Arg.Any<DateTimeOffset>());
@@ -532,13 +532,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.WorkspaceNameObservable.Subscribe(observer);
 
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId + 1, Name = "Selected workspace" };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
                     .Returns(Observable.Return(mockWorkspace));
                 InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(mockWorkspace));
 
                 await ViewModel.Initialize();
 
-                await ViewModel.SelectWorkspaceMethod();
+                await ViewModel.SelectWorkspace();
 
                 TestScheduler.Start();
                 observer.Messages.AssertEqual(
@@ -551,10 +551,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task ShouldNotTriggerAReportReloadWhenSelectionIsCancelled()
             {
                 await ViewModel.Initialize();
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(null));
 
-                await ViewModel.SelectWorkspace.ExecuteAsync();
+                await ViewModel.SelectWorkspace();
 
                 await ReportsProvider.DidNotReceive().GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(),
                     Arg.Any<DateTimeOffset>());
@@ -565,10 +565,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.Initialize();
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(mockWorkspace));
 
-                await ViewModel.SelectWorkspace.ExecuteAsync();
+                await ViewModel.SelectWorkspace();
 
                 await ReportsProvider.DidNotReceive().GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(),
                     Arg.Any<DateTimeOffset>());

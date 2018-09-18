@@ -14,6 +14,7 @@ using PropertyChanged;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Extensions;
@@ -125,8 +126,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxCommand ToggleCalendarCommand { get; }
         [Obsolete]
         public IMvxCommand<ReportsDateRangeParameter> ChangeDateRangeCommand { get; }
-        [Obsolete("Use SelectWorkspaceAction instead")]
-        public IMvxAsyncCommand SelectWorkspace { get; }
 
         public ReportsViewModel(ITogglDataSource dataSource,
                                 ITimeService timeService,
@@ -159,7 +158,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             HideCalendarCommand = new MvxCommand(HideCalendar);
             ToggleCalendarCommand = new MvxCommand(ToggleCalendar);
             ChangeDateRangeCommand = new MvxCommand<ReportsDateRangeParameter>(changeDateRange);
-            SelectWorkspace = new MvxAsyncCommand(SelectWorkspaceMethod);
 
             WorkspaceNameObservable = workspaceNameSubject
                 .DistinctUntilChanged()
@@ -169,12 +167,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
-            var workspaces = dataSource.Workspaces;
-
-            WorkspacesObservable = Observable.Merge(
-                    workspaces.Created.SelectUnit(),
-                    workspaces.Updated.SelectUnit(),
-                    workspaces.Deleted.SelectUnit())
+            WorkspacesObservable = dataSource.Workspaces
+                .ItemsChanged()
                 .StartWith(Unit.Default)
                 .SelectMany(_ => dataSource.Workspaces.GetAll())
                 .DistinctUntilChanged()
@@ -250,18 +244,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             navigationService.ChangePresentation(new ToggleCalendarVisibilityHint(forceHide: true));
             calendarViewModel.OnHideCalendar();
-        }
-
-        public async Task SelectWorkspaceMethod()
-        {
-            var workspace = await dialogService.Select(Resources.SelectWorkspace, Workspaces);
-
-            if (workspace == null || workspace.Id == workspaceId)
-                return;
-
-            workspaceId = workspace.Id;
-            workspaceNameSubject.OnNext(workspace.Name);
-            reportSubject.OnNext(Unit.Default);
         }
 
         private static ReadOnlyCollection<(string, IThreadSafeWorkspace)> readOnlyWorkspaceNameTuples(IEnumerable<IThreadSafeWorkspace> workspaces)
@@ -423,6 +405,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Append(lastSegment)
                 .ToList()
                 .AsReadOnly();
+        }
+
+        public async Task SelectWorkspace()
+        {
+            var currentWorkspaceIndex = Workspaces.IndexOf(w => w.Item.Id == workspaceId);
+
+            var workspace = await dialogService.Select(Resources.SelectWorkspace, Workspaces, currentWorkspaceIndex);
+
+            if (workspace == null || workspace.Id == workspaceId) return;
+
+            workspaceId = workspace.Id;
+            workspaceNameSubject.OnNext(workspace.Name);
+            reportSubject.OnNext(Unit.Default);
         }
 
         private float percentageOf(List<ChartSegment> list)

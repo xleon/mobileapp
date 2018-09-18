@@ -101,6 +101,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IMvxNavigationService navigationService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IIntentDonationService intentDonationService;
+        private readonly IAccessRestrictionStorage accessRestrictionStorage;
 
         private CompositeDisposable disposeBag = new CompositeDisposable();
 
@@ -132,6 +133,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IRemoteConfigService remoteConfigService,
             ISuggestionProviderContainer suggestionProviders,
             IIntentDonationService intentDonationService,
+            IAccessRestrictionStorage accessRestrictionStorage,
             ISchedulerProvider schedulerProvider)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -146,6 +148,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(suggestionProviders, nameof(suggestionProviders));
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
+            Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
@@ -156,6 +159,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.onboardingStorage = onboardingStorage;
             this.schedulerProvider = schedulerProvider;
             this.intentDonationService = intentDonationService;
+            this.accessRestrictionStorage = accessRestrictionStorage;
 
             SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, suggestionProviders);
             RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService, schedulerProvider);
@@ -319,6 +323,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             base.ViewAppearing();
 
             IsInManualMode = userPreferences.IsManualModeEnabled;
+            if (accessRestrictionStorage.HasNoWorkspace())
+            {
+                navigationService.Navigate<NoWorkspaceViewModel>();
+            }
         }
 
         private void setRunningEntry(IThreadSafeTimeEntry timeEntry)

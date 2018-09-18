@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Sync.States;
 using Toggl.Foundation.Sync.States.Pull;
@@ -20,7 +20,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
 {
     public sealed class CreateGhostProjectsStateTests
     {
-        private readonly IProjectsSource dataSource = Substitute.For<IProjectsSource>();
+        private readonly IDataSource<IThreadSafeProject, IDatabaseProject> dataSource = Substitute.For<IDataSource<IThreadSafeProject, IDatabaseProject>>();
         private readonly IAnalyticsService analyticsService = Substitute.For<IAnalyticsService>();
         private readonly CreateGhostProjectsState state;
 
