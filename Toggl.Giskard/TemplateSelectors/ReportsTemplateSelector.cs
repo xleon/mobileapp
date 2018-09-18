@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Foundation.Reports;
-using Toggl.Foundation.MvvmCross.ViewModels;
 using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 
 namespace Toggl.Giskard.TemplateSelectors
 {

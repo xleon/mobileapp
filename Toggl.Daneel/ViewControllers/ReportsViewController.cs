@@ -13,6 +13,7 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac.Extensions;
 using UIKit;
 using static Toggl.Daneel.Extensions.AnimationExtensions;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -52,7 +53,7 @@ namespace Toggl.Daneel.ViewControllers
 
             bool areThereEnoughWorkspaces(ICollection<(string ItemName, IThreadSafeWorkspace Item)> workspaces) => workspaces.Count > 1;
 
-            bool isWorkspaceNameTooLong(string workspaceName) 
+            bool isWorkspaceNameTooLong(string workspaceName)
             {
                 var attributes = new UIStringAttributes { Font = WorkspaceLabel.Font };
                 var size = new NSString(workspaceName).GetSizeUsingAttributes(attributes);

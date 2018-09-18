@@ -1025,6 +1025,11 @@
     <Compile Include="Binding\LayoutConstraintActiveTargetBinding.cs" />
     <Compile Include="Extensions\Reactive\FadeViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\NSObjectExtensions.cs" />
+    <Compile Include="Extensions\Reactive\UIStackViewExtensions.cs" />
+    <Compile Include="Views\Reports\BarSegmentView.cs" />
+    <Compile Include="Views\Reports\BarView.cs" />
+    <Compile Include="Views\Reports\BarLegendLabel.cs" />
+    <Compile Include="Views\Reports\EmptyBarView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
