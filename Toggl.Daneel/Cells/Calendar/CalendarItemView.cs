@@ -6,6 +6,7 @@ using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.UI;
 using Toggl.Daneel.Views;
+using Toggl.Daneel.Views.Calendar;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.MvvmCross.Extensions;
 using UIKit;
@@ -25,8 +26,10 @@ namespace Toggl.Daneel.Cells.Calendar
         public CGRect TopDragTouchArea => TopDragIndicator.Frame.Inset(-20, -20);
         public CGRect BottomDragTouchArea => BottomDragIndicator.Frame.Inset(-20, -20);
 
-        private static readonly TimeSpan thirtyMinutes = TimeSpan.FromMinutes(30);
-        private bool shortCalendarItem => Item.Duration < thirtyMinutes;
+        //In other words: 30 minutes or less
+        private bool shortCalendarItem => Frame.Height <= CalendarCollectionViewLayout.HourHeight / 2;
+
+        private bool shouldCenterIconVertically => Frame.Height <= CalendarCollectionViewLayout.HourHeight / 4;
 
         private bool isEditing;
         public bool IsEditing
@@ -104,6 +107,7 @@ namespace Toggl.Daneel.Cells.Calendar
             base.LayoutSubviews();
 
             updateShadow();
+            updateConstraints();
         }
 
         private UIColor itemColor()
@@ -162,8 +166,8 @@ namespace Toggl.Daneel.Cells.Calendar
                 = CalendarIconHeightConstrarint.Constant
                 = iconSize();
 
-            CalendarIconBaselineConstraint.Active = !shortCalendarItem;
-            CalendarIconCenterVerticallyConstraint.Active = shortCalendarItem;
+            CalendarIconBaselineConstraint.Active = !shouldCenterIconVertically;
+            CalendarIconCenterVerticallyConstraint.Active = shouldCenterIconVertically;
 
             DescriptionLabelLeadingConstraint.Constant = descriptionLabelLeadingConstraintConstant();
             DescriptionLabelTopConstraint.Constant

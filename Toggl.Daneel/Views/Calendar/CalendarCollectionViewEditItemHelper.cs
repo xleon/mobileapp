@@ -224,7 +224,7 @@ namespace Toggl.Daneel.Views.Calendar
             if (!isActive || itemIndexPath == null)
                 return;
 
-            if (Math.Abs(LastPoint.Y - point.Y) < Layout.HourHeight / 4)
+            if (Math.Abs(LastPoint.Y - point.Y) < CalendarCollectionViewLayout.HourHeight / 4)
                 return;
 
             LastPoint = point;
@@ -255,7 +255,7 @@ namespace Toggl.Daneel.Views.Calendar
             if (!isActive || itemIndexPath == null)
                 return;
 
-            if (Math.Abs(LastPoint.Y - point.Y) < Layout.HourHeight / 4)
+            if (Math.Abs(LastPoint.Y - point.Y) < CalendarCollectionViewLayout.HourHeight / 4)
                 return;
 
             if (point.Y < 0 || point.Y >= Layout.ContentViewHeight)
@@ -288,7 +288,7 @@ namespace Toggl.Daneel.Views.Calendar
             if (!isActive || itemIndexPath == null)
                 return;
 
-            if (Math.Abs(LastPoint.Y - point.Y) < Layout.HourHeight / 4)
+            if (Math.Abs(LastPoint.Y - point.Y) < CalendarCollectionViewLayout.HourHeight / 4)
                 return;
 
             if (point.Y < 0 || point.Y >= Layout.ContentViewHeight)

@@ -19,8 +19,9 @@ namespace Toggl.Daneel.Views.Calendar
     {
         private const int hoursPerDay = 24;
 
-        private static readonly nfloat hourHeight = 56;
-        private static readonly nfloat minItemHeight = hourHeight / 4;
+        public const float HourHeight = 56;
+
+        private static readonly nfloat minItemHeight = HourHeight / 4;
         private static readonly nfloat leftPadding = 76;
         private static readonly nfloat rightPadding = 16;
         private static readonly nfloat hourSupplementaryLabelHeight = 20;
@@ -37,8 +38,7 @@ namespace Toggl.Daneel.Views.Calendar
         public static NSString HourSupplementaryViewKind = new NSString("Hour");
         public static NSString EditingHourSupplementaryViewKind = new NSString("EditingHour");
         public static NSString CurrentTimeSupplementaryViewKind = new NSString("CurrentTime");
-        public nfloat HourHeight => hourHeight;
-        public nfloat ContentViewHeight => hoursPerDay * hourHeight;
+        public nfloat ContentViewHeight => hoursPerDay * HourHeight;
 
         private bool isEditing;
         public bool IsEditing
@@ -82,7 +82,7 @@ namespace Toggl.Daneel.Views.Calendar
 
         public DateTimeOffset DateAtPoint(CGPoint point)
         {
-            var seconds = (point.Y / hourHeight) * 60 * 60;
+            var seconds = (point.Y / HourHeight) * 60 * 60;
             var timespan = TimeSpan.FromSeconds(seconds);
             var nextDay = date.AddDays(1);
 
@@ -97,7 +97,7 @@ namespace Toggl.Daneel.Views.Calendar
         }
 
         public CGPoint PointAtDate(DateTimeOffset time)
-            => new CGPoint(0, time.Hour * hourHeight + time.Minute / hourHeight);
+            => new CGPoint(0, time.Hour * HourHeight + time.Minute / HourHeight);
 
         public void InvalidateLayoutForVisibleItems()
         {
@@ -171,8 +171,8 @@ namespace Toggl.Daneel.Views.Calendar
         {
             var now = timeService.CurrentDateTime.LocalDateTime;
 
-            var yHour = hourHeight * now.Hour;
-            var yMins = hourHeight * now.Minute / 60;
+            var yHour = HourHeight * now.Hour;
+            var yMins = HourHeight * now.Minute / 60;
 
             var width = CollectionViewContentSize.Width - leftPadding - rightPadding - currentTimeSupplementaryLeftOffset;
             var height = 8;
@@ -193,16 +193,16 @@ namespace Toggl.Daneel.Views.Calendar
 
         private IEnumerable<NSIndexPath> indexPathsForVisibleItemsInRect(CGRect rect)
         {
-            var minHour = (int)Math.Floor(rect.GetMinY() / hourHeight).Clamp(0, hoursPerDay);
-            var maxHour = (int)Math.Floor(rect.GetMaxY() / hourHeight).Clamp(0, hoursPerDay);
+            var minHour = (int)Math.Floor(rect.GetMinY() / HourHeight).Clamp(0, hoursPerDay);
+            var maxHour = (int)Math.Floor(rect.GetMaxY() / HourHeight).Clamp(0, hoursPerDay);
 
             return dataSource.IndexPathsOfCalendarItemsBetweenHours(minHour, maxHour);
         }
 
         private IEnumerable<NSIndexPath> indexPathsForHoursInRect(CGRect rect)
         {
-            var minHour = (int)Math.Floor(rect.GetMinY() / hourHeight).Clamp(0, hoursPerDay);
-            var maxHour = (int)Math.Floor(rect.GetMaxY() / hourHeight).Clamp(0, hoursPerDay + 1);
+            var minHour = (int)Math.Floor(rect.GetMinY() / HourHeight).Clamp(0, hoursPerDay);
+            var maxHour = (int)Math.Floor(rect.GetMaxY() / HourHeight).Clamp(0, hoursPerDay + 1);
 
             return Enumerable
                 .Range(minHour, maxHour - minHour)
@@ -221,12 +221,12 @@ namespace Toggl.Daneel.Views.Calendar
             var endTime = attrs.EndTime > date.AddDays(1) ? date.AddDays(1) : attrs.EndTime;
             var duration = endTime - startTime;
 
-            var yHour = hourHeight * startTime.Hour;
-            var yMins = hourHeight * startTime.Minute / 60;
+            var yHour = HourHeight * startTime.Hour;
+            var yMins = HourHeight * startTime.Minute / 60;
 
             var totalInterItemSpacing = (attrs.OverlappingItemsCount - 1) * horizontalItemSpacing;
             var width = (CollectionViewContentSize.Width - leftPadding - rightPadding - totalInterItemSpacing) / attrs.OverlappingItemsCount;
-            var height = Math.Max(minItemHeight, hourHeight * duration.TotalMinutes / 60) - verticalItemSpacing;
+            var height = Math.Max(minItemHeight, HourHeight * duration.TotalMinutes / 60) - verticalItemSpacing;
             var x = leftPadding + (width + horizontalItemSpacing) * attrs.PositionInOverlappingGroup;
             var y = yHour + yMins + verticalItemSpacing;
 
@@ -238,7 +238,7 @@ namespace Toggl.Daneel.Views.Calendar
             var width = CollectionViewContentSize.Width - rightPadding;
             var height = hourSupplementaryLabelHeight;
             var x = 0;
-            var y = hourHeight * hour - height / 2;
+            var y = HourHeight * hour - height / 2;
 
             return new CGRect(x, y, width, height);
         }
@@ -249,8 +249,8 @@ namespace Toggl.Daneel.Views.Calendar
             var attrs = dataSource.LayoutAttributesForItemAtIndexPath(editingItemIndexPath);
 
             var time = (int)indexPath.Item == 0 ? attrs.StartTime : attrs.EndTime;
-            var yHour = hourHeight * time.Hour;
-            var yMins = hourHeight * time.Minute / 60;
+            var yHour = HourHeight * time.Hour;
+            var yMins = HourHeight * time.Minute / 60;
 
             var width = CollectionViewContentSize.Width - rightPadding;
             var height = hourSupplementaryLabelHeight;
