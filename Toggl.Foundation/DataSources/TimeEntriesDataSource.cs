@@ -10,38 +10,31 @@ using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
-using Toggl.Foundation.DTOs;
-using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Sync.ConflictResolution;
 
 namespace Toggl.Foundation.DataSources
 {
-    internal sealed class TimeEntriesDataSource
-        : ObservableDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry>,
-          ITimeEntriesSource
+    internal sealed class TimeEntriesDataSource : ObservableDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry>, ITimeEntriesSource
     {
         private long? currentlyRunningTimeEntryId;
-
         private readonly ITimeService timeService;
-
-        private readonly IRepository<IDatabaseTimeEntry> repository;
-
         private readonly IAnalyticsService analyticsService;
+        private readonly IRepository<IDatabaseTimeEntry> repository;
 
         private readonly Func<IDatabaseTimeEntry, IDatabaseTimeEntry, ConflictResolutionMode> alwaysCreate
             = (a, b) => ConflictResolutionMode.Create;
 
         private readonly Subject<IThreadSafeTimeEntry> timeEntryStartedSubject = new Subject<IThreadSafeTimeEntry>();
         private readonly Subject<IThreadSafeTimeEntry> timeEntryStoppedSubject = new Subject<IThreadSafeTimeEntry>();
-        private readonly Subject<IThreadSafeTimeEntry> timeEntryContinuedSubject = new Subject<IThreadSafeTimeEntry>();
         private readonly Subject<IThreadSafeTimeEntry> suggestionStartedSubject = new Subject<IThreadSafeTimeEntry>();
+        private readonly Subject<IThreadSafeTimeEntry> timeEntryContinuedSubject = new Subject<IThreadSafeTimeEntry>();
 
         public IObservable<IThreadSafeTimeEntry> TimeEntryStarted { get; }
         public IObservable<IThreadSafeTimeEntry> TimeEntryStopped { get; }
-        public IObservable<IThreadSafeTimeEntry> TimeEntryContinued { get; }
         public IObservable<IThreadSafeTimeEntry> SuggestionStarted { get; }
+        public IObservable<IThreadSafeTimeEntry> TimeEntryContinued { get; }
 
         public IObservable<bool> IsEmpty { get; }
 
@@ -89,6 +82,7 @@ namespace Toggl.Foundation.DataSources
             SuggestionStarted = suggestionStartedSubject.AsObservable();
             TimeEntryContinued = timeEntryContinuedSubject.AsObservable();
         }
+
         public override IObservable<IThreadSafeTimeEntry> Create(IThreadSafeTimeEntry entity)
             => repository.UpdateWithConflictResolution(entity.Id, entity, alwaysCreate, RivalsResolver)  
                 .ToThreadSafeResult(Convert)
@@ -98,27 +92,15 @@ namespace Toggl.Foundation.DataSources
                 .FirstAsync()
                 .Select(result => result.Entity);
 
-        public IObservable<IThreadSafeTimeEntry> Stop(DateTimeOffset stopTime)
-            => GetAll(te => te.IsDeleted == false && te.Duration == null)
-                .Select(timeEntries => timeEntries.SingleOrDefault() ?? throw new NoRunningTimeEntryException())
-                .SelectMany(timeEntry => timeEntry
-                    .With((long)(stopTime - timeEntry.Start).TotalSeconds)
-                    .UpdatedAt(timeService.CurrentDateTime)
-                    .Apply(Update))
-                .Do(timeEntryStoppedSubject.OnNext);
+        public void OnTimeEntryStopped(IThreadSafeTimeEntry timeEntry)
+        {
+            timeEntryStoppedSubject.OnNext(timeEntry);
+        }
 
-        public IObservable<Unit> SoftDelete(IThreadSafeTimeEntry timeEntry)
-            => Observable.Return(timeEntry)
-                .Select(TimeEntry.DirtyDeleted)
-                .Select(te => te.UpdatedAt(timeService.CurrentDateTime))
-                .SelectMany(repository.Update)
-                .Do(entity => DeletedSubject.OnNext(entity.Id))
-                .Select(_ => Unit.Default);
-
-        public IObservable<IThreadSafeTimeEntry> Update(EditTimeEntryDto dto)
-            => GetById(dto.Id)
-                 .Select(te => createUpdatedTimeEntry(te, dto))
-                 .SelectMany(Update);
+        public void OnTimeEntrySoftDeleted(IThreadSafeTimeEntry timeEntry)
+        {
+            DeletedSubject.OnNext(timeEntry.Id);
+        }
 
         public void OnTimeEntryStarted(IThreadSafeTimeEntry timeEntry, TimeEntryStartOrigin origin)
         {
@@ -145,23 +127,6 @@ namespace Toggl.Foundation.DataSources
 
         protected override ConflictResolutionMode ResolveConflicts(IDatabaseTimeEntry first, IDatabaseTimeEntry second)
             => Resolver.ForTimeEntries.Resolve(first, second);
-
-        private TimeEntry createUpdatedTimeEntry(IThreadSafeTimeEntry timeEntry, EditTimeEntryDto dto)
-            => TimeEntry.Builder.Create(dto.Id)
-                        .SetDescription(dto.Description)
-                        .SetDuration(dto.StopTime.HasValue ? (long?)(dto.StopTime.Value - dto.StartTime).TotalSeconds : null)
-                        .SetTagIds(dto.TagIds)
-                        .SetStart(dto.StartTime)
-                        .SetTaskId(dto.TaskId)
-                        .SetBillable(dto.Billable)
-                        .SetProjectId(dto.ProjectId)
-                        .SetWorkspaceId(dto.WorkspaceId)
-                        .SetUserId(timeEntry.UserId)
-                        .SetIsDeleted(timeEntry.IsDeleted)
-                        .SetServerDeletedAt(timeEntry.ServerDeletedAt)
-                        .SetAt(timeService.CurrentDateTime)
-                        .SetSyncStatus(SyncStatus.SyncNeeded)
-                        .Build();
 
         private IThreadSafeTimeEntry runningTimeEntry(IThreadSafeTimeEntry timeEntry)
         {

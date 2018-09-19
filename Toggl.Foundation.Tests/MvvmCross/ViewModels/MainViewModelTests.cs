@@ -423,7 +423,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
 
-                await DataSource.TimeEntries.Received().Stop(date);
+                await InteractorFactory.Received().StopTimeEntry(date).Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -453,7 +453,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async ThreadingTask DoesNotInitiatePushSyncWhenSavingFails()
             {
-                DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>())
+                InteractorFactory
+                    .StopTimeEntry(Arg.Any<DateTimeOffset>())
+                    .Execute()
                     .Returns(Observable.Throw<IThreadSafeTimeEntry>(new Exception()));
 
                 Action stopTimeEntry = () => ViewModel.StopTimeEntryCommand.ExecuteAsync().Wait();
@@ -470,7 +472,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ThreadingTask.WaitAll(taskA, taskB);
 
-                await DataSource.TimeEntries.Received(1).Stop(Arg.Any<DateTimeOffset>());
+                await InteractorFactory.Received(1).StopTimeEntry(Arg.Any<DateTimeOffset>()).Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -480,7 +482,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 subject.OnNext(null);
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
 
-                await DataSource.TimeEntries.Received(1).Stop(Arg.Any<DateTimeOffset>());
+                await InteractorFactory.Received(1).StopTimeEntry(Arg.Any<DateTimeOffset>()).Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -491,7 +493,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
 
-                await DataSource.TimeEntries.DidNotReceive().Stop(Arg.Any<DateTimeOffset>());
+                await InteractorFactory.DidNotReceive().StopTimeEntry(Arg.Any<DateTimeOffset>()).Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -504,7 +506,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
 
-                await DataSource.TimeEntries.Received(2).Stop(Arg.Any<DateTimeOffset>());
+                await InteractorFactory.Received(2).StopTimeEntry(Arg.Any<DateTimeOffset>()).Execute();
             }
         }
 
@@ -939,7 +941,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.Init(ApplicationUrls.Main.Action.Stop);
                     await ViewModel.Initialize();
 
-                    await DataSource.TimeEntries.Received().Stop(TimeService.CurrentDateTime);
+                    await InteractorFactory.Received().StopTimeEntry(TimeService.CurrentDateTime).Execute();
                 }
 
                 [Fact, LogIfTooSlow]

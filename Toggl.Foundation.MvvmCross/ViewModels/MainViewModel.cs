@@ -414,7 +414,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             isStopButtonEnabled = false;
             StopTimeEntryCommand.RaiseCanExecuteChanged();
 
-            await dataSource.TimeEntries.Stop(timeService.CurrentDateTime)
+            await interactorFactory
+                .StopTimeEntry(timeService.CurrentDateTime)
+                .Execute()
                 .Do(dataSource.SyncManager.InitiatePushSync);
 
             CurrentTimeEntryElapsedTime = TimeSpan.Zero;

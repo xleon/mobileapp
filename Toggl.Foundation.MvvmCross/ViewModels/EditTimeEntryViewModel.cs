@@ -336,10 +336,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 TagIds = new List<long>(tagIds)
             };
 
-            confirmDisposable = dataSource.TimeEntries
-                                          .Update(dto)
-                                          .Do(dataSource.SyncManager.InitiatePushSync)
-                                          .Subscribe((Exception ex) => close(), () => close());
+            confirmDisposable = interactorFactory
+                .UpdateTimeEntry(dto)
+                .Execute()
+                .Do(dataSource.SyncManager.InitiatePushSync)
+                .Subscribe((Exception ex) => close(), () => close());
         }
 
         private async Task closeWithConfirmation()

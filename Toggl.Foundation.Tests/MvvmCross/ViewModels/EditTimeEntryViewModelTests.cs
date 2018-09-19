@@ -510,7 +510,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task DoesNotInitiatePushSyncWhenSavingFails()
             {
-                DataSource.TimeEntries.Update(Arg.Any<EditTimeEntryDto>())
+                InteractorFactory.UpdateTimeEntry(Arg.Any<EditTimeEntryDto>())
+                    .Execute()
                     .Returns(Observable.Throw<IThreadSafeTimeEntry>(new Exception()));
 
                 ViewModel.SaveCommand.Execute();
@@ -543,8 +544,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.SaveCommand.Execute();
 
-                await DataSource.TimeEntries.Received().Update(
-                    Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == project.WorkspaceId));
+                await InteractorFactory.Received()
+                    .UpdateTimeEntry(Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == project.WorkspaceId))
+                    .Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -572,8 +574,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.SaveCommand.Execute();
 
-                await DataSource.TimeEntries.Received().Update(
-                    Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == workspaceId));
+                await InteractorFactory
+                    .Received()
+                    .UpdateTimeEntry(Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == workspaceId))
+                    .Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -596,8 +600,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.SaveCommand.Execute();
 
-                await DataSource.TimeEntries.Received().Update(
-                    Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == newWorkspaceId));
+                await InteractorFactory
+                    .Received()
+                    .UpdateTimeEntry(Arg.Is<EditTimeEntryDto>(dto => dto.WorkspaceId == newWorkspaceId))
+                    .Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -628,9 +634,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.SaveCommand.Execute();
 
-                await DataSource.TimeEntries.Received().Update(Arg.Is<EditTimeEntryDto>(dto =>
-                    dto.Description.Length == 0
-                ));
+                await InteractorFactory
+                    .Received()
+                    .UpdateTimeEntry(Arg.Is<EditTimeEntryDto>(dto => dto.Description.Length == 0))
+                    .Execute();
             }
 
             [Theory, LogIfTooSlow]
@@ -646,9 +653,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.SaveCommand.Execute();
 
-                await DataSource.TimeEntries.Received().Update(Arg.Is<EditTimeEntryDto>(dto =>
-                    dto.Description == trimmed
-                ));
+                await InteractorFactory
+                    .Received()
+                    .UpdateTimeEntry(Arg.Is<EditTimeEntryDto>(dto => dto.Description == trimmed))
+                    .Execute();
             }
         }
 
@@ -669,7 +677,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.IsEditingDescription.Should().Be(false);
 
-                await DataSource.TimeEntries.DidNotReceive().Update(Arg.Any<EditTimeEntryDto>());
+                await InteractorFactory
+                    .DidNotReceive()
+                    .UpdateTimeEntry(Arg.Any<EditTimeEntryDto>())
+                    .Execute();
             }
         }
 
@@ -894,9 +905,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var uniqueTagIds = tagIds.Get.Distinct().ToArray();
                 if (projectId == null)
                     taskId = null;
-                var timeEntry = mockTimeEntry(id, workspaceId, projectId, taskId, billable, start, duration,
+                var mockedTimeEntry = mockTimeEntry(id, workspaceId, projectId, taskId, billable, start, duration,
                     description.Get, uniqueTagIds);
-                var observable = Observable.Return(timeEntry);
+                var observable = Observable.Return(mockedTimeEntry);
                 DataSource.TimeEntries.GetById(id).Returns(observable);
 
                 viewModel.Prepare(id);
@@ -904,17 +915,21 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 viewModel.IsEditingDescription = false;
                 viewModel.ConfirmCommand.Execute();
 
-                DataSource.TimeEntries.Received().Update(Arg.Is<EditTimeEntryDto>(
-                    dto => dto.Id == id
-                        && dto.WorkspaceId == workspaceId
-                        && dto.ProjectId == projectId
-                        && dto.TaskId == taskId
-                        && dto.Billable == billable
-                        && dto.StartTime == start
-                        && dto.StopTime == (duration.HasValue ? start + TimeSpan.FromSeconds(duration.Value) : (DateTimeOffset?)null)
-                        && dto.Description == description.Get.Trim()
-                        && dto.TagIds.Count() == uniqueTagIds.Count()
-                        && dto.TagIds.All(tagId => uniqueTagIds.Any(originalTagId => originalTagId == tagId)))).Wait();
+                InteractorFactory
+                    .Received()
+                    .UpdateTimeEntry(Arg.Is<EditTimeEntryDto>(
+                        dto => dto.Id == id
+                            && dto.WorkspaceId == workspaceId
+                            && dto.ProjectId == projectId
+                            && dto.TaskId == taskId
+                            && dto.Billable == billable
+                            && dto.StartTime == start
+                            && dto.StopTime == (duration.HasValue ? start + TimeSpan.FromSeconds(duration.Value) : (DateTimeOffset?)null)
+                            && dto.Description == description.Get.Trim()
+                            && dto.TagIds.Count() == uniqueTagIds.Count()
+                            && dto.TagIds.All(tagId => uniqueTagIds.Any(originalTagId => originalTagId == tagId))))
+                    .Execute()
+                    .Wait();
             }
 
             private IThreadSafeTimeEntry mockTimeEntry(
