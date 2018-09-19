@@ -43,16 +43,8 @@ namespace Toggl.Giskard.Adapters
             return ItemViewType;
         }
 
-        public void UpdateChanges(IReadOnlyCollection<ICollectionChange> changes)
+        public void UpdateChange(ICollectionChange change)
         {
-            if (changes.Count > 1 || changes.Any(c => c is ReloadCollectionChange))
-            {
-                updateSectionIndexes();
-                NotifyDataSetChanged();
-                return;
-            }
-
-            var change = changes.Single();
             switch (change)
             {
                 case AddRowCollectionChange<TModel> addRow:
@@ -81,6 +73,11 @@ namespace Toggl.Giskard.Adapters
 
                 case RemoveRowCollectionChange removeRow:
                     this.removeRow(removeRow);
+                    break;
+
+                case ReloadCollectionChange reload:
+                    updateSectionIndexes();
+                    NotifyDataSetChanged();
                     break;
             }
         }

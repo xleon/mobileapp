@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Foundation.MvvmCross.Collections.Changes;
-using Toggl.Multivac.Extensions;
+using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross.Collections
 {
     public class ObservableGroupedOrderedCollection<TItem> : IGroupOrderedCollection<TItem>
     {
-        private ISubject<IReadOnlyCollection<ICollectionChange>> collectionChangesSubject = new Subject<IReadOnlyCollection<ICollectionChange>>();
-        private GroupedOrderedCollection<TItem> collection;
         private Func<TItem, IComparable> indexKey;
+        private readonly ISubject<ICollectionChange> collectionChangesSubject = new Subject<ICollectionChange>();
+        private readonly GroupedOrderedCollection<TItem> collection;
 
-        public IObservable<IReadOnlyCollection<ICollectionChange>> CollectionChanges
+        public IObservable<ICollectionChange> CollectionChange
             => collectionChangesSubject.AsObservable();
 
         public IObservable<bool> Empty
@@ -67,18 +66,15 @@ namespace Toggl.Foundation.MvvmCross.Collections
         {
             var (index, needsNewSection) = collection.InsertItem(item);
 
-            var changes = new CollectionChangesListBuilder<TItem>();
 
             if (needsNewSection)
             {
-                changes.InsertSection(index.Section, item);
+                collectionChangesSubject.OnNext(new InsertSectionCollectionChange<TItem>(index.Section, item));
             }
             else
             {
-                changes.AddRow(index, item);
+                collectionChangesSubject.OnNext(new AddRowCollectionChange<TItem>(index, item));
             }
-
-            collectionChangesSubject.OnNext(changes.Build());
 
             return (index, needsNewSection);
         }
@@ -91,8 +87,6 @@ namespace Toggl.Foundation.MvvmCross.Collections
                 return InsertItem(item).index;
             }
 
-            var changes = new CollectionChangesListBuilder<TItem>();
-
             var section = collection.FitsIntoSection(item);
             var movesToDifferentSection = !section.HasValue || section.Value != oldIndex.Value.Section;
             collection.RemoveItemAt(oldIndex.Value.Section, oldIndex.Value.Row);
@@ -100,21 +94,20 @@ namespace Toggl.Foundation.MvvmCross.Collections
 
             if (!movesToDifferentSection && oldIndex.Value.Equals(newIndex))
             {
-                changes.UpdateRow(newIndex, item);
+                collectionChangesSubject.OnNext(new UpdateRowCollectionChange<TItem>(newIndex, item));
             }
             else
             {
                 if (needsNewSection)
                 {
-                    changes.MoveRowToNewSection(oldIndex.Value, newIndex.Section, item);
+                    collectionChangesSubject.OnNext(new MoveRowToNewSectionCollectionChange<TItem>(oldIndex.Value, newIndex.Section, item));
                 }
                 else
                 {
-                    changes.MoveRowWithinExistingSections(oldIndex.Value, newIndex, item, movesToDifferentSection);
+                    collectionChangesSubject.OnNext(new MoveRowWithinExistingSectionsCollectionChange<TItem>(oldIndex.Value, newIndex, item, movesToDifferentSection));
                 }
             }
 
-            collectionChangesSubject.OnNext(changes.Build());
             return newIndex;
         }
 
@@ -122,9 +115,7 @@ namespace Toggl.Foundation.MvvmCross.Collections
         {
             collection.ReplaceWith(items);
 
-            var changes = new CollectionChangesListBuilder<TItem>();
-            changes.Reload();
-            collectionChangesSubject.OnNext(changes.Build());
+            collectionChangesSubject.OnNext(new ReloadCollectionChange());
         }
 
         public TItem RemoveItemAt(int section, int row)
@@ -132,9 +123,7 @@ namespace Toggl.Foundation.MvvmCross.Collections
             var index = new SectionedIndex(section, row);
             var item = collection.RemoveItemAt(section, row);
 
-            var changes = new CollectionChangesListBuilder<TItem>();
-            changes.RemoveRow(index);
-            collectionChangesSubject.OnNext(changes.Build());
+            collectionChangesSubject.OnNext(new RemoveRowCollectionChange(index));
 
             return item;
         }
