@@ -6,6 +6,7 @@ using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.UI;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Span;
+using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Multivac.Extensions;
 using UIKit;
@@ -78,7 +79,7 @@ namespace Toggl.Daneel.Autocomplete
             );
 
         public static IImmutableList<ISpan> AsImmutableSpans(this NSAttributedString text, int cursorPosition)
-            => text.AsSpans(cursorPosition).ToImmutableList();
+            => text.AsSpans(cursorPosition).CollapseTextSpans().ToImmutableList();
 
         private static IEnumerable<ISpan> AsSpans(this NSAttributedString text, int cursorPosition)
         {

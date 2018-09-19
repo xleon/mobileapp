@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.MvvmCross.Collections;
@@ -12,7 +11,7 @@ namespace Toggl.Foundation.MvvmCross.Extensions
     using WorkspaceGroupedSuggestionsCollection = WorkspaceGroupedCollection<AutocompleteSuggestion>;
     using WorkspaceSuggestionsGrouping = IGrouping<(long workspaceId, string workspaceName), AutocompleteSuggestion>;
 
-    internal static class AutocompleteExtensions
+    public static class AutocompleteExtensions
     {
         public static IEnumerable<WorkspaceGroupedSuggestionsCollection> GroupByWorkspace(
             this IEnumerable<AutocompleteSuggestion> suggestions)
@@ -115,6 +114,55 @@ namespace Toggl.Foundation.MvvmCross.Extensions
         {
             var result = textFieldInfo.AddTag(tagSuggestion.TagId, tagSuggestion.Name);
             return result;
+        }
+
+        public static IEnumerable<ISpan> CollapseTextSpans(this IEnumerable<ISpan> spans)
+        {
+            var collapsed = new List<ISpan>();
+
+            TextSpan previousTextSpan = null;
+
+            foreach (var span in spans)
+            {
+                if (span is TextSpan == false && previousTextSpan != null)
+                {
+                    collapsed.Add(previousTextSpan);
+                    previousTextSpan = null;
+                }
+
+                if (span is TextSpan textSpan)
+                {
+                    previousTextSpan = previousTextSpan == null
+                        ? textSpan
+                        : mergeTextSpans(previousTextSpan, textSpan);
+                }
+                else
+                {
+                    collapsed.Add(span);
+                }
+            }
+
+            if (previousTextSpan != null)
+            {
+                collapsed.Add(previousTextSpan);
+            }
+
+            return collapsed;
+        }
+
+        private static TextSpan mergeTextSpans(TextSpan first, TextSpan second)
+        {
+            if (first is QueryTextSpan firstQuerySpan)
+            {
+                return new QueryTextSpan(first.Text + second.Text, firstQuerySpan.CursorPosition);
+            }
+
+            if (second is QueryTextSpan secondQuerySpan)
+            {
+                return new QueryTextSpan(first.Text + second.Text, first.Text.Length + secondQuerySpan.CursorPosition);
+            }
+
+            return new TextSpan(first.Text + second.Text);
         }
     }
 }

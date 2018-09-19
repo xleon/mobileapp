@@ -16,6 +16,7 @@ using MvvmCross.Platforms.Android.Presenters.Attributes;
 using MvvmCross.WeakSubscription;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Giskard.Activities;
 using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions;

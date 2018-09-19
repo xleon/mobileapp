@@ -54,7 +54,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IObservable<bool> HasProject { get; }
 
         private bool isDirty
-            => originalTimeEntry.Description != Description
+            => originalTimeEntry == null
+               || originalTimeEntry.Description != Description
                || originalTimeEntry.WorkspaceId != workspaceId
                || originalTimeEntry.ProjectId != projectId
                || originalTimeEntry.TaskId != taskId
