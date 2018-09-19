@@ -63,6 +63,12 @@ namespace Toggl.Daneel.Views.Calendar
             date = timeService.CurrentDateTime.Date;
 
             timeService
+                .MidnightObservable
+                .Do(dateTimeOffset => date = dateTimeOffset.Date)
+                .VoidSubscribe(InvalidateLayout)
+                .DisposedBy(disposeBag);
+
+            timeService
                 .CurrentDateTimeObservable
                 .DistinctUntilChanged(offset => offset.Minute)
                 .ObserveOn(SynchronizationContext.Current)
