@@ -335,9 +335,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.Initialize();
                 await ViewModel.DoneCommand.ExecuteAsync();
 
-                await DataSource.Projects
+                await InteractorFactory
                     .Received()
-                    .Create(Arg.Is<CreateProjectDTO>(dto => dto.WorkspaceId == WorkspaceId));
+                    .CreateProject(Arg.Is<CreateProjectDTO>(dto => dto.WorkspaceId == WorkspaceId))
+                    .Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -378,7 +379,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.CloseCommand.ExecuteAsync();
 
-                await DataSource.Projects.DidNotReceive().Create(Arg.Any<CreateProjectDTO>());
+                await InteractorFactory.CreateProject(Arg.Any<CreateProjectDTO>()).DidNotReceive().Execute();
             }
         }
 
@@ -411,8 +412,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Execute()
                     .Returns(Observable.Return(Workspace));
 
-                DataSource.Projects
-                    .Create(Arg.Any<CreateProjectDTO>())
+                InteractorFactory
+                    .CreateProject(Arg.Any<CreateProjectDTO>())
+                    .Execute()
                     .Returns(Observable.Return(project));
 
                 project.Id.Returns(projectId);
@@ -449,8 +451,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.DoneCommand.ExecuteAsync();
 
-                await DataSource.Projects.DidNotReceive()
-                    .Create(Arg.Any<CreateProjectDTO>());
+                await InteractorFactory
+                    .DidNotReceive()
+                    .CreateProject(Arg.Any<CreateProjectDTO>())
+                    .Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -478,9 +482,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.DoneCommand.ExecuteAsync();
 
-                await DataSource.Projects.Received().Create(
-                    Arg.Is<CreateProjectDTO>(dto => dto.Name == trimmed)
-                );
+                await InteractorFactory
+                    .Received()
+                    .CreateProject(Arg.Is<CreateProjectDTO>(dto => dto.Name == trimmed))
+                    .Execute();
             }
 
             public sealed class WhenCreatingProjectInAnotherWorkspace : EditProjectViewModelTest
@@ -535,7 +540,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     await ViewModel.DoneCommand.ExecuteAsync();
 
-                    await DataSource.Projects.DidNotReceive().Create(Arg.Any<CreateProjectDTO>());
+                    await InteractorFactory.CreateProject(Arg.Any<CreateProjectDTO>()).DidNotReceive().Execute();
                     await NavigationService.DidNotReceive().Close(Arg.Is(ViewModel), Arg.Any<long>());
                 }
 
@@ -553,9 +558,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                     await ViewModel.DoneCommand.ExecuteAsync();
 
-                    await DataSource.Projects.Received().Create(
-                        Arg.Is<CreateProjectDTO>(
-                            dto => dto.WorkspaceId == selectedWorkspaceId));
+                    await InteractorFactory
+                        .Received()
+                        .CreateProject(Arg.Is<CreateProjectDTO>(dto => dto.WorkspaceId == selectedWorkspaceId))
+                        .Execute();
                 }
 
                 [Fact, LogIfTooSlow]

@@ -15,6 +15,8 @@ namespace Toggl.Foundation.MvvmCross.Helper
         private static readonly MvxColor macaroniAndCheese = new MvxColor(241, 195, 63);
         private static readonly MvxColor easterPurple = new MvxColor(197, 107, 255);
         private static readonly MvxColor nearlyWhite = new MvxColor(250, 251, 252);
+        private static readonly MvxColor silver = new MvxColor(181, 188, 192);
+        private static readonly MvxColor brownishGrey = new MvxColor(94, 91, 91);
 
         public static class Onboarding
         {
@@ -291,6 +293,17 @@ namespace Toggl.Foundation.MvvmCross.Helper
             public static readonly MvxColor DayNotInMonth = new MvxColor(149, 149, 149);
 
             public static readonly MvxColor Disabled = new MvxColor(181, 188, 192);
+
+            public static class BarChart
+            {
+                public static readonly MvxColor Legend = silver;
+
+                public static readonly MvxColor Billable = azure;
+
+                public static readonly MvxColor NonBillable = new MvxColor(71, 195, 252);
+
+                public static readonly MvxColor EmptyBar = brownishGrey;
+            }
 
             public static readonly MvxColor OtherProjectsSegmentBackground = pinkishGrey;
 

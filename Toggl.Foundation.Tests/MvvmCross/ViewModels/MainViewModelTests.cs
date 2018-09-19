@@ -17,6 +17,7 @@ using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Foundation.Suggestions;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
@@ -49,6 +50,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     NavigationService,
                     RemoteConfigService,
                     SuggestionProviderContainer,
+                    AccessRestrictionStorage,
                     SchedulerProvider);
 
                 vm.Prepare();
@@ -86,6 +88,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useNavigationService,
                 bool useRemoteConfigService,
                 bool useSuggestionProviderContainer,
+                bool useAccessRestrictionStorage,
                 bool useSchedulerProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
@@ -99,6 +102,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
                 var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
+                var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainViewModel(
@@ -112,6 +116,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         navigationService,
                         remoteConfigService,
                         suggestionProviderContainer,
+                        accessRestrictionStorage,
                         schedulerProvider);
 
                 tryingToConstructWithEmptyParameters
@@ -137,6 +142,26 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.ViewAppearing();
 
                 ViewModel.IsInManualMode.Should().Be(isEnabled);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask NavigatesToNoWorkspaceViewModelWhenNoWorkspaceStateIsSet()
+            {
+                AccessRestrictionStorage.HasNoWorkspace().Returns(true);
+
+                ViewModel.ViewAppearing();
+
+                await NavigationService.Received().Navigate<NoWorkspaceViewModel>();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask DoesNotNavigateToNoWorkspaceViewModelWhenNoWorkspaceStateIsNotSet()
+            {
+                AccessRestrictionStorage.HasNoWorkspace().Returns(false);
+
+                ViewModel.ViewAppearing();
+
+                await NavigationService.DidNotReceive().Navigate<NoWorkspaceViewModel>();
             }
         }
 
@@ -398,7 +423,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
 
-                await DataSource.TimeEntries.Received().Stop(date);
+                await InteractorFactory.Received().StopTimeEntry(date).Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -428,7 +453,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async ThreadingTask DoesNotInitiatePushSyncWhenSavingFails()
             {
-                DataSource.TimeEntries.Stop(Arg.Any<DateTimeOffset>())
+                InteractorFactory
+                    .StopTimeEntry(Arg.Any<DateTimeOffset>())
+                    .Execute()
                     .Returns(Observable.Throw<IThreadSafeTimeEntry>(new Exception()));
 
                 Action stopTimeEntry = () => ViewModel.StopTimeEntryCommand.ExecuteAsync().Wait();
@@ -445,7 +472,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ThreadingTask.WaitAll(taskA, taskB);
 
-                await DataSource.TimeEntries.Received(1).Stop(Arg.Any<DateTimeOffset>());
+                await InteractorFactory.Received(1).StopTimeEntry(Arg.Any<DateTimeOffset>()).Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -455,7 +482,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 subject.OnNext(null);
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
 
-                await DataSource.TimeEntries.Received(1).Stop(Arg.Any<DateTimeOffset>());
+                await InteractorFactory.Received(1).StopTimeEntry(Arg.Any<DateTimeOffset>()).Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -466,7 +493,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
 
-                await DataSource.TimeEntries.DidNotReceive().Stop(Arg.Any<DateTimeOffset>());
+                await InteractorFactory.DidNotReceive().StopTimeEntry(Arg.Any<DateTimeOffset>()).Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -479,7 +506,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
                 await ViewModel.StopTimeEntryCommand.ExecuteAsync();
 
-                await DataSource.TimeEntries.Received(2).Stop(Arg.Any<DateTimeOffset>());
+                await InteractorFactory.Received(2).StopTimeEntry(Arg.Any<DateTimeOffset>()).Execute();
             }
         }
 
@@ -914,7 +941,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.Init(ApplicationUrls.Main.Action.Stop);
                     await ViewModel.Initialize();
 
-                    await DataSource.TimeEntries.Received().Stop(TimeService.CurrentDateTime);
+                    await InteractorFactory.Received().StopTimeEntry(TimeService.CurrentDateTime).Execute();
                 }
 
                 [Fact, LogIfTooSlow]

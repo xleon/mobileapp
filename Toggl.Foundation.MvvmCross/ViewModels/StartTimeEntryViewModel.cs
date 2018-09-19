@@ -401,7 +401,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task createTag()
         {
-            var createdTag = await dataSource.Tags.Create(CurrentQuery, textFieldInfo.WorkspaceId);
+            var createdTag = await interactorFactory.CreateTag(CurrentQuery, textFieldInfo.WorkspaceId).Execute();
             var tagSuggestion = new TagSuggestion(createdTag);
             await SelectSuggestionCommand.ExecuteAsync(tagSuggestion);
             hasAnyTags = true;

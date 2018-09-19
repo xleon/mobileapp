@@ -30,10 +30,9 @@ namespace Toggl.Ultrawave.ApiClients
             this.credentials = credentials;
         }
 
-        public IObservable<ITimeEntriesTotals> GetTotals(long workspaceId, DateTimeOffset startDate, DateTimeOffset? endDate)
+        public IObservable<ITimeEntriesTotals> GetTotals(long workspaceId, DateTimeOffset startDate, DateTimeOffset endDate)
         {
-            var interval = endDate?.Date - startDate.Date;
-            if (interval.HasValue && interval > maximumRange)
+            if (endDate.Date - startDate.Date > maximumRange)
                 throw new ArgumentOutOfRangeException(nameof(endDate));
 
             var parameters = new TimeEntriesTotalsParameters(startDate, endDate);
@@ -52,7 +51,7 @@ namespace Toggl.Ultrawave.ApiClients
                     {
                         Total = TimeSpan.FromSeconds(group.Seconds),
                         Billable = TimeSpan.FromSeconds(group.BillableSeconds)
-                    }).ToArray()
+                    }).ToArray<ITimeEntriesTotalsGroup>()
                 };
 
                 observer.OnNext(totals);

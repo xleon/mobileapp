@@ -158,7 +158,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             var billable = await interactorFactory.AreProjectsBillableByDefault(workspaceId).Execute();
 
-            var createdProject = await dataSource.Projects.Create(new CreateProjectDTO
+            var createdProject = await interactorFactory.CreateProject(new CreateProjectDTO
             {
                 Name = TrimmedName,
                 Color = Color.ToHexString(),
@@ -166,7 +166,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 ClientId = clientId,
                 Billable = billable,
                 WorkspaceId = workspaceId
-            });
+            }).Execute();
 
             await navigationService.Close(this, createdProject.Id);
         }

@@ -329,7 +329,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (currentUser.BeginningOfWeek == newBeginningOfWeek)
                 return;
 
-            await dataSource.User.Update(new EditUserDTO { BeginningOfWeek = newBeginningOfWeek });
+            await interactorFactory.UpdateUser(new EditUserDTO { BeginningOfWeek = newBeginningOfWeek }).Execute();
             dataSource.SyncManager.InitiatePushSync();
         }
 
@@ -386,7 +386,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 TimeOfDayFormat = timeFormat
             };
 
-            await dataSource.Preferences.Update(preferencesDto);
+            await interactorFactory.UpdatePreferences(preferencesDto).Execute();
             dataSource.SyncManager.InitiatePushSync();
         }
 
@@ -394,7 +394,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             if (selectedWorkspaceId == currentUser.DefaultWorkspaceId) return;
 
-            await dataSource.User.UpdateWorkspace(selectedWorkspaceId);
+            await interactorFactory.UpdateDefaultWorkspace(selectedWorkspaceId).Execute();
             dataSource.SyncManager.InitiatePushSync();
         }
 

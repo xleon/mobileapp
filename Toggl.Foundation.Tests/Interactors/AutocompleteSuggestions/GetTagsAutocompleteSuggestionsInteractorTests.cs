@@ -4,15 +4,18 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Interactors.AutocompleteSuggestions;
+using Toggl.Foundation.Models.Interfaces;
+using Toggl.PrimeRadiant.Models;
 using Xunit;
 
 namespace Toggl.Foundation.Tests.Interactors.AutocompleteSuggestions
 {
     public sealed class GetTagsAutocompleteSuggestionsInteractorTests : BaseAutocompleteSuggestionsInteractorTest
     {
-        private readonly ITagsSource dataSource = Substitute.For<ITagsSource>();
+        private readonly IDataSource<IThreadSafeTag, IDatabaseTag> dataSource = 
+            Substitute.For<IDataSource<IThreadSafeTag, IDatabaseTag>>();
 
         public GetTagsAutocompleteSuggestionsInteractorTests()
         {

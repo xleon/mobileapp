@@ -1,10 +1,13 @@
-﻿using Android.App;
+﻿using System.Reactive.Disposables;
+using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.Views;
 
 namespace Toggl.Giskard.Activities
@@ -13,10 +16,12 @@ namespace Toggl.Giskard.Activities
     [Activity(Theme = "@style/AppTheme",
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
-    public sealed class ReportsActivity : MvxAppCompatActivity<ReportsViewModel>
+    public sealed partial class ReportsActivity : MvxAppCompatActivity<ReportsViewModel>, IReactiveBindingHolder
     {
         private ReportsRecyclerView reportsRecyclerView;
         private ReportsLinearLayout reportsMainContainer;
+
+        public CompositeDisposable DisposeBag { get; } = new CompositeDisposable();
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -27,6 +32,11 @@ namespace Toggl.Giskard.Activities
             reportsRecyclerView = FindViewById<ReportsRecyclerView>(Resource.Id.ReportsActivityRecyclerView);
             reportsMainContainer = FindViewById<ReportsLinearLayout>(Resource.Id.ReportsActivityMainContainer);
             reportsMainContainer.CalendarContainer = FindViewById(Resource.Id.ReportsCalendarContainer);
+
+            initializeViews();
+
+            this.Bind(selectWorkspaceFAB.Rx().Tap(), ViewModel.SelectWorkspace);
+            this.Bind(ViewModel.WorkspaceNameObservable, workspaceName.Rx().TextObserver());
 
             setupToolbar();
         }
@@ -48,7 +58,6 @@ namespace Toggl.Giskard.Activities
 
             toolbar.NavigationClick += onNavigateBack;
         }
-
         private void onNavigateBack(object sender, Toolbar.NavigationClickEventArgs e)
         {
             Finish();

@@ -19,6 +19,7 @@ using MvvmCross.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Presenters;
 using MvvmCross.Presenters;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 
 namespace Toggl.Daneel.Presentation
 {

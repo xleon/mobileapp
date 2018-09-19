@@ -22,9 +22,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class SelectTagsViewModel : MvxViewModel<(long[] tagIds, long workspaceId), long[]>
     {
-        private readonly IMvxNavigationService navigationService;
         private readonly ITogglDataSource dataSource;
         private readonly IInteractorFactory interactorFactory;
+        private readonly IMvxNavigationService navigationService;
+
         private readonly Subject<string> textSubject = new Subject<string>();
         private readonly BehaviorSubject<bool> hasTagsSubject = new BehaviorSubject<bool>(false);
         private readonly HashSet<long> selectedTagIds = new HashSet<long>();
@@ -98,8 +99,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
 
             var initialHasTags = dataSource.Tags
-                                           .GetAll()
-                                           .Select(tags => tags.Where(tag => tag.WorkspaceId == workspaceId).Any());
+               .GetAll()
+               .Select(tags => tags.Where(tag => tag.WorkspaceId == workspaceId).Any());
 
             hasTagsSubject.AsObservable()
                           .Merge(initialHasTags)
@@ -150,7 +151,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task createTag()
         {
-            var createdTag = await dataSource.Tags.Create(Text.Trim(), workspaceId);
+            var createdTag = await interactorFactory.CreateTag(Text.Trim(), workspaceId).Execute();
             selectedTagIds.Add(createdTag.Id);
             Text = "";
 

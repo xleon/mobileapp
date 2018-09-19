@@ -29,7 +29,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     PermissionsService,
                     NavigationService,
                     RemoteConfigService,
-                    SuggestionProviderContainer
+                    SuggestionProviderContainer,
+                    AccessRestrictionStorage
                 );
         }
 
@@ -51,6 +52,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     bool usePermissionsService,
                     bool useNavigationService,
                     bool useRemoteConfigService,
+                    bool useAccessRestrictionStorage,
                     bool useSuggestionProviderContainer)
             {
                 var timeService = useTimeService ? TimeService : null;
@@ -66,6 +68,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var permissionsService = usePermissionsService ? PermissionsService : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
+                var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
                 var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
 
                 Action tryingToConstructWithEmptyParameters =
@@ -83,7 +86,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         permissionsService,
                         navigationService,
                         remoteConfigService,
-                        suggestionProviderContainer
+                        suggestionProviderContainer,
+                        accessRestrictionStorage
                     );
 
                 tryingToConstructWithEmptyParameters

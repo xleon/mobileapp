@@ -6,8 +6,7 @@ using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.DataSources
 {
-    public sealed class TasksDataSource
-        : DataSource<IThreadSafeTask, IDatabaseTask>, ITasksSource
+    internal sealed class TasksDataSource : DataSource<IThreadSafeTask, IDatabaseTask>
     {
         public TasksDataSource(IRepository<IDatabaseTask> repository)
             : base(repository)

@@ -13,11 +13,15 @@ namespace Toggl.Daneel.ViewSources
         where TCell : BaseTableViewCell<TModel>
     {
         private readonly string cellIdentifier;
-        protected readonly IReadOnlyList<IReadOnlyList<TModel>> items;
 
-        private IList<IList<TModel>> displayedItems;
+        private readonly IReadOnlyList<IReadOnlyList<TModel>> items;
 
         public Action<TModel> OnItemTapped { get; set; }
+
+        protected IReadOnlyList<IReadOnlyList<TModel>> DisplayedItems
+            => displayedItems.Select(section => section.AsReadOnly()).ToList().AsReadOnly();
+
+        private List<List<TModel>> displayedItems;
 
         public SectionedListTableViewSource(IReadOnlyList<IReadOnlyList<TModel>> items, string cellIdentifier)
         {
@@ -119,7 +123,7 @@ namespace Toggl.Daneel.ViewSources
 
         private void reloadDisplayedData()
         {
-            displayedItems = new List<IList<TModel>>(items.Select(list => new List<TModel>(list)));
+            displayedItems = new List<List<TModel>>(items.Select(list => new List<TModel>(list)));
         }
     }
 }

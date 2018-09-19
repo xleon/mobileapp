@@ -2,6 +2,7 @@
 using FluentAssertions;
 using MvvmCross.Navigation;
 using NSubstitute;
+using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Services;
@@ -107,6 +108,27 @@ namespace Toggl.Foundation.Tests.MvvmCross.Services
                 ErrorHandlingService.TryHandleDeprecationError(exception);
 
                 NavigationService.Received().Navigate<OutdatedAppViewModel>();
+            }
+        }
+
+        public sealed class TheNoWorkspaceException : BaseErrorHandlingServiceTests
+        {
+            private NoWorkspaceException exception => new NoWorkspaceException();
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsTrueForNoWorkspaceException()
+            {
+                var result = ErrorHandlingService.TryHandleNoWorkspaceError(exception);
+
+                result.Should().BeTrue();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void RestrictsAccessForNoWorkspaceException()
+            {
+                ErrorHandlingService.TryHandleNoWorkspaceError(exception);
+
+                AccessRestrictionStorage.Received().SetNoWorkspaceStateReached(true);
             }
         }
 

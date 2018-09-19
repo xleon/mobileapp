@@ -14,6 +14,7 @@ namespace Toggl.PrimeRadiant.Settings
         private const string outdatedApiKey = "OutdatedApi";
         private const string outdatedClientKey = "OutdatedClient";
         private const string unauthorizedAccessKey = "UnauthorizedAccessForApiToken";
+        private const string noWorkspaceKey = "noWorkspace";
 
         private const string userSignedUpUsingTheAppKey = "UserSignedUpUsingTheApp";
         private const string isNewUserKey = "IsNewUser";
@@ -113,6 +114,16 @@ namespace Toggl.PrimeRadiant.Settings
         public void SetUnauthorizedAccess(string apiToken)
         {
             keyValueStorage.SetString(unauthorizedAccessKey, apiToken);
+        }
+
+        public void SetNoWorkspaceStateReached(bool hasNoWorkspace)
+        {
+            keyValueStorage.SetBool(noWorkspaceKey, hasNoWorkspace);
+        }
+
+        public bool HasNoWorkspace()
+        {
+            return keyValueStorage.GetBool(noWorkspaceKey);
         }
 
         public bool IsClientOutdated()

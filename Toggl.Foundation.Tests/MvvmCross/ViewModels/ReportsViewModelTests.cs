@@ -19,6 +19,7 @@ using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Xunit;
 using Microsoft.Reactive.Testing;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -230,6 +231,55 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await Initialize();
 
                 ViewModel.IsLoading.Should().BeFalse();
+            }
+        }
+
+        public sealed class TheIsLoadingObservable : ReportsViewModelTest
+        {
+            private readonly ITestableObserver<bool> isLoadingObserver;
+
+            public TheIsLoadingObservable()
+            {
+                isLoadingObserver = TestScheduler.CreateObserver<bool>();
+                ViewModel.IsLoadingObservable.Subscribe(isLoadingObserver);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task IsSetToTrueWhenTheViewIsInitializedBeforeAnyLoadingOfReportsStarts()
+            {
+                await ViewModel.Initialize();
+
+                TestScheduler.Start();
+                isLoadingObserver.Messages.Last().Value.Value.Should().BeTrue();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task IsSetToTrueWhenAReportIsLoading()
+            {
+                var now = DateTimeOffset.Now;
+                TimeService.CurrentDateTime.Returns(now);
+                ReportsProvider.GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
+                    .Returns(Observable.Never<ProjectSummaryReport>());
+
+                await Initialize();
+
+                TestScheduler.Start();
+                isLoadingObserver.Messages.Last().Value.Value.Should().BeTrue();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task IsSetToFalseWhenLoadingIsCompleted()
+            {
+                var now = DateTimeOffset.Now;
+                var projectsNotSyncedCount = 0;
+                TimeService.CurrentDateTime.Returns(now);
+                ReportsProvider.GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>())
+                    .Returns(Observable.Return(new ProjectSummaryReport(new ChartSegment[0], projectsNotSyncedCount)));
+
+                await Initialize();
+
+                TestScheduler.Start();
+                isLoadingObserver.Messages.Last().Value.Value.Should().BeFalse();
             }
         }
 
@@ -514,10 +564,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.Initialize();
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId + 1 };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
                     .Returns(Observable.Return(mockWorkspace));
 
-                await ViewModel.SelectWorkspace.ExecuteAsync();
+                await ViewModel.SelectWorkspace();
 
                 await ReportsProvider.Received().GetProjectSummary(Arg.Is(mockWorkspace.Id), Arg.Any<DateTimeOffset>(),
                     Arg.Any<DateTimeOffset>());
@@ -530,13 +580,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.WorkspaceNameObservable.Subscribe(observer);
 
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId + 1, Name = "Selected workspace" };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
                     .Returns(Observable.Return(mockWorkspace));
                 InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(mockWorkspace));
 
                 await ViewModel.Initialize();
 
-                await ViewModel.SelectWorkspaceMethod();
+                await ViewModel.SelectWorkspace();
 
                 TestScheduler.Start();
                 observer.Messages.AssertEqual(
@@ -549,10 +599,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task ShouldNotTriggerAReportReloadWhenSelectionIsCancelled()
             {
                 await ViewModel.Initialize();
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(null));
 
-                await ViewModel.SelectWorkspace.ExecuteAsync();
+                await ViewModel.SelectWorkspace();
 
                 await ReportsProvider.DidNotReceive().GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(),
                     Arg.Any<DateTimeOffset>());
@@ -564,13 +614,133 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.Initialize();
 
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>())
+                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(mockWorkspace));
 
-                await ViewModel.SelectWorkspace.ExecuteAsync();
+                await ViewModel.SelectWorkspace();
 
                 await ReportsProvider.DidNotReceive().GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(),
                     Arg.Any<DateTimeOffset>());
+            }
+        }
+
+        public sealed class TheStartDateAndEndDateObservables : ReportsViewModelTest
+        {
+            private readonly ITestableObserver<DateTimeOffset> startDateObserver;
+            private readonly ITestableObserver<DateTimeOffset> endDateObserver;
+
+            public TheStartDateAndEndDateObservables()
+            {
+                startDateObserver = TestScheduler.CreateObserver<DateTimeOffset>();
+                endDateObserver = TestScheduler.CreateObserver<DateTimeOffset>();
+
+                ViewModel.StartDate.Subscribe(startDateObserver);
+                ViewModel.EndDate.Subscribe(endDateObserver);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task DoesNotEmitAnyValuesDuringInitialization()
+            {
+                await ViewModel.Initialize();
+
+                startDateObserver.Messages.Should().BeEmpty();
+                endDateObserver.Messages.Should().BeEmpty();
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData(
+                2017, 12, 6,
+                2017, 12, 4,
+                2017, 12, 10
+            )]
+            [InlineData(
+                2018, 2, 28,
+                2018, 2, 26,
+                2018, 3, 4
+            )]
+            [InlineData(
+                2016, 4, 20,
+                2016, 4, 18,
+                2016, 4, 24
+            )]
+            [InlineData(
+                2016, 12, 28,
+                2016, 12, 26,
+                2017, 1, 1
+            )]
+            public void ReturnsTheCorrectStartAndEndDatesForSelectedRanges(
+                int currentYear, int currentMonth, int currentDay,
+                int startYear, int startMonth, int startDay,
+                int endYear, int endMonth, int endDay)
+            {
+                var currentDate = new DateTimeOffset(currentYear, currentMonth, currentDay, 0, 0, 0, TimeSpan.Zero);
+                var start = new DateTimeOffset(startYear, startMonth, startDay, 0, 0, 0, TimeSpan.Zero);
+                var end = new DateTimeOffset(endYear, endMonth, endDay, 0, 0, 0, TimeSpan.Zero);
+                TimeService.CurrentDateTime.Returns(currentDate);
+                ViewModel.ChangeDateRangeCommand.Execute(
+                    ReportsDateRangeParameter.WithDates(start, end).WithSource(ReportsSource.Calendar));
+
+                TestScheduler.Start();
+                startDateObserver.Messages.AssertEqual(ReactiveTest.OnNext(1, start));
+                endDateObserver.Messages.AssertEqual(ReactiveTest.OnNext(1, end));
+            }
+        }
+
+        public sealed class TheWorkspaceHasBillableFeatureEnabledObservable : ReportsViewModelTest
+        {
+            private readonly ITestableObserver<bool> isEnabledObserver;
+
+            public TheWorkspaceHasBillableFeatureEnabledObservable()
+            {
+                isEnabledObserver = TestScheduler.CreateObserver<bool>();
+                ViewModel.WorkspaceHasBillableFeatureEnabled.Subscribe(isEnabledObserver);
+            }
+
+            [Fact]
+            public async Task IsDisabledByDefault()
+            {
+                await ViewModel.Initialize();
+
+                TestScheduler.Start();
+                isEnabledObserver.Messages.Single().Value.Value.Should().BeFalse();
+            }
+
+            [Fact]
+            public async Task StaysDisabledWhenSwitchingToAFreeWorkspace()
+            {
+                prepareWorkspace(isProEnabled: false);
+
+                await ViewModel.Initialize();
+                await ViewModel.SelectWorkspace();
+
+                TestScheduler.Start();
+                isEnabledObserver.Messages.Last().Value.Value.Should().BeFalse();
+            }
+
+            [Fact]
+            public async Task BecomesEnabledWhenSwitchingToAProWorkspace()
+            {
+                prepareWorkspace(isProEnabled: true);
+
+                await ViewModel.Initialize();
+                await ViewModel.SelectWorkspace();
+
+                TestScheduler.Start();
+                isEnabledObserver.Messages.Last().Value.Value.Should().BeTrue();
+            }
+
+            private void prepareWorkspace(bool isProEnabled)
+            {
+                var workspace = new MockWorkspace { Id = 123 };
+                var workspaceFeatures = new MockWorkspaceFeatureCollection
+                {
+                    Features = new[] { new MockWorkspaceFeature { FeatureId = WorkspaceFeatureId.Pro, Enabled = isProEnabled } }
+                };
+
+                var workspaceFeaturesObservable = Observable.Return(workspaceFeatures);
+                var workspaceObservable = Observable.Return(workspace);
+                DataSource.WorkspaceFeatures.GetById(workspace.Id).Returns(workspaceFeaturesObservable);
+                DialogService.Select(Arg.Any<string>(), Arg.Any<ICollection<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>()).Returns(workspaceObservable);
             }
         }
     }

@@ -5,6 +5,6 @@ namespace Toggl.Ultrawave.ApiClients.Interfaces
 {
     public interface ITimeEntriesReportsApi
     {
-        IObservable<ITimeEntriesTotals> GetTotals(long workspaceId, DateTimeOffset startDate, DateTimeOffset? endDate);
+        IObservable<ITimeEntriesTotals> GetTotals(long workspaceId, DateTimeOffset startDate, DateTimeOffset endDate);
     }
 }

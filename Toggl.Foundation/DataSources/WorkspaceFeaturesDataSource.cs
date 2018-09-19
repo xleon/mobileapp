@@ -6,7 +6,7 @@ using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.DataSources
 {
-    public sealed class WorkspaceFeaturesDataSource : DataSource<IThreadSafeWorkspaceFeatureCollection, IDatabaseWorkspaceFeatureCollection>
+    internal sealed class WorkspaceFeaturesDataSource : DataSource<IThreadSafeWorkspaceFeatureCollection, IDatabaseWorkspaceFeatureCollection>
     {
         public WorkspaceFeaturesDataSource(IRepository<IDatabaseWorkspaceFeatureCollection> repository)
             : base(repository)

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Helper;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Sync.States;
@@ -22,12 +23,13 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
 {
     public sealed class TryFetchInaccessibleProjectsStateTests
     {
-        private readonly DateTimeOffset now = new DateTimeOffset(2018, 06, 01, 12, 52, 00, TimeSpan.Zero);
+        private readonly TryFetchInaccessibleProjectsState state;
         private readonly IProjectsApi api = Substitute.For<IProjectsApi>();
-        private readonly IProjectsSource dataSource = Substitute.For<IProjectsSource>();
         private readonly ITimeService timeService = Substitute.For<ITimeService>();
         private readonly IFetchObservables fetch = Substitute.For<IFetchObservables>();
-        private readonly TryFetchInaccessibleProjectsState state;
+        private readonly DateTimeOffset now = new DateTimeOffset(2018, 06, 01, 12, 52, 00, TimeSpan.Zero);
+        private readonly IDataSource<IThreadSafeProject, IDatabaseProject> dataSource = 
+            Substitute.For<IDataSource<IThreadSafeProject, IDatabaseProject>>();
 
         public TryFetchInaccessibleProjectsStateTests()
         {

@@ -74,7 +74,7 @@ namespace Toggl.Giskard.Extensions
         {
             if (OreoApis.AreAvailable)
             {
-                var channel = new NotificationChannel(defaultChannelId, defaultChannelName, NotificationImportance.Default);
+                var channel = new NotificationChannel(defaultChannelId, defaultChannelName, NotificationImportance.Low);
                 channel.Description = defaultChannelDescription;
                 channel.EnableVibration(false);
                 channel.SetVibrationPattern(noNotificationVibrationPattern);

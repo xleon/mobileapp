@@ -97,7 +97,7 @@ namespace Toggl.Daneel.ViewSources
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
             var header = (TimeEntriesLogHeaderView)tableView.DequeueReusableHeaderFooterView(TimeEntriesLogHeaderView.Identifier);
-            header.Items = collection[(int)section];
+            header.Items = DisplayedItems[(int)section];
             return header;
         }
 
@@ -105,14 +105,14 @@ namespace Toggl.Daneel.ViewSources
         {
             if (tableView.GetHeaderView(section) is TimeEntriesLogHeaderView header)
             {
-                header.Items = collection[section];
                 header.UpdateView();
+                header.Items = DisplayedItems[section];
             }
         }
 
         private void handleDeleteTableViewRowAction(UITableViewRowAction rowAction, NSIndexPath indexPath)
         {
-            var timeEntry = collection[indexPath.Section][indexPath.Row];
+            var timeEntry = DisplayedItems[indexPath.Section][indexPath.Row];
             swipeToDeleteSubject.OnNext(timeEntry);
         }
 
@@ -121,7 +121,7 @@ namespace Toggl.Daneel.ViewSources
             if (!UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
                 return null;
 
-            var item = collection[indexPath.Section][indexPath.Row];
+            var item = DisplayedItems[indexPath.Section][indexPath.Row];
             if (item == null)
                 return null;
 
@@ -134,7 +134,7 @@ namespace Toggl.Daneel.ViewSources
             if (!UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
                 return null;
 
-            var item = collection[indexPath.Section][indexPath.Row];
+            var item = DisplayedItems[indexPath.Section][indexPath.Row];
             if (item == null)
                 return null;
 
