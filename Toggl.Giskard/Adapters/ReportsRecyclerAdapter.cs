@@ -4,7 +4,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Giskard.TemplateSelectors;
 using Toggl.Giskard.Views;
 using Android.Widget;

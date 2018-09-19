@@ -5,7 +5,7 @@ using Android.Support.V7.Widget.Helper;
 using Android.Util;
 using Android.Views;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Giskard.Adapters;
 
 namespace Toggl.Giskard.Views
