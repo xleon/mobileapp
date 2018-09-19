@@ -32,10 +32,14 @@ namespace Toggl.Giskard
         {
             base.RunAppStart(bundle);
             var navigationUrl = Intent.Data?.ToString();
+            var navigationService = Mvx.Resolve<IMvxNavigationService>();
             if (string.IsNullOrEmpty(navigationUrl))
+            {
+                navigationService.Navigate<MainViewModel>();
                 return;
+            }
 
-            Mvx.Resolve<IMvxNavigationService>().Navigate(navigationUrl);
+            navigationService.Navigate(navigationUrl);
         }
     }
 }

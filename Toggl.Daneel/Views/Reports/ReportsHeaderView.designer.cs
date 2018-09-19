@@ -13,6 +13,18 @@ namespace Toggl.Daneel.Views.Reports
 	partial class ReportsHeaderView
 	{
 		[Outlet]
+		UIKit.UIView BarChartCardView { get; set; }
+
+		[Outlet]
+		UIKit.UIView BarChartContainerView { get; set; }
+
+		[Outlet]
+		UIKit.UIStackView BarsStackView { get; set; }
+
+		[Outlet]
+		UIKit.UILabel BillableLegendLabel { get; set; }
+
+		[Outlet]
 		UIKit.UILabel BillablePercentageLabel { get; set; }
 
 		[Outlet]
@@ -22,7 +34,22 @@ namespace Toggl.Daneel.Views.Reports
 		UIKit.UILabel BillableTitleLabel { get; set; }
 
 		[Outlet]
+		UIKit.UILabel ClockedHoursTitleLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView ColorsLegendContainerView { get; set; }
+
+		[Outlet]
 		UIKit.UIView EmptyStateView { get; set; }
+
+		[Outlet]
+		UIKit.UILabel EndDateLabel { get; set; }
+
+		[Outlet]
+		UIKit.UILabel HalfHoursLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIStackView HorizontalLegendStackView { get; set; }
 
 		[Outlet]
 		UIKit.UIView LoadingCardView { get; set; }
@@ -31,10 +58,19 @@ namespace Toggl.Daneel.Views.Reports
 		Toggl.Daneel.Views.Reports.LoadingPieChartView LoadingPieChartView { get; set; }
 
 		[Outlet]
+		UIKit.UILabel MaximumHoursLabel { get; set; }
+
+		[Outlet]
+		UIKit.UILabel NonBillableLegendLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIView OverviewCardView { get; set; }
 
 		[Outlet]
 		Toggl.Daneel.Views.Reports.PieChartView PieChartView { get; set; }
+
+		[Outlet]
+		UIKit.UILabel StartDateLabel { get; set; }
 
 		[Outlet]
 		UIKit.UIImageView TotalDurationGraph { get; set; }
@@ -47,9 +83,24 @@ namespace Toggl.Daneel.Views.Reports
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (LoadingCardView != null) {
-				LoadingCardView.Dispose ();
-				LoadingCardView = null;
+			if (BarChartCardView != null) {
+				BarChartCardView.Dispose ();
+				BarChartCardView = null;
+			}
+
+			if (BarChartContainerView != null) {
+				BarChartContainerView.Dispose ();
+				BarChartContainerView = null;
+			}
+
+			if (BarsStackView != null) {
+				BarsStackView.Dispose ();
+				BarsStackView = null;
+			}
+
+			if (BillableLegendLabel != null) {
+				BillableLegendLabel.Dispose ();
+				BillableLegendLabel = null;
 			}
 
 			if (BillablePercentageLabel != null) {
@@ -67,14 +118,49 @@ namespace Toggl.Daneel.Views.Reports
 				BillableTitleLabel = null;
 			}
 
+			if (ClockedHoursTitleLabel != null) {
+				ClockedHoursTitleLabel.Dispose ();
+				ClockedHoursTitleLabel = null;
+			}
+
 			if (EmptyStateView != null) {
 				EmptyStateView.Dispose ();
 				EmptyStateView = null;
 			}
 
+			if (EndDateLabel != null) {
+				EndDateLabel.Dispose ();
+				EndDateLabel = null;
+			}
+
+			if (HalfHoursLabel != null) {
+				HalfHoursLabel.Dispose ();
+				HalfHoursLabel = null;
+			}
+
+			if (HorizontalLegendStackView != null) {
+				HorizontalLegendStackView.Dispose ();
+				HorizontalLegendStackView = null;
+			}
+
+			if (LoadingCardView != null) {
+				LoadingCardView.Dispose ();
+				LoadingCardView = null;
+			}
+
 			if (LoadingPieChartView != null) {
 				LoadingPieChartView.Dispose ();
 				LoadingPieChartView = null;
+			}
+
+			if (MaximumHoursLabel != null) {
+				MaximumHoursLabel.Dispose ();
+				MaximumHoursLabel = null;
+			}
+
+			if (NonBillableLegendLabel != null) {
+				NonBillableLegendLabel.Dispose ();
+				NonBillableLegendLabel = null;
 			}
 
 			if (OverviewCardView != null) {
@@ -85,6 +171,11 @@ namespace Toggl.Daneel.Views.Reports
 			if (PieChartView != null) {
 				PieChartView.Dispose ();
 				PieChartView = null;
+			}
+
+			if (StartDateLabel != null) {
+				StartDateLabel.Dispose ();
+				StartDateLabel = null;
 			}
 
 			if (TotalDurationGraph != null) {
@@ -100,6 +191,11 @@ namespace Toggl.Daneel.Views.Reports
 			if (TotalTitleLabel != null) {
 				TotalTitleLabel.Dispose ();
 				TotalTitleLabel = null;
+			}
+
+			if (ColorsLegendContainerView != null) {
+				ColorsLegendContainerView.Dispose ();
+				ColorsLegendContainerView = null;
 			}
 		}
 	}

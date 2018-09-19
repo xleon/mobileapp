@@ -261,6 +261,10 @@
     <Compile Include="Extensions\PopupOffsets.cs" />
     <Compile Include="Extensions\PopupWindowWithDefaultGravityExtenstions.cs" />
     <Compile Include="Helper\PersistentNotificationsHelper.cs" />
+    <Compile Include="Fragments\NoWorkspaceFragment.cs" />
+    <Compile Include="Fragments\NoWorkspaceFragment.ViewBinds.cs">
+      <DependentUpon>NoWorkspaceFragment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helper\PopupWindowFactory.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -429,6 +433,10 @@
         <DependentUpon>MainActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="Startup\HandlerScheduler.cs" />
+    <Compile Include="Activities\ReportsActivity.ViewBinds.cs">
+      <DependentUpon>ReportsActivity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ListSelectionDialog.cs" />
     <Compile Include="Extensions\Reactive\ViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\TextViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\CompoundButtonExtensions.cs" />
@@ -441,6 +449,7 @@
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml" />
+    <AndroidResource Include="Resources\color\BlueTextColor.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
@@ -823,6 +832,14 @@
     <AndroidResource Include="Resources\drawable\ic_icon_notrunning.xml" />
     <AndroidResource Include="Resources\layout\SendFeedbackActivity.axml" />
     <AndroidResource Include="Resources\menu\SendFeedbackMenu.xml" />
+    <AndroidResource Include="Resources\layout\NoWorkspaceFragment.axml" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_illustration_error_workspace.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_illustration_error_workspace.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_illustration_error_workspace.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_illustration_error_workspace.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_illustration_error_workspace.png" />
+    <AndroidResource Include="Resources\layout\ReportsActivityWorkspaceName.axml" />
+    <AndroidResource Include="Resources\drawable\workspace_white.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">

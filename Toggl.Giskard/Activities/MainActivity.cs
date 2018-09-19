@@ -72,11 +72,11 @@ namespace Toggl.Giskard.Activities
 
             setupLayoutManager(mainRecyclerAdapter);
 
-            var mainLogChanges = ViewModel
+            var mainLogChange = ViewModel
                 .TimeEntries
-                .CollectionChanges
+                .CollectionChange
                 .ObserveOn(SynchronizationContext.Current);
-            this.Bind(mainLogChanges, mainRecyclerAdapter.UpdateChanges);
+            this.Bind(mainLogChange, mainRecyclerAdapter.UpdateChange);
 
             var isTimeEntryRunning = ViewModel
                 .IsTimeEntryRunning

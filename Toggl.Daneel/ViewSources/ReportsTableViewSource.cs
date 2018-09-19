@@ -5,14 +5,14 @@ using MvvmCross.Platforms.Ios.Binding.Views;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Views.Reports;
 using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using UIKit;
 
 namespace Toggl.Daneel.ViewSources
 {
     public sealed class ReportsTableViewSource : MvxTableViewSource
     {
-        private const int summaryHeight = 175;
+        private const int summaryHeight = 469;
         private const string cellIdentifier = nameof(ReportsLegendViewCell);
         private const string headerCellIdentifier = nameof(ReportsHeaderView);
 
@@ -39,6 +39,9 @@ namespace Toggl.Daneel.ViewSources
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
             var header = tableView.DequeueReusableHeaderFooterView(headerCellIdentifier);
+
+            if (header is ReportsHeaderView reportsHeaderView)
+                reportsHeaderView.ViewModel = viewModel;
 
             if (header is IMvxBindable bindable)
                 bindable.DataContext = viewModel;

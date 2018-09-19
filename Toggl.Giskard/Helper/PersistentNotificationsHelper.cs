@@ -15,7 +15,7 @@ namespace Toggl.Giskard.Helper
 {
     public static class PersistentNotificationsHelper
     {
-        private static Uri togglMainNavigationUri  = Uri.Parse("toggl://main");
+        private static Uri togglMainNavigationUri = Uri.Parse(ApplicationUrls.Main.Open);
         private static int runningTimeEntryNotificationId = 111;
         private static int idleTimerNotificationId = 112;
         private static char dotSeparator = '\u00b7';
@@ -123,10 +123,10 @@ namespace Toggl.Giskard.Helper
 
         private static PendingIntent getIntentFor(Activity activity)
         {
-            var startMainActivityIntent = new Intent(Intent.ActionView, togglMainNavigationUri)
-                .SetFlags(ActivityFlags.ClearTop | ActivityFlags.ClearTask | ActivityFlags.NewTask);
-
-            return PendingIntent.GetActivity(activity, 0, startMainActivityIntent, 0);
+            var notificationIntent = activity.PackageManager.GetLaunchIntentForPackage(activity.PackageName);
+            notificationIntent.SetPackage(null);
+            notificationIntent.SetFlags(ActivityFlags.NewTask | ActivityFlags.ResetTaskIfNeeded);
+            return PendingIntent.GetActivity(activity, 0, notificationIntent, 0);
         }
     }
 }

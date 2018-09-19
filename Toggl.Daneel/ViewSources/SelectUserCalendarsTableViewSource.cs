@@ -38,7 +38,7 @@ namespace Toggl.Daneel.ViewSources
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
             var header = (UserCalendarListHeaderViewCell)tableView.DequeueReusableHeaderFooterView(headerIdentifier);
-            header.Item = collection[(int)section].First().SourceName;
+            header.Item = DisplayedItems[(int)section].First().SourceName;
             header.ContentView.BackgroundColor = SectionHeaderBackgroundColor;
             return header;
         }
@@ -51,6 +51,10 @@ namespace Toggl.Daneel.ViewSources
             cell.UpdateView(true);
 
             tableView.DeselectRow(indexPath, true);
+        }
+
+        public override void RefreshHeader(UITableView tableView, int section)
+        {
         }
     }
 }

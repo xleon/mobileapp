@@ -14,21 +14,24 @@ using PropertyChanged;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Foundation.Reports;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
+using Toggl.Multivac.Models.Reports;
+using Toggl.Ultrawave.Exceptions;
 using CommonFunctions = Toggl.Multivac.Extensions.CommonFunctions;
 
 [assembly: MvxNavigation(typeof(ReportsViewModel), ApplicationUrls.Reports)]
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
 {
     [Preserve(AllMembers = true)]
     public sealed class ReportsViewModel : MvxViewModel
@@ -50,8 +53,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         private readonly Subject<Unit> reportSubject = new Subject<Unit>();
-        private readonly BehaviorSubject<string> workspaceNameSubject = new BehaviorSubject<string>(string.Empty);
+        private readonly BehaviorSubject<bool> isLoading = new BehaviorSubject<bool>(true);
+        private readonly BehaviorSubject<IThreadSafeWorkspace> workspaceSubject = new BehaviorSubject<IThreadSafeWorkspace>(null);
         private readonly BehaviorSubject<string> currentDateRangeStringSubject = new BehaviorSubject<string>(string.Empty);
+        private readonly Subject<DateTimeOffset> startDateSubject = new Subject<DateTimeOffset>();
+        private readonly Subject<DateTimeOffset> endDateSubject = new Subject<DateTimeOffset>();
 
         private bool didNavigateToCalendar;
         private DateTimeOffset startDate;
@@ -66,7 +72,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IReadOnlyList<ChartSegment> segments = new ChartSegment[0];
         private IReadOnlyList<ChartSegment> groupedSegments = new ChartSegment[0];
 
+        [Obsolete("Use IsLoadingObservable instead")]
         public bool IsLoading { get; private set; }
+        public IObservable<bool> IsLoadingObservable { get; }
 
         public TimeSpan TotalTime { get; private set; } = TimeSpan.Zero;
 
@@ -75,6 +83,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public bool TotalTimeIsZero => TotalTime.Ticks == 0;
 
         public float? BillablePercentage { get; private set; }
+
+        public ReportsBarChartViewModel BarChartViewModel { get; }
 
         public IReadOnlyList<ChartSegment> Segments
         {
@@ -123,8 +133,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxCommand ToggleCalendarCommand { get; }
         [Obsolete]
         public IMvxCommand<ReportsDateRangeParameter> ChangeDateRangeCommand { get; }
-        [Obsolete("Use SelectWorkspaceAction instead")]
-        public IMvxAsyncCommand SelectWorkspace { get; }
+
+        public IObservable<DateTimeOffset> StartDate { get; }
+
+        public IObservable<DateTimeOffset> EndDate { get; }
+
+        public IObservable<bool> WorkspaceHasBillableFeatureEnabled { get; }
 
         public ReportsViewModel(
             ITogglDataSource dataSource,
@@ -152,12 +166,30 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             calendarViewModel = new ReportsCalendarViewModel(timeService, dataSource);
 
+            var totalsObservable = reportSubject
+                .SelectMany(_ => dataSource.ReportsProvider.GetTotals(workspaceId, startDate, endDate))
+                .Catch<ITimeEntriesTotals, OfflineException>(_ => Observable.Return<ITimeEntriesTotals>(null))
+                .Where(report => report != null);
+            BarChartViewModel = new ReportsBarChartViewModel(schedulerProvider, dataSource.Preferences, totalsObservable);
+
             HideCalendarCommand = new MvxCommand(HideCalendar);
             ToggleCalendarCommand = new MvxCommand(ToggleCalendar);
             ChangeDateRangeCommand = new MvxCommand<ReportsDateRangeParameter>(changeDateRange);
-            SelectWorkspace = new MvxAsyncCommand(SelectWorkspaceMethod);
 
-            WorkspaceNameObservable = workspaceNameSubject
+            IsLoadingObservable = isLoading.AsObservable().StartWith(true).AsDriver(schedulerProvider);
+            StartDate = startDateSubject.AsObservable().AsDriver(schedulerProvider);
+            EndDate = endDateSubject.AsObservable().AsDriver(schedulerProvider);
+
+            WorkspaceNameObservable = workspaceSubject
+                .Select(workspace => workspace?.Name ?? string.Empty)
+                .DistinctUntilChanged()
+                .AsDriver(schedulerProvider);
+
+            WorkspaceHasBillableFeatureEnabled = workspaceSubject
+                .Where(workspace => workspace != null)
+                .SelectMany(workspace => dataSource.WorkspaceFeatures.GetById(workspace.Id))
+                .Select(workspaceFeatures => workspaceFeatures.IsEnabled(WorkspaceFeatureId.Pro))
+                .StartWith(false)
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
@@ -165,12 +197,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
-            var workspaces = dataSource.Workspaces;
-
-            WorkspacesObservable = Observable.Merge(
-                    workspaces.Created.SelectUnit(),
-                    workspaces.Updated.SelectUnit(),
-                    workspaces.Deleted.SelectUnit())
+            WorkspacesObservable = dataSource.Workspaces
+                .ItemsChanged()
                 .StartWith(Unit.Default)
                 .SelectMany(_ => dataSource.Workspaces.GetAll())
                 .DistinctUntilChanged()
@@ -185,7 +213,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
             workspaceId = workspace.Id;
-            workspaceNameSubject.OnNext(workspace.Name);
+            workspaceSubject.OnNext(workspace);
 
             reportSubject
                 .AsObservable()
@@ -241,18 +269,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             calendarViewModel.OnHideCalendar();
         }
 
-        public async Task SelectWorkspaceMethod()
-        {
-            var workspace = await dialogService.Select(Resources.SelectWorkspace, Workspaces);
-
-            if (workspace == null || workspace.Id == workspaceId)
-                return;
-
-            workspaceId = workspace.Id;
-            workspaceNameSubject.OnNext(workspace.Name);
-            reportSubject.OnNext(Unit.Default);
-        }
-
         private static ReadOnlyCollection<(string, IThreadSafeWorkspace)> readOnlyWorkspaceNameTuples(IEnumerable<IThreadSafeWorkspace> workspaces)
             => workspaces
                 .Select(ws => (ws.Name, ws))
@@ -263,6 +279,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             reportSubjectStartTime = timeService.CurrentDateTime.UtcDateTime;
             IsLoading = true;
+            isLoading.OnNext(true);
             Segments = new ChartSegment[0];
         }
 
@@ -277,6 +294,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                              .AsReadOnly();
 
             IsLoading = false;
+            isLoading.OnNext(false);
 
             trackReportsEvent(true);
         }
@@ -285,6 +303,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             RaisePropertyChanged(nameof(Segments));
             IsLoading = false;
+            isLoading.OnNext(false);
             trackReportsEvent(false);
         }
 
@@ -306,6 +325,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             startDate = dateRange.StartDate;
             endDate = dateRange.EndDate;
+            startDateSubject.OnNext(dateRange.StartDate);
+            endDateSubject.OnNext(dateRange.EndDate);
             source = dateRange.Source;
             updateCurrentDateRangeString();
             reportSubject.OnNext(Unit.Default);
@@ -412,6 +433,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Append(lastSegment)
                 .ToList()
                 .AsReadOnly();
+        }
+
+        public async Task SelectWorkspace()
+        {
+            var currentWorkspaceIndex = Workspaces.IndexOf(w => w.Item.Id == workspaceId);
+
+            var workspace = await dialogService.Select(Resources.SelectWorkspace, Workspaces, currentWorkspaceIndex);
+
+            if (workspace == null || workspace.Id == workspaceId) return;
+
+            workspaceId = workspace.Id;
+            workspaceSubject.OnNext(workspace);
+            reportSubject.OnNext(Unit.Default);
         }
 
         private float percentageOf(List<ChartSegment> list)

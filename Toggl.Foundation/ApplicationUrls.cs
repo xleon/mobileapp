@@ -14,7 +14,9 @@
                 public const string Continue = "continue";
             }
 
-            public const string Regex = @"toggl://main\?action=(?<action>.+)";
+            public const string Regex = @"toggl://main(\?action=(?<action>.+))?";
+
+            public static readonly string Open = "toggl://main";
 
             public static readonly string StopTimeEntry = $"toggl://main?action={Action.Stop}";
 

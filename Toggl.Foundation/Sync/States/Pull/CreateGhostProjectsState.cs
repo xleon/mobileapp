@@ -13,12 +13,14 @@ using Toggl.PrimeRadiant;
 using Toggl.Multivac.Extensions;
 using Toggl.Ultrawave.Exceptions;
 using static Toggl.Multivac.Extensions.CommonFunctions;
+using Toggl.Foundation.DataSources.Interfaces;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Sync.States.Pull
 {
     public sealed class CreateGhostProjectsState : IPersistState
     {
-        private readonly IProjectsSource dataSource;
+        private readonly IDataSource<IThreadSafeProject, IDatabaseProject> dataSource;
 
         private readonly IAnalyticsService analyticsService;
 
@@ -27,7 +29,7 @@ namespace Toggl.Foundation.Sync.States.Pull
         public StateResult<ApiException> ErrorOccured { get; } = new StateResult<ApiException>();
 
         public CreateGhostProjectsState(
-            IProjectsSource dataSource,
+            IDataSource<IThreadSafeProject, IDatabaseProject> dataSource,
             IAnalyticsService analyticsService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));

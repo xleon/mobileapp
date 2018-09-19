@@ -11,6 +11,7 @@ using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Multivac.Extensions;
 using UIKit;
 using static Toggl.Daneel.Extensions.AnimationExtensions;
@@ -54,7 +55,7 @@ namespace Toggl.Daneel.ViewControllers
 
             bool areThereEnoughWorkspaces(ICollection<(string ItemName, IThreadSafeWorkspace Item)> workspaces) => workspaces.Count > 1;
 
-            bool isWorkspaceNameTooLong(string workspaceName) 
+            bool isWorkspaceNameTooLong(string workspaceName)
             {
                 var attributes = new UIStringAttributes { Font = WorkspaceLabel.Font };
                 var size = new NSString(workspaceName).GetSizeUsingAttributes(attributes);
@@ -72,7 +73,7 @@ namespace Toggl.Daneel.ViewControllers
             //Commands
             this.BindVoid(titleButton.Rx().Tap(), ViewModel.ToggleCalendar);
             this.BindVoid(ReportsTableView.Rx().Tap(), ViewModel.HideCalendar);
-            this.Bind(WorkspaceButton.Rx().Tap(), ViewModel.SelectWorkspaceMethod);
+            this.Bind(WorkspaceButton.Rx().Tap(), ViewModel.SelectWorkspace);
 
             var bindingSet = this.CreateBindingSet<ReportsViewController, ReportsViewModel>();
 

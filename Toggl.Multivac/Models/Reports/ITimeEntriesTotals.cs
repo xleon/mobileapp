@@ -5,7 +5,7 @@ namespace Toggl.Multivac.Models.Reports
     {
         DateTimeOffset StartDate { get; }
 
-        DateTimeOffset? EndDate { get; }
+        DateTimeOffset EndDate { get; }
 
         Resolution Resolution { get; }
 

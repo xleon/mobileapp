@@ -12,6 +12,7 @@ using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.ApiClients;
+using Toggl.Ultrawave.ApiClients.Interfaces;
 
 namespace Toggl.Foundation.Reports
 {
@@ -21,6 +22,7 @@ namespace Toggl.Foundation.Reports
 
         private readonly IProjectsApi projectsApi;
         private readonly IProjectsSummaryApi projectSummaryApi;
+        private readonly ITimeEntriesReportsApi timeEntriesReportsApi;
         private readonly IRepository<IDatabaseProject> projectsRepository;
         private readonly IRepository<IDatabaseClient> clientsRepository;
 
@@ -35,6 +37,7 @@ namespace Toggl.Foundation.Reports
             projectsRepository = database.Projects;
             clientsRepository = database.Clients;
             projectSummaryApi = api.ProjectsSummary;
+            timeEntriesReportsApi = api.TimeEntriesReports;
         }
 
         public IObservable<ProjectSummaryReport> GetProjectSummary(
@@ -42,6 +45,10 @@ namespace Toggl.Foundation.Reports
             => projectSummaryApi
                 .GetByWorkspace(workspaceId, startDate, endDate)
                 .SelectMany(response => summaryReportFromResponse(response, workspaceId));
+
+        public IObservable<ITimeEntriesTotals> GetTotals(
+            long workspaceId, DateTimeOffset startDate, DateTimeOffset endDate)
+            => timeEntriesReportsApi.GetTotals(workspaceId, startDate, endDate);
 
         private IObservable<ProjectSummaryReport> summaryReportFromResponse(IProjectsSummary response, long workspaceId)
         {

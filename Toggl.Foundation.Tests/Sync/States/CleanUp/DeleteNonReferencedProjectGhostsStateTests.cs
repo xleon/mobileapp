@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Sync.States.CleanUp;
 using Toggl.Foundation.Tests.Mocks;
@@ -19,9 +19,10 @@ namespace Toggl.Foundation.Tests.Sync.States.CleanUp
 {
     public sealed class DeleteNonReferencedProjectGhostsStateTests
     {
-        private readonly IProjectsSource projectsDataSource = Substitute.For<IProjectsSource>();
-        private readonly ITimeEntriesSource timeEntriesDataSource = Substitute.For<ITimeEntriesSource>();
         private readonly DeleteNonReferencedProjectGhostsState state;
+        private readonly ITimeEntriesSource timeEntriesDataSource = Substitute.For<ITimeEntriesSource>();
+        private readonly IDataSource<IThreadSafeProject, IDatabaseProject> projectsDataSource = 
+            Substitute.For<IDataSource<IThreadSafeProject, IDatabaseProject>>();
 
         public DeleteNonReferencedProjectGhostsStateTests()
         {

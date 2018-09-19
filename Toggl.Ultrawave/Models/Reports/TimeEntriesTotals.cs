@@ -9,7 +9,7 @@ namespace Toggl.Ultrawave.Models.Reports
     {
         public DateTimeOffset StartDate { get; set; }
 
-        public DateTimeOffset? EndDate { get; set; }
+        public DateTimeOffset EndDate { get; set; }
 
         public Resolution Resolution { get; set; }
 

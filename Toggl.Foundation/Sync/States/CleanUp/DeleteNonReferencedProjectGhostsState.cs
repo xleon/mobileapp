@@ -2,22 +2,24 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
+using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Sync.States.CleanUp
 {
     public sealed class DeleteNonReferencedProjectGhostsState : ISyncState
     {
-        private readonly IProjectsSource projectsDataSource;
+        private readonly IDataSource<IThreadSafeProject, IDatabaseProject> projectsDataSource;
 
-        private readonly ITimeEntriesSource timeEntriesDataSource;
+        private readonly IObservableDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry> timeEntriesDataSource;
 
         public StateResult FinishedDeleting { get; } = new StateResult();
 
-        public DeleteNonReferencedProjectGhostsState(IProjectsSource projectsDataSource, ITimeEntriesSource timeEntriesDataSource)
+        public DeleteNonReferencedProjectGhostsState(IDataSource<IThreadSafeProject, IDatabaseProject> projectsDataSource, IObservableDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry> timeEntriesDataSource)
         {
             Ensure.Argument.IsNotNull(projectsDataSource, nameof(projectsDataSource));
             Ensure.Argument.IsNotNull(timeEntriesDataSource, nameof(timeEntriesDataSource));

@@ -1,14 +1,15 @@
 ﻿using System;
 using Toggl.Foundation.Reports;
-using Toggl.Foundation.MvvmCross.ViewModels;
 using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 
 namespace Toggl.Giskard.TemplateSelectors
 {
     public sealed class ReportsTemplateSelector : IMvxTemplateSelector
     {
-        public const int Header = 0;
-        public const int Item = 1;
+        public const int WorkspaceName = 0;
+        public const int Header = 1;
+        public const int Item = 2;
 
         public int ItemTemplateId { get; set; }
 
@@ -16,6 +17,8 @@ namespace Toggl.Giskard.TemplateSelectors
         {
             switch (fromViewType)
             {
+                case WorkspaceName:
+                    return Resource.Layout.ReportsActivityWorkspaceName;
                 case Header:
                     return Resource.Layout.ReportsActivityHeader;
                 case Item:
@@ -28,6 +31,9 @@ namespace Toggl.Giskard.TemplateSelectors
 
         public int GetItemViewType(object forItemObject)
         {
+            if (forItemObject is string)
+                return WorkspaceName;
+
             if (forItemObject is ReportsViewModel)
                 return Header;
 

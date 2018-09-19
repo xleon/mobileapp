@@ -639,10 +639,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                                          .Select(createArbitraryProject)
                                          .ToList();
 
-                var projectsSource = Substitute.For<IProjectsSource>();
-                projectsSource.GetAll().Returns(Observable.Return(projects));
-
-                DataSource.Projects.Returns(projectsSource);
+                DataSource.Projects.GetAll().Returns(Observable.Return(projects));
 
                 ViewModel.Prepare(SelectProjectParameter.WithIds(null, null, workspaceId));
                 await ViewModel.Initialize();
@@ -657,10 +654,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                                          .Select(createArbitraryProject)
                                          .ToList();
 
-                var projectsSource = Substitute.For<IProjectsSource>();
-                projectsSource.GetAll().Returns(Observable.Return(projects));
-
-                DataSource.Projects.Returns(projectsSource);
+                DataSource.Projects.GetAll().Returns(Observable.Return(projects));
 
                 AutocompleteProvider
                           .Query(Arg.Is<QueryInfo>(arg => arg.SuggestionType == AutocompleteSuggestionType.Projects))
@@ -677,10 +671,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ReturnsTrueIfHasNoProjects()
             {
-                var projectsSource = Substitute.For<IProjectsSource>();
-                projectsSource.GetAll().Returns(Observable.Return(new List<IThreadSafeProject>()));
-
-                DataSource.Projects.Returns(projectsSource);
+                DataSource.Projects.GetAll().Returns(Observable.Return(new List<IThreadSafeProject>()));
 
                 ViewModel.Prepare(SelectProjectParameter.WithIds(null, null, workspaceId));
                 await ViewModel.Initialize();
@@ -691,10 +682,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public void ReturnsFalseBeforeLoadingProjectsFromDatabase()
             {
-                var projectsSource = Substitute.For<IProjectsSource>();
-                projectsSource.GetAll().Returns(Observable.Return(new List<IThreadSafeProject>()));
-
-                DataSource.Projects.Returns(projectsSource);
+                DataSource.Projects.GetAll().Returns(Observable.Return(new List<IThreadSafeProject>()));
 
                 ViewModel.Prepare(SelectProjectParameter.WithIds(null, null, workspaceId));
 

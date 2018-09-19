@@ -75,7 +75,7 @@ namespace Toggl.Daneel.ViewSources
                 .DisposedBy(disposeBag);
 
             collection
-                .CollectionChanges
+                .CollectionChange
                 .ObserveOn(SynchronizationContext.Current)
                 .VoidSubscribe(onCollectionChanges)
                 .DisposedBy(disposeBag);

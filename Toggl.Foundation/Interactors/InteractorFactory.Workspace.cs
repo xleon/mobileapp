@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.PrimeRadiant.Models;
 
@@ -27,5 +28,8 @@ namespace Toggl.Foundation.Interactors
 
         public IInteractor<IObservable<bool>> IsBillableAvailableForWorkspace(long workspaceId)
             => new IsBillableAvailableForWorkspaceInteractor(dataSource, workspaceId);
+
+        public IInteractor<IObservable<Unit>> CreateDefaultWorkspace()
+            => new CreateDefaultWorkspaceInteractor(idProvider, timeService, dataSource.User, dataSource.Workspaces);
     }
 }

@@ -110,7 +110,7 @@ namespace Toggl.Daneel.Services
             });
         }
 
-        public IObservable<T> Select<T>(string title, IEnumerable<(string ItemName, T Item)> options)
+        public IObservable<T> Select<T>(string title, IEnumerable<(string ItemName, T Item)> options, int initialSelectionIndex)
             where T : class
         {
             return Observable.Create<T>(observer =>

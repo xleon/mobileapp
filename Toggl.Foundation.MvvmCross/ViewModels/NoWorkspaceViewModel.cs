@@ -6,29 +6,39 @@ using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Sync;
 using Toggl.Multivac;
+using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class NoWorkspaceViewModel : MvxViewModel
     {
-        private readonly IMvxNavigationService navigationService;
         private readonly ITogglDataSource dataSource;
+        private readonly IAccessRestrictionStorage accessRestrictionStorage;
+        private readonly IInteractorFactory interactorFactory;
+        private readonly IMvxNavigationService navigationService;
         private readonly Subject<bool> isLoading = new Subject<bool>();
 
         public IObservable<bool> IsLoading => isLoading.AsObservable();
 
         public NoWorkspaceViewModel(
+            ITogglDataSource dataSource,
+            IInteractorFactory interactorFactory,
             IMvxNavigationService navigationService,
-            ITogglDataSource dataSource)
+            IAccessRestrictionStorage accessRestrictionStorage)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
+            Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
+            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
-            this.navigationService = navigationService;
             this.dataSource = dataSource;
+            this.accessRestrictionStorage = accessRestrictionStorage;
+            this.navigationService = navigationService;
+            this.interactorFactory = interactorFactory;
         }
 
         public async Task TryAgain()
@@ -37,15 +47,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             dataSource.CreateNewSyncManager();
 
-            var workspaces = await dataSource
+            var anyWorkspaceIsAvailable = await dataSource
                 .SyncManager
                 .ForceFullSync()
                 .Where(state => state == SyncState.Sleep)
-                .SelectMany(dataSource.Workspaces.GetAll());
+                .SelectMany(dataSource.Workspaces.GetAll())
+                .Any(workspaces => workspaces.Any());
 
             isLoading.OnNext(false);
 
-            if (workspaces.Any())
+            if (anyWorkspaceIsAvailable)
             {
                 close();
             }
@@ -57,13 +68,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             dataSource.CreateNewSyncManager();
 
-            await dataSource
-                .User
-                .Current
-                .FirstAsync()
-                .Select(user => $"{user.Fullname}'s Workspace")
-                .SelectMany(dataSource.Workspaces.Create)
-                .SelectMany(workspace => dataSource.User.UpdateWorkspace(workspace.Id));
+            await interactorFactory.CreateDefaultWorkspace().Execute();
 
             await dataSource
                 .SyncManager
@@ -75,6 +80,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void close()
         {
+            accessRestrictionStorage.SetNoWorkspaceStateReached(false);
             navigationService.Close(this);
         }
     }

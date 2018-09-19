@@ -6,6 +6,7 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Interactors.AutocompleteSuggestions;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Multivac.Extensions;
@@ -16,7 +17,8 @@ namespace Toggl.Foundation.Tests.Interactors.AutocompleteSuggestions
 {
     public sealed class GetProjectsAutocompleteSuggestionsInteractorTests : BaseAutocompleteSuggestionsInteractorTest
     {
-        private readonly IProjectsSource dataSource = Substitute.For<IProjectsSource>();
+        private readonly IDataSource<IThreadSafeProject, IDatabaseProject> dataSource = 
+            Substitute.For<IDataSource<IThreadSafeProject, IDatabaseProject>>();
 
         public GetProjectsAutocompleteSuggestionsInteractorTests()
         {

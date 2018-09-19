@@ -4,14 +4,20 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Giskard.TemplateSelectors;
 using Toggl.Giskard.Views;
+using Android.Widget;
+using static Toggl.Giskard.Resource.Id;
 
 namespace Toggl.Giskard.Adapters
 {
     public sealed class ReportsRecyclerAdapter : MvxRecyclerAdapter
     {
+        private const int workspaceNameCellIndex = 0;
+        private const int summaryCardCellIndex = 1;
+        private const int headerItemsCount = 2;
+
         public ReportsViewModel ViewModel { get; set; }
 
         public ReportsRecyclerAdapter()
@@ -48,16 +54,26 @@ namespace Toggl.Giskard.Adapters
                 reportsViewHolder.IsLastItem = position == ItemCount - 1;
                 reportsViewHolder.RecalculateSize();
             }
+
+            if (position == workspaceNameCellIndex)
+            {
+                var workspaceNameTextView = holder.ItemView as TextView;
+                workspaceNameTextView.Text = ViewModel.WorkspaceName;
+            }
         }
 
-        public override int ItemCount => 1 + base.ItemCount;
+        public override int ItemCount 
+            => headerItemsCount + base.ItemCount;
 
-        public override object GetItem(int viewPosition) 
+        public override object GetItem(int viewPosition)
         {
-            if (viewPosition == 0)
-               return ViewModel;
+            if (viewPosition == workspaceNameCellIndex)
+                return ViewModel.WorkspaceName;
 
-            return base.GetItem(viewPosition - 1);
+            if (viewPosition == summaryCardCellIndex)
+                return ViewModel;
+
+            return base.GetItem(viewPosition - headerItemsCount);
         }
     }
 }

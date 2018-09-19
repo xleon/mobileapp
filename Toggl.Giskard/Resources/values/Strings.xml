@@ -107,6 +107,10 @@ understand and agree to Toggl\'s</string>
     <string name="GenericInternetConnectionErrorMessage">No internet connection. Please try again.</string>
     <string name="SendFeedbackTitle">Submit feedback</string>
     <string name="SendFeedbackSuccessMessage">Message sent. Thank you for your feedback. If you had any questions, we\'ll get back to you soon.</string>
+    <string name="TryAgain">Try Again</string>
+    <string name="CreateWorkspace">Create Workspace</string>
+    <string name="NoWorkspaceHelperText">Seems someone has removed you from their workspace.\nNo worries. Create a new workspace to continue.</string>
+    <string name="Uhoh">Uh oh.</string>
 
     <string name="ReportsCalendarShortcutsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsCalendarShortcutsTemplateSelector, Toggl.Giskard</string>
     <string name="ReportsCalendarTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsCalendarTemplateSelector, Toggl.Giskard</string>
