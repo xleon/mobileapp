@@ -48,6 +48,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IObservable<IThreadSafeTimeEntry> CurrentRunningTimeEntry { get; private set; }
         public IObservable<bool> ShouldShowRunningTimeEntryNotification { get; private set; }
         public IObservable<bool> ShouldShowStoppedTimeEntryNotification { get; private set; }
+        public IObservable<Unit> ShouldReloadTimeEntryLog { get; private set; }
 
         public TimeSpan CurrentTimeEntryElapsedTime { get; private set; } = TimeSpan.Zero;
         public DurationFormat CurrentTimeEntryElapsedTimeFormat { get; } = DurationFormat.Improved;
@@ -248,9 +249,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Subscribe(n => NumberOfSyncFailures = n)
                 .DisposedBy(disposeBag);
 
-            timeService.MidnightObservable
-                .Subscribe(onMidnight)
-                .DisposedBy(disposeBag);
+            ShouldReloadTimeEntryLog = Observable.Merge(
+                timeService.MidnightObservable.SelectUnit(),
+                timeService.SignificantTimeChangeObservable.SelectUnit()
+            );
 
             switch (urlNavigationAction)
             {
@@ -345,11 +347,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             EditTimeEntryCommand.RaiseCanExecuteChanged();
 
             RaisePropertyChanged(nameof(IsTimeEntryRunning));
-        }
-
-        private void onMidnight(DateTimeOffset midnight)
-        {
-            navigationService.ChangePresentation(new ReloadLogHint());
         }
 
         private Task openSettings()

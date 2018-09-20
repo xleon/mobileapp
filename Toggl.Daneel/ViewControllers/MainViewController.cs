@@ -210,6 +210,10 @@ namespace Toggl.Daneel.ViewControllers
                 SendFeedbackSuccessView.Rx().AnimatedIsVisible());
             this.BindVoid(SendFeedbackSuccessView.Rx().Tap(), ViewModel.RatingViewModel.CloseFeedbackSuccessView);
 
+            ViewModel.ShouldReloadTimeEntryLog
+                .VoidSubscribe(reload)
+                .DisposedBy(disposeBag);
+
             View.SetNeedsLayout();
             View.LayoutIfNeeded();
         }
@@ -601,7 +605,7 @@ namespace Toggl.Daneel.ViewControllers
             swipeLeftGestureRecognizer = swipeLeftStep.DismissBySwiping(nextFirstTimeEntry, Direction.Left);
         }
 
-        internal void Reload()
+        private void reload()
         {
             var range = new NSRange(0, TimeEntriesLogTableView.NumberOfSections());
             var indexSet = NSIndexSet.FromNSRange(range);

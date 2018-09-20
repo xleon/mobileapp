@@ -20,6 +20,7 @@ using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Suggestions;
+using Toggl.Giskard.BroadcastReceivers;
 using Toggl.Giskard.Presenters;
 using Toggl.Giskard.Services;
 using Toggl.Multivac.Extensions;
@@ -86,6 +87,9 @@ namespace Toggl.Giskard
             var settingsStorage = new SettingsStorage(appVersion, keyValueStorage);
             var feedbackService = new FeedbackService(userAgent, mailService, dialogService, platformConstants);
             var schedulerProvider = new AndroidSchedulerProvider();
+
+            ApplicationContext.RegisterReceiver(new TimezoneChangedBroadcastReceiver(timeService),
+                new IntentFilter(Intent.ActionTimezoneChanged));
 
             var foundation =
                 TogglFoundation
