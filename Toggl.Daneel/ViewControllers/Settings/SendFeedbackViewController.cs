@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
@@ -12,7 +13,7 @@ using static Toggl.Multivac.Extensions.CommonFunctions;
 namespace Toggl.Daneel.ViewControllers.Settings
 {
     [ModalCardPresentation]
-    public sealed partial class SendFeedbackViewController : ReactiveViewController<SendFeedbackViewModel>
+    public sealed partial class SendFeedbackViewController : ReactiveViewController<SendFeedbackViewModel>, IDismissableViewController
     {
 
         public SendFeedbackViewController()
@@ -48,6 +49,12 @@ namespace Toggl.Daneel.ViewControllers.Settings
         {
             base.ViewWillAppear(animated);
             IndicatorView.StartSpinning();
+        }
+
+        public async Task<bool> Dismiss()
+        {
+            await ViewModel.CloseButtonTapped.Execute();
+            return true;
         }
 
         private void prepareViews()

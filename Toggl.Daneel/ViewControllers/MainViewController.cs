@@ -385,6 +385,11 @@ namespace Toggl.Daneel.ViewControllers
             prepareEmptyStateView();
 
             View.BackgroundColor = Color.Main.BackgroundColor.ToNativeColor();
+
+            // Open edit view for the currently running time entry by swiping up
+            var swipeUpRunningCardGesture = new UISwipeGestureRecognizer(() => ViewModel.EditTimeEntryCommand.Execute());
+            swipeUpRunningCardGesture.Direction = UISwipeGestureRecognizerDirection.Up;
+            CurrentTimeEntryCard.AddGestureRecognizer(swipeUpRunningCardGesture);
         }
 
         private void showTimeEntryCard()
