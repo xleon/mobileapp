@@ -280,7 +280,7 @@
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
-    <Compile Include="Services\DummyIntentDonationService.cs" />
+    <Compile Include="Services\NoopIntentDonationService.cs" />
     <Compile Include="Startup\AndroidSchedulerProvider.cs" />
     <Compile Include="Startup\QueryableMvxLifecycleMonitorCurrentTopActivity.cs" />
     <Compile Include="Startup\Setup.cs" />
@@ -436,10 +436,10 @@
       <DependentUpon>MainActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="Activities\MainActivity.Onboardings.cs">
-        <DependentUpon>MainActivity.cs</DependentUpon>
+      <DependentUpon>MainActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="Startup\HandlerScheduler.cs" />
-    <Compile Include="Services\DummyPrivateSharedStorageService.cs" />
+    <Compile Include="Services\NoopPrivateSharedStorageService.cs" />
     <Compile Include="Activities\ReportsActivity.ViewBinds.cs">
       <DependentUpon>ReportsActivity.cs</DependentUpon>
     </Compile>
