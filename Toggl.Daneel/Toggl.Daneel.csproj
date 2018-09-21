@@ -1026,6 +1026,7 @@
     </Compile>
     <Compile Include="Extensions\Reactive\UIControlExtensions.cs" />
     <Compile Include="Binding\LayoutConstraintActiveTargetBinding.cs" />
+    <Compile Include="ViewControllers\IDismissableViewController.cs" />
     <Compile Include="Services\PrivateSharedStorageService.cs" />
     <Compile Include="Extensions\Reactive\FadeViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\NSObjectExtensions.cs" />

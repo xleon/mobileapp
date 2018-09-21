@@ -268,6 +268,7 @@
     <Compile Include="Activities\SelectProjectActivity.cs" />
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
     <Compile Include="Bindings\TextInputLayoutErrorTextTargetBinding.cs" />
+    <Compile Include="BroadcastReceivers\TimezoneChangedBroadcastReceiver.cs" />
     <Compile Include="Extensions\OnboardingExtensions.cs" />
     <Compile Include="Extensions\PopupOffsets.cs" />
     <Compile Include="Extensions\PopupWindowWithDefaultGravityExtenstions.cs" />
@@ -847,6 +848,7 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_illustration_error_workspace.png" />
     <AndroidResource Include="Resources\layout\ReportsActivityWorkspaceName.axml" />
     <AndroidResource Include="Resources\drawable\workspace_white.xml" />
+    <AndroidResource Include="Resources\values-v23\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">

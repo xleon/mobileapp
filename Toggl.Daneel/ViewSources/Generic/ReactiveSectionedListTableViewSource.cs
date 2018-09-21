@@ -17,13 +17,10 @@ namespace Toggl.Daneel.ViewSources
         IObservable<bool> IsDragging { get; }
     }
 
-    public class ReactiveSectionedListTableViewSource<TModel, TCell> : SectionedListTableViewSource<TModel, TCell>, IObservableScroll
+    public abstract class ReactiveSectionedListTableViewSource<TModel, TCell> : SectionedListTableViewSource<TModel, TCell>, IObservableScroll
         where TCell : BaseTableViewCell<TModel>
     {
-        protected ObservableGroupedOrderedCollection<TModel> collection;
-
-        public IObservable<IReadOnlyCollection<ICollectionChange>> CollectionChanges
-            => collection.CollectionChanges;
+        public IObservable<ICollectionChange> CollectionChange { get; }
 
         public IObservable<TModel> ItemSelected
             => itemSelectedSubject.AsObservable();
@@ -40,7 +37,7 @@ namespace Toggl.Daneel.ViewSources
 
         public ReactiveSectionedListTableViewSource(ObservableGroupedOrderedCollection<TModel> collection, string cellIdentifier) : base (collection, cellIdentifier)
         {
-            this.collection = collection;
+            CollectionChange = collection.CollectionChange;
 
             OnItemTapped = ItemTapped;
         }
@@ -48,10 +45,6 @@ namespace Toggl.Daneel.ViewSources
         private void ItemTapped(TModel model)
         {
             itemSelectedSubject.OnNext(model);
-        }
-
-        public virtual void RefreshHeader(UITableView tableView, int section)
-        {
         }
 
         public override void Scrolled(UIScrollView scrollView)
@@ -68,5 +61,7 @@ namespace Toggl.Daneel.ViewSources
         {
             isDraggingSubject.OnNext(false);
         }
+
+        public abstract void RefreshHeader(UITableView tableView, int section);
     }
 }

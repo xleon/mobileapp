@@ -25,6 +25,10 @@ namespace Toggl.Foundation.Interactors
 
         IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> GetAllNonDeletedTimeEntries();
 
+        IInteractor<IObservable<IThreadSafeTimeEntry>> UpdateTimeEntry(EditTimeEntryDto dto);
+
+        IInteractor<IObservable<IThreadSafeTimeEntry>> StopTimeEntry(DateTimeOffset currentDateTime);
+
         #endregion
 
         #region Projects

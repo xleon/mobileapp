@@ -63,7 +63,7 @@ namespace Toggl.Giskard.Activities
 
         private void setupMainLogObservables()
         {
-            var collectionChanges = ViewModel.TimeEntries.CollectionChanges.SelectUnit();
+            var collectionChanges = ViewModel.TimeEntries.CollectionChange.SelectUnit();
             mainRecyclerViewChangesObservable = Observable
                 .FromEventPattern<View.ScrollChangeEventArgs>(e => mainRecyclerView.ScrollChange += e, e => mainRecyclerView.ScrollChange -= e)
                 .Select(_ => Unit.Default)

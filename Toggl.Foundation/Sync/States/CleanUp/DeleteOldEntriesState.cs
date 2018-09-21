@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources;
+using Toggl.Foundation.DataSources.Interfaces;
+using Toggl.Foundation.Models.Interfaces;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
@@ -17,9 +18,9 @@ namespace Toggl.Foundation.Sync.States.CleanUp
         public StateResult FinishedDeleting { get; } = new StateResult();
 
         private readonly ITimeService timeService;
-        private readonly ITimeEntriesSource dataSource;
+        private readonly IObservableDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry> dataSource;
 
-        public DeleteOldEntriesState(ITimeService timeService, ITimeEntriesSource dataSource)
+        public DeleteOldEntriesState(ITimeService timeService, IObservableDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry> dataSource)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));

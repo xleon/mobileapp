@@ -33,6 +33,7 @@ namespace Toggl.Daneel
         private IAnalyticsService analyticsService;
         private IBackgroundService backgroundService;
         private IMvxNavigationService navigationService;
+        private ITimeService timeService;
 
         public override UIWindow Window { get; set; }
 
@@ -67,6 +68,7 @@ namespace Toggl.Daneel
             analyticsService = Mvx.Resolve<IAnalyticsService>();
             backgroundService = Mvx.Resolve<IBackgroundService>();
             navigationService = Mvx.Resolve<IMvxNavigationService>();
+            timeService = Mvx.Resolve<ITimeService>();
             setupNavigationBar();
             setupTabBar();
         }
@@ -147,7 +149,8 @@ namespace Toggl.Daneel
             UIApplicationRestorationHandler completionHandler)
         {
             var interaction = userActivity.GetInteraction();
-            if (interaction == null || interaction.IntentHandlingStatus != INIntentHandlingStatus.DeferredToApplication) {
+            if (interaction == null || interaction.IntentHandlingStatus != INIntentHandlingStatus.DeferredToApplication)
+            {
                 return false;
             }
 
@@ -175,6 +178,11 @@ namespace Toggl.Daneel
                 default:
                     return false;
             }
+        }
+
+        public override void ApplicationSignificantTimeChange(UIApplication application)
+        {
+            timeService.SignificantTimeChanged();
         }
 
         private void setupTabBar()
