@@ -13,6 +13,9 @@ API_AVAILABLE(ios(12.0), watchos(5.0))
 
 @property (readwrite, copy, nullable, nonatomic) INObject *workspace;
 @property (readwrite, copy, nullable, nonatomic) NSString *entryDescription;
+@property (readwrite, copy, nullable, nonatomic) INObject *billable;
+@property (readwrite, copy, nullable, nonatomic) INObject *projectId;
+@property (readwrite, copy, nullable, nonatomic) NSArray<INObject *> *tags;
 
 @end
 

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Foundation;
 using Intents;
 using Toggl.Daneel.Intents;
@@ -21,12 +22,24 @@ namespace Toggl.Daneel.Services
 
             var intent = new StartTimerIntent();
             intent.Workspace = new INObject(workspace.Id.ToString(), workspace.Name);
-            if (!string.IsNullOrEmpty(timeEntry.Description)) 
+            if (!string.IsNullOrEmpty(timeEntry.Description))
             {
-                intent.EntryDescription = timeEntry.Description;
-            }
+                // If any of the tags or the project id were just created and haven't sync we ignore this action until the user repeats it
+                if (timeEntry.ProjectId < 0 || timeEntry.TagIds.Any(tagId => tagId < 0)) 
+                {
+                    return;
+                }
 
-            intent.SuggestedInvocationPhrase = "Start timer";
+                intent.EntryDescription = timeEntry.Description;
+                intent.ProjectId = new INObject(timeEntry.ProjectId.ToString(), timeEntry.ProjectId.ToString());
+                intent.Tags = timeEntry.TagIds.Select(tag => new INObject(tag.ToString(), tag.ToString())).ToArray();
+                intent.Billable = new INObject(timeEntry.Billable.ToString(), timeEntry.Billable.ToString());
+                intent.SuggestedInvocationPhrase = timeEntry.Description;
+            }
+            else
+            {
+                intent.SuggestedInvocationPhrase = "Start timer";
+            }
 
             var interaction = new INInteraction(intent, null);
             interaction.DonateInteraction(onCompletion);

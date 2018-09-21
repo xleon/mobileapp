@@ -107,6 +107,18 @@ namespace Toggl.Daneel.Intents
         // @property (readwrite, copy, nonatomic) NSString * _Nullable entryDescription;
         [NullAllowed, Export("entryDescription")]
         string EntryDescription { get; set; }
+
+        // @property (readwrite, copy, nonatomic) INObject * _Nullable billable;
+        [NullAllowed, Export("billable", ArgumentSemantic.Copy)]
+        INObject Billable { get; set; }
+
+        // @property (readwrite, copy, nonatomic) INObject * _Nullable projectId;
+        [NullAllowed, Export("projectId", ArgumentSemantic.Copy)]
+        INObject ProjectId { get; set; }
+
+        // @property (readwrite, copy, nonatomic) NSArray<INObject *> * _Nullable tags;
+        [NullAllowed, Export("tags", ArgumentSemantic.Copy)]
+        INObject[] Tags { get; set; }
     }
 
     // @protocol StartTimerIntentHandling <NSObject>

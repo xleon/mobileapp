@@ -171,13 +171,30 @@ namespace Toggl.Daneel
                     return true;
                 case StartTimerIntent startTimerIntent:
                     var workspaceId = (long)Convert.ToDouble(startTimerIntent.Workspace.Identifier);
-                    var timeEntryParams = new StartTimeEntryParameters(DateTimeOffset.Now, "", null, workspaceId, startTimerIntent.EntryDescription ?? "");
+                    var timeEntryParams = createStartTimeEntryParameters(startTimerIntent);
                     navigationService.Navigate<MainViewModel>();
                     navigationService.Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(timeEntryParams);
                     return true;
                 default:
                     return false;
             }
+        }
+
+        private StartTimeEntryParameters createStartTimeEntryParameters(StartTimerIntent intent)
+        {
+            var tags = (intent.Tags == null || intent.Tags.Count() == 0)
+                ? null
+                : intent.Tags.Select(tagid => (long)Convert.ToDouble(tagid.Identifier));
+
+            return new StartTimeEntryParameters(
+                DateTimeOffset.Now,
+                "",
+                null,
+                string.IsNullOrEmpty(intent.Workspace.Identifier) ? null : (long?)Convert.ToDouble(intent.Workspace.Identifier),
+                intent.EntryDescription ?? "",
+                string.IsNullOrEmpty(intent.ProjectId.Identifier) ? null : (long?)Convert.ToDouble(intent.ProjectId.Identifier),
+                tags
+            );
         }
 
         public override void ApplicationSignificantTimeChange(UIApplication application)

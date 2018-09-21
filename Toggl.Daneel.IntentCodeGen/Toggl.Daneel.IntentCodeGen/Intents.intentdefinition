@@ -99,7 +99,7 @@
 	<key>INIntentDefinitionSystemVersion</key>
 	<string>17G2208</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>10L232m</string>
+	<string>10A254a</string>
 	<key>INIntentDefinitionToolsVersion</key>
 	<string>10.0</string>
 	<key>INIntents</key>
@@ -433,11 +433,86 @@
 			<key>INIntentDescriptionID</key>
 			<string>kSGACm</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>5</integer>
+			<integer>15</integer>
 			<key>INIntentName</key>
 			<string>StartTimer</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
+				<key>billable,entryDescription,workspace</key>
+				<dict>
+					<key>INIntentParameterCombinationIsPrimary</key>
+					<false/>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>in ${workspace}</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>KKrxVY</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Start timer for ${entryDescription}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>IUEfYE</string>
+				</dict>
+				<key>billable,projectId,entryDescription,workspace</key>
+				<dict>
+					<key>INIntentParameterCombinationIsPrimary</key>
+					<false/>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>in ${workspace}</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>Mr6glC</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Start timer for ${entryDescription}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>xGukxu</string>
+				</dict>
+				<key>billable,projectId,tags,entryDescription,workspace</key>
+				<dict>
+					<key>INIntentParameterCombinationIsPrimary</key>
+					<false/>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>in ${workspace}</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>5xqJdx</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Start timer for ${entryDescription}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>tjn3qS</string>
+				</dict>
+				<key>billable,tags,entryDescription,workspace</key>
+				<dict>
+					<key>INIntentParameterCombinationIsPrimary</key>
+					<false/>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>in ${workspace}</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>msGSif</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Start timer for ${entryDescription}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>ArvZvi</string>
+				</dict>
+				<key>entryDescription,workspace</key>
+				<dict>
+					<key>INIntentParameterCombinationIsPrimary</key>
+					<false/>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>in ${workspace}</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>bHlXe3</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Start timer for ${entryDescription}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>dZOAcx</string>
+				</dict>
 				<key>workspace</key>
 				<dict>
 					<key>INIntentParameterCombinationIsPrimary</key>
@@ -452,21 +527,6 @@
 					<string>Start timer</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>VbS2we</string>
-				</dict>
-				<key>workspace,entryDescription</key>
-				<dict>
-					<key>INIntentParameterCombinationIsPrimary</key>
-					<false/>
-					<key>INIntentParameterCombinationSubtitle</key>
-					<string>in ${workspace}</string>
-					<key>INIntentParameterCombinationSubtitleID</key>
-					<string>DJav0d</string>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Start timer for ${entryDescription}</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>H7rfbw</string>
 				</dict>
 			</dict>
 			<key>INIntentParameters</key>
@@ -494,6 +554,42 @@
 					<integer>5</integer>
 					<key>INIntentParameterType</key>
 					<string>String</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>3</integer>
+					<key>INIntentParameterName</key>
+					<string>billable</string>
+					<key>INIntentParameterSupportsMultipleValues</key>
+					<false/>
+					<key>INIntentParameterTag</key>
+					<integer>12</integer>
+					<key>INIntentParameterType</key>
+					<string>Object</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>4</integer>
+					<key>INIntentParameterName</key>
+					<string>projectId</string>
+					<key>INIntentParameterSupportsMultipleValues</key>
+					<false/>
+					<key>INIntentParameterTag</key>
+					<integer>11</integer>
+					<key>INIntentParameterType</key>
+					<string>Object</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>5</integer>
+					<key>INIntentParameterName</key>
+					<string>tags</string>
+					<key>INIntentParameterSupportsMultipleValues</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>15</integer>
+					<key>INIntentParameterType</key>
+					<string>Object</string>
 				</dict>
 			</array>
 			<key>INIntentResponse</key>

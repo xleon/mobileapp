@@ -8,7 +8,7 @@
 
 @implementation StartTimerIntent
 
-@dynamic workspace, entryDescription;
+@dynamic workspace, entryDescription, billable, projectId, tags;
 
 @end
 

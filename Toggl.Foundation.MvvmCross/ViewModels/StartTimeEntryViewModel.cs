@@ -59,7 +59,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IThreadSafeWorkspace defaultWorkspace;
         private StartTimeEntryParameters parameter;
         private TextFieldInfo textFieldInfo = TextFieldInfo.Empty(0);
-        private string initialDescription;
+        private StartTimeEntryParameters initialParameters;
 
         //Properties
         public IObservable<TextFieldInfo> TextFieldInfoObservable { get; }
@@ -283,7 +283,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Duration = parameter.Duration;
 
             PlaceholderText = parameter.PlaceholderText;
-            initialDescription = parameter.EntryDescription;
+            if (!string.IsNullOrEmpty(parameter.EntryDescription))
+            {
+                initialParameters = parameter;
+            }
 
             timeService.CurrentDateTimeObservable
                 .Where(_ => isRunning)
@@ -297,13 +300,38 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             defaultWorkspace = await interactorFactory.GetDefaultWorkspace().Execute();
 
-            if (string.IsNullOrEmpty(initialDescription))
+            textFieldInfo = TextFieldInfo.Empty(parameter?.WorkspaceId ?? defaultWorkspace.Id);
+
+            if (initialParameters != null)
             {
-                textFieldInfo = TextFieldInfo.Empty(parameter?.WorkspaceId ?? defaultWorkspace.Id);
-            }
-            else 
-            {
-                textFieldInfo = TextFieldInfo.WithDescription(parameter?.WorkspaceId ?? defaultWorkspace.Id, initialDescription);
+                var spans = new List<ISpan>();
+                spans.Add(new TextSpan(initialParameters.EntryDescription));
+                if (initialParameters.ProjectId != null) {
+                    try
+                    {
+                        var project = await dataSource.Projects.GetById((long)initialParameters.ProjectId);
+                        spans.Add(new ProjectSpan(project));
+                    }
+                    catch
+                    {
+                        // Intentionally left blank
+                    }
+                }
+                if (initialParameters.TagIds != null) {
+                    try
+                    {
+                        var tags = initialParameters.TagIds.ToObservable()
+                            .SelectMany<long, IThreadSafeTag>(tagId => dataSource.Tags.GetById(tagId))
+                            .ToEnumerable();
+                        spans.AddRange(tags.Select(tag => new TagSpan(tag)));
+                    }
+                    catch
+                    {
+                        // Intentionally left blank
+                    }
+                }
+
+                textFieldInfo = textFieldInfo.ReplaceSpans(spans.ToImmutableList());
             }
 
             await setBillableValues(textFieldInfo.ProjectId);
