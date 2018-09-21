@@ -842,6 +842,7 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_illustration_error_workspace.png" />
     <AndroidResource Include="Resources\layout\ReportsActivityWorkspaceName.axml" />
     <AndroidResource Include="Resources\drawable\workspace_white.xml" />
+    <AndroidResource Include="Resources\values-v23\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">
