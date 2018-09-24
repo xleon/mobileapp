@@ -85,8 +85,8 @@ namespace Toggl.Foundation.MvvmCross
             SchedulerProvider = builder.Foundation.SchedulerProvider;
             BackgroundService = builder.Foundation.BackgroundService;
             RemoteConfigService = builder.Foundation.RemoteConfigService;
-            SuggestionProviderContainer = builder.Foundation.SuggestionProviderContainer;
             IntentDonationService = builder.Foundation.IntentDonationService;
+            SuggestionProviderContainer = builder.Foundation.SuggestionProviderContainer;
             PrivateSharedStorageService = builder.Foundation.PrivateSharedStorageService;
         }
 

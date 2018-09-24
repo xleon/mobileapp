@@ -32,9 +32,9 @@ namespace Toggl.Foundation
         public IPlatformConstants PlatformConstants { get; }
         public IRemoteConfigService RemoteConfigService { get; }
         public IApplicationShortcutCreator ShortcutCreator { get; }
-        public ISuggestionProviderContainer SuggestionProviderContainer { get; }
         public IIntentDonationService IntentDonationService { get; }
         public IPrivateSharedStorageService PrivateSharedStorageService { get; }
+        public ISuggestionProviderContainer SuggestionProviderContainer { get; }
 
         public static Builder ForClient(UserAgent userAgent, Version version)
             => new Builder(userAgent, version);
@@ -61,9 +61,9 @@ namespace Toggl.Foundation
             BackgroundService = builder.BackgroundService;
             SchedulerProvider = builder.SchedulerProvider;
             RemoteConfigService = builder.RemoteConfigService;
-            SuggestionProviderContainer = builder.SuggestionProviderContainer;
             IntentDonationService = builder.IntentDonationService;
             PrivateSharedStorageService = builder.PrivateSharedStorageService;
+            SuggestionProviderContainer = builder.SuggestionProviderContainer;
         }
 
         public class Builder
@@ -83,12 +83,12 @@ namespace Toggl.Foundation
             public ILicenseProvider LicenseProvider { get; internal set; }
             public IAnalyticsService AnalyticsService { get; internal set; }
             public ISchedulerProvider SchedulerProvider { get; internal set; }
-            public IRemoteConfigService RemoteConfigService { get; internal set; }
-            public IApplicationShortcutCreator ShortcutCreator { get; internal set; }
             public IBackgroundService BackgroundService { get; internal set; }
             public IPlatformConstants PlatformConstants { get; internal set; }
-            public ISuggestionProviderContainer SuggestionProviderContainer { get; internal set; }
+            public IRemoteConfigService RemoteConfigService { get; internal set; }
+            public IApplicationShortcutCreator ShortcutCreator { get; internal set; }
             public IIntentDonationService IntentDonationService { get; internal set; }
+            public ISuggestionProviderContainer SuggestionProviderContainer { get; internal set; }
             public IPrivateSharedStorageService PrivateSharedStorageService { get; internal set; }
 
             public Builder(UserAgent agent, Version version)
@@ -285,8 +285,8 @@ namespace Toggl.Foundation
                 Ensure.Argument.IsNotNull(SchedulerProvider, nameof(SchedulerProvider));
                 Ensure.Argument.IsNotNull(PlatformConstants, nameof(PlatformConstants));
                 Ensure.Argument.IsNotNull(RemoteConfigService, nameof(RemoteConfigService));
-                Ensure.Argument.IsNotNull(SuggestionProviderContainer, nameof(SuggestionProviderContainer));
                 Ensure.Argument.IsNotNull(IntentDonationService, nameof(IntentDonationService));
+                Ensure.Argument.IsNotNull(SuggestionProviderContainer, nameof(SuggestionProviderContainer));
                 Ensure.Argument.IsNotNull(PrivateSharedStorageService, nameof(PrivateSharedStorageService));
             }
         }

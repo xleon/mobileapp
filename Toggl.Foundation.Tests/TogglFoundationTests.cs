@@ -38,7 +38,9 @@ namespace Toggl.Foundation.Tests
                 bool useSchedulerProvider,
                 bool usePlatformConstants,
                 bool useRemoteConfigService,
+                bool useIntentDonationService,
                 bool useApplicationShortcutCreator,
+                bool usePrivateSharedStorageService,
                 bool useSuggestionProviderContainer)
             {
                 var version = useVersion ? Version.Parse("1.0") : null;
@@ -56,8 +58,10 @@ namespace Toggl.Foundation.Tests
                 var backgroundService = useBackgroundService ? Substitute.For<IBackgroundService>() : null;
                 var platformConstants = usePlatformConstants ? Substitute.For<IPlatformConstants>() : null;
                 var remoteConfigService = useRemoteConfigService ? Substitute.For<IRemoteConfigService>() : null;
+                var intentDonationService = useIntentDonationService ? Substitute.For<IIntentDonationService>() : null;
                 var applicationShortcutCreator = useApplicationShortcutCreator ? Substitute.For<IApplicationShortcutCreator>() : null;
                 var suggestionProviderContainer = useSuggestionProviderContainer ? Substitute.For<ISuggestionProviderContainer>() : null;
+                var privateSharedStorageService = usePrivateSharedStorageService ? Substitute.For<IPrivateSharedStorageService>() : null;
                 var schedulerProvider = useSchedulerProvider ? Substitute.For<ISchedulerProvider>() : null;
 
                 Action tryingToConstructWithEmptyParameters = () =>
@@ -77,8 +81,10 @@ namespace Toggl.Foundation.Tests
                         .WithSchedulerProvider(schedulerProvider)
                         .WithPlatformConstants(platformConstants)
                         .WithRemoteConfigService(remoteConfigService)
+                        .WithIntentDonationService(intentDonationService)
                         .WithApplicationShortcutCreator(applicationShortcutCreator)
                         .WithSuggestionProviderContainer(suggestionProviderContainer)
+                        .WithPrivateSharedStorageService(privateSharedStorageService)
                         .Build();
 
                 tryingToConstructWithEmptyParameters.Should().Throw<Exception>();
@@ -103,8 +109,10 @@ namespace Toggl.Foundation.Tests
                 var platformConstants = Substitute.For<IPlatformConstants>();
                 var backgroundService = Substitute.For<IBackgroundService>();
                 var remoteConfigService = Substitute.For<IRemoteConfigService>();
+                var intentDonationService = Substitute.For<IIntentDonationService>();
                 var applicationShortcutCreator = Substitute.For<IApplicationShortcutCreator>();
                 var suggestionProviderContainer = Substitute.For<ISuggestionProviderContainer>();
+                var privateSharedStorageService = Substitute.For<IPrivateSharedStorageService>();
 
                 Action tryingToConstructWithValidParameters = () =>
                     TogglFoundation
@@ -123,7 +131,9 @@ namespace Toggl.Foundation.Tests
                         .WithSchedulerProvider(schedulerProvider)
                         .WithPlatformConstants(platformConstants)
                         .WithRemoteConfigService(remoteConfigService)
+                        .WithIntentDonationService(intentDonationService)
                         .WithApplicationShortcutCreator(applicationShortcutCreator)
+                        .WithPrivateSharedStorageService(privateSharedStorageService)
                         .WithSuggestionProviderContainer(suggestionProviderContainer)
                         .Build();
 
