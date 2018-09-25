@@ -37,6 +37,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IMvxNavigationService navigationService,
             IRemoteConfigService remoteConfigService,
             ISuggestionProviderContainer suggestionProviders,
+            IIntentDonationService intentDonationService,
             IDialogService dialogService,
             ISchedulerProvider schedulerProvider,
             IAccessRestrictionStorage accessRestrictionStorage)
@@ -51,6 +52,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
             Ensure.Argument.IsNotNull(suggestionProviders, nameof(suggestionProviders));
+            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
@@ -65,6 +67,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 navigationService,
                 remoteConfigService,
                 suggestionProviders,
+                intentDonationService,
                 accessRestrictionStorage,
                 schedulerProvider);
 
@@ -75,6 +78,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 interactorFactory,
                 analyticsService,
                 dialogService,
+                intentDonationService,
                 schedulerProvider);
         }
 

@@ -47,6 +47,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IInteractorFactory interactorFactory;
         private readonly IMvxNavigationService navigationService;
+        private readonly IPrivateSharedStorageService privateSharedStorageService;
+        private readonly IIntentDonationService intentDonationService;
 
         private bool isSyncing;
         private bool isLoggingOut;
@@ -100,7 +102,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IInteractorFactory interactorFactory,
             IPlatformConstants platformConstants,
             IOnboardingStorage onboardingStorage,
-            IMvxNavigationService navigationService)
+            IMvxNavigationService navigationService,
+            IPrivateSharedStorageService privateSharedStorageService,
+            IIntentDonationService intentDonationService)
         {
             Ensure.Argument.IsNotNull(userAgent, nameof(userAgent));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -113,6 +117,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(platformConstants, nameof(platformConstants));
+            Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
+            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
 
             this.userAgent = userAgent;
             this.dataSource = dataSource;
@@ -125,6 +131,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.navigationService = navigationService;
             this.platformConstants = platformConstants;
             this.onboardingStorage = onboardingStorage;
+            this.privateSharedStorageService = privateSharedStorageService;
+            this.intentDonationService = intentDonationService;
 
             IsSynced = dataSource.SyncManager.ProgressObservable.SelectMany(checkSynced);
 
@@ -339,6 +347,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             loggingOutSubject.OnNext(Unit.Default);
             analyticsService.Logout.Track(LogoutSource.Settings);
             userPreferences.Reset();
+
+            privateSharedStorageService.ClearAll();
+            intentDonationService.ClearAll();
 
             return dataSource.Logout().Do(_ => navigationService.Navigate<LoginViewModel>());
         }

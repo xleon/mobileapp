@@ -4,6 +4,7 @@ using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Foundation.Services;
 using Toggl.Foundation.Shortcuts;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant;
@@ -24,5 +25,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
 
         protected IForkingNavigationService NavigationService { get; } = Substitute.For<IForkingNavigationService>();
         protected TestSchedulerProvider SchedulerProvider { get; } = new TestSchedulerProvider();
+        protected IIntentDonationService IntentDonationService { get; } = Substitute.For<IIntentDonationService>();
+        protected IPrivateSharedStorageService PrivateSharedStorageService { get; } = Substitute.For<IPrivateSharedStorageService>();
     }
 }

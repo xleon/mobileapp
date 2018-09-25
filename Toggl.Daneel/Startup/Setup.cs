@@ -87,6 +87,8 @@ namespace Toggl.Daneel
             var suggestionProviderContainer = new SuggestionProviderContainer(
                 new MostUsedTimeEntrySuggestionProvider(database, timeService, maxNumberOfSuggestions)
             );
+            var intentDonationService = new IntentDonationService();
+            var privateSharedStorageService = new PrivateSharedStorageService();
 
             var appVersion = Version.Parse(version);
             var userAgent = new UserAgent(clientName, version);
@@ -115,6 +117,8 @@ namespace Toggl.Daneel
                     .WithBackgroundService(new BackgroundService(timeService))
                     .WithApplicationShortcutCreator<ApplicationShortcutCreator>()
                     .WithSuggestionProviderContainer(suggestionProviderContainer)
+                    .WithIntentDonationService(intentDonationService)
+                    .WithPrivateSharedStorageService(privateSharedStorageService)
                     .WithPlatformInfo(platformInfo)
 
                     .StartRegisteringPlatformServices()

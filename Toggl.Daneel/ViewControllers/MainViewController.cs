@@ -27,6 +27,7 @@ using Toggl.PrimeRadiant.Onboarding;
 using Toggl.PrimeRadiant.Settings;
 using UIKit;
 using static Toggl.Foundation.MvvmCross.Helper.Animation;
+using Toggl.Daneel.ExtensionKit;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -216,6 +217,8 @@ namespace Toggl.Daneel.ViewControllers
 
             View.SetNeedsLayout();
             View.LayoutIfNeeded();
+
+            NSNotificationCenter.DefaultCenter.AddObserver(UIApplication.DidBecomeActiveNotification, onApplicationDidBecomeActive);
         }
 
         private void setupTableViewHeader()
@@ -256,6 +259,15 @@ namespace Toggl.Daneel.ViewControllers
                 new UIBarButtonItem(syncFailuresButton)
             };
 #endif
+        }
+
+        private void onApplicationDidBecomeActive(NSNotification notification)
+        {
+            if (SharedStorage.instance.GetNeedsSync())
+            {
+                SharedStorage.instance.SetNeedsSync(false);
+                ViewModel.RefreshAction.Execute();
+            }
         }
 
         private void toggleUndoDeletion(bool show)

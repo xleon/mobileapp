@@ -1,16 +1,20 @@
 using System;
+using System.Linq;
 using Foundation;
+using Intents;
 using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Ios.Core;
 using MvvmCross.Plugin.Color.Platforms.Ios;
-using MvvmCross.ViewModels;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Intents;
+using Toggl.Daneel.ViewControllers;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Foundation.Services;
@@ -139,6 +143,58 @@ namespace Toggl.Daneel
                     navigationService.Navigate<StartTimeEntryViewModel>();
                     break;
             }
+        }
+
+        public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,
+            UIApplicationRestorationHandler completionHandler)
+        {
+            var interaction = userActivity.GetInteraction();
+            if (interaction == null || interaction.IntentHandlingStatus != INIntentHandlingStatus.DeferredToApplication)
+            {
+                return false;
+            }
+
+            var intent = interaction?.Intent;
+
+            switch (intent)
+            {
+                case StopTimerIntent _:
+                    navigationService.Navigate(ApplicationUrls.Main.StopTimeEntry);
+                    return true;
+                case ShowReportIntent _:
+                    navigationService.Navigate(ApplicationUrls.Reports);
+                    return true;
+                case ShowReportPeriodIntent periodIntent:
+                    var tabbarVC = (MainTabBarController)UIApplication.SharedApplication.KeyWindow.RootViewController;
+                    var reportViewModel = (ReportsViewModel)tabbarVC.ViewModel.ViewModels.Single(viewModel => viewModel is ReportsViewModel);
+                    navigationService.Navigate(reportViewModel, periodIntent.Period.ToReportPeriod());
+                    return true;
+                case StartTimerIntent startTimerIntent:
+                    var workspaceId = (long)Convert.ToDouble(startTimerIntent.Workspace.Identifier);
+                    var timeEntryParams = createStartTimeEntryParameters(startTimerIntent);
+                    navigationService.Navigate<MainViewModel>();
+                    navigationService.Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(timeEntryParams);
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private StartTimeEntryParameters createStartTimeEntryParameters(StartTimerIntent intent)
+        {
+            var tags = (intent.Tags == null || intent.Tags.Count() == 0)
+                ? null
+                : intent.Tags.Select(tagid => (long)Convert.ToDouble(tagid.Identifier));
+
+            return new StartTimeEntryParameters(
+                DateTimeOffset.Now,
+                "",
+                null,
+                string.IsNullOrEmpty(intent.Workspace.Identifier) ? null : (long?)Convert.ToDouble(intent.Workspace.Identifier),
+                intent.EntryDescription ?? "",
+                string.IsNullOrEmpty(intent.ProjectId.Identifier) ? null : (long?)Convert.ToDouble(intent.ProjectId.Identifier),
+                tags
+            );
         }
 
         public override void ApplicationSignificantTimeChange(UIApplication application)

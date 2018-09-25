@@ -13,6 +13,7 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar.QuickSelectShortcuts;
+using Toggl.Foundation.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 
@@ -26,6 +27,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         //Fields
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
+        private readonly IIntentDonationService intentDonationService;
         private readonly ISubject<ReportsDateRangeParameter> selectedDateRangeSubject = new Subject<ReportsDateRangeParameter>();
         private readonly string[] dayHeaders =
         {
@@ -40,9 +42,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private CalendarMonth initialMonth;
         private CalendarDayViewModel startOfSelection;
+        private ReportPeriod reportPeriod = ReportPeriod.ThisWeek;
+        private bool IsInitialized;
 
         private CompositeDisposable disposableBag;
-
 
         public BeginningOfWeek BeginningOfWeek { get; private set; }
 
@@ -67,13 +70,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxCommand<CalendarBaseQuickSelectShortcut> QuickSelectCommand { get; }
 
         public ReportsCalendarViewModel(
-            ITimeService timeService, ITogglDataSource dataSource)
+            ITimeService timeService,
+            ITogglDataSource dataSource,
+            IIntentDonationService intentDonationService)
         {
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
 
             this.timeService = timeService;
             this.dataSource = dataSource;
+            this.intentDonationService = intentDonationService;
 
             CalendarDayTappedCommand = new MvxCommand<CalendarDayViewModel>(calendarDayTapped);
             QuickSelectCommand = new MvxCommand<CalendarBaseQuickSelectShortcut>(quickSelect);
@@ -129,8 +136,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     quickSelectShortcut.OnDateRangeChanged))
                 .ForEach(disposableBag.Add);
 
-            var initialShortcut = QuickSelectShortcuts.Single(shortcut => shortcut is CalendarThisWeekQuickSelectShortcut);
+            var initialShortcut = QuickSelectShortcuts.Single(shortcut => shortcut.Period == reportPeriod);
             changeDateRange(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
+            IsInitialized = true;
         }
 
         public void OnToggleCalendar() => selectStartOfSelectionIfNeeded();
@@ -139,6 +147,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public string DayHeaderFor(int index)
             => dayHeaders[(index + (int)BeginningOfWeek + 7) % 7];
+
+        public void SelectPeriod(ReportPeriod period)
+        {
+            reportPeriod = period;
+
+            if (IsInitialized)
+            {
+                var initialShortcut = QuickSelectShortcuts.Single(shortcut => shortcut.Period == period);
+                changeDateRange(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
+            }
+        }
 
         private void selectStartOfSelectionIfNeeded()
         {
@@ -183,7 +202,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private void quickSelect(CalendarBaseQuickSelectShortcut quickSelectShortCut)
-            => changeDateRange(quickSelectShortCut.GetDateRange());
+        {
+            intentDonationService.DonateShowReport(quickSelectShortCut.Period);
+            changeDateRange(quickSelectShortCut.GetDateRange());
+        }
 
         private void highlightDateRange(ReportsDateRangeParameter dateRange)
         {

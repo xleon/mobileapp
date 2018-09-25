@@ -111,6 +111,8 @@ namespace Toggl.Giskard
                     .WithSuggestionProviderContainer(suggestionProviderContainer)
                     .WithApplicationShortcutCreator(new ApplicationShortcutCreator(ApplicationContext))
                     .WithPlatformInfo(platformInfo)
+                    .WithIntentDonationService(new NoopIntentDonationService())
+                    .WithPrivateSharedStorageService(new NoopPrivateSharedStorageService())
 
                     .StartRegisteringPlatformServices()
                     .WithDialogService(dialogService)

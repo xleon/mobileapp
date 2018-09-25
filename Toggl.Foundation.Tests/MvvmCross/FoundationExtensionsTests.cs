@@ -92,9 +92,9 @@ namespace Toggl.Foundation.Tests.MvvmCross
             var actualFeedbackService = useFeedbackService ? Substitute.For<IFeedbackService>() : null;
             var actualOnboardingStorage = useOnboardingStorage ? Substitute.For<IOnboardingStorage>() : null;
             var actualNavigationService = useNavigationService ? Substitute.For<IForkingNavigationService>() : null;
+            var actualLastTimeUsageStorage = useLastTimeUsageStorage ? Substitute.For<ILastTimeUsageStorage>() : null;
             var actualApiErrorHandlingService = useApiErrorHandlingService ? Substitute.For<IErrorHandlingService>() : null;
             var actualAccessRestrictionStorage = useAccessRestrictionStorage ? Substitute.For<IAccessRestrictionStorage>() : null;
-            var actualLastTimeUsageStorage = useLastTimeUsageStorage ? Substitute.For<ILastTimeUsageStorage>() : null;
 
             Action tryingToConstructWithEmptyParameters = () =>
                 foundation.StartRegisteringPlatformServices()
@@ -176,8 +176,10 @@ namespace Toggl.Foundation.Tests.MvvmCross
                     .WithSchedulerProvider(schedulerProvider)
                     .WithPlatformConstants(platformConstants)
                     .WithRemoteConfigService(remoteConfigService)
+                    .WithIntentDonationService(IntentDonationService)
                     .WithApplicationShortcutCreator(applicationShortcutCreator)
                     .WithSuggestionProviderContainer(suggestionProviderContainer)
+                    .WithPrivateSharedStorageService(PrivateSharedStorageService)
                     .Build();
     }
 }
