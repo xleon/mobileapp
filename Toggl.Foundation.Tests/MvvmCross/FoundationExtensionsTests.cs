@@ -102,7 +102,6 @@ namespace Toggl.Foundation.Tests.MvvmCross
             var actualLastTimeUsageStorage = useLastTimeUsageStorage ? Substitute.For<ILastTimeUsageStorage>() : null;
             var actualApiErrorHandlingService = useApiErrorHandlingService ? Substitute.For<IErrorHandlingService>() : null;
             var actualAccessRestrictionStorage = useAccessRestrictionStorage ? Substitute.For<IAccessRestrictionStorage>() : null;
-            var actualLastTimeUsageStorage = useLastTimeUsageStorage ? Substitute.For<ILastTimeUsageStorage>() : null;
             var actualPermissionsService = usePermissionsService ? Substitute.For<IPermissionsService>() : null;
             var actualCalendarService = useCalendarService ? Substitute.For<ICalendarService>() : null;
 
