@@ -12,6 +12,7 @@ using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar;
 using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts;
+using Toggl.Foundation.Services;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac;
 using Xunit;
@@ -24,20 +25,25 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             : BaseViewModelTests<ReportsCalendarViewModel>
         {
             protected override ReportsCalendarViewModel CreateViewModel()
-                => new ReportsCalendarViewModel(TimeService, DataSource);
+                => new ReportsCalendarViewModel(TimeService, DataSource, IntentDonationService);
         }
 
         public sealed class TheConstructor : ReportsCalendarViewModelTest
         {
             [Theory, LogIfTooSlow]
             [ConstructorData]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useTimeService, bool useDataSource)
+            public void ThrowsIfAnyOfTheArgumentsIsNull(
+                bool useTimeService,
+                bool useDataSource,
+                bool useIntentDonationService
+                )
             {
                 var timeService = useTimeService ? TimeService : null;
                 var dataSource = useDataSource ? DataSource : null;
+                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new ReportsCalendarViewModel(timeService, dataSource);
+                    () => new ReportsCalendarViewModel(timeService, dataSource, intentDonationService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -429,7 +435,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 private ReportsDateRangeParameter range;
 
-                public CustomShortcut(ReportsDateRangeParameter range, ITimeService timeService) : base(timeService, "")
+                public CustomShortcut(ReportsDateRangeParameter range, ITimeService timeService) : base(timeService, "", ReportPeriod.Unknown)
                 {
                     this.range = range;
                 }

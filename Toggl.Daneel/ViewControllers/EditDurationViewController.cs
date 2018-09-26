@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using CoreGraphics;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding;
@@ -12,10 +13,12 @@ using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Presentation.Transition;
 using Toggl.Foundation.Analytics;
+using Toggl.Foundation.DTOs;
 using Toggl.Foundation.MvvmCross.Combiners;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac.Extensions;
 using UIKit;
@@ -24,7 +27,7 @@ using static Toggl.Daneel.Extensions.FontExtensions;
 namespace Toggl.Daneel.ViewControllers
 {
     [ModalCardPresentation]
-    public sealed partial class EditDurationViewController : KeyboardAwareViewController<EditDurationViewModel>
+    public sealed partial class EditDurationViewController : KeyboardAwareViewController<EditDurationViewModel>, IDismissableViewController
     {
         private const int offsetFromSafeAreaTop = 20;
         private const int bottomOffset = 48;
@@ -45,7 +48,6 @@ namespace Toggl.Daneel.ViewControllers
 
             startTimeChangingSubscription = ViewModel.StartTimeChanging.Subscribe(startTimeChanging);
 
-            setupDismissingByTappingOnBackground();
             prepareViews();
 
             var durationCombiner = new DurationValueCombiner();
@@ -265,6 +267,12 @@ namespace Toggl.Daneel.ViewControllers
             }
         }
 
+        public async Task<bool> Dismiss()
+        {
+            await ViewModel.CloseCommand.ExecuteAsync();
+            return true;
+        }
+
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
         {
             nfloat distanceFromTop = offsetFromSafeAreaTop;
@@ -303,15 +311,6 @@ namespace Toggl.Daneel.ViewControllers
             {
                 PreferredContentSize = newSize;
                 PresentationController.ContainerViewWillLayoutSubviews();
-            }
-        }
-
-        private void setupDismissingByTappingOnBackground()
-        {
-            if (PresentationController is ModalPresentationController modalPresentationController)
-            {
-                var tapToDismiss = new UITapGestureRecognizer(() => ViewModel.CloseCommand.Execute());
-                modalPresentationController.AdditionalContentView.AddGestureRecognizer(tapToDismiss);
             }
         }
 

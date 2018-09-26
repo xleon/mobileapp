@@ -13,6 +13,7 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar;
 using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts;
+using Toggl.Foundation.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 
@@ -26,6 +27,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         //Fields
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
+        private readonly IIntentDonationService intentDonationService;
         private readonly ISubject<ReportsDateRangeParameter> selectedDateRangeSubject = new Subject<ReportsDateRangeParameter>();
         private readonly string[] dayHeaders =
         {
@@ -38,11 +40,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Resources.SaturdayInitial
         };
 
+        private bool isInitialized;
         private CalendarMonth initialMonth;
-        private ReportsCalendarDayViewModel startOfSelection;
-
         private CompositeDisposable disposableBag;
-
+        private ReportsCalendarDayViewModel startOfSelection;
+        private ReportPeriod reportPeriod = ReportPeriod.ThisWeek;
 
         public BeginningOfWeek BeginningOfWeek { get; private set; }
 
@@ -67,13 +69,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxCommand<ReportsCalendarBaseQuickSelectShortcut> QuickSelectCommand { get; }
 
         public ReportsCalendarViewModel(
-            ITimeService timeService, ITogglDataSource dataSource)
+            ITimeService timeService,
+            ITogglDataSource dataSource,
+            IIntentDonationService intentDonationService)
         {
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
 
             this.timeService = timeService;
             this.dataSource = dataSource;
+            this.intentDonationService = intentDonationService;
 
             CalendarDayTappedCommand = new MvxCommand<ReportsCalendarDayViewModel>(calendarDayTapped);
             QuickSelectCommand = new MvxCommand<ReportsCalendarBaseQuickSelectShortcut>(quickSelect);
@@ -129,8 +135,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     quickSelectShortcut.OnDateRangeChanged))
                 .ForEach(disposableBag.Add);
 
-            var initialShortcut = QuickSelectShortcuts.Single(shortcut => shortcut is ReportsCalendarThisWeekQuickSelectShortcut);
+            var initialShortcut = QuickSelectShortcuts.Single(shortcut => shortcut.Period == reportPeriod);
             changeDateRange(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
+            isInitialized = true;
         }
 
         public void OnToggleCalendar() => selectStartOfSelectionIfNeeded();
@@ -139,6 +146,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public string DayHeaderFor(int index)
             => dayHeaders[(index + (int)BeginningOfWeek + 7) % 7];
+
+        public void SelectPeriod(ReportPeriod period)
+        {
+            reportPeriod = period;
+
+            if (isInitialized)
+            {
+                var initialShortcut = QuickSelectShortcuts.Single(shortcut => shortcut.Period == period);
+                changeDateRange(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
+            }
+        }
 
         private void selectStartOfSelectionIfNeeded()
         {
@@ -183,7 +201,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private void quickSelect(ReportsCalendarBaseQuickSelectShortcut quickSelectShortCut)
-            => changeDateRange(quickSelectShortCut.GetDateRange());
+        {
+            intentDonationService.DonateShowReport(quickSelectShortCut.Period);
+            changeDateRange(quickSelectShortCut.GetDateRange());
+        }
 
         private void highlightDateRange(ReportsDateRangeParameter dateRange)
         {
