@@ -66,5 +66,7 @@
 	<string>{TOGGL_FACEBOOK_APP_ID}</string>
 	<key>FacebookDisplayName</key>
 	<string>Toggl</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Toggl needs access to your calendar in order to display its events</string>
 </dict>
 </plist>

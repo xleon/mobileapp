@@ -18,8 +18,10 @@ namespace Toggl.Foundation.Tests.MvvmCross
         protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
         protected ITogglDataSource DataSource { get; } = Substitute.For<ITogglDataSource>();
         protected IUserPreferences UserPreferences { get; } = Substitute.For<IUserPreferences>();
+        protected ICalendarService CalendarService { get; } = Substitute.For<ICalendarService>();
         protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
         protected IInteractorFactory InteractorFactory { get; } = Substitute.For<IInteractorFactory>();
+        protected IPermissionsService PermissionsService { get; } = Substitute.For<IPermissionsService>();
         protected IApplicationShortcutCreator ApplicationShortcutCreator { get; }
             = Substitute.For<IApplicationShortcutCreator>();
 

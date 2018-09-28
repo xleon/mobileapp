@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Foundation;
 using Intents;
 using MvvmCross;
@@ -8,9 +10,11 @@ using MvvmCross.Platforms.Ios.Core;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Intents;
+using Toggl.Daneel.Services;
 using Toggl.Daneel.ViewControllers;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
+using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.Helper;
@@ -20,15 +24,12 @@ using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Shortcuts;
 using UIKit;
-
-#if USE_ANALYTICS
-using System.Linq;
-#endif
+using UserNotifications;
 
 namespace Toggl.Daneel
 {
     [Register(nameof(AppDelegate))]
-    public sealed class AppDelegate : MvxApplicationDelegate<Setup, App<OnboardingViewModel>>
+    public sealed class AppDelegate : MvxApplicationDelegate<Setup, App<OnboardingViewModel>>, IUNUserNotificationCenterDelegate
     {
         private IAnalyticsService analyticsService;
         private IBackgroundService backgroundService;
@@ -50,6 +51,8 @@ namespace Toggl.Daneel
             #endif
 
             base.FinishedLaunching(application, launchOptions);
+
+            UNUserNotificationCenter.Current.Delegate = this;
 
             #if ENABLE_TEST_CLOUD
             Xamarin.Calabash.Start();
@@ -101,6 +104,32 @@ namespace Toggl.Daneel
         {
             base.DidEnterBackground(application);
             backgroundService.EnterBackground();
+        }
+
+        [Export("userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:")]
+        public void DidReceiveNotificationResponse(UNUserNotificationCenter center, UNNotificationResponse response, Action completionHandler)
+        {
+            var eventId = response.Notification.Request.Content.UserInfo[NotificationService.CalendarEventIdKey] as NSString;
+
+            if (response.IsCustomAction)
+            {
+                switch (response.ActionIdentifier.ToString())
+                {
+                    case NotificationService.OpenAndCreateFromCalendarEvent:
+                        openAndStartTimeEntryFromCalendarEvent(eventId.ToString(), completionHandler);
+                        break;
+                    case NotificationService.OpenAndNavigateToCalendar:
+                        openAndNavigateToCalendar(completionHandler);
+                        break;
+                    case NotificationService.StartTimeEntryInBackground:
+                        startTimeEntryInBackground(eventId.ToString(), completionHandler);
+                        break;
+                }
+            }
+            else if (response.IsDefaultAction)
+            {
+                openAndStartTimeEntryFromCalendarEvent(eventId.ToString(), completionHandler);
+            }
         }
 
         public override void PerformActionForShortcutItem(UIApplication application, UIApplicationShortcutItem shortcutItem, UIOperationHandler completionHandler)
@@ -166,7 +195,7 @@ namespace Toggl.Daneel
                     return true;
                 case ShowReportPeriodIntent periodIntent:
                     var tabbarVC = (MainTabBarController)UIApplication.SharedApplication.KeyWindow.RootViewController;
-                    var reportViewModel = (ReportsViewModel)tabbarVC.ViewModel.ViewModels.Single(viewModel => viewModel is ReportsViewModel);
+                    var reportViewModel = (ReportsViewModel)tabbarVC.ViewModel.Tabs.Single(viewModel => viewModel is ReportsViewModel);
                     navigationService.Navigate(reportViewModel, periodIntent.Period.ToReportPeriod());
                     return true;
                 case StartTimerIntent startTimerIntent:
@@ -238,5 +267,37 @@ namespace Toggl.Daneel
                 ForegroundColor = UIColor.Black
             };
         }
+
+        #region Notification Actions
+
+        private void openAndStartTimeEntryFromCalendarEvent(string eventId, Action completionHandler)
+        {
+            completionHandler();
+            var url = ApplicationUrls.Calendar.ForId(eventId);
+            navigationService.Navigate(url);
+        }
+
+        private void openAndNavigateToCalendar(Action completionHandler)
+        {
+            completionHandler();
+            var url = ApplicationUrls.Calendar.Default;
+            navigationService.Navigate(url);
+        }
+
+        private void startTimeEntryInBackground(string eventId, Action completionHandler)
+        {
+            var interactorFactory = Mvx.Resolve<IInteractorFactory>();
+
+            Task.Run(async () =>
+            {
+                var calendarItem = await interactorFactory.GetCalendarItemWithId(eventId).Execute();
+                var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
+                var prototype = calendarItem.AsTimeEntryPrototype(workspace.Id);
+                await interactorFactory.CreateTimeEntry(prototype).Execute();
+                completionHandler();
+            });
+        }
+
+        #endregion
     }
 }

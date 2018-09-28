@@ -91,12 +91,15 @@ namespace Toggl.Daneel
             var privateSharedStorageService = new PrivateSharedStorageService();
 
             var appVersion = Version.Parse(version);
-            var userAgent = new UserAgent(clientName, version);
             var keyValueStorage = new UserDefaultsStorage();
+            var permissionsService = new PermissionsService();
+            var userAgent = new UserAgent(clientName, version);
             var settingsStorage = new SettingsStorage(Version.Parse(version), keyValueStorage);
             var remoteConfigService = new RemoteConfigService();
             remoteConfigService.SetupDefaults(remoteConfigDefaultsFileName);
             var schedulerProvider = new IOSSchedulerProvider();
+            var calendarService = new CalendarService(permissionsService);
+            var notificationService = new NotificationService(permissionsService, timeService);
 
             var foundation =
                 TogglFoundation
@@ -113,6 +116,7 @@ namespace Toggl.Daneel
                     .WithSchedulerProvider(schedulerProvider)
                     .WithPlatformConstants(platformConstants)
                     .WithRemoteConfigService(remoteConfigService)
+                    .WithNotificationService(notificationService)
                     .WithApiFactory(new ApiFactory(environment, userAgent))
                     .WithBackgroundService(new BackgroundService(timeService))
                     .WithApplicationShortcutCreator<ApplicationShortcutCreator>()
@@ -127,8 +131,10 @@ namespace Toggl.Daneel
                     .WithBrowserService<BrowserService>()
                     .WithKeyValueStorage(keyValueStorage)
                     .WithUserPreferences(settingsStorage)
+                    .WithCalendarService(calendarService)
                     .WithOnboardingStorage(settingsStorage)
                     .WithNavigationService(navigationService)
+                    .WithPermissionsService(permissionsService)
                     .WithAccessRestrictionStorage(settingsStorage)
                     .WithPasswordManagerService<OnePasswordService>()
                     .WithErrorHandlingService(new ErrorHandlingService(navigationService, settingsStorage))

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
@@ -22,6 +21,7 @@ using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Foundation.Services;
@@ -86,10 +86,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxCommand ToggleManualMode { get; }
 
         // Inputs
-        public InputAction<TimeEntryViewModel> ContinueTimeEntry { get; }
-        public InputAction<TimeEntryViewModel> SelectTimeEntry { get; }
-
         public UIAction RefreshAction { get; }
+        public InputAction<TimeEntryViewModel> DeleteTimeEntry { get; }
+        public InputAction<TimeEntryViewModel> SelectTimeEntry { get; }
+        public InputAction<TimeEntryViewModel> ContinueTimeEntry { get; }
 
         // Private
         private const int ratingViewTimeout = 5;
@@ -180,9 +180,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             StartTimeEntryCommand = new MvxAsyncCommand(startTimeEntry, () => CurrentTimeEntryId.HasValue == false);
             AlternativeStartTimeEntryCommand = new MvxAsyncCommand(alternativeStartTimeEntry, () => CurrentTimeEntryId.HasValue == false);
 
-            ContinueTimeEntry = new InputAction<TimeEntryViewModel>(continueTimeEntry);
-            SelectTimeEntry = new InputAction<TimeEntryViewModel>(timeEntrySelected);
             RefreshAction = new UIAction(refresh);
+            DeleteTimeEntry = new InputAction<TimeEntryViewModel>(deleteTimeEntry);
+            SelectTimeEntry = new InputAction<TimeEntryViewModel>(timeEntrySelected);
+            ContinueTimeEntry = new InputAction<TimeEntryViewModel>(continueTimeEntry);
         }
 
         public void Init(string action)
@@ -404,6 +405,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             return dataSource.SyncManager.ForceFullSync()
                 .SelectUnit();
+        }
+
+        private IObservable<Unit> deleteTimeEntry(TimeEntryViewModel timeEntry)
+        {
+            return interactorFactory
+                .DeleteTimeEntry(timeEntry.Id)
+                .Execute()
+                .Do( _ => {
+                    analyticsService.DeleteTimeEntry.Track();
+                    dataSource.SyncManager.PushSync();
+                });
         }
 
         private async Task stopTimeEntry()

@@ -39,4 +39,7 @@
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="MvvmCross\ViewModels\ReportsCalendarQuickSelectShortcuts\ReportsCalendarLastWeekQuickSelectShortcutTests.cs" />
+  </ItemGroup>
 </Project>

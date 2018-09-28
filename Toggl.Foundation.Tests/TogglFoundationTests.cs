@@ -37,6 +37,7 @@ namespace Toggl.Foundation.Tests
                 bool useBackgroundService,
                 bool useSchedulerProvider,
                 bool usePlatformConstants,
+                bool useNotificationService,
                 bool useRemoteConfigService,
                 bool useIntentDonationService,
                 bool useApplicationShortcutCreator,
@@ -57,6 +58,7 @@ namespace Toggl.Foundation.Tests
                 var analyticsService = useAnalyticsService ? Substitute.For<IAnalyticsService>() : null;
                 var backgroundService = useBackgroundService ? Substitute.For<IBackgroundService>() : null;
                 var platformConstants = usePlatformConstants ? Substitute.For<IPlatformConstants>() : null;
+                var notificationService = useNotificationService ? Substitute.For<INotificationService>() : null;
                 var remoteConfigService = useRemoteConfigService ? Substitute.For<IRemoteConfigService>() : null;
                 var intentDonationService = useIntentDonationService ? Substitute.For<IIntentDonationService>() : null;
                 var applicationShortcutCreator = useApplicationShortcutCreator ? Substitute.For<IApplicationShortcutCreator>() : null;
@@ -80,6 +82,7 @@ namespace Toggl.Foundation.Tests
                         .WithBackgroundService(backgroundService)
                         .WithSchedulerProvider(schedulerProvider)
                         .WithPlatformConstants(platformConstants)
+                        .WithNotificationService(notificationService)
                         .WithRemoteConfigService(remoteConfigService)
                         .WithIntentDonationService(intentDonationService)
                         .WithApplicationShortcutCreator(applicationShortcutCreator)
@@ -108,6 +111,7 @@ namespace Toggl.Foundation.Tests
                 var schedulerProvider = Substitute.For<ISchedulerProvider>();
                 var platformConstants = Substitute.For<IPlatformConstants>();
                 var backgroundService = Substitute.For<IBackgroundService>();
+                var notificationService = Substitute.For<INotificationService>();
                 var remoteConfigService = Substitute.For<IRemoteConfigService>();
                 var intentDonationService = Substitute.For<IIntentDonationService>();
                 var applicationShortcutCreator = Substitute.For<IApplicationShortcutCreator>();
@@ -130,6 +134,7 @@ namespace Toggl.Foundation.Tests
                         .WithBackgroundService(backgroundService)
                         .WithSchedulerProvider(schedulerProvider)
                         .WithPlatformConstants(platformConstants)
+                        .WithNotificationService(notificationService)
                         .WithRemoteConfigService(remoteConfigService)
                         .WithIntentDonationService(intentDonationService)
                         .WithApplicationShortcutCreator(applicationShortcutCreator)

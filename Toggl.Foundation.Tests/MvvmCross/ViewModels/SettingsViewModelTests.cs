@@ -13,6 +13,7 @@ using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.Settings;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
@@ -819,6 +820,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 await ViewModel.SubmitFeedbackUsingEmail();
                 await FeedbackService.Received().SubmitFeedback();
+            }
+        }
+
+        public sealed class TheOpenCalendarSettingsAction : SettingsViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task NavigatesToCalendarSettingsViewModel()
+            {
+                await ViewModel.OpenCalendarSettingsAction.Execute(Unit.Default);
+
+                await NavigationService.Received().Navigate<CalendarSettingsViewModel>();
             }
         }
     }

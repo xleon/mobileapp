@@ -614,6 +614,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task ShouldNotTriggerAReportReloadWhenTheSameWorkspaceIsSelected()
             {
                 await ViewModel.Initialize();
+
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId };
                 DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(mockWorkspace));
