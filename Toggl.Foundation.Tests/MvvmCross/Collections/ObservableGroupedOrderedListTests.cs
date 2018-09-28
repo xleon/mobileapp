@@ -52,7 +52,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 var scheduler = new TestScheduler();
                 var observer = scheduler.CreateObserver<ICollectionChange>();
 
-                collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
+                collection.CollectionChange.Subscribe(observer);
 
                 var updated = new MockItem { Id = 1, Description = "ED" };
                 collection.UpdateItem(updated.Id, updated);
@@ -92,7 +92,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 var scheduler = new TestScheduler();
                 var observer = scheduler.CreateObserver<ICollectionChange>();
 
-                collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
+                collection.CollectionChange.Subscribe(observer);
 
                 var updated = new MockItem { Id = 8, Description = "C" };
                 collection.UpdateItem(updated.Id, updated);
@@ -123,7 +123,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 var scheduler = new TestScheduler();
                 var observer = scheduler.CreateObserver<ICollectionChange>();
 
-                collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
+                collection.CollectionChange.Subscribe(observer);
 
                 collection.RemoveItemAt(0, 2);
 
@@ -144,7 +144,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 var scheduler = new TestScheduler();
                 var observer = scheduler.CreateObserver<ICollectionChange>();
 
-                collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
+                collection.CollectionChange.Subscribe(observer);
 
                 collection.InsertItem(20);
 
@@ -165,7 +165,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 var scheduler = new TestScheduler();
                 var observer = scheduler.CreateObserver<ICollectionChange>();
 
-                collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
+                collection.CollectionChange.Subscribe(observer);
 
                 int[] newItems = { 0, 10, 100, 1000 };
                 collection.ReplaceWith(newItems);
@@ -192,7 +192,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 var scheduler = new TestScheduler();
                 var observer = scheduler.CreateObserver<ICollectionChange>();
 
-                collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
+                collection.CollectionChange.Subscribe(observer);
 
                 var updated = new MockItem { Id = 1, Description = "C" };
                 collection.UpdateItem(updated.Id, updated);
@@ -220,7 +220,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 var scheduler = new TestScheduler();
                 var observer = scheduler.CreateObserver<ICollectionChange>();
 
-                collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
+                collection.CollectionChange.Subscribe(observer);
 
                 var updated = new MockItem { Id = 5, Description = "E" };
                 collection.UpdateItem(updated.Id, updated);
@@ -251,7 +251,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
                 var scheduler = new TestScheduler();
                 var observer = scheduler.CreateObserver<ICollectionChange>();
 
-                collection.CollectionChanges.SelectMany( l => l.ToObservable()).Subscribe(observer);
+                collection.CollectionChange.Subscribe(observer);
 
                 var updated = new MockItem { Id = 4, Description = "B2" };
                 var index = collection.UpdateItem(1, updated);

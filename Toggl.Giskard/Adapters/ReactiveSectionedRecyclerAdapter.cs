@@ -2,8 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Android.OS;
+using Android.Support.V7.Util;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Java.Lang;
+using MvvmCross.Binding.Extensions;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Collections.Changes;
 using Toggl.Giskard.ViewHolders;
@@ -17,94 +21,98 @@ namespace Toggl.Giskard.Adapters
         public const int SectionViewType = 0;
         public const int ItemViewType = 1;
 
-        public virtual int HeaderOffset { get; } = 0;
+        private readonly object collectionUpdateLock = new object();
+        private bool isUpdateRunning;
+        private bool hasPendingUpdate;
 
         private readonly ObservableGroupedOrderedCollection<TModel> items;
-        private ImmutableList<FlattenedItemInfo> collectionToAdapterIndexesMap = ImmutableList<FlattenedItemInfo>.Empty;
-        private ImmutableList<int> sectionsIndexes = ImmutableList<int>.Empty;
+        private IReadOnlyList<FlatItemInfo> currentItems;
 
         public ReactiveSectionedRecyclerAdapter(ObservableGroupedOrderedCollection<TModel> items)
         {
             this.items = items;
-            updateSectionIndexes();
+            currentItems = flattenItems(this.items);
         }
 
-        public override int ItemCount => collectionToAdapterIndexesMap.Count + HeaderOffset;
+        public virtual int HeaderOffset { get; } = 0;
+
+        public override int ItemCount => currentItems.Count + HeaderOffset;
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
-            if (viewType == ItemViewType) return CreateItemViewHolder(parent);
+            if (viewType == ItemViewType)
+            {
+                return CreateItemViewHolder(parent);
+            }
+
             return CreateHeaderViewHolder(parent);
         }
 
         public override int GetItemViewType(int position)
         {
-            if (sectionsIndexes.Contains(position - HeaderOffset)) return SectionViewType;
-            return ItemViewType;
+            return currentItems[position - HeaderOffset].ViewType;
         }
 
-        public void UpdateChanges(IReadOnlyCollection<ICollectionChange> changes)
+        protected TModel getItemAt(int position)
         {
-            if (changes.Count > 1 || changes.Any(c => c is ReloadCollectionChange))
-            {
-                updateSectionIndexes();
-                NotifyDataSetChanged();
-                return;
-            }
-
-            var change = changes.Single();
-            switch (change)
-            {
-                case AddRowCollectionChange<TModel> addRow:
-                    updateSectionIndexes();
-                    NotifyItemInserted(mapSectionIndexToAdapterIndex(addRow.Index));
-                    NotifyItemChanged(sectionsIndexes[addRow.Index.Section] + HeaderOffset);
-                    break;
-
-                case InsertSectionCollectionChange<TModel> insertSection:
-                    updateSectionIndexes();
-                    NotifyItemRangeInserted(sectionsIndexes[insertSection.Index] + HeaderOffset, 2);
-                    break;
-
-                case UpdateRowCollectionChange<TModel> updateRow:
-                    NotifyItemChanged(mapSectionIndexToAdapterIndex(updateRow.Index));
-                    NotifyItemChanged(sectionsIndexes[updateRow.Index.Section] + HeaderOffset);
-                    break;
-
-                case MoveRowWithinExistingSectionsCollectionChange<TModel> moveRowWithinExistingSectionsCollectionChange:
-                    moveRowWithinExistingSections(moveRowWithinExistingSectionsCollectionChange);
-                    break;
-
-                case MoveRowToNewSectionCollectionChange<TModel> moveRowToNewSection:
-                    this.moveRowToNewSection(moveRowToNewSection);
-                    break;
-
-                case RemoveRowCollectionChange removeRow:
-                    this.removeRow(removeRow);
-                    break;
-            }
+            return currentItems[position - HeaderOffset].Item;
         }
 
-        public TModel GetItemFromAdapterPosition(int position)
+        public void UpdateCollection(ICollectionChange change)
         {
-            var item = collectionToAdapterIndexesMap[position - HeaderOffset];
-            if (item.ViewType == ItemViewType)
+            lock (collectionUpdateLock)
             {
-                return items[item.SectionedIndex.Section][item.SectionedIndex.Row];
+                if (isUpdateRunning)
+                {
+                    hasPendingUpdate = true;
+                    return;
+                }
+
+                isUpdateRunning = true;
             }
 
-            throw new InvalidOperationException($"This position does not contain an item of the {typeof(TModel).Name} type");
+            startCurrentCollectionUpdate();
         }
 
-        public IReadOnlyList<TModel> GetSectionListFromAdapterPosition(int position)
+        private void startCurrentCollectionUpdate()
         {
-            var item = collectionToAdapterIndexesMap[position - HeaderOffset];
-            if (item.ViewType == SectionViewType)
+            var handler = new Handler();
+            new Thread(() =>
             {
-                return items[item.SectionedIndex.Section];
-            }
+                var newImmutableItems = flattenItems(items);
+                var diffResult = calculateDiffFromCurrentItems(newImmutableItems);
+                handler.Post(() => dispatchUpdates(newImmutableItems, diffResult));
+            }).Start();
+        }
 
-            throw new InvalidOperationException($"This position does not contain an item of the {typeof(IReadOnlyList<TModel>).Name} type");
+        private DiffUtil.DiffResult calculateDiffFromCurrentItems(IReadOnlyList<FlatItemInfo> newImmutableItems)
+        {
+            return DiffUtil.CalculateDiff(
+                new HeaderOffsetAwareDiffCallback(currentItems,
+                    newImmutableItems,
+                    AreItemContentsTheSame,
+                    AreSectionsRepresentationsTheSame,
+                    HeaderOffset)
+            );
+        }
+
+        private void dispatchUpdates(IReadOnlyList<FlatItemInfo> newImmutableItems, DiffUtil.DiffResult diffResult)
+        {
+            currentItems = newImmutableItems;
+            diffResult.DispatchUpdatesTo(this);
+
+            lock (collectionUpdateLock)
+            {
+                if (hasPendingUpdate)
+                {
+                    hasPendingUpdate = false;
+                    startCurrentCollectionUpdate();
+                }
+                else
+                {
+                    isUpdateRunning = false;
+                }
+            }
         }
 
         public sealed override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
@@ -112,11 +120,11 @@ namespace Toggl.Giskard.Adapters
             switch (holder)
             {
                 case TItemViewHolder itemViewHolder:
-                    itemViewHolder.Item = GetItemFromAdapterPosition(position);
+                    itemViewHolder.Item = currentItems[position - HeaderOffset].Item;
                     break;
 
                 case TSectionViewHolder sectionViewHolder:
-                    sectionViewHolder.Item = GetSectionListFromAdapterPosition(position);
+                    sectionViewHolder.Item = currentItems[position - HeaderOffset].Section;
                     break;
 
                 default:
@@ -135,103 +143,119 @@ namespace Toggl.Giskard.Adapters
 
         protected abstract TItemViewHolder CreateItemViewHolder(ViewGroup parent);
 
-        private int mapSectionIndexToAdapterIndex(SectionedIndex sectionedIndex)
-        {
-            return sectionsIndexes[sectionedIndex.Section] + sectionedIndex.Row + 1 + HeaderOffset;
-        }
+        protected abstract long IdFor(TModel item);
 
-        private void updateSectionIndexes()
-        {
-            if (items.IsEmpty)
-            {
-                collectionToAdapterIndexesMap = ImmutableList<FlattenedItemInfo>.Empty;
-                sectionsIndexes = ImmutableList<int>.Empty;
-            }
-            else
-            {
-                var mappedIndexes = new List<FlattenedItemInfo>();
-                var newSectionsIndexes = new List<int>();
-                var sectionIndex = 0;
-                var sectionIndexOnCollection = 0;
-                foreach (var section in items)
-                {
-                    newSectionsIndexes.Add(sectionIndex);
-                    mappedIndexes.Add(new FlattenedItemInfo(SectionViewType, new SectionedIndex(sectionIndexOnCollection, 0)));
-                    mappedIndexes.AddRange(Enumerable.Range(0, section.Count).Select(
-                        itemIndex => new FlattenedItemInfo(ItemViewType, new SectionedIndex(sectionIndexOnCollection, itemIndex)))
-                    );
-                    sectionIndex += section.Count + 1;
-                    sectionIndexOnCollection++;
-                }
+        protected abstract long IdForSection(IReadOnlyList<TModel> section);
 
-                sectionsIndexes = newSectionsIndexes.ToImmutableList();
-                collectionToAdapterIndexesMap = mappedIndexes.ToImmutableList();
-            }
-        }
+        /*
+         * The visual representation of the items are the same
+         */
+        protected abstract bool AreItemContentsTheSame(TModel item1, TModel item2);
 
-        private void removeRow(RemoveRowCollectionChange removeRow)
-        {
-            var indexToBeRemoved = mapSectionIndexToAdapterIndex(removeRow.Index);
-            var sectionCountBefore = sectionsIndexes.Count;
-            updateSectionIndexes();
-            if (sectionCountBefore == sectionsIndexes.Count)
-            {
-                NotifyItemRemoved(indexToBeRemoved);
-                NotifyItemChanged(sectionsIndexes[removeRow.Index.Section] + HeaderOffset);
-            }
-            else
-            {
-                NotifyItemRangeRemoved(indexToBeRemoved - 1, 2);
-            }
-        }
+        /*
+         * The visual representation of the section label is the same
+         */
+        protected abstract bool AreSectionsRepresentationsTheSame(IReadOnlyList<TModel> list1, IReadOnlyList<TModel> list2);
 
-        private void moveRowToNewSection(MoveRowToNewSectionCollectionChange<TModel> moveRowToNewSection)
-        {
-            var oldIndexToBeRemoved = mapSectionIndexToAdapterIndex(moveRowToNewSection.OldIndex);
-            var sectionsCountBeforeUpdate = sectionsIndexes.Count;
-            updateSectionIndexes();
-
-            var oldSectionWasDeleted = sectionsCountBeforeUpdate == sectionsIndexes.Count;
-            if (oldSectionWasDeleted)
-            {
-                NotifyItemRangeRemoved(oldIndexToBeRemoved - 1, 2);
-            }
-            else
-            {
-                NotifyItemRemoved(oldIndexToBeRemoved);
-            }
-
-            var newSectionIndex = sectionsIndexes[moveRowToNewSection.Index] + HeaderOffset;
-            NotifyItemRangeInserted(newSectionIndex, 2);
-        }
-
-        private void moveRowWithinExistingSections(MoveRowWithinExistingSectionsCollectionChange<TModel> moveRowWithinExistingSections)
-        {
-            var sectionsCountBeforeUpdate = sectionsIndexes.Count;
-            var oldIndex = mapSectionIndexToAdapterIndex(moveRowWithinExistingSections.OldIndex);
-            var oldSectionIndex = sectionsIndexes[moveRowWithinExistingSections.OldIndex.Section] + HeaderOffset;
-
-            updateSectionIndexes();
-            var oldSectionWasDeleted = sectionsCountBeforeUpdate != sectionsIndexes.Count;
-            if (oldSectionWasDeleted)
-            {
-                NotifyItemRemoved(oldSectionIndex);
-            }
-
-            var newIndex = mapSectionIndexToAdapterIndex(moveRowWithinExistingSections.Index);
-            NotifyItemMoved(oldIndex, newIndex);
-        }
-
-        private struct FlattenedItemInfo
+        private struct FlatItemInfo
         {
             public int ViewType { get; }
-            public SectionedIndex SectionedIndex { get; }
+            public TModel Item { get; }
+            public IReadOnlyList<TModel> Section { get; }
+            public long Id { get; }
 
-            public FlattenedItemInfo(int viewType, SectionedIndex sectionedIndex)
+            public FlatItemInfo(TModel item, Func<TModel, long> idProvider)
             {
-                ViewType = viewType;
-                SectionedIndex = sectionedIndex;
+                ViewType = ItemViewType;
+                Item = item;
+                Section = null;
+                Id = idProvider(item);
             }
+
+            public FlatItemInfo(IReadOnlyList<TModel> section, Func<IReadOnlyList<TModel>, long> idProvider)
+            {
+                ViewType = SectionViewType;
+                Item = default(TModel);
+                Section = section;
+                Id = idProvider(section);
+            }
+        }
+
+        private IReadOnlyList<FlatItemInfo> flattenItems(ObservableGroupedOrderedCollection<TModel> groupsSource)
+        {
+            var groups = new List<List<TModel>>(groupsSource.Select(list => new List<TModel>(list)));
+            var flattenedTimeEntriesList = new List<FlatItemInfo>();
+
+            foreach (var group in groups)
+            {
+                flattenedTimeEntriesList.Add(new FlatItemInfo(group.ToImmutableList(), IdForSection));
+                flattenedTimeEntriesList.AddRange(group.Select(item => new FlatItemInfo(item, IdFor)).ToList());
+            }
+
+            return flattenedTimeEntriesList.ToImmutableList();
+        }
+
+        private sealed class HeaderOffsetAwareDiffCallback : DiffUtil.Callback
+        {
+            /*
+             * To understand how the DiffUtil.Callback works, please check
+             * https://developer.android.com/reference/android/support/v7/util/DiffUtil.Callback
+             */
+            private readonly IReadOnlyList<FlatItemInfo> oldItems;
+            private readonly IReadOnlyList<FlatItemInfo> newItems;
+            private readonly Func<TModel, TModel, bool> itemContentsAreTheSame;
+            private readonly Func<IReadOnlyList<TModel>, IReadOnlyList<TModel>, bool> sectionContentsAreTheSame;
+            private readonly int headerOffset;
+
+            public HeaderOffsetAwareDiffCallback(
+                IReadOnlyList<FlatItemInfo> oldItems,
+                IReadOnlyList<FlatItemInfo> newItems,
+                Func<TModel, TModel, bool> itemContentsAreTheSame,
+                Func<IReadOnlyList<TModel>, IReadOnlyList<TModel>, bool> sectionContentsAreTheSame,
+                int headerOffset)
+            {
+                this.oldItems = oldItems;
+                this.newItems = newItems;
+                this.itemContentsAreTheSame = itemContentsAreTheSame;
+                this.sectionContentsAreTheSame = sectionContentsAreTheSame;
+                this.headerOffset = headerOffset;
+            }
+
+            public override bool AreContentsTheSame(int oldItemPosition, int newItemPosition)
+            {
+                if (oldItemPosition < headerOffset || newItemPosition < headerOffset)
+                {
+                    return oldItemPosition == newItemPosition;
+                }
+
+                var oldItem = oldItems[oldItemPosition - headerOffset];
+                var newItem = newItems[newItemPosition - headerOffset];
+
+                if (oldItem.ViewType == ItemViewType)
+                {
+                    return itemContentsAreTheSame(oldItem.Item, newItem.Item);
+                }
+
+                return sectionContentsAreTheSame(oldItem.Section, newItem.Section);
+            }
+
+            public override bool AreItemsTheSame(int oldItemPosition, int newItemPosition)
+            {
+                if (oldItemPosition < headerOffset || newItemPosition < headerOffset)
+                {
+                    return oldItemPosition == newItemPosition;
+                }
+
+                var oldItem = oldItems[oldItemPosition - headerOffset];
+                var newItem = newItems[newItemPosition - headerOffset];
+
+                return oldItem.ViewType == newItem.ViewType
+                       && oldItem.Id == newItem.Id;
+            }
+
+            public override int NewListSize => newItems.Count + headerOffset;
+
+            public override int OldListSize => oldItems.Count + headerOffset;
         }
     }
 }
