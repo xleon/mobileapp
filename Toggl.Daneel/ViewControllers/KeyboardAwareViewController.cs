@@ -1,4 +1,5 @@
-﻿using MvvmCross.ViewModels;
+﻿using Foundation;
+using MvvmCross.ViewModels;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers
@@ -15,6 +16,12 @@ namespace Toggl.Daneel.ViewControllers
 
             UIKeyboard.Notifications.ObserveWillShow(KeyboardWillShow);
             UIKeyboard.Notifications.ObserveWillHide(KeyboardWillHide);
+        }
+
+        public override void ViewWillDisappear(bool animated)
+        {
+            base.ViewWillDisappear(animated);
+            NSNotificationCenter.DefaultCenter.RemoveObserver(this);
         }
 
         protected abstract void KeyboardWillShow(object sender, UIKeyboardEventArgs e);
