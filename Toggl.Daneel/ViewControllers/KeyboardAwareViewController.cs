@@ -7,6 +7,9 @@ namespace Toggl.Daneel.ViewControllers
     public abstract class KeyboardAwareViewController<TViewModel> : ReactiveViewController<TViewModel>
         where TViewModel : class, IMvxViewModel
     {
+        private NSObject willShowNotification;
+        private NSObject willHideNotification;
+
         protected KeyboardAwareViewController(string nibName)
             : base(nibName) { }
 
@@ -14,14 +17,18 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidLoad();
 
-            UIKeyboard.Notifications.ObserveWillShow(KeyboardWillShow);
-            UIKeyboard.Notifications.ObserveWillHide(KeyboardWillHide);
+            willShowNotification = UIKeyboard.Notifications.ObserveWillShow(KeyboardWillShow);
+            willHideNotification = UIKeyboard.Notifications.ObserveWillHide(KeyboardWillHide);
         }
 
-        public override void ViewWillDisappear(bool animated)
+        protected override void Dispose(bool disposing)
         {
-            base.ViewWillDisappear(animated);
-            NSNotificationCenter.DefaultCenter.RemoveObserver(this);
+            base.Dispose(disposing);
+
+            if (!disposing) return;
+
+            NSNotificationCenter.DefaultCenter.RemoveObserver(willShowNotification);
+            NSNotificationCenter.DefaultCenter.RemoveObserver(willHideNotification);
         }
 
         protected abstract void KeyboardWillShow(object sender, UIKeyboardEventArgs e);
