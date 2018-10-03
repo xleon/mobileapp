@@ -268,7 +268,7 @@ namespace Toggl.Daneel.ViewControllers
             frameBeforeShowingKeyboard = View.Frame;
 
             var safeAreaOffset = UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
-                  ? UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top
+                  ? Math.Max(UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top, UIApplication.SharedApplication.StatusBarFrame.Height)
                   : 0;
             var distanceFromTop = Math.Max(safeAreaOffset, View.Frame.Y - e.FrameEnd.Height);
 
