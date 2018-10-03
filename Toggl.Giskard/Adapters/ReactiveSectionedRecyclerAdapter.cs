@@ -155,7 +155,7 @@ namespace Toggl.Giskard.Adapters
         /*
          * The visual representation of the section label is the same
          */
-        protected abstract bool AreSectionsRepresentationsTheSame(IReadOnlyList<TModel> list1, IReadOnlyList<TModel> list2);
+        protected abstract bool AreSectionsRepresentationsTheSame(IReadOnlyList<TModel> one, IReadOnlyList<TModel> other);
 
         private struct FlatItemInfo
         {
@@ -231,12 +231,16 @@ namespace Toggl.Giskard.Adapters
                 var oldItem = oldItems[oldItemPosition - headerOffset];
                 var newItem = newItems[newItemPosition - headerOffset];
 
+                if (oldItem.ViewType != newItem.ViewType) return false;
+
                 if (oldItem.ViewType == ItemViewType)
                 {
                     return itemContentsAreTheSame(oldItem.Item, newItem.Item);
                 }
 
-                return sectionContentsAreTheSame(oldItem.Section, newItem.Section);
+                return sectionContentsAreTheSame(
+                    oldItem.Section ?? ImmutableList<TModel>.Empty,
+                    newItem.Section ?? ImmutableList<TModel>.Empty);
             }
 
             public override bool AreItemsTheSame(int oldItemPosition, int newItemPosition)

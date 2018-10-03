@@ -105,10 +105,13 @@ namespace Toggl.Giskard.Adapters
         protected override bool AreItemContentsTheSame(TimeEntryViewModel item1, TimeEntryViewModel item2)
             => item1 == item2;
 
-        protected override bool AreSectionsRepresentationsTheSame(IReadOnlyList<TimeEntryViewModel> list1, IReadOnlyList<TimeEntryViewModel> list2)
+        protected override bool AreSectionsRepresentationsTheSame(IReadOnlyList<TimeEntryViewModel> one, IReadOnlyList<TimeEntryViewModel> other)
         {
-            return list1.First().StartTime.Date == list2.First().StartTime.Date
-                   && list1.ContainsExactlyAll(list2);
+            var oneFirst = one.FirstOrDefault()?.StartTime.Date;
+            var otherFirst = other.FirstOrDefault()?.StartTime.Date;
+            return (oneFirst != null || otherFirst != null)
+                   && oneFirst == otherFirst
+                   && one.ContainsExactlyAll(other);
         }
     }
 }
