@@ -614,7 +614,7 @@ Task("Tests.Unit")
 
 //Integration Tests
 Task("Tests.Integration")
-    .IsDependentOn(buildAll ? "Build.Tests.All" : "Build.Tests.Integration")
+    .IsDependentOn("Build.Tests.Integration")
     .Does(Test(GetIntegrationTestProjects()));
 
 //UI Tests
