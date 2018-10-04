@@ -950,12 +950,34 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheInitializeMethod
         {
+            public sealed class WhenReceivingADescription : MainViewModelTest
+            {
+                [Fact, LogIfTooSlow]
+                public async ThreadingTask CreatesANewTimeEntryWithThePassedDescriptionInTheDefaultWorkspace()
+                {
+                    const string description = "working on something";
+                    var defaultWorkspace = new MockWorkspace { Id = 1 };
+                    InteractorFactory
+                        .GetDefaultWorkspace()
+                        .Execute()
+                        .Returns(Observable.Return(defaultWorkspace));
+                    ViewModel.Init(null, description);
+
+                    await InteractorFactory
+                        .Received()
+                        .CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(
+                                te => te.Description == description 
+                                   && te.WorkspaceId == defaultWorkspace.Id))
+                        .Execute();
+                }
+            }
+
             public sealed class WhenNavigationActionIsStop : MainViewModelTest
             {
                 [Fact, LogIfTooSlow]
                 public async ThreadingTask StopsTheCurrentEntry()
                 {
-                    ViewModel.Init(ApplicationUrls.Main.Action.Stop);
+                    ViewModel.Init(ApplicationUrls.Main.Action.Stop, null);
                     await ViewModel.Initialize();
 
                     await InteractorFactory.Received().StopTimeEntry(TimeService.CurrentDateTime).Execute();
@@ -964,7 +986,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 [Fact, LogIfTooSlow]
                 public async ThreadingTask StartsPushSync()
                 {
-                    ViewModel.Init(ApplicationUrls.Main.Action.Stop);
+                    ViewModel.Init(ApplicationUrls.Main.Action.Stop, null);
                     await ViewModel.Initialize();
 
                     await DataSource.SyncManager.Received().PushSync();
@@ -976,7 +998,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 [Fact, LogIfTooSlow]
                 public async ThreadingTask GetsTheContinueMostRecentTimeEntryInteractor()
                 {
-                    ViewModel.Init(ApplicationUrls.Main.Action.Continue);
+                    ViewModel.Init(ApplicationUrls.Main.Action.Continue, null);
 
                     await ViewModel.Initialize();
 
@@ -988,7 +1010,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 {
                     var interactor = Substitute.For<IInteractor<IObservable<IThreadSafeTimeEntry>>>();
                     InteractorFactory.ContinueMostRecentTimeEntry().Returns(interactor);
-                    ViewModel.Init(ApplicationUrls.Main.Action.Continue);
+                    ViewModel.Init(ApplicationUrls.Main.Action.Continue, null);
 
                     await ViewModel.Initialize();
 

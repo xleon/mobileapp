@@ -8,13 +8,11 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using PropertyChanged;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Experiments;
 using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Helper;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Collections;
@@ -186,9 +184,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ContinueTimeEntry = new InputAction<TimeEntryViewModel>(continueTimeEntry);
         }
 
-        public void Init(string action)
+        public void Init(string action, string description)
         {
             urlNavigationAction = action;
+
+            if (description != null)
+            {
+                interactorFactory
+                    .GetDefaultWorkspace()
+                    .Execute()
+                    .SelectMany(workspace => interactorFactory
+                        .CreateTimeEntry(description.AsTimeEntryPrototype(timeService.CurrentDateTime, workspace.Id))
+                        .Execute())
+                    .Subscribe()
+                    .DisposedBy(disposeBag);
+            }
         }
 
         public override async Task Initialize()
