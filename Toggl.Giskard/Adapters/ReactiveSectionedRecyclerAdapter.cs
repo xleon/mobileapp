@@ -7,6 +7,7 @@ using Android.Views;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Collections.Changes;
 using Toggl.Giskard.ViewHolders;
+using Toggl.Foundation;
 
 namespace Toggl.Giskard.Adapters
 {
@@ -22,10 +23,14 @@ namespace Toggl.Giskard.Adapters
         private readonly ObservableGroupedOrderedCollection<TModel> items;
         private ImmutableList<FlattenedItemInfo> collectionToAdapterIndexesMap = ImmutableList<FlattenedItemInfo>.Empty;
         private ImmutableList<int> sectionsIndexes = ImmutableList<int>.Empty;
+        private readonly ITimeService timeService;
 
-        public ReactiveSectionedRecyclerAdapter(ObservableGroupedOrderedCollection<TModel> items)
+        public ReactiveSectionedRecyclerAdapter(
+            ObservableGroupedOrderedCollection<TModel> items,
+            ITimeService timeService)
         {
             this.items = items;
+            this.timeService = timeService;
             updateSectionIndexes();
         }
 
@@ -34,7 +39,10 @@ namespace Toggl.Giskard.Adapters
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
             if (viewType == ItemViewType) return CreateItemViewHolder(parent);
-            return CreateHeaderViewHolder(parent);
+
+            var header = CreateHeaderViewHolder(parent) as MainLogSectionViewHolder;
+            header.Now = timeService.CurrentDateTime;
+            return header;
         }
 
         public override int GetItemViewType(int position)

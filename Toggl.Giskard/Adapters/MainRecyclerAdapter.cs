@@ -12,6 +12,7 @@ using MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.ViewHolders;
+using Toggl.Foundation;
 
 namespace Toggl.Giskard.Adapters
 {
@@ -34,7 +35,10 @@ namespace Toggl.Giskard.Adapters
         private Subject<TimeEntryViewModel> continueTimeEntrySubject = new Subject<TimeEntryViewModel>();
         private Subject<TimeEntryViewModel> deleteTimeEntrySubject = new Subject<TimeEntryViewModel>();
 
-        public MainRecyclerAdapter(ObservableGroupedOrderedCollection<TimeEntryViewModel> items) : base(items)
+        public MainRecyclerAdapter(
+            ObservableGroupedOrderedCollection<TimeEntryViewModel> items,
+            ITimeService timeService)
+            : base(items, timeService)
         {
         }
 
