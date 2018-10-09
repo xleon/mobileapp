@@ -40,6 +40,8 @@ namespace Toggl.Daneel.Views.Calendar
         public static NSString CurrentTimeSupplementaryViewKind = new NSString("CurrentTime");
         public nfloat ContentViewHeight => hoursPerDay * HourHeight;
 
+        private UICollectionViewLayoutAttributes currentTimeLayoutAttributes;
+
         private bool isEditing;
         public bool IsEditing
         {
@@ -74,6 +76,8 @@ namespace Toggl.Daneel.Views.Calendar
                 .ObserveOn(SynchronizationContext.Current)
                 .VoidSubscribe(invalidateCurrentTimeLayout)
                 .DisposedBy(disposeBag);
+
+            currentTimeLayoutAttributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(CurrentTimeSupplementaryViewKind, NSIndexPath.FromItemSection(0, 0));
         }
 
         public override CGSize CollectionViewContentSize
@@ -127,12 +131,10 @@ namespace Toggl.Daneel.Views.Calendar
             var editingHoursIndexPaths = indexPathsForEditingHours();
             var editingHoursAttributes = editingHoursIndexPaths.Select(layoutAttributesForHourView);
 
-            var currentTimeAttributes = layoutAttributesForCurrentTime();
-
             var attributes = itemsAttributes
                 .Concat(hoursAttributes)
                 .Concat(editingHoursAttributes)
-                .Append(currentTimeAttributes);
+                .Append(currentTimeLayoutAttributes);
 
             return attributes.ToArray();
         }
@@ -166,10 +168,9 @@ namespace Toggl.Daneel.Views.Calendar
             }
             else
             {
-                var attributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(kind, indexPath);
-                attributes.Frame = FrameForCurrentTime();
-                attributes.ZIndex = 300;
-                return attributes;
+                currentTimeLayoutAttributes.Frame = FrameForCurrentTime();
+                currentTimeLayoutAttributes.ZIndex = 300;
+                return currentTimeLayoutAttributes;
             }
         }
 
