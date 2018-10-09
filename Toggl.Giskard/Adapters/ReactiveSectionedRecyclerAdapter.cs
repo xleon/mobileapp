@@ -115,7 +115,7 @@ namespace Toggl.Giskard.Adapters
             }
         }
 
-        public sealed override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
+        public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
             switch (holder)
             {

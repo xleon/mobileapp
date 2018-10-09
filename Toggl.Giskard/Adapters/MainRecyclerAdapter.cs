@@ -9,12 +9,15 @@ using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.ViewHolders;
 using Toggl.Multivac.Extensions;
+using Toggl.Foundation;
 
 namespace Toggl.Giskard.Adapters
 {
     public class MainRecyclerAdapter : ReactiveSectionedRecyclerAdapter<TimeEntryViewModel, MainLogCellViewHolder, MainLogSectionViewHolder>
     {
         public const int SuggestionViewType = 2;
+
+        private readonly ITimeService timeService;
 
         public IObservable<TimeEntryViewModel> TimeEntryTaps
             => timeEntryTappedSubject.AsObservable();
@@ -31,8 +34,12 @@ namespace Toggl.Giskard.Adapters
         private Subject<TimeEntryViewModel> continueTimeEntrySubject = new Subject<TimeEntryViewModel>();
         private Subject<TimeEntryViewModel> deleteTimeEntrySubject = new Subject<TimeEntryViewModel>();
 
-        public MainRecyclerAdapter(ObservableGroupedOrderedCollection<TimeEntryViewModel> items) : base(items)
+        public MainRecyclerAdapter(
+            ObservableGroupedOrderedCollection<TimeEntryViewModel> items,
+            ITimeService timeService)
+            : base(items)
         {
+            this.timeService = timeService;
         }
 
         public void ContinueTimeEntry(int position)
@@ -72,6 +79,16 @@ namespace Toggl.Giskard.Adapters
             return base.OnCreateViewHolder(parent, viewType);
         }
 
+        public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
+        {
+            if (holder is MainLogSectionViewHolder mainLogHeader)
+            {
+                mainLogHeader.Now = timeService.CurrentDateTime;
+            }
+
+            base.OnBindViewHolder(holder, position);
+        }
+
         public override int GetItemViewType(int position)
         {
             if (position == 0)
@@ -84,7 +101,10 @@ namespace Toggl.Giskard.Adapters
 
         protected override MainLogSectionViewHolder CreateHeaderViewHolder(ViewGroup parent)
         {
-            return new MainLogSectionViewHolder(LayoutInflater.FromContext(parent.Context).Inflate(Resource.Layout.MainLogHeader, parent, false));
+            var header = new MainLogSectionViewHolder(LayoutInflater.FromContext(parent.Context)
+                .Inflate(Resource.Layout.MainLogHeader, parent, false));
+            header.Now = timeService.CurrentDateTime;
+            return header;
         }
 
         protected override MainLogCellViewHolder CreateItemViewHolder(ViewGroup parent)

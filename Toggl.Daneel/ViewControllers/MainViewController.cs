@@ -102,7 +102,10 @@ namespace Toggl.Daneel.ViewControllers
             var bindingSet = this.CreateBindingSet<MainViewController, MainViewModel>();
 
             // Table view
-            tableViewSource = new TimeEntriesLogViewSource(ViewModel.TimeEntries, TimeEntriesLogViewCell.Identifier);
+            tableViewSource = new TimeEntriesLogViewSource(
+                ViewModel.TimeEntries,
+                TimeEntriesLogViewCell.Identifier,
+                ViewModel.TimeService);
             TimeEntriesLogTableView
                 .Rx()
                 .Bind(tableViewSource)
