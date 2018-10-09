@@ -95,6 +95,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private const int ratingViewTimeout = 5;
 
         public ITimeService TimeService { get; }
+        public ISchedulerProvider SchedulerProvider { get; }
 
         private readonly ITogglDataSource dataSource;
         private readonly IUserPreferences userPreferences;
@@ -102,7 +103,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IInteractorFactory interactorFactory;
         private readonly IMvxNavigationService navigationService;
-        private readonly ISchedulerProvider schedulerProvider;
         private readonly IIntentDonationService intentDonationService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
 
@@ -159,18 +159,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.interactorFactory = interactorFactory;
             this.navigationService = navigationService;
             this.onboardingStorage = onboardingStorage;
-            this.schedulerProvider = schedulerProvider;
+            this.SchedulerProvider = schedulerProvider;
             this.intentDonationService = intentDonationService;
             this.accessRestrictionStorage = accessRestrictionStorage;
 
             TimeService = timeService;
 
             SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, suggestionProviders);
-            RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService, schedulerProvider);
-            TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider);
+            RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService, SchedulerProvider);
+            TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, SchedulerProvider);
 
-            LogEmpty = TimeEntriesViewModel.Empty.AsDriver(this.schedulerProvider);
-            TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(this.schedulerProvider);
+            LogEmpty = TimeEntriesViewModel.Empty.AsDriver(SchedulerProvider);
+            TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(SchedulerProvider);
 
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService);
 
@@ -204,7 +204,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SyncProgressState = dataSource
                 .SyncManager
                 .ProgressObservable
-                .AsDriver(schedulerProvider);
+                .AsDriver(SchedulerProvider);
 
             var isWelcome = onboardingStorage.IsNewUser;
 
@@ -217,7 +217,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     noTimeEntries
                 )
                 .DistinctUntilChanged()
-                .AsDriver(schedulerProvider);
+                .AsDriver(SchedulerProvider);
 
             ShouldShowWelcomeBack = ObservableAddons.CombineLatestAll(
                     isWelcome.Select(b => !b),
@@ -225,7 +225,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 )
                 .StartWith(false)
                 .DistinctUntilChanged()
-                .AsDriver(schedulerProvider);
+                .AsDriver(SchedulerProvider);
 
             ShouldShowRunningTimeEntryNotification = userPreferences.AreRunningTimerNotificationsEnabledObservable;
             ShouldShowStoppedTimeEntryNotification = userPreferences.AreStoppedTimerNotificationsEnabledObservable;
@@ -233,7 +233,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             CurrentRunningTimeEntry = dataSource
                 .TimeEntries
                 .CurrentlyRunningTimeEntry
-                .AsDriver(schedulerProvider);
+                .AsDriver(SchedulerProvider);
 
             CurrentTimeEntryHasDescription = CurrentRunningTimeEntry
                 .Select(te => !string.IsNullOrWhiteSpace(te?.Description))
