@@ -103,6 +103,8 @@ namespace Toggl.Giskard.Extensions
                     return;
 
                 popupWindow.ContentView.Measure(View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified), View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified));
+                popupWindow.Height = ViewGroup.LayoutParams.WrapContent;
+                popupWindow.Width = ViewGroup.LayoutParams.WrapContent;
                 var offsets = popupOffsetsGenerator(popupWindow, anchor);
                 popupWindow.ShowAsDropDown(anchor, offsets.HorizontalOffset, offsets.VerticalOffset);
             });

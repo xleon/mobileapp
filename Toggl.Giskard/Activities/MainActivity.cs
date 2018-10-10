@@ -202,5 +202,14 @@ namespace Toggl.Giskard.Activities
                 hideTaskCompletionSource.SetResult(null);
             }
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (!disposing) return;
+
+            DisposeBag?.Dispose();
+        }
     }
 }
