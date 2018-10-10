@@ -15,11 +15,11 @@ namespace Toggl.Foundation.Sync.States.CleanUp
     {
         private readonly IDataSource<IThreadSafeProject, IDatabaseProject> projectsDataSource;
 
-        private readonly ITimeEntriesSource timeEntriesDataSource;
+        private readonly IObservableDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry> timeEntriesDataSource;
 
         public StateResult FinishedDeleting { get; } = new StateResult();
 
-        public DeleteNonReferencedProjectGhostsState(IDataSource<IThreadSafeProject, IDatabaseProject> projectsDataSource, ITimeEntriesSource timeEntriesDataSource)
+        public DeleteNonReferencedProjectGhostsState(IDataSource<IThreadSafeProject, IDatabaseProject> projectsDataSource, IObservableDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry> timeEntriesDataSource)
         {
             Ensure.Argument.IsNotNull(projectsDataSource, nameof(projectsDataSource));
             Ensure.Argument.IsNotNull(timeEntriesDataSource, nameof(timeEntriesDataSource));
