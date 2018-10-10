@@ -81,7 +81,7 @@ namespace Toggl.Giskard.Activities
                 .TimeEntries
                 .CollectionChange
                 .ObserveOn(SynchronizationContext.Current);
-            this.Bind(mainLogChange, mainRecyclerAdapter.UpdateChange);
+            this.Bind(mainLogChange, mainRecyclerAdapter.UpdateCollection);
 
             var isTimeEntryRunning = ViewModel
                 .IsTimeEntryRunning
