@@ -74,7 +74,7 @@ namespace Toggl.Daneel.Views.Calendar
                 .CurrentDateTimeObservable
                 .DistinctUntilChanged(offset => offset.Minute)
                 .ObserveOn(SynchronizationContext.Current)
-                .VoidSubscribe(invalidateCurrentTimeLayout)
+                .VoidSubscribe(InvalidateCurrentTimeLayout)
                 .DisposedBy(disposeBag);
 
             currentTimeLayoutAttributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(CurrentTimeSupplementaryViewKind, NSIndexPath.FromItemSection(0, 0));
@@ -114,6 +114,13 @@ namespace Toggl.Daneel.Views.Calendar
             var context = new UICollectionViewLayoutInvalidationContext();
             context.InvalidateItems(CollectionView.IndexPathsForVisibleItems);
             context.InvalidateSupplementaryElements(EditingHourSupplementaryViewKind, indexPathsForEditingHours().ToArray());
+            InvalidateLayout(context);
+        }
+
+        public void InvalidateCurrentTimeLayout()
+        {
+            var context = new UICollectionViewLayoutInvalidationContext();
+            context.InvalidateSupplementaryElements(CurrentTimeSupplementaryViewKind, new NSIndexPath[] { NSIndexPath.FromItemSection(0, 0) });
             InvalidateLayout(context);
         }
 
@@ -265,13 +272,6 @@ namespace Toggl.Daneel.Views.Calendar
             var y = yHour + yMins - height / 2;
 
             return new CGRect(x, y, width, height);
-        }
-
-        private void invalidateCurrentTimeLayout()
-        {
-            var context = new UICollectionViewLayoutInvalidationContext();
-            context.InvalidateSupplementaryElements(CurrentTimeSupplementaryViewKind, new NSIndexPath[] { NSIndexPath.FromItemSection(0, 0) });
-            InvalidateLayout(context);
         }
     }
 }
