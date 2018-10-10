@@ -9,6 +9,7 @@ using FluentAssertions;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Experiments;
 using Toggl.Foundation.Interactors;
@@ -425,15 +426,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var date = DateTimeOffset.UtcNow;
                 TimeService.CurrentDateTime.Returns(date);
 
-                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync(TimeEntryStopOrigin.Deeplink);
 
-                await InteractorFactory.Received().StopTimeEntry(date).Execute();
+                await InteractorFactory.Received().StopTimeEntry(date, TimeEntryStopOrigin.Deeplink).Execute();
             }
 
             [Fact, LogIfTooSlow]
             public async ThreadingTask SetsTheElapsedTimeToZero()
             {
-                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync(Arg.Any<TimeEntryStopOrigin>());
 
                 ViewModel.CurrentTimeEntryElapsedTime.Should().Be(TimeSpan.Zero);
             }
@@ -441,7 +442,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async ThreadingTask InitiatesPushSync()
             {
-                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync(Arg.Any<TimeEntryStopOrigin>());
 
                 await DataSource.SyncManager.Received().PushSync();
             }
@@ -449,7 +450,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async ThreadingTask MarksTheActionForOnboardingPurposes()
             {
-                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync(Arg.Any<TimeEntryStopOrigin>());
 
                 OnboardingStorage.Received().StopButtonWasTapped();
             }
@@ -458,11 +459,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask DoesNotInitiatePushSyncWhenSavingFails()
             {
                 InteractorFactory
-                    .StopTimeEntry(Arg.Any<DateTimeOffset>())
+                    .StopTimeEntry(Arg.Any<DateTimeOffset>(), Arg.Any<TimeEntryStopOrigin>())
                     .Execute()
                     .Returns(Observable.Throw<IThreadSafeTimeEntry>(new Exception()));
 
-                Action stopTimeEntry = () => ViewModel.StopTimeEntryCommand.ExecuteAsync().Wait();
+                Action stopTimeEntry = () => ViewModel.StopTimeEntryCommand.ExecuteAsync(Arg.Any<TimeEntryStopOrigin>()).Wait();
 
                 stopTimeEntry.Should().Throw<Exception>();
                 await DataSource.SyncManager.DidNotReceive().PushSync();
@@ -471,22 +472,22 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async ThreadingTask CannotBeExecutedTwiceInARowInFastSuccession()
             {
-                var taskA = ViewModel.StopTimeEntryCommand.ExecuteAsync();
-                var taskB = ViewModel.StopTimeEntryCommand.ExecuteAsync();
+                var taskA = ViewModel.StopTimeEntryCommand.ExecuteAsync(TimeEntryStopOrigin.Manual);
+                var taskB = ViewModel.StopTimeEntryCommand.ExecuteAsync(TimeEntryStopOrigin.Manual);
 
                 ThreadingTask.WaitAll(taskA, taskB);
 
-                await InteractorFactory.Received(1).StopTimeEntry(Arg.Any<DateTimeOffset>()).Execute();
+                await InteractorFactory.Received(1).StopTimeEntry(Arg.Any<DateTimeOffset>(), Arg.Any<TimeEntryStopOrigin>()).Execute();
             }
 
             [Fact, LogIfTooSlow]
             public async ThreadingTask CannotBeExecutedTwiceInARow()
             {
-                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync(TimeEntryStopOrigin.Manual);
                 subject.OnNext(null);
-                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync(TimeEntryStopOrigin.Manual);
 
-                await InteractorFactory.Received(1).StopTimeEntry(Arg.Any<DateTimeOffset>()).Execute();
+                await InteractorFactory.Received(1).StopTimeEntry(Arg.Any<DateTimeOffset>(), Arg.Any<TimeEntryStopOrigin>()).Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -495,9 +496,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 subject.OnNext(null);
                 TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
 
-                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync(TimeEntryStopOrigin.Manual);
 
-                await InteractorFactory.DidNotReceive().StopTimeEntry(Arg.Any<DateTimeOffset>()).Execute();
+                await InteractorFactory.DidNotReceive().StopTimeEntry(Arg.Any<DateTimeOffset>(), Arg.Any<TimeEntryStopOrigin>()).Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -505,12 +506,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var secondTimeEntry = Substitute.For<IThreadSafeTimeEntry>();
 
-                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync(TimeEntryStopOrigin.Manual);
                 subject.OnNext(secondTimeEntry);
                 TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
-                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync(TimeEntryStopOrigin.Manual);
 
-                await InteractorFactory.Received(2).StopTimeEntry(Arg.Any<DateTimeOffset>()).Execute();
+                await InteractorFactory.Received(2).StopTimeEntry(Arg.Any<DateTimeOffset>(), Arg.Any<TimeEntryStopOrigin>()).Execute();
             }
 
             [Fact, LogIfTooSlow]
@@ -518,10 +519,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var secondTimeEntry = Substitute.For<IThreadSafeTimeEntry>();
 
-                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync(Arg.Any<TimeEntryStopOrigin>());
                 subject.OnNext(secondTimeEntry);
                 TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
-                await ViewModel.StopTimeEntryCommand.ExecuteAsync();
+                await ViewModel.StopTimeEntryCommand.ExecuteAsync(Arg.Any<TimeEntryStopOrigin>());
 
                 IntentDonationService.Received().DonateStopCurrentTimeEntry();
             }
@@ -980,7 +981,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.Init(ApplicationUrls.Main.Action.Stop, null);
                     await ViewModel.Initialize();
 
-                    await InteractorFactory.Received().StopTimeEntry(TimeService.CurrentDateTime).Execute();
+                    await InteractorFactory.Received().StopTimeEntry(TimeService.CurrentDateTime, Arg.Any<TimeEntryStopOrigin>()).Execute();
                 }
 
                 [Fact, LogIfTooSlow]

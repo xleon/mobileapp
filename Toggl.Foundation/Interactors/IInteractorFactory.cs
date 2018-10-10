@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.DTOs;
@@ -29,7 +30,7 @@ namespace Toggl.Foundation.Interactors
 
         IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> GetAllNonDeletedTimeEntries();
 
-        IInteractor<IObservable<IThreadSafeTimeEntry>> StopTimeEntry(DateTimeOffset currentDateTime);
+        IInteractor<IObservable<IThreadSafeTimeEntry>> StopTimeEntry(DateTimeOffset currentDateTime, TimeEntryStopOrigin origin);
 
         #endregion
 
