@@ -7,7 +7,7 @@
 	<key>CFBundleName</key>
 	<string>Toggl.Daneel.SiriExtension.UI</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.toggl.daneel.debug.Toggl-Daneel-SiriExtension-UI</string>
+	<string>com.toggl.daneel.debug.SiriUIExtension</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleInfoDictionaryVersion</key>
