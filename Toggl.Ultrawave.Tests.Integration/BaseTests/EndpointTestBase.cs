@@ -18,9 +18,6 @@ namespace Toggl.Ultrawave.Tests.Integration.BaseTests
         }
 
         protected ITogglApi TogglApiWith(Credentials credentials)
-            => new TogglApi(configurationFor(credentials));
-
-        private ApiConfiguration configurationFor(Credentials credentials)
-            => new ApiConfiguration(ApiEnvironment.Staging, credentials, Configuration.UserAgent);
+            => Helper.TogglApiFactory.TogglApiWith(credentials);
     }
 }
