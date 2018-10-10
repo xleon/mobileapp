@@ -22,7 +22,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             var email = $"{Guid.NewGuid()}@mocks.toggl.com".ToEmail();
             var password = "123456".ToPassword();
 
-            var api = new TogglApi(new ApiConfiguration(ApiEnvironment.Staging, Credentials.None, Configuration.UserAgent));
+            var api = Helper.TogglApiFactory.TogglApiWith(Credentials.None);
             await api.User.SignUp(email, password, true, 237);
 
             return (email, password);
