@@ -21,6 +21,7 @@ using Toggl.PrimeRadiant.Settings;
 using static Toggl.Foundation.Helper.Constants;
 using SelectTimeOrigin = Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
 using System.Reactive.Subjects;
+using System.Reactive;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -224,7 +225,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             DeleteCommand = new MvxAsyncCommand(delete);
             ConfirmCommand = new MvxCommand(confirm);
             SaveCommand = new MvxCommand(save);
-            CloseCommand = new MvxAsyncCommand(closeWithConfirmation);
+            CloseCommand = new MvxAsyncCommand(CloseWithConfirmation);
 
             StopCommand = new MvxCommand(stopTimeEntry, () => IsTimeEntryRunning);
             StopTimeEntryCommand = new MvxAsyncCommand<SelectTimeOrigin>(onStopTimeEntryCommand);
@@ -300,7 +301,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
                 analyticsService.DeleteTimeEntry.Track();
                 dataSource.SyncManager.InitiatePushSync();
-                await navigationService.Close(this);
+                await close();
             }
             catch
             {
@@ -336,22 +337,24 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 TagIds = new List<long>(tagIds)
             };
 
-            confirmDisposable = dataSource.TimeEntries
-                                          .Update(dto)
-                                          .Do(dataSource.SyncManager.InitiatePushSync)
-                                          .Subscribe((Exception ex) => close(), () => close());
+            confirmDisposable = interactorFactory
+                .UpdateTimeEntry(dto)
+                .Execute()
+                .Do(dataSource.SyncManager.InitiatePushSync)
+                .Subscribe((Exception ex) => close(), () => close());
         }
 
-        private async Task closeWithConfirmation()
+        public async Task<bool> CloseWithConfirmation()
         {
             if (isDirty)
             {
                 var shouldDiscard = await dialogService.ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
                 if (!shouldDiscard)
-                    return;
+                    return false;
             }
 
             await close();
+            return true;
         }
 
         private Task close()

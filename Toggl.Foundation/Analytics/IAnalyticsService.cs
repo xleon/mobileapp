@@ -32,6 +32,8 @@ namespace Toggl.Foundation.Analytics
 
         IAnalyticsEvent<TimeEntryStartOrigin> TimeEntryStarted { get; }
       
+        IAnalyticsEvent<TimeEntryStopOrigin> TimeEntryStopped { get; }
+
         IAnalyticsEvent RatingViewWasShown { get; }
       
         IAnalyticsEvent<bool> UserFinishedRatingViewFirstStep { get; }
@@ -101,6 +103,12 @@ namespace Toggl.Foundation.Analytics
         IAnalyticsEvent<string, string> HandledException { get; }
 
         IAnalyticsEvent TwoRunningTimeEntriesInconsistencyFixed { get; }
+
+        IAnalyticsEvent CalendarOnboardingStarted { get; }
+
+        IAnalyticsEvent EditViewOpenedFromCalendar { get; }
+
+        IAnalyticsEvent<CalendarChangeEvent> TimeEntryChangedFromCalendar { get; }
 
         void Track(string eventName, Dictionary<string, string> parameters = null);
 

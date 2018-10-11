@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Android.Content;
+using Android.Icu.Text;
 using Android.Support.V4.App;
 using MvvmCross;
 using MvvmCross.Droid.Support.V7.AppCompat;
@@ -48,7 +49,7 @@ namespace Toggl.Giskard.Presenters
         {
             switch (hint)
             {
-                case ToggleCalendarVisibilityHint calendarHint when CurrentActivity is ReportsActivity reportsActivity:
+                case ToggleReportsCalendarVisibilityHint calendarHint when CurrentActivity is ReportsActivity reportsActivity:
                     reportsActivity.ToggleCalendarState(calendarHint.ForceHide);
                     return;
             }
@@ -73,7 +74,7 @@ namespace Toggl.Giskard.Presenters
         {
             var currentView = CurrentActivity as IMvxView;
 
-            if (currentView == null)
+            if (currentView == null || currentView.ViewModel != viewModel)
             {
                 var currentTopActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>() as QueryableMvxLifecycleMonitorCurrentTopActivity;
                 var closingActivity = currentTopActivity?.FindActivityByViewModel(viewModel);

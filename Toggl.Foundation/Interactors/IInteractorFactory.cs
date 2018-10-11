@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive;
+using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Autocomplete.Suggestions;
+using Toggl.Foundation.Calendar;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Suggestions;
+using Toggl.Multivac;
 
 namespace Toggl.Foundation.Interactors
 {
@@ -21,9 +24,13 @@ namespace Toggl.Foundation.Interactors
 
         IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueMostRecentTimeEntry();
 
+        IInteractor<IObservable<IThreadSafeTimeEntry>> UpdateTimeEntry(EditTimeEntryDto dto);
+
         IInteractor<IObservable<Unit>> DeleteTimeEntry(long id);
 
         IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> GetAllNonDeletedTimeEntries();
+
+        IInteractor<IObservable<IThreadSafeTimeEntry>> StopTimeEntry(DateTimeOffset currentDateTime, TimeEntryStopOrigin origin);
 
         #endregion
 
@@ -97,6 +104,26 @@ namespace Toggl.Foundation.Interactors
         #region Settings
 
         IInteractor<IObservable<Unit>> SendFeedback(string message);
+
+        #endregion
+
+        #region Calendar
+
+        IInteractor<IObservable<CalendarItem>> GetCalendarItemWithId(string eventId);
+
+        IInteractor<IObservable<IEnumerable<CalendarItem>>> GetCalendarItemsForDate(DateTime date);
+
+        IInteractor<IObservable<IEnumerable<UserCalendar>>> GetUserCalendars();
+
+        IInteractor<Unit> SetEnabledCalendars(params string[] ids);
+
+        #endregion
+
+        #region Notifications
+
+        IInteractor<IObservable<Unit>> UnscheduleAllNotifications();
+
+        IInteractor<IObservable<Unit>> ScheduleEventNotificationsForNextWeek();
 
         #endregion
 
