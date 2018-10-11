@@ -12,6 +12,9 @@ namespace Toggl.Multivac.Extensions
         public UIAction(Func<IObservable<Unit>> workFactory, IObservable<bool> enabledIf) : base(_ => workFactory(), enabledIf)
         {
         }
+
+        public IObservable<Unit> Execute()
+            => Execute(Unit.Default);
     }
 
     public static class RxActionExtensions
