@@ -3,6 +3,7 @@ using System.Reactive.Concurrency;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.Analytics;
+using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.Services;
@@ -34,6 +35,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
         private readonly IGoogleService googleService = Substitute.For<IGoogleService>();
         private readonly ILicenseProvider licenseProvider = Substitute.For<ILicenseProvider>();
         private readonly IAnalyticsService analyticsService = Substitute.For<IAnalyticsService>();
+        private readonly IStopwatchFactory stopwatchFactory = Substitute.For<IStopwatchFactory>();
         private readonly IBackgroundService backgroundService = Substitute.For<IBackgroundService>();
         private readonly IPlatformConstants platformConstants = Substitute.For<IPlatformConstants>();
         private readonly IRemoteConfigService remoteConfigService = Substitute.For<IRemoteConfigService>();
@@ -187,6 +189,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                     .WithGoogleService(googleService)
                     .WithLicenseProvider(licenseProvider)
                     .WithAnalyticsService(analyticsService)
+                    .WithStopwatchFactory(stopwatchFactory)
                     .WithBackgroundService(backgroundService)
                     .WithSchedulerProvider(schedulerProvider)
                     .WithPlatformConstants(platformConstants)

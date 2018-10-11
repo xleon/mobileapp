@@ -122,6 +122,7 @@ namespace Toggl.Daneel
                     .WithApplicationShortcutCreator<ApplicationShortcutCreator>()
                     .WithSuggestionProviderContainer(suggestionProviderContainer)
                     .WithIntentDonationService(intentDonationService)
+                    .WithStopwatchFactory<IosFirebaseStopwatchFactory>()
                     .WithPrivateSharedStorageService(privateSharedStorageService)
                     .WithPlatformInfo(platformInfo)
 
