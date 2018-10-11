@@ -38,11 +38,9 @@
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidSupportedAbis>armeabi-v7a;armeabi;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
-    <DebugType>
-    </DebugType>
+    <DebugType></DebugType>
     <OutputPath>..\bin</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <AndroidKeyStore>True</AndroidKeyStore>
     <AndroidSigningKeyStore>../giskard.keystore</AndroidSigningKeyStore>
     <AndroidSigningStorePass>{KEYSTORE_PASSWORD}</AndroidSigningStorePass>
@@ -54,14 +52,12 @@
     <OutputPath>bin\Release.PlayStore</OutputPath>
     <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API</DefineConstants>
     <WarningLevel>4</WarningLevel>
-    <AndroidLinkSkip>
-    </AndroidLinkSkip>
+    <AndroidLinkSkip></AndroidLinkSkip>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidSupportedAbis>armeabi-v7a;armeabi;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
-    <DebugType>
-    </DebugType>
+    <DebugType></DebugType>
     <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API</DefineConstants>
     <AndroidKeyStore>True</AndroidKeyStore>
     <AndroidSigningKeyStore>../giskard.keystore</AndroidSigningKeyStore>
@@ -265,6 +261,7 @@
     <Compile Include="Extensions\OnboardingExtensions.cs" />
     <Compile Include="Extensions\PopupOffsets.cs" />
     <Compile Include="Extensions\PopupWindowWithDefaultGravityExtenstions.cs" />
+    <Compile Include="Extensions\Reactive\RecyclerViewExtensions.cs" />
     <Compile Include="Helper\PersistentNotificationsHelper.cs" />
     <Compile Include="Fragments\NoWorkspaceFragment.cs" />
     <Compile Include="Fragments\NoWorkspaceFragment.ViewBinds.cs">
@@ -293,6 +290,8 @@
     <Compile Include="Activities\MainActivity.cs" />
     <Compile Include="Startup\TogglApplication.cs" />
     <Compile Include="TemplateSelectors\SelectTagsTemplateSelector.cs" />
+    <Compile Include="ViewHelpers\MainRecyclerViewTouchCallback.cs" />
+    <Compile Include="ViewHelpers\SimpleRecyclerViewScrollChangeListener.cs" />
     <Compile Include="ViewHelpers\SuggestionsRecyclerViewSnapHelper.cs" />
     <Compile Include="ViewHolders\MainLogCellViewHolder.cs" />
     <Compile Include="ViewHolders\MainLogSuggestionItemViewHolder.cs" />
@@ -426,7 +425,6 @@
     <Compile Include="Views\NonSwipingViewPager.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="ViewHolders\MainLogSectionViewHolder.cs" />
-    <Compile Include="ViewHelpers\MainRecyclerViewTouchCallback.cs" />
     <Compile Include="Adapters\ReactiveSectionedRecyclerAdapter.cs" />
     <Compile Include="Adapters\MainSuggestionsRecyclerAdapter.cs" />
     <Compile Include="Activities\SignUpActivity.ViewBinds.cs">
