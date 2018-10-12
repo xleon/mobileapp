@@ -11,7 +11,6 @@ using MvvmCross.Binding.Extensions;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Collections.Changes;
 using Toggl.Giskard.ViewHolders;
-using Toggl.Foundation;
 
 namespace Toggl.Giskard.Adapters
 {
@@ -29,9 +28,7 @@ namespace Toggl.Giskard.Adapters
         private readonly ObservableGroupedOrderedCollection<TModel> items;
         private IReadOnlyList<FlatItemInfo> currentItems;
 
-        public ReactiveSectionedRecyclerAdapter(
-            ObservableGroupedOrderedCollection<TModel> items,
-            ITimeService timeService)
+        public ReactiveSectionedRecyclerAdapter(ObservableGroupedOrderedCollection<TModel> items)
         {
             this.items = items;
             currentItems = flattenItems(this.items);

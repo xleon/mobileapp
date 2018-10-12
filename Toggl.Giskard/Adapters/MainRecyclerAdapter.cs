@@ -8,8 +8,8 @@ using Android.Views;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.ViewHolders;
-using Toggl.Foundation;
 using Toggl.Multivac.Extensions;
+using Toggl.Foundation;
 
 namespace Toggl.Giskard.Adapters
 {
@@ -37,7 +37,7 @@ namespace Toggl.Giskard.Adapters
         public MainRecyclerAdapter(
             ObservableGroupedOrderedCollection<TimeEntryViewModel> items,
             ITimeService timeService)
-            : base(items, timeService)
+            : base(items)
         {
             this.timeService = timeService;
         }
