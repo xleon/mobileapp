@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 
 namespace Toggl.Multivac.Extensions
 {
@@ -154,5 +155,10 @@ namespace Toggl.Multivac.Extensions
             observer.OnNext(item);
             observer.OnCompleted();
         }
+
+        public static IObservable<Unit> ToUnitObservable<T>(this Task<T> task)
+            => Observable
+            .FromAsync(async () => await task)
+            .SelectUnit();
     }
 }

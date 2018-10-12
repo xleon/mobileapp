@@ -87,7 +87,7 @@ namespace SiriExtension
         private StopTimerIntentResponse responseFromException(Exception exception)
         {            
             if (exception is NoRunningEntryException)
-                return new StopTimerIntentResponse(StopTimerIntentResponseCode.FailureNoRunningEntry, null);
+                return new StopTimerIntentResponse(StopTimerIntentResponseCode.SuccessNoRunningEntry, null);
 
             return new StopTimerIntentResponse(StopTimerIntentResponseCode.Failure, null);
         }

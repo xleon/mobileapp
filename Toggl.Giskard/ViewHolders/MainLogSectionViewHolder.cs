@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Android.Runtime;
@@ -38,7 +38,7 @@ namespace Toggl.Giskard.ViewHolders
                 return;
 
             var firstItem = Item.First();
-            mainLogHeaderTitle.Text = DateToTitleString.Convert(firstItem.StartTime.Date, Now);
+            mainLogHeaderTitle.Text = DateToTitleString.Convert(firstItem.StartTime, Now);
 
             var totalDuration = Item.Sum(vm => vm.Duration);
             mainLogHeaderDuration.Text = totalDuration.ToFormattedString(firstItem.DurationFormat);

@@ -32,6 +32,8 @@ namespace Toggl.Foundation.Analytics
 
         IAnalyticsEvent<TimeEntryStartOrigin> TimeEntryStarted { get; }
       
+        IAnalyticsEvent<TimeEntryStopOrigin> TimeEntryStopped { get; }
+
         IAnalyticsEvent RatingViewWasShown { get; }
       
         IAnalyticsEvent<bool> UserFinishedRatingViewFirstStep { get; }

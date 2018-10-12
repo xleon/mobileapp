@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -8,13 +8,11 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using PropertyChanged;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Experiments;
 using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Helper;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Collections;
@@ -79,7 +77,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxAsyncCommand StartTimeEntryCommand { get; }
         public IMvxAsyncCommand AlternativeStartTimeEntryCommand { get; }
-        public IMvxAsyncCommand StopTimeEntryCommand { get; }
+        public IMvxAsyncCommand<TimeEntryStopOrigin> StopTimeEntryCommand { get; }
         public IMvxAsyncCommand OpenSettingsCommand { get; }
         public IMvxAsyncCommand OpenReportsCommand { get; }
         public IMvxAsyncCommand OpenSyncFailuresCommand { get; }
@@ -178,7 +176,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             OpenReportsCommand = new MvxAsyncCommand(openReports);
             OpenSyncFailuresCommand = new MvxAsyncCommand(openSyncFailures);
             EditTimeEntryCommand = new MvxAsyncCommand(editTimeEntry, canExecuteEditTimeEntryCommand);
-            StopTimeEntryCommand = new MvxAsyncCommand(stopTimeEntry, () => isStopButtonEnabled);
+            StopTimeEntryCommand = new MvxAsyncCommand<TimeEntryStopOrigin>(stopTimeEntry, _ => isStopButtonEnabled);
             StartTimeEntryCommand = new MvxAsyncCommand(startTimeEntry, () => CurrentTimeEntryId.HasValue == false);
             AlternativeStartTimeEntryCommand = new MvxAsyncCommand(alternativeStartTimeEntry, () => CurrentTimeEntryId.HasValue == false);
 
@@ -188,9 +186,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ContinueTimeEntry = new InputAction<TimeEntryViewModel>(continueTimeEntry);
         }
 
-        public void Init(string action)
+        public void Init(string action, string description)
         {
             urlNavigationAction = action;
+
+            if (description != null)
+            {
+                interactorFactory
+                    .GetDefaultWorkspace()
+                    .Execute()
+                    .SelectMany(workspace => interactorFactory
+                        .CreateTimeEntry(description.AsTimeEntryPrototype(TimeService.CurrentDateTime, workspace.Id))
+                        .Execute())
+                    .Subscribe()
+                    .DisposedBy(disposeBag);
+            }
         }
 
         public override async Task Initialize()
@@ -268,7 +278,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     break;
 
                 case ApplicationUrls.Main.Action.Stop:
-                    await stopTimeEntry();
+                    await stopTimeEntry(TimeEntryStopOrigin.Deeplink);
                     break;
             }
 
@@ -285,6 +295,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .TimeEntries
                 .CurrentlyRunningTimeEntry
                 .Subscribe(setRunningEntry)
+                .DisposedBy(disposeBag);
+
+            interactorFactory
+                .GetDefaultWorkspace()
+                .Execute()
+                .Subscribe(intentDonationService.SetDefaultShortcutSuggestions)
                 .DisposedBy(disposeBag);
         }
 
@@ -420,7 +436,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 });
         }
 
-        private async Task stopTimeEntry()
+        private async Task stopTimeEntry(TimeEntryStopOrigin origin)
         {
             OnboardingStorage.StopButtonWasTapped();
 
@@ -428,7 +444,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             StopTimeEntryCommand.RaiseCanExecuteChanged();
 
             await interactorFactory
-                .StopTimeEntry(TimeService.CurrentDateTime)
+                .StopTimeEntry(TimeService.CurrentDateTime, origin)
                 .Execute()
                 .Do(_ => intentDonationService.DonateStopCurrentTimeEntry())
                 .Do(dataSource.SyncManager.InitiatePushSync);
