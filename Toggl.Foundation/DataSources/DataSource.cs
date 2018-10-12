@@ -35,11 +35,23 @@ namespace Toggl.Foundation.DataSources
         public virtual IObservable<TThreadsafe> ChangeId(long currentId, long newId)
             => repository.ChangeId(currentId, newId).Select(Convert);
 
-        public virtual IObservable<IEnumerable<TThreadsafe>> GetAll()
-            => repository.GetAll().Select(entities => entities.Select(Convert));
+        public virtual IObservable<IEnumerable<TThreadsafe>> GetAll(bool includeGhosts = false)
+        {
+            var repositoryEntities = includeGhosts
+                ? repository.GetAll()
+                : repository.GetAll(isNotGhost);
 
-        public virtual IObservable<IEnumerable<TThreadsafe>> GetAll(Func<TDatabase, bool> predicate)
-            => repository.GetAll(predicate).Select(entities => entities.Select(Convert));
+            return repositoryEntities.Select(entities => entities.Select(Convert));
+        }
+
+        public virtual IObservable<IEnumerable<TThreadsafe>> GetAll(Func<TDatabase, bool> predicate, bool includeGhosts = false)
+        {
+            var repositoryEntities = includeGhosts
+                ? repository.GetAll(predicate)
+                : repository.GetAll(entity => predicate(entity) && isNotGhost(entity));
+
+            return repositoryEntities.Select(entities => entities.Select(Convert));
+        }
 
         public virtual IObservable<IEnumerable<IConflictResolutionResult<TThreadsafe>>> DeleteAll(IEnumerable<TThreadsafe> entities)
             => repository.BatchUpdate(convertEntitiesForBatchUpdate(entities), safeAlwaysDelete)
@@ -61,5 +73,13 @@ namespace Toggl.Foundation.DataSources
 
         private static ConflictResolutionMode safeAlwaysDelete(TDatabase old, TDatabase now)
             => old == null ? ConflictResolutionMode.Ignore : ConflictResolutionMode.Delete;
+
+        private bool isNotGhost(TDatabase entity)
+        {
+            if (entity is IGhostable ghostable)
+                return !ghostable.IsGhost;
+
+            return true;
+        }
     }
 }

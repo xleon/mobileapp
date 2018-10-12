@@ -15,9 +15,9 @@ namespace Toggl.Foundation.DataSources.Interfaces
 
         IObservable<TThreadsafe> ChangeId(long currentId, long newId);
 
-        IObservable<IEnumerable<TThreadsafe>> GetAll();
+        IObservable<IEnumerable<TThreadsafe>> GetAll(bool includeGhosts = false);
 
-        IObservable<IEnumerable<TThreadsafe>> GetAll(Func<TDatabase, bool> predicate);
+        IObservable<IEnumerable<TThreadsafe>> GetAll(Func<TDatabase, bool> predicate, bool includeGhosts = false);
 
         IObservable<IEnumerable<IConflictResolutionResult<TThreadsafe>>> DeleteAll(IEnumerable<TThreadsafe> entities);
 
