@@ -25,6 +25,7 @@ using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.Mocks;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
+using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Xunit;
 using static Toggl.Foundation.Helper.Constants;
@@ -1092,6 +1093,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     await NavigationService.DidNotReceive().ChangePresentation(
                         Arg.Is<ToggleRatingViewVisibilityHint>(hint => hint.ShouldHide == false)
                     );
+                }
+            }
+
+            public sealed class InvokeIntentDonationService : MainViewModelTest
+            {
+                [Fact, LogIfTooSlow]
+                public async void ShouldSetShortcutSuggestions()
+                {
+                    await ViewModel.Initialize();
+                    IntentDonationService.Received().SetDefaultShortcutSuggestions(Arg.Any<IWorkspace>());
                 }
             }
         }

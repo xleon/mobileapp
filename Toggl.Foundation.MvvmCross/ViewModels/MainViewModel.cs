@@ -296,6 +296,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .CurrentlyRunningTimeEntry
                 .Subscribe(setRunningEntry)
                 .DisposedBy(disposeBag);
+
+            interactorFactory
+                .GetDefaultWorkspace()
+                .Execute()
+                .Subscribe(intentDonationService.SetDefaultShortcutSuggestions)
+                .DisposedBy(disposeBag);
         }
 
         private void presentRatingViewIfNeeded(bool shouldBevisible)
