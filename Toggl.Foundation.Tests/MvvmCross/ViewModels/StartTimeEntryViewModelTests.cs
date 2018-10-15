@@ -392,6 +392,22 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
+                public async Task ReturnsFalseIfAnOtherTagIsAvailableWithSameNameButDifferentCase()
+                {
+                    var projectSpan = new ProjectSpan(ProjectId, ProjectName, ProjectColor, null, null);
+                    var querySpan = new QueryTextSpan("#mobile", 7);
+
+                    ViewModel.Prepare();
+                    await ViewModel.Initialize();
+                    await ViewModel.OnTextFieldInfoFromView(projectSpan);
+                    ViewModel.ToggleTagSuggestionsCommand.Execute();
+
+                    await ViewModel.OnTextFieldInfoFromView(projectSpan, querySpan);
+
+                    ViewModel.SuggestCreation.Should().BeFalse();
+                }
+
+                [Fact, LogIfTooSlow]
                 public async Task TracksTagSelection()
                 {
                     ViewModel.Prepare();

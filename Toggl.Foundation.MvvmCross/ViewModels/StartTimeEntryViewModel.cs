@@ -92,8 +92,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                            && shouldSuggestProjectCreation;
 
                 if (IsSuggestingTags)
-                    return Suggestions.None(c => c.Any(s => s is TagSuggestion tS && tS.Name == CurrentQuery))
-                           && CurrentQuery.LengthInBytes() <= MaxTagNameLengthInBytes;
+                    return Suggestions.None(c => c.Any(s => 
+                               s is TagSuggestion tS 
+                               && tS.Name.IsSameCaseInsensitiveTrimedTextAs(CurrentQuery)))
+                           && CurrentQuery.IsAllowedTagByteSize();
 
                 return false;
             }
@@ -468,6 +470,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var tagSuggestion = new TagSuggestion(createdTag);
             await SelectSuggestionCommand.ExecuteAsync(tagSuggestion);
             hasAnyTags = true;
+            toggleTagSuggestions();
         }
 
         private void OnDurationChanged()
