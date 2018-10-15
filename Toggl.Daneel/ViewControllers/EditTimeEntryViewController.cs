@@ -1,28 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Commands;
 using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Platforms.Ios.Views;
-using MvvmCross.WeakSubscription;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.Plugin.Visibility;
+using MvvmCross.WeakSubscription;
 using Toggl.Daneel.Combiners;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
-using Toggl.Daneel.Presentation.Transition;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Combiners;
 using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Onboarding.EditView;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Multivac.Extensions;
 using UIKit;
-using System.Threading.Tasks;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -236,7 +237,18 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.IsBillableAvailable)
                       .WithConversion(visibilityConverter);
 
+            //Regarding ghost entries
+            getViewsToDisableWhenEditingGhostEntry().ForEach(createUserInteractionBindingForGhostedEntries);
+
             bindingSet.Apply();
+
+            void createUserInteractionBindingForGhostedEntries(UIView view)
+            {
+                bindingSet.Bind(view)
+                          .For(v => v.UserInteractionEnabled)
+                          .To(vm => vm.IsGhost)
+                          .WithConversion(invertedBoolConverter);
+            }
         }
 
         public override void ViewDidLayoutSubviews()
@@ -260,6 +272,19 @@ namespace Toggl.Daneel.ViewControllers
         public async Task<bool> Dismiss()
         {
             return await ViewModel.CloseWithConfirmation();
+        }
+
+
+        IEnumerable<UIView> getViewsToDisableWhenEditingGhostEntry()
+        {
+            yield return EndTimeView;
+            yield return AddTagsView;
+            yield return BillableView;
+            yield return TagsTextView;
+            yield return DurationView;
+            yield return StartTimeView;
+            yield return StartDateView;
+            yield return DescriptionTextView;
         }
 
         private void prepareViews()

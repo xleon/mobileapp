@@ -165,6 +165,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public bool SyncErrorMessageVisible { get; private set; }
 
+        public bool IsGhost { get; set; }
+
         public IMvxCommand ConfirmCommand { get; }
 
         public IMvxCommand SaveCommand { get; }
@@ -267,6 +269,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             taskId = timeEntry.Task?.Id;
             SyncErrorMessage = timeEntry.LastSyncErrorMessage;
             workspaceId = timeEntry.WorkspaceId;
+            IsGhost = timeEntry.IsGhost;
             SyncErrorMessageVisible = !string.IsNullOrEmpty(SyncErrorMessage);
 
             onTags(timeEntry.Tags);

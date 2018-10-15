@@ -66,7 +66,7 @@ namespace Toggl.Foundation.Tests.Mocks
 
         public bool IsDeleted { get; set; }
 
-        public IThreadSafeTask Task { get; }
+        public IThreadSafeTask Task { get; set; }
 
         public IThreadSafeUser User { get; }
 
