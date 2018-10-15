@@ -553,6 +553,8 @@
     <ImageAsset Include="Resources\Images.xcassets\icCalendarSmall.imageset\icCalendarSmall.png" />
     <ImageAsset Include="Resources\Images.xcassets\icCalendarSmall.imageset\icCalendarSmall%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icCalendarSmall.imageset\icCalendarSmall%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\togglLogoWithoutTextRed.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\togglLogoWithoutTextRed.imageset\togglLogoRed.pdf" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
