@@ -60,6 +60,7 @@ namespace Toggl.Foundation
             LicenseProvider = builder.LicenseProvider;
             ShortcutCreator = builder.ShortcutCreator;
             AnalyticsService = builder.AnalyticsService;
+            StopwatchFactory = builder.StopwatchFactory;
             PlatformConstants = builder.PlatformConstants;
             BackgroundService = builder.BackgroundService;
             SchedulerProvider = builder.SchedulerProvider;
