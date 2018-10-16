@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -265,7 +265,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
                 navigationService.Navigate(calendarViewModel);
                 didNavigateToCalendar = true;
                 intentDonationService.DonateShowReport();
+                return;
             }
+
+            reportSubject.OnNext(Unit.Default);
         }
 
         public void ToggleCalendar()
