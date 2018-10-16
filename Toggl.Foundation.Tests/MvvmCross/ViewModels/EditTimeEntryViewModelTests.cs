@@ -18,6 +18,7 @@ using Toggl.Foundation.Tests.Generators;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Interactors;
+using Toggl.Foundation.Tests.Mocks;
 using Xunit;
 using static Toggl.Foundation.Helper.Constants;
 using static Toggl.Multivac.Extensions.StringExtensions;
@@ -861,6 +862,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Initialize().Wait();
 
                 ViewModel.SyncErrorMessage.Should().Be(errorMessage);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void SetsTheSyncErrorMessageWhenTheTimeEntryIsGhost()
+            {
+                timeEntry.IsGhost.Returns(true);
+                timeEntry.LastSyncErrorMessage.Returns("Some less important error message");
+
+                ViewModel.Prepare(Id);
+
+                ViewModel.Initialize().Wait();
+
+                ViewModel.SyncErrorMessage.Should().Be(Resources.GhostTimeEntryErrorMessage);
             }
 
             [Theory, LogIfTooSlow]

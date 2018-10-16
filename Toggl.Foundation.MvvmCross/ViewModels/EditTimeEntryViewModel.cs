@@ -267,10 +267,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Client = timeEntry.Project?.Client?.Name;
             projectId = timeEntry.Project?.Id;
             taskId = timeEntry.Task?.Id;
-            SyncErrorMessage = timeEntry.LastSyncErrorMessage;
             workspaceId = timeEntry.WorkspaceId;
+            setErrorMessage(timeEntry);
             IsGhost = timeEntry.IsGhost;
-            SyncErrorMessageVisible = !string.IsNullOrEmpty(SyncErrorMessage);
 
             onTags(timeEntry.Tags);
             foreach (var tagId in timeEntry.TagIds)
@@ -605,6 +604,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void OnProjectChanged()
         {
             hasProjectSubject.OnNext(!string.IsNullOrWhiteSpace(Project));
+        }
+
+        private void setErrorMessage(IThreadSafeTimeEntry timeEntry)
+        {
+            SyncErrorMessage = timeEntry.IsGhost ? Resources.GhostTimeEntryErrorMessage : timeEntry.LastSyncErrorMessage;
+            SyncErrorMessageVisible = timeEntry.IsGhost || !string.IsNullOrEmpty(SyncErrorMessage);
         }
     }
 }
