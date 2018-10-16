@@ -451,7 +451,7 @@
     <Compile Include="Extensions\Reactive\RecyclerAdapterExtensions.cs" />
     <Compile Include="Extensions\Reactive\SwipeRefreshLayoutExtensions.cs" />
     <Compile Include="Extensions\Reactive\JavaObjectExtensions.cs" />
-    <Compile Include="Services\AndroidFirebaseStopwatchFactory.cs" />
+    <Compile Include="Services\AndroidFirebaseStopwatchProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

@@ -1138,7 +1138,7 @@
     <Compile Include="Views\Reports\BarView.cs" />
     <Compile Include="Views\Reports\BarLegendLabel.cs" />
     <Compile Include="Views\Reports\EmptyBarView.cs" />
-    <Compile Include="Services\IosFirebaseStopwatchFactory.cs" />
+    <Compile Include="Services\IosFirebaseStopwatchProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

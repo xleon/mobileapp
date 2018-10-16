@@ -1,17 +1,49 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Toggl.Foundation.Diagnostics
 {
-    public abstract class BaseStopwatchFactory : IStopwatchFactory
+    public abstract class BaseStopwatchProvider : IStopwatchProvider
     {
+        private readonly Dictionary<MeasuredOperation, IStopwatch> cachedStopwatches;
+
+        protected BaseStopwatchProvider()
+        {
+            cachedStopwatches = new Dictionary<MeasuredOperation, IStopwatch>();
+        }
+
         public IStopwatch Create(MeasuredOperation operation, bool outputToConsole = false)
         {
             var stopwatch = NativeCreate(operation);
 
-            return outputToConsole 
+            return outputToConsole
                 ? new ConsoleStopwatch(stopwatch)
                 : new SingleUseStopwatch(stopwatch);
+        }
+
+        public IStopwatch CreateAndStore(MeasuredOperation operation, bool outputToConsole = false)
+        {
+            var stopwatch = Create(operation, outputToConsole);
+
+            cachedStopwatches[operation] = stopwatch;
+
+            return stopwatch;
+        }
+
+        public IStopwatch Get(MeasuredOperation operation)
+        {
+            if (cachedStopwatches.TryGetValue(operation, out var stopwatch))
+            {
+                return stopwatch;
+            }
+
+            return null;
+        }
+
+        public void Remove(MeasuredOperation operation)
+        {
+            cachedStopwatches.Remove(operation);
         }
 
         protected abstract IStopwatch NativeCreate(MeasuredOperation operation);

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Reactive.Concurrency;
-using MvvmCross.Navigation;
 using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
@@ -13,6 +11,7 @@ using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
+using IStopwatchProvider = Toggl.Foundation.Diagnostics.IStopwatchProvider;
 
 namespace Toggl.Foundation.MvvmCross
 {
@@ -30,7 +29,7 @@ namespace Toggl.Foundation.MvvmCross
         public ApiEnvironment ApiEnvironment { get; }
         public ILicenseProvider LicenseProvider { get; }
         public IAnalyticsService AnalyticsService { get; }
-        public IStopwatchFactory StopwatchFactory { get; }
+        public IStopwatchProvider StopwatchProvider { get; }
         public IBackgroundService BackgroundService { get; }
         public ISchedulerProvider SchedulerProvider { get; }
         public IPlatformConstants PlatformConstants { get; }
@@ -88,7 +87,7 @@ namespace Toggl.Foundation.MvvmCross
             LicenseProvider = builder.Foundation.LicenseProvider;
             ShortcutCreator = builder.Foundation.ShortcutCreator;
             AnalyticsService = builder.Foundation.AnalyticsService;
-            StopwatchFactory = builder.Foundation.StopwatchFactory;
+            StopwatchProvider = builder.Foundation.StopwatchProvider;
             PlatformConstants = builder.Foundation.PlatformConstants;
             SchedulerProvider = builder.Foundation.SchedulerProvider;
             BackgroundService = builder.Foundation.BackgroundService;

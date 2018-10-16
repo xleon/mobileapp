@@ -12,7 +12,7 @@ using Toggl.Foundation.Analytics;
 using System.Reactive.Concurrency;
 using Toggl.Multivac;
 using Toggl.Ultrawave.Network;
-using Toggl.Foundation.Diagnostics;
+using IStopwatchProvider = Toggl.Foundation.Diagnostics.IStopwatchProvider;
 
 namespace Toggl.Foundation.Tests
 {
@@ -35,7 +35,7 @@ namespace Toggl.Foundation.Tests
                 bool useGoogleService,
                 bool useLicenseProvider,
                 bool useAnalyticsService,
-                bool useStopwatchFactory,
+                bool useStopwatchProvider,
                 bool useBackgroundService,
                 bool useSchedulerProvider,
                 bool usePlatformConstants,
@@ -58,7 +58,7 @@ namespace Toggl.Foundation.Tests
                 var googleService = useGoogleService ? Substitute.For<IGoogleService>() : null;
                 var licenseProvider = useLicenseProvider ? Substitute.For<ILicenseProvider>() : null;
                 var analyticsService = useAnalyticsService ? Substitute.For<IAnalyticsService>() : null;
-                var stopwatchFactory = useStopwatchFactory ? Substitute.For<IStopwatchFactory>() : null;
+                var stopwatchProvider = useStopwatchProvider ? Substitute.For<IStopwatchProvider>() : null;
                 var backgroundService = useBackgroundService ? Substitute.For<IBackgroundService>() : null;
                 var platformConstants = usePlatformConstants ? Substitute.For<IPlatformConstants>() : null;
                 var notificationService = useNotificationService ? Substitute.For<INotificationService>() : null;
@@ -82,7 +82,7 @@ namespace Toggl.Foundation.Tests
                         .WithGoogleService(googleService)
                         .WithLicenseProvider(licenseProvider)
                         .WithAnalyticsService(analyticsService)
-                        .WithStopwatchFactory(stopwatchFactory)
+                        .WithStopwatchProvider(stopwatchProvider)
                         .WithBackgroundService(backgroundService)
                         .WithSchedulerProvider(schedulerProvider)
                         .WithPlatformConstants(platformConstants)
@@ -112,7 +112,7 @@ namespace Toggl.Foundation.Tests
                 var googleService = Substitute.For<IGoogleService>();
                 var licenseProvider = Substitute.For<ILicenseProvider>();
                 var analyticsService = Substitute.For<IAnalyticsService>();
-                var stopwatchFactory = Substitute.For<IStopwatchFactory>();
+                var stopwatchProvider = Substitute.For<IStopwatchProvider>();
                 var schedulerProvider = Substitute.For<ISchedulerProvider>();
                 var platformConstants = Substitute.For<IPlatformConstants>();
                 var backgroundService = Substitute.For<IBackgroundService>();
@@ -136,7 +136,7 @@ namespace Toggl.Foundation.Tests
                         .WithGoogleService(googleService)
                         .WithLicenseProvider(licenseProvider)
                         .WithAnalyticsService(analyticsService)
-                        .WithStopwatchFactory(stopwatchFactory)
+                        .WithStopwatchProvider(stopwatchProvider)
                         .WithBackgroundService(backgroundService)
                         .WithSchedulerProvider(schedulerProvider)
                         .WithPlatformConstants(platformConstants)

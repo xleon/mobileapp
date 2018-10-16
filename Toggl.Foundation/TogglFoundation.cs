@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Shortcuts;
@@ -10,6 +9,7 @@ using Toggl.Multivac;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
+using IStopwatchProvider = Toggl.Foundation.Diagnostics.IStopwatchProvider;
 
 namespace Toggl.Foundation
 {
@@ -28,7 +28,7 @@ namespace Toggl.Foundation
         public ApiEnvironment ApiEnvironment { get; }
         public ILicenseProvider LicenseProvider { get; }
         public IAnalyticsService AnalyticsService { get; }
-        public IStopwatchFactory StopwatchFactory { get; }
+        public IStopwatchProvider StopwatchProvider { get; }
         public IBackgroundService BackgroundService { get; }
         public ISchedulerProvider SchedulerProvider { get; }
         public IPlatformConstants PlatformConstants { get; }
@@ -60,7 +60,7 @@ namespace Toggl.Foundation
             LicenseProvider = builder.LicenseProvider;
             ShortcutCreator = builder.ShortcutCreator;
             AnalyticsService = builder.AnalyticsService;
-            StopwatchFactory = builder.StopwatchFactory;
+            StopwatchProvider = builder.StopwatchProvider;
             PlatformConstants = builder.PlatformConstants;
             BackgroundService = builder.BackgroundService;
             SchedulerProvider = builder.SchedulerProvider;
@@ -87,7 +87,7 @@ namespace Toggl.Foundation
 
             public ILicenseProvider LicenseProvider { get; internal set; }
             public IAnalyticsService AnalyticsService { get; internal set; }
-            public IStopwatchFactory StopwatchFactory { get; internal set; }
+            public IStopwatchProvider StopwatchProvider { get; internal set; }
             public ISchedulerProvider SchedulerProvider { get; internal set; }
             public INotificationService NotificationService { get; internal set; }
             public IRemoteConfigService RemoteConfigService { get; internal set; }
@@ -224,9 +224,9 @@ namespace Toggl.Foundation
                 return this;
             }
 
-            public Builder WithStopwatchFactory(IStopwatchFactory stopwatchFactory)
+            public Builder WithStopwatchProvider(IStopwatchProvider stopwatchProvider)
             {
-                StopwatchFactory = stopwatchFactory;
+                StopwatchProvider = stopwatchProvider;
                 return this;
             }
 
@@ -286,9 +286,9 @@ namespace Toggl.Foundation
                 where TNotificationService : INotificationService, new()
                 => WithNotificationService(new TNotificationService());
 
-            public Builder WithStopwatchFactory<TStopwatchFactory>()
-                where TStopwatchFactory : IStopwatchFactory, new()
-                => WithStopwatchFactory(new TStopwatchFactory());
+            public Builder WithStopwatchProvider<TStopwatchProvider>()
+                where TStopwatchProvider : IStopwatchProvider, new()
+                => WithStopwatchProvider(new TStopwatchProvider());
 
             public TogglFoundation Build()
                 => new TogglFoundation(this);
@@ -308,7 +308,7 @@ namespace Toggl.Foundation
                 Ensure.Argument.IsNotNull(LicenseProvider, nameof(LicenseProvider));
                 Ensure.Argument.IsNotNull(ShortcutCreator, nameof(ShortcutCreator));
                 Ensure.Argument.IsNotNull(AnalyticsService, nameof(AnalyticsService));
-                Ensure.Argument.IsNotNull(StopwatchFactory, nameof(StopwatchFactory));
+                Ensure.Argument.IsNotNull(StopwatchProvider, nameof(StopwatchProvider));
                 Ensure.Argument.IsNotNull(BackgroundService, nameof(BackgroundService));
                 Ensure.Argument.IsNotNull(SchedulerProvider, nameof(SchedulerProvider));
                 Ensure.Argument.IsNotNull(PlatformConstants, nameof(PlatformConstants));

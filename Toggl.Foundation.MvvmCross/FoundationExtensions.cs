@@ -72,7 +72,7 @@ namespace Toggl.Foundation.MvvmCross
 
         private static void initializeInversionOfControl(MvvmCrossFoundation foundation)
         {
-            Mvx.RegisterSingleton(foundation.StopwatchFactory);
+            Mvx.RegisterSingleton(foundation.StopwatchProvider);
             Mvx.RegisterSingleton(foundation.BackgroundService);
             Mvx.RegisterSingleton(foundation.DialogService);
             Mvx.RegisterSingleton(foundation.Database);

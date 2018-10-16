@@ -2,7 +2,7 @@
 
 namespace Toggl.Giskard.Services
 {
-    public sealed class AndroidFirebaseStopwatchFactory : BaseStopwatchFactory
+    public sealed class AndroidFirebaseStopwatchProvider : BaseStopwatchProvider
     {
         protected override IStopwatch NativeCreate(MeasuredOperation operation)
             => new AndroidFirebaseStopwatch(operation);
