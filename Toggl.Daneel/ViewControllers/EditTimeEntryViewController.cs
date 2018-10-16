@@ -12,6 +12,7 @@ using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.Plugin.Visibility;
+using MvvmCross.UI;
 using MvvmCross.WeakSubscription;
 using Toggl.Daneel.Combiners;
 using Toggl.Daneel.Extensions;
@@ -82,6 +83,13 @@ namespace Toggl.Daneel.ViewControllers
             );
             var stopRunningTimeEntryAndSelectStopTimeForStoppedConverter = new BoolToConstantValueConverter<IMvxCommand>(
                 ViewModel.StopCommand, ViewModel.SelectStopTimeCommand);
+
+            var isGhostTextColorConverter = new BoolToConstantValueConverter<UIColor>(
+                Color.Common.Disabled.ToNativeColor(),
+                Color.Common.TextColor.ToNativeColor()
+            );
+
+            var showTagsCombiner = new ShowTagsValueCombiner();
 
             var bindingSet = this.CreateBindingSet<EditTimeEntryViewController, EditTimeEntryViewModel>();
 
@@ -239,6 +247,31 @@ namespace Toggl.Daneel.ViewControllers
 
             //Regarding ghost entries
             getViewsToDisableWhenEditingGhostEntry().ForEach(createUserInteractionBindingForGhostedEntries);
+            getLabelsToChangeColorWhenEditingGhostEntry().ForEach(createTextColorBindingForGhostedEntries);
+
+            bindingSet.Bind(DescriptionTextView)
+                      .For(v => v.TextColor)
+                      .To(vm => vm.IsGhost)
+                      .WithConversion(isGhostTextColorConverter);
+
+            bindingSet.Bind(BillableSwitch)
+                      .For(v => v.Enabled)
+                      .To(vm => vm.IsGhost)
+                      .WithConversion(invertedBoolConverter);
+
+            bindingSet.Bind(TagsContainerView)
+                      .For(v => v.Hidden)
+                      .ByCombining(showTagsCombiner,
+                                   vm => vm.IsGhost,
+                                   vm => vm.HasTags)
+                      .WithConversion(invertedBoolConverter);
+
+            bindingSet.Bind(TagsSeparator)
+                      .For(v => v.Hidden)
+                      .ByCombining(showTagsCombiner,
+                                   vm => vm.IsGhost,
+                                   vm => vm.HasTags)
+                      .WithConversion(invertedBoolConverter);
 
             bindingSet.Apply();
 
@@ -248,6 +281,14 @@ namespace Toggl.Daneel.ViewControllers
                           .For(v => v.UserInteractionEnabled)
                           .To(vm => vm.IsGhost)
                           .WithConversion(invertedBoolConverter);
+            }
+
+            void createTextColorBindingForGhostedEntries(UILabel label)
+            {
+                bindingSet.Bind(label)
+                          .For(v => v.TextColor)
+                          .To(vm => vm.IsGhost)
+                          .WithConversion(isGhostTextColorConverter);
             }
         }
 
@@ -285,6 +326,14 @@ namespace Toggl.Daneel.ViewControllers
             yield return StartTimeView;
             yield return StartDateView;
             yield return DescriptionTextView;
+        }
+
+        IEnumerable<UILabel> getLabelsToChangeColorWhenEditingGhostEntry()
+        {
+            yield return StartTimeLabel;
+            yield return StartDateLabel;
+            yield return EndTimeLabel;
+            yield return DurationLabel;
         }
 
         private void prepareViews()
