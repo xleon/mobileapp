@@ -284,8 +284,8 @@
     <Compile Include="Activities\OnboardingActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="Activities\LoginActivity.ViewBinds.cs">
-		<DependentUpon>LoginActivity.cs</DependentUpon>
-	</Compile>
+    <DependentUpon>LoginActivity.cs</DependentUpon>
+  </Compile>
     <Compile Include="Services\SharedPreferencesStorage.cs" />
     <Compile Include="Activities\MainActivity.cs" />
     <Compile Include="Startup\TogglApplication.cs" />
@@ -400,6 +400,9 @@
     <Compile Include="Activities\SignUpActivity.cs" />
     <Compile Include="TemplateSelectors\SelecCountryTemplateSelector.cs" />
     <Compile Include="Fragments\TermsOfServiceFragment.cs" />
+    <Compile Include="Fragments\TermsOfServiceFragment.ViewBinds.cs">
+    <DependentUpon>TermsOfServiceFragment.cs</DependentUpon>
+  </Compile>
     <Compile Include="Views\TogglDroidTimePicker.cs" />
     <Compile Include="Activities\ReactiveActivity.cs" />
     <Compile Include="Adapters\BaseRecyclerAdapter.cs" />
