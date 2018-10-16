@@ -109,7 +109,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 onboardingStorage,
                 schedulerProvider,
                 permissionsService,
-                navigationService);
+                navigationService,
+                stopwatchProvider);
         }
 
         public override async Task Initialize()

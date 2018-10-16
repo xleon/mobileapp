@@ -22,6 +22,7 @@ using static Toggl.Foundation.Helper.Constants;
 using SelectTimeOrigin = Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
 using System.Reactive.Subjects;
 using System.Reactive;
+using Toggl.Foundation.Diagnostics;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -37,11 +38,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IMvxNavigationService navigationService;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IAnalyticsService analyticsService;
+        private readonly IStopwatchProvider stopwatchProvider;
 
         private readonly HashSet<long> tagIds = new HashSet<long>();
         private IDisposable tickingDisposable;
         private IDisposable confirmDisposable;
         private IDisposable preferencesDisposable;
+        private IStopwatch stopwatchFromCalendar;
+        private IStopwatch stopwatchFromMainLog;
 
         private IThreadSafeTimeEntry originalTimeEntry;
 
@@ -204,7 +208,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IMvxNavigationService navigationService,
             IOnboardingStorage onboardingStorage,
             IDialogService dialogService,
-            IAnalyticsService analyticsService)
+            IAnalyticsService analyticsService,
+            IStopwatchProvider stopwatchProvider)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
@@ -213,6 +218,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
+            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
@@ -221,6 +227,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.navigationService = navigationService;
             this.onboardingStorage = onboardingStorage;
             this.analyticsService = analyticsService;
+            this.stopwatchProvider = stopwatchProvider;
 
             DeleteCommand = new MvxAsyncCommand(delete);
             ConfirmCommand = new MvxCommand(confirm);
@@ -252,6 +259,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public override async Task Initialize()
         {
+            stopwatchFromCalendar = stopwatchProvider.Get(MeasuredOperation.EditTimeEntryFromCalendar);
+            stopwatchProvider.Remove(MeasuredOperation.EditTimeEntryFromCalendar);
+            stopwatchFromMainLog = stopwatchProvider.Get(MeasuredOperation.EditTimeEntryFromMainLog);
+            stopwatchProvider.Remove(MeasuredOperation.EditTimeEntryFromMainLog);
+
             var timeEntry = await dataSource.TimeEntries.GetById(Id);
             originalTimeEntry = timeEntry;
 
@@ -280,6 +292,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Subscribe(onPreferencesChanged);
 
             await updateFeaturesAvailability();
+        }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            stopwatchFromCalendar?.Stop();
+            stopwatchFromCalendar = null;
+            stopwatchFromMainLog?.Stop();
+            stopwatchFromMainLog = null;
         }
 
         private void subscribeToTimeServiceTicks()

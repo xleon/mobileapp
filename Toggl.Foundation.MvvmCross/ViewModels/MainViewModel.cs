@@ -415,6 +415,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return Observable.Empty<Unit>();
 
             onboardingStorage.TimeEntryWasTapped();
+
+            var editTimeEntryStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.EditTimeEntryFromMainLog);
+            editTimeEntryStopwatch.Start();
+
             return navigate<EditTimeEntryViewModel, long>(timeEntry.Id).ToObservable();
         }
 
@@ -457,6 +461,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             {
                 isEditViewOpen = true;
             }
+
+            var editTimeEntryStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.EditTimeEntryFromMainLog);
+            editTimeEntryStopwatch.Start();
 
             await navigate<EditTimeEntryViewModel, long>(CurrentTimeEntryId.Value);
 

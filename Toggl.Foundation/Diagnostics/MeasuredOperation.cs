@@ -3,6 +3,8 @@
     public enum MeasuredOperation
     {
         None,
-        OpenStartView
+        OpenStartView,
+        EditTimeEntryFromCalendar,
+        EditTimeEntryFromMainLog
     }
 }
