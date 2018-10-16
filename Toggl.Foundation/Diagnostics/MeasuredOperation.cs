@@ -2,6 +2,7 @@
 {
     public enum MeasuredOperation
     {
-        None
+        None,
+        OpenStartView
     }
 }

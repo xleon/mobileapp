@@ -11,6 +11,7 @@ using MvvmCross.ViewModels;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.Experiments;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
@@ -102,6 +103,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IIntentDonationService intentDonationService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
+        private readonly IStopwatchProvider stopwatchProvider;
 
         private CompositeDisposable disposeBag = new CompositeDisposable();
 
@@ -134,7 +136,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ISuggestionProviderContainer suggestionProviders,
             IIntentDonationService intentDonationService,
             IAccessRestrictionStorage accessRestrictionStorage,
-            ISchedulerProvider schedulerProvider)
+            ISchedulerProvider schedulerProvider,
+            IStopwatchProvider stopwatchProvider)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
@@ -149,6 +152,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
+            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
@@ -160,6 +164,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.schedulerProvider = schedulerProvider;
             this.intentDonationService = intentDonationService;
             this.accessRestrictionStorage = accessRestrictionStorage;
+            this.stopwatchProvider = stopwatchProvider;
 
             SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, suggestionProviders);
             RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService, schedulerProvider);
@@ -382,6 +387,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private Task startTimeEntry(bool initializeInManualMode)
         {
             OnboardingStorage.StartButtonWasTapped();
+            var startTimeEntryStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.OpenStartView);
+            startTimeEntryStopwatch.Start();
 
             if (hasStopButtonEverBeenUsed)
                 onboardingStorage.SetNavigatedAwayFromMainViewAfterStopButton();

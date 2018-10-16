@@ -7,6 +7,7 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
@@ -46,7 +47,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IRemoteConfigService remoteConfigService,
             ISuggestionProviderContainer suggestionProviders,
             IIntentDonationService intentDonationService,
-            IAccessRestrictionStorage accessRestrictionStorage)
+            IAccessRestrictionStorage accessRestrictionStorage,
+            IStopwatchProvider stopwatchProvider)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
@@ -66,6 +68,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
+            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
             this.remoteConfigService = remoteConfigService;
 
@@ -82,7 +85,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 suggestionProviders,
                 intentDonationService,
                 accessRestrictionStorage,
-                schedulerProvider);
+                schedulerProvider,
+                stopwatchProvider);
 
             reportsViewModel = new ReportsViewModel(
                 dataSource,

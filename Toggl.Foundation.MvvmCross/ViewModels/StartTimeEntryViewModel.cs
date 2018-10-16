@@ -15,6 +15,7 @@ using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Span;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
@@ -48,6 +49,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IAutocompleteProvider autocompleteProvider;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IIntentDonationService intentDonationService;
+        private readonly IStopwatchProvider stopwatchProvider;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
         private readonly ISubject<TextFieldInfo> uiSubject = new ReplaySubject<TextFieldInfo>();
@@ -60,6 +62,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private StartTimeEntryParameters parameter;
         private TextFieldInfo textFieldInfo = TextFieldInfo.Empty(0);
         private StartTimeEntryParameters initialParameters;
+        private IStopwatch startTimeEntryStopwatch;
 
         //Properties
         public IObservable<TextFieldInfo> TextFieldInfoObservable { get; }
@@ -207,7 +210,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IAnalyticsService analyticsService,
             IAutocompleteProvider autocompleteProvider,
             ISchedulerProvider schedulerProvider,
-            IIntentDonationService intentDonationService
+            IIntentDonationService intentDonationService,
+            IStopwatchProvider stopwatchProvider
         )
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -221,6 +225,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(autocompleteProvider, nameof(autocompleteProvider));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
+            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
@@ -232,6 +237,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.autocompleteProvider = autocompleteProvider;
             this.schedulerProvider = schedulerProvider;
             this.intentDonationService = intentDonationService;
+            this.stopwatchProvider = stopwatchProvider;
 
             OnboardingStorage = onboardingStorage;
 
@@ -297,6 +303,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public override async Task Initialize()
         {
             await base.Initialize();
+            startTimeEntryStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenStartView);
+            stopwatchProvider.Remove(MeasuredOperation.OpenStartView);
 
             defaultWorkspace = await interactorFactory.GetDefaultWorkspace().Execute();
 
@@ -339,6 +347,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             hasAnyTags = (await dataSource.Tags.GetAll()).Any();
             hasAnyProjects = (await dataSource.Projects.GetAll()).Any();
+        }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            startTimeEntryStopwatch?.Stop();
+            startTimeEntryStopwatch = null;
         }
 
         public override void ViewDestroy(bool viewFinishing)
