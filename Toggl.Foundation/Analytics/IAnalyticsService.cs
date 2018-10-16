@@ -76,6 +76,8 @@ namespace Toggl.Foundation.Analytics
 
         IAnalyticsEvent<StartViewTapSource> StartViewTapped { get; }
 
+        IAnalyticsEvent LostWorkspaceAccess { get; }
+
         IAnalyticsEvent<string> WorkspaceSyncError { get; }
 
         IAnalyticsEvent<string> UserSyncError { get; }

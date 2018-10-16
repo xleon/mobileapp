@@ -128,6 +128,9 @@ namespace Toggl.Foundation.Analytics
         [AnalyticsEvent("Origin")]
         public IAnalyticsEvent<TimeEntryStopOrigin> TimeEntryStopped { get; protected set; }
 
+        [AnalyticsEvent]
+        public IAnalyticsEvent LostWorkspaceAccess { get; protected set; }
+
         [AnalyticsEvent("Reason")]
         public IAnalyticsEvent<string> WorkspaceSyncError { get; protected set; }
 
