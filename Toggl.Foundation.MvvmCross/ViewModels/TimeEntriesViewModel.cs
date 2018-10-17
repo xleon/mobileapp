@@ -144,7 +144,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task fetchSectionedTimeEntries()
         {
-            var groupedEntries = await interactorFactory.GetAllNonDeletedTimeEntries().Execute()
+            var groupedEntries = await interactorFactory.GetAllTimeEntriesVisibleToTheUser().Execute()
                 .Select(entries => entries
                     .Where(isNotRunning)
                     .Where(timeEntry => timeEntry.Id != timeEntryToDelete?.Id)

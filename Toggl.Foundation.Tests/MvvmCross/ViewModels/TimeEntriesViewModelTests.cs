@@ -153,7 +153,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                                     .SetAt(now).Build())
                             .Apply(Observable.Return);
 
-                        InteractorFactory.GetAllNonDeletedTimeEntries().Execute().Returns(observable);
+                        InteractorFactory.GetAllTimeEntriesVisibleToTheUser().Execute().Returns(observable);
 
                         return viewModel;
                     });
@@ -215,7 +215,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     )
                   .Apply(Observable.Return);
 
-                InteractorFactory.GetAllNonDeletedTimeEntries().Execute().Returns(observable);
+                InteractorFactory.GetAllTimeEntriesVisibleToTheUser().Execute().Returns(observable);
                 DataSource.TimeEntries.Created.Returns(TimeEntryCreatedSubject.AsObservable());
                 DataSource.TimeEntries.Updated.Returns(TimeEntryUpdatedSubject.AsObservable());
                 DataSource.TimeEntries.Deleted.Returns(TimeEntryDeletedSubject.AsObservable());
@@ -281,7 +281,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async ThreadingTask RemovesTheTimeEntryIfItWasNotRemovedPreviously()
             {
                 await ViewModel.Initialize();
-                var timeEntryCollection = await InteractorFactory.GetAllNonDeletedTimeEntries().Execute().FirstAsync();
+                var timeEntryCollection = await InteractorFactory.GetAllTimeEntriesVisibleToTheUser().Execute().FirstAsync();
                 var timeEntryToDelete = timeEntryCollection.First();
 
                 TimeEntryDeletedSubject.OnNext(timeEntryToDelete.Id);

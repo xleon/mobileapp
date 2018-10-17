@@ -808,7 +808,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 timeEntry.Id.Returns(123);
                 timeEntry.Start.Returns(DateTimeOffset.Now);
                 timeEntry.Duration.Returns(100);
-                InteractorFactory.GetAllNonDeletedTimeEntries().Execute()
+                InteractorFactory.GetAllTimeEntriesVisibleToTheUser().Execute()
                     .Returns(Observable.Return(new[] { timeEntry }));
                 DataSource
                     .TimeEntries
