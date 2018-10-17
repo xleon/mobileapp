@@ -458,6 +458,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task createProject()
         {
+            var createProjectStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.OpenCreateProjectViewFromStartTimeEntryView);
+            createProjectStopwatch.Start();
+            
             var projectId = await navigationService.Navigate<EditProjectViewModel, string, long?>(CurrentQuery);
             if (projectId == null) return;
 

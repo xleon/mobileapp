@@ -6,6 +6,7 @@
         OpenStartView,
         EditTimeEntryFromCalendar,
         EditTimeEntryFromMainLog,
+        OpenCreateProjectViewFromStartTimeEntryView,
         OpenSelectProjectFromEditView,
         OpenReportsFromGiskard
     }
