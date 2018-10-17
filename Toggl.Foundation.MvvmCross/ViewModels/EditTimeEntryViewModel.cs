@@ -9,6 +9,7 @@ using MvvmCross.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
@@ -535,6 +536,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             analyticsService.EditEntrySelectTag.Track();
             analyticsService.EditViewTapped.Track(EditViewTapSource.Tags);
+
+            var selectTagsStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.OpenSelectTagsView);
+            selectTagsStopwatch.Start();
 
             var tagsToPass = tagIds.ToArray();
             var returnedTags = await navigationService

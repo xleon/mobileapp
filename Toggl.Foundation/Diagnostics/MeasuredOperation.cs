@@ -4,6 +4,7 @@
     {
         None,
         OpenStartView,
+        OpenSelectTagsView,
         OpenSettingsView,
         EditTimeEntryFromCalendar,
         EditTimeEntryFromMainLog,

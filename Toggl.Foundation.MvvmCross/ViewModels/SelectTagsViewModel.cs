@@ -11,6 +11,7 @@ using MvvmCross.ViewModels;
 using PropertyChanged;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
 using Toggl.Multivac;
@@ -25,6 +26,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ITogglDataSource dataSource;
         private readonly IInteractorFactory interactorFactory;
         private readonly IMvxNavigationService navigationService;
+        private readonly IStopwatchProvider stopwatchProvider;
 
         private readonly Subject<string> textSubject = new Subject<string>();
         private readonly BehaviorSubject<bool> hasTagsSubject = new BehaviorSubject<bool>(false);
@@ -32,6 +34,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private long[] defaultResult;
         private long workspaceId;
+        private IStopwatch navigationFromEditTimeEntryStopwatch;
 
         public string Text { get; set; } = "";
 
@@ -69,15 +72,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IMvxCommand<SelectableTagViewModel> SelectTagCommand { get; }
 
-        public SelectTagsViewModel(ITogglDataSource dataSource, IMvxNavigationService navigationService, IInteractorFactory interactorFactory)
+        public SelectTagsViewModel(
+            ITogglDataSource dataSource,
+            IMvxNavigationService navigationService,
+            IInteractorFactory interactorFactory,
+            IStopwatchProvider stopwatchProvider)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
+            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
             this.dataSource = dataSource;
             this.navigationService = navigationService;
             this.interactorFactory = interactorFactory;
+            this.stopwatchProvider = stopwatchProvider;
 
             CloseCommand = new MvxAsyncCommand(close);
             SaveCommand = new MvxAsyncCommand(save);
@@ -97,6 +106,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             await base.Initialize();
 
+            navigationFromEditTimeEntryStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenSelectTagsView);
+            stopwatchProvider.Remove(MeasuredOperation.OpenSelectTagsView);
 
             var initialHasTags = dataSource.Tags
                .GetAll()
@@ -113,6 +124,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                        .Select(suggestions => suggestions.Cast<TagSuggestion>())
                        .Select(suggestions => suggestions.Where(s => s.WorkspaceId == workspaceId))
                        .Subscribe(onTags);
+        }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            navigationFromEditTimeEntryStopwatch?.Stop();
+            navigationFromEditTimeEntryStopwatch = null;
         }
 
         private void OnTextChanged()
