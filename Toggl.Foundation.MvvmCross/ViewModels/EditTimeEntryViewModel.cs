@@ -479,6 +479,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             onboardingStorage.SelectsProject();
 
+            var selectProjectStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.OpenSelectProjectFromEditView, true);
+            selectProjectStopwatch.Start();
+
             var returnParameter = await navigationService
                 .Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(
                     SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
