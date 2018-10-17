@@ -4,6 +4,7 @@
     {
         None,
         OpenStartView,
+        OpenSettingsView,
         EditTimeEntryFromCalendar,
         EditTimeEntryFromMainLog,
         OpenCreateProjectViewFromStartTimeEntryView,

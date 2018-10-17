@@ -10,6 +10,7 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
@@ -50,11 +51,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IMvxNavigationService navigationService;
         private readonly IPrivateSharedStorageService privateSharedStorageService;
         private readonly IIntentDonationService intentDonationService;
+        private readonly IStopwatchProvider stopwatchProvider;
 
         private bool isSyncing;
         private bool isLoggingOut;
         private IThreadSafeUser currentUser;
         private IThreadSafePreferences currentPreferences;
+        private IStopwatch navigationFromMainViewModelStopwatch;
 
         public string Title { get; private set; } = Resources.Settings;
 
@@ -111,7 +114,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IOnboardingStorage onboardingStorage,
             IMvxNavigationService navigationService,
             IPrivateSharedStorageService privateSharedStorageService,
-            IIntentDonationService intentDonationService)
+            IIntentDonationService intentDonationService,
+            IStopwatchProvider stopwatchProvider)
         {
             Ensure.Argument.IsNotNull(userAgent, nameof(userAgent));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -126,6 +130,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(platformConstants, nameof(platformConstants));
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
+            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
             this.userAgent = userAgent;
             this.dataSource = dataSource;
@@ -140,6 +145,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.onboardingStorage = onboardingStorage;
             this.privateSharedStorageService = privateSharedStorageService;
             this.intentDonationService = intentDonationService;
+            this.stopwatchProvider = stopwatchProvider;
 
             IsSynced = dataSource.SyncManager.ProgressObservable.SelectMany(checkSynced);
 
@@ -224,6 +230,20 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             OpenCalendarSettingsAction = new UIAction(openCalendarSettings);
 
             OpenNotificationSettingsAction = new UIAction(openNotificationSettings);
+        }
+
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+            navigationFromMainViewModelStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenSettingsView);
+            stopwatchProvider.Remove(MeasuredOperation.OpenStartView);
+        }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            navigationFromMainViewModelStopwatch?.Stop();
+            navigationFromMainViewModelStopwatch = null;
         }
 
         public void CloseFeedbackSuccessView()

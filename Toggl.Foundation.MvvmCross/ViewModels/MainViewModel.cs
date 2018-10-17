@@ -370,7 +370,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         }
 
         private Task openSettings()
-            => navigate<SettingsViewModel>();
+        {
+            var settingsStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.OpenSettingsView);
+            settingsStopwatch.Start();
+            return navigate<SettingsViewModel>();
+        }
 
         private Task openReports()
         {
