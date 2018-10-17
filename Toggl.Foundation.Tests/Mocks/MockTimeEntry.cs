@@ -76,6 +76,6 @@ namespace Toggl.Foundation.Tests.Mocks
 
         public IEnumerable<IThreadSafeTag> Tags { get; }
 
-        public bool IsGhost => Workspace.IsGhost;
+        public bool IsInaccessible => Workspace.IsInaccessible;
     }
 }

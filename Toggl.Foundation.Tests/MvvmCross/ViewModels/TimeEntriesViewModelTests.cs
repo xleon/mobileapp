@@ -210,7 +210,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                             Description = "",
                             At = now,
                             TagIds = new long[] { 1, 2, 3 },
-                            Workspace = new MockWorkspace { IsGhost = false }
+                            Workspace = new MockWorkspace { IsInaccessible = false }
                         }
                     )
                   .Apply(Observable.Return);

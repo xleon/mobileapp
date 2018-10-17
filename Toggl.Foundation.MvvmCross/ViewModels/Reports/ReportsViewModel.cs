@@ -206,7 +206,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
                 .StartWith(Unit.Default)
                 .SelectMany(_ => dataSource.Workspaces.GetAll())
                 .DistinctUntilChanged()
-                .Select(list => list.Where(w => !w.IsGhost))
+                .Select(list => list.Where(w => !w.IsInaccessible))
                 .Select(readOnlyWorkspaceNameTuples)
                 .AsDriver(schedulerProvider);
         }

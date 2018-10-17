@@ -865,9 +865,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public void SetsTheSyncErrorMessageWhenTheTimeEntryIsGhost()
+            public void SetsTheSyncErrorMessageWhenTheTimeEntryIsInaccessible()
             {
-                timeEntry.IsGhost.Returns(true);
+                timeEntry.IsInaccessible.Returns(true);
                 timeEntry.LastSyncErrorMessage.Returns("Some less important error message");
 
                 ViewModel.Prepare(Id);

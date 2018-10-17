@@ -87,9 +87,9 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
 
                 transition.Result.Should().Be(state.Continue);
                 await dataSource.Received()
-                    .Update(Arg.Is<IThreadSafeWorkspace>(workspace => workspace.Id == 2 && workspace.IsGhost));
+                    .Update(Arg.Is<IThreadSafeWorkspace>(workspace => workspace.Id == 2 && workspace.IsInaccessible));
                 await dataSource.Received()
-                    .Update(Arg.Is<IThreadSafeWorkspace>(workspace => workspace.Id == 3 && workspace.IsGhost));
+                    .Update(Arg.Is<IThreadSafeWorkspace>(workspace => workspace.Id == 3 && workspace.IsInaccessible));
             }
 
             [Fact]
@@ -131,7 +131,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
 
                 transition.Result.Should().Be(state.Continue);
                 await dataSource.Received()
-                    .Update(Arg.Is<IThreadSafeWorkspace>(workspace => workspace.Id == 2 && workspace.IsGhost));
+                    .Update(Arg.Is<IThreadSafeWorkspace>(workspace => workspace.Id == 2 && workspace.IsInaccessible));
             }
 
             [Fact]
@@ -141,7 +141,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
                 {
                     new MockWorkspace { Id = 1 },
                     new MockWorkspace { Id = 2 },
-                    new MockWorkspace { Id = 3, IsGhost = true }
+                    new MockWorkspace { Id = 3, IsInaccessible = true }
                 });
                 prepareFetch(new List<IWorkspace>
                 {
@@ -153,7 +153,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
 
                 transition.Result.Should().Be(state.Continue);
                 await dataSource.Received()
-                    .Update(Arg.Is<IThreadSafeWorkspace>(workspace => workspace.Id == 2 && workspace.IsGhost));
+                    .Update(Arg.Is<IThreadSafeWorkspace>(workspace => workspace.Id == 2 && workspace.IsInaccessible));
             }
 
             [Fact]
@@ -163,7 +163,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
                 {
                     new MockWorkspace { Id = 1 },
                     new MockWorkspace { Id = 2 },
-                    new MockWorkspace { Id = 3, IsGhost = true }
+                    new MockWorkspace { Id = 3, IsInaccessible = true }
                 });
                 prepareFetch(new List<IWorkspace>
                 {

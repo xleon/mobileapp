@@ -165,7 +165,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public bool SyncErrorMessageVisible { get; private set; }
 
-        public bool IsGhost { get; set; }
+        public bool IsInaccessible { get; set; }
 
         public IMvxCommand ConfirmCommand { get; }
 
@@ -269,7 +269,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             taskId = timeEntry.Task?.Id;
             workspaceId = timeEntry.WorkspaceId;
             setErrorMessage(timeEntry);
-            IsGhost = timeEntry.IsGhost;
+            IsInaccessible = timeEntry.IsInaccessible;
 
             onTags(timeEntry.Tags);
             foreach (var tagId in timeEntry.TagIds)
@@ -608,8 +608,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void setErrorMessage(IThreadSafeTimeEntry timeEntry)
         {
-            SyncErrorMessage = timeEntry.IsGhost ? Resources.GhostTimeEntryErrorMessage : timeEntry.LastSyncErrorMessage;
-            SyncErrorMessageVisible = timeEntry.IsGhost || !string.IsNullOrEmpty(SyncErrorMessage);
+            SyncErrorMessage = timeEntry.IsInaccessible ? Resources.GhostTimeEntryErrorMessage : timeEntry.LastSyncErrorMessage;
+            SyncErrorMessageVisible = timeEntry.IsInaccessible || !string.IsNullOrEmpty(SyncErrorMessage);
         }
     }
 }

@@ -42,6 +42,6 @@ namespace Toggl.Foundation.Tests.Mocks
 
         public bool IsDeleted { get; set; }
 
-        public bool IsGhost { get; set; }
+        public bool IsInaccessible { get; set; }
     }
 }

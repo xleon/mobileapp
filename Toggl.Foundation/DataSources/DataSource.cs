@@ -76,8 +76,8 @@ namespace Toggl.Foundation.DataSources
 
         private bool isNotGhost(TDatabase entity)
         {
-            if (entity is IGhostable ghostable)
-                return !ghostable.IsGhost;
+            if (entity is IPotentiallyInaccessible potentiallyInaccessible)
+                return !potentiallyInaccessible.IsInaccessible;
 
             return true;
         }

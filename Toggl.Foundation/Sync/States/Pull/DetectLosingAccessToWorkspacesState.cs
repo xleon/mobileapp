@@ -43,7 +43,7 @@ namespace Toggl.Foundation.Sync.States.Pull
                 .Do(trackLoseOfWorkspaceAccessIfNeeded);
 
         private IObservable<IThreadSafeWorkspace> allStoredWorkspaces()
-            => dataSource.GetAll(ws => ws.Id > 0 && ws.IsGhost == false)
+            => dataSource.GetAll(ws => ws.Id > 0 && ws.IsInaccessible == false)
                          .SelectMany(CommonFunctions.Identity);
 
         private IObservable<Unit> markAsGhosts(IList<IThreadSafeWorkspace> workspacesToMark)
@@ -54,7 +54,7 @@ namespace Toggl.Foundation.Sync.States.Pull
                 .Select(Unit.Default);
 
         private IObservable<IThreadSafeWorkspace> markAsGhost(IThreadSafeWorkspace workspaceToMark)
-            => dataSource.Update(workspaceToMark.AsGhost());
+            => dataSource.Update(workspaceToMark.AsInaccessible());
 
         private void trackLoseOfWorkspaceAccessIfNeeded(IList<IThreadSafeWorkspace> workspacesNotFetched)
         {

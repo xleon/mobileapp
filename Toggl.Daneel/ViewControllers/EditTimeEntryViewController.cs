@@ -251,25 +251,25 @@ namespace Toggl.Daneel.ViewControllers
 
             bindingSet.Bind(DescriptionTextView)
                       .For(v => v.TextColor)
-                      .To(vm => vm.IsGhost)
+                      .To(vm => vm.IsInaccessible)
                       .WithConversion(isGhostTextColorConverter);
 
             bindingSet.Bind(BillableSwitch)
                       .For(v => v.Enabled)
-                      .To(vm => vm.IsGhost)
+                      .To(vm => vm.IsInaccessible)
                       .WithConversion(invertedBoolConverter);
 
             bindingSet.Bind(TagsContainerView)
                       .For(v => v.Hidden)
                       .ByCombining(showTagsCombiner,
-                                   vm => vm.IsGhost,
+                                   vm => vm.IsInaccessible,
                                    vm => vm.HasTags)
                       .WithConversion(invertedBoolConverter);
 
             bindingSet.Bind(TagsSeparator)
                       .For(v => v.Hidden)
                       .ByCombining(showTagsCombiner,
-                                   vm => vm.IsGhost,
+                                   vm => vm.IsInaccessible,
                                    vm => vm.HasTags)
                       .WithConversion(invertedBoolConverter);
 
@@ -279,7 +279,7 @@ namespace Toggl.Daneel.ViewControllers
             {
                 bindingSet.Bind(view)
                           .For(v => v.UserInteractionEnabled)
-                          .To(vm => vm.IsGhost)
+                          .To(vm => vm.IsInaccessible)
                           .WithConversion(invertedBoolConverter);
             }
 
@@ -287,7 +287,7 @@ namespace Toggl.Daneel.ViewControllers
             {
                 bindingSet.Bind(label)
                           .For(v => v.TextColor)
-                          .To(vm => vm.IsGhost)
+                          .To(vm => vm.IsInaccessible)
                           .WithConversion(isGhostTextColorConverter);
             }
         }
