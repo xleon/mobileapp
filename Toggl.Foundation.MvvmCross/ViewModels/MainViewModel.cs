@@ -373,7 +373,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             => navigate<SettingsViewModel>();
 
         private Task openReports()
-            => navigate<ReportsViewModel>();
+        {
+            var openReportsStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.OpenReportsFromGiskard);
+            openReportsStopwatch.Start();
+            return navigate<ReportsViewModel>();
+        }
 
         private Task openSyncFailures()
             => navigate<SyncFailuresViewModel>();

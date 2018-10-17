@@ -5,6 +5,7 @@
         None,
         OpenStartView,
         EditTimeEntryFromCalendar,
-        EditTimeEntryFromMainLog
+        EditTimeEntryFromMainLog,
+        OpenReportsFromGiskard
     }
 }

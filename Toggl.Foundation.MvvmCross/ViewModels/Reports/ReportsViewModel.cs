@@ -14,6 +14,7 @@ using PropertyChanged;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
@@ -49,6 +50,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
         private readonly IAnalyticsService analyticsService;
         private readonly IDialogService dialogService;
         private readonly IIntentDonationService intentDonationService;
+        private readonly IStopwatchProvider stopwatchProvider;
 
         private readonly ReportsCalendarViewModel calendarViewModel;
 
@@ -149,7 +151,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
                                 IAnalyticsService analyticsService,
                                 IDialogService dialogService,
                                 IIntentDonationService intentDonationService,
-                                ISchedulerProvider schedulerProvider)
+                                ISchedulerProvider schedulerProvider,
+                                IStopwatchProvider stopwatchProvider)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -159,6 +162,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
+            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
             this.timeService = timeService;
             this.navigationService = navigationService;
@@ -167,6 +171,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
             this.interactorFactory = interactorFactory;
             this.dialogService = dialogService;
             this.intentDonationService = intentDonationService;
+            this.stopwatchProvider = stopwatchProvider;
 
             calendarViewModel = new ReportsCalendarViewModel(timeService, dialogService, dataSource, intentDonationService);
 
@@ -266,6 +271,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
                 didNavigateToCalendar = true;
                 intentDonationService.DonateShowReport();
             }
+        }
+
+        public void StopNavigationFromMainLogStopwatch()
+        {
+            var navigationStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenReportsFromGiskard);
+            stopwatchProvider.Remove(MeasuredOperation.OpenReportsFromGiskard);
+            navigationStopwatch?.Stop();
         }
 
         public void ToggleCalendar()

@@ -96,7 +96,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 analyticsService,
                 dialogService,
                 intentDonationService,
-                schedulerProvider);
+                schedulerProvider,
+                stopwatchProvider);
 
             calendarViewModel = new CalendarViewModel(
                 dataSource,
