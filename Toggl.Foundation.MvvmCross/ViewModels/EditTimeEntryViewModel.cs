@@ -611,7 +611,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void setErrorMessage(IThreadSafeTimeEntry timeEntry)
         {
-            SyncErrorMessage = timeEntry.IsInaccessible ? Resources.GhostTimeEntryErrorMessage : timeEntry.LastSyncErrorMessage;
+            SyncErrorMessage = timeEntry.IsInaccessible ? Resources.InaccessibleTimeEntryErrorMessage : timeEntry.LastSyncErrorMessage;
             SyncErrorMessageVisible = timeEntry.IsInaccessible || !string.IsNullOrEmpty(SyncErrorMessage);
         }
     }

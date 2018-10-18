@@ -874,7 +874,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.Initialize().Wait();
 
-                ViewModel.SyncErrorMessage.Should().Be(Resources.GhostTimeEntryErrorMessage);
+                ViewModel.SyncErrorMessage.Should().Be(Resources.InaccessibleTimeEntryErrorMessage);
             }
 
             [Theory, LogIfTooSlow]

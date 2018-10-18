@@ -9,7 +9,7 @@ namespace Toggl.Foundation.MvvmCross.Combiners
         {
         }
 
-        protected override object Combine(bool isGhost, bool hasTags)
-            => !isGhost || hasTags;
+        protected override object Combine(bool isInaccessible, bool hasTags)
+            => !isInaccessible || hasTags;
     }
 }

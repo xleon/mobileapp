@@ -84,7 +84,7 @@ namespace Toggl.Daneel.ViewControllers
             var stopRunningTimeEntryAndSelectStopTimeForStoppedConverter = new BoolToConstantValueConverter<IMvxCommand>(
                 ViewModel.StopCommand, ViewModel.SelectStopTimeCommand);
 
-            var isGhostTextColorConverter = new BoolToConstantValueConverter<UIColor>(
+            var isInaccessibleTextColorConverter = new BoolToConstantValueConverter<UIColor>(
                 Color.Common.Disabled.ToNativeColor(),
                 Color.Common.TextColor.ToNativeColor()
             );
@@ -245,13 +245,13 @@ namespace Toggl.Daneel.ViewControllers
                       .To(vm => vm.IsBillableAvailable)
                       .WithConversion(visibilityConverter);
 
-            //Regarding ghost entries
-            getLabelsToChangeColorWhenEditingGhostEntry().ForEach(createTextColorBindingForGhostedEntries);
+            //Regarding inaccessible entries
+            getLabelsToChangeColorWhenEditingInaccessibleEntry().ForEach(createTextColorBindingForInaccessibleEntries);
 
             bindingSet.Bind(DescriptionTextView)
                       .For(v => v.TextColor)
                       .To(vm => vm.IsInaccessible)
-                      .WithConversion(isGhostTextColorConverter);
+                      .WithConversion(isInaccessibleTextColorConverter);
 
             bindingSet.Bind(DescriptionTextView)
                       .For(v => v.UserInteractionEnabled)
@@ -279,12 +279,12 @@ namespace Toggl.Daneel.ViewControllers
 
             bindingSet.Apply();
 
-            void createTextColorBindingForGhostedEntries(UILabel label)
+            void createTextColorBindingForInaccessibleEntries(UILabel label)
             {
                 bindingSet.Bind(label)
                           .For(v => v.TextColor)
                           .To(vm => vm.IsInaccessible)
-                          .WithConversion(isGhostTextColorConverter);
+                          .WithConversion(isInaccessibleTextColorConverter);
             }
         }
 
@@ -311,7 +311,7 @@ namespace Toggl.Daneel.ViewControllers
             return await ViewModel.CloseWithConfirmation();
         }
 
-        IEnumerable<UILabel> getLabelsToChangeColorWhenEditingGhostEntry()
+        IEnumerable<UILabel> getLabelsToChangeColorWhenEditingInaccessibleEntry()
         {
             yield return StartTimeLabel;
             yield return StartDateLabel;

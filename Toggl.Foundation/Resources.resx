@@ -495,7 +495,7 @@ account is not set up</value>
     <data name="DiscardMessage">
         <value>Discard message?</value>
     </data>
-    <data name="GhostTimeEntryErrorMessage">
+    <data name="InaccessibleTimeEntryErrorMessage">
         <value>This time entry belongs to a workspace that you don't have access to anymore and it can't by synced.</value>
     </data>
 </root>

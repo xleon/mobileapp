@@ -10,7 +10,6 @@
 
 namespace Toggl.Foundation {
     using System;
-    using System.Reflection;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
@@ -983,9 +982,9 @@ namespace Toggl.Foundation {
             }
         }
         
-        public static string GhostTimeEntryErrorMessage {
+        public static string InaccessibleTimeEntryErrorMessage {
             get {
-                return ResourceManager.GetString("GhostTimeEntryErrorMessage", resourceCulture);
+                return ResourceManager.GetString("InaccessibleTimeEntryErrorMessage", resourceCulture);
             }
         }
     }
