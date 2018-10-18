@@ -93,4 +93,10 @@ namespace Toggl.Giskard.Converters
         public DisabledTextColorValueConverter()
             : base(Color.ParseColor("#cecece"), Color.ParseColor("#000000")) { }
     }
+
+    public sealed class InvertDisabledTextColorValueConverter : BoolToConstantValueConverter<Color>
+    {
+        public InvertDisabledTextColorValueConverter()
+            : base(Color.ParseColor("#cecece"), Color.ParseColor("#ffffff")) { }
+    }
 }

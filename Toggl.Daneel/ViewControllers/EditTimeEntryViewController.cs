@@ -246,13 +246,17 @@ namespace Toggl.Daneel.ViewControllers
                       .WithConversion(visibilityConverter);
 
             //Regarding ghost entries
-            getViewsToDisableWhenEditingGhostEntry().ForEach(createUserInteractionBindingForGhostedEntries);
             getLabelsToChangeColorWhenEditingGhostEntry().ForEach(createTextColorBindingForGhostedEntries);
 
             bindingSet.Bind(DescriptionTextView)
                       .For(v => v.TextColor)
                       .To(vm => vm.IsInaccessible)
                       .WithConversion(isGhostTextColorConverter);
+
+            bindingSet.Bind(DescriptionTextView)
+                      .For(v => v.UserInteractionEnabled)
+                      .To(vm => vm.IsInaccessible)
+                      .WithConversion(invertedBoolConverter);
 
             bindingSet.Bind(BillableSwitch)
                       .For(v => v.Enabled)
@@ -274,14 +278,6 @@ namespace Toggl.Daneel.ViewControllers
                       .WithConversion(invertedBoolConverter);
 
             bindingSet.Apply();
-
-            void createUserInteractionBindingForGhostedEntries(UIView view)
-            {
-                bindingSet.Bind(view)
-                          .For(v => v.UserInteractionEnabled)
-                          .To(vm => vm.IsInaccessible)
-                          .WithConversion(invertedBoolConverter);
-            }
 
             void createTextColorBindingForGhostedEntries(UILabel label)
             {
@@ -313,19 +309,6 @@ namespace Toggl.Daneel.ViewControllers
         public async Task<bool> Dismiss()
         {
             return await ViewModel.CloseWithConfirmation();
-        }
-
-
-        IEnumerable<UIView> getViewsToDisableWhenEditingGhostEntry()
-        {
-            yield return EndTimeView;
-            yield return AddTagsView;
-            yield return BillableView;
-            yield return TagsTextView;
-            yield return DurationView;
-            yield return StartTimeView;
-            yield return StartDateView;
-            yield return DescriptionTextView;
         }
 
         IEnumerable<UILabel> getLabelsToChangeColorWhenEditingGhostEntry()

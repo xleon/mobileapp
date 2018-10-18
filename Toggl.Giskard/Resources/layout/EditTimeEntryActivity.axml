@@ -29,7 +29,7 @@
             android:layout_height="?attr/actionBarSize" />
         <EditText
             android:id="@+id/EditTimeEntryDescriptionTextField"
-            local:MvxBind="Text Description; TextColor DisabledTextColor(IsInaccessible); Focus IsEditingDescription; Click StartEditingDescriptionCommand"
+            local:MvxBind="Text Description; TextColor InvertDisabledTextColor(IsInaccessible); Focus IsEditingDescription; Click StartEditingDescriptionCommand"
             android:minLines="1"
             android:maxLines="4"
             android:textSize="19sp"
@@ -182,7 +182,7 @@
                 android:layout_width="match_parent"
                 android:layout_below="@id/EditTimeEntryProjectContainer">
                 <LinearLayout
-                    local:MvxBind="Click SelectTagsCommand; Visibility ShowTags(IsInaccessible, HasTags)"
+                    local:MvxBind="Click SelectTagsCommand; Visibility Visibility(ShowTags(IsInaccessible, HasTags))"
                     android:background="?attr/selectableItemBackground"
                     android:layout_height="48dp"
                     android:layout_width="match_parent">

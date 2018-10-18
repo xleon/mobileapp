@@ -232,19 +232,22 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             StopCommand = new MvxCommand(stopTimeEntry, () => IsTimeEntryRunning);
             StopTimeEntryCommand = new MvxAsyncCommand<SelectTimeOrigin>(onStopTimeEntryCommand);
 
-            SelectStartTimeCommand = new MvxAsyncCommand(selectStartTime);
-            SelectStopTimeCommand = new MvxAsyncCommand(selectStopTime);
-            SelectStartDateCommand = new MvxAsyncCommand(selectStartDate);
-            SelectDurationCommand = new MvxAsyncCommand(selectDuration);
-            SelectTimeCommand = new MvxAsyncCommand<SelectTimeOrigin>(selectTime);
+            SelectStartTimeCommand = new MvxAsyncCommand(selectStartTime, canExecute);
+            SelectStopTimeCommand = new MvxAsyncCommand(selectStopTime, canExecute);
+            SelectStartDateCommand = new MvxAsyncCommand(selectStartDate, canExecute);
+            SelectDurationCommand = new MvxAsyncCommand(selectDuration, canExecute);
+            SelectTimeCommand = new MvxAsyncCommand<SelectTimeOrigin>(selectTime, _ => canExecute());
 
             SelectProjectCommand = new MvxAsyncCommand(selectProject);
-            SelectTagsCommand = new MvxAsyncCommand(selectTags);
+            SelectTagsCommand = new MvxAsyncCommand(selectTags, canExecute);
             DismissSyncErrorMessageCommand = new MvxCommand(dismissSyncErrorMessageCommand);
-            ToggleBillableCommand = new MvxCommand(toggleBillable);
-            StartEditingDescriptionCommand = new MvxCommand(startEditingDescriptionCommand);
+            ToggleBillableCommand = new MvxCommand(toggleBillable, canExecute);
+            StartEditingDescriptionCommand = new MvxCommand(startEditingDescriptionCommand, canExecute);
 
             HasProject = hasProjectSubject.AsObservable();
+
+            bool canExecute()
+                => !IsInaccessible;
         }
 
         public override void Prepare(long parameter)
