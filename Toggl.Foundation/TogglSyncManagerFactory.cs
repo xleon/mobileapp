@@ -6,6 +6,7 @@ using System.Reactive.Subjects;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DataSources.Interfaces;
+using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Sync;
@@ -98,7 +99,9 @@ namespace Toggl.Foundation
             var persistUser =
                 new PersistSingletonState<IUser, IDatabaseUser, IThreadSafeUser>(dataSource.User, User.Clean);
 
-            var noDefaultWorkspaceTrackingState = new NoDefaultWorkspaceTrackingState(analyticsService);
+            var noDefaultWorkspaceDetectingState = new NoDefaultWorkspaceDetectingState(dataSource, analyticsService);
+
+            var trySetDefaultWorkspaceState = new TrySetDefaultWorkspaceState(timeService, dataSource);
 
             var persistTags =
                 new PersistListState<ITag, IDatabaseTag, IThreadSafeTag>(dataSource.Tags, Tag.Clean);
@@ -144,10 +147,8 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(persistWorkspaces.FinishedPersisting, updateWorkspacesSinceDate);
             transitions.ConfigureTransition(updateWorkspacesSinceDate.Finished, detectNoWorkspaceState);
             transitions.ConfigureTransition(detectNoWorkspaceState.Continue, persistUser);
-
-            transitions.ConfigureTransition(persistUser.FinishedPersisting, noDefaultWorkspaceTrackingState);
-            transitions.ConfigureTransition(noDefaultWorkspaceTrackingState.Continue, persistWorkspaceFeatures);
-
+            
+            transitions.ConfigureTransition(persistUser.FinishedPersisting, persistWorkspaceFeatures);
             transitions.ConfigureTransition(persistWorkspaceFeatures.FinishedPersisting, persistPreferences);
 
             transitions.ConfigureTransition(persistPreferences.FinishedPersisting, persistTags);
@@ -168,6 +169,9 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(persistTimeEntries.FinishedPersisting, updateTimeEntriesSinceDate);
             transitions.ConfigureTransition(updateTimeEntriesSinceDate.Finished, refetchInaccessibleProjects);
             transitions.ConfigureTransition(refetchInaccessibleProjects.FetchNext, refetchInaccessibleProjects);
+
+            transitions.ConfigureTransition(refetchInaccessibleProjects.FinishedPersisting, noDefaultWorkspaceDetectingState);
+            transitions.ConfigureTransition(noDefaultWorkspaceDetectingState.NoDefaultWorkspaceDetected, trySetDefaultWorkspaceState);
 
             transitions.ConfigureTransition(persistWorkspaces.ErrorOccured, retryOrThrow);
             transitions.ConfigureTransition(persistUser.ErrorOccured, retryOrThrow);

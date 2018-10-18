@@ -48,6 +48,8 @@ namespace Toggl.Foundation.Interactors
 
         IInteractor<IObservable<IThreadSafeWorkspace>> GetDefaultWorkspace();
 
+        IInteractor<IObservable<Unit>> SetDefaultWorkspace(long workspaceId);
+
         IInteractor<IObservable<IEnumerable<IThreadSafeWorkspace>>> GetAllWorkspaces();
 
         IInteractor<IObservable<IThreadSafeWorkspace>> GetWorkspaceById(long workspaceId);
