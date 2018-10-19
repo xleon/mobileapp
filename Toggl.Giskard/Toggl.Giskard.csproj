@@ -251,6 +251,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\ForgotPasswordActivity.cs" />
+    <Compile Include="Activities\OutdatedAppActivity.ViewBinds.cs">
+      <DependentUpon>OutdatedAppActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Activities\SelectTagsActivity.cs" />
     <Compile Include="Adapters\SelectCreatableEntityRecyclerAdapter.cs" />
     <Compile Include="Adapters\SelectTagsRecyclerAdapter.cs" />
