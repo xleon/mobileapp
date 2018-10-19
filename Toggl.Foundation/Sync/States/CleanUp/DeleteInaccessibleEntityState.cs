@@ -4,6 +4,7 @@ using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
+using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Sync.States.CleanUp
@@ -11,7 +12,7 @@ namespace Toggl.Foundation.Sync.States.CleanUp
     public abstract class DeleteInaccessibleEntityState<TInterface, TDatabaseInterface>
         : ISyncState
         where TInterface : class, TDatabaseInterface, IThreadSafeModel
-        where TDatabaseInterface : IDatabaseModel, IPotentiallyInaccessible
+        where TDatabaseInterface : IDatabaseSyncable, IPotentiallyInaccessible
     {
         private readonly IDataSource<TInterface, TDatabaseInterface> dataSource;
 
@@ -25,7 +26,7 @@ namespace Toggl.Foundation.Sync.States.CleanUp
         }
 
         public IObservable<ITransition> Start()
-            => dataSource.GetAll(entity => entity.IsInaccessible, includeInaccessibleEntities: true)
+            => dataSource.GetAll(candidateForDeletion, includeInaccessibleEntities: true)
                 .SelectMany(CommonFunctions.Identity)
                 .WhereAsync(SuitableForDeletion)
                 .ToList()
@@ -33,5 +34,8 @@ namespace Toggl.Foundation.Sync.States.CleanUp
                 .Select(FinishedDeleting.Transition());
 
         protected abstract IObservable<bool> SuitableForDeletion(TInterface entity);
+
+        private bool candidateForDeletion(TDatabaseInterface entity)
+            => entity.IsInaccessible && entity.SyncStatus == SyncStatus.InSync;
     }
 }

@@ -35,23 +35,24 @@ namespace Toggl.Foundation.Tests.Sync.States.CleanUp
             var accessibleWorkspace = getWorkspace(1000, isInaccessible: false);
             var inaccessibleWorkspace = getWorkspace(2000, isInaccessible: true);
 
-            var tag1 = getTag(1001, accessibleWorkspace);
-            var tag2 = getTag(1002, accessibleWorkspace);
-            var tag3 = getTag(1003, accessibleWorkspace);
-            var tag4 = getTag(2001, inaccessibleWorkspace);
-            var tag5 = getTag(2002, inaccessibleWorkspace);
-            var tag6 = getTag(2003, inaccessibleWorkspace);
-            var tag7 = getTag(2004, inaccessibleWorkspace);
+            var tag1 = getTag(1001, accessibleWorkspace, SyncStatus.InSync);
+            var tag2 = getTag(1002, accessibleWorkspace, SyncStatus.SyncFailed);
+            var tag3 = getTag(1003, accessibleWorkspace, SyncStatus.RefetchingNeeded);
+            var tag4 = getTag(2001, inaccessibleWorkspace, SyncStatus.InSync);
+            var tag5 = getTag(2002, inaccessibleWorkspace, SyncStatus.SyncNeeded);
+            var tag6 = getTag(2003, inaccessibleWorkspace, SyncStatus.RefetchingNeeded);
+            var tag7 = getTag(2004, inaccessibleWorkspace, SyncStatus.InSync);
+            var tag8 = getTag(2004, inaccessibleWorkspace, SyncStatus.InSync);
 
             var te1 = getTimeEntry(10001, accessibleWorkspace, new[] { tag1 }, SyncStatus.InSync);
             var te2 = getTimeEntry(10002, accessibleWorkspace, new[] { tag2 }, SyncStatus.SyncNeeded);
             var te3 = getTimeEntry(20001, inaccessibleWorkspace, new[] { tag4 }, SyncStatus.InSync);
             var te4 = getTimeEntry(20002, inaccessibleWorkspace, new[] { tag5 }, SyncStatus.SyncNeeded);
 
-            var tags = new IThreadSafeTag[] { tag1, tag2, tag3, tag4, tag5, tag6, tag7 };
+            var tags = new IThreadSafeTag[] { tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8 };
             var timeEntries = new IThreadSafeTimeEntry[] { te1, te2, te3, te4 };
 
-            var unreferencedTags = new IThreadSafeTag[] { tag6, tag7 };
+            var unreferencedTags = new IThreadSafeTag[] { tag7, tag8 };
             var neededTags = tags.Where(tag => !unreferencedTags.Contains(tag));
 
             configureDataSource(tags, timeEntries);
@@ -91,12 +92,13 @@ namespace Toggl.Foundation.Tests.Sync.States.CleanUp
                     IsInaccessible = isInaccessible
                 };
 
-        private IThreadSafeTag getTag(long id, IThreadSafeWorkspace workspace)
+        private IThreadSafeTag getTag(long id, IThreadSafeWorkspace workspace, SyncStatus syncStatus)
             => new MockTag
                 {
                     Id = id,
                     Workspace = workspace,
-                    WorkspaceId = workspace.Id
+                    WorkspaceId = workspace.Id,
+                    SyncStatus = syncStatus
                 };
 
         private IThreadSafeTimeEntry getTimeEntry(long id, IThreadSafeWorkspace workspace, IThreadSafeTag[] tags, SyncStatus syncStatus)
