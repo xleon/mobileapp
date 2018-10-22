@@ -10,6 +10,7 @@
         EditTimeEntryFromMainLog,
         OpenCreateProjectViewFromStartTimeEntryView,
         OpenSelectProjectFromEditView,
-        OpenReportsFromGiskard
+        OpenReportsFromGiskard,
+        MainActivityOnCreate
     }
 }
