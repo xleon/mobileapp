@@ -4,6 +4,8 @@
     {
         None,
         OpenStartView,
+        StartTimeEntrySuggestionsLoadingTime,
+        StartTimeEntrySuggestionsRenderingTime,
         OpenSelectTagsView,
         OpenSettingsView,
         EditTimeEntryFromCalendar,

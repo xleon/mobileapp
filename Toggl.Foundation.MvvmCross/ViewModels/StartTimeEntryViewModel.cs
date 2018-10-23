@@ -64,6 +64,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private TextFieldInfo textFieldInfo = TextFieldInfo.Empty(0);
         private StartTimeEntryParameters initialParameters;
         private IStopwatch startTimeEntryStopwatch;
+        private Dictionary<string, IStopwatch> suggestionsLoadingStopwatches = new Dictionary<string, IStopwatch>();
+        private IStopwatch suggestionsRenderingStopwatch;
 
         //Properties
         public IObservable<TextFieldInfo> TextFieldInfoObservable { get; }
@@ -371,6 +373,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             disposeBag?.Dispose();
         }
 
+        public void StopSuggestionsRenderingStopwatch()
+        {
+            suggestionsRenderingStopwatch?.Stop();
+            suggestionsRenderingStopwatch = null;
+        }
+
         public async Task OnTextFieldInfoFromView(IImmutableList<ISpan> spans)
         {
             queryWith(textFieldInfo.ReplaceSpans(spans));
@@ -469,7 +477,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             var createProjectStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.OpenCreateProjectViewFromStartTimeEntryView);
             createProjectStopwatch.Start();
-            
+
             var projectId = await navigationService.Navigate<EditProjectViewModel, string, long?>(CurrentQuery);
             if (projectId == null) return;
 
@@ -655,7 +663,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void onParsedQuery(QueryInfo parsedQuery)
         {
-            CurrentQuery = parsedQuery.Text?.Trim() ?? "";
+            var newQuery = parsedQuery.Text?.Trim() ?? "";
+            if (CurrentQuery != newQuery)
+            {
+                CurrentQuery = newQuery;
+                suggestionsLoadingStopwatches[CurrentQuery] = stopwatchProvider.Create(MeasuredOperation.StartTimeEntrySuggestionsLoadingTime);
+                suggestionsLoadingStopwatches[CurrentQuery].Start();
+            }
             bool suggestsTags = parsedQuery.SuggestionType == AutocompleteSuggestionType.Tags;
             bool suggestsProjects = parsedQuery.SuggestionType == AutocompleteSuggestionType.Projects;
 
@@ -682,10 +696,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Suggestions.ReplaceWith(groupedSuggestions);
 
             RaisePropertyChanged(nameof(SuggestCreation));
+
+            if (suggestionsLoadingStopwatches.ContainsKey(CurrentQuery))
+            {
+                suggestionsLoadingStopwatches[CurrentQuery]?.Stop();
+                suggestionsLoadingStopwatches = new Dictionary<string, IStopwatch>();
+            }
         }
 
         private IEnumerable<AutocompleteSuggestion> filterSuggestions(IEnumerable<AutocompleteSuggestion> suggestions)
         {
+            suggestionsRenderingStopwatch = stopwatchProvider.Create(MeasuredOperation.StartTimeEntrySuggestionsRenderingTime);
+            suggestionsRenderingStopwatch.Start();
+
             if (textFieldInfo.HasProject && !IsSuggestingProjects && !IsSuggestingTags)
             {
                 var projectId = textFieldInfo.Spans.OfType<ProjectSpan>().Single().ProjectId;
