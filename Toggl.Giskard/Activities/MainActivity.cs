@@ -69,7 +69,8 @@ namespace Toggl.Giskard.Activities
 
             mainRecyclerAdapter = new MainRecyclerAdapter(ViewModel.TimeEntries)
             {
-                SuggestionsViewModel = ViewModel.SuggestionsViewModel
+                SuggestionsViewModel = ViewModel.SuggestionsViewModel,
+                StopwatchProvider = localStopwatchProvider
             };
 
             this.Bind(mainRecyclerAdapter.TimeEntryTaps, ViewModel.SelectTimeEntry.Inputs);

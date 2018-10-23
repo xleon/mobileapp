@@ -11,6 +11,12 @@
         OpenCreateProjectViewFromStartTimeEntryView,
         OpenSelectProjectFromEditView,
         OpenReportsFromGiskard,
+        CreateMainLogItemViewHolder,
+        CreateMainLogSectionViewHolder,
+        BindMainLogItemVH,
+        BindMainLogSectionVH,
+        BindMainLogSuggestionsVH,
+        CreateMainLogSuggestionsViewHolder,
         MainActivityOnCreate
     }
 }
