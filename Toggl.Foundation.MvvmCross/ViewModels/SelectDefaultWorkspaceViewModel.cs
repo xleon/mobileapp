@@ -40,7 +40,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.interactorFactory = interactorFactory;
             this.navigationService = navigationService;
 
-            SelectWorkspaceAction = new InputAction<SelectableWorkspaceViewModel>(selectWorkspace);
+            SelectWorkspaceAction = InputAction<SelectableWorkspaceViewModel>.FromObservable(selectWorkspace);
         }
 
         public override async Task Initialize()
