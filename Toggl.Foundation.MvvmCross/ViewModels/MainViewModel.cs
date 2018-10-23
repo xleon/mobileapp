@@ -19,7 +19,6 @@ using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Foundation.Services;
@@ -268,8 +267,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             ShouldReloadTimeEntryLog = Observable.Merge(
                 TimeService.MidnightObservable.SelectUnit(),
-                TimeService.SignificantTimeChangeObservable.SelectUnit()
-            );
+                TimeService.SignificantTimeChangeObservable.SelectUnit())
+                .AsDriver(SchedulerProvider);
 
             switch (urlNavigationAction)
             {
@@ -302,6 +301,23 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Execute()
                 .Subscribe(intentDonationService.SetDefaultShortcutSuggestions)
                 .DisposedBy(disposeBag);
+
+            dataSource
+                .Workspaces
+                .Updated
+                .Subscribe(onWorkspaceUpdated)
+                .DisposedBy(disposeBag);
+        }
+
+        private async void onWorkspaceUpdated(EntityUpdate<IThreadSafeWorkspace> update)
+        {
+            var workspace = update.Entity;
+            if (workspace == null) return;
+
+            if (workspace.IsInaccessible)
+            {
+                await TimeEntriesViewModel.ReloadData();
+            }
         }
 
         private void presentRatingViewIfNeeded(bool shouldBevisible)

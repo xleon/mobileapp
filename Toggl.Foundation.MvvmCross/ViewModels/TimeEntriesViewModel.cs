@@ -93,6 +93,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .DisposedBy(disposeBag);
         }
 
+        public async Task ReloadData()
+        {
+            await fetchSectionedTimeEntries();
+        }
+
         private void delayDeleteTimeEntry(TimeEntryViewModel timeEntry)
         {
             timeEntryToDelete = timeEntry;
