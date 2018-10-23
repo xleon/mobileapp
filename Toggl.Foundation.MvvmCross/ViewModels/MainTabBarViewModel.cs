@@ -24,10 +24,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
     public sealed class MainTabBarViewModel : MvxViewModel
     {
         private readonly IRemoteConfigService remoteConfigService;
+        private readonly IStopwatchProvider stopwatchProvider;
 
         private readonly MainViewModel mainViewModel;
         private readonly ReportsViewModel reportsViewModel;
         private readonly CalendarViewModel calendarViewModel;
+
+        private bool hasOpenedReports = false;
 
         public IEnumerable<MvxViewModel> Tabs { get; private set; }
 
@@ -71,6 +74,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
             this.remoteConfigService = remoteConfigService;
+            this.stopwatchProvider = stopwatchProvider;
 
             mainViewModel = new MainViewModel(
                 dataSource,
@@ -125,6 +129,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             await Tabs
                 .Select(vm => vm.Initialize())
                 .Apply(Task.WhenAll);
+        }
+
+        public void StartReportsStopwatch()
+        {
+            if (!hasOpenedReports)
+            {
+                var reportsStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.OpenReportsViewForTheFirstTime);
+                reportsStopwatch.Start();
+                hasOpenedReports = true;
+            }
         }
 
         private IEnumerable<MvxViewModel> getViewModels(bool isCalendarEnabled)

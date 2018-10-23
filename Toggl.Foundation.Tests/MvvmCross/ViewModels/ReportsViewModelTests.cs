@@ -10,6 +10,7 @@ using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Analytics;
+using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Reports;

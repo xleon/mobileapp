@@ -271,6 +271,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
                 didNavigateToCalendar = true;
                 intentDonationService.DonateShowReport();
             }
+
+            var firstTimeOpenedFromMainTabBarStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenReportsViewForTheFirstTime);
+            stopwatchProvider.Remove(MeasuredOperation.OpenReportsViewForTheFirstTime);
+            firstTimeOpenedFromMainTabBarStopwatch?.Stop();
+            firstTimeOpenedFromMainTabBarStopwatch = null;
         }
 
         public void StopNavigationFromMainLogStopwatch()

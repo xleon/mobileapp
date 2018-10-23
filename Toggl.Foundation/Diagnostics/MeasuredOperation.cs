@@ -8,6 +8,7 @@
         OpenSettingsView,
         EditTimeEntryFromCalendar,
         EditTimeEntryFromMainLog,
+        OpenReportsViewForTheFirstTime,
         OpenCreateProjectViewFromStartTimeEntryView,
         OpenSelectProjectFromEditView,
         OpenReportsFromGiskard,
