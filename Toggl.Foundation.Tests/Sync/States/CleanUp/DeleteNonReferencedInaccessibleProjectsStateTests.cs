@@ -41,13 +41,13 @@ namespace Toggl.Foundation.Tests.Sync.States.CleanUp
             var accessibleWorkspace = new MockWorkspace(1000, isInaccessible: false);
             var inaccessibleWorkspace = new MockWorkspace(2000, isInaccessible: true);
 
-            var project1 = new MockProject(101, accessibleWorkspace, SyncStatus.InSync);
-            var project2 = new MockProject(102, accessibleWorkspace, SyncStatus.RefetchingNeeded);
-            var project3 = new MockProject(201, inaccessibleWorkspace, SyncStatus.InSync);
-            var project4 = new MockProject(202, inaccessibleWorkspace, SyncStatus.SyncNeeded);
-            var project5 = new MockProject(203, inaccessibleWorkspace, SyncStatus.SyncNeeded);
-            var project6 = new MockProject(204, inaccessibleWorkspace, SyncStatus.InSync);
-            var project7 = new MockProject(205, inaccessibleWorkspace, SyncStatus.InSync);
+            var project1 = new MockProject(101, accessibleWorkspace, syncStatus: SyncStatus.InSync);
+            var project2 = new MockProject(102, accessibleWorkspace, syncStatus: SyncStatus.RefetchingNeeded);
+            var project3 = new MockProject(201, inaccessibleWorkspace, syncStatus: SyncStatus.InSync);
+            var project4 = new MockProject(202, inaccessibleWorkspace, syncStatus: SyncStatus.SyncNeeded);
+            var project5 = new MockProject(203, inaccessibleWorkspace, syncStatus: SyncStatus.SyncNeeded);
+            var project6 = new MockProject(204, inaccessibleWorkspace, syncStatus: SyncStatus.InSync);
+            var project7 = new MockProject(205, inaccessibleWorkspace, syncStatus: SyncStatus.InSync);
 
             var task1 = new MockTask(1001, accessibleWorkspace, project1, SyncStatus.InSync);
             var task2 = new MockTask(1002, accessibleWorkspace, project2, SyncStatus.RefetchingNeeded);
@@ -80,13 +80,13 @@ namespace Toggl.Foundation.Tests.Sync.States.CleanUp
             var accessibleWorkspace = new MockWorkspace(1000, isInaccessible: false);
             var inaccessibleWorkspace = new MockWorkspace(2000, isInaccessible: true);
 
-            var project1 = new MockProject(101, accessibleWorkspace, SyncStatus.InSync);
-            var project2 = new MockProject(102, accessibleWorkspace, SyncStatus.RefetchingNeeded);
-            var project3 = new MockProject(201, inaccessibleWorkspace, SyncStatus.InSync);
-            var project4 = new MockProject(202, inaccessibleWorkspace, SyncStatus.SyncNeeded);
-            var project5 = new MockProject(203, inaccessibleWorkspace, SyncStatus.SyncNeeded);
-            var project6 = new MockProject(204, inaccessibleWorkspace, SyncStatus.InSync);
-            var project7 = new MockProject(205, inaccessibleWorkspace, SyncStatus.InSync);
+            var project1 = new MockProject(101, accessibleWorkspace, syncStatus: SyncStatus.InSync);
+            var project2 = new MockProject(102, accessibleWorkspace, syncStatus: SyncStatus.RefetchingNeeded);
+            var project3 = new MockProject(201, inaccessibleWorkspace, syncStatus: SyncStatus.InSync);
+            var project4 = new MockProject(202, inaccessibleWorkspace, syncStatus: SyncStatus.SyncNeeded);
+            var project5 = new MockProject(203, inaccessibleWorkspace, syncStatus: SyncStatus.SyncNeeded);
+            var project6 = new MockProject(204, inaccessibleWorkspace, syncStatus: SyncStatus.InSync);
+            var project7 = new MockProject(205, inaccessibleWorkspace, syncStatus: SyncStatus.InSync);
 
             var te1 = new MockTimeEntry(10001, accessibleWorkspace, project: project1, syncStatus: SyncStatus.InSync);
             var te2 = new MockTimeEntry(10002, accessibleWorkspace, project: project2, syncStatus: SyncStatus.SyncNeeded);
@@ -116,14 +116,14 @@ namespace Toggl.Foundation.Tests.Sync.States.CleanUp
         {
             var workspace = new MockWorkspace(2000, isInaccessible: true);
 
-            var project1 = new MockProject(101, workspace, SyncStatus.InSync);
-            var project2 = new MockProject(102, workspace, SyncStatus.RefetchingNeeded);
-            var project3 = new MockProject(103, workspace, SyncStatus.InSync);
-            var project4 = new MockProject(104, workspace, SyncStatus.SyncNeeded);
-            var project5 = new MockProject(105, workspace, SyncStatus.InSync);
-            var project6 = new MockProject(106, workspace, SyncStatus.InSync);
-            var project7 = new MockProject(107, workspace, SyncStatus.InSync);
-            var project8 = new MockProject(108, workspace, SyncStatus.InSync);
+            var project1 = new MockProject(101, workspace, syncStatus: SyncStatus.InSync);
+            var project2 = new MockProject(102, workspace, syncStatus: SyncStatus.RefetchingNeeded);
+            var project3 = new MockProject(103, workspace, syncStatus: SyncStatus.InSync);
+            var project4 = new MockProject(104, workspace, syncStatus: SyncStatus.SyncNeeded);
+            var project5 = new MockProject(105, workspace, syncStatus: SyncStatus.InSync);
+            var project6 = new MockProject(106, workspace, syncStatus: SyncStatus.InSync);
+            var project7 = new MockProject(107, workspace, syncStatus: SyncStatus.InSync);
+            var project8 = new MockProject(108, workspace, syncStatus: SyncStatus.InSync);
 
             var task1 = new MockTask(1001, workspace, project1, SyncStatus.InSync);
             var task2 = new MockTask(1002, workspace, project2, SyncStatus.RefetchingNeeded);
@@ -133,7 +133,7 @@ namespace Toggl.Foundation.Tests.Sync.States.CleanUp
 
             var te1 = new MockTimeEntry(10001, workspace, project: project1, task: task1, syncStatus: SyncStatus.InSync);
             var te2 = new MockTimeEntry(10002, workspace, project: project2, task: task2, syncStatus: SyncStatus.SyncNeeded);
-            var te3 = new MockTimeEntry(20001, workspace, project: project3, task: task3,  syncStatus: SyncStatus.InSync);
+            var te3 = new MockTimeEntry(20001, workspace, project: project3, task: task3, syncStatus: SyncStatus.InSync);
             var te4 = new MockTimeEntry(20002, workspace, project: project4, task: task4, syncStatus: SyncStatus.SyncNeeded);
             var te5 = new MockTimeEntry(20003, workspace, project: project4, syncStatus: SyncStatus.SyncFailed);
             var te6 = new MockTimeEntry(20004, workspace, project: project5, syncStatus: SyncStatus.InSync);

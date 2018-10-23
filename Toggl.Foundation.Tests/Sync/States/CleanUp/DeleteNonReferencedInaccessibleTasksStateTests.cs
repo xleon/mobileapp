@@ -37,9 +37,9 @@ namespace Toggl.Foundation.Tests.Sync.States.CleanUp
             var inaccessibleWorkspace = new MockWorkspace(2000, isInaccessible: true);
 
             var project1 = new MockProject(101, accessibleWorkspace);
-            var project2 = new MockProject(102, accessibleWorkspace, SyncStatus.RefetchingNeeded);
-            var project3 = new MockProject(201, inaccessibleWorkspace, SyncStatus.SyncFailed);
-            var project4 = new MockProject(202, inaccessibleWorkspace, SyncStatus.SyncNeeded);
+            var project2 = new MockProject(102, accessibleWorkspace, syncStatus: SyncStatus.RefetchingNeeded);
+            var project3 = new MockProject(201, inaccessibleWorkspace, syncStatus: SyncStatus.SyncFailed);
+            var project4 = new MockProject(202, inaccessibleWorkspace, syncStatus: SyncStatus.SyncNeeded);
 
             var task1 = new MockTask(1001, accessibleWorkspace, project1);
             var task2 = new MockTask(1002, accessibleWorkspace, project2, SyncStatus.RefetchingNeeded);
