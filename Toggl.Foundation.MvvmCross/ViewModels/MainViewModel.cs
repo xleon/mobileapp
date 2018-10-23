@@ -20,7 +20,6 @@ using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Foundation.Services;
@@ -185,10 +184,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             StartTimeEntryCommand = new MvxAsyncCommand(startTimeEntry, () => CurrentTimeEntryId.HasValue == false);
             AlternativeStartTimeEntryCommand = new MvxAsyncCommand(alternativeStartTimeEntry, () => CurrentTimeEntryId.HasValue == false);
 
-            RefreshAction = new UIAction(refresh);
-            DeleteTimeEntry = new InputAction<TimeEntryViewModel>(deleteTimeEntry);
-            SelectTimeEntry = new InputAction<TimeEntryViewModel>(timeEntrySelected);
-            ContinueTimeEntry = new InputAction<TimeEntryViewModel>(continueTimeEntry);
+            RefreshAction = UIAction.FromAsync(refresh);
+            DeleteTimeEntry = InputAction<TimeEntryViewModel>.FromObservable(deleteTimeEntry);
+            SelectTimeEntry = InputAction<TimeEntryViewModel>.FromAsync(timeEntrySelected);
+            ContinueTimeEntry = InputAction<TimeEntryViewModel>.FromObservable(continueTimeEntry);
         }
 
         public void Init(string action, string description)
@@ -273,8 +272,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             ShouldReloadTimeEntryLog = Observable.Merge(
                 TimeService.MidnightObservable.SelectUnit(),
-                TimeService.SignificantTimeChangeObservable.SelectUnit()
-            );
+                TimeService.SignificantTimeChangeObservable.SelectUnit())
+                .AsDriver(SchedulerProvider);
 
             switch (urlNavigationAction)
             {
@@ -307,6 +306,23 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Execute()
                 .Subscribe(intentDonationService.SetDefaultShortcutSuggestions)
                 .DisposedBy(disposeBag);
+
+            dataSource
+                .Workspaces
+                .Updated
+                .Subscribe(onWorkspaceUpdated)
+                .DisposedBy(disposeBag);
+        }
+
+        private async void onWorkspaceUpdated(EntityUpdate<IThreadSafeWorkspace> update)
+        {
+            var workspace = update.Entity;
+            if (workspace == null) return;
+
+            if (workspace.IsInaccessible)
+            {
+                await TimeEntriesViewModel.ReloadData();
+            }
         }
 
         private void presentRatingViewIfNeeded(bool shouldBevisible)
@@ -425,23 +441,22 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .SelectUnit();
         }
 
-        private IObservable<Unit> timeEntrySelected(TimeEntryViewModel timeEntry)
+        private async Task timeEntrySelected(TimeEntryViewModel timeEntry)
         {
             if (isEditViewOpen)
-                return Observable.Empty<Unit>();
+                return;
 
             onboardingStorage.TimeEntryWasTapped();
-
+            
             var editTimeEntryStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.EditTimeEntryFromMainLog);
             editTimeEntryStopwatch.Start();
 
-            return navigate<EditTimeEntryViewModel, long>(timeEntry.Id).ToObservable();
+            await navigate<EditTimeEntryViewModel, long>(timeEntry.Id);
         }
 
-        private IObservable<Unit> refresh()
+        private async Task refresh()
         {
-            return dataSource.SyncManager.ForceFullSync()
-                .SelectUnit();
+            await dataSource.SyncManager.ForceFullSync();
         }
 
         private IObservable<Unit> deleteTimeEntry(TimeEntryViewModel timeEntry)
