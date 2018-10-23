@@ -66,7 +66,7 @@ namespace Toggl.Foundation.Tests.Mocks
 
         public bool IsDeleted { get; set; }
 
-        public IThreadSafeTask Task { get; }
+        public IThreadSafeTask Task { get; set; }
 
         public IThreadSafeUser User { get; }
 
@@ -74,8 +74,8 @@ namespace Toggl.Foundation.Tests.Mocks
 
         public IThreadSafeWorkspace Workspace { get; set; }
 
-        public IEnumerable<IThreadSafeTag> Tags { get; }
+        public IEnumerable<IThreadSafeTag> Tags { get; set; }
 
-        public bool IsGhost => Workspace.IsGhost;
+        public bool IsInaccessible => Workspace.IsInaccessible;
     }
 }

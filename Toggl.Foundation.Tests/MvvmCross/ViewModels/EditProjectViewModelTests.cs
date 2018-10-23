@@ -11,6 +11,8 @@ using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
+using Toggl.Multivac.Extensions;
+using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 using ProjectPredicate = System.Func<Toggl.PrimeRadiant.Models.IDatabaseProject, bool>;
@@ -21,8 +23,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
     {
         public abstract class EditProjectViewModelTest : BaseViewModelTests<EditProjectViewModel>
         {
-            protected const long WorkspaceId = 10;
-            protected const string WorkspaceName = "Some workspace name";
+            protected const long DefaultWorkspaceId = 10;
+            protected const string DefaultWorkspaceName = "Some workspace name";
             protected IThreadSafeWorkspace Workspace { get; } = Substitute.For<IThreadSafeWorkspace>();
 
             protected EditProjectViewModelTest()
@@ -36,7 +38,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public abstract class EditProjectWithSpecificNameViewModelTest : EditProjectViewModelTest
         {
-            private const long otherWorkspaceId = WorkspaceId + 1;
+            private const long otherWorkspaceId = DefaultWorkspaceId + 1;
             private const long projectId = 12345;
 
             protected string ProjectName { get; } = "A random project";
@@ -46,10 +48,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var project = Substitute.For<IThreadSafeProject>();
                 project.Id.Returns(projectId);
                 project.Name.Returns(ProjectName);
-                project.WorkspaceId.Returns(isFromSameWorkspace ? WorkspaceId : otherWorkspaceId);
+                project.WorkspaceId.Returns(isFromSameWorkspace ? DefaultWorkspaceId : otherWorkspaceId);
 
                 var defaultWorkspace = Substitute.For<IThreadSafeWorkspace>();
-                defaultWorkspace.Id.Returns(WorkspaceId);
+                defaultWorkspace.Id.Returns(DefaultWorkspaceId);
                 defaultWorkspace.Name.Returns(Guid.NewGuid().ToString());
 
                 InteractorFactory
@@ -58,7 +60,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Returns(Observable.Return(defaultWorkspace));
 
                 InteractorFactory
-                    .AreCustomColorsEnabledForWorkspace(WorkspaceId)
+                    .AreCustomColorsEnabledForWorkspace(DefaultWorkspaceId)
                     .Execute()
                     .Returns(Observable.Return(false));
 
@@ -318,15 +320,15 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheInitializeMethod : EditProjectViewModelTest
         {
-            public TheInitializeMethod()
+            private void setupDefaultWorkspace()
             {
                 InteractorFactory
                     .GetDefaultWorkspace()
                     .Execute()
                     .Returns(Observable.Return(Workspace));
 
-                Workspace.Id.Returns(WorkspaceId);
-                Workspace.Name.Returns(WorkspaceName);
+                Workspace.Id.Returns(DefaultWorkspaceId);
+                Workspace.Name.Returns(DefaultWorkspaceName);
 
                 ViewModel.Prepare("Some name");
             }
@@ -334,21 +336,70 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task SetsTheWorkspaceId()
             {
+                setupDefaultWorkspace();
                 await ViewModel.Initialize();
                 await ViewModel.DoneCommand.ExecuteAsync();
 
                 await InteractorFactory
                     .Received()
-                    .CreateProject(Arg.Is<CreateProjectDTO>(dto => dto.WorkspaceId == WorkspaceId))
+                    .CreateProject(Arg.Is<CreateProjectDTO>(dto => dto.WorkspaceId == DefaultWorkspaceId))
                     .Execute();
             }
 
             [Fact, LogIfTooSlow]
             public async Task SetsTheWorkspaceName()
             {
+                setupDefaultWorkspace();
                 await ViewModel.Initialize();
 
-                ViewModel.WorkspaceName.Should().Be(WorkspaceName);
+                ViewModel.WorkspaceName.Should().Be(DefaultWorkspaceName);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SetsToTheFirstEligibleProjectIfDefaultIsNotEligible()
+            {
+                var defaultWorkspace = Substitute.For<IThreadSafeWorkspace>();
+                defaultWorkspace.Name.Returns(DefaultWorkspaceName);
+                defaultWorkspace.Admin.Returns(false);
+                defaultWorkspace.OnlyAdminsMayCreateProjects.Returns(true);
+
+                var eligibleWorkspace = Substitute.For<IThreadSafeWorkspace>();
+                eligibleWorkspace.Name.Returns("Eligible workspace for project creation");
+                eligibleWorkspace.Admin.Returns(true);
+
+                InteractorFactory.GetDefaultWorkspace().Execute()
+                    .Returns(Observable.Return(defaultWorkspace));
+                InteractorFactory.GetAllWorkspaces().Execute()
+                    .Returns(Observable.Return(new[] { defaultWorkspace, eligibleWorkspace }));
+
+                await ViewModel.Initialize();
+
+                ViewModel.WorkspaceName.Should().Be(eligibleWorkspace.Name);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SetToDefaultWorkspaceIfAllWorkspacesAreEligible()
+            {
+                var defaultWorkspace = Substitute.For<IThreadSafeWorkspace>();
+                defaultWorkspace.Name.Returns(DefaultWorkspaceName);
+                defaultWorkspace.Admin.Returns(true);
+
+                var eligibleWorkspace = Substitute.For<IThreadSafeWorkspace>();
+                eligibleWorkspace.Name.Returns("Eligible workspace for project creation");
+                eligibleWorkspace.Admin.Returns(true);
+
+                var eligibleWorkspace2 = Substitute.For<IThreadSafeWorkspace>();
+                eligibleWorkspace.Name.Returns("Another Eligible Workspace");
+                eligibleWorkspace.Admin.Returns(true);
+
+                InteractorFactory.GetDefaultWorkspace().Execute()
+                    .Returns(Observable.Return(defaultWorkspace));
+                InteractorFactory.GetAllWorkspaces().Execute()
+                    .Returns(Observable.Return(new[] { eligibleWorkspace2, defaultWorkspace, eligibleWorkspace }));
+
+                await ViewModel.Initialize();
+
+                ViewModel.WorkspaceName.Should().Be(defaultWorkspace.Name);
             }
         }
 
@@ -395,7 +446,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public TheDoneCommand()
             {
                 InteractorFactory
-                    .AreCustomColorsEnabledForWorkspace(WorkspaceId)
+                    .AreCustomColorsEnabledForWorkspace(DefaultWorkspaceId)
                     .Execute()
                     .Returns(Observable.Return(false));
 
@@ -713,7 +764,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .GetDefaultWorkspace()
                     .Execute()
                     .Returns(Observable.Return(Workspace));
-                Workspace.Id.Returns(WorkspaceId);
+                Workspace.Id.Returns(DefaultWorkspaceId);
                 ViewModel.Prepare("Some name");
                 await ViewModel.Initialize();
 
@@ -721,7 +772,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await NavigationService.Received()
                     .Navigate<SelectClientViewModel, SelectClientParameters, long?>(
-                        Arg.Is<SelectClientParameters>(parameter => parameter.WorkspaceId == WorkspaceId)
+                        Arg.Is<SelectClientParameters>(parameter => parameter.WorkspaceId == DefaultWorkspaceId)
                     );
             }
 
@@ -732,7 +783,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .GetDefaultWorkspace()
                     .Execute()
                     .Returns(Observable.Return(Workspace));
-                Workspace.Id.Returns(WorkspaceId);
+                Workspace.Id.Returns(DefaultWorkspaceId);
                 ViewModel.Prepare("Some name");
                 await ViewModel.Initialize();
 
@@ -760,7 +811,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Execute()
                     .Returns(Observable.Return(Workspace));
                 DataSource.Clients.GetById(expectedId.Value).Returns(Observable.Return(client));
-                Workspace.Id.Returns(WorkspaceId);
+                Workspace.Id.Returns(DefaultWorkspaceId);
                 ViewModel.Prepare("Some name");
 
                 await ViewModel.PickClientCommand.ExecuteAsync();
@@ -784,7 +835,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Execute()
                     .Returns(Observable.Return(Workspace));
                 DataSource.Clients.GetById(expectedId.Value).Returns(Observable.Return(client));
-                Workspace.Id.Returns(WorkspaceId);
+                Workspace.Id.Returns(DefaultWorkspaceId);
                 ViewModel.Prepare("Some name");
                 await ViewModel.PickClientCommand.ExecuteAsync();
                 NavigationService

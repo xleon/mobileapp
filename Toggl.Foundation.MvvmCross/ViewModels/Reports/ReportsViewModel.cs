@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -211,7 +211,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
                 .StartWith(Unit.Default)
                 .SelectMany(_ => dataSource.Workspaces.GetAll())
                 .DistinctUntilChanged()
-                .Select(list => list.Where(w => !w.IsGhost))
+                .Select(list => list.Where(w => !w.IsInaccessible))
                 .Select(readOnlyWorkspaceNameTuples)
                 .AsDriver(schedulerProvider);
         }
@@ -270,12 +270,15 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
                 navigationService.Navigate(calendarViewModel);
                 didNavigateToCalendar = true;
                 intentDonationService.DonateShowReport();
+                return;
             }
 
             var firstTimeOpenedFromMainTabBarStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenReportsViewForTheFirstTime);
             stopwatchProvider.Remove(MeasuredOperation.OpenReportsViewForTheFirstTime);
             firstTimeOpenedFromMainTabBarStopwatch?.Stop();
             firstTimeOpenedFromMainTabBarStopwatch = null;
+
+            reportSubject.OnNext(Unit.Default);
         }
 
         public void StopNavigationFromMainLogStopwatch()

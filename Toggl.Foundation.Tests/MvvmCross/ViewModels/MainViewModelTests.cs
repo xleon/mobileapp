@@ -25,6 +25,7 @@ using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.Mocks;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
+using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Xunit;
 using static Toggl.Foundation.Helper.Constants;
@@ -811,7 +812,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 timeEntry.Id.Returns(123);
                 timeEntry.Start.Returns(DateTimeOffset.Now);
                 timeEntry.Duration.Returns(100);
-                InteractorFactory.GetAllNonDeletedTimeEntries().Execute()
+                InteractorFactory.GetAllTimeEntriesVisibleToTheUser().Execute()
                     .Returns(Observable.Return(new[] { timeEntry }));
                 DataSource
                     .TimeEntries
@@ -1096,6 +1097,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     await NavigationService.DidNotReceive().ChangePresentation(
                         Arg.Is<ToggleRatingViewVisibilityHint>(hint => hint.ShouldHide == false)
                     );
+                }
+            }
+
+            public sealed class InvokeIntentDonationService : MainViewModelTest
+            {
+                [Fact, LogIfTooSlow]
+                public async void ShouldSetShortcutSuggestions()
+                {
+                    await ViewModel.Initialize();
+                    IntentDonationService.Received().SetDefaultShortcutSuggestions(Arg.Any<IWorkspace>());
                 }
             }
         }

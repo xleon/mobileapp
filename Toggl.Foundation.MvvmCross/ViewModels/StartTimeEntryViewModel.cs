@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -58,6 +58,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private bool hasAnyTags;
         private bool hasAnyProjects;
+        private bool shouldSuggestProjectCreation;
         private IThreadSafeWorkspace defaultWorkspace;
         private StartTimeEntryParameters parameter;
         private TextFieldInfo textFieldInfo = TextFieldInfo.Empty(0);
@@ -88,12 +89,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     return false;
 
                 if (IsSuggestingProjects)
-                    return Suggestions.None(c => c.Any(s => s is ProjectSuggestion pS && pS.ProjectName == CurrentQuery))
-                           && CurrentQuery.LengthInBytes() <= MaxProjectNameLengthInBytes;
+                    return Suggestions.None(
+                               c => c.Any(s => s is ProjectSuggestion pS && pS.ProjectName == CurrentQuery))
+                           && CurrentQuery.LengthInBytes() <= MaxProjectNameLengthInBytes
+                           && shouldSuggestProjectCreation;
 
                 if (IsSuggestingTags)
-                    return Suggestions.None(c => c.Any(s => s is TagSuggestion tS && tS.Name == CurrentQuery))
-                           && CurrentQuery.LengthInBytes() <= MaxTagNameLengthInBytes;
+                    return Suggestions.None(c => c.Any(s => 
+                               s is TagSuggestion tS 
+                               && tS.Name.IsSameCaseInsensitiveTrimedTextAs(CurrentQuery)))
+                           && CurrentQuery.IsAllowedTagByteSize();
 
                 return false;
             }
@@ -308,6 +313,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             defaultWorkspace = await interactorFactory.GetDefaultWorkspace().Execute();
 
+            shouldSuggestProjectCreation =
+                await interactorFactory.GetAllWorkspaces().Execute().Select(allWorkspaces =>
+                    allWorkspaces.Any(ws => ws.IsEligibleForProjectCreation()));
+
             textFieldInfo = TextFieldInfo.Empty(parameter?.WorkspaceId ?? defaultWorkspace.Id);
 
             if (initialParameters != null)
@@ -479,6 +488,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var tagSuggestion = new TagSuggestion(createdTag);
             await SelectSuggestionCommand.ExecuteAsync(tagSuggestion);
             hasAnyTags = true;
+            toggleTagSuggestions();
         }
 
         private void OnDurationChanged()

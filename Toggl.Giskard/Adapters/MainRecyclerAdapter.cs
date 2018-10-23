@@ -11,12 +11,15 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.ViewHolders;
 using Toggl.Multivac.Extensions;
+using Toggl.Foundation;
 
 namespace Toggl.Giskard.Adapters
 {
     public class MainRecyclerAdapter : ReactiveSectionedRecyclerAdapter<TimeEntryViewModel, MainLogCellViewHolder, MainLogSectionViewHolder>
     {
         public const int SuggestionViewType = 2;
+
+        private readonly ITimeService timeService;
 
         public IObservable<TimeEntryViewModel> TimeEntryTaps
             => timeEntryTappedSubject.AsObservable();
@@ -35,8 +38,12 @@ namespace Toggl.Giskard.Adapters
         private Subject<TimeEntryViewModel> continueTimeEntrySubject = new Subject<TimeEntryViewModel>();
         private Subject<TimeEntryViewModel> deleteTimeEntrySubject = new Subject<TimeEntryViewModel>();
 
-        public MainRecyclerAdapter(ObservableGroupedOrderedCollection<TimeEntryViewModel> items) : base(items)
+        public MainRecyclerAdapter(
+            ObservableGroupedOrderedCollection<TimeEntryViewModel> items,
+            ITimeService timeService)
+            : base(items)
         {
+            this.timeService = timeService;
         }
 
         public void ContinueTimeEntry(int position)
@@ -82,6 +89,9 @@ namespace Toggl.Giskard.Adapters
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
+            if (holder is MainLogSectionViewHolder mainLogHeader)
+                mainLogHeader.Now = timeService.CurrentDateTime;
+
             var stopwatchForViewHolder = createStopwatchFor(holder);
             stopwatchForViewHolder?.Start();
             base.OnBindViewHolder(holder, position);
@@ -117,7 +127,9 @@ namespace Toggl.Giskard.Adapters
         {
             var mainLogSectionStopwatch = StopwatchProvider.Create(MeasuredOperation.CreateMainLogSectionViewHolder);
             mainLogSectionStopwatch.Start();
-            var mainLogSectionViewHolder = new MainLogSectionViewHolder(LayoutInflater.FromContext(parent.Context).Inflate(Resource.Layout.MainLogHeader, parent, false));
+            var mainLogSectionViewHolder = new MainLogSectionViewHolder(LayoutInflater.FromContext(parent.Context)
+                .Inflate(Resource.Layout.MainLogHeader, parent, false));
+            mainLogSectionViewHolder.Now = timeService.CurrentDateTime;
             mainLogSectionStopwatch.Stop();
             return mainLogSectionViewHolder;
         }

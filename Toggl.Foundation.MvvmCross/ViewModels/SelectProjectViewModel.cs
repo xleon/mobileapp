@@ -40,6 +40,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private long? taskId;
         private long? projectId;
         private long workspaceId;
+        private bool shouldShowProjectCreationSuggestion;
         private IStopwatch navigationFromEditTimeEntryViewModelStopwatch;
 
         private List<IThreadSafeWorkspace> allWorkspaces = new List<IThreadSafeWorkspace>();
@@ -54,6 +55,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             get
             {
+                if (!shouldShowProjectCreationSuggestion)
+                    return false;
+
                 if (!UsesFilter)
                     return false;
 
@@ -128,6 +132,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             stopwatchProvider.Remove(MeasuredOperation.OpenSelectProjectFromEditView);
 
             var workspaces = await interactorFactory.GetAllWorkspaces().Execute();
+
+            shouldShowProjectCreationSuggestion = workspaces.Any(ws => ws.IsEligibleForProjectCreation());
             allWorkspaces = workspaces.ToList();
             UseGrouping = allWorkspaces.Count > 1;
 

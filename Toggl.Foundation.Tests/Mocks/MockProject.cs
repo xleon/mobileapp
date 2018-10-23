@@ -58,6 +58,6 @@ namespace Toggl.Foundation.Tests.Mocks
 
         public IEnumerable<IThreadSafeTask> Tasks { get; set; }
 
-        public bool IsGhost => Workspace.IsGhost;
+        public bool IsInaccessible => Workspace.IsInaccessible;
     }
 }

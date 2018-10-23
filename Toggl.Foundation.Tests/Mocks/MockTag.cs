@@ -27,6 +27,6 @@ namespace Toggl.Foundation.Tests.Mocks
 
         public IThreadSafeWorkspace Workspace { get; set; }
 
-        public bool IsGhost => Workspace.IsGhost;
+        public bool IsInaccessible => Workspace.IsInaccessible;
     }
 }

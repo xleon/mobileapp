@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
-using MvvmCross.Commands;
+﻿using System;
+using System.Reactive;
+using System.Reactive.Linq;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -16,13 +18,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IBrowserService browserService;
         private readonly IMvxNavigationService navigationService;
 
-        public IMvxCommand ViewTermsOfServiceCommand { get; }
+        public UIAction ViewTermsOfService { get; }
 
-        public IMvxCommand ViewPrivacyPolicyCommand { get; }
+        public UIAction ViewPrivacyPolicy { get; }
 
-        public IMvxAsyncCommand CloseCommand { get; }
+        public UIAction Close { get; }
 
-        public IMvxAsyncCommand AcceptCommand { get; }
+        public UIAction Accept { get; }
 
         public TermsOfServiceViewModel(
             IBrowserService browserService, IMvxNavigationService navigationService)
@@ -33,19 +35,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.navigationService = navigationService;
             this.browserService = browserService;
 
-            CloseCommand = new MvxAsyncCommand(() => close(false));
-            AcceptCommand = new MvxAsyncCommand(() => close(true));
-            ViewPrivacyPolicyCommand = new MvxCommand(viewPrivacyPolicy);
-            ViewTermsOfServiceCommand = new MvxCommand(viewTermsOfService);
+            ViewPrivacyPolicy = new UIAction(() => openUrl(privacyPolicyUrl));
+            ViewTermsOfService = new UIAction(() => openUrl(termsOfServiceUrl));
+
+            Close = new UIAction(() => close(false));
+            Accept = new UIAction(() => close(true));
         }
 
-        private Task close(bool accepted)
-            => navigationService.Close(this, accepted);
+        private IObservable<Unit> close(bool isAccepted)
+            => navigationService.Close(this, isAccepted)
+                .ToUnitObservable();
 
-        private void viewTermsOfService()
-            => browserService.OpenUrl(termsOfServiceUrl);
-
-        private void viewPrivacyPolicy()
-            => browserService.OpenUrl(privacyPolicyUrl);
+        private IObservable<Unit> openUrl(string url)
+        {
+            browserService.OpenUrl(url);
+            return Observable.Return(Unit.Default);
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -29,6 +29,8 @@ using Toggl.PrimeRadiant.Settings;
 using UIKit;
 using static Toggl.Foundation.MvvmCross.Helper.Animation;
 using Toggl.Daneel.ExtensionKit;
+using Toggl.Multivac;
+using MvvmCross;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -105,7 +107,11 @@ namespace Toggl.Daneel.ViewControllers
             var bindingSet = this.CreateBindingSet<MainViewController, MainViewModel>();
 
             // Table view
-            tableViewSource = new TimeEntriesLogViewSource(ViewModel.TimeEntries, TimeEntriesLogViewCell.Identifier);
+            tableViewSource = new TimeEntriesLogViewSource(
+                ViewModel.TimeEntries,
+                TimeEntriesLogViewCell.Identifier,
+                ViewModel.TimeService,
+                ViewModel.SchedulerProvider);
             TimeEntriesLogTableView
                 .Rx()
                 .Bind(tableViewSource)

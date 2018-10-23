@@ -14,6 +14,7 @@ using Toggl.Foundation.Extensions;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
+using Toggl.Foundation.Tests.Mocks;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 
@@ -362,6 +363,16 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.SuggestCreation.Should().BeFalse();
             }
+
+            [Fact, LogIfTooSlow]
+            public async Task ReturnsFalseIfNoWorkspaceIsEligible()
+            {
+                var workspace = new MockWorkspace { Id = 1, Name = "ws", Admin = false, OnlyAdminsMayCreateProjects = true };
+                InteractorFactory.GetAllWorkspaces().Execute().Returns(Observable.Return(new[] { workspace } ));
+
+                await ViewModel.Initialize();
+                ViewModel.SuggestCreation.Should().BeFalse();
+            }
         }
 
         public sealed class TheCreateProjectCommand : SelectProjectViewModelTest
@@ -382,6 +393,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModelReturningTheCreatedIdIfTheProjectIsCreated()
             {
+                var workspace = new MockWorkspace { Id = 1, Name = "ws", Admin = true, OnlyAdminsMayCreateProjects = true };
+                InteractorFactory.GetAllWorkspaces().Execute().Returns(Observable.Return(new[] { workspace } ));
                 const long projectId = 10;
                 setupProjectCreationResult(projectId);
                 ViewModel.Prepare(SelectProjectParameter.WithIds(null, null, 10));
