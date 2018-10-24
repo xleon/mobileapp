@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
@@ -21,9 +23,6 @@ using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Settings;
 using static Toggl.Foundation.Helper.Constants;
 using SelectTimeOrigin = Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
-using System.Reactive.Subjects;
-using System.Reactive;
-using Toggl.Foundation.Diagnostics;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
