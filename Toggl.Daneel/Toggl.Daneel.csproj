@@ -658,6 +658,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analytics\SiriTrackableEvent.cs" />
     <Compile Include="Binding\DatePickerDateTimeOffsetTargetBinding.cs" />
     <Compile Include="Extensions\Binders\ReactiveTableViewBinder.cs" />
     <Compile Include="Extensions\IntentPeriod.cs" />

@@ -325,6 +325,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
         }
 
+        public void Track(ITrackableEvent e)
+        {
+            analyticsService.Track(e);
+        }
+
         private void presentRatingViewIfNeeded(bool shouldBevisible)
         {
             if (!shouldBevisible) return;

@@ -102,6 +102,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public UIAction OpenNotificationSettingsAction { get; }
 
+        public UIAction ToggleTwentyFourHourSettings { get; }
+
         public SettingsViewModel(
             UserAgent userAgent,
             IMailService mailService,
@@ -229,8 +231,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IsFeedbackSuccessViewShowing = isFeedbackSuccessViewShowing.AsObservable();
 
             OpenCalendarSettingsAction = UIAction.FromAsync(openCalendarSettings);
-
             OpenNotificationSettingsAction = UIAction.FromAsync(openNotificationSettings);
+            ToggleTwentyFourHourSettings = UIAction.FromAsync(toggleUseTwentyFourHourClock);
         }
 
         public override async Task Initialize()
@@ -287,7 +289,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public Task SelectDefaultWorkspace(SelectableWorkspaceViewModel workspace)
             => changeDefaultWorkspace(workspace.WorkspaceId);
 
-        public async Task ToggleUseTwentyFourHourClock()
+        private async Task toggleUseTwentyFourHourClock() 
         {
             var timeFormat = currentPreferences.TimeOfDayFormat.IsTwentyFourHoursFormat
                 ? TimeFormat.TwelveHoursFormat
