@@ -1149,6 +1149,7 @@
     <Compile Include="Views\Reports\BarView.cs" />
     <Compile Include="Views\Reports\BarLegendLabel.cs" />
     <Compile Include="Views\Reports\EmptyBarView.cs" />
+    <Compile Include="Services\IosFirebaseStopwatchProvider.cs" />
     <Compile Include="ViewControllers\SelectDefaultWorkspaceViewController.cs" />
     <Compile Include="ViewControllers\SelectDefaultWorkspaceViewController.designer.cs">
       <DependentUpon>SelectDefaultWorkspaceViewController.cs</DependentUpon>

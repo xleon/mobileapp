@@ -59,7 +59,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     OnboardingStorage,
                     NavigationService,
                     PrivateSharedStorageService,
-                    IntentDonationService);
+                    IntentDonationService,
+                    StopwatchProvider);
             }
 
             protected virtual void SetupObservables()
@@ -84,7 +85,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useOnboardingStorage,
                 bool useNavigationService,
                 bool usePrivateSharedStorageService,
-                bool useIntentDonationService)
+                bool useIntentDonationService,
+                bool useStopwatchProvider)
             {
                 var userAgent = useUserAgent ? UserAgent : null;
                 var dataSource = useDataSource ? DataSource : null;
@@ -99,6 +101,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
                 var intentDonationService = useIntentDonationService ? IntentDonationService : null;
+                var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new SettingsViewModel(
@@ -114,7 +117,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         onboardingStorage,
                         navigationService,
                         privateSharedStorageService,
-                        intentDonationService);
+                        intentDonationService,
+                        stopwatchProvider);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
