@@ -190,7 +190,7 @@
       <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Firebase.Perf">
-      <HintPath>..\packages\Xamarin.Firebase.Perf.60.1142.1\lib\MonoAndroid80\Xamarin.Firebase.Perf.dll</HintPath>
+      <HintPath>Xamarin.Firebase.Perf.dll</HintPath>
     </Reference>
     <Reference Include="MvvmCross">
       <HintPath>..\packages\MvvmCross.6.1.2\lib\monoandroid81\MvvmCross.dll</HintPath>

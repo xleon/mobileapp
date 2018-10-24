@@ -1,4 +1,6 @@
-﻿using Toggl.Foundation.Diagnostics;
+﻿using Com.Google.Firebase.Perf;
+using Com.Google.Firebase.Perf.Metrics;
+using Toggl.Foundation.Diagnostics;
 
 namespace Toggl.Giskard.Services
 {
@@ -9,7 +11,7 @@ namespace Toggl.Giskard.Services
 
         private class AndroidFirebaseStopwatch : IStopwatch
         {
-            //private Trace firebaseTrace;
+            private readonly Trace firebaseTrace;
 
             public MeasuredOperation Operation { get; }
 
@@ -17,17 +19,17 @@ namespace Toggl.Giskard.Services
             {
                 Operation = operation;
 
-                //firebaseTrace = FirebasePerformance.Instance.NewTrace(operation.ToString());
+                firebaseTrace = FirebasePerformance.Instance.NewTrace(operation.ToString());
             }
 
             public void Start()
             {
-                //firebaseTrace.Start();
+                firebaseTrace.Start();
             }
 
             public void Stop()
             {
-                //firebaseTrace.Stop();
+                firebaseTrace.Stop();
             }
         }
     }
