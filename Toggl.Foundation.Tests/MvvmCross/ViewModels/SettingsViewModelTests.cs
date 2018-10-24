@@ -608,7 +608,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var timeFormat = originalValue ? TimeFormat.TwentyFourHoursFormat : TimeFormat.TwelveHoursFormat;
                 PreferencesSubject.OnNext(new MockPreferences { TimeOfDayFormat = timeFormat });
 
-                await ViewModel.ToggleUseTwentyFourHourClock();
+                await ViewModel.ToggleTwentyFourHourSettings.Execute();
 
                 await InteractorFactory
                     .Received()
@@ -625,7 +625,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observable = Observable.Return(preferences);
                 InteractorFactory.UpdatePreferences(Arg.Any<EditPreferencesDTO>()).Execute().Returns(observable);
 
-                await ViewModel.ToggleUseTwentyFourHourClock();
+                await ViewModel.ToggleTwentyFourHourSettings.Execute();
 
                 await DataSource.SyncManager.Received().PushSync();
             }
