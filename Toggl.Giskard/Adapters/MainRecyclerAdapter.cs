@@ -12,10 +12,11 @@ using Toggl.Giskard.Extensions;
 using Toggl.Giskard.ViewHolders;
 using Toggl.Multivac.Extensions;
 using Toggl.Foundation;
+using Toggl.Giskard.ViewHelpers;
 
 namespace Toggl.Giskard.Adapters
 {
-    public class MainRecyclerAdapter : ReactiveSectionedRecyclerAdapter<TimeEntryViewModel, MainLogCellViewHolder, MainLogSectionViewHolder>
+    public class MainRecyclerAdapter : ReactiveSectionedRecyclerAdapter<TimeEntryViewModel, TimeEntryViewModel, TimeEntryCollectionViewModel, MainLogCellViewHolder, MainLogSectionViewHolder>
     {
         public const int SuggestionViewType = 2;
 
@@ -152,6 +153,12 @@ namespace Toggl.Giskard.Adapters
 
         protected override long IdForSection(IReadOnlyList<TimeEntryViewModel> section)
             => section.First().StartTime.Date.GetHashCode();
+
+        protected override TimeEntryViewModel Wrap(TimeEntryViewModel item)
+            => item;
+
+        protected override TimeEntryCollectionViewModel Wrap(IReadOnlyList<TimeEntryViewModel> section)
+            => new TimeEntryCollectionViewModel(section);
 
         protected override bool AreItemContentsTheSame(TimeEntryViewModel item1, TimeEntryViewModel item2)
             => item1 == item2;

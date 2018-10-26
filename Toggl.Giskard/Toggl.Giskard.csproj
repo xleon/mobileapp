@@ -315,6 +315,7 @@
     <Compile Include="ViewHelpers\MainRecyclerViewTouchCallback.cs" />
     <Compile Include="ViewHelpers\SimpleRecyclerViewScrollChangeListener.cs" />
     <Compile Include="ViewHelpers\SuggestionsRecyclerViewSnapHelper.cs" />
+    <Compile Include="ViewHelpers\TimeEntryCollectionViewModel.cs" />
     <Compile Include="ViewHolders\MainLogCellViewHolder.cs" />
     <Compile Include="ViewHolders\MainLogSuggestionItemViewHolder.cs" />
     <Compile Include="ViewHolders\MainLogSuggestionsListViewHolder.cs" />
