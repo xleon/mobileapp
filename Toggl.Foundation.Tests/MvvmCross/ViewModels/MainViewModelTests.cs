@@ -177,6 +177,52 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await NavigationService.DidNotReceive().Navigate<NoWorkspaceViewModel>();
             }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask DoesNotNavigateToNoWorkspaceViewSeveralTimes()
+            {
+                AccessRestrictionStorage.HasNoWorkspace().Returns(true);
+
+                ViewModel.ViewAppearing();
+                ViewModel.ViewAppearing();
+                ViewModel.ViewAppearing();
+                ViewModel.ViewAppearing();
+
+                await NavigationService.Received(1).Navigate<NoWorkspaceViewModel>();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask NavigatesToSelectDefaultWorkspaceViewModelWhenNoDefaultWorkspaceStateIsSet()
+            {
+                AccessRestrictionStorage.HasNoDefaultWorkspace().Returns(true);
+
+                ViewModel.ViewAppearing();
+
+                await NavigationService.Received().Navigate<SelectDefaultWorkspaceViewModel>();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask DoesNotNavigateToSelectDefaultWorkspaceViewModelWhenNoDefaultWorkspaceStateIsNotSet()
+            {
+                AccessRestrictionStorage.HasNoDefaultWorkspace().Returns(false);
+
+                ViewModel.ViewAppearing();
+
+                await NavigationService.DidNotReceive().Navigate<SelectDefaultWorkspaceViewModel>();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask DoesNotNavigateToSelectDefaultWorkspaceViewSeveralTimes()
+            {
+                AccessRestrictionStorage.HasNoDefaultWorkspace().Returns(true);
+
+                ViewModel.ViewAppearing();
+                ViewModel.ViewAppearing();
+                ViewModel.ViewAppearing();
+                ViewModel.ViewAppearing();
+
+                await NavigationService.Received(1).Navigate<SelectDefaultWorkspaceViewModel>();
+            }
         }
 
         public abstract class BaseStartTimeEntryTest : MainViewModelTest

@@ -115,6 +115,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private bool isEditViewOpen = false;
         private object isEditViewOpenLock = new object();
 
+        private bool noWorkspaceViewPresented;
+        private bool noDefaultWorkspaceViewPresented;
+
         private DateTimeOffset? currentTimeEntryStart;
 
         public TimeEntriesViewModel TimeEntriesViewModel { get; }
@@ -372,9 +375,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             base.ViewAppearing();
 
             IsInManualMode = userPreferences.IsManualModeEnabled;
-            if (accessRestrictionStorage.HasNoWorkspace())
+            if (accessRestrictionStorage.HasNoWorkspace() && !noWorkspaceViewPresented)
             {
                 navigationService.Navigate<NoWorkspaceViewModel>();
+                noWorkspaceViewPresented = true;
+            }
+
+            if (accessRestrictionStorage.HasNoDefaultWorkspace() && !noDefaultWorkspaceViewPresented)
+            {
+                navigationService.Navigate<SelectDefaultWorkspaceViewModel>();
+                noDefaultWorkspaceViewPresented = true;
             }
         }
 

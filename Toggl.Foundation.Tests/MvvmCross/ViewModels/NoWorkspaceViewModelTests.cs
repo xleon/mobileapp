@@ -9,7 +9,6 @@ using NSubstitute;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Tests.Generators;
-using Toggl.Multivac.Extensions;
 using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
@@ -60,6 +59,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact, LogIfTooSlow]
+
             public async Task ResetsNoWorkspaceStateWhenAnotherWorkspaceIsFetched()
             {
                 var workspace = Substitute.For<IThreadSafeWorkspace>();
