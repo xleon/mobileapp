@@ -946,7 +946,6 @@
     <Compile Include="Views\Suggestions\SuggestionView.designer.cs">
       <DependentUpon>SuggestionView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Converters\CollectionSizeToHeightConverter.cs" />
     <Compile Include="Binding\LayoutConstraintConstantTargetBinding.cs" />
     <Compile Include="Services\LicenseProvider.cs" />
     <Compile Include="Views\Settings\DateFormatViewCell.cs" />

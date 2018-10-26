@@ -167,7 +167,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             TimeService = timeService;
 
-            SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, suggestionProviders);
+            SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, suggestionProviders, schedulerProvider);
             RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService, SchedulerProvider);
             TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, SchedulerProvider);
 
@@ -222,8 +222,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             var isWelcome = onboardingStorage.IsNewUser;
 
-            var noTimeEntries = TimeEntriesViewModel.Empty
-                .Select( e => e && SuggestionsViewModel.IsEmpty )
+            var noTimeEntries = Observable
+                .CombineLatest(TimeEntriesViewModel.Empty, SuggestionsViewModel.IsEmpty,
+                    (isTimeEntryEmpty, isSuggestionEmpty) => isTimeEntryEmpty && isSuggestionEmpty)
                 .DistinctUntilChanged();
 
             ShouldShowEmptyState = ObservableAddons.CombineLatestAll(
