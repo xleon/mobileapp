@@ -313,9 +313,20 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             dataSource
                 .Workspaces
+                .Created
+                .VoidSubscribe(onWorkspaceCreated)
+                .DisposedBy(disposeBag);
+
+            dataSource
+                .Workspaces
                 .Updated
                 .Subscribe(onWorkspaceUpdated)
                 .DisposedBy(disposeBag);
+        }
+
+        private async void onWorkspaceCreated()
+        {
+            await TimeEntriesViewModel.ReloadData();
         }
 
         private async void onWorkspaceUpdated(EntityUpdate<IThreadSafeWorkspace> update)
