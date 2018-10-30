@@ -131,6 +131,9 @@ namespace Toggl.Foundation.Analytics
         [AnalyticsEvent]
         public IAnalyticsEvent LostWorkspaceAccess { get; protected set; }
 
+        [AnalyticsEvent]
+        public IAnalyticsEvent GainWorkspaceAccess { get; protected set; }
+
         [AnalyticsEvent("Reason")]
         public IAnalyticsEvent<string> WorkspaceSyncError { get; protected set; }
 
