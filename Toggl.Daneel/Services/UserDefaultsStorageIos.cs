@@ -5,7 +5,7 @@ using Toggl.Foundation.Services;
 
 namespace Toggl.Daneel.Services
 {
-    internal sealed class UserDefaultsStorage : KeyValueStorage
+    internal sealed class UserDefaultsStorageIos : KeyValueStorage
     {
         public override bool GetBool(string key)
             => NSUserDefaults.StandardUserDefaults.BoolForKey(key);

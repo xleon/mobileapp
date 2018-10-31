@@ -78,6 +78,8 @@ namespace Toggl.Foundation.Analytics
 
         IAnalyticsEvent LostWorkspaceAccess { get; }
 
+        IAnalyticsEvent GainWorkspaceAccess { get; }
+
         IAnalyticsEvent<string> WorkspaceSyncError { get; }
 
         IAnalyticsEvent<string> UserSyncError { get; }
