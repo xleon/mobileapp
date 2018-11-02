@@ -4,6 +4,8 @@ using Android.Content;
 using MvvmCross;
 using MvvmCross.Binding;
 using MvvmCross.Droid.Support.V7.AppCompat;
+using MvvmCross.Exceptions;
+using MvvmCross.Logging;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Presenters;
@@ -148,6 +150,12 @@ namespace Toggl.Giskard
         }
 
         // Skip the sluggish and reflection-based manager and load our plugins by hand
+        protected override IMvxPluginManager InitializePluginFramework()
+        {
+            LoadPlugins(null);
+            return null;
+        }
+
         public override void LoadPlugins(IMvxPluginManager pluginManager)
         {
             new ColorPlugin().Load();
