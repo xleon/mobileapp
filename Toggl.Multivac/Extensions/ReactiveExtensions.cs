@@ -31,13 +31,13 @@ namespace Toggl.Multivac.Extensions
             public void OnNext(T value) { }
         }
 
-        public static IDisposable Subscribe<T>(this IObservable<T> observable, Action<Exception> onError, Action onCompleted)
+        public static IDisposable SubscribeToErrorsAndCompletion<T>(this IObservable<T> observable, Action<Exception> onError, Action onCompleted)
         {
             var observer = new Observer<T>(onError, onCompleted);
             return observable.Subscribe(observer);
         }
 
-        public static IDisposable Subscribe<T>(this IObservable<T> observable, Action<Exception> onError)
+        public static IDisposable SubscribeToErrors<T>(this IObservable<T> observable, Action<Exception> onError)
         {
             var observer = new Observer<T>(onError, () => { });
             return observable.Subscribe(observer);
