@@ -143,10 +143,11 @@ namespace Toggl.Foundation
 
             transitions.ConfigureTransition(entryPoint, fetchAllSince);
             transitions.ConfigureTransition(fetchAllSince.FetchStarted, persistWorkspaces);
+
             transitions.ConfigureTransition(persistWorkspaces.FinishedPersisting, updateWorkspacesSinceDate);
             transitions.ConfigureTransition(updateWorkspacesSinceDate.Finished, detectNoWorkspaceState);
             transitions.ConfigureTransition(detectNoWorkspaceState.Continue, persistUser);
-
+            
             transitions.ConfigureTransition(persistUser.FinishedPersisting, persistWorkspaceFeatures);
             transitions.ConfigureTransition(persistWorkspaceFeatures.FinishedPersisting, persistPreferences);
 
