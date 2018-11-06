@@ -1158,6 +1158,7 @@
     <Compile Include="Cells\SelectDefaultWorkspaceTableViewCell.designer.cs">
       <DependentUpon>SelectDefaultWorkspaceTableViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\IThreadSafeTimeEntryExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
