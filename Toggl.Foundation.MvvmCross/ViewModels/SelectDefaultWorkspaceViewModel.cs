@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Toggl.Foundation.Exceptions;
 using System.Collections.Immutable;
 using MvvmCross.Navigation;
+using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -22,25 +23,29 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ITogglDataSource dataSource;
         private readonly IInteractorFactory interactorFactory;
         private readonly IMvxNavigationService navigationService;
+        private readonly IAccessRestrictionStorage accessRestrictionStorage;
 
         public IImmutableList<SelectableWorkspaceViewModel> Workspaces { get; private set; }
 
-        public InputAction<SelectableWorkspaceViewModel> SelectWorkspaceAction { get; }
+        public InputAction<SelectableWorkspaceViewModel> SelectWorkspace { get; }
 
         public SelectDefaultWorkspaceViewModel(
             ITogglDataSource dataSource,
             IInteractorFactory interactorFactory,
-            IMvxNavigationService navigationService)
+            IMvxNavigationService navigationService,
+            IAccessRestrictionStorage accessRestrictionStorage)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
+            Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
 
             this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
             this.navigationService = navigationService;
+            this.accessRestrictionStorage = accessRestrictionStorage;
 
-            SelectWorkspaceAction = InputAction<SelectableWorkspaceViewModel>.FromObservable(selectWorkspace);
+            SelectWorkspace = InputAction<SelectableWorkspaceViewModel>.FromObservable(selectWorkspace);
         }
 
         public override async Task Initialize()
@@ -63,6 +68,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             => Observable.DeferAsync(async _ =>
             {
                 await interactorFactory.SetDefaultWorkspace(workspace.WorkspaceId).Execute();
+                await navigationService.Close(this);
+                accessRestrictionStorage.SetNoDefaultWorkspaceStateReached(false);
                 await navigationService.Close(this);
                 return Observable.Return(Unit.Default);
             });
