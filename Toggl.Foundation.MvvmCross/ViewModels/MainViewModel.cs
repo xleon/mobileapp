@@ -84,7 +84,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IMvxCommand ToggleManualMode { get; }
 
         // Inputs
-        public UIAction RefreshAction { get; }
+        public UIAction Refresh { get; }
         public InputAction<TimeEntryViewModel> DeleteTimeEntry { get; }
         public InputAction<TimeEntryViewModel> SelectTimeEntry { get; }
         public InputAction<TimeEntryViewModel> ContinueTimeEntry { get; }
@@ -114,6 +114,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private bool hasStopButtonEverBeenUsed;
         private bool isEditViewOpen = false;
         private object isEditViewOpenLock = new object();
+
+        private bool noWorkspaceViewPresented;
+        private bool noDefaultWorkspaceViewPresented;
 
         private DateTimeOffset? currentTimeEntryStart;
 
@@ -167,7 +170,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             TimeService = timeService;
 
-            SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, suggestionProviders);
+            SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, suggestionProviders, schedulerProvider);
             RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService, SchedulerProvider);
             TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, SchedulerProvider);
 
@@ -184,7 +187,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             StartTimeEntryCommand = new MvxAsyncCommand(startTimeEntry, () => CurrentTimeEntryId.HasValue == false);
             AlternativeStartTimeEntryCommand = new MvxAsyncCommand(alternativeStartTimeEntry, () => CurrentTimeEntryId.HasValue == false);
 
-            RefreshAction = UIAction.FromAsync(refresh);
+            Refresh = UIAction.FromAsync(refresh);
             DeleteTimeEntry = InputAction<TimeEntryViewModel>.FromObservable(deleteTimeEntry);
             SelectTimeEntry = InputAction<TimeEntryViewModel>.FromAsync(timeEntrySelected);
             ContinueTimeEntry = InputAction<TimeEntryViewModel>.FromObservable(continueTimeEntry);
@@ -222,8 +225,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             var isWelcome = onboardingStorage.IsNewUser;
 
-            var noTimeEntries = TimeEntriesViewModel.Empty
-                .Select( e => e && SuggestionsViewModel.IsEmpty )
+            var noTimeEntries = Observable
+                .CombineLatest(TimeEntriesViewModel.Empty, SuggestionsViewModel.IsEmpty,
+                    (isTimeEntryEmpty, isSuggestionEmpty) => isTimeEntryEmpty && isSuggestionEmpty)
                 .DistinctUntilChanged();
 
             ShouldShowEmptyState = ObservableAddons.CombineLatestAll(
@@ -309,9 +313,20 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             dataSource
                 .Workspaces
+                .Created
+                .VoidSubscribe(onWorkspaceCreated)
+                .DisposedBy(disposeBag);
+
+            dataSource
+                .Workspaces
                 .Updated
                 .Subscribe(onWorkspaceUpdated)
                 .DisposedBy(disposeBag);
+        }
+
+        private async void onWorkspaceCreated()
+        {
+            await TimeEntriesViewModel.ReloadData();
         }
 
         private async void onWorkspaceUpdated(EntityUpdate<IThreadSafeWorkspace> update)
@@ -371,9 +386,27 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             base.ViewAppearing();
 
             IsInManualMode = userPreferences.IsManualModeEnabled;
-            if (accessRestrictionStorage.HasNoWorkspace())
+            handleNoWorkspaceState()
+                .ContinueWith(_ => handleNoDefaultWorkspaceState());
+        }
+
+        private async Task handleNoWorkspaceState()
+        {
+            if (accessRestrictionStorage.HasNoWorkspace() && !noWorkspaceViewPresented)
             {
-                navigationService.Navigate<NoWorkspaceViewModel>();
+                noWorkspaceViewPresented = true;
+                await navigationService.Navigate<NoWorkspaceViewModel, Unit>();
+                noWorkspaceViewPresented = false;
+            }
+        }
+
+        private async Task handleNoDefaultWorkspaceState()
+        {
+            if (accessRestrictionStorage.HasNoDefaultWorkspace() && !noDefaultWorkspaceViewPresented)
+            {
+                noDefaultWorkspaceViewPresented = true;
+                await navigationService.Navigate<SelectDefaultWorkspaceViewModel, Unit>();
+                noDefaultWorkspaceViewPresented = false;
             }
         }
 
@@ -452,7 +485,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return;
 
             onboardingStorage.TimeEntryWasTapped();
-            
+
             var editTimeEntryStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.EditTimeEntryFromMainLog);
             editTimeEntryStopwatch.Start();
 
