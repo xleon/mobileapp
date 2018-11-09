@@ -10,13 +10,14 @@ using Xunit;
 
 namespace Toggl.Foundation.Sync.Tests
 {
-    public abstract class BaseComplexSyncTest : IDisposable
+    public abstract class ComplexSyncTest : IDisposable
     {
         private readonly Storage storage;
 
-        protected BaseComplexSyncTest()
+        protected ComplexSyncTest()
         {
             storage = new Storage();
+            storage.Clear().Wait();
         }
 
         public void Dispose()
