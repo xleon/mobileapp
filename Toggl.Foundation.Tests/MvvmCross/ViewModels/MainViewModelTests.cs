@@ -202,7 +202,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 ViewModel.ViewAppearing();
                 //ViewAppearing calls an async method. The delay is here to ensure that the async method completes before the assertion
-                await ThreadingTask.Delay(100);
+                await ThreadingTask.Delay(200);
 
                 await NavigationService.Received().Navigate<SelectDefaultWorkspaceViewModel, Unit>();
             }
@@ -230,7 +230,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.ViewAppearing();
                 ViewModel.ViewAppearing();
                 //ViewAppearing calls an async method. The delay is here to ensure that the async method completes before the assertion
-                await ThreadingTask.Delay(100);
+                await ThreadingTask.Delay(200);
 
                 await NavigationService.Received(1).Navigate<SelectDefaultWorkspaceViewModel, Unit>();
             }
