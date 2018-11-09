@@ -1,21 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Sync.Tests.Extensions;
 using Toggl.Foundation.Sync.Tests.Helpers;
 using Toggl.Foundation.Sync.Tests.State;
 using Toggl.Foundation.Tests.Mocks;
-using Toggl.PrimeRadiant;
-using System.Collections.Generic;
 using Toggl.Multivac;
+using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.Helpers;
 
-namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
+namespace Toggl.Foundation.Sync.Tests.Scenarios.GainingAccessToWorkspace
 {
-    public sealed class GainAccessToAWorkspaceForTheFirstTimeTest : BaseComplexSyncTest
+    public sealed class GainAccessToAWorkspaceForTheFirstTimeTest : ComplexSyncTest
     {
         protected override ServerState ArrangeServerState(ServerState initialServerState)
             => initialServerState.With(
@@ -25,10 +23,10 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                     new MockTag { Id = -1, WorkspaceId = -2, Name = "t1" },
                     new MockTag { Id = -2, WorkspaceId = -2, Name = "t2" }
                 },
-                projects: new[] 
-                { 
+                projects: new[]
+                {
                     new MockProject
-                    { 
+                    {
                         Id = -1,
                         WorkspaceId = -2,
                         ClientId = -1,
@@ -50,7 +48,7 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                         Description = "te1"
                     },
                     new MockTimeEntry
-                    { 
+                    {
                         Id = -2,
                         Start = DateTimeOffset.Now - TimeSpan.FromDays(1),
                         Duration = 10 * 60,
@@ -60,48 +58,37 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                         Description = "te2"
                     }
                 },
-                workspaces: new[]
+                workspaces: initialServerState.Workspaces.Concat(new[]
                 {
-                    initialServerState.Workspaces.Single(),
                     new MockWorkspace { Id = -2, Name = "ws2" }
-                },
-                pricingPlans: New<IDictionary<long, PricingPlans>>.Value
-                (
+                }).ToArray(),
+                pricingPlans: New<IDictionary<long, PricingPlans>>.Value(
                     new Dictionary<long, PricingPlans>
                     {
                         [-2] = PricingPlans.StarterAnnual
-                    }
-                )
-            );
+                    }));
 
         protected override DatabaseState ArrangeDatabaseState(ServerState serverState)
-        {
-            var defaultWorkspace = serverState.Workspaces.Single(ws => ws.Id == serverState.User.DefaultWorkspaceId.Value);
-
-            return new DatabaseState(
+            => new DatabaseState(
                 user: serverState.User.ToSyncable(),
                 preferences: serverState.Preferences.ToSyncable(),
                 workspaces: new[]
                 {
-                    defaultWorkspace.ToSyncable()
+                    serverState.DefaultWorkspace.ToSyncable()
                 });
-        }
 
         protected override void AssertFinalState(AppServices services, ServerState finalServerState, DatabaseState finalDatabaseState)
         {
-            if (!finalServerState.User.DefaultWorkspaceId.HasValue)
+            if (finalServerState.DefaultWorkspace == null)
                 throw new NoDefaultWorkspaceException();
 
-            var defaultWorkspaceId = finalServerState.User.DefaultWorkspaceId.Value;
             var workspace = finalServerState.Workspaces.Single(w => w.Name == "ws2");
 
-            finalServerState.Workspaces.Should().HaveCount(2)
-                .And
-                .Contain(ws => ws.Id == defaultWorkspaceId);
+            finalServerState.Workspaces.Should().HaveCount(2);
 
             finalDatabaseState.Workspaces.Should().HaveCount(2)
                 .And
-                .Contain(ws => ws.Id == defaultWorkspaceId && ws.SyncStatus == SyncStatus.InSync && !ws.IsInaccessible)
+                .Contain(ws => ws.Id == finalServerState.DefaultWorkspace.Id && ws.SyncStatus == SyncStatus.InSync && !ws.IsInaccessible)
                 .And
                 .Contain(ws => ws.Id == workspace.Id && ws.SyncStatus == SyncStatus.InSync && !ws.IsInaccessible);
 

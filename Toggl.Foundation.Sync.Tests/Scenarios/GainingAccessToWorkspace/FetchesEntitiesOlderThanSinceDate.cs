@@ -1,57 +1,55 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Sync.Tests.Extensions;
 using Toggl.Foundation.Sync.Tests.Helpers;
 using Toggl.Foundation.Sync.Tests.State;
 using Toggl.Foundation.Tests.Mocks;
-using Toggl.PrimeRadiant;
-using System.Collections.Generic;
 using Toggl.Multivac;
-using Toggl.Ultrawave.Helpers;
+using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
+using Toggl.Ultrawave.Helpers;
 
-namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
+namespace Toggl.Foundation.Sync.Tests.Scenarios.GainingAccessToWorkspace
 {
-    public sealed class FetchesEntitiesOlderThanSinceDate : BaseComplexSyncTest
+    public sealed class FetchesEntitiesOlderThanSinceDate : ComplexSyncTest
     {
         protected override ServerState ArrangeServerState(ServerState initialServerState)
             => initialServerState.With(
                 clients: new[] { new MockClient { Id = -1, WorkspaceId = -2, Name = "c1" } },
-                tags: new[] 
+                tags: new[]
                 {
                     new MockTag { Id = -1, WorkspaceId = -2, Name = "t1" },
                     new MockTag { Id = -2, WorkspaceId = -2, Name = "t2" }
                 },
-                projects: new[] 
-                { 
-                    new MockProject 
-                    { 
+                projects: new[]
+                {
+                    new MockProject
+                    {
                         Id = -1,
                         WorkspaceId = -2,
                         ClientId = -1,
                         Name = "p1",
                         Color = Helper.Color.DefaultProjectColors[0],
-                        Active = true 
+                        Active = true
                     }
                 },
                 timeEntries: new[]
                 {
-                    new MockTimeEntry 
-                    { 
+                    new MockTimeEntry
+                    {
                         Id = -1,
                         Start = DateTimeOffset.Now - TimeSpan.FromDays(2),
                         Duration = 10 * 60,
                         WorkspaceId = -2,
                         ProjectId = -1,
                         TagIds = new long[] { -1, -2 },
-                        Description = "te1" 
+                        Description = "te1"
                     },
-                    new MockTimeEntry 
-                    { 
+                    new MockTimeEntry
+                    {
                         Id = -2,
                         Start = DateTimeOffset.Now - TimeSpan.FromDays(1),
                         Duration = 10 * 60,
@@ -61,23 +59,18 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                         Description = "te2"
                     }
                 },
-                workspaces: new[] 
+                workspaces: initialServerState.Workspaces.Concat(new[]
                 {
-                    initialServerState.Workspaces.Single(),
                     new MockWorkspace { Id = -2, Name = "ws2" }
-                },
-                pricingPlans: New<IDictionary<long, PricingPlans>>.Value
-                (
+                }).ToArray(),
+                pricingPlans: New<IDictionary<long, PricingPlans>>.Value(
                     new Dictionary<long, PricingPlans>
                     {
                         [-2] = PricingPlans.StarterAnnual
-                    }
-                )
-            );
+                    }));
 
         protected override DatabaseState ArrangeDatabaseState(ServerState serverState)
         {
-            var defaultWorkspace = serverState.Workspaces.Single(ws => ws.Id == serverState.User.DefaultWorkspaceId.Value);
             var regainedAccessWorkspace = serverState.Workspaces.Single(ws => ws.Name == "ws2");
             var regainedAccessClient = serverState.Clients.Single(c => c.Name == "c1");
             var regainedAccessTag1 = serverState.Tags.Single(t => t.Name == "t1");
@@ -91,8 +84,8 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                 preferences: serverState.Preferences.ToSyncable(),
                 workspaces: new[]
                 {
-                    defaultWorkspace.ToSyncable(),
-                    new MockWorkspace 
+                    serverState.DefaultWorkspace.ToSyncable(),
+                    new MockWorkspace
                     {
                         Id = regainedAccessWorkspace.Id,
                         Name = "ws2", IsInaccessible = true,
@@ -110,7 +103,7 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                 },
                 projects: new[]
                 {
-                    new MockProject 
+                    new MockProject
                     {
                         Id = regainedAccessProject.Id,
                         WorkspaceId = regainedAccessWorkspace.Id,
@@ -120,7 +113,7 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                 },
                 timeEntries: new[]
                 {
-                    new MockTimeEntry 
+                    new MockTimeEntry
                     {
                         Id = regainedAccessTE1.Id,
                         Start = DateTimeOffset.Now - TimeSpan.FromDays(2),
@@ -130,7 +123,7 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                         TagIds = new long[] { regainedAccessTag1.Id },
                         SyncStatus = SyncStatus.InSync
                     },
-                    new MockTimeEntry 
+                    new MockTimeEntry
                     {
                         Id = regainedAccessTE2.Id,
                         Start = DateTimeOffset.Now - TimeSpan.FromDays(1),
@@ -140,7 +133,7 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                         TagIds = new long[] { regainedAccessTag1.Id },
                         SyncStatus = SyncStatus.SyncFailed,
                     },
-                    new MockTimeEntry 
+                    new MockTimeEntry
                     {
                         Id = -5,
                         Start = DateTimeOffset.Now - TimeSpan.FromDays(1),
@@ -163,19 +156,16 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
 
         protected override void AssertFinalState(AppServices services, ServerState finalServerState, DatabaseState finalDatabaseState)
         {
-            if (!finalServerState.User.DefaultWorkspaceId.HasValue)
+            if (finalServerState.DefaultWorkspace == null)
                 throw new NoDefaultWorkspaceException();
 
-            var defaultWorkspaceId = finalServerState.User.DefaultWorkspaceId.Value;
             var workspace = finalServerState.Workspaces.Single(w => w.Name == "ws2");
 
-            finalServerState.Workspaces.Should().HaveCount(2)
-                .And
-                .Contain(ws => ws.Id == defaultWorkspaceId);
+            finalServerState.Workspaces.Should().HaveCount(2);
 
             finalDatabaseState.Workspaces.Should().HaveCount(2)
                 .And
-                .Contain(ws => ws.Id == defaultWorkspaceId && ws.SyncStatus == SyncStatus.InSync && !ws.IsInaccessible)
+                .Contain(ws => ws.Id == finalServerState.DefaultWorkspace.Id && ws.SyncStatus == SyncStatus.InSync && !ws.IsInaccessible)
                 .And
                 .Contain(ws => ws.Id == workspace.Id && ws.SyncStatus == SyncStatus.InSync && !ws.IsInaccessible);
 

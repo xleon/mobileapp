@@ -1,21 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Sync.Tests.Extensions;
 using Toggl.Foundation.Sync.Tests.Helpers;
 using Toggl.Foundation.Sync.Tests.State;
 using Toggl.Foundation.Tests.Mocks;
-using Toggl.PrimeRadiant;
-using System.Collections.Generic;
 using Toggl.Multivac;
+using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.Helpers;
 
-namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
+namespace Toggl.Foundation.Sync.Tests.Scenarios.GainingAccessToWorkspace
 {
-    public sealed class GainingAccessToAPreviouslyInaccessibleWorkspaceTest : BaseComplexSyncTest
+    public sealed class GainingAccessToAPreviouslyInaccessibleWorkspaceTest : ComplexSyncTest
     {
         protected override ServerState ArrangeServerState(ServerState initialServerState)
             => initialServerState.With(
@@ -26,7 +24,7 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                     new MockTag { Id = -2, WorkspaceId = -2, Name = "t2" }
                 },
                 projects: new[]
-                { 
+                {
                     new MockProject
                     {
                         Id = -1,
@@ -50,7 +48,7 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                         Description = "te1"
                     },
                     new MockTimeEntry
-                    { 
+                    {
                         Id = -2,
                         Start = DateTimeOffset.Now - TimeSpan.FromDays(1),
                         Duration = 10 * 60,
@@ -92,7 +90,7 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                 {
                     defaultWorkspace.ToSyncable(),
                     new MockWorkspace
-                    { 
+                    {
                         Id = regainedAccessWorkspace.Id,
                         Name = "ws2",
                         IsInaccessible = true,
@@ -102,7 +100,7 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                 clients: new[]
                 {
                     new MockClient
-                    { 
+                    {
                         Id = regainedAccessClient.Id,
                         WorkspaceId = regainedAccessWorkspace.Id,
                         SyncStatus = SyncStatus.SyncFailed
@@ -125,7 +123,7 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                 },
                 projects: new[]
                 {
-                    new MockProject 
+                    new MockProject
                     {
                         Id = regainedAccessProject.Id,
                         WorkspaceId = regainedAccessWorkspace.Id,
@@ -146,7 +144,7 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
                         SyncStatus = SyncStatus.InSync
                     },
                     new MockTimeEntry
-                    { 
+                    {
                         Id = regainedAccessTE2.Id,
                         Start = DateTimeOffset.Now - TimeSpan.FromDays(1),
                         Duration = 10 * 60,
@@ -170,19 +168,16 @@ namespace Toggl.Foundation.Sync.Tests.GainingAccessToWorkspace
 
         protected override void AssertFinalState(AppServices services, ServerState finalServerState, DatabaseState finalDatabaseState)
         {
-            if (!finalServerState.User.DefaultWorkspaceId.HasValue)
+            if (finalServerState.DefaultWorkspace == null)
                 throw new NoDefaultWorkspaceException();
 
-            var defaultWorkspaceId = finalServerState.User.DefaultWorkspaceId.Value;
             var workspace = finalServerState.Workspaces.Single(w => w.Name == "ws2");
 
-            finalServerState.Workspaces.Should().HaveCount(2)
-                .And
-                .Contain(ws => ws.Id == defaultWorkspaceId);
+            finalServerState.Workspaces.Should().HaveCount(2);
 
             finalDatabaseState.Workspaces.Should().HaveCount(2)
                 .And
-                .Contain(ws => ws.Id == defaultWorkspaceId && ws.SyncStatus == SyncStatus.InSync && !ws.IsInaccessible)
+                .Contain(ws => ws.Id == finalServerState.DefaultWorkspace.Id && ws.SyncStatus == SyncStatus.InSync && !ws.IsInaccessible)
                 .And
                 .Contain(ws => ws.Id == workspace.Id && ws.SyncStatus == SyncStatus.InSync && !ws.IsInaccessible);
 

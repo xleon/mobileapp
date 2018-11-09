@@ -21,7 +21,4 @@
     <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Ultrawave.csproj" />
     <ProjectReference Include="..\Toggl.Ultrawave.Tests.Integration\Toggl.Ultrawave.Tests.Integration.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GainingAccessToWorkspace\" />
-  </ItemGroup>
 </Project>
