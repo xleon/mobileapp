@@ -32,6 +32,7 @@ namespace Toggl.Foundation.Sync.States.CleanUp
                 .GetAll(ws => ws.IsInaccessible, includeInaccessibleEntities: true)
                 .Select(data => data.Count())
                 .SelectMany(trackDataIfNeeded)
+                .ToList()
                 .SelectValue(Continue.Transition());
 
         private IObservable<Unit> trackDataIfNeeded(int numberOfInaccessibleWorkspaces)
