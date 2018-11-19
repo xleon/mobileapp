@@ -8,10 +8,13 @@
             EntryPoint = 1,
             DeadEnd = 2,
             InvalidTransitionState = 3,
+            RetryLoop = 4,
+            APIDelayReset = 5,
         }
 
         public string Id { get; set; }
         public string Label { get; set; }
         public NodeType Type { get; set; }
+        public SubGraph SubGraph { get; set; }
     }
 }
