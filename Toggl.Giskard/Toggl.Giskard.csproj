@@ -271,6 +271,9 @@
     <Compile Include="Activities\OutdatedAppActivity.ViewBinds.cs">
       <DependentUpon>OutdatedAppActivity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Activities\SelectClientActivity.ViewBinds.cs">
+      <DependentUpon>SelectClientActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Activities\SelectTagsActivity.cs" />
     <Compile Include="Activities\SendFeedbackActivity.cs" />
     <Compile Include="Activities\SendFeedbackActivity.ViewBinds.cs">
@@ -321,6 +324,8 @@
     <Compile Include="ViewHelpers\MainRecyclerViewTouchCallback.cs" />
     <Compile Include="ViewHelpers\SimpleRecyclerViewScrollChangeListener.cs" />
     <Compile Include="ViewHelpers\SuggestionsRecyclerViewSnapHelper.cs" />
+    <Compile Include="ViewHolders\Client\ClientCreationSelectionViewHolder.cs" />
+    <Compile Include="ViewHolders\Client\ClientSelectionViewHolder.cs" />
     <Compile Include="ViewHelpers\TimeEntryCollectionViewModel.cs" />
     <Compile Include="ViewHelpers\TimeEntryViewData.cs" />
     <Compile Include="ViewHolders\ColorSelectionViewHolder.cs" />
@@ -376,8 +381,6 @@
     <Compile Include="Views\DurationEditText.cs" />
     <Compile Include="Activities\SelectClientActivity.cs" />
     <Compile Include="Adapters\SelectClientRecyclerAdapter.cs" />
-    <Compile Include="TemplateSelectors\SelectClientTemplateSelector.cs" />
-    <Compile Include="Views\SelectClientRecyclerView.cs" />
     <Compile Include="Fragments\SelectWorkspaceFragment.cs" />
     <Compile Include="TemplateSelectors\SelectWorkspaceTemplateSelector.cs" />
     <Compile Include="Bindings\TextViewFontWeightTargetBinding.cs" />
@@ -502,6 +505,10 @@
     <None Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\color\BlueTextColor.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
+    <AndroidResource Include="Resources\layout\EntityCreationActivityCell.axml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivityProjectCell.axml" />
