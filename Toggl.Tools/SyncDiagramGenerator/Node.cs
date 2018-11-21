@@ -6,10 +6,11 @@
         {
             Regular = 0,
             EntryPoint = 1,
-            DeadEnd = 2,
+            LooseEnd = 2,
             InvalidTransitionState = 3,
-            RetryLoop = 4,
-            APIDelayReset = 5,
+            DeadEnd = 4,
+            RetryLoop = 5,
+            APIDelayReset = 6,
         }
 
         public string Id { get; set; }

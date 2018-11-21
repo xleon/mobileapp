@@ -46,14 +46,14 @@ namespace SyncDiagramGenerator
             Console.WriteLine("Created graph nodes and edges");
 
             var entryPointCount = addEntryPoints(edges, nodes, entryPoints, configurator, stateNodes);
-            var deadEndsCount = addDeadEnds(edges, nodes, allStateResults, configurator, stateNodes);
+            var looseEndCount = addLooseEnds(edges, nodes, allStateResults, configurator, stateNodes);
 
-            Console.WriteLine($"Found and added {entryPointCount} entry points and {deadEndsCount} dead ends");
+            Console.WriteLine($"Found and added {entryPointCount} entry points and {looseEndCount} loose ends");
 
             return (nodes, edges);
         }
 
-        private int addDeadEnds(List<Edge> edges, List<Node> nodes,
+        private int addLooseEnds(List<Edge> edges, List<Node> nodes,
             List<(object State, List<(IStateResult Result, string Name)> StateResults)> allStateResults,
             Configurator configurator,
             Dictionary<object, Node> stateNodes)
@@ -66,8 +66,8 @@ namespace SyncDiagramGenerator
             {
                 var node = new Node
                 {
-                    Label = "Dead End",
-                    Type = Node.NodeType.DeadEnd
+                    Label = "Loose End",
+                    Type = Node.NodeType.LooseEnd
                 };
                 nodes.Add(node);
 
@@ -164,6 +164,8 @@ namespace SyncDiagramGenerator
                     return Node.NodeType.RetryLoop;
                 case ResetAPIDelayState _:
                     return Node.NodeType.APIDelayReset;
+                case DeadEndState _:
+                    return Node.NodeType.DeadEnd;
                 default:
                     return Node.NodeType.Regular;
             }
