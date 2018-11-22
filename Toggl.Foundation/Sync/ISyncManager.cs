@@ -6,6 +6,7 @@ namespace Toggl.Foundation.Sync
     {
         SyncState State { get; }
         IObservable<SyncProgress> ProgressObservable { get; }
+        IObservable<Exception> Errors { get; }
         bool IsRunningSync { get; }
 
         IObservable<SyncState> PushSync();

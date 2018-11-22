@@ -13,11 +13,12 @@ namespace Toggl.Foundation.Sync.Tests.Extensions
         public static IUser With(
             this IUser user,
             New<long?> defaultWorkspaceId = default(New<long?>),
-            New<Email> email = default(New<Email>))
+            New<Email> email = default(New<Email>),
+            New<DateTimeOffset> at = default(New<DateTimeOffset>))
             => new User
             {
                 Id = user.Id,
-                At = user.At,
+                At = at.ValueOr(user.At),
                 ApiToken = user.ApiToken,
                 DefaultWorkspaceId = defaultWorkspaceId.ValueOr(user.DefaultWorkspaceId),
                 BeginningOfWeek = user.BeginningOfWeek,
