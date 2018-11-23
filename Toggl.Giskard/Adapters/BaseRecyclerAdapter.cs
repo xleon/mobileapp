@@ -38,11 +38,7 @@ namespace Toggl.Giskard.Adapters
             var inflater = LayoutInflater.From(parent.Context);
 
             var viewHolder = CreateViewHolder(parent, inflater, viewType);
-            viewHolder.Tapped = async item =>
-            {
-                itemTapSubject.OnNext(item);
-                await OnItemTapped(item);
-            };
+            viewHolder.TappedSubject = itemTapSubject;
 
             return viewHolder;
         }
