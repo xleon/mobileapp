@@ -191,9 +191,6 @@
     <Reference Include="Firebase.Analytics">
       <HintPath>..\packages\Xamarin.Firebase.iOS.Analytics.4.0.5.1\lib\Xamarin.iOS10\Firebase.Analytics.dll</HintPath>
     </Reference>
-    <Reference Include="Firebase.CrashReporting">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.CrashReporting.2.0.0.5\lib\Xamarin.iOS10\Firebase.CrashReporting.dll</HintPath>
-    </Reference>
     <Reference Include="Google.Core">
       <HintPath>..\packages\Xamarin.Google.iOS.Core.3.1.0.1\lib\Xamarin.iOS10\Google.Core.dll</HintPath>
     </Reference>
