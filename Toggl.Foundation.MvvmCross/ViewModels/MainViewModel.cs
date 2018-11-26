@@ -351,11 +351,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public override void ViewAppearing()
         {
             base.ViewAppearing();
+            ViewAppearingAsync();
+        }
 
+        internal async Task ViewAppearingAsync()
+        {
             hideRatingViewIfStillVisibleAfterDelay();
-
-            handleNoWorkspaceState()
-                .ContinueWith(_ => handleNoDefaultWorkspaceState());
+            await handleNoWorkspaceState();
+            handleNoDefaultWorkspaceState();
         }
 
         private void hideRatingViewIfStillVisibleAfterDelay()

@@ -1,8 +1,10 @@
 using System;
 using System.Reactive.Concurrency;
+using MvvmCross.Navigation;
 using NSubstitute;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
+using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Shortcuts;
 using Toggl.PrimeRadiant;
@@ -21,7 +23,13 @@ namespace Toggl.Foundation.Sync.Tests.Helpers
 
         public ITimeService TimeService { get; }
 
-        public IErrorHandlingService ErrorHandlingServiceSubstitute { get; } = Substitute.For<IErrorHandlingService>();
+        public IAccessRestrictionStorage AccessRestrictionStorageSubsitute { get; } =
+            Substitute.For<IAccessRestrictionStorage>();
+
+        public IMvxNavigationService NavigationServiceSubstitute { get; } =
+            Substitute.For<IMvxNavigationService>();
+
+        public IErrorHandlingService ErrorHandlingService { get; }
 
         public IBackgroundService BackgroundServiceSubstitute { get; } = Substitute.For<IBackgroundService>();
 
@@ -40,6 +48,8 @@ namespace Toggl.Foundation.Sync.Tests.Helpers
         {
             Scheduler = System.Reactive.Concurrency.Scheduler.Default;
             TimeService = new TimeService(Scheduler);
+            ErrorHandlingService = new ErrorHandlingService(
+                NavigationServiceSubstitute, AccessRestrictionStorageSubsitute);
 
             ISyncManager createSyncManager(ITogglDataSource dataSource)
                 => TogglSyncManager.CreateSyncManager(
@@ -56,7 +66,7 @@ namespace Toggl.Foundation.Sync.Tests.Helpers
                 api,
                 database,
                 TimeService,
-                ErrorHandlingServiceSubstitute,
+                ErrorHandlingService,
                 BackgroundServiceSubstitute,
                 createSyncManager,
                 minimumTimeInBackgroundForFullSync,

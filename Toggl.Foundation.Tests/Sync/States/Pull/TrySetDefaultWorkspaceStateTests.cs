@@ -34,7 +34,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
                 Fullname = "Full Name",
                 DefaultWorkspaceId = null
             };
-            dataSource.User.Current.Returns(Observable.Return(user));
+            dataSource.User.Get().Returns(Observable.Return(user));
         }
 
         [Fact, LogIfTooSlow]
