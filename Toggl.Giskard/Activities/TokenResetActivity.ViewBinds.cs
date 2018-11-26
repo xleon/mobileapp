@@ -17,11 +17,8 @@ namespace Toggl.Giskard.Activities
     {
         private Toolbar toolbar;
 
-        private TextView loginLabel;
         private EditText passwordEditText;
         private ProgressBar progressBar;
-        private TextView resetMessageWarning;
-        private TextView enterPasswordLabel;
         private TextView emailLabel;
         private TextView signoutLabel;
         private FloatingActionButton doneButton;
@@ -30,11 +27,8 @@ namespace Toggl.Giskard.Activities
         {
             toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
 
-            loginLabel = FindViewById<TextView>(Resource.Id.LoginLabel);
             passwordEditText = FindViewById<EditText>(Resource.Id.TokenResetPassword);
             progressBar = FindViewById<ProgressBar>(Resource.Id.TokenResetProgressBar);
-            resetMessageWarning = FindViewById<TextView>(Resource.Id.TokenResetMessageWarning);
-            enterPasswordLabel = FindViewById<TextView>(Resource.Id.TokenResetMessageEnterPasswordLabel);
             emailLabel = FindViewById<TextView>(Resource.Id.TokenResetEmailLabel);
             signoutLabel = FindViewById<TextView>(Resource.Id.TokenResetSignOutLabel);
             doneButton = FindViewById<FloatingActionButton>(Resource.Id.TokenResetDoneButton);

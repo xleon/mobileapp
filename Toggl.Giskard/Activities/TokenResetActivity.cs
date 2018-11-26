@@ -13,7 +13,7 @@ using static Toggl.Foundation.Resources;
 namespace Toggl.Giskard.Activities
 {
     [MvxActivityPresentation]
-    [Activity(Theme = "@style/AppTheme",
+    [Activity(Theme = "@style/AppTheme.WhiteStatusBar",
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class TokenResetActivity : ReactiveActivity<TokenResetViewModel>
