@@ -8,6 +8,7 @@ using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Network;
 using Toggl.Foundation.Services;
+using Toggl.Foundation.Sync;
 
 namespace Toggl.Foundation.Tests
 {
@@ -26,6 +27,7 @@ namespace Toggl.Foundation.Tests
             = Substitute.For<IApplicationShortcutCreator>();
         protected UserAgent UserAgent { get; } = new UserAgent("Tests", "0.0");
         protected ICalendarService CalendarService { get; } = Substitute.For<ICalendarService>();
+        protected ISyncManager SyncManager { get; } = Substitute.For<ISyncManager>();
 
         protected IInteractorFactory InteractorFactory { get; }
 
