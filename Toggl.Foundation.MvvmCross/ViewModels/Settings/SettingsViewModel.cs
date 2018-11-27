@@ -5,7 +5,6 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
@@ -40,7 +39,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         private readonly UserAgent userAgent;
-        private readonly IMailService mailService;
         private readonly ITogglDataSource dataSource;
         private readonly IDialogService dialogService;
         private readonly IUserPreferences userPreferences;
@@ -106,7 +104,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public SettingsViewModel(
             UserAgent userAgent,
-            IMailService mailService,
             ITogglDataSource dataSource,
             IDialogService dialogService,
             IUserPreferences userPreferences,
@@ -122,7 +119,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             Ensure.Argument.IsNotNull(userAgent, nameof(userAgent));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(mailService, nameof(mailService));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(feedbackService, nameof(feedbackService));
@@ -137,7 +133,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             this.userAgent = userAgent;
             this.dataSource = dataSource;
-            this.mailService = mailService;
             this.dialogService = dialogService;
             this.userPreferences = userPreferences;
             this.feedbackService = feedbackService;
