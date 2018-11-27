@@ -801,6 +801,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                             ReactiveTest.OnNext(2, Resources.GenericSignUpError)
                         );
                     }
+
+                    [Fact, LogIfTooSlow]
+                    public async Task TracksTheEventAndException()
+                    {
+                        var exception = new Exception();
+                        prepareException(exception);
+
+                        await ViewModel.Signup();
+
+                        AnalyticsService.UnknownSignUpFailure.Received()
+                            .Track(exception.GetType().FullName, exception.Message, exception.StackTrace);
+                        AnalyticsService.Received().Track(exception);
+                    }
                 }
             }
         }
