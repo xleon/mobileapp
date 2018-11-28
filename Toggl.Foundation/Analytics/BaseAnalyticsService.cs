@@ -194,6 +194,15 @@ namespace Toggl.Foundation.Analytics
         [AnalyticsEvent("NumberOfWorkspacesInaccesibleAfterCleanUp")]
         public IAnalyticsEvent<int> WorkspacesInaccesibleAfterCleanUp { get; protected set; }
 
+        [AnalyticsEvent]
+        public IAnalyticsEvent BackgroundSyncStarted { get; protected set; }
+
+        [AnalyticsEvent("BackgroundSyncFinishedWithOutcome")]
+        public IAnalyticsEvent<string> BackgroundSyncFinished { get; protected set; }
+
+        [AnalyticsEvent("Type", "Message", "StackTrace")]
+        public IAnalyticsEvent<string, string, string> BackgroundSyncFailed { get; protected set; }
+
         public void Track(Exception exception)
         {
             if (exception.IsAnonymized())

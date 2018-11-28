@@ -5,6 +5,7 @@ using Toggl.Multivac;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Analytics;
+using Toggl.Foundation.Extensions;
 
 namespace Toggl.Foundation.Interactors
 {
@@ -24,10 +25,19 @@ namespace Toggl.Foundation.Interactors
 
         public IObservable<SyncOutcome> Execute()
         {
+            analyticsService.BackgroundSyncStarted.Track();
             return syncManager.ForceFullSync()
                               .LastAsync()
                               .Select(_ => SyncOutcome.NewData)
-                              .Catch(Observable.Return(SyncOutcome.Failed));
+                              .Catch((Exception error) => syncFailed(error))
+                              .Do(outcome => analyticsService.BackgroundSyncFinished.Track(outcome.ToString()));
+        }
+
+        private IObservable<SyncOutcome> syncFailed(Exception error)
+        {
+            analyticsService.BackgroundSyncFailed
+                .Track(error.GetType().FullName, error.Message, error.StackTrace);
+            return Observable.Return(SyncOutcome.Failed);
         }
     }
 }

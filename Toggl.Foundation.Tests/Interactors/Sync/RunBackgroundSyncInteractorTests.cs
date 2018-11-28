@@ -45,10 +45,32 @@ namespace Toggl.Foundation.Tests.Interactors.Workspace
             }
 
             [Fact, LogIfTooSlow]
-            public async Task ReturnsNewDataIsSyncSucceeds()
+            public async Task ReturnsNewDataIfSyncSucceeds()
             {
                 SyncManager.ForceFullSync().Returns(Observable.Return(SyncState.Sleep));
                 (await interactor.Execute().SingleAsync()).Should().Be(SyncOutcome.NewData);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksIfSyncSucceeds()
+            {
+                SyncManager.ForceFullSync().Returns(Observable.Return(SyncState.Sleep));
+                await interactor.Execute().SingleAsync();
+                AnalyticsService.BackgroundSyncStarted.Received().Track();
+                AnalyticsService.BackgroundSyncFinished.Received().Track(nameof(SyncOutcome.NewData));
+                AnalyticsService.BackgroundSyncFailed.DidNotReceive().Track(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksIfSyncFails()
+            {
+                var exception = new Exception();
+                SyncManager.ForceFullSync().Returns(Observable.Throw<SyncState>(exception));
+                await interactor.Execute().SingleAsync();
+                AnalyticsService.BackgroundSyncStarted.Received().Track();
+                AnalyticsService.BackgroundSyncFinished.Received().Track(nameof(SyncOutcome.Failed));
+                AnalyticsService.BackgroundSyncFailed.Received()
+                    .Track(exception.GetType().FullName, exception.Message, exception.StackTrace);
             }
         }
     }
