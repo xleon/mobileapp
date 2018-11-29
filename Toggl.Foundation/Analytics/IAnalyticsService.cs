@@ -126,9 +126,9 @@ namespace Toggl.Foundation.Analytics
 
         IAnalyticsEvent<int> WorkspacesInaccesibleAfterCleanUp { get; }
 
-        IAnalyticsEvent<string, string, string> UnknownLoginFailure { get; }
+        IAnalyticsEvent<string, string> UnknownLoginFailure { get; }
 
-        IAnalyticsEvent<string, string, string> UnknownSignUpFailure { get; }
+        IAnalyticsEvent<string, string> UnknownSignUpFailure { get; }
 
         void Track(string eventName, Dictionary<string, string> parameters = null);
 

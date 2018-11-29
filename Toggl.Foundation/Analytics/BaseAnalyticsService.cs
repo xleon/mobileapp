@@ -194,11 +194,11 @@ namespace Toggl.Foundation.Analytics
         [AnalyticsEvent("NumberOfWorkspacesInaccesibleAfterCleanUp")]
         public IAnalyticsEvent<int> WorkspacesInaccesibleAfterCleanUp { get; protected set; }
 
-        [AnalyticsEvent("Type", "Message", "StackTrace")]
-        public IAnalyticsEvent<string, string, string> UnknownLoginFailure { get; protected set; }
+        [AnalyticsEvent("Type", "Message")]
+        public IAnalyticsEvent<string, string> UnknownLoginFailure { get; protected set; }
 
-        [AnalyticsEvent("Type", "Message", "StackTrace")]
-        public IAnalyticsEvent<string, string, string> UnknownSignUpFailure { get; protected set; }
+        [AnalyticsEvent("Type", "Message")]
+        public IAnalyticsEvent<string, string> UnknownSignUpFailure { get; protected set; }
 
         public void Track(Exception exception)
         {

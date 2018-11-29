@@ -271,7 +271,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     errorMessageSubject.OnNext("");
                     break;
                 default:
-                    analyticsService.UnknownLoginFailure.Track(exception.GetType().FullName, exception.Message, exception.StackTrace);
+                    analyticsService.UnknownLoginFailure.Track(exception.GetType().FullName, exception.Message);
                     analyticsService.Track(exception);
                     errorMessageSubject.OnNext(Resources.GenericLoginError);
                     break;
