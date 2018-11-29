@@ -10,7 +10,9 @@ using Foundation;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using Toggl.Daneel.Cells.Calendar;
 using Toggl.Daneel.Views.Calendar;
+using Toggl.Foundation;
 using Toggl.Foundation.Calendar;
+using Toggl.Foundation.MvvmCross.Calendar;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Multivac;
@@ -32,41 +34,42 @@ namespace Toggl.Daneel.ViewSources
         private readonly string editingHourReuseIdentifier = nameof(HourSupplementaryView);
         private readonly string currentTimeReuseIdentifier = nameof(CurrentTimeSupplementaryView);
 
-        private readonly IObservable<DateTime> date;
+        private readonly ITimeService timeService;
         private readonly IObservable<TimeFormat> timeOfDayFormatObservable;
         private readonly ObservableGroupedOrderedCollection<CalendarItem> collection;
 
         private IList<CalendarItem> calendarItems;
-        private IList<CalendarCollectionViewItemLayoutAttributes> layoutAttributes;
+        private IList<CalendarItemLayoutAttributes> layoutAttributes;
         private TimeFormat timeOfDayFormat = TimeFormat.TwelveHoursFormat;
-        private DateTime currentDate;
+        private DateTime date;
         private NSIndexPath editingItemIndexPath;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
         private readonly ISubject<CalendarItem> itemTappedSubject = new Subject<CalendarItem>();
 
         private CalendarCollectionViewLayout layout => CollectionView.CollectionViewLayout as CalendarCollectionViewLayout;
+        private CalendarLayoutCalculator layoutCalculator = new CalendarLayoutCalculator();
 
         public bool IsEditing { get; private set; }
 
         public IObservable<CalendarItem> ItemTapped => itemTappedSubject.AsObservable();
 
         public CalendarCollectionViewSource(
+            ITimeService timeService,
             UICollectionView collectionView,
-            IObservable<DateTime> date,
             IObservable<TimeFormat> timeOfDayFormat,
             ObservableGroupedOrderedCollection<CalendarItem> collection)
             : base(collectionView)
         {
-            Ensure.Argument.IsNotNull(date, nameof(date));
+            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(timeOfDayFormat, nameof(timeOfDayFormat));
             Ensure.Argument.IsNotNull(collection, nameof(collection));
-            this.date = date;
+            this.timeService = timeService;
             this.timeOfDayFormatObservable = timeOfDayFormat;
             this.collection = collection;
 
             calendarItems = new List<CalendarItem>();
-            layoutAttributes = new List<CalendarCollectionViewItemLayoutAttributes>();
+            layoutAttributes = new List<CalendarItemLayoutAttributes>();
 
             registerCells();
 
@@ -80,7 +83,9 @@ namespace Toggl.Daneel.ViewSources
                 .VoidSubscribe(onCollectionChanges)
                 .DisposedBy(disposeBag);
 
-            date.Subscribe(dateChanged)
+            timeService
+                .MidnightObservable
+                .Subscribe(dateChanged)
                 .DisposedBy(disposeBag);
 
             onCollectionChanges();
@@ -108,7 +113,7 @@ namespace Toggl.Daneel.ViewSources
             if (elementKind == CalendarCollectionViewLayout.HourSupplementaryViewKind)
             {
                 var reusableView = collectionView.DequeueReusableSupplementaryView(elementKind, hourReuseIdentifier, indexPath) as HourSupplementaryView;
-                var hour = currentDate.AddHours((int)indexPath.Item);
+                var hour = date.AddHours((int)indexPath.Item);
                 reusableView.SetLabel(hour.ToString(supplementaryHourFormat()));
                 return reusableView;
             }
@@ -139,7 +144,7 @@ namespace Toggl.Daneel.ViewSources
             return indices.Select(index => NSIndexPath.FromItemSection(index, 0));
         }
 
-        public CalendarCollectionViewItemLayoutAttributes LayoutAttributesForItemAtIndexPath(NSIndexPath indexPath)
+        public CalendarItemLayoutAttributes LayoutAttributesForItemAtIndexPath(NSIndexPath indexPath)
             => layoutAttributes[(int)indexPath.Item];
 
         public NSIndexPath IndexPathForEditingItem()
@@ -232,9 +237,9 @@ namespace Toggl.Daneel.ViewSources
             CollectionView.ReloadData();
         }
 
-        private void dateChanged(DateTime date)
+        private void dateChanged(DateTimeOffset dateTimeOffset)
         {
-            this.currentDate = date;
+            this.date = dateTimeOffset.ToLocalTime().Date;
         }
 
         private void registerCells()
@@ -254,73 +259,8 @@ namespace Toggl.Daneel.ViewSources
                                                            new NSString(currentTimeReuseIdentifier));
         }
 
-        private IList<CalendarCollectionViewItemLayoutAttributes> calculateLayoutAttributes()
-        {
-            if (calendarItems.None())
-                return new List<CalendarCollectionViewItemLayoutAttributes>();
-
-            var initialValue = new List<List<(CalendarItem item, int index)>>() { new List<(CalendarItem item, int index)>() };
-
-            var pairs = calendarItems
-                .Select((item, index) => (item: item, index: index))
-                .OrderBy(pair => pair.item.StartTime)
-                .ToList();
-
-            var attributes = pairs
-                .Aggregate(initialValue, groupOverlappingItems)
-                .Select(orderByEventFirst)
-                .Select(toLayoutAttributes)
-                .SelectMany(CommonFunctions.Identity)
-                .OrderBy(pair => pair.index)
-                .Select(pair => pair.attributes)
-                .ToList();
-
-            return attributes;
-
-            List<List<(CalendarItem item, int index)>> groupOverlappingItems(
-                List<List<(CalendarItem item, int index)>> previous,
-                (CalendarItem item, int index) pair)
-            {
-                var group = previous.Last();
-                if (group.None())
-                {
-                    group.Add(pair);
-                }
-                else
-                {
-                    var endTime = group.Max(i => i.item.EndTime.LocalDateTime);
-                    if (pair.item.StartTime.LocalDateTime < endTime)
-                        group.Add(pair);
-                    else
-                        previous.Add(new List<(CalendarItem, int)>() { pair });
-                }
-
-                return previous;
-            }
-
-            List<(CalendarItem item, int index)> orderByEventFirst(List<(CalendarItem item, int index)> group)
-                => group.OrderBy((pair) => pair.item.Source == CalendarItemSource.Calendar, true).ToList();
-
-            IEnumerable<(CalendarCollectionViewItemLayoutAttributes attributes, int index)> toLayoutAttributes(
-                List<(CalendarItem item, int index)> group)
-                => group.Select((pair, index) => (attributesForItem(index, pair.item, group.Count, index), pair.index));
-        }
-
-        private CalendarCollectionViewItemLayoutAttributes attributesForItem(
-            int index,
-            CalendarItem calendarItem,
-            int overlappingItemsCount,
-            int positionInOverlappingGroup)
-        {
-            var isEditing = IsEditing && editingItemIndexPath != null && index == editingItemIndexPath.Item;
-            return new CalendarCollectionViewItemLayoutAttributes(
-                calendarItem.StartTime.LocalDateTime,
-                calendarItem.Duration,
-                overlappingItemsCount,
-                positionInOverlappingGroup,
-                isEditing
-            );
-        }
+        private IList<CalendarItemLayoutAttributes> calculateLayoutAttributes()
+            => layoutCalculator.CalculateLayoutAttributes(calendarItems);
 
         private NSIndexPath insertCalendarItem(DateTimeOffset startTime, TimeSpan duration)
         {

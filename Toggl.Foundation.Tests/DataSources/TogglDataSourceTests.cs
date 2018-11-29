@@ -39,6 +39,7 @@ namespace Toggl.Foundation.Tests.DataSources
             protected INotificationService NotificationService { get; } = Substitute.For<INotificationService>();
             protected IErrorHandlingService ErrorHandlingService { get; } = Substitute.For<IErrorHandlingService>();
             protected ISubject<SyncProgress> ProgressSubject = new Subject<SyncProgress>();
+            protected ISubject<Exception> ErrorsSubject = new Subject<Exception>();
             protected TimeSpan MinimumTimeInBackgroundForFullSync = TimeSpan.FromMinutes(5);
             protected IApplicationShortcutCreator ApplicationShortcutCreator { get; } = Substitute.For<IApplicationShortcutCreator>();
             protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
@@ -46,6 +47,7 @@ namespace Toggl.Foundation.Tests.DataSources
             public TogglDataSourceTest()
             {
                 SyncManager.ProgressObservable.Returns(ProgressSubject.AsObservable());
+                SyncManager.Errors.Returns(ErrorsSubject.AsObservable());
                 DataSource = new TogglDataSource(
                     Api,
                     Database,
@@ -373,7 +375,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 var exception = new ClientDeprecatedException(request, response);
                 ErrorHandlingService.TryHandleDeprecationError(Arg.Any<ClientDeprecatedException>()).Returns(true);
 
-                ProgressSubject.OnError(exception);
+                ErrorsSubject.OnNext(exception);
 
                 ErrorHandlingService.Received().TryHandleDeprecationError(Arg.Is(exception));
                 ErrorHandlingService.DidNotReceive().TryHandleUnauthorizedError(Arg.Is(exception));
@@ -385,7 +387,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 var exception = new ApiDeprecatedException(request, response);
                 ErrorHandlingService.TryHandleDeprecationError(Arg.Any<ApiDeprecatedException>()).Returns(true);
 
-                ProgressSubject.OnError(exception);
+                ErrorsSubject.OnNext(exception);
 
                 ErrorHandlingService.Received().TryHandleDeprecationError(Arg.Is(exception));
                 ErrorHandlingService.DidNotReceive().TryHandleUnauthorizedError(Arg.Is(exception));
@@ -397,7 +399,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 var exception = new UnauthorizedException(request, response);
                 ErrorHandlingService.TryHandleUnauthorizedError(Arg.Any<UnauthorizedException>()).Returns(true);
 
-                ProgressSubject.OnError(exception);
+                ErrorsSubject.OnNext(exception);
 
                 ErrorHandlingService.Received().TryHandleUnauthorizedError(Arg.Is(exception));
             }
@@ -410,7 +412,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 ErrorHandlingService.TryHandleDeprecationError(Arg.Any<ClientDeprecatedException>()).Returns(true);
                 ErrorHandlingService.TryHandleDeprecationError(Arg.Any<ApiDeprecatedException>()).Returns(true);
 
-                Action processingError = () => ProgressSubject.OnError(exception);
+                Action processingError = () => ErrorsSubject.OnNext(exception);
 
                 processingError.Should().NotThrow();
             }
@@ -419,7 +421,7 @@ namespace Toggl.Foundation.Tests.DataSources
             [MemberData(nameof(ApiExceptionsWhichAreNotThrowByTheProgressObservable))]
             public void ThrowsForDifferentException(Exception exception)
             {
-                Action handling = () => ProgressSubject.OnError(exception);
+                Action handling = () => ErrorsSubject.OnNext(exception);
 
                 handling.Should().Throw<ArgumentException>();
             }
@@ -434,7 +436,7 @@ namespace Toggl.Foundation.Tests.DataSources
                 var exception = new UnauthorizedException(request, response);
                 ErrorHandlingService.TryHandleUnauthorizedError(Arg.Any<UnauthorizedException>()).Returns(true);
 
-                ProgressSubject.OnError(exception);
+                ErrorsSubject.OnNext(exception);
                 subject.OnNext(MinimumTimeInBackgroundForFullSync + TimeSpan.FromSeconds(1));
 
                 SyncManager.DidNotReceive().ForceFullSync();

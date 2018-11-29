@@ -262,6 +262,9 @@
     <Reference Include="MvvmCross.Droid.Support.V7.AppCompat">
       <HintPath>..\packages\MvvmCross.Droid.Support.V7.AppCompat.6.1.2\lib\monoandroid81\MvvmCross.Droid.Support.V7.AppCompat.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Firebase.Config">
+      <HintPath>..\packages\Xamarin.Firebase.Config.60.1142.1\lib\MonoAndroid80\Xamarin.Firebase.Config.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\ForgotPasswordActivity.cs" />
@@ -270,6 +273,12 @@
     </Compile>
     <Compile Include="Activities\OutdatedAppActivity.ViewBinds.cs">
       <DependentUpon>OutdatedAppActivity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Activities\SelectClientActivity.ViewBinds.cs">
+      <DependentUpon>SelectClientActivity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Activities\SelectCountryActivity.ViewBinds.cs">
+      <DependentUpon>SelectCountryActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="Activities\SelectTagsActivity.cs" />
     <Compile Include="Activities\SendFeedbackActivity.cs" />
@@ -321,9 +330,12 @@
     <Compile Include="ViewHelpers\MainRecyclerViewTouchCallback.cs" />
     <Compile Include="ViewHelpers\SimpleRecyclerViewScrollChangeListener.cs" />
     <Compile Include="ViewHelpers\SuggestionsRecyclerViewSnapHelper.cs" />
+    <Compile Include="ViewHolders\Client\ClientCreationSelectionViewHolder.cs" />
+    <Compile Include="ViewHolders\Client\ClientSelectionViewHolder.cs" />
     <Compile Include="ViewHelpers\TimeEntryCollectionViewModel.cs" />
     <Compile Include="ViewHelpers\TimeEntryViewData.cs" />
     <Compile Include="ViewHolders\ColorSelectionViewHolder.cs" />
+    <Compile Include="ViewHolders\Country\CountrySelectionViewHolder.cs" />
     <Compile Include="ViewHolders\MainLogCellViewHolder.cs" />
     <Compile Include="ViewHolders\MainLogSuggestionItemViewHolder.cs" />
     <Compile Include="ViewHolders\MainLogSuggestionsListViewHolder.cs" />
@@ -376,8 +388,6 @@
     <Compile Include="Views\DurationEditText.cs" />
     <Compile Include="Activities\SelectClientActivity.cs" />
     <Compile Include="Adapters\SelectClientRecyclerAdapter.cs" />
-    <Compile Include="TemplateSelectors\SelectClientTemplateSelector.cs" />
-    <Compile Include="Views\SelectClientRecyclerView.cs" />
     <Compile Include="Fragments\SelectWorkspaceFragment.cs" />
     <Compile Include="TemplateSelectors\SelectWorkspaceTemplateSelector.cs" />
     <Compile Include="Bindings\TextViewFontWeightTargetBinding.cs" />
@@ -428,7 +438,6 @@
     <Compile Include="Helper\VibratorExtensions.cs" />
     <Compile Include="Bindings\DatePickerBoundariesTargetBinding.cs" />
     <Compile Include="Activities\SignUpActivity.cs" />
-    <Compile Include="TemplateSelectors\SelecCountryTemplateSelector.cs" />
     <Compile Include="Fragments\TermsOfServiceFragment.cs" />
     <Compile Include="Fragments\TermsOfServiceFragment.ViewBinds.cs">
       <DependentUpon>TermsOfServiceFragment.cs</DependentUpon>
@@ -494,6 +503,8 @@
     <Compile Include="Fragments\SelectDefaultWorkspaceFragment.ViewBinds.cs">
       <DependentUpon>SelectDefaultWorkspaceFragment.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewHolders\MainLogUserFeedbackViewHolder.cs" />
+    <Compile Include="Extensions\Reactive\ImageViewExtensions.cs" />      
     <Compile Include="Extensions\TimeEntryExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -502,6 +513,10 @@
     <None Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\color\BlueTextColor.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
+    <AndroidResource Include="Resources\layout\EntityCreationActivityCell.axml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivityProjectCell.axml" />
@@ -830,11 +845,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\bike.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\bike.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\bike.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\bg_noise_login.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\bg_noise_login.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\bg_noise_login.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\bg_noise_login.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\bg_noise_login.png" />
     <AndroidResource Include="Resources\drawable-hdpi\paws.png" />
     <AndroidResource Include="Resources\drawable-mdpi\paws.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\paws.png" />
@@ -893,6 +903,11 @@
     <AndroidResource Include="Resources\values-v23\Strings.xml" />
     <AndroidResource Include="Resources\layout\SelectDefaultWorkspaceFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDefaultWorkspaceFragmentCell.axml" />
+    <AndroidResource Include="Resources\drawable\bg_noise_login.png" />
+    <AndroidResource Include="Resources\drawable\ic_thumbs_down.xml" />
+    <AndroidResource Include="Resources\drawable\ic_thumbs_up.xml" />
+    <AndroidResource Include="Resources\layout\MainUserFeedbackCard.axml" />
+    <AndroidResource Include="Resources\xml\RemoteConfigDefaults.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">
@@ -923,6 +938,7 @@
   <ItemGroup>
     <Folder Include="Presenters\" />
     <Folder Include="Extensions\Reactive\" />
+    <Folder Include="Resources\xml\" />
   </ItemGroup>
   <ItemGroup>
     <ProguardConfiguration Include="ProGuard.cfg" />
@@ -968,4 +984,5 @@
   <Import Project="..\packages\Xamarin.Android.Support.Animated.Vector.Drawable.27.0.2\build\MonoAndroid81\Xamarin.Android.Support.Animated.Vector.Drawable.targets" Condition="Exists('..\packages\Xamarin.Android.Support.Animated.Vector.Drawable.27.0.2\build\MonoAndroid81\Xamarin.Android.Support.Animated.Vector.Drawable.targets')" />
   <Import Project="..\packages\Xamarin.Android.Support.v7.AppCompat.27.0.2\build\MonoAndroid81\Xamarin.Android.Support.v7.AppCompat.targets" Condition="Exists('..\packages\Xamarin.Android.Support.v7.AppCompat.27.0.2\build\MonoAndroid81\Xamarin.Android.Support.v7.AppCompat.targets')" />
   <Import Project="..\packages\Xamarin.Android.Support.Design.27.0.2\build\MonoAndroid81\Xamarin.Android.Support.Design.targets" Condition="Exists('..\packages\Xamarin.Android.Support.Design.27.0.2\build\MonoAndroid81\Xamarin.Android.Support.Design.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.Config.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Config.targets" Condition="Exists('..\packages\Xamarin.Firebase.Config.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Config.targets')" />
 </Project>

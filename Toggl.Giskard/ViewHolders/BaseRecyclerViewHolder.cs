@@ -9,7 +9,6 @@ namespace Toggl.Giskard.ViewHolders
 {
     public abstract class BaseRecyclerViewHolder<T> : RecyclerView.ViewHolder
     {
-        public Func<T, Task> Tapped { get; set; }
         public Subject<T> TappedSubject { get; set; }
 
         private T item;
@@ -50,7 +49,6 @@ namespace Toggl.Giskard.ViewHolders
 
         private void onItemViewClick(object sender, EventArgs args)
         {
-            Tapped?.Invoke(Item);
             TappedSubject?.OnNext(Item);
         }
     }

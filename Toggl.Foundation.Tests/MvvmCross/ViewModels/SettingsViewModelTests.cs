@@ -48,7 +48,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 return new SettingsViewModel(
                     UserAgent,
-                    MailService,
                     DataSource,
                     DialogService,
                     UserPreferences,
@@ -75,7 +74,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useUserAgent,
                 bool useDataSource,
-                bool useMailService,
                 bool useDialogService,
                 bool useUserPreferences,
                 bool useFeedbackService,
@@ -90,7 +88,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var userAgent = useUserAgent ? UserAgent : null;
                 var dataSource = useDataSource ? DataSource : null;
-                var mailService = useMailService ? MailService : null;
                 var dialogService = useDialogService ? DialogService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var feedbackService = useFeedbackService ? FeedbackService : null;
@@ -106,7 +103,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 Action tryingToConstructWithEmptyParameters =
                     () => new SettingsViewModel(
                         userAgent,
-                        mailService,
                         dataSource,
                         dialogService,
                         userPreferences,

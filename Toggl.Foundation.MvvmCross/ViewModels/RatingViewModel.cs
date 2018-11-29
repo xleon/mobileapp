@@ -46,6 +46,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IObservable<bool> IsFeedbackSuccessViewShowing { get; }
 
+        public UIAction PerformMainAction { get; }
+
         public RatingViewModel(
             ITimeService timeService,
             ITogglDataSource dataSource,
@@ -86,6 +88,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .AsDriver(this.schedulerProvider);
 
             IsFeedbackSuccessViewShowing = isFeedbackSuccessViewShowing.AsDriver(this.schedulerProvider);
+
+            PerformMainAction = UIAction.FromAsync(performMainAction);
         }
 
         public void CloseFeedbackSuccessView()
@@ -142,7 +146,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                    : Resources.RatingViewNegativeCallToActionButtonTitle;
         }
 
-        public async Task PerformMainAction()
+        private async Task performMainAction()
         {
             hide();
 
@@ -152,8 +156,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (impressionIsPositive)
             {
                 ratingService.AskForRating();
-                //We can't really know whether the user actually rated
-                //We only know that we presented the iOS rating view
+                /* 
+                 * We can't really know whether the user has actually rated.
+                 * We only know that we presented the rating view (iOS) 
+                 * or navigated to the market (Android).
+                */
                 trackSecondStepOutcome(
                     RatingViewOutcome.AppWasRated,
                     RatingViewSecondStepOutcome.AppWasRated,

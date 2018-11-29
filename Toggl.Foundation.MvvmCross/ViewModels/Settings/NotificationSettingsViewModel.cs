@@ -20,7 +20,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
     public sealed class NotificationSettingsViewModel : MvxViewModel
     {
         private readonly IMvxNavigationService navigationService;
-        private readonly IBackgroundService backgroundService;
         private readonly IPermissionsService permissionsService;
         private readonly IUserPreferences userPreferences;
 
@@ -49,7 +48,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
 
             this.navigationService = navigationService;
-            this.backgroundService = backgroundService;
             this.permissionsService = permissionsService;
             this.userPreferences = userPreferences;
 
