@@ -1,11 +1,10 @@
-﻿using MvvmCross.ViewModels;
-using Toggl.Multivac;
+﻿using Toggl.Multivac;
 using Toggl.Multivac.Models;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SelectableCountryViewModel : MvxNotifyPropertyChanged
+    public sealed class SelectableCountryViewModel
     {
         public ICountry Country { get; set; }
 

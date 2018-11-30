@@ -337,6 +337,20 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         ReactiveTest.OnNext(1, "")
                     );
                 }
+
+                [Fact, LogIfTooSlow]
+                public void TracksTheEventAndException()
+                {
+                    var exception = new Exception();
+                    LoginManager.Login(Arg.Any<Email>(), Arg.Any<Password>())
+                        .Returns(Observable.Throw<ITogglDataSource>(exception));
+
+                    ViewModel.Login();
+
+                    AnalyticsService.UnknownLoginFailure.Received()
+                        .Track(exception.GetType().FullName, exception.Message, exception.StackTrace);
+                    AnalyticsService.Received().Track(exception);
+                }
             }
         }
 

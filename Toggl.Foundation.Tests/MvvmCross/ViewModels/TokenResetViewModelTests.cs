@@ -43,7 +43,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     DialogService,
                     NavigationService,
                     UserPreferences,
-                    OnboardingStorage,
                     AnalyticsService,
                     SchedulerProvider);
         }
@@ -57,7 +56,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useDataSource,
                 bool useDialogService,
                 bool useUserPreferences,
-                bool useOnboardingStorage,
                 bool useAnalyticsService,
                 bool useSchedulerProvider
             )
@@ -67,7 +65,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var dataSource = useDataSource ? DataSource : null;
                 var dialogService = useDialogService ? DialogService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
-                var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
 
@@ -78,7 +75,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         dialogService,
                         navigationService,
                         userPreferences,
-                        onboardingStorage,
                         analyticsService,
                         schedulerProvider);
 
@@ -223,7 +219,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheSignOutCommand : TokenResetViewModelTest
         {
-            private async Task setup(bool hasUnsyncedData = false, bool userConfirmsSignout = true) 
+            private async Task setup(bool hasUnsyncedData = false, bool userConfirmsSignout = true)
             {
                 DialogService.Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
                              .Returns(Observable.Return(userConfirmsSignout));
@@ -239,7 +235,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.SignOut.Execute();
 
-                await DataSource.Received().Logout();
+                await LoginManager.Received().Logout();
             }
 
             [Fact, LogIfTooSlow]
