@@ -151,7 +151,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             analyticsService.Logout.Track(LogoutSource.TokenReset);
             userPreferences.Reset();
 
-            await dataSource.Logout();
+            await loginManager.Logout();
             await navigationService.Navigate<LoginViewModel>();
         }
 

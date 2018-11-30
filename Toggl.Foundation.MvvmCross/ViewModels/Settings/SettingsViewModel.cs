@@ -14,6 +14,7 @@ using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Interactors;
+using Toggl.Foundation.Login;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
@@ -40,6 +41,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private readonly UserAgent userAgent;
         private readonly ITogglDataSource dataSource;
+        private readonly ILoginManager loginManager;
         private readonly IDialogService dialogService;
         private readonly IUserPreferences userPreferences;
         private readonly IFeedbackService feedbackService;
@@ -105,6 +107,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public SettingsViewModel(
             UserAgent userAgent,
             ITogglDataSource dataSource,
+            ILoginManager loginManager,
             IDialogService dialogService,
             IUserPreferences userPreferences,
             IFeedbackService feedbackService,
@@ -119,6 +122,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             Ensure.Argument.IsNotNull(userAgent, nameof(userAgent));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(loginManager, nameof(loginManager));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(feedbackService, nameof(feedbackService));
@@ -133,6 +137,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             this.userAgent = userAgent;
             this.dataSource = dataSource;
+            this.loginManager = loginManager;
             this.dialogService = dialogService;
             this.userPreferences = userPreferences;
             this.feedbackService = feedbackService;
@@ -384,7 +389,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             privateSharedStorageService.ClearAll();
             intentDonationService.ClearAll();
 
-            return dataSource.Logout().Do(_ => navigationService.Navigate<LoginViewModel>());
+            return loginManager.Logout().Do(_ => navigationService.Navigate<LoginViewModel>());
         }
 
         private IObservable<bool> isSynced()

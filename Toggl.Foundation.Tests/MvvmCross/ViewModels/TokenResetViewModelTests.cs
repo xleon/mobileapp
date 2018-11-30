@@ -219,7 +219,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheSignOutCommand : TokenResetViewModelTest
         {
-            private async Task setup(bool hasUnsyncedData = false, bool userConfirmsSignout = true) 
+            private async Task setup(bool hasUnsyncedData = false, bool userConfirmsSignout = true)
             {
                 DialogService.Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
                              .Returns(Observable.Return(userConfirmsSignout));
@@ -235,7 +235,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.SignOut.Execute();
 
-                await DataSource.Received().Logout();
+                await LoginManager.Received().Logout();
             }
 
             [Fact, LogIfTooSlow]
