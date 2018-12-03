@@ -811,7 +811,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         await ViewModel.Signup();
 
                         AnalyticsService.UnknownSignUpFailure.Received()
-                            .Track(exception.GetType().FullName, exception.Message, exception.StackTrace);
+                            .Track(exception.GetType().FullName, exception.Message);
                         AnalyticsService.Received().Track(exception);
                     }
                 }

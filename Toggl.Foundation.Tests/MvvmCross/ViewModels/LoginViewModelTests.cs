@@ -348,7 +348,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.Login();
 
                     AnalyticsService.UnknownLoginFailure.Received()
-                        .Track(exception.GetType().FullName, exception.Message, exception.StackTrace);
+                        .Track(exception.GetType().FullName, exception.Message);
                     AnalyticsService.Received().Track(exception);
                 }
             }

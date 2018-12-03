@@ -290,7 +290,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     errorMessageSubject.OnNext(Resources.EmailIsAlreadyUsedError);
                     break;
                 default:
-                    analyticsService.UnknownSignUpFailure.Track(exception.GetType().FullName, exception.Message, exception.StackTrace);
+                    analyticsService.UnknownSignUpFailure.Track(exception.GetType().FullName, exception.Message);
                     analyticsService.Track(exception);
                     errorMessageSubject.OnNext(Resources.GenericSignUpError);
                     break;
