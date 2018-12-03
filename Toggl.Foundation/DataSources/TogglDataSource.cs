@@ -111,7 +111,7 @@ namespace Toggl.Foundation.DataSources
         {
             SyncManager = createSyncManager(this);
             errorHandlingDisposable?.Dispose();
-            errorHandlingDisposable = SyncManager.ProgressObservable.SubscribeToErrors(onSyncError);
+            errorHandlingDisposable = SyncManager.Errors.Subscribe(onSyncError);
         }
 
         public IObservable<Unit> StartSyncing()

@@ -183,9 +183,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 AccessRestrictionStorage.HasNoWorkspace().Returns(false);
                 AccessRestrictionStorage.HasNoDefaultWorkspace().Returns(true);
 
-                ViewModel.ViewAppearing();
-                //ViewAppearing calls an async method. The delay is here to ensure that the async method completes before the assertion
-                await ThreadingTask.Delay(200);
+                await ViewModel.ViewAppearingAsync();
 
                 await NavigationService.Received().Navigate<SelectDefaultWorkspaceViewModel, Unit>();
             }
@@ -316,7 +314,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 subject.OnNext(timeEntry);
                 TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
 
-                Action tryingToExecuteWhenThereIsARunningTimeEntry = 
+                Action tryingToExecuteWhenThereIsARunningTimeEntry =
                     () => ViewModel.StartTimeEntry.Execute(useDefaultMode).Wait();
 
                 tryingToExecuteWhenThereIsARunningTimeEntry.Should().Throw<RxActionNotEnabledException>();

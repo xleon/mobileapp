@@ -43,7 +43,7 @@ namespace Toggl.Foundation.Tests.Interactors.Workspace
                     Fullname = "Full Name",
                     DefaultWorkspaceId = null
                 };
-                DataSource.User.Current.Returns(Observable.Return(user));
+                DataSource.User.Get().Returns(Observable.Return(user));
             }
 
             [Property, LogIfTooSlow]

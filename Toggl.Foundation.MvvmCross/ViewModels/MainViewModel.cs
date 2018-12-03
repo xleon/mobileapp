@@ -43,6 +43,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private bool noWorkspaceViewPresented;
         private bool hasStopButtonEverBeenUsed;
         private bool noDefaultWorkspaceViewPresented;
+        private bool shouldHideRatingViewIfStillVisible = false;
         private object isEditViewOpenLock = new object();
 
         private readonly ITogglDataSource dataSource;
@@ -337,6 +338,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             onboardingStorage.SetRatingViewOutcome(RatingViewOutcome.NoInteraction, TimeService.CurrentDateTime);
             TimeService.RunAfterDelay(TimeSpan.FromMinutes(ratingViewTimeout), () =>
             {
+                shouldHideRatingViewIfStillVisible = true;
                 navigationService.ChangePresentation(ToggleRatingViewVisibilityHint.Hide());
             });
         }
@@ -349,9 +351,23 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public override void ViewAppearing()
         {
             base.ViewAppearing();
+            ViewAppearingAsync();
+        }
 
-            handleNoWorkspaceState()
-                .ContinueWith(_ => handleNoDefaultWorkspaceState());
+        internal async Task ViewAppearingAsync()
+        {
+            hideRatingViewIfStillVisibleAfterDelay();
+            await handleNoWorkspaceState();
+            handleNoDefaultWorkspaceState();
+        }
+
+        private void hideRatingViewIfStillVisibleAfterDelay()
+        {
+            if (shouldHideRatingViewIfStillVisible)
+            {
+                shouldHideRatingViewIfStillVisible = false;
+                navigationService.ChangePresentation(ToggleRatingViewVisibilityHint.Hide());
+            }
         }
 
         private async Task handleNoWorkspaceState()
