@@ -33,5 +33,11 @@ namespace Toggl.Foundation.Interactors
 
         public IInteractor<IObservable<Unit>> CreateDefaultWorkspace()
             => new CreateDefaultWorkspaceInteractor(idProvider, timeService, dataSource.User, dataSource.Workspaces);
+
+        public IInteractor<IObservable<IEnumerable<IThreadSafeWorkspace>>> ObserveAllWorkspaces()
+            => new ObserveAllWorkspacesInteractor(dataSource);
+
+        public IInteractor<IObservable<Unit>> ObserveWorkspacesChanges()
+            => new ObserveWorkspacesChangesInteractor(dataSource);
     }
 }
