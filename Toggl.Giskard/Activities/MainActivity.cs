@@ -44,6 +44,7 @@ namespace Toggl.Giskard.Activities
         private MainRecyclerAdapter mainRecyclerAdapter;
         private LinearLayoutManager layoutManager;
         private FirebaseStopwatchProviderAndroid localStopwatchProvider = new FirebaseStopwatchProviderAndroid();
+        private CancellationTokenSource cardAnimationCancellation;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -269,15 +270,19 @@ namespace Toggl.Giskard.Activities
 
         private async void onTimeEntryCardVisibilityChanged(bool visible)
         {
+            cardAnimationCancellation?.Cancel();
             if (runningEntryCardFrame == null) return;
 
             var isCardVisible = runningEntryCardFrame.Visibility == ViewStates.Visible;
             if (isCardVisible == visible) return;
 
+            cardAnimationCancellation = new CancellationTokenSource();
+
             var fabListener = new FabAsyncHideListener();
             var radialAnimation =
                 runningEntryCardFrame
                     .AnimateWithCircularReveal()
+                    .WithCancellationToken(cardAnimationCancellation.Token)
                     .SetDuration(TimeSpan.FromSeconds(0.5))
                     .SetBehaviour((x, y, w, h) => (x, y + h, 0, w))
                     .SetType(() => visible ? Appear : Disappear);
@@ -289,6 +294,7 @@ namespace Toggl.Giskard.Activities
 
                 radialAnimation
                     .OnAnimationEnd(_ => stopButton.Show())
+                    .OnAnimationCancel(() => playButton.Show())
                     .Start();
             }
             else
@@ -298,6 +304,7 @@ namespace Toggl.Giskard.Activities
 
                 radialAnimation
                     .OnAnimationEnd(_ => playButton.Show())
+                    .OnAnimationCancel(() => stopButton.Show())
                     .Start();
             }
         }
