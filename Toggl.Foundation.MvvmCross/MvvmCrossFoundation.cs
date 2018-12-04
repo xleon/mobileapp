@@ -31,6 +31,7 @@ namespace Toggl.Foundation.MvvmCross
         public IAnalyticsService AnalyticsService { get; }
         public IStopwatchProvider StopwatchProvider { get; }
         public IBackgroundService BackgroundService { get; }
+        public IBackgroundSyncService BackgroundSyncService { get; }
         public ISchedulerProvider SchedulerProvider { get; }
         public IPlatformConstants PlatformConstants { get; }
         public INotificationService NotificationService { get; }
@@ -91,6 +92,7 @@ namespace Toggl.Foundation.MvvmCross
             PlatformConstants = builder.Foundation.PlatformConstants;
             SchedulerProvider = builder.Foundation.SchedulerProvider;
             BackgroundService = builder.Foundation.BackgroundService;
+            BackgroundSyncService = builder.Foundation.BackgroundSyncService;
             NotificationService = builder.Foundation.NotificationService;
             RemoteConfigService = builder.Foundation.RemoteConfigService;
             IntentDonationService = builder.Foundation.IntentDonationService;

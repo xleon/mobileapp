@@ -91,6 +91,7 @@ namespace Toggl.Daneel
             var schedulerProvider = new IOSSchedulerProvider();
             var calendarService = new CalendarServiceIos(permissionsService);
             var notificationService = new NotificationServiceIos(permissionsService, timeService);
+            var backgroundSyncService = new BackgroundSyncServiceIos();
 
             var foundation =
                 TogglFoundation
@@ -116,6 +117,7 @@ namespace Toggl.Daneel
                     .WithStopwatchProvider<FirebaseStopwatchProviderIos>()
                     .WithPrivateSharedStorageService(privateSharedStorageService)
                     .WithPlatformInfo(platformInfo)
+                    .WithBackgroundSyncService(backgroundSyncService)
 
                     .StartRegisteringPlatformServices()
                     .WithDialogService(dialogService)

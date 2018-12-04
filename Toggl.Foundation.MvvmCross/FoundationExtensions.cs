@@ -67,12 +67,14 @@ namespace Toggl.Foundation.MvvmCross
                 new LoginManager(foundation.ApiFactory, foundation.Database, foundation.GoogleService, foundation.ShortcutCreator, foundation.PrivateSharedStorageService, createDataSource);
 
             Mvx.RegisterSingleton<ILoginManager>(loginManager);
+            foundation.BackgroundSyncService.SetupBackgroundSync(loginManager);
         }
 
         private static void initializeInversionOfControl(MvvmCrossFoundation foundation)
         {
             Mvx.RegisterSingleton(foundation.StopwatchProvider);
             Mvx.RegisterSingleton(foundation.BackgroundService);
+            Mvx.RegisterSingleton(foundation.BackgroundSyncService);
             Mvx.RegisterSingleton(foundation.DialogService);
             Mvx.RegisterSingleton(foundation.Database);
             Mvx.RegisterSingleton(foundation.BrowserService);
@@ -85,7 +87,6 @@ namespace Toggl.Foundation.MvvmCross
             Mvx.RegisterSingleton(foundation.ShortcutCreator);
             Mvx.RegisterSingleton(foundation.LicenseProvider);
             Mvx.RegisterSingleton(foundation.FeedbackService);
-            Mvx.RegisterSingleton(foundation.ShortcutCreator);
             Mvx.RegisterSingleton(foundation.AnalyticsService);
             Mvx.RegisterSingleton(foundation.PlatformConstants);
             Mvx.RegisterSingleton(foundation.NotificationService);

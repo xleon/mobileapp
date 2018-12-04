@@ -37,6 +37,7 @@ namespace Toggl.Foundation.Tests
                 bool useAnalyticsService,
                 bool useStopwatchProvider,
                 bool useBackgroundService,
+                bool useBackgroundSyncService,
                 bool useSchedulerProvider,
                 bool usePlatformConstants,
                 bool useNotificationService,
@@ -60,6 +61,7 @@ namespace Toggl.Foundation.Tests
                 var analyticsService = useAnalyticsService ? Substitute.For<IAnalyticsService>() : null;
                 var stopwatchProvider = useStopwatchProvider ? Substitute.For<IStopwatchProvider>() : null;
                 var backgroundService = useBackgroundService ? Substitute.For<IBackgroundService>() : null;
+                var backgroundSyncService = useBackgroundSyncService ? Substitute.For<IBackgroundSyncService>() : null;
                 var platformConstants = usePlatformConstants ? Substitute.For<IPlatformConstants>() : null;
                 var notificationService = useNotificationService ? Substitute.For<INotificationService>() : null;
                 var remoteConfigService = useRemoteConfigService ? Substitute.For<IRemoteConfigService>() : null;
@@ -84,6 +86,7 @@ namespace Toggl.Foundation.Tests
                         .WithAnalyticsService(analyticsService)
                         .WithStopwatchProvider(stopwatchProvider)
                         .WithBackgroundService(backgroundService)
+                        .WithBackgroundSyncService(backgroundSyncService)
                         .WithSchedulerProvider(schedulerProvider)
                         .WithPlatformConstants(platformConstants)
                         .WithNotificationService(notificationService)
@@ -116,6 +119,7 @@ namespace Toggl.Foundation.Tests
                 var schedulerProvider = Substitute.For<ISchedulerProvider>();
                 var platformConstants = Substitute.For<IPlatformConstants>();
                 var backgroundService = Substitute.For<IBackgroundService>();
+                var backgroundSyncService = Substitute.For<IBackgroundSyncService>();
                 var notificationService = Substitute.For<INotificationService>();
                 var remoteConfigService = Substitute.For<IRemoteConfigService>();
                 var intentDonationService = Substitute.For<IIntentDonationService>();
@@ -138,6 +142,7 @@ namespace Toggl.Foundation.Tests
                         .WithAnalyticsService(analyticsService)
                         .WithStopwatchProvider(stopwatchProvider)
                         .WithBackgroundService(backgroundService)
+                        .WithBackgroundSyncService(backgroundSyncService)
                         .WithSchedulerProvider(schedulerProvider)
                         .WithPlatformConstants(platformConstants)
                         .WithNotificationService(notificationService)

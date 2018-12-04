@@ -45,7 +45,8 @@ namespace Toggl.Foundation.Tests
                 LastTimeUsageStorage,
                 PlatformConstants,
                 UserAgent,
-                CalendarService
+                CalendarService,
+                SyncManager
             );
         }
     }

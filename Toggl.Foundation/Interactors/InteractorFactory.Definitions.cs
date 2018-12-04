@@ -7,6 +7,7 @@ using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Network;
 using Toggl.Foundation.Services;
+using Toggl.Foundation.Sync;
 
 namespace Toggl.Foundation.Interactors
 {
@@ -25,6 +26,7 @@ namespace Toggl.Foundation.Interactors
         private readonly IPlatformConstants platformConstants;
         private readonly UserAgent userAgent;
         private readonly ICalendarService calendarService;
+        private readonly ISyncManager syncManager;
 
         public InteractorFactory(
             IIdProvider idProvider,
@@ -38,7 +40,8 @@ namespace Toggl.Foundation.Interactors
             ILastTimeUsageStorage lastTimeUsageStorage,
             IPlatformConstants platformConstants,
             UserAgent userAgent,
-            ICalendarService calendarService)
+            ICalendarService calendarService,
+            ISyncManager syncManager)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(idProvider, nameof(idProvider));
@@ -52,6 +55,7 @@ namespace Toggl.Foundation.Interactors
             Ensure.Argument.IsNotNull(platformConstants, nameof(platformConstants));
             Ensure.Argument.IsNotNull(userAgent, nameof(userAgent));
             Ensure.Argument.IsNotNull(calendarService, nameof(calendarService));
+            Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
 
             this.dataSource = dataSource;
             this.idProvider = idProvider;
@@ -65,6 +69,7 @@ namespace Toggl.Foundation.Interactors
             this.platformConstants = platformConstants;
             this.userAgent = userAgent;
             this.calendarService = calendarService;
+            this.syncManager = syncManager;
         }
     }
 }

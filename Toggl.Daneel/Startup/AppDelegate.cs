@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Foundation;
@@ -24,6 +25,7 @@ using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Shortcuts;
+using Toggl.Multivac.Extensions;
 using UIKit;
 using UserNotifications;
 
@@ -32,6 +34,7 @@ namespace Toggl.Daneel
     [Register(nameof(AppDelegate))]
     public sealed class AppDelegate : MvxApplicationDelegate<Setup, App<OnboardingViewModel>>, IUNUserNotificationCenterDelegate
     {
+
         private IAnalyticsService analyticsService;
         private IBackgroundService backgroundService;
         private IMvxNavigationService navigationService;
@@ -300,6 +303,36 @@ namespace Toggl.Daneel
                 await interactorFactory.CreateTimeEntry(prototype).Execute();
                 completionHandler();
             });
+        }
+
+        #endregion
+
+        #region Background Sync
+
+        public override void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
+        {
+            var interactorFactory = Mvx.Resolve<IInteractorFactory>();
+            if (interactorFactory == null) return;
+            interactorFactory
+                .RunBackgroundSync()
+                .Execute()
+                .Select(mapToNativeOutcomes)
+                .Do(completionHandler)
+                .Subscribe();
+        }
+
+        private UIBackgroundFetchResult mapToNativeOutcomes(Foundation.Models.SyncOutcome outcome) {
+            switch (outcome)
+            {
+                case Foundation.Models.SyncOutcome.NewData:
+                    return UIBackgroundFetchResult.NewData;
+                case Foundation.Models.SyncOutcome.NoData:
+                    return UIBackgroundFetchResult.NoData;
+                case Foundation.Models.SyncOutcome.Failed:
+                    return UIBackgroundFetchResult.Failed;
+                default:
+                    return UIBackgroundFetchResult.Failed;
+            }
         }
 
         #endregion

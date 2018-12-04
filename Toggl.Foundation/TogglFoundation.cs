@@ -30,6 +30,7 @@ namespace Toggl.Foundation
         public IAnalyticsService AnalyticsService { get; }
         public IStopwatchProvider StopwatchProvider { get; }
         public IBackgroundService BackgroundService { get; }
+        public IBackgroundSyncService BackgroundSyncService { get; }
         public ISchedulerProvider SchedulerProvider { get; }
         public IPlatformConstants PlatformConstants { get; }
         public INotificationService NotificationService { get; }
@@ -63,6 +64,7 @@ namespace Toggl.Foundation
             StopwatchProvider = builder.StopwatchProvider;
             PlatformConstants = builder.PlatformConstants;
             BackgroundService = builder.BackgroundService;
+            BackgroundSyncService = builder.BackgroundSyncService;
             SchedulerProvider = builder.SchedulerProvider;
             NotificationService = builder.NotificationService;
             RemoteConfigService = builder.RemoteConfigService;
@@ -93,6 +95,7 @@ namespace Toggl.Foundation
             public IRemoteConfigService RemoteConfigService { get; internal set; }
             public IApplicationShortcutCreator ShortcutCreator { get; internal set; }
             public IBackgroundService BackgroundService { get; internal set; }
+            public IBackgroundSyncService BackgroundSyncService { get; internal set; }
             public IPlatformConstants PlatformConstants { get; internal set; }
             public IIntentDonationService IntentDonationService { get; internal set; }
             public ISuggestionProviderContainer SuggestionProviderContainer { get; internal set; }
@@ -155,6 +158,12 @@ namespace Toggl.Foundation
             public Builder WithBackgroundService(IBackgroundService backgroundService)
             {
                 BackgroundService = backgroundService;
+                return this;
+            }
+
+            public Builder WithBackgroundSyncService(IBackgroundSyncService backgroundSyncService)
+            {
+                BackgroundSyncService = backgroundSyncService;
                 return this;
             }
 
@@ -254,6 +263,10 @@ namespace Toggl.Foundation
                 where TBackgroundService : IBackgroundService, new()
                 => WithBackgroundService(new TBackgroundService());
 
+            public Builder WithBackgroundSyncService<TBackgroundSyncService>()
+                where TBackgroundSyncService : IBackgroundSyncService, new()
+                => WithBackgroundSyncService(new TBackgroundSyncService());
+
             public Builder WithLicenseProvider<TLicenseProvider>()
                 where TLicenseProvider : ILicenseProvider, new()
                 => WithLicenseProvider(new TLicenseProvider());
@@ -310,6 +323,7 @@ namespace Toggl.Foundation
                 Ensure.Argument.IsNotNull(AnalyticsService, nameof(AnalyticsService));
                 Ensure.Argument.IsNotNull(StopwatchProvider, nameof(StopwatchProvider));
                 Ensure.Argument.IsNotNull(BackgroundService, nameof(BackgroundService));
+                Ensure.Argument.IsNotNull(BackgroundSyncService, nameof(BackgroundSyncService));
                 Ensure.Argument.IsNotNull(SchedulerProvider, nameof(SchedulerProvider));
                 Ensure.Argument.IsNotNull(PlatformConstants, nameof(PlatformConstants));
                 Ensure.Argument.IsNotNull(NotificationService, nameof(NotificationService));

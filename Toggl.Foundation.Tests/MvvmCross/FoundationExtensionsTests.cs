@@ -37,6 +37,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
         private readonly IAnalyticsService analyticsService = Substitute.For<IAnalyticsService>();
         private readonly IStopwatchProvider stopwatchProvider = Substitute.For<IStopwatchProvider>();
         private readonly IBackgroundService backgroundService = Substitute.For<IBackgroundService>();
+        private readonly IBackgroundSyncService backgroundSyncService = Substitute.For<IBackgroundSyncService>();
         private readonly IPlatformConstants platformConstants = Substitute.For<IPlatformConstants>();
         private readonly IRemoteConfigService remoteConfigService = Substitute.For<IRemoteConfigService>();
         private readonly IApplicationShortcutCreator applicationShortcutCreator = Substitute.For<IApplicationShortcutCreator>();
@@ -191,6 +192,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                     .WithAnalyticsService(analyticsService)
                     .WithStopwatchProvider(stopwatchProvider)
                     .WithBackgroundService(backgroundService)
+                    .WithBackgroundSyncService(backgroundSyncService)
                     .WithSchedulerProvider(schedulerProvider)
                     .WithPlatformConstants(platformConstants)
                     .WithNotificationService(notificationService)
