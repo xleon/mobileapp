@@ -291,7 +291,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     break;
                 default:
                     analyticsService.UnknownSignUpFailure.Track(exception.GetType().FullName, exception.Message);
-                    analyticsService.Track(exception);
+                    analyticsService.TrackAnonymized(exception);
                     errorMessageSubject.OnNext(Resources.GenericSignUpError);
                     break;
             }

@@ -200,7 +200,7 @@ namespace Toggl.Foundation.Analytics
         [AnalyticsEvent("Type", "Message")]
         public IAnalyticsEvent<string, string> UnknownSignUpFailure { get; protected set; }
 
-        public void Track(Exception exception)
+        public void TrackAnonymized(Exception exception)
         {
             if (exception.IsAnonymized())
             {
@@ -211,6 +211,8 @@ namespace Toggl.Foundation.Analytics
                 HandledException.Track(exception.GetType().FullName, exception.Message);
             }
         }
+
+        public abstract void Track(Exception exception, string message);
 
         public abstract void Track(string eventName, Dictionary<string, string> parameters = null);
 

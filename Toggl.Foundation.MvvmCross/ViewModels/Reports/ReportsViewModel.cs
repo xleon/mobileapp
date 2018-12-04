@@ -230,7 +230,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
             var user = await dataSource.User.Get();
             userId = user.Id;
 
-            var workspace = await interactorFactory.GetDefaultWorkspace().Execute();
+            var workspace = await interactorFactory.GetDefaultWorkspace()
+                .TrackException<InvalidOperationException, IThreadSafeWorkspace>("ReportsViewModel.Initialize")
+                .Execute();
             workspaceId = workspace.Id;
             workspaceSubject.OnNext(workspace);
 
