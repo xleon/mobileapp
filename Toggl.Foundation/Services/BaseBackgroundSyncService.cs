@@ -12,7 +12,7 @@ namespace Toggl.Foundation.Services
         private IDisposable loggedInDisposable;
         private IDisposable loggedOutDisposable;
 
-        public void SetupBackgroundSync(LoginManager loginManager)
+        public void SetupBackgroundSync(IUserAccessManager loginManager)
         {
             loggedInDisposable = loginManager.UserLoggedIn
                 .Do(EnableBackgroundSync)

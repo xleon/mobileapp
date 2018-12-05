@@ -63,11 +63,11 @@ namespace Toggl.Foundation.MvvmCross
                 return dataSource;
             }
 
-            var loginManager =
-                new LoginManager(foundation.ApiFactory, foundation.Database, foundation.GoogleService, foundation.ShortcutCreator, foundation.PrivateSharedStorageService, createDataSource);
+            var userAccessManager =
+                new UserAccessManager(foundation.ApiFactory, foundation.Database, foundation.GoogleService, foundation.ShortcutCreator, foundation.PrivateSharedStorageService, createDataSource);
 
-            Mvx.RegisterSingleton<ILoginManager>(loginManager);
-            foundation.BackgroundSyncService.SetupBackgroundSync(loginManager);
+            Mvx.RegisterSingleton<IUserAccessManager>(userAccessManager);
+            foundation.BackgroundSyncService.SetupBackgroundSync(userAccessManager);
         }
 
         private static void initializeInversionOfControl(MvvmCrossFoundation foundation)
@@ -87,6 +87,7 @@ namespace Toggl.Foundation.MvvmCross
             Mvx.RegisterSingleton(foundation.ShortcutCreator);
             Mvx.RegisterSingleton(foundation.LicenseProvider);
             Mvx.RegisterSingleton(foundation.FeedbackService);
+            Mvx.RegisterSingleton(foundation.ShortcutCreator);
             Mvx.RegisterSingleton(foundation.AnalyticsService);
             Mvx.RegisterSingleton(foundation.PlatformConstants);
             Mvx.RegisterSingleton(foundation.NotificationService);
