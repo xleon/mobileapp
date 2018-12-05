@@ -62,12 +62,12 @@ namespace Toggl.Giskard.Activities
 
             runningEntryCardFrame.Visibility = ViewStates.Invisible;
 
-            reportsView.Rx().BindAction(ViewModel.OpenReports);
-            settingsView.Rx().BindAction(ViewModel.OpenSettings);
-            stopButton.Rx().BindAction(ViewModel.StopTimeEntry, _ => TimeEntryStopOrigin.Manual);
+            reportsView.Rx().BindAction(ViewModel.OpenReports).DisposedBy(DisposeBag);
+            settingsView.Rx().BindAction(ViewModel.OpenSettings).DisposedBy(DisposeBag);
+            stopButton.Rx().BindAction(ViewModel.StopTimeEntry, _ => TimeEntryStopOrigin.Manual).DisposedBy(DisposeBag);
 
-            playButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => true);
-            playButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => false, ButtonEventType.LongPress);
+            playButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => true).DisposedBy(DisposeBag);
+            playButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => false, ButtonEventType.LongPress).DisposedBy(DisposeBag);
 
             timeEntryCard.Rx().Tap()
                 .WithLatestFrom(ViewModel.CurrentRunningTimeEntry, (_, te) => te.Id)
