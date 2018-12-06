@@ -34,26 +34,10 @@ namespace Toggl.Foundation.Sync
             this.movingWindowSize = movingWindowSize ?? standardMovingWindowWidth;
         }
 
-        public void SlotWasUsed(DateTimeOffset time)
-        {
-            SlotsWereUsed(time, numberOfSlots: 1);
-        }
+        public bool TryClaimFreeSlot(DateTimeOffset now, out TimeSpan timeToFreeSlot)
+            => TryClaimFreeSlots(now, numberOfSlots: 1, timeToFreeSlot: out timeToFreeSlot);
 
-        public void SlotsWereUsed(DateTimeOffset time, int numberOfSlots)
-        {
-            lock (historyWindow)
-            {
-                for (var i = 0; i < numberOfSlots; i++)
-                {
-                    useSlot(time, historyWindow);
-                }
-            }
-        }
-
-        public bool HasFreeSlot(DateTimeOffset now, out TimeSpan timeToFreeSlot)
-            => HasFreeSlots(now, numberOfSlots: 1, timeToFreeSlot: out timeToFreeSlot);
-
-        public bool HasFreeSlots(DateTimeOffset now, int numberOfSlots, out TimeSpan timeToFreeSlot)
+        public bool TryClaimFreeSlots(DateTimeOffset now, int numberOfSlots, out TimeSpan timeToFreeSlot)
         {
             lock (historyWindow)
             {
@@ -64,7 +48,15 @@ namespace Toggl.Foundation.Sync
                 }
 
                 timeToFreeSlot = timeToNextFreeSlots(now, numberOfSlots);
-                return timeToFreeSlot == TimeSpan.Zero;
+                var claimSlots = timeToFreeSlot == TimeSpan.Zero;
+
+                if (claimSlots)
+                {
+                    for (var i = 0; i < numberOfSlots; i++)
+                        useSlot(now, historyWindow);
+                }
+
+                return claimSlots;
             }
         }
 
