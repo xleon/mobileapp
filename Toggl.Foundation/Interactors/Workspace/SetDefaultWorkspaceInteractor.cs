@@ -31,8 +31,8 @@ namespace Toggl.Foundation.Interactors
 
         public IObservable<Unit> Execute()
             => userDataSource
-                .Current
-                .FirstAsync()
+                .Get()
+                .SingleAsync()
                 .Select(User.Builder.FromExisting)
                 .Select(user => user
                     .SetDefaultWorkspaceId(workspaceId)

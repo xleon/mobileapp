@@ -622,7 +622,7 @@ namespace Toggl.Foundation.Tests.Sync
             public void ReportsTheErrorWhenAKnownClientErrorExceptionIsReported(ClientErrorException exception)
             {
                 Exception caughtException = null;
-                SyncManager.ProgressObservable.Subscribe(_ => { }, e => caughtException = e);
+                SyncManager.Errors.Subscribe(e => caughtException = e);
 
                 OrchestratorSyncComplete.OnNext(new Error(exception));
 
@@ -656,7 +656,7 @@ namespace Toggl.Foundation.Tests.Sync
             {
                 Exception caughtException = null;
                 var thrownException = new NoWorkspaceException();
-                SyncManager.ProgressObservable.Subscribe(_ => { }, e => caughtException = e);
+                SyncManager.Errors.Subscribe(e => caughtException = e);
 
                 OrchestratorSyncComplete.OnNext(new Error(thrownException));
 
@@ -668,7 +668,7 @@ namespace Toggl.Foundation.Tests.Sync
             {
                 Exception caughtException = null;
                 var thrownException = new NoDefaultWorkspaceException();
-                SyncManager.ProgressObservable.Subscribe(_ => { }, e => caughtException = e);
+                SyncManager.Errors.Subscribe(e => caughtException = e);
 
                 OrchestratorSyncComplete.OnNext(new Error(thrownException));
 
@@ -750,7 +750,7 @@ namespace Toggl.Foundation.Tests.Sync
 
                 OrchestratorSyncComplete.OnNext(new Error(exception));
 
-                AnalyticsService.Received().Track(exception);
+                AnalyticsService.Received().TrackAnonymized(exception);
             }
 
             [Fact, LogIfTooSlow]
@@ -760,7 +760,7 @@ namespace Toggl.Foundation.Tests.Sync
 
                 OrchestratorSyncComplete.OnNext(new Error(exception));
 
-                AnalyticsService.DidNotReceive().Track(Arg.Any<OfflineException>());
+                AnalyticsService.DidNotReceive().TrackAnonymized(Arg.Any<OfflineException>());
                 AnalyticsService.OfflineModeDetected.Received().Track();
             }
 

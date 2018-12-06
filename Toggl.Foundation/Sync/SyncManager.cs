@@ -23,11 +23,15 @@ namespace Toggl.Foundation.Sync
         private bool isFrozen;
 
         private readonly ISubject<SyncProgress> progress;
+        private readonly ISubject<Exception> errors;
 
         public bool IsRunningSync { get; private set; }
 
         public SyncState State => orchestrator.State;
+
         public IObservable<SyncProgress> ProgressObservable { get; }
+
+        public IObservable<Exception> Errors { get; }
 
         public SyncManager(
             ISyncStateQueue queue,
@@ -50,6 +54,9 @@ namespace Toggl.Foundation.Sync
 
             progress = new BehaviorSubject<SyncProgress>(SyncProgress.Unknown);
             ProgressObservable = progress.AsObservable();
+
+            errors = new Subject<Exception>();
+            Errors = errors.AsObservable();
 
             orchestrator.SyncCompleteObservable.Subscribe(syncOperationCompleted);
             isFrozen = false;
@@ -142,7 +149,8 @@ namespace Toggl.Foundation.Sync
             if (error is NoWorkspaceException
                 || error is NoDefaultWorkspaceException)
             {
-                progress.OnError(error);
+                errors.OnNext(error);
+                progress.OnNext(SyncProgress.Synced);
                 return;
             }
 
@@ -154,7 +162,7 @@ namespace Toggl.Foundation.Sync
             else
             {
                 progress.OnNext(SyncProgress.Failed);
-                analyticsService.Track(error);
+                analyticsService.TrackAnonymized(error);
             }
 
             if (error is ClientDeprecatedException
@@ -162,7 +170,8 @@ namespace Toggl.Foundation.Sync
                 || error is UnauthorizedException)
             {
                 Freeze();
-                progress.OnError(error);
+                errors.OnNext(error);
+                progress.OnNext(SyncProgress.Failed);
             }
         }
 
