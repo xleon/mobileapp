@@ -190,8 +190,12 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.ShouldReloadTimeEntryLog
-                    .VoidSubscribe(reload)
-                    .DisposedBy(DisposeBag);
+                .VoidSubscribe(reload)
+                .DisposedBy(DisposeBag);
+
+            ViewModel.ShouldShowWelcomeBack
+                .Subscribe(onWelcomeBackViewVisibilityChanged)
+                .DisposedBy(DisposeBag);
 
             setupOnboardingSteps();
             onCreateStopwatch.Stop();
@@ -317,6 +321,23 @@ namespace Toggl.Giskard.Activities
             Snackbar.Make(coordinatorLayout, FoundationResources.EntryDeleted, snackbarDuration)
                 .SetAction(FoundationResources.UndoButtonTitle, view => ViewModel.TimeEntriesViewModel.CancelDeleteTimeEntry.Execute())
                 .Show();
+        }
+
+        private void onWelcomeBackViewVisibilityChanged(bool shouldShowWelcomeBackView)
+        {
+            if (shouldShowWelcomeBackView)
+            {
+                if (welcomeBackView == null)
+                {
+                    welcomeBackView = welcomeBackStub.Inflate();
+                }
+
+                welcomeBackView.Visibility = ViewStates.Visible;
+            }
+            else if (welcomeBackView != null)
+            {
+                welcomeBackView.Visibility = ViewStates.Gone;
+            }
         }
 
         private sealed class FabAsyncHideListener : FloatingActionButton.OnVisibilityChangedListener

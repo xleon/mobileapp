@@ -23,6 +23,8 @@ namespace Toggl.Giskard.Activities
         private TextView timeEntryCardProjectClientTaskLabel;
         private SwipeRefreshLayout refreshLayout;
         private RecyclerView mainRecyclerView;
+        private ViewStub welcomeBackStub;
+        private View welcomeBackView;
 
         protected override void InitializeViews()
         {
@@ -41,6 +43,7 @@ namespace Toggl.Giskard.Activities
             timeEntryCardDotView = FindViewById(Resource.Id.MainRunningTimeEntryProjectDotView);
             timeEntryCardProjectClientTaskLabel = FindViewById<TextView>(Resource.Id.MainRunningTimeEntryProjectClientTaskLabel);
             refreshLayout = FindViewById<SwipeRefreshLayout>(Resource.Id.MainSwipeRefreshLayout);
+            welcomeBackStub = FindViewById<ViewStub>(Resource.Id.WelcomeBackViewStub);
         }
     }
 }
