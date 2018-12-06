@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -171,7 +172,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 .Merge(dayChangedObservable)
                 .Merge(selectedCalendarsChangedObservable)
                 .Merge(appResumedFromBackgroundObservable)
-                .Subscribe(reloadData)
+                .SelectMany(_ => reloadData())
+                .Subscribe(CalendarItems.ReplaceWith)
                 .DisposedBy(disposeBag);
 
             selectedCalendarsChangedObservable
@@ -301,10 +303,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             await interactorFactory.UpdateTimeEntry(dto).Execute();
         }
 
-        private async Task reloadData()
-            => await interactorFactory
-                .GetCalendarItemsForDate(timeService.CurrentDateTime.ToLocalTime().Date)
-                .Execute()
-                .Do(CalendarItems.ReplaceWith);
+        private IObservable<IEnumerable<CalendarItem>> reloadData()
+        {
+            return interactorFactory.GetCalendarItemsForDate(timeService.CurrentDateTime.ToLocalTime().Date).Execute();
+        }
     }
 }

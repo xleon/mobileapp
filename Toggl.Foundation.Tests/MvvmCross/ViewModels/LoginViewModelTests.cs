@@ -505,7 +505,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PasswordManagerService.IsAvailable.Returns(false);
 
-                await ViewModel.StartPasswordManager();
+                await ViewModel.StartPasswordManager.Execute();
 
                 await PasswordManagerService.DidNotReceive().GetLoginInformation();
             }
@@ -516,7 +516,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observable = Observable.Return(new PasswordManagerResult(ValidEmail, ValidPassword));
                 PasswordManagerService.GetLoginInformation().Returns(observable);
 
-                await ViewModel.StartPasswordManager();
+                await ViewModel.StartPasswordManager.Execute();
 
                 await PasswordManagerService.Received().GetLoginInformation();
             }
@@ -527,7 +527,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var scheduler = new TestScheduler();
                 var observable = arrangeCallToPasswordManagerWithValidCredentials();
 
-                await ViewModel.StartPasswordManager();
+                await ViewModel.StartPasswordManager.Execute();
 
                 await UserAccessManager.Received().Login(Arg.Any<Email>(), Arg.Any<Password>());
             }
@@ -540,7 +540,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observer = TestScheduler.CreateObserver<string>();
                 ViewModel.Email.Subscribe(observer);
 
-                await ViewModel.StartPasswordManager();
+                await ViewModel.StartPasswordManager.Execute();
 
                 TestScheduler.Start();
                 observer.Messages.AssertEqual(
@@ -556,7 +556,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observer = TestScheduler.CreateObserver<string>();
                 ViewModel.Email.Subscribe(observer);
 
-                await ViewModel.StartPasswordManager();
+                await ViewModel.StartPasswordManager.Execute();
 
                 TestScheduler.Start();
                 observer.Messages.AssertEqual(
@@ -572,7 +572,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observer = TestScheduler.CreateObserver<string>();
                 ViewModel.Password.Subscribe(observer);
 
-                await ViewModel.StartPasswordManager();
+                await ViewModel.StartPasswordManager.Execute();
 
                 TestScheduler.Start();
                 observer.Messages.AssertEqual(
@@ -588,7 +588,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observer = TestScheduler.CreateObserver<string>();
                 ViewModel.Password.Subscribe(observer);
 
-                await ViewModel.StartPasswordManager();
+                await ViewModel.StartPasswordManager.Execute();
 
                 TestScheduler.Start();
                 observer.Messages.AssertEqual(
@@ -602,7 +602,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var scheduler = new TestScheduler();
                 var observable = arrangeCallToPasswordManagerWithInvalidCredentials();
 
-                await ViewModel.StartPasswordManager();
+                await ViewModel.StartPasswordManager.Execute();
 
                 await UserAccessManager.DidNotReceive().Login(Arg.Any<Email>(), Arg.Any<Password>());
             }
@@ -613,7 +613,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 PasswordManagerService.IsAvailable.Returns(true);
                 var observable = arrangeCallToPasswordManagerWithInvalidCredentials();
 
-                await ViewModel.StartPasswordManager();
+                await ViewModel.StartPasswordManager.Execute();
 
                 AnalyticsService.PasswordManagerButtonClicked.Received().Track();
                 AnalyticsService.PasswordManagerContainsValidEmail.DidNotReceive().Track();
@@ -628,7 +628,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observable = Observable.Return(loginInfo);
                 PasswordManagerService.GetLoginInformation().Returns(observable);
 
-                await ViewModel.StartPasswordManager();
+                await ViewModel.StartPasswordManager.Execute();
 
                 AnalyticsService.PasswordManagerButtonClicked.Received().Track();
                 AnalyticsService.PasswordManagerContainsValidEmail.Received().Track();
@@ -641,7 +641,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 PasswordManagerService.IsAvailable.Returns(true);
                 var observable = arrangeCallToPasswordManagerWithValidCredentials();
 
-                await ViewModel.StartPasswordManager();
+                await ViewModel.StartPasswordManager.Execute();
 
                 AnalyticsService.PasswordManagerButtonClicked.Received().Track();
                 AnalyticsService.PasswordManagerContainsValidEmail.Received().Track();
@@ -678,7 +678,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.SetEmail(email);
                 ViewModel.SetPassword(password);
 
-                ViewModel.Signup().Wait();
+                ViewModel.Signup.Execute().Wait();
 
                 NavigationService
                     .Received()
