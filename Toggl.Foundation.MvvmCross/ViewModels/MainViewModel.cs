@@ -280,7 +280,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             dataSource
                 .Workspaces
                 .Created
-                .VoidSubscribe(onWorkspaceCreated)
+                .Subscribe(_ => onWorkspaceCreated())
                 .DisposedBy(disposeBag);
 
             dataSource

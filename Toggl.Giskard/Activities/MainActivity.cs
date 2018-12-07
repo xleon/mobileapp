@@ -190,7 +190,7 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.ShouldReloadTimeEntryLog
-                .VoidSubscribe(reload)
+                .Subscribe(reload)
                 .DisposedBy(DisposeBag);
 
             ViewModel.ShouldShowWelcomeBack

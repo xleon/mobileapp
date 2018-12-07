@@ -88,7 +88,7 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.LoggingOut
-                .VoidSubscribe(this.CancelAllNotifications)
+                .Subscribe(this.CancelAllNotifications)
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsFeedbackSuccessViewShowing
@@ -112,7 +112,7 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             manualModeView.Rx().Tap()
-                .VoidSubscribe(ViewModel.ToggleManualMode)
+                .Subscribe(ViewModel.ToggleManualMode)
                 .DisposedBy(DisposeBag);
 
             is24hoursModeView.Rx()
@@ -120,11 +120,11 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             runningTimerNotificationsView.Rx().Tap()
-                .VoidSubscribe(ViewModel.ToggleRunningTimerNotifications)
+                .Subscribe(ViewModel.ToggleRunningTimerNotifications)
                 .DisposedBy(DisposeBag);
 
             stoppedTimerNotificationsView.Rx().Tap()
-                .VoidSubscribe(ViewModel.ToggleStoppedTimerNotifications)
+                .Subscribe(ViewModel.ToggleStoppedTimerNotifications)
                 .DisposedBy(DisposeBag);
 
             beginningOfWeekView.Rx()
