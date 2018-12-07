@@ -65,26 +65,21 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly BehaviorSubject<bool> isCountryErrorVisibleSubject = new BehaviorSubject<bool>(false);
 
         public IObservable<string> CountryButtonTitle { get; }
-
         public IObservable<bool> IsCountryErrorVisible { get; }
-
         public IObservable<string> Email { get; }
-
         public IObservable<string> Password { get; }
-
         public IObservable<bool> HasError { get; }
-
         public IObservable<bool> IsLoading { get; }
-
         public IObservable<bool> SignupEnabled { get; }
-
         public IObservable<ShakeTargets> Shake { get; }
-
         public IObservable<string> ErrorMessage { get; }
-
         public IObservable<bool> IsPasswordMasked { get; }
-
         public IObservable<bool> IsShowPasswordButtonVisible { get; }
+
+        public UIAction Login { get; }
+        public UIAction Signup { get; }
+        public UIAction GoogleSignup { get; }
+        public UIAction PickCountry { get; }
 
         public SignupViewModel(
             IApiFactory apiFactory,
@@ -116,6 +111,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.lastTimeUsageStorage = lastTimeUsageStorage;
             this.timeService = timeService;
             this.schedulerProvider = schedulerProvider;
+
+            Login = UIAction.FromAsync(login);
+            Signup = UIAction.FromAsync(signup);
+            GoogleSignup = UIAction.FromAsync(googleSignup);
+            PickCountry = UIAction.FromAsync(pickCountry);
 
             var emailObservable = emailSubject.Select(email => email.TrimmedEnd());
 
@@ -222,7 +222,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             isCountryErrorVisibleSubject.OnNext(true);
         }
 
-        public async Task Signup()
+        private async Task signup()
         {
             var shakeTargets = ShakeTargets.None;
             if (!emailSubject.Value.IsValid)
@@ -303,7 +303,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             signupDisposable = null;
         }
 
-        public async Task GoogleSignup()
+        private async Task googleSignup()
         {
             if (!countryId.HasValue)
             {
@@ -327,7 +327,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public void TogglePasswordVisibility()
             => isPasswordMaskedSubject.OnNext(!isPasswordMaskedSubject.Value);
 
-        public async Task PickCountry()
+        private async Task pickCountry()
         {
             getCountrySubscription?.Dispose();
             getCountrySubscription = null;
@@ -349,7 +349,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             countryNameSubject.OnNext(selectedCountry.Name);
         }
 
-        public Task Login()
+        private Task login()
         {
             if (isLoadingSubject.Value)
                 return Task.CompletedTask;

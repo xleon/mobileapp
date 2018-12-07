@@ -140,10 +140,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
         public IMvxCommand<ReportsDateRangeParameter> ChangeDateRangeCommand { get; }
 
         public IObservable<DateTimeOffset> StartDate { get; }
-
         public IObservable<DateTimeOffset> EndDate { get; }
-
         public IObservable<bool> WorkspaceHasBillableFeatureEnabled { get; }
+
+        public UIAction SelectWorkspace { get; }
 
         public ReportsViewModel(ITogglDataSource dataSource,
                                 ITimeService timeService,
@@ -189,6 +189,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
             IsLoadingObservable = isLoading.AsObservable().StartWith(true).AsDriver(schedulerProvider);
             StartDate = startDateSubject.AsObservable().AsDriver(schedulerProvider);
             EndDate = endDateSubject.AsObservable().AsDriver(schedulerProvider);
+
+            SelectWorkspace = UIAction.FromAsync(selectWorkspace);
 
             WorkspaceNameObservable = workspaceSubject
                 .Select(workspace => workspace?.Name ?? string.Empty)
@@ -469,7 +471,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
                 .AsReadOnly();
         }
 
-        public async Task SelectWorkspace()
+        private async Task selectWorkspace()
         {
             var currentWorkspaceIndex = Workspaces.IndexOf(w => w.Item.Id == workspaceId);
 
