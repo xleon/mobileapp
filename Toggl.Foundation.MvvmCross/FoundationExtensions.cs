@@ -40,7 +40,14 @@ namespace Toggl.Foundation.MvvmCross
             initializeInversionOfControl(foundation);
 
             Func<ITogglDataSource, ISyncManager> createSyncManager(ITogglApi api) => dataSource =>
-                TogglSyncManager.CreateSyncManager(foundation.Database, api, dataSource, foundation.TimeService, foundation.AnalyticsService, foundation.LastTimeUsageStorage, retryDelayLimit, foundation.Scheduler);
+                TogglSyncManager.CreateSyncManager(
+                    foundation.Database,
+                    api,
+                    dataSource,
+                    foundation.TimeService,
+                    foundation.AnalyticsService,
+                    foundation.LastTimeUsageStorage,
+                    foundation.Scheduler);
 
             ITogglDataSource createDataSource(ITogglApi api)
             {
