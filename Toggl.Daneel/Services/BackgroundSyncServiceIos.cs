@@ -7,11 +7,11 @@ namespace Toggl.Daneel.Services
 {
     public sealed class BackgroundSyncServiceIos : BaseBackgroundSyncService
     {
-        private const double minimumBackgroundFetchInterval = 15 * 60;
+        private const double minimumBackgroundFetchIntervalInMinutes = 15;
 
         public override void EnableBackgroundSync()
             => UIApplication.SharedApplication
-                .SetMinimumBackgroundFetchInterval(minimumBackgroundFetchInterval);
+                .SetMinimumBackgroundFetchInterval(TimeSpan.FromMinutes(minimumBackgroundFetchIntervalInMinutes).TotalSeconds);
 
         public override void DisableBackgroundSync()
             => UIApplication.SharedApplication
