@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Threading;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DataSources.Interfaces;
@@ -16,7 +11,6 @@ using Toggl.Foundation.Sync.States;
 using Toggl.Foundation.Sync.States.CleanUp;
 using Toggl.Foundation.Sync.States.Pull;
 using Toggl.Foundation.Sync.States.Push;
-using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
@@ -41,7 +35,7 @@ namespace Toggl.Foundation
             var queue = new SyncStateQueue();
             var entryPoints = new StateMachineEntryPoints();
             var transitions = new TransitionHandlerProvider();
-            ConfigureTransitions(transitions, database, api, dataSource, timeService, analyticsService, entryPoints, queue);
+            ConfigureTransitions(transitions, database, api, dataSource, scheduler, timeService, analyticsService, entryPoints, queue);
             var stateMachine = new StateMachine(transitions, scheduler);
             var orchestrator = new StateMachineOrchestrator(stateMachine, entryPoints);
 
@@ -53,12 +47,15 @@ namespace Toggl.Foundation
             ITogglDatabase database,
             ITogglApi api,
             ITogglDataSource dataSource,
+            IScheduler scheduler,
             ITimeService timeService,
             IAnalyticsService analyticsService,
             StateMachineEntryPoints entryPoints,
             ISyncStateQueue queue)
         {
-            configurePullTransitions(transitions, database, api, dataSource, timeService, analyticsService, entryPoints.StartPullSync, queue);
+            var leakyBucket = new LeakyBucket(slotsPerWindow: 60, movingWindowSize: TimeSpan.FromSeconds(60));
+
+            configurePullTransitions(transitions, database, api, dataSource, timeService, analyticsService, scheduler, entryPoints.StartPullSync, leakyBucket, queue);
             configurePushTransitions(transitions, api, dataSource, analyticsService, entryPoints.StartPushSync);
             configureCleanUpTransitions(transitions, timeService, dataSource, analyticsService, entryPoints.StartCleanUp);
         }
@@ -70,10 +67,14 @@ namespace Toggl.Foundation
             ITogglDataSource dataSource,
             ITimeService timeService,
             IAnalyticsService analyticsService,
+            IScheduler scheduler,
             StateResult entryPoint,
+            ILeakyBucket leakyBucket,
             ISyncStateQueue queue)
         {
-            var fetchAllSince = new FetchAllSinceState(database, api, timeService);
+            var delayState = new DelayState(scheduler);
+
+            var fetchAllSince = new FetchAllSinceState(database, api, timeService, leakyBucket);
 
             var ensureFetchWorkspacesSucceeded = new EnsureFetchListSucceededState<IWorkspace>();
             var ensureFetchWorkspaceFeaturesSucceeded = new EnsureFetchListSucceededState<IWorkspaceFeatureCollection>();
@@ -160,6 +161,9 @@ namespace Toggl.Foundation
             // start all the API requests first
             transitions.ConfigureTransition(entryPoint, fetchAllSince);
 
+            // prevent overloading server with too many requests
+            transitions.ConfigureTransition(fetchAllSince.PreventOverloadingServer, delayState);
+
             // detect gaining access to workspaces
             transitions.ConfigureTransition(fetchAllSince.FetchStarted, ensureFetchWorkspacesSucceeded);
             transitions.ConfigureTransition(ensureFetchWorkspacesSucceeded.Continue, detectGainingAccessToWorkspaces);
@@ -227,6 +231,9 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(ensureFetchTasksSucceeded.ErrorOccured, new FailureState());
             transitions.ConfigureTransition(ensureFetchTimeEntriesSucceeded.ErrorOccured, new FailureState());
             transitions.ConfigureTransition(refetchInaccessibleProjects.ErrorOccured, new FailureState());
+
+            // delay loop
+            transitions.ConfigureTransition(delayState.Continue, fetchAllSince);
         }
 
         private static void configurePushTransitions(

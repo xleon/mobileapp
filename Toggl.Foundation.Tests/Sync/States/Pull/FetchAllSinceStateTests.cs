@@ -25,6 +25,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
             private readonly ITogglDatabase database;
             private readonly ITogglApi api;
             private readonly ITimeService timeService;
+            private readonly ILeakyBucket leakyBucket;
             private readonly FetchAllSinceState state;
             private readonly DateTimeOffset now = new DateTimeOffset(2017, 02, 15, 13, 50, 00, TimeSpan.Zero);
 
@@ -33,8 +34,10 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
                 database = Substitute.For<ITogglDatabase>();
                 api = Substitute.For<ITogglApi>();
                 timeService = Substitute.For<ITimeService>();
+                leakyBucket = Substitute.For<ILeakyBucket>();
+                leakyBucket.TryClaimFreeSlots(Arg.Any<DateTimeOffset>(), Arg.Any<int>(), out _).Returns(true);
                 timeService.CurrentDateTime.Returns(now);
-                state = new FetchAllSinceState(database, api, timeService);
+                state = new FetchAllSinceState(database, api, timeService, leakyBucket);
             }
 
             [Fact, LogIfTooSlow]
@@ -208,6 +211,22 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
 
                 await api.TimeEntries.Received().GetAll(
                     Arg.Is<DateTimeOffset>(start => min <= now - start && now - start <= max), Arg.Is(now.AddDays(2)));
+            }
+
+            [Property]
+            public void ReturnsPreventServerOverloadWithCorrectDelayWhenTheLeakyBucketIsFull(TimeSpan delay)
+            {
+                leakyBucket.TryClaimFreeSlots(Arg.Any<DateTimeOffset>(), Arg.Any<int>(), out _)
+                    .Returns(x =>
+                    {
+                        x[2] = delay;
+                        return false;
+                    });
+
+                var transition = state.Start().SingleAsync().Wait();
+
+                transition.Result.Should().Be(state.PreventOverloadingServer);
+                var parameter = ((Transition<TimeSpan>)transition).Parameter;
             }
         }
     }

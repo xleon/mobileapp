@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using NSubstitute;
@@ -222,6 +223,7 @@ namespace SyncDiagramGenerator
                 Substitute.For<ITogglDatabase>(),
                 Substitute.For<ITogglApi>(),
                 Substitute.For<ITogglDataSource>(),
+                Substitute.For<IScheduler>(),
                 Substitute.For<ITimeService>(),
                 Substitute.For<IAnalyticsService>(),
                 entryPoints,
