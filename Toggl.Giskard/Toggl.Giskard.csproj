@@ -509,6 +509,7 @@
     <Compile Include="Extensions\Reactive\ImageViewExtensions.cs" />      
     <Compile Include="Extensions\TimeEntryExtensions.cs" />
     <Compile Include="Services\BackgroundSyncServiceAndroid.cs" />
+    <Compile Include="Services\BackgroundSyncJobSchedulerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
