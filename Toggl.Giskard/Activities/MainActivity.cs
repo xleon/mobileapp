@@ -12,6 +12,7 @@ using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
 using Android.Text;
 using Android.Views;
+using MvvmCross.Platforms.Android.Core;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Diagnostics;
@@ -48,6 +49,9 @@ namespace Toggl.Giskard.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
+            var setup = MvxAndroidSetupSingleton.EnsureSingletonAvailable(ApplicationContext);
+            setup.EnsureInitialized();
+
             base.OnCreate(bundle);
             var onCreateStopwatch = localStopwatchProvider.Create(MeasuredOperation.MainActivityOnCreate);
             onCreateStopwatch.Start();
