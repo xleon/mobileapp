@@ -197,6 +197,10 @@ namespace Toggl.Giskard.Activities
                 .Subscribe(onWelcomeBackViewVisibilityChanged)
                 .DisposedBy(DisposeBag);
 
+            ViewModel.ShouldShowEmptyState
+                .Subscribe(onEmptyStateVisibilityChanged)
+                .DisposedBy(DisposeBag);
+
             setupOnboardingSteps();
             onCreateStopwatch.Stop();
         }
@@ -310,6 +314,23 @@ namespace Toggl.Giskard.Activities
                     .OnAnimationEnd(_ => playButton.Show())
                     .OnAnimationCancel(() => stopButton.Show())
                     .Start();
+            }
+        }
+
+        private void onEmptyStateVisibilityChanged(bool shouldShowEmptyState)
+        {
+            if (shouldShowEmptyState)
+            {
+                if (emptyStateView == null)
+                {
+                    emptyStateView = emptyStateViewStub.Inflate();
+                }
+
+                emptyStateView.Visibility = ViewStates.Visible;
+            }
+            else if (emptyStateView != null)
+            {
+                emptyStateView.Visibility = ViewStates.Gone;
             }
         }
 
