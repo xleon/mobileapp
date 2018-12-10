@@ -40,7 +40,10 @@ namespace Toggl.Giskard.Activities
                 Resource.Layout.SettingsActivityWorkspaceCell,
                 WorkspaceSelectionViewHolder.Create
             );
-            adapter.OnItemTapped = ViewModel.SelectDefaultWorkspace;
+            adapter.ItemTapObservable
+                .Subscribe(ViewModel.SelectDefaultWorkspace.Inputs)
+                .DisposedBy(DisposeBag);
+
             workspacesRecyclerView.SetAdapter(adapter);
             workspacesRecyclerView.SetLayoutManager(new LinearLayoutManager(this));
 
