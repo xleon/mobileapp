@@ -42,7 +42,6 @@ namespace Toggl.Giskard
             var navigationService = Mvx.Resolve<IMvxNavigationService>();
             if (string.IsNullOrEmpty(navigationUrl))
             {
-                navigationService.Navigate<MainViewModel>();
                 return;
             }
 
