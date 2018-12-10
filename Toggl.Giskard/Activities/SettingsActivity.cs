@@ -74,6 +74,10 @@ namespace Toggl.Giskard.Activities
                 .Subscribe(stoppedTimerNotificationsSwitch.Rx().Checked())
                 .DisposedBy(DisposeBag);
 
+            ViewModel.DateFormat
+                .Subscribe(dateFormatTextView.Rx().TextObserver())
+                .DisposedBy(DisposeBag);
+
             ViewModel.BeginningOfWeek
                 .Subscribe(beginningOfWeekTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
@@ -125,6 +129,10 @@ namespace Toggl.Giskard.Activities
 
             stoppedTimerNotificationsView.Rx().Tap()
                 .Subscribe(ViewModel.ToggleStoppedTimerNotifications)
+                .DisposedBy(DisposeBag);
+
+            dateFormatView.Rx().Tap()
+                .Subscribe(ViewModel.SelectDateFormat.Inputs)
                 .DisposedBy(DisposeBag);
 
             beginningOfWeekView.Rx()

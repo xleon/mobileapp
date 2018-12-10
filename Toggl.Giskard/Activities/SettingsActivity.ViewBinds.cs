@@ -16,11 +16,13 @@ namespace Toggl.Giskard.Activities
         private View runningTimerNotificationsView;
         private View stoppedTimerNotificationsView;
         private View avatarContainer;
+        private View dateFormatView;
         private View beginningOfWeekView;
 
         private TextView nameTextView;
         private TextView emailTextView;
         private TextView versionTextView;
+        private TextView dateFormatTextView;
         private TextView beginningOfWeekTextView;
 
         private ImageView avatarView;
@@ -41,6 +43,7 @@ namespace Toggl.Giskard.Activities
             manualModeView = FindViewById(Resource.Id.SettingsToggleManualModeView);
             is24hoursModeView = FindViewById(Resource.Id.SettingsIs24HourModeView);
             avatarContainer = FindViewById(Resource.Id.SettingsViewAvatarImageContainer);
+            dateFormatView = FindViewById(Resource.Id.SettingsDateFormatView);
             beginningOfWeekView = FindViewById(Resource.Id.SettingsSelectBeginningOfWeekView);
             runningTimerNotificationsView = FindViewById(Resource.Id.SettingsRunningTimerNotificationsView);
             stoppedTimerNotificationsView = FindViewById(Resource.Id.SettingsStoppedTimerNotificationsView);
@@ -48,6 +51,7 @@ namespace Toggl.Giskard.Activities
             nameTextView = FindViewById<TextView>(Resource.Id.SettingsNameTextView);
             emailTextView = FindViewById<TextView>(Resource.Id.SettingsEmailTextView);
             versionTextView = FindViewById<TextView>(Resource.Id.SettingsAppVersionTextView);
+            dateFormatTextView = FindViewById<TextView>(Resource.Id.SettingsDateFormatTextView);
             beginningOfWeekTextView = FindViewById<TextView>(Resource.Id.SettingsBeginningOfWeekTextView);
 
             avatarView = FindViewById<ImageView>(Resource.Id.SettingsViewAvatarImage);
