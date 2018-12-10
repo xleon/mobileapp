@@ -8,7 +8,6 @@ using Android.OS;
 using Android.Views;
 using MvvmCross.Platforms.Android.Binding.Views;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
-using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
@@ -79,24 +78,24 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             //Commands
-            loginCard.Rx()
-                .BindAction(ViewModel.Login)
+            loginCard.Rx().Tap()
+                .Subscribe(ViewModel.Login.Inputs)
                 .DisposedBy(DisposeBag);
 
-            signupButton.Rx()
-                .BindAction(ViewModel.Signup)
+            signupButton.Rx().Tap()
+                .Subscribe(ViewModel.Signup.Inputs)
                 .DisposedBy(DisposeBag);
 
             passwordEditText.Rx().EditorActionSent()
                 .Subscribe(ViewModel.Signup.Inputs)
                 .DisposedBy(DisposeBag);
 
-            googleSignupButton.Rx()
-                .BindAction(ViewModel.GoogleSignup)
+            googleSignupButton.Rx().Tap()
+                .Subscribe(ViewModel.GoogleSignup.Inputs)
                 .DisposedBy(DisposeBag);
 
-            countrySelection.Rx()
-                .BindAction(ViewModel.PickCountry)
+            countrySelection.Rx().Tap()
+                .Subscribe(ViewModel.PickCountry.Inputs)
                 .DisposedBy(DisposeBag);
 
             string signupButtonTitle(bool isLoading)
