@@ -82,6 +82,10 @@ namespace Toggl.Giskard.Activities
                 .Subscribe(beginningOfWeekTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
+            ViewModel.DurationFormat
+                .Subscribe(durationFormatTextView.Rx().TextObserver())
+                .DisposedBy(DisposeBag);
+
             ViewModel.UserAvatar
                 .Select(userImageFromBytes)
                 .Subscribe(bitmap =>
@@ -137,6 +141,10 @@ namespace Toggl.Giskard.Activities
 
             beginningOfWeekView.Rx()
                 .BindAction(ViewModel.SelectBeginningOfWeek)
+                .DisposedBy(DisposeBag);
+
+            durationFormatView.Rx().Tap()
+                .Subscribe(ViewModel.SelectDurationFormat.Inputs)
                 .DisposedBy(DisposeBag);
 
             setupToolbar();
