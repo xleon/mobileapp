@@ -7,6 +7,7 @@ using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Sync;
+using Toggl.Foundation.Sync.Helpers;
 using Toggl.Foundation.Sync.States;
 using Toggl.Foundation.Sync.States.CleanUp;
 using Toggl.Foundation.Sync.States.Pull;
@@ -53,9 +54,25 @@ namespace Toggl.Foundation
             StateMachineEntryPoints entryPoints,
             ISyncStateQueue queue)
         {
-            var leakyBucket = new LeakyBucket(slotsPerWindow: 60, movingWindowSize: TimeSpan.FromSeconds(60));
+            var minutesLeakyBucket = new LeakyBucket(slotsPerWindow: 60, movingWindowSize: TimeSpan.FromSeconds(60));
+            var secondsLeakyBucket = new LeakyBucket(slotsPerWindow: 3, movingWindowSize: TimeSpan.FromSeconds(1));
+            var requestSender = new RequestSender(database, timeService);
+            var rateLimitingAwareRequestSender =
+                new RateLimitingAwareRequestSender(timeService, secondsLeakyBucket, scheduler, requestSender);
 
-            configurePullTransitions(transitions, database, api, dataSource, timeService, analyticsService, scheduler, entryPoints.StartPullSync, leakyBucket, queue);
+            configurePullTransitions(
+                transitions,
+                database,
+                api,
+                dataSource,
+                timeService,
+                analyticsService,
+                scheduler,
+                entryPoints.StartPullSync,
+                minutesLeakyBucket,
+                queue,
+                rateLimitingAwareRequestSender);
+
             configurePushTransitions(transitions, api, dataSource, analyticsService, entryPoints.StartPushSync);
             configureCleanUpTransitions(transitions, timeService, dataSource, analyticsService, entryPoints.StartCleanUp);
         }
@@ -70,11 +87,12 @@ namespace Toggl.Foundation
             IScheduler scheduler,
             StateResult entryPoint,
             ILeakyBucket leakyBucket,
-            ISyncStateQueue queue)
+            ISyncStateQueue queue,
+            IRequestSender requestSender)
         {
             var delayState = new DelayState(scheduler);
 
-            var fetchAllSince = new FetchAllSinceState(database, api, timeService, leakyBucket);
+            var fetchAllSince = new FetchAllSinceState(api, timeService, requestSender, leakyBucket);
 
             var ensureFetchWorkspacesSucceeded = new EnsureFetchListSucceededState<IWorkspace>();
             var ensureFetchWorkspaceFeaturesSucceeded = new EnsureFetchListSucceededState<IWorkspaceFeatureCollection>();
