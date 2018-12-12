@@ -42,10 +42,14 @@ namespace Toggl.Giskard
             var navigationService = Mvx.Resolve<IMvxNavigationService>();
             if (string.IsNullOrEmpty(navigationUrl))
             {
+                Finish();
                 return;
             }
 
-            navigationService.Navigate(navigationUrl);
+            navigationService.Navigate(navigationUrl).ContinueWith(_ =>
+            {
+                Finish();
+            });
         }
 
         private string getTrackUrlFromProcessedText()
