@@ -113,7 +113,7 @@ namespace Toggl.Foundation
                 new PersistListState<IWorkspace, IDatabaseWorkspace, IThreadSafeWorkspace>(dataSource.Workspaces, Workspace.Clean);
 
             var updateWorkspacesSinceDate =
-                new SinceDateUpdatingState<IWorkspace, IDatabaseWorkspace>(database.SinceParameters);
+                new SinceDateUpdatingState<IWorkspace>(database.SinceParameters);
 
             var detectNoWorkspaceState = new NoWorkspaceDetectingState(dataSource);
 
@@ -131,12 +131,12 @@ namespace Toggl.Foundation
             var persistTags =
                 new PersistListState<ITag, IDatabaseTag, IThreadSafeTag>(dataSource.Tags, Tag.Clean);
 
-            var updateTagsSinceDate = new SinceDateUpdatingState<ITag, IDatabaseTag>(database.SinceParameters);
+            var updateTagsSinceDate = new SinceDateUpdatingState<ITag>(database.SinceParameters);
 
             var persistClients =
                 new PersistListState<IClient, IDatabaseClient, IThreadSafeClient>(dataSource.Clients, Client.Clean);
 
-            var updateClientsSinceDate = new SinceDateUpdatingState<IClient, IDatabaseClient>(database.SinceParameters);
+            var updateClientsSinceDate = new SinceDateUpdatingState<IClient>(database.SinceParameters);
 
             var persistPreferences =
                 new PersistSingletonState<IPreferences, IDatabasePreferences, IThreadSafePreferences>(dataSource.Preferences, Preferences.Clean);
@@ -144,19 +144,19 @@ namespace Toggl.Foundation
             var persistProjects =
                 new PersistListState<IProject, IDatabaseProject, IThreadSafeProject>(dataSource.Projects, Project.Clean);
 
-            var updateProjectsSinceDate = new SinceDateUpdatingState<IProject, IDatabaseProject>(database.SinceParameters);
+            var updateProjectsSinceDate = new SinceDateUpdatingState<IProject>(database.SinceParameters);
 
             var createProjectPlaceholders = new CreateArchivedProjectPlaceholdersState(dataSource.Projects, analyticsService);
 
             var persistTimeEntries =
                 new PersistListState<ITimeEntry, IDatabaseTimeEntry, IThreadSafeTimeEntry>(dataSource.TimeEntries, TimeEntry.Clean);
 
-            var updateTimeEntriesSinceDate = new SinceDateUpdatingState<ITimeEntry, IDatabaseTimeEntry>(database.SinceParameters);
+            var updateTimeEntriesSinceDate = new SinceDateUpdatingState<ITimeEntry>(database.SinceParameters);
 
             var persistTasks =
                 new PersistListState<ITask, IDatabaseTask, IThreadSafeTask>(dataSource.Tasks, Task.Clean);
 
-            var updateTasksSinceDate = new SinceDateUpdatingState<ITask, IDatabaseTask>(database.SinceParameters);
+            var updateTasksSinceDate = new SinceDateUpdatingState<ITask>(database.SinceParameters);
 
             var refetchInaccessibleProjects =
                 new TryFetchInaccessibleProjectsState(dataSource.Projects, timeService, api.Projects);

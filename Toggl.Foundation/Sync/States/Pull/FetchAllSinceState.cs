@@ -5,7 +5,6 @@ using Toggl.Foundation.Extensions;
 using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Models;
 using Toggl.Ultrawave;
 
 namespace Toggl.Foundation.Sync.States.Pull
@@ -76,33 +75,28 @@ namespace Toggl.Foundation.Sync.States.Pull
 
             var tags =
                 user.ThenExecute(limiter.WaitForFreeSlot)
-                    .ThenExecute(() =>
-                        sinceOrAll(since.Get<IDatabaseTag>(), api.Tags.GetAll, api.Tags.GetAllSince))
+                    .ThenExecute(() => fetchRecentIfPossible(api.Tags.GetAllSince, api.Tags.GetAll))
                     .ConnectedReplay();
 
             var clients =
                 features.ThenExecute(limiter.WaitForFreeSlot)
-                    .ThenExecute(() =>
-                        sinceOrAll(since.Get<IDatabaseClient>(), api.Clients.GetAll, api.Clients.GetAllSince))
+                    .ThenExecute(() => fetchRecentIfPossible(api.Clients.GetAllSince, api.Clients.GetAll))
                     .ConnectedReplay();
 
             // third wave
             var projects =
                 preferences.ThenExecute(limiter.WaitForFreeSlot)
-                    .ThenExecute(() =>
-                        sinceOrAll(since.Get<IDatabaseProject>(), api.Projects.GetAll, api.Projects.GetAllSince))
+                    .ThenExecute(() => fetchRecentIfPossible(api.Projects.GetAllSince, api.Projects.GetAll))
                     .ConnectedReplay();
 
             var timeEntries =
                 tags.ThenExecute(limiter.WaitForFreeSlot)
-                    .ThenExecute(() =>
-                        sinceOrAll(since.Get<IDatabaseTimeEntry>(), fetchTwoMonthsOfTimeEntries, api.TimeEntries.GetAllSince))
+                    .ThenExecute(() => fetchRecentIfPossible(api.TimeEntries.GetAllSince, fetchTwoMonthsOfTimeEntries))
                     .ConnectedReplay();
 
             var tasks =
                 clients.ThenExecute(limiter.WaitForFreeSlot)
-                    .ThenExecute(() =>
-                        sinceOrAll(since.Get<IDatabaseTask>(), api.Tasks.GetAll, api.Tasks.GetAllSince))
+                    .ThenExecute(() => fetchRecentIfPossible(api.Tasks.GetAllSince, api.Tasks.GetAll))
                     .ConnectedReplay();
 
             var observables = new FetchObservables(
@@ -117,13 +111,16 @@ namespace Toggl.Foundation.Sync.States.Pull
                 start: timeService.CurrentDateTime.AddMonths(-fetchTimeEntriesForMonths),
                 end: timeService.CurrentDateTime.AddDays(timeEntriesEndDateInclusiveExtraDaysCount));
 
-        private IObservable<List<T>> sinceOrAll<T>(
-            DateTimeOffset? threshold,
-            Func<IObservable<List<T>>> getAll,
-            Func<DateTimeOffset, IObservable<List<T>>> getAllSince)
-            => threshold.HasValue && isWithinLimit(threshold.Value)
+        private IObservable<List<T>> fetchRecentIfPossible<T>(
+            Func<DateTimeOffset, IObservable<List<T>>> getAllSince,
+            Func<IObservable<List<T>>> getAll)
+            where T : ILastChangedDatable
+        {
+            var threshold = since.Get<T>();
+            return threshold.HasValue && isWithinLimit(threshold.Value)
                 ? getAllSince(threshold.Value)
                 : getAll();
+        }
 
         private bool isWithinLimit(DateTimeOffset threshold)
             => threshold > timeService.CurrentDateTime.AddMonths(-sinceDateLimitMonths);

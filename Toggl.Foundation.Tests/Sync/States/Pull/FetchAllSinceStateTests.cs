@@ -138,12 +138,12 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
                 var seconds = twoMonths.TotalSeconds * percent;
                 var since = now.AddSeconds(-seconds);
 
-                sinceParameters.Get<IDatabaseClient>().Returns(since);
-                sinceParameters.Get<IDatabaseProject>().Returns(since);
-                sinceParameters.Get<IDatabaseTask>().Returns(since);
-                sinceParameters.Get<IDatabaseTag>().Returns(since);
-                sinceParameters.Get<IDatabaseWorkspace>().Returns(since);
-                sinceParameters.Get<IDatabaseTimeEntry>().Returns(since);
+                sinceParameters.Get<IClient>().Returns(since);
+                sinceParameters.Get<IProject>().Returns(since);
+                sinceParameters.Get<ITask>().Returns(since);
+                sinceParameters.Get<ITag>().Returns(since);
+                sinceParameters.Get<IWorkspace>().Returns(since);
+                sinceParameters.Get<ITimeEntry>().Returns(since);
 
                 state.Start().Wait();
 
@@ -160,12 +160,12 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
             {
                 var now = timeService.CurrentDateTime;
 
-                sinceParameters.Get<IDatabaseClient>().Returns(now.AddMonths(-3));
-                sinceParameters.Get<IDatabaseProject>().Returns(now.AddMonths(-4));
-                sinceParameters.Get<IDatabaseTask>().Returns(now.AddMonths(-5));
-                sinceParameters.Get<IDatabaseTag>().Returns(now.AddMonths(-6));
-                sinceParameters.Get<IDatabaseWorkspace>().Returns(now.AddMonths(-7));
-                sinceParameters.Get<IDatabaseTimeEntry>().Returns(now.AddMonths(-8));
+                sinceParameters.Get<IClient>().Returns(now.AddMonths(-3));
+                sinceParameters.Get<IProject>().Returns(now.AddMonths(-4));
+                sinceParameters.Get<ITask>().Returns(now.AddMonths(-5));
+                sinceParameters.Get<ITag>().Returns(now.AddMonths(-6));
+                sinceParameters.Get<IWorkspace>().Returns(now.AddMonths(-7));
+                sinceParameters.Get<ITimeEntry>().Returns(now.AddMonths(-8));
 
                 state.Start().Wait();
 
@@ -221,7 +221,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
             [Fact, LogIfTooSlow]
             public async Task FetchesTwoMonthsOfTimeEntriesDataIncludingTwoDaysAfterNow()
             {
-                sinceParameters.Get<IDatabaseTimeEntry>().Returns(now.AddMonths(-8));
+                sinceParameters.Get<ITimeEntry>().Returns(now.AddMonths(-8));
 
                 await state.Start().SingleAsync();
 
