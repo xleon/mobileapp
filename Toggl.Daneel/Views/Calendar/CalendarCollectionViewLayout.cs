@@ -74,7 +74,7 @@ namespace Toggl.Daneel.Views.Calendar
                 .CurrentDateTimeObservable
                 .DistinctUntilChanged(offset => offset.Minute)
                 .ObserveOn(SynchronizationContext.Current)
-                .VoidSubscribe(InvalidateCurrentTimeLayout)
+                .Subscribe(_ => InvalidateCurrentTimeLayout())
                 .DisposedBy(disposeBag);
 
             currentTimeLayoutAttributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(CurrentTimeSupplementaryViewKind, NSIndexPath.FromItemSection(0, 0));

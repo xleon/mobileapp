@@ -77,8 +77,16 @@ namespace Toggl.Giskard.Activities
                 .Subscribe(stoppedTimerNotificationsSwitch.Rx().Checked())
                 .DisposedBy(DisposeBag);
 
+            ViewModel.DateFormat
+                .Subscribe(dateFormatTextView.Rx().TextObserver())
+                .DisposedBy(DisposeBag);
+
             ViewModel.BeginningOfWeek
                 .Subscribe(beginningOfWeekTextView.Rx().TextObserver())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.DurationFormat
+                .Subscribe(durationFormatTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
             ViewModel.UserAvatar
@@ -91,7 +99,7 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.LoggingOut
-                .VoidSubscribe(this.CancelAllNotifications)
+                .Subscribe(this.CancelAllNotifications)
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsFeedbackSuccessViewShowing
@@ -115,7 +123,7 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             manualModeView.Rx().Tap()
-                .VoidSubscribe(ViewModel.ToggleManualMode)
+                .Subscribe(ViewModel.ToggleManualMode)
                 .DisposedBy(DisposeBag);
 
             is24hoursModeView.Rx()
@@ -123,15 +131,23 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             runningTimerNotificationsView.Rx().Tap()
-                .VoidSubscribe(ViewModel.ToggleRunningTimerNotifications)
+                .Subscribe(ViewModel.ToggleRunningTimerNotifications)
                 .DisposedBy(DisposeBag);
 
             stoppedTimerNotificationsView.Rx().Tap()
-                .VoidSubscribe(ViewModel.ToggleStoppedTimerNotifications)
+                .Subscribe(ViewModel.ToggleStoppedTimerNotifications)
+                .DisposedBy(DisposeBag);
+
+            dateFormatView.Rx().Tap()
+                .Subscribe(ViewModel.SelectDateFormat.Inputs)
                 .DisposedBy(DisposeBag);
 
             beginningOfWeekView.Rx()
                 .BindAction(ViewModel.SelectBeginningOfWeek)
+                .DisposedBy(DisposeBag);
+
+            durationFormatView.Rx().Tap()
+                .Subscribe(ViewModel.SelectDurationFormat.Inputs)
                 .DisposedBy(DisposeBag);
 
             setupToolbar();

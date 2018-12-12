@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -132,11 +132,11 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(DisposeBag);
 
             tableViewSource.SwipeToContinue
-                .VoidSubscribe(swipeRightStep.Dismiss)
+                .Subscribe(_ => swipeRightStep.Dismiss())
                 .DisposedBy(disposeBag);
 
             tableViewSource.SwipeToDelete
-                .VoidSubscribe(swipeLeftStep.Dismiss)
+                .Subscribe(_ => swipeLeftStep.Dismiss())
                 .DisposedBy(disposeBag);
 
             // Refresh Control
@@ -220,7 +220,7 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(DisposeBag);
 
             SendFeedbackSuccessView.Rx().Tap()
-                .VoidSubscribe(ViewModel.RatingViewModel.CloseFeedbackSuccessView)
+                .Subscribe(ViewModel.RatingViewModel.CloseFeedbackSuccessView)
                 .DisposedBy(DisposeBag);
 
             // Suggestion View
@@ -237,7 +237,7 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ViewModel.ShouldReloadTimeEntryLog
-                .VoidSubscribe(reload)
+                .Subscribe(reload)
                 .DisposedBy(disposeBag);
 
             View.SetNeedsLayout();
@@ -365,12 +365,12 @@ namespace Toggl.Daneel.ViewControllers
 
             ViewModel.IsTimeEntryRunning
                 .Where(visible => visible)
-                .VoidSubscribe(showTimeEntryCard)
+                .Subscribe(_ => showTimeEntryCard())
                 .DisposedBy(disposeBag);
 
             ViewModel.IsTimeEntryRunning
                 .Where(visible => !visible)
-                .VoidSubscribe(hideTimeEntryCard)
+                .Subscribe(_ => hideTimeEntryCard())
                 .DisposedBy(disposeBag);
         }
 

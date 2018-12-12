@@ -154,7 +154,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             urlNavigationAction = action;
 
-            if (description != null)
+            if (!string.IsNullOrEmpty(description))
             {
                 interactorFactory.GetDefaultWorkspace()
                     .TrackException<InvalidOperationException, IThreadSafeWorkspace>("MainViewModel.Init")
@@ -280,7 +280,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             dataSource
                 .Workspaces
                 .Created
-                .VoidSubscribe(onWorkspaceCreated)
+                .Subscribe(_ => onWorkspaceCreated())
                 .DisposedBy(disposeBag);
 
             dataSource

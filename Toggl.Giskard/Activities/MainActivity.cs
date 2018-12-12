@@ -12,6 +12,7 @@ using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
 using Android.Text;
 using Android.Views;
+using MvvmCross.Platforms.Android.Core;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Diagnostics;
@@ -48,6 +49,9 @@ namespace Toggl.Giskard.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
+            var setup = MvxAndroidSetupSingleton.EnsureSingletonAvailable(ApplicationContext);
+            setup.EnsureInitialized();
+
             base.OnCreate(bundle);
             var onCreateStopwatch = localStopwatchProvider.Create(MeasuredOperation.MainActivityOnCreate);
             onCreateStopwatch.Start();
@@ -190,8 +194,16 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.ShouldReloadTimeEntryLog
-                    .VoidSubscribe(reload)
-                    .DisposedBy(DisposeBag);
+                .Subscribe(reload)
+                .DisposedBy(DisposeBag);
+
+            ViewModel.ShouldShowWelcomeBack
+                .Subscribe(onWelcomeBackViewVisibilityChanged)
+                .DisposedBy(DisposeBag);
+
+            ViewModel.ShouldShowEmptyState
+                .Subscribe(onEmptyStateVisibilityChanged)
+                .DisposedBy(DisposeBag);
 
             setupOnboardingSteps();
             onCreateStopwatch.Stop();
@@ -309,6 +321,23 @@ namespace Toggl.Giskard.Activities
             }
         }
 
+        private void onEmptyStateVisibilityChanged(bool shouldShowEmptyState)
+        {
+            if (shouldShowEmptyState)
+            {
+                if (emptyStateView == null)
+                {
+                    emptyStateView = emptyStateViewStub.Inflate();
+                }
+
+                emptyStateView.Visibility = ViewStates.Visible;
+            }
+            else if (emptyStateView != null)
+            {
+                emptyStateView.Visibility = ViewStates.Gone;
+            }
+        }
+
         private void showUndoDeletion(bool show)
         {
             if (!show)
@@ -317,6 +346,23 @@ namespace Toggl.Giskard.Activities
             Snackbar.Make(coordinatorLayout, FoundationResources.EntryDeleted, snackbarDuration)
                 .SetAction(FoundationResources.UndoButtonTitle, view => ViewModel.TimeEntriesViewModel.CancelDeleteTimeEntry.Execute())
                 .Show();
+        }
+
+        private void onWelcomeBackViewVisibilityChanged(bool shouldShowWelcomeBackView)
+        {
+            if (shouldShowWelcomeBackView)
+            {
+                if (welcomeBackView == null)
+                {
+                    welcomeBackView = welcomeBackStub.Inflate();
+                }
+
+                welcomeBackView.Visibility = ViewStates.Visible;
+            }
+            else if (welcomeBackView != null)
+            {
+                welcomeBackView.Visibility = ViewStates.Gone;
+            }
         }
 
         private sealed class FabAsyncHideListener : FloatingActionButton.OnVisibilityChangedListener

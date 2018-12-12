@@ -15,7 +15,6 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
     <AndroidLinkMode>Full</AndroidLinkMode>
     <AndroidLinkSkip>Toggl.Giskard</AndroidLinkSkip>
     <EnableProguard>true</EnableProguard>
@@ -912,6 +911,15 @@
     <AndroidResource Include="Resources\drawable\ic_thumbs_up.xml" />
     <AndroidResource Include="Resources\layout\MainUserFeedbackCard.axml" />
     <AndroidResource Include="Resources\xml\RemoteConfigDefaults.xml" />
+    <AndroidResource Include="Resources\layout\MainLogEmptyView.axml" />
+    <AndroidResource Include="Resources\drawable\BorderRectangle.xml" />
+    <AndroidResource Include="Resources\drawable\EmptyViewRoundedRectangle.xml" />
+    <AndroidResource Include="Resources\drawable-hdpi\toggl_spider.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\toggl_spider.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\toggl_spider.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\toggl_spider.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\toggl_spider.png" />
+    <AndroidResource Include="Resources\layout\WelcomeBackPlaceholder.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">

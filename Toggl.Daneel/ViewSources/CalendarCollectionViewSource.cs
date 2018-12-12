@@ -80,7 +80,7 @@ namespace Toggl.Daneel.ViewSources
             collection
                 .CollectionChange
                 .ObserveOn(SynchronizationContext.Current)
-                .VoidSubscribe(onCollectionChanges)
+                .Subscribe(_ => onCollectionChanges())
                 .DisposedBy(disposeBag);
 
             timeService
