@@ -1,34 +1,42 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
-using Toggl.Foundation.Sync.Helpers;
+using Toggl.Foundation.Extensions;
 using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
+using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Ultrawave;
-using Toggl.Ultrawave.ApiClients;
 
 namespace Toggl.Foundation.Sync.States.Pull
 {
     internal sealed class FetchAllSinceState : ISyncState
     {
-        private readonly IRequestSender sender;
+        private const int sinceDateLimitMonths = 2;
+        private const int fetchTimeEntriesForMonths = 2;
+        private const int timeEntriesEndDateInclusiveExtraDaysCount = 2;
+
         private readonly ITogglApi api;
+        private readonly ISinceParameterRepository since;
         private readonly ITimeService timeService;
         private readonly ILeakyBucket leakyBucket;
+        private readonly IRateLimiter limiter;
 
         public StateResult<TimeSpan> PreventOverloadingServer { get; } = new StateResult<TimeSpan>();
         public StateResult<IFetchObservables> FetchStarted { get; } = new StateResult<IFetchObservables>();
 
         public FetchAllSinceState(
             ITogglApi api,
+            ISinceParameterRepository since,
             ITimeService timeService,
-            IRequestSender sender,
-            ILeakyBucket leakyBucket)
+            ILeakyBucket leakyBucket,
+            IRateLimiter limiter)
         {
             this.api = api;
+            this.since = since;
             this.timeService = timeService;
-            this.sender = sender;
             this.leakyBucket = leakyBucket;
+            this.limiter = limiter;
         }
 
         public IObservable<ITransition> Start() => Observable.Create<ITransition>(observer =>
@@ -45,19 +53,57 @@ namespace Toggl.Foundation.Sync.States.Pull
             // We send at most 3 parallel requests to prevent overloading the server with large bursts of requests.
 
             // first wave
-            var workspaces = sender.FetchAll<IWorkspace, IWorkspacesApi>(api.Workspaces);
-            var user = sender.Fetch<IUser, IUserApi>(api.User);
-            var features = sender.FetchAll<IWorkspaceFeatureCollection, IWorkspaceFeaturesApi>(api.WorkspaceFeatures);
+            var workspaces =
+                limiter.WaitForFreeSlot()
+                    .ThenExecute(() => api.Workspaces.GetAll())
+                    .ConnectedReplay();
+
+            var user =
+                limiter.WaitForFreeSlot()
+                    .ThenExecute(() => api.User.Get())
+                    .ConnectedReplay();
+
+            var features =
+                limiter.WaitForFreeSlot()
+                    .ThenExecute(() => api.WorkspaceFeatures.GetAll())
+                    .ConnectedReplay();
 
             // second wave
-            var preferences = followUp(workspaces, () => sender.Fetch<IPreferences, IPreferencesApi>(api.Preferences));
-            var tags = followUp(user, () => sender.FetchAllSinceIfPossible<ITag, IDatabaseTag, ITagsApi>(api.Tags));
-            var clients = followUp(features, () => sender.FetchAllSinceIfPossible<IClient, IDatabaseClient, IClientsApi>(api.Clients));
+            var preferences =
+                workspaces.ThenExecute(limiter.WaitForFreeSlot)
+                    .ThenExecute(() => api.Preferences.Get())
+                    .ConnectedReplay();
+
+            var tags =
+                user.ThenExecute(limiter.WaitForFreeSlot)
+                    .ThenExecute(() =>
+                        sinceOrAll(since.Get<IDatabaseTag>(), api.Tags.GetAll, api.Tags.GetAllSince))
+                    .ConnectedReplay();
+
+            var clients =
+                features.ThenExecute(limiter.WaitForFreeSlot)
+                    .ThenExecute(() =>
+                        sinceOrAll(since.Get<IDatabaseClient>(), api.Clients.GetAll, api.Clients.GetAllSince))
+                    .ConnectedReplay();
 
             // third wave
-            var projects = followUp(preferences, () => sender.FetchAllSinceIfPossible<IProject, IDatabaseProject, IProjectsApi>(api.Projects));
-            var timeEntries = followUp(tags, () => sender.FetchTimeEntries(api.TimeEntries));
-            var tasks = followUp(clients, () => sender.FetchAllSinceIfPossible<ITask, IDatabaseTask, ITasksApi>(api.Tasks));
+            var projects =
+                preferences.ThenExecute(limiter.WaitForFreeSlot)
+                    .ThenExecute(() =>
+                        sinceOrAll(since.Get<IDatabaseProject>(), api.Projects.GetAll, api.Projects.GetAllSince))
+                    .ConnectedReplay();
+
+            var timeEntries =
+                tags.ThenExecute(limiter.WaitForFreeSlot)
+                    .ThenExecute(() =>
+                        sinceOrAll(since.Get<IDatabaseTimeEntry>(), fetchTwoMonthsOfTimeEntries, api.TimeEntries.GetAllSince))
+                    .ConnectedReplay();
+
+            var tasks =
+                clients.ThenExecute(limiter.WaitForFreeSlot)
+                    .ThenExecute(() =>
+                        sinceOrAll(since.Get<IDatabaseTask>(), api.Tasks.GetAll, api.Tasks.GetAllSince))
+                    .ConnectedReplay();
 
             var observables = new FetchObservables(
                 workspaces, features, user, clients, projects, timeEntries, tags, tasks, preferences);
@@ -66,7 +112,20 @@ namespace Toggl.Foundation.Sync.States.Pull
             return () => { };
         });
 
-        private static IObservable<T2> followUp<T1, T2>(IObservable<T1> observable, Func<IObservable<T2>> continuation)
-            => observable.SingleAsync().SelectMany(_ => continuation()).ConnectedReplay();
+        private IObservable<List<ITimeEntry>> fetchTwoMonthsOfTimeEntries()
+            => api.TimeEntries.GetAll(
+                start: timeService.CurrentDateTime.AddMonths(-fetchTimeEntriesForMonths),
+                end: timeService.CurrentDateTime.AddDays(timeEntriesEndDateInclusiveExtraDaysCount));
+
+        private IObservable<List<T>> sinceOrAll<T>(
+            DateTimeOffset? threshold,
+            Func<IObservable<List<T>>> getAll,
+            Func<DateTimeOffset, IObservable<List<T>>> getAllSince)
+            => threshold.HasValue && isWithinLimit(threshold.Value)
+                ? getAllSince(threshold.Value)
+                : getAll();
+
+        private bool isWithinLimit(DateTimeOffset threshold)
+            => threshold > timeService.CurrentDateTime.AddMonths(-sinceDateLimitMonths);
     }
 }
