@@ -58,7 +58,7 @@ namespace Toggl.Foundation
             var rateLimiter = new RateLimiter(secondsLeakyBucket, timeService, scheduler);
 
             configurePullTransitions(transitions, database, api, dataSource, timeService, analyticsService, scheduler, entryPoints.StartPullSync, minutesLeakyBucket, rateLimiter, queue);
-            configurePushTransitions(transitions, api, dataSource, analyticsService, entryPoints.StartPushSync);
+            configurePushTransitions(transitions, api, dataSource, analyticsService, rateLimiter, entryPoints.StartPushSync);
             configureCleanUpTransitions(transitions, timeService, dataSource, analyticsService, entryPoints.StartCleanUp);
         }
 
@@ -244,15 +244,16 @@ namespace Toggl.Foundation
             ITogglApi api,
             ITogglDataSource dataSource,
             IAnalyticsService analyticsService,
+            IRateLimiter rateLimiter,
             StateResult entryPoint)
         {
-            var pushingWorkspacesFinished = configureCreateOnlyPush(transitions, entryPoint, dataSource.Workspaces, analyticsService, api.Workspaces, Workspace.Clean, Workspace.Unsyncable);
-            var pushingUsersFinished = configurePushSingleton(transitions, pushingWorkspacesFinished, dataSource.User, analyticsService, api.User, User.Clean, User.Unsyncable);
-            var pushingPreferencesFinished = configurePushSingleton(transitions, pushingUsersFinished, dataSource.Preferences, analyticsService, api.Preferences, Preferences.Clean, Preferences.Unsyncable);
-            var pushingTagsFinished = configureCreateOnlyPush(transitions, pushingPreferencesFinished, dataSource.Tags, analyticsService, api.Tags, Tag.Clean, Tag.Unsyncable);
-            var pushingClientsFinished = configureCreateOnlyPush(transitions, pushingTagsFinished, dataSource.Clients, analyticsService, api.Clients, Client.Clean, Client.Unsyncable);
-            var pushingProjectsFinished = configureCreateOnlyPush(transitions, pushingClientsFinished, dataSource.Projects, analyticsService, api.Projects, Project.Clean, Project.Unsyncable);
-            var pushingTimeEntriesFinished = configurePush(transitions, pushingProjectsFinished, dataSource.TimeEntries, analyticsService, api.TimeEntries, api.TimeEntries, api.TimeEntries, TimeEntry.Clean, TimeEntry.Unsyncable);
+            var pushingWorkspacesFinished = configureCreateOnlyPush(transitions, entryPoint, dataSource.Workspaces, analyticsService, api.Workspaces, rateLimiter, Workspace.Clean, Workspace.Unsyncable);
+            var pushingUsersFinished = configurePushSingleton(transitions, pushingWorkspacesFinished, dataSource.User, analyticsService, api.User, rateLimiter, User.Clean, User.Unsyncable);
+            var pushingPreferencesFinished = configurePushSingleton(transitions, pushingUsersFinished, dataSource.Preferences, analyticsService, api.Preferences, rateLimiter, Preferences.Clean, Preferences.Unsyncable);
+            var pushingTagsFinished = configureCreateOnlyPush(transitions, pushingPreferencesFinished, dataSource.Tags, analyticsService, api.Tags, rateLimiter, Tag.Clean, Tag.Unsyncable);
+            var pushingClientsFinished = configureCreateOnlyPush(transitions, pushingTagsFinished, dataSource.Clients, analyticsService, api.Clients, rateLimiter, Client.Clean, Client.Unsyncable);
+            var pushingProjectsFinished = configureCreateOnlyPush(transitions, pushingClientsFinished, dataSource.Projects, analyticsService, api.Projects, rateLimiter, Project.Clean, Project.Unsyncable);
+            var pushingTimeEntriesFinished = configurePush(transitions, pushingProjectsFinished, dataSource.TimeEntries, analyticsService, api.TimeEntries, api.TimeEntries, api.TimeEntries, rateLimiter, TimeEntry.Clean, TimeEntry.Unsyncable);
             transitions.ConfigureTransition(pushingTimeEntriesFinished, new DeadEndState());
         }
 
@@ -304,6 +305,7 @@ namespace Toggl.Foundation
             ICreatingApiClient<TModel> creatingApi,
             IUpdatingApiClient<TModel> updatingApi,
             IDeletingApiClient<TModel> deletingApi,
+            IRateLimiter rateLimiter,
             Func<TModel, TThreadsafe> toClean,
             Func<TThreadsafe, string, TThreadsafe> toUnsyncable)
             where TModel : class, IIdentifiable, ILastChangedDatable
@@ -312,9 +314,9 @@ namespace Toggl.Foundation
         {
             var push = new PushState<TDatabase, TThreadsafe>(dataSource);
             var pushOne = new PushOneEntityState<TThreadsafe>();
-            var create = new CreateEntityState<TModel, TDatabase, TThreadsafe>(creatingApi, dataSource, analyticsService, toClean);
-            var update = new UpdateEntityState<TModel, TThreadsafe>(updatingApi, dataSource, analyticsService, toClean);
-            var delete = new DeleteEntityState<TModel, TDatabase, TThreadsafe>(deletingApi, analyticsService, dataSource);
+            var create = new CreateEntityState<TModel, TDatabase, TThreadsafe>(creatingApi, dataSource, analyticsService, rateLimiter, toClean);
+            var update = new UpdateEntityState<TModel, TThreadsafe>(updatingApi, dataSource, analyticsService, rateLimiter, toClean);
+            var delete = new DeleteEntityState<TModel, TDatabase, TThreadsafe>(deletingApi, analyticsService, dataSource, rateLimiter);
             var deleteLocal = new DeleteLocalEntityState<TDatabase, TThreadsafe>(dataSource);
             var tryResolveClientError = new TryResolveClientErrorState<TThreadsafe>();
             var unsyncable = new UnsyncableEntityState<TThreadsafe>(dataSource, toUnsyncable);
@@ -360,6 +362,7 @@ namespace Toggl.Foundation
             IDataSource<TThreadsafe, TDatabase> dataSource,
             IAnalyticsService analyticsService,
             ICreatingApiClient<TModel> creatingApi,
+            IRateLimiter rateLimiter,
             Func<TModel, TThreadsafe> toClean,
             Func<TThreadsafe, string, TThreadsafe> toUnsyncable)
             where TModel : IIdentifiable, ILastChangedDatable
@@ -368,7 +371,7 @@ namespace Toggl.Foundation
         {
             var push = new PushState<TDatabase, TThreadsafe>(dataSource);
             var pushOne = new PushOneEntityState<TThreadsafe>();
-            var create = new CreateEntityState<TModel, TDatabase, TThreadsafe>(creatingApi, dataSource, analyticsService, toClean);
+            var create = new CreateEntityState<TModel, TDatabase, TThreadsafe>(creatingApi, dataSource, analyticsService, rateLimiter, toClean);
             var tryResolveClientError = new TryResolveClientErrorState<TThreadsafe>();
             var unsyncable = new UnsyncableEntityState<TThreadsafe>(dataSource, toUnsyncable);
 
@@ -400,6 +403,7 @@ namespace Toggl.Foundation
             ISingletonDataSource<TThreadsafe> dataSource,
             IAnalyticsService analyticsService,
             IUpdatingApiClient<TModel> updatingApi,
+            IRateLimiter rateLimiter,
             Func<TModel, TThreadsafe> toClean,
             Func<TThreadsafe, string, TThreadsafe> toUnsyncable)
             where TModel : class
@@ -407,7 +411,7 @@ namespace Toggl.Foundation
         {
             var push = new PushSingleState<TThreadsafe>(dataSource);
             var pushOne = new PushOneEntityState<TThreadsafe>();
-            var update = new UpdateEntityState<TModel, TThreadsafe>(updatingApi, dataSource, analyticsService, toClean);
+            var update = new UpdateEntityState<TModel, TThreadsafe>(updatingApi, dataSource, analyticsService, rateLimiter, toClean);
             var tryResolveClientError = new TryResolveClientErrorState<TThreadsafe>();
             var unsyncable = new UnsyncableEntityState<TThreadsafe>(dataSource, toUnsyncable);
 

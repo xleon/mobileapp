@@ -23,19 +23,24 @@ namespace Toggl.Foundation.Sync.States.Push
 
         private readonly IDataSource<TThreadsafeModel, TDatabaseModel> dataSource;
 
+        private readonly IRateLimiter limiter;
+
         public StateResult DeletingFinished { get; } = new StateResult();
 
         public DeleteEntityState(
             IDeletingApiClient<TModel> api,
             IAnalyticsService analyticsService,
-            IDataSource<TThreadsafeModel, TDatabaseModel> dataSource)
+            IDataSource<TThreadsafeModel, TDatabaseModel> dataSource,
+            IRateLimiter limiter)
             : base(analyticsService)
         {
             Ensure.Argument.IsNotNull(api, nameof(api));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(limiter, nameof(limiter));
 
             this.api = api;
             this.dataSource = dataSource;
+            this.limiter = limiter;
         }
 
         public override IObservable<ITransition> Start(TThreadsafeModel entity)
@@ -49,6 +54,7 @@ namespace Toggl.Foundation.Sync.States.Push
         private IObservable<Unit> delete(TModel entity)
             => entity == null
                 ? Observable.Throw<Unit>(new ArgumentNullException(nameof(entity)))
-                : api.Delete(entity);
+                : limiter.WaitForFreeSlot()
+                    .ThenExecute(() => api.Delete(entity));
     }
 }

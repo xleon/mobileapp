@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive;
 using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
@@ -15,6 +16,13 @@ namespace Toggl.Foundation.Tests.Sync.States.Push.BaseStates
 {
     public abstract class BasePushEntityStateTests
     {
+        protected IRateLimiter RateLimiter { get; } = Substitute.For<IRateLimiter>();
+
+        protected BasePushEntityStateTests()
+        {
+            RateLimiter.WaitForFreeSlot().Returns(Observable.Return(Unit.Default));
+        }
+
         [Fact, LogIfTooSlow]
         public void ReturnsFailTransitionWhenEntityIsNull()
         {

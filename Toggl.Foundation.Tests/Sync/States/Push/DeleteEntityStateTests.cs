@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using FluentAssertions;
+using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources.Interfaces;
@@ -60,6 +61,23 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
             state.Start(dirtyEntity).SingleAsync().Wait();
 
             dataSource.Received().Delete(dirtyEntity.Id);
+        }
+
+        [Fact, LogIfTooSlow]
+        public void WaitsForASlotFromTheRateLimiter()
+        {
+            var scheduler = new TestScheduler();
+            var delay = TimeSpan.FromSeconds(1);
+            RateLimiter.WaitForFreeSlot().Returns(Observable.Return(Unit.Default).Delay(delay, scheduler));
+            var state = (DeleteEntityState<ITestModel, IDatabaseTestModel, IThreadSafeTestModel>)CreateState();
+            var entity = new TestModel(-1, SyncStatus.SyncFailed);
+
+            state.Start(entity).Subscribe();
+
+            scheduler.AdvanceBy(delay.Ticks - 1);
+            api.DidNotReceive().Delete(Arg.Any<ITestModel>());
+            scheduler.AdvanceBy(1);
+            api.Received().Delete(Arg.Any<ITestModel>());
         }
 
         [Fact, LogIfTooSlow]
@@ -144,7 +162,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
         {
             var exception = new Exception("SomeRandomMessage");
             var entity = (IThreadSafeTestModel)Substitute.For(new[] { entityType }, new object[0]);
-            var state = new DeleteEntityState<ITestModel, IDatabaseTestModel, IThreadSafeTestModel>(api, analyticsService, dataSource);
+            var state = new DeleteEntityState<ITestModel, IDatabaseTestModel, IThreadSafeTestModel>(api, analyticsService, dataSource, RateLimiter);
             var expectedMessage = $"{Delete}:{exception.Message}";
             var analyticsEvent = entity.GetType().ToSyncErrorAnalyticsEvent(analyticsService);
             PrepareApiCallFunctionToThrow(exception);
@@ -155,7 +173,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
         }
 
         protected override BasePushEntityState<IThreadSafeTestModel> CreateState()
-        => new DeleteEntityState<ITestModel, IDatabaseTestModel, IThreadSafeTestModel>(api, analyticsService, dataSource);
+        => new DeleteEntityState<ITestModel, IDatabaseTestModel, IThreadSafeTestModel>(api, analyticsService, dataSource, RateLimiter);
 
         protected override void PrepareApiCallFunctionToThrow(Exception e)
         {

@@ -22,6 +22,8 @@ namespace Toggl.Foundation.Sync.States.Push
 
         private readonly IBaseDataSource<TThreadsafeModel> dataSource;
 
+        private readonly IRateLimiter limiter;
+
         private readonly Func<TModel, TThreadsafeModel> convertToThreadsafeModel;
 
         public StateResult<TThreadsafeModel> EntityChanged { get; } = new StateResult<TThreadsafeModel>();
@@ -32,16 +34,19 @@ namespace Toggl.Foundation.Sync.States.Push
             IUpdatingApiClient<TModel> api,
             IBaseDataSource<TThreadsafeModel> dataSource,
             IAnalyticsService analyticsService,
+            IRateLimiter limiter,
             Func<TModel, TThreadsafeModel> convertToThreadsafeModel)
             : base(analyticsService)
         {
             Ensure.Argument.IsNotNull(api, nameof(api));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(convertToThreadsafeModel, nameof(convertToThreadsafeModel));
+            Ensure.Argument.IsNotNull(limiter, nameof(limiter));
 
             this.api = api;
             this.dataSource = dataSource;
             this.convertToThreadsafeModel = convertToThreadsafeModel;
+            this.limiter = limiter;
         }
 
         public override IObservable<ITransition> Start(TThreadsafeModel entity)
@@ -86,6 +91,7 @@ namespace Toggl.Foundation.Sync.States.Push
         private IObservable<TModel> update(TModel entity)
             => entity == null
                 ? Observable.Throw<TModel>(new ArgumentNullException(nameof(entity)))
-                : api.Update(entity);
+                : limiter.WaitForFreeSlot()
+                    .ThenExecute(() => api.Update(entity));
     }
 }
