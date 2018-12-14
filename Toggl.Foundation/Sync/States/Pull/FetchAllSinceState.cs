@@ -40,8 +40,7 @@ namespace Toggl.Foundation.Sync.States.Pull
 
         public IObservable<ITransition> Start() => Observable.Create<ITransition>(observer =>
         {
-            if (!leakyBucket.TryClaimFreeSlots(
-                timeService.CurrentDateTime, numberOfSlots: 9, timeToFreeSlot: out var timeToNextFreeSlot))
+            if (!leakyBucket.TryClaimFreeSlots(numberOfSlots: 9, timeToFreeSlot: out var timeToNextFreeSlot))
             {
                 observer.CompleteWith(PreventOverloadingServer.Transition(timeToNextFreeSlot));
                 return () => { };

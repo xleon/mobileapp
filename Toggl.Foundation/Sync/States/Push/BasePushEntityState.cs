@@ -13,13 +13,15 @@ namespace Toggl.Foundation.Sync.States.Push
     public abstract class BasePushEntityState<T> : IPushEntityState<T>
         where T : class, IThreadSafeModel
     {
-        protected readonly IAnalyticsService AnalyticsService;
+        protected IAnalyticsService AnalyticsService { get; }
 
         public StateResult<ServerErrorException> ServerError { get; } = new StateResult<ServerErrorException>();
 
         public StateResult<(Exception, T)> ClientError { get; } = new StateResult<(Exception, T)>();
 
         public StateResult<Exception> UnknownError { get; } = new StateResult<Exception>();
+
+        public StateResult<TimeSpan> PreventOverloadingServer { get; } = new StateResult<TimeSpan>();
 
         protected BasePushEntityState(IAnalyticsService analyticsService)
         {

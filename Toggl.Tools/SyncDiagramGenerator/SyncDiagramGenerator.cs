@@ -158,6 +158,8 @@ namespace SyncDiagramGenerator
             {
                 case InvalidTransitionState _:
                     return Node.NodeType.InvalidTransitionState;
+                case DelayState _:
+                    return Node.NodeType.RetryLoop;
                 case DeadEndState _:
                 case FailureState _:
                     return Node.NodeType.DeadEnd;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Foundation.Analytics;
@@ -16,11 +17,13 @@ namespace Toggl.Foundation.Tests.Sync.States.Push.BaseStates
 {
     public abstract class BasePushEntityStateTests
     {
+        protected ILeakyBucket LeakyBucket { get; } = Substitute.For<ILeakyBucket>();
         protected IRateLimiter RateLimiter { get; } = Substitute.For<IRateLimiter>();
 
         protected BasePushEntityStateTests()
         {
             RateLimiter.WaitForFreeSlot().Returns(Observable.Return(Unit.Default));
+            LeakyBucket.TryClaimFreeSlot(out _).Returns(true);
         }
 
         [Fact, LogIfTooSlow]
@@ -113,6 +116,25 @@ namespace Toggl.Foundation.Tests.Sync.States.Push.BaseStates
 
             caughtException.Should().NotBeNull();
             caughtException.Should().BeAssignableTo(exception.GetType());
+        }
+
+
+        [Fact, LogIfTooSlow]
+        public async Task ReturnsDelayTransitionWhenTheLeakyBucketDoesNotHaveFreeSlots()
+        {
+            var delay = TimeSpan.FromSeconds(123.45);
+            LeakyBucket.TryClaimFreeSlot(out _).Returns(x =>
+            {
+                x[0] = delay;
+                return false;
+            });
+            var state = CreateState();
+            var entity = Substitute.For<IThreadSafeTestModel>();
+
+            var transition = await state.Start(entity);
+
+            transition.Result.Should().Be(state.PreventOverloadingServer);
+            ((Transition<TimeSpan>)transition).Parameter.Should().Be(delay);
         }
 
         public static IEnumerable<object[]> ExtraExceptionsToRethrow => new[]

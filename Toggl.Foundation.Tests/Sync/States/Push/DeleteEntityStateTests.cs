@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
@@ -162,7 +163,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
         {
             var exception = new Exception("SomeRandomMessage");
             var entity = (IThreadSafeTestModel)Substitute.For(new[] { entityType }, new object[0]);
-            var state = new DeleteEntityState<ITestModel, IDatabaseTestModel, IThreadSafeTestModel>(api, analyticsService, dataSource, RateLimiter);
+            var state = new DeleteEntityState<ITestModel, IDatabaseTestModel, IThreadSafeTestModel>(api, analyticsService, dataSource, LeakyBucket, RateLimiter);
             var expectedMessage = $"{Delete}:{exception.Message}";
             var analyticsEvent = entity.GetType().ToSyncErrorAnalyticsEvent(analyticsService);
             PrepareApiCallFunctionToThrow(exception);
@@ -173,7 +174,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Push
         }
 
         protected override BasePushEntityState<IThreadSafeTestModel> CreateState()
-        => new DeleteEntityState<ITestModel, IDatabaseTestModel, IThreadSafeTestModel>(api, analyticsService, dataSource, RateLimiter);
+        => new DeleteEntityState<ITestModel, IDatabaseTestModel, IThreadSafeTestModel>(api, analyticsService, dataSource, LeakyBucket, RateLimiter);
 
         protected override void PrepareApiCallFunctionToThrow(Exception e)
         {

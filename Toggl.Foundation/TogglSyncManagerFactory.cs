@@ -53,12 +53,12 @@ namespace Toggl.Foundation
             StateMachineEntryPoints entryPoints,
             ISyncStateQueue queue)
         {
-            var minutesLeakyBucket = new LeakyBucket(slotsPerWindow: 60, movingWindowSize: TimeSpan.FromSeconds(60));
-            var secondsLeakyBucket = new LeakyBucket(slotsPerWindow: 3, movingWindowSize: TimeSpan.FromSeconds(1));
-            var rateLimiter = new RateLimiter(secondsLeakyBucket, timeService, scheduler);
+            var minutesLeakyBucket = new LeakyBucket(timeService, slotsPerWindow: 60, movingWindowSize: TimeSpan.FromSeconds(60));
+            var secondsLeakyBucket = new LeakyBucket(timeService, slotsPerWindow: 3, movingWindowSize: TimeSpan.FromSeconds(1));
+            var rateLimiter = new RateLimiter(secondsLeakyBucket, scheduler);
 
             configurePullTransitions(transitions, database, api, dataSource, timeService, analyticsService, scheduler, entryPoints.StartPullSync, minutesLeakyBucket, rateLimiter, queue);
-            configurePushTransitions(transitions, api, dataSource, analyticsService, rateLimiter, entryPoints.StartPushSync);
+            configurePushTransitions(transitions, api, dataSource, analyticsService, minutesLeakyBucket, rateLimiter, scheduler, entryPoints.StartPushSync);
             configureCleanUpTransitions(transitions, timeService, dataSource, analyticsService, entryPoints.StartCleanUp);
         }
 
@@ -244,17 +244,23 @@ namespace Toggl.Foundation
             ITogglApi api,
             ITogglDataSource dataSource,
             IAnalyticsService analyticsService,
+            ILeakyBucket minutesLeakyBucket,
             IRateLimiter rateLimiter,
+            IScheduler scheduler,
             StateResult entryPoint)
         {
-            var pushingWorkspacesFinished = configureCreateOnlyPush(transitions, entryPoint, dataSource.Workspaces, analyticsService, api.Workspaces, rateLimiter, Workspace.Clean, Workspace.Unsyncable);
-            var pushingUsersFinished = configurePushSingleton(transitions, pushingWorkspacesFinished, dataSource.User, analyticsService, api.User, rateLimiter, User.Clean, User.Unsyncable);
-            var pushingPreferencesFinished = configurePushSingleton(transitions, pushingUsersFinished, dataSource.Preferences, analyticsService, api.Preferences, rateLimiter, Preferences.Clean, Preferences.Unsyncable);
-            var pushingTagsFinished = configureCreateOnlyPush(transitions, pushingPreferencesFinished, dataSource.Tags, analyticsService, api.Tags, rateLimiter, Tag.Clean, Tag.Unsyncable);
-            var pushingClientsFinished = configureCreateOnlyPush(transitions, pushingTagsFinished, dataSource.Clients, analyticsService, api.Clients, rateLimiter, Client.Clean, Client.Unsyncable);
-            var pushingProjectsFinished = configureCreateOnlyPush(transitions, pushingClientsFinished, dataSource.Projects, analyticsService, api.Projects, rateLimiter, Project.Clean, Project.Unsyncable);
-            var pushingTimeEntriesFinished = configurePush(transitions, pushingProjectsFinished, dataSource.TimeEntries, analyticsService, api.TimeEntries, api.TimeEntries, api.TimeEntries, rateLimiter, TimeEntry.Clean, TimeEntry.Unsyncable);
-            transitions.ConfigureTransition(pushingTimeEntriesFinished, new DeadEndState());
+            var delayState = new DelayState(scheduler);
+
+            var pushingWorkspaces = configureCreateOnlyPush(transitions, entryPoint, dataSource.Workspaces, analyticsService, api.Workspaces, minutesLeakyBucket, rateLimiter, delayState, Workspace.Clean, Workspace.Unsyncable);
+            var pushingUsers = configurePushSingleton(transitions, pushingWorkspaces.NothingToPush, dataSource.User, analyticsService, api.User, minutesLeakyBucket, rateLimiter, delayState, User.Clean, User.Unsyncable);
+            var pushingPreferences = configurePushSingleton(transitions, pushingUsers.NothingToPush, dataSource.Preferences, analyticsService, api.Preferences, minutesLeakyBucket, rateLimiter, delayState, Preferences.Clean, Preferences.Unsyncable);
+            var pushingTags = configureCreateOnlyPush(transitions, pushingPreferences.NothingToPush, dataSource.Tags, analyticsService, api.Tags, minutesLeakyBucket, rateLimiter, delayState, Tag.Clean, Tag.Unsyncable);
+            var pushingClients = configureCreateOnlyPush(transitions, pushingTags.NothingToPush, dataSource.Clients, analyticsService, api.Clients, minutesLeakyBucket, rateLimiter, delayState, Client.Clean, Client.Unsyncable);
+            var pushingProjects = configureCreateOnlyPush(transitions, pushingClients.NothingToPush, dataSource.Projects, analyticsService, api.Projects, minutesLeakyBucket, rateLimiter, delayState, Project.Clean, Project.Unsyncable);
+            var pushingTimeEntries = configurePush(transitions, pushingProjects.NothingToPush, dataSource.TimeEntries, analyticsService, api.TimeEntries, api.TimeEntries, api.TimeEntries, minutesLeakyBucket, rateLimiter, delayState, TimeEntry.Clean, TimeEntry.Unsyncable);
+
+            transitions.ConfigureTransition(delayState.Continue, pushingWorkspaces);
+            transitions.ConfigureTransition(pushingTimeEntries.NothingToPush, new DeadEndState());
         }
 
         private static void configureCleanUpTransitions(
@@ -297,7 +303,7 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(trackInaccesssibleWorkspacesAfterCleanUp.Continue, new DeadEndState());
         }
 
-        private static IStateResult configurePush<TModel, TDatabase, TThreadsafe>(
+        private static PushState<TDatabase, TThreadsafe> configurePush<TModel, TDatabase, TThreadsafe>(
             ITransitionConfigurator transitions,
             IStateResult entryPoint,
             IDataSource<TThreadsafe, TDatabase> dataSource,
@@ -305,7 +311,9 @@ namespace Toggl.Foundation
             ICreatingApiClient<TModel> creatingApi,
             IUpdatingApiClient<TModel> updatingApi,
             IDeletingApiClient<TModel> deletingApi,
+            ILeakyBucket minutesLeakyBucket,
             IRateLimiter rateLimiter,
+            DelayState delayState,
             Func<TModel, TThreadsafe> toClean,
             Func<TThreadsafe, string, TThreadsafe> toUnsyncable)
             where TModel : class, IIdentifiable, ILastChangedDatable
@@ -314,9 +322,9 @@ namespace Toggl.Foundation
         {
             var push = new PushState<TDatabase, TThreadsafe>(dataSource);
             var pushOne = new PushOneEntityState<TThreadsafe>();
-            var create = new CreateEntityState<TModel, TDatabase, TThreadsafe>(creatingApi, dataSource, analyticsService, rateLimiter, toClean);
-            var update = new UpdateEntityState<TModel, TThreadsafe>(updatingApi, dataSource, analyticsService, rateLimiter, toClean);
-            var delete = new DeleteEntityState<TModel, TDatabase, TThreadsafe>(deletingApi, analyticsService, dataSource, rateLimiter);
+            var create = new CreateEntityState<TModel, TDatabase, TThreadsafe>(creatingApi, dataSource, analyticsService, minutesLeakyBucket, rateLimiter, toClean);
+            var update = new UpdateEntityState<TModel, TThreadsafe>(updatingApi, dataSource, analyticsService, minutesLeakyBucket, rateLimiter, toClean);
+            var delete = new DeleteEntityState<TModel, TDatabase, TThreadsafe>(deletingApi, analyticsService, dataSource, minutesLeakyBucket, rateLimiter);
             var deleteLocal = new DeleteLocalEntityState<TDatabase, TThreadsafe>(dataSource);
             var tryResolveClientError = new TryResolveClientErrorState<TThreadsafe>();
             var unsyncable = new UnsyncableEntityState<TThreadsafe>(dataSource, toUnsyncable);
@@ -346,6 +354,10 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(create.EntityChanged, push);
             transitions.ConfigureTransition(update.EntityChanged, push);
 
+            transitions.ConfigureTransition(create.PreventOverloadingServer, delayState);
+            transitions.ConfigureTransition(update.PreventOverloadingServer, delayState);
+            transitions.ConfigureTransition(delete.PreventOverloadingServer, delayState);
+
             transitions.ConfigureTransition(create.Finished, push);
             transitions.ConfigureTransition(update.Finished, push);
             transitions.ConfigureTransition(delete.DeletingFinished, push);
@@ -353,16 +365,18 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(deleteLocal.DeletingFailed, push);
             transitions.ConfigureTransition(unsyncable.MarkedAsUnsyncable, push);
 
-            return push.NothingToPush;
+            return push;
         }
 
-        private static IStateResult configureCreateOnlyPush<TModel, TDatabase, TThreadsafe>(
+        private static PushState<TDatabase, TThreadsafe> configureCreateOnlyPush<TModel, TDatabase, TThreadsafe>(
             ITransitionConfigurator transitions,
             IStateResult entryPoint,
             IDataSource<TThreadsafe, TDatabase> dataSource,
             IAnalyticsService analyticsService,
             ICreatingApiClient<TModel> creatingApi,
+            ILeakyBucket minutesLeakyBucket,
             IRateLimiter rateLimiter,
+            DelayState delayState,
             Func<TModel, TThreadsafe> toClean,
             Func<TThreadsafe, string, TThreadsafe> toUnsyncable)
             where TModel : IIdentifiable, ILastChangedDatable
@@ -371,7 +385,7 @@ namespace Toggl.Foundation
         {
             var push = new PushState<TDatabase, TThreadsafe>(dataSource);
             var pushOne = new PushOneEntityState<TThreadsafe>();
-            var create = new CreateEntityState<TModel, TDatabase, TThreadsafe>(creatingApi, dataSource, analyticsService, rateLimiter, toClean);
+            var create = new CreateEntityState<TModel, TDatabase, TThreadsafe>(creatingApi, dataSource, analyticsService, minutesLeakyBucket, rateLimiter, toClean);
             var tryResolveClientError = new TryResolveClientErrorState<TThreadsafe>();
             var unsyncable = new UnsyncableEntityState<TThreadsafe>(dataSource, toUnsyncable);
 
@@ -387,6 +401,8 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(create.ServerError, new FailureState());
             transitions.ConfigureTransition(create.UnknownError, new FailureState());
 
+            transitions.ConfigureTransition(create.PreventOverloadingServer, delayState);
+
             transitions.ConfigureTransition(tryResolveClientError.UnresolvedTooManyRequests, new FailureState());
             transitions.ConfigureTransition(tryResolveClientError.Unresolved, unsyncable);
 
@@ -394,16 +410,18 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(create.Finished, push);
             transitions.ConfigureTransition(unsyncable.MarkedAsUnsyncable, push);
 
-            return push.NothingToPush;
+            return push;
         }
 
-        private static IStateResult configurePushSingleton<TModel, TThreadsafe>(
+        private static PushSingleState<TThreadsafe> configurePushSingleton<TModel, TThreadsafe>(
             ITransitionConfigurator transitions,
             IStateResult entryPoint,
             ISingletonDataSource<TThreadsafe> dataSource,
             IAnalyticsService analyticsService,
             IUpdatingApiClient<TModel> updatingApi,
+            ILeakyBucket minutesLeakyBucket,
             IRateLimiter rateLimiter,
+            DelayState delayState,
             Func<TModel, TThreadsafe> toClean,
             Func<TThreadsafe, string, TThreadsafe> toUnsyncable)
             where TModel : class
@@ -411,7 +429,7 @@ namespace Toggl.Foundation
         {
             var push = new PushSingleState<TThreadsafe>(dataSource);
             var pushOne = new PushOneEntityState<TThreadsafe>();
-            var update = new UpdateEntityState<TModel, TThreadsafe>(updatingApi, dataSource, analyticsService, rateLimiter, toClean);
+            var update = new UpdateEntityState<TModel, TThreadsafe>(updatingApi, dataSource, analyticsService, minutesLeakyBucket, rateLimiter, toClean);
             var tryResolveClientError = new TryResolveClientErrorState<TThreadsafe>();
             var unsyncable = new UnsyncableEntityState<TThreadsafe>(dataSource, toUnsyncable);
 
@@ -427,6 +445,8 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(update.ServerError, new FailureState());
             transitions.ConfigureTransition(update.UnknownError, new FailureState());
 
+            transitions.ConfigureTransition(update.PreventOverloadingServer, delayState);
+
             transitions.ConfigureTransition(tryResolveClientError.UnresolvedTooManyRequests, new FailureState());
             transitions.ConfigureTransition(tryResolveClientError.Unresolved, unsyncable);
 
@@ -434,7 +454,7 @@ namespace Toggl.Foundation
             transitions.ConfigureTransition(unsyncable.MarkedAsUnsyncable, push);
             transitions.ConfigureTransition(update.EntityChanged, push);
 
-            return push.NothingToPush;
+            return push;
         }
     }
 }

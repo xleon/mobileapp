@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Toggl.Multivac;
 
 namespace Toggl.Foundation.Sync
 {
@@ -13,24 +14,30 @@ namespace Toggl.Foundation.Sync
 
         private readonly Queue<DateTimeOffset> historyWindow = new Queue<DateTimeOffset>();
 
+        private readonly ITimeService timeService;
+
         public LeakyBucket(
+            ITimeService timeService,
             int slotsPerWindow = standardSlotsLimit,
             TimeSpan? movingWindowSize = null)
         {
+            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+
             if (slotsPerWindow <= 0)
             {
                 throw new ArgumentOutOfRangeException(
                     $"The value of {nameof(slotsPerWindow)} must be greater than 0, the constructor was given {slotsPerWindow}.");
             }
 
+            this.timeService = timeService;
             this.slotsPerWindow = slotsPerWindow;
             this.movingWindowSize = movingWindowSize ?? standardMovingWindowWidth;
         }
 
-        public bool TryClaimFreeSlot(DateTimeOffset now, out TimeSpan timeToFreeSlot)
-            => TryClaimFreeSlots(now, numberOfSlots: 1, timeToFreeSlot: out timeToFreeSlot);
+        public bool TryClaimFreeSlot(out TimeSpan timeToFreeSlot)
+            => TryClaimFreeSlots(numberOfSlots: 1, timeToFreeSlot: out timeToFreeSlot);
 
-        public bool TryClaimFreeSlots(DateTimeOffset now, int numberOfSlots, out TimeSpan timeToFreeSlot)
+        public bool TryClaimFreeSlots(int numberOfSlots, out TimeSpan timeToFreeSlot)
         {
             lock (historyWindow)
             {
@@ -40,6 +47,7 @@ namespace Toggl.Foundation.Sync
                         $"It is not possible to allocate {numberOfSlots} slots because the maximum size of a window is {slotsPerWindow}.");
                 }
 
+                var now = timeService.CurrentDateTime;
                 timeToFreeSlot = timeToNextFreeSlots(now, numberOfSlots);
                 var claimSlots = timeToFreeSlot == TimeSpan.Zero;
 

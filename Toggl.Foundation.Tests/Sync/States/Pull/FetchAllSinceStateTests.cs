@@ -36,7 +36,7 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
                 api = Substitute.For<ITogglApi>();
                 timeService = Substitute.For<ITimeService>();
                 leakyBucket = Substitute.For<ILeakyBucket>();
-                leakyBucket.TryClaimFreeSlots(Arg.Any<DateTimeOffset>(), Arg.Any<int>(), out _).Returns(true);
+                leakyBucket.TryClaimFreeSlots(Arg.Any<int>(), out _).Returns(true);
                 rateLimiter = Substitute.For<IRateLimiter>();
                 rateLimiter.WaitForFreeSlot().Returns(Observable.Return(Unit.Default));
                 timeService.CurrentDateTime.Returns(now);
@@ -235,10 +235,10 @@ namespace Toggl.Foundation.Tests.Sync.States.Pull
             [Property]
             public void ReturnsPreventServerOverloadWithCorrectDelayWhenTheLeakyBucketIsFull(TimeSpan delay)
             {
-                leakyBucket.TryClaimFreeSlots(Arg.Any<DateTimeOffset>(), Arg.Any<int>(), out _)
+                leakyBucket.TryClaimFreeSlots(Arg.Any<int>(), out _)
                     .Returns(x =>
                     {
-                        x[2] = delay;
+                        x[1] = delay;
                         return false;
                     });
 

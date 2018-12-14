@@ -19,12 +19,22 @@ namespace Toggl.Foundation.Tests.Sync
     {
         public sealed class TheConstructor
         {
+            [Fact]
+            public void ThrowsWhenArgumentIsNull()
+            {
+                Action creatingLeakyBucket = () => new LeakyBucket(null, 1);
+
+                creatingLeakyBucket.Should().Throw<ArgumentNullException>();
+            }
+
             [Property]
             public void ThrowsWhenHorizonIsLowerOrEqualToZero(NonNegativeInt slotsPerWindow)
             {
-                Action creatingClient = () => new LeakyBucket(-slotsPerWindow.Get);
+                var timeService = Substitute.For<ITimeService>();
 
-                creatingClient.Should().Throw<ArgumentOutOfRangeException>();
+                Action creatingLeakyBucket = () => new LeakyBucket(timeService, -slotsPerWindow.Get);
+
+                creatingLeakyBucket.Should().Throw<ArgumentOutOfRangeException>();
             }
         }
 
@@ -33,17 +43,20 @@ namespace Toggl.Foundation.Tests.Sync
             private readonly DateTimeOffset baseTime
                 = new DateTimeOffset(2018, 12, 1, 22, 12, 24, TimeSpan.FromHours(6));
 
+            private readonly ITimeService timeService = Substitute.For<ITimeService>();
+
             [Theory]
             [InlineData(2)]
             [InlineData(10)]
             [InlineData(60)]
             public void SendsAllRequestsInAShortPeriodOfTimeUntilReachingTheLimit(int slotsPerWindow)
             {
-                var client = new LeakyBucket(slotsPerWindow);
+                timeService.CurrentDateTime.Returns(baseTime);
+                var bucket = new LeakyBucket(timeService, slotsPerWindow);
 
                 for (var i = 0; i < slotsPerWindow; i++)
                 {
-                    var claimed = client.TryClaimFreeSlot(baseTime, out var timeToNextFreeSlot);
+                    var claimed = bucket.TryClaimFreeSlot(out var timeToNextFreeSlot);
 
                     claimed.Should().BeTrue();
                     timeToNextFreeSlot.Should().Be(TimeSpan.Zero);
@@ -56,10 +69,11 @@ namespace Toggl.Foundation.Tests.Sync
             [InlineData(60)]
             public void ReturnsNonZeroTimeToNextSlotTooManyRequestsAreSentInAShortPeriodOfTime(int slotsPerWindow)
             {
-                var bucket = new LeakyBucket(slotsPerWindow);
+                timeService.CurrentDateTime.Returns(baseTime);
+                var bucket = new LeakyBucket(timeService, slotsPerWindow);
 
-                bucket.TryClaimFreeSlots(baseTime, slotsPerWindow, out _);
-                var claimed = bucket.TryClaimFreeSlot(baseTime, out var time);
+                bucket.TryClaimFreeSlots(slotsPerWindow, out _);
+                var claimed = bucket.TryClaimFreeSlot(out var time);
 
                 claimed.Should().BeFalse();
                 time.Should().BeGreaterThan(TimeSpan.Zero);
@@ -73,13 +87,14 @@ namespace Toggl.Foundation.Tests.Sync
             {
                 var movingWindowSize = TimeSpan.FromSeconds(10);
                 var uniformDelayBetweenRequests = movingWindowSize / slotsPerWindow;
-                var times = new Queue<DateTimeOffset>(Enumerable.Range(1, 2 * slotsPerWindow).Select(n => baseTime + (n * uniformDelayBetweenRequests)));
-                var bucket = new LeakyBucket(slotsPerWindow, movingWindowSize);
+                var times = Enumerable.Range(1, 2 * slotsPerWindow)
+                    .Select(n => baseTime + (n * uniformDelayBetweenRequests)).ToArray();
+                timeService.CurrentDateTime.Returns(baseTime, times);
+                var bucket = new LeakyBucket(timeService, slotsPerWindow, movingWindowSize);
 
-                for (var i = 0; i < times.Count; i++)
+                for (var i = 0; i < times.Length - 1; i++)
                 {
-                    var now = times.Dequeue();
-                    var claimed = bucket.TryClaimFreeSlot(now, out var timeToNextSlot);
+                    var claimed = bucket.TryClaimFreeSlot(out var timeToNextSlot);
 
                     claimed.Should().BeTrue();
                     timeToNextSlot.Should().Be(TimeSpan.Zero);
@@ -89,11 +104,15 @@ namespace Toggl.Foundation.Tests.Sync
             [Fact]
             public void CalculatesTheDelayUntilTheNextFreeSlot()
             {
-                var bucket = new LeakyBucket(slotsPerWindow: 2, movingWindowSize: TimeSpan.FromSeconds(10));
+                timeService.CurrentDateTime.Returns(
+                    baseTime,
+                    baseTime + TimeSpan.FromSeconds(6),
+                    baseTime + TimeSpan.FromSeconds(8));
+                var bucket = new LeakyBucket(timeService, slotsPerWindow: 2, movingWindowSize: TimeSpan.FromSeconds(10));
 
-                bucket.TryClaimFreeSlot(baseTime, out _);
-                bucket.TryClaimFreeSlot(baseTime + TimeSpan.FromSeconds(6), out _);
-                var claimed = bucket.TryClaimFreeSlot(baseTime + TimeSpan.FromSeconds(8), out var timeToFreeSlot);
+                bucket.TryClaimFreeSlot(out _);
+                bucket.TryClaimFreeSlot(out _);
+                var claimed = bucket.TryClaimFreeSlot(out var timeToFreeSlot);
 
                 claimed.Should().BeFalse();
                 timeToFreeSlot.Should().Be(TimeSpan.FromSeconds(2));
@@ -105,15 +124,18 @@ namespace Toggl.Foundation.Tests.Sync
             private readonly DateTimeOffset baseTime
                 = new DateTimeOffset(2018, 12, 1, 22, 12, 24, TimeSpan.FromHours(6));
 
+            private readonly ITimeService timeService = Substitute.For<ITimeService>();
+
             [Theory]
             [InlineData(2)]
             [InlineData(10)]
             [InlineData(60)]
             public void AllowsSlotsInAShortPeriodOfTimeUntilReachingTheLimit(int slotsPerWindow)
             {
-                var client = new LeakyBucket(slotsPerWindow);
+                timeService.CurrentDateTime.Returns(baseTime);
+                var client = new LeakyBucket(timeService, slotsPerWindow);
 
-                var claimed = client.TryClaimFreeSlots(baseTime, slotsPerWindow, out var timeToNextFreeSlot);
+                var claimed = client.TryClaimFreeSlots(slotsPerWindow, out var timeToNextFreeSlot);
 
                 claimed.Should().BeTrue();
                 timeToNextFreeSlot.Should().Be(TimeSpan.Zero);
@@ -125,10 +147,11 @@ namespace Toggl.Foundation.Tests.Sync
             [InlineData(60)]
             public void ReturnsNonZeroTimeToNextSlotWhenTooManySlotsAreUsedInAShortPeriodOfTime(int slotsPerWindowLimit)
             {
-                var bucket = new LeakyBucket(slotsPerWindowLimit);
-                bucket.TryClaimFreeSlot(baseTime, out _);
+                timeService.CurrentDateTime.Returns(baseTime);
+                var bucket = new LeakyBucket(timeService, slotsPerWindowLimit);
+                bucket.TryClaimFreeSlot(out _);
 
-                var claimed = bucket.TryClaimFreeSlots(baseTime, slotsPerWindowLimit, out var time);
+                var claimed = bucket.TryClaimFreeSlots(slotsPerWindowLimit, out var time);
 
                 claimed.Should().BeFalse();
                 time.Should().BeGreaterThan(TimeSpan.Zero);
@@ -137,12 +160,18 @@ namespace Toggl.Foundation.Tests.Sync
             [Fact]
             public void CalculatesTheDelayUntilNextFreeSlot()
             {
-                var bucket = new LeakyBucket(slotsPerWindow: 4, movingWindowSize: TimeSpan.FromSeconds(10));
+                timeService.CurrentDateTime.Returns(
+                    baseTime,
+                    baseTime + TimeSpan.FromSeconds(
+                        3),
+                    baseTime + TimeSpan.FromSeconds(6),
+                    baseTime + TimeSpan.FromSeconds(8));
+                var bucket = new LeakyBucket(timeService, slotsPerWindow: 4, movingWindowSize: TimeSpan.FromSeconds(10));
 
-                bucket.TryClaimFreeSlot(baseTime, out _);
-                bucket.TryClaimFreeSlot(baseTime + TimeSpan.FromSeconds(3), out _);
-                bucket.TryClaimFreeSlot(baseTime + TimeSpan.FromSeconds(6), out _);
-                var claimed = bucket.TryClaimFreeSlots(baseTime + TimeSpan.FromSeconds(8), 3, out var timeToFreeSlot);
+                bucket.TryClaimFreeSlot(out _);
+                bucket.TryClaimFreeSlot(out _);
+                bucket.TryClaimFreeSlot(out _);
+                var claimed = bucket.TryClaimFreeSlots(3, out var timeToFreeSlot);
 
                 claimed.Should().BeFalse();
                 timeToFreeSlot.Should().Be(TimeSpan.FromSeconds(5));
@@ -153,9 +182,10 @@ namespace Toggl.Foundation.Tests.Sync
             {
                 if (slotsPerWindow.Get == int.MaxValue) return;
 
-                var bucket = new LeakyBucket(slotsPerWindow.Get);
+                timeService.CurrentDateTime.Returns(baseTime);
+                var bucket = new LeakyBucket(timeService, slotsPerWindow.Get);
 
-                Action claimMany = () => bucket.TryClaimFreeSlots(baseTime, slotsPerWindow.Get + 1, out _);
+                Action claimMany = () => bucket.TryClaimFreeSlots(slotsPerWindow.Get + 1, out _);
 
                 claimMany.Should().Throw<InvalidOperationException>();
             }
