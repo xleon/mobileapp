@@ -93,6 +93,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public UIAction SelectDurationFormat { get; }
         public UIAction SelectBeginningOfWeek { get; }
 
+        public InputAction<SelectableWorkspaceViewModel> SelectDefaultWorkspace { get; }
+
         public SettingsViewModel(
             UserAgent userAgent,
             ITogglDataSource dataSource,
@@ -233,6 +235,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             PickDefaultWorkspace = UIAction.FromAsync(pickDefaultWorkspace);
             SelectDurationFormat = UIAction.FromAsync(selectDurationFormat);
             SelectBeginningOfWeek = UIAction.FromAsync(selectBeginningOfWeek);
+            SelectDefaultWorkspace = InputAction<SelectableWorkspaceViewModel>.FromAsync(selectDefaultWorkspace);
         }
 
         public override async Task Initialize()
@@ -259,7 +262,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             feedbackService.SubmitFeedback();
         }
 
-        public Task SelectDefaultWorkspace(SelectableWorkspaceViewModel workspace)
+        private Task selectDefaultWorkspace(SelectableWorkspaceViewModel workspace)
             => changeDefaultWorkspace(workspace.WorkspaceId);
 
         private async Task toggleUseTwentyFourHourClock()

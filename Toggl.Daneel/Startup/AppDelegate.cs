@@ -35,7 +35,6 @@ namespace Toggl.Daneel
     [Register(nameof(AppDelegate))]
     public sealed class AppDelegate : MvxApplicationDelegate<Setup, App<OnboardingViewModel>>, IUNUserNotificationCenterDelegate
     {
-
         private IAnalyticsService analyticsService;
         private IBackgroundService backgroundService;
         private IMvxNavigationService navigationService;
@@ -295,15 +294,18 @@ namespace Toggl.Daneel
         private void startTimeEntryInBackground(string eventId, Action completionHandler)
         {
             var interactorFactory = Mvx.Resolve<IInteractorFactory>();
+            var timeService = Mvx.Resolve<ITimeService>();
 
             Task.Run(async () =>
             {
                 var calendarItem = await interactorFactory.GetCalendarItemWithId(eventId).Execute();
+
+                var now = timeService.CurrentDateTime;
                 var workspace = await interactorFactory.GetDefaultWorkspace()
                     .TrackException<InvalidOperationException, IThreadSafeWorkspace>("AppDelegate.startTimeEntryInBackground")
                     .Execute();
 
-                var prototype = calendarItem.AsTimeEntryPrototype(workspace.Id);
+                var prototype = calendarItem.Description.AsTimeEntryPrototype(now, workspace.Id);
                 await interactorFactory.CreateTimeEntry(prototype).Execute();
                 completionHandler();
             });
