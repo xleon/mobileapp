@@ -58,11 +58,8 @@ namespace Toggl.Giskard.Extensions
             var component = new ComponentName(context, javaClass);
 
             var builder = new JobInfo.Builder(BackgroundSyncJobSchedulerService.JobId, component)
-                // This job can run on any network
                 .SetRequiredNetworkType(NetworkType.Any)
-                // It will happen once every n millis, but not more than that
                 .SetPeriodic(periodicity)
-                // It should be reescheduled when the device reboots
                 .SetPersisted(true);
 
             var jobInfo = builder.Build();
