@@ -71,15 +71,15 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             loginButton.Rx().Tap()
-                .VoidSubscribe(ViewModel.Login)
+                .Subscribe(ViewModel.Login)
                 .DisposedBy(DisposeBag);
 
             passwordEditText.Rx().EditorActionSent()
-                .VoidSubscribe(ViewModel.Login)
+                .Subscribe(ViewModel.Login)
                 .DisposedBy(DisposeBag);
 
             googleLoginButton.Rx().Tap()
-                .VoidSubscribe(ViewModel.GoogleLogin)
+                .Subscribe(ViewModel.GoogleLogin)
                 .DisposedBy(DisposeBag);
 
             forgotPasswordView.Rx()

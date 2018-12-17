@@ -105,7 +105,7 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ManualModeSwitch.Rx().Changed()
-                .VoidSubscribe(ViewModel.ToggleManualMode)
+                .Subscribe(ViewModel.ToggleManualMode)
                 .DisposedBy(DisposeBag);
 
             BeginningOfWeekView.Rx()
@@ -117,7 +117,7 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(DisposeBag);
 
             SendFeedbackSuccessView.Rx().Tap()
-                .VoidSubscribe(ViewModel.CloseFeedbackSuccessView)
+                .Subscribe(ViewModel.CloseFeedbackSuccessView)
                 .DisposedBy(DisposeBag);
 
             NotificationSettingsView.Rx()

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
@@ -116,7 +116,7 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ShowPasswordButton.Rx().Tap()
-                .VoidSubscribe(ViewModel.TogglePasswordVisibility)
+                .Subscribe(ViewModel.TogglePasswordVisibility)
                 .DisposedBy(DisposeBag);
 
             SelectCountryButton.Rx()
