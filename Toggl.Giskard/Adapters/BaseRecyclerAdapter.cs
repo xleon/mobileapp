@@ -20,8 +20,6 @@ namespace Toggl.Giskard.Adapters
 
         private Subject<T> itemTapSubject = new Subject<T>();
 
-        private Subject<T> itemTapSubject = new Subject<T>();
-
         private IList<T> items = new List<T>();
 
         private IList<T> nextUpdate;
