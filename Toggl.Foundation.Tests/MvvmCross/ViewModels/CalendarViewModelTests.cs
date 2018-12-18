@@ -833,7 +833,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var timeEntry = new MockTimeEntry
                 {
                     Start = calendarItem.StartTime,
-                    Duration = (long)calendarItem.Duration.TotalSeconds + 10
+                    Duration = (long)calendarItem.Duration.Value.TotalSeconds + 10
                 };
                 DataSource.TimeEntries
                     .GetById(Arg.Any<long>())
@@ -850,7 +850,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var timeEntry = new MockTimeEntry
                 {
                     Start = calendarItem.StartTime.Add(TimeSpan.FromHours(1)),
-                    Duration = (long)calendarItem.Duration.TotalSeconds
+                    Duration = (long)calendarItem.Duration.Value.TotalSeconds
                 };
                 DataSource.TimeEntries
                     .GetById(Arg.Any<long>())
@@ -867,7 +867,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var timeEntry = new MockTimeEntry
                 {
                     Start = calendarItem.StartTime.Add(TimeSpan.FromHours(1)),
-                    Duration = (long)calendarItem.Duration.TotalSeconds + 10
+                    Duration = (long)calendarItem.Duration.Value.TotalSeconds + 10
                 };
                 DataSource.TimeEntries
                     .GetById(Arg.Any<long>())

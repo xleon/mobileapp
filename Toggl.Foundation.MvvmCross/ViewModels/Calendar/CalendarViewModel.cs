@@ -293,7 +293,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 TagIds = timeEntry.TagIds
             };
 
-            if (timeEntry.Duration != calendarItem.Duration.TotalSeconds)
+            var duration = calendarItem.Duration.HasValue 
+                ? calendarItem.Duration.Value.TotalSeconds 
+                : (timeService.CurrentDateTime - calendarItem.StartTime.LocalDateTime).TotalSeconds;
+
+            if (timeEntry.Duration != duration)
             {
                 analyticsService.TimeEntryChangedFromCalendar.Track(CalendarChangeEvent.Duration);
             }

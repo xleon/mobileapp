@@ -19,11 +19,12 @@ namespace Toggl.Foundation.MvvmCross
     {
         public Version Version { get; }
         public UserAgent UserAgent { get; }
+        public IScheduler Scheduler { get; }
         public IApiFactory ApiFactory { get; }
         public ITogglDatabase Database { get; }
         public ITimeService TimeService { get; }
-        public IScheduler Scheduler { get; }
         public IMailService MailService { get; }
+        public IPlatformInfo PlatformInfo { get; }
         public IGoogleService GoogleService { get; }
         public IRatingService RatingService { get; }
         public ApiEnvironment ApiEnvironment { get; }
@@ -32,7 +33,6 @@ namespace Toggl.Foundation.MvvmCross
         public IStopwatchProvider StopwatchProvider { get; }
         public IBackgroundService BackgroundService { get; }
         public ISchedulerProvider SchedulerProvider { get; }
-        public IPlatformConstants PlatformConstants { get; }
         public INotificationService NotificationService { get; }
         public IRemoteConfigService RemoteConfigService { get; }
         public IApplicationShortcutCreator ShortcutCreator { get; }
@@ -41,8 +41,7 @@ namespace Toggl.Foundation.MvvmCross
         public IPrivateSharedStorageService PrivateSharedStorageService { get; }
         public IRxActionFactory RxActionFactory { get; }
 
-        public PlatformInfo PlatformInfo { get; }
-        public IDialogService DialogService { get; }
+         public IDialogService DialogService { get; }
         public IBrowserService BrowserService { get; }
         public IKeyValueStorage KeyValueStorage { get; }
         public IUserPreferences UserPreferences { get; }
@@ -90,7 +89,7 @@ namespace Toggl.Foundation.MvvmCross
             ShortcutCreator = builder.Foundation.ShortcutCreator;
             AnalyticsService = builder.Foundation.AnalyticsService;
             StopwatchProvider = builder.Foundation.StopwatchProvider;
-            PlatformConstants = builder.Foundation.PlatformConstants;
+            PlatformInfo = builder.Foundation.PlatformInfo;
             SchedulerProvider = builder.Foundation.SchedulerProvider;
             BackgroundService = builder.Foundation.BackgroundService;
             NotificationService = builder.Foundation.NotificationService;
