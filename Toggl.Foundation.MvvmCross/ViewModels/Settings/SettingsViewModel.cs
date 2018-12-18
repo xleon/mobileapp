@@ -141,6 +141,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.stopwatchProvider = stopwatchProvider;
             this.intentDonationService = intentDonationService;
             this.privateSharedStorageService = privateSharedStorageService;
+            this.rxActionFactory = rxActionFactory;
 
             IsSynced = dataSource.SyncManager.ProgressObservable.SelectMany(checkSynced);
 

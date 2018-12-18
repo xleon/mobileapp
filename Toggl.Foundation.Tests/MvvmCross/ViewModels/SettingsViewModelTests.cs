@@ -92,7 +92,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var dialogService = useDialogService ? DialogService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var feedbackService = useFeedbackService ? FeedbackService : null;
-                var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var userAccessManager = useUserAccessManager ? UserAccessManager : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
@@ -101,6 +100,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
+                var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new SettingsViewModel(

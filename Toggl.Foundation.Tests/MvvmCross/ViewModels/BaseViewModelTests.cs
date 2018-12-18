@@ -1,4 +1,7 @@
-﻿using Microsoft.Reactive.Testing;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using Microsoft.Reactive.Testing;
 using MvvmCross.ViewModels;
 using NSubstitute;
 using Toggl.Foundation.Autocomplete;
@@ -7,6 +10,7 @@ using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Suggestions;
+using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
