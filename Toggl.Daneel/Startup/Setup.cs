@@ -131,6 +131,7 @@ namespace Toggl.Daneel
                     .WithPasswordManagerService<OnePasswordServiceIos>()
                     .WithErrorHandlingService(new ErrorHandlingService(navigationService, settingsStorage))
                     .WithFeedbackService(new FeedbackService(userAgent, mailService, dialogService, platformConstants))
+                    .WithRxActionFactory(new RxActionFactory(schedulerProvider))
                     .Build();
 
             foundation.RevokeNewUserIfNeeded().Initialize();
