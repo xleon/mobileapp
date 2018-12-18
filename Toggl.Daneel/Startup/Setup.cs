@@ -92,6 +92,8 @@ namespace Toggl.Daneel
             var calendarService = new CalendarServiceIos(permissionsService);
             var notificationService = new NotificationServiceIos(permissionsService, timeService);
             var backgroundSyncService = new BackgroundSyncServiceIos();
+            var backgroundService = new BackgroundService(timeService);
+            var automaticSyncingService = new AutomaticSyncingService(backgroundService, timeService, analyticsService);
 
             var foundation =
                 TogglFoundation
@@ -110,7 +112,8 @@ namespace Toggl.Daneel
                     .WithRemoteConfigService(remoteConfigService)
                     .WithNotificationService(notificationService)
                     .WithApiFactory(new ApiFactory(environment, userAgent))
-                    .WithBackgroundService(new BackgroundService(timeService))
+                    .WithBackgroundService(backgroundService)
+                    .WithAutomaticSyncingService(automaticSyncingService)
                     .WithApplicationShortcutCreator(new ApplicationShortcutCreator())
                     .WithSuggestionProviderContainer(suggestionProviderContainer)
                     .WithIntentDonationService(intentDonationService)

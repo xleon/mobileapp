@@ -43,6 +43,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
         private readonly IApplicationShortcutCreator applicationShortcutCreator = Substitute.For<IApplicationShortcutCreator>();
         private readonly ISuggestionProviderContainer suggestionProviderContainer = Substitute.For<ISuggestionProviderContainer>();
         private readonly ISchedulerProvider schedulerProvider = new TestSchedulerProvider();
+        private readonly IAutomaticSyncingService automaticSyncingService = Substitute.For<IAutomaticSyncingService>();
 
         private readonly IDialogService dialogService = Substitute.For<IDialogService>();
         private readonly IBrowserService browserService = Substitute.For<IBrowserService>();
@@ -201,6 +202,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                     .WithApplicationShortcutCreator(applicationShortcutCreator)
                     .WithSuggestionProviderContainer(suggestionProviderContainer)
                     .WithPrivateSharedStorageService(PrivateSharedStorageService)
+                    .WithAutomaticSyncingService(automaticSyncingService)
                     .Build();
     }
 }

@@ -827,7 +827,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ExecuteCommand();
 
-                DataSource.Received().StartSyncing();
+                DataSource.SyncManager.Received().ForceFullSync();
             }
 
             [Fact, LogIfTooSlow]

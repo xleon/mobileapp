@@ -126,6 +126,7 @@ namespace Toggl.Foundation.Tests
                 var applicationShortcutCreator = Substitute.For<IApplicationShortcutCreator>();
                 var suggestionProviderContainer = Substitute.For<ISuggestionProviderContainer>();
                 var privateSharedStorageService = Substitute.For<IPrivateSharedStorageService>();
+                var automaticSyncingService = Substitute.For<IAutomaticSyncingService>();
 
                 Action tryingToConstructWithValidParameters = () =>
                     TogglFoundation
@@ -151,6 +152,7 @@ namespace Toggl.Foundation.Tests
                         .WithApplicationShortcutCreator(applicationShortcutCreator)
                         .WithPrivateSharedStorageService(privateSharedStorageService)
                         .WithSuggestionProviderContainer(suggestionProviderContainer)
+                        .WithAutomaticSyncingService(automaticSyncingService)
                         .Build();
 
                 tryingToConstructWithValidParameters.Should().NotThrow();

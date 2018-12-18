@@ -26,7 +26,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IForkingNavigationService navigationService;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
-        private readonly ISchedulerProvider schedulerProvider;
 
         private readonly BehaviorSubject<string> errorSubject = new BehaviorSubject<string>(string.Empty);
         private readonly BehaviorSubject<Email> emailSubject = new BehaviorSubject<Email>(Multivac.Email.Empty);
@@ -75,7 +74,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.navigationService = navigationService;
             this.userPreferences = userPreferences;
             this.analyticsService = analyticsService;
-            this.schedulerProvider = schedulerProvider;
 
             Error = errorSubject
                 .AsDriver(schedulerProvider);
@@ -177,7 +175,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void onDataSource(ITogglDataSource newDataSource)
         {
-            newDataSource.StartSyncing();
+            newDataSource.SyncManager.ForceFullSync().Subscribe();
 
             navigationService.ForkNavigate<MainTabBarViewModel, MainViewModel>();
         }

@@ -247,7 +247,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             lastTimeUsageStorage.SetLogin(timeService.CurrentDateTime);
 
-            await dataSource.StartSyncing();
+            await dataSource.SyncManager.ForceFullSync();
 
             onboardingStorage.SetIsNewUser(false);
 

@@ -56,9 +56,7 @@ namespace Toggl.Foundation.MvvmCross
                         foundation.Database,
                         foundation.TimeService,
                         foundation.ErrorHandlingService,
-                        foundation.BackgroundService,
                         createSyncManager(api),
-                        TimeSpan.FromMinutes(5),
                         foundation.NotificationService,
                         foundation.ShortcutCreator,
                         foundation.AnalyticsService)
@@ -74,13 +72,16 @@ namespace Toggl.Foundation.MvvmCross
                 new UserAccessManager(foundation.ApiFactory, foundation.Database, foundation.GoogleService, foundation.ShortcutCreator, foundation.PrivateSharedStorageService, createDataSource);
 
             Mvx.RegisterSingleton<IUserAccessManager>(userAccessManager);
+
             foundation.BackgroundSyncService.SetupBackgroundSync(userAccessManager);
+            foundation.AutomaticSyncingService.SetupAutomaticSync(userAccessManager);
         }
 
         private static void initializeInversionOfControl(MvvmCrossFoundation foundation)
         {
             Mvx.RegisterSingleton(foundation.StopwatchProvider);
             Mvx.RegisterSingleton(foundation.BackgroundService);
+            Mvx.RegisterSingleton(foundation.AutomaticSyncingService);
             Mvx.RegisterSingleton(foundation.BackgroundSyncService);
             Mvx.RegisterSingleton(foundation.DialogService);
             Mvx.RegisterSingleton(foundation.Database);

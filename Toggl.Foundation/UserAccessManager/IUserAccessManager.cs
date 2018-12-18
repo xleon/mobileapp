@@ -7,7 +7,7 @@ namespace Toggl.Foundation.Login
 {
     public interface IUserAccessManager
     {
-        IObservable<Unit> UserLoggedIn { get; }
+        IObservable<ITogglDataSource> UserLoggedIn { get; }
         IObservable<Unit> UserLoggedOut { get; }
 
         ITogglDataSource GetDataSourceIfLoggedIn();

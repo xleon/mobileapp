@@ -39,6 +39,7 @@ namespace Toggl.Foundation
         public IIntentDonationService IntentDonationService { get; }
         public IPrivateSharedStorageService PrivateSharedStorageService { get; }
         public ISuggestionProviderContainer SuggestionProviderContainer { get; }
+        public IAutomaticSyncingService AutomaticSyncingService { get; }
 
         public static Builder ForClient(UserAgent userAgent, Version version)
             => new Builder(userAgent, version);
@@ -71,6 +72,7 @@ namespace Toggl.Foundation
             IntentDonationService = builder.IntentDonationService;
             PrivateSharedStorageService = builder.PrivateSharedStorageService;
             SuggestionProviderContainer = builder.SuggestionProviderContainer;
+            AutomaticSyncingService = builder.AutomaticSyncingService;
         }
 
         public class Builder
@@ -100,6 +102,7 @@ namespace Toggl.Foundation
             public IIntentDonationService IntentDonationService { get; internal set; }
             public ISuggestionProviderContainer SuggestionProviderContainer { get; internal set; }
             public IPrivateSharedStorageService PrivateSharedStorageService { get; internal set; }
+            public IAutomaticSyncingService AutomaticSyncingService { get; internal set; }
 
             public Builder(UserAgent agent, Version version)
             {
@@ -239,6 +242,12 @@ namespace Toggl.Foundation
                 return this;
             }
 
+            public Builder WithAutomaticSyncingService(IAutomaticSyncingService automaticSyncingService)
+            {
+                AutomaticSyncingService = automaticSyncingService;
+                return this;
+            }
+
             public Builder WithDatabase<TDatabase>()
                 where TDatabase : ITogglDatabase, new()
                 => WithDatabase(new TDatabase());
@@ -331,6 +340,7 @@ namespace Toggl.Foundation
                 Ensure.Argument.IsNotNull(IntentDonationService, nameof(IntentDonationService));
                 Ensure.Argument.IsNotNull(SuggestionProviderContainer, nameof(SuggestionProviderContainer));
                 Ensure.Argument.IsNotNull(PrivateSharedStorageService, nameof(PrivateSharedStorageService));
+                Ensure.Argument.IsNotNull(AutomaticSyncingService, nameof(AutomaticSyncingService));
             }
         }
     }

@@ -90,6 +90,8 @@ namespace Toggl.Giskard
             var schedulerProvider = new AndroidSchedulerProvider();
             var permissionsService = new PermissionsServiceAndroid();
             var calendarService = new CalendarServiceAndroid(permissionsService);
+            var backgroundService = new BackgroundService(timeService);
+            var automaticSyncingService = new AutomaticSyncingService(backgroundService, timeService, analyticsService);
 
             ApplicationContext.RegisterReceiver(new TimezoneChangedBroadcastReceiver(timeService),
                 new IntentFilter(Intent.ActionTimezoneChanged));
@@ -111,7 +113,8 @@ namespace Toggl.Giskard
                     .WithNotificationService<NotificationServiceAndroid>()
                     .WithRemoteConfigService<RemoteConfigServiceAndroid>()
                     .WithApiFactory(new ApiFactory(environment, userAgent))
-                    .WithBackgroundService(new BackgroundService(timeService))
+                    .WithBackgroundService(backgroundService)
+                    .WithAutomaticSyncingService(automaticSyncingService)
                     .WithSuggestionProviderContainer(suggestionProviderContainer)
                     .WithApplicationShortcutCreator(new ApplicationShortcutCreator(ApplicationContext))
                     .WithPlatformInfo(platformInfo)
