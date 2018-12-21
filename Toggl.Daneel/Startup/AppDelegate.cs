@@ -318,13 +318,10 @@ namespace Toggl.Daneel
         public override void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
         {
             var interactorFactory = Mvx.Resolve<IInteractorFactory>();
-            if (interactorFactory == null) return;
-            interactorFactory
-                .RunBackgroundSync()
+            interactorFactory?.RunBackgroundSync()
                 .Execute()
                 .Select(mapToNativeOutcomes)
-                .Do(completionHandler)
-                .Subscribe();
+                .Subscribe(completionHandler);
         }
 
         private UIBackgroundFetchResult mapToNativeOutcomes(Foundation.Models.SyncOutcome outcome) {

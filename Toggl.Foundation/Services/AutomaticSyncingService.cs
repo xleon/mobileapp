@@ -50,7 +50,7 @@ namespace Toggl.Foundation.Services
 
         private void start(ITogglDataSource dataSource)
         {
-            stop(); // replace any previous automatic syncing (if any)
+            stop();
 
             backgroundService.AppResumedFromBackground
                 .Where(timeInBackground => timeInBackground >= MinimumTimeInBackgroundForFullSync)

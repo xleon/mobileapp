@@ -1,6 +1,7 @@
 namespace Toggl.Foundation.Models
 {
-    public enum SyncOutcome {
+    public enum SyncOutcome
+    {
         NewData,
         NoData,
         Failed

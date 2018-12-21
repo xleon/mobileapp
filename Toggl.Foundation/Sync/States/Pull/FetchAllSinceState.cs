@@ -46,11 +46,24 @@ namespace Toggl.Foundation.Sync.States.Pull
                 return () => { };
             }
 
-            // The dependencies between the requests are based on the intended order of processing the entities
-            // in the sync states. Check the transitions graph and make sure that the requests and states are aligned.
-            // We send at most 3 parallel requests to prevent overloading the server with large bursts of requests.
+            var observables = fetchInWaves();
 
-            // first wave
+            observer.CompleteWith(FetchStarted.Transition(observables));
+            return () => { };
+        });
+
+        private IFetchObservables fetchInWaves()
+        {
+            var (workspaces, user, features) = firstWave();
+            var (preferences, tags, clients) = secondWave(workspaces, user, features);
+            var (projects, timeEntries, tasks) = thirdWave(preferences, tags, clients);
+
+            return new FetchObservables(
+                workspaces, features, user, clients, projects, timeEntries, tags, tasks, preferences);
+        }
+
+        private (IObservable<List<IWorkspace>>, IObservable<IUser>, IObservable<List<IWorkspaceFeatureCollection>>) firstWave()
+        {
             var workspaces =
                 limiter.WaitForFreeSlot()
                     .ThenExecute(() => api.Workspaces.GetAll())
@@ -66,7 +79,14 @@ namespace Toggl.Foundation.Sync.States.Pull
                     .ThenExecute(() => api.WorkspaceFeatures.GetAll())
                     .ConnectedReplay();
 
-            // second wave
+            return (workspaces, user, features);
+        }
+
+        private (IObservable<IPreferences>, IObservable<List<ITag>>, IObservable<List<IClient>>) secondWave(
+            IObservable<List<IWorkspace>> workspaces,
+            IObservable<IUser> user,
+            IObservable<List<IWorkspaceFeatureCollection>> features)
+        {
             var preferences =
                 workspaces.ThenExecute(limiter.WaitForFreeSlot)
                     .ThenExecute(() => api.Preferences.Get())
@@ -82,7 +102,12 @@ namespace Toggl.Foundation.Sync.States.Pull
                     .ThenExecute(() => fetchRecentIfPossible(api.Clients.GetAllSince, api.Clients.GetAll))
                     .ConnectedReplay();
 
-            // third wave
+            return (preferences, tags, clients);
+        }
+
+        private (IObservable<List<IProject>>, IObservable<List<ITimeEntry>>, IObservable<List<ITask>>) thirdWave(
+            IObservable<IPreferences> preferences, IObservable<List<ITag>> tags, IObservable<List<IClient>> clients)
+        {
             var projects =
                 preferences.ThenExecute(limiter.WaitForFreeSlot)
                     .ThenExecute(() => fetchRecentIfPossible(api.Projects.GetAllSince, api.Projects.GetAll))
@@ -98,12 +123,8 @@ namespace Toggl.Foundation.Sync.States.Pull
                     .ThenExecute(() => fetchRecentIfPossible(api.Tasks.GetAllSince, api.Tasks.GetAll))
                     .ConnectedReplay();
 
-            var observables = new FetchObservables(
-                workspaces, features, user, clients, projects, timeEntries, tags, tasks, preferences);
-
-            observer.CompleteWith(FetchStarted.Transition(observables));
-            return () => { };
-        });
+            return (projects, timeEntries, tasks);
+        }
 
         private IObservable<List<ITimeEntry>> fetchTwoMonthsOfTimeEntries()
             => api.TimeEntries.GetAll(

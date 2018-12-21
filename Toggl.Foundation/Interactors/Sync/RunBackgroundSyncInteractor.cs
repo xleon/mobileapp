@@ -32,17 +32,17 @@ namespace Toggl.Foundation.Interactors
         public IObservable<SyncOutcome> Execute()
         {
             var syncTimeStopwatch = stopwatchProvider.Create(MeasuredOperation.BackgroundSync);
-            var systemStopwatch = new Stopwatch();
             syncTimeStopwatch.Start();
-            systemStopwatch.Start();
             analyticsService.BackgroundSyncStarted.Track();
             return syncManager.ForceFullSync()
-                              .LastAsync()
-                              .Select(_ => SyncOutcome.NewData)
-                              .Catch((Exception error) => syncFailed(error))
-                              .Do(_ => systemStopwatch.Stop())
-                              .Do(_ => syncTimeStopwatch.Stop())
-                              .Do(outcome => analyticsService.BackgroundSyncFinished.Track(outcome.ToString()));
+                .LastAsync()
+                .Select(_ => SyncOutcome.NewData)
+                .Catch((Exception error) => syncFailed(error))
+                .Do(outcome =>
+                {
+                    syncTimeStopwatch.Stop();
+                    analyticsService.BackgroundSyncFinished.Track(outcome.ToString());
+                });
         }
 
         private IObservable<SyncOutcome> syncFailed(Exception error)
