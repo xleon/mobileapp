@@ -75,7 +75,7 @@ namespace Toggl.Foundation
             IRateLimiter rateLimiter,
             ISyncStateQueue queue)
         {
-            var delayState = new DelayState(scheduler);
+            var delayState = new DelayState(scheduler, analyticsService);
 
             var fetchAllSince = new FetchAllSinceState(api, database.SinceParameters, timeService, leakyBucket, rateLimiter);
 
@@ -249,7 +249,7 @@ namespace Toggl.Foundation
             IScheduler scheduler,
             StateResult entryPoint)
         {
-            var delayState = new DelayState(scheduler);
+            var delayState = new DelayState(scheduler, analyticsService);
 
             var pushingWorkspaces = configureCreateOnlyPush(transitions, entryPoint, dataSource.Workspaces, analyticsService, api.Workspaces, minutesLeakyBucket, rateLimiter, delayState, Workspace.Clean, Workspace.Unsyncable);
             var pushingUsers = configurePushSingleton(transitions, pushingWorkspaces.NothingToPush, dataSource.User, analyticsService, api.User, minutesLeakyBucket, rateLimiter, delayState, User.Clean, User.Unsyncable);

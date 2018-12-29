@@ -134,6 +134,8 @@ namespace Toggl.Foundation.Analytics
 
         IAnalyticsEvent<string, string, string> BackgroundSyncFailed { get; }
 
+        IAnalyticsEvent<int> RateLimitingDelayDuringSyncing { get; }
+
         IAnalyticsEvent<string, string> UnknownLoginFailure { get; }
 
         IAnalyticsEvent<string, string> UnknownSignUpFailure { get; }

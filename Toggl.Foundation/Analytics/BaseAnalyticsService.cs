@@ -212,6 +212,9 @@ namespace Toggl.Foundation.Analytics
         [AnalyticsEvent("Type", "Message")]
         public IAnalyticsEvent<string, string> UnknownSignUpFailure { get; protected set; }
 
+        [AnalyticsEvent("DelayDurationSeconds")]
+        public IAnalyticsEvent<int> RateLimitingDelayDuringSyncing { get; protected set; }
+
         public void TrackAnonymized(Exception exception)
         {
             if (exception.IsAnonymized())
