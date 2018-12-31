@@ -23,7 +23,7 @@ namespace Toggl.Foundation.Interactors
         private readonly IIntentDonationService intentDonationService;
         private readonly IApplicationShortcutCreator shortcutCreator;
         private readonly ILastTimeUsageStorage lastTimeUsageStorage;
-        private readonly IPlatformConstants platformConstants;
+        private readonly IPlatformInfo platformInfo;
         private readonly UserAgent userAgent;
         private readonly ICalendarService calendarService;
         private readonly ISyncManager syncManager;
@@ -39,7 +39,7 @@ namespace Toggl.Foundation.Interactors
             IIntentDonationService intentDonationService,
             IApplicationShortcutCreator shortcutCreator,
             ILastTimeUsageStorage lastTimeUsageStorage,
-            IPlatformConstants platformConstants,
+            IPlatformInfo platformInfo,
             UserAgent userAgent,
             ICalendarService calendarService,
             ISyncManager syncManager,
@@ -54,7 +54,7 @@ namespace Toggl.Foundation.Interactors
             Ensure.Argument.IsNotNull(notificationService, nameof(notificationService));
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
-            Ensure.Argument.IsNotNull(platformConstants, nameof(platformConstants));
+            Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
             Ensure.Argument.IsNotNull(userAgent, nameof(userAgent));
             Ensure.Argument.IsNotNull(calendarService, nameof(calendarService));
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
@@ -69,7 +69,7 @@ namespace Toggl.Foundation.Interactors
             this.notificationService = notificationService;
             this.intentDonationService = intentDonationService;
             this.lastTimeUsageStorage = lastTimeUsageStorage;
-            this.platformConstants = platformConstants;
+            this.platformInfo = platformInfo;
             this.userAgent = userAgent;
             this.calendarService = calendarService;
             this.syncManager = syncManager;

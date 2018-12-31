@@ -24,13 +24,13 @@ namespace Toggl.Foundation.Tests.MvvmCross
         private readonly MvvmCrossFoundation mvvmCrossFoundation;
 
         private readonly Version version = Version.Parse("1.0");
-        private readonly PlatformInfo platformInfo = new PlatformInfo();
         private readonly IScheduler scheduler = Substitute.For<IScheduler>();
         private readonly IApiFactory apiFactory = Substitute.For<IApiFactory>();
         private readonly UserAgent userAgent = new UserAgent("Some Client", "1.0");
         private readonly ITimeService timeService = Substitute.For<ITimeService>();
         private readonly IMailService mailService = Substitute.For<IMailService>();
         private readonly ITogglDatabase database = Substitute.For<ITogglDatabase>();
+        private readonly IPlatformInfo platformInfo = Substitute.For<IPlatformInfo>();
         private readonly IRatingService ratingService = Substitute.For<IRatingService>();
         private readonly IGoogleService googleService = Substitute.For<IGoogleService>();
         private readonly ILicenseProvider licenseProvider = Substitute.For<ILicenseProvider>();
@@ -38,7 +38,6 @@ namespace Toggl.Foundation.Tests.MvvmCross
         private readonly IStopwatchProvider stopwatchProvider = Substitute.For<IStopwatchProvider>();
         private readonly IBackgroundService backgroundService = Substitute.For<IBackgroundService>();
         private readonly IBackgroundSyncService backgroundSyncService = Substitute.For<IBackgroundSyncService>();
-        private readonly IPlatformConstants platformConstants = Substitute.For<IPlatformConstants>();
         private readonly IRemoteConfigService remoteConfigService = Substitute.For<IRemoteConfigService>();
         private readonly IApplicationShortcutCreator applicationShortcutCreator = Substitute.For<IApplicationShortcutCreator>();
         private readonly ISuggestionProviderContainer suggestionProviderContainer = Substitute.For<ISuggestionProviderContainer>();
@@ -202,7 +201,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                     .WithBackgroundService(backgroundService)
                     .WithBackgroundSyncService(backgroundSyncService)
                     .WithSchedulerProvider(schedulerProvider)
-                    .WithPlatformConstants(platformConstants)
+                    .WithPlatformInfo(platformInfo)
                     .WithNotificationService(notificationService)
                     .WithRemoteConfigService(remoteConfigService)
                     .WithIntentDonationService(IntentDonationService)

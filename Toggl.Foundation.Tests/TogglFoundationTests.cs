@@ -39,7 +39,6 @@ namespace Toggl.Foundation.Tests
                 bool useBackgroundService,
                 bool useBackgroundSyncService,
                 bool useSchedulerProvider,
-                bool usePlatformConstants,
                 bool useNotificationService,
                 bool useRemoteConfigService,
                 bool useIntentDonationService,
@@ -48,13 +47,13 @@ namespace Toggl.Foundation.Tests
                 bool useSuggestionProviderContainer)
             {
                 var version = useVersion ? Version.Parse("1.0") : null;
-                var platformInfo = usePlatformInfo ? new PlatformInfo() : null;
                 var agent = userAgent ? new UserAgent("Some Client", "1.0") : null;
                 var scheduler = useScheduler ? Substitute.For<IScheduler>() : null;
                 var database = useDatabase ? Substitute.For<ITogglDatabase>() : null;
                 var apiFactory = useApiFactory ? Substitute.For<IApiFactory>() : null;
                 var timeService = useTimeService ? Substitute.For<ITimeService>() : null;
                 var mailService = useMailService ? Substitute.For<IMailService>() : null;
+                var platformInfo = usePlatformInfo ? Substitute.For<IPlatformInfo>() : null;
                 var ratinService = useRatingService ? Substitute.For<IRatingService>() : null;
                 var googleService = useGoogleService ? Substitute.For<IGoogleService>() : null;
                 var licenseProvider = useLicenseProvider ? Substitute.For<ILicenseProvider>() : null;
@@ -62,7 +61,6 @@ namespace Toggl.Foundation.Tests
                 var stopwatchProvider = useStopwatchProvider ? Substitute.For<IStopwatchProvider>() : null;
                 var backgroundService = useBackgroundService ? Substitute.For<IBackgroundService>() : null;
                 var backgroundSyncService = useBackgroundSyncService ? Substitute.For<IBackgroundSyncService>() : null;
-                var platformConstants = usePlatformConstants ? Substitute.For<IPlatformConstants>() : null;
                 var notificationService = useNotificationService ? Substitute.For<INotificationService>() : null;
                 var remoteConfigService = useRemoteConfigService ? Substitute.For<IRemoteConfigService>() : null;
                 var intentDonationService = useIntentDonationService ? Substitute.For<IIntentDonationService>() : null;
@@ -88,7 +86,7 @@ namespace Toggl.Foundation.Tests
                         .WithBackgroundService(backgroundService)
                         .WithBackgroundSyncService(backgroundSyncService)
                         .WithSchedulerProvider(schedulerProvider)
-                        .WithPlatformConstants(platformConstants)
+                        .WithPlatformInfo(platformInfo)
                         .WithNotificationService(notificationService)
                         .WithRemoteConfigService(remoteConfigService)
                         .WithIntentDonationService(intentDonationService)
@@ -104,20 +102,19 @@ namespace Toggl.Foundation.Tests
             public void BuildingWorksIfAllParametersAreProvided()
             {
                 var version = Version.Parse("1.0");
-                var platformInfo = new PlatformInfo();
                 var scheduler = Substitute.For<IScheduler>();
                 var apiFactory = Substitute.For<IApiFactory>();
                 var agent = new UserAgent("Some Client", "1.0");
                 var database = Substitute.For<ITogglDatabase>();
                 var timeService = Substitute.For<ITimeService>();
                 var mailService = Substitute.For<IMailService>();
+                var platformInfo = Substitute.For<IPlatformInfo>();
                 var ratingService = Substitute.For<IRatingService>();
                 var googleService = Substitute.For<IGoogleService>();
                 var licenseProvider = Substitute.For<ILicenseProvider>();
                 var analyticsService = Substitute.For<IAnalyticsService>();
                 var stopwatchProvider = Substitute.For<IStopwatchProvider>();
                 var schedulerProvider = Substitute.For<ISchedulerProvider>();
-                var platformConstants = Substitute.For<IPlatformConstants>();
                 var backgroundService = Substitute.For<IBackgroundService>();
                 var backgroundSyncService = Substitute.For<IBackgroundSyncService>();
                 var notificationService = Substitute.For<INotificationService>();
@@ -146,7 +143,7 @@ namespace Toggl.Foundation.Tests
                         .WithBackgroundService(backgroundService)
                         .WithBackgroundSyncService(backgroundSyncService)
                         .WithSchedulerProvider(schedulerProvider)
-                        .WithPlatformConstants(platformConstants)
+                        .WithPlatformInfo(platformInfo)
                         .WithNotificationService(notificationService)
                         .WithRemoteConfigService(remoteConfigService)
                         .WithIntentDonationService(intentDonationService)

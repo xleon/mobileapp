@@ -14,7 +14,6 @@ using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Settings;
-using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.Mocks;
@@ -47,15 +46,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 SetupObservables();
 
                 return new SettingsViewModel(
-                    UserAgent,
                     DataSource,
-                    UserAccessManager,
+                    PlatformInfo,
                     DialogService,
                     UserPreferences,
                     FeedbackService,
                     AnalyticsService,
+                    UserAccessManager,
                     InteractorFactory,
-                    PlatformConstants,
                     OnboardingStorage,
                     NavigationService,
                     PrivateSharedStorageService,
@@ -74,7 +72,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Theory, LogIfTooSlow]
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
-                bool useUserAgent,
                 bool useDataSource,
                 bool useUserAccessManager,
                 bool useDialogService,
@@ -82,7 +79,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useFeedbackService,
                 bool useAnalyticsService,
                 bool useInteractorFactory,
-                bool usePlatformConstants,
+                bool useplatformInfo,
                 bool useOnboardingStorage,
                 bool useNavigationService,
                 bool usePrivateSharedStorageService,
@@ -90,33 +87,31 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useStopwatchProvider,
                 bool useRxActionFactory)
             {
-                var userAgent = useUserAgent ? UserAgent : null;
                 var dataSource = useDataSource ? DataSource : null;
-                var userAccessManager = useUserAccessManager ? UserAccessManager : null;
+                var platformInfo = useplatformInfo ? PlatformInfo : null;
                 var dialogService = useDialogService ? DialogService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var feedbackService = useFeedbackService ? FeedbackService : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
+                var userAccessManager = useUserAccessManager ? UserAccessManager : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var navigationService = useNavigationService ? NavigationService : null;
-                var platformConstants = usePlatformConstants ? PlatformConstants : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
-                var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
-                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
+                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
+                var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new SettingsViewModel(
-                        userAgent,
                         dataSource,
-                        userAccessManager,
+                        platformInfo,
                         dialogService,
                         userPreferences,
                         feedbackService,
                         analyticsService,
+                        userAccessManager,
                         interactorFactory,
-                        platformConstants,
                         onboardingStorage,
                         navigationService,
                         privateSharedStorageService,
@@ -512,11 +507,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheOpenHelpViewMethod : SettingsViewModelTest
         {
             [Property]
-            public void NavigatesToBrowserViewModelWithUrlFromPlatformConstants(
+            public void NavigatesToBrowserViewModelWithUrlFromplatformInfo(
                 NonEmptyString nonEmptyString)
             {
                 var helpUrl = nonEmptyString.Get;
-                PlatformConstants.HelpUrl.Returns(helpUrl);
+                PlatformInfo.HelpUrl.Returns(helpUrl);
 
                 ViewModel.OpenHelpView.Execute();
                 TestScheduler.Start();
@@ -540,7 +535,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public void ShouldBeConstructedFromVersionAndBuildNumber()
             {
-                ViewModel.Version.Should().Be($"{UserAgent.Version} ({PlatformConstants.BuildNumber})");
+                const string version = "1.0";
+                PlatformInfo.Version.Returns(version);
+
+                ViewModel.Version.Should().Be($"{version} ({PlatformInfo.BuildNumber})");
             }
         }
 

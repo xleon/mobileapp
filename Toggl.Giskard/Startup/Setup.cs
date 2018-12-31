@@ -23,6 +23,7 @@ using Toggl.Foundation.Suggestions;
 using Toggl.Giskard.BroadcastReceivers;
 using Toggl.Giskard.Presenters;
 using Toggl.Giskard.Services;
+using Toggl.Giskard.Startup;
 using Toggl.PrimeRadiant.Realm;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
@@ -38,7 +39,6 @@ namespace Toggl.Giskard
 
         private IAnalyticsService analyticsService;
         private IForkingNavigationService navigationService;
-        private PlatformInfo platformInfo;
 
 #if USE_PRODUCTION_API
         private const ApiEnvironment environment = ApiEnvironment.Production;
@@ -56,7 +56,7 @@ namespace Toggl.Giskard
             var loader = CreateViewModelLoader(collection);
             Mvx.RegisterSingleton<IMvxViewModelLoader>(loader);
 
-            navigationService = new NavigationService(null, loader, analyticsService, platformInfo);
+            navigationService = new NavigationService(null, loader, analyticsService, Platform.Giskard);
 
             Mvx.RegisterSingleton<IForkingNavigationService>(navigationService);
             Mvx.RegisterSingleton<IMvxNavigationService>(navigationService);
@@ -75,6 +75,7 @@ namespace Toggl.Giskard
             var database = new Database();
             var scheduler = Scheduler.Default;
             var timeService = new TimeService(scheduler);
+            var backgroundService = new BackgroundService(timeService);
             var suggestionProviderContainer = new SuggestionProviderContainer(
                 new MostUsedTimeEntrySuggestionProvider(database, timeService, maxNumberOfSuggestions)
             );
@@ -83,10 +84,10 @@ namespace Toggl.Giskard
             var userAgent = new UserAgent(clientName, version);
             var mailService = new MailServiceAndroid(ApplicationContext);
             var dialogService = new DialogServiceAndroid();
-            var platformConstants = new PlatformConstants();
+            var platformInfo = new PlatformInfoAndroid();
             var keyValueStorage = new SharedPreferencesStorageAndroid(sharedPreferences);
             var settingsStorage = new SettingsStorage(appVersion, keyValueStorage);
-            var feedbackService = new FeedbackService(userAgent, mailService, dialogService, platformConstants);
+            var feedbackService = new FeedbackService(userAgent, mailService, dialogService, platformInfo);
             var schedulerProvider = new AndroidSchedulerProvider();
             var permissionsService = new PermissionsServiceAndroid();
             var calendarService = new CalendarServiceAndroid(permissionsService);
@@ -109,7 +110,7 @@ namespace Toggl.Giskard
                     .WithLicenseProvider<LicenseProviderAndroid>()
                     .WithAnalyticsService(analyticsService)
                     .WithSchedulerProvider(schedulerProvider)
-                    .WithPlatformConstants(platformConstants)
+                    .WithPlatformInfo(platformInfo)
                     .WithNotificationService<NotificationServiceAndroid>()
                     .WithRemoteConfigService<RemoteConfigServiceAndroid>()
                     .WithApiFactory(new ApiFactory(environment, userAgent))
@@ -117,7 +118,6 @@ namespace Toggl.Giskard
                     .WithAutomaticSyncingService(automaticSyncingService)
                     .WithSuggestionProviderContainer(suggestionProviderContainer)
                     .WithApplicationShortcutCreator(new ApplicationShortcutCreator(ApplicationContext))
-                    .WithPlatformInfo(platformInfo)
                     .WithStopwatchProvider<FirebaseStopwatchProviderAndroid>()
                     .WithIntentDonationService(new NoopIntentDonationServiceAndroid())
                     .WithPrivateSharedStorageService(new NoopPrivateSharedStorageServiceAndroid())
@@ -141,6 +141,7 @@ namespace Toggl.Giskard
             foundation.RevokeNewUserIfNeeded().Initialize();
 
             ensureDataSourceInitializationIfLoggedIn();
+            createApplicationLifecycleObserver(backgroundService);
 
             base.InitializeApp(pluginManager, app);
         }
@@ -184,6 +185,14 @@ namespace Toggl.Giskard
              */
             var userAccessManager = Mvx.Resolve<IUserAccessManager>();
             var dataSource = userAccessManager.GetDataSourceIfLoggedIn();
+        }
+
+        private void createApplicationLifecycleObserver(IBackgroundService backgroundService)
+        {
+            var mvxApplication = MvxAndroidApplication.Instance;
+            var appLifecycleObserver = new ApplicationLifecycleObserver(backgroundService);
+            mvxApplication.RegisterActivityLifecycleCallbacks(appLifecycleObserver);
+            mvxApplication.RegisterComponentCallbacks(appLifecycleObserver);
         }
     }
 }
