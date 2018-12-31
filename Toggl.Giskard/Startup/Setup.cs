@@ -51,7 +51,6 @@ namespace Toggl.Giskard
         protected override IMvxNavigationService InitializeNavigationService(IMvxViewModelLocatorCollection collection)
         {
             analyticsService = new AnalyticsServiceAndroid();
-            platformInfo = new PlatformInfo { Platform = Platform.Giskard };
 
             var loader = CreateViewModelLoader(collection);
             Mvx.RegisterSingleton<IMvxViewModelLoader>(loader);
@@ -91,7 +90,6 @@ namespace Toggl.Giskard
             var schedulerProvider = new AndroidSchedulerProvider();
             var permissionsService = new PermissionsServiceAndroid();
             var calendarService = new CalendarServiceAndroid(permissionsService);
-            var backgroundService = new BackgroundService(timeService);
             var automaticSyncingService = new AutomaticSyncingService(backgroundService, timeService, analyticsService);
 
             ApplicationContext.RegisterReceiver(new TimezoneChangedBroadcastReceiver(timeService),
