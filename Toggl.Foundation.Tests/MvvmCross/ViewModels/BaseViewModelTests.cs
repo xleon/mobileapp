@@ -14,7 +14,6 @@ using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
-using Toggl.Ultrawave.Network;
 
 namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 {
@@ -26,14 +25,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         protected IMailService MailService { get; } = Substitute.For<IMailService>();
         protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
         protected IUserAccessManager UserAccessManager { get; } = Substitute.For<IUserAccessManager>();
-        protected UserAgent UserAgent { get; } = new UserAgent("Foundation.Tests", "1.0");
         protected IRatingService RatingService { get; } = Substitute.For<IRatingService>();
         protected IDialogService DialogService { get; } = Substitute.For<IDialogService>();
         protected IBrowserService BrowserService { get; } = Substitute.For<IBrowserService>();
         protected ILicenseProvider LicenseProvider { get; } = Substitute.For<ILicenseProvider>();
         protected IFeedbackService FeedbackService { get; } = Substitute.For<IFeedbackService>();
         protected IBackgroundService BackgroundService { get; } = Substitute.For<IBackgroundService>();
-        protected IPlatformConstants PlatformConstants { get; } = Substitute.For<IPlatformConstants>();
+        protected IPlatformInfo PlatformInfo { get; } = Substitute.For<IPlatformInfo>();
         protected IOnboardingStorage OnboardingStorage { get; } = Substitute.For<IOnboardingStorage>();
         protected IRemoteConfigService RemoteConfigService { get; } = Substitute.For<IRemoteConfigService>();
         protected IPasswordManagerService PasswordManagerService { get; } = Substitute.For<IPasswordManagerService>();
