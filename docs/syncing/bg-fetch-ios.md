@@ -11,3 +11,4 @@ Depending on the time it takes us to call the handler and its results, iOS can c
 
 Previous topic: [Background sync](bg-sync.md)
 Next topic: [Background Fetch on Android](bg-fetch-android.md)
+Go to the [Index](index.md)

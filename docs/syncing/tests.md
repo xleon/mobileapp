@@ -32,6 +32,6 @@ For most tests it should be enough to derive a class form `BaseComplexSyncTest` 
 ---
 
 Previous topic: [Sample sync state](example.md)
-Next topic: [Background sync](bg-sync.md)
+Next topic: [Rate limiting](rate-limiting.md)
 Go to the [Index](index.md)
 
