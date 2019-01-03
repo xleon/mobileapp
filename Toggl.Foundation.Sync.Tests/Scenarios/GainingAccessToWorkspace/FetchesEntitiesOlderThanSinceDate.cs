@@ -8,8 +8,8 @@ using Toggl.Foundation.Sync.Tests.Helpers;
 using Toggl.Foundation.Sync.Tests.State;
 using Toggl.Foundation.Tests.Mocks;
 using Toggl.Multivac;
+using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Models;
 using Toggl.Ultrawave.Helpers;
 
 namespace Toggl.Foundation.Sync.Tests.Scenarios.GainingAccessToWorkspace
@@ -146,11 +146,11 @@ namespace Toggl.Foundation.Sync.Tests.Scenarios.GainingAccessToWorkspace
                 },
                 sinceParameters: new Dictionary<Type, DateTimeOffset?>
                 {
-                    [typeof(IDatabaseWorkspace)] = DateTimeOffset.Now.AddDays(1),
-                    [typeof(IDatabaseClient)] = DateTimeOffset.Now.AddDays(1),
-                    [typeof(IDatabaseProject)] = DateTimeOffset.Now.AddDays(1),
-                    [typeof(IDatabaseTag)] = DateTimeOffset.Now.AddDays(1),
-                    [typeof(IDatabaseTimeEntry)] = DateTimeOffset.Now.AddDays(1)
+                    [typeof(IWorkspace)] = DateTimeOffset.Now.AddDays(1),
+                    [typeof(IClient)] = DateTimeOffset.Now.AddDays(1),
+                    [typeof(IProject)] = DateTimeOffset.Now.AddDays(1),
+                    [typeof(ITag)] = DateTimeOffset.Now.AddDays(1),
+                    [typeof(ITimeEntry)] = DateTimeOffset.Now.AddDays(1)
                 });
         }
 
