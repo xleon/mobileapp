@@ -473,7 +473,7 @@ private TemporaryFileTransformation GetIntegrationTestsConfigurationTransformati
     {
         Path = path,
         Original = file,
-        Temporary = file.Replace("{CAKE_COMMIT_HASH}", commitHash)
+        Temporary = file.Replace("\"CAKE_COMMIT_HASH\"", $"\"{commitHash}\"")
     };
 }
 
