@@ -324,7 +324,6 @@
     <Compile Include="Services\GoogleServiceAndroid.cs" />
     <Compile Include="Services\DialogServiceAndroid.cs" />
     <Compile Include="Services\BrowserServiceAndroid.cs" />
-    <Compile Include="Activities\OnboardingActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="Activities\LoginActivity.ViewBinds.cs">
       <DependentUpon>LoginActivity.cs</DependentUpon>
@@ -600,7 +599,6 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\add_new.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\add_new.png" />
     <AndroidResource Include="Resources\layout\MainActivity.axml" />
-    <AndroidResource Include="Resources\layout\OnboardingActivity.axml" />
     <AndroidResource Include="Resources\layout\LoginActivity.axml" />
     <AndroidResource Include="Resources\values\Styles.xml" />
     <AndroidResource Include="Resources\values-v23\Styles.xml" />
