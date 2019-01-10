@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -338,13 +339,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
 
             if (startDate == endDate)
             {
-                currentDateRangeStringSubject.OnNext($"{startDate.ToString(dateFormat.Short)} ▾");
+                currentDateRangeStringSubject.OnNext($"{startDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture)} ▾");
                 return;
             }
 
             currentDateRangeStringSubject.OnNext(isCurrentWeek()
                 ? $"{Resources.ThisWeek} ▾"
-                : $"{startDate.ToString(dateFormat.Short)} - {endDate.ToString(dateFormat.Short)} ▾");
+                : $"{startDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture)} - {endDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture)} ▾");
         }
 
         private void onPreferencesChanged(IThreadSafePreferences preferences)

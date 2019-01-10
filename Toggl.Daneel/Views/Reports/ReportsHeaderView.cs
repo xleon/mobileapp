@@ -19,6 +19,7 @@ using Toggl.Multivac.Extensions;
 using System.Linq;
 using Toggl.Multivac;
 using System.Collections.Generic;
+using System.Globalization;
 using Toggl.Foundation.Conversions;
 using System.Reactive.Subjects;
 using System.Reactive;
@@ -116,14 +117,14 @@ namespace Toggl.Daneel.Views.Reports
                 ViewModel.StartDate
                     .CombineLatest(
                         ViewModel.BarChartViewModel.DateFormat,
-                        (startDate, format) => startDate.ToString(format.Short))
+                        (startDate, format) => startDate.ToString(format.Short, CultureInfo.InvariantCulture))
                     .Subscribe(StartDateLabel.Rx().Text())
                     .DisposedBy(disposeBag);
 
                 ViewModel.EndDate
                     .CombineLatest(
                         ViewModel.BarChartViewModel.DateFormat,
-                        (endDate, format) => endDate.ToString(format.Short))
+                        (endDate, format) => endDate.ToString(format.Short, CultureInfo.InvariantCulture))
                     .Subscribe(EndDateLabel.Rx().Text())
                     .DisposedBy(disposeBag);
 
@@ -229,6 +230,9 @@ namespace Toggl.Daneel.Views.Reports
             });
 
         private IEnumerable<UILabel> createHorizontalLegendLabels(IEnumerable<DateTimeOffset> dates, DateFormat format)
-            => dates.Select(date => new BarLegendLabel(DateTimeOffsetConversion.ToDayOfWeekInitial(date), date.ToString(format.Short)));
+            => dates.Select(date =>
+                new BarLegendLabel(
+                    DateTimeOffsetConversion.ToDayOfWeekInitial(date),
+                    date.ToString(format.Short, CultureInfo.InvariantCulture)));
     }
 }
