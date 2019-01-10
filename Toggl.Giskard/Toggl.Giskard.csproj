@@ -416,7 +416,9 @@
     <Compile Include="Services\LicenseProviderAndroid.cs" />
     <Compile Include="Views\SelectProjectWithExpandableTasksRecyclerViewHolder.cs" />
     <Compile Include="Fragments\SelectDateFormatFragment.cs" />
-    <Compile Include="TemplateSelectors\SelectDateFormatTemplateSelector.cs" />
+    <Compile Include="Fragments\SelectDateFormatFragment.ViewBinds.cs">
+      <DependentUpon>SelectDateFormatFragment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fragments\SelectBeginningOfWeekFragment.cs" />
     <Compile Include="TemplateSelectors\SelectBeginningOfWeekTemplateSelector.cs" />
     <Compile Include="Fragments\SelectDurationFormatFragment.cs" />
@@ -532,6 +534,8 @@
     <Compile Include="Startup\ApplicationLifecycleObserver.cs" />
     <Compile Include="Services\BackgroundSyncServiceAndroid.cs" />
     <Compile Include="Services\BackgroundSyncJobSchedulerService.cs" />
+    <Compile Include="Adapters\SelectDateFormatRecyclerAdapter.cs" />
+    <Compile Include="ViewHolders\SelectDateFormatViewHolder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
