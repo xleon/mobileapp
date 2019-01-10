@@ -307,6 +307,9 @@
     <Compile Include="Extensions\TracingExtensions.cs" />
     <Compile Include="Extensions\Reactive\RecyclerViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\ValueSliderViewExtensions.cs" />
+    <Compile Include="Fragments\SelectWorkspaceFragment.ViewBinds.cs">
+      <DependentUpon>SelectWorkspaceFragment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helper\PersistentNotificationsHelper.cs" />
     <Compile Include="Fragments\NoWorkspaceFragment.cs" />
     <Compile Include="Fragments\NoWorkspaceFragment.ViewBinds.cs">
@@ -352,6 +355,7 @@
     <Compile Include="ViewHolders\MainLogSuggestionItemViewHolder.cs" />
     <Compile Include="ViewHolders\MainLogSuggestionsListViewHolder.cs" />
     <Compile Include="ViewHolders\GuardedMvxRecyclerViewHolder.cs" />
+    <Compile Include="ViewHolders\SelectWorkspaceViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsCalendarShortcutCellViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsHeaderCellViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsItemCellViewHolder.cs" />
@@ -406,7 +410,6 @@
     <Compile Include="Activities\SelectClientActivity.cs" />
     <Compile Include="Adapters\SelectClientRecyclerAdapter.cs" />
     <Compile Include="Fragments\SelectWorkspaceFragment.cs" />
-    <Compile Include="TemplateSelectors\SelectWorkspaceTemplateSelector.cs" />
     <Compile Include="Bindings\TextViewFontWeightTargetBinding.cs" />
     <Compile Include="Services\LicenseProviderAndroid.cs" />
     <Compile Include="Views\SelectProjectWithExpandableTasksRecyclerViewHolder.cs" />

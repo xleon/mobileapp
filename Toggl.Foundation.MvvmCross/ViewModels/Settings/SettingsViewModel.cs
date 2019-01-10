@@ -414,10 +414,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .TrackException<InvalidOperationException, IThreadSafeWorkspace>("SettingsViewModel.PickDefaultWorkspace")
                 .Execute();
 
-            var parameters = WorkspaceParameters.Create(defaultWorkspace.Id, Resources.SetDefaultWorkspace, allowQuerying: false);
             var selectedWorkspaceId =
                 await navigationService
-                    .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(parameters);
+                    .Navigate<SelectWorkspaceViewModel, long, long>(defaultWorkspace.Id);
 
             await changeDefaultWorkspace(selectedWorkspaceId);
         }

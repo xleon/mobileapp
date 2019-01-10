@@ -724,6 +724,7 @@
     <Compile Include="ViewControllers\StartTimeEntryViewController.designer.cs">
       <DependentUpon>StartTimeEntryViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewSources\WorkspaceTableViewSource.cs" />
     <Compile Include="Views\ActivityIndicatorView.cs" />
     <Compile Include="Presentation\Attributes\ModalCardPresentationAttribute.cs" />
     <Compile Include="Presentation\Attributes\NestedChildPresentationAttribute.cs" />
@@ -815,7 +816,6 @@
     <Compile Include="ViewControllers\SelectWorkspaceViewController.designer.cs">
       <DependentUpon>SelectWorkspaceViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewSources\WorkspaceTableViewSource.cs" />
     <Compile Include="ViewSources\ClientTableViewSource.cs" />
     <Compile Include="ViewControllers\SelectClientViewController.cs" />
     <Compile Include="ViewControllers\SelectClientViewController.designer.cs">

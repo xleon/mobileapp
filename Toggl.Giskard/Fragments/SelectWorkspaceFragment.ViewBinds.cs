@@ -1,9 +1,9 @@
-﻿using Android.Support.V7.Widget;
+using Android.Support.V7.Widget;
 using Android.Views;
 
 namespace Toggl.Giskard.Fragments
 {
-    public partial class SelectDefaultWorkspaceFragment
+    public partial class SelectWorkspaceFragment
     {
         private RecyclerView recyclerView;
 

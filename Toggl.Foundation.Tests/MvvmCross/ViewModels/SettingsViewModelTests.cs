@@ -443,14 +443,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TestScheduler.Start();
 
                 await NavigationService.Received()
-                    .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>());
+                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>());
             }
 
             [Fact, LogIfTooSlow]
             public async Task UpdatesTheUserWithTheReceivedWorspace()
             {
                 NavigationService
-                    .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>())
+                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>())
                     .Returns(Task.FromResult(workspaceId));
 
                 ViewModel.PickDefaultWorkspace.Execute();
@@ -466,7 +466,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task StartsTheSyncAlgorithm()
             {
                 NavigationService
-                    .Navigate<SelectWorkspaceViewModel, WorkspaceParameters, long>(Arg.Any<WorkspaceParameters>())
+                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>())
                     .Returns(Task.FromResult(workspaceId));
 
                 ViewModel.PickDefaultWorkspace.Execute();
