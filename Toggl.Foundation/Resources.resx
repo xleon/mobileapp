@@ -495,6 +495,18 @@ account is not set up</value>
     <data name="Calendar">
         <value>Calendar</value>
     </data>
+    <data name="CalendarWhatToDoWithCalendarEvent">
+        <value>What would you like to do with this calendar event?</value>
+    </data>
+    <data name="CalendarStartNow">
+        <value>Start now</value>
+    </data>
+    <data name="CalendarStartWhenTheEventStarts">
+        <value>Start at event start</value>
+    </data>
+    <data name="CalendarCopyEventToTimeEntry">
+        <value>Copy as a time entry</value>
+    </data>
     <data name="CreateClient">
         <value>Create client</value>
     </data>
