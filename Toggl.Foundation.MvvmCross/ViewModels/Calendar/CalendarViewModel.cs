@@ -278,7 +278,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             if (!calendarItem.IsEditable() || calendarItem.TimeEntryId == null)
                 return;
 
-            var timeEntry = await dataSource.TimeEntries.GetById(calendarItem.TimeEntryId.Value);
+            var timeEntry = await interactorFactory.GetTimeEntryById(calendarItem.TimeEntryId.Value).Execute();
 
             var dto = new DTOs.EditTimeEntryDto
             {
@@ -293,8 +293,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 TagIds = timeEntry.TagIds
             };
 
-            var duration = calendarItem.Duration.HasValue 
-                ? calendarItem.Duration.Value.TotalSeconds 
+            var duration = calendarItem.Duration.HasValue
+                ? calendarItem.Duration.Value.TotalSeconds
                 : (timeService.CurrentDateTime - calendarItem.StartTime.LocalDateTime).TotalSeconds;
 
             if (timeEntry.Duration != duration)

@@ -835,8 +835,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Start = calendarItem.StartTime,
                     Duration = (long)calendarItem.Duration.Value.TotalSeconds + 10
                 };
-                DataSource.TimeEntries
-                    .GetById(Arg.Any<long>())
+                InteractorFactory.GetTimeEntryById(Arg.Any<long>())
+                    .Execute()
                     .Returns(Observable.Return(timeEntry));
 
                 ViewModel.OnUpdateTimeEntry.Execute(calendarItem);
@@ -852,8 +852,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Start = calendarItem.StartTime.Add(TimeSpan.FromHours(1)),
                     Duration = (long)calendarItem.Duration.Value.TotalSeconds
                 };
-                DataSource.TimeEntries
-                    .GetById(Arg.Any<long>())
+                InteractorFactory.GetTimeEntryById(Arg.Any<long>())
+                    .Execute()
                     .Returns(Observable.Return(timeEntry));
 
                 ViewModel.OnUpdateTimeEntry.Execute(calendarItem);
@@ -869,8 +869,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Start = calendarItem.StartTime.Add(TimeSpan.FromHours(1)),
                     Duration = (long)calendarItem.Duration.Value.TotalSeconds + 10
                 };
-                DataSource.TimeEntries
-                    .GetById(Arg.Any<long>())
+                InteractorFactory.GetTimeEntryById(Arg.Any<long>())
+                    .Execute()
                     .Returns(Observable.Return(timeEntry));
 
                 ViewModel.OnUpdateTimeEntry.Execute(calendarItem);
