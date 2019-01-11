@@ -86,7 +86,7 @@ Please try again.</value>
         <value>We're syncing your data</value>
     </data>
     <data name="SettingsSyncInProgressMessage">
-        <value>You may lose your data when you sign out before the sync is complete.</value>
+        <value>You may lose your data if you sign out before the sync is complete.</value>
     </data>
     <data name="SettingsUnsyncedTitle">
         <value>Unsynced data</value>
@@ -297,10 +297,10 @@ categorize your tracked time.</value>
         <value>Help</value>
     </data>
     <data name="WorkspaceChangedAlertTitle">
-        <value>You've changed the workspace.</value>
+        <value>You've changed workspace.</value>
     </data>
     <data name="WorkspaceChangedAlertMessage">
-        <value>Your project and time entry will be allocated under the selected workspace.</value>
+        <value>Your project and time entry will be allocated to the selected workspace.</value>
     </data>
     <data name="Reports">
         <value>Reports</value>
@@ -319,7 +319,7 @@ categorize your tracked time.</value>
 account is not set up</value>
     </data>
     <data name="NoEmailErrorMessage">
-        <value>Go to “Settings > Mail > Add Account” to set up an email account or send us your feedback to support@toggl.com</value>
+        <value>Go to “Settings > Mail > Add Account” to set up an email account or send your feedback to support@toggl.com</value>
     </data>
     <data name="Continue">
         <value>Continue</value>
@@ -409,7 +409,7 @@ account is not set up</value>
         <value>Too Long</value>
     </data>
     <data name="ReportTooLongDescription">
-        <value>The maximum lenght of a report is 365 days.</value>
+        <value>The maximum length of a report is 365 days.</value>
     </data>
     <data name="ArchivedProjectDecorator">
         <value>(archived)</value>
