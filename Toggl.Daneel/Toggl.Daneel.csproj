@@ -668,9 +668,11 @@
     <Compile Include="Cells\BaseCollectionViewCell.cs" />
     <Compile Include="Extensions\Binders\ReactiveTableViewBinder.cs" />
     <Compile Include="Extensions\IntentPeriod.cs" />
+    <Compile Include="Extensions\Reactive\DurationFieldExtensions.cs" />
     <Compile Include="Extensions\Reactive\HueSaturationPickerViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\UIScrollViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\UISliderExtensions.cs" />
+    <Compile Include="Extensions\Reactive\WheelForegroundViewExtensions.cs" />
     <Compile Include="Extensions\SectionedIndexExtensions.cs" />
     <Compile Include="Services\PermissionsServiceIos.cs" />
     <Compile Include="Services\CalendarServiceIos.cs" />
