@@ -9,7 +9,6 @@ using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using UIKit;
@@ -66,7 +65,7 @@ namespace Toggl.Daneel.ViewSources
                     UITableViewRowActionStyle.Destructive,
                     Resources.Delete,
                     handleDeleteTableViewRowAction);
-                deleteTableViewRowAction.BackgroundColor = Color.TimeEntriesLog.DeleteSwipeActionBackground.ToNativeColor();
+                deleteTableViewRowAction.BackgroundColor = Foundation.MvvmCross.Helper.Color.TimeEntriesLog.DeleteSwipeActionBackground.ToNativeColor();
             }
 
             FirstCell = firstCellSubject.AsDriver(schedulerProvider);
@@ -172,7 +171,7 @@ namespace Toggl.Daneel.ViewSources
                     completionHandler.Invoke(finished: true);
                 }
             );
-            continueAction.BackgroundColor = Color.TimeEntriesLog.ContinueSwipeActionBackground.ToNativeColor();
+            continueAction.BackgroundColor = Foundation.MvvmCross.Helper.Color.TimeEntriesLog.ContinueSwipeActionBackground.ToNativeColor();
             return continueAction;
         }
 
@@ -187,7 +186,7 @@ namespace Toggl.Daneel.ViewSources
                     completionHandler.Invoke(finished: true);
                 }
             );
-            deleteAction.BackgroundColor = Color.TimeEntriesLog.DeleteSwipeActionBackground.ToNativeColor();
+            deleteAction.BackgroundColor = Foundation.MvvmCross.Helper.Color.TimeEntriesLog.DeleteSwipeActionBackground.ToNativeColor();
             return deleteAction;
         }
     }

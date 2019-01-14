@@ -155,8 +155,8 @@ namespace Toggl.Daneel.ViewControllers
                 => hasError ? UIColor.White : UIColor.Black;
 
             UIColor signupButtonTitleColor(bool enabled) => enabled
-                ? Color.Login.EnabledButtonColor.ToNativeColor()
-                : Color.Login.DisabledButtonColor.ToNativeColor();
+                ? Foundation.MvvmCross.Helper.Color.Login.EnabledButtonColor.ToNativeColor()
+                : Foundation.MvvmCross.Helper.Color.Login.DisabledButtonColor.ToNativeColor();
         }
 
         public override void ViewDidLayoutSubviews()
@@ -206,7 +206,7 @@ namespace Toggl.Daneel.ViewControllers
             ActivityIndicator.StartSpinning();
 
             SignupButton.SetTitleColor(
-                Color.Login.DisabledButtonColor.ToNativeColor(),
+                Foundation.MvvmCross.Helper.Color.Login.DisabledButtonColor.ToNativeColor(),
                 UIControlState.Disabled
             );
 

@@ -2,14 +2,10 @@
 using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Converters;
 using Toggl.Daneel.Extensions;
-using Toggl.Foundation.MvvmCross.Combiners;
-using Toggl.Foundation.MvvmCross.Converters;
-using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using UIKit;
 using System.Reactive.Disposables;
@@ -93,8 +89,8 @@ namespace Toggl.Daneel.Views.Reports
 
                 var totalDurationColorObservable = ViewModel.TotalTimeIsZeroObservable
                     .Select(isZero => isZero
-                        ? Color.Reports.Disabled.ToNativeColor()
-                        : Color.Reports.TotalTimeActivated.ToNativeColor());
+                        ? Foundation.MvvmCross.Helper.Color.Reports.Disabled.ToNativeColor()
+                        : Foundation.MvvmCross.Helper.Color.Reports.TotalTimeActivated.ToNativeColor());
 
                 totalDurationColorObservable
                     .Subscribe(TotalDurationGraph.Rx().TintColor())
