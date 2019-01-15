@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -17,6 +17,9 @@ using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac.Extensions;
 using UIKit;
+using static Toggl.Daneel.Extensions.FontExtensions;
+using System.Runtime.Remoting.Messaging;
+using Toggl.Foundation;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -36,6 +39,12 @@ namespace Toggl.Daneel.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            StartLabel.Text = Resources.Start;
+            EndLabel.Text = Resources.End;
+            TitleLabel.Text = Resources.StartAndStopTime;
+            SetEndButton.SetTitle(Resources.Stop, UIControlState.Normal);
+            SaveButton.SetTitle(Resources.Save, UIControlState.Normal);
 
             prepareViews();
 
