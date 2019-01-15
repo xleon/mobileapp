@@ -952,7 +952,6 @@
     <Compile Include="Binding\SpiderOnARopeViewIsVisibleTargetBinding.cs" />
     <Compile Include="ApplicationShortcutCreator.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
-    <Compile Include="Services\MailServiceIos.cs" />
     <Compile Include="Autocomplete\TokenTextAttachment.cs" />
     <Compile Include="Autocomplete\AutocompleteExtensions.cs" />
     <Compile Include="Services\AnalyticsServiceIos.cs" />

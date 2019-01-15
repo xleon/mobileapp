@@ -10,7 +10,6 @@
 
 namespace Toggl.Foundation {
     using System;
-    using System.Reflection;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
@@ -632,18 +631,6 @@ namespace Toggl.Foundation {
         public static string MostRecentEntry {
             get {
                 return ResourceManager.GetString("MostRecentEntry", resourceCulture);
-            }
-        }
-        
-        public static string NoEmailErrorTitle {
-            get {
-                return ResourceManager.GetString("NoEmailErrorTitle", resourceCulture);
-            }
-        }
-        
-        public static string NoEmailErrorMessage {
-            get {
-                return ResourceManager.GetString("NoEmailErrorMessage", resourceCulture);
             }
         }
         
