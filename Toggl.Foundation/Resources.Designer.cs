@@ -1533,5 +1533,23 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("APITokenResetSuccess", resourceCulture);
             }
         }
+        
+        public static string StartTimerInvocationPhrase {
+            get {
+                return ResourceManager.GetString("StartTimerInvocationPhrase", resourceCulture);
+            }
+        }
+        
+        public static string StopTimerInvocationPhrase {
+            get {
+                return ResourceManager.GetString("StopTimerInvocationPhrase", resourceCulture);
+            }
+        }
+        
+        public static string ShowReportsInvocationPhrase {
+            get {
+                return ResourceManager.GetString("ShowReportsInvocationPhrase", resourceCulture);
+            }
+        }
     }
 }
