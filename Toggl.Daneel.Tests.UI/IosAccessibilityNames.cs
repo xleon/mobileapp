@@ -55,4 +55,9 @@
         public const string DialogDiscard = "Discard";
         public const string DialogCancel = "Cancel";
     }
+
+    public static class NewProject
+    {
+        public const string CreateButton = "CreateProjectButton";
+    }
 }

@@ -58,4 +58,9 @@ namespace Toggl.Tests.UI
         public const string GetLinkButton = "ResetPasswordButton";
         public const string DoneCard = "Link sent. Please, check your email to reset the password";
     }
+
+    public static class NewProject
+    {
+        public const string CreateButton = "CreateProjectButton";
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Xamarin.UITest;
+using static Toggl.Tests.UI.Extensions.MainExtensions;
 using static Toggl.Tests.UI.Extensions.StartTimeEntryExtensions;
 
 namespace Toggl.Tests.UI
@@ -75,6 +76,23 @@ namespace Toggl.Tests.UI
             app.Tap(StartTimeEntry.DoneButton);
 
             app.WaitForElement(query => query.Marked(description + edit));
+        }
+
+        [Test]
+        public void AddingAProjectBeforeSavingPersistsTheProject()
+        {
+            const string description = "Field Research ";
+            app.EnterText(description);
+
+            var projectName = "Meme Production";
+            app.CreateProjectInStartView(projectName);
+
+            app.Tap(StartTimeEntry.DoneButton);
+            app.Tap(Main.StopTimeEntryButton);
+
+            app.PullToRefresh();
+
+            app.WaitForElement(projectName);
         }
     }
 }

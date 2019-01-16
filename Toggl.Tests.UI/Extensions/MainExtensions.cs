@@ -3,7 +3,7 @@ using Xamarin.UITest;
 
 namespace Toggl.Tests.UI.Extensions
 {
-    public static class MainExtensions
+    public static partial class MainExtensions
     {
         public static void WaitForMainScreen(this IApp app)
         {

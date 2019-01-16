@@ -2,7 +2,7 @@
 
 namespace Toggl.Tests.UI.Extensions
 {
-    public static class StartTimeEntryExtensions
+    public static partial class StartTimeEntryExtensions
     {
         public static void WaitForStartTimeEntryScreen(this IApp app)
         {
@@ -10,6 +10,15 @@ namespace Toggl.Tests.UI.Extensions
 
             app.Tap(Main.StartTimeEntryButton);
             app.WaitForElement(StartTimeEntry.DoneButton);
+        }
+
+        public static void CreateProjectInStartView(this IApp app, string projectName)
+        {
+            app.EnterText($"@{projectName}");
+            app.TapCreateProject(projectName);
+
+            app.WaitForElement(NewProject.CreateButton);
+            app.Tap(NewProject.CreateButton);
         }
     }
 }
