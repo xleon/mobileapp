@@ -532,6 +532,12 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string LastYear {
+            get {
+                return ResourceManager.GetString("LastYear", resourceCulture);
+            }
+        }
+        
         public static string WorkingOnThis {
             get {
                 return ResourceManager.GetString("WorkingOnThis", resourceCulture);
