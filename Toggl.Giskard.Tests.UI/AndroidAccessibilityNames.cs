@@ -59,6 +59,11 @@ namespace Toggl.Tests.UI
         public const string DoneCard = "Link sent. Please, check your email to reset the password";
     }
 
+    public static class EditTimeEntry
+    {
+        public const string EditTags = "EditTimeEntryTagsContainer";
+    }
+
     public static class NewProject
     {
         public const string CreateButton = "CreateProjectButton";

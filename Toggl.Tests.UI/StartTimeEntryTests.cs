@@ -94,5 +94,36 @@ namespace Toggl.Tests.UI
 
             app.WaitForElement(projectName);
         }
+
+        [Test]
+        public void AddingMultipleTagsBeforeSavingPersistsTheTags()
+        {
+            const string description = "Delicious meal ";
+            app.EnterText(description);
+
+            var tags = new[] { "Tomato", "Kale", "Carrot", "Broccoli" };
+            foreach (var tag in tags)
+            {
+                app.AddTagInStartView(tag);
+            }
+
+            app.Tap(StartTimeEntry.DoneButton);
+            app.Tap(Main.StopTimeEntryButton);
+
+            app.PullToRefresh();
+
+            //Open the edit view
+            app.OpenEditView();
+
+            //Open the tags view. We need to tap it twice because of the onboarding tooltip
+            app.WaitForElement(EditTimeEntry.EditTags);
+            app.Tap(EditTimeEntry.EditTags);
+            app.Tap(EditTimeEntry.EditTags);
+
+            foreach (var tag in tags)
+            {
+                app.WaitForElement(tag);
+            }
+        }
     }
 }

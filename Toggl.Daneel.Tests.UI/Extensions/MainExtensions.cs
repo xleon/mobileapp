@@ -8,5 +8,10 @@ namespace Toggl.Tests.UI.Extensions
         {
             app.Tap(query => query.Class("UITableViewCell").Child(index));
         }
+
+        public static void OpenEditView(this IApp app)
+        {
+            app.TapNthCellInCollection(0);
+        }
     }
 }

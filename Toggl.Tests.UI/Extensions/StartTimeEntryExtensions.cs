@@ -12,6 +12,12 @@ namespace Toggl.Tests.UI.Extensions
             app.WaitForElement(StartTimeEntry.DoneButton);
         }
 
+        public static void AddTagInStartView(this IApp app, string tag)
+        {
+            app.EnterText($"#{tag}");
+            app.TapCreateTag(tag);
+        }
+
         public static void CreateProjectInStartView(this IApp app, string projectName)
         {
             app.EnterText($"@{projectName}");

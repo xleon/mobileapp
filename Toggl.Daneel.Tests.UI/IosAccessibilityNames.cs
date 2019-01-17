@@ -56,6 +56,11 @@
         public const string DialogCancel = "Cancel";
     }
 
+    public static class EditTimeEntry
+    {
+        public const string EditTags = "EditTimeEntryTags";
+    }
+
     public static class NewProject
     {
         public const string CreateButton = "CreateProjectButton";
