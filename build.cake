@@ -136,6 +136,7 @@ private TemporaryFileTransformation GetIosAnalyticsServicesConfigurationTransfor
     var projectId = EnvironmentVariable("TOGGL_PROJECT_ID");
     var storageBucket = EnvironmentVariable("TOGGL_STORAGE_BUCKET");
     var googleAppId = EnvironmentVariable("TOGGL_GOOGLE_APP_ID");
+    var adjustToken = EnvironmentVariable("TOGGL_ADJUST_APP_TOKEN");
 
     var filePath = GetFiles(path).Single();
     var file = TransformTextFile(filePath).ToString();
@@ -153,6 +154,7 @@ private TemporaryFileTransformation GetIosAnalyticsServicesConfigurationTransfor
                         .Replace("{TOGGL_PROJECT_ID}", projectId)
                         .Replace("{TOGGL_STORAGE_BUCKET}", storageBucket)
                         .Replace("{TOGGL_GOOGLE_APP_ID}", googleAppId)
+                        .Replace("{TOGGL_ADJUST_APP_TOKEN}", adjustToken)
     };
 }
 

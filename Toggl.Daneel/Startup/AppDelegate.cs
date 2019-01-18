@@ -29,6 +29,7 @@ using Toggl.Foundation.Shortcuts;
 using Toggl.Multivac.Extensions;
 using UIKit;
 using UserNotifications;
+using AdjustBindingsiOS;
 
 namespace Toggl.Daneel
 {
@@ -52,6 +53,7 @@ namespace Toggl.Daneel
             Firebase.Core.App.Configure();
             Google.SignIn.SignIn.SharedInstance.ClientID =
                 Firebase.Core.App.DefaultInstance.Options.ClientId;
+            Adjust.AppDidLaunch(ADJConfig.ConfigWithAppToken("{TOGGL_ADJUST_APP_TOKEN}", AdjustConfig.EnvironmentProduction));
             #endif
 
             base.FinishedLaunching(application, launchOptions);

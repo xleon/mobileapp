@@ -15,6 +15,7 @@ Below is a list of all the environment variables you need to configure before bu
 `TOGGL_STORAGE_BUCKET`
 `TOGGL_GOOGLE_APP_ID`
 `TOGGL_FACEBOOK_APP_ID`
+`TOGGL_ADJUST_APP_TOKEN`
 
 - Android Google login :busts_in_silhouette:
 `TOGGL_DROID_GOOGLE_SERVICES_API_KEY`
@@ -56,6 +57,7 @@ export TOGGL_DROID_GOOGLE_SERVICES_MOBILE_SDK_APP_ID=""
 export TOGGL_DROID_GOOGLE_SERVICES_PROJECT_NUMBER=""
 export TOGGL_DROID_GOOGLE_SERVICES_PROJECT_ID=""
 export TOGGL_FACEBOOK_APP_ID=""
+export TOGGL_ADJUST_APP_TOKEN=""
 ```
 
 Finish it off with:

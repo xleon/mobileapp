@@ -233,6 +233,9 @@
     <Reference Include="Xamarin.Essentials">
       <HintPath>..\packages\Xamarin.Essentials.1.0.0\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
     </Reference>
+    <Reference Include="AdjustSdk.Xamarin.iOS">
+      <HintPath>..\packages\AdjustSdk.Xamarin.iOS.4.17.0\lib\xamarinios10\AdjustSdk.Xamarin.iOS.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
