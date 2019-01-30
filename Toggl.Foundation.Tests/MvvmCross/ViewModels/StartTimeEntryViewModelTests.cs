@@ -1861,6 +1861,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
         public sealed class TheSuggestionsProperty : StartTimeEntryViewModelTest
         {
+            private IEnumerable<ProjectSuggestion> getProjectSuggestions(int count, int workspaceId)
+            {
+                for (int i = 0; i < count; i++)
+                    yield return getProjectSuggestion(i, workspaceId);
+            }
+
+            private ProjectSuggestion getProjectSuggestion(int projectId, int workspaceId)
+            {
+                return getProjectSuggestion(projectId, workspaceId, new List<IThreadSafeTask>());
+            }
+
             private ProjectSuggestion getProjectSuggestion(int projectId, int workspaceId, IEnumerable<IThreadSafeTask> tasks)
             {
                 var workspace = Substitute.For<IThreadSafeWorkspace>();
@@ -1876,6 +1887,26 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             private IEnumerable<string> tasksNames(IEnumerable<AutocompleteSuggestion> autocompleteSuggestions)
                 => autocompleteSuggestions.Cast<TaskSuggestion>().Select(suggestion => suggestion.Name);
+
+            [Fact, LogIfTooSlow]
+            public async Task PrependsEmptyProjectToEveryGroup()
+            {
+                var suggestions = new List<ProjectSuggestion>();
+                suggestions.AddRange(getProjectSuggestions(3, 0));
+                suggestions.AddRange(getProjectSuggestions(4, 1));
+                suggestions.AddRange(getProjectSuggestions(1, 10));
+                suggestions.AddRange(getProjectSuggestions(10, 54));
+                var suggestionsObservable = Observable.Return(suggestions);
+                AutocompleteProvider.Query(Arg.Any<QueryInfo>()).Returns(suggestionsObservable);
+                ViewModel.Prepare();
+
+                await ViewModel.Initialize();
+
+                foreach (var group in ViewModel.Suggestions)
+                {
+                    group.Cast<ProjectSuggestion>().First().ProjectName.Should().Be(Resources.NoProject);
+                }
+            }
 
             [Fact, LogIfTooSlow]
             public async Task IsClearedWhenThereAreNoWordsToQuery()
