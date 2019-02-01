@@ -59,7 +59,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     PrivateSharedStorageService,
                     IntentDonationService,
                     StopwatchProvider,
-                    RxActionFactory);
+                    RxActionFactory,
+                    SchedulerProvider);
             }
 
             protected virtual void SetupObservables()
@@ -84,7 +85,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool usePrivateSharedStorageService,
                 bool useIntentDonationService,
                 bool useStopwatchProvider,
-                bool useRxActionFactory)
+                bool useRxActionFactory,
+                bool useSchedulerProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var platformInfo = useplatformInfo ? PlatformInfo : null;
@@ -99,6 +101,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
+                var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new SettingsViewModel(
@@ -114,7 +117,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         privateSharedStorageService,
                         intentDonationService,
                         stopwatchProvider,
-                        rxActionFactory);
+                        rxActionFactory,
+                        schedulerProvider);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -492,6 +496,60 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 PlatformInfo.Version.Returns(version);
 
                 ViewModel.Version.Should().Be($"{version} ({PlatformInfo.BuildNumber})");
+            }
+        }
+
+        public sealed class TheToggleTimeEntriesGroupingAction : SettingsViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task UpdatesTheStoredPreferences()
+            {
+                var oldValue = false;
+                var newValue = true;
+                var preferences = new MockPreferences { CollapseTimeEntries = oldValue };
+                PreferencesSubject.OnNext(preferences);
+
+                ViewModel.ToggleTimeEntriesGrouping.Execute();
+                TestScheduler.Start();
+
+                await InteractorFactory
+                    .Received()
+                    .UpdatePreferences(Arg.Is<EditPreferencesDTO>(dto => dto.CollapseTimeEntries.Equals(New<bool>.Value(newValue))))
+                    .Execute();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task UpdatesTheCollapseTimeEntriesProperty()
+            {
+                var oldValue = false;
+                var newValue = true;
+                var oldPreferences = new MockPreferences { CollapseTimeEntries = oldValue };
+                var newPreferences = new MockPreferences { CollapseTimeEntries = newValue };
+                PreferencesSubject.OnNext(oldPreferences);
+                InteractorFactory.UpdatePreferences(Arg.Any<EditPreferencesDTO>())
+                    .Execute()
+                    .Returns(Observable.Return(newPreferences));
+
+                ViewModel.ToggleTimeEntriesGrouping.Execute();
+                TestScheduler.Start();
+
+                await InteractorFactory
+                    .Received()
+                    .UpdatePreferences(Arg.Is<EditPreferencesDTO>(dto => dto.CollapseTimeEntries.ValueOr(oldValue) == newValue))
+                    .Execute();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task InitiatesPushSync()
+            {
+                var oldValue = false;
+                var preferences = new MockPreferences { CollapseTimeEntries = oldValue };
+                PreferencesSubject.OnNext(preferences);
+
+                ViewModel.ToggleTimeEntriesGrouping.Execute();
+                TestScheduler.Start();
+
+                await DataSource.SyncManager.Received().PushSync();
             }
         }
 
