@@ -101,7 +101,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var calendars = viewModel.Calendars.FirstAsync().Wait();
                 foreach (var calendarGroup in calendars)
                 {
-                    foreach (var calendar in calendarGroup)
+                    foreach (var calendar in calendarGroup.Items)
                     {
                         if (enabledCalendarIds.Contains(calendar.Id))
                             calendar.InitiallySelected.Should().BeTrue();
