@@ -38,7 +38,7 @@ namespace Toggl.Daneel.ViewControllers
 
             var source = new ReloadTableViewSource<Unit, SelectableWorkspaceViewModel>(
                 WorkspaceViewCell.CellConfiguration(WorkspaceViewCell.Identifier),
-                ViewModel.Workspaces.ToImmutableList()
+                ViewModel.Workspaces
             );
             WorkspaceTableView.Source = source;
 

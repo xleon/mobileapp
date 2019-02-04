@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using CoreGraphics;
 using Foundation;
@@ -21,9 +22,9 @@ namespace Toggl.Daneel.ViewSources
 
         public HeaderConfiguration<THeader> ConfigureHeader { get; set; }
 
-        public BaseTableViewSource(CellConfiguration<TModel> configureCell, IImmutableList<CollectionSection<THeader, TModel>> sections)
+        public BaseTableViewSource(CellConfiguration<TModel> configureCell, IEnumerable<CollectionSection<THeader, TModel>> sections)
         {
-            Sections = sections;
+            Sections = sections.ToImmutableList();
             this.configureCell = configureCell;
         }
 
