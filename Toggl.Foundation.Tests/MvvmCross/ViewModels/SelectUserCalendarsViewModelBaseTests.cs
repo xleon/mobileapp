@@ -58,7 +58,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var calendars = await viewModel.Calendars.FirstAsync();
 
                 calendars.Should().HaveCount(3);
-                calendars.ForEach(group => group.Should().HaveCount(3));
+                calendars.ForEach(group => group.Items.Should().HaveCount(3));
             }
         }
 
@@ -96,7 +96,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 foreach (var calendarGroup in calendars)
                 {
-                    calendarGroup.None(calendar => calendar.InitiallySelected).Should().BeTrue();
+                    calendarGroup.Items.None(calendar => calendar.InitiallySelected).Should().BeTrue();
                 }
             }
         }
