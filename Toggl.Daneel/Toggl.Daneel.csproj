@@ -712,7 +712,6 @@
     <Compile Include="ViewSources\Generic\ReactiveSectionedListTableViewSource.cs" />
     <Compile Include="ViewSources\Generic\MutableSectionedListTableViewSource.cs" />
     <Compile Include="ViewSources\Generic\TableView\BaseTableViewSource.cs" />
-    <Compile Include="ViewSources\Generic\TableView\ReloadTableViewSource.cs" />
     <Compile Include="ViewSources\SelectProjectTableViewSource.cs" />
     <Compile Include="Binding\TextFieldSecureTextEntryTargetBinding.cs" />
     <Compile Include="Binding\BarButtonAnimatedEnabledTargetBinding.cs" />
@@ -1169,6 +1168,7 @@
     <Compile Include="PlatformInfoIos.cs" />
     <Compile Include="Services\BackgroundSyncServiceIos.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
+    <Compile Include="ViewSources\Generic\TableView\CustomTableViewSource.cs" />
     <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogHeaderView.cs" />
     <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogHeaderView.designer.cs">
       <DependentUpon>TimeEntriesLogHeaderView.cs</DependentUpon>
