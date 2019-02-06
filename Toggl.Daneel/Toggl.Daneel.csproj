@@ -588,8 +588,6 @@
     <InterfaceDefinition Include="ViewControllers\TokenResetViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\ReportsViewController.xib" />
     <InterfaceDefinition Include="Views\Color\ColorSelectionViewCell.xib" />
-    <InterfaceDefinition Include="Views\Log\TimeEntriesLogHeaderView.xib" />
-    <InterfaceDefinition Include="Views\Log\TimeEntriesLogViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\ProjectSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\StartTimeEntryEmptyViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\StartTimeEntryViewCell.xib" />
@@ -646,6 +644,8 @@
     <InterfaceDefinition Include="Cells\Settings\UpcomingEventsOptionCell.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectDefaultWorkspaceViewController.xib" />
     <InterfaceDefinition Include="Cells\SelectDefaultWorkspaceTableViewCell.xib" />
+    <InterfaceDefinition Include="Cells\TimeEntriesLog\TimeEntriesLogHeaderView.xib" />
+    <InterfaceDefinition Include="Cells\TimeEntriesLog\TimeEntriesLogViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -669,6 +669,7 @@
     <Compile Include="Extensions\IntentPeriod.cs" />
     <Compile Include="Extensions\Reactive\DurationFieldExtensions.cs" />
     <Compile Include="Extensions\Reactive\HueSaturationPickerViewExtensions.cs" />
+    <Compile Include="Extensions\Reactive\BaseTableViewSourceExtensions.cs" />
     <Compile Include="Extensions\Reactive\UIScrollViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\UISliderExtensions.cs" />
     <Compile Include="Extensions\Reactive\WheelForegroundViewExtensions.cs" />
@@ -707,11 +708,10 @@
     <Compile Include="Binding\BarButtonCommandTargetBinding.cs" />
     <Compile Include="Binding\ViewAnimatedVisibilityTargetBinding.cs" />
     <Compile Include="ViewControllers\SyncFailuresViewController.cs" />
-    <Compile Include="ViewSources\Generic\ListCollectionViewSource.cs" />
-    <Compile Include="ViewSources\Generic\ListTableViewSource.cs" />
+    <Compile Include="ViewSources\Generic\CollectionView\ReloadCollectionViewSource.cs" />
     <Compile Include="ViewSources\Generic\ReactiveSectionedListTableViewSource.cs" />
     <Compile Include="ViewSources\Generic\MutableSectionedListTableViewSource.cs" />
-    <Compile Include="ViewSources\Generic\SectionedListTableViewSource.cs" />
+    <Compile Include="ViewSources\Generic\TableView\BaseTableViewSource.cs" />
     <Compile Include="ViewSources\SelectProjectTableViewSource.cs" />
     <Compile Include="Binding\TextFieldSecureTextEntryTargetBinding.cs" />
     <Compile Include="Binding\BarButtonAnimatedEnabledTargetBinding.cs" />
@@ -726,7 +726,6 @@
     <Compile Include="ViewControllers\StartTimeEntryViewController.designer.cs">
       <DependentUpon>StartTimeEntryViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewSources\WorkspaceTableViewSource.cs" />
     <Compile Include="Views\ActivityIndicatorView.cs" />
     <Compile Include="Presentation\Attributes\ModalCardPresentationAttribute.cs" />
     <Compile Include="Presentation\Attributes\NestedChildPresentationAttribute.cs" />
@@ -854,14 +853,6 @@
       <DependentUpon>ColorSelectionViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Color\HueSaturationPickerView.cs" />
-    <Compile Include="Views\Log\TimeEntriesLogHeaderView.cs" />
-    <Compile Include="Views\Log\TimeEntriesLogHeaderView.designer.cs">
-      <DependentUpon>TimeEntriesLogHeaderView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Log\TimeEntriesLogViewCell.cs" />
-    <Compile Include="Views\Log\TimeEntriesLogViewCell.designer.cs">
-      <DependentUpon>TimeEntriesLogViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\StartTimeEntry\ProjectSuggestionViewCell.cs" />
     <Compile Include="Views\StartTimeEntry\ProjectSuggestionViewCell.designer.cs">
       <DependentUpon>ProjectSuggestionViewCell.cs</DependentUpon>
@@ -974,12 +965,10 @@
     <Compile Include="ViewControllers\SelectDateFormatViewController.designer.cs">
       <DependentUpon>SelectDateFormatViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewSources\DateFormatsTableViewSource.cs" />
     <Compile Include="ViewControllers\SelectDurationFormatViewController.cs" />
     <Compile Include="ViewControllers\SelectDurationFormatViewController.designer.cs">
       <DependentUpon>SelectDurationFormatViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewSources\DurationFormatsTableViewSource.cs" />
     <Compile Include="Views\Settings\DurationFormatViewCell.cs" />
     <Compile Include="Views\Settings\DurationFormatViewCell.designer.cs">
       <DependentUpon>DurationFormatViewCell.cs</DependentUpon>
@@ -1021,7 +1010,6 @@
     <Compile Include="ViewControllers\SelectCountryViewController.designer.cs">
       <DependentUpon>SelectCountryViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewSources\CountryTableViewSource.cs" />
     <Compile Include="Views\CountrySelection\CountryViewCell.cs" />
     <Compile Include="Views\CountrySelection\CountryViewCell.designer.cs">
       <DependentUpon>CountryViewCell.cs</DependentUpon>
@@ -1180,6 +1168,15 @@
     <Compile Include="PlatformInfoIos.cs" />
     <Compile Include="Services\BackgroundSyncServiceIos.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
+    <Compile Include="ViewSources\Generic\TableView\CustomTableViewSource.cs" />
+    <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogHeaderView.cs" />
+    <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogHeaderView.designer.cs">
+      <DependentUpon>TimeEntriesLogHeaderView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogViewCell.cs" />
+    <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogViewCell.designer.cs">
+      <DependentUpon>TimeEntriesLogViewCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">
@@ -1265,6 +1262,7 @@
     <Folder Include="Cells\Calendar\" />
     <Folder Include="Resources\Images.xcassets\icCalendarSmall.imageset\" />
     <Folder Include="Resources\Images.xcassets\stripes.imageset\" />
+    <Folder Include="Cells\TimeEntriesLog\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />

@@ -12,13 +12,14 @@ using Toggl.Daneel.Views.CountrySelection;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Multivac.Extensions;
+using Toggl.Daneel.ViewSources.Generic.TableView;
 
 namespace Toggl.Daneel.ViewControllers
 {
     [ModalCardPresentation]
     public sealed partial class SelectCountryViewController : KeyboardAwareViewController<SelectCountryViewModel>, IDismissableViewController
     {
-        private CountryTableViewSource tableViewSource = new CountryTableViewSource();
+        private const int rowHeight = 48;
 
         public SelectCountryViewController() : base(nameof(SelectCountryViewController))
         {
@@ -33,10 +34,19 @@ namespace Toggl.Daneel.ViewControllers
 
             CountriesTableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             CountriesTableView.RegisterNibForCellReuse(CountryViewCell.Nib, CountryViewCell.Identifier);
-            CountriesTableView.Source = tableViewSource;
+            CountriesTableView.RowHeight = rowHeight;
+
+            var source = new CustomTableViewSource<string, SelectableCountryViewModel>(
+                CountryViewCell.CellConfiguration(CountryViewCell.Identifier));
+
+            CountriesTableView.Source = source;
+
+            source.Rx().ModelSelected()
+                .Subscribe(ViewModel.SelectCountry.Inputs)
+                .DisposedBy(DisposeBag);
 
             ViewModel.Countries
-                .Subscribe(replaceCountries)
+                .Subscribe(CountriesTableView.Rx().ReloadItems(source))
                 .DisposedBy(DisposeBag);
 
             CloseButton.Rx()
@@ -47,9 +57,7 @@ namespace Toggl.Daneel.ViewControllers
                 .Subscribe(ViewModel.FilterText)
                 .DisposedBy(DisposeBag);
 
-            tableViewSource.CountrySelected
-                .Subscribe(ViewModel.SelectCountry.Inputs)
-                .DisposedBy(DisposeBag);
+
 
             SearchTextField.BecomeFirstResponder();
         }
@@ -58,12 +66,6 @@ namespace Toggl.Daneel.ViewControllers
         {
             ViewModel.Close.Execute(Unit.Default);
             return true;
-        }
-
-        private void replaceCountries(IEnumerable<SelectableCountryViewModel> countries)
-        {
-            tableViewSource.SetNewCountries(countries);
-            CountriesTableView.ReloadData();
         }
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
