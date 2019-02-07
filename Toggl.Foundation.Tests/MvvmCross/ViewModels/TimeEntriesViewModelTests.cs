@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -14,7 +15,9 @@ using Toggl.Foundation.Helper;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
+using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.Mocks;
@@ -34,16 +37,29 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
             protected TestSchedulerProvider SchedulerProvider { get; } = new TestSchedulerProvider();
             protected IRxActionFactory RxActionFactory { get; }
+            protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
 
             protected TimeEntriesViewModel ViewModel { get; private set; }
 
-            protected TimeEntriesViewModel CreateViewModel()
-                => new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory);
+            protected TimeEntriesViewModel CreateViewModel(TestSchedulerProvider specificSchedulerProvider = null)
+                => new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, specificSchedulerProvider ?? SchedulerProvider, RxActionFactory, TimeService);
 
             protected TimeEntriesViewModelTest()
             {
                 RxActionFactory = new RxActionFactory(SchedulerProvider);
                 ViewModel = CreateViewModel();
+            }
+
+            protected IImmutableList<CollectionSection<DaySummaryViewModel, TimeEntryViewModel>> GetTimeEntries(
+                TimeEntriesViewModel viewModel, TestSchedulerProvider schedulerProvider)
+            {
+                var observer = schedulerProvider.TestScheduler
+                    .CreateObserver<IImmutableList<CollectionSection<DaySummaryViewModel, TimeEntryViewModel>>>();
+
+                viewModel.TimeEntries.Subscribe(observer);
+                schedulerProvider.TestScheduler.Start();
+
+                return observer.Messages.Select(x => x.Value.Value).Last();
             }
         }
 
@@ -56,16 +72,18 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useInteractorFactory,
                 bool useAnalyticsService,
                 bool useSchedulerProvider,
-                bool useRxActionFactory)
+                bool useRxActionFactory,
+                bool useTimeService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
+                var timeService = useTimeService ? TimeService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider, rxActionFactory);
+                    () => new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -78,14 +96,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public Property ShouldBeOrderedAfterInitialization()
             {
                 var arb = generatorForTimeEntriesViewModel(_ => true).ToArbitrary();
-                return Prop.ForAll(arb, viewModel =>
+                return Prop.ForAll(arb, sample =>
                 {
-                    viewModel.Initialize().Wait();
-
-                    for (int i = 1; i < viewModel.TimeEntries.Count(); i++)
+                    var timeEntries = GetTimeEntries(sample.viewModel, sample.schedulerProvider);
+                    for (int i = 1; i < timeEntries.Count; i++)
                     {
-                        var dateTime1 = viewModel.TimeEntries.ElementAt(i - 1).First().StartTime.Date;
-                        var dateTime2 = viewModel.TimeEntries.ElementAt(i).First().StartTime.Date;
+                        var dateTime1 = timeEntries.ElementAt(i - 1).Items.First().StartTime.Date;
+                        var dateTime2 = timeEntries.ElementAt(i).Items.First().StartTime.Date;
                         dateTime1.Should().BeAfter(dateTime2);
                     }
                 });
@@ -95,14 +112,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public Property ShouldNotHaveEmptyGroups()
             {
                 var arb = generatorForTimeEntriesViewModel(_ => true).ToArbitrary();
-                return Prop.ForAll(arb, viewModel =>
+                return Prop.ForAll(arb, sample =>
                 {
-
-                    viewModel.Initialize().Wait();
-
-                    foreach (var grouping in viewModel.TimeEntries)
+                    var timeEntries = GetTimeEntries(sample.viewModel, sample.schedulerProvider);
+                    foreach (var grouping in timeEntries)
                     {
-                        grouping.Count().Should().BeGreaterOrEqualTo(1);
+                        grouping.Items.Count.Should().BeGreaterOrEqualTo(1);
                     }
                 });
             }
@@ -113,22 +128,22 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var arb =
                     generatorForTimeEntriesViewModel(m => m == DateTime.UtcNow.Month).ToArbitrary();
 
-                return Prop.ForAll(arb, (Action<TimeEntriesViewModel>)(viewModel =>
+                return Prop.ForAll(arb, sample =>
                 {
-                    viewModel.Initialize().Wait();
-                    foreach (var grouping in viewModel.TimeEntries)
+                    var timeEntries = GetTimeEntries(sample.viewModel, sample.schedulerProvider);
+                    foreach (var grouping in timeEntries)
                     {
-                        for (int i = 1; i < grouping.Count(); i++)
+                        for (int i = 1; i < grouping.Items.Count; i++)
                         {
-                            var dateTime1 = grouping.ElementAt(i - 1).StartTime;
-                            var dateTime2 = grouping.ElementAt(i).StartTime;
+                            var dateTime1 = grouping.Items[i - 1].StartTime;
+                            var dateTime2 = grouping.Items[i].StartTime;
                             AssertionExtensions.Should(dateTime1).BeOnOrAfter((DateTimeOffset)dateTime2);
                         }
                     }
-                }));
+                });
             }
 
-            private Gen<TimeEntriesViewModel> generatorForTimeEntriesViewModel(Func<int, bool> filter)
+            private Gen<(TimeEntriesViewModel viewModel, TestSchedulerProvider schedulerProvider)> generatorForTimeEntriesViewModel(Func<int, bool> filter)
             {
                 var now = new DateTimeOffset(2017, 08, 13, 08, 01, 23, TimeSpan.Zero);
                 var monthsGenerator = Gen.Choose(1, 12).Where(filter);
@@ -139,7 +154,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Generator
                     .Select(dateTimes =>
                     {
-                        var viewModel = CreateViewModel();
                         var year = yearGenerator.Sample(0, 1).First();
 
                         var observable = dateTimes
@@ -153,9 +167,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                                     .SetAt(now).Build())
                             .Apply(Observable.Return);
 
-                        InteractorFactory.GetAllTimeEntriesVisibleToTheUser().Execute().Returns(observable);
+                        InteractorFactory.ObserveAllTimeEntriesVisibleToTheUser().Execute().Returns(observable);
 
-                        return viewModel;
+                        var schedulerProvider = new TestSchedulerProvider();
+                        var viewModel = CreateViewModel(schedulerProvider);
+
+                        return (viewModel, schedulerProvider);
                     });
             }
 
@@ -175,9 +192,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             protected const int InitialAmountOfTimeEntries = 20;
 
-            protected Subject<IThreadSafeTimeEntry> TimeEntryCreatedSubject = new Subject<IThreadSafeTimeEntry>();
-            protected Subject<EntityUpdate<IThreadSafeTimeEntry>> TimeEntryUpdatedSubject = new Subject<EntityUpdate<IThreadSafeTimeEntry>>();
-            protected Subject<long> TimeEntryDeletedSubject = new Subject<long>();
+            protected ISubject<IEnumerable<IThreadSafeTimeEntry>> TimeEntries { get; }
 
             protected IThreadSafeTimeEntry NewTimeEntry(long? duration = null)
             {
@@ -199,110 +214,54 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var startTime = now.AddHours(-2);
 
-                var observable = Enumerable.Range(1, InitialAmountOfTimeEntries)
-                    .Select(i =>
-                        new MockTimeEntry {
-                            Id = i,
-                            Start = startTime.AddHours(i * 2),
-                            Duration = (long)TimeSpan.FromHours(i * 2 + 2).TotalSeconds,
-                            UserId = 11,
-                            WorkspaceId = 12,
-                            Description = "",
-                            At = now,
-                            TagIds = new long[] { 1, 2, 3 },
-                            Workspace = new MockWorkspace { IsInaccessible = false }
-                        }
-                    )
-                  .Apply(Observable.Return);
+                var initialTimeEntries =
+                    Enumerable.Range(1, InitialAmountOfTimeEntries)
+                        .Select(i =>
+                            new MockTimeEntry
+                            {
+                                Id = i,
+                                Start = startTime.AddHours(i * 2),
+                                Duration = (long)TimeSpan.FromHours(i * 2 + 2).TotalSeconds,
+                                UserId = 11,
+                                WorkspaceId = 12,
+                                Description = "",
+                                At = now,
+                                TagIds = new long[] { 1, 2, 3 },
+                                Workspace = new MockWorkspace { IsInaccessible = false }
+                            }
+                        );
 
-                InteractorFactory.GetAllTimeEntriesVisibleToTheUser().Execute().Returns(observable);
-                DataSource.TimeEntries.Created.Returns(TimeEntryCreatedSubject.AsObservable());
-                DataSource.TimeEntries.Updated.Returns(TimeEntryUpdatedSubject.AsObservable());
-                DataSource.TimeEntries.Deleted.Returns(TimeEntryDeletedSubject.AsObservable());
+                TimeEntries = new BehaviorSubject<IEnumerable<IThreadSafeTimeEntry>>(initialTimeEntries);
+                InteractorFactory.ObserveAllTimeEntriesVisibleToTheUser().Execute().Returns(TimeEntries);
             }
         }
 
-        public sealed class WhenReceivingAnEventFromTheTimeEntryCreatedObservable : TimeEntryDataSourceObservableTest
+        public sealed class UpdatesTimeEntriesListWhenTimeEntriesChange : TimeEntryDataSourceObservableTest
         {
             [Fact, LogIfTooSlow]
-            public async ThreadingTask AddsTheCreatedTimeEntryToTheList()
+            public async ThreadingTask ReloadsWhenTimeEntriesChange()
             {
-                await ViewModel.Initialize();
+                var viewModel = CreateViewModel(SchedulerProvider);
                 var newTimeEntry = NewTimeEntry((long)TimeSpan.FromHours(1).TotalSeconds);
 
-                TimeEntryCreatedSubject.OnNext(newTimeEntry);
+                TimeEntries.OnNext(new[] { newTimeEntry });
+                var timeEntries = GetTimeEntries(viewModel, SchedulerProvider);
 
-                ViewModel.TimeEntries.Any(c => c.Any(te => te.Id == 21)).Should().BeTrue();
-                ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries + 1);
+                timeEntries.Should().HaveCount(1);
+                timeEntries[0].Items.Should().HaveCount(1);
+                timeEntries[0].Items[0].Id.Should().Be(newTimeEntry.Id);
             }
 
             [Fact, LogIfTooSlow]
             public async ThreadingTask IgnoresTheTimeEntryIfItsStillRunning()
             {
-                await ViewModel.Initialize();
+                var viewModel = CreateViewModel(SchedulerProvider);
+                var newTimeEntry = NewTimeEntry();
 
-                TimeEntryCreatedSubject.OnNext(NewTimeEntry());
+                TimeEntries.OnNext(new[] { newTimeEntry });
+                var timeEntries = GetTimeEntries(viewModel, SchedulerProvider);
 
-                ViewModel.TimeEntries.Any(c => c.Any(te => te.Id == 21)).Should().BeFalse();
-                ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries);
-            }
-        }
-
-        public sealed class WhenReceivingAnEventFromTheTimeEntryUpdatedObservable : TimeEntryDataSourceObservableTest
-        {
-            [Fact, LogIfTooSlow]
-            //This can happen, for example, if the time entry was just stopped
-            public async ThreadingTask AddsTheTimeEntryIfItWasNotAddedPreviously()
-            {
-                await ViewModel.Initialize();
-                var newTimeEntry = NewTimeEntry((long)TimeSpan.FromHours(1).TotalSeconds);
-
-                TimeEntryUpdatedSubject.OnNext(new EntityUpdate<IThreadSafeTimeEntry>(newTimeEntry.Id, newTimeEntry));
-
-                ViewModel.TimeEntries.Any(c => c.Any(te => te.Id == 21)).Should().BeTrue();
-                ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries + 1);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async ThreadingTask IgnoresTheTimeEntryIfItWasDeleted()
-            {
-                await ViewModel.Initialize();
-
-                TimeEntryCreatedSubject.OnNext(NewTimeEntry());
-
-                ViewModel.TimeEntries.Any(c => c.Any(te => te.Id == 21)).Should().BeFalse();
-                ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries);
-            }
-        }
-
-        public sealed class WhenReceivingAnEventFromTheTimeEntryDeletedObservable : TimeEntryDataSourceObservableTest
-        {
-            [Fact, LogIfTooSlow]
-            public async ThreadingTask RemovesTheTimeEntryIfItWasNotRemovedPreviously()
-            {
-                await ViewModel.Initialize();
-                var timeEntryCollection = await InteractorFactory.GetAllTimeEntriesVisibleToTheUser().Execute().FirstAsync();
-                var timeEntryToDelete = timeEntryCollection.First();
-
-                TimeEntryDeletedSubject.OnNext(timeEntryToDelete.Id);
-
-                ViewModel.TimeEntries.All(c => c.All(te => te.Id != timeEntryToDelete.Id)).Should().BeTrue();
-                ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries - 1);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async ThreadingTask RemovesTheWholeCollectionWhenThereAreNoOtherTimeEntriesLeftForThatDay()
-            {
-                await ViewModel.Initialize();
-                var timeEntryCollection = ViewModel.TimeEntries.First();
-                var timeEntriesToDelete = new List<TimeEntryViewModel>(timeEntryCollection);
-                var InitialSectionCount = ViewModel.TimeEntries.Count;
-
-                foreach (var te in timeEntriesToDelete)
-                    TimeEntryDeletedSubject.OnNext(te.Id);
-
-                ViewModel.TimeEntries.Count.Should().Be(InitialSectionCount - 1);
-                ViewModel.TimeEntries.Aggregate(0, (acc, te) => acc + te.Count).Should().Be(InitialAmountOfTimeEntries - timeEntriesToDelete.Count);
+                timeEntries.Should().HaveCount(0);
             }
         }
 
@@ -314,7 +273,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             public TheDelayDeleteTimeEntryAction()
             {
-                viewModel = new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory);
+                viewModel = new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
                 viewModel.ShouldShowUndo.Subscribe(observer);
             }
 
@@ -408,7 +367,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             public TheCancelDeleteTimeEntryAction()
             {
-                viewModel = new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory);
+                viewModel = new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
                 viewModel.ShouldShowUndo.Subscribe(observer);
             }
 

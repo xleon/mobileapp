@@ -32,6 +32,8 @@ namespace Toggl.Foundation.Interactors
 
         IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> GetAllTimeEntriesVisibleToTheUser();
 
+        IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> ObserveAllTimeEntriesVisibleToTheUser();
+
         IInteractor<IObservable<IThreadSafeTimeEntry>> StopTimeEntry(DateTimeOffset currentDateTime, TimeEntryStopOrigin origin);
 
         IInteractor<IObservable<Unit>> ObserveTimeEntriesChanges();
