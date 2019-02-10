@@ -16,7 +16,7 @@ namespace Toggl.Foundation.Interactors
         public GetAllTimeEntriesVisibleToTheUserInteractor(IDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry> dataSource)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            
+
             this.dataSource = dataSource;
         }
 
