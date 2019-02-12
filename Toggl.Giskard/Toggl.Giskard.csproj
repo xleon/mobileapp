@@ -388,7 +388,6 @@
     <Compile Include="Converters\BoolToConstantOverrides.cs" />
     <Compile Include="Bindings\DrawableColorTargetBinding.cs" />
     <Compile Include="TemplateSelectors\SuggestionsTemplateSelector.cs" />
-    <Compile Include="Activities\SettingsActivity.cs" />
     <Compile Include="Bindings\EditTextFocusTargetBinding.cs" />
     <Compile Include="Presenters\TogglPresenter.cs" />
     <Compile Include="Activities\StartTimeEntryActivity.cs" />
@@ -485,9 +484,6 @@
     <Compile Include="Activities\AboutActivity.cs" />
     <Compile Include="Services\RatingServiceAndroid.cs" />
     <Compile Include="Services\RemoteConfigServiceAndroid.cs" />
-    <Compile Include="Activities\SettingsActivity.ViewBinds.cs">
-      <DependentUpon>SettingsActivity.cs</DependentUpon>
-    </Compile>
     <Compile Include="Activities\EditTimeEntryActivity.ViewBinds.cs">
       <DependentUpon>EditTimeEntryActivity.cs</DependentUpon>
     </Compile>
@@ -555,6 +551,11 @@
       <DependentUpon>SelectBeginningOfWeekFragment.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewHolders\BeginningOfWeekViewHolder.cs" />
+    <Compile Include="Fragments\SettingsFragment.cs" />
+    <Compile Include="Fragments\SettingsFragment.ViewBinds.cs">
+    <DependentUpon>SettingsFragment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fragments\ReactiveFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -578,7 +579,7 @@
     </None>
     <AndroidResource Include="Resources\layout\SelectDateFormatFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDateFormatFragmentCell.axml" />
-    <AndroidResource Include="Resources\layout\SettingsActivityWorkspaceCell.axml" />
+    <AndroidResource Include="Resources\layout\SettingsFragmentWorkspaceCell.axml" />
     <AndroidResource Include="Resources\drawable\TransparentToLightGrayGradient.xml" />
     <GoogleServicesJson Include="google-services.json" />
     <AndroidResource Include="Resources\layout\SelectBeginningOfWeekFragment.axml" />
@@ -808,7 +809,7 @@
     <AndroidResource Include="Resources\drawable\SmallDot.xml" />
     <AndroidResource Include="Resources\layout\MainSuggestionsCard.axml" />
     <AndroidResource Include="Resources\layout\MainRunningTimeEntry.axml" />
-    <AndroidResource Include="Resources\layout\SettingsActivity.axml" />
+    <AndroidResource Include="Resources\layout\SettingsFragment.axml" />
     <AndroidResource Include="Resources\layout\BrowserActivity.axml" />
     <AndroidResource Include="Resources\drawable\TopShadow.xml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivity.axml" />
