@@ -36,7 +36,7 @@ namespace Toggl.Giskard.Fragments
 
         private RecyclerView workspacesRecyclerView;
 
-        protected void InitializeViews(View fragmentView)
+        protected override void InitializeViews(View fragmentView)
         {
             helpView = fragmentView.FindViewById(Resource.Id.SettingsHelpButton);
             aboutView = fragmentView.FindViewById(Resource.Id.SettingsAboutContainer);
