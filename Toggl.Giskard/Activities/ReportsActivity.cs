@@ -24,18 +24,6 @@ namespace Toggl.Giskard.Activities
             InitializeViews();
         }
 
-        public override void OnEnterAnimationComplete()
-        {
-            base.OnEnterAnimationComplete();
-            fragment?.ViewModel.StopNavigationFromMainLogStopwatch();
-        }
-
-        public override void Finish()
-        {
-            base.Finish();
-            OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_right);
-        }
-
         internal void ToggleCalendarState(bool forceHide)
         {
             fragment?.ToggleCalendarState(forceHide);

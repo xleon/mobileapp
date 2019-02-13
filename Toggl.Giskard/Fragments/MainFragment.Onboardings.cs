@@ -18,9 +18,9 @@ using Toggl.PrimeRadiant.Extensions;
 using Toggl.PrimeRadiant.Onboarding;
 using static Toggl.Giskard.ViewHolders.MainLogCellViewHolder;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Giskard.Fragments
 {
-    public partial class MainActivity
+    public sealed partial class MainFragment
     {
         private PopupWindow playButtonTooltipPopupWindow;
         private PopupWindow stopButtonTooltipPopupWindow;
@@ -46,7 +46,7 @@ namespace Toggl.Giskard.Activities
         private ISubject<Unit> mainRecyclerViewScrollChanges = new Subject<Unit>();
         private IDisposable mainRecyclerViewScrollChangesDisposable;
 
-        protected override void OnResume()
+        public override void OnResume()
         {
             base.OnResume();
             mainRecyclerViewScrollChangesDisposable = mainRecyclerView
@@ -56,13 +56,13 @@ namespace Toggl.Giskard.Activities
                 .Subscribe(mainRecyclerViewScrollChanges.OnNext);
         }
 
-        protected override void OnPause()
+        public override void OnPause()
         {
             base.OnPause();
             mainRecyclerViewScrollChangesDisposable?.Dispose();
         }
 
-        protected override void OnStop()
+        public override void OnStop()
         {
             base.OnStop();
             playButtonTooltipPopupWindow.Dismiss();
@@ -91,7 +91,7 @@ namespace Toggl.Giskard.Activities
             if (playButtonTooltipPopupWindow == null)
             {
                 playButtonTooltipPopupWindow = PopupWindowFactory.PopupWindowWithText(
-                    this,
+                    Context,
                     Resource.Layout.TooltipWithRightArrow,
                     Resource.Id.TooltipText,
                     Resource.String.OnboardingTapToStartTimer);
@@ -111,7 +111,7 @@ namespace Toggl.Giskard.Activities
             if (stopButtonTooltipPopupWindow == null)
             {
                 stopButtonTooltipPopupWindow = PopupWindowFactory.PopupWindowWithText(
-                    this,
+                    Context,
                     Resource.Layout.TooltipWithRightBottomArrow,
                     Resource.Id.TooltipText,
                     Resource.String.OnboardingTapToStopTimer);
@@ -129,7 +129,7 @@ namespace Toggl.Giskard.Activities
         private void setupTapToEditOnboardingStep()
         {
             tapToEditPopup = PopupWindowFactory.PopupWindowWithText(
-                this,
+                Context,
                 Resource.Layout.TooltipWithLeftTopArrow,
                 Resource.Id.TooltipText,
                 Resource.String.OnboardingTapToEdit);
@@ -169,7 +169,7 @@ namespace Toggl.Giskard.Activities
                 .ManageVisibilityOf(
                     tapToEditPopup,
                     oldestVisibleTimeEntryViewHolder.ItemView,
-                    (window, view) => PopupOffsets.FromDp(16, -4, this));
+                    (window, view) => PopupOffsets.FromDp(16, -4, Context));
         }
 
         private void setupSwipeRightOnboardingStep()
@@ -186,7 +186,7 @@ namespace Toggl.Giskard.Activities
 
 
             swipeRightPopup = PopupWindowFactory.PopupWindowWithText(
-                this,
+                Context,
                 Resource.Layout.TooltipWithLeftTopArrow,
                 Resource.Id.TooltipText,
                 Resource.String.OnboardingSwipeRight);
@@ -236,7 +236,7 @@ namespace Toggl.Giskard.Activities
                 .ManageVisibilityOf(
                     swipeRightPopup,
                     lastTimeEntry.ItemView,
-                    (window, view) => PopupOffsets.FromDp(16, -4, this));
+                    (window, view) => PopupOffsets.FromDp(16, -4, Context));
 
             if (swipeRightOnboardingAnimationStepDisposable != null)
             {
@@ -263,7 +263,7 @@ namespace Toggl.Giskard.Activities
                 (shouldShowStep, unit, syncState) => shouldShowStep && syncState == SyncProgress.Synced);
 
             swipeLeftPopup = PopupWindowFactory.PopupWindowWithText(
-                this,
+                Context,
                 Resource.Layout.TooltipWithRightTopArrow,
                 Resource.Id.TooltipText,
                 Resource.String.OnboardingSwipeLeft);

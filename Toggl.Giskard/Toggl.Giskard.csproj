@@ -344,6 +344,9 @@
     </Compile>
     <Compile Include="Services\SharedPreferencesStorageAndroid.cs" />
     <Compile Include="Activities\MainActivity.cs" />
+    <Compile Include="Activities\MainActivity.ViewBinds.cs">
+      <DependentUpon>MainActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Startup\TogglApplication.cs" />
     <Compile Include="TemplateSelectors\SelectTagsTemplateSelector.cs" />
     <Compile Include="ViewHelpers\BarChartData.cs" />
@@ -506,12 +509,6 @@
     <Compile Include="Activities\SignUpActivity.ViewBinds.cs">
       <DependentUpon>SignUpActivity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Activities\MainActivity.ViewBinds.cs">
-      <DependentUpon>MainActivity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Activities\MainActivity.Onboardings.cs">
-      <DependentUpon>MainActivity.cs</DependentUpon>
-    </Compile>
     <Compile Include="Startup\HandlerScheduler.cs" />
     <Compile Include="Services\NoopPrivateSharedStorageServiceAndroid.cs" />
     <Compile Include="Activities\ReportsActivity.ViewBinds.cs">
@@ -564,6 +561,14 @@
     <Compile Include="Fragments\ReportsFragment.ViewBinds.cs">
       <DependentUpon>ReportsFragment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fragments\MainFragment.cs" />
+    <Compile Include="Fragments\MainFragment.ViewBinds.cs">
+      <DependentUpon>MainFragment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fragments\MainFragment.Onboardings.cs">
+      <DependentUpon>MainFragment.cs</DependentUpon>
+    </Compile>
+
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -644,7 +649,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\add_new.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\add_new.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\add_new.png" />
-    <AndroidResource Include="Resources\layout\MainActivity.axml" />
+    <AndroidResource Include="Resources\layout\MainFragment.axml" />
     <AndroidResource Include="Resources\layout\LoginActivity.axml" />
     <AndroidResource Include="Resources\values\Styles.xml" />
     <AndroidResource Include="Resources\values-v23\Styles.xml" />
@@ -976,6 +981,7 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\toggl_spider.png" />
     <AndroidResource Include="Resources\layout\WelcomeBackPlaceholder.axml" />
     <AndroidResource Include="Resources\layout\ReportsActivity.axml" />
+    <AndroidResource Include="Resources\layout\MainActivity.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">
