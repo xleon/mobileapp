@@ -388,7 +388,6 @@
     <Compile Include="Converters\BoolToConstantOverrides.cs" />
     <Compile Include="Bindings\DrawableColorTargetBinding.cs" />
     <Compile Include="TemplateSelectors\SuggestionsTemplateSelector.cs" />
-    <Compile Include="Activities\SettingsActivity.cs" />
     <Compile Include="Bindings\EditTextFocusTargetBinding.cs" />
     <Compile Include="Presenters\TogglPresenter.cs" />
     <Compile Include="Activities\StartTimeEntryActivity.cs" />
@@ -485,9 +484,6 @@
     <Compile Include="Activities\AboutActivity.cs" />
     <Compile Include="Services\RatingServiceAndroid.cs" />
     <Compile Include="Services\RemoteConfigServiceAndroid.cs" />
-    <Compile Include="Activities\SettingsActivity.ViewBinds.cs">
-      <DependentUpon>SettingsActivity.cs</DependentUpon>
-    </Compile>
     <Compile Include="Activities\EditTimeEntryActivity.ViewBinds.cs">
       <DependentUpon>EditTimeEntryActivity.cs</DependentUpon>
     </Compile>
@@ -555,6 +551,15 @@
       <DependentUpon>SelectBeginningOfWeekFragment.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewHolders\BeginningOfWeekViewHolder.cs" />
+    <Compile Include="Fragments\SettingsFragment.cs" />
+    <Compile Include="Fragments\SettingsFragment.ViewBinds.cs">
+      <DependentUpon>SettingsFragment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fragments\ReactiveFragment.cs" />
+    <Compile Include="Fragments\ReportsFragment.cs" />
+    <Compile Include="Fragments\ReportsFragment.ViewBinds.cs">
+      <DependentUpon>ReportsFragment.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -578,7 +583,7 @@
     </None>
     <AndroidResource Include="Resources\layout\SelectDateFormatFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDateFormatFragmentCell.axml" />
-    <AndroidResource Include="Resources\layout\SettingsActivityWorkspaceCell.axml" />
+    <AndroidResource Include="Resources\layout\SettingsFragmentWorkspaceCell.axml" />
     <AndroidResource Include="Resources\drawable\TransparentToLightGrayGradient.xml" />
     <GoogleServicesJson Include="google-services.json" />
     <AndroidResource Include="Resources\layout\SelectBeginningOfWeekFragment.axml" />
@@ -586,8 +591,8 @@
     <AndroidResource Include="Resources\layout\SelectDurationFormatFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDurationFormatFragmentCell.axml" />
     <AndroidResource Include="Resources\drawable\RoundedRectangle.xml" />
-    <AndroidResource Include="Resources\layout\ReportsActivity.axml" />
-    <AndroidResource Include="Resources\layout\ReportsActivityHeader.axml" />
+    <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
+    <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
     <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
     <AndroidResource Include="Resources\drawable-mdpi\logo.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\logo.png" />
@@ -808,7 +813,7 @@
     <AndroidResource Include="Resources\drawable\SmallDot.xml" />
     <AndroidResource Include="Resources\layout\MainSuggestionsCard.axml" />
     <AndroidResource Include="Resources\layout\MainRunningTimeEntry.axml" />
-    <AndroidResource Include="Resources\layout\SettingsActivity.axml" />
+    <AndroidResource Include="Resources\layout\SettingsFragment.axml" />
     <AndroidResource Include="Resources\layout\BrowserActivity.axml" />
     <AndroidResource Include="Resources\drawable\TopShadow.xml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivity.axml" />
@@ -832,7 +837,7 @@
     <AndroidResource Include="Resources\layout\SelectClientActivityCell.axml" />
     <AndroidResource Include="Resources\layout\SelectWorkspaceFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectWorkspaceFragmentCell.axml" />
-    <AndroidResource Include="Resources\layout\ReportsActivityItem.axml" />
+    <AndroidResource Include="Resources\layout\ReportsFragmentItem.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentDayCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentPage.axml" />
@@ -947,7 +952,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\ic_illustration_error_workspace.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_illustration_error_workspace.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_illustration_error_workspace.png" />
-    <AndroidResource Include="Resources\layout\ReportsActivityWorkspaceName.axml" />
+    <AndroidResource Include="Resources\layout\ReportsFragmentWorkspaceName.axml" />
     <AndroidResource Include="Resources\drawable\workspace_white.xml" />
     <AndroidResource Include="Resources\values-v23\Strings.xml" />
     <AndroidResource Include="Resources\layout\SelectDefaultWorkspaceFragment.axml" />
@@ -966,6 +971,7 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\toggl_spider.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\toggl_spider.png" />
     <AndroidResource Include="Resources\layout\WelcomeBackPlaceholder.axml" />
+    <AndroidResource Include="Resources\layout\ReportsActivity.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">

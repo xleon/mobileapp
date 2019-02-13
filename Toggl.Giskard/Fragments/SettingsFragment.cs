@@ -1,14 +1,13 @@
-﻿using System;
+﻿
+using System;
+using System.Linq;
 using System.Reactive.Linq;
-using Android.App;
 using Android.Content;
-using Android.Content.PM;
 using Android.Graphics;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using MvvmCross.Platforms.Android.Binding.Views;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -17,27 +16,25 @@ using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.ViewHolders;
 using Toggl.Multivac.Extensions;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Giskard.Fragments
 {
-    [MvxActivityPresentation]
-    [Activity(Theme = "@style/AppTheme",
-              ScreenOrientation = ScreenOrientation.Portrait,
-              ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
-    public sealed partial class SettingsActivity : ReactiveActivity<SettingsViewModel>
+    [MvxFragmentPresentation(
+        AddToBackStack = true,
+        EnterAnimation = Resource.Animation.abc_slide_in_right,
+        ExitAnimation = Resource.Animation.abc_slide_out_right,
+        PopEnterAnimation = Resource.Animation.abc_fade_in,
+        PopExitAnimation = Resource.Animation.abc_slide_out_right)]
+    public sealed partial class SettingsFragment : ReactiveFragment<SettingsViewModel>
     {
-        protected override void OnCreate(Bundle bundle)
+        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            base.OnCreate(bundle);
-            SetContentView(Resource.Layout.SettingsActivity);
+            var view = inflater.Inflate(Resource.Layout.SettingsFragment, container, false);
 
-            OverridePendingTransition(Resource.Animation.abc_slide_in_right, Resource.Animation.abc_fade_out);
-
-            InitializeViews();
+            InitializeViews(view);
 
             var adapter = new SimpleAdapter<SelectableWorkspaceViewModel>(
-                Resource.Layout.SettingsActivityWorkspaceCell,
+                Resource.Layout.SettingsFragmentWorkspaceCell,
                 WorkspaceSelectionViewHolder.Create
             );
             adapter.ItemTapObservable
@@ -45,7 +42,7 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             workspacesRecyclerView.SetAdapter(adapter);
-            workspacesRecyclerView.SetLayoutManager(new LinearLayoutManager(this));
+            workspacesRecyclerView.SetLayoutManager(new LinearLayoutManager(Context));
 
             versionTextView.Text = ViewModel.Version;
 
@@ -99,7 +96,7 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.LoggingOut
-                .Subscribe(this.CancelAllNotifications)
+                .Subscribe(Context.CancelAllNotifications)
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsFeedbackSuccessViewShowing
@@ -150,49 +147,19 @@ namespace Toggl.Giskard.Activities
                 .Subscribe(ViewModel.SelectDurationFormat.Inputs)
                 .DisposedBy(DisposeBag);
 
-            setupToolbar();
+            return view;
         }
 
         private void showFeedbackSuccessToast(bool succeeeded)
         {
             if (!succeeeded) return;
 
-            var toast = Toast.MakeText(this, Resource.String.SendFeedbackSuccessMessage, ToastLength.Long);
+            var toast = Toast.MakeText(Context, Resource.String.SendFeedbackSuccessMessage, ToastLength.Long);
             toast.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.Bottom, 0, 0);
             toast.Show();
         }
 
         private Bitmap userImageFromBytes(byte[] imageBytes)
             => BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
-
-        private void setupToolbar()
-        {
-            var toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
-
-            toolbar.Title = ViewModel.Title;
-
-            SetSupportActionBar(toolbar);
-
-            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            SupportActionBar.SetDisplayShowHomeEnabled(true);
-
-            toolbar.NavigationClick += onNavigateBack;
-        }
-
-        private void onNavigateBack(object sender, Toolbar.NavigationClickEventArgs e)
-        {
-            ViewModel.Close.Execute();
-        }
-
-        public override void Finish()
-        {
-            base.Finish();
-            OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_right);
-        }
-
-        protected override void AttachBaseContext(Context @base)
-        {
-            base.AttachBaseContext(MvxContextWrapper.Wrap(@base, this));
-        }
     }
 }
