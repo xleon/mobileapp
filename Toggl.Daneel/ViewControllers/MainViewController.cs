@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Binding.BindingContext;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.ExtensionKit;
 using Toggl.Daneel.Extensions;
@@ -20,6 +20,7 @@ using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Onboarding.MainView;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Extensions;
 using Toggl.PrimeRadiant.Onboarding;
@@ -108,6 +109,10 @@ namespace Toggl.Daneel.ViewControllers
                 .Subscribe(TimeEntriesLogTableView.Rx().ReloadSections(tableViewSource))
                 .DisposedBy(disposeBag);
 
+            tableViewSource.ToggleGroupExpansion
+                .Subscribe(ViewModel.TimeEntriesViewModel.ToggleGroupExpansion.Inputs)
+                .DisposedBy(disposeBag);
+
             tableViewSource.FirstCell
                 .Subscribe(f =>
                 {
@@ -126,15 +131,17 @@ namespace Toggl.Daneel.ViewControllers
             );
 
             continueTimeEntry
+                .Select(logItem => logItem.RepresentedTimeEntriesIds.First())
                 .Subscribe(ViewModel.ContinueTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
             tableViewSource.SwipeToDelete
+                .Select(logItem => logItem.RepresentedTimeEntriesIds.First())
                 .Subscribe(ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
             tableViewSource.Rx().ModelSelected()
-                .Select(te => te.Id)
+                .Select(model => model.RepresentedTimeEntriesIds.First())
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
