@@ -65,6 +65,9 @@ namespace Toggl.Foundation.Interactors
         public IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> GetAllTimeEntriesVisibleToTheUser()
             => new GetAllTimeEntriesVisibleToTheUserInteractor(dataSource.TimeEntries);
 
+        public IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> ObserveAllTimeEntriesVisibleToTheUser()
+            => new ObserveAllTimeEntriesVisibleToTheUserInteractor(dataSource.TimeEntries, dataSource.Workspaces);
+
         public IInteractor<IObservable<IThreadSafeTimeEntry>> UpdateTimeEntry(EditTimeEntryDto dto)
             => new UpdateTimeEntryInteractor(timeService, dataSource, this, dto);
 

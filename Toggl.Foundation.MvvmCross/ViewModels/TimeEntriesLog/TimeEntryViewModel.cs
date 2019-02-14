@@ -91,6 +91,52 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ClientName = timeEntry.Project.Client?.Name ?? "";
         }
 
+        public TimeEntryViewModel(
+            long id,
+            bool isBillable,
+            string description,
+            DateTimeOffset startTime,
+            TimeSpan? duration,
+            long workspaceId,
+            long? projectId,
+            string projectName,
+            string projectColor,
+            string clientName,
+            long? taskId,
+            string taskName,
+            long[] tagIds,
+            bool needsSync,
+            bool canSync,
+            bool isInaccessible,
+            DurationFormat durationFormat)
+        {
+            Id = id;
+            WorkspaceId = workspaceId;
+            IsBillable = isBillable;
+            HasDescription = !string.IsNullOrEmpty(description);
+            Description = description;
+            StartTime = startTime;
+            Duration = duration;
+
+            HasProject = projectId != null;
+            ProjectId = projectId;
+            ProjectName = projectName ?? string.Empty;
+            ProjectColor = projectColor ?? string.Empty;
+
+            ClientName = clientName ?? string.Empty;
+            TaskId = taskId;
+            TaskName = taskName ?? string.Empty;
+
+            HasTags = tagIds?.Length > 0;
+            TagIds = tagIds ?? Array.Empty<long>();
+
+            NeedsSync = needsSync;
+            CanSync = canSync;
+            IsInaccessible = isInaccessible;
+
+            DurationFormat = durationFormat;
+        }
+
         public bool Equals(TimeEntryViewModel other)
         {
             if (ReferenceEquals(null, other)) return false;

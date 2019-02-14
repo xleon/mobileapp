@@ -100,14 +100,12 @@ namespace Toggl.Daneel.ViewControllers
             setupTableViewHeader();
 
             // Table view
-            tableViewSource = new TimeEntriesLogViewSource(
-                ViewModel.TimeEntries,
-                TimeEntriesLogViewCell.Identifier,
-                ViewModel.TimeService,
-                ViewModel.SchedulerProvider);
-            TimeEntriesLogTableView
-                .Rx()
-                .Bind(tableViewSource)
+            tableViewSource = new TimeEntriesLogViewSource();
+
+            TimeEntriesLogTableView.Source = tableViewSource;
+
+            ViewModel.TimeEntries
+                .Subscribe(TimeEntriesLogTableView.Rx().ReloadSections(tableViewSource))
                 .DisposedBy(disposeBag);
 
             tableViewSource.FirstCell
@@ -118,7 +116,7 @@ namespace Toggl.Daneel.ViewControllers
                 })
                 .DisposedBy(DisposeBag);
 
-            tableViewSource.ScrollOffset
+            tableViewSource.Rx().Scrolled()
                 .Subscribe(onTableScroll)
                 .DisposedBy(DisposeBag);
 
@@ -135,7 +133,7 @@ namespace Toggl.Daneel.ViewControllers
                 .Subscribe(ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
-            tableViewSource.ItemSelected
+            tableViewSource.Rx().ModelSelected()
                 .Select(te => te.Id)
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
@@ -153,7 +151,10 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(disposeBag);
 
             // Refresh Control
-            var refreshControl = new RefreshControl(ViewModel.SyncProgressState, tableViewSource);
+            var refreshControl = new RefreshControl(
+                ViewModel.SyncProgressState,
+                tableViewSource.Rx().Scrolled(),
+                tableViewSource.IsDragging);
             refreshControl.Refresh
                 .Subscribe(ViewModel.Refresh.Inputs)
                 .DisposedBy(DisposeBag);

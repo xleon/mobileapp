@@ -12,10 +12,6 @@ namespace Toggl.Daneel.Extensions.Reactive
 {
     public static class UITableViewExtensions
     {
-        public static IDisposable Bind<TModel, TCell>(this IReactive<UITableView> tableView, ReactiveSectionedListTableViewSource<TModel, TCell> dataSource)
-            where TCell : BaseTableViewCell<TModel>
-            => new ReactiveTableViewBinder<TModel, TCell>(tableView.Base, dataSource);
-
         public static IObserver<IEnumerable<CollectionSection<THeader, TModel>>> ReloadSections<THeader, TModel>(
             this IReactive<UITableView> reactive, BaseTableViewSource<THeader, TModel> dataSource)
         {

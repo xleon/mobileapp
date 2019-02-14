@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Foundation;
 using Toggl.Daneel.Extensions;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.MvvmCross.Transformations;
-using Toggl.Foundation.MvvmCross.ViewModels;
 using UIKit;
-using Toggl.Multivac.Extensions;
+using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
 
 namespace Toggl.Daneel.Views
 {
@@ -17,26 +12,6 @@ namespace Toggl.Daneel.Views
 
         public static readonly NSString Key = new NSString(nameof(TimeEntriesLogHeaderView));
         public static readonly UINib Nib;
-
-        private IReadOnlyList<TimeEntryViewModel> items;
-        public IReadOnlyList<TimeEntryViewModel> Items
-        {
-            set
-            {
-                items = value;
-                updateView();
-            }
-        }
-
-        private DateTimeOffset now;
-        public DateTimeOffset Now
-        {
-            set
-            {
-                now = value;
-                updateView();
-            }
-        }
 
         static TimeEntriesLogHeaderView()
         {
@@ -56,17 +31,10 @@ namespace Toggl.Daneel.Views
             DurationLabel.Font = DurationLabel.Font.GetMonospacedDigitFont();
         }
 
-        private void updateView()
+        public void Update(DaySummaryViewModel viewModel)
         {
-            if (items.Count == 0)
-                return;
-
-            var firstItem = items.First();
-
-            DateLabel.Text = DateToTitleString.Convert(firstItem.StartTime, now);
-
-            var totalDuration = items.Sum(vm => vm.Duration);
-            DurationLabel.Text = totalDuration.ToFormattedString(firstItem.DurationFormat);
+            DateLabel.Text = viewModel.Title;
+            DurationLabel.Text = viewModel.TotalTrackedTime;
         }
     }
 }

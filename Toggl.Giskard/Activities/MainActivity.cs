@@ -138,12 +138,12 @@ namespace Toggl.Giskard.Activities
                 .Subscribe(onSyncChanged)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter = new MainRecyclerAdapter(ViewModel.TimeEntries, ViewModel.TimeService)
-            {
-                SuggestionsViewModel = ViewModel.SuggestionsViewModel,
-                RatingViewModel = ViewModel.RatingViewModel,
-                StopwatchProvider = localStopwatchProvider
-            };
+            //mainRecyclerAdapter = new MainRecyclerAdapter(ViewModel.TimeEntries, ViewModel.TimeService)
+            //{
+            //    SuggestionsViewModel = ViewModel.SuggestionsViewModel,
+            //    RatingViewModel = ViewModel.RatingViewModel,
+            //    StopwatchProvider = localStopwatchProvider
+            //};
 
             mainRecyclerAdapter.TimeEntryTaps
                 .Select(te => te.Id)
@@ -172,10 +172,10 @@ namespace Toggl.Giskard.Activities
 
             setupLayoutManager(mainRecyclerAdapter);
 
-            ViewModel.TimeEntries.CollectionChange
-                .ObserveOn(SynchronizationContext.Current)
-                .Subscribe(mainRecyclerAdapter.UpdateCollection)
-                .DisposedBy(DisposeBag);
+            //ViewModel.TimeEntries.CollectionChange
+                //.ObserveOn(SynchronizationContext.Current)
+                //.Subscribe(mainRecyclerAdapter.UpdateCollection)
+                //.DisposedBy(DisposeBag);
 
             ViewModel.IsTimeEntryRunning
                 .ObserveOn(SynchronizationContext.Current)
