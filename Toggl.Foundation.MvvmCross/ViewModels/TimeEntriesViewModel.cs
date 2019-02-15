@@ -30,7 +30,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IAnalyticsService analyticsService;
         private readonly ISchedulerProvider schedulerProvider;
 
-        private readonly TimeEntriesCollapsing collapsingStrategy;
+        private readonly TimeEntriesGroupsFlattening groupsFlatteningStrategy;
 
         private Subject<int?> timeEntriesPendingDeletionSubject = new Subject<int?>();
         private IDisposable delayedDeletionDisposable;
@@ -69,7 +69,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ToggleGroupExpansion = rxActionFactory.FromAction<GroupId>(toggleGroupExpansion);
             CancelDeleteTimeEntry = rxActionFactory.FromAction(cancelDeleteTimeEntry);
 
-            collapsingStrategy = new TimeEntriesCollapsing(timeService, dataSource.Preferences.Current);
+            groupsFlatteningStrategy = new TimeEntriesGroupsFlattening(timeService, dataSource.Preferences.Current);
 
             var deletingOrPressingUndo = timeEntriesPendingDeletionSubject.SelectUnit().StartWith(Unit.Default);
             var collapsingOrExpanding = ToggleGroupExpansion.Elements.StartWith(Unit.Default);
@@ -82,7 +82,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                         (timeEntries, _) => timeEntries.Where(isNotDeleted))
                     .CombineLatest(dataSource.Preferences.Current, group)
                     .CombineLatest(collapsingOrExpanding, (groups, _) => groups)
-                    .Select(collapsingStrategy.Flatten)
+                    .Select(groupsFlatteningStrategy.Flatten)
                     .AsDriver(schedulerProvider);
 
             Empty = TimeEntries
@@ -117,7 +117,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private void toggleGroupExpansion(GroupId groupId)
         {
-            collapsingStrategy.ToggleGroupExpansion(groupId);
+            groupsFlatteningStrategy.ToggleGroupExpansion(groupId);
         }
 
         private void delayDeleteTimeEntries(long[] timeEntries)

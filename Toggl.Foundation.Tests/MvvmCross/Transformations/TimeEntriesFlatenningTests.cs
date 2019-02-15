@@ -65,7 +65,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Transformations
             HashSet<GroupId> expandedGroups,
             params CollectionSection<DaySummaryViewModel, LogItemViewModel>[] expectedTree)
         {
-            var collapsingStrategy = new TimeEntriesCollapsing(timeService, preferencesObservable);
+            var collapsingStrategy = new TimeEntriesGroupsFlattening(timeService, preferencesObservable);
             expandedGroups.ForEach(collapsingStrategy.ToggleGroupExpansion);
 
             var transformedTree = collapsingStrategy.Flatten(log).ToArray();

@@ -13,7 +13,7 @@ using static Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.LogItemVisuali
 
 namespace Toggl.Foundation.MvvmCross.Transformations
 {
-    internal sealed class TimeEntriesCollapsing
+    internal sealed class TimeEntriesGroupsFlattening
     {
         private readonly ITimeService timeService;
         private readonly HashSet<GroupId> expandedGroups;
@@ -21,7 +21,7 @@ namespace Toggl.Foundation.MvvmCross.Transformations
 
         private IThreadSafePreferences preferences;
 
-        public TimeEntriesCollapsing(
+        public TimeEntriesGroupsFlattening(
             ITimeService timeService,
             IObservable<IThreadSafePreferences> preferencesObservable)
         {
