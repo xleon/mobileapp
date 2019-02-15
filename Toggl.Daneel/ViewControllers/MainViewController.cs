@@ -136,8 +136,8 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(DisposeBag);
 
             tableViewSource.SwipeToDelete
-                .Select(logItem => logItem.RepresentedTimeEntriesIds.First())
-                .Subscribe(ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntry.Inputs)
+                .Select(logItem => logItem.RepresentedTimeEntriesIds)
+                .Subscribe(ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntries.Inputs)
                 .DisposedBy(DisposeBag);
 
             tableViewSource.Rx().ModelSelected()
@@ -145,7 +145,7 @@ namespace Toggl.Daneel.ViewControllers
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.TimeEntriesViewModel.ShouldShowUndo
+            ViewModel.TimeEntriesViewModel.TimeEntriesPendingDeletion
                 .Subscribe(toggleUndoDeletion)
                 .DisposedBy(DisposeBag);
 
@@ -328,7 +328,7 @@ namespace Toggl.Daneel.ViewControllers
             trackSiriEvents();
         }
 
-        private void toggleUndoDeletion(bool show)
+        private void toggleUndoDeletion(int? numberOfTimeEntriesPendingDeletion)
         {
             if (snackBar != null)
             {
@@ -336,11 +336,16 @@ namespace Toggl.Daneel.ViewControllers
                 snackBar = null;
             }
 
-            if (!show)
+            if (!numberOfTimeEntriesPendingDeletion.HasValue)
                 return;
 
+            var undoText = numberOfTimeEntriesPendingDeletion > 1
+                ? String.Format(Resources.MultipleEntriesDeleted, numberOfTimeEntriesPendingDeletion)
+                : Resources.EntryDeleted;
+
             snackBar = SnackBar.Factory.CreateUndoSnackBar(
-                onUndo: () => ViewModel.TimeEntriesViewModel.CancelDeleteTimeEntry.Execute(Unit.Default));
+                onUndo: () => ViewModel.TimeEntriesViewModel.CancelDeleteTimeEntry.Execute(Unit.Default),
+                text: undoText);
 
             snackBar.SnackBottomAnchor = StartTimeEntryButton.TopAnchor;
             snackBar.Show(superView: View);

@@ -159,11 +159,11 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             mainRecyclerAdapter.DeleteTimeEntrySubject
-                .Select(vm => vm.RepresentedTimeEntriesIds.First())
-                .Subscribe(ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntry.Inputs)
+                .Select(vm => vm.RepresentedTimeEntriesIds)
+                .Subscribe(ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntries.Inputs)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.TimeEntriesViewModel.ShouldShowUndo
+            ViewModel.TimeEntriesViewModel.TimeEntriesPendingDeletion
                 .Subscribe(showUndoDeletion)
                 .DisposedBy(DisposeBag);
 
@@ -335,12 +335,16 @@ namespace Toggl.Giskard.Activities
             }
         }
 
-        private void showUndoDeletion(bool show)
+        private void showUndoDeletion(int? numberOfTimeEntriesPendingDeletion)
         {
-            if (!show)
+            if (!numberOfTimeEntriesPendingDeletion.HasValue)
                 return;
 
-            Snackbar.Make(coordinatorLayout, FoundationResources.EntryDeleted, snackbarDuration)
+            var undoText = numberOfTimeEntriesPendingDeletion > 1
+                ? String.Format(FoundationResources.MultipleEntriesDeleted, numberOfTimeEntriesPendingDeletion)
+                : FoundationResources.EntryDeleted;
+
+            Snackbar.Make(coordinatorLayout, undoText, snackbarDuration)
                 .SetAction(FoundationResources.UndoButtonTitle, view => ViewModel.TimeEntriesViewModel.CancelDeleteTimeEntry.Execute())
                 .Show();
         }

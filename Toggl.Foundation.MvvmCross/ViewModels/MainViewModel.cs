@@ -4,9 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation;
@@ -332,7 +330,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task viewDisappearedAsync()
         {
-            await TimeEntriesViewModel.FinilizeDelayDeleteTimeEntryIfNeeded();
+            await TimeEntriesViewModel.FinalizeDelayDeleteTimeEntryIfNeeded();
         }
 
         public override void ViewAppearing()

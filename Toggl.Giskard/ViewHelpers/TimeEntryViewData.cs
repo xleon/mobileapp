@@ -2,8 +2,6 @@ using Android.Graphics;
 using Android.Text;
 using Android.Text.Style;
 using Android.Views;
-using Toggl.Foundation.MvvmCross.Transformations;
-using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Giskard.Extensions;
 using static Toggl.Foundation.Helper.Color;

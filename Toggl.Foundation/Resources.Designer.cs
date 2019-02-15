@@ -10,7 +10,6 @@
 
 namespace Toggl.Foundation {
     using System;
-    using System.Reflection;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
@@ -860,6 +859,12 @@ namespace Toggl.Foundation {
         public static string EntryDeleted {
             get {
                 return ResourceManager.GetString("EntryDeleted", resourceCulture);
+            }
+        }
+        
+        public static string MultipleEntriesDeleted {
+            get {
+                return ResourceManager.GetString("MultipleEntriesDeleted", resourceCulture);
             }
         }
         

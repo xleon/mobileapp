@@ -8,6 +8,7 @@ using System.Reactive.Subjects;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
+using MvvmCross.Navigation;
 using NSubstitute;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
@@ -134,95 +135,112 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheDelayDeleteTimeEntryAction : TimeEntriesViewModelTest
         {
             private readonly TimeEntriesViewModel viewModel;
-            private readonly long id = 1235900;
-            private readonly IObserver<bool> observer = Substitute.For<IObserver<bool>>();
+            private readonly IObserver<int?> observer = Substitute.For<IObserver<int?>>();
 
             public TheDelayDeleteTimeEntryAction()
             {
                 viewModel = new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
-                viewModel.ShouldShowUndo.Subscribe(observer);
+                viewModel.TimeEntriesPendingDeletion.Subscribe(observer);
             }
 
-            [Fact]
-            public async ThreadingTask ShowsTheUndoUI()
+            [Property]
+            public void ShowsTheUndoUI(NonEmptyArray<long> ids)
             {
-                viewModel.DelayDeleteTimeEntry.Execute(id);
+                observer.ClearReceivedCalls();
+
+                viewModel.DelayDeleteTimeEntries.Execute(ids.Get);
                 SchedulerProvider.TestScheduler.Start();
 
-                observer.Received().OnNext(true);
+                observer.Received().OnNext(ids.Get.Length);
             }
 
-            [Fact]
-            public async ThreadingTask DoesNotHideTheUndoUITooEarly()
+            [Property]
+            public void DoesNotHideTheUndoUITooEarly(NonEmptyArray<long> ids)
             {
-                var observable = viewModel.DelayDeleteTimeEntry.Execute(id);
+                observer.ClearReceivedCalls();
+
+                viewModel.DelayDeleteTimeEntries.Execute(ids.Get);
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks - 1);
-                await observable;
 
-                observer.Received().OnNext(true);
-                observer.DidNotReceive().OnNext(false);
+                observer.Received().OnNext(ids.Get.Length);
+                observer.DidNotReceive().OnNext(null);
             }
 
-            [Fact]
-            public async ThreadingTask HidesTheUndoUIAfterSeveralSeconds()
+            [Property]
+            public void HidesTheUndoUIAfterSeveralSeconds(NonEmptyArray<long> ids)
             {
-                viewModel.DelayDeleteTimeEntry.Execute(id);
+                observer.ClearReceivedCalls();
+
+                viewModel.DelayDeleteTimeEntries.Execute(ids.Get);
                 SchedulerProvider.TestScheduler.Start();
 
-                observer.Received().OnNext(true);
-                observer.Received().OnNext(false);
+                Received.InOrder(() =>
+                {
+                    observer.OnNext(ids.Get.Length);
+                    observer.OnNext(null);
+                });
             }
 
             [Fact]
-            public async ThreadingTask DoesNotHideTheUndoUIIfAnotherItemWasDeletedWhileWaiting()
+            public void DoesNotHideTheUndoUIIfAnotherItemWasDeletedWhileWaiting()
             {
-                var timeEntryA = 1;
-                var timeEntryB = 2;
-
-                viewModel.DelayDeleteTimeEntry.Execute(timeEntryA);
+                viewModel.DelayDeleteTimeEntries.Execute(new long[] { 1 });
                 SchedulerProvider.TestScheduler.AdvanceBy((long)(Constants.UndoTime.Ticks * 0.5));
-                viewModel.DelayDeleteTimeEntry.Execute(timeEntryB);
+                viewModel.DelayDeleteTimeEntries.Execute(new long[] { 2, 3 });
                 SchedulerProvider.TestScheduler.AdvanceBy((long)(Constants.UndoTime.Ticks * 0.6));
 
-                observer.Received().OnNext(true);
+                Received.InOrder(() =>
+                {
+                    observer.OnNext(1);
+                    observer.OnNext(2);
+                });
             }
 
             [Fact]
             public async ThreadingTask ImmediatelyHardDeletesTheTimeEntryWhenAnotherTimeEntryIsDeletedBeforeTheUndoTimeRunsOut()
             {
-                var timeEntryA = 1;
-                var timeEntryB = 2;
+                var batchA = new long[] { 1, 2, 3 };
+                var batchB = new long[] { 4, 5 };
 
-                var observableA = viewModel.DelayDeleteTimeEntry.Execute(timeEntryA);
+                var observableA = viewModel.DelayDeleteTimeEntries.Execute(batchA);
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks / 2);
-                var observableB = viewModel.DelayDeleteTimeEntry.Execute(timeEntryB);
-                SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks / 4);
+                var observableB = viewModel.DelayDeleteTimeEntries.Execute(batchB);
+                await observableA;
 
-                InteractorFactory.Received().DeleteTimeEntry(timeEntryA).Execute();
+                batchA.ForEach(id =>
+                {
+                    InteractorFactory.Received().DeleteTimeEntry(id).Execute();
+                });
             }
 
             [Fact]
             public async ThreadingTask ImmediatelyHardDeletesTheTimeEntryWhenCallingFinilizeDelayDeleteTimeEntryIfNeeded()
             {
-                var timeEntryA = 1;
+                var batch = new long[] { 1, 2, 3 };
 
-                var observableA = viewModel.DelayDeleteTimeEntry.Execute(timeEntryA);
+                var observableA = viewModel.DelayDeleteTimeEntries.Execute(batch);
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks / 2);
-                await viewModel.FinilizeDelayDeleteTimeEntryIfNeeded();
+                await viewModel.FinalizeDelayDeleteTimeEntryIfNeeded();
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks / 4);
 
-                InteractorFactory.Received().DeleteTimeEntry(timeEntryA).Execute();
+                batch.ForEach(id =>
+                {
+                    InteractorFactory.Received().DeleteTimeEntry(Arg.Is(id)).Execute();
+                });
             }
 
             [Fact]
-            public async ThreadingTask DoesNotHardDeletesTheTimeEntryWhenNotCallingFinilizeDelayDeleteTimeEntryIfNeeded()
+            public void DoesNotHardDeletesTheTimeEntryWhenNotCallingFinilizeDelayDeleteTimeEntryIfNeeded()
             {
-                var timeEntryA = 1;
+                var batch = new long[] { 1, 2, 3 };
 
-                var observableA = viewModel.DelayDeleteTimeEntry.Execute(timeEntryA);
+                var observableA = viewModel.DelayDeleteTimeEntries.Execute(batch);
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks / 2);
 
-                InteractorFactory.DidNotReceive().DeleteTimeEntry(timeEntryA).Execute();
+                batch.ForEach(id =>
+                {
+                    InteractorFactory.DidNotReceive().DeleteTimeEntry(Arg.Is(id)).Execute();
+                });
             }
 
             [Fact]
@@ -231,7 +249,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observer = SchedulerProvider.TestScheduler.CreateObserver<TimeEntriesLog>();
                 viewModel.TimeEntries.Subscribe(observer);
 
-                viewModel.DelayDeleteTimeEntry.Execute(id);
+                viewModel.DelayDeleteTimeEntries.Execute(new[] { 123L });
                 SchedulerProvider.TestScheduler.Start();
 
                 // 1 - the initial load of the data
@@ -244,46 +262,52 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public sealed class TheCancelDeleteTimeEntryAction : TimeEntriesViewModelTest
         {
             private readonly TimeEntriesViewModel viewModel;
-            private readonly long id = 123579;
-            private readonly IObserver<bool> observer = Substitute.For<IObserver<bool>>();
+            private readonly long[] batch = { 1, 2, 3 };
+            private readonly IObserver<int?> observer = Substitute.For<IObserver<int?>>();
 
             public TheCancelDeleteTimeEntryAction()
             {
                 viewModel = new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
-                viewModel.ShouldShowUndo.Subscribe(observer);
+                viewModel.TimeEntriesPendingDeletion.Subscribe(observer);
             }
 
             [Fact]
             public async ThreadingTask DoesNotDeleteTheTimeEntryIfTheUndoIsInitiatedBeforeTheUndoPeriodIsOver()
             {
-                viewModel.DelayDeleteTimeEntry.Execute(id);
+                viewModel.DelayDeleteTimeEntries.Execute(batch);
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks / 2);
                 viewModel.CancelDeleteTimeEntry.Execute();
                 SchedulerProvider.TestScheduler.Start();
 
-                InteractorFactory.DidNotReceive().DeleteTimeEntry(id);
+                batch.ForEach(id =>
+                {
+                    InteractorFactory.DidNotReceive().DeleteTimeEntry(Arg.Is(id)).Execute();
+                });
             }
 
             [Fact]
             public async ThreadingTask DeletesTheTimeEntryIfTheUndoIsInitiatedAfterTheUndoPeriodIsOver()
             {
-                viewModel.DelayDeleteTimeEntry.Execute(id);
+                viewModel.DelayDeleteTimeEntries.Execute(batch);
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks);
                 viewModel.CancelDeleteTimeEntry.Execute();
 
-                InteractorFactory.Received().DeleteTimeEntry(id);
+                batch.ForEach(id =>
+                {
+                    InteractorFactory.Received().DeleteTimeEntry(Arg.Is(id)).Execute();
+                });
             }
 
             [Fact]
             public async ThreadingTask HidesTheUndoUI()
             {
-                viewModel.DelayDeleteTimeEntry.Execute(id);
+                viewModel.DelayDeleteTimeEntries.Execute(batch);
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks / 2);
                 viewModel.CancelDeleteTimeEntry.Execute();
                 SchedulerProvider.TestScheduler.Start();
 
-                observer.Received().OnNext(true);
-                observer.Received().OnNext(false);
+                observer.Received().OnNext(batch.Length);
+                observer.Received().OnNext(null);
             }
         }
     }
