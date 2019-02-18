@@ -26,7 +26,6 @@ using Toggl.PrimeRadiant.Exceptions;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 using static Toggl.Foundation.Helper.Constants;
-using static Toggl.Foundation.MvvmCross.Parameters.SelectTimeParameters.Origin;
 using static Toggl.Multivac.Extensions.FunctionalExtensions;
 using static Toggl.Multivac.Extensions.StringExtensions;
 using ITimeEntryPrototype = Toggl.Foundation.Models.ITimeEntryPrototype;
@@ -328,6 +327,36 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     await ViewModel.OnTextFieldInfoFromView(projectSpan, querySpan);
 
                     ViewModel.SuggestCreation.Should().BeFalse();
+                }
+
+                [Fact, LogIfTooSlow]
+                public async Task ReturnsTrueIfTheProjectNameIsValid()
+                {
+                    var workspace = new MockWorkspace { Id = 1, Name = "ws", Admin = true };
+                    InteractorFactory.GetAllWorkspaces().Execute().Returns(Observable.Return(new[] { workspace }));
+
+                    ViewModel.Prepare();
+                    await ViewModel.Initialize();
+                    TestScheduler.Start();
+
+                    await ViewModel.OnTextFieldInfoFromView(new QueryTextSpan("@bongo", 6));
+
+                    ViewModel.SuggestCreation.Should().BeTrue();
+                }
+
+                [Fact, LogIfTooSlow]
+                public async Task ReturnsTrueEvenIfAProjectWithSameNameExist()
+                {
+                    var workspace = new MockWorkspace { Id = 1, Name = "ws", Admin = true };
+                    InteractorFactory.GetAllWorkspaces().Execute().Returns(Observable.Return(new[] { workspace }));
+
+                    ViewModel.Prepare();
+                    await ViewModel.Initialize();
+                    TestScheduler.Start();
+
+                    await ViewModel.OnTextFieldInfoFromView(new QueryTextSpan($"@${ProjectName}", 6));
+
+                    ViewModel.SuggestCreation.Should().BeTrue();
                 }
 
                 [Fact, LogIfTooSlow]
@@ -1749,105 +1778,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public sealed class TheSelectTimeCommand : StartTimeEntryViewModelTest
-        {
-            private const SelectTimeParameters.Origin origin = Duration;
-            private readonly TaskCompletionSource<SelectTimeResultsParameters> tcs = new TaskCompletionSource<SelectTimeResultsParameters>();
-
-            public TheSelectTimeCommand()
-            {
-                NavigationService
-                    .Navigate<SelectTimeViewModel, SelectTimeParameters, SelectTimeResultsParameters>(Arg.Any<SelectTimeParameters>())
-                    .Returns(tcs.Task);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task CallsTheSelectViewModelWithACalculatedStopDateIfTheDurationIsNotNull()
-            {
-                ViewModel.Prepare(StartTimeEntryParameters.ForManualMode(DateTimeOffset.Now));
-
-                await callCommandCorrectly();
-
-                await NavigationService
-                    .Received()
-                    .Navigate<SelectTimeViewModel, SelectTimeParameters, SelectTimeResultsParameters>(Arg.Is<SelectTimeParameters>(
-                        parameters => parameters.Stop != null
-                    ));
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task CallsTheSelectViewModelWithNoStopDateIfTheDurationIsNull()
-            {
-                ViewModel.Prepare(StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now));
-
-                await callCommandCorrectly();
-
-                await NavigationService
-                    .Received()
-                    .Navigate<SelectTimeViewModel, SelectTimeParameters, SelectTimeResultsParameters>(Arg.Is<SelectTimeParameters>(
-                        parameters => parameters.Stop == null
-                    ));
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task SetsTheDurationIfTheStopResultHasAValue()
-            {
-                const int totalDurationInHours = 2;
-                ViewModel.Prepare(StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now));
-
-                await callCommandCorrectly(totalDurationInHours);
-
-                ViewModel.Duration.Value.TotalHours.Should().Be(totalDurationInHours);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task DoesNotSetTheDurationIfTheStopResultHasNoValue()
-            {
-                ViewModel.Prepare(StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now));
-
-                await callCommandCorrectly();
-
-                ViewModel.Duration.Should().BeNull();
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task SetsTheStartDateToTheValueReturned()
-            {
-                const int totalDurationInHours = 2;
-                ViewModel.Prepare(StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now));
-
-                await callCommandCorrectly(totalDurationInHours);
-                var expected = (await tcs.Task).Start;
-
-                ViewModel.StartTime.Should().Be(expected);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task TracksDurationTap()
-            {
-                var now = DateTimeOffset.UtcNow;
-                var parameters = StartTimeEntryParameters.ForTimerMode(now);
-                var returnParameters = new SelectTimeResultsParameters(now, null);
-                NavigationService
-                    .Navigate<SelectTimeViewModel, SelectTimeParameters, SelectTimeResultsParameters>(Arg.Any<SelectTimeParameters>())
-                    .Returns(Task.FromResult(returnParameters));
-                ViewModel.Prepare(parameters);
-
-                await ViewModel.SelectTimeCommand.ExecuteAsync(SelectTimeParameters.Origin.Duration);
-
-                AnalyticsService.StartViewTapped.Received().Track(StartViewTapSource.Duration);
-            }
-
-            private Task callCommandCorrectly(int? hoursToAddToStopTime = null)
-            {
-                var commandTask = ViewModel.SelectTimeCommand.ExecuteAsync(origin);
-                var now = DateTimeOffset.Now;
-                var stopTime = hoursToAddToStopTime.HasValue ? now.AddHours(hoursToAddToStopTime.Value) : (DateTimeOffset?)null;
-                tcs.SetResult(new SelectTimeResultsParameters(now, stopTime));
-                return commandTask;
-            }
-        }
-
         public sealed class TheDurationTappedCommand : StartTimeEntryViewModelTest
         {
             [Fact, LogIfTooSlow]
@@ -1975,7 +1905,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 projectNames(ViewModel.Suggestions[0]).Should().BeInAscendingOrder();
                 projectNames(ViewModel.Suggestions[1]).Should().BeInAscendingOrder();
             }
-          
+
             public async Task SortsTasksByName()
             {
                 var suggestions = new List<ProjectSuggestion>();
@@ -2085,74 +2015,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.OnTextFieldInfoFromView(new QueryTextSpan());
 
                 ViewModel.IsDirty.Should().BeFalse();
-            }
-        }
-
-        public sealed class TheDescriptionRemainingBytesProperty : StartTimeEntryViewModelTest
-        {
-            [Fact, LogIfTooSlow]
-            public async Task IsMaxIfTheTextIsEmpty()
-            {
-                await ViewModel.OnTextFieldInfoFromView(new QueryTextSpan());
-
-                ViewModel.DescriptionRemainingBytes.Should()
-                    .Be(MaxTimeEntryDescriptionLengthInBytes);
-            }
-
-            [Theory, LogIfTooSlow]
-            [InlineData("Hello fox")]
-            [InlineData("Some emojis: 🔥😳👻")]
-            [InlineData("Some weird characters: āčēļķīņš")]
-            [InlineData("Some random arabic characters: ظۓڰڿڀ")]
-            public async Task IsDecreasedForEachByteInTheText(string text)
-            {
-                var expectedRemainingByteCount
-                    = MaxTimeEntryDescriptionLengthInBytes - text.LengthInBytes();
-
-                await ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(text, 0));
-
-                ViewModel.DescriptionRemainingBytes.Should()
-                    .Be(expectedRemainingByteCount);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task IsNegativeWhenTextLengthExceedsMax()
-            {
-                var bytesOverLimit = 5;
-                var longString = new string('0', MaxTimeEntryDescriptionLengthInBytes + bytesOverLimit);
-
-                await ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(longString, 0));
-
-                ViewModel.DescriptionRemainingBytes.Should().Be(-bytesOverLimit);
-            }
-        }
-
-        public sealed class TheDescriptionLengthExceededproperty : StartTimeEntryViewModelTest
-        {
-            [Theory, LogIfTooSlow]
-            [InlineData(0)]
-            [InlineData(20)]
-            [InlineData(2999)]
-            [InlineData(3000)]
-            public async Task IsFalseIfTextIsShorterOrEqualToMax(int byteCount)
-            {
-                var text = new string('0', byteCount);
-
-                await ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(text, 0));
-
-                ViewModel.DescriptionLengthExceeded.Should().BeFalse();
-            }
-
-            [Theory, LogIfTooSlow]
-            [InlineData(MaxTimeEntryDescriptionLengthInBytes + 1)]
-            [InlineData(MaxTimeEntryDescriptionLengthInBytes + 20)]
-            public async Task IsTrueWhenTextIsLongerThanMax(int byteCount)
-            {
-                var text = new string('0', byteCount);
-
-                await ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(text, 0));
-
-                ViewModel.DescriptionLengthExceeded.Should().BeTrue();
             }
         }
 
