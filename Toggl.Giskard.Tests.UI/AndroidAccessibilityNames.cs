@@ -62,6 +62,7 @@ namespace Toggl.Tests.UI
     public static class EditTimeEntry
     {
         public const string EditTags = "EditTimeEntryTagsContainer";
+        public const string DeleteButton = "EditTimeEntryDelete";
     }
 
     public static class NewProject
