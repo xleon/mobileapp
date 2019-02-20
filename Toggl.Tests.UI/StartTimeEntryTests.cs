@@ -92,7 +92,7 @@ namespace Toggl.Tests.UI
 
             app.PullToRefresh();
 
-            app.WaitForElement(projectName);
+            app.WaitForElement(e => e.All().Property("text").Contains(projectName));
         }
 
         [Test]
