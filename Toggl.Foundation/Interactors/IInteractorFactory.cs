@@ -188,6 +188,12 @@ namespace Toggl.Foundation.Interactors
 
         #endregion
 
+        #region Timezones
+
+        IInteractor<IObservable<IEnumerable<string>>> GetSupportedTimezones();
+
+        #endregion
+
         #region Reports
 
         IInteractor<IObservable<ITimeEntriesTotals>> GetReportsTotals(
