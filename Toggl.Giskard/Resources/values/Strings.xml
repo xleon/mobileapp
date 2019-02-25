@@ -142,6 +142,8 @@ understand and agree to Toggl\'s</string>
     <string name="CalendarOnboardingMessage">View your calendar events in Toggl and turn them into time entries with a tap</string>
     <string name="LinkYourCalendars">Link your calendars</string>
     <string name="Skip">Skip</string>
+    <string name="SelectCalendars">Select calendars</string>
+    <string name="SelectCalendarsMessage">Choose the calendars containing events you’d like to log in Toggl</string>
 
     <string name="ReportsCalendarShortcutsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsCalendarShortcutsTemplateSelector, Toggl.Giskard</string>
     <string name="ReportsCalendarTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsCalendarTemplateSelector, Toggl.Giskard</string>

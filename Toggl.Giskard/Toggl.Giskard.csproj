@@ -618,7 +618,16 @@
     <Compile Include="Fragments\MainFragment.Onboardings.cs">
       <DependentUpon>MainFragment.cs</DependentUpon>
     </Compile>
-
+    <Compile Include="Fragments\SelectUserCalendarsFragment.cs" />
+    <Compile Include="Fragments\SelectUserCalendarsFragment.ViewBinds.cs">
+      <DependentUpon>SelectUserCalendarsFragment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Adapters\UserCalendarsRecyclerAdapter.cs" />
+    <Compile Include="ViewHolders\UserCalendarViewHolder.cs" />
+    <Compile Include="ViewHolders\UserCalendarHeaderViewHolder.cs" />
+    <Compile Include="Adapters\BaseSectionedRecyclerAdapter.cs" />
+    <Compile Include="Extensions\Reactive\ButtonExtensions.cs" />
+    <Compile Include="Fragments\ReactiveDialogFragment.cs" />
     <Compile Include="Activities\MainTabBarActivity.cs" />
     <Compile Include="Activities\MainTabBarActivity.ViewBinds.cs">
       <DependentUpon>MainTabBarActivity.cs</DependentUpon>
@@ -1036,6 +1045,10 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\toggl_spider.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\toggl_spider.png" />
     <AndroidResource Include="Resources\layout\WelcomeBackPlaceholder.axml" />
+    <AndroidResource Include="Resources\layout\SelectUserCalendarsFragment.axml" />
+    <AndroidResource Include="Resources\layout\UserCalendarItem.axml" />
+    <AndroidResource Include="Resources\layout\UserCalendarHeader.axml" />
+    <AndroidResource Include="Resources\color\BlueLinkTextColor.xml" />
     <AndroidResource Include="Resources\layout\MainTabBarActivity.axml" />
     <AndroidResource Include="Resources\menu\MainTabBarBottomMenu.xml" />
     <AndroidResource Include="Resources\color\MainTabBarItemTextColor.xml" />
