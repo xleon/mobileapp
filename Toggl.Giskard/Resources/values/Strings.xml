@@ -144,7 +144,11 @@ understand and agree to Toggl\'s</string>
     <string name="Skip">Skip</string>
     <string name="SelectCalendars">Select calendars</string>
     <string name="SelectCalendarsMessage">Choose the calendars containing events you’d like to log in Toggl</string>
-
+    <string name="SetSmartReminders">Set smart reminders</string>
+    <string name="SetSmartRemindersMessage">Get an actionable reminder to start tracking time for your event</string>
+    <string name="CalendarSettings">CalendarSettings</string>
+    <string name="SmartReminders">Smart reminders</string>
+    
     <string name="ReportsCalendarShortcutsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsCalendarShortcutsTemplateSelector, Toggl.Giskard</string>
     <string name="ReportsCalendarTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsCalendarTemplateSelector, Toggl.Giskard</string>
     <string name="ReportsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsTemplateSelector, Toggl.Giskard</string>
