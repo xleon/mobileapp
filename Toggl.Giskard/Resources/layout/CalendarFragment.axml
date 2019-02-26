@@ -4,4 +4,10 @@
              android:fitsSystemWindows="true"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
+    <ViewStub
+        android:id="@+id/OnboardingViewStub"
+        android:layout="@layout/CalendarOnboardingView"
+        android:inflatedId="@+id/OnboardingView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </FrameLayout>

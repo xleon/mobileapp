@@ -61,6 +61,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
         public UIAction GetStarted { get; }
 
+        public UIAction SkipOnboarding { get; }
+
         public UIAction SelectCalendars { get; }
 
         public InputAction<CalendarItem> OnItemTapped { get; }
@@ -146,6 +148,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 .AsDriver(schedulerProvider);
 
             GetStarted = rxActionFactory.FromAsync(getStarted);
+            SkipOnboarding = rxActionFactory.FromAction(skipOnboarding);
             OnItemTapped = rxActionFactory.FromAsync<CalendarItem>(handleCalendarItem);
             OnCalendarEventLongPressed = rxActionFactory.FromAsync<CalendarItem>(handleCalendarEventLongPressed);
 
@@ -239,6 +242,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 await navigationService.Navigate<CalendarPermissionDeniedViewModel, Unit>();
             }
 
+            onboardingStorage.SetCompletedCalendarOnboarding();
+            shouldShowOnboardingSubject.OnNext(false);
+        }
+
+        private void skipOnboarding()
+        {
             onboardingStorage.SetCompletedCalendarOnboarding();
             shouldShowOnboardingSubject.OnNext(false);
         }

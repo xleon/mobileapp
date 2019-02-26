@@ -519,6 +519,28 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
+        public sealed class TheSkipOnboardingProperty : CalendarViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task SetsTheOnboardingAsCompleted()
+            {
+                ViewModel.SkipOnboarding.Execute();
+                OnboardingStorage.Received().SetCompletedCalendarOnboarding();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SetsTheShouldShowOnboardingPropertyToFalse()
+            {
+                var observer = TestScheduler.CreateObserver<bool>();
+                ViewModel.ShouldShowOnboarding.Subscribe(observer);
+
+                ViewModel.SkipOnboarding.Execute(); 
+                TestScheduler.Start();
+
+                observer.Messages.Select(m => m.Value.Value).Should().BeEquivalentTo(new[] { true, false });
+            }
+        }
+
         public sealed class TheCalendarItemsProperty : CalendarViewModelTest
         {
             [Fact, LogIfTooSlow]
