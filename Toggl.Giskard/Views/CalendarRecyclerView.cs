@@ -30,20 +30,21 @@ namespace Toggl.Giskard.Views
         private float timeSlicesTopPadding;
         private float verticalLineLeftMargin;
         private float middleLineX;
+        private float hoursDistanceFromTimeLine;
+        private ImmutableArray<string> hours = ImmutableArray<string>.Empty;
         private ImmutableArray<float> timeLinesYs = ImmutableArray<float>.Empty;
         private ImmutableArray<float> hoursYs = ImmutableArray<float>.Empty;
 
         private readonly Paint hoursLabelPaint = new Paint(PaintFlags.AntiAlias)
         {
             Color = Color.ParseColor("#757575"),
-            TextAlign = Paint.Align.Center
+            TextAlign = Paint.Align.Right
         };
 
         private readonly Paint linesPaint = new Paint(PaintFlags.AntiAlias)
         {
             Color = Color.ParseColor("#19000000")
         };
-
 
         #region Constructors
         protected CalendarRecyclerView(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
@@ -71,9 +72,10 @@ namespace Toggl.Giskard.Views
             linesPaint.StrokeWidth = 1.DpToPixels(Context);
             timeSliceHeight = 56.DpToPixels(Context);
             timeSliceStartX = 60.DpToPixels(Context);
-            timeSlicesTopPadding = 16.DpToPixels(Context);
+            timeSlicesTopPadding = 0;
             verticalLineLeftMargin = 68.DpToPixels(Context);
-            hoursX = timeSliceStartX - verticalLineLeftMargin;
+            hoursDistanceFromTimeLine = 12.DpToPixels(Context);
+            hoursX = timeSliceStartX - hoursDistanceFromTimeLine;
         }
 
         #endregion
@@ -82,9 +84,20 @@ namespace Toggl.Giskard.Views
         {
             base.OnLayout(changed, l, t, r, b);
             timeLinesYs = createTimeLinesYPositions();
+            hours = createHours();
             hoursYs = timeLinesYs.Select(lineY => lineY + hoursLabelPaint.Descent()).ToImmutableArray();
             middleLineX = verticalLineLeftMargin + (Width - verticalLineLeftMargin) / 2f;
         }
+
+        private ImmutableArray<string> createHours()
+        {
+            DateTime date = new DateTime();
+            return Enumerable.Range(0, hoursPerDay)
+                .Select(hour => date.AddHours(hour))
+                .Select(formatHour)
+                .ToImmutableArray();
+        }
+
 
         private ImmutableArray<float> createTimeLinesYPositions()
          => Enumerable.Range(0, hoursPerDay)
@@ -95,6 +108,8 @@ namespace Toggl.Giskard.Views
         {
             base.OnDraw(canvas);
 
+            var offset = ComputeVerticalScrollOffset();
+
             canvas.DrawLine(verticalLineLeftMargin, 0f, verticalLineLeftMargin, Height, linesPaint);
             if (hasTwoColumns)
             {
@@ -103,8 +118,8 @@ namespace Toggl.Giskard.Views
 
             for (var hour = 0; hour < timeLinesYs.Length; hour++)
             {
-                canvas.DrawLine(timeSliceStartX, timeLinesYs[hour], Width, timeLinesYs[hour], linesPaint);
-                canvas.DrawText(formatHour(hour % hoursPerDay), hoursX, hoursYs[hour], hoursLabelPaint);
+                canvas.DrawLine(timeSliceStartX, timeLinesYs[hour] - offset, Width, timeLinesYs[hour] - offset, linesPaint);
+                canvas.DrawText(hours[hour], hoursX, hoursYs[hour] - offset, hoursLabelPaint);
             }
         }
 
@@ -121,7 +136,7 @@ namespace Toggl.Giskard.Views
             Invalidate();
         }
 
-        private string formatHour(int hour)
+        private string formatHour(DateTime hour)
             => hour.ToString(fixedHoursFormat(), CultureInfo.InvariantCulture);
 
         private string fixedHoursFormat()
