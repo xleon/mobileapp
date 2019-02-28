@@ -669,6 +669,10 @@
     </Compile>
     <Compile Include="Adapters\SelectCalendarNotificationsOptionAdapter.cs" />
     <Compile Include="ViewHolders\SelectCalendarNotificationsOptionViewHolder.cs" />
+    <Compile Include="Activities\CalendarSettingsActivity.cs" />
+    <Compile Include="Activities\CalendarSettingsActivity.ViewBinds.cs">
+      <DependentUpon>CalendarSettingsActivity.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -1102,6 +1106,9 @@
     <AndroidResource Include="Resources\layout\CalendarPermissionDeniedFragment.axml" />
     <AndroidResource Include="Resources\layout\UpcomingEventsNotificationSettingsFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectCalendarNotificationsOptionItem.axml" />
+    <AndroidResource Include="Resources\layout\CalendarSettingsActivity.axml" />
+    <AndroidResource Include="Resources\layout\SelectUserCalendarsBase.axml" />
+    <AndroidResource Include="Resources\menu\CalendarSettingsMenu.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation\Toggl.Foundation.csproj">

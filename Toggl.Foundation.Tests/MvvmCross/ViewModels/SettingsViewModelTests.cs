@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -59,7 +60,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     PrivateSharedStorageService,
                     IntentDonationService,
                     StopwatchProvider,
-                    RxActionFactory);
+                    RxActionFactory,
+                    PermissionsService);
             }
 
             protected virtual void SetupObservables()
@@ -84,7 +86,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool usePrivateSharedStorageService,
                 bool useIntentDonationService,
                 bool useStopwatchProvider,
-                bool useRxActionFactory)
+                bool useRxActionFactory,
+                bool usePermissionsService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var platformInfo = useplatformInfo ? PlatformInfo : null;
@@ -99,6 +102,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
+                var permissionsService = usePermissionsService ? PermissionsService : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new SettingsViewModel(
@@ -114,7 +118,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         privateSharedStorageService,
                         intentDonationService,
                         stopwatchProvider,
-                        rxActionFactory);
+                        rxActionFactory,
+                        permissionsService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -807,6 +812,51 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.OpenCalendarSettings.Execute(Unit.Default);
 
                 NavigationService.Received().Navigate<CalendarSettingsViewModel>();
+            }
+        }
+
+        public sealed class TheIsSmartRemindersVisibleProperty : SettingsViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task EmitsTrueWhenCalendarPermissionsAreGrantedAndCalendarsAreSelected()
+            {
+                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                UserPreferences.EnabledCalendars.Returns(Observable.Return(new List<string>() { "1" }));
+
+                var observer = TestScheduler.CreateObserver<bool>();
+                var viewModel = CreateViewModel();
+
+                viewModel.IsCalendarSmartRemindersVisible.Subscribe(observer);
+
+                observer.Messages.First().Value.Value.Should().BeTrue();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task EmitsFalseWhenCalendarPermissionsAreNotGranted()
+            {
+                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(false));
+                UserPreferences.EnabledCalendars.Returns(Observable.Return(new List<string>() { "1" }));
+
+                var observer = TestScheduler.CreateObserver<bool>();
+                var viewModel = CreateViewModel();
+
+                viewModel.IsCalendarSmartRemindersVisible.Subscribe(observer);
+
+                observer.Messages.First().Value.Value.Should().BeFalse();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task EmitsFalseWhenNoCalendarsAreSelected()
+            {
+                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                UserPreferences.EnabledCalendars.Returns(Observable.Return(new List<string>()));
+
+                var observer = TestScheduler.CreateObserver<bool>();
+                var viewModel = CreateViewModel();
+
+                viewModel.IsCalendarSmartRemindersVisible.Subscribe(observer);
+
+                observer.Messages.First().Value.Value.Should().BeFalse();
             }
         }
     }

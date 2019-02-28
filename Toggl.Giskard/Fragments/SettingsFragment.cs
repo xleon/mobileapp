@@ -82,6 +82,10 @@ namespace Toggl.Giskard.Fragments
                 .Subscribe(durationFormatTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
+            ViewModel.IsCalendarSmartRemindersVisible
+                .Subscribe(smartRemindersView.Rx().IsVisible())
+                .DisposedBy(DisposeBag);
+
             ViewModel.CalendarSmartReminders
                 .Subscribe(smartRemindersTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
@@ -145,6 +149,10 @@ namespace Toggl.Giskard.Fragments
 
             durationFormatView.Rx().Tap()
                 .Subscribe(ViewModel.SelectDurationFormat.Inputs)
+                .DisposedBy(DisposeBag);
+
+            calendarSettingsView.Rx().Tap()
+                .Subscribe(ViewModel.OpenCalendarSettings.Inputs)
                 .DisposedBy(DisposeBag);
 
             smartRemindersView.Rx().Tap()

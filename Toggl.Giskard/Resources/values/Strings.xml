@@ -149,8 +149,10 @@ understand and agree to Toggl\'s</string>
     <string name="AllowAccess">Allow access</string>
     <string name="SetSmartReminders">Set smart reminders</string>
     <string name="SetSmartRemindersMessage">Get an actionable reminder to start tracking time for your event</string>
-    <string name="CalendarSettings">CalendarSettings</string>
+    <string name="CalendarSettings">Calendar Settings</string>
     <string name="SmartReminders">Smart reminders</string>
+    <string name="LinkCalendars">Link calendars</string>
+    <string name="LinkCalendarsMessage">View your calendar events in Toggl and log them  with a single tap</string>
     
     <string name="ReportsCalendarShortcutsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsCalendarShortcutsTemplateSelector, Toggl.Giskard</string>
     <string name="ReportsCalendarTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsCalendarTemplateSelector, Toggl.Giskard</string>

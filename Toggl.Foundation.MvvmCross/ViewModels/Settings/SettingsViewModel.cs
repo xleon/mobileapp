@@ -52,6 +52,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IIntentDonationService intentDonationService;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly IRxActionFactory rxActionFactory;
+        private readonly IPermissionsService permissionsService;
 
         private bool isSyncing;
         private bool isLoggingOut;
@@ -79,6 +80,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IObservable<bool> UseTwentyFourHourFormat { get; }
         public IObservable<IList<SelectableWorkspaceViewModel>> Workspaces { get; }
         public IObservable<bool> IsFeedbackSuccessViewShowing { get; }
+        public IObservable<bool> IsCalendarSmartRemindersVisible { get; }
         public IObservable<string> CalendarSmartReminders { get; }
 
         public UIAction OpenCalendarSettings { get; }
@@ -110,7 +112,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IPrivateSharedStorageService privateSharedStorageService,
             IIntentDonationService intentDonationService,
             IStopwatchProvider stopwatchProvider,
-            IRxActionFactory rxActionFactory)
+            IRxActionFactory rxActionFactory,
+            IPermissionsService permissionsService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
@@ -125,6 +128,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
+            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
 
             this.dataSource = dataSource;
             this.platformInfo = platformInfo;
@@ -140,6 +144,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.intentDonationService = intentDonationService;
             this.privateSharedStorageService = privateSharedStorageService;
             this.rxActionFactory = rxActionFactory;
+            this.permissionsService = permissionsService;
 
             IsSynced = dataSource.SyncManager.ProgressObservable.SelectMany(checkSynced);
 
@@ -192,6 +197,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 dataSource.Preferences.Current
                     .Select(preferences => preferences.TimeOfDayFormat.IsTwentyFourHoursFormat)
                     .DistinctUntilChanged();
+
+            IsCalendarSmartRemindersVisible = permissionsService.CalendarPermissionGranted
+                .CombineLatest(userPreferences.EnabledCalendars.Select(ids => ids.Any()), CommonFunctions.And);
 
             CalendarSmartReminders = userPreferences.CalendarNotificationsSettings()
                 .Select(s => s.Title())

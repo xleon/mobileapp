@@ -145,7 +145,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 privateSharedStorageService,
                 intentDonationService,
                 stopwatchProvider,
-                rxActionFactory
+                rxActionFactory,
+                permissionsService
             );
         }
 

@@ -21,7 +21,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public abstract class CalendarSettingsViewModelTest : BaseViewModelTests<CalendarSettingsViewModel>
         {
             protected override CalendarSettingsViewModel CreateViewModel()
-                => new CalendarSettingsViewModel(UserPreferences, InteractorFactory, PermissionsService, RxActionFactory);
+                => new CalendarSettingsViewModel(UserPreferences, InteractorFactory, NavigationService, RxActionFactory, PermissionsService);
         }
 
         public sealed class TheConstructor : CalendarSettingsViewModelTest
@@ -31,15 +31,17 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useUserPreferences,
                 bool useInteractorFactory,
-                bool usePermissionsService,
-                bool useRxActionFactory)
+                bool useNavigationService,
+                bool useRxActionFactory,
+                bool usePermissionsService)
             {
                 Action tryingToConstructWithEmptyParameters =
                     () => new CalendarSettingsViewModel(
                         useUserPreferences ? UserPreferences : null,
                         useInteractorFactory ? InteractorFactory : null,
-                        usePermissionsService ? PermissionsService : null,
-                        useRxActionFactory ? RxActionFactory : null
+                        useNavigationService ? NavigationService : null,
+                        useRxActionFactory ? RxActionFactory : null,
+                        usePermissionsService ? PermissionsService : null
                     );
 
                 tryingToConstructWithEmptyParameters.Should().Throw<ArgumentNullException>();
