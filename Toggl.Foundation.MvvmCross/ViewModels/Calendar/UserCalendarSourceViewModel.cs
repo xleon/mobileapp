@@ -3,7 +3,7 @@ using Toggl.Foundation.MvvmCross.Interfaces;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 {
-    public sealed class UserCalendarSourceViewModel : IDiffable<UserCalendarSourceViewModel>
+    public sealed class UserCalendarSourceViewModel : IDiffableByIdentifier<UserCalendarSourceViewModel>
     {
         public string Name { get; }
 

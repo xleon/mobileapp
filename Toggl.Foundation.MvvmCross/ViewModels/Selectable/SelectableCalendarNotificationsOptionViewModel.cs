@@ -4,7 +4,7 @@ using Toggl.Multivac;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.Selectable
 {
-    public sealed class SelectableCalendarNotificationsOptionViewModel : IDiffable<SelectableCalendarNotificationsOptionViewModel>
+    public sealed class SelectableCalendarNotificationsOptionViewModel : IDiffableByIdentifier<SelectableCalendarNotificationsOptionViewModel>
     {
         public CalendarNotificationsOption Option { get; }
 

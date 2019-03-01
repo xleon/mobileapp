@@ -11,13 +11,13 @@ namespace Toggl.Giskard.Extensions.Reactive
 {
     public static class RecyclerAdapterExtensions
     {
-        public static Action<IList<T>> Items<T>(this IReactive<BaseRecyclerAdapter<T>> reactive) where T : IDiffable<T>
+        public static Action<IList<T>> Items<T>(this IReactive<BaseRecyclerAdapter<T>> reactive) where T : IEquatable<T>
             => collection => reactive.Base.Items = collection;
 
         public static Action<IList<CollectionSection<TSection, TItem>>> Items<TSection, TItem, TSectionViewHolder, TItemViewHolder>
         (this IReactive<BaseSectionedRecyclerAdapter<TSection, TItem, TSectionViewHolder, TItemViewHolder>> reactive)
-        where TSection : IDiffable<TSection>
-        where TItem : IDiffable<TItem>
+        where TSection : IDiffableByIdentifier<TSection>
+        where TItem : IDiffableByIdentifier<TItem>
         where TSectionViewHolder : BaseRecyclerViewHolder<TSection>
         where TItemViewHolder : BaseRecyclerViewHolder<TItem>
             => collection => reactive.Base.Items = collection;

@@ -146,8 +146,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 intentDonationService,
                 stopwatchProvider,
                 rxActionFactory,
-                permissionsService
-            );
+                permissionsService,
+                schedulerProvider);
         }
 
         public override async Task Initialize()

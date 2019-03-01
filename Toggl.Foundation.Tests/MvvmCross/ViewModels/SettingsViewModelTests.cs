@@ -19,6 +19,7 @@ using Toggl.Foundation.MvvmCross.ViewModels.Settings;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.Mocks;
+using Toggl.Foundation.Tests.TestExtensions;
 using Toggl.Multivac;
 using Xunit;
 
@@ -61,7 +62,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     IntentDonationService,
                     StopwatchProvider,
                     RxActionFactory,
-                    PermissionsService);
+                    PermissionsService,
+                    SchedulerProvider);
             }
 
             protected virtual void SetupObservables()
@@ -87,7 +89,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useIntentDonationService,
                 bool useStopwatchProvider,
                 bool useRxActionFactory,
-                bool usePermissionsService)
+                bool usePermissionsService,
+                bool useSchedulerProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var platformInfo = useplatformInfo ? PlatformInfo : null;
@@ -103,6 +106,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var permissionsService = usePermissionsService ? PermissionsService : null;
+                var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new SettingsViewModel(
@@ -119,7 +123,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         intentDonationService,
                         stopwatchProvider,
                         rxActionFactory,
-                        permissionsService);
+                        permissionsService,
+                        schedulerProvider);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -144,9 +149,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     syncingObserver.Messages.Clear();
 
                     ProgressSubject.OnNext(state);
+                    TestScheduler.Start();
+                    TestScheduler.Stop();
 
-                    var isSynced = syncedObserver.Messages.Single().Value.Value;
-                    var isRunningSync = syncingObserver.Messages.Single().Value.Value;
+                    var isSynced = syncedObserver.SingleEmittedValue();
+                    var isRunningSync = syncingObserver.SingleEmittedValue();
 
                     (isRunningSync && isSynced).Should().BeFalse();
                 }
@@ -166,8 +173,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     observer.Messages.Clear();
 
                     ProgressSubject.OnNext(state);
+                    TestScheduler.Start();
+                    TestScheduler.Stop();
 
-                    var isRunningSync = observer.Messages.Single().Value.Value;
+                    var isRunningSync = observer.SingleEmittedValue();
                     isRunningSync.Should().Be(state == SyncProgress.Syncing);
                 }
             }
@@ -188,8 +197,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     observer.Messages.Clear();
 
                     ProgressSubject.OnNext(state);
+                    TestScheduler.Start();
+                    TestScheduler.Stop();
 
-                    var isSynced = observer.Messages.Single().Value.Value;
+                    var isSynced = observer.SingleEmittedValue();
                     isSynced.Should().Be(state == SyncProgress.Synced);
                 }
             }
@@ -206,6 +217,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 UserSubject.OnNext(new MockUser { Email = Email.From("newmail@mail.com") });
                 UserSubject.OnNext(new MockUser { Email = Email.From("newmail@mail.com") });
                 UserSubject.OnNext(new MockUser { Email = Email.From("differentmail@mail.com") });
+                TestScheduler.Start();
 
                 observer.Messages.Count.Should().Be(2);
             }
@@ -222,6 +234,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 UserSubject.OnNext(new MockUser { ImageUrl = "http://toggl.com/image.jpg" });
                 UserSubject.OnNext(new MockUser { ImageUrl = "http://toggl.com/image.jpg" });
                 UserSubject.OnNext(new MockUser { ImageUrl = "http://toggl.com/image2.jpg" });
+                TestScheduler.Start();
 
                 observer.Messages.Count.Should().Be(2);
             }
@@ -235,6 +248,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 UserSubject.OnNext(new MockUser { ImageUrl = "http://toggl.com/image.jpg" });
                 UserSubject.OnNext(new MockUser { ImageUrl = "http://toggl.com/image.jpg" });
                 UserSubject.OnNext(new MockUser { ImageUrl = "http://toggl.com/image2.jpg" });
+                TestScheduler.Start();
 
                 InteractorFactory.Received(2).GetUserAvatar(Arg.Any<string>());
             }
@@ -261,8 +275,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 doNotShowConfirmationDialog();
 
-                ViewModel.TryLogout.Execute();
                 TestScheduler.Start();
+                ViewModel.TryLogout.Execute();
 
                 await InteractorFactory.Received().Logout(LogoutSource.Settings).Execute();
             }
@@ -272,8 +286,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 doNotShowConfirmationDialog();
 
-                ViewModel.TryLogout.Execute();
                 TestScheduler.Start();
+                ViewModel.TryLogout.Execute();
 
                 await NavigationService.Received().Navigate<LoginViewModel>();
             }
@@ -283,8 +297,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 ProgressSubject.OnNext(SyncProgress.Synced);
 
-                ViewModel.TryLogout.Execute();
                 TestScheduler.Start();
+                ViewModel.TryLogout.Execute();
 
                 await DataSource.Received().HasUnsyncedData();
             }
@@ -294,8 +308,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 doNotShowConfirmationDialog();
 
-                ViewModel.TryLogout.Execute();
                 TestScheduler.Start();
+                ViewModel.TryLogout.Execute();
 
                 await DialogService.DidNotReceiveWithAnyArgs().Confirm("", "", "", "");
             }
@@ -306,8 +320,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DataSource.HasUnsyncedData().Returns(Observable.Return(false));
                 ProgressSubject.OnNext(SyncProgress.Syncing);
 
-                ViewModel.TryLogout.Execute();
                 TestScheduler.Start();
+                ViewModel.TryLogout.Execute();
 
                 await DialogService.ReceivedWithAnyArgs().Confirm("", "", "", "");
             }
@@ -318,8 +332,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DataSource.HasUnsyncedData().Returns(Observable.Return(true));
                 ProgressSubject.OnNext(SyncProgress.Syncing);
 
-                ViewModel.TryLogout.Execute();
                 TestScheduler.Start();
+                ViewModel.TryLogout.Execute();
 
                 await DialogService.ReceivedWithAnyArgs().Confirm("", "", "", "");
             }
@@ -334,8 +348,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Any<string>(),
                     Arg.Any<string>()).Returns(Observable.Return(false));
 
-                ViewModel.TryLogout.Execute();
                 TestScheduler.Start();
+                ViewModel.TryLogout.Execute();
 
                 InteractorFactory.DidNotReceive().Logout(Arg.Any<LogoutSource>());
                 await NavigationService.DidNotReceive().Navigate<LoginViewModel>();
@@ -351,8 +365,8 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Arg.Any<string>(),
                     Arg.Any<string>()).Returns(Observable.Return(true));
 
-                ViewModel.TryLogout.Execute();
                 TestScheduler.Start();
+                ViewModel.TryLogout.Execute();
 
                 await InteractorFactory.Received().Logout(LogoutSource.Settings).Execute();
                 await NavigationService.Received().Navigate<LoginViewModel>();
@@ -800,7 +814,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 viewModel.IsFeedbackSuccessViewShowing.StartWith(true).Subscribe(observer);
                 viewModel.CloseFeedbackSuccessView();
-                observer.Messages.Last().Value.Value.Should().BeFalse();
+                TestScheduler.Start();
+
+                observer.LastEmittedValue().Should().BeFalse();
             }
         }
 

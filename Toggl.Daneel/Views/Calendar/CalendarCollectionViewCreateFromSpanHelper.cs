@@ -9,7 +9,6 @@ using Toggl.Foundation.Helper;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using UIKit;
-using Math = System.Math;
 
 namespace Toggl.Daneel.Views.Calendar
 {
@@ -24,6 +23,8 @@ namespace Toggl.Daneel.Views.Calendar
         private NSIndexPath itemIndexPath;
 
         private CGPoint firstPoint;
+
+        private TimeSpan? previousDuration;
 
         private readonly ISubject<(DateTimeOffset, TimeSpan)> createFromSpanSuject = new Subject<(DateTimeOffset, TimeSpan)>();
 
@@ -51,7 +52,26 @@ namespace Toggl.Daneel.Views.Calendar
 
         [Export("gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:")]
         public bool ShouldRecognizeSimultaneously(UIGestureRecognizer gestureRecognizer, UIGestureRecognizer otherGestureRecognizer)
-            => otherGestureRecognizer is UILongPressGestureRecognizer;
+        {
+            if (gestureRecognizer == longPressGestureRecognizer)
+                return otherGestureRecognizer is UILongPressGestureRecognizer;
+            else
+                return false;
+        }
+
+        [Export("gestureRecognizer:shouldReceiveTouch:")]
+        public bool ShouldReceiveTouch(UIGestureRecognizer gestureRecognizer, UITouch touch)
+        {
+            if (gestureRecognizer == longPressGestureRecognizer)
+            {
+                var point = touch.LocationInView(CollectionView);
+                var thereIsNoItemAtPoint = dataSource.CalendarItemAtPoint(point) == null;
+                var isNotEditing = dataSource.IsEditing == false;
+                return thereIsNoItemAtPoint && isNotEditing;
+            }
+
+            return true;
+        }
 
         private void onLongPress(UILongPressGestureRecognizer gesture)
         {
@@ -72,11 +92,18 @@ namespace Toggl.Daneel.Views.Calendar
                     longPressEnded(point);
                     break;
 
-                case UIGestureRecognizerState.Cancelled when isEditing:
-                case UIGestureRecognizerState.Failed when isEditing:
-                    dataSource.RemoveItemView(itemIndexPath);
-                    dataSource.StopEditing();
+                case UIGestureRecognizerState.Failed:
                     itemIndexPath = null;
+                    break;
+
+                case UIGestureRecognizerState.Cancelled:
+                    if (itemIndexPath != null)
+                    {
+                        dataSource.RemoveItemView(itemIndexPath);
+                        dataSource.StopEditing();
+                        itemIndexPath = null;
+                    }
+
                     break;
             }
         }
@@ -92,6 +119,7 @@ namespace Toggl.Daneel.Views.Calendar
             itemIndexPath = dataSource.InsertItemView(startTime, defaultDuration);
             impactFeedback.ImpactOccurred();
             selectionFeedback.Prepare();
+            previousDuration = defaultDuration;
         }
 
         private bool isDraggingDown(CGPoint point) => firstPoint.Y < point.Y;
@@ -127,11 +155,17 @@ namespace Toggl.Daneel.Views.Calendar
             var duration = endTime - startTime;
 
             dataSource.UpdateItemView(itemIndexPath, startTime, duration);
-            selectionFeedback.SelectionChanged();
+
+            if (duration != previousDuration)
+            {
+                selectionFeedback.SelectionChanged();
+                previousDuration = duration;
+            }
         }
 
         private void longPressEnded(CGPoint point)
         {
+            previousDuration = null;
             LastPoint = point;
 
             DateTimeOffset startTime;
