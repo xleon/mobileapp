@@ -32,7 +32,7 @@ namespace Toggl.Giskard.ViewHolders
 
         protected override void UpdateView()
         {
-            checkbox.Checked = Item.InitiallySelected;
+            checkbox.Checked = Item.Selected;
             calendarName.Text = Item.Name;
         }
 

@@ -119,6 +119,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 SelectedCalendarIds.Remove(calendar.Id);
             else
                 SelectedCalendarIds.Add(calendar.Id);
+            calendar.Selected = !calendar.Selected;
         }
 
         private Task close()

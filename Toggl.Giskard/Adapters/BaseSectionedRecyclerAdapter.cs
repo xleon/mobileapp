@@ -19,8 +19,8 @@ namespace Toggl.Giskard.Adapters
     public abstract class BaseSectionedRecyclerAdapter<TSection, TItem, TSectionViewHolder, TItemViewHolder> : RecyclerView.Adapter
         where TItemViewHolder : BaseRecyclerViewHolder<TItem>
         where TSectionViewHolder : BaseRecyclerViewHolder<TSection>
-        where TItem : IDiffable<TItem>
-        where TSection : IDiffable<TSection>
+        where TItem : IDiffableByIdentifier<TItem>
+        where TSection : IDiffableByIdentifier<TSection>
     {
         public const int SectionViewType = 0;
         public const int ItemViewType = 1;

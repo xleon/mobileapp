@@ -48,7 +48,8 @@ namespace Toggl.Foundation.MvvmCross
                     foundation.TimeService,
                     foundation.AnalyticsService,
                     foundation.LastTimeUsageStorage,
-                    foundation.Scheduler);
+                    foundation.Scheduler,
+                    foundation.StopwatchProvider);
 
             ITogglDataSource createDataSource(ITogglApi api)
             {
@@ -60,6 +61,7 @@ namespace Toggl.Foundation.MvvmCross
                         foundation.AnalyticsService)
                     .RegisterServices();
 
+                Mvx.RegisterSingleton<ITogglApi>(api);
                 Mvx.ConstructAndRegisterSingleton<IInteractorFactory, InteractorFactory>();
                 Mvx.ConstructAndRegisterSingleton<IAutocompleteProvider, AutocompleteProvider>();
 

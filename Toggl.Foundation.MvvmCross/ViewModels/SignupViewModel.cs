@@ -26,6 +26,9 @@ using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using System.Reactive;
+using System.Reactive.Disposables;
+using Toggl.Foundation.Interactors.Timezones;
+using Toggl.Foundation.Serialization;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
@@ -51,12 +54,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly ITimeService timeService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IRxActionFactory rxActionFactory;
+        private readonly IPlatformInfo platformInfo;
 
         private IDisposable getCountrySubscription;
         private IDisposable signupDisposable;
         private bool termsOfServiceAccepted;
         private List<ICountry> allCountries;
         private long? countryId;
+        private string timezone;
 
         private readonly Subject<ShakeTargets> shakeSubject = new Subject<ShakeTargets>();
         private readonly Subject<bool> isShowPasswordButtonVisibleSubject = new Subject<bool>();
@@ -68,6 +73,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly BehaviorSubject<string> countryNameSubject = new BehaviorSubject<string>(Resources.SelectCountry);
         private readonly BehaviorSubject<bool> isCountryErrorVisibleSubject = new BehaviorSubject<bool>(false);
         private readonly Subject<Unit> successfulSignupSubject = new Subject<Unit>();
+        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         public IObservable<string> CountryButtonTitle { get; }
         public IObservable<bool> IsCountryErrorVisible { get; }
@@ -97,7 +103,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ILastTimeUsageStorage lastTimeUsageStorage,
             ITimeService timeService,
             ISchedulerProvider schedulerProvider,
-            IRxActionFactory rxActionFactory)
+            IRxActionFactory rxActionFactory,
+            IPlatformInfo platformInfo)
         {
             Ensure.Argument.IsNotNull(apiFactory, nameof(apiFactory));
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
@@ -109,6 +116,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
+            Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
 
             this.apiFactory = apiFactory;
             this.userAccessManager = userAccessManager;
@@ -120,6 +128,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.timeService = timeService;
             this.schedulerProvider = schedulerProvider;
             this.rxActionFactory = rxActionFactory;
+            this.platformInfo = platformInfo;
 
             Login = rxActionFactory.FromAsync(login);
             Signup = rxActionFactory.FromAsync(signup);
@@ -220,6 +229,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 );
         }
 
+        public override void ViewDisappeared()
+        {
+            base.ViewDisappeared();
+            disposeBag?.Dispose();
+        }
+
         private void setCountryIfNeeded(ICountry country)
         {
             if (countryId.HasValue) return;
@@ -263,11 +278,20 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             isLoadingSubject.OnNext(true);
             errorMessageSubject.OnNext(string.Empty);
 
-            signupDisposable =
-                userAccessManager
-                    .SignUp(emailSubject.Value, passwordSubject.Value, termsOfServiceAccepted, (int)countryId.Value)
-                    .Track(analyticsService.SignUp, AuthenticationMethod.EmailAndPassword)
-                    .Subscribe(onDataSource, onError, onCompleted);
+            var supportedTimezonesObs = new GetSupportedTimezonesInteractor(new JsonSerializer()).Execute();
+            signupDisposable = supportedTimezonesObs
+                .Select(supportedTimezones => supportedTimezones.FirstOrDefault(tz => platformInfo.TimezoneIdentifier == tz))
+                .SelectMany(timezone
+                    => userAccessManager
+                        .SignUp(
+                            emailSubject.Value,
+                            passwordSubject.Value,
+                            termsOfServiceAccepted,
+                             (int)countryId.Value,
+                            timezone)
+                )
+                .Track(analyticsService.SignUp, AuthenticationMethod.EmailAndPassword)
+                .Subscribe(onDataSource, onError, onCompleted);
         }
 
         private async void onDataSource(ITogglDataSource dataSource)
@@ -333,7 +357,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             errorMessageSubject.OnNext(string.Empty);
 
             signupDisposable = userAccessManager
-                .SignUpWithGoogle(termsOfServiceAccepted, (int)countryId.Value)
+                .SignUpWithGoogle(termsOfServiceAccepted, (int)countryId.Value, timezone)
                 .Track(analyticsService.SignUp, AuthenticationMethod.Google)
                 .Subscribe(onDataSource, onError, onCompleted);
         }
