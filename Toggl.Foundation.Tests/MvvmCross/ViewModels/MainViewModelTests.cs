@@ -838,9 +838,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 public async void DoesNotShowTheRatingViewByDefault()
                 {
                     await ViewModel.Initialize();
-                    await NavigationService.DidNotReceive().ChangePresentation(
-                        Arg.Is<ToggleRatingViewVisibilityHint>(hint => hint.ShouldHide == false)
-                    );
+
+                    var observer = TestScheduler.CreateObserver<bool>();
+                    ViewModel.ShouldShowRatingView.Subscribe(observer);
+
+                    TestScheduler.Start();
+                    observer.LastEmittedValue().Should().BeFalse();
                 }
 
                 [Fact, LogIfTooSlow]
@@ -858,9 +861,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     OnboardingStorage.GetFirstOpened().Returns(firstOpened);
 
                     await ViewModel.Initialize();
-                    await NavigationService.Received().ChangePresentation(
-                        Arg.Is<ToggleRatingViewVisibilityHint>(hint => hint.ShouldHide == false)
-                    );
+                    var observer = TestScheduler.CreateObserver<bool>();
+                    ViewModel.ShouldShowRatingView.Subscribe(observer);
+
+                    TestScheduler.Start();
+                    observer.LastEmittedValue().Should().BeTrue();
                 }
 
                 [Fact, LogIfTooSlow]
@@ -879,9 +884,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     OnboardingStorage.RatingViewOutcome().Returns(RatingViewOutcome.AppWasNotRated);
 
                     await ViewModel.Initialize();
-                    await NavigationService.DidNotReceive().ChangePresentation(
-                        Arg.Is<ToggleRatingViewVisibilityHint>(hint => hint.ShouldHide == false)
-                    );
+
+                    var observer = TestScheduler.CreateObserver<bool>();
+                    ViewModel.ShouldShowRatingView.Subscribe(observer);
+
+                    TestScheduler.Start();
+                    observer.LastEmittedValue().Should().BeFalse();
                 }
 
                 [Fact, LogIfTooSlow]
@@ -902,9 +910,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     OnboardingStorage.RatingViewOutcomeTime().Returns(lastInteraction);
 
                     await ViewModel.Initialize();
-                    await NavigationService.DidNotReceive().ChangePresentation(
-                        Arg.Is<ToggleRatingViewVisibilityHint>(hint => hint.ShouldHide == false)
-                    );
+
+                    var observer = TestScheduler.CreateObserver<bool>();
+                    ViewModel.ShouldShowRatingView.Subscribe(observer);
+
+                    TestScheduler.Start();
+                    observer.LastEmittedValue().Should().BeFalse();
                 }
             }
 
