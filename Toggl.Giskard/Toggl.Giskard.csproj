@@ -678,6 +678,8 @@
     <Compile Include="Activities\CalendarSettingsActivity.ViewBinds.cs">
       <DependentUpon>CalendarSettingsActivity.cs</DependentUpon>
     </Compile>
+    <Compile Include="BroadcastReceivers\BootCompletedBroadcastReceiver.cs" />
+    <Compile Include="Services\ScheduleEventNotificationsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
