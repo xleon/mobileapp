@@ -21,9 +21,11 @@ namespace Toggl.Tests.UI
         }
 
         [Test]
-        public void SigningUpWithCorrectCredentialsLeadsToTheMainScreen()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void SigningUpWithCorrectCredentialsLeadsToTheMainScreen(bool useUnicodeEmail)
         {
-            var email = randomEmail();
+            var email = useUnicodeEmail ? randomUnicodeEmail() : randomEmail();
             var password = "qwerty123";
 
             app.Tap(SignUp.EmailText);
@@ -136,5 +138,8 @@ namespace Toggl.Tests.UI
 
         private string randomEmail()
             => $"{Guid.NewGuid().ToString()}@toggl.space";
+
+        private string randomUnicodeEmail()
+            => $"{Guid.NewGuid().ToString()}用@टा子.广रкψSöф告.example.com";
     }
 }
