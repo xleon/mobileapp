@@ -28,5 +28,11 @@ namespace Toggl.Tests.UI.Extensions
         {
             app.TapNthCellInCollection(0);
         }
+
+        public static void EnterManualTimeEntryDuration(this IApp app, string duration)
+        {
+            app.Tap(StartTimeEntry.DurationLabel);
+            app.EnterText(duration);
+        }
     }
 }

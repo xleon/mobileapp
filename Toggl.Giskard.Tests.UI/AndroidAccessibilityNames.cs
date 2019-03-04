@@ -57,6 +57,13 @@ namespace Toggl.Tests.UI
         public const string CloseButton = "StartTimeEntryClose";
         public const string DialogDiscard = "Discard";
         public const string DialogCancel = "Cancel";
+        public const string DurationLabel = "StartTimeEntryDurationText";
+    }
+
+    public static class EditDuration
+    {
+        public const string WheelDurationInput = "WheelDurationInput";
+        public const string SaveButton = "SaveMenuItem";
     }
 
     public static class ForgotPassword

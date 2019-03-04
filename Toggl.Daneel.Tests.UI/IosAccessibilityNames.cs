@@ -62,6 +62,7 @@
         public const string DescriptionText = "StartTimeEntryDescription";
         public const string DialogDiscard = "Discard";
         public const string DialogCancel = "Cancel";
+        public const string DurationLabel = "DurationLabel";
     }
 
     public static class EditTimeEntry
