@@ -32,9 +32,23 @@ namespace Toggl.Tests.UI.Extensions
 
         public static void TapOnTimeEntryWithDescription(this IApp app, string description)
         {
-            Func<AppQuery, AppQuery> timeEntryCellSelector = x => x.Marked(Main.TimeEntryRow).Descendant().Text(description);
+            var timeEntryCellSelector = queryForTimeEntryCell(description);
             app.WaitForElement(timeEntryCellSelector);
             app.Tap(timeEntryCellSelector);
+        }
+
+        public static void SwipeEntryToDelete(this IApp app, string timeEntryDescription)
+        {
+            var timeEntryCellRect = RectForTimeEntryCell(app, timeEntryDescription);
+
+            app.DragCoordinates(
+                fromX: timeEntryCellRect.X + timeEntryCellRect.Width,
+                fromY: timeEntryCellRect.CenterY,
+                toX: timeEntryCellRect.X,
+                toY: timeEntryCellRect.CenterY
+            );
+
+            app.WaitForNoElement(x => x.Text(timeEntryDescription));
         }
 
         public static void PullToRefresh(this IApp app)
@@ -48,6 +62,18 @@ namespace Toggl.Tests.UI.Extensions
         {
             app.WaitForElement(Main.StopTimeEntryButton);
             app.Tap(Main.StopTimeEntryButton);
+            app.WaitForNoElement(Main.StopTimeEntryButton);
         }
+
+        public static AppRect RectForTimeEntryCell(this IApp app, string timeEntryDescription)
+        {
+            var timeEntryViews = app.Query(queryForTimeEntryCell(timeEntryDescription));
+            if (timeEntryViews.Length == 0)
+                return null;
+            return timeEntryViews[0].Rect;
+        }
+
+        private static Func<AppQuery, AppQuery> queryForTimeEntryCell(string timeEntryDescription)
+        => x => x.Marked(Main.TimeEntryRow).Descendant().Text(timeEntryDescription);
     }
 }
