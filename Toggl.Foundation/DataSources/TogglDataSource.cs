@@ -48,8 +48,6 @@ namespace Toggl.Foundation.DataSources
             SyncManager = createSyncManager(this);
 
             ReportsProvider = new ReportsProvider(api, database);
-
-            FeedbackApi = api.Feedback;
         }
 
         public ITimeEntriesSource TimeEntries { get; }
@@ -73,8 +71,6 @@ namespace Toggl.Foundation.DataSources
         public ISyncManager SyncManager { get; private set; }
 
         public IReportsProvider ReportsProvider { get; }
-
-        public IFeedbackApi FeedbackApi { get; }
 
         public IObservable<bool> HasUnsyncedData()
             => Observable.Merge(

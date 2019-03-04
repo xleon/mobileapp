@@ -25,8 +25,6 @@ namespace Toggl.Foundation.DataSources
 
         IReportsProvider ReportsProvider { get; }
 
-        IFeedbackApi FeedbackApi { get; }
-
         IObservable<bool> HasUnsyncedData();
     }
 }
