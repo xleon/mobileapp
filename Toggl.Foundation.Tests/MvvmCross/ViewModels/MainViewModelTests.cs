@@ -325,13 +325,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 subject.OnNext(timeEntry);
                 TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
 
-                var observer = TestScheduler.CreateObserver<Unit>();
-                ViewModel.StartTimeEntry.Execute(useDefaultMode)
-                    .Subscribe(observer);
+                var errors = TestScheduler.CreateObserver<Exception>();
+                ViewModel.StartTimeEntry.Errors.Subscribe(errors);
+                ViewModel.StartTimeEntry.Execute(useDefaultMode);
+
                 TestScheduler.Start();
 
-                observer.Messages.Count.Should().Be(1);
-                observer.Messages.Last().Value.Exception.Should().BeEquivalentTo(new RxActionNotEnabledException());
+                errors.Messages.Count.Should().Be(1);
+                errors.LastEmittedValue().Should().BeEquivalentTo(new RxActionNotEnabledException());
             }
 
             [Theory, LogIfTooSlow]
@@ -536,13 +537,13 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     .Execute()
                     .Returns(Observable.Throw<IThreadSafeTimeEntry>(new Exception()));
 
-                var observer = TestScheduler.CreateObserver<Unit>();
-                ViewModel.StopTimeEntry.Execute(Arg.Any<TimeEntryStopOrigin>())
-                    .Subscribe(observer);
+                var errors = TestScheduler.CreateObserver<Exception>();
+                ViewModel.StopTimeEntry.Errors.Subscribe(errors);
+                ViewModel.StopTimeEntry.Execute(Arg.Any<TimeEntryStopOrigin>());
+
                 TestScheduler.Start();
 
-                observer.Messages.Count().Should().Be(1);
-                observer.Messages.Last().Value.Kind.Should().Be(NotificationKind.OnError);
+                errors.Messages.Count().Should().Be(1);
                 await DataSource.SyncManager.DidNotReceive().PushSync();
             }
 
@@ -552,13 +553,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 subject.OnNext(null);
                 TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
 
-                var observer = TestScheduler.CreateObserver<Unit>();
-                ViewModel.StopTimeEntry.Execute(TimeEntryStopOrigin.Manual)
-                    .Subscribe(observer);
+                var errors = TestScheduler.CreateObserver<Exception>();
+                ViewModel.StopTimeEntry.Errors.Subscribe(errors);
+                ViewModel.StopTimeEntry.Execute(TimeEntryStopOrigin.Manual);
+
                 TestScheduler.Start();
 
-                observer.Messages.Count.Should().Be(1);
-                observer.Messages.Last().Value.Exception.Should().BeEquivalentTo(new RxActionNotEnabledException());
+                errors.Messages.Count.Should().Be(1);
+                errors.LastEmittedValue().Should().BeEquivalentTo(new RxActionNotEnabledException());
 
                 await InteractorFactory.DidNotReceive().StopTimeEntry(Arg.Any<DateTimeOffset>(), Arg.Any<TimeEntryStopOrigin>()).Execute();
             }

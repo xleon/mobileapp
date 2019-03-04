@@ -466,7 +466,7 @@ namespace Toggl.Daneel.ViewControllers
             {
                 var currentlyRunningTimeEntry = await ViewModel.CurrentRunningTimeEntry.FirstAsync();
                 if (currentlyRunningTimeEntry == null) return;
-                await ViewModel.SelectTimeEntry.Execute(currentlyRunningTimeEntry.Id);
+                await ViewModel.SelectTimeEntry.ExecuteWithCompletion(currentlyRunningTimeEntry.Id);
             });
             swipeUpRunningCardGesture.Direction = UISwipeGestureRecognizerDirection.Up;
             CurrentTimeEntryCard.AddGestureRecognizer(swipeUpRunningCardGesture);
