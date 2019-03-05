@@ -7,6 +7,7 @@ using Toggl.Foundation.Calendar;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
+using Toggl.Foundation.Reports;
 using Toggl.Foundation.Suggestions;
 using Toggl.Multivac;
 using Toggl.Multivac.Models.Reports;
@@ -198,6 +199,9 @@ namespace Toggl.Foundation.Interactors
 
         IInteractor<IObservable<ITimeEntriesTotals>> GetReportsTotals(
             long userId, long workspaceId, DateTimeOffset startDate, DateTimeOffset endDate);
+
+        IInteractor<IObservable<ProjectSummaryReport>> GetProjectSummary(
+            long workspaceId, DateTimeOffset startDate, DateTimeOffset? endDate);
 
         #endregion
     }
