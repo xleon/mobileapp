@@ -59,8 +59,14 @@ namespace Toggl.Foundation.Interactors
         public IInteractor<IObservable<Unit>> DeleteTimeEntry(long id)
             => new DeleteTimeEntryInteractor(timeService, dataSource.TimeEntries, this, id);
 
+        public IInteractor<IObservable<Unit>> DeleteMultipleTimeEntries(long[] ids)
+             => new DeleteMultipleTimeEntriesInteractor(dataSource.TimeEntries, this, ids);
+
         public IInteractor<IObservable<IThreadSafeTimeEntry>> GetTimeEntryById(long id)
             => new GetByIdInteractor<IThreadSafeTimeEntry, IDatabaseTimeEntry>(dataSource.TimeEntries, id);
+
+        public IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> GetMultipleTimeEntriesById(long[] ids)
+            => new GetMultipleByIdInteractor<IThreadSafeTimeEntry, IDatabaseTimeEntry>(dataSource.TimeEntries, ids);
 
         public IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> GetAllTimeEntriesVisibleToTheUser()
             => new GetAllTimeEntriesVisibleToTheUserInteractor(dataSource.TimeEntries);
@@ -70,6 +76,9 @@ namespace Toggl.Foundation.Interactors
 
         public IInteractor<IObservable<IThreadSafeTimeEntry>> UpdateTimeEntry(EditTimeEntryDto dto)
             => new UpdateTimeEntryInteractor(timeService, dataSource, this, dto);
+
+        public IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> UpdateMultipleTimeEntries(EditTimeEntryDto[] dtos)
+            => new UpdateMultipleTimeEntriesInteractor(this, dtos);
 
         public IInteractor<IObservable<IThreadSafeTimeEntry>> StopTimeEntry(DateTimeOffset currentDateTime, TimeEntryStopOrigin origin)
             => new StopTimeEntryInteractor(timeService, dataSource.TimeEntries, currentDateTime, analyticsService, origin);

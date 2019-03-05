@@ -63,13 +63,14 @@ namespace Toggl.Giskard.Activities
         {
             var storage = ViewModel.OnboardingStorage;
 
-            new CategorizeTimeUsingProjectsOnboardingStep(storage, ViewModel.HasProject)
-                .ManageDismissableTooltip(
-                    projectTooltip,
-                    projectContainer,
-                    (window, view) => PopupOffsets.FromDp(16, 8, this),
-                    storage)
-                .DisposedBy(DisposeBag);
+            // TODO: Fix in Giskard Edit TE View branch
+            //new CategorizeTimeUsingProjectsOnboardingStep(storage, ViewModel.HasProject)
+            //    .ManageDismissableTooltip(
+            //        projectTooltip,
+            //        projectContainer,
+            //        (window, view) => PopupOffsets.FromDp(16, 8, this),
+            //        storage)
+            //    .DisposedBy(DisposeBag);
         }
 
         public override void Finish()
@@ -80,40 +81,43 @@ namespace Toggl.Giskard.Activities
 
         private void setupBindings()
         {
-            startTimeArea.Rx().Tap()
-                .Subscribe(_ => ViewModel.SelectStartTimeCommand.Execute())
-                .DisposedBy(DisposeBag);
+            // TODO: Fix in Giskard Edit TE View branch
+            //startTimeArea.Rx().Tap()
+            //    .Subscribe(_ => ViewModel.SelectStartTimeCommand.Execute())
+            //    .DisposedBy(DisposeBag);
 
-            stopTimeArea.Rx().Tap()
-                .Subscribe(_ => ViewModel.SelectStopTimeCommand.Execute())
-                .DisposedBy(DisposeBag);
+            //stopTimeArea.Rx().Tap()
+            //    .Subscribe(_ => ViewModel.SelectStopTimeCommand.Execute())
+            //    .DisposedBy(DisposeBag);
 
-            durationArea.Rx().Tap()
-                .Subscribe(_ => ViewModel.SelectDurationCommand.Execute())
-                .DisposedBy(DisposeBag);
+            //durationArea.Rx().Tap()
+            //    .Subscribe(_ => ViewModel.SelectDurationCommand.Execute())
+            //    .DisposedBy(DisposeBag);
 
-            ViewModel.ProjectTaskOrClientChanged
-                     .WithLatestFrom(ViewModel.HasProject, (_, hasProject) => hasProject)
-                     .Subscribe(onProjectTaskOrClientChanged)
-                     .DisposedBy(DisposeBag);
+            //ViewModel.ProjectTaskOrClientChanged
+            //         .WithLatestFrom(ViewModel.HasProject, (_, hasProject) => hasProject)
+            //         .Subscribe(onProjectTaskOrClientChanged)
+            //         .DisposedBy(DisposeBag);
         }
 
         private void onProjectTaskOrClientChanged(bool hasProject)
         {
-            projectTaskClientTextView.TextFormatted =
-                TimeEntryExtensions.ToProjectTaskClient(
-                    hasProject,
-                    ViewModel.Project,
-                    ViewModel.ProjectColor,
-                    ViewModel.Task,
-                    ViewModel.Client);
+            // TODO: Fix in Giskard Edit TE View branch
+            //projectTaskClientTextView.TextFormatted =
+            //    TimeEntryExtensions.ToProjectTaskClient(
+            //        hasProject,
+            //        ViewModel.Project,
+            //        ViewModel.ProjectColor,
+            //        ViewModel.Task,
+            //        ViewModel.Client);
         }
 
         public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
         {
             if (keyCode == Keycode.Back)
             {
-                ViewModel.CloseCommand.ExecuteAsync();
+                // TODO: Fix in Giskard Edit TE View branch
+                // ViewModel.CloseCommand.ExecuteAsync();
                 return true;
             }
 

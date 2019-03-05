@@ -94,9 +94,10 @@ namespace Toggl.Daneel.ViewControllers
                 Color.EditTimeEntry.ClientText.ToNativeColor(),
                 false
             );
-            var stopRunningTimeEntryAndSelectStopTimeForStoppedConverter = new BoolToConstantValueConverter<IMvxCommand>(
-                ViewModel.StopCommand, ViewModel.SelectStopTimeCommand);
-
+            // TODO: Fix in Daneel Edit TE View branch
+            //var stopRunningTimeEntryAndSelectStopTimeForStoppedConverter = new BoolToConstantValueConverter<IMvxCommand>(
+            //    ViewModel.StopCommand, ViewModel.SelectStopTimeCommand);
+            //
             var isInaccessibleTextColorConverter = new BoolToConstantValueConverter<UIColor>(
                 Color.Common.Disabled.ToNativeColor(),
                 Color.Common.TextColor.ToNativeColor()
@@ -111,169 +112,170 @@ namespace Toggl.Daneel.ViewControllers
                       .For(v => v.Text)
                       .To(vm => vm.SyncErrorMessage);
 
-            bindingSet.Bind(ErrorView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.DismissSyncErrorMessageCommand);
+            // TODO: Fix in Daneel Edit TE View branch
+            //bindingSet.Bind(ErrorView)
+            //          .For(v => v.BindTap())
+            //          .To(vm => vm.DismissSyncErrorMessageCommand);
 
-            bindingSet.Bind(ErrorView)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.SyncErrorMessageVisible)
-                      .WithConversion(inverterVisibilityConverter);
+            //bindingSet.Bind(ErrorView)
+            //          .For(v => v.BindVisible())
+            //          .To(vm => vm.SyncErrorMessageVisible)
+            //          .WithConversion(inverterVisibilityConverter);
 
             //Text
-            bindingSet.Bind(DescriptionTextView)
-                      .For(v => v.BindText())
-                      .To(vm => vm.Description);
+            //bindingSet.Bind(DescriptionTextView)
+            //          .For(v => v.BindText())
+            //          .To(vm => vm.Description);
 
-            bindingSet.Bind(DescriptionTextView)
-                      .For(v => v.BindDidBecomeFirstResponder())
-                      .To(vm => vm.StartEditingDescriptionCommand);
+            //bindingSet.Bind(DescriptionTextView)
+            //          .For(v => v.BindDidBecomeFirstResponder())
+            //          .To(vm => vm.StartEditingDescriptionCommand);
 
-            bindingSet.Bind(DurationLabel)
-                      .ByCombining(durationCombiner,
-                          vm => vm.Duration,
-                          vm => vm.DurationFormat);
+            //bindingSet.Bind(DurationLabel)
+            //          .ByCombining(durationCombiner,
+            //              vm => vm.Duration,
+            //              vm => vm.DurationFormat);
 
-            bindingSet.Bind(ProjectTaskClientLabel)
-                      .For(v => v.AttributedText)
-                      .ByCombining(projectTaskClientCombiner,
-                          v => v.Project,
-                          v => v.Task,
-                          v => v.Client,
-                          v => v.ProjectColor);
+            //bindingSet.Bind(ProjectTaskClientLabel)
+            //          .For(v => v.AttributedText)
+            //          .ByCombining(projectTaskClientCombiner,
+            //              v => v.Project,
+            //              v => v.Task,
+            //              v => v.Client,
+            //              v => v.ProjectColor);
 
-            bindingSet.Bind(StartDateLabel)
-                      .ByCombining(dateCombiner,
-                          vm => vm.StartTime,
-                          vm => vm.DateFormat);
+            //bindingSet.Bind(StartDateLabel)
+            //          .ByCombining(dateCombiner,
+            //              vm => vm.StartTime,
+            //              vm => vm.DateFormat);
 
-            bindingSet.Bind(StartTimeLabel)
-                      .ByCombining(timeCombiner,
-                          vm => vm.StartTime,
-                          vm => vm.TimeFormat);
+            //bindingSet.Bind(StartTimeLabel)
+            //          .ByCombining(timeCombiner,
+            //              vm => vm.StartTime,
+            //              vm => vm.TimeFormat);
 
-            bindingSet.Bind(EndTimeLabel)
-                      .ByCombining(timeCombiner,
-                          vm => vm.StopTime,
-                          vm => vm.TimeFormat);
+            //bindingSet.Bind(EndTimeLabel)
+            //          .ByCombining(timeCombiner,
+            //              vm => vm.StopTime,
+            //              vm => vm.TimeFormat);
 
-            //Commands
-            bindingSet.Bind(CloseButton).To(vm => vm.CloseCommand);
-            bindingSet.Bind(DeleteButton).To(vm => vm.DeleteCommand);
-            bindingSet.Bind(ConfirmButton).To(vm => vm.SaveCommand);
+            ////Commands
+            //bindingSet.Bind(CloseButton).To(vm => vm.CloseCommand);
+            //bindingSet.Bind(DeleteButton).To(vm => vm.DeleteCommand);
+            //bindingSet.Bind(ConfirmButton).To(vm => vm.SaveCommand);
 
-            bindingSet.Bind(DurationView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectDurationCommand);
+            //bindingSet.Bind(DurationView)
+            //          .For(v => v.BindTap())
+            //          .To(vm => vm.SelectDurationCommand);
 
-            bindingSet.Bind(StartTimeView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectStartTimeCommand);
+            //bindingSet.Bind(StartTimeView)
+            //          .For(v => v.BindTap())
+            //          .To(vm => vm.SelectStartTimeCommand);
 
-            bindingSet.Bind(StopButton)
-                      .To(vm => vm.StopCommand);
+            //bindingSet.Bind(StopButton)
+            //          .To(vm => vm.StopCommand);
 
-            bindingSet.Bind(EndTimeView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.IsTimeEntryRunning)
-                      .WithConversion(stopRunningTimeEntryAndSelectStopTimeForStoppedConverter);
+            //bindingSet.Bind(EndTimeView)
+            //          .For(v => v.BindTap())
+            //          .To(vm => vm.IsTimeEntryRunning)
+            //          .WithConversion(stopRunningTimeEntryAndSelectStopTimeForStoppedConverter);
 
-            bindingSet.Bind(ProjectTaskClientLabel)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectProjectCommand);
+            //bindingSet.Bind(ProjectTaskClientLabel)
+            //          .For(v => v.BindTap())
+            //          .To(vm => vm.SelectProjectCommand);
 
-            bindingSet.Bind(AddProjectAndTaskView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectProjectCommand);
+            //bindingSet.Bind(AddProjectAndTaskView)
+            //          .For(v => v.BindTap())
+            //          .To(vm => vm.SelectProjectCommand);
 
-            bindingSet.Bind(StartDateView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectStartDateCommand);
+            //bindingSet.Bind(StartDateView)
+            //          .For(v => v.BindTap())
+            //          .To(vm => vm.SelectStartDateCommand);
 
-            bindingSet.Bind(TagsTextView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectTagsCommand);
+            //bindingSet.Bind(TagsTextView)
+            //          .For(v => v.BindTap())
+            //          .To(vm => vm.SelectTagsCommand);
 
-            bindingSet.Bind(AddTagsView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectTagsCommand);
+            //bindingSet.Bind(AddTagsView)
+            //          .For(v => v.BindTap())
+            //          .To(vm => vm.SelectTagsCommand);
 
-            bindingSet.Bind(BillableSwitch)
-                      .For(v => v.BindValueChanged())
-                      .To(vm => vm.ToggleBillableCommand);
+            //bindingSet.Bind(BillableSwitch)
+            //          .For(v => v.BindValueChanged())
+            //          .To(vm => vm.ToggleBillableCommand);
 
-            //End time and the stop button visibility
-            bindingSet.Bind(StopButton)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.IsTimeEntryRunning)
-                      .WithConversion(inverterVisibilityConverter);
+            ////End time and the stop button visibility
+            //bindingSet.Bind(StopButton)
+            //          .For(v => v.BindVisible())
+            //          .To(vm => vm.IsTimeEntryRunning)
+            //          .WithConversion(inverterVisibilityConverter);
 
-            bindingSet.Bind(EndTimeLabel)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.IsTimeEntryRunning)
-                      .WithConversion(visibilityConverter);
+            //bindingSet.Bind(EndTimeLabel)
+            //          .For(v => v.BindVisible())
+            //          .To(vm => vm.IsTimeEntryRunning)
+            //          .WithConversion(visibilityConverter);
 
-            //Project visibility
-            bindingSet.Bind(AddProjectAndTaskView)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.Project)
-                      .WithConversion(visibilityConverter);
+            ////Project visibility
+            //bindingSet.Bind(AddProjectAndTaskView)
+            //          .For(v => v.BindVisible())
+            //          .To(vm => vm.Project)
+            //          .WithConversion(visibilityConverter);
 
-            bindingSet.Bind(ProjectTaskClientLabel)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.Project)
-                      .WithConversion(inverterVisibilityConverter);
+            //bindingSet.Bind(ProjectTaskClientLabel)
+            //          .For(v => v.BindVisible())
+            //          .To(vm => vm.Project)
+            //          .WithConversion(inverterVisibilityConverter);
 
-            //Tags visibility
-            bindingSet.Bind(AddTagsView)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.HasTags)
-                      .WithConversion(visibilityConverter);
+            ////Tags visibility
+            //bindingSet.Bind(AddTagsView)
+            //          .For(v => v.BindVisible())
+            //          .To(vm => vm.HasTags)
+            //          .WithConversion(visibilityConverter);
 
-            bindingSet.Bind(TagsTextView)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.HasTags)
-                      .WithConversion(inverterVisibilityConverter);
+            //bindingSet.Bind(TagsTextView)
+            //          .For(v => v.BindVisible())
+            //          .To(vm => vm.HasTags)
+            //          .WithConversion(inverterVisibilityConverter);
 
-            //Billable view
-            bindingSet.Bind(BillableView)
-                      .For(v => v.BindVisibility())
-                      .To(vm => vm.IsBillableAvailable)
-                      .WithConversion(visibilityConverter);
+            ////Billable view
+            //bindingSet.Bind(BillableView)
+            //          .For(v => v.BindVisibility())
+            //          .To(vm => vm.IsBillableAvailable)
+            //          .WithConversion(visibilityConverter);
 
-            //Regarding inaccessible entries
-            getLabelsToChangeColorWhenEditingInaccessibleEntry().ForEach(createTextColorBindingForInaccessibleEntries);
+            ////Regarding inaccessible entries
+            //getLabelsToChangeColorWhenEditingInaccessibleEntry().ForEach(createTextColorBindingForInaccessibleEntries);
 
-            bindingSet.Bind(DescriptionTextView)
-                      .For(v => v.TextColor)
-                      .To(vm => vm.IsInaccessible)
-                      .WithConversion(isInaccessibleTextColorConverter);
+            //bindingSet.Bind(DescriptionTextView)
+            //          .For(v => v.TextColor)
+            //          .To(vm => vm.IsInaccessible)
+            //          .WithConversion(isInaccessibleTextColorConverter);
 
-            bindingSet.Bind(DescriptionTextView)
-                      .For(v => v.UserInteractionEnabled)
-                      .To(vm => vm.IsInaccessible)
-                      .WithConversion(invertedBoolConverter);
+            //bindingSet.Bind(DescriptionTextView)
+            //          .For(v => v.UserInteractionEnabled)
+            //          .To(vm => vm.IsInaccessible)
+            //          .WithConversion(invertedBoolConverter);
 
-            bindingSet.Bind(BillableSwitch)
-                      .For(v => v.Enabled)
-                      .To(vm => vm.IsInaccessible)
-                      .WithConversion(invertedBoolConverter);
+            //bindingSet.Bind(BillableSwitch)
+            //          .For(v => v.Enabled)
+            //          .To(vm => vm.IsInaccessible)
+            //          .WithConversion(invertedBoolConverter);
 
-            bindingSet.Bind(TagsContainerView)
-                      .For(v => v.Hidden)
-                      .ByCombining(showTagsCombiner,
-                                   vm => vm.IsInaccessible,
-                                   vm => vm.HasTags)
-                      .WithConversion(invertedBoolConverter);
+            //bindingSet.Bind(TagsContainerView)
+            //          .For(v => v.Hidden)
+            //          .ByCombining(showTagsCombiner,
+            //                       vm => vm.IsInaccessible,
+            //                       vm => vm.HasTags)
+            //          .WithConversion(invertedBoolConverter);
 
-            bindingSet.Bind(TagsSeparator)
-                      .For(v => v.Hidden)
-                      .ByCombining(showTagsCombiner,
-                                   vm => vm.IsInaccessible,
-                                   vm => vm.HasTags)
-                      .WithConversion(invertedBoolConverter);
+            //bindingSet.Bind(TagsSeparator)
+            //          .For(v => v.Hidden)
+            //          .ByCombining(showTagsCombiner,
+            //                       vm => vm.IsInaccessible,
+            //                       vm => vm.HasTags)
+            //          .WithConversion(invertedBoolConverter);
 
-            bindingSet.Apply();
+            //bindingSet.Apply();
 
             void createTextColorBindingForInaccessibleEntries(UILabel label)
             {
@@ -304,7 +306,10 @@ namespace Toggl.Daneel.ViewControllers
 
         public async Task<bool> Dismiss()
         {
-            return await ViewModel.CloseWithConfirmation();
+            // TODO: Fix in Daneel Edit TE View branch
+            //return await ViewModel.CloseWithConfirmation();
+            await Task.Delay(100);
+            return false;
         }
 
         IEnumerable<UILabel> getLabelsToChangeColorWhenEditingInaccessibleEntry()
@@ -322,7 +327,8 @@ namespace Toggl.Daneel.ViewControllers
             prepareDescriptionField();
             centerTextVertically(TagsTextView);
             TagsTextView.TextContainer.LineFragmentPadding = 0;
-            BillableSwitch.SetState(ViewModel.Billable, false);
+            // TODO: Fix in Daneel Edit TE View branch
+            //BillableSwitch.SetState(ViewModel.Billable, false);
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
             {
@@ -350,8 +356,9 @@ namespace Toggl.Daneel.ViewControllers
         {
             var storage = ViewModel.OnboardingStorage;
 
-            hasProjectSubject = new BehaviorSubject<bool>(!String.IsNullOrEmpty(ViewModel.Project));
-            hasProjectDisposable = ViewModel.WeakSubscribe(() => ViewModel.Project, onProjectChanged);
+            // TODO: Fix in Daneel Edit TE View branch
+            //hasProjectSubject = new BehaviorSubject<bool>(!String.IsNullOrEmpty(ViewModel.Project));
+            //hasProjectDisposable = ViewModel.WeakSubscribe(() => ViewModel.Project, onProjectChanged);
 
             projectOnboardingDisposable = new CategorizeTimeUsingProjectsOnboardingStep(storage, hasProjectSubject.AsObservable())
                 .ManageDismissableTooltip(CategorizeWithProjectsBubbleView, storage);
@@ -359,7 +366,8 @@ namespace Toggl.Daneel.ViewControllers
 
         private void onProjectChanged(object sender, PropertyChangedEventArgs args)
         {
-            hasProjectSubject.OnNext(!String.IsNullOrEmpty(ViewModel.Project));
+            // TODO: Fix in Daneel Edit TE View branch
+            //hasProjectSubject.OnNext(!String.IsNullOrEmpty(ViewModel.Project));
         }
 
         private void onContentSizeChanged(NSObservedChange change)
