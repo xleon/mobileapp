@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Reactive;
@@ -47,17 +47,16 @@ namespace SiriExtension
                         SharedStorage.instance.SetNeedsSync(true);
 
                         var timeSpan = TimeSpan.FromSeconds(te.Duration ?? 0);
-                        var durationString = $"{timeSpan.Hours} hours, {timeSpan.Minutes} minutes and {timeSpan.Seconds} seconds";
-                        
+
                         var response = StopTimerIntentResponse.SuccessIntentResponseWithEntryDescription(
                             te.Description,
-                            durationString
+                            durationStringForTimeSpan(timeSpan)
                         );
                         response.EntryStart = te.Start.ToUnixTimeSeconds();
                         response.EntryDuration = te.Duration;
 
                         SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.StopTimer());
-                        
+
                         // Once Xamarin's bug if fixed we have to use tha above response instead of this one.
                         //var response = new StopTimerIntentResponse(StopTimerIntentResponseCode.Success, null);
                         completion(response);
@@ -68,6 +67,21 @@ namespace SiriExtension
                         SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
                         completion(responseFromException(exception));
                     });
+        }
+
+        private string durationStringForTimeSpan(TimeSpan timeSpan)
+        {
+            if (timeSpan.Hours == 0 && timeSpan.Minutes == 0)
+            {
+                return $"{timeSpan.Seconds} seconds";
+            }
+
+            if (timeSpan.Hours == 0)
+            {
+                return $"{timeSpan.Minutes} minutes and {timeSpan.Seconds} seconds";
+            }
+
+            return $"{timeSpan.Hours} hours, {timeSpan.Minutes} minutes and {timeSpan.Seconds} seconds";
         }
 
         private ITimeEntry getRunningTimeEntry(IList<ITimeEntry> timeEntries)
