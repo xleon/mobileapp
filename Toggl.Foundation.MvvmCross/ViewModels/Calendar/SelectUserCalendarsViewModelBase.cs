@@ -21,10 +21,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 {
     public abstract class SelectUserCalendarsViewModelBase : MvxViewModel<bool, string[]>
     {
+        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
+
         protected readonly IUserPreferences UserPreferences;
         private readonly IInteractorFactory interactorFactory;
         private readonly IMvxNavigationService navigationService;
         private readonly IRxActionFactory rxActionFactory;
+
+        private ISubject<bool> doneEnabledSubject = new BehaviorSubject<bool>(false);
 
         private ISubject<IImmutableList<CollectionSection<UserCalendarSourceViewModel, SelectableUserCalendarViewModel>>> calendarsSubject =
             new BehaviorSubject<IImmutableList<CollectionSection<UserCalendarSourceViewModel, SelectableUserCalendarViewModel>>>(
@@ -60,6 +64,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             SelectCalendar = rxActionFactory.FromAction<SelectableUserCalendarViewModel>(toggleCalendarSelection);
 
             Calendars = calendarsSubject.AsObservable().DistinctUntilChanged();
+
+            Close = rxActionFactory.FromAsync(close);
+            Done = rxActionFactory.FromAsync(done, doneEnabledSubject.AsObservable());
         }
 
         public sealed override void Prepare(bool parameter)
@@ -82,9 +89,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                     .Select(_ => SelectedCalendarIds.Any())
                     .DistinctUntilChanged()
                 : Observable.Return(true);
-
-            Close = rxActionFactory.FromAsync(close);
-            Done = rxActionFactory.FromAsync(done, enabledObservable);
+            enabledObservable.Subscribe(doneEnabledSubject).DisposedBy(disposeBag);
         }
 
         protected async Task ReloadCalendars()
