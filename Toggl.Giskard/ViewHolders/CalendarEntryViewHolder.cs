@@ -1,14 +1,18 @@
 using System;
+using Android.Graphics;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using Toggl.Foundation.Calendar;
+using Toggl.Giskard.Extensions;
 
 namespace Toggl.Giskard.ViewHolders
 {
-    public class CalendarEntryViewHolder : RecyclerView.ViewHolder
+    public class CalendarEntryViewHolder : BaseRecyclerViewHolder<CalendarItem>
     {
-        public TextView label;
+        private bool isInEditMode;
+        private float defaultElevation;
+        private TextView label;
 
         public CalendarEntryViewHolder(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         {
@@ -16,7 +20,26 @@ namespace Toggl.Giskard.ViewHolders
 
         public CalendarEntryViewHolder(View itemView) : base(itemView)
         {
-            label = itemView.FindViewById<TextView>(Resource.Id.EntryLabel);
+        }
+
+        protected override void InitializeViews()
+        {
+            label = ItemView.FindViewById<TextView>(Resource.Id.EntryLabel);
+            defaultElevation = ItemView.Elevation;
+        }
+
+        protected override void UpdateView()
+        {
+            ItemView.Background.SetTint(Color.ParseColor(Item.Color));
+            label.Text = Item.Description;
+        }
+
+        public void SetIsInEditMode(bool editModeEnabled)
+        {
+            isInEditMode = editModeEnabled;
+            ItemView.Elevation = isInEditMode
+                ? defaultElevation + 4.DpToPixels(ItemView.Context)
+                : defaultElevation;
         }
     }
 }

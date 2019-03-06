@@ -2,11 +2,16 @@ using System;
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Util;
+using Android.Views;
+using Toggl.Foundation;
+using Toggl.Foundation.Helper;
 using Toggl.Giskard.Extensions;
 using Toggl.Multivac;
 using Color = Android.Graphics.Color;
@@ -16,16 +21,20 @@ namespace Toggl.Giskard.Views
     [Register("toggl.giskard.views.CalendarRecyclerView")]
     public class CalendarRecyclerView : RecyclerView
     {
-        private const int hoursPerDay = 24;
+        private const int hoursPerDay = Constants.HoursPerDay;
+        private const float secondsInOneHour = 60f * 60f;
 
         private static readonly string twelveHoursFormat = Foundation.Resources.TwelveHoursFormat;
         private static readonly string twentyFourHoursFormat = Foundation.Resources.TwentyFourHoursFormat;
 
+        private readonly ISubject<PointF> emptySpaceTouchedSubject = new Subject<PointF>();
+
         private TimeFormat timeOfDayFormat = TimeFormat.TwelveHoursFormat;
+        private ITimeService timeService;
         private bool hasTwoColumns;
 
         private float hoursX;
-        private float timeSliceHeight;
+        private float hourHeight;
         private float timeSliceStartX;
         private float timeSlicesTopPadding;
         private float verticalLineLeftMargin;
@@ -34,6 +43,8 @@ namespace Toggl.Giskard.Views
         private ImmutableArray<string> hours = ImmutableArray<string>.Empty;
         private ImmutableArray<float> timeLinesYs = ImmutableArray<float>.Empty;
         private ImmutableArray<float> hoursYs = ImmutableArray<float>.Empty;
+
+        private PointF lastTouch;
 
         private readonly Paint hoursLabelPaint = new Paint(PaintFlags.AntiAlias)
         {
@@ -45,6 +56,11 @@ namespace Toggl.Giskard.Views
         {
             Color = Color.ParseColor("#19000000")
         };
+
+        private int maxDistanceBetweenDownAndUpTouches;
+
+        public IObservable<DateTimeOffset> EmptySpansTouchedObservable
+            => emptySpaceTouchedSubject.Select(pointToDateTimeOffset);
 
         #region Constructors
         protected CalendarRecyclerView(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
@@ -70,12 +86,13 @@ namespace Toggl.Giskard.Views
         {
             hoursLabelPaint.TextSize = 12.SpToPixels(Context);
             linesPaint.StrokeWidth = 1.DpToPixels(Context);
-            timeSliceHeight = 56.DpToPixels(Context);
+            hourHeight = 56.DpToPixels(Context);
             timeSliceStartX = 60.DpToPixels(Context);
             timeSlicesTopPadding = 0;
             verticalLineLeftMargin = 68.DpToPixels(Context);
             hoursDistanceFromTimeLine = 12.DpToPixels(Context);
             hoursX = timeSliceStartX - hoursDistanceFromTimeLine;
+            maxDistanceBetweenDownAndUpTouches = 6.DpToPixels(Context);
         }
 
         #endregion
@@ -89,6 +106,76 @@ namespace Toggl.Giskard.Views
             middleLineX = verticalLineLeftMargin + (Width - verticalLineLeftMargin) / 2f;
         }
 
+        public override bool OnTouchEvent(MotionEvent motionEvent)
+        {
+            switch (motionEvent.Action)
+            {
+                case MotionEventActions.Down:
+                    var touchDown = motionEvent.ToPointF();
+                    if (pointIsInActionableArea(touchDown))
+                    {
+                        lastTouch = touchDown;
+                    }
+                    return base.OnTouchEvent(motionEvent);
+
+                case MotionEventActions.Up:
+                    var touchUp = motionEvent.ToPointF();
+                    if (pointIsInActionableArea(touchUp)
+                        && touchUpIsCloseEnoughToLastTouch(touchUp)
+                        && !lastTouchInterceptsAnyChild(touchUp))
+                    {
+                        emptySpaceTouchedSubject.OnNext(touchUp);
+                    }
+
+                    lastTouch = null;
+                    return base.OnTouchEvent(motionEvent);
+
+                case MotionEventActions.Cancel:
+                case MotionEventActions.Outside:
+                    lastTouch = null;
+                    return base.OnTouchEvent(motionEvent);
+
+                default:
+                    return base.OnTouchEvent(motionEvent);
+            }
+        }
+
+        public void SetTimeService(ITimeService timeService)
+        {
+            this.timeService = timeService;
+        }
+        
+        private DateTimeOffset pointToDateTimeOffset(PointF point)
+        {
+            var seconds = (point.Y + ComputeVerticalScrollOffset()) / hourHeight * secondsInOneHour;
+            var timeSpan = TimeSpan.FromSeconds(seconds);
+            return todayDate() + timeSpan;
+        }
+
+        private DateTime todayDate()
+        {
+            return timeService?.CurrentDateTime.ToLocalTime().Date ?? DateTimeOffset.Now.Date;
+        }
+
+        private bool pointIsInActionableArea(PointF point)
+        {
+            var minX = hasTwoColumns ? middleLineX : verticalLineLeftMargin;
+            return point.X > minX;
+        }
+
+        private bool lastTouchInterceptsAnyChild(PointF touchUp)
+            => FindChildViewUnder(touchUp.X, touchUp.Y) != null;
+
+        private bool touchUpIsCloseEnoughToLastTouch(PointF touchUp)
+        {
+            if (lastTouch == null)
+                return false;
+
+            var distance = Multivac.Math.DistanceSq(touchUp.ToPoint(), lastTouch.ToPoint());
+
+            return distance < maxDistanceBetweenDownAndUpTouches;
+        }
+
         private ImmutableArray<string> createHours()
         {
             DateTime date = new DateTime();
@@ -98,10 +185,9 @@ namespace Toggl.Giskard.Views
                 .ToImmutableArray();
         }
 
-
         private ImmutableArray<float> createTimeLinesYPositions()
          => Enumerable.Range(0, hoursPerDay)
-             .Select(line => line * timeSliceHeight + timeSlicesTopPadding)
+             .Select(line => line * hourHeight + timeSlicesTopPadding)
              .ToImmutableArray();
 
         public override void OnDraw(Canvas canvas)
@@ -123,10 +209,10 @@ namespace Toggl.Giskard.Views
             }
         }
 
-        public void SetHasTwoColumns(bool hasTwoColumns)
+        public void SetHasTwoColumns(bool shouldHaveTwoColumns)
         {
-            if (this.hasTwoColumns == hasTwoColumns) return;
-            this.hasTwoColumns = hasTwoColumns;
+            if (hasTwoColumns == shouldHaveTwoColumns) return;
+            hasTwoColumns = shouldHaveTwoColumns;
             Invalidate();
         }
 

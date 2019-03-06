@@ -1,5 +1,6 @@
 using System;
 using Android.Support.V7.Widget;
+using Android.Util;
 using Android.Views;
 
 namespace Toggl.Giskard.Views.Calendar
@@ -12,16 +13,9 @@ namespace Toggl.Giskard.Views.Calendar
                 return 0;
 
             var startChildPosition = GetPosition(startChild);
-            var endChildPosition = GetPosition(endChild);
-            var minPosition = Math.Min(startChildPosition, endChildPosition);
+            var anchorHeight = (double)Math.Abs(orientationHelper.GetDecoratedEnd(startChild) - orientationHelper.GetDecoratedStart(startChild));
 
-            var itemsBeforeStart = Math.Max(0, minPosition - 1);
-
-            var laidOutArea = Math.Abs(orientationHelper.GetDecoratedEnd(endChild) - orientationHelper.GetDecoratedStart(startChild));
-            var itemRange = Math.Abs(startChildPosition - endChildPosition) + 1;
-            var avgSizePerRow = (float)laidOutArea / itemRange;
-            //todo: simplify to use anchor height
-            return (int)Math.Round(itemsBeforeStart * avgSizePerRow +
+            return (int)Math.Round(startChildPosition * anchorHeight +
                                     (orientationHelper.StartAfterPadding - orientationHelper.GetDecoratedStart(startChild)));
         }
 

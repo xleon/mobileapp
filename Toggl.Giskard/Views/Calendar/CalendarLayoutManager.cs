@@ -444,7 +444,7 @@ namespace Toggl.Giskard.Views.Calendar
             layoutChunkResult.Consumed = anchor.Height;
 
             var anchorLeft = PaddingLeft;
-            var anchorRight = anchorLeft + view.MeasuredWidth;
+            var anchorRight = PaddingLeft;
 
             int anchorTop;
             int anchorBottom;

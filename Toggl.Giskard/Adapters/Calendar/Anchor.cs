@@ -1,27 +1,16 @@
-using System;
-
 namespace Toggl.Giskard.Adapters.Calendar
 {
     public class Anchor : Java.Lang.Object
     {
         private readonly int height;
-        private AnchorData[] anchoredData;
-
-        public AnchorData[] AnchoredData
-        {
-            get => anchoredData;
-            set
-            {
-                anchoredData = value;
-            }
-        }
+        public AnchorData[] AnchoredData { get; }
 
         public int Height => height;
 
-        public Anchor(int height)
+        public Anchor(int height, AnchorData[] anchorData)
         {
             this.height = height;
-            anchoredData = Array.Empty<AnchorData>();
+            AnchoredData = anchorData;
         }
 
     }

@@ -535,7 +535,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observer = TestScheduler.CreateObserver<bool>();
                 ViewModel.ShouldShowOnboarding.Subscribe(observer);
 
-                ViewModel.SkipOnboarding.Execute(); 
+                ViewModel.SkipOnboarding.Execute();
                 TestScheduler.Start();
 
                 observer.Messages.Select(m => m.Value.Value).Should().BeEquivalentTo(new[] { true, false });
@@ -562,6 +562,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.Initialize();
 
+                TestScheduler.Start();
                 ViewModel.CalendarItems[0].Should().BeEquivalentTo(items);
             }
 
@@ -578,9 +579,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TimeService.MidnightObservable.Returns(midnightSubject);
                 await ViewModel.Initialize();
                 CalendarInteractor.ClearReceivedCalls();
+                TestScheduler.Start();
 
                 createdSubject.OnNext(new MockTimeEntry());
 
+                TestScheduler.Start();
                 await CalendarInteractor.Received().Execute();
             }
 
@@ -597,9 +600,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TimeService.MidnightObservable.Returns(midnightSubject);
                 await ViewModel.Initialize();
                 CalendarInteractor.ClearReceivedCalls();
+                TestScheduler.Start();
 
                 updatedSubject.OnNext(new EntityUpdate<IThreadSafeTimeEntry>(0, new MockTimeEntry()));
 
+                TestScheduler.Start();
                 await CalendarInteractor.Received().Execute();
             }
 
@@ -616,9 +621,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TimeService.MidnightObservable.Returns(midnightSubject);
                 await ViewModel.Initialize();
                 CalendarInteractor.ClearReceivedCalls();
+                TestScheduler.Start();
 
                 deletedSubject.OnNext(0);
 
+                TestScheduler.Start();
                 await CalendarInteractor.Received().Execute();
             }
 
@@ -635,9 +642,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TimeService.MidnightObservable.Returns(midnightSubject);
                 await ViewModel.Initialize();
                 CalendarInteractor.ClearReceivedCalls();
+                TestScheduler.Start();
 
                 midnightSubject.OnNext(DateTimeOffset.Now);
 
+                TestScheduler.Start();
                 await CalendarInteractor.Received().Execute();
             }
 
@@ -656,9 +665,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 UserPreferences.EnabledCalendars.Returns(calendarSubject);
                 await ViewModel.Initialize();
                 CalendarInteractor.ClearReceivedCalls();
+                TestScheduler.Start();
 
                 calendarSubject.OnNext(new List<string>());
 
+                TestScheduler.Start();
                 await CalendarInteractor.Received().Execute();
             }
         }

@@ -41,6 +41,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         private readonly IBackgroundService backgroundService;
         private readonly IInteractorFactory interactorFactory;
         private readonly IOnboardingStorage onboardingStorage;
+        private readonly ISchedulerProvider schedulerProvider;
         private readonly IPermissionsService permissionsService;
         private readonly IMvxNavigationService navigationService;
         private readonly IStopwatchProvider stopwatchProvider;
@@ -52,6 +53,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         public IObservable<bool> SettingsAreVisible { get; }
 
         public IObservable<bool> ShouldShowOnboarding { get; }
+
+        public IObservable<bool> HasCalendarsLinked { get; }
 
         public IObservable<TimeFormat> TimeOfDayFormat { get; }
 
@@ -112,6 +115,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             this.backgroundService = backgroundService;
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
+            this.schedulerProvider = schedulerProvider;
             this.navigationService = navigationService;
             this.permissionsService = permissionsService;
             this.stopwatchProvider = stopwatchProvider;
@@ -155,6 +159,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             SettingsAreVisible = onboardingObservable
                 .SelectMany(_ => permissionsService.CalendarPermissionGranted)
                 .DistinctUntilChanged();
+
+            HasCalendarsLinked = userPreferences.EnabledCalendars.CombineLatest(
+                permissionsService.CalendarPermissionGranted, (calendars, hasCalendarPermissions)
+                    => hasCalendarPermissions && calendars.Count > 0);
 
             SelectCalendars = rxActionFactory.FromAsync(() => selectUserCalendars(false), SettingsAreVisible);
 
@@ -202,6 +210,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 .Merge(dayChangedObservable)
                 .Merge(selectedCalendarsChangedObservable)
                 .Merge(appResumedFromBackgroundObservable)
+                .SubscribeOn(schedulerProvider.BackgroundScheduler)
                 .SelectMany(_ => reloadData())
                 .Subscribe(CalendarItems.ReplaceWith)
                 .DisposedBy(disposeBag);

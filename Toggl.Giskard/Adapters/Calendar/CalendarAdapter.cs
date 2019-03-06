@@ -1,31 +1,60 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Android.Content;
+using Android.OS;
+using Android.Support.V7.Util;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Java.Lang;
+using Toggl.Foundation;
+using Toggl.Foundation.Calendar;
 using Toggl.Foundation.Helper;
+using Toggl.Foundation.MvvmCross.Calendar;
+using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.ViewHolders;
-using Color = Android.Graphics.Color;
+using Toggl.Multivac;
+using Toggl.Multivac.Extensions;
 
 namespace Toggl.Giskard.Adapters.Calendar
 {
     public class CalendarAdapter : RecyclerView.Adapter
     {
-        private readonly int screenWidth;
         private const int anchorViewType = 1;
         private const int anchoredViewType = 2;
         private const int anchorCount = Constants.HoursPerDay;
+        private readonly LayoutAnchorsCalculator layoutAnchorsCalculator;
+        private CompositeDisposable disposeBag = new CompositeDisposable();
+
+        private readonly ISubject<CalendarItem> firstTapSubject = new Subject<CalendarItem>();
+        private readonly ISubject<CalendarItem> calendarItemTappedSubject = new Subject<CalendarItem>();
+
+        private readonly object updateLock = new object();
+        private bool isUpdateRunning;
+        private IList<CalendarItem> nextUpdate;
+        private bool nextUpdateHasTwoColumns;
 
         private IReadOnlyList<Anchor> anchors;
+        private IList<CalendarItem> items = new List<CalendarItem>();
 
-        private IReadOnlyList<(string, Color, int)> items;
+        public IObservable<CalendarItem> CalendarItemTappedObservable
+            => calendarItemTappedSubject.AsObservable();
 
-        public CalendarAdapter(Context context, int screenWidth)
+        private CalendarItem? calendarItemInEditMode;
+
+        public CalendarAdapter(Context context, ITimeService timeService, int screenWidth)
         {
-            this.screenWidth = screenWidth;
-            createTestData(context);
+            var layoutCalculator = new CalendarLayoutCalculator(timeService);
+            layoutAnchorsCalculator = new LayoutAnchorsCalculator(context, screenWidth, anchorCount, layoutCalculator);
+
+            anchors = Enumerable.Range(0, 24).Select(_ => new Anchor(56.DpToPixels(context), new AnchorData[0])).ToList();
+
+            firstTapSubject.Subscribe(onFirstTap)
+                .DisposedBy(disposeBag);
         }
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
@@ -33,14 +62,20 @@ namespace Toggl.Giskard.Adapters.Calendar
             if (holder is AnchorViewHolder)
             {
                 holder.ItemView.Tag = anchors[position];
-                return;
             }
 
             if (holder is CalendarEntryViewHolder calendarEntryViewHolder)
             {
-                calendarEntryViewHolder.ItemView.Background.SetTint(items[position - anchorCount].Item2);
-                calendarEntryViewHolder.label.Text = items[position - anchorCount].Item1;
+                var calendarItem = items[position - anchorCount];
+                calendarEntryViewHolder.Item = calendarItem;
+                calendarEntryViewHolder.SetIsInEditMode(calendarItemIsInEditMode(calendarItem));
             }
+        }
+
+        private bool calendarItemIsInEditMode(CalendarItem calendarItem)
+        {
+            return calendarItem.Source == CalendarItemSource.TimeEntry
+                   && calendarItem.Id == calendarItemInEditMode?.Id;
         }
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
@@ -49,8 +84,13 @@ namespace Toggl.Giskard.Adapters.Calendar
             {
                 case anchorViewType:
                     return new AnchorViewHolder(new View(parent.Context));
+
                 case anchoredViewType:
-                    return new CalendarEntryViewHolder(LayoutInflater.From(parent.Context).Inflate(Resource.Layout.CalendarEntryCell, parent, false));
+                    return new CalendarEntryViewHolder(LayoutInflater.From(parent.Context).Inflate(Resource.Layout.CalendarEntryCell, parent, false))
+                    {
+                        TappedSubject = firstTapSubject
+                    };
+
                 default:
                     throw new InvalidOperationException($"Invalid view type {viewType}");
             }
@@ -66,87 +106,233 @@ namespace Toggl.Giskard.Adapters.Calendar
 
         public override int ItemCount => anchorCount + items.Count;
 
-        private void createTestData(Context context)
+        public bool NeedsToClearItemInEditMode()
         {
-            items = new[]
+            if (calendarItemInEditMode.HasValue)
             {
-                ("Lorem", Color.Crimson, 24),
-                ("Ipsum", Color.ParseColor("#328fff"), 25),
-                ("Dolor", Color.ParseColor("#c56bff"), 26),
-                ("愛は必要だ", Color.Peru, 27),
-                ("Stroops time", Color.DimGray, 28),
-                ("More Stroops", Color.Goldenrod, 29),
-                ("Stuff", Color.SlateGray, 30),
-                ("友達も必要だ", Color.Crimson, 31),
-                ("心の時間", Color.ParseColor("#328fff"), 32),
-                ("色々の会議", Color.ParseColor("#c56bff"), 32),
-                ("トッグル会議", Color.Peru, 34),
-                ("Even more stroops", Color.DimGray, 35),
-                ("Meeting mates", Color.Goldenrod, 36),
-                ("Stuff", Color.SlateGray, 37)
-            };
+                clearItemInEditMode();
+                return true;
+            }
 
-            var availableSpace = screenWidth - 76.DpToPixels(context);
-            var leftMargin = 72.DpToPixels(context);
+            return false;
+        }
 
-            anchors = Enumerable.Range(0, anchorCount).Select(_ => new Anchor(56.DpToPixels(context))).ToArray();
-            anchors[0].AnchoredData = new[]
+        public void UpdateItems(ObservableGroupedOrderedCollection<CalendarItem> calendarItems, bool hasCalendarsLinked)
+        {
+            lock (updateLock)
             {
-                new AnchorData(24, 0, leftMargin, 56.DpToPixels(context), availableSpace / 2),
-                new AnchorData(    25, 10.DpToPixels(context), leftMargin + 4.DpToPixels(context) + availableSpace / 2, 80.DpToPixels(context), availableSpace / 2 - 4.DpToPixels(context))
-            };
+                var newItems = calendarItems.IsEmpty
+                    ? new List<CalendarItem>()
+                    : calendarItems[0].ToList();
 
-            anchors[1].AnchoredData = new[]
-            {
-                new AnchorData(25, -(anchors[0].Height - 10.DpToPixels(context)), leftMargin + 4.DpToPixels(context) + availableSpace / 2, 80.DpToPixels(context), availableSpace / 2 - 4.DpToPixels(context))
-            };
+                if (!isUpdateRunning)
+                {
+                    isUpdateRunning = true;
+                    processUpdate(newItems, hasCalendarsLinked);
+                }
+                else
+                {
+                    nextUpdate = newItems;
+                    nextUpdateHasTwoColumns = hasCalendarsLinked;
+                }
+            }
+        }
 
-            var width = availableSpace / 8 - 4.DpToPixels(context);
-            anchors[2].AnchoredData = new[]
+        private void onFirstTap(CalendarItem calendarItem)
+        {
+            if (calendarItem.Source == CalendarItemSource.Calendar)
             {
-                new AnchorData(26, 0, leftMargin + 4.DpToPixels(context), 56.DpToPixels(context), width),
-                new AnchorData(27, 10.DpToPixels(context), leftMargin + 4.DpToPixels(context) + width, 56.DpToPixels(context), width),
-                new AnchorData(28, 20.DpToPixels(context), leftMargin + 4.DpToPixels(context) + width * 2, 56.DpToPixels(context), width),
-                new AnchorData(29, 30.DpToPixels(context), leftMargin + 4.DpToPixels(context) + width * 3, 56.DpToPixels(context), width),
-                new AnchorData(30, 40.DpToPixels(context), leftMargin + 4.DpToPixels(context) + width * 4, 56.DpToPixels(context), width),
-            };
+                if (calendarItemInEditMode.HasValue)
+                {
+                    clearItemInEditMode();
+                    return;
+                }
 
-            anchors[3].AnchoredData = new[]
-            {
-                new AnchorData(26,  -anchors[0].Height, leftMargin + 4.DpToPixels(context), 56.DpToPixels(context), width),
-                new AnchorData(27, -(anchors[0].Height -10.DpToPixels(context)), leftMargin + 4.DpToPixels(context) + width, 56.DpToPixels(context), width),
-                new AnchorData(28, -(anchors[0].Height - 20.DpToPixels(context)), leftMargin + 4.DpToPixels(context) + width * 2, 56.DpToPixels(context), width),
-                new AnchorData(29, -(anchors[0].Height - 30.DpToPixels(context)), leftMargin + 4.DpToPixels(context) + width * 3, 56.DpToPixels(context), width),
-                new AnchorData(30, -(anchors[0].Height - 40.DpToPixels(context)), leftMargin + 4.DpToPixels(context) + width * 4, 56.DpToPixels(context), width),
-            };
+                calendarItemTappedSubject.OnNext(calendarItem);
+                return;
+            }
 
-            anchors[4].AnchoredData = new[]
+            if (calendarItemInEditMode == null || touchesOtherItem(calendarItem))
             {
-                new AnchorData(36, anchors[0].Height -20.DpToPixels(context), leftMargin, 200.DpToPixels(context), availableSpace)
-            };
+                updateCalendarItemInEditMode(calendarItem);
+                return;
+            }
 
-            anchors[5].AnchoredData = new[]
-            {
-                new AnchorData(36, -20.DpToPixels(context), leftMargin, 200.DpToPixels(context), availableSpace)
-            };
-            anchors[6].AnchoredData = new[]
-            {
-                new AnchorData(36,  -anchors[0].Height -20.DpToPixels(context), leftMargin, 200.DpToPixels(context), availableSpace)
-            };
-            anchors[7].AnchoredData = new[]
-            {
-                new AnchorData(36,  -anchors[0].Height * 2 -20.DpToPixels(context), leftMargin, 200.DpToPixels(context), availableSpace)
-            };
-            anchors[8].AnchoredData = new[]
-            {
-                new AnchorData(36,  -anchors[0].Height * 3 -20.DpToPixels(context), leftMargin, 200.DpToPixels(context), availableSpace)
-            };
+            calendarItemTappedSubject.OnNext(calendarItem);
+        }
 
-            anchors[10].AnchoredData = new[]
+        private bool touchesOtherItem(CalendarItem calendarItem)
+            => calendarItem.Id != calendarItemInEditMode?.Id
+               || calendarItem.Source != calendarItemInEditMode?.Source;
+
+        private void clearItemInEditMode()
+        {
+            updateCalendarItemInEditMode(null);
+        }
+
+        private void updateCalendarItemInEditMode(CalendarItem? newCalendarItemInEditMode)
+        {
+            var oldPosition = findCalendarItemInEditModeAdapterPosition();
+            calendarItemInEditMode = newCalendarItemInEditMode;
+
+            if (oldPosition >= 0)
             {
-                new AnchorData(36, 0, leftMargin, 200.DpToPixels(context), availableSpace / 2),
-                new AnchorData(37, 10.DpToPixels(context), leftMargin + availableSpace / 2 + 4.DpToPixels(context), 80.DpToPixels(context), availableSpace / 2 - 4.DpToPixels(context))
-            };
+                NotifyItemChanged(oldPosition);
+            }
+
+            var newPosition = findCalendarItemInEditModeAdapterPosition();
+            if (newPosition >= 0)
+            {
+                NotifyItemChanged(newPosition);
+            }
+        }
+
+        private int findCalendarItemInEditModeAdapterPosition()
+        {
+            if (items.Count <= 0 || !calendarItemInEditMode.HasValue)
+                return -1;
+
+            var calendarItemIndex = items.IndexOf(calendarItemInEditMode.Value);
+
+            return calendarItemIndex >= 0
+                ? calendarItemIndex + anchorCount
+                : calendarItemIndex;
+        }
+
+        private void processUpdate(IList<CalendarItem> calendarItems, bool hasCalendarsLinked)
+        {
+            var handler = new Handler(Looper.MainLooper);
+            new Thread(() =>
+            {
+                var oldItems = items;
+                var oldAnchors = anchors;
+                var newItems = calendarItems;
+                var newAnchors = layoutAnchorsCalculator.CalculateAnchors(newItems, hasCalendarsLinked);
+
+                var diffResult = DiffUtil.CalculateDiff(new AnchorDiffCallback(oldItems, oldAnchors, newItems, newAnchors));
+
+                handler.Post(() => dispatchUpdates(newItems, newAnchors, diffResult));
+            }).Start();
+        }
+
+        private void dispatchUpdates(IList<CalendarItem> newItems, List<Anchor> newAnchors, DiffUtil.DiffResult diffResult)
+        {
+            var calendarItemInEditModeBeforeUpdate = calendarItemInEditMode;
+
+            updateCalendarItemInEditMode(null);
+
+            items = newItems;
+            anchors = newAnchors;
+            diffResult.DispatchUpdatesTo(this);
+
+            if (calendarItemInEditModeBeforeUpdate.HasValue)
+            {
+                fixCurrentCalendarItemInEditMode(calendarItemInEditModeBeforeUpdate.Value);
+            }
+
+            lock (updateLock)
+            {
+                if (nextUpdate != null)
+                {
+                    var updateTarget = nextUpdate;
+                    nextUpdate = null;
+                    processUpdate(updateTarget, nextUpdateHasTwoColumns);
+                }
+                else
+                {
+                    isUpdateRunning = false;
+                }
+            }
+        }
+
+        private void fixCurrentCalendarItemInEditMode(CalendarItem calendarItemInEditModeBeforeUpdate)
+        {
+            var newCalendarItemInEditMode = items.FirstOrDefault(calendarItem =>
+                    calendarItem.Source == CalendarItemSource.TimeEntry
+                    && calendarItem.Id == calendarItemInEditModeBeforeUpdate.Id);
+
+            var defaultCalendarItem = default(CalendarItem);
+            if (newCalendarItemInEditMode.Source != defaultCalendarItem.Source && newCalendarItemInEditMode.Id != defaultCalendarItem.Id)
+            {
+                updateCalendarItemInEditMode(newCalendarItemInEditMode);
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (!disposing) return;
+
+            disposeBag?.Dispose();
+        }
+
+        private sealed class AnchorDiffCallback : DiffUtil.Callback
+        {
+            private readonly IList<CalendarItem> oldItems;
+            private readonly IReadOnlyList<Anchor> oldAnchors;
+            private readonly IList<CalendarItem> newItems;
+            private readonly IReadOnlyList<Anchor> newAnchors;
+
+            public AnchorDiffCallback(IList<CalendarItem> oldItems, IReadOnlyList<Anchor> oldAnchors, IList<CalendarItem> newItems, IReadOnlyList<Anchor> newAnchors)
+            {
+                this.oldItems = oldItems;
+                this.oldAnchors = oldAnchors;
+                this.newItems = newItems;
+                this.newAnchors = newAnchors;
+            }
+
+            public override bool AreContentsTheSame(int oldItemPosition, int newItemPosition)
+            {
+                if (oldItemPosition < anchorCount && newItemPosition < anchorCount)
+                {
+                    return areAnchorsContentsTheSame(oldItemPosition, newItemPosition);
+                }
+
+                if (oldItemPosition >= anchorCount && oldItems.Count > 0 && newItemPosition >= anchorCount && newItems.Count > 0)
+                {
+                    return areAnchoredItemsContentsTheSame(oldItems[oldItemPosition - anchorCount], newItems[newItemPosition - anchorCount]);
+                }
+
+                return false;
+            }
+
+            private bool areAnchorsContentsTheSame(int oldItemPosition, int newItemPosition)
+            {
+                return Enumerable.SequenceEqual(oldAnchors[oldItemPosition].AnchoredData, newAnchors[newItemPosition].AnchoredData);
+            }
+
+            private bool areAnchoredItemsContentsTheSame(CalendarItem oldItem, CalendarItem newItem)
+            {
+                return anchoredItemHashCode(oldItem) == anchoredItemHashCode(newItem);
+            }
+
+            private int anchoredItemHashCode(CalendarItem item)
+                => HashCode.From(
+                    item.Source,
+                    item.Id,
+                    item.StartTime,
+                    item.Color,
+                    item.Duration ?? TimeSpan.Zero,
+                    item.Description,
+                    item.IconKind);
+
+            public override bool AreItemsTheSame(int oldItemPosition, int newItemPosition)
+            {
+                if (oldItemPosition < anchorCount && newItemPosition < anchorCount)
+                    return oldItemPosition == newItemPosition;
+
+                if (oldItemPosition >= anchorCount && oldItems.Count > 0 && newItemPosition >= anchorCount && newItems.Count > 0)
+                    return compareAnchoredItemIdentity(oldItems[oldItemPosition - anchorCount], newItems[newItemPosition - anchorCount]);
+
+                return false;
+            }
+
+            private bool compareAnchoredItemIdentity(CalendarItem oldItem, CalendarItem newItem)
+                => oldItem.Source == newItem.Source && oldItem.Id == newItem.Id;
+
+            public override int NewListSize => anchorCount + newItems.Count;
+            public override int OldListSize => anchorCount + oldItems.Count;
         }
     }
 }

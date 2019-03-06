@@ -104,8 +104,8 @@ namespace Toggl.Giskard.Services
         private static CalendarItem calendarItemFromCursor(ICursor cursor)
         {
             var id = cursor.GetString(eventIdIndex);
-            var startDateUnixTime = cursor.GetInt(eventStartDateIndex);
-            var endDateUnixTime = cursor.GetInt(eventEndDateIndex);
+            var startDateUnixTime = cursor.GetLong(eventStartDateIndex);
+            var endDateUnixTime = cursor.GetLong(eventEndDateIndex);
             var description = cursor.GetString(eventDescriptionIndex);
             var color = cursor.GetString(eventColorIndex);
             var calendarId = cursor.GetString(eventCalendarIdIndex);
