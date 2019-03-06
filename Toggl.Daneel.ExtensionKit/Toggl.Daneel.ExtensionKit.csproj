@@ -60,15 +60,20 @@
     <Compile Include="SharedStorage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Toggl.Daneel.IntentCodeGen\Toggl.Daneel.IntentCodeGen\Intents.intentdefinition">
-      <Link>Intents.intentdefinition</Link>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj">
       <Project>{6af7be5e-af9d-4ea7-af7f-28d07b8def24}</Project>
       <Name>Toggl.Multivac</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Toggl.Daneel.IntentCodeGen\Toggl.Daneel.IntentCodeGen\Base.lproj\Intents.intentdefinition">
+      <Link>Base.lproj\Intents.intentdefinition</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\Toggl.Daneel.IntentCodeGen\Toggl.Daneel.IntentCodeGen\en.lproj\Intents.strings">
+      <Link>en.lproj\Intents.strings</Link>
+    </BundleResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
