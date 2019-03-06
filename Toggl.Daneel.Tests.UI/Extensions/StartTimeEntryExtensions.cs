@@ -11,7 +11,8 @@ namespace Toggl.Tests.UI.Extensions
 
         public static void TapCreateProject(this IApp app, string projectName)
         {
-            app.TapNthCellInCollection(0);
+            var cellText = $"Create project \"{projectName}\"";
+            app.Tap(x => x.Contains(cellText));
         }
 
         public static void TapSelectTag(this IApp app, string tagName)
