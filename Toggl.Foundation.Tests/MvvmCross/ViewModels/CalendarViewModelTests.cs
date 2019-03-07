@@ -374,12 +374,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public sealed class TheGetStartedAction : CalendarViewModelTest
+        public abstract class LinkCalendarsTest : CalendarViewModelTest
         {
+            protected abstract UIAction Action { get; }
+
             [Fact, LogIfTooSlow]
             public async Task RequestsCalendarPermission()
             {
-                ViewModel.GetStarted.Execute();
+                Action.Execute();
                 TestScheduler.Start();
 
                 await PermissionsService.Received().RequestCalendarAuthorization();
@@ -390,7 +392,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(false));
 
-                ViewModel.GetStarted.Execute();
+                Action.Execute();
 
                 NavigationService.Received().Navigate<CalendarPermissionDeniedViewModel, Unit>();
             }
@@ -403,7 +405,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Observable.Return(new UserCalendar[] { new UserCalendar() })
                 );
 
-                ViewModel.GetStarted.Execute();
+                Action.Execute();
                 TestScheduler.Start();
 
                 await NavigationService
@@ -419,7 +421,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Observable.Return(new UserCalendar[0])
                 );
 
-                ViewModel.GetStarted.Execute();
+                Action.Execute();
                 TestScheduler.Start();
 
                 await NavigationService.DidNotReceive().Navigate<SelectUserCalendarsViewModel, string[]>();
@@ -440,11 +442,60 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Observable.Return(new UserCalendar[] { new UserCalendar() })
                 );
 
-                viewModel.GetStarted.Execute(Unit.Default);
+                Action.Execute(Unit.Default);
                 TestScheduler.Start();
 
                 InteractorFactory.Received().SetEnabledCalendars(calendarIds).Execute();
             }
+
+            [Fact, LogIfTooSlow]
+            public async Task RequestsNotificationsPermissionIfCalendarPermissionWasGranted()
+            {
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(new string[0]);
+
+                Action.Execute(Unit.Default);
+                TestScheduler.Start();
+
+                await PermissionsService.Received().RequestNotificationAuthorization();
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData(true)]
+            [InlineData(false)]
+            public async Task SetsTheNotificationPropertyAfterAskingForPermission(bool permissionWasGiven)
+            {
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(new string[0]);
+                PermissionsService.RequestNotificationAuthorization().Returns(Observable.Return(permissionWasGiven));
+
+                Action.Execute();
+                TestScheduler.Start();
+
+                UserPreferences.Received().SetCalendarNotificationsEnabled(Arg.Is(permissionWasGiven));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task DoesNotRequestNotificationsPermissionIfCalendarPermissionWasNotGranted()
+            {
+                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(false));
+                NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(new string[0]);
+
+                Action.Execute();
+                TestScheduler.Start();
+
+                await PermissionsService.DidNotReceive().RequestNotificationAuthorization();
+            }
+        }
+
+        public sealed class TheLinkCalendarsAction : LinkCalendarsTest
+        {
+            protected override UIAction Action => ViewModel.LinkCalendars;
+        }
+
+        public sealed class TheGetStartedAction : LinkCalendarsTest
+        {
+            protected override UIAction Action => ViewModel.GetStarted;
 
             [Fact, LogIfTooSlow]
             public async Task SetsCalendarOnboardingAsCompletedIfUserGrantsAccess()
@@ -452,7 +503,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
                 NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(new string[0]);
 
-                 ViewModel.GetStarted.Execute(Unit.Default);
+                Action.Execute(Unit.Default);
 
                 OnboardingStorage.Received().SetCompletedCalendarOnboarding();
             }
@@ -478,45 +529,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TestScheduler.Start();
 
                 AnalyticsService.CalendarOnboardingStarted.Received().Track();
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task RequestsNotificationsPermissionIfCalendarPermissionWasGranted()
-            {
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
-                NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(new string[0]);
-
-                ViewModel.GetStarted.Execute(Unit.Default);
-                TestScheduler.Start();
-
-                await PermissionsService.Received().RequestNotificationAuthorization();
-            }
-
-            [Theory, LogIfTooSlow]
-            [InlineData(true)]
-            [InlineData(false)]
-            public async Task SetsTheNotificationPropertyAfterAskingForPermission(bool permissionWasGiven)
-            {
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
-                NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(new string[0]);
-                PermissionsService.RequestNotificationAuthorization().Returns(Observable.Return(permissionWasGiven));
-
-                ViewModel.GetStarted.Execute();
-                TestScheduler.Start();
-
-                UserPreferences.Received().SetCalendarNotificationsEnabled(Arg.Is(permissionWasGiven));
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task DoesNotRequestNotificationsPermissionIfCalendarPermissionWasNotGranted()
-            {
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(false));
-                NavigationService.Navigate<SelectUserCalendarsViewModel, string[]>().Returns(new string[0]);
-
-                ViewModel.GetStarted.Execute();
-                TestScheduler.Start();
-
-                await PermissionsService.DidNotReceive().RequestNotificationAuthorization();
             }
         }
 
