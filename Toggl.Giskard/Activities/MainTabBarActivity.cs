@@ -25,6 +25,7 @@ namespace Toggl.Giskard.Activities
     {
         private readonly Dictionary<int, Fragment> fragments = new Dictionary<int, Fragment>();
         private Fragment activeFragment;
+        private bool activityResumedBefore = false;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -43,6 +44,17 @@ namespace Toggl.Giskard.Activities
                 .ItemSelected()
                 .Subscribe(onTabSelected)
                 .DisposedBy(DisposeBag);
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            if (!activityResumedBefore)
+            {
+                navigationView.SelectedItemId = Resource.Id.MainTabTimerItem;
+                activityResumedBefore = true;
+            }
         }
 
         private Fragment getCachedFragment(int itemId)
