@@ -90,9 +90,12 @@ namespace Toggl.Daneel.ExtensionKit.Analytics
         {
             encoder.Encode((int)EventType, eventTypeEncodeKey);
 
-            var nativeDict = NSDictionary
+            if (Parameters != null)
+            {
+                var nativeDict = NSDictionary
                 .FromObjectsAndKeys(Parameters.Values.ToArray(), Parameters.Keys.ToArray());
-            encoder.Encode(nativeDict, parametersEncodeKey);
+                encoder.Encode(nativeDict, parametersEncodeKey);
+            }
         }
         #endregion
     }
