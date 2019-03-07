@@ -215,6 +215,56 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     Duration = isRunning ? (long?)null : (long)OneHour.TotalSeconds
                 };
             }
+
+            protected static EditTimeEntryDto CreateDtoFromTimeEntry(IThreadSafeTimeEntry timeEntry)
+            {
+                return new EditTimeEntryDto
+                {
+                    Id = timeEntry.Id,
+                    Description = timeEntry.Description,
+                    StartTime = timeEntry.Start,
+                    StopTime = CalculateStopTime(timeEntry.Start, timeEntry.TimeSpanDuration()),
+                    ProjectId = timeEntry.ProjectId,
+                    TaskId = timeEntry.TaskId,
+                    Billable = timeEntry.Billable,
+                    WorkspaceId = timeEntry.WorkspaceId,
+                    TagIds = timeEntry.TagIds
+                };
+            }
+
+            protected static bool DtosEqualTimeEntries(IEnumerable<EditTimeEntryDto> dtos, IEnumerable<IThreadSafeTimeEntry> timeEntries)
+            {
+                var orderedDtos = dtos.OrderBy(dto => dto.Id);
+                var orderedTimeEntries = timeEntries.OrderBy(te => te.Id);
+
+                var areEqual = Enumerable
+                    .Zip(orderedDtos, orderedTimeEntries, DtoEqualsTimeEntry)
+                    .Select(equal => !equal)
+                    .None(CommonFunctions.Identity);
+
+                return areEqual;
+            }
+
+            protected static bool DtoEqualsTimeEntry(EditTimeEntryDto dto, IThreadSafeTimeEntry timeEntry)
+                => dto.Equals(CreateDtoFromTimeEntry(timeEntry));
+
+            protected static DateTimeOffset? CalculateStopTime(DateTimeOffset start, TimeSpan? duration)
+                => duration.HasValue ? start + duration : null;
+
+            protected IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> SetupUpdateInteractor(
+                IEnumerable<IThreadSafeTimeEntry> entries)
+            {
+                var timeEntryObservable = Observable.Return(entries);
+                var interactor = Substitute.For<IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>>>();
+                interactor
+                    .Execute()
+                    .Returns(timeEntryObservable);
+                InteractorFactory
+                     .UpdateMultipleTimeEntries(Arg.Any<EditTimeEntryDto[]>())
+                     .Returns(interactor);
+
+                return interactor;
+            }
         }
 
         public abstract class GroupedTimeEntriesEditTimeEntryViewModelTest : InitializableEditTimeEntryViewModelTest
@@ -350,10 +400,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ReturnsCorrectSumForTimeEntries()
             {
-                var expectedDuration = OneHour * TimeEntriesGroupIds.Length;
+                var expectedDuration = OneHour * (TimeEntriesGroupIds.Length * (TimeEntriesGroupIds.Length + 1) / 2.0);
+
+                int i = 0;
                 AdjustTimeEntries(TimeEntriesGroupIds, te =>
                 {
-                    te.Duration = (long)OneHour.TotalSeconds;
+                    te.Duration = ++i * (long)OneHour.TotalSeconds;
                     return te;
                 });
 
@@ -1689,23 +1741,37 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
         }
 
-        public sealed class TheSaveAction : InitializableEditTimeEntryViewModelTest
+        public sealed class TheSaveActionForMultipleTimeEntries : InitializableEditTimeEntryViewModelTest
         {
-            private IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> setupUpdateInteractor(
-                IEnumerable<IThreadSafeTimeEntry> entries)
-            {
-                var timeEntryObservable = Observable.Return(entries);
-                var interactor = Substitute.For<IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>>>();
-                interactor
-                    .Execute()
-                    .Returns(timeEntryObservable);
-                InteractorFactory
-                     .UpdateMultipleTimeEntries(Arg.Any<EditTimeEntryDto[]>())
-                     .Returns(interactor);
+            private static readonly long[] ids = { 1, 2, 3 };
 
-                return interactor;
+            public TheSaveActionForMultipleTimeEntries()
+                : base(ids)
+            {
             }
 
+            [Fact, LogIfTooSlow]
+            public async Task PreservesStartAndEndTimesWhenEditingAGroupOfTimeEntries()
+            {
+                NavigationService
+                    .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>())
+                    .Returns(new DurationParameter { Start = new DateTimeOffset(), Duration = TimeSpan.FromDays(365) });
+                var interactor = SetupUpdateInteractor(entries);
+
+                await ViewModel.Initialize();
+                _ = ViewModel.EditTimes.Execute(EditViewTapSource.StartDate);
+                _ = ViewModel.Save.Execute();
+                TestScheduler.Start();
+
+                InteractorFactory
+                   .Received()
+                   .UpdateMultipleTimeEntries(Arg.Is<EditTimeEntryDto[]>(dtos => DtosEqualTimeEntries(dtos, entries)));
+                await interactor.Received().Execute();
+            }
+        }
+
+        public sealed class TheSaveAction : InitializableEditTimeEntryViewModelTest
+        {
             [Fact, LogIfTooSlow]
             public async Task SetsTheOnboardingStorageFlag()
             {
@@ -1719,7 +1785,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task CallsInteractorWithValidDtoForSingleTimeEntry()
             {
-                var interactor = setupUpdateInteractor(entries);
+                var interactor = SetupUpdateInteractor(entries);
 
                 await ViewModel.Initialize();
                 _ = ViewModel.Save.Execute();
@@ -1727,7 +1793,24 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 InteractorFactory
                    .Received()
-                   .UpdateMultipleTimeEntries(Arg.Is<EditTimeEntryDto[]>(dtos => dtosEqualTimeEntries(dtos, entries)));
+                   .UpdateMultipleTimeEntries(Arg.Is<EditTimeEntryDto[]>(dtos => DtosEqualTimeEntries(dtos, entries)));
+                await interactor.Received().Execute();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task AllowsEditingStartAndEndTimesWhenEditingASingleTimeEntry()
+            {
+                var timeEntry = entries.Single();
+                var interactor = SetupUpdateInteractor(new[] { timeEntry });
+
+                await ViewModel.Initialize();
+                _ = ViewModel.StopTimeEntry.Execute();
+                _ = ViewModel.Save.Execute();
+                TestScheduler.Start();
+
+                InteractorFactory
+                    .Received()
+                    .UpdateMultipleTimeEntries(Arg.Is<EditTimeEntryDto[]>(dtos => DtoEqualsTimeEntry(dtos.First(), timeEntry)));
                 await interactor.Received().Execute();
             }
 
@@ -1735,7 +1818,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task CallsInteractorWithValidDtoForTimeEntriesGroup()
             {
                 AdjustTimeEntries(TimeEntriesGroupIds, te => te);
-                var interactor = setupUpdateInteractor(entries);
+                var interactor = SetupUpdateInteractor(entries);
 
                 await ViewModel.Initialize();
                 _ = ViewModel.Save.Execute();
@@ -1743,14 +1826,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 InteractorFactory
                    .Received()
-                   .UpdateMultipleTimeEntries(Arg.Is<EditTimeEntryDto[]>(dtos => dtosEqualTimeEntries(dtos, entries)));
+                   .UpdateMultipleTimeEntries(Arg.Is<EditTimeEntryDto[]>(dtos => DtosEqualTimeEntries(dtos, entries)));
                 await interactor.Received().Execute();
             }
 
             [Fact, LogIfTooSlow]
             public async Task ClosesAfterSuccessfulSave()
             {
-                setupUpdateInteractor(entries);
+                SetupUpdateInteractor(entries);
 
                 await ViewModel.Initialize();
                 _ = ViewModel.Save.Execute();
@@ -1762,7 +1845,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ClosesEvenAfterFailedSave()
             {
-                var interactor = setupUpdateInteractor(entries);
+                var interactor = SetupUpdateInteractor(entries);
                 interactor.Execute()
                     .Returns(Observable.Throw<IEnumerable<IThreadSafeTimeEntry>>(new Exception()));
 
@@ -1772,41 +1855,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await NavigationService.Received().Close(ViewModel);
             }
-
-            private static EditTimeEntryDto createDtoFromTimeEntry(IThreadSafeTimeEntry timeEntry)
-            {
-                return new EditTimeEntryDto
-                {
-                    Id = timeEntry.Id,
-                    Description = timeEntry.Description,
-                    StartTime = timeEntry.Start,
-                    StopTime = calculateStopTime(timeEntry.Start, timeEntry.TimeSpanDuration()),
-                    ProjectId = timeEntry.ProjectId,
-                    TaskId = timeEntry.TaskId,
-                    Billable = timeEntry.Billable,
-                    WorkspaceId = timeEntry.WorkspaceId,
-                    TagIds = timeEntry.TagIds
-                };
-            }
-
-            private static bool dtosEqualTimeEntries(IEnumerable<EditTimeEntryDto> dtos, IEnumerable<IThreadSafeTimeEntry> timeEntries)
-            {
-                var orderedDtos = dtos.OrderBy(dto => dto.Id);
-                var orderedTimeEntries = timeEntries.OrderBy(te => te.Id);
-
-                var areEqual = Enumerable
-                    .Zip(orderedDtos, orderedTimeEntries, dtoEqualsTimeEntry)
-                    .Select(equal => !equal)
-                    .None(CommonFunctions.Identity);
-
-                return areEqual;
-            }
-
-            private static bool dtoEqualsTimeEntry(EditTimeEntryDto dto, IThreadSafeTimeEntry timeEntry)
-                => dto.Equals(createDtoFromTimeEntry(timeEntry));
-
-            private static DateTimeOffset? calculateStopTime(DateTimeOffset start, TimeSpan? duration)
-                => duration.HasValue ? start + duration : null;
         }
     }
 }

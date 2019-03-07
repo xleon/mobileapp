@@ -255,7 +255,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             durationSubject.OnNext(timeEntry.TimeSpanDuration());
 
-            GroupDuration = timeEntries.Sum(entry => timeEntry.TimeSpanDuration());
+            GroupDuration = timeEntries.Sum(entry => entry.TimeSpanDuration());
 
             tagsSubject.OnNext(timeEntry.Tags?.ToImmutableList() ?? ImmutableList<IThreadSafeTag>.Empty);
 
@@ -497,8 +497,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private EditTimeEntryDto applyDataFromTimeEntry(EditTimeEntryDto commonTimeEntryData, IThreadSafeTimeEntry timeEntry)
         {
             commonTimeEntryData.Id = timeEntry.Id;
-            commonTimeEntryData.StartTime = timeEntry.Start;
-            commonTimeEntryData.StopTime = calculateStopTime(timeEntry.Start, timeEntry.TimeSpanDuration());
+
+            if (IsEditingGroup)
+            {
+                // start and end times can't be changed when editing a group of time entries
+                commonTimeEntryData.StartTime = timeEntry.Start;
+                commonTimeEntryData.StopTime = calculateStopTime(timeEntry.Start, timeEntry.TimeSpanDuration());
+            }
 
             return commonTimeEntryData;
         }
