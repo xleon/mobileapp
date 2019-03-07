@@ -26,12 +26,12 @@ namespace Toggl.Giskard.Adapters
         private bool isUpdateRunning;
         private bool hasPendingUpdate;
 
-        private IImmutableList<CollectionSection<TSectionHeaderModel, TModel>> items;
+        private IImmutableList<ISectionModel<TSectionHeaderModel, TModel>> items;
         private IReadOnlyList<FlatItemInfo> currentItems;
 
         public ReactiveSectionedRecyclerAdapter()
         {
-            items = ImmutableList<CollectionSection<TSectionHeaderModel, TModel>>.Empty;
+            items = ImmutableList<ISectionModel<TSectionHeaderModel, TModel>>.Empty;
             currentItems = new FlatItemInfo[0];
         }
 
@@ -59,7 +59,7 @@ namespace Toggl.Giskard.Adapters
             return currentItems[position - HeaderOffset].Item;
         }
 
-        public void UpdateCollection(IEnumerable<CollectionSection<TSectionHeaderModel, TModel>> items)
+        public void UpdateCollection(IEnumerable<ISectionModel<TSectionHeaderModel, TModel>> items)
         {
             this.items = items.ToImmutableList();
 
@@ -200,7 +200,7 @@ namespace Toggl.Giskard.Adapters
             }
         }
 
-        private IReadOnlyList<FlatItemInfo> flattenItems(IEnumerable<CollectionSection<TSectionHeaderModel, TModel>> groups)
+        private IReadOnlyList<FlatItemInfo> flattenItems(IEnumerable<ISectionModel<TSectionHeaderModel, TModel>> groups)
         {
             var flattenedTimeEntriesList = new List<FlatItemInfo>();
 
