@@ -15,5 +15,7 @@ namespace Toggl.Foundation.Services
         InputAction<TInput> FromAsync<TInput>(Func<TInput, Task> asyncAction, IObservable<bool> enabledIf = null);
         InputAction<TInput> FromObservable<TInput>(Func<TInput, IObservable<Unit>> workFactory,
             IObservable<bool> enabledIf = null);
+
+        OutputAction<TOutput> FromAsync<TOutput>(Func<Task<TOutput>> asyncAction, IObservable<bool> enabledIf = null);
     }
 }

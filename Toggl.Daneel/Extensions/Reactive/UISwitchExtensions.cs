@@ -41,5 +41,16 @@ namespace Toggl.Daneel.Extensions.Reactive
                 .Select(_ => inputTransform(reactive.Base))
                 .Subscribe(action.Inputs);
         }
+
+        public static Action<bool> CheckedObserver(this IReactive<UISwitch> reactive)
+        {
+            return isChecked =>
+            {
+                if (reactive.Base.On != isChecked)
+                {
+                    reactive.Base.SetState(isChecked, false);
+                }
+            };
+        }
     }
 }

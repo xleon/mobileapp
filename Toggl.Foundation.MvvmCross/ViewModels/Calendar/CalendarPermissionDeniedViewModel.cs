@@ -1,4 +1,5 @@
 ﻿using System.Reactive;
+using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
@@ -24,12 +25,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             this.permissionsService = permissionsService;
 
             EnableAccess = rxActionFactory.FromAction(enableAccess);
-            Close = rxActionFactory.FromAsync(() => NavigationService.Close(this, Unit.Default));
+            Close = rxActionFactory.FromAsync(close);
+
         }
 
         private void enableAccess()
         {
             permissionsService.OpenAppSettings();
+        }
+
+        private Task close()
+        {
+            return NavigationService.Close(this, Unit.Default);
         }
     }
 }

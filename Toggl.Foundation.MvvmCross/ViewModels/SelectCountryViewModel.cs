@@ -36,7 +36,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.rxActionFactory = rxActionFactory;
 
             SelectCountry = rxActionFactory.FromAsync<SelectableCountryViewModel>(selectCountry);
-            Close = rxActionFactory.FromAsync(() => NavigationService.Close(this));
+            Close = rxActionFactory.FromAsync(close);
         }
 
         public override async Task Initialize()
@@ -70,5 +70,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task selectCountry(SelectableCountryViewModel selectedCountry)
             => await navigationService.Close(this, selectedCountry.Country.Id);
+
+        private Task close()
+        {
+            return NavigationService.Close(this);
+        }
     }
 }

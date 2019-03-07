@@ -96,7 +96,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IObservable<IThreadSafePreferences> Preferences { get; private set; }
 
-        public UIAction Close { get; private set; }
+        public OutputAction<bool> Close { get; private set; }
         public UIAction SelectProject { get; private set; }
         public UIAction SelectTags { get; private set; }
         public UIAction ToggleBillable { get; private set; }
@@ -439,17 +439,18 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             syncErrorMessageSubject.OnNext(null);
         }
 
-        private async Task closeWithConfirmation()
+        private async Task<bool> closeWithConfirmation()
         {
             if (isDirty)
             {
                 var userConfirmedDiscardingChanges = await dialogService.ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
 
                 if (!userConfirmedDiscardingChanges)
-                    return;
+                    return false;
             }
 
             await navigationService.Close(this);
+            return true;
         }
 
         private bool isDirty

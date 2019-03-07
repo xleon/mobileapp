@@ -789,4 +789,7 @@ Use them to add keywords to your time entries.</value>
     <data name="GroupTimeEntries">
         <value>Group similar time entries</value>
     </data>
+    <data name="EditingTimeEntryGroup">
+        <value>Editing {0} time entries</value>
+    </data>
 </root>

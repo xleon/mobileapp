@@ -46,5 +46,10 @@ namespace Toggl.Foundation.Services
         {
             return InputAction<TInput>.FromObservable(workFactory, schedulerProvider.MainScheduler, enabledIf);
         }
+
+        public OutputAction<TOutput> FromAsync<TOutput>(Func<Task<TOutput>> asyncAction, IObservable<bool> enabledIf = null)
+        {
+            return OutputAction<TOutput>.FromAsync(asyncAction, schedulerProvider.MainScheduler, enabledIf);
+        }
     }
 }

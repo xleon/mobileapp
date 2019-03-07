@@ -52,7 +52,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
             };
 
             SelectOption = rxActionFactory.FromAction<CalendarNotificationsOption>(onSelectOption);
-            Close = rxActionFactory.FromAsync(() => navigationService.Close(this, Unit.Default));
+            Close = rxActionFactory.FromAsync(close);
         }
 
         public override async Task Initialize()
@@ -72,6 +72,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
                 userPreferences.SetTimeSpanBeforeCalendarNotifications(option.Duration());
 
             navigationService.Close(this, Unit.Default);
+        }
+
+        private Task close()
+        {
+            return navigationService.Close(this, Unit.Default);
         }
     }
 }

@@ -186,7 +186,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                         .Execute()
                     )
                     .Select(workspace => workspace.Name)
-                    .AsDriver(schedulerProvider);;
+                    .AsDriver(schedulerProvider);
 
             BeginningOfWeek =
                 dataSource.User.Current
@@ -268,7 +268,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SelectBeginningOfWeek = rxActionFactory.FromAsync(selectBeginningOfWeek);
             ToggleTimeEntriesGrouping = rxActionFactory.FromAsync(toggleTimeEntriesGrouping);
             SelectDefaultWorkspace = rxActionFactory.FromAsync<SelectableWorkspaceViewModel>(selectDefaultWorkspace);
-            Close = rxActionFactory.FromAsync(() => navigationService.Close(this));
+            Close = rxActionFactory.FromAsync(close);
         }
 
         public override async Task Initialize()
@@ -472,6 +472,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             await interactorFactory.UpdateUser(new EditUserDTO { BeginningOfWeek = newBeginningOfWeek }).Execute();
             dataSource.SyncManager.InitiatePushSync();
+        }
+
+        private Task close()
+        {
+            return navigationService.Close(this);
         }
     }
 }
