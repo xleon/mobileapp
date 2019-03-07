@@ -37,7 +37,7 @@ namespace Toggl.Tests.UI
 
             app.SwipeEntryToDelete(description);
 
-            app.WaitForNoElement(x => x.Text(description));
+            app.AssertNoTimeEntryInTheLog(description);
         }
 
         [Test, IgnoreOnAndroid]
@@ -57,7 +57,21 @@ namespace Toggl.Tests.UI
             app.WaitForElement(x => x.Text("Delete"));
             app.Tap(x => x.Text("Delete"));
 
-            app.WaitForNoElement(x => x.Text(description));
+            app.AssertNoTimeEntryInTheLog(description);
+        }
+
+        [Test]
+        public void TappingTheUndoButtonBringsBackTheDeletedTimeEntry()
+        {
+            var description = "some time entry";
+            app.CreateTimeEntry(description);
+            app.SwipeEntryToDelete(description);
+
+            app.AssertNoTimeEntryInTheLog(description);
+
+            app.TapSnackBarButton("UNDO");
+
+            app.AssertTimeEntryInTheLog(description);
         }
     }
 }

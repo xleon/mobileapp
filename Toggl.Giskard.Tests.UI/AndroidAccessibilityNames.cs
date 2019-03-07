@@ -79,6 +79,7 @@ namespace Toggl.Tests.UI
         public const string Confirm = "EditTimeEntryConfirmButton";
         public const string DeleteButton = "EditTimeEntryDelete";
         public const string EditTags = "EditTimeEntryTagsContainer";
+        public const string EditProject = "EditTimeEntryProjectContainer";
         public const string EditDescription = "EditTimeEntryDescriptionTextField";
     }
 
@@ -88,5 +89,22 @@ namespace Toggl.Tests.UI
         public const string CreateButton = "CreateProjectButton";
         public const string ChangeWorkspace = "ChangeWorkspaceButton";
         public const string TogglePrivateProject = "PrivateProjectSwitchContainer";
+    }
+
+    public static class SelectProject
+    {
+        public const string ProjectNameTextField = "SelectProjectProjectNameEditText";
+        public const string ProjectSuggestionRow = "SelectProjectProjectCell";
+    }
+
+    public static class EditProject
+    {
+        public const string CreateButton = "CreateProjectButton";
+        public const string ChangeClient = "ChangeClientButton";
+    }
+
+    public static class Misc
+    {
+        public const string SnackbarAction = "snackbar_action";
     }
 }
