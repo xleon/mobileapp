@@ -102,4 +102,9 @@ namespace Toggl.Tests.UI
         public const string CreateButton = "CreateProjectButton";
         public const string ChangeClient = "ChangeClientButton";
     }
+
+    public static class Misc
+    {
+        public const string SnackbarAction = "snackbar_action";
+    }
 }

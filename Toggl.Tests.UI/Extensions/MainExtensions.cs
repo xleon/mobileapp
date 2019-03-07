@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Toggl.Tests.UI.Exceptions;
 using Xamarin.UITest;
 using Xamarin.UITest.Queries;
 
@@ -132,6 +133,22 @@ namespace Toggl.Tests.UI.Extensions
             if (timeEntryViews.Length == 0)
                 return null;
             return timeEntryViews[0].Rect;
+        }
+
+        public static void AssertTimeEntryInTheLog(this IApp app, string description)
+        {
+            var timeEntryExists = app.Query(queryForTimeEntryCell(description)).Any();
+
+            if (!timeEntryExists)
+                throw new NoTimeEntryException($"Expected to find a time entry with description \"{description}\", but didn't find one");
+        }
+
+        public static void AssertNoTimeEntryInTheLog(this IApp app, string description)
+        {
+            var timeEntryExists = app.Query(queryForTimeEntryCell(description)).Any();
+
+            if (timeEntryExists)
+                throw new TimeEntryFoundException($"Expected to find no time entry with description \"{description}\", but found one");
         }
 
         private static Func<AppQuery, AppQuery> queryForTimeEntryCell(string timeEntryDescription)
