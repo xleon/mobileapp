@@ -77,7 +77,7 @@ namespace Toggl.Giskard.Activities
             playButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => false, ButtonEventType.LongPress).DisposedBy(DisposeBag);
 
             timeEntryCard.Rx().Tap()
-                .WithLatestFrom(ViewModel.CurrentRunningTimeEntry, (_, te) => te.Id)
+                .WithLatestFrom(ViewModel.CurrentRunningTimeEntry, (_, te) => new[] { te.Id })
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
@@ -149,7 +149,7 @@ namespace Toggl.Giskard.Activities
             };
 
             mainRecyclerAdapter.TimeEntryTaps
-                .Select(te => te.RepresentedTimeEntriesIds.First())
+                .Select(te => te.RepresentedTimeEntriesIds)
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 

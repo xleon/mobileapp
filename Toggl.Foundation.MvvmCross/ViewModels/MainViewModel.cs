@@ -89,7 +89,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public UIAction OpenSettings { get; private set; }
         public UIAction OpenSyncFailures { get; private set; }
         public InputAction<bool> StartTimeEntry { get; private set; }
-        public InputAction<long> SelectTimeEntry { get; private set; }
+        public InputAction<long[]> SelectTimeEntry { get; private set; }
         public InputAction<TimeEntryStopOrigin> StopTimeEntry { get; private set; }
         public InputAction<long> ContinueTimeEntry { get; private set; }
 
@@ -248,7 +248,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             OpenReports = rxActionFactory.FromAsync(openReports);
             OpenSettings = rxActionFactory.FromAsync(openSettings);
             OpenSyncFailures = rxActionFactory.FromAsync(openSyncFailures);
-            SelectTimeEntry = rxActionFactory.FromAsync<long>(timeEntrySelected);
+            SelectTimeEntry = rxActionFactory.FromAsync<long[]>(timeEntrySelected);
             ContinueTimeEntry = rxActionFactory.FromObservable<long>(continueTimeEntry);
             StartTimeEntry = rxActionFactory.FromAsync<bool>(startTimeEntry, IsTimeEntryRunning.Invert());
             StopTimeEntry = rxActionFactory.FromAsync<TimeEntryStopOrigin>(stopTimeEntry, IsTimeEntryRunning);
@@ -420,7 +420,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .SelectUnit();
         }
 
-        private async Task timeEntrySelected(long timeEntryId)
+        private async Task timeEntrySelected(long[] timeEntryIds)
         {
             if (isEditViewOpen)
                 return;
@@ -435,7 +435,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             var editTimeEntryStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.EditTimeEntryFromMainLog);
             editTimeEntryStopwatch.Start();
 
-            await navigate<EditTimeEntryViewModel, long[]>(new[] { timeEntryId });
+            await navigate<EditTimeEntryViewModel, long[]>(timeEntryIds);
 
             lock (isEditViewOpenLock)
             {

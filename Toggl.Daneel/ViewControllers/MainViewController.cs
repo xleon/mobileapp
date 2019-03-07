@@ -140,7 +140,7 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(DisposeBag);
 
             tableViewSource.Rx().ModelSelected()
-                .Select(model => model.RepresentedTimeEntriesIds.First())
+                .Select(model => model.RepresentedTimeEntriesIds)
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
@@ -177,7 +177,7 @@ namespace Toggl.Daneel.ViewControllers
             CurrentTimeEntryCard.Rx().Tap()
                 .WithLatestFrom(ViewModel.CurrentRunningTimeEntry, (_, te) => te)
                 .Where(te => te != null)
-                .Select(te => te.Id)
+                .Select(te => new[] { te.Id })
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
@@ -466,7 +466,7 @@ namespace Toggl.Daneel.ViewControllers
             {
                 var currentlyRunningTimeEntry = await ViewModel.CurrentRunningTimeEntry.FirstAsync();
                 if (currentlyRunningTimeEntry == null) return;
-                await ViewModel.SelectTimeEntry.Execute(currentlyRunningTimeEntry.Id);
+                await ViewModel.SelectTimeEntry.Execute(new[] { currentlyRunningTimeEntry.Id });
             });
             swipeUpRunningCardGesture.Direction = UISwipeGestureRecognizerDirection.Up;
             CurrentTimeEntryCard.AddGestureRecognizer(swipeUpRunningCardGesture);
