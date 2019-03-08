@@ -560,6 +560,7 @@
       <DependentUpon>SelectBeginningOfWeekFragment.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewHolders\BeginningOfWeekViewHolder.cs" />
+    <Compile Include="Adapters\BaseSectionedRecyclerAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

@@ -38,5 +38,16 @@ namespace Toggl.Tests.UI.Extensions
             app.Tap(query);
             app.WaitForNoElement(query);
         }
+
+        public static void EnterManualTimeEntryDuration(this IApp app, string duration)
+        {
+            app.Tap(StartTimeEntry.DurationLabel);
+            app.Tap(EditDuration.WheelDurationInput);
+
+            app.EnterText(duration);
+            app.PressEnter();
+
+            app.Tap(EditDuration.SaveButton);
+        }
     }
 }
