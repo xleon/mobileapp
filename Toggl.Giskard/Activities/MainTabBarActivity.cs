@@ -118,12 +118,18 @@ namespace Toggl.Giskard.Activities
         {
             var transaction = SupportFragmentManager.BeginTransaction();
 
+            if (activeFragment is MainFragment mainFragmentToHide)
+                mainFragmentToHide.SetFragmentIsVisible(false);
+
             if (fragment.IsAdded)
                 transaction.Hide(activeFragment).Show(fragment);
             else
                 transaction.Add(Resource.Id.CurrentTabFragmmentContainer, fragment).Hide(activeFragment);
 
             transaction.Commit();
+
+            if (fragment is MainFragment mainFragmentToShow)
+                mainFragmentToShow.SetFragmentIsVisible(true);
 
             activeFragment = fragment;
         }
@@ -132,11 +138,13 @@ namespace Toggl.Giskard.Activities
         {
             SupportFragmentManager.RemoveAllFragments();
 
-            var mainFragment = getCachedFragment(Resource.Id.MainTabTimerItem);
+            var mainFragment = getCachedFragment(Resource.Id.MainTabTimerItem) as MainFragment;
             SupportFragmentManager
                 .BeginTransaction()
                 .Add(Resource.Id.CurrentTabFragmmentContainer, mainFragment)
                 .Commit();
+
+            mainFragment.SetFragmentIsVisible(true);
 
             activeFragment = mainFragment;
         }
