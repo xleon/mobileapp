@@ -98,10 +98,10 @@ namespace Toggl.Daneel.Extensions.Reactive
                 return indexSet as NSIndexSet;
             }
 
-            tableView.DeleteSections(newIndexSet(changes.DeletedSections), UITableViewRowAnimation.Automatic);
+            tableView.DeleteSections(newIndexSet(changes.DeletedSections), UITableViewRowAnimation.Fade);
             // Updated sections doesn't mean reload entire section, somebody needs to update the section view manually
             // otherwise all cells will be reloaded for nothing.
-            tableView.InsertSections(newIndexSet(changes.InsertedSections), UITableViewRowAnimation.Automatic);
+            tableView.InsertSections(newIndexSet(changes.InsertedSections), UITableViewRowAnimation.Fade);
 
             foreach (var (from, to) in changes.MovedSections)
             {
@@ -109,7 +109,7 @@ namespace Toggl.Daneel.Extensions.Reactive
             }
             tableView.DeleteRows(
                 changes.DeletedItems.Select(item => NSIndexPath.FromRowSection(item.itemIndex, item.sectionIndex)).ToArray(),
-                UITableViewRowAnimation.Automatic
+                UITableViewRowAnimation.Top
             );
 
             tableView.InsertRows(
