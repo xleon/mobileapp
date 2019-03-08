@@ -1,19 +1,15 @@
 using System;
 using System.Reactive.Linq;
-using MvvmCross.Binding;
-using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using UIKit;
-using static Toggl.Daneel.Extensions.ViewBindingExtensions;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -21,9 +17,7 @@ namespace Toggl.Daneel.ViewControllers
     public sealed partial class ForgotPasswordViewController
         : KeyboardAwareViewController<ForgotPasswordViewModel>
     {
-        private const int distanceFromTop = 136;
         private const int backButtonFontSize = 14;
-        private const int iPhoneSeScreenHeight = 568;
         private const int resetButtonBottomSpacing = 32;
 
         private bool viewInitialized;
@@ -102,9 +96,6 @@ namespace Toggl.Daneel.ViewControllers
             if (viewInitialized) return;
 
             viewInitialized = true;
-
-            if (View.Frame.Height > iPhoneSeScreenHeight)
-                TopConstraint.Constant = distanceFromTop;
         }
 
         public override void ViewDidAppear(bool animated)
