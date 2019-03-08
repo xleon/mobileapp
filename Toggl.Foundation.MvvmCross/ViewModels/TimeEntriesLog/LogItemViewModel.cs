@@ -27,6 +27,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog
         public bool NeedsSync { get; }
         public bool CanContinue { get; }
 
+        public long Identity { get; }
+
+        public bool IsTimeEntryGroupHeader =>
+            VisualizationIntent == LogItemVisualizationIntent.ExpandedGroupHeader ||
+            VisualizationIntent == LogItemVisualizationIntent.CollapsedGroupHeader;
+
         public LogItemViewModel(
             GroupId groupId,
             long[] representedTimeEntriesIds,
@@ -57,9 +63,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog
             NeedsSync = needsSync;
             CanContinue = canSync && !isInaccessible;
 
-            Identity = isHeader()
-                ? $"G_{representedTimeEntriesIds.First()}".GetHashCode()
-                : representedTimeEntriesIds.First();
+            var idNormalizationFactor = IsTimeEntryGroupHeader ? -1 : 1;
+            Identity = idNormalizationFactor * RepresentedTimeEntriesIds.First();
         }
 
         public bool Equals(LogItemViewModel other)
@@ -106,9 +111,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog
         public static bool operator ==(LogItemViewModel left, LogItemViewModel right) => Equals(left, right);
 
         public static bool operator !=(LogItemViewModel left, LogItemViewModel right) => !Equals(left, right);
-        public long Identity { get; }
-
-        private bool isHeader() => VisualizationIntent == LogItemVisualizationIntent.ExpandedGroupHeader ||
-                                   VisualizationIntent == LogItemVisualizationIntent.CollapsedGroupHeader;
+      
     }
 }

@@ -589,7 +589,6 @@
     <AndroidResource Include="Resources\layout\SelectBeginningOfWeekFragmentCell.axml" />
     <AndroidResource Include="Resources\layout\SelectDurationFormatFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDurationFormatFragmentCell.axml" />
-    <AndroidResource Include="Resources\drawable\RoundedRectangle.xml" />
     <AndroidResource Include="Resources\layout\ReportsActivity.axml" />
     <AndroidResource Include="Resources\layout\ReportsActivityHeader.axml" />
     <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
@@ -1024,6 +1023,9 @@
     <AndroidResource Include="Resources\drawable\picker_header_background.xml" />
     <AndroidResource Include="Resources\drawable\ic_play.xml" />
     <AndroidResource Include="Resources\drawable\ic_stop.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\GrayBorderRoundedRectangle.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />

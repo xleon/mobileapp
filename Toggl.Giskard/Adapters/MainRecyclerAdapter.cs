@@ -14,6 +14,7 @@ using Toggl.Multivac.Extensions;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Giskard.ViewHelpers;
+using System.Reactive.Disposables;
 
 namespace Toggl.Giskard.Adapters
 {
@@ -25,6 +26,9 @@ namespace Toggl.Giskard.Adapters
         private readonly ITimeService timeService;
 
         private bool isRatingViewVisible = false;
+
+        public IObservable<GroupId> ToggleGroupExpansion
+            => toggleGroupExpansionSubject.AsObservable();
 
         public IObservable<LogItemViewModel> TimeEntryTaps
             => timeEntryTappedSubject.Select(item => item.ViewModel).AsObservable();
@@ -40,9 +44,10 @@ namespace Toggl.Giskard.Adapters
 
         public IStopwatchProvider StopwatchProvider { get; set; }
 
-        private Subject<TimeEntryViewData> timeEntryTappedSubject = new Subject<TimeEntryViewData>();
-        private Subject<LogItemViewModel> continueTimeEntrySubject = new Subject<LogItemViewModel>();
-        private Subject<LogItemViewModel> deleteTimeEntrySubject = new Subject<LogItemViewModel>();
+        private readonly Subject<GroupId> toggleGroupExpansionSubject = new Subject<GroupId>();
+        private readonly Subject<TimeEntryViewData> timeEntryTappedSubject = new Subject<TimeEntryViewData>();
+        private readonly Subject<LogItemViewModel> continueTimeEntrySubject = new Subject<LogItemViewModel>();
+        private readonly Subject<LogItemViewModel> deleteTimeEntrySubject = new Subject<LogItemViewModel>();
 
         public MainRecyclerAdapter(ITimeService timeService)
         {
@@ -156,17 +161,22 @@ namespace Toggl.Giskard.Adapters
             var mainLogCellViewHolder = new MainLogCellViewHolder(LayoutInflater.FromContext(parent.Context).Inflate(Resource.Layout.MainLogCell, parent, false))
             {
                 TappedSubject = timeEntryTappedSubject,
-                ContinueButtonTappedSubject = continueTimeEntrySubject
+                ContinueButtonTappedSubject = continueTimeEntrySubject,
+                ToggleGroupExpansionSubject = toggleGroupExpansionSubject
             };
+
             mainLogCellStopwatch.Stop();
             return mainLogCellViewHolder;
         }
 
         protected override long IdFor(LogItemViewModel item)
-            => item.RepresentedTimeEntriesIds.First();
+        {
+            var idNormalizationFactor = item.IsTimeEntryGroupHeader ? -1 : 1;
+            return idNormalizationFactor * item.RepresentedTimeEntriesIds.First();
+        }
 
         protected override long IdForSection(DaySummaryViewModel section)
-            => section.Title.GetHashCode();
+            => section.Identity;
 
         protected override TimeEntryViewData Wrap(LogItemViewModel item)
             => new TimeEntryViewData(item);

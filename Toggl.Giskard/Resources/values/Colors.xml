@@ -40,4 +40,5 @@
     <color name="nonBillableColor">#1e328fff</color>
     <color name="halfTransparentPurple">#8FC56BFF</color>
     <color name="halfTransparentBlue">#8F06AAF5</color>
+    <color name="grayBorder">#CECECE</color>
 </resources>

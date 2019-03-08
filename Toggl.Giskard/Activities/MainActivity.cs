@@ -148,6 +148,12 @@ namespace Toggl.Giskard.Activities
                 StopwatchProvider = localStopwatchProvider
             };
 
+            setupRecycler();
+
+            mainRecyclerAdapter.ToggleGroupExpansion
+                .Subscribe(ViewModel.TimeEntriesViewModel.ToggleGroupExpansion.Inputs)
+                .DisposedBy(DisposeBag);
+
             mainRecyclerAdapter.TimeEntryTaps
                 .Select(te => te.RepresentedTimeEntriesIds)
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
@@ -171,11 +177,9 @@ namespace Toggl.Giskard.Activities
                 .Subscribe(updateSyncingIndicator)
                 .DisposedBy(DisposeBag);
 
-           refreshLayout.Rx().Refreshed()
+            refreshLayout.Rx().Refreshed()
                 .Subscribe(ViewModel.Refresh.Inputs)
                 .DisposedBy(DisposeBag);
-
-            setupLayoutManager(mainRecyclerAdapter);
 
             ViewModel.TimeEntries
                 .ObserveOn(SynchronizationContext.Current)
@@ -233,13 +237,13 @@ namespace Toggl.Giskard.Activities
             mainRecyclerAdapter.NotifyDataSetChanged();
         }
 
-        private void setupLayoutManager(MainRecyclerAdapter mainAdapter)
+        private void setupRecycler()
         {
             layoutManager = new LinearLayoutManager(this);
             layoutManager.ItemPrefetchEnabled = true;
             layoutManager.InitialPrefetchItemCount = 4;
             mainRecyclerView.SetLayoutManager(layoutManager);
-            mainRecyclerView.SetAdapter(mainAdapter);
+            mainRecyclerView.SetAdapter(mainRecyclerAdapter);
         }
 
         private void setupItemTouchHelper(MainRecyclerAdapter mainAdapter)

@@ -10,13 +10,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog
 
         public string TotalTrackedTime { get; }
 
+        public long Identity { get; }
+
         public DaySummaryViewModel(DateTime day, string title, string totalTrackedTime)
         {
             Title = title;
             TotalTrackedTime = totalTrackedTime;
             Identity = day.ToBinary();
         }
-
-        public long Identity { get; }
     }
 }
