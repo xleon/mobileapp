@@ -108,6 +108,11 @@ namespace Toggl.Daneel.ViewControllers
                 .Subscribe(TimeEntriesLogTableView.Rx().AnimateSections(tableViewSource))
                 .DisposedBy(disposeBag);
 
+            ViewModel.ShouldReloadTimeEntryLog
+                .WithLatestFrom(ViewModel.TimeEntries, (_, timeEntries) => timeEntries)
+                .Subscribe(TimeEntriesLogTableView.Rx().ReloadSections(tableViewSource))
+                .DisposedBy(disposeBag);
+
             tableViewSource.ToggleGroupExpansion
                 .Subscribe(ViewModel.TimeEntriesViewModel.ToggleGroupExpansion.Inputs)
                 .DisposedBy(disposeBag);
@@ -257,10 +262,6 @@ namespace Toggl.Daneel.ViewControllers
             ViewModel.SuggestionsViewModel.Suggestions
                 .Subscribe(suggestionsView.OnSuggestions)
                 .DisposedBy(DisposeBag);
-
-            ViewModel.ShouldReloadTimeEntryLog
-                .Subscribe(reload)
-                .DisposedBy(disposeBag);
 
             View.SetNeedsLayout();
             View.LayoutIfNeeded();
@@ -693,13 +694,6 @@ namespace Toggl.Daneel.ViewControllers
             swipeRightAnimationDisposable = swipeRightStep.ManageSwipeActionAnimationOf(nextFirstTimeEntry, Direction.Right);
 
             swipeLeftGestureRecognizer = swipeLeftStep.DismissBySwiping(nextFirstTimeEntry, Direction.Left);
-        }
-
-        private void reload()
-        {
-            var range = new NSRange(0, TimeEntriesLogTableView.NumberOfSections());
-            var indexSet = NSIndexSet.FromNSRange(range);
-            TimeEntriesLogTableView.ReloadSections(indexSet, UITableViewRowAnimation.None);
         }
     }
 }
