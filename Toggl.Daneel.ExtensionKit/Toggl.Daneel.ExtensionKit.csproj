@@ -66,14 +66,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Toggl.Daneel.IntentCodeGen\Toggl.Daneel.IntentCodeGen\Base.lproj\Intents.intentdefinition">
-      <Link>Base.lproj\Intents.intentdefinition</Link>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="..\Toggl.Daneel.IntentCodeGen\Toggl.Daneel.IntentCodeGen\en.lproj\Intents.strings">
       <Link>en.lproj\Intents.strings</Link>
     </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Toggl.Daneel.IntentCodeGen\Toggl.Daneel.IntentCodeGen\Base.lproj\Intents.intentdefinition">
+      <Link>Base.lproj\Intents.intentdefinition</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
