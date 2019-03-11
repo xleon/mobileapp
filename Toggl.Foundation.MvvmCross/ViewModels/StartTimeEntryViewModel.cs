@@ -98,7 +98,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IOnboardingStorage OnboardingStorage { get; }
 
-        public UIAction Close { get; }
+        public OutputAction<bool> Close { get; }
         public UIAction Done { get; }
         public UIAction DurationTapped { get; }
         public UIAction ToggleBillable { get; }
@@ -111,8 +111,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public InputAction<ProjectSuggestion> ToggleTasks { get; }
         public InputAction<IEnumerable<ISpan>> SetTextSpans { get; }
 
-        public IObservable<IList<CollectionSection<string, AutocompleteSuggestion>>>
-            Suggestions { get; }
+        public IObservable<IList<SectionModel<string, AutocompleteSuggestion>>> Suggestions { get; }
         public IObservable<string> DisplayedTime { get; }
 
         public StartTimeEntryViewModel(
@@ -613,7 +612,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .GroupBy(suggestion => suggestion.WorkspaceId);
         }
 
-        private IEnumerable<CollectionSection<string, AutocompleteSuggestion>> toCollections(IEnumerable<IGrouping<long, AutocompleteSuggestion>> suggestions)
+        private IEnumerable<SectionModel<string, AutocompleteSuggestion>> toCollections(IEnumerable<IGrouping<long, AutocompleteSuggestion>> suggestions)
         {
             var sections = suggestions.Select(group =>
                 {
@@ -629,7 +628,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                             projectSuggestion.WorkspaceName));
                     }
 
-                    return new CollectionSection<string, AutocompleteSuggestion>(header, items);
+                    return new SectionModel<string, AutocompleteSuggestion>(header, items);
                 }
             );
 
@@ -670,10 +669,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             }
         }
 
-        private IList<CollectionSection<string, AutocompleteSuggestion>> addStaticElements(IEnumerable<CollectionSection<string, AutocompleteSuggestion>> sections)
+        private IList<SectionModel<string, AutocompleteSuggestion>> addStaticElements(IEnumerable<SectionModel<string, AutocompleteSuggestion>> sections)
         {
             var suggestions = sections.SelectMany(section => section.Items);
-            IEnumerable<CollectionSection<string, AutocompleteSuggestion>> collections = sections;
+            IEnumerable<SectionModel<string, AutocompleteSuggestion>> collections = sections;
 
             if (isSuggestingProjects.Value)
             {
@@ -681,15 +680,14 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 {
                     sections = sections
                         .Prepend(
-                            CollectionSection<string, AutocompleteSuggestion>.SingleElement(
-                                new CreateEntitySuggestion(Resources.CreateProject, textFieldInfo.Value.Description)
-                            )
+                            SectionModel<string, AutocompleteSuggestion>.SingleElement(
+                                new CreateEntitySuggestion(Resources.CreateProject, textFieldInfo.Value.Description))
                         );
                 }
 
                 if (!hasAnyProjects)
                 {
-                    sections = sections.Append(CollectionSection<string, AutocompleteSuggestion>.SingleElement(
+                    sections = sections.Append(SectionModel<string, AutocompleteSuggestion>.SingleElement(
                         NoEntityInfoMessage.CreateProject())
                     );
                 }
@@ -701,7 +699,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 {
                     sections = sections
                         .Prepend(
-                            CollectionSection<string, AutocompleteSuggestion>.SingleElement(
+                            SectionModel<string, AutocompleteSuggestion>.SingleElement(
                                 new CreateEntitySuggestion(Resources.CreateTag, textFieldInfo.Value.Description)
                             )
                         );
@@ -709,7 +707,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
                 if (!hasAnyTags)
                 {
-                    sections = sections.Append(CollectionSection<string, AutocompleteSuggestion>.SingleElement(
+                    sections = sections.Append(SectionModel<string, AutocompleteSuggestion>.SingleElement(
                         NoEntityInfoMessage.CreateTag())
                     );
                 }

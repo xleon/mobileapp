@@ -31,11 +31,11 @@ namespace Toggl.Giskard.Adapters
         private readonly Subject<TItem> itemTapSubject = new Subject<TItem>();
         private readonly Subject<TSection> headerTapSubject = new Subject<TSection>();
 
-        private IList<CollectionSection<TSection, TItem>> items;
-        public IList<CollectionSection<TSection, TItem>> Items
+        private IList<SectionModel<TSection, TItem>> items;
+        public IList<SectionModel<TSection, TItem>> Items
         {
             get => Items;
-            set => setItems(value ?? new List<CollectionSection<TSection, TItem>>());
+            set => setItems(value ?? new List<SectionModel<TSection, TItem>>());
         }
 
         public IObservable<TItem> ItemTapObservable => itemTapSubject.AsObservable();
@@ -67,7 +67,7 @@ namespace Toggl.Giskard.Adapters
 
                 return headerViewType;
             }
-            
+
             var itemViewType = SelectItemViewType(item.Right);
             if (!ItemViewTypes.Contains(itemViewType))
                 throw new InvalidOperationException("An item view type not included in the ItemViewTypes property was returned");
@@ -115,7 +115,7 @@ namespace Toggl.Giskard.Adapters
             }
         }
 
-        private void setItems(IList<CollectionSection<TSection, TItem>> newItems)
+        private void setItems(IList<SectionModel<TSection, TItem>> newItems)
         {
             lock (updateLock)
             {
@@ -132,7 +132,7 @@ namespace Toggl.Giskard.Adapters
             }
         }
 
-        private IEnumerable<Either<TSection, TItem>> flattenItems(IList<CollectionSection<TSection, TItem>> newItems)
+        private IEnumerable<Either<TSection, TItem>> flattenItems(IList<SectionModel<TSection, TItem>> newItems)
         {
             var shouldIncludeHeader = newItems.Count > 1;
 

@@ -44,7 +44,7 @@ namespace Toggl.Giskard.Activities
             var adapter = new StartTimeEntryRecyclerAdapter();
             recyclerView.SetLayoutManager(new LinearLayoutManager(this));
             recyclerView.SetAdapter(adapter);
-            
+
             ViewModel.Suggestions
                 .Subscribe(adapter.Rx().Items())
                 .DisposedBy(DisposeBag);
@@ -101,10 +101,10 @@ namespace Toggl.Giskard.Activities
                 .BindAction(ViewModel.Done)
                 .DisposedBy(DisposeBag);
 
-            closeButton.Rx()
-                .BindAction(ViewModel.Close)
+            closeButton.Rx().Tap()
+                .Subscribe(ViewModel.Close.Inputs)
                 .DisposedBy(DisposeBag);
-            
+
             // Description text field
             descriptionField.Hint = ViewModel.PlaceholderText;
 

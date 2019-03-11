@@ -893,7 +893,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             public async Task ClosesTheViewModelIfNothingChanged()
             {
                 await ViewModel.Initialize();
-                _ = ViewModel.Close.Execute();
+                _ = ViewModel.Close.ExecuteWithCompletion();
                 TestScheduler.Start();
 
                 await NavigationService.Received().Close(Arg.Is(ViewModel));
@@ -905,7 +905,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.Initialize();
                 ViewModel.Description.Accept("Something Else");
 
-                _ = ViewModel.Close.Execute();
+                _ = ViewModel.Close.ExecuteWithCompletion();
                 TestScheduler.Start();
 
                 await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -930,7 +930,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.Initialize();
                 _ = ViewModel.SelectProject.Execute();
-                _ = ViewModel.Close.Execute();
+                _ = ViewModel.Close.ExecuteWithCompletion();
                 TestScheduler.Start();
 
                 await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -955,7 +955,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.Initialize();
                 _ = ViewModel.SelectProject.Execute();
-                _ = ViewModel.Close.Execute();
+                _ = ViewModel.Close.ExecuteWithCompletion();
                 TestScheduler.Start();
 
                 await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -980,7 +980,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.Initialize();
                 _ = ViewModel.SelectProject.Execute();
-                _ = ViewModel.Close.Execute();
+                _ = ViewModel.Close.ExecuteWithCompletion();
                 TestScheduler.Start();
 
                 await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -1002,7 +1002,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.Initialize();
                 _ = ViewModel.EditTimes.Execute(EditViewTapSource.StartTime);
-                _ = ViewModel.Close.Execute();
+                _ = ViewModel.Close.ExecuteWithCompletion();
                 TestScheduler.Start();
 
                 await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -1026,7 +1026,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.Initialize();
                 _ = ViewModel.EditTimes.Execute(EditViewTapSource.Duration);
-                _ = ViewModel.Close.Execute();
+                _ = ViewModel.Close.ExecuteWithCompletion();
                 TestScheduler.Start();
 
                 await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -1047,7 +1047,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.Initialize();
                 _ = ViewModel.StopTimeEntry.Execute();
-                _ = ViewModel.Close.Execute();
+                _ = ViewModel.Close.ExecuteWithCompletion();
                 TestScheduler.Start();
 
                 await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -1065,7 +1065,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 await ViewModel.Initialize();
                 _ = ViewModel.ToggleBillable.Execute();
-                _ = ViewModel.Close.Execute();
+                _ = ViewModel.Close.ExecuteWithCompletion();
                 TestScheduler.Start();
 
                 await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -1087,7 +1087,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.Initialize();
                 TestScheduler.Start();
                 _ = ViewModel.SelectTags.Execute();
-                _ = ViewModel.Close.Execute();
+                _ = ViewModel.Close.ExecuteWithCompletion();
                 TestScheduler.Start();
 
                 await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -1103,7 +1103,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.Initialize();
                 TestScheduler.Start();
                 ViewModel.Description.Accept("This changes the description.");
-                _ = ViewModel.Close.Execute();
+                _ = ViewModel.Close.ExecuteWithCompletion();
                 TestScheduler.Start();
 
                 await NavigationService.Received().Close(ViewModel);
@@ -1119,7 +1119,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await ViewModel.Initialize();
                 TestScheduler.Start();
                 ViewModel.Description.Accept("This changes the description.");
-                _ = ViewModel.Close.Execute();
+                _ = ViewModel.Close.ExecuteWithCompletion();
                 TestScheduler.Start();
 
                 await NavigationService.DidNotReceive().Close(ViewModel);
