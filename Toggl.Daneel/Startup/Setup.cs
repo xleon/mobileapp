@@ -75,7 +75,7 @@ namespace Toggl.Daneel
             var suggestionProviderContainer = new SuggestionProviderContainer(
                 new MostUsedTimeEntrySuggestionProvider(database, timeService, maxNumberOfSuggestions)
             );
-            var intentDonationService = new IntentDonationServiceIos();
+            var intentDonationService = new IntentDonationServiceIos(analyticsService);
             var privateSharedStorageService = new PrivateSharedStorageServiceIos();
 
             var appVersion = Version.Parse(version);
