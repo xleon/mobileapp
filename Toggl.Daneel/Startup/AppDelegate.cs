@@ -186,7 +186,7 @@ namespace Toggl.Daneel
             switch (intent)
             {
                 case StopTimerIntent _:
-                    navigationService.Navigate(ApplicationUrls.Main.StopTimeEntry);
+                    navigationService.Navigate(ApplicationUrls.Main.StopFromSiri);
                     return true;
                 case ShowReportIntent _:
                     navigationService.Navigate(ApplicationUrls.Reports);
@@ -219,7 +219,8 @@ namespace Toggl.Daneel
                 string.IsNullOrEmpty(intent.Workspace?.Identifier) ? null : (long?)Convert.ToDouble(intent.Workspace?.Identifier),
                 intent.EntryDescription ?? "",
                 string.IsNullOrEmpty(intent.ProjectId?.Identifier) ? null : (long?)Convert.ToDouble(intent.ProjectId?.Identifier),
-                tags
+                tags,
+                TimeEntryStartOrigin.Siri
             );
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -257,6 +257,9 @@ namespace Toggl.Foundation.Tests.Interactors
             protected override IObservable<IDatabaseTimeEntry> CallInteractor(ITimeEntryPrototype prototype)
                 => InteractorFactory.CreateTimeEntry(prototype, prototype.Duration.HasValue ? TimeEntryStartOrigin.Manual : TimeEntryStartOrigin.Timer).Execute();
 
+            protected IObservable<IDatabaseTimeEntry> CallInteractorWithOrigin(ITimeEntryPrototype prototype, TimeEntryStartOrigin origin)
+                => InteractorFactory.CreateTimeEntry(prototype, origin).Execute();
+
             [Fact, LogIfTooSlow]
             public async Task RegistersTheEventAsATimerEventIfManualModeIsDisabled()
             {
@@ -274,6 +277,16 @@ namespace Toggl.Foundation.Tests.Interactors
 
                 AnalyticsService.Received().Track(Arg.Is<StartTimeEntryEvent>(
                     startTimeEntryEvent => startTimeEntryEvent.Origin == TimeEntryStartOrigin.Manual));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task AllowsOriginToBePassedIn()
+            {
+                var prototype = CreatePrototype(ValidTime, ValidDescription, true, ProjectId, duration: TimeSpan.FromMinutes(1));
+                await CallInteractorWithOrigin(prototype, TimeEntryStartOrigin.Siri);
+
+                AnalyticsService.Received().Track(Arg.Is<StartTimeEntryEvent>(
+                    startTimeEntryEvent => startTimeEntryEvent.Origin == TimeEntryStartOrigin.Siri));
             }
 
             [Fact, LogIfTooSlow]
