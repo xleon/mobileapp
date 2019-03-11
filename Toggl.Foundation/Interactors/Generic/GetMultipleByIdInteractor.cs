@@ -10,7 +10,7 @@ using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Interactors.Generic
 {
-    public sealed class GetMultipleByIdInteractor<TThreadsafe, TDatabase> 
+    public sealed class GetMultipleByIdInteractor<TThreadsafe, TDatabase>
         : IInteractor<IObservable<IEnumerable<TThreadsafe>>>
         where TDatabase : IDatabaseModel, IIdentifiable
         where TThreadsafe : TDatabase, IThreadSafeModel
@@ -27,6 +27,6 @@ namespace Toggl.Foundation.Interactors.Generic
         }
 
         public IObservable<IEnumerable<TThreadsafe>> Execute()
-            => dataSource.GetAll(entry => ids.Contains(entry.Id));
+            => dataSource.GetAll(entry => ids.Contains(entry.Id), includeInaccessibleEntities: true);
     }
 }

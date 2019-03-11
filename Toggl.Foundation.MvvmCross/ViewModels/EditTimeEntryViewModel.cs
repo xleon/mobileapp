@@ -206,6 +206,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .DistinctUntilChanged()
                 .AsDriver(false, schedulerProvider);
 
+            Preferences = interactorFactory.GetPreferences().Execute()
+                .AsDriver(null, schedulerProvider);
+
             // Actions
             Close = actionFactory.FromAsync(closeWithConfirmation);
             SelectProject = actionFactory.FromAsync(selectProject);
@@ -262,9 +265,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             isInaccessibleSubject.OnNext(timeEntry.IsInaccessible);
 
             setupSyncError(timeEntries);
-
-            Preferences = interactorFactory.GetPreferences().Execute()
-                .AsDriver(null, schedulerProvider);
         }
 
         private void setupSyncError(IEnumerable<IThreadSafeTimeEntry> timeEntries)
@@ -352,9 +352,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 projectClientTaskSubject.OnNext(ProjectClientTaskInfo.Empty);
 
                 clearTagsIfNeeded(workspaceId, chosenProject.WorkspaceId);
-
                 workspaceIdSubject.OnNext(chosenProject.WorkspaceId);
-                
+
+                var workspace = await interactorFactory.GetWorkspaceById(chosenProject.WorkspaceId).Execute();
+                isInaccessibleSubject.OnNext(workspace.IsInaccessible);
+
                 return;
             }
 
@@ -372,6 +374,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 taskName));
 
             workspaceIdSubject.OnNext(chosenProject.WorkspaceId);
+
+            isInaccessibleSubject.OnNext(project.IsInaccessible);
         }
 
         private void clearTagsIfNeeded(long currentWorkspaceId, long newWorkspaceId)

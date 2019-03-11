@@ -133,18 +133,6 @@ namespace Toggl.Daneel.ViewControllers
                 .Subscribe(TagsTextView.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
 
-            var shouldShowTags = Observable.CombineLatest(
-                ViewModel.IsInaccessible, containsTags,
-                (isInaccessible, hasTags) => !isInaccessible || hasTags);
-
-            shouldShowTags
-                .Subscribe(TagsContainerView.Rx().IsVisible())
-                .DisposedBy(DisposeBag);
-
-            shouldShowTags
-               .Subscribe(TagsSeparator.Rx().IsVisible())
-               .DisposedBy(DisposeBag);
-
             ViewModel.IsBillable
                 .Subscribe(BillableSwitch.Rx().CheckedObserver())
                 .DisposedBy(DisposeBag);
@@ -158,8 +146,7 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsInaccessible
-                .Invert()
-                .Subscribe(BillableSwitch.Rx().Enabled())
+                .Subscribe(adjustUIForInaccessibleTimeEntry)
                 .DisposedBy(DisposeBag);
 
             ViewModel.StartTime
@@ -256,14 +243,6 @@ namespace Toggl.Daneel.ViewControllers
             return await ViewModel.Close.Execute();
         }
 
-        IEnumerable<UILabel> getLabelsToChangeColorWhenEditingInaccessibleEntry()
-        {
-            yield return StartTimeLabel;
-            yield return StartDateLabel;
-            yield return EndTimeLabel;
-            yield return DurationLabel;
-        }
-
         private void prepareViews()
         {
             DurationLabel.Font = DurationLabel.Font.GetMonospacedDigitFont();
@@ -310,6 +289,39 @@ namespace Toggl.Daneel.ViewControllers
             AddTagsLabel.Text = Resources.AddTags;
             DeleteButton.SetTitle(Resources.Delete, UIControlState.Normal);
             ConfirmButton.SetTitle(Resources.ConfirmChanges, UIControlState.Normal);
+        }
+
+        private void adjustUIForInaccessibleTimeEntry(bool isInaccessible)
+        {
+            DescriptionTextView.UserInteractionEnabled = !isInaccessible;
+            StartTimeView.UserInteractionEnabled = !isInaccessible;
+            StartDateView.UserInteractionEnabled = !isInaccessible;
+            EndTimeView.UserInteractionEnabled = !isInaccessible;
+            DurationView.UserInteractionEnabled = !isInaccessible;
+            StopButton.UserInteractionEnabled = !isInaccessible;
+
+            BillableSwitch.Enabled = !isInaccessible;
+            TagsContainerView.Hidden = isInaccessible;
+            TagsSeparator.Hidden = isInaccessible;
+
+            var textColor = isInaccessible
+                ? Color.Common.Disabled.ToNativeColor()
+                : Color.Common.TextColor.ToNativeColor();
+
+            DescriptionTextView.TextColor = textColor;
+
+            foreach (var label in getLabelsToChangeColorWhenEditingInaccessibleEntry())
+            {
+                label.TextColor = textColor;
+            }
+        }
+
+        IEnumerable<UILabel> getLabelsToChangeColorWhenEditingInaccessibleEntry()
+        {
+            yield return StartTimeLabel;
+            yield return StartDateLabel;
+            yield return EndTimeLabel;
+            yield return DurationLabel;
         }
 
         private void centerTextVertically(UITextView textView)
