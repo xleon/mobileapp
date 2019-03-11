@@ -63,7 +63,8 @@ namespace Toggl.Daneel.Intents
         Success,
         Failure,
         FailureRequiringAppLaunch,
-        SuccessNoRunningEntry = 100,
-        FailureNoApiToken
+        FailureNoTimerRunning = 100,
+        FailureNoApiToken,
+        SuccessWithEmptyDescription
     }
 }

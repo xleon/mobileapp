@@ -97,18 +97,16 @@
 	<key>INIntentDefinitionModelVersion</key>
 	<string>1.0</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>18A389</string>
+	<string>18D109</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>10A255</string>
+	<string>10B61</string>
 	<key>INIntentDefinitionToolsVersion</key>
-	<string>10.0</string>
+	<string>10.1</string>
 	<key>INIntents</key>
 	<array>
 		<dict>
 			<key>INIntentCategory</key>
 			<string>generic</string>
-			<key>INIntentDescription</key>
-			<string>Stop current running time entry</string>
 			<key>INIntentDescriptionID</key>
 			<string>EA0ujz</string>
 			<key>INIntentLastParameterTag</key>
@@ -128,7 +126,7 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Stop current running time entry</string>
+					<string>Stop a running timer</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>UHcyyr</string>
 				</dict>
@@ -151,7 +149,7 @@
 					</dict>
 					<dict>
 						<key>INIntentResponseCodeFormatString</key>
-						<string>Stopped. You've been doing ${entryDescription} for ${entryDurationString}.</string>
+						<string>Stopped. You've tracked ${entryDescription} for ${entryDurationString}.</string>
 						<key>INIntentResponseCodeFormatStringID</key>
 						<string>akQb1h</string>
 						<key>INIntentResponseCodeName</key>
@@ -161,23 +159,33 @@
 					</dict>
 					<dict>
 						<key>INIntentResponseCodeFormatString</key>
-						<string>There's no entry currently running.</string>
+						<string>There's no timer running. </string>
 						<key>INIntentResponseCodeFormatStringID</key>
 						<string>JuvQpB</string>
 						<key>INIntentResponseCodeName</key>
-						<string>successNoRunningEntry</string>
+						<string>failureNoTimerRunning</string>
 						<key>INIntentResponseCodeSuccess</key>
-						<true/>
+						<false/>
 					</dict>
 					<dict>
 						<key>INIntentResponseCodeFormatString</key>
-						<string>You need to log in to continue.</string>
+						<string>Log in to use this shortcut.</string>
 						<key>INIntentResponseCodeFormatStringID</key>
 						<string>C84CvN</string>
 						<key>INIntentResponseCodeName</key>
 						<string>failureNoApiToken</string>
 						<key>INIntentResponseCodeSuccess</key>
 						<false/>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeFormatString</key>
+						<string>Stopped. You've tracked time for ${entryDurationString}.</string>
+						<key>INIntentResponseCodeFormatStringID</key>
+						<string>WSMrGS</string>
+						<key>INIntentResponseCodeName</key>
+						<string>successWithEmptyDescription</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<true/>
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
@@ -237,7 +245,7 @@
 			<key>INIntentRestrictions</key>
 			<integer>0</integer>
 			<key>INIntentTitle</key>
-			<string>Stop Timer</string>
+			<string>Stop a running timer</string>
 			<key>INIntentTitleID</key>
 			<string>QmBKnK</string>
 			<key>INIntentType</key>
@@ -354,8 +362,6 @@
 		<dict>
 			<key>INIntentCategory</key>
 			<string>generic</string>
-			<key>INIntentDescription</key>
-			<string>Show report</string>
 			<key>INIntentDescriptionID</key>
 			<string>KPcGYj</string>
 			<key>INIntentLastParameterTag</key>
@@ -415,7 +421,7 @@
 			<key>INIntentRestrictions</key>
 			<integer>0</integer>
 			<key>INIntentTitle</key>
-			<string>Show Report</string>
+			<string>Show report</string>
 			<key>INIntentTitleID</key>
 			<string>vvtqdG</string>
 			<key>INIntentType</key>
@@ -427,7 +433,7 @@
 		</dict>
 		<dict>
 			<key>INIntentCategory</key>
-			<string>generic</string>
+			<string>start</string>
 			<key>INIntentDescription</key>
 			<string>Start a new time tracking</string>
 			<key>INIntentDescriptionID</key>
@@ -608,7 +614,7 @@
 					</dict>
 					<dict>
 						<key>INIntentResponseCodeFormatString</key>
-						<string>Time tracking started.</string>
+						<string>Time-tracking started.</string>
 						<key>INIntentResponseCodeFormatStringID</key>
 						<string>0vfpVe</string>
 						<key>INIntentResponseCodeName</key>
@@ -618,7 +624,7 @@
 					</dict>
 					<dict>
 						<key>INIntentResponseCodeFormatString</key>
-						<string>You need to log in to continue.</string>
+						<string>Log in to use this shortcut.</string>
 						<key>INIntentResponseCodeFormatStringID</key>
 						<string>sC56D6</string>
 						<key>INIntentResponseCodeName</key>
@@ -643,7 +649,7 @@
 			<key>INIntentUserConfirmationRequired</key>
 			<false/>
 			<key>INIntentVerb</key>
-			<string>Do</string>
+			<string>Start</string>
 		</dict>
 	</array>
 </dict>

@@ -1,4 +1,4 @@
-"0vfpVe" = "Time tracking started.";
+"0vfpVe" = "Time-tracking started.";
 
 "5xqJdx" = "in ${workspace}";
 
@@ -10,9 +10,7 @@
 
 "ArvZvi" = "Start timer for ${entryDescription}";
 
-"C84CvN" = "You need to log in to continue.";
-
-"EA0ujz" = "Stop current running time entry";
+"C84CvN" = "Log in to use this shortcut.";
 
 "Emkvsq-EagY8C" = "Here is the report for This Week.";
 
@@ -30,21 +28,21 @@
 
 "IUEfYE" = "Start timer for ${entryDescription}";
 
-"JuvQpB" = "There's no entry currently running.";
+"JuvQpB" = "There's no timer running. ";
 
 "KKrxVY" = "in ${workspace}";
 
-"KPcGYj" = "Show report";
-
 "Mr6glC" = "in ${workspace}";
 
-"QmBKnK" = "Stop Timer";
+"QmBKnK" = "Stop a running timer";
 
-"UHcyyr" = "Stop current running time entry";
+"UHcyyr" = "Stop a running timer";
 
 "VbS2we" = "Start timer";
 
-"akQb1h" = "Stopped. You've been doing ${entryDescription} for ${entryDurationString}.";
+"WSMrGS" = "Stopped. You've tracked time for ${entryDurationString}.";
+
+"akQb1h" = "Stopped. You've tracked ${entryDescription} for ${entryDurationString}.";
 
 "bHlXe3" = "in ${workspace}";
 
@@ -74,11 +72,11 @@
 
 "msGSif" = "in ${workspace}";
 
-"sC56D6" = "You need to log in to continue.";
+"sC56D6" = "Log in to use this shortcut.";
 
 "tjn3qS" = "Start timer for ${entryDescription}";
 
-"vvtqdG" = "Show Report";
+"vvtqdG" = "Show report";
 
 "xGukxu" = "Start timer for ${entryDescription}";
 

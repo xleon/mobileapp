@@ -48,17 +48,19 @@ namespace SiriExtension
 
                         var timeSpan = TimeSpan.FromSeconds(te.Duration ?? 0);
 
-                        var response = StopTimerIntentResponse.SuccessIntentResponseWithEntryDescription(
-                            te.Description,
-                            durationStringForTimeSpan(timeSpan)
-                        );
+                        var response = string.IsNullOrEmpty(te.Description)
+                            ? StopTimerIntentResponse
+                                .SuccessWithEmptyDescriptionIntentResponseWithEntryDurationString(
+                                    durationStringForTimeSpan(timeSpan))
+                            : StopTimerIntentResponse.SuccessIntentResponseWithEntryDescription(
+                                te.Description,
+                                durationStringForTimeSpan(timeSpan)
+                            );
                         response.EntryStart = te.Start.ToUnixTimeSeconds();
                         response.EntryDuration = te.Duration;
 
                         SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.StopTimer());
 
-                        // Once Xamarin's bug if fixed we have to use tha above response instead of this one.
-                        //var response = new StopTimerIntentResponse(StopTimerIntentResponseCode.Success, null);
                         completion(response);
                     },
                     exception =>
@@ -104,9 +106,9 @@ namespace SiriExtension
         }
 
         private StopTimerIntentResponse responseFromException(Exception exception)
-        {            
+        {
             if (exception is NoRunningEntryException)
-                return new StopTimerIntentResponse(StopTimerIntentResponseCode.SuccessNoRunningEntry, null);
+                return new StopTimerIntentResponse(StopTimerIntentResponseCode.FailureNoTimerRunning, null);
 
             return new StopTimerIntentResponse(StopTimerIntentResponseCode.Failure, null);
         }

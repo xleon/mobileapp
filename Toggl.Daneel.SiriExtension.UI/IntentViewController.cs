@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Globalization;
+using System.Resources;
 using CoreGraphics;
 using Foundation;
 using Intents;
@@ -60,20 +61,19 @@ namespace Toggl.Daneel.SiriExtension.UI
                 case StartTimerIntent startTimerIntent:
                     if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Success)
                     {
-                        desiredSize = showStartTimerSuccess(startTimerIntent.EntryDescription);                         
+                        desiredSize = showStartTimerSuccess(startTimerIntent.EntryDescription);
                     }
 
                     if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Ready)
                     {
-                        desiredSize = showConfirmation($"Start {startTimerIntent.EntryDescription}?");
+                        desiredSize = showConfirmation($"Start tracking {startTimerIntent.EntryDescription ?? "time"}?");
                     }
 
                     break;
                 case StopTimerIntent _:
                     if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Success)
                     {
-                        var response = interaction.IntentResponse as StopTimerIntentResponse;
-                        if (!(response is null))
+                        if (interaction.IntentResponse is StopTimerIntentResponse response)
                         {
                             desiredSize = showStopResponse(response);
                         }
@@ -81,7 +81,7 @@ namespace Toggl.Daneel.SiriExtension.UI
 
                     if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Ready)
                     {
-                        desiredSize = showConfirmation("Stop current entry?");
+                        desiredSize = showConfirmation("Stop tracking time?");
                     }
 
                     break;
@@ -140,7 +140,7 @@ namespace Toggl.Daneel.SiriExtension.UI
         {
             entryInfoView.TimeLabel.Text = secondsToString(response.EntryDuration.DoubleValue);
 
-            var attributedString = new NSMutableAttributedString(response.EntryDescription, boldAttributes);
+            var attributedString = new NSMutableAttributedString(response.EntryDescription ?? "", boldAttributes);
 
             var startTime = DateTimeOffset.FromUnixTimeSeconds(response.EntryStart.LongValue).ToLocalTime();
             var endTime = DateTimeOffset.FromUnixTimeSeconds(response.EntryStart.LongValue + response.EntryDuration.LongValue).ToLocalTime();

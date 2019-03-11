@@ -180,6 +180,11 @@ namespace Toggl.Daneel.Intents
 		[Export ("successIntentResponseWithEntryDescription:entryDurationString:")]
 		StopTimerIntentResponse SuccessIntentResponseWithEntryDescription (string entryDescription, string entryDurationString);
 
+		// +(instancetype _Nonnull)successWithEmptyDescriptionIntentResponseWithEntryDurationString:(NSString * _Nonnull)entryDurationString;
+		[Static]
+		[Export ("successWithEmptyDescriptionIntentResponseWithEntryDurationString:")]
+		StopTimerIntentResponse SuccessWithEmptyDescriptionIntentResponseWithEntryDurationString (string entryDurationString);
+
 		// @property (readwrite, copy, nonatomic) NSString * _Nullable entryDescription;
 		[NullAllowed, Export ("entryDescription")]
 		string EntryDescription { get; set; }
