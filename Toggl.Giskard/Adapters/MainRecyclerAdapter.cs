@@ -170,10 +170,7 @@ namespace Toggl.Giskard.Adapters
         }
 
         protected override long IdFor(LogItemViewModel item)
-        {
-            var idNormalizationFactor = item.IsTimeEntryGroupHeader ? -1 : 1;
-            return idNormalizationFactor * item.RepresentedTimeEntriesIds.First();
-        }
+            => item.Identity;
 
         protected override long IdForSection(DaySummaryViewModel section)
             => section.Identity;
