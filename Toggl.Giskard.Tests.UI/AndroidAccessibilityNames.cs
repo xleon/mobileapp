@@ -53,7 +53,7 @@ namespace Toggl.Tests.UI
     public static class StartTimeEntry
     {
         public static readonly Func<AppQuery, AppQuery> DoneButton = x => x.Id("StartTimeEntryDoneButton");
-        public static readonly Func<AppQuery, AppQuery> DescriptionText = x => x.Id("StartTimeEntryDescriptionTextField");
+        public static readonly Func<AppQuery, AppQuery> DescriptionTextField = x => x.Id("StartTimeEntryDescriptionTextField");
         public const string CloseButton = "StartTimeEntryClose";
         public const string DialogDiscard = "Discard";
         public const string DialogCancel = "Cancel";
@@ -81,6 +81,12 @@ namespace Toggl.Tests.UI
         public const string EditTags = "EditTimeEntryTagsContainer";
         public const string EditProject = "EditTimeEntryProjectContainer";
         public const string EditDescription = "EditTimeEntryDescriptionTextField";
+    }
+
+    public static class Client
+    {
+        public const string AddFilterTextField = "FilterEditText";
+        public const string ClientCreationCellId = "NameTextView";
     }
 
     public static class NewProject
