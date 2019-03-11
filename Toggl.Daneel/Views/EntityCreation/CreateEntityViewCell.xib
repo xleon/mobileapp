@@ -18,31 +18,30 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wOp-ZO-MES">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5dX-Pl-R9i">
                         <rect key="frame" x="16" y="22" width="0.0" height="0.0"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cjz-8B-v9l">
-                        <rect key="frame" x="0.0" y="42" width="320" height="1"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3YA-do-ifW">
+                        <rect key="frame" x="0.0" y="42.5" width="320" height="1"/>
                         <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="1" id="xG0-rM-6kl"/>
+                            <constraint firstAttribute="height" constant="1" id="loe-0e-w0L"/>
                         </constraints>
                     </view>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="5dX-Pl-R9i" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="LWJ-CT-C8T"/>
+                    <constraint firstAttribute="trailing" secondItem="3YA-do-ifW" secondAttribute="trailing" id="Uw0-Kr-3gO"/>
+                    <constraint firstItem="3YA-do-ifW" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" id="VFH-XT-b8j"/>
+                    <constraint firstAttribute="bottom" secondItem="3YA-do-ifW" secondAttribute="bottom" id="eOD-b1-szp"/>
+                    <constraint firstItem="5dX-Pl-R9i" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="16" id="yKn-tx-prG"/>
+                </constraints>
             </tableViewCellContentView>
-            <accessibility key="accessibilityConfiguration" label="CreateEntityViewCell"/>
-            <constraints>
-                <constraint firstItem="wOp-ZO-MES" firstAttribute="centerY" secondItem="cxk-wN-pdQ" secondAttribute="centerY" id="8ju-HG-Sb1"/>
-                <constraint firstAttribute="bottom" secondItem="cjz-8B-v9l" secondAttribute="bottom" constant="1" id="a9k-sd-c0l"/>
-                <constraint firstItem="wOp-ZO-MES" firstAttribute="leading" secondItem="cxk-wN-pdQ" secondAttribute="leading" constant="16" id="cdL-e4-UF5"/>
-                <constraint firstItem="cjz-8B-v9l" firstAttribute="centerX" secondItem="cxk-wN-pdQ" secondAttribute="centerX" id="kJJ-1B-pMB"/>
-                <constraint firstItem="cjz-8B-v9l" firstAttribute="width" secondItem="cxk-wN-pdQ" secondAttribute="width" id="pPK-Wa-QOD"/>
-            </constraints>
             <connections>
-                <outlet property="TextLabel" destination="wOp-ZO-MES" id="vFb-ll-z1x"/>
+                <outlet property="TextLabel" destination="5dX-Pl-R9i" id="980-ks-5dg"/>
             </connections>
         </tableViewCell>
     </objects>

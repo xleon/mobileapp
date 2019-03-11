@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Globalization;
 using Foundation;
-using MvvmCross.Binding.BindingContext;
-using MvvmCross.Platforms.Ios.Binding.Views;
-using MvvmCross.Converters;
 using MvvmCross.Plugin.Color.Platforms.Ios;
+using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
+using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.MvvmCross.Helper;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.Daneel.Views.EntityCreation
 {
-    public partial class CreateEntityViewCell : MvxTableViewCell
+    public sealed partial class CreateEntityViewCell : BaseTableViewCell<CreateEntitySuggestion>
     {
-        public static readonly NSString Key = new NSString(nameof(CreateEntityViewCell));
+        public static readonly string Identifier = nameof(CreateEntityViewCell);
         public static readonly UINib Nib;
+
+        private NSAttributedString cachedAddIcon;
 
         static CreateEntityViewCell()
         {
@@ -30,45 +30,19 @@ namespace Toggl.Daneel.Views
         {
             base.AwakeFromNib();
 
-            this.DelayBind(() =>
-            {
-                var bindingSet = this.CreateBindingSet<CreateEntityViewCell, string>();
-
-                bindingSet.Bind(TextLabel)
-                          .For(v => v.AttributedText)
-                          .To(vm => vm)
-                          .WithConversion(new CreateEntityValueConverter(TextLabel.Font.CapHeight));
-
-                bindingSet.Apply();
-            });
+            cachedAddIcon = "".PrependWithAddIcon(TextLabel.Font.CapHeight);
         }
 
-        private class CreateEntityValueConverter : MvxValueConverter<string, NSAttributedString>
+        protected override void UpdateView()
         {
-            private readonly nfloat fontHeight;
-            private readonly NSAttributedString cachedAddIcon;
-            private readonly UIColor textColor;
-            public CreateEntityValueConverter(nfloat fontHeight)
-            {
-                this.fontHeight = fontHeight;
-                textColor = Color.StartTimeEntry.Placeholder.ToNativeColor();
+            var result = new NSMutableAttributedString(cachedAddIcon);
+            var text = new NSMutableAttributedString(Item.CreateEntityMessage);
+            var textColor = Color.StartTimeEntry.Placeholder.ToNativeColor();
 
-                // We need to cache this icon because iOS can't create images on background threads
-                // and MvvmCross uses background threads in lists for performance. Caching is a much
-                // better solution than marshalling to the MainThread for every cell.
-                cachedAddIcon = "".PrependWithAddIcon(fontHeight);
-            }
+            text.AddAttribute(UIStringAttributeKey.ForegroundColor, textColor, new NSRange(0, text.Length));
+            result.Append(text);
 
-            protected override NSAttributedString Convert(string value, Type targetType, object parameter, CultureInfo culture)
-            {
-                var result = new NSMutableAttributedString(cachedAddIcon);
-                var text = new NSMutableAttributedString(value);
-
-                text.AddAttribute(UIStringAttributeKey.ForegroundColor, textColor, new NSRange(0, text.Length));
-                result.Append(text);
-
-                return result;
-            }
+            TextLabel.AttributedText = result;
         }
     }
 }

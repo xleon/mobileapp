@@ -3,6 +3,7 @@ using System.Linq;
 using Foundation;
 using MvvmCross.Commands;
 using Toggl.Daneel.Views;
+using Toggl.Daneel.Views.EntityCreation;
 using Toggl.Foundation.MvvmCross.Collections;
 using UIKit;
 
