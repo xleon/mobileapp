@@ -278,6 +278,7 @@
     <Compile Include="Activities\EditDurationActivity.ViewBinds.cs">
       <DependentUpon>EditDurationActivity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Activities\EditTimeEntryActivity.Onboarding.cs" />
     <Compile Include="Activities\ForgotPasswordActivity.cs" />
     <Compile Include="Activities\ForgotPasswordActivity.ViewBinds.cs">
       <DependentUpon>ForgotPasswordActivity.cs</DependentUpon>
@@ -374,6 +375,7 @@
     <Compile Include="ViewHolders\ReportsHeaderCellViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsItemCellViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsWorkspaceNameViewHolder.cs" />
+    <Compile Include="ViewHolders\StringViewHolder.cs" />
     <Compile Include="Views\BarChartView.cs" />
     <Compile Include="Views\EditDuration\Shapes\Arc.cs" />
     <Compile Include="Views\EditDuration\Shapes\Cap.cs" />
@@ -465,8 +467,6 @@
     <Compile Include="Activities\TokenResetActivity.cs" />
     <Compile Include="Tiles\ReportsTileService.cs" />
     <Compile Include="Tiles\NewTimeEntryTileService.cs" />
-    <Compile Include="Views\TagsListRecyclerView.cs" />
-    <Compile Include="TemplateSelectors\TagsListTemplateSelector.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Bindings\ViewAlphaTargetBinding.cs" />
     <Compile Include="Bindings\ViewUpsideDownTargetBinding.cs" />
