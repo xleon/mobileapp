@@ -149,12 +149,6 @@ namespace Toggl.Giskard.Activities
             activeFragment = mainFragment;
         }
 
-        public void SetupRatingViewVisibility(bool isVisible)
-        {
-            var mainFragment = getCachedFragment(Resource.Id.MainTabTimerItem) as MainFragment;
-            mainFragment.SetupRatingViewVisibility(isVisible);
-        }
-
         internal void ToggleReportsCalendarState(bool forceHide)
         {
             var reportsFragment = getCachedFragment(Resource.Id.MainTabReportsItem) as ReportsFragment;
