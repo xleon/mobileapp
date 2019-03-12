@@ -111,6 +111,32 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     }
                 }
             }
+
+            [Fact]
+            public void SetsTheEnabledCalendarsToNullWhenCalendarPermissionsWereNotGranted()
+            {
+                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(false));
+                UserPreferences.EnabledCalendarIds().Returns(new List<string>());
+
+                var viewModel = CreateViewModel();
+
+                viewModel.Initialize().Wait();
+
+                UserPreferences.Received().SetEnabledCalendars(Arg.Is<string[]>(strings => strings == null || strings.Length == 0));
+            }
+
+            [Fact]
+            public void DoesNotSetTheEnabledCalendarsToNullWhenCalendarPermissionsWereGranted()
+            {
+                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                UserPreferences.EnabledCalendarIds().Returns(new List<string>());
+
+                var viewModel = CreateViewModel();
+
+                viewModel.Initialize().Wait();
+
+                UserPreferences.DidNotReceive().SetEnabledCalendars(Arg.Is<string[]>(strings => strings == null || strings.Length == 0));
+            }
         }
 
         public sealed class TheSelectCalendarAction : CalendarSettingsViewModelTest
