@@ -50,7 +50,8 @@ namespace Toggl.Daneel.Intents
         Success,
         Failure,
         FailureRequiringAppLaunch,
-        FailureNoApiToken = 100
+        FailureNoApiToken = 100,
+        FailureSyncConflict
     }
 
     [Native]
@@ -65,6 +66,7 @@ namespace Toggl.Daneel.Intents
         FailureRequiringAppLaunch,
         FailureNoTimerRunning = 100,
         FailureNoApiToken,
-        SuccessWithEmptyDescription
+        SuccessWithEmptyDescription,
+        FailureSyncConflict
     }
 }

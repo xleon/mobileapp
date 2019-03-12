@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using Foundation;
 using SiriExtension.Models;
 using Toggl.Daneel.ExtensionKit;
@@ -27,7 +28,22 @@ namespace SiriExtension
                 return;
             }
 
-            completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.Ready, null));        }
+            var lastUpdated = SharedStorage.instance.GetLastUpdateDate();
+            togglAPI.TimeEntries.GetAllSince(lastUpdated)
+                .Subscribe(tes =>
+                    {
+                        // If there are no changes since last sync, or there are changes in the server but not in the app, we are ok
+                        if (tes.Count == 0 || tes.OrderBy(te => te.At).Last().At >= lastUpdated)
+                        {
+                            completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.Ready, null));
+                        }
+                        else
+                        {
+                            completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.FailureSyncConflict, null));
+                        }
+                    }
+                );
+        }
 
         public override void HandleStartTimer(StartTimerIntent intent, Action<StartTimerIntentResponse> completion)
         {

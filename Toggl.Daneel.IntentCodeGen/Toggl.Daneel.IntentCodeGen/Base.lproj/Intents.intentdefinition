@@ -97,7 +97,7 @@
 	<key>INIntentDefinitionModelVersion</key>
 	<string>1.0</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>18D109</string>
+	<string>18C54</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
 	<string>10B61</string>
 	<key>INIntentDefinitionToolsVersion</key>
@@ -186,6 +186,16 @@
 						<string>successWithEmptyDescription</string>
 						<key>INIntentResponseCodeSuccess</key>
 						<true/>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeFormatString</key>
+						<string>App data is outdated.</string>
+						<key>INIntentResponseCodeFormatStringID</key>
+						<string>HVyNMs</string>
+						<key>INIntentResponseCodeName</key>
+						<string>failureSyncConflict</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<false/>
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
@@ -629,6 +639,16 @@
 						<string>sC56D6</string>
 						<key>INIntentResponseCodeName</key>
 						<string>failureNoApiToken</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<false/>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeFormatString</key>
+						<string>App data is outdated.</string>
+						<key>INIntentResponseCodeFormatStringID</key>
+						<string>DxHT4S</string>
+						<key>INIntentResponseCodeName</key>
+						<string>failureSyncConflict</string>
 						<key>INIntentResponseCodeSuccess</key>
 						<false/>
 					</dict>
