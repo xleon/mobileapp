@@ -15,6 +15,7 @@ using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Giskard.ViewHelpers;
 using System.Reactive.Disposables;
+using Toggl.Foundation.Analytics;
 
 namespace Toggl.Giskard.Adapters
 {
@@ -33,7 +34,7 @@ namespace Toggl.Giskard.Adapters
         public IObservable<LogItemViewModel> TimeEntryTaps
             => timeEntryTappedSubject.Select(item => item.ViewModel).AsObservable();
 
-        public IObservable<LogItemViewModel> ContinueTimeEntrySubject
+        public IObservable<(LogItemViewModel LogItem, ContinueTimeEntryMode ContinueMode)> ContinueTimeEntry
             => continueTimeEntrySubject.AsObservable();
 
         public IObservable<LogItemViewModel> DeleteTimeEntrySubject
@@ -46,7 +47,7 @@ namespace Toggl.Giskard.Adapters
 
         private readonly Subject<GroupId> toggleGroupExpansionSubject = new Subject<GroupId>();
         private readonly Subject<TimeEntryViewData> timeEntryTappedSubject = new Subject<TimeEntryViewData>();
-        private readonly Subject<LogItemViewModel> continueTimeEntrySubject = new Subject<LogItemViewModel>();
+        private readonly Subject<(LogItemViewModel, ContinueTimeEntryMode)> continueTimeEntrySubject = new Subject<(LogItemViewModel, ContinueTimeEntryMode)>();
         private readonly Subject<LogItemViewModel> deleteTimeEntrySubject = new Subject<LogItemViewModel>();
 
         public MainRecyclerAdapter(ITimeService timeService)
@@ -54,16 +55,21 @@ namespace Toggl.Giskard.Adapters
             this.timeService = timeService;
         }
 
-        public void ContinueTimeEntry(int position)
+        public void ContinueTimeEntryBySwiping(int position)
         {
-            var continuedTimeEntry = getItemAt(position);
+            var continuedTimeEntry = GetItemAt(position);
             NotifyItemChanged(position);
-            continueTimeEntrySubject.OnNext(continuedTimeEntry);
+
+            var continueMode = continuedTimeEntry.IsTimeEntryGroupHeader
+                ? ContinueTimeEntryMode.TimeEntriesGroupSwipe
+                : ContinueTimeEntryMode.SingleTimeEntrySwipe;
+
+            continueTimeEntrySubject.OnNext((continuedTimeEntry, continueMode));
         }
 
         public void DeleteTimeEntry(int position)
         {
-            var deletedTimeEntry = getItemAt(position);
+            var deletedTimeEntry = GetItemAt(position);
             deleteTimeEntrySubject.OnNext(deletedTimeEntry);
         }
 
