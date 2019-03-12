@@ -258,7 +258,7 @@ namespace Toggl.Foundation.MvvmCross.Helper
 
         public static class ModalDialog
         {
-            public static readonly MvxColor BackgroundOverlay = new MvxColor(181, 188, 192);
+            public static readonly MvxColor BackgroundOverlay = new MvxColor(rgb: 0, alpha: 122);
         }
 
         public static class Suggestions

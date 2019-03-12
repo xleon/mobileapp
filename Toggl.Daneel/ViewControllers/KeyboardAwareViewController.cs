@@ -17,6 +17,9 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidLoad();
 
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+                return;
+
             willShowNotification = UIKeyboard.Notifications.ObserveWillShow(KeyboardWillShow);
             willHideNotification = UIKeyboard.Notifications.ObserveWillHide(KeyboardWillHide);
         }
@@ -26,6 +29,9 @@ namespace Toggl.Daneel.ViewControllers
             base.Dispose(disposing);
 
             if (!disposing) return;
+
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+                return;
 
             NSNotificationCenter.DefaultCenter.RemoveObserver(willShowNotification);
             NSNotificationCenter.DefaultCenter.RemoveObserver(willHideNotification);

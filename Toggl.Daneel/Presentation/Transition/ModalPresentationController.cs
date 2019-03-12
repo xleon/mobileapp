@@ -8,6 +8,8 @@ using static System.Math;
 using Toggl.Daneel.ViewControllers;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Toggl.Daneel.Extensions;
+using Toggl.Foundation.MvvmCross.Helper;
 
 namespace Toggl.Daneel.Presentation.Transition
 {
@@ -19,9 +21,27 @@ namespace Toggl.Daneel.Presentation.Transition
         private readonly nfloat backgroundAlpha = 0.8f;
         private const double returnAnimationDuration = 0.1;
         private const double impactThreshold = 0.4;
+        private const double iPadMinHeightWithoutKeyboard = 360;
+        private const double iPadMaxWidth = 540;
+        private const double iPadTopMarginNarrow = 40;
+        private const double iPadTopMarginLarge = 76;
+        private const double iPadStackModalViewSpacing = 40;
+
+        private double topiPadMargin
+            => PresentingViewController.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact
+               || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeLeft
+               || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeRight
+                ? iPadTopMarginNarrow
+                : iPadTopMarginLarge;
+
+        private double iPadMaxHeight => UIScreen.MainScreen.Bounds.Height - 2 * topiPadMargin;
 
         private CGPoint originalCenter;
-        private double keyboardHeight;
+        private double keyboardHeight = 0.0;
+
+        private bool isKeyboardVisible => keyboardHeight != 0.0;
+
+        private bool finishedPresenting = false;
 
         private List<NSObject> observers = new List<NSObject>();
 
@@ -66,8 +86,8 @@ namespace Toggl.Daneel.Presentation.Transition
             observers.AddRange(new[]
             {
                 NSNotificationCenter.DefaultCenter.AddObserver(UIApplication.WillChangeStatusBarFrameNotification, onStatusBarFrameChanged),
-                UIKeyboard.Notifications.ObserveDidShow(keyboardVisibilityChanged),
-                UIKeyboard.Notifications.ObserveDidHide(keyboardVisibilityChanged)
+                NSNotificationCenter.DefaultCenter.AddObserver(UIKeyboard.WillHideNotification, OnKeyboardNotification),
+                NSNotificationCenter.DefaultCenter.AddObserver(UIKeyboard.WillShowNotification, OnKeyboardNotification)
             });
         }
 
@@ -122,22 +142,48 @@ namespace Toggl.Daneel.Presentation.Transition
             }
         }
 
+        public override void PresentationTransitionDidEnd(bool completed)
+        {
+            base.PresentationTransitionDidEnd(completed);
+            finishedPresenting = completed;
+        }
+
         public override void ContainerViewWillLayoutSubviews()
         {
+            dimmingView.Frame = ContainerView.Bounds;
             PresentedView.Frame = FrameOfPresentedViewInContainerView;
 
-            var shadowPath = UIBezierPath.FromRoundedRect(PresentedViewController.View.Bounds, 8.0f).CGPath;
-            PresentedViewController.View.Layer.ShadowRadius = 20;
             PresentedViewController.View.Layer.CornerRadius = 8.0f;
-            PresentedViewController.View.Layer.ShadowOpacity = 0.8f;
             PresentedViewController.View.Layer.MasksToBounds = false;
-            PresentedViewController.View.Layer.ShadowPath = shadowPath;
-            PresentedViewController.View.Layer.ShadowOffset = CGSize.Empty;
-            PresentedViewController.View.Layer.ShadowColor = UIColor.FromRGB(181f / 255f, 188f / 255f, 192f / 255f).CGColor;
         }
 
         public override CGSize GetSizeForChildContentContainer(IUIContentContainer contentContainer, CGSize parentContainerSize)
         {
+            var regualrOrCompactHorizontalSizeClass = PresentingViewController.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
+                                                      || PresentingViewController.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact;
+            var regularVerticalSizeClass = PresentingViewController.TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular;
+
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad
+                && regualrOrCompactHorizontalSizeClass
+                && regularVerticalSizeClass)
+            {
+                var preferredContentHeight = PresentedViewController.PreferredContentSize.Height != 0
+                    ? PresentedViewController.PreferredContentSize.Height
+                    : iPadMaxHeight;
+
+                var height = Max(iPadMinHeightWithoutKeyboard, preferredContentHeight);
+                var width = Min(iPadMaxWidth, parentContainerSize.Width);
+
+                if (isKeyboardVisible)
+                {
+                    height = UIScreen.MainScreen.Bounds.Height - topiPadMargin - keyboardHeight;
+                }
+
+                height -= iPadStackModalViewSpacing * levelsOfModalViews();
+
+                return new CGSize(width, height);
+            }
+
             var preferredHeight = Min(maximumHeight, PresentedViewController.PreferredContentSize.Height);
             return new CGSize(parentContainerSize.Width, preferredHeight == 0 ? maximumHeight : preferredHeight);
         }
@@ -154,8 +200,34 @@ namespace Toggl.Daneel.Presentation.Transition
                 frame.Size = GetSizeForChildContentContainer(PresentedViewController, containerSize);
                 frame.X = 0;
                 frame.Y = containerSize.Height - frame.Size.Height;
+
+                if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+                {
+                    frame.X = (containerSize.Width - frame.Size.Width) / 2;
+
+                    frame.Y = (containerSize.Height - frame.Size.Height) / 2 + (nfloat)iPadStackModalViewSpacing * levelsOfModalViews();
+
+                    if (isKeyboardVisible || PresentingViewController.PresentingViewController != null)
+                    {
+                        frame.Y = (nfloat)topiPadMargin + (nfloat)iPadStackModalViewSpacing * levelsOfModalViews();
+                    }
+                }
+
                 return frame;
             }
+        }
+
+        private int levelsOfModalViews()
+        {
+            var levels = 0;
+            var topVC = PresentingViewController;
+            while (topVC.PresentingViewController != null)
+            {
+                topVC = topVC.PresentingViewController;
+                levels += 1;
+            }
+
+            return levels;
         }
 
         private async void handleSwipe(UIPanGestureRecognizer recognizer)
@@ -216,9 +288,26 @@ namespace Toggl.Daneel.Presentation.Transition
             ContainerView?.SetNeedsLayout();
         }
 
-        private void keyboardVisibilityChanged(object sender, UIKeyboardEventArgs e)
+        private void OnKeyboardNotification(NSNotification notification)
         {
-            keyboardHeight = e.FrameEnd.Size.Height;
+            var visible = notification.Name == UIKeyboard.WillShowNotification;
+            Console.WriteLine(notification);
+            keyboardHeight = visible
+                ? UIKeyboard.FrameEndFromNotification(notification).Height
+                : 0.0;
+
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad && finishedPresenting && ContainerView != null)
+            {
+                var animationDuration = UIKeyboard.AnimationDurationFromNotification(notification);
+                AnimationExtensions.Animate(animationDuration, Animation.Curves.StandardEase, () =>
+                {
+                    ContainerViewWillLayoutSubviews();
+                });
+            }
+            else
+            {
+                ContainerView?.SetNeedsLayout();
+            }
         }
     }
 }
