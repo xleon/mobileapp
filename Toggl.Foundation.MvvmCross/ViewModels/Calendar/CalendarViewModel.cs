@@ -217,6 +217,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 .Merge(selectedCalendarsChangedObservable)
                 .Merge(appResumedFromBackgroundObservable)
                 .SubscribeOn(schedulerProvider.BackgroundScheduler)
+                .ObserveOn(schedulerProvider.BackgroundScheduler)
                 .SelectMany(_ => reloadData())
                 .Subscribe(CalendarItems.ReplaceWith)
                 .DisposedBy(disposeBag);
