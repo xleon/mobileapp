@@ -20,6 +20,7 @@ namespace SiriExtension
     {
         private ITogglApi togglAPI;
         private static ITimeEntry runningEntry;
+        private const string stopTimerActivityType = "StopTimer";
 
         public StopTimerIntentHandler(ITogglApi togglAPI)
         {
@@ -42,7 +43,9 @@ namespace SiriExtension
                 runningTE =>
                 {
                     runningEntry = runningTE;
-                    completion(new StopTimerIntentResponse(StopTimerIntentResponseCode.Ready, null));
+                    var userActivity = new NSUserActivity(stopTimerActivityType);
+                    userActivity.Title = runningTE.Description;
+                    completion(new StopTimerIntentResponse(StopTimerIntentResponseCode.Ready, userActivity));
                 },
                 exception =>
                 {

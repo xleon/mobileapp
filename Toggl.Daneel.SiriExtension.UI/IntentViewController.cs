@@ -81,7 +81,10 @@ namespace Toggl.Daneel.SiriExtension.UI
 
                     if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Ready)
                     {
-                        desiredSize = showConfirmation("Stop tracking time?");
+                        var entryDescription = interaction.IntentResponse.UserActivity.Title;
+                        desiredSize =
+                            showConfirmation(
+                                $"Stop tracking {(!string.IsNullOrEmpty(entryDescription) ? entryDescription : "time")}?");
                     }
 
                     break;
