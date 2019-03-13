@@ -56,7 +56,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.Adhoc|iPhone' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\iPhone\Release.Adhoc</OutputPath>
-    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;USE_PRODUCTION_API</DefineConstants>
+    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodesignKey>iPhone Distribution: Toggl OU (B227VTMZ94)</CodesignKey>
