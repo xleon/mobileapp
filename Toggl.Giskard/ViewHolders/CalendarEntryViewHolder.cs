@@ -30,7 +30,8 @@ namespace Toggl.Giskard.ViewHolders
 
         protected override void UpdateView()
         {
-            ItemView.Background.SetTint(Color.ParseColor(Item.Color));
+            updateBackground();
+            updateTextColor();
             label.Text = Item.Description;
         }
 
@@ -40,6 +41,21 @@ namespace Toggl.Giskard.ViewHolders
             ItemView.Elevation = isInEditMode
                 ? defaultElevation + 4.DpToPixels(ItemView.Context)
                 : defaultElevation;
+        }
+
+        private void updateBackground()
+        {
+            var color = Color.ParseColor(Item.Color);
+            if (Item.Source == CalendarItemSource.Calendar)
+                color.A = (byte) (color.A * 0.25);
+
+            ItemView.Background.SetTint(color);
+        }
+
+        private void updateTextColor()
+        {
+            var color = Item.Source == CalendarItemSource.Calendar ? Color.ParseColor(Item.Color) : Color.White;
+            label.SetTextColor(color);
         }
     }
 }
