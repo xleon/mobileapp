@@ -1564,5 +1564,11 @@ namespace Toggl.Foundation {
                 return ResourceManager.GetString("ShowReportsInvocationPhrase", resourceCulture);
             }
         }
+        
+        public static string ContinueTimerInvocationPhrase {
+            get {
+                return ResourceManager.GetString("ContinueTimerInvocationPhrase", resourceCulture);
+            }
+        }
     }
 }

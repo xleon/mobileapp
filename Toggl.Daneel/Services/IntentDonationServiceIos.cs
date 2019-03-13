@@ -173,12 +173,12 @@ namespace Toggl.Daneel.Services
             startTimerIntent.SuggestedInvocationPhrase = Resources.StartTimerInvocationPhrase;
             var startShortcut = new INShortcut(startTimerIntent);
             var startRelevantShorcut = new INRelevantShortcut(startShortcut);
-            startRelevantShorcut.RelevanceProviders = new[]
-            {
+            INRelevanceProvider[] startTimerProviders = {
                 new INDailyRoutineRelevanceProvider(INDailyRoutineSituation.Work),
                 new INDailyRoutineRelevanceProvider(INDailyRoutineSituation.Gym),
                 new INDailyRoutineRelevanceProvider(INDailyRoutineSituation.School)
             };
+            startRelevantShorcut.RelevanceProviders = startTimerProviders;
 
             var stopTimerIntent = new StopTimerIntent();
             stopTimerIntent.SuggestedInvocationPhrase = Resources.StopTimerInvocationPhrase;
@@ -193,10 +193,21 @@ namespace Toggl.Daneel.Services
             showReportIntent.SuggestedInvocationPhrase = Resources.ShowReportsInvocationPhrase;
             var reportShortcut = new INShortcut(showReportIntent);
 
-            var shortcuts = new[] { startShortcut, stopShortcut, reportShortcut };
+            var continueTimerIntent = new ContinueTimerIntent
+            {
+                SuggestedInvocationPhrase = Resources.ContinueTimerInvocationPhrase
+            };
+            continueTimerIntent.Workspace = new INObject(workspace.Id.ToString(), workspace.Name);
+            var continueTimerShortcut = new INShortcut(continueTimerIntent);
+            var continueTimerRelevantShortcut = new INRelevantShortcut(continueTimerShortcut)
+            {
+                RelevanceProviders = startTimerProviders
+            };
+
+            var shortcuts = new[] { startShortcut, stopShortcut, reportShortcut, continueTimerShortcut };
             INVoiceShortcutCenter.SharedCenter.SetShortcutSuggestions(shortcuts);
 
-            var relevantShortcuts = new[] { startRelevantShorcut, stopRelevantShortcut };
+            var relevantShortcuts = new[] { startRelevantShorcut, stopRelevantShortcut, continueTimerRelevantShortcut };
             INRelevantShortcutStore.DefaultStore.SetRelevantShortcuts(relevantShortcuts, trackError);
         }
 

@@ -88,6 +88,25 @@ namespace Toggl.Daneel.SiriExtension.UI
                     }
 
                     break;
+
+                case ContinueTimerIntent _:
+                    if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Success)
+                    {
+                        if (interaction.IntentResponse is ContinueTimerIntentResponse response)
+                        {
+                            desiredSize = showStartTimerSuccess(response.EntryDescription);
+                        }
+                    }
+
+                    if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Ready)
+                    {
+                        var entryDescription = interaction.IntentResponse.UserActivity.Title;
+                        desiredSize =
+                            showConfirmation(
+                                $"Start tracking {(!string.IsNullOrEmpty(entryDescription) ? entryDescription : "time")}?");
+                    }
+
+                    break;
                 default:
                     success = false;
                     break;

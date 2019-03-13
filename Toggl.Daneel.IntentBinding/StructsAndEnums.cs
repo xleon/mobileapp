@@ -4,6 +4,20 @@ using ObjCRuntime;
 namespace Toggl.Daneel.Intents
 {
     [Native]
+    public enum ContinueTimerIntentResponseCode : long
+    {
+        Unspecified = 0,
+        Ready,
+        ContinueInApp,
+        InProgress,
+        Success,
+        Failure,
+        FailureRequiringAppLaunch,
+        FailureNoApiToken = 100,
+        SuccessWithEntryDescription
+    }
+
+    [Native]
     public enum ShowReportIntentResponseCode : long
     {
         Unspecified = 0,

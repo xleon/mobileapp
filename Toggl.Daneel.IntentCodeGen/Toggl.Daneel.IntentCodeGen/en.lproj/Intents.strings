@@ -1,3 +1,5 @@
+"0DhbDI" = "in ${workspace}";
+
 "0vfpVe" = "Time-tracking started.";
 
 "5xqJdx" = "in ${workspace}";
@@ -11,6 +13,8 @@
 "ArvZvi" = "Start timer for ${entryDescription}";
 
 "C84CvN" = "Log in to use this shortcut.";
+
+"DcWrhF" = "Continue timer";
 
 "DxHT4S" = "App data is outdated.";
 
@@ -60,6 +64,8 @@
 
 "kSGACm" = "Start a new time tracking";
 
+"m5JJnW" = "Tracking ${entryDescription}.";
+
 "m9jvM4-EagY8C" = "for This Week";
 
 "m9jvM4-LRmygz" = "for Yesterday";
@@ -76,11 +82,14 @@
 
 "msGSif" = "in ${workspace}";
 
+"rWNsdx" = "Continue timer";
+
 "sC56D6" = "Log in to use this shortcut.";
 
 "tjn3qS" = "Start timer for ${entryDescription}";
 
+"ttEh92" = "Log in to use this shortcut.";
+
 "vvtqdG" = "Show report";
 
 "xGukxu" = "Start timer for ${entryDescription}";
-
