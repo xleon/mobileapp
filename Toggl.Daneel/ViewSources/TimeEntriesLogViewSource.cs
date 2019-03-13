@@ -67,7 +67,10 @@ namespace Toggl.Daneel.ViewSources
         }
 
         public override UIView GetViewForFooter(UITableView tableView, nint section)
-            => new UIView(new CGRect(0, 0, UIScreen.MainScreen.Bounds.Width, SpaceBetweenSections));
+            => new UIView(new CGRect(0, 0, UIScreen.MainScreen.Bounds.Width, SpaceBetweenSections))
+            {
+                BackgroundColor = UIColor.White
+            };
 
         public override nfloat GetHeightForHeader(UITableView tableView, nint section) => headerHeight;
 
