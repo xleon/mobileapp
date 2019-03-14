@@ -18,8 +18,5 @@ namespace Toggl.Foundation.Interactors
 
         public IInteractor<IObservable<IThreadSafeUser>> UpdateDefaultWorkspace(long selectedWorkspaceId)
             => new UpdateWorkspaceInteractor(dataSource.User, selectedWorkspaceId);
-
-        public IInteractor<IObservable<IThreadSafeUser>> GetCurrentUser()
-            => new GetCurrentUserInteractor(dataSource.User);
     }
 }

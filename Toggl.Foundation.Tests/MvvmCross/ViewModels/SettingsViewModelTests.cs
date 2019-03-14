@@ -563,7 +563,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.ToggleTimeEntriesGrouping.Execute();
                 TestScheduler.Start();
 
-                await DataSource.SyncManager.Received().PushSync();
+                await SyncManager.Received().PushSync();
             }
 
             [Property, LogIfTooSlow]

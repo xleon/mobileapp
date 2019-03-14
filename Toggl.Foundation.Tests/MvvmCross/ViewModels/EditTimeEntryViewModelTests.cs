@@ -73,6 +73,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 => new EditTimeEntryViewModel(
                     TimeService,
                     DataSource,
+                    SyncManager,
                     InteractorFactory,
                     NavigationService,
                     OnboardingStorage,
