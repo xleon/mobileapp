@@ -49,6 +49,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
         private readonly ISubject<bool> shouldShowOnboardingSubject;
         private readonly ISubject<bool> hasCalendarsLinkedSubject;
+        private readonly ISubject<bool> calendarPermissionsOnViewAppearedSubject;
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         public IObservable<bool> SettingsAreVisible { get; }
@@ -127,6 +128,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             var isCompleted = onboardingStorage.CompletedCalendarOnboarding();
             shouldShowOnboardingSubject = new BehaviorSubject<bool>(!isCompleted);
             hasCalendarsLinkedSubject = new BehaviorSubject<bool>(false);
+            calendarPermissionsOnViewAppearedSubject = new BehaviorSubject<bool>(false);
 
             var onboardingObservable = shouldShowOnboardingSubject
                 .AsObservable()
@@ -166,8 +168,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 .DistinctUntilChanged();
 
             HasCalendarsLinked = userPreferences.EnabledCalendars.CombineLatest(
-                permissionsService.CalendarPermissionGranted, hasCalendarsLinkedSubject.AsObservable(),
-                (calendars, hasInitialCalendarPermissions, didLinkCalendars) => (hasInitialCalendarPermissions || didLinkCalendars) && calendars.Count > 0)
+                    permissionsService.CalendarPermissionGranted,
+                    hasCalendarsLinkedSubject.AsObservable(),
+                    calendarPermissionsOnViewAppearedSubject,
+                    hasCalendarsLinked)
                 .DistinctUntilChanged();
 
             SelectCalendars = rxActionFactory.FromAsync(() => selectUserCalendars(false), SettingsAreVisible);
@@ -231,6 +235,23 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
                 .Subscribe()
                 .DisposedBy(disposeBag);
         }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            checkCalendarPermissions();
+        }
+
+        private async Task checkCalendarPermissions()
+        {
+            var authorized = await permissionsService.CalendarPermissionGranted;
+            calendarPermissionsOnViewAppearedSubject.OnNext(authorized);
+        }
+
+        private bool hasCalendarsLinked(List<string> calendars, bool hasInitialCalendarPermissions, bool didLinkCalendars, bool hadPermissionsWhenAppeared)
+            => calendars != null
+               && calendars.Count > 0
+               && (hasInitialCalendarPermissions || didLinkCalendars || hadPermissionsWhenAppeared);
 
         private IObservable<Unit> refreshNotifications(bool notificationsAreEnabled)
             => Observable.FromAsync(async () =>
