@@ -152,6 +152,9 @@ Start the timer and your most used time entries will appear here.</value>
     <data name="Cancel">
         <value>Cancel</value>
     </data>
+    <data name="ConfirmDeleteNewTETitle">
+        <value>Would you like to discard this time entry?</value>
+    </data>
     <data name="ContinueEditing">
         <value>Continue Editing</value>
     </data>

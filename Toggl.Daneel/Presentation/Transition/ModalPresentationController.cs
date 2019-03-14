@@ -291,12 +291,11 @@ namespace Toggl.Daneel.Presentation.Transition
         private void OnKeyboardNotification(NSNotification notification)
         {
             var visible = notification.Name == UIKeyboard.WillShowNotification;
-            Console.WriteLine(notification);
             keyboardHeight = visible
                 ? UIKeyboard.FrameEndFromNotification(notification).Height
                 : 0.0;
 
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad && finishedPresenting && ContainerView != null)
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad && finishedPresenting && ContainerView != null && PresentingViewController == null)
             {
                 var animationDuration = UIKeyboard.AnimationDurationFromNotification(notification);
                 AnimationExtensions.Animate(animationDuration, Animation.Curves.StandardEase, () =>
@@ -304,7 +303,7 @@ namespace Toggl.Daneel.Presentation.Transition
                     ContainerViewWillLayoutSubviews();
                 });
             }
-            else
+            else if (PresentingViewController == null)
             {
                 ContainerView?.SetNeedsLayout();
             }
