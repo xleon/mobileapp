@@ -18,6 +18,7 @@ using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Foundation.Sync;
 using Toggl.Foundation.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
@@ -38,6 +39,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IMvxNavigationService navigationService;
         private readonly IAnalyticsService analyticsService;
         private readonly IStopwatchProvider stopwatchProvider;
+        private readonly ISyncManager syncManager;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IRxActionFactory actionFactory;
         public IOnboardingStorage OnboardingStorage { get; private set; }
@@ -111,6 +113,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public EditTimeEntryViewModel(
             ITimeService timeService,
             ITogglDataSource dataSource,
+            ISyncManager syncManager,
             IInteractorFactory interactorFactory,
             IMvxNavigationService navigationService,
             IOnboardingStorage onboardingStorage,
@@ -121,6 +124,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ISchedulerProvider schedulerProvider)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
@@ -132,6 +136,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(actionFactory, nameof(actionFactory));
 
             this.dataSource = dataSource;
+            this.syncManager = syncManager;
             this.timeService = timeService;
             this.dialogService = dialogService;
             this.interactorFactory = interactorFactory;
@@ -565,7 +570,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             await deletionInteractor.Execute();
 
-            dataSource.SyncManager.InitiatePushSync();
+            syncManager.InitiatePushSync();
             analyticsService.DeleteTimeEntry.Track();
 
             return true;

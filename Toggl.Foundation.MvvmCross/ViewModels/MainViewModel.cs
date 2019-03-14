@@ -48,6 +48,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private object isEditViewOpenLock = new object();
 
         private readonly ITogglDataSource dataSource;
+        private readonly ISyncManager syncManager;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
         private readonly IOnboardingStorage onboardingStorage;
@@ -103,6 +104,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public MainViewModel(
             ITogglDataSource dataSource,
+            ISyncManager syncManager,
             ITimeService timeService,
             IRatingService ratingService,
             IUserPreferences userPreferences,
@@ -119,6 +121,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IRxActionFactory rxActionFactory)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(ratingService, nameof(ratingService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
@@ -135,6 +138,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.dataSource = dataSource;
+            this.syncManager = syncManager;
             this.userPreferences = userPreferences;
             this.analyticsService = analyticsService;
             this.interactorFactory = interactorFactory;
@@ -149,11 +153,11 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             TimeService = timeService;
 
             SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, suggestionProviders, schedulerProvider, rxActionFactory);
-            RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService, this.schedulerProvider, rxActionFactory);
-            TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, this.schedulerProvider, rxActionFactory, timeService);
+            RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService, schedulerProvider, rxActionFactory);
+            TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, syncManager, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
 
-            LogEmpty = TimeEntriesViewModel.Empty.AsDriver(this.schedulerProvider);
-            TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(this.schedulerProvider);
+            LogEmpty = TimeEntriesViewModel.Empty.AsDriver(schedulerProvider);
+            TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(schedulerProvider);
 
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService);
         }
@@ -182,9 +186,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             await SuggestionsViewModel.Initialize();
             await RatingViewModel.Initialize();
 
-            SyncProgressState = dataSource
-                .SyncManager
-                .ProgressObservable
+            SyncProgressState = syncManager.ProgressObservable
                 .AsDriver(schedulerProvider);
 
             var isWelcome = onboardingStorage.IsNewUser;
@@ -466,7 +468,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private async Task refresh()
         {
-            await dataSource.SyncManager.ForceFullSync();
+            await syncManager.ForceFullSync();
         }
 
         private async Task stopTimeEntry(TimeEntryStopOrigin origin)
@@ -477,7 +479,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .StopTimeEntry(TimeService.CurrentDateTime, origin)
                 .Execute()
                 .Do(_ => intentDonationService.DonateStopCurrentTimeEntry())
-                .Do(dataSource.SyncManager.InitiatePushSync);
+                .Do(syncManager.InitiatePushSync);
         }
 
         private Task navigate<TModel, TParameters>(TParameters value)

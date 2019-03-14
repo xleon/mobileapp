@@ -279,6 +279,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
+                bool useSyncManager,
                 bool useNavigationService,
                 bool useTimeService,
                 bool useInteractorFactory,
@@ -290,6 +291,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useSchedulerProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
+                var syncManager = useSyncManager ? SyncManager : null;
                 var timeService = useTimeService ? TimeService : null;
                 var dialogService = useDialogService ? DialogService : null;
                 var navigationService = useNavigationService ? NavigationService : null;
@@ -304,6 +306,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     () => new EditTimeEntryViewModel(
                         timeService,
                         dataSource,
+                        syncManager,
                         interactorFactory,
                         navigationService,
                         onboardingStorage,
@@ -1830,7 +1833,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Delete.Execute();
                 TestScheduler.Start();
 
-                DataSource.SyncManager.Received().InitiatePushSync();
+                SyncManager.Received().InitiatePushSync();
             }
 
             [Fact, LogIfTooSlow]
@@ -1842,7 +1845,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.Delete.Execute();
                 TestScheduler.Start();
 
-                DataSource.SyncManager.Received().InitiatePushSync();
+                SyncManager.Received().InitiatePushSync();
             }
 
             [Fact, LogIfTooSlow]

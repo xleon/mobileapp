@@ -21,6 +21,7 @@ using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Foundation.Services;
+using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Foundation.Tests.Mocks;
 using Toggl.Multivac;
@@ -37,6 +38,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
         public abstract class TimeEntriesViewModelTest
         {
             protected ITogglDataSource DataSource { get; } = Substitute.For<ITogglDataSource>();
+            protected ISyncManager SyncManager { get; } = Substitute.For<ISyncManager>();
             protected IInteractorFactory InteractorFactory { get; } = Substitute.For<IInteractorFactory>();
             protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
             protected TestSchedulerProvider SchedulerProvider { get; } = new TestSchedulerProvider();
@@ -46,7 +48,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected TimeEntriesViewModel ViewModel { get; private set; }
 
             protected TimeEntriesViewModel CreateViewModel()
-                => new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
+                => new TimeEntriesViewModel(DataSource, SyncManager, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
 
             protected TimeEntriesViewModelTest()
             {
@@ -61,6 +63,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
+                bool useSyncManager,
                 bool useInteractorFactory,
                 bool useAnalyticsService,
                 bool useSchedulerProvider,
@@ -68,6 +71,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useTimeService)
             {
                 var dataSource = useDataSource ? DataSource : null;
+                var syncManager = useSyncManager ? SyncManager : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
@@ -75,7 +79,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var timeService = useTimeService ? TimeService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
+                    () => new TimeEntriesViewModel(dataSource, syncManager, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -139,7 +143,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             public TheDelayDeleteTimeEntryAction()
             {
-                viewModel = new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
+                viewModel = new TimeEntriesViewModel(DataSource, SyncManager, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
                 viewModel.TimeEntriesPendingDeletion.Subscribe(observer);
             }
 
@@ -267,7 +271,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
             public TheCancelDeleteTimeEntryAction()
             {
-                viewModel = new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
+                viewModel = new TimeEntriesViewModel(DataSource, SyncManager, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
                 viewModel.TimeEntriesPendingDeletion.Subscribe(observer);
             }
 

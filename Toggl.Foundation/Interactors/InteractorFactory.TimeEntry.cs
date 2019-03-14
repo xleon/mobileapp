@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reactive;
 using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Interactors.Generic;
 using Toggl.Foundation.Models;
@@ -22,6 +21,7 @@ namespace Toggl.Foundation.Interactors
                 analyticsService,
                 intentDonationService,
                 prototype,
+                syncManager,
                 prototype.StartTime,
                 prototype.Duration,
                 origin);
@@ -34,6 +34,7 @@ namespace Toggl.Foundation.Interactors
                 analyticsService,
                 intentDonationService,
                 prototype,
+                syncManager,
                 timeService.CurrentDateTime,
                 null,
                 (TimeEntryStartOrigin)continueMode);
@@ -46,12 +47,18 @@ namespace Toggl.Foundation.Interactors
                 analyticsService,
                 intentDonationService,
                 suggestion,
+                syncManager,
                 timeService.CurrentDateTime,
                 null,
             TimeEntryStartOrigin.Suggestion);
 
         public IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueMostRecentTimeEntry()
-            => new ContinueMostRecentTimeEntryInteractor(idProvider, timeService, dataSource, analyticsService);
+            => new ContinueMostRecentTimeEntryInteractor(
+                idProvider,
+                timeService,
+                dataSource,
+                analyticsService,
+                syncManager);
 
         public IInteractor<IObservable<Unit>> DeleteTimeEntry(long id)
             => new DeleteTimeEntryInteractor(timeService, dataSource.TimeEntries, this, id);
@@ -72,7 +79,7 @@ namespace Toggl.Foundation.Interactors
             => new ObserveAllTimeEntriesVisibleToTheUserInteractor(dataSource.TimeEntries, dataSource.Workspaces);
 
         public IInteractor<IObservable<IThreadSafeTimeEntry>> UpdateTimeEntry(EditTimeEntryDto dto)
-            => new UpdateTimeEntryInteractor(timeService, dataSource, this, dto);
+            => new UpdateTimeEntryInteractor(timeService, dataSource, this, syncManager, dto);
 
         public IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> UpdateMultipleTimeEntries(EditTimeEntryDto[] dtos)
             => new UpdateMultipleTimeEntriesInteractor(this, dtos);

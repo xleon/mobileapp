@@ -41,6 +41,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         private readonly ITogglDataSource dataSource;
+        private readonly ISyncManager syncManager;
         private readonly IUserAccessManager userAccessManager;
         private readonly IDialogService dialogService;
         private readonly IUserPreferences userPreferences;
@@ -101,6 +102,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public SettingsViewModel(
             ITogglDataSource dataSource,
+            ISyncManager syncManager,
             IPlatformInfo platformInfo,
             IDialogService dialogService,
             IUserPreferences userPreferences,
@@ -116,6 +118,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ISchedulerProvider schedulerProvider)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
@@ -131,6 +134,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
             this.dataSource = dataSource;
+            this.syncManager = syncManager;
             this.platformInfo = platformInfo;
             this.dialogService = dialogService;
             this.userPreferences = userPreferences;
@@ -146,14 +150,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             this.rxActionFactory = rxActionFactory;
             this.schedulerProvider = schedulerProvider;
 
-            IsSynced = dataSource.SyncManager
-                .ProgressObservable
-                .SelectMany(checkSynced)
-                .AsDriver(schedulerProvider);
+            IsSynced =
+                syncManager.ProgressObservable
+                    .SelectMany(checkSynced)
+                    .AsDriver(schedulerProvider);
 
             IsRunningSync =
-                dataSource.SyncManager
-                    .ProgressObservable
+                syncManager.ProgressObservable
                     .Select(isRunningSync)
                     .AsDriver(schedulerProvider);
 
@@ -371,7 +374,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             };
 
             await interactorFactory.UpdatePreferences(preferencesDto).Execute();
-            dataSource.SyncManager.InitiatePushSync();
+            syncManager.InitiatePushSync();
         }
 
         private async Task changeDefaultWorkspace(long selectedWorkspaceId)
@@ -379,7 +382,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             if (selectedWorkspaceId == currentUser.DefaultWorkspaceId) return;
 
             await interactorFactory.UpdateDefaultWorkspace(selectedWorkspaceId).Execute();
-            dataSource.SyncManager.InitiatePushSync();
+            syncManager.InitiatePushSync();
         }
 
         private WorkspaceToSelectableWorkspaceLambda selectableWorkspacesFromWorkspaces(IThreadSafeUser user)
@@ -473,7 +476,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 return;
 
             await interactorFactory.UpdateUser(new EditUserDTO { BeginningOfWeek = newBeginningOfWeek }).Execute();
-            dataSource.SyncManager.InitiatePushSync();
+            syncManager.InitiatePushSync();
         }
 
         private Task close()
