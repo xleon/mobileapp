@@ -19,6 +19,7 @@ using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Foundation.Services;
@@ -77,6 +78,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         public InputAction<CalendarItem> OnCalendarEventLongPressed { get; }
 
         public InputAction<(DateTimeOffset, TimeSpan)> OnDurationSelected { get; }
+
+        public InputAction<DateTimeOffset> CreateTimeEntryAtOffset { get; }
 
         public InputAction<CalendarItem> OnUpdateTimeEntry { get; }
 
@@ -178,6 +181,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 
             OnDurationSelected = rxActionFactory.FromAsync<(DateTimeOffset StartTime, TimeSpan Duration)>(
                 tuple => durationSelected(tuple.StartTime, tuple.Duration));
+
+            CreateTimeEntryAtOffset = rxActionFactory.FromAsync<DateTimeOffset>(createTimeEntryAtOffset);
 
             OnUpdateTimeEntry = rxActionFactory.FromAsync<CalendarItem>(updateTimeEntry);
 
@@ -378,6 +383,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             var timeEntry = await interactorFactory.CreateTimeEntry(prototype, TimeEntryStartOrigin.CalendarTapAndDrag).Execute();
 
             await navigationService.Navigate<EditTimeEntryViewModel, long>(timeEntry.Id);
+        }
+
+        private async Task createTimeEntryAtOffset(DateTimeOffset startTime)
+        {
+            var startParams = StartTimeEntryParameters.ForManualMode(startTime);
+            await navigationService.Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(startParams);
         }
 
         private async Task updateTimeEntry(CalendarItem calendarItem)

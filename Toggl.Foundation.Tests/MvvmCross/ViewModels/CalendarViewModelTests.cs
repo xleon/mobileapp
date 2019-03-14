@@ -18,6 +18,7 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
+using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Foundation.Tests.Generators;
@@ -938,6 +939,22 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TestScheduler.Start();
 
                 await NavigationService.Received().Navigate<EditTimeEntryViewModel, long>(Arg.Is(TimeEntryId));
+            }
+        }
+
+        public sealed class TheCreateTimeEntryAtOffsetAction : CalendarViewModelTest
+        {
+            [Fact]
+            public async Task NavigatesToTheStartTimeEntryViewModel()
+            {
+                var offset = DateTimeOffset.UtcNow;
+                var duration = TimeSpan.FromMinutes(30);
+
+                ViewModel.CreateTimeEntryAtOffset.Execute(offset);
+                TestScheduler.Start();
+
+                await NavigationService.Received().Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(
+                    Arg.Is<StartTimeEntryParameters>(param => param.StartTime == offset - duration && param.Duration == duration));
             }
         }
 

@@ -86,8 +86,7 @@ namespace Toggl.Giskard.Fragments
 
             calendarRecyclerView.EmptySpansTouchedObservable
                 .Where(_ => !calendarAdapter.NeedsToClearItemInEditMode())
-                .Select(span => (span, TimeSpan.FromMinutes(30)))
-                .Subscribe(ViewModel.OnDurationSelected.Inputs)
+                .Subscribe(ViewModel.CreateTimeEntryAtOffset.Inputs)
                 .DisposedBy(DisposeBag);
 
             ViewModel.ShouldShowOnboarding
