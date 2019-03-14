@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CoreGraphics;
@@ -9,7 +9,6 @@ using Toggl.Daneel.Views;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Multivac.Extensions;
 using UIKit;
@@ -21,6 +20,8 @@ namespace Toggl.Daneel.ViewSources
     public sealed class TimeEntriesLogViewSource
         : BaseTableViewSource<MainLogSection, DaySummaryViewModel, LogItemViewModel>
     {
+        public delegate IObservable<DaySummaryViewModel> ObservableHeaderForSection(int section);
+
         private const int rowHeight = 64;
         private const int headerHeight = 48;
 
@@ -35,6 +36,10 @@ namespace Toggl.Daneel.ViewSources
         //Using the old API so that delete action would work on pre iOS 11 devices
         private readonly UITableViewRowAction deleteTableViewRowAction;
 
+        private readonly ObservableHeaderForSection observableHeaderForSection;
+
+        public IObservable<IEnumerable<DaySummaryViewModel>> ObservedHeaders { get; set; }
+
         public const int SpaceBetweenSections = 20;
 
         public IObservable<LogItemViewModel> ContinueTap { get; }
@@ -45,8 +50,10 @@ namespace Toggl.Daneel.ViewSources
         public IObservable<TimeEntriesLogViewCell> FirstCell { get; }
         public IObservable<bool> IsDragging { get; }
 
-        public TimeEntriesLogViewSource()
+        public TimeEntriesLogViewSource(ObservableHeaderForSection observableHeaderForSection)
         {
+            this.observableHeaderForSection = observableHeaderForSection;
+
             if (!NSThread.Current.IsMainThread)
             {
                 throw new InvalidOperationException($"{nameof(TimeEntriesLogViewSource)} must be created on the main thread");
@@ -114,7 +121,10 @@ namespace Toggl.Daneel.ViewSources
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
             var header = (TimeEntriesLogHeaderView)tableView.DequeueReusableHeaderFooterView(TimeEntriesLogHeaderView.Identifier);
-            header.Update(HeaderOf((int)section));
+            observableHeaderForSection((int)section)
+                .Subscribe(header.Update)
+                .DisposedBy(header.DisposeBag);
+
             return header;
         }
 
