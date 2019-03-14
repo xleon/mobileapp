@@ -15,11 +15,12 @@ using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Giskard.ViewHelpers;
 using System.Reactive.Disposables;
+using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Foundation.Analytics;
 
 namespace Toggl.Giskard.Adapters
 {
-    public class MainRecyclerAdapter : ReactiveSectionedRecyclerAdapter<LogItemViewModel, TimeEntryViewData, DaySummaryViewModel, DaySummaryViewModel, MainLogCellViewHolder, MainLogSectionViewHolder>
+    public class MainRecyclerAdapter : ReactiveSectionedRecyclerAdapter<LogItemViewModel, TimeEntryViewData, DaySummaryViewModel, DaySummaryViewModel, MainLogCellViewHolder, MainLogSectionViewHolder, IMainLogKey>
     {
         public const int SuggestionViewType = 2;
         public const int UserFeedbackViewType = 3;
@@ -175,10 +176,10 @@ namespace Toggl.Giskard.Adapters
             return mainLogCellViewHolder;
         }
 
-        protected override long IdFor(LogItemViewModel item)
+        protected override IMainLogKey IdFor(LogItemViewModel item)
             => item.Identity;
 
-        protected override long IdForSection(DaySummaryViewModel section)
+        protected override IMainLogKey IdForSection(DaySummaryViewModel section)
             => section.Identity;
 
         protected override TimeEntryViewData Wrap(LogItemViewModel item)
