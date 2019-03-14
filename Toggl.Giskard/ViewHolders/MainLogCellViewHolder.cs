@@ -48,7 +48,7 @@ namespace Toggl.Giskard.ViewHolders
         private TextView addDescriptionLabel;
         private TextView timeEntriesLogCellProjectLabel;
         private TextView timeEntriesLogCellDuration;
-        private View groupBackground;
+        private View groupItemBackground;
         private View timeEntriesLogCellContinueImage;
         private View errorImageView;
         private View errorNeedsSync;
@@ -57,10 +57,11 @@ namespace Toggl.Giskard.ViewHolders
         private View mainLogBackgroundDelete;
         private View billableIcon;
         private View hasTagsIcon;
-        private View whitePadding;
+        private View durationPadding;
+        private View durationFadeGradient;
         private TextView groupCountTextView;
         private View groupExpansionButton;
-
+        
         private ObjectAnimator animator;
 
         public bool IsAnimating => animator?.IsRunning ?? false;
@@ -73,9 +74,15 @@ namespace Toggl.Giskard.ViewHolders
 
         private GroupId groupId;
 
+        private Color whiteColor;
+        private Color grayColor;
+
         protected override void InitializeViews()
         {
-            groupBackground = ItemView.FindViewById<View>(MainLogGroupBackground);
+            whiteColor = new Color(ItemView.Context.GetColor(Resource.Color.mainLogCellPaddingWhite));
+            grayColor = new Color(ItemView.Context.GetColor(Resource.Color.mainLogCellPaddingLightGray));
+
+            groupItemBackground = ItemView.FindViewById<View>(MainLogGroupBackground);
             groupCountTextView = ItemView.FindViewById<TextView>(TimeEntriesLogCellGroupCount);
 
             timeEntriesLogCellDescription = ItemView.FindViewById<TextView>(TimeEntriesLogCellDescription);
@@ -90,7 +97,8 @@ namespace Toggl.Giskard.ViewHolders
             mainLogBackgroundDelete = ItemView.FindViewById(MainLogBackgroundDelete);
             billableIcon = ItemView.FindViewById(TimeEntriesLogCellBillable);
             hasTagsIcon = ItemView.FindViewById(TimeEntriesLogCellTags);
-            whitePadding = ItemView.FindViewById(TimeEntriesLogCellDurationWhiteArea);
+            durationPadding = ItemView.FindViewById(TimeEntriesLogCellDurationPaddingArea);
+            durationFadeGradient = ItemView.FindViewById(TimeEntriesLogCellDurationGradient);
             MainLogContentView = ItemView.FindViewById(Resource.Id.MainLogContentView);
 
             groupExpansionButton = ItemView.FindViewById(TimeEntriesLogCellToggleExpansionButton);
@@ -133,14 +141,14 @@ namespace Toggl.Giskard.ViewHolders
             ContinueButtonTappedSubject?.OnNext((Item.ViewModel, ContinueTimeEntryMode.SingleTimeEntryContinueButton));
         }
 
-        private ConstraintLayout.LayoutParams getWhitePaddingWidthDependentOnIcons()
+        private ConstraintLayout.LayoutParams getDurationPaddingWidthDependentOnIcons()
         {
             var whitePaddingWidth =
                 72
                 + (Item.ViewModel.IsBillable ? 22 : 0)
                 + (Item.ViewModel.HasTags ? 22 : 0);
 
-            var layoutParameters = (ConstraintLayout.LayoutParams)whitePadding.LayoutParameters;
+            var layoutParameters = (ConstraintLayout.LayoutParams)durationPadding.LayoutParameters;
             layoutParameters.Width = whitePaddingWidth.DpToPixels(ItemView.Context);
             return layoutParameters;
         }
@@ -167,7 +175,7 @@ namespace Toggl.Giskard.ViewHolders
             billableIcon.Visibility = Item.BillableIconVisibility;
             hasTagsIcon.Visibility = Item.HasTagsIconVisibility;
 
-            whitePadding.LayoutParameters = getWhitePaddingWidthDependentOnIcons();
+            durationPadding.LayoutParameters = getDurationPaddingWidthDependentOnIcons();
 
             switch (Item.ViewModel.VisualizationIntent)
             {
@@ -245,7 +253,9 @@ namespace Toggl.Giskard.ViewHolders
             groupCountTextView.Text = timeEntriesCount.ToString();
             groupCountTextView.Visibility = ViewStates.Visible;
             groupCountTextView.SetTextColor(GroupingColor.Collapsed.Text.ToNativeColor());
-            groupBackground.Visibility = ViewStates.Gone;
+            groupItemBackground.Visibility = ViewStates.Gone;
+            durationPadding.SetBackgroundColor(whiteColor);
+            durationFadeGradient.SetBackgroundResource(Resource.Drawable.TransparentToWhiteGradient);
         }
 
         private void presentAsExpandedGroupHeader(int timeEntriesCount)
@@ -256,21 +266,27 @@ namespace Toggl.Giskard.ViewHolders
             groupCountTextView.Enabled = true;
             groupCountTextView.Text = timeEntriesCount.ToString();
             groupCountTextView.Visibility = ViewStates.Visible;
-            groupBackground.Visibility = ViewStates.Gone;
+            groupItemBackground.Visibility = ViewStates.Gone;
+            durationPadding.SetBackgroundColor(whiteColor);
+            durationFadeGradient.SetBackgroundResource(Resource.Drawable.TransparentToWhiteGradient);
         }
 
         private void presentAsSingleTimeEntry()
         {
             groupExpansionButton.Enabled = false;
             groupCountTextView.Visibility = ViewStates.Gone;
-            groupBackground.Visibility = ViewStates.Gone;
+            groupItemBackground.Visibility = ViewStates.Gone;
+            durationPadding.SetBackgroundColor(whiteColor);
+            durationFadeGradient.SetBackgroundResource(Resource.Drawable.TransparentToWhiteGradient);
         }
 
         private void presentAsTimeEntryInAGroup()
         {
             groupExpansionButton.Enabled = false;
             groupCountTextView.Visibility = ViewStates.Gone;
-            groupBackground.Visibility = ViewStates.Visible;
+            groupItemBackground.Visibility = ViewStates.Visible;
+            durationPadding.SetBackgroundColor(grayColor);
+            durationFadeGradient.SetBackgroundResource(Resource.Drawable.TransparentToLightGrayGradient);
         }
 
         protected override void Dispose(bool disposing)
