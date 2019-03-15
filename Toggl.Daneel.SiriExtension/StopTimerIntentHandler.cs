@@ -114,6 +114,11 @@ namespace SiriExtension
                 return $"{timeSpan.Minutes} minutes and {timeSpan.Seconds} seconds";
             }
 
+            if (timeSpan.Minutes == 0)
+            {
+                return $"{timeSpan.Hours} hours and {timeSpan.Seconds} seconds";
+            }
+
             return $"{timeSpan.Hours} hours, {timeSpan.Minutes} minutes and {timeSpan.Seconds} seconds";
         }
 
