@@ -13,6 +13,7 @@ using SiriExtension.Models;
 using SiriExtension.Exceptions;
 using Toggl.Daneel.ExtensionKit;
 using Toggl.Daneel.ExtensionKit.Analytics;
+using Toggl.Daneel.ExtensionKit.Extensions;
 
 namespace SiriExtension
 {
@@ -31,7 +32,9 @@ namespace SiriExtension
         {
             if (togglAPI == null)
             {
-                completion(new StopTimerIntentResponse(StopTimerIntentResponseCode.FailureNoApiToken, null));
+                var userActivity = new NSUserActivity(stopTimerActivityType);
+                userActivity.SetResponseText("Log in to use this shortcut.");
+                completion(new StopTimerIntentResponse(StopTimerIntentResponseCode.FailureNoApiToken, userActivity));
                 return;
             }
 
@@ -44,7 +47,7 @@ namespace SiriExtension
                 {
                     runningEntry = runningTE;
                     var userActivity = new NSUserActivity(stopTimerActivityType);
-                    userActivity.Title = runningTE.Description;
+                    userActivity.SetEntryDescription(runningTE.Description);
                     completion(new StopTimerIntentResponse(StopTimerIntentResponseCode.Ready, userActivity));
                 },
                 exception =>
@@ -135,13 +138,20 @@ namespace SiriExtension
 
         private StopTimerIntentResponse responseFromException(Exception exception)
         {
+            var userActivity = new NSUserActivity(stopTimerActivityType);
             if (exception is NoRunningEntryException)
-                return new StopTimerIntentResponse(StopTimerIntentResponseCode.FailureNoTimerRunning, null);
+            {
+                userActivity.SetResponseText("There's no entry currently running.");
+                return new StopTimerIntentResponse(StopTimerIntentResponseCode.FailureNoTimerRunning, userActivity);
+            }
 
-            if (exception is AppOutdatedException)
-                return new StopTimerIntentResponse(StopTimerIntentResponseCode.FailureSyncConflict, null);
+            if (exception is AppOutdatedException) {
+                userActivity.SetResponseText("Open the app to sync your data, then try again.");
+                return new StopTimerIntentResponse(StopTimerIntentResponseCode.FailureSyncConflict, userActivity);
+            }
 
-            return new StopTimerIntentResponse(StopTimerIntentResponseCode.Failure, null);
+            userActivity.SetResponseText("Something went wrong, please try again.");
+            return new StopTimerIntentResponse(StopTimerIntentResponseCode.Failure, userActivity);
         }
     }
 }

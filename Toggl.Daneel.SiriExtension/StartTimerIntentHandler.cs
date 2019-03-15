@@ -6,6 +6,7 @@ using Foundation;
 using SiriExtension.Models;
 using Toggl.Daneel.ExtensionKit;
 using Toggl.Daneel.ExtensionKit.Analytics;
+using Toggl.Daneel.ExtensionKit.Extensions;
 using Toggl.Daneel.Intents;
 using Toggl.Ultrawave;
 
@@ -14,6 +15,7 @@ namespace SiriExtension
     public class StartTimerIntentHandler : StartTimerIntentHandling
     {
         private ITogglApi togglAPI;
+        private const string startTimerActivityType = "StartTimer";
 
         public StartTimerIntentHandler(ITogglApi togglAPI)
         {
@@ -24,7 +26,9 @@ namespace SiriExtension
         {
             if (togglAPI == null)
             {
-                completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.FailureNoApiToken, null));
+                var userActivity = new NSUserActivity(startTimerActivityType);
+                userActivity.SetResponseText("Log in to use this shortcut.");
+                completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.FailureNoApiToken, userActivity));
                 return;
             }
 
@@ -39,7 +43,9 @@ namespace SiriExtension
                         }
                         else
                         {
-                            completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.FailureSyncConflict, null));
+                            var userActivity = new NSUserActivity(startTimerActivityType);
+                            userActivity.SetResponseText("Open the app to sync your data, then try again.");
+                            completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.FailureSyncConflict, userActivity));
                         }
                     }
                 );
@@ -60,7 +66,9 @@ namespace SiriExtension
             }, exception =>
             {
                 SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
-                completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.Failure, null));
+                var userActivity = new NSUserActivity(startTimerActivityType);
+                userActivity.SetResponseText("Something went wrong, please try again.");
+                completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.Failure, userActivity));
             });
         }
 

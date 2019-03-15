@@ -9,6 +9,7 @@ using UIKit;
 using CoreFoundation;
 using CoreAnimation;
 using Toggl.Daneel.Intents;
+using Toggl.Daneel.ExtensionKit.Extensions;
 
 namespace Toggl.Daneel.SiriExtension.UI
 {
@@ -66,7 +67,7 @@ namespace Toggl.Daneel.SiriExtension.UI
 
                     if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Ready)
                     {
-                        desiredSize = showConfirmation($"Start tracking {startTimerIntent.EntryDescription ?? "time"}?");
+                        desiredSize = showMessage($"Start tracking {startTimerIntent.EntryDescription ?? "time"}?");
                     }
 
                     break;
@@ -81,10 +82,19 @@ namespace Toggl.Daneel.SiriExtension.UI
 
                     if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Ready)
                     {
-                        var entryDescription = interaction.IntentResponse.UserActivity.Title;
+                        var entryDescription = interaction.IntentResponse.UserActivity.GetEntryDescription();
                         desiredSize =
-                            showConfirmation(
+                            showMessage(
                                 $"Stop tracking {(!string.IsNullOrEmpty(entryDescription) ? entryDescription : "time")}?");
+                    }
+
+                    if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Failure)
+                    {
+                        if (interaction.IntentResponse is StopTimerIntentResponse response)
+                        {
+                            var message = interaction.IntentResponse.UserActivity.GetResponseText();
+                            desiredSize = showMessage(message);
+                        }
                     }
 
                     break;
@@ -100,9 +110,9 @@ namespace Toggl.Daneel.SiriExtension.UI
 
                     if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Ready)
                     {
-                        var entryDescription = interaction.IntentResponse.UserActivity.Title;
+                        var entryDescription = interaction.IntentResponse.UserActivity.GetEntryDescription();
                         desiredSize =
-                            showConfirmation(
+                            showMessage(
                                 $"Start tracking {(!string.IsNullOrEmpty(entryDescription) ? entryDescription : "time")}?");
                     }
 
@@ -138,7 +148,7 @@ namespace Toggl.Daneel.SiriExtension.UI
             return frame.Size;
         }
 
-        private CGSize showConfirmation(string confirmationText)
+        private CGSize showMessage(string confirmationText)
         {
             confirmationView.ConfirmationLabel.Text = "";
 

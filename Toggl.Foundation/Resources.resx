@@ -778,6 +778,6 @@ Use them to add keywords to your time entries.</value>
         <value>Show my time</value>
     </data>
     <data name="ContinueTimerInvocationPhrase">
-        <value>Continue timer</value>
+        <value>Continue tracking</value>
     </data>
 </root>
