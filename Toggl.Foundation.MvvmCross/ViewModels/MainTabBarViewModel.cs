@@ -137,6 +137,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
             settingsViewModel = new SettingsViewModel(
                 dataSource,
+                syncManager,
                 platformInfo,
                 dialogService,
                 userPreferences,
