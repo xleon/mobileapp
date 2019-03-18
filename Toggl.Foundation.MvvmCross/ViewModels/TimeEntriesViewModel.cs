@@ -156,14 +156,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private IObservable<long[]> deleteTimeEntries(long[] timeEntries)
         {
-            var observables = timeEntries.Select(timeEntryId =>
-                interactorFactory
-                    .DeleteTimeEntry(timeEntryId)
-                    .Execute()
-                    .Track(analyticsService.DeleteTimeEntry)
-                    .Do(syncManager.InitiatePushSync));
+            var observables = interactorFactory.DeleteMultipleTimeEntries(timeEntries)
+                .Execute()
+                .Track(analyticsService.DeleteTimeEntry)
+                .Do(syncManager.InitiatePushSync);
 
-            return observables.Merge().LastAsync().SelectValue(timeEntries);
+            return observables.SelectValue(timeEntries);
         }
 
         private bool isNotRunning(IThreadSafeTimeEntry timeEntry) => !timeEntry.IsRunning();

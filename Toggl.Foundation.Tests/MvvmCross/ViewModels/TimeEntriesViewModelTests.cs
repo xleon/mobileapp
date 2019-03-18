@@ -211,10 +211,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 viewModel.DelayDeleteTimeEntries.Execute(batchB);
                 await observableA;
 
-                batchA.ForEach(id =>
-                {
-                    InteractorFactory.Received().DeleteTimeEntry(id).Execute();
-                });
+                InteractorFactory.Received().DeleteMultipleTimeEntries(Arg.Is(batchA)).Execute();
             }
 
             [Fact]
@@ -227,10 +224,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await viewModel.FinalizeDelayDeleteTimeEntryIfNeeded();
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks / 4);
 
-                batch.ForEach(id =>
-                {
-                    InteractorFactory.Received().DeleteTimeEntry(Arg.Is(id)).Execute();
-                });
+                InteractorFactory.Received().DeleteMultipleTimeEntries(Arg.Is(batch)).Execute();
             }
 
             [Fact]
@@ -241,10 +235,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 var observableA = viewModel.DelayDeleteTimeEntries.ExecuteWithCompletion(batch);
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks / 2);
 
-                batch.ForEach(id =>
-                {
-                    InteractorFactory.DidNotReceive().DeleteTimeEntry(Arg.Is(id)).Execute();
-                });
+                InteractorFactory.DidNotReceive().DeleteMultipleTimeEntries(Arg.Is(batch)).Execute();
             }
 
             [Fact]
@@ -283,10 +274,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 viewModel.CancelDeleteTimeEntry.Execute();
                 SchedulerProvider.TestScheduler.Start();
 
-                batch.ForEach(id =>
-                {
-                    InteractorFactory.DidNotReceive().DeleteTimeEntry(Arg.Is(id)).Execute();
-                });
+                InteractorFactory.DidNotReceive().DeleteMultipleTimeEntries(Arg.Is(batch)).Execute();
             }
 
             [Fact]
@@ -296,10 +284,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks);
                 viewModel.CancelDeleteTimeEntry.Execute();
 
-                batch.ForEach(id =>
-                {
-                    InteractorFactory.Received().DeleteTimeEntry(Arg.Is(id)).Execute();
-                });
+                InteractorFactory.Received().DeleteMultipleTimeEntries(Arg.Is(batch)).Execute();
             }
 
             [Fact]
