@@ -44,6 +44,8 @@ namespace Toggl.Daneel.ViewSources
 
             if (cell is ProjectSuggestionViewCell projectCell)
             {
+                projectCell.Item = GetItemAt(indexPath) as ProjectSuggestion;
+
                 projectCell.ToggleTasks
                     .Subscribe(ToggleTasksCommand.Execute)
                     .DisposedBy(projectCell.DisposeBag);
