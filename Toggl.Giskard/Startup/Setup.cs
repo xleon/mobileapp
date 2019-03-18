@@ -14,6 +14,7 @@ using MvvmCross.Plugin;
 using MvvmCross.ViewModels;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
+using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.Services;
@@ -94,10 +95,17 @@ namespace Toggl.Giskard
             ApplicationContext.RegisterReceiver(new TimezoneChangedBroadcastReceiver(timeService),
                 new IntentFilter(Intent.ActionTimezoneChanged));
 
+            var dataSource =
+                new TogglDataSource(
+                    database,
+                    timeService,
+                    analyticsService);
+
             var foundation =
                 TogglFoundation
                     .ForClient(userAgent, appVersion)
                     .WithDatabase(database)
+                    .WithDataSource(dataSource)
                     .WithScheduler(scheduler)
                     .WithTimeService(timeService)
                     .WithApiEnvironment(environment)
