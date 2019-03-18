@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Multivac;
 
@@ -14,7 +14,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog
         private readonly long? projectId;
         private readonly long? taskId;
         private readonly bool isBillable;
-        private readonly long[] tagIds;
+        private readonly HashSet<long> tagIds;
 
         public GroupId(IThreadSafeTimeEntry sample)
         {
@@ -24,7 +24,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog
             projectId = sample.Project?.Id;
             taskId = sample.Task?.Id;
             isBillable = sample.Billable;
-            tagIds = sample.TagIds.OrderBy(tag => tag).ToArray();
+            tagIds = new HashSet<long>(sample.TagIds ?? Array.Empty<long>());
         }
 
         public override bool Equals(object obj)
@@ -44,7 +44,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog
                    && projectId == other.projectId
                    && taskId == other.taskId
                    && isBillable == other.isBillable
-                   && Equals(tagIds, other.tagIds);
+                   && tagIds.SetEquals(other.tagIds);
         }
 
         public override int GetHashCode()
