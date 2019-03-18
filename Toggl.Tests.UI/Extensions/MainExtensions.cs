@@ -95,7 +95,7 @@ namespace Toggl.Tests.UI.Extensions
             app.WaitForElement(projectCellSelector);
             app.Tap(projectCellSelector);
         }
-          
+
         public static void SwipeEntryToDelete(this IApp app, string timeEntryDescription)
         {
             var timeEntryCellRect = RectForTimeEntryCell(app, timeEntryDescription);
@@ -108,6 +108,18 @@ namespace Toggl.Tests.UI.Extensions
             );
 
             app.WaitForNoElement(x => x.Text(timeEntryDescription));
+        }
+
+        public static void SwipeEntryToContinue(this IApp app, string timeEntryDescription)
+        {
+            var timeEntryCellRect = RectForTimeEntryCell(app, timeEntryDescription);
+
+            app.DragCoordinates(
+                fromX: timeEntryCellRect.X,
+                fromY: timeEntryCellRect.CenterY,
+                toX: timeEntryCellRect.X + timeEntryCellRect.Width,
+                toY: timeEntryCellRect.CenterY
+            );
         }
 
         public static void PullToRefresh(this IApp app)
@@ -126,13 +138,31 @@ namespace Toggl.Tests.UI.Extensions
 
         public static void WaitForTimeEntryWithProject(this IApp app, string projectName)
             => app.WaitForElement(x => x.Marked(Main.TimeEntryRow).Descendant().Contains(projectName));
-      
+
         public static AppRect RectForTimeEntryCell(this IApp app, string timeEntryDescription)
         {
             var timeEntryViews = app.Query(queryForTimeEntryCell(timeEntryDescription));
             if (timeEntryViews.Length == 0)
                 return null;
             return timeEntryViews[0].Rect;
+        }
+
+        public static void AssertRunningTimeEntry(this IApp app, string description, string projectName = null)
+        {
+            Func<AppQuery, AppQuery> queryForItemsInCard = x => x.Marked(Main.CurrentTimeEntryCard).Descendant();
+            Func<AppQuery, AppQuery> queryForDescriptionLabel = x => queryForItemsInCard(x).Text(description);
+            Func<AppQuery, AppQuery> queryForProjectLabel = x => queryForItemsInCard(x).EndsWith(projectName); //Project name label starts with the dot icon
+            var shouldCheckProject = !string.IsNullOrEmpty(projectName);
+
+            app.WaitForElement(Main.CurrentTimeEntryCard);
+            var theDescriptionIsCorrect = app.Query(queryForDescriptionLabel).Any();
+            var theProjectIsCorrect = app.Query(queryForProjectLabel).Any();
+
+            if (!theDescriptionIsCorrect)
+                throw new NoRunningTimeEntryException($"There is no running time entry with description \"{description}\"");
+
+            if (shouldCheckProject && !theProjectIsCorrect)
+                throw new NoRunningTimeEntryException($"There is no running time entry with project \"{projectName}\"");
         }
 
         public static void AssertTimeEntryInTheLog(this IApp app, string description)
