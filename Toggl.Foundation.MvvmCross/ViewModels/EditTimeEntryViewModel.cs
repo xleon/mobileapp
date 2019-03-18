@@ -51,7 +51,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private long? projectId;
         private long? taskId;
         private IThreadSafeTimeEntry originalTimeEntry;
-        private Subject<long> workspaceIdSubject = new Subject<long>();
+        private BehaviorSubject<long?> workspaceIdSubject = new BehaviorSubject<long?>(null);
 
         public long[] TimeEntryIds { get; set; }
         public long TimeEntryId => TimeEntryIds.First();
@@ -148,7 +148,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             OnboardingStorage = onboardingStorage;
 
             workspaceIdSubject
-                .Subscribe(id => workspaceId = id)
+                .Where(id => id.HasValue)
+                .Subscribe(id => workspaceId = id.Value)
                 .DisposedBy(disposeBag);
 
             isEditingDescriptionSubject = new BehaviorSubject<bool>(false);
@@ -159,7 +160,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .AsDriver(ProjectClientTaskInfo.Empty, schedulerProvider);
 
             IsBillableAvailable = workspaceIdSubject
-                .SelectMany(workspaceId => interactorFactory.IsBillableAvailableForWorkspace(workspaceId).Execute())
+                .Where(id => id.HasValue)
+                .SelectMany(workspaceId => interactorFactory.IsBillableAvailableForWorkspace(workspaceId.Value).Execute())
                 .DistinctUntilChanged()
                 .AsDriver(false, schedulerProvider);
 
