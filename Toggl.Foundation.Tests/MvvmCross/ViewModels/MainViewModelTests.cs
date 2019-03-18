@@ -49,6 +49,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 var vm = new MainViewModel(
                     DataSource,
+                    SyncManager,
                     TimeService,
                     RatingService,
                     UserPreferences,
@@ -75,7 +76,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                 var syncManager = Substitute.For<ISyncManager>();
                 syncManager.ProgressObservable.Returns(ProgressSubject.AsObservable());
-                DataSource.SyncManager.Returns(syncManager);
 
                 var defaultRemoteConfiguration = new RatingViewConfiguration(5, RatingViewCriterion.None);
                 RemoteConfigService
@@ -103,6 +103,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
+                bool useSyncManager,
                 bool useTimeService,
                 bool useRatingService,
                 bool useUserPreferences,
@@ -119,6 +120,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 bool useRxActionFactory)
             {
                 var dataSource = useDataSource ? DataSource : null;
+                var syncManager = useSyncManager ? SyncManager : null;
                 var timeService = useTimeService ? TimeService : null;
                 var ratingService = useRatingService ? RatingService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
@@ -137,6 +139,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainViewModel(
                         dataSource,
+                        syncManager,
                         timeService,
                         ratingService,
                         userPreferences,
@@ -527,7 +530,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 ViewModel.StopTimeEntry.Execute(Arg.Any<TimeEntryStopOrigin>());
 
                 TestScheduler.Start();
-                await DataSource.SyncManager.Received().PushSync();
+                SyncManager.Received().PushSync();
             }
 
             [Fact, LogIfTooSlow]
@@ -554,7 +557,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 TestScheduler.Start();
 
                 errors.Messages.Count().Should().Be(1);
-                await DataSource.SyncManager.DidNotReceive().PushSync();
+                SyncManager.DidNotReceive().PushSync();
             }
 
             [Fact, LogIfTooSlow]
@@ -821,7 +824,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.Init(ApplicationUrls.Main.Action.Stop, null);
                     await ViewModel.Initialize();
 
-                    await DataSource.SyncManager.Received().PushSync();
+                    SyncManager.Received().PushSync();
                 }
             }
 

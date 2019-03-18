@@ -1,8 +1,6 @@
-﻿using System;
-using System.Reactive.Linq;
+using System;
 using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac;
 
 namespace Toggl.Foundation.Interactors
 {
