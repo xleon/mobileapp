@@ -297,8 +297,8 @@ namespace Toggl.Daneel.ViewControllers
             suggestionsContaier.ConstrainToViewSides(tableHeader);
             ratingViewContainer.ConstrainToViewSides(tableHeader);
 
-            suggestionsContaier.TopAnchor.ConstraintEqualTo(tableHeader.TopAnchor).Active = true;
-            suggestionsContaier.BottomAnchor.ConstraintEqualTo(ratingViewContainer.TopAnchor).Active = true;
+            suggestionsContaier.TopAnchor.ConstraintEqualTo(tableHeader.TopAnchor, TimeEntriesLogViewSource.SpaceBetweenSections).Active = true;
+            suggestionsContaier.BottomAnchor.ConstraintEqualTo(ratingViewContainer.TopAnchor, TimeEntriesLogViewSource.SpaceBetweenSections).Active = true;
             ratingViewContainer.BottomAnchor.ConstraintEqualTo(tableHeader.BottomAnchor).Active = true;
 
             suggestionsContaier.AddSubview(suggestionsView);
@@ -414,8 +414,9 @@ namespace Toggl.Daneel.ViewControllers
         {
             base.ViewDidLayoutSubviews();
 
-            TimeEntriesLogTableView.ContentInset = new UIEdgeInsets(0, 0,
-                StartTimeEntryButton.Frame.Height - TimeEntriesLogViewSource.SpaceBetweenSections, 0);
+            TimeEntriesLogTableView.ContentInset = new UIEdgeInsets(-TimeEntriesLogViewSource.SpaceBetweenSections, 0,
+                StartTimeEntryButton.Frame.Height, 0);
+            TimeEntriesLogTableView.BringSubviewToFront(TimeEntriesLogTableView.TableHeaderView);
 
             if (TimeEntriesLogTableView.TableHeaderView != null)
             {

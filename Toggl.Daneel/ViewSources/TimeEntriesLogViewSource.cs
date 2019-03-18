@@ -74,15 +74,7 @@ namespace Toggl.Daneel.ViewSources
             IsDragging = isDraggingSubject.AsObservable();
         }
 
-        public override UIView GetViewForFooter(UITableView tableView, nint section)
-            => new UIView(new CGRect(0, 0, UIScreen.MainScreen.Bounds.Width, SpaceBetweenSections))
-            {
-                BackgroundColor = UIColor.White
-            };
-
-        public override nfloat GetHeightForHeader(UITableView tableView, nint section) => headerHeight;
-
-        public override nfloat GetHeightForFooter(UITableView tableView, nint section) => SpaceBetweenSections;
+        public override nfloat GetHeightForHeader(UITableView tableView, nint section) => headerHeight + SpaceBetweenSections;
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath) => rowHeight;
 
