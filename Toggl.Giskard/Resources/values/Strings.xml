@@ -133,6 +133,7 @@ understand and agree to Toggl\'s</string>
     <string name="SignOutOption">Or sign out</string>
     <string name="LoginBackRequest">Enter your password to log back in to your account:</string>
     <string name="GroupTimeEntries">Group similar time entries</string>
+    <string name="Display">Display</string>
 
     <string name="ReportsCalendarShortcutsTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsCalendarShortcutsTemplateSelector, Toggl.Giskard</string>
     <string name="ReportsCalendarTemplateSelector" translatable="false">Toggl.Giskard.TemplateSelectors.ReportsCalendarTemplateSelector, Toggl.Giskard</string>

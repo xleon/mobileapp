@@ -283,7 +283,7 @@ namespace Toggl.Giskard.ViewHolders
         private void presentAsTimeEntryInAGroup()
         {
             groupExpansionButton.Enabled = false;
-            groupCountTextView.Visibility = ViewStates.Gone;
+            groupCountTextView.Visibility = ViewStates.Invisible;
             groupItemBackground.Visibility = ViewStates.Visible;
             durationPadding.SetBackgroundColor(grayColor);
             durationFadeGradient.SetBackgroundResource(Resource.Drawable.TransparentToLightGrayGradient);

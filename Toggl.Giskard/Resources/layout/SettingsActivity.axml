@@ -77,7 +77,7 @@
                 android:textAllCaps="true"
                 android:letterSpacing="0.04"
                 android:gravity="center_vertical"
-                android:text="@string/DateAndTime"
+                android:text="@string/Display"
                 android:textColor="@color/defaultText"
                 android:fontFamily="sans-serif-medium"
                 android:layout_height="48dp"
