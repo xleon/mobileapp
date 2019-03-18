@@ -67,7 +67,7 @@ namespace Toggl.Giskard.Adapters
 
                 return headerViewType;
             }
-            
+
             var itemViewType = SelectItemViewType(item.Right);
             if (!ItemViewTypes.Contains(itemViewType))
                 throw new InvalidOperationException("An item view type not included in the ItemViewTypes property was returned");

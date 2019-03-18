@@ -663,7 +663,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analytics\SiriTrackableEvent.cs" />
+    <Compile Include="Analytics\SiriIntentErrorTrackingEvent.cs" />
+    <Compile Include="Analytics\SiriTrackingEventExtensions.cs" />
     <Compile Include="Binding\DatePickerDateTimeOffsetTargetBinding.cs" />
     <Compile Include="Cells\BaseCollectionViewCell.cs" />
     <Compile Include="Extensions\Binders\ReactiveTableViewBinder.cs" />

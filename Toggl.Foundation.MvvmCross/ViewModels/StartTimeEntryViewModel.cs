@@ -545,6 +545,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             var timeEntry = textFieldInfo.Value.AsTimeEntryPrototype(startTime, duration, isBillable.Value);
             var origin = duration.HasValue ? TimeEntryStartOrigin.Manual : TimeEntryStartOrigin.Timer;
+            if (parameter.Origin is TimeEntryStartOrigin paramOrigin)
+            {
+                origin = paramOrigin;
+            }
             return interactorFactory.CreateTimeEntry(timeEntry, origin).Execute()
                 .Do(_ => navigationService.Close(this))
                 .SelectUnit();
