@@ -10,6 +10,7 @@
         OpenSettingsView,
         EditTimeEntryFromCalendar,
         EditTimeEntryFromMainLog,
+        UpdateTimeEntriesGroup,
         OpenReportsViewForTheFirstTime,
         OpenCreateProjectViewFromStartTimeEntryView,
         OpenSelectProjectFromEditView,

@@ -32,7 +32,7 @@ namespace Toggl.Foundation.Interactors
 
         IInteractor<IObservable<IThreadSafeTimeEntry>> GetTimeEntryById(long id);
 
-        IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> GetMultipleTimeEntriesById(params long[] ids);
+        IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> GetMultipleTimeEntriesById(long[] ids);
 
         IInteractor<IObservable<Unit>> DeleteTimeEntry(long id);
 

@@ -82,7 +82,7 @@ namespace Toggl.Foundation.Interactors
             => new UpdateTimeEntryInteractor(timeService, dataSource, this, syncManager, dto);
 
         public IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> UpdateMultipleTimeEntries(EditTimeEntryDto[] dtos)
-            => new UpdateMultipleTimeEntriesInteractor(this, dtos);
+            => new UpdateMultipleTimeEntriesInteractor(timeService, dataSource, stopwatchProvider, this, syncManager, dtos);
 
         public IInteractor<IObservable<IThreadSafeTimeEntry>> StopTimeEntry(DateTimeOffset currentDateTime, TimeEntryStopOrigin origin)
             => new StopTimeEntryInteractor(timeService, dataSource.TimeEntries, currentDateTime, analyticsService, origin);
