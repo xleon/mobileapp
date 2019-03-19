@@ -59,6 +59,11 @@ namespace Toggl.Foundation.Analytics
         /// <summary>
         /// Starting a time entry from a calendar notification
         /// </summary>
-        CalendarNotification
+        CalendarNotification,
+
+        /// <summary>
+        /// Starting a time entry via Siri
+        /// </summary>
+        Siri
     }
 }

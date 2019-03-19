@@ -10,7 +10,6 @@
 
 namespace Toggl.Foundation {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -374,6 +373,15 @@ namespace Toggl.Foundation {
         public static string ContinueLastEntry {
             get {
                 return ResourceManager.GetString("ContinueLastEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continue timer.
+        /// </summary>
+        public static string ContinueTimerInvocationPhrase {
+            get {
+                return ResourceManager.GetString("ContinueTimerInvocationPhrase", resourceCulture);
             }
         }
         
@@ -1278,6 +1286,24 @@ namespace Toggl.Foundation {
         public static string NoWorries {
             get {
                 return ResourceManager.GetString("NoWorries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Tasks.
+        /// </summary>
+        public static string NumberOfTasksPlural {
+            get {
+                return ResourceManager.GetString("NumberOfTasksPlural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Task.
+        /// </summary>
+        public static string NumberOfTasksSingular {
+            get {
+                return ResourceManager.GetString("NumberOfTasksSingular", resourceCulture);
             }
         }
         
@@ -2404,18 +2430,6 @@ namespace Toggl.Foundation {
         public static string YourProfile {
             get {
                 return ResourceManager.GetString("YourProfile", resourceCulture);
-            }
-        }
-        
-        public static string NumberOfTasksPlural {
-            get {
-                return ResourceManager.GetString("NumberOfTasksPlural", resourceCulture);
-            }
-        }
-        
-        public static string NumberOfTasksSingular {
-            get {
-                return ResourceManager.GetString("NumberOfTasksSingular", resourceCulture);
             }
         }
     }

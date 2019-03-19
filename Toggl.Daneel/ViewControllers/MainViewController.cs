@@ -358,10 +358,10 @@ namespace Toggl.Daneel.ViewControllers
         {
             var events = SharedStorage.instance.PopTrackableEvents();
 
-            foreach (var e in events)
-            {
-                ViewModel.Track(new SiriTrackableEvent(e));
-            }
+            events
+                .Select(e => e.ToTrackableEvent())
+                .Where(e => e != null)
+                .Do(ViewModel.Track);
         }
 
         private void onApplicationDidBecomeActive(NSNotification notification)
