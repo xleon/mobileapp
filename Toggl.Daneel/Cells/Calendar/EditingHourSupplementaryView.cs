@@ -5,14 +5,14 @@ using UIKit;
 
 namespace Toggl.Daneel.Cells.Calendar
 {
-    public partial class EditingHourSupplementaryView : UICollectionViewCell
+    public sealed partial class EditingHourSupplementaryView : UICollectionViewCell
     {
-        public static readonly NSString Key = new NSString("EditingHourSupplementaryView");
+        public static readonly NSString Key = new NSString(nameof(EditingHourSupplementaryView));
         public static readonly UINib Nib;
 
         static EditingHourSupplementaryView()
         {
-            Nib = UINib.FromName("EditingHourSupplementaryView", NSBundle.MainBundle);
+            Nib = UINib.FromName(nameof(EditingHourSupplementaryView), NSBundle.MainBundle);
         }
 
         protected EditingHourSupplementaryView(IntPtr handle) : base(handle)

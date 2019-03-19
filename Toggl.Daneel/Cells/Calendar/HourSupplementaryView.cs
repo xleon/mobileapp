@@ -4,7 +4,7 @@ using UIKit;
 
 namespace Toggl.Daneel.Cells.Calendar
 {
-    public sealed partial class HourSupplementaryView : UICollectionReusableView
+    public sealed partial class HourSupplementaryView : UICollectionViewCell
     {
         public static readonly NSString Key = new NSString(nameof(HourSupplementaryView));
         public static readonly UINib Nib;

@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading;
 using CoreGraphics;
 using Foundation;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Calendar;
-using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using UIKit;
@@ -26,11 +24,18 @@ namespace Toggl.Daneel.Views.Calendar
         public float HourHeight { get; private set; } = 56;
 
         private static readonly nfloat leftPadding = 76;
-        private static readonly nfloat rightPadding = 16;
         private static readonly nfloat hourSupplementaryLabelHeight = 20;
         private static readonly nfloat currentTimeSupplementaryLeftOffset = -18;
-        private static readonly nfloat horizontalItemSpacing = 4;
         private static readonly nfloat verticalItemSpacing = 1;
+
+        private nfloat rightPadding
+            => CollectionView.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
+                ? 20
+                : 16;
+        private nfloat horizontalItemSpacing
+            => CollectionView.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
+                ? 11
+                : 4;
 
         private DateTime date;
         private readonly ITimeService timeService;
@@ -167,6 +172,8 @@ namespace Toggl.Daneel.Views.Calendar
             var editingHoursIndexPaths = indexPathsForEditingHours();
             var editingHoursAttributes = editingHoursIndexPaths.Select(layoutAttributesForHourView);
 
+            currentTimeLayoutAttributes.Frame = frameForCurrentTime();
+
             var attributes = itemsAttributes
                 .Concat(hoursAttributes)
                 .Concat(editingHoursAttributes)
@@ -204,13 +211,13 @@ namespace Toggl.Daneel.Views.Calendar
             }
             else
             {
-                currentTimeLayoutAttributes.Frame = FrameForCurrentTime();
+                currentTimeLayoutAttributes.Frame = frameForCurrentTime();
                 currentTimeLayoutAttributes.ZIndex = 300;
                 return currentTimeLayoutAttributes;
             }
         }
 
-        internal CGRect FrameForCurrentTime()
+        private CGRect frameForCurrentTime()
         {
             var now = timeService.CurrentDateTime.LocalDateTime;
 

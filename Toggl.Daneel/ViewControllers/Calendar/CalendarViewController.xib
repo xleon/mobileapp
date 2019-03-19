@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -64,6 +63,9 @@
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="NhI-Kn-KUq">
                     <rect key="frame" x="0.0" y="32" width="375" height="635"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="834" id="YQ4-F9-sjV"/>
+                    </constraints>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="xJA-hD-XsC">
                         <size key="itemSize" width="50" height="50"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -129,13 +131,14 @@
                 <constraint firstItem="3RA-hC-Bqf" firstAttribute="top" secondItem="LXy-pR-2Vb" secondAttribute="bottom" id="7jd-Qc-cxJ"/>
                 <constraint firstAttribute="bottom" secondItem="4HD-Ed-Lag" secondAttribute="bottom" id="7kd-gh-CMu"/>
                 <constraint firstAttribute="trailing" secondItem="4HD-Ed-Lag" secondAttribute="trailing" id="AKw-sA-S7u"/>
-                <constraint firstItem="NhI-Kn-KUq" firstAttribute="leading" secondItem="Gmd-lW-ZGB" secondAttribute="leading" id="BBh-t4-ydr"/>
+                <constraint firstItem="NhI-Kn-KUq" firstAttribute="leading" secondItem="Gmd-lW-ZGB" secondAttribute="leading" priority="750" id="BBh-t4-ydr"/>
                 <constraint firstItem="Gmd-lW-ZGB" firstAttribute="trailing" secondItem="LXy-pR-2Vb" secondAttribute="trailing" id="Rld-f6-Acg"/>
                 <constraint firstAttribute="trailing" secondItem="3RA-hC-Bqf" secondAttribute="trailing" id="gmv-li-nfu"/>
                 <constraint firstItem="NhI-Kn-KUq" firstAttribute="top" secondItem="3RA-hC-Bqf" secondAttribute="bottom" id="hEg-dN-eMJ"/>
                 <constraint firstItem="4HD-Ed-Lag" firstAttribute="top" secondItem="3RA-hC-Bqf" secondAttribute="bottom" id="jyI-vw-Zuz"/>
                 <constraint firstItem="LXy-pR-2Vb" firstAttribute="top" secondItem="2" secondAttribute="top" id="kLd-uU-jws"/>
-                <constraint firstItem="NhI-Kn-KUq" firstAttribute="trailing" secondItem="Gmd-lW-ZGB" secondAttribute="trailing" id="xyG-4v-H5P"/>
+                <constraint firstItem="NhI-Kn-KUq" firstAttribute="centerX" secondItem="Gmd-lW-ZGB" secondAttribute="centerX" id="szX-LQ-97x"/>
+                <constraint firstItem="NhI-Kn-KUq" firstAttribute="trailing" secondItem="Gmd-lW-ZGB" secondAttribute="trailing" priority="750" id="xyG-4v-H5P"/>
                 <constraint firstItem="3RA-hC-Bqf" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="yGO-jS-eul"/>
                 <constraint firstItem="4HD-Ed-Lag" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="yS4-uj-tTO"/>
             </constraints>
