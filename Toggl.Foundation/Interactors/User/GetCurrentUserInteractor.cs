@@ -1,4 +1,5 @@
 using System;
+using System.Reactive.Linq;
 using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Models.Interfaces;
 
@@ -14,6 +15,6 @@ namespace Toggl.Foundation.Interactors
         }
 
         public IObservable<IThreadSafeUser> Execute()
-            => dataSource.Current;
+            => dataSource.Current.FirstAsync();
     }
 }
