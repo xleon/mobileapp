@@ -13,7 +13,28 @@ namespace Toggl.Daneel.Views
     public sealed class HueSaturationPickerView : UIView
     {
         private readonly CALayer opacityLayer = new CALayer();
-        
+
+        private const float step = 1 / 6f;
+        private readonly CAGradientLayer colorLayer = new CAGradientLayer
+        {
+            BorderWidth = 1,
+            CornerRadius = 3,
+            StartPoint = new CGPoint(0, 0),
+            EndPoint = new CGPoint(1, 0),
+            BorderColor = UIColor.Black.ColorWithAlpha(0.08f).CGColor,
+            Locations = new NSNumber[] { 0, step * 1, step * 2, step * 3, step * 4, step * 5, 1.0 },
+            Colors = new CGColor[]
+            {
+                UIColor.Red.CGColor, UIColor.Yellow.CGColor, UIColor.Green.CGColor,
+                UIColor.Cyan.CGColor, UIColor.Blue.CGColor, UIColor.Magenta.CGColor, UIColor.Red.CGColor
+            },
+            Mask = new CAGradientLayer
+            {
+                Colors = new CGColor[] { UIColor.Black.CGColor, UIColor.Clear.CGColor },
+                Locations = new NSNumber[] { 0.0, 1.0 }
+            }
+        };
+
         private const byte circleDiameter = 30;
         private const byte circleRadius = circleDiameter / 2;
         private static readonly CGColor circleColor = UIColor.White.CGColor;
@@ -48,6 +69,11 @@ namespace Toggl.Daneel.Views
         public HueSaturationPickerView(IntPtr handle)
             : base(handle)
         {
+            opacityLayer.CornerRadius = 3;
+            opacityLayer.BackgroundColor = UIColor.Black.ColorWithAlpha(complement(Value)).CGColor;
+            Layer.InsertSublayer(opacityLayer, 0);
+
+            Layer.InsertSublayer(colorLayer, 0);
         }
 
         public override void TouchesBegan(NSSet touches, UIEvent evt)
@@ -84,6 +110,15 @@ namespace Toggl.Daneel.Views
             SetNeedsDisplay();
         }
 
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
+
+            opacityLayer.Frame = Bounds;
+            colorLayer.Frame = Bounds;
+            colorLayer.Mask.Frame = Bounds;
+        }
+
         public override void Draw(CGRect rect)
         {
             base.Draw(rect);
@@ -107,39 +142,6 @@ namespace Toggl.Daneel.Views
             context.AddPath(outerPath.CGPath);
             context.SetStrokeColor(outerCircleColor);
             context.DrawPath(CGPathDrawingMode.Stroke);
-        }
-
-        public void InitializeLayers(CGRect layerFrame)
-        {
-            opacityLayer.CornerRadius = 3;
-            opacityLayer.Frame = layerFrame;
-            opacityLayer.BackgroundColor = UIColor.Black.ColorWithAlpha(complement(Value)).CGColor;
-            Layer.InsertSublayer(opacityLayer, 0);
-
-            const float step = 1 / 6f;
-            Layer.InsertSublayer(new CAGradientLayer
-            {
-                BorderWidth = 1,
-                CornerRadius = 3,
-                Frame = layerFrame,
-                StartPoint = new CGPoint(0, 0),
-                EndPoint = new CGPoint(1, 0),
-                BorderColor = UIColor.Black.ColorWithAlpha(0.08f).CGColor,
-                Locations = new NSNumber[] { 0, step * 1, step * 2, step * 3, step * 4, step * 5, 1.0 },
-                Colors = new CGColor[]
-                {
-                    UIColor.Red.CGColor, UIColor.Yellow.CGColor, UIColor.Green.CGColor,
-                    UIColor.Cyan.CGColor, UIColor.Blue.CGColor, UIColor.Magenta.CGColor, UIColor.Red.CGColor
-                },
-                Mask = new CAGradientLayer
-                {
-                    Frame = layerFrame,
-                    Colors = new CGColor[] { UIColor.Black.CGColor, UIColor.Clear.CGColor },
-                    Locations = new NSNumber[] { 0.0, 1.0 }
-                }
-            }, 0);
-
-            SetNeedsDisplay();
         }
 
         private float complement(float number) => Math.Abs(number - 1);

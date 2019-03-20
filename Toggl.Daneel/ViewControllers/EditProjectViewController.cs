@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using CoreGraphics;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.Plugin.Color;
-using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Converters;
@@ -17,6 +17,8 @@ namespace Toggl.Daneel.ViewControllers
     public sealed partial class EditProjectViewController : MvxViewController<EditProjectViewModel>, IDismissableViewController
     {
         private const float nameAlreadyTakenHeight = 16;
+        private const double desiredIpadHeight = 360;
+
 
         public EditProjectViewController() 
             : base(nameof(EditProjectViewController), null)
@@ -32,6 +34,11 @@ namespace Toggl.Daneel.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            {
+                PreferredContentSize = new CGSize(0, desiredIpadHeight);
+            }
 
             NameTakenErrorLabel.Text = Resources.NameTakenError;
             TitleLabel.Text = Resources.NewProject;
