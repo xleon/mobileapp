@@ -156,10 +156,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private IObservable<long[]> deleteTimeEntries(long[] timeEntries)
         {
-            var observables = interactorFactory.DeleteMultipleTimeEntries(timeEntries)
-                .Execute()
-                .Track(analyticsService.DeleteTimeEntry)
-                .Do(syncManager.InitiatePushSync);
+            var observables =
+                interactorFactory.SoftDeleteMultipleTimeEntries(timeEntries)
+                    .Execute()
+                    .Track(analyticsService.DeleteTimeEntry);
 
             return observables.SelectValue(timeEntries);
         }

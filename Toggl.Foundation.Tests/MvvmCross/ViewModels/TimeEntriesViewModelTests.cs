@@ -201,7 +201,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             }
 
             [Fact]
-            public async ThreadingTask ImmediatelyHardDeletesTheTimeEntryWhenAnotherTimeEntryIsDeletedBeforeTheUndoTimeRunsOut()
+            public async ThreadingTask ImmediatelyDeletesTheTimeEntryWhenAnotherTimeEntryIsDeletedBeforeTheUndoTimeRunsOut()
             {
                 var batchA = new long[] { 1, 2, 3 };
                 var batchB = new long[] { 4, 5 };
@@ -211,11 +211,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 viewModel.DelayDeleteTimeEntries.Execute(batchB);
                 await observableA;
 
-                InteractorFactory.Received().DeleteMultipleTimeEntries(Arg.Is(batchA)).Execute();
+                InteractorFactory.Received().SoftDeleteMultipleTimeEntries(Arg.Is(batchA)).Execute();
             }
 
             [Fact]
-            public async ThreadingTask ImmediatelyHardDeletesTheTimeEntryWhenCallingFinilizeDelayDeleteTimeEntryIfNeeded()
+            public async ThreadingTask ImmediatelyDeletesTheTimeEntryWhenCallingFinilizeDelayDeleteTimeEntryIfNeeded()
             {
                 var batch = new long[] { 1, 2, 3 };
 
@@ -224,7 +224,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 await viewModel.FinalizeDelayDeleteTimeEntryIfNeeded();
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks / 4);
 
-                InteractorFactory.Received().DeleteMultipleTimeEntries(Arg.Is(batch)).Execute();
+                InteractorFactory.Received().SoftDeleteMultipleTimeEntries(Arg.Is(batch)).Execute();
             }
 
             [Fact]
@@ -284,7 +284,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks);
                 viewModel.CancelDeleteTimeEntry.Execute();
 
-                InteractorFactory.Received().DeleteMultipleTimeEntries(Arg.Is(batch)).Execute();
+                InteractorFactory.Received().SoftDeleteMultipleTimeEntries(Arg.Is(batch)).Execute();
             }
 
             [Fact]

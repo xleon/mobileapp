@@ -38,6 +38,8 @@ namespace Toggl.Foundation.Interactors
 
         IInteractor<IObservable<Unit>> DeleteMultipleTimeEntries(long[] ids);
 
+        IInteractor<IObservable<Unit>> SoftDeleteMultipleTimeEntries(long[] ids);
+
         IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> GetAllTimeEntriesVisibleToTheUser();
 
         IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> ObserveAllTimeEntriesVisibleToTheUser();
