@@ -218,7 +218,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     .Select(user => user.ImageUrl)
                     .DistinctUntilChanged()
                     .SelectMany(url => interactorFactory.GetUserAvatar(url).Execute())
-                    .AsDriver(schedulerProvider);
+                    .AsDriver(schedulerProvider)
+                    .Where(avatar => avatar != null);
 
             Workspaces =
                 dataSource.User.Current
