@@ -8,7 +8,6 @@ using Toggl.Foundation.Services;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 
-
 namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
 {
     [Preserve(AllMembers = true)]
@@ -31,7 +30,12 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             this.permissionsService = permissionsService;
 
             EnableAccess = rxActionFactory.FromAction(enableAccess);
-            Close = rxActionFactory.FromAsync(() => navigationService.Close(this, Unit.Default));
+            Close = rxActionFactory.FromAsync(close);
+        }
+
+        private async Task close()
+        {
+            await navigationService.Close(this, Unit.Default);
         }
 
         public override void ViewAppeared()

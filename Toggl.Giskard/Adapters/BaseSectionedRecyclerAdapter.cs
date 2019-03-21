@@ -31,13 +31,6 @@ namespace Toggl.Giskard.Adapters
         private readonly Subject<TItem> itemTapSubject = new Subject<TItem>();
         private readonly Subject<TSection> headerTapSubject = new Subject<TSection>();
 
-        private IList<CollectionSection<TSection, TItem>> items;
-        public IList<CollectionSection<TSection, TItem>> Items
-        {
-            get => Items;
-            set => setItems(value ?? new List<CollectionSection<TSection, TItem>>());
-        }
-
         public IObservable<TItem> ItemTapObservable => itemTapSubject.AsObservable();
 
         protected virtual HashSet<int> ItemViewTypes { get; } = new HashSet<int> { ItemViewType };
@@ -115,7 +108,7 @@ namespace Toggl.Giskard.Adapters
             }
         }
 
-        private void setItems(IList<CollectionSection<TSection, TItem>> newItems)
+        public void SetItems(IList<CollectionSection<TSection, TItem>> newItems)
         {
             lock (updateLock)
             {
@@ -134,10 +127,11 @@ namespace Toggl.Giskard.Adapters
 
         private IEnumerable<Either<TSection, TItem>> flattenItems(IList<CollectionSection<TSection, TItem>> newItems)
         {
-            var shouldIncludeHeader = newItems.Count > 1;
+            var hasMultipleSections = newItems.Count > 1;
 
             foreach (var section in newItems)
             {
+                var shouldIncludeHeader = hasMultipleSections && !(section.Header?.Equals(default(TSection)) ?? true);
                 if (shouldIncludeHeader)
                     yield return Either<TSection, TItem>.WithLeft(section.Header);
 
