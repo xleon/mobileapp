@@ -33,9 +33,6 @@ namespace Toggl.Daneel.ViewControllers
 		[Outlet]
 		UIKit.UILabel SuccessMessageLabel { get; set; }
 
-		[Outlet]
-		UIKit.NSLayoutConstraint TopConstraint { get; set; }
-		
 		void ReleaseDesignerOutlets ()
 		{
 			if (ActivityIndicator != null) {
@@ -66,11 +63,6 @@ namespace Toggl.Daneel.ViewControllers
 			if (ResetPasswordButtonBottomConstraint != null) {
 				ResetPasswordButtonBottomConstraint.Dispose ();
 				ResetPasswordButtonBottomConstraint = null;
-			}
-
-			if (TopConstraint != null) {
-				TopConstraint.Dispose ();
-				TopConstraint = null;
 			}
 
 			if (SuccessMessageLabel != null) {

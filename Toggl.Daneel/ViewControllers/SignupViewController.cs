@@ -33,6 +33,9 @@ namespace Toggl.Daneel.ViewControllers
         private const int emailTopConstraint = 42;
         private const int emailTopConstraintWithKeyboard = 12;
 
+        private const int tabletFormOffset = 246;
+        private const int tabletLandscapeKeyboardOffset = 80;
+
         public SignupViewController() : base(nameof(SignupViewController))
         {
         }
@@ -179,6 +182,9 @@ namespace Toggl.Daneel.ViewControllers
             if (View.Frame.Height > iPhoneSeScreenHeight && !keyboardIsOpen)
                 TopConstraint.Constant = topConstraintForBiggerScreens;
 
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad && !keyboardIsOpen)
+                TopConstraint.Constant = View.Frame.Height / 2 - tabletFormOffset;
+
             LoginCard.SetupBottomCard();
             GoogleSignupButton.SetupGoogleButton();
         }
@@ -186,13 +192,21 @@ namespace Toggl.Daneel.ViewControllers
         private void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
         {
             keyboardIsOpen = true;
-            if (View.Frame.Height > iPhoneSeScreenHeight)
+            if (View.Frame.Height <= iPhoneSeScreenHeight)
             {
-                TopConstraint.Constant = topConstraintForBiggerScreensWithKeyboard;
+                EmailFieldTopConstraint.Constant = emailTopConstraintWithKeyboard;
+            }
+            else if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            {
+                var keyboardOffset = UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.Portrait ||
+                                     UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.PortraitUpsideDown
+                                     ? 0
+                                     : tabletLandscapeKeyboardOffset;
+                TopConstraint.Constant = View.Frame.Height / 2 - tabletFormOffset - keyboardOffset;
             }
             else
             {
-                EmailFieldTopConstraint.Constant = emailTopConstraintWithKeyboard;
+                TopConstraint.Constant = topConstraintForBiggerScreensWithKeyboard;
             }
             UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
         }
@@ -200,13 +214,17 @@ namespace Toggl.Daneel.ViewControllers
         private void KeyboardWillHide(object sender, UIKeyboardEventArgs e)
         {
             keyboardIsOpen = false;
-            if (View.Frame.Height > iPhoneSeScreenHeight)
+            if (View.Frame.Height <= iPhoneSeScreenHeight)
             {
-                TopConstraint.Constant = topConstraintForBiggerScreens;
+                EmailFieldTopConstraint.Constant = emailTopConstraint;
+            }
+            else if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            {
+                TopConstraint.Constant = View.Frame.Height / 2 - tabletFormOffset;
             }
             else
             {
-                EmailFieldTopConstraint.Constant = emailTopConstraint;
+                TopConstraint.Constant = topConstraintForBiggerScreens;
             }
             UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
         }

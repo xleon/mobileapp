@@ -18,8 +18,11 @@ namespace Toggl.Daneel.ViewControllers
     [ModalDialogPresentation]
     public sealed partial class SelectColorViewController : ReactiveViewController<SelectColorViewModel>
     {
+        private const int customColorEnabledHeightPad = 490;
         private const int customColorEnabledHeight = 365;
         private const int customColorDisabledHeight = 233;
+
+
 
         private ColorSelectionCollectionViewSource source;
 
@@ -92,22 +95,21 @@ namespace Toggl.Daneel.ViewControllers
             PreferredContentSize = new CGSize
             {
                 // ScreenWidth - 32 for 16pt margins on both sides
-                Width = screenWidth > 320 ? screenWidth - 32 : 312,
-                Height = ViewModel.AllowCustomColors ? customColorEnabledHeight : customColorDisabledHeight
+                Width = UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad
+                    ? 0
+                    : screenWidth > 320 ? screenWidth - 32 : 312,
+                Height = UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad
+                    ? (ViewModel.AllowCustomColors ? customColorEnabledHeightPad : customColorDisabledHeight)
+                    : (ViewModel.AllowCustomColors ? customColorEnabledHeight : customColorDisabledHeight)
             };
 
             if (!ViewModel.AllowCustomColors)
             {
-                SliderView.Hidden = true;
-                PickerView.Hidden = true;
-                SliderBackgroundView.Hidden = true;
+                SliderView.RemoveFromSuperview();
+                PickerView.RemoveFromSuperview();
+                SliderBackgroundView.RemoveFromSuperview();
                 return;
             }
-
-            // Initialize picker related layers
-            var usableWidth = PreferredContentSize.Width - 28;
-            PickerView.InitializeLayers(new CGRect(0, 0, usableWidth, 80));
-            SliderBackgroundView.InitializeLayer(new CGRect(0, 0, usableWidth, 18));
 
             // Remove track
             SliderView.SetMinTrackImage(new UIImage(), UIControlState.Normal);

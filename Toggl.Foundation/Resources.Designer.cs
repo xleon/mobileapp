@@ -323,6 +323,12 @@ namespace Toggl.Foundation {
             }
         }
 
+        public static string ConfirmDeleteNewTETitle {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteNewTETitle", resourceCulture);
+            }
+        }
+
         public static string ContinueEditing {
             get {
                 return ResourceManager.GetString("ContinueEditing", resourceCulture);

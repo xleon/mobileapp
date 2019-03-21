@@ -38,13 +38,8 @@ namespace Toggl.Daneel.Views
         public ValueSliderView(IntPtr handle)
             : base(handle)
         {
-        }
-
-        public void InitializeLayer(CGRect layerFrame)
-        {
             layer.BorderWidth = 1;
             layer.CornerRadius = 3;
-            layer.Frame = layerFrame;
             layer.StartPoint = new CGPoint(0, 0);
             layer.EndPoint = new CGPoint(1, 0);
             layer.Locations = new NSNumber[] { 0, 1.0 };
@@ -52,6 +47,13 @@ namespace Toggl.Daneel.Views
             Layer.InsertSublayer(layer, 0);
 
             updateValues();
+        }
+
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
+
+            layer.Frame = Bounds;
         }
 
         private void updateValues()

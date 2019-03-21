@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using CoreGraphics;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Multivac;
@@ -58,15 +59,19 @@ namespace Toggl.Daneel.Services
         {
             return Observable.Create<bool>(observer =>
             {
+                var (confirmText, cancelText, title) = selectTextByType(type);
+
                 var actionSheet = UIAlertController.Create(
-                    title: null,
+                    title: title,
                     message: null,
                     preferredStyle: UIAlertControllerStyle.ActionSheet
                 );
 
-                var (confirmText, cancelText) = selectTextByType(type);
+                var actionStyleForCancel = UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad
+                    ? UIAlertActionStyle.Default
+                    : UIAlertActionStyle.Cancel;
 
-                var cancelAction = UIAlertAction.Create(cancelText, UIAlertActionStyle.Cancel, _ =>
+                var cancelAction = UIAlertAction.Create(cancelText, actionStyleForCancel, _ =>
                 {
                     observer.OnNext(false);
                     observer.OnCompleted();
@@ -78,8 +83,10 @@ namespace Toggl.Daneel.Services
                     observer.OnCompleted();
                 });
 
-                actionSheet.AddAction(cancelAction);
                 actionSheet.AddAction(confirmAction);
+                actionSheet.AddAction(cancelAction);
+
+                applyPopoverDetailsIfNeeded(actionSheet);
 
                 topViewControllerProvider
                     .TopViewController
@@ -138,6 +145,8 @@ namespace Toggl.Daneel.Services
 
                 actionSheet.AddAction(cancelAction);
 
+                applyPopoverDetailsIfNeeded(actionSheet);
+
                 topViewControllerProvider
                     .TopViewController
                     .PresentViewController(actionSheet, true, null);
@@ -146,21 +155,33 @@ namespace Toggl.Daneel.Services
             });
         }
 
-        private (string, string) selectTextByType(ActionType type)
+        private (string, string, string) selectTextByType(ActionType type)
         {
             switch (type)
             {
                 case ActionType.DiscardNewTimeEntry:
-                    return (Resources.Discard, Resources.Cancel);
+                    return (Resources.Discard, Resources.Cancel, Resources.ConfirmDeleteNewTETitle);
                 case ActionType.DiscardEditingChanges:
-                    return (Resources.Discard, Resources.ContinueEditing);
+                    return (Resources.Discard, Resources.ContinueEditing, null);
                 case ActionType.DeleteExistingTimeEntry:
-                    return (Resources.Delete, Resources.Cancel);
+                    return (Resources.Delete, Resources.Cancel, null);
                 case ActionType.DiscardFeedback:
-                    return (Resources.Discard, Resources.ContinueEditing);
+                    return (Resources.Discard, Resources.ContinueEditing, null);
             }
 
             throw new ArgumentOutOfRangeException(nameof(type));
+        }
+
+        private void applyPopoverDetailsIfNeeded(UIAlertController alert)
+        {
+            var popoverController = alert.PopoverPresentationController;
+            if (popoverController != null && UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            {
+                var view = topViewControllerProvider.TopViewController.View;
+                popoverController.SourceView = view;
+                popoverController.SourceRect = new CGRect(view.Bounds.GetMidX(), view.Bounds.GetMidY(), 0, 0);
+                popoverController.PermittedArrowDirections = new UIPopoverArrowDirection();
+            }
         }
     }
 }

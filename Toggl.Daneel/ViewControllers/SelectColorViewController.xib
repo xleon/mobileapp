@@ -23,11 +23,14 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="2">
-            <rect key="frame" x="0.0" y="0.0" width="288" height="365"/>
+            <rect key="frame" x="0.0" y="0.0" width="288" height="392"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Project color" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pIl-6Q-q30">
                     <rect key="frame" x="102" y="12" width="84.5" height="17"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="17" id="pH2-RH-y4q"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -94,25 +97,27 @@
                 <constraint firstItem="9ax-lx-WQ3" firstAttribute="top" secondItem="Ny2-Jd-yif" secondAttribute="top" id="1ft-8P-et3"/>
                 <constraint firstItem="oPC-Yw-XVk" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="1ih-nI-lu4"/>
                 <constraint firstItem="9ax-lx-WQ3" firstAttribute="leading" secondItem="Ny2-Jd-yif" secondAttribute="leading" id="3MV-qw-Iyd"/>
+                <constraint firstItem="a4O-k3-XAQ" firstAttribute="top" secondItem="oPC-Yw-XVk" secondAttribute="bottom" constant="20" id="4db-ky-al3"/>
                 <constraint firstAttribute="trailing" secondItem="oPC-Yw-XVk" secondAttribute="trailing" id="5dU-9Q-OPM"/>
                 <constraint firstAttribute="trailing" secondItem="a4O-k3-XAQ" secondAttribute="trailing" constant="14" id="7sY-MD-TmJ"/>
+                <constraint firstAttribute="bottom" secondItem="oPC-Yw-XVk" secondAttribute="bottom" priority="750" constant="20" id="8Qc-kO-w2x"/>
                 <constraint firstItem="a4O-k3-XAQ" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="14" id="964-DV-Bvs"/>
                 <constraint firstItem="oPC-Yw-XVk" firstAttribute="top" secondItem="pIl-6Q-q30" secondAttribute="bottom" constant="30" id="AHE-BY-3pr"/>
                 <constraint firstItem="9ax-lx-WQ3" firstAttribute="height" secondItem="Ny2-Jd-yif" secondAttribute="height" id="D6n-A0-KgM"/>
-                <constraint firstItem="a4O-k3-XAQ" firstAttribute="top" secondItem="oPC-Yw-XVk" secondAttribute="bottom" constant="20" id="Ihs-L2-BW7"/>
                 <constraint firstAttribute="trailing" secondItem="fvg-dp-el4" secondAttribute="trailing" id="LeM-BJ-FUG"/>
                 <constraint firstAttribute="trailing" secondItem="Ny2-Jd-yif" secondAttribute="trailing" constant="14" id="c2V-d3-r2R"/>
                 <constraint firstItem="fvg-dp-el4" firstAttribute="top" secondItem="2" secondAttribute="top" id="c3l-Js-zbN"/>
                 <constraint firstItem="pIl-6Q-q30" firstAttribute="top" secondItem="2" secondAttribute="top" constant="12" id="cC8-mg-Zb9"/>
                 <constraint firstItem="pIl-6Q-q30" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="crd-40-gPz"/>
                 <constraint firstItem="9ax-lx-WQ3" firstAttribute="trailing" secondItem="Ny2-Jd-yif" secondAttribute="trailing" id="iS3-5x-9tc"/>
+                <constraint firstAttribute="bottom" secondItem="Ny2-Jd-yif" secondAttribute="bottom" priority="750" constant="20" id="kzr-66-ngo"/>
                 <constraint firstItem="9ax-lx-WQ3" firstAttribute="bottom" secondItem="Ny2-Jd-yif" secondAttribute="bottom" id="oN3-Bx-rS4"/>
                 <constraint firstItem="9ax-lx-WQ3" firstAttribute="top" secondItem="a4O-k3-XAQ" secondAttribute="bottom" constant="10" id="s3C-BE-cQJ"/>
                 <constraint firstItem="8iM-ju-8R3" firstAttribute="top" secondItem="2" secondAttribute="top" id="vQt-v4-4J8"/>
                 <constraint firstItem="Ny2-Jd-yif" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="14" id="zbo-ff-igS"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="54.399999999999999" y="46.326836581709152"/>
+            <point key="canvasLocation" x="54.399999999999999" y="58.47076461769116"/>
         </view>
     </objects>
     <resources>
