@@ -23,30 +23,20 @@ namespace Toggl.Foundation.MvvmCross.Transformations
     {
         private readonly ITimeService timeService;
         private readonly HashSet<GroupId> expandedGroups;
-        private readonly IObservable<IThreadSafePreferences> preferencesObservable;
 
         private DurationFormat durationFormat;
 
-        public TimeEntriesGroupsFlattening(
-            ITimeService timeService,
-            IObservable<IThreadSafePreferences> preferencesObservable)
+        public TimeEntriesGroupsFlattening(ITimeService timeService)
         {
             this.timeService = timeService;
-            this.preferencesObservable = preferencesObservable.ShareReplay();
             expandedGroups = new HashSet<GroupId>();
         }
 
-        public IObservable<IEnumerable<MainLogSection>> Flatten(
-            IEnumerable<LogGrouping> days)
+        public IEnumerable<MainLogSection> Flatten(IEnumerable<LogGrouping> days, IThreadSafePreferences preferences)
         {
-            return preferencesObservable
-                .Do(preferences => durationFormat = preferences.DurationFormat)
-                .Select(preferences =>
-                    days.Select(preferences.CollapseTimeEntries
-                        ? flatten(bySimilarTimeEntries)
-                        : flatten(withJustSingleTimeEntries)
-                    )
-                );
+            return days.Select(preferences.CollapseTimeEntries
+                ? flatten(bySimilarTimeEntries)
+                : flatten(withJustSingleTimeEntries));
         }
 
         public void ToggleGroupExpansion(GroupId groupId)

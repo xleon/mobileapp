@@ -12,6 +12,7 @@ using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Transformations;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
+using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Foundation.Tests.Mocks;
 using Toggl.Foundation.Tests.TestExtensions;
 using Toggl.Multivac;
@@ -63,14 +64,11 @@ namespace Toggl.Foundation.Tests.MvvmCross.Transformations
         };
 
         private readonly ITimeService timeService;
-        private readonly IObservable<IThreadSafePreferences> preferencesObservable;
 
         public TimeEntriesFlatenningTests()
         {
             timeService = Substitute.For<ITimeService>();
             timeService.CurrentDateTime.Returns(now);
-
-            preferencesObservable = Observable.Return(preferences);
         }
 
         [Theory]
@@ -78,18 +76,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.Transformations
         public void TransformsTimeEntriesIntoACorrectTree(
             IEnumerable<IGrouping<DateTime, IThreadSafeTimeEntry>> log,
             HashSet<GroupId> expandedGroups,
-            params ISectionModel<DaySummaryViewModel, LogItemViewModel>[] expectedTree)
+            params AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>[] expectedTree)
         {
-            var collapsingStrategy = new TimeEntriesGroupsFlattening(timeService, preferencesObservable);
+            var collapsingStrategy = new TimeEntriesGroupsFlattening(timeService);
             expandedGroups.ForEach(collapsingStrategy.ToggleGroupExpansion);
 
-            var scheduler = new TestScheduler();
-            var observer = scheduler.CreateObserver<IEnumerable<ISectionModel<DaySummaryViewModel, LogItemViewModel>>>();
-            collapsingStrategy.Flatten(log).Subscribe(observer);
+            var actualTree = collapsingStrategy.Flatten(log, preferences);
 
-            scheduler.Start();
-
-            observer.LastEmittedValue().Should().BeEquivalentTo(expectedTree);
+            actualTree.Should().BeEquivalentTo(expectedTree);
         }
 
         public static IEnumerable<object[]> TestData
@@ -249,12 +243,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.Transformations
 
         private static IThreadSafeTimeEntry[] group(params IThreadSafeTimeEntry[] timeEntries) => timeEntries;
 
-        private static ISectionModel<DaySummaryViewModel, LogItemViewModel> logOf(
+        private static AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey> logOf(
             DateTime date,
             string title,
             string trackedTime,
             IEnumerable<LogItemViewModel> items)
-            => new SectionModel<DaySummaryViewModel, LogItemViewModel>(
+            => new AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>(
                 new DaySummaryViewModel(date, title, trackedTime), items);
 
         private static IEnumerable<LogItemViewModel> single(IThreadSafeTimeEntry timeEntry)

@@ -72,19 +72,19 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             ToggleGroupExpansion = rxActionFactory.FromAction<GroupId>(toggleGroupExpansion);
             CancelDeleteTimeEntry = rxActionFactory.FromAction(cancelDeleteTimeEntry);
 
-            groupsFlatteningStrategy = new TimeEntriesGroupsFlattening(timeService, dataSource.Preferences.Current);
+            groupsFlatteningStrategy = new TimeEntriesGroupsFlattening(timeService);
 
             var deletingOrPressingUndo = timeEntriesPendingDeletionSubject.SelectUnit();
             var collapsingOrExpanding = ToggleGroupExpansion.Elements;
 
-            TimeEntries =
-                interactorFactory.ObserveAllTimeEntriesVisibleToTheUser().Execute()
-                    .Select(timeEntries => timeEntries.Where(isNotRunning))
-                    .ReemitWhen(deletingOrPressingUndo)
-                    .Select(timeEntries => timeEntries.Where(isNotDeleted))
-                    .Select(group)
-                    .ReemitWhen(collapsingOrExpanding)
-                    .SelectMany(groupsFlatteningStrategy.Flatten)
+            var visibleTimeEntries = interactorFactory.ObserveAllTimeEntriesVisibleToTheUser().Execute()
+                .Select(timeEntries => timeEntries.Where(isNotRunning))
+                .ReemitWhen(deletingOrPressingUndo)
+                .Select(timeEntries => timeEntries.Where(isNotDeleted))
+                .Select(group)
+                .ReemitWhen(collapsingOrExpanding);
+
+             TimeEntries = Observable.CombineLatest(visibleTimeEntries, dataSource.Preferences.Current, groupsFlatteningStrategy.Flatten)
                     .AsDriver(schedulerProvider);
 
             Empty = TimeEntries
