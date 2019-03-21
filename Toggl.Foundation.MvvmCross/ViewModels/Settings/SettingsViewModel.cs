@@ -233,7 +233,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     .Select(user => user.ImageUrl)
                     .DistinctUntilChanged()
                     .SelectMany(url => interactorFactory.GetUserAvatar(url).Execute())
-                    .AsDriver(schedulerProvider);
+                    .AsDriver(schedulerProvider)
+                    .Where(avatar => avatar != null);
 
             Workspaces =
                 dataSource.User.Current
@@ -263,6 +264,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             IsFeedbackSuccessViewShowing = isFeedbackSuccessViewShowing.AsObservable()
                 .AsDriver(schedulerProvider);
 
+            Close = rxActionFactory.FromAsync(close);
             OpenCalendarSettings = rxActionFactory.FromAsync(openCalendarSettings);
             OpenCalendarSmartReminders = rxActionFactory.FromAsync(openCalendarSmartReminders);
             OpenNotificationSettings = rxActionFactory.FromAsync(openNotificationSettings);
@@ -276,7 +278,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             SelectDurationFormat = rxActionFactory.FromAsync(selectDurationFormat);
             SelectBeginningOfWeek = rxActionFactory.FromAsync(selectBeginningOfWeek);
             SelectDefaultWorkspace = rxActionFactory.FromAsync<SelectableWorkspaceViewModel>(selectDefaultWorkspace);
-            Close = rxActionFactory.FromAsync(() => navigationService.Close(this));
         }
 
         public override async Task Initialize()
@@ -299,6 +300,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         {
             isFeedbackSuccessViewShowing.OnNext(false);
         }
+
+        private Task close()
+            => navigationService.Close(this);
 
         private Task selectDefaultWorkspace(SelectableWorkspaceViewModel workspace)
             => changeDefaultWorkspace(workspace.WorkspaceId);

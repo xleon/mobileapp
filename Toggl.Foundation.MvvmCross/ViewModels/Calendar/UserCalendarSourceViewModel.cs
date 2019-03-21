@@ -15,6 +15,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
         }
 
         public bool Equals(UserCalendarSourceViewModel other)
-            => Name == other.Name;
+            => other != null
+                && Name == other.Name;
     }
 }

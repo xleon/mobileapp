@@ -53,7 +53,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
             AvailableOptions = options.Select(toSelectableOption).ToList();
 
             SelectOption = rxActionFactory.FromAction<SelectableCalendarNotificationsOptionViewModel>(onSelectOption);
-            Close = rxActionFactory.FromAction(() => navigationService.Close(this, Unit.Default));
+            Close = rxActionFactory.FromAsync(close);
         }
 
         public override async Task Initialize()
@@ -62,6 +62,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
             var selectedOption = await userPreferences.CalendarNotificationsSettings().FirstAsync();
             AvailableOptions.ForEach(opt => opt.Selected = opt.Option == selectedOption);
         }
+
+        private Task close()
+            => navigationService.Close(this, Unit.Default);
 
         private void onSelectOption(SelectableCalendarNotificationsOptionViewModel selectableOption)
         {
