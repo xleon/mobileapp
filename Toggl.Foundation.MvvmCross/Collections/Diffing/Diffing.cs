@@ -325,6 +325,7 @@ namespace Toggl.Foundation.MvvmCross.Collections.Diffing
         private List<Changeset> generateDeleteSectionsDeletedItemsAndUpdatedItems()
         {
             var deletedSections = new List<int>();
+            var updatedSections = new List<int>();
             var deletedItems = new List<ItemPath>();
             var updatedItems = new List<ItemPath>();
             var afterDeleteState = new List<TSection>();
@@ -372,8 +373,22 @@ namespace Toggl.Foundation.MvvmCross.Collections.Diffing
                     }
                 }
 
+                var sectionData = initialSectionData[i];
+                TSection section;
+                switch (sectionData.EditEvent)
+                {
+                    case EditEvent.Moved:
+                    case EditEvent.MovedAutomatically:
+                        section = finalSections[sectionData.MoveIndex ?? i];
+                        break;
+                    default:
+                        section = finalSections[i];
+                        break;
+                }
+
+
                 var newSection = new TSection();
-                newSection.Initialize(initialSections[i].Header, afterDeleteItems);
+                newSection.Initialize(section.Header, afterDeleteItems);
                 afterDeleteState.Add(newSection);
             }
 
@@ -382,9 +397,16 @@ namespace Toggl.Foundation.MvvmCross.Collections.Diffing
                 return new List<Changeset>();
             }
 
+            updatedSections = deletedItems
+                .Concat(updatedItems)
+                .Select(item => item.sectionIndex)
+                .Distinct()
+                .ToList();
+
             var changeSet = new Changeset(
                 finalSections: afterDeleteState,
                 deletedSections: deletedSections,
+                updatedSections: updatedSections,
                 deletedItems: deletedItems,
                 updatedItems: updatedItems
             );
@@ -489,6 +511,7 @@ namespace Toggl.Foundation.MvvmCross.Collections.Diffing
 
         private IEnumerable<Changeset> generateInsertAndMovedItems()
         {
+            var updatedSections = new List<int>();
             var insertedItems = new List<ItemPath>();
             var movedItems = new List<(ItemPath, ItemPath)>();
 
@@ -543,8 +566,15 @@ namespace Toggl.Foundation.MvvmCross.Collections.Diffing
                 return new List<Changeset>();
             }
 
+            updatedSections = insertedItems
+                .Select(item => item.sectionIndex)
+                .Concat(movedItems.SelectMany(movedItem => new[] { movedItem.Item1.sectionIndex, movedItem.Item2.sectionIndex }))
+                .Distinct()
+                .ToList();
+
             var changeset = new Changeset(
                 finalSections: finalSections,
+                updatedSections: updatedSections,
                 insertedItems: insertedItems,
                 movedItems: movedItems
             );

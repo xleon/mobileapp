@@ -105,7 +105,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
             var differences = diff.ComputeDifferences();
 
             differences.Count.Should().Be(1);
-            differences.First().OnlyContains(insertedItems: 1).Should().BeTrue();
+            differences.First().OnlyContains(insertedItems: 1, updatedSections: 1).Should().BeTrue();
             initial.Apply(differences).Should().BeEquivalentTo(final);
         }
 
@@ -136,7 +136,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
             var differences = diff.ComputeDifferences();
 
             differences.Count.Should().Be(1);
-            differences.First().OnlyContains(deletedItems: 1).Should().BeTrue();
+            differences.First().OnlyContains(deletedItems: 1, updatedSections: 1).Should().BeTrue();
             initial.Apply(differences).Should().BeEquivalentTo(final);
         }
 
@@ -168,7 +168,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
             var differences = diff.ComputeDifferences();
 
             differences.Count.Should().Be(1);
-            differences.First().OnlyContains(movedItems: 2).Should().BeTrue();
+            differences.First().OnlyContains(movedItems: 2, updatedSections: 1).Should().BeTrue();
             initial.Apply(differences).Should().BeEquivalentTo(final);
         }
 
@@ -200,7 +200,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
             var differences = diff.ComputeDifferences();
 
             differences.Count.Should().Be(1);
-            differences.First().OnlyContains(movedItems: 1).Should().BeTrue();
+            differences.First().OnlyContains(movedItems: 1, updatedSections: 1).Should().BeTrue();
             initial.Apply(differences).Should().BeEquivalentTo(final);
         }
 
@@ -232,7 +232,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections
             var differences = diff.ComputeDifferences();
 
             differences.Count.Should().Be(1);
-            differences.First().OnlyContains(updatedItems: 1).Should().BeTrue();
+            differences.First().OnlyContains(updatedItems: 1, updatedSections: 1).Should().BeTrue();
             initial.Apply(differences).Should().BeEquivalentTo(final);
         }
     }

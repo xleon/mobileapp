@@ -104,13 +104,7 @@ namespace Toggl.Daneel.ViewControllers
             prepareOnboarding();
             setupTableViewHeader();
 
-            // Table view
-            IObservable<DaySummaryViewModel> headerForSection(int s)
-                => ViewModel.TimeEntries
-                    .Select(sections => sections.ToList()[s])
-                    .Select(section => section.Header);
-
-            tableViewSource = new TimeEntriesLogViewSource(headerForSection);
+            tableViewSource = new TimeEntriesLogViewSource();
             tableViewSource.ObservedHeaders = ViewModel.TimeEntries.Select(e => e.Select(section => section.Header));
 
             TimeEntriesLogTableView.Source = tableViewSource;

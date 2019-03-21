@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
-using CoreAnimation;
-using CoreImage;
-using CoreText;
 using Foundation;
 using MvvmCross;
+using Toggl.Daneel.Cells;
 using Toggl.Daneel.ViewSources;
-using Toggl.Daneel.ViewSources.Generic;
 using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Collections.Diffing;
@@ -76,6 +73,14 @@ namespace Toggl.Daneel.Extensions.Reactive
                     dataSource.SetSections(difference.FinalSections);
                     reactive.Base.performChangesetUpdates(difference);
                     reactive.Base.EndUpdates();
+
+                    foreach (var section in difference.UpdatedSections)
+                    {
+                        if (reactive.Base.GetHeaderView(section) is BaseTableHeaderFooterView<THeader> headerView)
+                        {
+                            headerView.Item = difference.FinalSections[section].Header;
+                        }
+                    }
                 }
             });
         }

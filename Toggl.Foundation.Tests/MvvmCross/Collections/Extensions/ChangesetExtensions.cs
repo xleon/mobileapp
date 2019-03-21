@@ -187,10 +187,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.Collections.Extensions
             where THeader : IDiffable<TKey>
             where TElement : IDiffable<TKey>, IEquatable<TElement>
         {
-            if (changeset.UpdatedSections.Count != 0) {
-                throw new Exception("Section updates aren't supported");
-            }
-
             var sourceSectionIndexes = new HashSet<int>(changeset.MovedSections.Select(movement => movement.Item1));
             var destinationToSourceMapping = new Dictionary<int, int>();
             foreach (var movement in changeset.MovedSections)

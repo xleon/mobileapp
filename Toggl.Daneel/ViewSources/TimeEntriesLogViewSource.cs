@@ -37,8 +37,6 @@ namespace Toggl.Daneel.ViewSources
         //Using the old API so that delete action would work on pre iOS 11 devices
         private readonly UITableViewRowAction deleteTableViewRowAction;
 
-        private readonly ObservableHeaderForSection observableHeaderForSection;
-
         public IObservable<IEnumerable<DaySummaryViewModel>> ObservedHeaders { get; set; }
 
         public const int SpaceBetweenSections = 20;
@@ -51,10 +49,8 @@ namespace Toggl.Daneel.ViewSources
         public IObservable<TimeEntriesLogViewCell> FirstCell { get; }
         public IObservable<bool> IsDragging { get; }
 
-        public TimeEntriesLogViewSource(ObservableHeaderForSection observableHeaderForSection)
+        public TimeEntriesLogViewSource()
         {
-            this.observableHeaderForSection = observableHeaderForSection;
-
             if (!NSThread.Current.IsMainThread)
             {
                 throw new InvalidOperationException($"{nameof(TimeEntriesLogViewSource)} must be created on the main thread");
@@ -114,10 +110,7 @@ namespace Toggl.Daneel.ViewSources
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
             var header = (TimeEntriesLogHeaderView)tableView.DequeueReusableHeaderFooterView(TimeEntriesLogHeaderView.Identifier);
-            observableHeaderForSection((int)section)
-                .Subscribe(header.Update)
-                .DisposedBy(header.DisposeBag);
-
+            header.Item = HeaderOf((int) section);
             return header;
         }
 

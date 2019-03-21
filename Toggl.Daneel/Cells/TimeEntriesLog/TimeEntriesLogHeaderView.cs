@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using Foundation;
+using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
 using UIKit;
 using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
 
 namespace Toggl.Daneel.Views
 {
-    public partial class TimeEntriesLogHeaderView : UITableViewHeaderFooterView
+    public partial class TimeEntriesLogHeaderView : BaseTableHeaderFooterView<DaySummaryViewModel>
     {
         public static readonly string Identifier = "timeEntryLogHeaderCell";
 
         public static readonly NSString Key = new NSString(nameof(TimeEntriesLogHeaderView));
         public static readonly UINib Nib;
-
-        public CompositeDisposable DisposeBag { get; private set; } = new CompositeDisposable();
 
         static TimeEntriesLogHeaderView()
         {
@@ -34,17 +33,10 @@ namespace Toggl.Daneel.Views
             DurationLabel.Font = DurationLabel.Font.GetMonospacedDigitFont();
         }
 
-        public override void PrepareForReuse()
+        protected override void UpdateView()
         {
-            base.PrepareForReuse();
-            DisposeBag.Dispose();
-            DisposeBag = new CompositeDisposable();
-        }
-
-        public void Update(DaySummaryViewModel viewModel)
-        {
-            DateLabel.Text = viewModel.Title;
-            DurationLabel.Text = viewModel.TotalTrackedTime;
+            DateLabel.Text = Item.Title;
+            DurationLabel.Text = Item.TotalTrackedTime;
         }
     }
 }
