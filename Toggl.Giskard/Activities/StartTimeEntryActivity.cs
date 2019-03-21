@@ -46,7 +46,7 @@ namespace Toggl.Giskard.Activities
             recyclerView.SetAdapter(adapter);
             
             ViewModel.Suggestions
-                .Subscribe(adapter.Rx().Items())
+                .Subscribe(adapter.SetItems)
                 .DisposedBy(DisposeBag);
 
             adapter.ItemTapObservable
