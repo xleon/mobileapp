@@ -33,10 +33,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
             Close = rxActionFactory.FromAsync(close);
         }
 
-        private async Task close()
-        {
-            await navigationService.Close(this, Unit.Default);
-        }
+        private Task close()
+            => navigationService.Close(this, Unit.Default);
 
         public override void ViewAppeared()
         {
