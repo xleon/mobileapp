@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Foundation.MvvmCross.Interfaces;
 using Toggl.Foundation.MvvmCross.Reactive;
 using Toggl.Giskard.Adapters;
 

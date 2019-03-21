@@ -10,6 +10,7 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using UIKit;
+using Toggl.Foundation.MvvmCross.Extensions;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -86,6 +87,10 @@ namespace Toggl.Daneel.ViewControllers
             //Commands
             ResetPasswordButton.Rx()
                 .BindAction(ViewModel.Reset)
+                .DisposedBy(DisposeBag);
+
+            ResetPasswordButton.Rx().Tap()
+                .Subscribe(resetPasswordButtonTapped)
                 .DisposedBy(DisposeBag);
         }
 
@@ -169,5 +174,8 @@ namespace Toggl.Daneel.ViewControllers
             backButton.Frame = frame;
             backButton.HorizontalAlignment = UIControlContentHorizontalAlignment.Left;
         }
+
+        private void resetPasswordButtonTapped()
+            => EmailTextField.ResignFirstResponder();
     }
 }

@@ -1,4 +1,4 @@
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.props" Condition="Exists('..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -291,6 +291,7 @@
     <Compile Include="Activities\SelectCountryActivity.ViewBinds.cs">
       <DependentUpon>SelectCountryActivity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Activities\SelectProjectActivity.ViewBinds.cs" />
     <Compile Include="Activities\SelectTagsActivity.cs" />
     <Compile Include="Activities\SendFeedbackActivity.cs" />
     <Compile Include="Activities\SendFeedbackActivity.ViewBinds.cs">
@@ -305,6 +306,9 @@
     <Compile Include="Adapters\SelectTagsRecyclerAdapter.cs" />
     <Compile Include="Activities\SelectProjectActivity.cs" />
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
+    <Compile Include="ViewHolders\StartTimeEntry\SuggestionRecyclerViewHolder.cs" />
+    <Compile Include="ViewHolders\StartTimeEntry\ProjectSuggestionViewHolder.cs" />
+    <Compile Include="ViewHolders\StartTimeEntry\TimeEntrySuggestionViewHolder.cs" />
     <Compile Include="Bindings\TextInputLayoutErrorTextTargetBinding.cs" />
     <Compile Include="BroadcastReceivers\TimezoneChangedBroadcastReceiver.cs" />
     <Compile Include="Extensions\ContextExtensions.cs" />
@@ -369,6 +373,7 @@
     <Compile Include="ViewHolders\MainLogSuggestionItemViewHolder.cs" />
     <Compile Include="ViewHolders\MainLogSuggestionsListViewHolder.cs" />
     <Compile Include="ViewHolders\GuardedMvxRecyclerViewHolder.cs" />
+    <Compile Include="ViewHolders\SimpleTextViewHolder.cs" />
     <Compile Include="ViewHolders\SelectDurationFormatViewHolder.cs" />
     <Compile Include="ViewHolders\SelectWorkspaceViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsCalendarShortcutCellViewHolder.cs" />
@@ -384,7 +389,6 @@
     <Compile Include="Views\EditDuration\WheelBackgroundView.cs" />
     <Compile Include="Views\EditDuration\WheelForegroundView.cs" />
     <Compile Include="Views\ReportsCalendarView.cs" />
-    <Compile Include="Views\SelectProjectRecyclerView.cs" />
     <Compile Include="Adapters\MainRecyclerAdapter.cs" />
     <Compile Include="TemplateSelectors\SelectProjectTemplateSelector.cs" />
     <Compile Include="Startup\SetupTargetFactories.cs">
@@ -405,8 +409,6 @@
     <Compile Include="Extensions\CircularRevealAnimation.cs" />
     <Compile Include="Activities\EditTimeEntryActivity.cs" />
     <Compile Include="ApplicationShortcutCreator.cs" />
-    <Compile Include="TemplateSelectors\StartTimeEntrySuggestionsTemplateSelector.cs" />
-    <Compile Include="Views\StartTimeEntryRecyclerView.cs" />
     <Compile Include="Adapters\StartTimeEntryRecyclerAdapter.cs" />
     <Compile Include="Adapters\SegmentedRecyclerAdapter.cs" />
     <Compile Include="Autocomplete\AutocompleteExtensions.cs" />
@@ -560,6 +562,7 @@
       <DependentUpon>SelectBeginningOfWeekFragment.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewHolders\BeginningOfWeekViewHolder.cs" />
+    <Compile Include="Adapters\BaseSectionedRecyclerAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -568,10 +571,6 @@
     <AndroidResource Include="Resources\color\BlueTextColor.xml" />
     <AndroidResource Include="Resources\drawable\Dot.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
-    <AndroidResource Include="Resources\layout\EntityCreationActivityCell.axml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivityProjectCell.axml" />
@@ -825,7 +824,7 @@
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityTaskCell.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityWorkspaceHeader.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityNoEntityCell.axml" />
-    <AndroidResource Include="Resources\layout\StartTimeEntryActivityEmptyCell.axml" />
+    <AndroidResource Include="Resources\layout\StartTimeEntryActivityQuerySymbolCell.axml" />
     <AndroidResource Include="Resources\layout\EditTimeEntryActivity.axml" />
     <AndroidResource Include="Resources\values\Dimen.xml" />
     <AndroidResource Include="Resources\layout\EditProjectActivity.axml" />
@@ -991,12 +990,6 @@
       <Project>{5ACEB155-9DD4-4309-BCC9-997A09950393}</Project>
       <Name>Toggl.Ultrawave</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Presenters\" />
-    <Folder Include="Extensions\Reactive\" />
-    <Folder Include="Resources\xml\" />
-    <Folder Include="Views\EditDuration" />
   </ItemGroup>
   <ItemGroup>
     <ProguardConfiguration Include="ProGuard.cfg" />
