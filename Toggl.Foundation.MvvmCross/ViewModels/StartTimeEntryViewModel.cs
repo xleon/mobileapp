@@ -303,17 +303,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             suggestionsRenderingStopwatch = null;
         }
 
-        private async Task<bool> close()
+        private async Task close()
         {
             if (isDirty)
             {
                 var shouldDiscard = await dialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
                 if (!shouldDiscard)
-                    return false;
+                    return;
             }
 
             await navigationService.Close(this);
-            return true;
         }
 
         private void setTextSpans(IEnumerable<ISpan> spans)
