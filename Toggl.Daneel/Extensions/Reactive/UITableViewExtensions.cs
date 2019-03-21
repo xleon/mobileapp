@@ -6,8 +6,10 @@ using CoreAnimation;
 using CoreImage;
 using CoreText;
 using Foundation;
+using MvvmCross;
 using Toggl.Daneel.ViewSources;
 using Toggl.Daneel.ViewSources.Generic;
+using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Collections.Diffing;
 using Toggl.Foundation.MvvmCross.Reactive;
@@ -54,8 +56,14 @@ namespace Toggl.Daneel.Extensions.Reactive
                     return;
                 }
 
+                var stopwatchProvider = Mvx.Resolve<IStopwatchProvider>();
+                var stopwatch = stopwatchProvider.Create(MeasuredOperation.Diffing);
+                stopwatch.Start();
+
                 var diff = new Diffing<TSection, THeader, TModel, TKey>(initialSections, finalSections);
                 var changeset = diff.ComputeDifferences();
+
+                stopwatch.Stop();
 
                 // The changesets have to be applied one after another. Not in one transaction.
                 // iOS is picky about the changes which can happen in a single transaction.
