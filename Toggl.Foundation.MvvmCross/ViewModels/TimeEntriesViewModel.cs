@@ -33,6 +33,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private readonly TimeEntriesGroupsFlattening groupsFlatteningStrategy;
 
+        private readonly HashSet<long> hiddenTimeEntries = new HashSet<long>();
         private Subject<int?> timeEntriesPendingDeletionSubject = new Subject<int?>();
         private IDisposable delayedDeletionDisposable;
         private long[] timeEntriesToDelete;
@@ -125,6 +126,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void delayDeleteTimeEntries(long[] timeEntries)
         {
             timeEntriesToDelete = timeEntries;
+            hiddenTimeEntries.AddRange(timeEntries);
 
             timeEntriesPendingDeletionSubject.OnNext(timeEntries.Length);
 
@@ -141,6 +143,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     // Hide bar if there isn't other TE trying to be deleted
                     if (deletedTimeEntries == timeEntriesToDelete)
                     {
+                        hiddenTimeEntries.Clear();
                         timeEntriesPendingDeletionSubject.OnNext(null);
                     }
                 })
@@ -150,6 +153,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private void cancelDeleteTimeEntry()
         {
             timeEntriesToDelete = null;
+            hiddenTimeEntries.Clear();
             delayedDeletionDisposable.Dispose();
             timeEntriesPendingDeletionSubject.OnNext(null);
         }
@@ -167,6 +171,6 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private bool isNotRunning(IThreadSafeTimeEntry timeEntry) => !timeEntry.IsRunning();
 
         private bool isNotDeleted(IThreadSafeTimeEntry timeEntry)
-            => timeEntriesToDelete == null || !timeEntriesToDelete.Contains(timeEntry.Id);
+            => !hiddenTimeEntries.Contains(timeEntry.Id);
     }
 }
