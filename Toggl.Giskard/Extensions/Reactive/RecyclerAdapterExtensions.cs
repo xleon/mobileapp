@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Toggl.Foundation.MvvmCross.Reactive;
 using Toggl.Giskard.Adapters;
+using Toggl.Giskard.ViewHolders;
 
 namespace Toggl.Giskard.Extensions.Reactive
 {
