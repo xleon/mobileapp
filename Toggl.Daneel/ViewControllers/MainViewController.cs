@@ -105,7 +105,6 @@ namespace Toggl.Daneel.ViewControllers
             setupTableViewHeader();
 
             tableViewSource = new TimeEntriesLogViewSource();
-            tableViewSource.ObservedHeaders = ViewModel.TimeEntries.Select(e => e.Select(section => section.Header));
 
             TimeEntriesLogTableView.Source = tableViewSource;
 

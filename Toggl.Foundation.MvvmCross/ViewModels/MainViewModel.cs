@@ -34,6 +34,8 @@ using Toggl.PrimeRadiant.Settings;
 [assembly: MvxNavigation(typeof(MainViewModel), ApplicationUrls.Main.Regex)]
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {
+    using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
+
     [Preserve(AllMembers = true)]
     public sealed class MainViewModel : MvxViewModel
     {
@@ -81,8 +83,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         public IObservable<IThreadSafeTimeEntry> CurrentRunningTimeEntry { get; private set; }
         public IObservable<bool> ShouldShowRatingView { get; private set; }
 
-        public IObservable<IEnumerable<AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>>> TimeEntries
-            => TimeEntriesViewModel.TimeEntries.Throttle(TimeSpan.FromSeconds(throttlePeriodInSeconds)).ObserveOn(schedulerProvider.MainScheduler);
+        public IObservable<IEnumerable<MainLogSection>> TimeEntries => TimeEntriesViewModel.TimeEntries
+            .Throttle(TimeSpan.FromSeconds(throttlePeriodInSeconds))
+            .AsDriver(Enumerable.Empty<MainLogSection>(), schedulerProvider);
 
         public RatingViewModel RatingViewModel { get; }
         public SuggestionsViewModel SuggestionsViewModel { get; }

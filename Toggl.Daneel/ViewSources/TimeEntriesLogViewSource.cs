@@ -37,8 +37,6 @@ namespace Toggl.Daneel.ViewSources
         //Using the old API so that delete action would work on pre iOS 11 devices
         private readonly UITableViewRowAction deleteTableViewRowAction;
 
-        public IObservable<IEnumerable<DaySummaryViewModel>> ObservedHeaders { get; set; }
-
         public const int SpaceBetweenSections = 20;
 
         public IObservable<LogItemViewModel> ContinueTap { get; }
