@@ -5,10 +5,12 @@ about: A checklist before releasing to the AppStore and Play Store.
 
 ## During development phase
 
+- [ ] Add this issue to the release project
 - [ ] Pick a release name, iOS uses [planet names from Foundation of your choice][3], Android uses [elements from the periodic table in order][4]
 - [ ] Create a release branch from `develop` (or the latest tag for a hotfix) named after the release
 - [ ] Bump the version numbers (including app extensions in iOS)
-- [ ] Create a release pull request, link this issue, the diff and write the user-facing changelog following [the guidelines][2]
+- [ ] Create a release pull request, including the diff and write the user-facing changelog following [the guidelines][2], and add it to the release project
+- [ ] Link the release pull request in this issue
 - [ ] Have the changelog reviewed
 - [ ] When all changes are included in the release branch, create a new tag, name should be `daneel-X.Y` or `giskard-X.Y`
 - [ ] Create a GitHub release from the tag and include the user-facing changelog
@@ -19,6 +21,7 @@ about: A checklist before releasing to the AppStore and Play Store.
 
 - [ ] Create a manual testing issue from the template including all release specific features or bug fixes that need to be tested
 - [ ] Add the testing issue to the release project
+- [ ] Link the release pull request in the testing issue
 - [ ] Ensure that the release is tested according to the created testing issue
 - [ ] Close the testing issue once all testing is done
 - [ ] Check that there are no bugs/crashes, that need to be fixed ASAP. If there are, open an issue and fix them as a release bug fix
