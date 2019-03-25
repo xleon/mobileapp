@@ -665,6 +665,24 @@ namespace Toggl.Foundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to h:mm tt.
+        /// </summary>
+        public static string EditingTwelveHoursFormat {
+            get {
+                return ResourceManager.GetString("EditingTwelveHoursFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HH:mm.
+        /// </summary>
+        public static string EditingTwentyFourHoursFormat {
+            get {
+                return ResourceManager.GetString("EditingTwentyFourHoursFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email Address.
         /// </summary>
         public static string EmailAddress {
@@ -1813,7 +1831,7 @@ namespace Toggl.Foundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show Report.
+        ///   Looks up a localized string similar to Show my time.
         /// </summary>
         public static string ShowReportsInvocationPhrase {
             get {
@@ -1939,7 +1957,7 @@ namespace Toggl.Foundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start timer.
+        ///   Looks up a localized string similar to Track time.
         /// </summary>
         public static string StartTimerInvocationPhrase {
             get {
@@ -1957,7 +1975,7 @@ namespace Toggl.Foundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Stop timer.
+        ///   Looks up a localized string similar to Stop tracking.
         /// </summary>
         public static string StopTimerInvocationPhrase {
             get {
@@ -2250,6 +2268,24 @@ namespace Toggl.Foundation {
         public static string TuesdayInitial {
             get {
                 return ResourceManager.GetString("TuesdayInitial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to h tt.
+        /// </summary>
+        public static string TwelveHoursFormat {
+            get {
+                return ResourceManager.GetString("TwelveHoursFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HH:mm.
+        /// </summary>
+        public static string TwentyFourHoursFormat {
+            get {
+                return ResourceManager.GetString("TwentyFourHoursFormat", resourceCulture);
             }
         }
         

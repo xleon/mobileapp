@@ -98,7 +98,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IOnboardingStorage OnboardingStorage { get; }
 
-        public OutputAction<bool> Close { get; }
+        public UIAction Close { get; }
         public UIAction Done { get; }
         public UIAction DurationTapped { get; }
         public UIAction ToggleBillable { get; }
@@ -166,7 +166,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Select(time => time.ToFormattedString(DurationFormat.Improved))
                 .AsDriver(schedulerProvider);
 
-            Close = rxActionFactory.FromAsync(close);
+            Close = rxActionFactory.FromAsync(close); 
             Done = rxActionFactory.FromObservable(done);
             DurationTapped = rxActionFactory.FromAction(durationTapped);
             ToggleBillable = rxActionFactory.FromAction(toggleBillable);
@@ -302,17 +302,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             suggestionsRenderingStopwatch = null;
         }
 
-        private async Task<bool> close()
+        private async Task close()
         {
             if (isDirty)
             {
                 var shouldDiscard = await dialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
                 if (!shouldDiscard)
-                    return false;
+                    return;
             }
 
             await navigationService.Close(this);
-            return true;
         }
 
         private void setTextSpans(IEnumerable<ISpan> spans)

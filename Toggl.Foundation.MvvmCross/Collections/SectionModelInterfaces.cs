@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace Toggl.Foundation.MvvmCross.Collections
 {
@@ -12,7 +13,7 @@ namespace Toggl.Foundation.MvvmCross.Collections
     public interface ISectionModel<THeader, TItem>
     {
         THeader Header { get; }
-        List<TItem> Items { get; }
+        IImmutableList<TItem> Items { get; }
         void Initialize(THeader header, IEnumerable<TItem> items);
     }
 

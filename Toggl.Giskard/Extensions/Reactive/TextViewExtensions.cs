@@ -25,6 +25,9 @@ namespace Toggl.Giskard.Extensions.Reactive
                 .FromEventPattern<FocusChangeEventArgs>(e => reactive.Base.FocusChange += e, e => reactive.Base.FocusChange -= e)
                 .Select(args => ((EditText)args.Sender).HasFocus);
 
+        public static Action<string> Hint(this IReactive<TextView> reactive)
+            => text => reactive.Base.Hint = text;
+
         public static Action<string> TextObserver(this IReactive<TextView> reactive, bool ignoreUnchanged = false)
         {
             return text =>
