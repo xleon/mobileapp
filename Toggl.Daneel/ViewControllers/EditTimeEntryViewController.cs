@@ -20,6 +20,7 @@ using Toggl.Daneel.Transformations;
 using System.Linq;
 using Toggl.Foundation.MvvmCross.Transformations;
 using Toggl.Foundation.Analytics;
+using System.Reactive;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -239,7 +240,7 @@ namespace Toggl.Daneel.ViewControllers
 
         public async Task<bool> Dismiss()
         {
-            return await ViewModel.Close.ExecuteWithCompletion();
+            return await ViewModel.Close.ExecuteWithCompletion(Unit.Default);
         }
 
         private void prepareViews()

@@ -68,12 +68,10 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             selectedCountryId = parameter;
         }
 
+        private Task close()
+            => navigationService.Close(this);
+
         private async Task selectCountry(SelectableCountryViewModel selectedCountry)
             => await navigationService.Close(this, selectedCountry.Country.Id);
-
-        private Task close()
-        {
-            return NavigationService.Close(this);
-        }
     }
 }

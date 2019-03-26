@@ -184,6 +184,7 @@ namespace Toggl.Giskard.Activities
 
             onboardingDisposable = new AddProjectOrTagOnboardingStep(storage, ViewModel.DataSource)
                 .ManageDismissableTooltip(
+                    Observable.Return(true),
                     onboardingPopupWindow,
                     selectProjectToolbarButton,
                     (popup, anchor) => popup.TopHorizontallyCenteredOffsetsTo(anchor, 8),

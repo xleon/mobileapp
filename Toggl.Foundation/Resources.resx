@@ -901,13 +901,16 @@ Use them to add keywords to your time entries.</value>
     <value>Your API token has been reset.</value>
   </data>
   <data name="StartTimerInvocationPhrase" xml:space="preserve">
-    <value>Start timer</value>
+    <value>Track time</value>
   </data>
   <data name="StopTimerInvocationPhrase" xml:space="preserve">
-    <value>Stop timer</value>
+    <value>Stop tracking</value>
   </data>
   <data name="ShowReportsInvocationPhrase" xml:space="preserve">
-    <value>Show Report</value>
+    <value>Show my time</value>
+  </data>
+  <data name="ContinueTimerInvocationPhrase" xml:space="preserve">
+    <value>Continue tracking</value>
   </data>
   <data name="ContinueTimerInvocationPhrase">
       <value>Continue timer</value>
@@ -917,5 +920,17 @@ Use them to add keywords to your time entries.</value>
   </data>
   <data name="NumberOfTasksSingular" xml:space="preserve">
     <value>{0} Task</value>
+  </data>
+  <data name="TwelveHoursFormat">
+    <value>h tt</value>
+  </data>
+  <data name="TwentyFourHoursFormat">
+    <value>HH:mm</value>
+  </data>
+  <data name="EditingTwelveHoursFormat">
+    <value>h:mm tt</value>
+  </data>
+  <data name="EditingTwentyFourHoursFormat">
+    <value>HH:mm</value>
   </data>
 </root>

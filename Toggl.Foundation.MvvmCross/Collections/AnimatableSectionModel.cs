@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace Toggl.Foundation.MvvmCross.Collections
@@ -10,7 +11,7 @@ namespace Toggl.Foundation.MvvmCross.Collections
         where TItem : IDiffable<TKey>, IEquatable<TItem>
     {
         public THeader Header { get; private set; }
-        public List<TItem> Items { get; private set; }
+        public IImmutableList<TItem> Items { get; private set; }
 
         public TKey Identity { get; private set; }
 
@@ -22,14 +23,14 @@ namespace Toggl.Foundation.MvvmCross.Collections
         public AnimatableSectionModel(THeader header, IEnumerable<TItem> items)
         {
             Header = header;
-            Items = items.ToList();
+            Items = items.ToImmutableList();
             Identity = Header.Identity;
         }
 
         public void Initialize(THeader header, IEnumerable<TItem> items)
         {
             Header = header;
-            Items = items.ToList();
+            Items = items.ToImmutableList();
             Identity = Header.Identity;
         }
     }

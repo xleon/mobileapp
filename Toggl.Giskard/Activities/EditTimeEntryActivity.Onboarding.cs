@@ -38,6 +38,7 @@ namespace Toggl.Giskard.Activities
 
             new CategorizeTimeUsingProjectsOnboardingStep(storage, hasProject)
                 .ManageDismissableTooltip(
+                    Observable.Return(true),
                     projectTooltip,
                     projectButton,
                     (window, view) => PopupOffsets.FromDp(16, 8, this),

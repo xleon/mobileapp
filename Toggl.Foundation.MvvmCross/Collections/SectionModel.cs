@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace Toggl.Foundation.MvvmCross.Collections
@@ -6,7 +8,7 @@ namespace Toggl.Foundation.MvvmCross.Collections
     public class SectionModel<THeader, TItem> : ISectionModel<THeader, TItem>
     {
         public THeader Header { get; private set; }
-        public List<TItem> Items { get; private set; }
+        public IImmutableList<TItem> Items { get; private set; }
 
         public SectionModel()
         {
@@ -15,13 +17,13 @@ namespace Toggl.Foundation.MvvmCross.Collections
         public SectionModel(THeader header, IEnumerable<TItem> items)
         {
             Header = header;
-            Items = items.ToList();
+            Items = items.ToImmutableList();
         }
 
         public void Initialize(THeader header, IEnumerable<TItem> items)
         {
             Header = header;
-            Items = items.ToList();
+            Items = items.ToImmutableList();
         }
 
         public static SectionModel<THeader, TItem> SingleElement(TItem item)

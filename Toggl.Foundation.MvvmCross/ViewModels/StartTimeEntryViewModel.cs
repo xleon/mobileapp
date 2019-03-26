@@ -166,7 +166,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .Select(time => time.ToFormattedString(DurationFormat.Improved))
                 .AsDriver(schedulerProvider);
 
-            Close = rxActionFactory.FromAsync(close);
+            Close = rxActionFactory.FromAsync(close); 
             Done = rxActionFactory.FromObservable(done);
             DurationTapped = rxActionFactory.FromAction(durationTapped);
             ToggleBillable = rxActionFactory.FromAction(toggleBillable);

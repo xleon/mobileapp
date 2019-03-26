@@ -52,5 +52,8 @@ namespace Toggl.Daneel.Extensions.Reactive
                 }
             };
         }
+        
+        public static Action<bool> On(this IReactive<UISwitch> reactive)
+            => isOn => reactive.Base.SetState(isOn, true);
     }
 }
