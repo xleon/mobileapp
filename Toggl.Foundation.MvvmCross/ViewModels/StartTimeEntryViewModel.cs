@@ -98,7 +98,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         public IOnboardingStorage OnboardingStorage { get; }
 
-        public UIAction Close { get; }
+        public OutputAction<bool> Close { get; }
         public UIAction Done { get; }
         public UIAction DurationTapped { get; }
         public UIAction ToggleBillable { get; }
@@ -302,16 +302,17 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             suggestionsRenderingStopwatch = null;
         }
 
-        private async Task close()
+        private async Task<bool> close()
         {
             if (isDirty)
             {
                 var shouldDiscard = await dialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
                 if (!shouldDiscard)
-                    return;
+                    return false;
             }
 
             await navigationService.Close(this);
+            return true;
         }
 
         private void setTextSpans(IEnumerable<ISpan> spans)

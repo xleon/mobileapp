@@ -723,7 +723,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModelIfUserDoesNotChangeAnything()
             {
-                ViewModel.Close.Execute();
+                ViewModel.Close.Execute(Unit.Default);
 
                 TestScheduler.Start();
                 await NavigationService.Received().Close(ViewModel);
@@ -734,7 +734,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             {
                 makeDirty();
 
-                ViewModel.Close.Execute();
+                ViewModel.Close.Execute(Unit.Default);
 
                 TestScheduler.Start();
                 await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
@@ -747,7 +747,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
                     .Returns(_ => Observable.Return(false));
 
-                ViewModel.Close.Execute();
+                ViewModel.Close.Execute(Unit.Default);
 
                 TestScheduler.Start();
                 await NavigationService.DidNotReceive().Close(ViewModel);
@@ -760,7 +760,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 DialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
                     .Returns(_ => Observable.Return(true));
 
-                ViewModel.Close.Execute();
+                ViewModel.Close.Execute(Unit.Default);
 
                 TestScheduler.Start();
                 await NavigationService.Received().Close(ViewModel);
@@ -769,7 +769,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             [Fact, LogIfTooSlow]
             public async Task DoesNotCallTheAnalyticsServiceSinceNoTimeEntryWasCreated()
             {
-                ViewModel.Close.Execute();
+                ViewModel.Close.Execute(Unit.Default);
 
                 TestScheduler.Start();
                 AnalyticsService.DidNotReceive().Track(Arg.Any<StartTimeEntryEvent>());
