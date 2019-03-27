@@ -56,12 +56,12 @@ namespace Toggl.Foundation.Tests.MvvmCross.Transformations
                 createTimeEntry(now, workspaceA, "C2", duration: 4)
             );
 
-
-        private static readonly IThreadSafePreferences preferences = new MockPreferences
-        {
-            CollapseTimeEntries = true,
-            DateFormat = DateFormat.FromLocalizedDateFormat("YYYY-MM-DD")
-        };
+        private static readonly IThreadSafeTimeEntry[] longDuration =
+            group(
+                createTimeEntry(now, workspaceA, "D1", duration: (long)TimeSpan.FromHours(1.5).TotalSeconds),
+                createTimeEntry(now, workspaceA, "D1", duration: (long)TimeSpan.FromHours(2.5).TotalSeconds),
+                createTimeEntry(now, workspaceA, "D2", duration: (long)TimeSpan.FromHours(3.5).TotalSeconds)
+            );
 
         private readonly ITimeService timeService;
 
@@ -74,10 +74,19 @@ namespace Toggl.Foundation.Tests.MvvmCross.Transformations
         [Theory]
         [MemberData(nameof(TestData))]
         public void TransformsTimeEntriesIntoACorrectTree(
+            DurationFormat durationFormat,
             IEnumerable<IGrouping<DateTime, IThreadSafeTimeEntry>> log,
             HashSet<GroupId> expandedGroups,
             params AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>[] expectedTree)
         {
+            var preferences =
+                new MockPreferences
+                {
+                    CollapseTimeEntries = true,
+                    DateFormat = DateFormat.FromLocalizedDateFormat("YYYY-MM-DD"),
+                    DurationFormat = durationFormat
+                };
+
             var collapsingStrategy = new TimeEntriesGroupsFlattening(timeService);
             expandedGroups.ForEach(collapsingStrategy.ToggleGroupExpansion);
 
@@ -91,82 +100,91 @@ namespace Toggl.Foundation.Tests.MvvmCross.Transformations
             {
                 new object[]
                 {
+                    DurationFormat.Classic,
                     new[] { day(now, groupA) },
                     withExpanded(),
-                    new[] { logOf(now.DateTime, "Today", "07 sec", collapsed(groupA)) }
+                    new[] { logOf(now.DateTime, "Today", "07 sec", collapsed(groupA, DurationFormat.Classic)) }
                 },
                 new object[]
                 {
+                    DurationFormat.Classic,
                     new[] { day(now, groupA) },
                     withExpanded(groupA),
-                    new[] { logOf(now.DateTime, "Today", "07 sec", expanded(groupA)) }
+                    new[] { logOf(now.DateTime, "Today", "07 sec", expanded(groupA, DurationFormat.Classic)) }
                 },
                 new object[]
                 {
+                    DurationFormat.Improved,
                     new[] { day(now, groupA, groupB) },
                     withExpanded(groupA),
-                    new[] { logOf(now.DateTime, "Today", "14 sec", expanded(groupA).Concat(collapsed(groupB))) }
+                    new[] { logOf(now.DateTime, "Today", "0:00:14", expanded(groupA, DurationFormat.Improved).Concat(collapsed(groupB, DurationFormat.Improved))) }
                 },
                 new object[]
                 {
+                    DurationFormat.Improved,
                     new[] { day(now, singleItemGroup) },
                     withExpanded(groupB),
-                    new[] { logOf(now.DateTime, "Today", "01 sec", single(singleItemGroup.First())) }
+                    new[] { logOf(now.DateTime, "Today", "0:00:01", single(singleItemGroup.First(), DurationFormat.Improved)) }
                 },
                 new object[]
                 {
+                    DurationFormat.Classic,
                     new[] { day(now, groupA, singleItemGroup, groupB) },
                     withExpanded(),
                     new[] { logOf(
                         now.DateTime,
                         "Today",
                         "15 sec",
-                        collapsed(groupA)
-                            .Concat(single(singleItemGroup.First()))
-                            .Concat(collapsed(groupB)))
+                        collapsed(groupA, DurationFormat.Classic)
+                            .Concat(single(singleItemGroup.First(), DurationFormat.Classic))
+                            .Concat(collapsed(groupB, DurationFormat.Classic)))
                     }
                 },
                 new object[]
                 {
+                    DurationFormat.Classic,
                     new[] { day(now, groupA, singleItemGroup, groupB) },
                     withExpanded(groupA),
                     new[] { logOf(
                         now.DateTime,
                         "Today",
                         "15 sec",
-                        expanded(groupA)
-                            .Concat(single(singleItemGroup.First()))
-                            .Concat(collapsed(groupB)))
+                        expanded(groupA, DurationFormat.Classic)
+                            .Concat(single(singleItemGroup.First(), DurationFormat.Classic))
+                            .Concat(collapsed(groupB, DurationFormat.Classic)))
                     }
                 },
                 new object[]
                 {
+                    DurationFormat.Classic,
                     new[] { day(now, groupA, singleItemGroup, groupB) },
                     withExpanded(groupB),
                     new[] { logOf(
                         now.DateTime,
                         "Today",
                         "15 sec",
-                        collapsed(groupA)
-                            .Concat(single(singleItemGroup.First()))
-                            .Concat(expanded(groupB)))
+                        collapsed(groupA, DurationFormat.Classic)
+                            .Concat(single(singleItemGroup.First(), DurationFormat.Classic))
+                            .Concat(expanded(groupB, DurationFormat.Classic)))
                     }
                 },
                 new object[]
                 {
+                    DurationFormat.Improved,
                     new[] { day(now, groupA, singleItemGroup, groupB) },
                     withExpanded(groupA, groupB),
                     new[] { logOf(
                         now.DateTime,
                         "Today",
-                        "15 sec",
-                        expanded(groupA)
-                            .Concat(single(singleItemGroup.First()))
-                            .Concat(expanded(groupB)))
+                        "0:00:15",
+                        expanded(groupA, DurationFormat.Improved)
+                            .Concat(single(singleItemGroup.First(), DurationFormat.Improved))
+                            .Concat(expanded(groupB, DurationFormat.Improved)))
                     }
                 },
                 new object[]
                 {
+                    DurationFormat.Classic,
                     new[] { day(now, twoWorkspaces) },
                     withExpanded(),
                     new[] {
@@ -174,13 +192,14 @@ namespace Toggl.Foundation.Tests.MvvmCross.Transformations
                             now.DateTime,
                             "Today",
                             "03 sec",
-                            single(twoWorkspaces[0])
-                                .Concat(single(twoWorkspaces[1]))
+                            single(twoWorkspaces[0], DurationFormat.Classic)
+                                .Concat(single(twoWorkspaces[1], DurationFormat.Classic))
                         )
                     }
                 },
                 new object[]
                 {
+                    DurationFormat.Improved,
                     new[] { day(now, differentDescriptions) },
                     withExpanded(),
                     new[]
@@ -188,9 +207,25 @@ namespace Toggl.Foundation.Tests.MvvmCross.Transformations
                         logOf(
                             now.DateTime,
                             "Today",
-                            "07 sec",
-                            collapsed(differentDescriptions.Take(2).ToArray())
-                                .Concat(single(differentDescriptions[2]))
+                            "0:00:07",
+                            collapsed(differentDescriptions.Take(2).ToArray(), DurationFormat.Improved)
+                                .Concat(single(differentDescriptions[2], DurationFormat.Improved))
+                            )
+                    }
+                },
+                new object[]
+                {
+                    DurationFormat.Decimal,
+                    new[] { day(now, longDuration) },
+                    withExpanded(),
+                    new[]
+                    {
+                        logOf(
+                            now.DateTime,
+                            "Today",
+                            "07.50 h",
+                            collapsed(longDuration.Take(2).ToArray(), DurationFormat.Decimal)
+                                .Concat(single(longDuration[2], DurationFormat.Decimal))
                             )
                     }
                 }
@@ -251,31 +286,32 @@ namespace Toggl.Foundation.Tests.MvvmCross.Transformations
             => new AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>(
                 new DaySummaryViewModel(date, title, trackedTime), items);
 
-        private static IEnumerable<LogItemViewModel> single(IThreadSafeTimeEntry timeEntry)
+        private static IEnumerable<LogItemViewModel> single(IThreadSafeTimeEntry timeEntry, DurationFormat durationFormat)
         {
             yield return timeEntry.ToViewModel(
                 new GroupId(timeEntry),
                 LogItemVisualizationIntent.SingleItem,
-                DurationFormat.Classic);
+                durationFormat);
         }
 
-        private static IEnumerable<LogItemViewModel> collapsed(IThreadSafeTimeEntry[] group)
+        private static IEnumerable<LogItemViewModel> collapsed(IThreadSafeTimeEntry[] group, DurationFormat durationFormat)
         {
-            yield return header(group, LogItemVisualizationIntent.CollapsedGroupHeader);
+            yield return header(group, LogItemVisualizationIntent.CollapsedGroupHeader, durationFormat);
         }
 
-        private static IEnumerable<LogItemViewModel> expanded(IThreadSafeTimeEntry[] group)
+        private static IEnumerable<LogItemViewModel> expanded(IThreadSafeTimeEntry[] group, DurationFormat durationFormat)
         {
-            yield return header(group, LogItemVisualizationIntent.ExpandedGroupHeader);
+            yield return header(group, LogItemVisualizationIntent.ExpandedGroupHeader, durationFormat);
             foreach (var timeEntry in group)
             {
-                yield return groupItem(timeEntry);
+                yield return groupItem(timeEntry, durationFormat);
             }
         }
 
         private static LogItemViewModel header(
             IThreadSafeTimeEntry[] group,
-            LogItemVisualizationIntent visualizationIntent)
+            LogItemVisualizationIntent visualizationIntent,
+            DurationFormat durationFormat)
         {
             var sample = group.First();
             return new LogItemViewModel(
@@ -286,7 +322,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.Transformations
                 description: sample.Description,
                 duration: DurationAndFormatToString.Convert(
                     TimeSpan.FromSeconds(group.Sum(timeEntry => timeEntry.Duration ?? 0)),
-                    DurationFormat.Classic),
+                    durationFormat),
                 projectName: sample.Project?.Name,
                 projectColor: sample.Project?.Color,
                 clientName: sample.Project?.Client?.Name,
@@ -297,10 +333,10 @@ namespace Toggl.Foundation.Tests.MvvmCross.Transformations
                 isInaccessible: sample.IsInaccessible);
         }
 
-        private static LogItemViewModel groupItem(IThreadSafeTimeEntry timeEntry)
+        private static LogItemViewModel groupItem(IThreadSafeTimeEntry timeEntry, DurationFormat durationFormat)
             => timeEntry.ToViewModel(
                 new GroupId(timeEntry),
                 LogItemVisualizationIntent.GroupItem,
-                DurationFormat.Classic);
+                durationFormat);
     }
 }
