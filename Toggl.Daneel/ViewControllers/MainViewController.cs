@@ -309,8 +309,8 @@ namespace Toggl.Daneel.ViewControllers
         {
             var events = SharedStorage.instance.PopTrackableEvents();
 
-            events
-                .Select(e => e.ToTrackableEvent())
+            events?
+                .Select(e => e?.ToTrackableEvent())
                 .Where(e => e != null)
                 .Do(ViewModel.Track);
         }

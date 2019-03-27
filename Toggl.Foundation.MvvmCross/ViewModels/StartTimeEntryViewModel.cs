@@ -303,17 +303,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             suggestionsRenderingStopwatch = null;
         }
 
-        private async Task<bool> close()
+        private async Task close()
         {
             if (isDirty)
             {
                 var shouldDiscard = await dialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
                 if (!shouldDiscard)
-                    return false;
+                    return;
             }
 
             await navigationService.Close(this);
-            return true;
         }
 
         private void setTextSpans(IEnumerable<ISpan> spans)
@@ -686,7 +685,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     sections = sections
                         .Prepend(
                             CollectionSection<string, AutocompleteSuggestion>.SingleElement(
-                                new CreateEntitySuggestion(Resources.CreateProject, textFieldInfo.Value.Description)
+                                new CreateEntitySuggestion(Resources.CreateProject, currentQuery)
                             )
                         );
                 }
@@ -706,7 +705,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     sections = sections
                         .Prepend(
                             CollectionSection<string, AutocompleteSuggestion>.SingleElement(
-                                new CreateEntitySuggestion(Resources.CreateTag, textFieldInfo.Value.Description)
+                                new CreateEntitySuggestion(Resources.CreateTag, currentQuery)
                             )
                         );
                 }
