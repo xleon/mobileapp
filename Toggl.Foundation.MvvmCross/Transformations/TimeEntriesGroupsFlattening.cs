@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text.RegularExpressions;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross.Collections;
@@ -34,6 +33,8 @@ namespace Toggl.Foundation.MvvmCross.Transformations
 
         public IEnumerable<MainLogSection> Flatten(IEnumerable<LogGrouping> days, IThreadSafePreferences preferences)
         {
+            durationFormat = preferences.DurationFormat;
+
             return days.Select(preferences.CollapseTimeEntries
                 ? flatten(bySimilarTimeEntries)
                 : flatten(withJustSingleTimeEntries));
