@@ -35,8 +35,8 @@ namespace Toggl.Giskard.ViewHolders
 
         protected override void UpdateView()
         {
-            mainLogHeaderTitle.Text = Item.DurationText;
-            mainLogHeaderDuration.Text = Item.HeaderDate(Now);
+            mainLogHeaderTitle.Text = Item.HeaderDate(Now);
+            mainLogHeaderDuration.Text = Item.DurationText;
         }
     }
 }
