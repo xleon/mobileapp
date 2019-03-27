@@ -30,7 +30,7 @@ namespace Toggl.Giskard.Adapters
 
         private readonly Subject<TItem> itemTapSubject = new Subject<TItem>();
         private readonly Subject<TSection> headerTapSubject = new Subject<TSection>();
-        
+
         public IObservable<TItem> ItemTapObservable => itemTapSubject.AsObservable();
 
         protected virtual HashSet<int> ItemViewTypes { get; } = new HashSet<int> { ItemViewType };
@@ -40,6 +40,7 @@ namespace Toggl.Giskard.Adapters
 
         protected BaseSectionedRecyclerAdapter()
         {
+            HasStableIds = false;
         }
 
         protected BaseSectionedRecyclerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
@@ -83,10 +84,10 @@ namespace Toggl.Giskard.Adapters
         }
 
         protected virtual int SelectItemViewType(TItem headerItem)
-            => HeaderViewType;
-
-        protected virtual int SelectHeaderViewType(TSection item)
             => ItemViewType;
+
+        protected virtual int SelectHeaderViewType(TSection headerItem)
+            => HeaderViewType;
 
         protected abstract BaseRecyclerViewHolder<TSection> CreateHeaderViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType);
 
