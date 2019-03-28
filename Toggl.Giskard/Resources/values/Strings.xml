@@ -25,7 +25,7 @@
     <string name="EndTime">End time</string>
     <string name="Save">Save</string>
     <string name="Oops">Oops!</string>
-    <string name="NameTakenError">Sorry, this name is already taken.</string>
+    <string name="ProjectNameTakenError">Sorry, such project already exists</string>
     <string name="General">General</string>
     <string name="SubmitFeedback">Submit feedback</string>
     <string name="Help">Help</string>

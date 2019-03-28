@@ -669,8 +669,8 @@ Start the timer and your most used time entries will appear here.</value>
   <data name="StartAndStopTime" xml:space="preserve">
     <value>Start and stop times</value>
   </data>
-  <data name="NameTakenError" xml:space="preserve">
-    <value>Sorry, this name is already taken</value>
+  <data name="ProjectNameTakenError" xml:space="preserve">
+    <value>Sorry, this project already exists</value>
   </data>
   <data name="ProjectName" xml:space="preserve">
     <value>Project Name</value>

@@ -720,10 +720,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             bool shouldAddProjectCreationSuggestion()
                 => canCreateProjectsInWorkspace && !textFieldInfo.Value.HasProject &&
                    currentQuery.LengthInBytes() <= MaxProjectNameLengthInBytes &&
-                   !string.IsNullOrEmpty(currentQuery) &&
-                   suggestions.None(item =>
-                       item is ProjectSuggestion projectSuggestion &&
-                       projectSuggestion.ProjectName.IsSameCaseInsensitiveTrimedTextAs(currentQuery));
+                   !string.IsNullOrEmpty(currentQuery);
 
             bool shouldAddTagCreationSuggestion()
                 => !string.IsNullOrEmpty(currentQuery) && currentQuery.IsAllowedTagByteSize() &&

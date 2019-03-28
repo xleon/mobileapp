@@ -1722,6 +1722,12 @@ namespace Toggl.Foundation {
             }
         }
         
+        public static string ProjectNameTakenError {
+            get {
+                return ResourceManager.GetString("ProjectNameTakenError", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Events are visible to you only and won’t appear in Reports..
         /// </summary>
