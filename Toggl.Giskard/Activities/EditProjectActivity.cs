@@ -102,7 +102,7 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsPrivate
-                .Subscribe(isPrivateSwitch.Rx().Checked())
+                .Subscribe(isPrivateSwitch.Rx().CheckedObserver())
                 .DisposedBy(DisposeBag);
 
             // Save
