@@ -70,7 +70,8 @@ namespace Toggl.Foundation.Interactors
             => new SoftDeleteMultipleTimeEntriesInteractor(dataSource.TimeEntries, syncManager, this, ids);
 
         public IInteractor<IObservable<IThreadSafeTimeEntry>> GetTimeEntryById(long id)
-            => new GetByIdInteractor<IThreadSafeTimeEntry, IDatabaseTimeEntry>(dataSource.TimeEntries, id);
+            => new GetByIdInteractor<IThreadSafeTimeEntry, IDatabaseTimeEntry>(dataSource.TimeEntries, analyticsService, id)
+                .TrackException<Exception, IThreadSafeTimeEntry>("GetTimeEntryById");
 
         public IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> GetMultipleTimeEntriesById(long[] ids)
             => new GetMultipleByIdInteractor<IThreadSafeTimeEntry, IDatabaseTimeEntry>(dataSource.TimeEntries, ids);
