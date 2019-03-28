@@ -167,6 +167,7 @@ namespace Toggl.Giskard.Activities
                 .DisposedBy(DisposeBag);
 
             saveSubject
+                .Do(wheelNumericInput.ApplyDurationIfBeingEdited)
                 .Subscribe(ViewModel.Save.Inputs)
                 .DisposedBy(DisposeBag);
 
