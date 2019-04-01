@@ -460,8 +460,6 @@ namespace Toggl.Daneel.ViewControllers
             prepareWelcomeBackViews();
             prepareEmptyStateView();
 
-            View.BackgroundColor = Color.Main.BackgroundColor.ToNativeColor();
-
             // Open edit view for the currently running time entry by swiping up
             var swipeUpRunningCardGesture = new UISwipeGestureRecognizer(async () =>
             {

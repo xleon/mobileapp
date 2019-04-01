@@ -28,19 +28,32 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="cdF-bH-KD3">
-                    <rect key="frame" x="266" y="12" width="834" height="154.5"/>
+                    <rect key="frame" x="266" y="12" width="834" height="160"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="xaR-Hq-Ilj">
-                            <rect key="frame" x="0.0" y="0.0" width="834" height="68.5"/>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="xaR-Hq-Ilj">
+                            <rect key="frame" x="0.0" y="0.0" width="834" height="74"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notifications are currently disabled. If you’d like to recieve notifications, please enable them in the Settings app." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fhJ-tV-W3k">
-                                    <rect key="frame" x="16" y="0.0" width="802" height="14.5"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                    <color key="textColor" red="0.36862745098039218" green="0.35686274509803922" blue="0.35686274509803922" alpha="1" colorSpace="calibratedRGB"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l9o-iE-2jc">
+                                    <rect key="frame" x="0.0" y="0.0" width="834" height="20"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notifications are currently disabled. If you’d like to recieve notifications, please enable them in the Settings app." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fhJ-tV-W3k">
+                                            <rect key="frame" x="8" y="0.0" width="826" height="20"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" red="0.36862745098039218" green="0.35686274509803922" blue="0.35686274509803922" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="fhJ-tV-W3k" secondAttribute="bottom" id="Qse-ji-eQ0"/>
+                                        <constraint firstAttribute="trailing" secondItem="fhJ-tV-W3k" secondAttribute="trailing" id="TZL-S1-0qJ"/>
+                                        <constraint firstAttribute="height" constant="20" id="i00-Ry-U5y"/>
+                                        <constraint firstItem="fhJ-tV-W3k" firstAttribute="leading" secondItem="l9o-iE-2jc" secondAttribute="leading" constant="8" id="kov-dd-4Yl"/>
+                                        <constraint firstItem="fhJ-tV-W3k" firstAttribute="top" secondItem="l9o-iE-2jc" secondAttribute="top" id="oFM-Tk-0mb"/>
+                                    </constraints>
+                                </view>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="BCC-EI-4xS">
-                                    <rect key="frame" x="0.0" y="22.5" width="834" height="46"/>
+                                    <rect key="frame" x="0.0" y="28" width="834" height="46"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JNx-JU-2Oi">
                                             <rect key="frame" x="0.0" y="0.0" width="834" height="1"/>
@@ -81,7 +94,7 @@
                             </subviews>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="YmQ-ei-BhS">
-                            <rect key="frame" x="0.0" y="80.5" width="834" height="74"/>
+                            <rect key="frame" x="0.0" y="86" width="834" height="74"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="1b8-Dw-Vs1">
                                     <rect key="frame" x="0.0" y="0.0" width="834" height="46"/>
@@ -157,7 +170,6 @@
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="width" relation="lessThanOrEqual" constant="834" id="Ezo-eW-5RD"/>
-                        <constraint firstItem="fhJ-tV-W3k" firstAttribute="leading" secondItem="cdF-bH-KD3" secondAttribute="leading" constant="16" id="OIq-9I-b1m"/>
                     </constraints>
                 </stackView>
             </subviews>
