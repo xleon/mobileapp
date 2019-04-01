@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.props" Condition="Exists('..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.props')" />
   <PropertyGroup>
@@ -1309,6 +1309,8 @@
     <InterfaceDefinition Include="Views\StartTimeEntry\ReactiveTaskSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Cells\TimeEntriesLog\TimeEntriesLogHeaderView.xib" />
     <InterfaceDefinition Include="Cells\TimeEntriesLog\TimeEntriesLogViewCell.xib" />
+    <InterfaceDefinition Include="Views\Reports\ReportsOverviewCardView.xib" />
+    <InterfaceDefinition Include="Views\Reports\ReportsBarChartCardView.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\CreateEntityViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
@@ -1853,6 +1855,15 @@
     <Compile Include="Views\EntityCreation\CreateEntityViewCell.cs" />
     <Compile Include="Views\EntityCreation\CreateEntityViewCell.designer.cs">
       <DependentUpon>CreateEntityViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reports\ReportsOverviewCardView.cs" />
+    <Compile Include="Views\Reports\ReportsOverviewCardView.designer.cs">
+      <DependentUpon>ReportsOverviewCardView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\BaseReportsCardView.cs" />
+    <Compile Include="Views\Reports\ReportsBarChartCardView.cs" />
+    <Compile Include="Views\Reports\ReportsBarChartCardView.designer.cs">
+      <DependentUpon>ReportsBarChartCardView.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -235,7 +235,14 @@ namespace Toggl.Daneel.Presentation
                         }
                         else
                         {
-                            reportsViewController.ShowCalendar();
+                            if (TopViewController.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact)
+                            {
+                                reportsViewController.ShowCalendar();
+                            } 
+                            else
+                            {
+                                reportsViewController.ShowPopoverCalendar();
+                            }
                         }
                     }
                     return;

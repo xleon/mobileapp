@@ -1,4 +1,6 @@
 ﻿using System;
+using CoreAnimation;
+using CoreGraphics;
 using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.UI;
@@ -16,6 +18,10 @@ namespace Toggl.Daneel.Views.Reports
         public static readonly NSString Key = new NSString(nameof(ReportsLegendViewCell));
         public static readonly UINib Nib;
 
+        private CAShapeLayer borderLayer = new CAShapeLayer();
+        private CAShapeLayer mask = new CAShapeLayer();
+        private bool isLast = false;
+
         static ReportsLegendViewCell()
         {
             Nib = UINib.FromName(nameof(ReportsLegendViewCell), NSBundle.MainBundle);
@@ -31,6 +37,11 @@ namespace Toggl.Daneel.Views.Reports
             base.AwakeFromNib();
 
             FadeView.FadeRight = true;
+        }
+
+        public void SetIsLast(bool last)
+        {
+            isLast = last;
         }
 
         protected override void UpdateView()
@@ -52,6 +63,31 @@ namespace Toggl.Daneel.Views.Reports
             var color = MvxColor.ParseHexString(Item.Color).ToNativeColor();
             ProjectLabel.TextColor = color;
             CircleView.BackgroundColor = color;
+        }
+
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
+
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular && isLast)
+            {
+                var cornerRadius = 8;
+                var cornersToRound = UIRectCorner.BottomLeft | UIRectCorner.BottomRight;
+
+                mask.Path = UIBezierPath.FromRoundedRect(Bounds, cornersToRound, new CGSize(cornerRadius, cornerRadius)).CGPath;
+                Layer.Mask = mask;
+
+                borderLayer.FillColor = UIColor.Clear.CGColor;
+                borderLayer.LineWidth = 1;
+                borderLayer.StrokeColor = UIColor.GroupTableViewBackgroundColor.CGColor;
+                borderLayer.Path = UIBezierPath.FromRoundedRect(new CGRect(0, -1, Bounds.Width, Bounds.Height + 1), cornersToRound, new CGSize(cornerRadius + 1, cornerRadius + 1)).CGPath;
+                Layer.AddSublayer(borderLayer);
+            }
+            else
+            {
+                Layer.Mask = null;
+                borderLayer.RemoveFromSuperLayer();
+            }
         }
     }
 }

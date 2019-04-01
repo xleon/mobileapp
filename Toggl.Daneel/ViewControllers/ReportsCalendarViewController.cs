@@ -2,20 +2,15 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading;
-using MvvmCross.Base;
-using MvvmCross.Binding.BindingContext;
+using CoreGraphics;
 using MvvmCross.Platforms.Ios.Views;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
-using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar;
 using Toggl.Multivac.Extensions;
@@ -26,10 +21,10 @@ namespace Toggl.Daneel.ViewControllers
     [NestedPresentation]
     public partial class ReportsCalendarViewController : MvxViewController<ReportsCalendarViewModel>, IUICollectionViewDelegate
     {
+        private CGSize popoverPreferedSize = new CGSize(319, 355);
         private bool calendarInitialized;
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
         private ReportsCalendarCollectionViewSource calendarCollectionViewSource;
-        private List<ReportsCalendarPageViewModel> pendingMonthsUpdate;
 
         public ReportsCalendarViewController()
             : base(nameof(ReportsCalendarViewController), null)
@@ -39,6 +34,8 @@ namespace Toggl.Daneel.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            PreferredContentSize = popoverPreferedSize;
 
             calendarCollectionViewSource = new ReportsCalendarCollectionViewSource(CalendarCollectionView);
             var calendarCollectionViewLayout = new ReportsCalendarCollectionViewLayout();
@@ -87,6 +84,12 @@ namespace Toggl.Daneel.ViewControllers
             ViewModel.QuickSelectShortcutsObservable
                 .Subscribe(quickSelectCollectionViewSource.UpdateShortcuts)
                 .DisposedBy(disposeBag);
+
+            ViewModel.ReloadObservable
+                .Select(_ => ViewModel.CurrentPage)
+                .Subscribe(calendarCollectionViewSource.RefreshUIAtPage)
+                .DisposedBy(disposeBag);
+
         }
 
         public override void DidMoveToParentViewController(UIViewController parent)

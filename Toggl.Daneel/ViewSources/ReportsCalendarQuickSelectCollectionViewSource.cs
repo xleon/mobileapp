@@ -28,7 +28,6 @@ namespace Toggl.Daneel.ViewSources
         public IObservable<ReportsCalendarBaseQuickSelectShortcut> ShortcutTaps;
 
         private ReportsDateRangeParameter currentDateRange;
-        private NSIndexPath selectedIndexPath;
 
         public ReportsCalendarQuickSelectCollectionViewSource(
             UICollectionView collectionView) : base(collectionView)
