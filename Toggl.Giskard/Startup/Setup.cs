@@ -47,8 +47,6 @@ namespace Toggl.Giskard
         private const ApiEnvironment environment = ApiEnvironment.Staging;
 #endif
 
-        protected override MvxBindingBuilder CreateBindingBuilder() => new TogglBindingBuilder();
-
         protected override IMvxNavigationService InitializeNavigationService(IMvxViewModelLocatorCollection collection)
         {
             analyticsService = new AnalyticsServiceAndroid();
