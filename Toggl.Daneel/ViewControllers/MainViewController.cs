@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading;
 using CoreGraphics;
 using Foundation;
@@ -16,6 +17,7 @@ using Toggl.Daneel.Suggestions;
 using Toggl.Daneel.Views;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation;
+using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Helper;
@@ -66,6 +68,8 @@ namespace Toggl.Daneel.ViewControllers
         private IDisposable swipeLeftAnimationDisposable;
         private IDisposable swipeRightAnimationDisposable;
 
+        private Subject<Unit> traitCollectionSubject = new Subject<Unit>();
+
         private readonly UIView tableHeader = new UIView();
         private readonly UIView suggestionsContaier = new UIView { TranslatesAutoresizingMaskIntoConstraints = false };
         private readonly UIView ratingViewContainer = new UIView { TranslatesAutoresizingMaskIntoConstraints = false };
@@ -106,6 +110,7 @@ namespace Toggl.Daneel.ViewControllers
                 TimeEntriesLogViewCell.Identifier,
                 ViewModel.TimeService,
                 ViewModel.SchedulerProvider);
+
             TimeEntriesLogTableView
                 .Rx()
                 .Bind(tableViewSource)
@@ -253,6 +258,7 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ViewModel.SuggestionsViewModel.Suggestions
+                .ReemitWhen(traitCollectionSubject)
                 .Subscribe(suggestionsView.OnSuggestions)
                 .DisposedBy(DisposeBag);
 
@@ -303,6 +309,13 @@ namespace Toggl.Daneel.ViewControllers
                 new UIBarButtonItem(syncFailuresButton)
             };
 #endif
+        }
+
+        public override void TraitCollectionDidChange(UITraitCollection previousTraitCollection)
+        {
+            base.TraitCollectionDidChange(previousTraitCollection);
+            traitCollectionSubject.OnNext(Unit.Default);
+            TimeEntriesLogTableView.ReloadData();
         }
 
         private void trackSiriEvents()

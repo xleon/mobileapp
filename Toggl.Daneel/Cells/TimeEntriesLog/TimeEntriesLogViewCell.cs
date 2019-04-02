@@ -58,7 +58,8 @@ namespace Toggl.Daneel.Views
         {
             base.AwakeFromNib();
 
-            FadeView.FadeRight = true;
+            DescriptionFadeView.FadeRight = true;
+            ProjectTaskClientFadeView.FadeRight = true;
 
             TimeLabel.Font = TimeLabel.Font.GetMonospacedDigitFont();
 
@@ -92,7 +93,7 @@ namespace Toggl.Daneel.Views
                 : Color.TimeEntriesLog.AddDescriptionTextColor.ToNativeColor();
 
             // Visibility
-            ProjectTaskClientLabel.Hidden = !Item.HasProject;
+            ProjectTaskClientFadeView.Hidden = !Item.HasProject;
             SyncErrorImageView.Hidden = Item.CanContinue;
             UnsyncedImageView.Hidden = !Item.NeedsSync;
             ContinueButton.Hidden = !Item.CanContinue;

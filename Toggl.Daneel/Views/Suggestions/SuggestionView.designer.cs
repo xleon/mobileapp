@@ -16,19 +16,22 @@ namespace Toggl.Daneel
 		UIKit.UILabel ClientLabel { get; set; }
 
 		[Outlet]
+		Toggl.Daneel.Views.FadeView DescriptionFadeView { get; set; }
+
+		[Outlet]
 		UIKit.UILabel DescriptionLabel { get; set; }
-
-		[Outlet]
-		UIKit.NSLayoutConstraint DescriptionTopDistanceConstraint { get; set; }
-
-		[Outlet]
-		Toggl.Daneel.Views.FadeView FadeView { get; set; }
 
 		[Outlet]
 		UIKit.UIImageView ProjectDot { get; set; }
 
 		[Outlet]
+		Toggl.Daneel.Views.FadeView ProjectFadeView { get; set; }
+
+		[Outlet]
 		UIKit.UILabel ProjectLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView ProjectView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -42,9 +45,14 @@ namespace Toggl.Daneel
 				DescriptionLabel = null;
 			}
 
-			if (FadeView != null) {
-				FadeView.Dispose ();
-				FadeView = null;
+			if (DescriptionFadeView != null) {
+				DescriptionFadeView.Dispose ();
+				DescriptionFadeView = null;
+			}
+
+			if (ProjectFadeView != null) {
+				ProjectFadeView.Dispose ();
+				ProjectFadeView = null;
 			}
 
 			if (ProjectDot != null) {
@@ -57,9 +65,9 @@ namespace Toggl.Daneel
 				ProjectLabel = null;
 			}
 
-			if (DescriptionTopDistanceConstraint != null) {
-				DescriptionTopDistanceConstraint.Dispose ();
-				DescriptionTopDistanceConstraint = null;
+			if (ProjectView != null) {
+				ProjectView.Dispose ();
+				ProjectView = null;
 			}
 		}
 	}
