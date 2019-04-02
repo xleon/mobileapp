@@ -32,6 +32,7 @@ namespace Toggl.Daneel.ViewControllers
     public partial class EditTimeEntryViewController : MvxViewController<EditTimeEntryViewModel>, IDismissableViewController
     {
         private const float nonScrollableContentHeight = 116f;
+        private const double preferredIpadHeight = 395;
 
         private IDisposable hasProjectDisposable;
         private IDisposable projectOnboardingDisposable;
@@ -295,11 +296,24 @@ namespace Toggl.Daneel.ViewControllers
                 .For(v => v.BindTags())
                 .To<EditTimeEntryViewModel>(vm => vm.Tags)
                 .Apply();
+            View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
         }
 
         public override void ViewWillLayoutSubviews()
         {
+            base.ViewWillLayoutSubviews();
             adjustHeight();
+
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
+            {
+                ConfirmButton.SetTitleColor(Color.EditTimeEntry.TabletConfirmButtonText.ToNativeColor(), UIControlState.Normal);
+            }
+            else
+            {
+                ConfirmButton.SetTitleColor(Color.EditTimeEntry.MobileConfirmButtonText.ToNativeColor(), UIControlState.Normal);
+            }
+
+            View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
         }
 
         public async Task<bool> Dismiss()
@@ -324,7 +338,8 @@ namespace Toggl.Daneel.ViewControllers
             TagsTextView.TextContainer.LineFragmentPadding = 0;
             BillableSwitch.SetState(ViewModel.Billable, false);
 
-            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
+                && UIDevice.CurrentDevice.UserInterfaceIdiom != UIUserInterfaceIdiom.Pad)
             {
                 var bottomSafeAreaInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
                 if (bottomSafeAreaInset >= DeleteButtonBottomConstraint.Constant)
@@ -369,19 +384,30 @@ namespace Toggl.Daneel.ViewControllers
 
         private void adjustHeight()
         {
-            var height = nonScrollableContentHeight + ScrollViewContent.Bounds.Height;
-            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            double height;
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
             {
-                height += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+                height = nonScrollableContentHeight + ScrollViewContent.Bounds.Height;
+                if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                {
+                    height += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+                }
             }
-
+            else
+            {
+                var errorHeight = ErrorView.Hidden
+                    ? 0
+                    : ErrorView.SizeThatFits(UIView.UILayoutFittingCompressedSize).Height;
+                var titleHeight = DescriptionView.SizeThatFits(UIView.UILayoutFittingCompressedSize).Height;
+                var isBillableHeight = BillableView.Hidden ? 0 : 56;
+                height = preferredIpadHeight + errorHeight + titleHeight + isBillableHeight;
+            }
             var newSize = new CGSize(0, height);
             if (newSize != PreferredContentSize)
             {
                 PreferredContentSize = newSize;
                 PresentationController.ContainerViewWillLayoutSubviews();
             }
-
             ScrollView.ScrollEnabled = ScrollViewContent.Bounds.Height > ScrollView.Bounds.Height;
         }
     }

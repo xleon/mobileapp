@@ -159,12 +159,12 @@ namespace Toggl.Daneel.Presentation.Transition
 
         public override CGSize GetSizeForChildContentContainer(IUIContentContainer contentContainer, CGSize parentContainerSize)
         {
-            var regualrOrCompactHorizontalSizeClass = PresentingViewController.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
+            var regularOrCompactHorizontalSizeClass = PresentingViewController.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
                                                       || PresentingViewController.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact;
             var regularVerticalSizeClass = PresentingViewController.TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular;
 
             if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad
-                && regualrOrCompactHorizontalSizeClass
+                && regularOrCompactHorizontalSizeClass
                 && regularVerticalSizeClass)
             {
                 var preferredContentHeight = PresentedViewController.PreferredContentSize.Height != 0
@@ -173,14 +173,14 @@ namespace Toggl.Daneel.Presentation.Transition
 
                 var height = Max(iPadMinHeightWithoutKeyboard, preferredContentHeight);
                 var width = Min(iPadMaxWidth, parentContainerSize.Width);
+                var stackingDepth = iPadStackModalViewSpacing * levelsOfModalViews();
 
                 if (isKeyboardVisible)
                 {
-                    height = UIScreen.MainScreen.Bounds.Height - topiPadMargin - keyboardHeight;
+                    height = UIScreen.MainScreen.Bounds.Height - topiPadMargin - keyboardHeight - stackingDepth;
                 }
 
-                height -= iPadStackModalViewSpacing * levelsOfModalViews();
-
+                height = Max(height, iPadMaxHeight - stackingDepth);
                 return new CGSize(width, height);
             }
 
@@ -295,13 +295,13 @@ namespace Toggl.Daneel.Presentation.Transition
                 ? UIKeyboard.FrameEndFromNotification(notification).Height
                 : 0.0;
 
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad && finishedPresenting && ContainerView != null && PresentingViewController == null)
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad
+                && finishedPresenting
+                && ContainerView != null
+                && PresentedViewController.PresentedViewController == null)
             {
                 var animationDuration = UIKeyboard.AnimationDurationFromNotification(notification);
-                AnimationExtensions.Animate(animationDuration, Animation.Curves.StandardEase, () =>
-                {
-                    ContainerViewWillLayoutSubviews();
-                });
+                AnimationExtensions.Animate(animationDuration, Animation.Curves.StandardEase, ContainerViewWillLayoutSubviews);
             }
             else if (PresentingViewController == null)
             {

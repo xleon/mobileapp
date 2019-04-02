@@ -59,6 +59,9 @@ namespace Toggl.Daneel.ViewControllers
 		Toggl.Daneel.Views.TextViewWithPlaceholder DescriptionTextView { get; set; }
 
 		[Outlet]
+		UIKit.UIView DescriptionView { get; set; }
+
+		[Outlet]
 		UIKit.UILabel DurationDescriptionLabel { get; set; }
 
 		[Outlet]
@@ -139,9 +142,24 @@ namespace Toggl.Daneel.ViewControllers
 				AddProjectAndTaskView = null;
 			}
 
+			if (AddProjectTaskLabel != null) {
+				AddProjectTaskLabel.Dispose ();
+				AddProjectTaskLabel = null;
+			}
+
+			if (AddTagsLabel != null) {
+				AddTagsLabel.Dispose ();
+				AddTagsLabel = null;
+			}
+
 			if (AddTagsView != null) {
 				AddTagsView.Dispose ();
 				AddTagsView = null;
+			}
+
+			if (BillableLabel != null) {
+				BillableLabel.Dispose ();
+				BillableLabel = null;
 			}
 
 			if (BillableSwitch != null) {
@@ -157,6 +175,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (CategorizeWithProjectsBubbleView != null) {
 				CategorizeWithProjectsBubbleView.Dispose ();
 				CategorizeWithProjectsBubbleView = null;
+			}
+
+			if (CategorizeWithProjectsLabel != null) {
+				CategorizeWithProjectsLabel.Dispose ();
+				CategorizeWithProjectsLabel = null;
 			}
 
 			if (CloseButton != null) {
@@ -189,6 +212,11 @@ namespace Toggl.Daneel.ViewControllers
 				DescriptionTextView = null;
 			}
 
+			if (DurationDescriptionLabel != null) {
+				DurationDescriptionLabel.Dispose ();
+				DurationDescriptionLabel = null;
+			}
+
 			if (DurationLabel != null) {
 				DurationLabel.Dispose ();
 				DurationLabel = null;
@@ -197,6 +225,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (DurationView != null) {
 				DurationView.Dispose ();
 				DurationView = null;
+			}
+
+			if (EndDescriptionLabel != null) {
+				EndDescriptionLabel.Dispose ();
+				EndDescriptionLabel = null;
 			}
 
 			if (EndTimeLabel != null) {
@@ -212,6 +245,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (ErrorMessageLabel != null) {
 				ErrorMessageLabel.Dispose ();
 				ErrorMessageLabel = null;
+			}
+
+			if (ErrorMessageTitleLabel != null) {
+				ErrorMessageTitleLabel.Dispose ();
+				ErrorMessageTitleLabel = null;
 			}
 
 			if (ErrorView != null) {
@@ -239,6 +277,11 @@ namespace Toggl.Daneel.ViewControllers
 				ScrollViewContent = null;
 			}
 
+			if (StartDateDescriptionLabel != null) {
+				StartDateDescriptionLabel.Dispose ();
+				StartDateDescriptionLabel = null;
+			}
+
 			if (StartDateLabel != null) {
 				StartDateLabel.Dispose ();
 				StartDateLabel = null;
@@ -247,6 +290,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (StartDateView != null) {
 				StartDateView.Dispose ();
 				StartDateView = null;
+			}
+
+			if (StartDescriptionLabel != null) {
+				StartDescriptionLabel.Dispose ();
+				StartDescriptionLabel = null;
 			}
 
 			if (StartTimeLabel != null) {
@@ -284,49 +332,9 @@ namespace Toggl.Daneel.ViewControllers
 				TitleLabel = null;
 			}
 
-			if (BillableLabel != null) {
-				BillableLabel.Dispose ();
-				BillableLabel = null;
-			}
-
-			if (StartDateDescriptionLabel != null) {
-				StartDateDescriptionLabel.Dispose ();
-				StartDateDescriptionLabel = null;
-			}
-
-			if (DurationDescriptionLabel != null) {
-				DurationDescriptionLabel.Dispose ();
-				DurationDescriptionLabel = null;
-			}
-
-			if (StartDescriptionLabel != null) {
-				StartDescriptionLabel.Dispose ();
-				StartDescriptionLabel = null;
-			}
-
-			if (EndDescriptionLabel != null) {
-				EndDescriptionLabel.Dispose ();
-				EndDescriptionLabel = null;
-			}
-
-			if (ErrorMessageTitleLabel != null) {
-				ErrorMessageTitleLabel.Dispose ();
-				ErrorMessageTitleLabel = null;
-			}
-
-			if (AddProjectTaskLabel != null) {
-				AddProjectTaskLabel.Dispose ();
-				AddProjectTaskLabel = null;
-			}
-
-			if (CategorizeWithProjectsLabel != null) {
-				CategorizeWithProjectsLabel.Dispose ();
-				CategorizeWithProjectsLabel = null;
-			}
-
-			if (AddTagsLabel != null) {
-				AddTagsLabel.Dispose ();
-				AddTagsLabel = null;
+			if (DescriptionView != null) {
+				DescriptionView.Dispose ();
+				DescriptionView = null;
 			}
 		}
 	}

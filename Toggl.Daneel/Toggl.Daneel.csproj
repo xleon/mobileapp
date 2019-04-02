@@ -1852,6 +1852,7 @@
     <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogViewCell.designer.cs">
       <DependentUpon>TimeEntriesLogViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\Reactive\UIViewControllerExtensions.cs" />
     <Compile Include="Views\EntityCreation\CreateEntityViewCell.cs" />
     <Compile Include="Views\EntityCreation\CreateEntityViewCell.designer.cs">
       <DependentUpon>CreateEntityViewCell.cs</DependentUpon>
