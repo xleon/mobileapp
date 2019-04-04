@@ -683,7 +683,8 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     sections = sections
                         .Prepend(
                             SectionModel<string, AutocompleteSuggestion>.SingleElement(
-                                new CreateEntitySuggestion(Resources.CreateProject, textFieldInfo.Value.Description))
+                                new CreateEntitySuggestion(Resources.CreateProject, currentQuery)
+                            )
                         );
                 }
 
@@ -702,7 +703,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                     sections = sections
                         .Prepend(
                             SectionModel<string, AutocompleteSuggestion>.SingleElement(
-                                new CreateEntitySuggestion(Resources.CreateTag, textFieldInfo.Value.Description)
+                                new CreateEntitySuggestion(Resources.CreateTag, currentQuery)
                             )
                         );
                 }
