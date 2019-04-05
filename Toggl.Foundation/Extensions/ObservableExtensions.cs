@@ -43,11 +43,11 @@ namespace Toggl.Foundation.Extensions
             => observable.Catch((T exception) => Observable.Return(errorResult.Transition(exception)));
 
         public static IObservable<T> ReemitWhen<T>(
-           this IObservable<T> observable,
-           IObservable<Unit> otherObservable)
+            this IObservable<T> observable,
+            IObservable<Unit> otherObservable)
         {
-           var signal = otherObservable.StartWith(Unit.Default);
-           return observable.CombineLatest(signal, (t1, _) => t1);
+            var signal = otherObservable.StartWith(Unit.Default);
+            return observable.CombineLatest(signal, (t1, _) => t1);
         }
     }
 }

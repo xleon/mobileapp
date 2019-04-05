@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive;
 using Toggl.Foundation.Analytics;
+using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.DTOs;
@@ -9,7 +10,6 @@ using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Reports;
 using Toggl.Foundation.Suggestions;
-using Toggl.Foundation.Sync;
 using Toggl.Multivac;
 using Toggl.Multivac.Models.Reports;
 
@@ -23,19 +23,27 @@ namespace Toggl.Foundation.Interactors
 
         IInteractor<IObservable<IThreadSafeTimeEntry>> StartSuggestion(Suggestion suggestion);
 
-        IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueTimeEntry(ITimeEntryPrototype prototype);
+        IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueTimeEntry(ITimeEntryPrototype prototype, ContinueTimeEntryMode continueMode);
 
         IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueMostRecentTimeEntry();
 
         IInteractor<IObservable<IThreadSafeTimeEntry>> UpdateTimeEntry(EditTimeEntryDto dto);
 
+        IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> UpdateMultipleTimeEntries(EditTimeEntryDto[] dtos);
+
         IInteractor<IObservable<IThreadSafeTimeEntry>> GetTimeEntryById(long id);
+
+        IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> GetMultipleTimeEntriesById(long[] ids);
 
         IInteractor<IObservable<Unit>> DeleteTimeEntry(long id);
 
+        IInteractor<IObservable<Unit>> DeleteMultipleTimeEntries(long[] ids);
+
+        IInteractor<IObservable<Unit>> SoftDeleteMultipleTimeEntries(long[] ids);
+
         IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> GetAllTimeEntriesVisibleToTheUser();
 
-        IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> ObserveTimeEntriesVisibleToTheUser();
+        IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>> ObserveAllTimeEntriesVisibleToTheUser();
 
         IInteractor<IObservable<IThreadSafeTimeEntry>> StopTimeEntry(DateTimeOffset currentDateTime, TimeEntryStopOrigin origin);
 
@@ -101,6 +109,9 @@ namespace Toggl.Foundation.Interactors
 
         #region Autocomplete Suggestions
 
+        IInteractor<IObservable<IEnumerable<AutocompleteSuggestion>>> GetAutocompleteSuggestions(
+            QueryInfo queryInfo);
+
         IInteractor<IObservable<IEnumerable<AutocompleteSuggestion>>> GetTimeEntriesAutocompleteSuggestions(
             IList<string> wordsToQuery);
 
@@ -122,13 +133,13 @@ namespace Toggl.Foundation.Interactors
 
         #region User
 
+        IInteractor<IObservable<IThreadSafeUser>> GetCurrentUser();
+
         IInteractor<IObservable<byte[]>> GetUserAvatar(string url);
 
         IInteractor<IObservable<IThreadSafeUser>> UpdateUser(EditUserDTO dto);
 
         IInteractor<IObservable<IThreadSafeUser>> UpdateDefaultWorkspace(long selectedWorkspaceId);
-
-        IInteractor<IObservable<IThreadSafeUser>> GetCurrentUser();
 
         #endregion
 
@@ -179,6 +190,8 @@ namespace Toggl.Foundation.Interactors
         IInteractor<IObservable<IThreadSafeTag>> CreateTag(string tagName, long workspaceId);
 
         IInteractor<IObservable<IThreadSafeTag>> GetTagById(long id);
+
+        IInteractor<IObservable<IEnumerable<IThreadSafeTag>>> GetMultipleTagsById(params long[] id);
 
         #endregion
 

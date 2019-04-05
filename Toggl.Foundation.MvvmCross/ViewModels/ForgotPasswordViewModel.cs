@@ -2,14 +2,11 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using PropertyChanged;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Login;
-using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.Services;
 using Toggl.Multivac;
@@ -58,9 +55,16 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Reset = rxActionFactory.FromObservable(reset, Email.Select(email => email.IsValid));
             Close = rxActionFactory.FromAction(returnEmail, Reset.Executing.Invert());
 
+            var resetActionStartedObservable = Reset
+                .Executing
+                .Where(executing => executing)
+                .Select(_ => (Exception)null);
+
             ErrorMessage = Reset.Errors
+                .Merge(resetActionStartedObservable)
                 .Select(toErrorString)
-                .StartWith("");
+                .StartWith("")
+                .DistinctUntilChanged();
 
             PasswordResetSuccessful = Reset.Elements
                 .Select(_ => true)
@@ -102,6 +106,9 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
                 case ApiException apiException:
                     return apiException.LocalizedApiErrorMessage;
+
+                case null:
+                    return string.Empty;
 
                 default:
                     return Resources.PasswordResetGeneralError;
