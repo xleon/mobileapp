@@ -30,8 +30,12 @@ namespace Toggl.Giskard.Services
             var setup = MvxAndroidSetupSingleton.EnsureSingletonAvailable(ApplicationContext);
             setup.EnsureInitialized();
 
-            if (!Mvx.TryResolve<IInteractorFactory>(out var interactorFactory))
+            var dependencyContainer = AndroidDependencyContainer.Instance;
+
+            if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())
                 return;
+
+            var interactorFactory = dependencyContainer.InteractorFactory;
 
             disposable?.Dispose();
             disposable = null;
