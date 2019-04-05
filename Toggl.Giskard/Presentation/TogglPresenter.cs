@@ -13,7 +13,7 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Giskard.Activities;
 
-namespace Toggl.Giskard.Presenters
+namespace Toggl.Giskard.Presentation
 {
     public sealed class TogglPresenter : MvxAppCompatViewPresenter
     {

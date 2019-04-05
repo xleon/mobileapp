@@ -7,8 +7,10 @@ using Android.Widget;
 using MvvmCross;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Giskard.Adapters.Calendar;
+using Toggl.Giskard.Presentation;
 using Toggl.Giskard.Views.Calendar;
 using Toggl.Giskard.Extensions.Reactive;
+using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using System.Linq;
 using Toggl.Foundation.Calendar;
@@ -16,7 +18,7 @@ using System.Reactive;
 
 namespace Toggl.Giskard.Fragments
 {
-    public partial class CalendarFragment : ReactiveFragment<CalendarViewModel>
+    public partial class CalendarFragment : ReactiveFragment<CalendarViewModel>, IScrollableToTop
     {
         private CalendarLayoutManager calendarLayoutManager;
 
@@ -92,6 +94,11 @@ namespace Toggl.Giskard.Fragments
                 .DisposedBy(DisposeBag);
 
             return view;
+        }
+
+        public void ScrollToTop()
+        {
+            calendarRecyclerView.SmoothScrollToPosition(0);
         }
 
         private void onboardingVisibilityChanged(bool visible)

@@ -1804,6 +1804,7 @@
     <Compile Include="Views\EntityCreation\CreateEntityViewCell.designer.cs">
       <DependentUpon>CreateEntityViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\IScrollableToTop.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj">

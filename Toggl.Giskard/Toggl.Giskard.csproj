@@ -372,6 +372,7 @@
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
     <Compile Include="Startup\AndroidDependencyContainer.cs" />
     <Compile Include="Extensions\FloatingActionButtonExtensions.cs" />
+    <Compile Include="Presentation\IScrollableToTop.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\SuggestionRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\ProjectSuggestionViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\TimeEntrySuggestionViewHolder.cs" />
@@ -479,7 +480,7 @@
     <Compile Include="Adapters\MainRecyclerAdapter.cs" />
     <Compile Include="Extensions\LayoutParamsExtensions.cs" />
     <Compile Include="Extensions\NumberExtensions.cs" />
-    <Compile Include="Presenters\TogglPresenter.cs" />
+    <Compile Include="Presentation\TogglPresenter.cs" />
     <Compile Include="Activities\StartTimeEntryActivity.cs" />
     <Compile Include="Extensions\VisibilityExtensions.cs" />
     <Compile Include="Activities\BrowserActivity.cs" />

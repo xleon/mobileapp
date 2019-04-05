@@ -5,6 +5,7 @@ using CoreGraphics;
 using Foundation;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
+using Toggl.Daneel.Presentation;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.Models.Interfaces;
@@ -18,7 +19,7 @@ using static Toggl.Daneel.Extensions.AnimationExtensions;
 namespace Toggl.Daneel.ViewControllers
 {
     [TabPresentation]
-    public sealed partial class ReportsViewController : ReactiveViewController<ReportsViewModel>
+    public sealed partial class ReportsViewController : ReactiveViewController<ReportsViewModel>, IScrollableToTop
     {
         private const string boundsKey = "bounds";
 
@@ -99,6 +100,12 @@ namespace Toggl.Daneel.ViewControllers
             WorkspaceButton.Rx()
                 .BindAction(ViewModel.SelectWorkspace)
                 .DisposedBy(DisposeBag);
+        }
+
+        public void ScrollToTop()
+        {
+            var point = new CGPoint(0, -ReportsTableView.ContentInset.Top);
+            ReportsTableView.SetContentOffset(point, true);
         }
 
         protected override void Dispose(bool disposing)

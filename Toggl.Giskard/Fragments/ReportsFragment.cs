@@ -8,13 +8,13 @@ using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions.Reactive;
+using Toggl.Giskard.Presentation;
 using Toggl.Giskard.ViewHelpers;
 using Toggl.Multivac.Extensions;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace Toggl.Giskard.Fragments
 {
-    public sealed partial class ReportsFragment : ReactiveFragment<ReportsViewModel>
+    public sealed partial class ReportsFragment : ReactiveFragment<ReportsViewModel>, IScrollableToTop
     {
         private static readonly TimeSpan toggleCalendarThrottleDuration = TimeSpan.FromMilliseconds(300);
         private ReportsRecyclerAdapter reportsRecyclerAdapter;
@@ -71,6 +71,11 @@ namespace Toggl.Giskard.Fragments
                 .DisposedBy(DisposeBag);
 
             return view;
+        }
+
+        public void ScrollToTop()
+        {
+            reportsRecyclerView.SmoothScrollToPosition(0);
         }
 
         private void setupReportsRecyclerView()

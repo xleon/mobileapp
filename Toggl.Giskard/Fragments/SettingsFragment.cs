@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
 using Android.Content;
@@ -14,13 +13,14 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
+using Toggl.Giskard.Presentation;
 using Toggl.Giskard.ViewHolders;
 using Toggl.Multivac.Extensions;
 using FoundationResources = Toggl.Foundation.Resources;
 
 namespace Toggl.Giskard.Fragments
 {
-    public sealed partial class SettingsFragment : ReactiveFragment<SettingsViewModel>
+    public sealed partial class SettingsFragment : ReactiveFragment<SettingsViewModel>, IScrollableToTop
     {
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -172,6 +172,11 @@ namespace Toggl.Giskard.Fragments
                 .DisposedBy(DisposeBag);
 
             return view;
+        }
+
+        public void ScrollToTop()
+        {
+            scrollView.SmoothScrollTo(0, 0);
         }
 
         private void showFeedbackSuccessToast(bool succeeeded)
