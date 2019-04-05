@@ -1,7 +1,6 @@
 ﻿using System;
 using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Daneel.Converters;
 using Toggl.Daneel.Extensions;
 using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using UIKit;
@@ -15,13 +14,31 @@ using Toggl.Foundation;
 using Toggl.Foundation.Extensions;
 using ObjCRuntime;
 using Toggl.Foundation.MvvmCross.Extensions;
+using Color = Toggl.Foundation.MvvmCross.Helper.Color;
 
- namespace Toggl.Daneel.Views.Reports
+namespace Toggl.Daneel.Views.Reports
 {
     [Register(nameof(ReportsOverviewCardView))]
     public sealed partial class ReportsOverviewCardView : BaseReportsCardView<ReportsViewModel>
     {
+        private const int fontSize = 24;
+
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
+
+        private static readonly UIColor normalColor = Color.Reports.PercentageActivated.ToNativeColor();
+        private static readonly UIColor disabledColor = Color.Reports.Disabled.ToNativeColor();
+
+        private readonly UIStringAttributes normalAttributes = new UIStringAttributes
+        {
+            Font = UIFont.SystemFontOfSize(fontSize, UIFontWeight.Medium),
+            ForegroundColor = normalColor
+        };
+
+        private readonly UIStringAttributes disabledAttributes = new UIStringAttributes
+        {
+            Font = UIFont.SystemFontOfSize(fontSize, UIFontWeight.Medium),
+            ForegroundColor = disabledColor
+        };
 
         public ReportsOverviewCardView(IntPtr handle) : base(handle)
         {
@@ -50,9 +67,8 @@ using Toggl.Foundation.MvvmCross.Extensions;
         protected override void UpdateViewBinding()
         {
             //Text
-            var reportPercentageConverter = new ReportPercentageLabelValueConverter();
             Item.BillablePercentageObservable
-                .Select(reportPercentageConverter.Convert)
+                .Select(billableFormattedString)
                 .Subscribe(BillablePercentageLabel.Rx().AttributedText())
                 .DisposedBy(disposeBag);
 
@@ -84,6 +100,17 @@ using Toggl.Foundation.MvvmCross.Extensions;
             totalDurationColorObservable
                 .Subscribe(TotalDurationLabel.Rx().TextColor())
                 .DisposedBy(disposeBag);
+
+            NSAttributedString billableFormattedString(float? value)
+            {
+                var isDisabled = value == null;
+                var actualValue = isDisabled ? 0 : value.Value;
+
+                var percentage = $"{actualValue.ToString("0.00")}%";
+
+                var attributes = isDisabled ? disabledAttributes : normalAttributes;
+                return new NSAttributedString(percentage, attributes);
+            }
 
             LayoutIfNeeded();
         }

@@ -1,307 +1,242 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Binding.BindingContext;
-using MvvmCross.Commands;
-using MvvmCross.Platforms.Ios.Binding;
-using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.Plugin.Color.Platforms.Ios;
-using MvvmCross.Plugin.Visibility;
 using MvvmCross.UI;
-using MvvmCross.WeakSubscription;
-using Toggl.Daneel.Combiners;
+using Toggl.Daneel.Extensions.Reactive;
+using Toggl.Foundation.Extensions;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Combiners;
-using Toggl.Foundation.MvvmCross.Converters;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Onboarding.EditView;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Multivac.Extensions;
 using UIKit;
+using Toggl.Daneel.Transformations;
+using System.Linq;
+using Toggl.Foundation.MvvmCross.Transformations;
+using Toggl.Foundation.Analytics;
+using System.Reactive;
 
 namespace Toggl.Daneel.ViewControllers
 {
     [ModalCardPresentation]
-    public partial class EditTimeEntryViewController : MvxViewController<EditTimeEntryViewModel>, IDismissableViewController
+    public partial class EditTimeEntryViewController : KeyboardAwareViewController<EditTimeEntryViewModel>, IDismissableViewController
     {
         private const float nonScrollableContentHeight = 116f;
-        private const double preferredIpadHeight = 395;
+        private const double preferredIpadHeight = 228;
 
-        private IDisposable hasProjectDisposable;
         private IDisposable projectOnboardingDisposable;
         private IDisposable contentSizeChangedDisposable;
 
-        private ISubject<bool> hasProjectSubject;
+        private ProjectTaskClientToAttributedString projectTaskClientToAttributedString;
+        private TagsListToAttributedString tagsListToAttributedString;
 
         private const string boundsKey = "bounds";
 
-        public EditTimeEntryViewController() : base(nameof(EditTimeEntryViewController), null)
+        public EditTimeEntryViewController()
+            : base(nameof(EditTimeEntryViewController))
         {
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-
-            if (!disposing) return;
-
-            contentSizeChangedDisposable?.Dispose();
-            contentSizeChangedDisposable = null;
-
-            hasProjectDisposable?.Dispose();
-            hasProjectDisposable = null;
-
-            projectOnboardingDisposable?.Dispose();
-            projectOnboardingDisposable = null;
         }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
-            TitleLabel.Text = Resources.Edit;
-            BillableLabel.Text = Resources.Billable;
-            StartDateDescriptionLabel.Text = Resources.Startdate;
-            DurationDescriptionLabel.Text = Resources.Duration;
-            StartDescriptionLabel.Text = Resources.Start;
-            EndDescriptionLabel.Text = Resources.End;
-            ErrorMessageTitleLabel.Text = Resources.Oops;
-            AddProjectTaskLabel.Text = Resources.AddProjectTask;
-            CategorizeWithProjectsLabel.Text = Resources.CategorizeYourTimeWithProjects;
-            AddTagsLabel.Text = Resources.AddTags;
-            DeleteButton.SetTitle(Resources.Delete, UIControlState.Normal);
-            ConfirmButton.SetTitle(Resources.ConfirmChanges, UIControlState.Normal);
+            projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
+                ProjectTaskClientLabel.Font.CapHeight,
+                Color.EditTimeEntry.ClientText.ToNativeColor(),
+                false);
 
+            tagsListToAttributedString = new TagsListToAttributedString(TagsTextView);
+
+            localizeLabels();
             prepareViews();
             prepareOnboarding();
 
             contentSizeChangedDisposable = ScrollViewContent.AddObserver(boundsKey, NSKeyValueObservingOptions.New, onContentSizeChanged);
 
-            var durationCombiner = new DurationValueCombiner();
-            var dateCombiner = new DateTimeOffsetDateFormatValueCombiner(TimeZoneInfo.Local);
-            var timeCombiner = new DateTimeOffsetTimeFormatValueCombiner(TimeZoneInfo.Local);
-            var visibilityConverter = new MvxVisibilityValueConverter();
-            var invertedBoolConverter = new BoolToConstantValueConverter<bool>(false, true);
-            var inverterVisibilityConverter = new MvxInvertedVisibilityValueConverter();
-            var projectTaskClientCombiner = new ProjectTaskClientValueCombiner(
-                ProjectTaskClientLabel.Font.CapHeight,
-                Color.EditTimeEntry.ClientText.ToNativeColor(),
-                false
-            );
-            var stopRunningTimeEntryAndSelectStopTimeForStoppedConverter = new BoolToConstantValueConverter<IMvxCommand>(
-                ViewModel.StopCommand, ViewModel.SelectStopTimeCommand);
+            DescriptionTextView.Text = ViewModel.Description.Value;
 
-            var isInaccessibleTextColorConverter = new BoolToConstantValueConverter<UIColor>(
-                Color.Common.Disabled.ToNativeColor(),
-                Color.Common.TextColor.ToNativeColor()
-            );
+            ViewModel.Preferences
+                .Select(preferences => preferences.DurationFormat)
+                .Select(format => ViewModel.GroupDuration.ToFormattedString(format))
+                .Subscribe(GroupDuration.Rx().Text())
+                .DisposedBy(DisposeBag);
 
-            var showTagsCombiner = new ShowTagsValueCombiner();
+            CloseButton.Rx()
+                .BindAction(ViewModel.Close)
+                .DisposedBy(DisposeBag);
 
-            var bindingSet = this.CreateBindingSet<EditTimeEntryViewController, EditTimeEntryViewModel>();
+            ConfirmButton.Rx()
+                .BindAction(ViewModel.Save)
+                .DisposedBy(DisposeBag);
 
-            //Error message view
-            bindingSet.Bind(ErrorMessageLabel)
-                      .For(v => v.Text)
-                      .To(vm => vm.SyncErrorMessage);
+            DescriptionTextView.TextObservable
+                .Subscribe(ViewModel.Description.Accept)
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(ErrorView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.DismissSyncErrorMessageCommand);
+            ViewModel.SyncErrorMessage
+                .Subscribe(ErrorMessageLabel.Rx().Text())
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(ErrorView)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.SyncErrorMessageVisible)
-                      .WithConversion(inverterVisibilityConverter);
+            ViewModel.IsSyncErrorMessageVisible
+                .Subscribe(ErrorView.Rx().IsVisible())
+                .DisposedBy(DisposeBag);
 
-            //Text
-            bindingSet.Bind(DescriptionTextView)
-                      .For(v => v.BindText())
-                      .To(vm => vm.Description);
+            ErrorView.Rx().Tap()
+                .Subscribe(ViewModel.DismissSyncErrorMessage.Inputs)
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(DescriptionTextView)
-                      .For(v => v.BindDidBecomeFirstResponder())
-                      .To(vm => vm.StartEditingDescriptionCommand);
+            ViewModel.ProjectClientTask
+                .Select(info => projectTaskClientToAttributedString.Convert(
+                    info.Project,
+                    info.Task,
+                    info.Client,
+                    MvxColor.ParseHexString(info.ProjectColor).ToNativeColor()))
+                .Subscribe(ProjectTaskClientLabel.Rx().AttributedText())
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(DurationLabel)
-                      .ByCombining(durationCombiner,
-                          vm => vm.Duration,
-                          vm => vm.DurationFormat);
+            ViewModel.ProjectClientTask
+                .Select(info => info.HasProject)
+                .Subscribe(ProjectTaskClientLabel.Rx().IsVisible())
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(ProjectTaskClientLabel)
-                      .For(v => v.AttributedText)
-                      .ByCombining(projectTaskClientCombiner,
-                          v => v.Project,
-                          v => v.Task,
-                          v => v.Client,
-                          v => v.ProjectColor);
+            ViewModel.ProjectClientTask
+                .Select(info => !info.HasProject)
+                .Subscribe(AddProjectAndTaskView.Rx().IsVisible())
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(StartDateLabel)
-                      .ByCombining(dateCombiner,
-                          vm => vm.StartTime,
-                          vm => vm.DateFormat);
+            SelectProject.Rx()
+                .BindAction(ViewModel.SelectProject)
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(StartTimeLabel)
-                      .ByCombining(timeCombiner,
-                          vm => vm.StartTime,
-                          vm => vm.TimeFormat);
+            TagsTextView.Rx()
+                .BindAction(ViewModel.SelectTags)
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(EndTimeLabel)
-                      .ByCombining(timeCombiner,
-                          vm => vm.StopTime,
-                          vm => vm.TimeFormat);
+            AddTagsView.Rx()
+                .BindAction(ViewModel.SelectTags)
+                .DisposedBy(DisposeBag);
 
-            //Commands
-            bindingSet.Bind(CloseButton).To(vm => vm.CloseCommand);
-            bindingSet.Bind(DeleteButton).To(vm => vm.DeleteCommand);
-            bindingSet.Bind(ConfirmButton).To(vm => vm.SaveCommand);
+            var containsTags = ViewModel.Tags
+                .Select(tags => tags.Any());
 
-            bindingSet.Bind(DurationView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectDurationCommand);
+            containsTags
+                .Invert()
+                .Subscribe(AddTagsView.Rx().IsVisible())
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(StartTimeView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectStartTimeCommand);
+            containsTags
+                .Subscribe(TagsTextView.Rx().IsVisible())
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(StopButton)
-                      .To(vm => vm.StopCommand);
+            ViewModel.IsBillable
+                .Subscribe(BillableSwitch.Rx().CheckedObserver())
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(EndTimeView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.IsTimeEntryRunning)
-                      .WithConversion(stopRunningTimeEntryAndSelectStopTimeForStoppedConverter);
+            BillableSwitch.Rx().Changed()
+                .Subscribe(ViewModel.ToggleBillable.Inputs)
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(ProjectTaskClientLabel)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectProjectCommand);
+            ViewModel.IsBillableAvailable
+                .Subscribe(BillableView.Rx().IsVisible())
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(AddProjectAndTaskView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectProjectCommand);
+            ViewModel.IsInaccessible
+                .Subscribe(adjustUIForInaccessibleTimeEntry)
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(StartDateView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectStartDateCommand);
+            ViewModel.StartTime
+                .WithLatestFrom(ViewModel.Preferences,
+                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.TimeOfDayFormat.Format))
+                .Subscribe(StartTimeLabel.Rx().Text())
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(TagsTextView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectTagsCommand);
+            ViewModel.StartTime
+                .WithLatestFrom(ViewModel.Preferences,
+                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.DateFormat.Short))
+                .Subscribe(StartDateLabel.Rx().Text())
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(AddTagsView)
-                      .For(v => v.BindTap())
-                      .To(vm => vm.SelectTagsCommand);
+            StartTimeView.Rx().Tap()
+                .SelectValue(EditViewTapSource.StartTime)
+                .Subscribe(ViewModel.EditTimes.Inputs)
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(BillableSwitch)
-                      .For(v => v.BindValueChanged())
-                      .To(vm => vm.ToggleBillableCommand);
+            StartDateView.Rx().Tap()
+                .Subscribe(ViewModel.SelectStartDate.Inputs)
+                .DisposedBy(DisposeBag);
 
-            //End time and the stop button visibility
-            bindingSet.Bind(StopButton)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.IsTimeEntryRunning)
-                      .WithConversion(inverterVisibilityConverter);
+            ViewModel.IsTimeEntryRunning
+                .Subscribe(StopButton.Rx().IsVisible())
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(EndTimeLabel)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.IsTimeEntryRunning)
-                      .WithConversion(visibilityConverter);
+            ViewModel.IsTimeEntryRunning
+                .Select(CommonFunctions.Invert)
+                .Subscribe(EndTimeLabel.Rx().IsVisible())
+                .DisposedBy(DisposeBag);
 
-            //Project visibility
-            bindingSet.Bind(AddProjectAndTaskView)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.Project)
-                      .WithConversion(visibilityConverter);
+            ViewModel.StopTime
+                .Where(stopTime => stopTime.HasValue)
+                .Select(stopTime => stopTime.Value)
+                .WithLatestFrom(ViewModel.Preferences,
+                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.TimeOfDayFormat.Format))
+                .Subscribe(EndTimeLabel.Rx().Text())
+                .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(ProjectTaskClientLabel)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.Project)
-                      .WithConversion(inverterVisibilityConverter);
+            EndTimeView.Rx().Tap()
+                .SelectLatestFrom(ViewModel.IsTimeEntryRunning)
+                .Invert()
+                .Where(CommonFunctions.Identity)
+                .SelectValue(EditViewTapSource.StopTime)
+                .Subscribe(ViewModel.EditTimes.Inputs)
+                .DisposedBy(DisposeBag);
 
-            //Tags visibility
-            bindingSet.Bind(AddTagsView)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.HasTags)
-                      .WithConversion(visibilityConverter);
+            EndTimeView.Rx().Tap()
+               .Merge(StopButton.Rx().Tap())
+               .SelectLatestFrom(ViewModel.IsTimeEntryRunning)
+               .Where(CommonFunctions.Identity)
+               .SelectUnit()
+               .Subscribe(ViewModel.StopTimeEntry.Inputs)
+               .DisposedBy(DisposeBag);
 
-            bindingSet.Bind(TagsTextView)
-                      .For(v => v.BindVisible())
-                      .To(vm => vm.HasTags)
-                      .WithConversion(inverterVisibilityConverter);
+            ViewModel.Duration
+                .WithLatestFrom(ViewModel.Preferences,
+                    (duration, preferences) => duration.ToFormattedString(preferences.DurationFormat))
+                .Subscribe(DurationLabel.Rx().Text())
+                .DisposedBy(DisposeBag);
 
-            //Billable view
-            bindingSet.Bind(BillableView)
-                      .For(v => v.BindVisibility())
-                      .To(vm => vm.IsBillableAvailable)
-                      .WithConversion(visibilityConverter);
+            DurationView.Rx().Tap()
+                .SelectValue(EditViewTapSource.Duration)
+                .Subscribe(ViewModel.EditTimes.Inputs)
+                .DisposedBy(DisposeBag);
 
-            //Regarding inaccessible entries
-            getLabelsToChangeColorWhenEditingInaccessibleEntry().ForEach(createTextColorBindingForInaccessibleEntries);
-
-            bindingSet.Bind(DescriptionTextView)
-                      .For(v => v.TextColor)
-                      .To(vm => vm.IsInaccessible)
-                      .WithConversion(isInaccessibleTextColorConverter);
-
-            bindingSet.Bind(DescriptionTextView)
-                      .For(v => v.UserInteractionEnabled)
-                      .To(vm => vm.IsInaccessible)
-                      .WithConversion(invertedBoolConverter);
-
-            bindingSet.Bind(BillableSwitch)
-                      .For(v => v.Enabled)
-                      .To(vm => vm.IsInaccessible)
-                      .WithConversion(invertedBoolConverter);
-
-            bindingSet.Bind(TagsContainerView)
-                      .For(v => v.Hidden)
-                      .ByCombining(showTagsCombiner,
-                                   vm => vm.IsInaccessible,
-                                   vm => vm.HasTags)
-                      .WithConversion(invertedBoolConverter);
-
-            bindingSet.Bind(TagsSeparator)
-                      .For(v => v.Hidden)
-                      .ByCombining(showTagsCombiner,
-                                   vm => vm.IsInaccessible,
-                                   vm => vm.HasTags)
-                      .WithConversion(invertedBoolConverter);
-
-            bindingSet.Apply();
-
-            void createTextColorBindingForInaccessibleEntries(UILabel label)
-            {
-                bindingSet.Bind(label)
-                          .For(v => v.TextColor)
-                          .To(vm => vm.IsInaccessible)
-                          .WithConversion(isInaccessibleTextColorConverter);
-            }
+            DeleteButton.Rx()
+                .BindAction(ViewModel.Delete)
+                .DisposedBy(DisposeBag);
         }
 
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
 
-            //This binding needs to be created, when TagsTextView has it's
-            //proper size. In ViewDidLoad() TagsTextView width isn't initialized
-            //yet, which results in displaying less tags than possible
-            this.CreateBinding(TagsTextView)
-                .For(v => v.BindTags())
-                .To<EditTimeEntryViewModel>(vm => vm.Tags)
-                .Apply();
+            ViewModel.Tags
+                .Select(tagsListToAttributedString.Convert)
+                .Subscribe(TagsTextView.Rx().AttributedTextObserver())
+                .DisposedBy(DisposeBag);
+
             View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
         }
 
         public override void ViewWillLayoutSubviews()
         {
             base.ViewWillLayoutSubviews();
+
             adjustHeight();
 
             if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
@@ -318,25 +253,15 @@ namespace Toggl.Daneel.ViewControllers
 
         public async Task<bool> Dismiss()
         {
-            return await ViewModel.CloseWithConfirmation();
-        }
-
-        IEnumerable<UILabel> getLabelsToChangeColorWhenEditingInaccessibleEntry()
-        {
-            yield return StartTimeLabel;
-            yield return StartDateLabel;
-            yield return EndTimeLabel;
-            yield return DurationLabel;
+            return await ViewModel.Close.ExecuteWithCompletion(Unit.Default);
         }
 
         private void prepareViews()
         {
             DurationLabel.Font = DurationLabel.Font.GetMonospacedDigitFont();
-            PreferredContentSize = View.Frame.Size;
-            prepareDescriptionField();
+
             centerTextVertically(TagsTextView);
             TagsTextView.TextContainer.LineFragmentPadding = 0;
-            BillableSwitch.SetState(ViewModel.Billable, false);
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
                 && UIDevice.CurrentDevice.UserInterfaceIdiom != UIUserInterfaceIdiom.Pad)
@@ -347,12 +272,61 @@ namespace Toggl.Daneel.ViewControllers
                         = ConfirmButtonBottomConstraint.Constant
                         = 0;
             }
-        }
 
-        private void prepareDescriptionField()
-        {
             DescriptionTextView.TintColor = Color.StartTimeEntry.Cursor.ToNativeColor();
             DescriptionTextView.PlaceholderText = Resources.AddDescription;
+
+            TimeEntryTimes.Hidden = ViewModel.IsEditingGroup;
+            TimeEntryTimesSeparator.Hidden = ViewModel.IsEditingGroup;
+            GroupDuration.Hidden = !ViewModel.IsEditingGroup;
+            DurationView.Hidden = ViewModel.IsEditingGroup;
+            StartDateView.Hidden = ViewModel.IsEditingGroup;
+            DurationSeparator.Hidden = ViewModel.IsEditingGroup;
+            StartDateSeparator.Hidden = ViewModel.IsEditingGroup;
+        }
+
+        private void localizeLabels()
+        {
+            TitleLabel.Text = ViewModel.IsEditingGroup
+                ? string.Format(Resources.EditingTimeEntryGroup, ViewModel.GroupCount)
+                : Resources.Edit;
+
+            BillableLabel.Text = Resources.Billable;
+            StartDateDescriptionLabel.Text = Resources.Startdate;
+            DurationDescriptionLabel.Text = Resources.Duration;
+            StartDescriptionLabel.Text = Resources.Start;
+            EndDescriptionLabel.Text = Resources.End;
+            ErrorMessageTitleLabel.Text = Resources.Oops;
+            AddProjectTaskLabel.Text = Resources.AddProjectTask;
+            CategorizeWithProjectsLabel.Text = Resources.CategorizeYourTimeWithProjects;
+            AddTagsLabel.Text = Resources.AddTags;
+            DeleteButton.SetTitle(Resources.Delete, UIControlState.Normal);
+            ConfirmButton.SetTitle(Resources.ConfirmChanges, UIControlState.Normal);
+        }
+
+        private void adjustUIForInaccessibleTimeEntry(bool isInaccessible)
+        {
+            DescriptionTextView.UserInteractionEnabled = !isInaccessible;
+            StartTimeView.UserInteractionEnabled = !isInaccessible;
+            StartDateView.UserInteractionEnabled = !isInaccessible;
+            EndTimeView.UserInteractionEnabled = !isInaccessible;
+            DurationView.UserInteractionEnabled = !isInaccessible;
+            StopButton.UserInteractionEnabled = !isInaccessible;
+
+            BillableSwitch.Enabled = !isInaccessible;
+            TagsContainerView.Hidden = isInaccessible;
+            TagsSeparator.Hidden = isInaccessible;
+
+            var textColor = isInaccessible
+                ? Color.Common.Disabled.ToNativeColor()
+                : Color.Common.TextColor.ToNativeColor();
+
+            DescriptionTextView.TextColor = textColor;
+
+            StartTimeLabel.TextColor = textColor;
+            StartDateLabel.TextColor = textColor;
+            EndTimeLabel.TextColor = textColor;
+            DurationLabel.TextColor = textColor;
         }
 
         private void centerTextVertically(UITextView textView)
@@ -365,16 +339,8 @@ namespace Toggl.Daneel.ViewControllers
         {
             var storage = ViewModel.OnboardingStorage;
 
-            hasProjectSubject = new BehaviorSubject<bool>(!String.IsNullOrEmpty(ViewModel.Project));
-            hasProjectDisposable = ViewModel.WeakSubscribe(() => ViewModel.Project, onProjectChanged);
-
-            projectOnboardingDisposable = new CategorizeTimeUsingProjectsOnboardingStep(storage, hasProjectSubject.AsObservable())
+            projectOnboardingDisposable = new CategorizeTimeUsingProjectsOnboardingStep(storage, ViewModel.ProjectClientTask.Select(x => x.HasProject).AsObservable())
                 .ManageDismissableTooltip(CategorizeWithProjectsBubbleView, storage);
-        }
-
-        private void onProjectChanged(object sender, PropertyChangedEventArgs args)
-        {
-            hasProjectSubject.OnNext(!String.IsNullOrEmpty(ViewModel.Project));
         }
 
         private void onContentSizeChanged(NSObservedChange change)
@@ -400,7 +366,8 @@ namespace Toggl.Daneel.ViewControllers
                     : ErrorView.SizeThatFits(UIView.UILayoutFittingCompressedSize).Height;
                 var titleHeight = DescriptionView.SizeThatFits(UIView.UILayoutFittingCompressedSize).Height;
                 var isBillableHeight = BillableView.Hidden ? 0 : 56;
-                height = preferredIpadHeight + errorHeight + titleHeight + isBillableHeight;
+                var timeFieldsHeight = ViewModel.IsEditingGroup ? 0 : 167;
+                height = preferredIpadHeight + errorHeight + titleHeight + timeFieldsHeight + isBillableHeight;
             }
             var newSize = new CGSize(0, height);
             if (newSize != PreferredContentSize)
@@ -409,6 +376,56 @@ namespace Toggl.Daneel.ViewControllers
                 PresentationController.ContainerViewWillLayoutSubviews();
             }
             ScrollView.ScrollEnabled = ScrollViewContent.Bounds.Height > ScrollView.Bounds.Height;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (!disposing)
+                return;
+
+            contentSizeChangedDisposable?.Dispose();
+            contentSizeChangedDisposable = null;
+
+            projectOnboardingDisposable?.Dispose();
+            projectOnboardingDisposable = null;
+        }
+
+        protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
+        {
+            // this bit of code depends on the knowledge of the component tree:
+            // - description label is inside of a container view which is placed in a stack view
+            // - we want to know the vertical location of the container view in the whole view
+            // - we actually want to know the Y coordinate of the bottom of the container and make
+            //   sure we don't overaly it with the keyboard
+            var container = DescriptionTextView.Superview;
+            var absoluteLocation = View.ConvertPointFromView(container.Frame.Location, container.Superview);
+            var minimumVisibleContentHeight = View.Frame.Height - absoluteLocation.Y - container.Frame.Height;
+
+            var coveredByKeyboard = e.FrameEnd.Height - minimumVisibleContentHeight;
+
+            if (coveredByKeyboard < 0)
+            {
+                return;
+            }
+
+            var safeAreaOffset = UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
+                ? Math.Max(UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top, UIApplication.SharedApplication.StatusBarFrame.Height)
+                : 0;
+            var distanceFromTop = Math.Max(safeAreaOffset, View.Frame.Y - coveredByKeyboard);
+
+            View.Frame = new CGRect(View.Frame.X, distanceFromTop, View.Frame.Width, View.Frame.Height);
+            UIView.Animate(Animation.Timings.EnterTiming, View.LayoutIfNeeded);
+        }
+
+        protected override void KeyboardWillHide(object sender, UIKeyboardEventArgs e)
+        {
+            var distanceFromTop = UIScreen.MainScreen.Bounds.Height - View.Frame.Height;
+
+            Console.WriteLine($"Resetting distance: {distanceFromTop}");
+            View.Frame = new CGRect(View.Frame.X, distanceFromTop, View.Frame.Width, View.Frame.Height);
+            UIView.Animate(Animation.Timings.EnterTiming, View.LayoutIfNeeded);
         }
     }
 }

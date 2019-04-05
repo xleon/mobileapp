@@ -68,6 +68,9 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UILabel DurationLabel { get; set; }
 
 		[Outlet]
+		UIKit.UIView DurationSeparator { get; set; }
+
+		[Outlet]
 		UIKit.UIView DurationView { get; set; }
 
 		[Outlet]
@@ -89,10 +92,10 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIView ErrorView { get; set; }
 
 		[Outlet]
-		UIKit.UILabel ProjectTaskClientLabel { get; set; }
+		UIKit.UILabel GroupDuration { get; set; }
 
 		[Outlet]
-		UIKit.UILabel RemainingCharacterCount { get; set; }
+		UIKit.UILabel ProjectTaskClientLabel { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -103,10 +106,16 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIStackView ScrollViewContent { get; set; }
 
 		[Outlet]
+		UIKit.UIView SelectProject { get; set; }
+
+		[Outlet]
 		UIKit.UILabel StartDateDescriptionLabel { get; set; }
 
 		[Outlet]
 		UIKit.UILabel StartDateLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView StartDateSeparator { get; set; }
 
 		[Outlet]
 		UIKit.UIView StartDateView { get; set; }
@@ -133,8 +142,14 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UITextView TagsTextView { get; set; }
 
 		[Outlet]
+		UIKit.UIStackView TimeEntryTimes { get; set; }
+
+		[Outlet]
+		UIKit.UIStackView TimeEntryTimesSeparator { get; set; }
+
+		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (AddProjectAndTaskView != null) {
@@ -222,6 +237,16 @@ namespace Toggl.Daneel.ViewControllers
 				DurationLabel = null;
 			}
 
+			if (DurationSeparator != null) {
+				DurationSeparator.Dispose ();
+				DurationSeparator = null;
+			}
+
+			if (StartDateSeparator != null) {
+				StartDateSeparator.Dispose ();
+				StartDateSeparator = null;
+			}
+
 			if (DurationView != null) {
 				DurationView.Dispose ();
 				DurationView = null;
@@ -257,14 +282,14 @@ namespace Toggl.Daneel.ViewControllers
 				ErrorView = null;
 			}
 
+			if (GroupDuration != null) {
+				GroupDuration.Dispose ();
+				GroupDuration = null;
+			}
+
 			if (ProjectTaskClientLabel != null) {
 				ProjectTaskClientLabel.Dispose ();
 				ProjectTaskClientLabel = null;
-			}
-
-			if (RemainingCharacterCount != null) {
-				RemainingCharacterCount.Dispose ();
-				RemainingCharacterCount = null;
 			}
 
 			if (ScrollView != null) {
@@ -327,6 +352,16 @@ namespace Toggl.Daneel.ViewControllers
 				TagsTextView = null;
 			}
 
+			if (TimeEntryTimes != null) {
+				TimeEntryTimes.Dispose ();
+				TimeEntryTimes = null;
+			}
+
+			if (TimeEntryTimesSeparator != null) {
+				TimeEntryTimesSeparator.Dispose ();
+				TimeEntryTimesSeparator = null;
+			}
+
 			if (TitleLabel != null) {
 				TitleLabel.Dispose ();
 				TitleLabel = null;
@@ -335,6 +370,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (DescriptionView != null) {
 				DescriptionView.Dispose ();
 				DescriptionView = null;
+			}
+
+			if (SelectProject != null) {
+				SelectProject.Dispose ();
+				SelectProject = null;
 			}
 		}
 	}

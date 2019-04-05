@@ -1,17 +1,17 @@
 ﻿using System;
+using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.Extensions;
-using Toggl.Foundation.MvvmCross.ViewModels.Reports;
-using UIKit;
-using System.Reactive.Disposables;
-using Toggl.Daneel.Extensions.Reactive;
-using System.Reactive.Linq;
-using Toggl.Multivac.Extensions;
-using System.Linq;
 using Toggl.Daneel.Cells;
-using CoreAnimation;
+using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Foundation.MvvmCross.Extensions;
+using Toggl.Foundation.MvvmCross.ViewModels.Reports;
+using Toggl.Multivac.Extensions;
+using UIKit;
 
 namespace Toggl.Daneel.Views.Reports
 {

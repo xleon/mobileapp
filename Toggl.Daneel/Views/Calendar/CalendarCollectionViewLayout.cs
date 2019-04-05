@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading;
 using CoreGraphics;
 using Foundation;
@@ -24,6 +26,9 @@ namespace Toggl.Daneel.Views.Calendar
         private float maxHourHeight = 28 * 4;
 
         public float HourHeight { get; private set; } = 56;
+
+        private ISubject<Unit> scalingEndedSubject = new Subject<Unit>();
+        public IObservable<Unit> ScalingEnded => scalingEndedSubject.AsObservable();
 
         private static readonly nfloat leftPadding = 76;
         private static readonly nfloat hourSupplementaryLabelHeight = 20;
@@ -174,7 +179,7 @@ namespace Toggl.Daneel.Views.Calendar
             var editingHoursIndexPaths = indexPathsForEditingHours();
             var editingHoursAttributes = editingHoursIndexPaths.Select(layoutAttributesForHourView);
 
-            currentTimeLayoutAttributes.Frame = frameForCurrentTime();
+            currentTimeLayoutAttributes.Frame = FrameForCurrentTime();
 
             var attributes = itemsAttributes
                 .Concat(hoursAttributes)
@@ -213,13 +218,16 @@ namespace Toggl.Daneel.Views.Calendar
             }
             else
             {
-                currentTimeLayoutAttributes.Frame = frameForCurrentTime();
+                currentTimeLayoutAttributes.Frame = FrameForCurrentTime();
                 currentTimeLayoutAttributes.ZIndex = 300;
                 return currentTimeLayoutAttributes;
             }
         }
 
-        private CGRect frameForCurrentTime()
+        public void OnScalingEnded()
+            => scalingEndedSubject.OnNext(Unit.Default);
+
+        internal CGRect FrameForCurrentTime()
         {
             var now = timeService.CurrentDateTime.LocalDateTime;
 
