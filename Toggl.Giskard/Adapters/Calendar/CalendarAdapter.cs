@@ -320,7 +320,7 @@ namespace Toggl.Giskard.Adapters.Calendar
             }
 
             private int anchoredItemHashCode(CalendarItem item)
-                => HashCode.From(
+                => Multivac.HashCode.From(
                     item.Source,
                     item.Id,
                     item.StartTime,
