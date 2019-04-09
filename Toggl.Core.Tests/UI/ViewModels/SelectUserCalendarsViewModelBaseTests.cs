@@ -8,16 +8,16 @@ using NSubstitute;
 using Toggl.Core.Interactors;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.Services;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Xunit;
-using static Toggl.Multivac.Extensions.FunctionalExtensions;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 using MvvmCross.Navigation;
 using Toggl.Core.UI.ViewModels.Selectable;
 using System.Reactive;
 using System;
 using Toggl.Core.Tests.TestExtensions;
+using static Toggl.Shared.Extensions.FunctionalExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Multivac;
-using Toggl.PrimeRadiant;
+using Toggl.Shared;
+using Toggl.Storage;
 
 namespace Toggl.Core.Tests.Mocks
 {

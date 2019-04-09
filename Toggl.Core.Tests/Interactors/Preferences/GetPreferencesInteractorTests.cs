@@ -4,7 +4,7 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors

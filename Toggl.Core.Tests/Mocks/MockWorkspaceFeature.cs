@@ -1,5 +1,5 @@
 ﻿using Toggl.Core.Models.Interfaces;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Core.Tests.Mocks
 {

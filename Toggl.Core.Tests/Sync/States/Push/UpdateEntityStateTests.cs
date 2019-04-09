@@ -13,7 +13,7 @@ using Toggl.Core.Sync.ConflictResolution;
 using Toggl.Core.Sync.States.Push;
 using Toggl.Core.Tests.Helpers;
 using Toggl.Core.Tests.Sync.States.Push.BaseStates;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.Exceptions;
 using Xunit;

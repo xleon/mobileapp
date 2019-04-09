@@ -6,8 +6,8 @@ using Toggl.Core.DataSources;
 using Toggl.Core.MvvmCross.Services;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage;
+using Toggl.Storage.Settings;
 using Toggl.Ultrawave;
 using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
 

@@ -1,14 +1,14 @@
 ﻿using System;
 using Toggl.Networking.Tests.Integration.BaseTests;
-using Toggl.Multivac.Models.Reports;
+using Toggl.Shared.Models.Reports;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Networking.ApiClients;
 using Xunit;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using FluentAssertions;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.Networking.Tests.Integration.Helper;
 using Toggl.Networking.Helpers;
 

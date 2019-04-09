@@ -33,6 +33,6 @@
     <None Remove="Tools\**" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Toggl.Foundation\Toggl.Core.csproj" />
+    <ProjectReference Include="..\..\Toggl.Core\Toggl.Core.csproj" />
   </ItemGroup>
 </Project>

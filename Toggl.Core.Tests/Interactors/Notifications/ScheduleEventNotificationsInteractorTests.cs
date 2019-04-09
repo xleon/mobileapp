@@ -9,7 +9,7 @@ using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Core.Calendar;
 using Toggl.Core.Interactors.Notifications;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.Notifications

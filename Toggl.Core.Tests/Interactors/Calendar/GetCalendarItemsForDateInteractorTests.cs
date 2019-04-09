@@ -9,8 +9,8 @@ using Toggl.Core.Calendar;
 using Toggl.Core.Interactors.Calendar;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Multivac.Extensions;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Shared.Extensions;
+using Toggl.Storage.Models;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.Calendar

@@ -8,7 +8,7 @@ using NSubstitute;
 using Toggl.Core.Interactors;
 using Toggl.Core.Tests.Generators;
 using Xunit;
-using Notification = Toggl.Multivac.Notification;
+using Notification = Toggl.Shared.Notification;
 using SyncOutcome = Toggl.Core.Models.SyncOutcome;
 using SyncState = Toggl.Core.Sync.SyncState;
 

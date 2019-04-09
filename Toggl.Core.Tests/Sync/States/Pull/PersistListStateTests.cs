@@ -10,7 +10,7 @@ using Toggl.Core.Sync;
 using Toggl.Core.Sync.States;
 using Toggl.Core.Sync.States.Pull;
 using Toggl.Core.Tests.Helpers;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Toggl.Ultrawave.Exceptions;
 using Xunit;
 

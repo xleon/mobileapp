@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant;
+using Toggl.Shared.Models;
+using Toggl.Storage;
 
 namespace Toggl.Core.Tests.Sync.States
 {

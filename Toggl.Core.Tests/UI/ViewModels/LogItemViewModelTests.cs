@@ -10,7 +10,7 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

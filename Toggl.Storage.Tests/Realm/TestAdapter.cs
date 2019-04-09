@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.Storage.Realm;
 using Toggl.Storage.Realm.Models;
 

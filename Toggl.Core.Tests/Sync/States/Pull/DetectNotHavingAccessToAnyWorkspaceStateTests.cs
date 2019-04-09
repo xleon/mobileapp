@@ -6,13 +6,13 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Sync.States;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Xunit;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Sync.States.Pull;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Core.DataSources;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.Core.Models.Interfaces;
 
 namespace Toggl.Core.Tests.Sync.States.Pull

@@ -20,7 +20,7 @@ using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

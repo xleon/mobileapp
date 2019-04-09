@@ -2,11 +2,11 @@
 using System.Net.Http;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Multivac.Extensions;
 using Toggl.Networking.Network;
-using Toggl.Multivac.Models;
-using Toggl.Multivac;
 using Toggl.Networking.Tests.Integration.Helper;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 
 namespace Toggl.Networking.Tests.Integration
 {

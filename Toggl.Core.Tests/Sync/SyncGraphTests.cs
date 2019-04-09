@@ -6,7 +6,7 @@ using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Sync;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Toggl.Ultrawave;
 using Xunit;
 

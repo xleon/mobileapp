@@ -2,7 +2,7 @@
 using Xunit;
 using FluentAssertions;
 using Toggl.Core.Sync.ConflictResolution;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 
 namespace Toggl.Core.Tests.Sync.ConflictResolution
 {

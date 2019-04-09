@@ -18,7 +18,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Extensions;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Xunit;
 using Unit = System.Reactive.Unit;
 

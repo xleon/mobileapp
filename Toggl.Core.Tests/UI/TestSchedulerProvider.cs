@@ -1,6 +1,6 @@
 using System.Reactive.Concurrency;
 using Microsoft.Reactive.Testing;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Core.Tests.UI
 {

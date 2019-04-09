@@ -9,9 +9,9 @@ using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
-using Toggl.Multivac;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Shared;
+using Toggl.Storage;
+using Toggl.Storage.Settings;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
 

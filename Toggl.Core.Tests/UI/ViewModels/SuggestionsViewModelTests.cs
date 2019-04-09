@@ -16,7 +16,7 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.DataSources;
 using System.Reactive.Subjects;
 using Toggl.Core.UI.Extensions;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Toggl.Core.Tests.TestExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels

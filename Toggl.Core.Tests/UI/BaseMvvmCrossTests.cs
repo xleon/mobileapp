@@ -7,9 +7,9 @@ using Toggl.Core.Interactors;
 using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
-using Toggl.Multivac;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Shared;
+using Toggl.Storage;
+using Toggl.Storage.Settings;
 
 namespace Toggl.Core.Tests.UI
 {

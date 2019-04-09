@@ -10,9 +10,9 @@ using Toggl.Core.Exceptions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Sync.States.Pull;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
-using Toggl.PrimeRadiant;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Storage;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync.States.Pull

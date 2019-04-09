@@ -13,7 +13,7 @@ using Xunit;
 using FsCheck.Xunit;
 using Toggl.Core.Analytics;
 using Toggl.Core.Tests.Generators;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 using static Toggl.Core.Sync.SyncState;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;

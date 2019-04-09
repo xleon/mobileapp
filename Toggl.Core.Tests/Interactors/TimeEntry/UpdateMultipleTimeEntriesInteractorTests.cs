@@ -11,9 +11,9 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Sync;
-using Toggl.Multivac.Extensions;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Shared.Extensions;
+using Toggl.Storage;
+using Toggl.Storage.Models;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.TimeEntry

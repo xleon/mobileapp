@@ -9,7 +9,7 @@ using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.Workspace

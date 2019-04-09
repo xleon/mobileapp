@@ -4,9 +4,9 @@ using NSubstitute;
 using Toggl.Core.Tests.Sync.Extensions;
 using Toggl.Core.Tests.Sync.Helpers;
 using Toggl.Core.Tests.Sync.State;
-using Toggl.Multivac;
-using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant;
+using Toggl.Shared;
+using Toggl.Shared.Models;
+using Toggl.Storage;
 using Toggl.Ultrawave.Models;
 
 namespace Toggl.Core.Tests.Sync.Scenarios.NoDefaultWorkspace

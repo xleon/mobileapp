@@ -5,7 +5,7 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.DataSources;
 using Toggl.Core.Tests.Sync.States;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Xunit;
 
 namespace Toggl.Core.Tests.DataSources

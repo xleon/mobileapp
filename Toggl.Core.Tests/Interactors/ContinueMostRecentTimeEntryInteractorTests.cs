@@ -9,8 +9,8 @@ using Toggl.Core.Analytics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage;
+using Toggl.Storage.Models;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors

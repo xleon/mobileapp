@@ -10,9 +10,9 @@ using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Sync.States.CleanUp;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Multivac.Extensions;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Shared.Extensions;
+using Toggl.Storage;
+using Toggl.Storage.Models;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync.States.CleanUp

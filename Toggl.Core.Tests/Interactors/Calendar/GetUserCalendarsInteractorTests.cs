@@ -7,7 +7,7 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Interactors.Calendar;
 using Toggl.Core.Tests.Generators;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.Calendar

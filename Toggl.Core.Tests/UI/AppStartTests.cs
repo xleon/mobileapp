@@ -10,8 +10,8 @@ using Toggl.Core.UI;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
-using Toggl.Multivac;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Shared;
+using Toggl.Storage.Settings;
 using Toggl.Ultrawave;
 using Xunit;
 

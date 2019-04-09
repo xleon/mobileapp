@@ -7,7 +7,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Xunit;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using System.Reactive.Linq;
 using Toggl.Core.Interactors;
 using System.Reactive;

@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.Networking.Exceptions;
 using Xunit;
 using Task = System.Threading.Tasks.Task;

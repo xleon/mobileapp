@@ -7,7 +7,7 @@ using NSubstitute;
 using Toggl.Core.Models;
 using Toggl.Core.Sync.ConflictResolution;
 using Toggl.Core.Tests.Mocks;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync.ConflictResolution

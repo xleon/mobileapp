@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.Networking.ApiClients;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;

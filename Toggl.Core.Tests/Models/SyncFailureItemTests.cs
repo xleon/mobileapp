@@ -3,7 +3,7 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Xunit;
 
 namespace Toggl.Core.Tests.SyncModel

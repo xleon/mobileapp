@@ -15,11 +15,11 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Exceptions;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
+using Toggl.Storage;
+using Toggl.Storage.Exceptions;
+using Toggl.Storage.Models;
 using Xunit;
 using ThreadingTask = System.Threading.Tasks.Task;
 

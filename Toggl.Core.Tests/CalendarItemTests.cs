@@ -6,7 +6,7 @@ using Toggl.Core.Calendar;
 using Toggl.Core.Helper;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.Tests.Mocks;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Xunit;
 
 namespace Toggl.Core.Tests

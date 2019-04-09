@@ -1,8 +1,8 @@
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Multivac;
-using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant;
+using Toggl.Shared;
+using Toggl.Shared.Models;
+using Toggl.Storage;
 using Toggl.Ultrawave.Models;
 
 namespace Toggl.Core.Tests.Sync.Extensions

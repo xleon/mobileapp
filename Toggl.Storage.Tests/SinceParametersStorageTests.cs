@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using FluentAssertions;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.Storage.Models;
 using Toggl.Storage.Realm;
 using Toggl.Storage.Tests.Realm;

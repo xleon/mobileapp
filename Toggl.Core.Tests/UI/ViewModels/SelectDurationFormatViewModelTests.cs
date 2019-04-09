@@ -4,7 +4,7 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

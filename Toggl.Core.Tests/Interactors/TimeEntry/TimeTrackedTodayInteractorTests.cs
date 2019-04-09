@@ -12,7 +12,7 @@ using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage.Models;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.TimeEntry

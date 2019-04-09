@@ -6,8 +6,8 @@ using FsCheck.Xunit;
 using NSubstitute;
 using NSubstitute.Core;
 using Toggl.Core.Analytics;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 using Xunit;
 
 namespace Toggl.Core.Tests.AnalyticsService

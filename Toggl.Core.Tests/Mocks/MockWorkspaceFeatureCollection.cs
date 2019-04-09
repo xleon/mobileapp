@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Multivac;
-using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Shared;
+using Toggl.Shared.Models;
+using Toggl.Storage.Models;
 
 namespace Toggl.Core.Tests.Mocks
 {

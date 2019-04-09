@@ -10,11 +10,11 @@ using Toggl.Core.Analytics;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Tests.Generators;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Xunit;
-using static Toggl.Multivac.Extensions.EmailExtensions;
-using static Toggl.Multivac.Extensions.PasswordExtensions;
+using static Toggl.Shared.Extensions.EmailExtensions;
+using static Toggl.Shared.Extensions.PasswordExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {

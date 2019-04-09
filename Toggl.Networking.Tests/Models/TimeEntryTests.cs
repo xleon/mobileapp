@@ -1,6 +1,6 @@
 ﻿using System;
 using FluentAssertions;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.Networking.Models;
 using Toggl.Networking.Serialization;
 using Xunit;

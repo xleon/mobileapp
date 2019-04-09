@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Toggl.Multivac;
-using Toggl.Multivac.Models;
+using Toggl.Shared;
+using Toggl.Shared.Models;
 using Toggl.Ultrawave.Models;
 
 namespace Toggl.Core.Tests.Sync.Extensions

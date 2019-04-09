@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Multivac;
-using Toggl.Multivac.Models;
+using Toggl.Shared;
+using Toggl.Shared.Models;
 using Toggl.Ultrawave.Helpers;
 
 namespace Toggl.Core.Tests.Sync.State

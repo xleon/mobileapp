@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using Newtonsoft.Json;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.Networking.Serialization.Converters;
 using Xunit;
 

@@ -17,7 +17,7 @@ using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 using Toggl.Core.Services;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Tests.Generators;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

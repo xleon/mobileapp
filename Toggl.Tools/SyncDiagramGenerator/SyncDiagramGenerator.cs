@@ -10,7 +10,7 @@ using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Sync.States;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Toggl.Ultrawave;
 
 namespace SyncDiagramGenerator

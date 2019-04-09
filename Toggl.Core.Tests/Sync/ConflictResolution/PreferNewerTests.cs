@@ -3,8 +3,8 @@ using FsCheck.Xunit;
 using Xunit;
 using FluentAssertions;
 using Toggl.Core.Sync.ConflictResolution;
-using Toggl.PrimeRadiant;
-using Toggl.Multivac.Models;
+using Toggl.Storage;
+using Toggl.Shared.Models;
 
 namespace Toggl.Core.Tests.Sync.ConflictResolution
 {

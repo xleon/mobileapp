@@ -12,7 +12,7 @@ using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

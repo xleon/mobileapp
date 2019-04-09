@@ -6,7 +6,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Tests.Integration.BaseTests;
 using Xunit;

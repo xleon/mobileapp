@@ -13,8 +13,8 @@ using Toggl.Core.Services;
 using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Sync.States;
-using Toggl.Multivac.Extensions;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Shared.Extensions;
+using Toggl.Storage.Settings;
 using Xunit;
 using static Toggl.Core.Sync.SyncState;
 

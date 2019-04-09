@@ -11,7 +11,7 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Sync;
 using Toggl.Core.Sync.States.Push;
 using Toggl.Core.Tests.Sync.States.Push.BaseStates;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Toggl.Ultrawave.ApiClients.Interfaces;
 using Xunit;
 using static Toggl.Core.Sync.PushSyncOperation;

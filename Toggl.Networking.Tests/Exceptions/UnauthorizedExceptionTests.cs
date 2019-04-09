@@ -6,8 +6,8 @@ using NSubstitute;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Network;
 using Xunit;
-using static Toggl.Multivac.Extensions.EmailExtensions;
-using static Toggl.Multivac.Extensions.PasswordExtensions;
+using static Toggl.Shared.Extensions.EmailExtensions;
+using static Toggl.Shared.Extensions.PasswordExtensions;
 
 namespace Toggl.Networking.Tests.Exceptions
 {

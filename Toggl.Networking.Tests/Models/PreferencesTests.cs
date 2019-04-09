@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.Networking.Models;
 using Xunit;
 

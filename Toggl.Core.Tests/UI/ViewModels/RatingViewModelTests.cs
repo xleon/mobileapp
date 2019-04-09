@@ -13,7 +13,7 @@ using Toggl.Core.UI.ViewModels.Hints;
 using Toggl.Core.Services;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

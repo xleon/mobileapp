@@ -7,8 +7,8 @@ using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Multivac;
-using Toggl.PrimeRadiant;
+using Toggl.Shared;
+using Toggl.Storage;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.Workspace

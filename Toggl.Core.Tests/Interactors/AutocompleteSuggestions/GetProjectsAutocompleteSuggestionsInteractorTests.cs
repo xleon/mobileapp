@@ -9,8 +9,8 @@ using Toggl.Core.DataSources;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Interactors.AutocompleteSuggestions;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Multivac.Extensions;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Shared.Extensions;
+using Toggl.Storage.Models;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions

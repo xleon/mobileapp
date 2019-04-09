@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Toggl.Networking.Models;
 using Xunit;
-using static Toggl.Multivac.Extensions.EmailExtensions;
+using static Toggl.Shared.Extensions.EmailExtensions;
 
 namespace Toggl.Networking.Tests.Models
 {

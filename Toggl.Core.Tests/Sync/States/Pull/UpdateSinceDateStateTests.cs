@@ -6,8 +6,8 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Sync.States;
 using Toggl.Core.Sync.States.Pull;
-using Toggl.Multivac.Extensions;
-using Toggl.PrimeRadiant;
+using Toggl.Shared.Extensions;
+using Toggl.Storage;
 using Toggl.Ultrawave.Exceptions;
 using Xunit;
 

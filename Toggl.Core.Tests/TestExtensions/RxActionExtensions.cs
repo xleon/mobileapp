@@ -8,8 +8,8 @@ using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Tests;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Tests;
 
 namespace Toggl.Core.Tests.TestExtensions
 {

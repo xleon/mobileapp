@@ -10,9 +10,9 @@ using NSubstitute;
 using Toggl.Core.Sync;
 using Toggl.Core.Sync.States;
 using Toggl.Core.Sync.States.Pull;
-using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Shared.Models;
+using Toggl.Storage;
+using Toggl.Storage.Models;
 using Toggl.Ultrawave;
 using Xunit;
 

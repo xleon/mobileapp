@@ -4,7 +4,7 @@ using NSubstitute;
 using Toggl.Core.Interactors.Location;
 using Toggl.Ultrawave;
 using Xunit;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using FluentAssertions;
 
 namespace Toggl.Core.Tests.Interactors.Location

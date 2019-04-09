@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Toggl.Core.Sync;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Core.Tests.TestExtensions
 {

@@ -4,10 +4,10 @@ using System.Linq.Expressions;
 using System.Reactive.Linq;
 using FluentAssertions;
 using Xunit;
+using Toggl.Shared.Models;
 using Toggl.Networking.Models;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Tests.Integration.BaseTests;
-using Toggl.Multivac.Models;
 using Toggl.Networking.Helpers;
 using Toggl.Networking.Tests.Integration.Helper;
 

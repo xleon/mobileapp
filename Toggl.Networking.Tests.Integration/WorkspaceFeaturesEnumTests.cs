@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using FluentAssertions;
 using Toggl.Networking.Tests.Integration.BaseTests;
 using Xunit;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.Networking.Models;
 
 namespace Toggl.Networking.Tests.Integration

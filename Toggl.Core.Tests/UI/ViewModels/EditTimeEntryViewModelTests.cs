@@ -19,10 +19,10 @@ using Toggl.Core.Tests.Mocks;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 using Toggl.Core.Tests.TestExtensions;
-using Toggl.Multivac;
+using Toggl.Shared;
 using ProjectClientTaskInfo = Toggl.Core.UI.ViewModels.EditTimeEntryViewModel.ProjectClientTaskInfo;
 using Microsoft.Reactive.Testing;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Toggl.Core.Extensions;
 using static Toggl.Core.Helper.Constants;
 

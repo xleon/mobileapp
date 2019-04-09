@@ -8,7 +8,7 @@ using FsCheck;
 using NSubstitute;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

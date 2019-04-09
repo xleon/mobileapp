@@ -5,10 +5,10 @@ using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.Tests.Sync.State;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Realm;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
+using Toggl.Storage;
+using Toggl.Storage.Realm;
 
 namespace Toggl.Core.Tests.Sync.Helpers
 {

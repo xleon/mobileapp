@@ -9,9 +9,9 @@ using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Tests.Generators;
-using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Shared.Models;
+using Toggl.Storage;
+using Toggl.Storage.Models;
 using Xunit;
 using TimeEntry = Toggl.Core.Models.TimeEntry;
 

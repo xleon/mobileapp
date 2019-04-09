@@ -15,9 +15,9 @@ using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
-using Toggl.PrimeRadiant;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Storage;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.Transformations

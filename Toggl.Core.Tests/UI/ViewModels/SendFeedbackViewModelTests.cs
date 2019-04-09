@@ -15,7 +15,7 @@ using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

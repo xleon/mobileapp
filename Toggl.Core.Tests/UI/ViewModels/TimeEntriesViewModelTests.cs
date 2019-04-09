@@ -24,8 +24,8 @@ using Toggl.Core.Services;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Xunit;
 using ThreadingTask = System.Threading.Tasks.Task;
 

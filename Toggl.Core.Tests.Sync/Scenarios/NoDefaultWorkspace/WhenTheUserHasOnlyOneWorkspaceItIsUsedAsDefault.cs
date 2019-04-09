@@ -2,7 +2,7 @@ using FluentAssertions;
 using Toggl.Core.Tests.Sync.Extensions;
 using Toggl.Core.Tests.Sync.Helpers;
 using Toggl.Core.Tests.Sync.State;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 
 namespace Toggl.Core.Tests.Sync.Scenarios.NoDefaultWorkspace
 {

@@ -13,9 +13,9 @@ using Toggl.Core.Interactors;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Shared.Models;
+using Toggl.Storage;
+using Toggl.Storage.Models;
 using Xunit;
 using ThreadingTask = System.Threading.Tasks.Task;
 

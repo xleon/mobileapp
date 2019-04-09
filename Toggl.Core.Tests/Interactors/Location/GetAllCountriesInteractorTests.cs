@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Core.Interactors;
 using Xunit;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 
 namespace Toggl.Core.Tests.Interactors
 {

@@ -9,8 +9,8 @@ using Toggl.Core.Analytics;
 using Toggl.Core.Sync;
 using Toggl.Core.Sync.States.Push;
 using Toggl.Core.Tests.Helpers;
-using Toggl.Multivac.Extensions;
-using Toggl.PrimeRadiant;
+using Toggl.Shared.Extensions;
+using Toggl.Storage;
 using Toggl.Ultrawave.Exceptions;
 using Xunit;
 

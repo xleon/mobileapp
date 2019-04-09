@@ -8,9 +8,9 @@ using Toggl.Core.Analytics;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Tests.Mocks;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Models;
-using Toggl.Multivac.Models;
+using Toggl.Storage;
+using Toggl.Storage.Models;
+using Toggl.Shared.Models;
 using Xunit;
 using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
 

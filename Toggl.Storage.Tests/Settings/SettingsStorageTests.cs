@@ -7,10 +7,10 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.Services;
+using Toggl.Core.Services;
 using Toggl.Storage.Settings;
 using Xunit;
-using static Toggl.Multivac.Extensions.EnumerableExtensions;
+using static Toggl.Shared.Extensions.EnumerableExtensions;
 
 namespace Toggl.Storage.Tests.Settings
 {

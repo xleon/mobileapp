@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using Toggl.Core.Extensions;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Core.Tests.Extensions

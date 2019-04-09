@@ -13,9 +13,9 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models.Reports;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models.Reports;
 using Toggl.Ultrawave.Models.Reports;
 using Xunit;
 

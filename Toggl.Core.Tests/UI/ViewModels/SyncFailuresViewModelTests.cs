@@ -9,7 +9,7 @@ using Toggl.Core.Models;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage.Models;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

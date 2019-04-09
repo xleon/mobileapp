@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using FluentAssertions;
 using FsCheck.Xunit;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Xunit.Sdk;
 
 namespace Toggl.Core.Tests.Generators

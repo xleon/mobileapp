@@ -8,8 +8,8 @@ using NSubstitute;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
 using Xunit;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage;
+using Toggl.Storage.Models;
 
 namespace Toggl.Core.Tests.Interactors
 {

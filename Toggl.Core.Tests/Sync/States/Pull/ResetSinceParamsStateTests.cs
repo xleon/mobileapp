@@ -8,8 +8,8 @@ using Toggl.Core.Sync;
 using Toggl.Core.Sync.States.Pull;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant;
+using Toggl.Shared.Models;
+using Toggl.Storage;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync.States.Pull

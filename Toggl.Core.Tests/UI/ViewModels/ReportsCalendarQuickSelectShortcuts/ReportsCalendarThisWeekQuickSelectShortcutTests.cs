@@ -1,6 +1,6 @@
 ﻿using System;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Core.Tests.UI.ViewModels.ReportsCalendarQuickSelectShortcuts
 {

@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.Networking.Network;
 
 namespace Toggl.Networking.Tests.Integration.BaseTests

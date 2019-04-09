@@ -2,12 +2,12 @@
 using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.Networking.Models;
 using Toggl.Networking.Serialization;
 using Toggl.Networking.Serialization.Attributes;
 using Xunit;
-using static Toggl.Multivac.WorkspaceFeatureId;
+using static Toggl.Shared.WorkspaceFeatureId;
 
 namespace Toggl.Networking.Tests.Serialization
 {
