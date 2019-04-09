@@ -71,7 +71,7 @@ namespace Toggl.Networking.Tests.Integration
 
             protected override IObservable<IPreferences> CallUpdateEndpoint(ITogglApi api, IPreferences entityToUpdate)
             {
-                var entityWithUpdates = new Network.Models.Preferences(entityToUpdate);
+                var entityWithUpdates = new Preferences(entityToUpdate);
                 entityWithUpdates.CollapseTimeEntries = !entityWithUpdates.CollapseTimeEntries;
 
                 return api.Preferences.Update(entityWithUpdates)

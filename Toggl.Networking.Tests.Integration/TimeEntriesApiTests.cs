@@ -144,7 +144,7 @@ namespace Toggl.Networking.Tests.Integration
             {
                 var (togglApi, user) = await SetupTestUser();
                 var start = DateTimeOffset.Now.AddHours(-hoursOffset);
-                var timeEntry = new Network.Models.TimeEntry
+                var timeEntry = new TimeEntry
                 {
                     Description = Guid.NewGuid().ToString(),
                     WorkspaceId = user.DefaultWorkspaceId.Value,
@@ -166,7 +166,7 @@ namespace Toggl.Networking.Tests.Integration
             {
                 var (togglApi, user) = await SetupTestUser();
                 var start = DateTimeOffset.Now.AddHours(-hoursOffset);
-                var timeEntry = new Network.Models.TimeEntry
+                var timeEntry = new TimeEntry
                 {
                     Description = Guid.NewGuid().ToString(),
                     WorkspaceId = user.DefaultWorkspaceId.Value,
@@ -185,7 +185,7 @@ namespace Toggl.Networking.Tests.Integration
             public async Task TheTimeEntryReturnedByBackendIsARunningTimeEntryWhenPostingANewRunningTimeEntry()
             {
                 var (togglApi, user) = await SetupTestUser();
-                var timeEntry = new Network.Models.TimeEntry
+                var timeEntry = new TimeEntry
                 {
                     Description = Guid.NewGuid().ToString(),
                     WorkspaceId = user.DefaultWorkspaceId.Value,
@@ -204,7 +204,7 @@ namespace Toggl.Networking.Tests.Integration
             public async Task TheTimeEntryStoredInBackendIsARunningTimeEntryWhenFetchingItAfterPostingANewRunningTimeEntry()
             {
                 var (togglApi, user) = await SetupTestUser();
-                var timeEntry = new Network.Models.TimeEntry
+                var timeEntry = new TimeEntry
                 {
                     Description = Guid.NewGuid().ToString(),
                     WorkspaceId = user.DefaultWorkspaceId.Value,
@@ -266,7 +266,7 @@ namespace Toggl.Networking.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 var timeEntry = createTimeEntry(user);
                 var persistedTimeEntry = await togglClient.TimeEntries.Create(timeEntry);
-                var timeEntryWithUpdates = new Network.Models.TimeEntry
+                var timeEntryWithUpdates = new TimeEntry
                 {
                     Id = persistedTimeEntry.Id,
                     Description = Guid.NewGuid().ToString(),

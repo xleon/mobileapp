@@ -427,7 +427,7 @@ namespace Toggl.Networking.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 var secondWorkspace = await togglClient.Workspaces.Create(new Workspace { Name = Guid.NewGuid().ToString() });
 
-                var userWithUpdates = new Network.Models.User(user);
+                var userWithUpdates = new Models.User(user);
                 userWithUpdates.DefaultWorkspaceId = secondWorkspace.Id;
 
                 var updatedUser = await togglClient.User.Update(userWithUpdates);
@@ -442,7 +442,7 @@ namespace Toggl.Networking.Tests.Integration
             {
                 var (togglClient, user) = await SetupTestUser();
 
-                var userWithUpdates = new Network.Models.User(user);
+                var userWithUpdates = new Models.User(user);
                 userWithUpdates.DefaultWorkspaceId = null;
 
                 var updatedUser = await togglClient.User.Update(userWithUpdates);
@@ -457,7 +457,7 @@ namespace Toggl.Networking.Tests.Integration
 
             protected override IObservable<IUser> CallUpdateEndpoint(ITogglApi api, IUser entityToUpdate)
             {
-                var entityWithUpdates = new Network.Models.User(entityToUpdate);
+                var entityWithUpdates = new Models.User(entityToUpdate);
                 entityWithUpdates.Fullname = entityToUpdate.Fullname == "Test" ? "Different name" : "Test";
 
                 return api.User.Update(entityWithUpdates);
