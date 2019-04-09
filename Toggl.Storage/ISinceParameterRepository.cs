@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Shared.Models;
 
-namespace Toggl.PrimeRadiant
+namespace Toggl.Storage
 {
     public interface ISinceParameterRepository
     {

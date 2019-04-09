@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.PrimeRadiant.Exceptions
+namespace Toggl.Storage.Exceptions
 {
     public sealed class DatabaseOperationException<T> : DatabaseException
     {

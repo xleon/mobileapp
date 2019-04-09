@@ -4,11 +4,11 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Toggl.PrimeRadiant.Exceptions;
+using Toggl.Storage.Exceptions;
 using Toggl.Multivac.Extensions;
 using Xunit;
 
-namespace Toggl.PrimeRadiant.Tests
+namespace Toggl.Storage.Tests
 {
     public abstract class RepositoryTests<TTestModel> : BaseStorageTests<TTestModel>
         where TTestModel : class, ITestModel, new()

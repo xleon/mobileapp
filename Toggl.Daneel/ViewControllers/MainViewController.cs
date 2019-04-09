@@ -25,9 +25,9 @@ using Toggl.Core.MvvmCross.ViewModels;
 using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant.Extensions;
-using Toggl.PrimeRadiant.Onboarding;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Extensions;
+using Toggl.Storage.Onboarding;
+using Toggl.Storage.Settings;
 using UIKit;
 using static Toggl.Core.MvvmCross.Helper.Animation;
 

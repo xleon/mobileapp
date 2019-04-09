@@ -14,9 +14,9 @@ using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Suggestions;
 using Toggl.Shared;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Realm;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage;
+using Toggl.Storage.Realm;
+using Toggl.Storage.Settings;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
 

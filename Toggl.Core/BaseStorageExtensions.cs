@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using Toggl.Shared.Models;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 
 namespace Toggl.Core
 {

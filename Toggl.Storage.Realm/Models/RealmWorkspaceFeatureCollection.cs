@@ -3,9 +3,9 @@ using System.Linq;
 using Realms;
 using Toggl.Shared;
 using Toggl.Shared.Models;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage.Models;
 
-namespace Toggl.PrimeRadiant.Realm
+namespace Toggl.Storage.Realm
 {
     internal partial class RealmWorkspaceFeatureCollection : RealmObject, IDatabaseWorkspaceFeatureCollection
     {

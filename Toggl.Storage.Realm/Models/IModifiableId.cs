@@ -1,6 +1,6 @@
 ﻿using Toggl.Shared.Models;
 
-namespace Toggl.PrimeRadiant.Realm.Models
+namespace Toggl.Storage.Realm.Models
 {
     interface IModifiableId : IIdentifiable
     {

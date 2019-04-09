@@ -10,7 +10,7 @@ using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using static Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.LogItemVisualizationIntent;
 
 namespace Toggl.Core.MvvmCross.Transformations

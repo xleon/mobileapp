@@ -4,10 +4,10 @@ using System.Linq;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
-using Toggl.PrimeRadiant.Models;
-using Toggl.PrimeRadiant.Realm.Models;
+using Toggl.Storage.Models;
+using Toggl.Storage.Realm.Models;
 
-namespace Toggl.PrimeRadiant.Realm
+namespace Toggl.Storage.Realm
 {
     internal sealed class SinceParameterStorage : ISinceParameterRepository
     {

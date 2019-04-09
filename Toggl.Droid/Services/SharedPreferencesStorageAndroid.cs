@@ -2,7 +2,7 @@
 using System.Linq;
 using Android.Content;
 using Toggl.Core.Services;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 
 namespace Toggl.Giskard.Services
 {

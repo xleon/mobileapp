@@ -13,7 +13,7 @@ using Toggl.Core.MvvmCross.Extensions;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 using Math = System.Math;
 using Color = Toggl.Core.MvvmCross.Helper.Color;
 

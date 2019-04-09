@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using Toggl.Shared;
-using Toggl.PrimeRadiant.Onboarding;
+using Toggl.Storage.Onboarding;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.MvvmCross.Onboarding.MainView

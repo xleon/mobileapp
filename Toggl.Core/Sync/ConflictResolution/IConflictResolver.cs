@@ -1,4 +1,4 @@
-﻿using Toggl.PrimeRadiant;
+﻿using Toggl.Storage;
 
 namespace Toggl.Core.Sync.ConflictResolution
 {

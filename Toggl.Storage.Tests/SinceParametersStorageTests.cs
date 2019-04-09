@@ -4,12 +4,12 @@ using System.Linq;
 using System.Reflection;
 using FluentAssertions;
 using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant.Models;
-using Toggl.PrimeRadiant.Realm;
-using Toggl.PrimeRadiant.Tests.Realm;
+using Toggl.Storage.Models;
+using Toggl.Storage.Realm;
+using Toggl.Storage.Tests.Realm;
 using Xunit;
 
-namespace Toggl.PrimeRadiant.Tests
+namespace Toggl.Storage.Tests
 {
     public sealed class SinceParametersStorageTests
     {

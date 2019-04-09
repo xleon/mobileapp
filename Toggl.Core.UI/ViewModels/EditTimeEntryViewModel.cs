@@ -23,7 +23,7 @@ using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 
 namespace Toggl.Core.MvvmCross.ViewModels
 {

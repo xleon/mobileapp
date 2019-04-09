@@ -2,9 +2,9 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Shared;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 
-namespace Toggl.PrimeRadiant.Onboarding
+namespace Toggl.Storage.Onboarding
 {
     public sealed class DismissableOnboardingStep : IDismissable, IOnboardingStep
     {

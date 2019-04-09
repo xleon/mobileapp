@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.PrimeRadiant.Onboarding
+namespace Toggl.Storage.Onboarding
 {
     public interface IOnboardingStep
     {

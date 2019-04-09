@@ -5,9 +5,9 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant.Onboarding;
+using Toggl.Storage.Onboarding;
 
-namespace Toggl.PrimeRadiant.Settings
+namespace Toggl.Storage.Settings
 {
     public sealed class SettingsStorage : IAccessRestrictionStorage, IOnboardingStorage, IUserPreferences, ILastTimeUsageStorage
     {

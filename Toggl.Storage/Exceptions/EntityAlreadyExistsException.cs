@@ -1,4 +1,4 @@
-﻿namespace Toggl.PrimeRadiant.Exceptions
+﻿namespace Toggl.Storage.Exceptions
 {
     public sealed class EntityAlreadyExistsException : DatabaseException
     {

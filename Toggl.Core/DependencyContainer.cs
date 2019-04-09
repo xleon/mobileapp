@@ -12,10 +12,10 @@ using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 
 namespace Toggl.Core
 {

@@ -1,7 +1,7 @@
-﻿using Toggl.PrimeRadiant.Onboarding;
-using Toggl.PrimeRadiant.Settings;
+﻿using Toggl.Storage.Onboarding;
+using Toggl.Storage.Settings;
 
-namespace Toggl.PrimeRadiant.Extensions
+namespace Toggl.Storage.Extensions
 {
     public static class OnboardingStepExtensions
     {

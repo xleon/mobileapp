@@ -1,5 +1,5 @@
 ﻿using System;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 
 namespace Toggl.Core.Models
 {

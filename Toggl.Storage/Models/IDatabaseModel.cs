@@ -1,4 +1,4 @@
-﻿namespace Toggl.PrimeRadiant.Models
+﻿namespace Toggl.Storage.Models
 {
     public interface IDatabaseModel
     {   

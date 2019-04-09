@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Realms;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage.Models;
 using System.Collections.Generic;
 
-namespace Toggl.PrimeRadiant.Realm
+namespace Toggl.Storage.Realm
 {
     internal partial class RealmTimeEntry : RealmObject, IDatabaseTimeEntry
     {

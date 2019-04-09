@@ -1,6 +1,6 @@
-﻿using Toggl.PrimeRadiant.Realm;
+﻿using Toggl.Storage.Realm;
 
-namespace Toggl.PrimeRadiant.Tests.Realm
+namespace Toggl.Storage.Tests.Realm
 {
     public sealed class RealmRepositoryTests : RepositoryTests<TestModel>
     {

@@ -4,7 +4,7 @@ using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Sync.States.Push.Interfaces;
 using Toggl.Shared;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 
 namespace Toggl.Core.Sync.States.Push
 {

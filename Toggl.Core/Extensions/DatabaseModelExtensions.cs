@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Toggl.Shared.Models;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage.Models;
 
 namespace Toggl.Core.Extensions
 {

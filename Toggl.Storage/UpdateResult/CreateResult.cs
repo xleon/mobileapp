@@ -1,4 +1,4 @@
-﻿namespace Toggl.PrimeRadiant
+﻿namespace Toggl.Storage
 {
     public sealed class CreateResult<T> : IConflictResolutionResult<T>
     {

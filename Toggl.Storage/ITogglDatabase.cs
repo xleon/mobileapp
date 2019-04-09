@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reactive;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage.Models;
 
-namespace Toggl.PrimeRadiant
+namespace Toggl.Storage
 {
     public interface ITogglDatabase
     {

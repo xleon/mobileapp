@@ -4,11 +4,11 @@ using System.Reactive.Linq;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.PrimeRadiant.Onboarding;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Onboarding;
+using Toggl.Storage.Settings;
 using Xunit;
 
-namespace Toggl.PrimeRadiant.Tests.Onboarding
+namespace Toggl.Storage.Tests.Onboarding
 {
     public sealed class DismissableOnboardingStepTests
     {

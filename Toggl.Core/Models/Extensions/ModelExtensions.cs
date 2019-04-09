@@ -1,6 +1,6 @@
 ﻿using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 
 namespace Toggl.Core.Models
 {

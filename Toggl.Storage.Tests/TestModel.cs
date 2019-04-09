@@ -1,6 +1,6 @@
 using Toggl.Multivac.Models;
 
-namespace Toggl.PrimeRadiant.Tests
+namespace Toggl.Storage.Tests
 {
     public interface ITestModel : IIdentifiable, IDatabaseSyncable { }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Toggl.Core.Models.Interfaces;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 
 namespace Toggl.Core.DataSources.Interfaces
 {

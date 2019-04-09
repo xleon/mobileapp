@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Toggl.Multivac.Models;
-using Toggl.PrimeRadiant.Realm;
-using Toggl.PrimeRadiant.Realm.Models;
+using Toggl.Storage.Realm;
+using Toggl.Storage.Realm.Models;
 
-namespace Toggl.PrimeRadiant.Tests.Realm
+namespace Toggl.Storage.Tests.Realm
 {
     public class GenericTestAdapter<T> : IRealmAdapter<T>
         where T : class, IIdentifiable

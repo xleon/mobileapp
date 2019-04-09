@@ -1,6 +1,6 @@
 ﻿using System;
 using Toggl.Core.Models.Interfaces;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using ColorHelper = Toggl.Core.Helper.Color;
 
 namespace Toggl.Core.Calendar

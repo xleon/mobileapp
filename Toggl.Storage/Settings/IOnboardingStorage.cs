@@ -1,7 +1,7 @@
 ﻿using System;
-using Toggl.PrimeRadiant.Onboarding;
+using Toggl.Storage.Onboarding;
 
-namespace Toggl.PrimeRadiant.Settings
+namespace Toggl.Storage.Settings
 {
     public interface IOnboardingStorage
     {

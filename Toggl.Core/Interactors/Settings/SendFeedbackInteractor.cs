@@ -6,9 +6,9 @@ using System.Reactive.Linq;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Models;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage;
+using Toggl.Storage.Models;
+using Toggl.Storage.Settings;
 using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.Network;
 

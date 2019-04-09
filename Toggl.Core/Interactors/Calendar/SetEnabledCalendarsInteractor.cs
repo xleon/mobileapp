@@ -1,6 +1,6 @@
 ﻿using System.Reactive;
 using Toggl.Shared;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 
 namespace Toggl.Core.Interactors.Calendar
 {

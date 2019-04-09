@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 
 namespace Toggl.Core.Sync.States.Push
 {

@@ -10,9 +10,9 @@ using MvvmCross.Base;
 using Toggl.Giskard.ViewHolders;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant.Extensions;
-using Toggl.PrimeRadiant.Onboarding;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Extensions;
+using Toggl.Storage.Onboarding;
+using Toggl.Storage.Settings;
 using AnimationSide = Toggl.Giskard.ViewHolders.MainLogCellViewHolder.AnimationSide;
 
 namespace Toggl.Giskard.Extensions

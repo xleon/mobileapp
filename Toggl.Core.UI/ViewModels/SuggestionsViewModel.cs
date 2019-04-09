@@ -9,7 +9,7 @@ using Toggl.Core.Interactors;
 using Toggl.Core.Suggestions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 using Toggl.Core.Extensions;
 using Toggl.Core.Services;
 

@@ -1,6 +1,6 @@
 using System;
 using System.Globalization;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 
 namespace Toggl.Core.Services
 {

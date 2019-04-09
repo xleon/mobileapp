@@ -8,11 +8,11 @@ using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
 using Toggl.Foundation.Services;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 using Xunit;
 using static Toggl.Multivac.Extensions.EnumerableExtensions;
 
-namespace Toggl.PrimeRadiant.Tests.Settings
+namespace Toggl.Storage.Tests.Settings
 {
     public sealed class SettingsStorageTests
     {

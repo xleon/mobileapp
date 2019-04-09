@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Core.DataSources;
 using Toggl.Shared;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using static Toggl.Shared.WorkspaceFeatureId;
 
 namespace Toggl.Core.Interactors

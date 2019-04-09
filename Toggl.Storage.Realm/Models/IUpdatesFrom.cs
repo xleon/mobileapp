@@ -1,5 +1,5 @@
 ﻿
-namespace Toggl.PrimeRadiant.Realm
+namespace Toggl.Storage.Realm
 {
     internal interface IUpdatesFrom<TEntity>
     {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Toggl.Shared.Models;
 
-namespace Toggl.PrimeRadiant.Models
+namespace Toggl.Storage.Models
 {
     public interface IDatabaseTimeEntry : ITimeEntry, IDatabaseSyncable, IPotentiallyInaccessible
     {

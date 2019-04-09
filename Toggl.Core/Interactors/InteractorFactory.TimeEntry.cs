@@ -7,7 +7,7 @@ using Toggl.Core.Interactors.Generic;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Suggestions;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage.Models;
 
 namespace Toggl.Core.Interactors
 {

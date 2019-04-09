@@ -5,9 +5,9 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Toggl.Shared;
-using Toggl.PrimeRadiant.Exceptions;
+using Toggl.Storage.Exceptions;
 
-namespace Toggl.PrimeRadiant.Realm
+namespace Toggl.Storage.Realm
 {
     internal abstract class BaseStorage<TModel> : IBaseStorage<TModel>
     {

@@ -13,7 +13,7 @@ namespace Toggl.Core.Extensions
 
             switch (project.SyncStatus)
             {
-                case PrimeRadiant.SyncStatus.RefetchingNeeded:
+                case Storage.SyncStatus.RefetchingNeeded:
                     return Resources.InaccessibleProject;
                 default:
                     return project.Active ? name : $"{name} {Resources.ArchivedProjectDecorator}";
@@ -24,7 +24,7 @@ namespace Toggl.Core.Extensions
         {
             switch (project.SyncStatus)
             {
-                case PrimeRadiant.SyncStatus.RefetchingNeeded:
+                case Storage.SyncStatus.RefetchingNeeded:
                     return inaccessibleProjectColor;
                 default:
                     return project.Color ?? "";

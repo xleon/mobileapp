@@ -1,10 +1,10 @@
 ﻿using System;
 using CoreGraphics;
-using Toggl.PrimeRadiant.Onboarding;
+using Toggl.Storage.Onboarding;
 using UIKit;
 using Toggl.Core.MvvmCross.Helper;
-using Toggl.PrimeRadiant.Settings;
-using Toggl.PrimeRadiant.Extensions;
+using Toggl.Storage.Settings;
+using Toggl.Storage.Extensions;
 using System.Reactive.Linq;
 using Toggl.Daneel.Views;
 using static System.Math;

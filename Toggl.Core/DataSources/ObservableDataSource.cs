@@ -7,7 +7,7 @@ using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared.Models;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 
 namespace Toggl.Core.DataSources
 {

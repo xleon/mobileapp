@@ -7,7 +7,7 @@ using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
 

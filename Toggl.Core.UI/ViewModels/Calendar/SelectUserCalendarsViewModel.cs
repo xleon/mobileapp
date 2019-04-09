@@ -8,7 +8,7 @@ using Toggl.Core.Interactors;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 
 namespace Toggl.Core.MvvmCross.ViewModels.Calendar
 {

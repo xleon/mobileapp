@@ -6,7 +6,7 @@ using Toggl.Core.Extensions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Toggl.Ultrawave.Exceptions;
 
 namespace Toggl.Core.Sync.States.Pull

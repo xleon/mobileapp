@@ -1,8 +1,8 @@
 ﻿using System;
 using Realms;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage.Models;
 
-namespace Toggl.PrimeRadiant.Realm.Models
+namespace Toggl.Storage.Realm.Models
 {
     public sealed class RealmSinceParameter : RealmObject, IDatabaseSinceParameter, IUpdatesFrom<IDatabaseSinceParameter>
     {

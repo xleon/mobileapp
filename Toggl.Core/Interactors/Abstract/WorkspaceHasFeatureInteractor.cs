@@ -3,7 +3,7 @@ using System.Reactive.Linq;
 using Toggl.Core.DataSources;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 
 namespace Toggl.Core.Interactors
 {

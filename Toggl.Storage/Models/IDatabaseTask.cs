@@ -1,6 +1,6 @@
 using Toggl.Shared.Models;
 
-namespace Toggl.PrimeRadiant.Models
+namespace Toggl.Storage.Models
 {
     public interface IDatabaseTask : ITask, IDatabaseSyncable, IPotentiallyInaccessible
     {

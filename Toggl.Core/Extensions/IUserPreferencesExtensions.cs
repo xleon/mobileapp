@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using Toggl.Shared;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 
 namespace Toggl.Core.Extensions
 {

@@ -6,10 +6,10 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.PrimeRadiant.Exceptions;
+using Toggl.Storage.Exceptions;
 using Xunit;
 
-namespace Toggl.PrimeRadiant.Tests
+namespace Toggl.Storage.Tests
 {
     public abstract class SingleObjectStorageTests<TTestModel> : BaseStorageTests<TTestModel>
         where TTestModel : class, ITestModel, IDatabaseSyncable, new()

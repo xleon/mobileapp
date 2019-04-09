@@ -6,13 +6,13 @@ using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Toggl.Ultrawave.ApiClients;
 using System.Collections.Generic;
 using Toggl.Core.Extensions;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Core.DataSources.Interfaces;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage.Models;
 
 namespace Toggl.Core.Sync.States.Pull
 {

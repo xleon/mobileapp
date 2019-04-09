@@ -8,8 +8,8 @@ using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Sync;
 using Toggl.Shared;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage;
+using Toggl.Storage.Settings;
 using Toggl.Ultrawave;
 
 namespace Toggl.Core.Interactors

@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage.Models;
 
 namespace Toggl.Core.Shortcuts
 {

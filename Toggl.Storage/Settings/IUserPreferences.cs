@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Toggl.PrimeRadiant.Settings
+namespace Toggl.Storage.Settings
 {
     public interface IUserPreferences
     {

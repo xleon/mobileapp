@@ -8,8 +8,8 @@ using Toggl.Core.Shortcuts;
 using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage;
+using Toggl.Storage.Settings;
 
 namespace Toggl.Core.Interactors.UserAccess
 {

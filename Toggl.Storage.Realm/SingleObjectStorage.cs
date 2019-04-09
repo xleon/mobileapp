@@ -6,9 +6,9 @@ using System.Reactive.Linq;
 using Realms;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant.Exceptions;
+using Toggl.Storage.Exceptions;
 
-namespace Toggl.PrimeRadiant.Realm
+namespace Toggl.Storage.Realm
 {
     internal sealed class SingleObjectStorage<TModel> : BaseStorage<TModel>, ISingleObjectStorage<TModel>
         where TModel : IDatabaseSyncable

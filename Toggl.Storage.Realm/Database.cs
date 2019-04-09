@@ -4,10 +4,10 @@ using System.Reactive;
 using System.Reactive.Linq;
 using Realms;
 using Remotion.Linq.Clauses;
-using Toggl.PrimeRadiant.Models;
-using Toggl.PrimeRadiant.Realm.Models;
+using Toggl.Storage.Models;
+using Toggl.Storage.Realm.Models;
 
-namespace Toggl.PrimeRadiant.Realm
+namespace Toggl.Storage.Realm
 {
     public sealed class Database : ITogglDatabase
     {

@@ -28,7 +28,7 @@ using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 using static Toggl.Core.Helper.Constants;
 using static Toggl.Shared.Extensions.CommonFunctions;
 using IStopwatch = Toggl.Core.Diagnostics.IStopwatch;

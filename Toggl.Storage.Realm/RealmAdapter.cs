@@ -6,10 +6,10 @@ using System.Linq.Expressions;
 using Realms;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant.Models;
-using Toggl.PrimeRadiant.Realm.Models;
+using Toggl.Storage.Models;
+using Toggl.Storage.Realm.Models;
 
-namespace Toggl.PrimeRadiant.Realm
+namespace Toggl.Storage.Realm
 {
     internal interface IRealmAdapter<TModel>
     {

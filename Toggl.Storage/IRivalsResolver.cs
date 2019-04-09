@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Toggl.PrimeRadiant
+namespace Toggl.Storage
 {
     public interface IRivalsResolver<TModel>
     {

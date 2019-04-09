@@ -13,8 +13,8 @@ using Toggl.Core.MvvmCross.ViewModels.Hints;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage;
+using Toggl.Storage.Settings;
 
 namespace Toggl.Core.MvvmCross.ViewModels
 {

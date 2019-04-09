@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive;
 
-namespace Toggl.PrimeRadiant
+namespace Toggl.Storage
 {
     public interface ISingleObjectStorage<TModel> : IBaseStorage<TModel>
         where TModel : IDatabaseSyncable

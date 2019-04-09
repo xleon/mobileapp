@@ -8,7 +8,7 @@ using Toggl.Core.Exceptions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Services;
 using Toggl.Shared;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 
 namespace Toggl.Core.Interactors.Calendar
 {

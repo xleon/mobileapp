@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive;
 
-namespace Toggl.PrimeRadiant
+namespace Toggl.Storage
 {
     public interface IBaseStorage<TModel>
     {

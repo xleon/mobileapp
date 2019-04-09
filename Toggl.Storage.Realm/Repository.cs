@@ -2,9 +2,9 @@
 using System.Linq.Expressions;
 using Realms;
 using Toggl.Shared.Models;
-using Toggl.PrimeRadiant.Realm.Models;
+using Toggl.Storage.Realm.Models;
 
-namespace Toggl.PrimeRadiant.Realm
+namespace Toggl.Storage.Realm
 {
     internal sealed class Repository<TModel> : BaseStorage<TModel>, IRepository<TModel>
     {

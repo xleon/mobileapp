@@ -1,6 +1,6 @@
-﻿using Toggl.PrimeRadiant;
+﻿using Toggl.Storage;
 using Toggl.Shared;
-using static Toggl.PrimeRadiant.ConflictResolutionMode;
+using static Toggl.Storage.ConflictResolutionMode;
 using System;
 using Toggl.Shared.Models;
 

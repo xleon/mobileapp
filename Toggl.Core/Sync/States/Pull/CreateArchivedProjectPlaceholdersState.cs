@@ -9,12 +9,12 @@ using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Models;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Toggl.Shared.Extensions;
 using Toggl.Ultrawave.Exceptions;
 using static Toggl.Shared.Extensions.CommonFunctions;
 using Toggl.Core.DataSources.Interfaces;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage.Models;
 
 namespace Toggl.Core.Sync.States.Pull
 {

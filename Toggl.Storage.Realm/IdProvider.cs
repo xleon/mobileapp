@@ -3,7 +3,7 @@ using System.Linq;
 using Realms;
 using Toggl.Shared;
 
-namespace Toggl.PrimeRadiant.Realm
+namespace Toggl.Storage.Realm
 {
     public sealed class RealmIdProvider : RealmObject
     {

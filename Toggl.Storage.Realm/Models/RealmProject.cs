@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Realms;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage.Models;
 
-namespace Toggl.PrimeRadiant.Realm
+namespace Toggl.Storage.Realm
 {
     internal partial class RealmProject : RealmObject, IDatabaseProject
     {

@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using Toggl.Core.Extensions;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 using Toggl.Ultrawave;
 
 namespace Toggl.Core.Sync.States.Pull

@@ -5,7 +5,7 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.MvvmCross.Transformations;
 using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Shared;
-using Toggl.PrimeRadiant;
+using Toggl.Storage;
 
 namespace Toggl.Core.MvvmCross.Extensions
 {

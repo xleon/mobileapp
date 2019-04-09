@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.PrimeRadiant
+namespace Toggl.Storage
 {
     public interface IRepository<TModel> : IBaseStorage<TModel>
     {

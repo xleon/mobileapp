@@ -2,7 +2,7 @@ using System;
 using Toggl.Core.Helper;
 using Toggl.Core.Models;
 using Toggl.Shared;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage.Models;
 
 namespace Toggl.Core.Suggestions
 {

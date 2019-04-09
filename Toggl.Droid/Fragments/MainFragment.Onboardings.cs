@@ -14,8 +14,8 @@ using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.Helper;
 using Toggl.Giskard.ViewHolders;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant.Extensions;
-using Toggl.PrimeRadiant.Onboarding;
+using Toggl.Storage.Extensions;
+using Toggl.Storage.Onboarding;
 using static Toggl.Giskard.ViewHolders.MainLogCellViewHolder;
 
 namespace Toggl.Giskard.Fragments

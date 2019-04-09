@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Reactive;
 using Toggl.Core.Models.Interfaces;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage;
+using Toggl.Storage.Models;
 
 namespace Toggl.Core.DataSources.Interfaces
 {

@@ -7,7 +7,7 @@ using Toggl.Core.Exceptions;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Storage.Settings;
 using Toggl.Ultrawave.Exceptions;
 using static Toggl.Core.Sync.SyncState;
 

@@ -2,7 +2,7 @@
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Sync;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Storage.Models;
 using Toggl.Ultrawave.ApiClients;
 
 namespace Toggl.Core.DataSources
