@@ -2,8 +2,8 @@
 using FluentAssertions;
 using Toggl.Core.Extensions;
 using Toggl.Core.Tests.Helpers;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Serialization;
 using Xunit;
 
 namespace Toggl.Core.Tests.Extensions
@@ -13,7 +13,7 @@ namespace Toggl.Core.Tests.Extensions
         [Fact]
         public void MarksSerializationExceptionAsNotAnonymized()
         {
-            var exception = new SerializationException(typeof(Ultrawave.Models.User), new Exception());
+            var exception = new SerializationException(typeof(Networking.Models.User), new Exception());
 
             var isAnonymized = exception.IsAnonymized();
 

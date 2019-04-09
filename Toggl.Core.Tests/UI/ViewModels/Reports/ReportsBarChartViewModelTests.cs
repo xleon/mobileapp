@@ -16,7 +16,7 @@ using Toggl.Core.Tests.TestExtensions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models.Reports;
-using Toggl.Ultrawave.Models.Reports;
+using Toggl.Networking.Models.Reports;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels.Reports

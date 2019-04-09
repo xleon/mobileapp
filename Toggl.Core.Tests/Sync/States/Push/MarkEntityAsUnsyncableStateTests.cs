@@ -10,8 +10,8 @@ using Toggl.Core.Sync;
 using Toggl.Core.Sync.States.Push;
 using Toggl.Core.Tests.Generators;
 using Toggl.Storage;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Network;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync.States.Push

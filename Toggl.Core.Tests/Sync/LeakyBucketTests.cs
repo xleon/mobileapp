@@ -11,8 +11,8 @@ using Toggl.Core.Analytics;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Network;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync

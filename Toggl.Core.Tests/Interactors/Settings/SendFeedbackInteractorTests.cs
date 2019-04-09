@@ -16,7 +16,7 @@ using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Models;
 using Toggl.Storage.Settings;
-using Toggl.Ultrawave.ApiClients;
+using Toggl.Networking.ApiClients;
 using Xunit;
 using static Toggl.Core.Interactors.Settings.SendFeedbackInteractor;
 

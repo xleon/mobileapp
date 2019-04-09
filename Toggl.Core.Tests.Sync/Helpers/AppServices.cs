@@ -8,7 +8,7 @@ using Toggl.Core.Services;
 using Toggl.Core.Sync;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using Toggl.Ultrawave;
+using Toggl.Networking;
 using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
 
 namespace Toggl.Core.Tests.Sync.Helpers

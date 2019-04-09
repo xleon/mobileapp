@@ -17,8 +17,8 @@ using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Realm;
 using Toggl.Storage.Settings;
-using Toggl.Network;
-using Toggl.Network.Network;
+using Toggl.Networking;
+using Toggl.Networking.Network;
 
 namespace Toggl.Daneel
 {

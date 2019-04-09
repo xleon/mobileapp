@@ -16,7 +16,7 @@ using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Shared.Extensions;
 using Xunit;
-using ProjectPredicate = System.Func<Toggl.PrimeRadiant.Models.IDatabaseProject, bool>;
+using ProjectPredicate = System.Func<Toggl.Storage.Models.IDatabaseProject, bool>;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {

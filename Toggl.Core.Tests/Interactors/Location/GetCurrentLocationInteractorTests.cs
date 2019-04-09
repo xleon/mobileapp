@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using NSubstitute;
 using Toggl.Core.Interactors.Location;
-using Toggl.Ultrawave;
+using Toggl.Networking;
 using Xunit;
 using Toggl.Shared.Models;
 using FluentAssertions;

@@ -9,8 +9,8 @@ using Toggl.Core.Tests.Sync.Helpers;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
-using Toggl.Ultrawave.Helpers;
-using Toggl.Ultrawave.Tests.Integration;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Tests.Integration;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync.Scenarios.ServerHelper

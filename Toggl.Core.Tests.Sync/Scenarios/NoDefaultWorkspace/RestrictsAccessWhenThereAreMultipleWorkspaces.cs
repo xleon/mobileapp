@@ -7,7 +7,7 @@ using Toggl.Core.Tests.Sync.State;
 using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.Storage;
-using Toggl.Ultrawave.Models;
+using Toggl.Networking.Models;
 
 namespace Toggl.Core.Tests.Sync.Scenarios.NoDefaultWorkspace
 {

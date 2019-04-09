@@ -9,8 +9,8 @@ using Toggl.Core.Services;
 using Toggl.Core.Tests.Generators;
 using Toggl.Storage.Models;
 using Toggl.Storage.Settings;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Network;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.Services

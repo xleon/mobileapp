@@ -6,10 +6,10 @@ using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Network;
 using Toggl.Core.Sync;
 using Toggl.Core.Diagnostics;
-using Toggl.Ultrawave;
+using Toggl.Networking;
 using Toggl.Core.Login;
 using System;
 

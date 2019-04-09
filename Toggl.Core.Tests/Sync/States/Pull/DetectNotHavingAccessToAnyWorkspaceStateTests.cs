@@ -10,7 +10,7 @@ using Toggl.Shared.Models;
 using Xunit;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Sync.States.Pull;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Networking.Exceptions;
 using Toggl.Core.DataSources;
 using Toggl.Shared;
 using Toggl.Core.Models.Interfaces;

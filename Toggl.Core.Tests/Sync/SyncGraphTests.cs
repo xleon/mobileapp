@@ -7,7 +7,7 @@ using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Sync;
 using Toggl.Storage;
-using Toggl.Ultrawave;
+using Toggl.Networking;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync

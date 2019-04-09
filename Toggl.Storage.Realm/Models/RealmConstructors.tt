@@ -172,9 +172,9 @@ namespace Toggl.Storage.Realm
 
             if (isListOfNestedRealmEntities)
             {
-                var ultrawaveClassName = Regex.Match(line, "IEnumerable<I(?<class>[^>]+?)>").Groups["class"].Value;
-                var collectionClassName = $"Realm{ultrawaveClassName}";
-                var databaseClassName = $"Foundation.Models.{ultrawaveClassName}";
+                var networkClassName = Regex.Match(line, "IEnumerable<I(?<class>[^>]+?)>").Groups["class"].Value;
+                var collectionClassName = $"Realm{networkClassName}";
+                var databaseClassName = $"Foundation.Models.{networkClassName}";
                 var collectionPropName = $"{collectionClassName}s";
                 WriteLine($"            {collectionPropName}.Clear();");
                 WriteLine($"            foreach (var oneOf{propName} in entity.{propName})");

@@ -13,7 +13,7 @@ using Toggl.Core.Sync.States.Pull;
 using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Models;
-using Toggl.Ultrawave;
+using Toggl.Networking;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync.States.Pull

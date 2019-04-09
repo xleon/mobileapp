@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using NSubstitute;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Network;
 
 namespace Toggl.Core.Tests.Helpers
 {

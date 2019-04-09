@@ -3,7 +3,7 @@ using System.Linq;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Shared;
 using Toggl.Shared.Models;
-using Toggl.Ultrawave.Helpers;
+using Toggl.Networking.Helpers;
 
 namespace Toggl.Core.Tests.Sync.State
 {

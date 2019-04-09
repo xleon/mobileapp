@@ -19,8 +19,8 @@ using Toggl.Core.Tests.Generators;
 using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.Storage.Settings;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Network;
 using Xunit;
 using static Toggl.Core.UI.ViewModels.SignupViewModel;
 

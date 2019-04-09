@@ -15,8 +15,8 @@ using Toggl.Core.Tests.Mocks;
 using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Models;
-using Toggl.Ultrawave.ApiClients;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Networking.ApiClients;
+using Toggl.Networking.Exceptions;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync.States.Pull

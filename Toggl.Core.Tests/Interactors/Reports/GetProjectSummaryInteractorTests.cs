@@ -16,9 +16,9 @@ using Toggl.Shared.Models;
 using Toggl.Shared.Models.Reports;
 using Toggl.Storage;
 using Toggl.Storage.Models;
-using Toggl.Ultrawave;
-using Toggl.Ultrawave.ApiClients;
-using Toggl.Ultrawave.Models.Reports;
+using Toggl.Networking;
+using Toggl.Networking.ApiClients;
+using Toggl.Networking.Models.Reports;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors

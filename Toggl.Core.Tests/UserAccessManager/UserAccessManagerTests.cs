@@ -19,12 +19,12 @@ using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Models;
 using Toggl.Storage.Settings;
-using Toggl.Ultrawave;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Network;
 using Xunit;
 using FoundationUser = Toggl.Core.Models.User;
-using User = Toggl.Ultrawave.Models.User;
+using User = Toggl.Networking.Models.User;
 
 namespace Toggl.Core.Tests.Login
 {

@@ -12,7 +12,7 @@ using Toggl.Core.Sync;
 using Toggl.Core.Sync.States.Push;
 using Toggl.Core.Tests.Sync.States.Push.BaseStates;
 using Toggl.Storage;
-using Toggl.Ultrawave.ApiClients;
+using Toggl.Networking.ApiClients;
 using Xunit;
 using static Toggl.Core.Sync.PushSyncOperation;
 

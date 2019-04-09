@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Network;
 
 namespace Toggl.Core.Tests.Sync.Helpers
 {

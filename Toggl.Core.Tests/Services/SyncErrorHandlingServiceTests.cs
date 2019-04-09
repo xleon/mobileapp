@@ -8,8 +8,8 @@ using Toggl.Core.Services;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Helpers;
 using Toggl.Core.Tests.Sync;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Network;
 using Xunit;
 
 namespace Toggl.Core.Tests.Services

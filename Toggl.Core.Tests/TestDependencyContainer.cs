@@ -12,8 +12,8 @@ using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using Toggl.Ultrawave;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking;
+using Toggl.Networking.Network;
 
 namespace Toggl.Core.UI
 {

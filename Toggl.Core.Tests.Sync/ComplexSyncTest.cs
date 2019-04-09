@@ -6,7 +6,7 @@ using Toggl.Core.Tests.Sync.Helpers;
 using Toggl.Core.Tests.Sync.Exceptions;
 using Toggl.Core.Tests.Sync.State;
 using Toggl.Shared.Extensions;
-using Toggl.Ultrawave.Tests.Integration;
+using Toggl.Networking.Tests.Integration;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync

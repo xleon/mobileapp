@@ -10,11 +10,11 @@ using Toggl.Core.Tests.Sync.State;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
-using Toggl.Ultrawave;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Helpers;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Tests.Integration.Helper;
+using Toggl.Networking;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Network;
+using Toggl.Networking.Tests.Integration.Helper;
 
 namespace Toggl.Core.Tests.Sync.Helpers
 {

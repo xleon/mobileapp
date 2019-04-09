@@ -14,7 +14,7 @@ using Toggl.Core.Sync;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using Toggl.Ultrawave;
+using Toggl.Networking;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {

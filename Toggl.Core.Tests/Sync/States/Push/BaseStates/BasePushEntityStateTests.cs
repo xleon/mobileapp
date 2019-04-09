@@ -11,7 +11,7 @@ using Toggl.Core.Sync.States.Push;
 using Toggl.Core.Tests.Helpers;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Networking.Exceptions;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync.States.Push.BaseStates

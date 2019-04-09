@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute.ExceptionExtensions;
 using Toggl.Core.Sync.States;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Network;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync.States

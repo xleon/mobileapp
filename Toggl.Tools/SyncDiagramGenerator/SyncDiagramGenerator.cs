@@ -11,7 +11,7 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Sync.States;
 using Toggl.Storage;
-using Toggl.Ultrawave;
+using Toggl.Networking;
 
 namespace SyncDiagramGenerator
 {
