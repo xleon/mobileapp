@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Toggl.Foundation.Analytics
+namespace Toggl.Core.Analytics
 {
     public enum AuthenticationMethod
     {

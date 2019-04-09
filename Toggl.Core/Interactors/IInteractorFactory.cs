@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.DTOs;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Reports;
-using Toggl.Foundation.Suggestions;
+using Toggl.Core.Analytics;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.Calendar;
+using Toggl.Core.DTOs;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Reports;
+using Toggl.Core.Suggestions;
 using Toggl.Shared;
 using Toggl.Shared.Models.Reports;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public interface IInteractorFactory
     {

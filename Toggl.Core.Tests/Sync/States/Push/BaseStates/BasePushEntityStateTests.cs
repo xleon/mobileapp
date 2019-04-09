@@ -5,16 +5,16 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Sync.States.Push;
-using Toggl.Foundation.Tests.Helpers;
+using Toggl.Core.Analytics;
+using Toggl.Core.Sync;
+using Toggl.Core.Sync.States.Push;
+using Toggl.Core.Tests.Helpers;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.Exceptions;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync.States.Push.BaseStates
+namespace Toggl.Core.Tests.Sync.States.Push.BaseStates
 {
     public abstract class BasePushEntityStateTests
     {

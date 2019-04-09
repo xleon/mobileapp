@@ -4,8 +4,8 @@ using System.Linq;
 using Android.Text;
 using Android.Text.Style;
 using Java.Lang;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Autocomplete.Span;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Span;
 using Toggl.Giskard.Autocomplete;
 using Toggl.Shared.Extensions;
 

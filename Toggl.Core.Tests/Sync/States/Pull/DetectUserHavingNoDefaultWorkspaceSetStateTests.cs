@@ -3,13 +3,13 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Sync.States.Pull;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Sync.States.Pull;
+using Toggl.Core.Tests.Mocks;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync.States.Pull
+namespace Toggl.Core.Tests.Sync.States.Pull
 {
     public sealed class DetectUserHavingNoDefaultWorkspaceSetStateTests
     {

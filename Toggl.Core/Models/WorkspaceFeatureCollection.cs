@@ -3,7 +3,7 @@ using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Models
+namespace Toggl.Core.Models
 {
     internal partial class WorkspaceFeatureCollection
     {

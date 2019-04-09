@@ -3,12 +3,12 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Interactors.AutocompleteSuggestions;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.DataSources;
+using Toggl.Core.Interactors.AutocompleteSuggestions;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.AutocompleteSuggestions
+namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
 {
     public sealed class GetTimeEntriesAutocompleteSuggestionsInteractorTests : BaseAutocompleteSuggestionsInteractorTest
     {

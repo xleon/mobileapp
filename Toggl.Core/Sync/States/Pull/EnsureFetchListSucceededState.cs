@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Toggl.Foundation.Sync.States.Pull
+namespace Toggl.Core.Sync.States.Pull
 {
     public sealed class EnsureFetchListSucceededState<T> : EnsureFetchSucceededState<IList<T>>
     {

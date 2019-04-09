@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Reactive;
+using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.Reactive;
 using Toggl.Giskard.Adapters;
 
 namespace Toggl.Giskard.Extensions.Reactive

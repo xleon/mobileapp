@@ -1,4 +1,4 @@
-﻿namespace Toggl.Foundation.Diagnostics
+﻿namespace Toggl.Core.Diagnostics
 {
     public interface IStopwatchProvider
     {

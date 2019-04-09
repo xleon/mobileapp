@@ -7,7 +7,7 @@ using FsCheck.Xunit;
 using Toggl.Multivac.Extensions;
 using Xunit.Sdk;
 
-namespace Toggl.Foundation.Tests.Generators
+namespace Toggl.Core.Tests.Generators
 {
     public sealed class ConstructorDataAttribute : DataAttribute
     {

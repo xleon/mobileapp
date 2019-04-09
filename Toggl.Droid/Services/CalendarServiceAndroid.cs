@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Android.App;
 using Android.Database;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.MvvmCross.Services;
+using Toggl.Core.Calendar;
+using Toggl.Core.MvvmCross.Services;
 using Toggl.Shared;
 using static Android.Provider.CalendarContract;
 using Color = Android.Graphics.Color;

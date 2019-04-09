@@ -7,16 +7,16 @@ using FluentAssertions;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Sync.States;
-using Toggl.Foundation.Sync.States.Pull;
+using Toggl.Core.Sync;
+using Toggl.Core.Sync.States;
+using Toggl.Core.Sync.States.Pull;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Ultrawave;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync.States.Pull
+namespace Toggl.Core.Tests.Sync.States.Pull
 {
     public sealed class FetchAllSinceStateTests
     {

@@ -1,7 +1,7 @@
 ﻿using Android.Views;
 using Android.Widget;
 using MvvmCross.Droid.Support.V7.AppCompat;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.ViewModels;
 using Android.Support.Constraints;
 using static Toggl.Giskard.Resource.Id;
 using Android.Support.V7.Widget;

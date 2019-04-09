@@ -1,8 +1,8 @@
 using System;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Sync;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public sealed class SyncErrorHandlingService : ISyncErrorHandlingService
     {

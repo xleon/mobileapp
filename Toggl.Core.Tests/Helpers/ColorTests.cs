@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
-using Toggl.Foundation.Helper;
+using Toggl.Core.Helper;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Helpers
+namespace Toggl.Core.Tests.Helpers
 {
     public sealed class ColorTests
     {

@@ -9,10 +9,10 @@ using FluentAssertions;
 using Xunit;
 using Microsoft.Reactive.Testing;
 using NUnit.Framework;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Collections.Changes;
+using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.Collections.Changes;
 
-namespace Toggl.Foundation.Tests.MvvmCross.Collections
+namespace Toggl.Core.Tests.MvvmCross.Collections
 {
     public sealed class MockItem : IEquatable<MockItem>
     {

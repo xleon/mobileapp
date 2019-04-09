@@ -1,4 +1,4 @@
-namespace Toggl.Foundation.MvvmCross.Collections.Diffing
+namespace Toggl.Core.MvvmCross.Collections.Diffing
 {
     public enum EditEvent
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.Services;
+using Toggl.Core.Calendar;
+using Toggl.Core.Services;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Interactors.Calendar
+namespace Toggl.Core.Interactors.Calendar
 {
     internal sealed class GetCalendarItemWithIdInteractor : IInteractor<IObservable<CalendarItem>>
     {

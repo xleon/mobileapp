@@ -4,19 +4,19 @@ using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using MvvmCross.ViewModels;
 using NSubstitute;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.Login;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Suggestions;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Login;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.Services;
+using Toggl.Core.Suggestions;
+using Toggl.Core.Sync;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public abstract class BaseViewModelTests<TViewModel> : BaseMvvmCrossTests
         where TViewModel : MvxViewModel

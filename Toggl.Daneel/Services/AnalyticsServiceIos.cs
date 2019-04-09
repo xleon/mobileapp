@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Foundation;
 using Microsoft.AppCenter.Crashes;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 using FirebaseAnalytics = Firebase.Analytics.Analytics;
 using AppCenterAnalytics = Microsoft.AppCenter.Analytics.Analytics;
 

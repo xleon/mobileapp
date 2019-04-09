@@ -4,7 +4,7 @@ using Toggl.Shared;
 using Toggl.PrimeRadiant.Onboarding;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.MvvmCross.Onboarding.CreationView
+namespace Toggl.Core.MvvmCross.Onboarding.CreationView
 {
     public sealed class DisabledConfirmationButtonOnboardingStep : IOnboardingStep
     {

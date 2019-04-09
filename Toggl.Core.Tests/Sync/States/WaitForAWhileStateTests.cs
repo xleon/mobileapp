@@ -5,13 +5,13 @@ using System.Reactive.Concurrency;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Sync.States;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Analytics;
+using Toggl.Core.Sync;
+using Toggl.Core.Sync.States;
+using Toggl.Core.Tests.Generators;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync.States
+namespace Toggl.Core.Tests.Sync.States
 {
     public sealed class WaitForAWhileStateTests
     {

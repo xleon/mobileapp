@@ -1,7 +1,7 @@
 ﻿using System;
-using Toggl.Foundation.Models;
+using Toggl.Core.Models;
 
-namespace Toggl.Foundation.Tests.Mocks
+namespace Toggl.Core.Tests.Mocks
 {
     public sealed class MockTimeEntryPrototype : ITimeEntryPrototype
     {

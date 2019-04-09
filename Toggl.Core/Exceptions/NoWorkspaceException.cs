@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Toggl.Foundation.Exceptions
+namespace Toggl.Core.Exceptions
 {
     public class NoWorkspaceException : Exception
     {

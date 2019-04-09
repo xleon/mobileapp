@@ -2,15 +2,15 @@
 using System.Linq;
 using System.Reactive.Linq;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models.Reports;
 using static System.Math;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
+namespace Toggl.Core.MvvmCross.ViewModels.Reports
 {
     public sealed class ReportsBarChartViewModel : MvxViewModel
     {

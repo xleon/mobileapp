@@ -2,7 +2,7 @@
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
 
 namespace Toggl.Giskard.ViewHolders

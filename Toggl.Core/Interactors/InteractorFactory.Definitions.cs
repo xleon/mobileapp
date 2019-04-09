@@ -1,18 +1,18 @@
 ﻿using System;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.Login;
-using Toggl.Foundation.Reports;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Shortcuts;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Login;
+using Toggl.Core.Reports;
+using Toggl.Core.Services;
+using Toggl.Core.Shortcuts;
+using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     [Preserve(AllMembers = true)]
     public sealed partial class InteractorFactory : IInteractorFactory

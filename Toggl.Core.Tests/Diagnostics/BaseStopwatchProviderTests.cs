@@ -1,10 +1,10 @@
 ﻿using System;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Diagnostics;
+using Toggl.Core.Diagnostics;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Diagnostics
+namespace Toggl.Core.Tests.Diagnostics
 {
     public sealed class BaseStopwatchProviderTests
     {

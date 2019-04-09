@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Toggl.Foundation.Diagnostics
+namespace Toggl.Core.Diagnostics
 {
     public abstract class BaseStopwatchProvider : IStopwatchProvider
     {

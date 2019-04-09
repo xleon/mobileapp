@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Sync;
 using Toggl.Multivac.Extensions;
 
-namespace Toggl.Foundation.Tests.Sync
+namespace Toggl.Core.Tests.Sync
 {
     internal sealed class TestConfigurator : ITransitionConfigurator
     {

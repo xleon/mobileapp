@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.DTOs;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.DTOs;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     internal class UpdateUserInteractor : IInteractor<IObservable<IThreadSafeUser>>
     {

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.Exceptions;
+using Toggl.Core.Exceptions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.MvvmCross.Extensions
+namespace Toggl.Core.MvvmCross.Extensions
 {
     public static class ObservableExtensions
     {

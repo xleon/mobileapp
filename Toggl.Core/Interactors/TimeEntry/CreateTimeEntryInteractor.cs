@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Extensions;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Services;
+using Toggl.Core.Sync;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     internal sealed class CreateTimeEntryInteractor : IInteractor<IObservable<IThreadSafeTimeEntry>>
     {

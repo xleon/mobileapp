@@ -2,7 +2,7 @@
 using Toggl.Shared.Models;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Extensions
+namespace Toggl.Core.Extensions
 {
     public static class DatabaseModelExtensions
     {

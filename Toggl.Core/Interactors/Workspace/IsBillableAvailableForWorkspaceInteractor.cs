@@ -1,8 +1,8 @@
 ﻿using System;
-using Toggl.Foundation.DataSources;
+using Toggl.Core.DataSources;
 using static Toggl.Shared.WorkspaceFeatureId;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     internal sealed class IsBillableAvailableForWorkspaceInteractor : WorkspaceHasFeatureInteractor<bool>
     {

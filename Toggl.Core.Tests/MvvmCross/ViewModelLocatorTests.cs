@@ -4,24 +4,24 @@ using MvvmCross.ViewModels;
 using NSubstitute;
 using System;
 using System.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Login;
-using Toggl.Foundation.MvvmCross;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Shortcuts;
-using Toggl.Foundation.Suggestions;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Analytics;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Interactors;
+using Toggl.Core.Login;
+using Toggl.Core.MvvmCross;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Services;
+using Toggl.Core.Shortcuts;
+using Toggl.Core.Suggestions;
+using Toggl.Core.Sync;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross
+namespace Toggl.Core.Tests.MvvmCross
 {
     public class ViewModelLocatorTests : BaseMvvmCrossTests
     {

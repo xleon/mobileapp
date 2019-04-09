@@ -3,20 +3,20 @@ using System.Reactive.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using System.Linq;
 using System.Collections.Generic;
-using Toggl.Foundation.Exceptions;
+using Toggl.Core.Exceptions;
 using System.Collections.Immutable;
 using MvvmCross.Navigation;
-using Toggl.Foundation.Services;
+using Toggl.Core.Services;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class SelectDefaultWorkspaceViewModel : MvxViewModelResult<Unit>

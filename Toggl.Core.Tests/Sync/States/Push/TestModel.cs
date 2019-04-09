@@ -1,9 +1,9 @@
 ﻿using System;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Tests.Sync.States
+namespace Toggl.Core.Tests.Sync.States
 {
     public interface ITestModel : IIdentifiable, ILastChangedDatable, IDeletable, IDatabaseSyncable
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Foundation.Autocomplete.Suggestions
+namespace Toggl.Core.Autocomplete.Suggestions
 {
     public abstract class AutocompleteSuggestion : IEquatable<AutocompleteSuggestion>
     {

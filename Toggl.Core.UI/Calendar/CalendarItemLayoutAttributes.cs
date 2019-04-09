@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.MvvmCross.Calendar
+namespace Toggl.Core.MvvmCross.Calendar
 {
     public struct CalendarItemLayoutAttributes
     {

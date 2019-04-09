@@ -4,7 +4,7 @@ using static Toggl.PrimeRadiant.ConflictResolutionMode;
 using System;
 using Toggl.Shared.Models;
 
-namespace Toggl.Foundation.Sync.ConflictResolution
+namespace Toggl.Core.Sync.ConflictResolution
 {
     internal sealed class PreferNewer<T> : IConflictResolver<T>
         where T : class, ILastChangedDatable, IDatabaseSyncable

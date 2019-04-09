@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Mocks;
 
-namespace Toggl.Foundation.Tests.Sync.State
+namespace Toggl.Core.Tests.Sync.State
 {
     public struct DatabaseState
     {

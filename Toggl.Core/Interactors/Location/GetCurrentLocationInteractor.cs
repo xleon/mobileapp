@@ -3,7 +3,7 @@ using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.Ultrawave;
 
-namespace Toggl.Foundation.Interactors.Location
+namespace Toggl.Core.Interactors.Location
 {
     public sealed class GetCurrentLocationInteractor : IInteractor<IObservable<ILocation>>
     {

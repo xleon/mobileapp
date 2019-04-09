@@ -9,33 +9,33 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Foundation;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Autocomplete.Span;
-using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Services;
+using Toggl.Core;
+using Toggl.Core.Analytics;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Span;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.DataSources;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Extensions;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
 using Toggl.PrimeRadiant.Settings;
-using static Toggl.Foundation.Helper.Constants;
+using static Toggl.Core.Helper.Constants;
 using static Toggl.Shared.Extensions.CommonFunctions;
-using IStopwatch = Toggl.Foundation.Diagnostics.IStopwatch;
-using IStopwatchProvider = Toggl.Foundation.Diagnostics.IStopwatchProvider;
+using IStopwatch = Toggl.Core.Diagnostics.IStopwatch;
+using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
 
 [assembly: MvxNavigation(typeof(StartTimeEntryViewModel), ApplicationUrls.StartTimeEntry)]
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class StartTimeEntryViewModel : MvxViewModel<StartTimeEntryParameters>

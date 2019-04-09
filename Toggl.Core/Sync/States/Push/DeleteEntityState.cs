@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Extensions;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.ApiClients.Interfaces;
-using static Toggl.Foundation.Sync.PushSyncOperation;
+using static Toggl.Core.Sync.PushSyncOperation;
 
-namespace Toggl.Foundation.Sync.States.Push
+namespace Toggl.Core.Sync.States.Push
 {
     internal sealed class DeleteEntityState<TModel, TDatabaseModel, TThreadsafeModel>
         : BasePushEntityState<TThreadsafeModel>

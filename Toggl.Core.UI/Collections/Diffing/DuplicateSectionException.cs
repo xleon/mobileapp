@@ -1,6 +1,6 @@
 using System;
 
-namespace Toggl.Foundation.MvvmCross.Collections.Diffing
+namespace Toggl.Core.MvvmCross.Collections.Diffing
 {
     public sealed class DuplicateSectionException<TKey> : Exception
     {

@@ -3,19 +3,19 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Models;
+using Toggl.Core.Services;
+using Toggl.Core.Sync;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 using ThreadingTask = System.Threading.Tasks.Task;
-using Toggl.Foundation.Shortcuts;
+using Toggl.Core.Shortcuts;
 
-namespace Toggl.Foundation.Tests.DataSources
+namespace Toggl.Core.Tests.DataSources
 {
     public sealed class TogglDataSourceTests
     {

@@ -1,4 +1,4 @@
-namespace Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog
+namespace Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog
 {
     public enum LogItemVisualizationIntent
     {

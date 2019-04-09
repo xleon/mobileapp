@@ -2,7 +2,7 @@
 using System.Linq;
 using MvvmCross.UI;
 
-namespace Toggl.Foundation.MvvmCross.Helper
+namespace Toggl.Core.MvvmCross.Helper
 {
     public static class Color
     {
@@ -349,6 +349,6 @@ namespace Toggl.Foundation.MvvmCross.Helper
         }
 
         public static readonly MvxColor[] DefaultProjectColors =
-            Toggl.Foundation.Helper.Color.DefaultProjectColors.Select(MvxColor.ParseHexString).ToArray();
+            Toggl.Core.Helper.Color.DefaultProjectColors.Select(MvxColor.ParseHexString).ToArray();
     }
 }

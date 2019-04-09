@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.DataSources;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.Interactors.AutocompleteSuggestions
+namespace Toggl.Core.Interactors.AutocompleteSuggestions
 {
     internal sealed class GetTimeEntriesAutocompleteSuggestions : IInteractor<IObservable<IEnumerable<AutocompleteSuggestion>>>
     {

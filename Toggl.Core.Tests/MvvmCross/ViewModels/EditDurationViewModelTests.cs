@@ -5,17 +5,17 @@ using System.Reactive.Subjects;
 using FluentAssertions;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Tests.TestExtensions;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Analytics;
+using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.Tests.Generators;
 using Toggl.Multivac.Extensions;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class EditDurationViewModelTests
     {

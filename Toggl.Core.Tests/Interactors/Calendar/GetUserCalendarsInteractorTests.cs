@@ -5,12 +5,12 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Interactors.Calendar;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Interactors.Calendar;
+using Toggl.Core.Tests.Generators;
 using Toggl.Multivac;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.Calendar
+namespace Toggl.Core.Tests.Interactors.Calendar
 {
     public sealed class GetUserCalendarsInteractorTests
     {

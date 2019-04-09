@@ -1,10 +1,10 @@
 ﻿using System;
-using Toggl.Foundation.DataSources;
+using Toggl.Core.DataSources;
 using Toggl.Shared;
 using Toggl.PrimeRadiant;
 using static Toggl.Shared.WorkspaceFeatureId;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     internal sealed class AreCustomColorsEnabledForWorkspaceInteractor : WorkspaceHasFeatureInteractor<bool>
     {

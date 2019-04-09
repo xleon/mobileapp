@@ -6,7 +6,7 @@ using Toggl.Shared;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Suggestions
+namespace Toggl.Core.Suggestions
 {
     public sealed class MostUsedTimeEntrySuggestionProvider : ISuggestionProvider
     {

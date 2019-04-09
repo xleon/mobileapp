@@ -9,20 +9,20 @@ using FsCheck;
 using FsCheck.Xunit;
 using Microsoft.FSharp.Core;
 using NSubstitute;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Tests.Extensions;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.Extensions;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Tests.Extensions;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Multivac.Extensions;
 using Xunit;
 using Unit = System.Reactive.Unit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class SelectTagsViewModelTests
     {

@@ -1,13 +1,13 @@
 using System;
 using System.Diagnostics;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Analytics;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Models;
+using Toggl.Core.Sync;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public class RunBackgroundSyncInteractor : IInteractor<IObservable<SyncOutcome>>
     {

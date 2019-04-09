@@ -3,7 +3,7 @@ using Microsoft.Reactive.Testing;
 using System.Linq;
 using System.Reactive;
 
-namespace Toggl.Foundation.Tests.TestExtensions
+namespace Toggl.Core.Tests.TestExtensions
 {
     public static class ITestableObserverExtensions
     {

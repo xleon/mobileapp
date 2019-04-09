@@ -5,20 +5,20 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Sync.States;
-using Toggl.Foundation.Sync.States.Pull;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync;
+using Toggl.Core.Sync.States;
+using Toggl.Core.Sync.States.Pull;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync.States.Pull
+namespace Toggl.Core.Tests.Sync.States.Pull
 {
     public sealed class DetectGainingAccessToWorkspacesStateTests
     {

@@ -5,21 +5,21 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Interactors.UserAccess;
-using Toggl.Foundation.Login;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Interactors;
+using Toggl.Core.Interactors.UserAccess;
+using Toggl.Core.Login;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.Services;
+using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Exceptions;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class TokenResetViewModel : MvxViewModel

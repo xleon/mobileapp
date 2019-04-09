@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Toggl.Foundation.Autocomplete.Suggestions
+namespace Toggl.Core.Autocomplete.Suggestions
 {
     public sealed class AutocompleteSuggestionComparer : IEqualityComparer<AutocompleteSuggestion>
     {

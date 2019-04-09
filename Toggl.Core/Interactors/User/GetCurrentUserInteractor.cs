@@ -1,9 +1,9 @@
 using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models.Interfaces;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     internal sealed class GetCurrentUserInteractor : IInteractor<IObservable<IThreadSafeUser>>
     {

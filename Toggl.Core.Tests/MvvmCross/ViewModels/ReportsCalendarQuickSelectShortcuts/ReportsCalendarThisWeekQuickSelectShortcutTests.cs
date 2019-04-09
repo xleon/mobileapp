@@ -1,8 +1,8 @@
 ﻿using System;
-using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts;
+using Toggl.Core.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 using Toggl.Multivac;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.ReportsCalendarQuickSelectShortcuts
+namespace Toggl.Core.Tests.MvvmCross.ViewModels.ReportsCalendarQuickSelectShortcuts
 {
     public abstract class ReportsCalendarThisWeekQuickSelectShortcutTests
             : BaseReportsCalendarQuickSelectShortcutTests<ReportsCalendarThisWeekQuickSelectShortcut>

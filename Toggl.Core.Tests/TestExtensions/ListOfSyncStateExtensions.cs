@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Sync;
 using Toggl.Multivac;
 
-namespace Toggl.Foundation.Tests.TestExtensions
+namespace Toggl.Core.Tests.TestExtensions
 {
     internal static class ListOfSyncStateExtensions
     {

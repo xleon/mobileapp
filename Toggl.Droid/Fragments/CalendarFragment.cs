@@ -5,7 +5,7 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using MvvmCross;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
+using Toggl.Core.MvvmCross.ViewModels.Calendar;
 using Toggl.Giskard.Adapters.Calendar;
 using Toggl.Giskard.Presentation;
 using Toggl.Giskard.Views.Calendar;
@@ -13,7 +13,7 @@ using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using System.Linq;
-using Toggl.Foundation.Calendar;
+using Toggl.Core.Calendar;
 using System.Reactive;
 
 namespace Toggl.Giskard.Fragments

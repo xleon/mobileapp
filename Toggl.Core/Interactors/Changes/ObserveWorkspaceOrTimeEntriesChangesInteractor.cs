@@ -1,12 +1,12 @@
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Extensions;
+using Toggl.Core.DataSources;
+using Toggl.Core.Extensions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.Interactors.Changes
+namespace Toggl.Core.Interactors.Changes
 {
     public class ObserveWorkspaceOrTimeEntriesChangesInteractor : IInteractor<IObservable<Unit>>
     {

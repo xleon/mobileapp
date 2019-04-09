@@ -4,16 +4,16 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Sync.States.Pull
+namespace Toggl.Core.Sync.States.Pull
 {
     public sealed class DetectLosingAccessToWorkspacesState : ISyncState<IFetchObservables>
     {

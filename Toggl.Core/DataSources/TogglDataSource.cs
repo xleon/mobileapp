@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.DataSources
+namespace Toggl.Core.DataSources
 {
     public sealed class TogglDataSource : ITogglDataSource
     {

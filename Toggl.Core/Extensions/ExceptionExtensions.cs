@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Extensions
+namespace Toggl.Core.Extensions
 {
     public static class ExceptionExtensions
     {

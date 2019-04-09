@@ -1,8 +1,8 @@
 ﻿using System;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Models
+namespace Toggl.Core.Models
 {
     internal partial class Workspace
     {

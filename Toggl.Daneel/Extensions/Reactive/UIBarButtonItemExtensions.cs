@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.MvvmCross.Reactive;
+using Toggl.Core.MvvmCross.Reactive;
 using UIKit;
 using Toggl.Shared.Extensions;
 

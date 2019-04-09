@@ -3,7 +3,7 @@ using Toggl.PrimeRadiant;
 using System.Collections.Generic;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Models
+namespace Toggl.Core.Models
 {
     internal partial class TimeEntry
     {

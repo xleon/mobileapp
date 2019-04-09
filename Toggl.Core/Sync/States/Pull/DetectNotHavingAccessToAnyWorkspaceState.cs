@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.DataSources;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Interactors;
+using Toggl.Core.DataSources;
 
-namespace Toggl.Foundation.Sync.States.Pull
+namespace Toggl.Core.Sync.States.Pull
 {
     internal sealed class DetectNotHavingAccessToAnyWorkspaceState : ISyncState<IFetchObservables>
     {

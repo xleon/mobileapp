@@ -5,17 +5,17 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar;
-using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.Services;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.ViewModels.ReportsCalendar;
+using Toggl.Core.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class ReportsCalendarViewModel : MvxViewModel

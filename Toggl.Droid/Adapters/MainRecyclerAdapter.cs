@@ -5,18 +5,18 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.ViewHolders;
 using Toggl.Shared.Extensions;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
+using Toggl.Core;
+using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Giskard.ViewHelpers;
 using System.Reactive.Disposables;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.Identity;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.Analytics;
 
 namespace Toggl.Giskard.Adapters
 {

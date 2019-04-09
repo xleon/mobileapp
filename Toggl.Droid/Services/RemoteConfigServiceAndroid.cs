@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Android.Gms.Tasks;
 using Firebase.RemoteConfig;
-using Toggl.Foundation.Services;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using GmsTask = Android.Gms.Tasks.Task;
 

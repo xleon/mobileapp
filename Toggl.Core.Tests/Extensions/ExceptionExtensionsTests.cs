@@ -1,12 +1,12 @@
 ﻿using System;
 using FluentAssertions;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Tests.Helpers;
+using Toggl.Core.Extensions;
+using Toggl.Core.Tests.Helpers;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Serialization;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Extensions
+namespace Toggl.Core.Tests.Extensions
 {
     public sealed class ExceptionExtensionsTests
     {

@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Services;
+using Toggl.Core.Calendar;
+using Toggl.Core.DataSources;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.Interactors.Calendar
+namespace Toggl.Core.Interactors.Calendar
 {
     public sealed class GetCalendarItemsForDateInteractor : IInteractor<IObservable<IEnumerable<CalendarItem>>>
     {

@@ -3,14 +3,14 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Sync;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync
+namespace Toggl.Core.Tests.Sync
 {
     public sealed class SyncGraphTests
     {

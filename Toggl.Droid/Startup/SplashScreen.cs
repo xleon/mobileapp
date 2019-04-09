@@ -2,9 +2,9 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using MvvmCross.Droid.Support.V7.AppCompat;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core;
+using Toggl.Core.MvvmCross;
+using Toggl.Core.MvvmCross.ViewModels;
 using Toggl.Giskard.Helper;
 using static Android.Content.Intent;
 

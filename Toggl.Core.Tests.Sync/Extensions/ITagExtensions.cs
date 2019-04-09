@@ -2,7 +2,7 @@ using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Models;
 
-namespace Toggl.Foundation.Tests.Sync.Extensions
+namespace Toggl.Core.Tests.Sync.Extensions
 {
     public static class ITagExtensions
     {

@@ -1,11 +1,11 @@
 using System;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.MvvmCross.Calendar;
+using Toggl.Core.Calendar;
+using Toggl.Core.MvvmCross.Calendar;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Calendar
+namespace Toggl.Core.Tests.Calendar
 {
     public sealed class CalendarLayoutCalculatorTests
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive;
 
-namespace Toggl.Foundation.MvvmCross.Services
+namespace Toggl.Core.MvvmCross.Services
 {
     public interface IDialogService
     {

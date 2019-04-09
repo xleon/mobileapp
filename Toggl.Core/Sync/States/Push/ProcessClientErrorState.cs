@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Ultrawave.Exceptions;
 
-namespace Toggl.Foundation.Sync.States.Push
+namespace Toggl.Core.Sync.States.Push
 {
     public sealed class ProcessClientErrorState<T> : ISyncState<(Exception Error, T Entity)>
         where T : class, IThreadSafeModel

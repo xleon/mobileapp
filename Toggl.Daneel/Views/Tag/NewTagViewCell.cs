@@ -4,8 +4,8 @@ using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.MvvmCross.ViewModels;
 using UIKit;
 
 namespace Toggl.Daneel.Views.Tag

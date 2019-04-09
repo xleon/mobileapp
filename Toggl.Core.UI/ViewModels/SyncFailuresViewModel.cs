@@ -2,11 +2,11 @@
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public class SyncFailuresViewModel : MvxViewModel

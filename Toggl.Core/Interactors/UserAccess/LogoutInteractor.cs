@@ -1,17 +1,17 @@
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Login;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Shortcuts;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Analytics;
+using Toggl.Core.Login;
+using Toggl.Core.Services;
+using Toggl.Core.Shortcuts;
+using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.Interactors.UserAccess
+namespace Toggl.Core.Interactors.UserAccess
 {
     public sealed class LogoutInteractor : IInteractor<IObservable<Unit>>
     {

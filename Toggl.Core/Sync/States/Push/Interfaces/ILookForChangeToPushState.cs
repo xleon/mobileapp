@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Foundation.Sync.States.Push.Interfaces
+namespace Toggl.Core.Sync.States.Push.Interfaces
 {
     public interface ILookForChangeToPushState<T> : ISyncState
     {

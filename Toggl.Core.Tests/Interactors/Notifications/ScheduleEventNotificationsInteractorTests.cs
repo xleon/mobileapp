@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.Interactors.Notifications;
+using Toggl.Core.Calendar;
+using Toggl.Core.Interactors.Notifications;
 using Toggl.Multivac;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.Notifications
+namespace Toggl.Core.Tests.Interactors.Notifications
 {
     public sealed class ScheduleEventNotificationsInteractorTests
     {

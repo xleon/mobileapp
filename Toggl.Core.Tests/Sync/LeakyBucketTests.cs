@@ -6,16 +6,16 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core;
+using Toggl.Core.Analytics;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Sync;
+using Toggl.Core.Tests.Generators;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync
+namespace Toggl.Core.Tests.Sync
 {
     public sealed class LeakyBucketTests
     {

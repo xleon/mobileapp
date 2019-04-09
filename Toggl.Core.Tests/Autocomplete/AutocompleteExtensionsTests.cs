@@ -2,11 +2,11 @@
 using System.Linq;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
-using Toggl.Foundation.Autocomplete.Span;
-using Toggl.Foundation.MvvmCross.Extensions;
+using Toggl.Core.Autocomplete.Span;
+using Toggl.Core.MvvmCross.Extensions;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Autocomplete
+namespace Toggl.Core.Tests.Autocomplete
 {
     public sealed class AutocompleteExtensionsTests
     {

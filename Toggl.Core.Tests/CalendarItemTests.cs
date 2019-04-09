@@ -2,14 +2,14 @@
 using FluentAssertions;
 using FsCheck.Xunit;
 using MvvmCross.UI;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.Helper;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Calendar;
+using Toggl.Core.Helper;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.Tests.Mocks;
 using Toggl.PrimeRadiant;
 using Xunit;
 
-namespace Toggl.Foundation.Tests
+namespace Toggl.Core.Tests
 {
     public sealed class CalendarItemTests
     {

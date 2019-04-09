@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Helper;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Extensions;
+using Toggl.Core.Helper;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 using Toggl.Shared.Extensions;
 using Toggl.Ultrawave.Exceptions;
 using static Toggl.Shared.Extensions.CommonFunctions;
-using Toggl.Foundation.DataSources.Interfaces;
+using Toggl.Core.DataSources.Interfaces;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Sync.States.Pull
+namespace Toggl.Core.Sync.States.Pull
 {
     public sealed class CreateArchivedProjectPlaceholdersState : IPersistState
     {

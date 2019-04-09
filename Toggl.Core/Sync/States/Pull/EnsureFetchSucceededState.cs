@@ -1,10 +1,10 @@
 using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.Extensions;
+using Toggl.Core.Extensions;
 using Toggl.Shared;
 using Toggl.Ultrawave.Exceptions;
 
-namespace Toggl.Foundation.Sync.States.Pull
+namespace Toggl.Core.Sync.States.Pull
 {
     public abstract class EnsureFetchSucceededState<T> : ISyncState<IFetchObservables>
     {

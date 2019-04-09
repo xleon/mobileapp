@@ -6,17 +6,17 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.Services;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.DataSources;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Extensions;
+using Toggl.Core.Interactors;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class SelectTagsViewModel : MvxViewModel<(long[] tagIds, long workspaceId), long[]>

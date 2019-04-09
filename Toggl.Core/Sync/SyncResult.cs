@@ -1,6 +1,6 @@
 using System;
 
-namespace Toggl.Foundation.Sync
+namespace Toggl.Core.Sync
 {
     public abstract class SyncResult
     {

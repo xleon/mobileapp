@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Models.Interfaces
+namespace Toggl.Core.Models.Interfaces
 {
     public partial interface IThreadSafeClient
         : IThreadSafeModel, IDatabaseClient

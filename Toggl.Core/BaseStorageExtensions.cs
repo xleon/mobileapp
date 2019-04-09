@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation
+namespace Toggl.Core
 {
     public static class BaseStorageExtensions
     {

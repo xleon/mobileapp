@@ -1,6 +1,6 @@
-﻿using Toggl.Foundation.Interactors;
+﻿using Toggl.Core.Interactors;
 
-namespace Toggl.Foundation.Shortcuts
+namespace Toggl.Core.Shortcuts
 {
     public interface IApplicationShortcutCreator
     {

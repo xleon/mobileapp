@@ -3,7 +3,7 @@ using System.Globalization;
 using Toggl.Shared;
 using static System.FormattableString;
 
-namespace Toggl.Foundation.Extensions
+namespace Toggl.Core.Extensions
 {
     public static class TimeSpanExtensions
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Android.Runtime;
 using Android.Views;
-using Toggl.Foundation.Autocomplete.Suggestions;
+using Toggl.Core.Autocomplete.Suggestions;
 
 namespace Toggl.Giskard.ViewHolders
 {

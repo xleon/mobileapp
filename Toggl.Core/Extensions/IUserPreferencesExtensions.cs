@@ -3,7 +3,7 @@ using System.Reactive.Linq;
 using Toggl.Shared;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.Extensions
+namespace Toggl.Core.Extensions
 {
     public static class IUserPreferencesExtensions
     {

@@ -10,12 +10,12 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using MvvmCross.Plugin.Color.Platforms.Android;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.Fragments;
 using Toggl.Shared.Extensions;
-using FoundationResources = Toggl.Foundation.Resources;
+using FoundationResources = Toggl.Core.Resources;
 
 namespace Toggl.Giskard.Activities
 {

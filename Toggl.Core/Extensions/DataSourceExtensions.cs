@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Extensions
+namespace Toggl.Core.Extensions
 {
     public static class DataSourceExtensions
     {

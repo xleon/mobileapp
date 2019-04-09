@@ -2,18 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.Extensions;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
+using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant;
-using static Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.LogItemVisualizationIntent;
+using static Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.LogItemVisualizationIntent;
 
-namespace Toggl.Foundation.MvvmCross.Transformations
+namespace Toggl.Core.MvvmCross.Transformations
 {
     using LogGrouping = IGrouping<DateTime, IThreadSafeTimeEntry>;
     using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;

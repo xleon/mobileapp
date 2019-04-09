@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Sync.ConflictResolution
+namespace Toggl.Core.Sync.ConflictResolution
 {
     internal static class Resolver
     {

@@ -1,6 +1,6 @@
 ﻿using UIKit;
 using System;
-using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Core.MvvmCross.Helper;
 using Toggl.Shared;
 
 namespace Toggl.Daneel.Extensions

@@ -3,14 +3,14 @@ using System.IO;
 using System.Collections.Generic;
 using Toggl.Shared.Models;
 using System.Reactive.Linq;
-using Toggl.Foundation.Serialization;
+using Toggl.Core.Serialization;
 using System.Reflection;
 using System.Linq;
 using Toggl.Shared;
 using Newtonsoft.Json;
 
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public class GetAllCountriesInteractor : IInteractor<IObservable<List<ICountry>>>
     {

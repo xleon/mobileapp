@@ -3,15 +3,15 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using MvvmCross.Navigation;
 using NSubstitute;
-using Toggl.Foundation.MvvmCross;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.Selectable;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.MvvmCross;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.ViewModels.Selectable;
+using Toggl.Core.Services;
+using Toggl.Core.Tests.Generators;
 using Toggl.Multivac;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class SelectDateFormatViewModelTests
     {

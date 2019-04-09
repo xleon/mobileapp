@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
-using Toggl.Foundation.Serialization;
+using Toggl.Core.Serialization;
 
-namespace Toggl.Foundation.Interactors.Timezones
+namespace Toggl.Core.Interactors.Timezones
 {
     public sealed class GetSupportedTimezonesInteractor : IInteractor<IObservable<List<string>>>
     {

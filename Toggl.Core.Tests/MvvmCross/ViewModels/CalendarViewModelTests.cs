@@ -12,25 +12,25 @@ using FsCheck;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.DTOs;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.Mocks;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.Analytics;
+using Toggl.Core.Calendar;
+using Toggl.Core.DataSources;
+using Toggl.Core.DTOs;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.ViewModels.Calendar;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Xunit;
-using ITimeEntryPrototype = Toggl.Foundation.Models.ITimeEntryPrototype;
+using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
 using Notification = System.Reactive.Notification;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class CalendarViewModelTests
     {

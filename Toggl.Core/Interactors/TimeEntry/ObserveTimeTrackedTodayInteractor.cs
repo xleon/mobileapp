@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources;
+using Toggl.Core.Extensions;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public sealed class ObserveTimeTrackedTodayInteractor : IInteractor<IObservable<TimeSpan>>
     {

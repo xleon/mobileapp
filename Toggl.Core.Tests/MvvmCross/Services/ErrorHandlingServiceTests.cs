@@ -2,18 +2,18 @@
 using FluentAssertions;
 using MvvmCross.Navigation;
 using NSubstitute;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Exceptions;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Services;
+using Toggl.Core.Tests.Generators;
 using Toggl.PrimeRadiant.Models;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.Services
+namespace Toggl.Core.Tests.MvvmCross.Services
 {
     public sealed class ErrorHandlingServiceTests
     {

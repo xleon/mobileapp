@@ -7,13 +7,13 @@ using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Suggestions;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Suggestions;
 using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.ViewHelpers;
 using Toggl.Shared.Extensions;
-using TogglResources = Toggl.Foundation.Resources;
+using TogglResources = Toggl.Core.Resources;
 
 namespace Toggl.Giskard.ViewHolders
 {

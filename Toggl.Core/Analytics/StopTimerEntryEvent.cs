@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Toggl.Foundation.Analytics
+namespace Toggl.Core.Analytics
 {
     public sealed class StopTimerEntryEvent : ITrackableEvent
     {

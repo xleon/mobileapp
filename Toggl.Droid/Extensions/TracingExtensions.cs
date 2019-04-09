@@ -1,5 +1,5 @@
 using System;
-using Toggl.Foundation.Diagnostics;
+using Toggl.Core.Diagnostics;
 
 namespace Toggl.Giskard.Extensions
 {

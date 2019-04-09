@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Extensions;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     internal class StopTimeEntryInteractor : IInteractor<IObservable<IThreadSafeTimeEntry>>
     {

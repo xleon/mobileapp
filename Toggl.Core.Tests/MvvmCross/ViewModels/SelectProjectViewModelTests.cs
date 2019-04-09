@@ -6,21 +6,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Extensions;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
 using Xunit;
-using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.Collections;
 using Microsoft.Reactive.Testing;
 using System.Reactive;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.Tests.TestExtensions;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class SelectProjectViewModelTests
     {

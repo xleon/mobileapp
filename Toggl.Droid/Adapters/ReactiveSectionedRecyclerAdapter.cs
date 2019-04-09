@@ -8,8 +8,8 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Java.Lang;
 using MvvmCross.Binding.Extensions;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Collections.Changes;
+using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.Collections.Changes;
 using Toggl.Giskard.ViewHolders;
 
 namespace Toggl.Giskard.Adapters

@@ -2,14 +2,14 @@
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Shared;
-using Toggl.Foundation.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.Parameters;
 using Toggl.Shared.Extensions;
 using System;
 using System.Reactive;
 using System.Reactive.Threading.Tasks;
-using Toggl.Foundation.Services;
+using Toggl.Core.Services;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class AboutViewModel : MvxViewModel

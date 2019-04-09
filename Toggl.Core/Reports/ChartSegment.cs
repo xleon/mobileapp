@@ -2,7 +2,7 @@
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.Reports
+namespace Toggl.Core.Reports
 {
     [Preserve(AllMembers = true)]
     public struct ChartSegment

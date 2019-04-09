@@ -4,16 +4,16 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Suggestions;
+using Toggl.Core.DataSources;
+using Toggl.Core.Interactors;
+using Toggl.Core.Suggestions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Settings;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Services;
+using Toggl.Core.Extensions;
+using Toggl.Core.Services;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class SuggestionsViewModel : MvxViewModel

@@ -1,11 +1,11 @@
 ﻿using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Toggl.Foundation.Interactors;
+using Toggl.Core.Interactors;
 using Xunit;
 using Toggl.Multivac.Models;
 
-namespace Toggl.Foundation.Tests.Interactors
+namespace Toggl.Core.Tests.Interactors
 {
     public sealed class GetAllCountriesInteractorTests
     {

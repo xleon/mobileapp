@@ -1,12 +1,12 @@
 ﻿using System;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
 using Toggl.PrimeRadiant;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.SyncModel
+namespace Toggl.Core.Tests.SyncModel
 {
     public sealed class SyncFailureItemTests
     {

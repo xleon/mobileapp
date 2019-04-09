@@ -1,8 +1,8 @@
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Login;
-using Toggl.Foundation.Sync;
+using Toggl.Core.DataSources;
+using Toggl.Core.Login;
+using Toggl.Core.Sync;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public interface IAutomaticSyncingService
     {

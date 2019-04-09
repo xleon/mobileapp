@@ -5,7 +5,7 @@ using System.Reactive.Subjects;
 using CoreGraphics;
 using Foundation;
 using Toggl.Daneel.ViewSources;
-using Toggl.Foundation.Helper;
+using Toggl.Core.Helper;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;

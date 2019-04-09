@@ -1,7 +1,7 @@
 ﻿using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using UIKit;
-using Color = Toggl.Foundation.MvvmCross.Helper.Color;
+using Color = Toggl.Core.MvvmCross.Helper.Color;
 using Toggl.Daneel.Extensions;
 using Toggl.Shared;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace Toggl.Foundation.MvvmCross.Collections
+namespace Toggl.Core.MvvmCross.Collections
 {
     public class SectionModel<THeader, TItem> : ISectionModel<THeader, TItem>
     {

@@ -4,12 +4,12 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute.ExceptionExtensions;
-using Toggl.Foundation.Sync.States;
+using Toggl.Core.Sync.States;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync.States
+namespace Toggl.Core.Tests.Sync.States
 {
     public sealed class FailureStateTests
     {

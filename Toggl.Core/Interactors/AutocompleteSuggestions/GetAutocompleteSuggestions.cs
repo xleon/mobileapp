@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.Extensions;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.Extensions;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Interactors.AutocompleteSuggestions
+namespace Toggl.Core.Interactors.AutocompleteSuggestions
 {
     public class GetAutocompleteSuggestions : IInteractor<IObservable<IEnumerable<AutocompleteSuggestion>>>
     {

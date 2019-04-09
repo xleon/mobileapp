@@ -5,12 +5,12 @@ using FluentAssertions;
 using FsCheck.Xunit;
 using NSubstitute;
 using NSubstitute.Core;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.AnalyticsService
+namespace Toggl.Core.Tests.AnalyticsService
 {
     public sealed class StartTimeEntryEventTests
     {

@@ -9,7 +9,7 @@ using Android.Util;
 using Android.Views;
 using MvvmCross.Plugin.Color.Platforms.Android;
 using MvvmCross.UI;
-using Toggl.Foundation.Reports;
+using Toggl.Core.Reports;
 using Toggl.Giskard.Extensions;
 
 namespace Toggl.Giskard.Views

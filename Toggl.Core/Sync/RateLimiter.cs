@@ -4,7 +4,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Sync
+namespace Toggl.Core.Sync
 {
     public sealed class RateLimiter : IRateLimiter
     {

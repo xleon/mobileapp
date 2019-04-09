@@ -1,10 +1,10 @@
 ﻿using System;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Suggestions;
+using Toggl.Core.Suggestions;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Suggestions
+namespace Toggl.Core.Tests.Suggestions
 {
     public sealed class SuggestionProviderContainerTests
     {

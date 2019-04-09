@@ -1,6 +1,6 @@
 ﻿using Toggl.Shared;
 
-namespace Toggl.Foundation.DTOs
+namespace Toggl.Core.DTOs
 {
     public struct EditPreferencesDTO
     {

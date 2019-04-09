@@ -4,18 +4,18 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Sync.States;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Sync.States;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Multivac.Models;
 using Xunit;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Sync.States.Pull;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Sync.States.Pull;
 using Toggl.Ultrawave.Exceptions;
-using Toggl.Foundation.DataSources;
+using Toggl.Core.DataSources;
 using Toggl.Multivac;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models.Interfaces;
 
-namespace Toggl.Foundation.Tests.Sync.States.Pull
+namespace Toggl.Core.Tests.Sync.States.Pull
 {
     public sealed class DetectNotHavingAccessToAnyWorkspaceStateTests
     {

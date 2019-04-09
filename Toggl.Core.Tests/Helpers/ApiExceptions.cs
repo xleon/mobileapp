@@ -3,7 +3,7 @@ using NSubstitute;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 
-namespace Toggl.Foundation.Tests.Helpers
+namespace Toggl.Core.Tests.Helpers
 {
     public static class ApiExceptions
     {

@@ -6,11 +6,11 @@ using Android.Support.V7.Widget;
 using Android.Webkit;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.ViewModels;
 using Toggl.Shared;
 using static Android.Support.V7.Widget.Toolbar;
-using static Toggl.Foundation.Resources;
+using static Toggl.Core.Resources;
 
 namespace Toggl.Giskard.Activities
 {

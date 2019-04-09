@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Toggl.Foundation.Reports
+namespace Toggl.Core.Reports
 {
     public sealed class ProjectSummaryReport
     {

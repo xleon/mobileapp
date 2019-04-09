@@ -10,15 +10,15 @@ using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using MvvmCross.ViewModels;
 using NSubstitute;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.Interactors;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Multivac.Extensions;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class SendFeedbackViewModelTests
     {

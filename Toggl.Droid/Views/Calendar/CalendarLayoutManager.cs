@@ -4,7 +4,7 @@ using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
-using Toggl.Foundation.Helper;
+using Toggl.Core.Helper;
 using Toggl.Giskard.Adapters.Calendar;
 
 namespace Toggl.Giskard.Views.Calendar

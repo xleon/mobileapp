@@ -1,7 +1,7 @@
 ﻿using System;
-using Toggl.Foundation.Calendar;
+using Toggl.Core.Calendar;
 
-namespace Toggl.Foundation.Extensions
+namespace Toggl.Core.Extensions
 {
     public static class CalendarItemExtensions
     {

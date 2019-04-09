@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Multivac;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors
+namespace Toggl.Core.Tests.Interactors
 {
     public class AreCustomColorsEnabledForWorkspaceInteractorTests
     {

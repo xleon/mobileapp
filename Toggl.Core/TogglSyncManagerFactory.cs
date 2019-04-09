@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Reactive.Concurrency;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.DataSources.Interfaces;
-using IStopwatchProvider = Toggl.Foundation.Diagnostics.IStopwatchProvider;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Sync.States;
-using Toggl.Foundation.Sync.States.CleanUp;
-using Toggl.Foundation.Sync.States.Pull;
-using Toggl.Foundation.Sync.States.Push;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.DataSources.Interfaces;
+using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Services;
+using Toggl.Core.Sync;
+using Toggl.Core.Sync.States;
+using Toggl.Core.Sync.States.CleanUp;
+using Toggl.Core.Sync.States.Pull;
+using Toggl.Core.Sync.States.Push;
 using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
@@ -21,7 +21,7 @@ using Toggl.Ultrawave;
 using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.ApiClients.Interfaces;
 
-namespace Toggl.Foundation
+namespace Toggl.Core
 {
     public static class TogglSyncManager
     {

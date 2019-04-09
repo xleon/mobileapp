@@ -1,10 +1,10 @@
 using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Sync.States
+namespace Toggl.Core.Sync.States
 {
     public sealed class WaitForAWhileState : ISyncState<TimeSpan>
     {

@@ -9,14 +9,14 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.ViewHelpers;
 using Toggl.Giskard.Views.EditDuration;
 using Toggl.Shared.Extensions;
-using static Toggl.Foundation.MvvmCross.Helper.TemporalInconsistency;
+using static Toggl.Core.MvvmCross.Helper.TemporalInconsistency;
 
 namespace Toggl.Giskard.Activities
 {
@@ -226,7 +226,7 @@ namespace Toggl.Giskard.Activities
 
         private void setupToolbar()
         {
-            toolbar.Title = Foundation.Resources.StartAndStopTime;
+            toolbar.Title = Core.Resources.StartAndStopTime;
 
             SetSupportActionBar(toolbar);
 

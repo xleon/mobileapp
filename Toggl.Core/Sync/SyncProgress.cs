@@ -1,4 +1,4 @@
-﻿namespace Toggl.Foundation.Sync
+﻿namespace Toggl.Core.Sync
 {
     public enum SyncProgress
     {

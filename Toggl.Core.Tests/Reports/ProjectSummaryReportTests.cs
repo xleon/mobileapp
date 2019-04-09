@@ -2,10 +2,10 @@
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
-using Toggl.Foundation.Reports;
+using Toggl.Core.Reports;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Reports
+namespace Toggl.Core.Tests.Reports
 {
     public sealed class ProjectSummaryReportTests
     {

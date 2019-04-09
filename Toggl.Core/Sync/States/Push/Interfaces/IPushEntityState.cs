@@ -1,8 +1,8 @@
 ﻿using System;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Ultrawave.Exceptions;
 
-namespace Toggl.Foundation.Sync.States.Push.Interfaces
+namespace Toggl.Core.Sync.States.Push.Interfaces
 {
     public interface IPushEntityState<T> : ISyncState<T>
         where T : IThreadSafeModel

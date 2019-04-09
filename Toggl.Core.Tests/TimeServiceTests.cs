@@ -9,7 +9,7 @@ using Xunit;
 using FsCheck.Xunit;
 using FsCheck;
 
-namespace Toggl.Foundation.Tests
+namespace Toggl.Core.Tests
 {
     public sealed class TimeServiceTests
     {

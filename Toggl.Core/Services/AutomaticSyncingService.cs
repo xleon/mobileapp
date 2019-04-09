@@ -1,16 +1,16 @@
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Login;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Interactors;
+using Toggl.Core.Login;
+using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public sealed class AutomaticSyncingService : IAutomaticSyncingService
     {

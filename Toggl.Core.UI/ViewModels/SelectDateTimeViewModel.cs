@@ -2,13 +2,13 @@
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.Services;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public class SelectDateTimeViewModel : MvxViewModel<DateTimePickerParameters, DateTimeOffset>

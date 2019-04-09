@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
@@ -12,7 +12,7 @@ using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.Network;
 
-namespace Toggl.Foundation.Interactors.Settings
+namespace Toggl.Core.Interactors.Settings
 {
     public class SendFeedbackInteractor : IInteractor<IObservable<Unit>>
     {

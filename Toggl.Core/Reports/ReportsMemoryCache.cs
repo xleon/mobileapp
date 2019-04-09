@@ -3,7 +3,7 @@ using System.Linq;
 using Toggl.Shared;
 using Toggl.Shared.Models;
 
-namespace Toggl.Foundation.Reports
+namespace Toggl.Core.Reports
 {
     public sealed class ReportsMemoryCache
     {

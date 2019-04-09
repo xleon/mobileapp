@@ -3,12 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.Selectable;
-using Toggl.Foundation.Services;
+using Toggl.Core.MvvmCross.ViewModels.Selectable;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class SelectDateFormatViewModel : MvxViewModel<DateFormat, DateFormat>

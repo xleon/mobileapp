@@ -5,15 +5,15 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Autocomplete.Span;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Interactors.AutocompleteSuggestions;
-using Toggl.Foundation.Tests.Autocomplete;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Span;
+using Toggl.Core.Extensions;
+using Toggl.Core.Interactors;
+using Toggl.Core.Interactors.AutocompleteSuggestions;
+using Toggl.Core.Tests.Autocomplete;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.AutocompleteSuggestions
+namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
 {
     public sealed class AutocompleteProviderTests
     {

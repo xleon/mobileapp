@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 
-namespace Toggl.Foundation.MvvmCross.Transformations
+namespace Toggl.Core.MvvmCross.Transformations
 {
     public class DateTimeToFormattedString
     {

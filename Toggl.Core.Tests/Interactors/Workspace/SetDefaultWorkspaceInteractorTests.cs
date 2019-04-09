@@ -3,15 +3,15 @@ using System.Reactive.Linq;
 using FluentAssertions;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.Workspace
+namespace Toggl.Core.Tests.Interactors.Workspace
 {
     public sealed class SetDefaultWorkspaceInteractorTests
     {

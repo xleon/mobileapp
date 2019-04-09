@@ -7,14 +7,14 @@ using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using NSubstitute.Routing.Handlers;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.DTOs;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.Mocks;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.DataSources;
+using Toggl.Core.DTOs;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
@@ -23,7 +23,7 @@ using Toggl.PrimeRadiant.Models;
 using Xunit;
 using ThreadingTask = System.Threading.Tasks.Task;
 
-namespace Toggl.Foundation.Tests.DataSources
+namespace Toggl.Core.Tests.DataSources
 {
     public sealed class TimeEntriesDataSourceTests
     {

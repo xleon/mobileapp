@@ -1,4 +1,4 @@
-﻿namespace Toggl.Foundation.Login
+﻿namespace Toggl.Core.Login
 {
     public enum LoginType
     {

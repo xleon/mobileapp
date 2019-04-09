@@ -6,15 +6,15 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Interactors.Location;
-using Toggl.Foundation.Login;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.Services;
+using Toggl.Core.Analytics;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Extensions;
+using Toggl.Core.Interactors;
+using Toggl.Core.Interactors.Location;
+using Toggl.Core.Login;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
@@ -23,10 +23,10 @@ using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using System.Reactive;
 using System.Reactive.Disposables;
-using Toggl.Foundation.Interactors.Timezones;
-using Toggl.Foundation.Serialization;
+using Toggl.Core.Interactors.Timezones;
+using Toggl.Core.Serialization;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class SignupViewModel : MvxViewModel<CredentialsParameter>

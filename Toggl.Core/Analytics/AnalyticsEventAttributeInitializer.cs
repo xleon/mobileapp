@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Analytics
+namespace Toggl.Core.Analytics
 {
     [Preserve(AllMembers = true)]
     public abstract class AnalyticsEventAttributeInitializer

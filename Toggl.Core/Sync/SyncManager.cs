@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Services;
+using Toggl.Core.Analytics;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Exceptions;
-using static Toggl.Foundation.Sync.SyncState;
+using static Toggl.Core.Sync.SyncState;
 
-namespace Toggl.Foundation.Sync
+namespace Toggl.Core.Sync
 {
     public sealed class SyncManager : ISyncManager
     {

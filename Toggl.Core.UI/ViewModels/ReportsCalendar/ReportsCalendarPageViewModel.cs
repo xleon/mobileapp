@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar
+namespace Toggl.Core.MvvmCross.ViewModels.ReportsCalendar
 {
     public sealed class ReportsCalendarPageViewModel
     {

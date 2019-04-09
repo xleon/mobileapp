@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Foundation;
-using Toggl.Foundation.Analytics;
-using static Toggl.Foundation.Helper.Constants;
+using Toggl.Core;
+using Toggl.Core.Analytics;
+using static Toggl.Core.Helper.Constants;
 
-namespace Toggl.Foundation.MvvmCross.Parameters
+namespace Toggl.Core.MvvmCross.Parameters
 {
     public sealed class StartTimeEntryParameters
     {

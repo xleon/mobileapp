@@ -1,9 +1,9 @@
 using System;
 using System.Reactive;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Interactors.UserAccess;
+using Toggl.Core.Analytics;
+using Toggl.Core.Interactors.UserAccess;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public sealed partial class InteractorFactory : IInteractorFactory
     {

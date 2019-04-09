@@ -1,6 +1,6 @@
 ﻿using Com.Google.Firebase.Perf;
 using Com.Google.Firebase.Perf.Metrics;
-using Toggl.Foundation.Diagnostics;
+using Toggl.Core.Diagnostics;
 
 namespace Toggl.Giskard.Services
 {

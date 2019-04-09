@@ -4,22 +4,22 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Login;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
-using Toggl.Foundation.MvvmCross.ViewModels.Reports;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Suggestions;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Interactors;
+using Toggl.Core.Login;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.MvvmCross.ViewModels.Calendar;
+using Toggl.Core.MvvmCross.ViewModels.Reports;
+using Toggl.Core.Services;
+using Toggl.Core.Suggestions;
+using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class MainTabBarViewModel : MvxViewModel

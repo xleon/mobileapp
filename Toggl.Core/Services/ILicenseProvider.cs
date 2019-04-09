@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public interface ILicenseProvider
     {

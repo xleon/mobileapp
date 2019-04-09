@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Toggl.Foundation.Suggestions
+namespace Toggl.Core.Suggestions
 {
     public interface ISuggestionProviderContainer
     {

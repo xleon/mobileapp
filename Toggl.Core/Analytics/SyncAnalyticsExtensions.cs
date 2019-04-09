@@ -1,9 +1,9 @@
 ﻿using System;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Extensions;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.Analytics
+namespace Toggl.Core.Analytics
 {
     internal delegate IAnalyticsEvent<string> SyncAnalyticsExtensionsSearchStrategy(Type entityType, IAnalyticsService analyticsService);
 

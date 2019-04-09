@@ -3,7 +3,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public interface IRxActionFactory
     {

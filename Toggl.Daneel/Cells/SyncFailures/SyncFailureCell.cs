@@ -1,7 +1,7 @@
 ﻿using System;
 using Foundation;
 using UIKit;
-using Toggl.Foundation.Models;
+using Toggl.Core.Models;
 using static Toggl.PrimeRadiant.SyncStatus;
 
 namespace Toggl.Daneel.Cells

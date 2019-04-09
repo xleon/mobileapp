@@ -5,19 +5,19 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Sync.States;
-using Toggl.Foundation.Sync.States.CleanUp;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync;
+using Toggl.Core.Sync.States;
+using Toggl.Core.Sync.States.CleanUp;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync.States.CleanUp
+namespace Toggl.Core.Tests.Sync.States.CleanUp
 {
     public sealed class TrackInaccessibleDataAfterCleanUpStateTests
     {

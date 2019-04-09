@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Foundation.Analytics
+namespace Toggl.Core.Analytics
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class AnalyticsEventAttribute : Attribute

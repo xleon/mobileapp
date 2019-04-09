@@ -7,15 +7,15 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.Suggestions;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Suggestions;
+using Toggl.Core.Tests.Generators;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
-using TimeEntry = Toggl.Foundation.Models.TimeEntry;
+using TimeEntry = Toggl.Core.Models.TimeEntry;
 
-namespace Toggl.Foundation.Tests.Suggestions
+namespace Toggl.Core.Tests.Suggestions
 {
     public sealed class MostUsedTimeEntrySuggestionProviderTests
     {

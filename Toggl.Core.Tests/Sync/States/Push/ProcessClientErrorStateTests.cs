@@ -5,16 +5,16 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Sync.States;
-using Toggl.Foundation.Sync.States.Push;
+using Toggl.Core.Sync;
+using Toggl.Core.Sync.States;
+using Toggl.Core.Sync.States.Push;
 using Xunit;
-using Toggl.Foundation.Tests.Helpers;
+using Toggl.Core.Tests.Helpers;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 
-namespace Toggl.Foundation.Tests.Sync.States.Push
+namespace Toggl.Core.Tests.Sync.States.Push
 {
     public sealed class ProcessClientErrorStateTests
     {

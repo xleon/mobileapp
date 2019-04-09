@@ -9,22 +9,22 @@ using FsCheck;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using NUnit.Framework;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.MvvmCross;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Analytics;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Interactors;
+using Toggl.Core.MvvmCross;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Tests.Generators;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using Xunit;
-using static Toggl.Foundation.MvvmCross.ViewModels.SignupViewModel;
+using static Toggl.Core.MvvmCross.ViewModels.SignupViewModel;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class SignupViewModelTests
     {

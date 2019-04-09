@@ -2,7 +2,7 @@
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
 
-namespace Toggl.Foundation.Login
+namespace Toggl.Core.Login
 {
     public sealed class ApiFactory : IApiFactory
     {

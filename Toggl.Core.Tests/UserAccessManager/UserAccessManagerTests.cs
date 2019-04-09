@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Login;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Interactors;
+using Toggl.Core.Services;
+using Toggl.Core.Login;
+using Toggl.Core.Sync;
+using Toggl.Core.Tests.Generators;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
@@ -23,10 +23,10 @@ using Toggl.Ultrawave;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using Xunit;
-using FoundationUser = Toggl.Foundation.Models.User;
+using FoundationUser = Toggl.Core.Models.User;
 using User = Toggl.Ultrawave.Models.User;
 
-namespace Toggl.Foundation.Tests.Login
+namespace Toggl.Core.Tests.Login
 {
     public sealed class UserAccessManagerTests
     {

@@ -1,10 +1,10 @@
 using FluentAssertions;
-using Toggl.Foundation.Tests.Sync.Extensions;
-using Toggl.Foundation.Tests.Sync.Helpers;
-using Toggl.Foundation.Tests.Sync.State;
+using Toggl.Core.Tests.Sync.Extensions;
+using Toggl.Core.Tests.Sync.Helpers;
+using Toggl.Core.Tests.Sync.State;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Tests.Sync.Scenarios.NoDefaultWorkspace
+namespace Toggl.Core.Tests.Sync.Scenarios.NoDefaultWorkspace
 {
     public sealed class WhenTheUserHasOnlyOneWorkspaceItIsUsedAsDefault
         : ComplexSyncTest

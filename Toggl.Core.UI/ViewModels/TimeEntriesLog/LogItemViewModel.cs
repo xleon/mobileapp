@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog
+namespace Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog
 {
     public sealed class LogItemViewModel : IDiffable<IMainLogKey>, IEquatable<LogItemViewModel>
     {

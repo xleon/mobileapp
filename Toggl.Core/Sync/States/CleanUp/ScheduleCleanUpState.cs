@@ -2,7 +2,7 @@ using System;
 using System.Reactive.Linq;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Sync.States.CleanUp
+namespace Toggl.Core.Sync.States.CleanUp
 {
     internal sealed class ScheduleCleanUpState : ISyncState<IFetchObservables>
     {

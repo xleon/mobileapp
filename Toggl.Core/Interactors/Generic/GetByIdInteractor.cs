@@ -1,11 +1,11 @@
 ﻿using System;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Interactors.Generic
+namespace Toggl.Core.Interactors.Generic
 {
     public sealed class GetByIdInteractor<TThreadsafe, TDatabase>
         : TrackableInteractor, IInteractor<IObservable<TThreadsafe>>

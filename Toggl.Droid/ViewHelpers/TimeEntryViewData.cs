@@ -2,9 +2,9 @@ using Android.Graphics;
 using Android.Text;
 using Android.Text.Style;
 using Android.Views;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
+using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Giskard.Extensions;
-using static Toggl.Foundation.Helper.Color;
+using static Toggl.Core.Helper.Color;
 
 namespace Toggl.Giskard.ViewHelpers
 {

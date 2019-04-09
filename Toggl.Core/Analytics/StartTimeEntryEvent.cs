@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 
-namespace Toggl.Foundation.Analytics
+namespace Toggl.Core.Analytics
 {
     public class StartTimeEntryEvent : ITrackableEvent
     {

@@ -8,14 +8,14 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using MvvmCross.Plugin.Color.Platforms.Android;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Helper;
 using Toggl.Giskard.Views.EditDuration.Shapes;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using static Toggl.Shared.Math;
-using FoundationColor = Toggl.Foundation.MvvmCross.Helper.Color;
+using FoundationColor = Toggl.Core.MvvmCross.Helper.Color;
 using Math = System.Math;
 using Color = Android.Graphics.Color;
 namespace Toggl.Giskard.Views.EditDuration

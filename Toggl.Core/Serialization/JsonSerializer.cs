@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Toggl.Foundation.Serialization
+namespace Toggl.Core.Serialization
 {
     public sealed class JsonSerializer : IJsonSerializer
     {

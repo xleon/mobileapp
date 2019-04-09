@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources;
+using Toggl.Core.DataSources;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     internal abstract class WorkspaceHasFeatureInteractor<TValue> : IInteractor<IObservable<TValue>>
     {

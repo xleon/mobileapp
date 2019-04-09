@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public interface IErrorHandlingService
     {

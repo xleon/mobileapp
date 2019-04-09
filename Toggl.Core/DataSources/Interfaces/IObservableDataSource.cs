@@ -1,8 +1,8 @@
 ﻿using System;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.DataSources.Interfaces
+namespace Toggl.Core.DataSources.Interfaces
 {
     public interface IObservableDataSource<TThreadsafe, out TDatabase>
         : IDataSource<TThreadsafe, TDatabase>

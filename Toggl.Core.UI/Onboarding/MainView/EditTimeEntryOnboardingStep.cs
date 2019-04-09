@@ -4,7 +4,7 @@ using Toggl.Shared;
 using Toggl.PrimeRadiant.Onboarding;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.MvvmCross.Onboarding.MainView
+namespace Toggl.Core.MvvmCross.Onboarding.MainView
 {
     public sealed class EditTimeEntryOnboardingStep : IOnboardingStep
     {

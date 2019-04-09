@@ -6,15 +6,15 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.Services;
+using Toggl.Core.Extensions;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.Settings
+namespace Toggl.Core.MvvmCross.ViewModels.Settings
 {
     [Preserve(AllMembers = true)]
     public sealed class NotificationSettingsViewModel : MvxViewModel

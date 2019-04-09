@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Foundation.Helper
+namespace Toggl.Core.Helper
 {
     public static class Constants
     {

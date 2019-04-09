@@ -1,9 +1,9 @@
 ﻿using System;
 using FluentAssertions;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Sync;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync
+namespace Toggl.Core.Tests.Sync
 {
     public class TestConfiguratorTests
     {

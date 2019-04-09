@@ -3,7 +3,7 @@ using Android.App;
 using Android.App.Job;
 using MvvmCross;
 using MvvmCross.Platforms.Android.Core;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 
 namespace Toggl.Giskard.Services
 {

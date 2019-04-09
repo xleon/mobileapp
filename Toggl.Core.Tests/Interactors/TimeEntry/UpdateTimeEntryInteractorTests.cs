@@ -3,15 +3,15 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
-using Toggl.Foundation.DTOs;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Sync;
+using Toggl.Core.DTOs;
+using Toggl.Core.Extensions;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync;
 using Toggl.PrimeRadiant;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.TimeEntry
+namespace Toggl.Core.Tests.Interactors.TimeEntry
 {
     public class UpdateTimeEntryInteractorTests : BaseInteractorTests
     {

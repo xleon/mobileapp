@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Suggestions
+namespace Toggl.Core.Suggestions
 {
     public sealed class SuggestionProviderContainer : ISuggestionProviderContainer
     {

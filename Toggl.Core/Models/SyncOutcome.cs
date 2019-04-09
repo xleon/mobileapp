@@ -1,4 +1,4 @@
-namespace Toggl.Foundation.Models
+namespace Toggl.Core.Models
 {
     public enum SyncOutcome
     {

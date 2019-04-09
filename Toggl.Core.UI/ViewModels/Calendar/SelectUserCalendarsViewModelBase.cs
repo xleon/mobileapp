@@ -8,16 +8,16 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.ViewModels.Selectable;
-using Toggl.Foundation.Services;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Interactors;
+using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.ViewModels.Selectable;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
+namespace Toggl.Core.MvvmCross.ViewModels.Calendar
 {
     using CalendarSectionModel = SectionModel<UserCalendarSourceViewModel, SelectableUserCalendarViewModel>;
     using ImmutableCalendarSectionModel = IImmutableList<SectionModel<UserCalendarSourceViewModel, SelectableUserCalendarViewModel>>;

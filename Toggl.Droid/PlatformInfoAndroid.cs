@@ -1,5 +1,5 @@
 ﻿using Java.Util;
-using Toggl.Foundation;
+using Toggl.Core;
 
 namespace Toggl.Giskard
 {

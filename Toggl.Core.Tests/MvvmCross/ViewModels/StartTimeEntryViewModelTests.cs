@@ -12,31 +12,31 @@ using FluentAssertions;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Autocomplete.Span;
-using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Interactors.AutocompleteSuggestions;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Analytics;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Span;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.Extensions;
+using Toggl.Core.Interactors;
+using Toggl.Core.Interactors.AutocompleteSuggestions;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Multivac;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.PrimeRadiant.Exceptions;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
-using static Toggl.Foundation.Helper.Constants;
-using ITimeEntryPrototype = Toggl.Foundation.Models.ITimeEntryPrototype;
-using TextFieldInfo = Toggl.Foundation.Autocomplete.TextFieldInfo;
-using CollectionSections = System.Collections.Generic.IEnumerable<Toggl.Foundation.MvvmCross.Collections.SectionModel<string, Toggl.Foundation.Autocomplete.Suggestions.AutocompleteSuggestion>>;
+using static Toggl.Core.Helper.Constants;
+using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
+using TextFieldInfo = Toggl.Core.Autocomplete.TextFieldInfo;
+using CollectionSections = System.Collections.Generic.IEnumerable<Toggl.Core.MvvmCross.Collections.SectionModel<string, Toggl.Core.Autocomplete.Suggestions.AutocompleteSuggestion>>;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class StartTimeEntryViewModelTests
     {

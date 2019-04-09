@@ -5,14 +5,14 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Interactors;
+using Toggl.Core.Tests.Generators;
 using Xunit;
 using Notification = Toggl.Multivac.Notification;
-using SyncOutcome = Toggl.Foundation.Models.SyncOutcome;
-using SyncState = Toggl.Foundation.Sync.SyncState;
+using SyncOutcome = Toggl.Core.Models.SyncOutcome;
+using SyncState = Toggl.Core.Sync.SyncState;
 
-namespace Toggl.Foundation.Tests.Interactors.Workspace
+namespace Toggl.Core.Tests.Interactors.Workspace
 {
     public sealed class RunBackgroundSyncInteractorTests
     {

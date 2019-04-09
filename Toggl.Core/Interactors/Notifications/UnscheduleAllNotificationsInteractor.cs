@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Services;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Services;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Interactors.Notifications
+namespace Toggl.Core.Interactors.Notifications
 {
     public class UnscheduleAllNotificationsInteractor : IInteractor<IObservable<Unit>>
     {

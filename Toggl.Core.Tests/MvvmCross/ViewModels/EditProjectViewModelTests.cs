@@ -8,17 +8,17 @@ using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using MvvmCross.UI;
 using NSubstitute;
-using Toggl.Foundation.DTOs;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.DTOs;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Multivac.Extensions;
 using Xunit;
 using ProjectPredicate = System.Func<Toggl.PrimeRadiant.Models.IDatabaseProject, bool>;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class EditProjectViewModelTests
     {

@@ -2,8 +2,8 @@ using System;
 using System.Reactive.Linq;
 using CoreGraphics;
 using Toggl.Daneel.ViewSources;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Reactive;
+using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.Reactive;
 
 namespace Toggl.Daneel.Extensions.Reactive
 {

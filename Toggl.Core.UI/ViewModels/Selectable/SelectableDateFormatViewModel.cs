@@ -1,8 +1,8 @@
 ﻿using MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.Interfaces;
+using Toggl.Core.MvvmCross.Interfaces;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.Selectable
+namespace Toggl.Core.MvvmCross.ViewModels.Selectable
 {
     [Preserve]
     public sealed class SelectableDateFormatViewModel : IDiffableByIdentifier<SelectableDateFormatViewModel>

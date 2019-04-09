@@ -8,20 +8,20 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Sync;
 using Xunit;
 using FsCheck.Xunit;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Analytics;
+using Toggl.Core.Tests.Generators;
 using Toggl.PrimeRadiant.Settings;
-using static Toggl.Foundation.Sync.SyncState;
+using static Toggl.Core.Sync.SyncState;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.Services;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Services;
 
-namespace Toggl.Foundation.Tests.Sync
+namespace Toggl.Core.Tests.Sync
 {
     public sealed class SyncManagerTests
     {

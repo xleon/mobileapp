@@ -3,10 +3,10 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Tests.Mocks;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.Generic
+namespace Toggl.Core.Tests.Interactors.Generic
 {
     public class GetByIdInteractorTests
     {

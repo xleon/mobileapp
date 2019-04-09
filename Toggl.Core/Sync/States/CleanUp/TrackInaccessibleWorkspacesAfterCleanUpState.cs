@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Extensions;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Extensions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.Sync.States.CleanUp
+namespace Toggl.Core.Sync.States.CleanUp
 {
     public sealed class TrackInaccessibleWorkspacesAfterCleanUpState : ISyncState
     {

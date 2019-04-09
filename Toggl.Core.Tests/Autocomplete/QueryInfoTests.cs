@@ -2,12 +2,12 @@
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Autocomplete.Span;
-using Toggl.Foundation.Autocomplete.Suggestions;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Span;
+using Toggl.Core.Autocomplete.Suggestions;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Autocomplete
+namespace Toggl.Core.Tests.Autocomplete
 {
     public sealed class QueryInfoTests
     {

@@ -4,7 +4,7 @@ using Android.Content.PM;
 using Android.OS;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Shared.Extensions;
 

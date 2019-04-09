@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Sync
+namespace Toggl.Core.Sync
 {
     internal sealed class LeakyBucket : ILeakyBucket
     {

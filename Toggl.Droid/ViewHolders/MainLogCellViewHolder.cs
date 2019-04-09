@@ -7,14 +7,14 @@ using Android.Support.Constraints;
 using Android.Text;
 using Android.Views;
 using Android.Widget;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.ViewHelpers;
 using static Toggl.Giskard.Resource.Id;
 using MvvmCross.Plugin.Color.Platforms.Android;
 using Android.Graphics.Drawables;
-using GroupingColor = Toggl.Foundation.MvvmCross.Helper.Color.TimeEntriesLog.Grouping;
+using GroupingColor = Toggl.Core.MvvmCross.Helper.Color.TimeEntriesLog.Grouping;
 using Android.Graphics;
 using System.Reactive;
 using Toggl.Giskard.Extensions.Reactive;
@@ -22,7 +22,7 @@ using System.Reactive.Disposables;
 using Android.Support.V4.Content;
 using Toggl.Shared.Extensions;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 
 namespace Toggl.Giskard.ViewHolders
 {

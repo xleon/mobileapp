@@ -6,21 +6,21 @@ using System.Reactive.Linq;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Transformations;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.Identity;
-using Toggl.Foundation.Tests.Mocks;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.Transformations;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
+using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.Transformations
+namespace Toggl.Core.Tests.MvvmCross.Transformations
 {
     public sealed class TimeEntriesFlatenningTests
     {

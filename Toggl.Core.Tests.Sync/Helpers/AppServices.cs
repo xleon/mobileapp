@@ -1,17 +1,17 @@
 using System.Reactive.Concurrency;
 using MvvmCross.Navigation;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.Services;
+using Toggl.Core.Sync;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
-using IStopwatchProvider = Toggl.Foundation.Diagnostics.IStopwatchProvider;
+using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
 
-namespace Toggl.Foundation.Tests.Sync.Helpers
+namespace Toggl.Core.Tests.Sync.Helpers
 {
     public sealed class AppServices
     {

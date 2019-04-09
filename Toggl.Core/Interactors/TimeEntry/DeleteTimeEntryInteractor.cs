@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     internal sealed class DeleteTimeEntryInteractor : IInteractor<IObservable<Unit>>
     {

@@ -1,8 +1,8 @@
-﻿using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Models.Interfaces;
+﻿using Toggl.Core.Extensions;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Autocomplete.Suggestions
+namespace Toggl.Core.Autocomplete.Suggestions
 {
     public sealed class TaskSuggestion : AutocompleteSuggestion
     {

@@ -8,19 +8,19 @@ using FsCheck;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar;
-using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Tests.TestExtensions;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Analytics;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.ViewModels.ReportsCalendar;
+using Toggl.Core.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts;
+using Toggl.Core.Services;
+using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.Tests.Generators;
 using Toggl.Multivac;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class ReportsCalendarViewModelTests
     {

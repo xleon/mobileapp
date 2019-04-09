@@ -3,18 +3,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
 using Xunit;
 using Toggl.Multivac.Extensions;
 using System.Reactive.Linq;
-using Toggl.Foundation.Interactors;
+using Toggl.Core.Interactors;
 using System.Reactive;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Exceptions;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Exceptions;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class SelectDefaultWorkspaceViewModelTests
     {

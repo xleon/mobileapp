@@ -2,11 +2,11 @@
 using FsCheck.Xunit;
 using Xunit;
 using FluentAssertions;
-using Toggl.Foundation.Sync.ConflictResolution;
+using Toggl.Core.Sync.ConflictResolution;
 using Toggl.PrimeRadiant;
 using Toggl.Multivac.Models;
 
-namespace Toggl.Foundation.Tests.Sync.ConflictResolution
+namespace Toggl.Core.Tests.Sync.ConflictResolution
 {
     public sealed class PreferNewerTests
     {

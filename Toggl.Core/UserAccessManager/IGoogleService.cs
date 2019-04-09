@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive;
 
-namespace Toggl.Foundation.Login
+namespace Toggl.Core.Login
 {
     public interface IGoogleService
     {

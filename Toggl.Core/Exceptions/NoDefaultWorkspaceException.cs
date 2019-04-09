@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Foundation.Exceptions
+namespace Toggl.Core.Exceptions
 {
     public sealed class NoDefaultWorkspaceException : Exception
     {

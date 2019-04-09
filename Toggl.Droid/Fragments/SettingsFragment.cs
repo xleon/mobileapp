@@ -8,15 +8,15 @@ using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.ViewModels;
 using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.Presentation;
 using Toggl.Giskard.ViewHolders;
 using Toggl.Shared.Extensions;
-using FoundationResources = Toggl.Foundation.Resources;
+using FoundationResources = Toggl.Core.Resources;
 
 namespace Toggl.Giskard.Fragments
 {

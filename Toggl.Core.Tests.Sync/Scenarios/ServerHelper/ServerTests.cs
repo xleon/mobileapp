@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Toggl.Foundation.Tests.Mocks;
-using Toggl.Foundation.Tests.Sync.Extensions;
-using Toggl.Foundation.Tests.Sync.Helpers;
+using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.Sync.Extensions;
+using Toggl.Core.Tests.Sync.Helpers;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
@@ -13,7 +13,7 @@ using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Tests.Integration;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync.Scenarios.ServerHelper
+namespace Toggl.Core.Tests.Sync.Scenarios.ServerHelper
 {
     public sealed class ServerTests
     {

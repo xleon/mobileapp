@@ -1,11 +1,11 @@
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Toggl.Foundation.Interactors.Timezones;
-using Toggl.Foundation.Serialization;
+using Toggl.Core.Interactors.Timezones;
+using Toggl.Core.Serialization;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.Timezones
+namespace Toggl.Core.Tests.Interactors.Timezones
 {
     public sealed class GetSupportedTimezonesInteractorTests
     {

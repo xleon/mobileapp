@@ -1,13 +1,13 @@
 ﻿using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using System.Threading.Tasks;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.Services;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using System.Threading.Tasks;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class BrowserViewModel : MvxViewModel<BrowserParameters>

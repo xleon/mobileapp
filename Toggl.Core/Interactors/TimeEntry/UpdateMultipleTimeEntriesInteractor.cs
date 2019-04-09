@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.DTOs;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Sync;
+using Toggl.Core.DataSources;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.DTOs;
+using Toggl.Core.Extensions;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     internal class UpdateMultipleTimeEntriesInteractor : IInteractor<IObservable<IEnumerable<IThreadSafeTimeEntry>>>
     {

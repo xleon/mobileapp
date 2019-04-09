@@ -4,7 +4,7 @@ using Android.App;
 using Android.OS;
 using Firebase.Analytics;
 using Microsoft.AppCenter.Crashes;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 using AppCenterAnalytics = Microsoft.AppCenter.Analytics.Analytics;
 
 namespace Toggl.Giskard.Services

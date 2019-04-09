@@ -1,6 +1,6 @@
-using Toggl.Foundation.Sync;
+using Toggl.Core.Sync;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public interface ISyncErrorHandlingService
     {

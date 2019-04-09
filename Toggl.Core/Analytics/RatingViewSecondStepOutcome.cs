@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Toggl.Foundation.Analytics
+namespace Toggl.Core.Analytics
 {
     public enum RatingViewSecondStepOutcome
     {

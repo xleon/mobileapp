@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.Autocomplete.Span
+namespace Toggl.Core.Autocomplete.Span
 {
     public sealed class QueryTextSpan : TextSpan
     {

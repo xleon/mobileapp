@@ -4,11 +4,11 @@ using System.Collections.Immutable;
 using System.Linq;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.ViewModels;
 using Toggl.Multivac;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class LicensesViewModelTests
     {

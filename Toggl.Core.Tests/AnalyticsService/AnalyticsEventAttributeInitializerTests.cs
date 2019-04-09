@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.AnalyticsService
+namespace Toggl.Core.Tests.AnalyticsService
 {
     public sealed class AnalyticsEventAttributeInitializerTests
     {

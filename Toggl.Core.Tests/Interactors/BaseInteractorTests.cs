@@ -1,19 +1,19 @@
 ﻿using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Shortcuts;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Interactors;
+using Toggl.Core.Services;
+using Toggl.Core.Shortcuts;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Network;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Diagnostics;
+using Toggl.Core.Sync;
+using Toggl.Core.Diagnostics;
 using Toggl.Ultrawave;
-using Toggl.Foundation.Login;
+using Toggl.Core.Login;
 using System;
 
-namespace Toggl.Foundation.Tests
+namespace Toggl.Core.Tests
 {
     public abstract class BaseInteractorTests
     {

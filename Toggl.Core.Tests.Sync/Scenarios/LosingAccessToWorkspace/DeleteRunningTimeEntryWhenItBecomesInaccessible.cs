@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using Toggl.Foundation.Tests.Mocks;
-using Toggl.Foundation.Tests.Sync.Extensions;
-using Toggl.Foundation.Tests.Sync.Helpers;
-using Toggl.Foundation.Tests.Sync.State;
+using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.Sync.Extensions;
+using Toggl.Core.Tests.Sync.Helpers;
+using Toggl.Core.Tests.Sync.State;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Tests.Sync.Scenarios.LosingAccessToWorkspace
+namespace Toggl.Core.Tests.Sync.Scenarios.LosingAccessToWorkspace
 {
     public sealed class DeleteRunningTimeEntryWhenItBecomesInaccessible
     {

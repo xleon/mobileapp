@@ -4,17 +4,17 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Suggestions;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Analytics;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Suggestions;
+using Toggl.Core.Tests.Mocks;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Multivac.Models;
 using Xunit;
-using ITimeEntryPrototype = Toggl.Foundation.Models.ITimeEntryPrototype;
+using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
 
-namespace Toggl.Foundation.Tests.Interactors
+namespace Toggl.Core.Tests.Interactors
 {
     public sealed class CreateTimeEntryInteractorTests
     {

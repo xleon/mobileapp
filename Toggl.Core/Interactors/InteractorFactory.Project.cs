@@ -1,10 +1,10 @@
 ﻿using System;
-using Toggl.Foundation.DTOs;
-using Toggl.Foundation.Interactors.Generic;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DTOs;
+using Toggl.Core.Interactors.Generic;
+using Toggl.Core.Models.Interfaces;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public sealed partial class InteractorFactory : IInteractorFactory
     {

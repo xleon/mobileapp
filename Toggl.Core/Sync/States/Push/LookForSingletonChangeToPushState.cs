@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Sync.States.Push.Interfaces;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync.States.Push.Interfaces;
 using Toggl.Shared;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Sync.States.Push
+namespace Toggl.Core.Sync.States.Push
 {
     internal sealed class LookForSingletonChangeToPushState<T> : ILookForChangeToPushState<T>
         where T : class, IThreadSafeModel, IDatabaseSyncable

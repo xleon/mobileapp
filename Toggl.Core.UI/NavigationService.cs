@@ -3,9 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 
-namespace Toggl.Foundation.MvvmCross
+namespace Toggl.Core.MvvmCross
 {
     public sealed class NavigationService : MvxNavigationService
     {

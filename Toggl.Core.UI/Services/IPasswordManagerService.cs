@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Foundation.MvvmCross.Services
+namespace Toggl.Core.MvvmCross.Services
 {
     public interface IPasswordManagerService
     {

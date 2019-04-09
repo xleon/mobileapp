@@ -1,5 +1,5 @@
 ﻿using Java.Lang;
-using Toggl.Foundation.MvvmCross.Reactive;
+using Toggl.Core.MvvmCross.Reactive;
 
 namespace Toggl.Giskard.Extensions.Reactive
 {

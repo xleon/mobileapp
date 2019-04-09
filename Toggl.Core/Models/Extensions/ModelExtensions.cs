@@ -1,8 +1,8 @@
-﻿using Toggl.Foundation.Models.Interfaces;
+﻿using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Models
+namespace Toggl.Core.Models
 {
     internal static class ModelExtensions
     {

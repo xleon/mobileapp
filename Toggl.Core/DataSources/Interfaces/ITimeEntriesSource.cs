@@ -1,9 +1,9 @@
 using System;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.DataSources
+namespace Toggl.Core.DataSources
 {
     public interface ITimeEntriesSource
         : IObservableDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry>

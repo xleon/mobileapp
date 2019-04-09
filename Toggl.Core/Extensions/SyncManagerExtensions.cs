@@ -1,6 +1,6 @@
-﻿using Toggl.Foundation.Sync;
+﻿using Toggl.Core.Sync;
 
-namespace Toggl.Foundation.Extensions
+namespace Toggl.Core.Extensions
 {
     public static class SyncManagerExtensions
     {

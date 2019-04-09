@@ -1,12 +1,12 @@
 ﻿using System;
-using Toggl.Foundation.DTOs;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DTOs;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Models
+namespace Toggl.Core.Models
 {
     internal class Preferences : IThreadSafePreferences
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 
-namespace Toggl.Foundation.Sync.States
+namespace Toggl.Core.Sync.States
 {
     internal sealed class FailureState : ISyncState<Exception>
     {

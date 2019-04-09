@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.Ultrawave.Helpers;
 
-namespace Toggl.Foundation.Tests.Sync.State
+namespace Toggl.Core.Tests.Sync.State
 {
     public struct ServerState
     {

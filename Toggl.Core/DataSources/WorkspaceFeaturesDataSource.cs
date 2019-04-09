@@ -1,10 +1,10 @@
-﻿using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Sync.ConflictResolution;
+﻿using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync.ConflictResolution;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.DataSources
+namespace Toggl.Core.DataSources
 {
     internal sealed class WorkspaceFeaturesDataSource : DataSource<IThreadSafeWorkspaceFeatureCollection, IDatabaseWorkspaceFeatureCollection>
     {

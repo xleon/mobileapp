@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.MvvmCross.ViewModels.Calendar;
+using Toggl.Core.Tests.Generators;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class SelectUserCalendarsViewModelTests
     {

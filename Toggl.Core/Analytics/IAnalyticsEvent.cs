@@ -1,4 +1,4 @@
-﻿namespace Toggl.Foundation.Analytics
+﻿namespace Toggl.Core.Analytics
 {
     public interface IAnalyticsEvent
     {

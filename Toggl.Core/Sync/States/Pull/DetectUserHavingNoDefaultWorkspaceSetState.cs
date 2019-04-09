@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Sync.States.Pull
+namespace Toggl.Core.Sync.States.Pull
 {
     internal sealed class DetectUserHavingNoDefaultWorkspaceSetState : ISyncState
     {

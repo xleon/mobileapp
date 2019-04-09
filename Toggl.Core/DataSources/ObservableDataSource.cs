@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared.Models;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.DataSources
+namespace Toggl.Core.DataSources
 {
     public abstract class ObservableDataSource<TThreadsafe, TDatabase>
         : DataSource<TThreadsafe, TDatabase>, IObservableDataSource<TThreadsafe, TDatabase>

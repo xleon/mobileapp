@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation
+namespace Toggl.Core
 {
     public sealed class TimeService : ITimeService
     {

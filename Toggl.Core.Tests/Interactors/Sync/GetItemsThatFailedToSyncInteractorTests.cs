@@ -5,13 +5,13 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Mocks;
 using Xunit;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Tests.Interactors
+namespace Toggl.Core.Tests.Interactors
 {
     public class GetItemsThatFailedToSyncInteractorTests
     {

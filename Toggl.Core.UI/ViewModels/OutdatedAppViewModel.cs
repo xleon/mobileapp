@@ -4,12 +4,12 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.Services;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class OutdatedAppViewModel : MvxViewModel

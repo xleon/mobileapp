@@ -1,4 +1,4 @@
-﻿namespace Toggl.Foundation.Autocomplete
+﻿namespace Toggl.Core.Autocomplete
 {
     public static class QuerySymbols
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Sync;
 
-namespace Toggl.Foundation.Analytics
+namespace Toggl.Core.Analytics
 {
     public interface IAnalyticsService
     {

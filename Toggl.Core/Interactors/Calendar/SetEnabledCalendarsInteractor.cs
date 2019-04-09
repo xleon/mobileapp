@@ -2,7 +2,7 @@
 using Toggl.Shared;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.Interactors.Calendar
+namespace Toggl.Core.Interactors.Calendar
 {
     public sealed class SetEnabledCalendarsInteractor : IInteractor<Unit>
     {

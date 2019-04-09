@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Exceptions;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Services;
+using Toggl.Core.Exceptions;
 using Toggl.Shared;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Exceptions;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 
-namespace Toggl.Foundation.MvvmCross.Services
+namespace Toggl.Core.MvvmCross.Services
 {
     public sealed class ErrorHandlingService : IErrorHandlingService
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.Identity
+namespace Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.Identity
 {
     public interface IMainLogKey : IEquatable<IMainLogKey>
     {

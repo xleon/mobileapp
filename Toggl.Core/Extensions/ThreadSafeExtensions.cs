@@ -1,7 +1,7 @@
 ﻿using System;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models.Interfaces;
 
-namespace Toggl.Foundation.Extensions
+namespace Toggl.Core.Extensions
 {
     public static class ThreadSafeExtensions
     {

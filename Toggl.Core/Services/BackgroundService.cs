@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public sealed class BackgroundService : IBackgroundService
     {

@@ -1,9 +1,9 @@
 using System;
-using Toggl.Foundation.Interactors.Reports;
-using Toggl.Foundation.Reports;
+using Toggl.Core.Interactors.Reports;
+using Toggl.Core.Reports;
 using Toggl.Shared.Models.Reports;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public partial class InteractorFactory
     {

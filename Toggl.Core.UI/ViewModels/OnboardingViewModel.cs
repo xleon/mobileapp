@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using MvvmCross.UI;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.Services;
+using Toggl.Core.Analytics;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Settings;
 using Math = System.Math;
-using Color = Toggl.Foundation.MvvmCross.Helper.Color;
+using Color = Toggl.Core.MvvmCross.Helper.Color;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class OnboardingViewModel : MvxViewModel

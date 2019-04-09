@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Foundation.Conversions
+namespace Toggl.Core.Conversions
 {
     public static class DateTimeOffsetConversion
     {

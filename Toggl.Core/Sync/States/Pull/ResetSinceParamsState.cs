@@ -5,7 +5,7 @@ using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Sync.States.Pull
+namespace Toggl.Core.Sync.States.Pull
 {
     public class ResetSinceParamsState : ISyncState<IEnumerable<IWorkspace>>
     {

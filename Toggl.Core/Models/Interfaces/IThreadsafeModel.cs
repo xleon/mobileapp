@@ -1,6 +1,6 @@
 ﻿using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Models.Interfaces
+namespace Toggl.Core.Models.Interfaces
 {
     public interface IThreadSafeModel : IDatabaseModel
     {

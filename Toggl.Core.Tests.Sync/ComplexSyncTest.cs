@@ -1,15 +1,15 @@
 using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Tests.Sync.Helpers;
-using Toggl.Foundation.Tests.Sync.Exceptions;
-using Toggl.Foundation.Tests.Sync.State;
+using Toggl.Core.Sync;
+using Toggl.Core.Tests.Sync.Helpers;
+using Toggl.Core.Tests.Sync.Exceptions;
+using Toggl.Core.Tests.Sync.State;
 using Toggl.Multivac.Extensions;
 using Toggl.Ultrawave.Tests.Integration;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync
+namespace Toggl.Core.Tests.Sync
 {
     public abstract class ComplexSyncTest : IDisposable
     {

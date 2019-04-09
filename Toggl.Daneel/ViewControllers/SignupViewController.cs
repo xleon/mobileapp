@@ -5,10 +5,10 @@ using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.MvvmCross.ViewModels;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -168,8 +168,8 @@ namespace Toggl.Daneel.ViewControllers
                 => hasError ? UIColor.White : UIColor.Black;
 
             UIColor signupButtonTitleColor(bool enabled) => enabled
-                ? Foundation.MvvmCross.Helper.Color.Login.EnabledButtonColor.ToNativeColor()
-                : Foundation.MvvmCross.Helper.Color.Login.DisabledButtonColor.ToNativeColor();
+                ? Core.MvvmCross.Helper.Color.Login.EnabledButtonColor.ToNativeColor()
+                : Core.MvvmCross.Helper.Color.Login.DisabledButtonColor.ToNativeColor();
         }
 
         public override void ViewDidLayoutSubviews()
@@ -219,7 +219,7 @@ namespace Toggl.Daneel.ViewControllers
             ActivityIndicator.StartSpinning();
 
             SignupButton.SetTitleColor(
-                Foundation.MvvmCross.Helper.Color.Login.DisabledButtonColor.ToNativeColor(),
+                Core.MvvmCross.Helper.Color.Login.DisabledButtonColor.ToNativeColor(),
                 UIControlState.Disabled
             );
 

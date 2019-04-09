@@ -2,19 +2,19 @@
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.ApiClients;
 using System.Collections.Generic;
-using Toggl.Foundation.Extensions;
+using Toggl.Core.Extensions;
 using Toggl.Ultrawave.Exceptions;
-using Toggl.Foundation.DataSources.Interfaces;
+using Toggl.Core.DataSources.Interfaces;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Sync.States.Pull
+namespace Toggl.Core.Sync.States.Pull
 {
     public sealed class TryFetchInaccessibleProjectsState : IPersistState
     {

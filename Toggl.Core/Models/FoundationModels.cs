@@ -1,12 +1,12 @@
 ﻿﻿using System;
 using System.Collections.Generic;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Shared;
 using Toggl.Shared.Models;
 
-namespace Toggl.Foundation.Models
+namespace Toggl.Core.Models
 {
     internal partial class Project : IThreadSafeProject
     {

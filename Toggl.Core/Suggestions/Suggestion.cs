@@ -1,10 +1,10 @@
 using System;
-using Toggl.Foundation.Helper;
-using Toggl.Foundation.Models;
+using Toggl.Core.Helper;
+using Toggl.Core.Models;
 using Toggl.Shared;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Suggestions
+namespace Toggl.Core.Suggestions
 {
     [Preserve(AllMembers = true)]
     public sealed class Suggestion : ITimeEntryPrototype

@@ -1,6 +1,6 @@
 ﻿using CoreGraphics;
 using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Core.MvvmCross.Helper;
 using UIKit;
 
 namespace Toggl.Daneel.Presentation.Transition

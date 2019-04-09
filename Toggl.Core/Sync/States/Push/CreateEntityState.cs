@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Analytics;
+using Toggl.Core.Extensions;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Ultrawave.ApiClients;
-using static Toggl.Foundation.Sync.PushSyncOperation;
+using static Toggl.Core.Sync.PushSyncOperation;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Toggl.Foundation.Sync.States.Push
+namespace Toggl.Core.Sync.States.Push
 {
     internal sealed class CreateEntityState<TModel, TDatabaseModel, TThreadsafeModel>
         : BasePushEntityState<TThreadsafeModel>

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Foundation.Calendar;
+using Toggl.Core.Calendar;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public interface ICalendarService
     {

@@ -3,7 +3,7 @@ using System.Reactive;
 using Toggl.Shared;
 using Toggl.Ultrawave;
 
-namespace Toggl.Foundation.Login
+namespace Toggl.Core.Login
 {
     public interface IUserAccessManager
     {

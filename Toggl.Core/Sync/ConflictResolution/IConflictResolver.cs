@@ -1,6 +1,6 @@
 ﻿using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Sync.ConflictResolution
+namespace Toggl.Core.Sync.ConflictResolution
 {
     internal interface IConflictResolver<T>
     {

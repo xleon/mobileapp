@@ -1,6 +1,6 @@
 using Toggl.Shared.Models;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public enum ReportPeriod
     {

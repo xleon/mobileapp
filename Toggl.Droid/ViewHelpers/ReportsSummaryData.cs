@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using Toggl.Foundation.Reports;
+using Toggl.Core.Reports;
 using Toggl.Shared;
 
 namespace Toggl.Giskard.ViewHelpers

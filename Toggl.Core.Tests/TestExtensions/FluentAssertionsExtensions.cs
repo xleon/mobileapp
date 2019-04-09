@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Toggl.Foundation.Tests.TestExtensions
+namespace Toggl.Core.Tests.TestExtensions
 {
     public static class FluentAssertionsExtensions
     {

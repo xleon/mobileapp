@@ -2,7 +2,7 @@ using Android.App;
 using Android.App.Job;
 using Android.Content;
 using Toggl.Giskard.Extensions;
-using Toggl.Foundation.Services;
+using Toggl.Core.Services;
 
 namespace Toggl.Giskard.Services
 {

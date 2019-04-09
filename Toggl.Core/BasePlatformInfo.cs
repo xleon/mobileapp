@@ -1,6 +1,6 @@
 ﻿using Xamarin.Essentials;
 
-namespace Toggl.Foundation
+namespace Toggl.Core
 {
     public abstract class BasePlatformInfo : IPlatformInfo
     {

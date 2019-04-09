@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public interface IRatingService
     {

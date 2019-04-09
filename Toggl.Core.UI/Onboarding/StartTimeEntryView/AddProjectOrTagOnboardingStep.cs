@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources;
+using Toggl.Core.DataSources;
 using Toggl.Shared;
 using Toggl.PrimeRadiant.Onboarding;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.MvvmCross.Onboarding.StartTimeEntryView
+namespace Toggl.Core.MvvmCross.Onboarding.StartTimeEntryView
 {
     public sealed class AddProjectOrTagOnboardingStep : IOnboardingStep
     {

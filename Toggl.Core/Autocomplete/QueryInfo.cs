@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using Toggl.Foundation.Autocomplete.Span;
-using Toggl.Foundation.Autocomplete.Suggestions;
+using Toggl.Core.Autocomplete.Span;
+using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.Autocomplete
+namespace Toggl.Core.Autocomplete
 {
     public struct QueryInfo
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
+namespace Toggl.Core.MvvmCross.ViewModels.Reports
 {
     public struct BarViewModel
     {

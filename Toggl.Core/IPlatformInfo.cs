@@ -1,6 +1,6 @@
 ﻿using Toggl.Ultrawave.Network;
 
-namespace Toggl.Foundation
+namespace Toggl.Core
 {
     public interface IPlatformInfo
     {

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Tests.Mocks
+namespace Toggl.Core.Tests.Mocks
 {
     public sealed class MockWorkspaceFeatureCollection : IThreadSafeWorkspaceFeatureCollection
     {

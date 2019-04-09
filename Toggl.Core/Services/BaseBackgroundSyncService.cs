@@ -1,9 +1,9 @@
 using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.Login;
+using Toggl.Core.Login;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public abstract class BaseBackgroundSyncService : IBackgroundSyncService, IDisposable
     {

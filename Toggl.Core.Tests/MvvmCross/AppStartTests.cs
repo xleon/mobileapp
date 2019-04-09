@@ -3,19 +3,19 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 using NSubstitute;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Login;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Interactors;
+using Toggl.Core.Login;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Services;
+using Toggl.Core.Sync;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross
+namespace Toggl.Core.Tests.MvvmCross
 {
     public sealed class AppStartTests
     {

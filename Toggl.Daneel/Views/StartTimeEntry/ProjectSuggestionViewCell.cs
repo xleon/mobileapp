@@ -6,7 +6,7 @@ using MvvmCross.UI;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Foundation.Autocomplete.Suggestions;
+using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Shared.Extensions;
 using UIKit;
 

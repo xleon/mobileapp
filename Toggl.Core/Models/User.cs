@@ -3,7 +3,7 @@ using Toggl.Shared;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Models
+namespace Toggl.Core.Models
 {
     internal partial class User
     {

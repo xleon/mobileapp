@@ -4,7 +4,7 @@ using System.Linq;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.DTOs
+namespace Toggl.Core.DTOs
 {
     public struct EditTimeEntryDto : IEquatable<EditTimeEntryDto>
     {

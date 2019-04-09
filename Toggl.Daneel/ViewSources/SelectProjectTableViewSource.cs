@@ -4,9 +4,9 @@ using System.Reactive.Subjects;
 using Foundation;
 using Toggl.Daneel.Views.EntityCreation;
 using Toggl.Daneel.Views.StartTimeEntry;
-using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.Helper;
 using Toggl.Shared.Extensions;
 using UIKit;
 

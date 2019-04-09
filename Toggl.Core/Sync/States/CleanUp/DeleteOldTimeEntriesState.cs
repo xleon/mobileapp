@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Sync.States.CleanUp
+namespace Toggl.Core.Sync.States.CleanUp
 {
     internal class DeleteOldTimeEntriesState : ISyncState
     {

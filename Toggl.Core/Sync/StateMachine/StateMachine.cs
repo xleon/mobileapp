@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Sync
+namespace Toggl.Core.Sync
 {
     internal sealed class StateMachine : IStateMachine
     {

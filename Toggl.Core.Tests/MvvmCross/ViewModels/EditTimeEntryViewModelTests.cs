@@ -7,26 +7,26 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.DTOs;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.DTOs;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Analytics;
+using Toggl.Core.Interactors;
+using Toggl.Core.Tests.Mocks;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Multivac;
-using ProjectClientTaskInfo = Toggl.Foundation.MvvmCross.ViewModels.EditTimeEntryViewModel.ProjectClientTaskInfo;
+using ProjectClientTaskInfo = Toggl.Core.MvvmCross.ViewModels.EditTimeEntryViewModel.ProjectClientTaskInfo;
 using Microsoft.Reactive.Testing;
 using Toggl.Multivac.Extensions;
-using Toggl.Foundation.Extensions;
-using static Toggl.Foundation.Helper.Constants;
+using Toggl.Core.Extensions;
+using static Toggl.Core.Helper.Constants;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class EditTimeEntryViewModelTests
     {

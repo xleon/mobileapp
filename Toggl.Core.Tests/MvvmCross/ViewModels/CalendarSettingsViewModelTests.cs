@@ -8,14 +8,14 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.MvvmCross.ViewModels.Selectable;
-using Toggl.Foundation.MvvmCross.ViewModels.Settings;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.MvvmCross.ViewModels.Selectable;
+using Toggl.Core.MvvmCross.ViewModels.Settings;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Multivac;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class CalendarSettingsViewModelTests
     {

@@ -3,7 +3,7 @@ using System;
 using UIKit;
 using ObjCRuntime;
 using CoreGraphics;
-using Toggl.Foundation.Suggestions;
+using Toggl.Core.Suggestions;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.UI;
 

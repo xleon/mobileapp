@@ -6,21 +6,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Reports;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Analytics;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Reports;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Xunit;
 using Microsoft.Reactive.Testing;
-using Toggl.Foundation.MvvmCross.ViewModels.Reports;
-using Toggl.Foundation.Tests.TestExtensions;
-using Toggl.Foundation.Interactors;
+using Toggl.Core.MvvmCross.ViewModels.Reports;
+using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.Interactors;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class ReportsViewModelTests
     {

@@ -6,11 +6,11 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Helper;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Reports;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Analytics;
+using Toggl.Core.Helper;
+using Toggl.Core.Interactors;
+using Toggl.Core.Reports;
+using Toggl.Core.Tests.Generators;
 using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
 using Toggl.Multivac.Models.Reports;
@@ -21,7 +21,7 @@ using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.Models.Reports;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors
+namespace Toggl.Core.Tests.Interactors
 {
     public sealed class GetProjectSummaryInteractorTests
     {

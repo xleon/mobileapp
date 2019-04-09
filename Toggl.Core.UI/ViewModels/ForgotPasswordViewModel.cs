@@ -4,16 +4,16 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Login;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.Services;
+using Toggl.Core.Analytics;
+using Toggl.Core.Extensions;
+using Toggl.Core.Login;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Ultrawave.Exceptions;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class ForgotPasswordViewModel : MvxViewModel<EmailParameter, EmailParameter>

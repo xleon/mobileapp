@@ -13,31 +13,31 @@ using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using MvvmCross.Binding.Extensions;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Experiments;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.Hints;
-using Toggl.Foundation.MvvmCross.ViewModels.Reports;
-using Toggl.Foundation.Suggestions;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.Mocks;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Experiments;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.ViewModels.Hints;
+using Toggl.Core.MvvmCross.ViewModels.Reports;
+using Toggl.Core.Suggestions;
+using Toggl.Core.Sync;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Xunit;
-using static Toggl.Foundation.Helper.Constants;
+using static Toggl.Core.Helper.Constants;
 using Notification = System.Reactive.Notification;
 using ThreadingTask = System.Threading.Tasks.Task;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class MainViewModelTests
     {

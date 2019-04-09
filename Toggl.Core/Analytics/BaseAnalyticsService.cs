@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Extensions;
+using Toggl.Core.Sync;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Analytics
+namespace Toggl.Core.Analytics
 {
     [Preserve(AllMembers = true)]
     public abstract class BaseAnalyticsService : AnalyticsEventAttributeInitializer, IAnalyticsService

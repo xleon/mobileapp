@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Sync.States.Push;
-using Toggl.Foundation.Tests.Sync.States.Push.BaseStates;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Extensions;
+using Toggl.Core.Sync;
+using Toggl.Core.Sync.States.Push;
+using Toggl.Core.Tests.Sync.States.Push.BaseStates;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.ApiClients.Interfaces;
 using Xunit;
-using static Toggl.Foundation.Sync.PushSyncOperation;
+using static Toggl.Core.Sync.PushSyncOperation;
 
-namespace Toggl.Foundation.Tests.Sync.States.Push
+namespace Toggl.Core.Tests.Sync.States.Push
 {
     public sealed class DeleteEntityStateTests : BasePushEntityStateTests
     {

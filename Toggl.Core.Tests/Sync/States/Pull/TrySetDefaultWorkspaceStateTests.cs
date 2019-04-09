@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Sync.States.Pull;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.DataSources;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync.States.Pull;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync.States.Pull
+namespace Toggl.Core.Tests.Sync.States.Pull
 {
     public sealed class TrySetDefaultWorkspaceStateTests
     {

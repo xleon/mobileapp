@@ -1,9 +1,9 @@
 ﻿using System;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.PrimeRadiant;
-using ColorHelper = Toggl.Foundation.Helper.Color;
+using ColorHelper = Toggl.Core.Helper.Color;
 
-namespace Toggl.Foundation.Calendar
+namespace Toggl.Core.Calendar
 {
     public struct CalendarItem
     {

@@ -7,19 +7,19 @@ using FsCheck;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.ViewModels.Reports;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.DataSources;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross.ViewModels.Reports;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models.Reports;
 using Toggl.Ultrawave.Models.Reports;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.Reports
+namespace Toggl.Core.Tests.MvvmCross.ViewModels.Reports
 {
     public abstract class ReportsBarChartViewModelTest : BaseViewModelTests<ReportsBarChartViewModel>
     {

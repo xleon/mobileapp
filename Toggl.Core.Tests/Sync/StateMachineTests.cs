@@ -7,12 +7,12 @@ using System.Reactive.Subjects;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Sync;
+using Toggl.Core.Tests.Generators;
 using Toggl.Multivac;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync
+namespace Toggl.Core.Tests.Sync
 {
     public sealed class StateMachineTests
     {

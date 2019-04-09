@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources;
+using Toggl.Core.DataSources;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     internal sealed class GetUserAvatarInteractor : IInteractor<IObservable<byte[]>>
     {

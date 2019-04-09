@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.Interactors.AutocompleteSuggestions;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.Interactors.AutocompleteSuggestions;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public partial class InteractorFactory
     {

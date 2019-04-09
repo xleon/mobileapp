@@ -4,13 +4,13 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Services;
+using Toggl.Core.Interactors;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar
+namespace Toggl.Core.MvvmCross.ViewModels.Calendar
 {
     [Preserve(AllMembers = true)]
     public sealed class SelectUserCalendarsViewModel : SelectUserCalendarsViewModelBase

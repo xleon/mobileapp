@@ -5,13 +5,13 @@ using System.Reactive.Subjects;
 using FluentAssertions;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.Sync;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.TestExtensions;
 using Xunit;
-using static Toggl.Foundation.Sync.SyncState;
+using static Toggl.Core.Sync.SyncState;
 
-namespace Toggl.Foundation.Tests.Sync
+namespace Toggl.Core.Tests.Sync
 {
     public sealed class StateMachineOrchestratorTests
     {

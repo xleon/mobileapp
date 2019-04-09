@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.DataSources;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Mocks;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.TimeEntry
+namespace Toggl.Core.Tests.Interactors.TimeEntry
 {
     public class ObserveTimeEntriesChangesInteractorTests : BaseInteractorTests
     {

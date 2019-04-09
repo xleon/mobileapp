@@ -1,11 +1,11 @@
 using System;
 using FluentAssertions;
 using FsCheck.Xunit;
-using Toggl.Foundation.MvvmCross.ViewModels.Reports;
+using Toggl.Core.MvvmCross.ViewModels.Reports;
 using Xunit;
 using System.Collections.Generic;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels.Reports
+namespace Toggl.Core.Tests.MvvmCross.ViewModels.Reports
 {
     public sealed class BarViewModelTests
     {

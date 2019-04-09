@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Autocomplete.Span;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Span;
+using Toggl.Core.Calendar;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
 
-namespace Toggl.Foundation.Extensions
+namespace Toggl.Core.Extensions
 {
     public static class TimeEntryExtensions
     {

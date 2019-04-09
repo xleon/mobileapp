@@ -6,7 +6,7 @@ using Android.Graphics.Drawables;
 using Android.Support.V4.Graphics;
 using Android.Views;
 using Android.Widget;
-using Toggl.Foundation.Autocomplete.Suggestions;
+using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using static Toggl.Giskard.Resource.Id;

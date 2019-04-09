@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Interactors.Generic
+namespace Toggl.Core.Interactors.Generic
 {
     public sealed class GetMultipleByIdInteractor<TThreadsafe, TDatabase>
         : IInteractor<IObservable<IEnumerable<TThreadsafe>>>

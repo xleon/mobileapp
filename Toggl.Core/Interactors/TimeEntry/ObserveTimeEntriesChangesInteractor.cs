@@ -1,10 +1,10 @@
 using System;
 using System.Reactive;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Extensions;
+using Toggl.Core.DataSources;
+using Toggl.Core.Extensions;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public class ObserveTimeEntriesChangesInteractor : IInteractor<IObservable<Unit>>
     {

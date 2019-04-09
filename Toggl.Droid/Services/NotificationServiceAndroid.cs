@@ -7,7 +7,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.V4.App;
-using Toggl.Foundation.Services;
+using Toggl.Core.Services;
 using Toggl.Giskard.BroadcastReceivers;
 using Toggl.Giskard.Extensions;
 using Toggl.Shared.Extensions;

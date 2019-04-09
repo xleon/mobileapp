@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Reactive.Disposables;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Login;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Shortcuts;
-using Toggl.Foundation.Suggestions;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Interactors;
+using Toggl.Core.Login;
+using Toggl.Core.Services;
+using Toggl.Core.Shortcuts;
+using Toggl.Core.Suggestions;
+using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant;
@@ -17,7 +17,7 @@ using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation
+namespace Toggl.Core
 {
     public abstract class DependencyContainer
     {

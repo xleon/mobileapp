@@ -6,17 +6,17 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Tests.TestExtensions;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Analytics;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.Tests.Generators;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Xunit;
 using static Toggl.Multivac.Extensions.EmailExtensions;
 using static Toggl.Multivac.Extensions.PasswordExtensions;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public class TokenResetViewModelTests
     {

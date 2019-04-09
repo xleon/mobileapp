@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Tests.Mocks;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.DataSources;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.TestExtensions;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.Workspace
+namespace Toggl.Core.Tests.Interactors.Workspace
 {
     public class ObserveAllWorkspacesInteractorTests
     {

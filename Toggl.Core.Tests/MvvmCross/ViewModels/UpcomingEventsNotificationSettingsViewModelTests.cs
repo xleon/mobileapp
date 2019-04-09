@@ -4,13 +4,13 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.MvvmCross.ViewModels.Selectable;
-using Toggl.Foundation.MvvmCross.ViewModels.Settings;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.MvvmCross.ViewModels.Selectable;
+using Toggl.Core.MvvmCross.ViewModels.Settings;
+using Toggl.Core.Tests.Generators;
 using Toggl.Multivac;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class UpcomingEventsNotificationSettingsViewModelTests
     {

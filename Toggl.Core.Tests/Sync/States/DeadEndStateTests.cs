@@ -1,10 +1,10 @@
 ﻿using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Toggl.Foundation.Sync.States;
+using Toggl.Core.Sync.States;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync.States
+namespace Toggl.Core.Tests.Sync.States
 {
     public class DeadEndStateTests
     {

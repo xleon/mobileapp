@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Threading;
 
-namespace Toggl.Foundation.Helper
+namespace Toggl.Core.Helper
 {
     public static class Color
     {

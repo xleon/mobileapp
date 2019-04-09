@@ -10,30 +10,30 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Foundation;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.MvvmCross.ViewModels.Hints;
-using Toggl.Foundation.MvvmCross.ViewModels.Reports;
-using Toggl.Foundation.Reports;
-using Toggl.Foundation.Services;
+using Toggl.Core;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.MvvmCross.ViewModels.Hints;
+using Toggl.Core.MvvmCross.ViewModels.Reports;
+using Toggl.Core.Reports;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models.Reports;
 using Toggl.Ultrawave.Exceptions;
 using CommonFunctions = Toggl.Shared.Extensions.CommonFunctions;
-using Color = Toggl.Foundation.MvvmCross.Helper.Color;
+using Color = Toggl.Core.MvvmCross.Helper.Color;
 
 [assembly: MvxNavigation(typeof(ReportsViewModel), ApplicationUrls.Reports)]
 
-namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
+namespace Toggl.Core.MvvmCross.ViewModels.Reports
 {
     [Preserve(AllMembers = true)]
     public sealed class ReportsViewModel : MvxViewModel<ReportPeriod>

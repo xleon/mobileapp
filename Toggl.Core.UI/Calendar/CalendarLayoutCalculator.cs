@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.Extensions;
+using Toggl.Core.Calendar;
+using Toggl.Core.Extensions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-using CalendarItemGroup = System.Collections.Generic.List<(Toggl.Foundation.Calendar.CalendarItem Item, int Index)>;
-using CalendarItemGroups = System.Collections.Generic.List<System.Collections.Generic.List<(Toggl.Foundation.Calendar.CalendarItem Item, int Index)>>;
+using CalendarItemGroup = System.Collections.Generic.List<(Toggl.Core.Calendar.CalendarItem Item, int Index)>;
+using CalendarItemGroups = System.Collections.Generic.List<System.Collections.Generic.List<(Toggl.Core.Calendar.CalendarItem Item, int Index)>>;
 
-namespace Toggl.Foundation.MvvmCross.Calendar
+namespace Toggl.Core.MvvmCross.Calendar
 {
     public sealed class CalendarLayoutCalculator
     {

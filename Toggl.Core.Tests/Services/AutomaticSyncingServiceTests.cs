@@ -3,11 +3,11 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using NSubstitute;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Services;
+using Toggl.Core.Sync;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Services
+namespace Toggl.Core.Tests.Services
 {
     public sealed class AutomaticSyncingServiceTests
     {
@@ -32,7 +32,7 @@ namespace Toggl.Foundation.Tests.Services
             public async Task SubscribesToResumingFromBackgroundSignal()
             {
                 AutomaticSyncingService.Start(SyncManager);
-                AppResumedFromBackground.OnNext(Foundation.Services.AutomaticSyncingService.MinimumTimeInBackgroundForFullSync);
+                AppResumedFromBackground.OnNext(Core.Services.AutomaticSyncingService.MinimumTimeInBackgroundForFullSync);
 
                 await SyncManager.Received().ForceFullSync();
             }
@@ -76,7 +76,7 @@ namespace Toggl.Foundation.Tests.Services
                 SyncManager.ClearReceivedCalls();
                 AutomaticSyncingService.Stop();
 
-                subject.OnNext(Foundation.Services.AutomaticSyncingService.MinimumTimeInBackgroundForFullSync);
+                subject.OnNext(Core.Services.AutomaticSyncingService.MinimumTimeInBackgroundForFullSync);
 
                 await SyncManager.DidNotReceive().ForceFullSync();
             }

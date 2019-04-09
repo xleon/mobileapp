@@ -2,8 +2,8 @@ using System;
 using Android.App;
 using Android.Content;
 using MvvmCross;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross;
+using Toggl.Core;
+using Toggl.Core.MvvmCross;
 
 namespace Toggl.Giskard.BroadcastReceivers
 {

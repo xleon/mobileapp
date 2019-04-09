@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using System.Reactive;
 using Notification = Toggl.Shared.Notification;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public interface INotificationService
     {

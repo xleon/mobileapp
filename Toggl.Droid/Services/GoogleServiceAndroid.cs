@@ -11,8 +11,8 @@ using Android.Gms.Common;
 using Android.Gms.Common.Apis;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Views.Base;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Login;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Login;
 
 namespace Toggl.Giskard.Services
 {

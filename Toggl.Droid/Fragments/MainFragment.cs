@@ -14,13 +14,13 @@ using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
 using Android.Text;
 using Android.Views;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Analytics;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
+using Toggl.Core.Sync;
 using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
@@ -30,10 +30,10 @@ using Toggl.Giskard.Services;
 using Toggl.Giskard.ViewHelpers;
 using Toggl.Shared.Extensions;
 using static Android.Content.Context;
-using static Toggl.Foundation.Sync.SyncProgress;
+using static Toggl.Core.Sync.SyncProgress;
 using static Toggl.Giskard.Extensions.CircularRevealAnimation.AnimationType;
 using static Toggl.Giskard.Extensions.FloatingActionButtonExtensions;
-using FoundationResources = Toggl.Foundation.Resources;
+using FoundationResources = Toggl.Core.Resources;
 
 namespace Toggl.Giskard.Fragments
 {

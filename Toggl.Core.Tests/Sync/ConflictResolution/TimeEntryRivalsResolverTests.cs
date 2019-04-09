@@ -4,13 +4,13 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Sync.ConflictResolution;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Models;
+using Toggl.Core.Sync.ConflictResolution;
+using Toggl.Core.Tests.Mocks;
 using Toggl.PrimeRadiant;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync.ConflictResolution
+namespace Toggl.Core.Tests.Sync.ConflictResolution
 {
     public sealed class TimeEntryRivalsResolverTests
     {

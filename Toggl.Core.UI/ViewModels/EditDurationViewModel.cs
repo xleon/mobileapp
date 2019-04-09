@@ -4,20 +4,20 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.Transformations;
-using Toggl.Foundation.Services;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Extensions;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.Transformations;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using static Toggl.Foundation.Helper.Constants;
-using static Toggl.Foundation.MvvmCross.Helper.TemporalInconsistency;
+using static Toggl.Core.Helper.Constants;
+using static Toggl.Core.MvvmCross.Helper.TemporalInconsistency;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class EditDurationViewModel : MvxViewModel<EditDurationParameters, DurationParameter>

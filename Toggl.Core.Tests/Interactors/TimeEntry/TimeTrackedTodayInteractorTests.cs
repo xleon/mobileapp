@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.Core;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.DataSources;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Mocks;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.TimeEntry
+namespace Toggl.Core.Tests.Interactors.TimeEntry
 {
     public sealed class TimeTrackedTodayInteractorTests
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Foundation.Interactors.Timezones;
-using Toggl.Foundation.Serialization;
+using Toggl.Core.Interactors.Timezones;
+using Toggl.Core.Serialization;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public sealed partial class InteractorFactory
     {

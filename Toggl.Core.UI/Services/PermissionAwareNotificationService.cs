@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.Services;
+using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Notification = Toggl.Shared.Notification;
 
-namespace Toggl.Foundation.Calendar
+namespace Toggl.Core.Calendar
 {
     public abstract class PermissionAwareNotificationService : INotificationService
     {

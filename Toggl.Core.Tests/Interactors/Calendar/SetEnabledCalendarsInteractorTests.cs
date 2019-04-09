@@ -4,11 +4,11 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.Interactors.Calendar;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Interactors.Calendar;
+using Toggl.Core.Tests.Generators;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.Calendar
+namespace Toggl.Core.Tests.Interactors.Calendar
 {
     public sealed class SetEnabledCalendarsInteractorTests
     {

@@ -6,9 +6,9 @@ using Android.Support.V7.Widget;
 using Android.Widget;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
-using static Toggl.Foundation.Resources;
+using static Toggl.Core.Resources;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace Toggl.Giskard.Activities

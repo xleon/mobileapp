@@ -11,7 +11,7 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Java.Lang;
-using Toggl.Foundation;
+using Toggl.Core;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Views.EditDuration.Shapes;
 using System.Reactive.Subjects;

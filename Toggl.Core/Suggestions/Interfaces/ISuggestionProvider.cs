@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Foundation.Suggestions
+namespace Toggl.Core.Suggestions
 {
     public interface ISuggestionProvider
     {

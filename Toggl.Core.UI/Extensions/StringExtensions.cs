@@ -1,8 +1,8 @@
 ﻿using System;
 using Toggl.Shared.Extensions;
-using static Toggl.Foundation.Helper.Constants;
+using static Toggl.Core.Helper.Constants;
 
-namespace Toggl.Foundation.MvvmCross.Extensions
+namespace Toggl.Core.MvvmCross.Extensions
 {
     public static class StringExtensions
     {

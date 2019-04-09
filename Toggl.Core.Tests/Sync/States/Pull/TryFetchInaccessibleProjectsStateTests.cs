@@ -5,13 +5,13 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Helper;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Sync.States;
-using Toggl.Foundation.Sync.States.Pull;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.DataSources;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Helper;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync.States;
+using Toggl.Core.Sync.States.Pull;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
@@ -19,7 +19,7 @@ using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.Exceptions;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync.States.Pull
+namespace Toggl.Core.Tests.Sync.States.Pull
 {
     public sealed class TryFetchInaccessibleProjectsStateTests
     {

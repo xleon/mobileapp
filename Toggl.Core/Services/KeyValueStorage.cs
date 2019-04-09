@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public abstract class KeyValueStorage : IKeyValueStorage
     {

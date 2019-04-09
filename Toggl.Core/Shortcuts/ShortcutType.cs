@@ -1,4 +1,4 @@
-﻿namespace Toggl.Foundation.Shortcuts
+﻿namespace Toggl.Core.Shortcuts
 {
     public enum ShortcutType
     {

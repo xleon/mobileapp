@@ -2,10 +2,10 @@
 using System.Reactive.Linq;
 using FluentAssertions;
 using Xunit;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Sync.States.Push;
+using Toggl.Core.Sync;
+using Toggl.Core.Sync.States.Push;
 
-namespace Toggl.Foundation.Tests.Sync.States
+namespace Toggl.Core.Tests.Sync.States
 {
     public sealed class ChooseSyncOperationStateTests
     {

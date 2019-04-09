@@ -1,9 +1,9 @@
 ﻿using System;
 using MvvmCross.UI;
-using Toggl.Foundation.Calendar;
+using Toggl.Core.Calendar;
 using static System.Math;
 
-namespace Toggl.Foundation.MvvmCross.Extensions
+namespace Toggl.Core.MvvmCross.Extensions
 {
     public static class ColorExtensions
     {

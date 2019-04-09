@@ -1,6 +1,6 @@
 using System;
 
-namespace Toggl.Foundation.Tests.Sync.Exceptions
+namespace Toggl.Core.Tests.Sync.Exceptions
 {
     public class CannotDeleteDefaultWorkspaceException : Exception
     {

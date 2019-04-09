@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Toggl.Foundation.Calendar
+namespace Toggl.Core.Calendar
 {
     public enum CalendarIconKind
     {

@@ -8,17 +8,17 @@ using FluentAssertions;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Services;
-using IStopwatchProvider = Toggl.Foundation.Diagnostics.IStopwatchProvider;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Tests.Sync.States;
+using Toggl.Core.Analytics;
+using Toggl.Core.Services;
+using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
+using Toggl.Core.Sync;
+using Toggl.Core.Tests.Sync.States;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Settings;
 using Xunit;
-using static Toggl.Foundation.Sync.SyncState;
+using static Toggl.Core.Sync.SyncState;
 
-namespace Toggl.Foundation.Tests.Sync
+namespace Toggl.Core.Tests.Sync
 {
     public sealed class TheDeadlocks
     {

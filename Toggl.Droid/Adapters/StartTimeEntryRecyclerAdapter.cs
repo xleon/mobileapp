@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Android.Runtime;
 using Android.Views;
-using Toggl.Foundation.Autocomplete.Suggestions;
+using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Giskard.ViewHolders;
 using Toggl.Shared.Extensions;
 

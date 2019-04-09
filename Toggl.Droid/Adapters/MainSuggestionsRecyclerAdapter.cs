@@ -8,7 +8,7 @@ using Android.Graphics;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Toggl.Foundation.Suggestions;
+using Toggl.Core.Suggestions;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.ViewHolders;
 

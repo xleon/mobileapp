@@ -2,12 +2,12 @@ using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Mocks;
 using Toggl.PrimeRadiant;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.Workspace
+namespace Toggl.Core.Tests.Interactors.Workspace
 {
     public sealed class CreateDefaultWorkspaceInteractorTests
     {

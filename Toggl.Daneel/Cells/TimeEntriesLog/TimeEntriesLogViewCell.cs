@@ -8,10 +8,10 @@ using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Transformations;
-using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Core.MvvmCross.Helper;
 using UIKit;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
+using Toggl.Core;
+using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
 
 namespace Toggl.Daneel.Views
 {

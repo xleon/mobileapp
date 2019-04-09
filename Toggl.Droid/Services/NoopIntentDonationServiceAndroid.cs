@@ -1,5 +1,5 @@
 using Toggl.Shared.Models;
-using Toggl.Foundation.Services;
+using Toggl.Core.Services;
 
 namespace Toggl.Giskard.Services
 {

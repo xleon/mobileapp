@@ -1,6 +1,6 @@
 ﻿using Android.Content;
 using Android.Net;
-using Toggl.Foundation.Services;
+using Toggl.Core.Services;
 
 namespace Toggl.Giskard.Services
 {

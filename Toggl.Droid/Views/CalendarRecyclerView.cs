@@ -10,8 +10,8 @@ using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
-using Toggl.Foundation;
-using Toggl.Foundation.Helper;
+using Toggl.Core;
+using Toggl.Core.Helper;
 using Toggl.Giskard.Extensions;
 using Toggl.Shared;
 using Color = Android.Graphics.Color;
@@ -24,8 +24,8 @@ namespace Toggl.Giskard.Views
         private const int hoursPerDay = Constants.HoursPerDay;
         private const float secondsInOneHour = 60f * 60f;
 
-        private static readonly string twelveHoursFormat = Foundation.Resources.TwelveHoursFormat;
-        private static readonly string twentyFourHoursFormat = Foundation.Resources.TwentyFourHoursFormat;
+        private static readonly string twelveHoursFormat = Core.Resources.TwelveHoursFormat;
+        private static readonly string twentyFourHoursFormat = Core.Resources.TwentyFourHoursFormat;
 
         private readonly ISubject<PointF> emptySpaceTouchedSubject = new Subject<PointF>();
 

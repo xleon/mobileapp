@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.AnalyticsService
+namespace Toggl.Core.Tests.AnalyticsService
 {
     public sealed class EditDurationEventTests
     {

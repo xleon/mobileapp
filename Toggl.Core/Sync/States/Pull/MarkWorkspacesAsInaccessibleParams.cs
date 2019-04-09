@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models.Interfaces;
 
-namespace Toggl.Foundation.Sync.States.Pull
+namespace Toggl.Core.Sync.States.Pull
 {
     public struct MarkWorkspacesAsInaccessibleParams
     {

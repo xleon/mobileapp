@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using FluentAssertions;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Collections.Diffing;
-using Toggl.Foundation.Tests.MvvmCross.Collections.Extensions;
+using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.Collections.Diffing;
+using Toggl.Core.Tests.MvvmCross.Collections.Extensions;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.Collections
+namespace Toggl.Core.Tests.MvvmCross.Collections
 {
     public class DiffableInt : IDiffable<long>
     {

@@ -4,15 +4,15 @@ using System.Linq;
 using System.Reactive.Subjects;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Tests.Helpers;
-using Toggl.Foundation.Tests.Sync;
+using Toggl.Core.Services;
+using Toggl.Core.Sync;
+using Toggl.Core.Tests.Helpers;
+using Toggl.Core.Tests.Sync;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Services
+namespace Toggl.Core.Tests.Services
 {
     public sealed class SyncErrorHandlingServiceTests
     {

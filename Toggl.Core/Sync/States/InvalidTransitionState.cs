@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Sync.States
+namespace Toggl.Core.Sync.States
 {
     public sealed class InvalidTransitionState : ISyncState
     {

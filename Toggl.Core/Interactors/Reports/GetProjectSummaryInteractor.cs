@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Reports;
+using Toggl.Core.Analytics;
+using Toggl.Core.Models;
+using Toggl.Core.Reports;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
@@ -15,7 +15,7 @@ using Toggl.Ultrawave;
 using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.ApiClients.Interfaces;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public sealed class GetProjectSummaryInteractor
         : TrackableInteractor,

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.Tests.TestExtensions;
 using FsCheck;
 using FsCheck.Xunit;
-using Toggl.Foundation.Sync;
-using static Toggl.Foundation.Sync.SyncState;
+using Toggl.Core.Sync;
+using static Toggl.Core.Sync.SyncState;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync
+namespace Toggl.Core.Tests.Sync
 {
     public sealed class SyncStateQueueTests
     {

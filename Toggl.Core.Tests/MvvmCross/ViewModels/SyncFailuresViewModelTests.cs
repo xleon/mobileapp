@@ -4,15 +4,15 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class SyncFailuresViewModelTests
     {

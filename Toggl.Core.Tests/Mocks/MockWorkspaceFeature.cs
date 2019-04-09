@@ -1,7 +1,7 @@
-﻿using Toggl.Foundation.Models.Interfaces;
+﻿using Toggl.Core.Models.Interfaces;
 using Toggl.Multivac;
 
-namespace Toggl.Foundation.Tests.Mocks
+namespace Toggl.Core.Tests.Mocks
 {
     public sealed class MockWorkspaceFeature : IThreadSafeWorkspaceFeature
     {

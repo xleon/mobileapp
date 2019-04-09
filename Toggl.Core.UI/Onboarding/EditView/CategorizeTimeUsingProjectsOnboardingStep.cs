@@ -4,7 +4,7 @@ using Toggl.Shared;
 using Toggl.PrimeRadiant.Onboarding;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.MvvmCross.Onboarding.EditView
+namespace Toggl.Core.MvvmCross.Onboarding.EditView
 {
     public class CategorizeTimeUsingProjectsOnboardingStep : IOnboardingStep
     {

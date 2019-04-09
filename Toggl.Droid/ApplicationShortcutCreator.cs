@@ -6,7 +6,7 @@ using Android.Graphics.Drawables;
 using Android.Net;
 using Android.Runtime;
 using Java.Lang;
-using Toggl.Foundation.Shortcuts;
+using Toggl.Core.Shortcuts;
 using Toggl.Giskard.Helper;
 
 namespace Toggl.Giskard

@@ -7,10 +7,10 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Foundation.Interactors.Settings;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Interactors.Settings;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
@@ -18,9 +18,9 @@ using Toggl.PrimeRadiant.Models;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.ApiClients;
 using Xunit;
-using static Toggl.Foundation.Interactors.Settings.SendFeedbackInteractor;
+using static Toggl.Core.Interactors.Settings.SendFeedbackInteractor;
 
-namespace Toggl.Foundation.Tests.Interactors.Settings
+namespace Toggl.Core.Tests.Interactors.Settings
 {
     public sealed class SendFeedbackInteractorTests
     {

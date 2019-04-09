@@ -3,12 +3,12 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Tests.Sync.States;
+using Toggl.Core.DataSources;
+using Toggl.Core.Tests.Sync.States;
 using Toggl.PrimeRadiant;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.DataSources
+namespace Toggl.Core.Tests.DataSources
 {
     public sealed class SingletonDataSourceTests
     {

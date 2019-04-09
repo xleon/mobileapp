@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Toggl.Foundation {
+namespace Toggl.Core {
     using System;
     
     

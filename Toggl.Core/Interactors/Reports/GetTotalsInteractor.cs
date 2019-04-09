@@ -3,7 +3,7 @@ using Toggl.Shared;
 using Toggl.Shared.Models.Reports;
 using Toggl.Ultrawave.ApiClients.Interfaces;
 
-namespace Toggl.Foundation.Interactors.Reports
+namespace Toggl.Core.Interactors.Reports
 {
     internal sealed class GetTotalsInteractor : IInteractor<IObservable<ITimeEntriesTotals>>
     {

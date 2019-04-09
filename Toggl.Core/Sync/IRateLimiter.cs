@@ -1,7 +1,7 @@
 using System;
 using System.Reactive;
 
-namespace Toggl.Foundation.Sync
+namespace Toggl.Core.Sync
 {
     public interface IRateLimiter
     {

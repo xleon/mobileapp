@@ -11,7 +11,7 @@ using Microsoft.Reactive.Testing;
 using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Tests;
 
-namespace Toggl.Foundation.Tests.TestExtensions
+namespace Toggl.Core.Tests.TestExtensions
 {
     public static class RxActionExtensions
     {

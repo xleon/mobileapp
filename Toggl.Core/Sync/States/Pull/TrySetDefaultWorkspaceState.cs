@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.Sync.States.Pull
+namespace Toggl.Core.Sync.States.Pull
 {
     public sealed class TrySetDefaultWorkspaceState : ISyncState
     {

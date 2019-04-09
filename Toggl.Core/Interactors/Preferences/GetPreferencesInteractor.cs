@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources;
+using Toggl.Core.Models.Interfaces;
 using static Toggl.Shared.WorkspaceFeatureId;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     internal sealed class GetPreferencesInteractor : IInteractor<IObservable<IThreadSafePreferences>>
     {

@@ -5,7 +5,7 @@ using Android.Content;
 using Android.Support.V4.App;
 using MvvmCross;
 using MvvmCross.Platforms.Android.Core;
-using Toggl.Foundation.Interactors;
+using Toggl.Core.Interactors;
 
 namespace Toggl.Giskard.Services
 {

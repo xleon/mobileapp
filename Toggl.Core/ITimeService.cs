@@ -3,7 +3,7 @@ using System.Reactive;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
-namespace Toggl.Foundation
+namespace Toggl.Core
 {
     public interface ITimeService
     {

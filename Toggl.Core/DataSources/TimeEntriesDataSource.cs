@@ -4,17 +4,17 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Collections.Generic;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Models;
+using Toggl.Core.Analytics;
+using Toggl.Core.Models;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Sync.ConflictResolution;
+using Toggl.Core.Extensions;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync.ConflictResolution;
 
-namespace Toggl.Foundation.DataSources
+namespace Toggl.Core.DataSources
 {
     internal sealed class TimeEntriesDataSource : ObservableDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry>, ITimeEntriesSource
     {

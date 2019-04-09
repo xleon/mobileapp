@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Extensions;
+using Toggl.Core.Models.Interfaces;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Sync.States.Push
+namespace Toggl.Core.Sync.States.Push
 {
     internal sealed class ChooseSyncOperationState<T> : ISyncState<T>
         where T : class, IDatabaseSyncable, IThreadSafeModel

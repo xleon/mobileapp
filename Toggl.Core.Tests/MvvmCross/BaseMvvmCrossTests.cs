@@ -1,17 +1,17 @@
 ﻿using Microsoft.Reactive.Testing;
 using MvvmCross.Navigation;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Shortcuts;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Interactors;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.Services;
+using Toggl.Core.Shortcuts;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.Tests.MvvmCross
+namespace Toggl.Core.Tests.MvvmCross
 {
     public abstract class BaseMvvmCrossTests : ReactiveTest
     {

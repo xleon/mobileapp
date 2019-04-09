@@ -4,8 +4,8 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Foundation;
 using Toggl.Daneel.Views;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.ViewModels.ReportsCalendar;
 using UIKit;
 
 namespace Toggl.Daneel.ViewSources

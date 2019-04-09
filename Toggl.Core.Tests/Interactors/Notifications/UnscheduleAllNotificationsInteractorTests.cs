@@ -1,8 +1,8 @@
 ﻿using NSubstitute;
-using Toggl.Foundation.Interactors.Notifications;
+using Toggl.Core.Interactors.Notifications;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.Notifications
+namespace Toggl.Core.Tests.Interactors.Notifications
 {
     public class UnscheduleAllNotificationsInteractorTests
     {

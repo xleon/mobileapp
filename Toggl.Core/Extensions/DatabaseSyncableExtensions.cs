@@ -1,7 +1,7 @@
 ﻿using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Extensions
+namespace Toggl.Core.Extensions
 {
     public static class DatabaseSyncableExtensions
     {

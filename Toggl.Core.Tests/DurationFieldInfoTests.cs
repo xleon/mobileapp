@@ -4,7 +4,7 @@ using FluentAssertions;
 using FsCheck.Xunit;
 using Xunit;
 
-namespace Toggl.Foundation.Tests
+namespace Toggl.Core.Tests
 {
     public sealed class DurationFieldInfoTests
     {

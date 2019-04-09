@@ -1,11 +1,11 @@
 ﻿using System;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.Services;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.Services;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
 using MvvmCross.Navigation;
 
-namespace Toggl.Foundation.MvvmCross
+namespace Toggl.Core.MvvmCross
 {
     public abstract class UIDependencyContainer : DependencyContainer
     {

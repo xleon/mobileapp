@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Sync.States.Push;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Sync;
+using Toggl.Core.Sync.States.Push;
 using Toggl.PrimeRadiant;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Sync.States.Push
+namespace Toggl.Core.Tests.Sync.States.Push
 {
     public sealed class LookForSingletonChangeToPushStateTests
     {

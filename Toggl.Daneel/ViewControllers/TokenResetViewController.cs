@@ -5,9 +5,9 @@ using Foundation;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core;
+using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.MvvmCross.ViewModels;
 using Toggl.Shared.Extensions;
 using UIKit;
 

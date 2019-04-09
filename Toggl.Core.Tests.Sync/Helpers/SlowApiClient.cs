@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Toggl.Ultrawave.Network;
 
-namespace Toggl.Foundation.Tests.Sync.Helpers
+namespace Toggl.Core.Tests.Sync.Helpers
 {
     internal sealed class SlowApiClient : IApiClient
     {

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public sealed class RxActionFactory : IRxActionFactory
     {

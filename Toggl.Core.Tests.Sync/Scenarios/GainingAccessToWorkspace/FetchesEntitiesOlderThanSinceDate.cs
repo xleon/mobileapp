@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Tests.Mocks;
-using Toggl.Foundation.Tests.Sync.Extensions;
-using Toggl.Foundation.Tests.Sync.Helpers;
-using Toggl.Foundation.Tests.Sync.State;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.Sync.Extensions;
+using Toggl.Core.Tests.Sync.Helpers;
+using Toggl.Core.Tests.Sync.State;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.Helpers;
 
-namespace Toggl.Foundation.Tests.Sync.Scenarios.GainingAccessToWorkspace
+namespace Toggl.Core.Tests.Sync.Scenarios.GainingAccessToWorkspace
 {
     public sealed class FetchesEntitiesOlderThanSinceDate : ComplexSyncTest
     {

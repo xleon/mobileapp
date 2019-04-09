@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public interface IInteractor<out T>
     {

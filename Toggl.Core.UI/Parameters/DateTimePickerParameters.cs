@@ -1,8 +1,8 @@
 ﻿using System;
 using Toggl.Shared;
-using static Toggl.Foundation.Helper.Constants;
+using static Toggl.Core.Helper.Constants;
 
-namespace Toggl.Foundation.MvvmCross.Parameters
+namespace Toggl.Core.MvvmCross.Parameters
 {
     [Preserve(AllMembers = true)]
     public sealed class DateTimePickerParameters

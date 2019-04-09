@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Toggl.Foundation.Analytics
+namespace Toggl.Core.Analytics
 {
     public class EditDurationEvent : ITrackableEvent
     {

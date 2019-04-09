@@ -1,8 +1,8 @@
 ﻿using System;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Shared.Models;
 
-namespace Toggl.Foundation.Autocomplete.Span
+namespace Toggl.Core.Autocomplete.Span
 {
     public sealed class ProjectSpan : ISpan
     {

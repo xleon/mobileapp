@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reactive;
-using Toggl.Foundation.Interactors.Settings;
+using Toggl.Core.Interactors.Settings;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public partial class InteractorFactory : IInteractorFactory
     {

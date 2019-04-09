@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using Toggl.Shared;
 using Toggl.Ultrawave.ApiClients;
 
-namespace Toggl.Foundation.Sync
+namespace Toggl.Core.Sync
 {
     public sealed class PullingApiClientAdapter<T> : IPullingApiClient<T>
     {

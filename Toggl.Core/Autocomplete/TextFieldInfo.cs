@@ -3,10 +3,10 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using Toggl.Foundation.Autocomplete.Span;
+using Toggl.Core.Autocomplete.Span;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Foundation.Autocomplete
+namespace Toggl.Core.Autocomplete
 {
     [DebuggerDisplay("Description = {Description}")]
     public sealed class TextFieldInfo

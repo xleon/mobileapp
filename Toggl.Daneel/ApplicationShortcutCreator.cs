@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Foundation;
-using Toggl.Foundation.Shortcuts;
+using Toggl.Core.Shortcuts;
 using UIKit;
 
 namespace Toggl.Daneel

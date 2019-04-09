@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Foundation.Serialization
+namespace Toggl.Core.Serialization
 {
     public interface IJsonSerializer
     {

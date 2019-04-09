@@ -3,7 +3,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using Microsoft.Reactive.Testing;
 
-namespace Toggl.Foundation.Tests.TestExtensions
+namespace Toggl.Core.Tests.TestExtensions
 {
     public static class ReactiveExtensions
     {

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Toggl.Foundation.Services;
+using Toggl.Core.Services;
 
 namespace Toggl.Daneel.Services
 {

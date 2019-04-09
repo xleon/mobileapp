@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Services;
+using Toggl.Core.DataSources;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Foundation.Experiments
+namespace Toggl.Core.Experiments
 {
     [Preserve(AllMembers = true)]
     public sealed class RatingViewExperiment

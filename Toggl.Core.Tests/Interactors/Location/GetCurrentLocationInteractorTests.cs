@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using System.Reactive.Linq;
 using NSubstitute;
-using Toggl.Foundation.Interactors.Location;
+using Toggl.Core.Interactors.Location;
 using Toggl.Ultrawave;
 using Xunit;
 using Toggl.Multivac.Models;
 using FluentAssertions;
 
-namespace Toggl.Foundation.Tests.Interactors.Location
+namespace Toggl.Core.Tests.Interactors.Location
 {
     public sealed class GetCurrentLocationInteractorTests
     {

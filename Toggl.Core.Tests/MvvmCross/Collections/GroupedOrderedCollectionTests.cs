@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
-using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.Collections;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.Collections
+namespace Toggl.Core.Tests.MvvmCross.Collections
 {
     public sealed class GroupedOrderedCollectionTests
     {

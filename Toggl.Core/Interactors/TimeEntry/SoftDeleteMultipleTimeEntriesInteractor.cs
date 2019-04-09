@@ -1,17 +1,17 @@
 ﻿using System;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
 using Toggl.PrimeRadiant.Models;
 using System.Reactive;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Interactors.Generic;
+using Toggl.Core.Sync;
+using Toggl.Core.Interactors.Generic;
 using System.Reactive.Linq;
 using System.Linq;
 using Toggl.Shared.Extensions;
-using Toggl.Foundation.Extensions;
+using Toggl.Core.Extensions;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public class SoftDeleteMultipleTimeEntriesInteractor : IInteractor<IObservable<Unit>>
     {

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
+using Toggl.Core.Tests.Mocks;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class GroupIdTests
     {

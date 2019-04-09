@@ -1,6 +1,6 @@
-using Toggl.Foundation.Login;
+using Toggl.Core.Login;
 
-namespace Toggl.Foundation.Services
+namespace Toggl.Core.Services
 {
     public interface IBackgroundSyncService
     {

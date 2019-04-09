@@ -5,18 +5,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.DTOs;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Sync;
+using Toggl.Core.DataSources;
+using Toggl.Core.DTOs;
+using Toggl.Core.Extensions;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.TimeEntry
+namespace Toggl.Core.Tests.Interactors.TimeEntry
 {
     public class UpdateMultipleTimeEntriesInteractorTests : BaseInteractorTests
     {

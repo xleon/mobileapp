@@ -1,6 +1,6 @@
-﻿using Toggl.Foundation.Sync;
+﻿using Toggl.Core.Sync;
 
-namespace Toggl.Foundation.Tests.Sync
+namespace Toggl.Core.Tests.Sync
 {
     internal struct NamedStateResult
     {

@@ -2,7 +2,7 @@
 using System.Linq;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Analytics
+namespace Toggl.Core.Analytics
 {
     internal abstract class BaseAnalyticsEvent
     {

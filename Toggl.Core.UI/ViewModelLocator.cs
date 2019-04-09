@@ -1,11 +1,11 @@
 ﻿using System;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
-using Toggl.Foundation.MvvmCross.ViewModels.Reports;
-using Toggl.Foundation.MvvmCross.ViewModels.Settings;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.MvvmCross.ViewModels.Calendar;
+using Toggl.Core.MvvmCross.ViewModels.Reports;
+using Toggl.Core.MvvmCross.ViewModels.Settings;
 
-namespace Toggl.Foundation.MvvmCross
+namespace Toggl.Core.MvvmCross
 {
     public sealed class TogglViewModelLocator : MvxDefaultViewModelLocator
     {

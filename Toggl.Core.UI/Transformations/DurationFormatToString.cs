@@ -1,7 +1,7 @@
 using System;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.MvvmCross.Transformations
+namespace Toggl.Core.MvvmCross.Transformations
 {
     public static class DurationFormatToString
     {

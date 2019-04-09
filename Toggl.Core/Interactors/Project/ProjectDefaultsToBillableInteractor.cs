@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources;
+using Toggl.Core.DataSources;
 using Toggl.Shared;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     internal sealed class ProjectDefaultsToBillableInteractor : IInteractor<IObservable<bool>>
     {

@@ -1,6 +1,6 @@
 ﻿using Toggl.Shared.Models;
 
-namespace Toggl.Foundation.Models
+namespace Toggl.Core.Models
 {
     public sealed class Country : ICountry
     {

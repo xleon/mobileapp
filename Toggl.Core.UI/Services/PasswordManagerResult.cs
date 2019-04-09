@@ -1,6 +1,6 @@
 ﻿using Toggl.Shared;
 
-namespace Toggl.Foundation.MvvmCross.Services
+namespace Toggl.Core.MvvmCross.Services
 {
     public sealed class PasswordManagerResult
     {

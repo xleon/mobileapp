@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Reactive.Linq;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.Services;
+using Toggl.Core.Services;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.MvvmCross.ViewModels
+namespace Toggl.Core.MvvmCross.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class LicensesViewModel : MvxViewModel

@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Transformations;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
+using Toggl.Core.Extensions;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.MvvmCross.Transformations;
+using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Shared;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.MvvmCross.Extensions
+namespace Toggl.Core.MvvmCross.Extensions
 {
     public static class TimeEntryExtensions
     {

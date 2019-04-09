@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using NSubstitute;
-using Toggl.Foundation.Tests.Sync.Extensions;
-using Toggl.Foundation.Tests.Sync.Helpers;
-using Toggl.Foundation.Tests.Sync.State;
+using Toggl.Core.Tests.Sync.Extensions;
+using Toggl.Core.Tests.Sync.Helpers;
+using Toggl.Core.Tests.Sync.State;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.Models;
 
-namespace Toggl.Foundation.Tests.Sync.Scenarios.NoDefaultWorkspace
+namespace Toggl.Core.Tests.Sync.Scenarios.NoDefaultWorkspace
 {
     public sealed class RestrictsAccessWhenThereAreMultipleWorkspaces
         : ComplexSyncTest

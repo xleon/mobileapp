@@ -1,4 +1,4 @@
-﻿namespace Toggl.Foundation.MvvmCross.Reactive
+﻿namespace Toggl.Core.MvvmCross.Reactive
 {
     public interface IReactive<out TBase>
     {

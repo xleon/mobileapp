@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NSubstitute;
-using Toggl.Foundation.Models.Interfaces;
+using Toggl.Core.Models.Interfaces;
 
-namespace Toggl.Foundation.Tests.Interactors.AutocompleteSuggestions
+namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
 {
     public abstract class BaseAutocompleteSuggestionsInteractorTest
     {

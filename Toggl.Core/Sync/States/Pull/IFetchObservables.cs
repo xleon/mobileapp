@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Toggl.Foundation.Sync.States
+namespace Toggl.Core.Sync.States
 {
     public interface IFetchObservables
     {

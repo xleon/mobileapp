@@ -1,6 +1,6 @@
 ﻿using Toggl.Ultrawave.Exceptions;
 
-namespace Toggl.Foundation.Sync.States.Pull
+namespace Toggl.Core.Sync.States.Pull
 {
     public interface IPersistState : ISyncState<IFetchObservables>
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Models;
+using Toggl.Core.Sync;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public sealed partial class InteractorFactory : IInteractorFactory
     {

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Tests.Mocks;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
 
-namespace Toggl.Foundation.Tests.Sync.Extensions
+namespace Toggl.Core.Tests.Sync.Extensions
 {
     public static class IWorkspaceExtensions
     {

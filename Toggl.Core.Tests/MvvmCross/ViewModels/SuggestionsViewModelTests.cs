@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Suggestions;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Interactors;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Suggestions;
+using Toggl.Core.Tests.Generators;
 using Xunit;
-using TimeEntry = Toggl.Foundation.Models.TimeEntry;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.DataSources;
+using TimeEntry = Toggl.Core.Models.TimeEntry;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.DataSources;
 using System.Reactive.Subjects;
-using Toggl.Foundation.MvvmCross.Extensions;
+using Toggl.Core.MvvmCross.Extensions;
 using Toggl.Multivac.Extensions;
-using Toggl.Foundation.Tests.TestExtensions;
+using Toggl.Core.Tests.TestExtensions;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class SuggestionsViewModelTests
     {

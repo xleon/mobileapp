@@ -2,10 +2,10 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models;
+using Toggl.Core.Services;
+using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
@@ -13,7 +13,7 @@ using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
 
-namespace Toggl.Foundation.Login
+namespace Toggl.Core.Login
 {
     public sealed class UserAccessManager : IUserAccessManager
     {

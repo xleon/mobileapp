@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Tests.Sync.Exceptions;
-using Toggl.Foundation.Tests.Sync.Extensions;
-using Toggl.Foundation.Tests.Sync.State;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Tests.Sync.Exceptions;
+using Toggl.Core.Tests.Sync.Extensions;
+using Toggl.Core.Tests.Sync.State;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
@@ -16,7 +16,7 @@ using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Tests.Integration.Helper;
 
-namespace Toggl.Foundation.Tests.Sync.Helpers
+namespace Toggl.Core.Tests.Sync.Helpers
 {
     public sealed class Server
     {

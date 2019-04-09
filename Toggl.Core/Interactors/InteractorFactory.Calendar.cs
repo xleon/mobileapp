@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.Interactors.Calendar;
+using Toggl.Core.Calendar;
+using Toggl.Core.Interactors.Calendar;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public sealed partial class InteractorFactory : IInteractorFactory
     {

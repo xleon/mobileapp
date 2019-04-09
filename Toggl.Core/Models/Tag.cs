@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.PrimeRadiant;
 
-namespace Toggl.Foundation.Models
+namespace Toggl.Core.Models
 {
     internal sealed partial class Tag
     {

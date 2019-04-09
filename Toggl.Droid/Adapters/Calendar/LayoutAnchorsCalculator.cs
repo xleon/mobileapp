@@ -4,8 +4,8 @@ using System.Collections.Immutable;
 using System.Linq;
 using Android.Content;
 using Android.Util;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.MvvmCross.Calendar;
+using Toggl.Core.Calendar;
+using Toggl.Core.MvvmCross.Calendar;
 using Toggl.Giskard.Extensions;
 
 namespace Toggl.Giskard.Adapters.Calendar

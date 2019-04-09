@@ -1,4 +1,4 @@
-namespace Toggl.Foundation.MvvmCross.Helper
+namespace Toggl.Core.MvvmCross.Helper
 {
     public enum UpcomingEventsOption
     {

@@ -1,8 +1,8 @@
 ﻿using System;
-using Toggl.Foundation.Extensions;
+using Toggl.Core.Extensions;
 using Toggl.Shared;
 
-namespace Toggl.Foundation.MvvmCross.Transformations
+namespace Toggl.Core.MvvmCross.Transformations
 {
     public class DurationAndFormatToString
     {

@@ -3,15 +3,15 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Services;
+using Toggl.Core.Calendar;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Settings;
 using Notification = Toggl.Shared.Notification;
 
-namespace Toggl.Foundation.Interactors.Notifications
+namespace Toggl.Core.Interactors.Notifications
 {
     public sealed class ScheduleEventNotificationsInteractor : IInteractor<IObservable<Unit>>
     {

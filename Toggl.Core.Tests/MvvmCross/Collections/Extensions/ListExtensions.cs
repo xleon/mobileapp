@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Collections.Diffing;
+using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.MvvmCross.Collections.Diffing;
 
-namespace Toggl.Foundation.Tests.MvvmCross.Collections.Extensions
+namespace Toggl.Core.Tests.MvvmCross.Collections.Extensions
 {
     public static class ListExtensions
     {

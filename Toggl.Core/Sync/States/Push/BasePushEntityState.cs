@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.Sync.States.Push.Interfaces;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Extensions;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync.States.Push.Interfaces;
 using Toggl.Shared;
 using Toggl.Ultrawave.Exceptions;
 
-namespace Toggl.Foundation.Sync.States.Push
+namespace Toggl.Core.Sync.States.Push
 {
     public abstract class BasePushEntityState<T> : IPushEntityState<T>
         where T : class, IThreadSafeModel

@@ -1,4 +1,4 @@
-namespace Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.Identity
+namespace Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.Identity
 {
     internal sealed class SingleTimeEntryKey : IMainLogKey
     {

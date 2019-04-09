@@ -1,6 +1,6 @@
 ﻿using Android.OS;
 using Android.Views;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
+using Toggl.Core.MvvmCross.ViewModels.Calendar;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Shared.Extensions;
 

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Foundation.DataSources;
+using Toggl.Core.DataSources;
 using Toggl.Shared;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 
-namespace Toggl.Foundation.Sync.States.CleanUp
+namespace Toggl.Core.Sync.States.CleanUp
 {
     public class DeleteInaccessibleTimeEntriesState : ISyncState
     {

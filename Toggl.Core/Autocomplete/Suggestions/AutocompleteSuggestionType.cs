@@ -1,4 +1,4 @@
-﻿namespace Toggl.Foundation.Autocomplete.Suggestions
+﻿namespace Toggl.Core.Autocomplete.Suggestions
 {
     public enum AutocompleteSuggestionType
     {

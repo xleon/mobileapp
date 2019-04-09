@@ -2,11 +2,11 @@
 using System.Globalization;
 using FluentAssertions;
 using FsCheck;
-using Toggl.Foundation.MvvmCross.Transformations;
+using Toggl.Core.MvvmCross.Transformations;
 using Xunit;
 using FsCheck.Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.Transformations
+namespace Toggl.Core.Tests.MvvmCross.Transformations
 {
     public sealed class DateToTitleStringTests
     {

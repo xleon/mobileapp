@@ -1,6 +1,6 @@
-﻿using Toggl.Foundation.Models.Interfaces;
+﻿using Toggl.Core.Models.Interfaces;
 
-namespace Toggl.Foundation.DataSources
+namespace Toggl.Core.DataSources
 {
     public struct EntityUpdate<TThreadsafe>
         where TThreadsafe : IThreadSafeModel

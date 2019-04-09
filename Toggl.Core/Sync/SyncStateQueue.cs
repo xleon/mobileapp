@@ -1,6 +1,6 @@
-using static Toggl.Foundation.Sync.SyncState;
+using static Toggl.Core.Sync.SyncState;
 
-namespace Toggl.Foundation.Sync
+namespace Toggl.Core.Sync
 {
     internal sealed class SyncStateQueue : ISyncStateQueue
     {

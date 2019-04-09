@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reactive;
-using Toggl.Foundation.Interactors.Notifications;
+using Toggl.Core.Interactors.Notifications;
 
-namespace Toggl.Foundation.Interactors
+namespace Toggl.Core.Interactors
 {
     public sealed partial class InteractorFactory : IInteractorFactory
     {

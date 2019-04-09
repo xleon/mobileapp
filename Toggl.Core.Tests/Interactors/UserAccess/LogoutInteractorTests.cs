@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Interactors.UserAccess;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Analytics;
+using Toggl.Core.Interactors;
+using Toggl.Core.Interactors.UserAccess;
+using Toggl.Core.Sync;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.Interactors.UserAccess
+namespace Toggl.Core.Tests.Interactors.UserAccess
 {
     public class LogoutInteractorTests : BaseInteractorTests
     {

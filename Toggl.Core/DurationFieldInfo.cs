@@ -2,9 +2,9 @@
 using System.Collections.Immutable;
 using System.Linq;
 using Toggl.Shared.Extensions;
-using static Toggl.Foundation.Helper.Constants;
+using static Toggl.Core.Helper.Constants;
 
-namespace Toggl.Foundation
+namespace Toggl.Core
 {
     public struct DurationFieldInfo : IEquatable<DurationFieldInfo>
     {

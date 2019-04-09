@@ -1,11 +1,11 @@
 ﻿using System;
 using FsCheck.Xunit;
-using Toggl.Foundation.Sync.States;
+using Toggl.Core.Sync.States;
 using Xunit;
 using FluentAssertions;
 using FsCheck;
 
-namespace Toggl.Foundation.Tests.Sync.States
+namespace Toggl.Core.Tests.Sync.States
 {
     public sealed class InvalidTransitionStateTests
     {

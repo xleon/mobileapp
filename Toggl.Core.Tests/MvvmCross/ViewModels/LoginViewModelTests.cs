@@ -9,20 +9,20 @@ using FsCheck;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using NUnit.Framework;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.MvvmCross;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Tests.Generators;
+using Toggl.Core.Analytics;
+using Toggl.Core.Exceptions;
+using Toggl.Core.MvvmCross;
+using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.Tests.Generators;
 using Toggl.Multivac;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using Xunit;
 
-namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {
     public sealed class LoginViewModelTests
     {
