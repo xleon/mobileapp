@@ -2,14 +2,14 @@
 #><#@ assembly name="System.Core"
 #><#@ import namespace="System.IO"
 #><#@ import namespace="System.Linq"
-#>using Toggl.Multivac;
-using Toggl.Multivac.Models;
+#>using Toggl.Shared;
+using Toggl.Shared.Models;
 
-namespace Toggl.Ultrawave.Models
+namespace Toggl.Networking.Models
 {
 <#
     var filePath = Path.GetDirectoryName(Host.TemplateFile);
-    var solutionDirectory = Path.Combine(filePath, "../../Toggl.Multivac/Models/" );
+    var solutionDirectory = Path.Combine(filePath, "../../Toggl.Shared/Models/" );
     var modelsToGenerate = Directory.GetFiles(solutionDirectory, "*.cs");
     var isFirst = true;
     foreach(var modelFile in modelsToGenerate)

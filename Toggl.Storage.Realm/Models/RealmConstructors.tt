@@ -5,14 +5,14 @@
 #><#@ import namespace="System.Linq"
 #>using System.Linq;
 using Realms;
-using Toggl.PrimeRadiant.Models;
-using Toggl.PrimeRadiant.Realm.Models;
+using Toggl.Storage.Models;
+using Toggl.Storage.Realm.Models;
 
-namespace Toggl.PrimeRadiant.Realm
+namespace Toggl.Storage.Realm
 {
 <#
     var filePath = Path.GetDirectoryName(Host.TemplateFile);
-    var solutionDirectory = Path.Combine(filePath, "../../Toggl.Multivac/Models/" );
+    var solutionDirectory = Path.Combine(filePath, "../../Toggl.Shared/Models/" );
     var modelsToGenerate = Directory.GetFiles(solutionDirectory, "*.cs");
     var isFirst = true;
 
@@ -28,7 +28,7 @@ namespace Toggl.PrimeRadiant.Realm
         var realmClassName = $"Realm{className}";
 
         var databaseInterfaceName = $"IDatabase{className}";
-        var databaseInterfaceFileName = Path.Combine(filePath, "../../Toggl.PrimeRadiant/Models/", databaseInterfaceName + ".cs");
+        var databaseInterfaceFileName = Path.Combine(filePath, "../../Toggl.Storage/Models/", databaseInterfaceName + ".cs");
         var databaseInterfaceExists = File.Exists(databaseInterfaceFileName);
 
         var implementsIIdentifiable = File.ReadAllLines(modelFile).Any(l => l.Contains("IIdentifiable"));
