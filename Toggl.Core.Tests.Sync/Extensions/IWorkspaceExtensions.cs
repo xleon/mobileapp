@@ -31,7 +31,7 @@ namespace Toggl.Core.Tests.Sync.Extensions
         public static IWorkspace With(
             this IWorkspace workspace,
             New<string> name = default(New<string>))
-            => new Ultrawave.Models.Workspace
+            => new Networking.Models.Workspace
             {
                 Admin = workspace.Admin,
                 At = workspace.At,

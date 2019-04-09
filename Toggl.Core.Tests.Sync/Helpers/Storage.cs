@@ -12,11 +12,11 @@ using Toggl.Storage.Realm;
 
 namespace Toggl.Core.Tests.Sync.Helpers
 {
-    public sealed class Storage
+    public sealed class SyncStorage
     {
         public ITogglDatabase Database { get; }
 
-        public Storage()
+        public SyncStorage()
         {
             Database = new Database();
         }

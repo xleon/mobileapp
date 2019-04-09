@@ -239,7 +239,7 @@ namespace Toggl.Core.Tests.Sync.Helpers
                 do
                 {
                     if (user != null) await Task.Delay(TimeSpan.FromSeconds(1));
-                    user = await Ultrawave.Tests.Integration.User.Create();
+                    user = await Networking.Tests.Integration.User.Create();
                 } while (user.DefaultWorkspaceId.HasValue == false && ++numberOfTries < 3);
 
                 if (!user.DefaultWorkspaceId.HasValue)
@@ -259,7 +259,7 @@ namespace Toggl.Core.Tests.Sync.Helpers
 
             private static IApiClient createApiClient()
             {
-                var realApiClient = Ultrawave.TogglApiFactory.CreateDefaultApiClient(userAgent);
+                var realApiClient = Networking.TogglApiFactory.CreateDefaultApiClient(userAgent);
 
                 return new SlowApiClient(new RetryingApiClient(realApiClient));
             }

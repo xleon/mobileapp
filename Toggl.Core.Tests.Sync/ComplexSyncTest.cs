@@ -13,11 +13,11 @@ namespace Toggl.Core.Tests.Sync
 {
     public abstract class ComplexSyncTest : IDisposable
     {
-        private readonly Storage storage;
+        private readonly SyncStorage storage;
 
         protected ComplexSyncTest()
         {
-            storage = new Storage();
+            storage = new SyncStorage();
             storage.Clear().Wait();
         }
 

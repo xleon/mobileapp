@@ -3,7 +3,7 @@ using MvvmCross.Navigation;
 using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
-using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
 using Toggl.Storage;
