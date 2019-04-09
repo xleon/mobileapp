@@ -1,9 +1,9 @@
 ﻿using System;
 using FluentAssertions;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Xunit;
 
-namespace Toggl.Multivac.Tests
+namespace Toggl.Shared.Tests
 {
     public sealed class ClampExtensionTests
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Multivac.Models
+namespace Toggl.Shared.Models
 {
     public interface IDeletable
     {

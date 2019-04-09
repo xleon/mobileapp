@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Android.Support.V4.App;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Giskard.Extensions
 {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Foundation.Extensions;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave.Exceptions;
 

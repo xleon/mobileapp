@@ -20,9 +20,9 @@ using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Sync;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Extensions.Reactive;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Extensions.Reactive;
 using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels

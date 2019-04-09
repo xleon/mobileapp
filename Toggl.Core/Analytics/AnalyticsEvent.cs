@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.Analytics
 {

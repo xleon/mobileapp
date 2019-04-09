@@ -13,8 +13,8 @@ using Toggl.Foundation.Interactors;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.ViewModels.Selectable;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar

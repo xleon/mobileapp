@@ -4,9 +4,9 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Extensions.Reactive;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Extensions.Reactive;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {

@@ -3,8 +3,8 @@ using MvvmCross.ViewModels;
 using System.Threading.Tasks;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using System.Threading.Tasks;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels

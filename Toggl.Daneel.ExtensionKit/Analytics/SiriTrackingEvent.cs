@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Foundation;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 
 namespace Toggl.Daneel.ExtensionKit.Analytics
 {

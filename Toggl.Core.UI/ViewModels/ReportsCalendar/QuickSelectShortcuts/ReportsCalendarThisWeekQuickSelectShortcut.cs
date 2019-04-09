@@ -1,7 +1,7 @@
 ﻿using Toggl.Foundation.Analytics;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts
 {

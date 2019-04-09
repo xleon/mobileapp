@@ -10,7 +10,7 @@ using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.Presentation;
 using Toggl.Giskard.ViewHelpers;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Giskard.Fragments
 {

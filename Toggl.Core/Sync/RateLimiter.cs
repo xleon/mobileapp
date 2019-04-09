@@ -2,7 +2,7 @@ using System;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.Sync
 {

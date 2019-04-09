@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Xunit;
 
-namespace Toggl.Multivac.Tests
+namespace Toggl.Shared.Tests
 {
     public sealed class EnsureTests
     {

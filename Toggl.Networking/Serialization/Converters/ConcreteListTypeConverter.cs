@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Ultrawave.Serialization.Converters
 {

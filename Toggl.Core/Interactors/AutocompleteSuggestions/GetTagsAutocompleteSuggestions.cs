@@ -5,8 +5,8 @@ using System.Reactive.Linq;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Interactors.AutocompleteSuggestions

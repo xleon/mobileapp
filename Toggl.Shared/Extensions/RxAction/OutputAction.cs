@@ -6,7 +6,7 @@ using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 
-namespace Toggl.Multivac.Extensions
+namespace Toggl.Shared.Extensions
 {
     public sealed class OutputAction<TElement> : RxAction<Unit, TElement>
     {

@@ -13,7 +13,7 @@ using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.Helper;
 using Toggl.Giskard.ViewHolders;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Extensions;
 using Toggl.PrimeRadiant.Onboarding;
 using static Toggl.Giskard.ViewHolders.MainLogCellViewHolder;

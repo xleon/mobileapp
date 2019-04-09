@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using System;
 using System.Reactive;
 using System.Reactive.Threading.Tasks;

@@ -1,6 +1,6 @@
 ﻿using System;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.PrimeRadiant;
 
 namespace Toggl.Foundation.Models

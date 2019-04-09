@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Foundation.MvvmCross.Interfaces;
 using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar
 {

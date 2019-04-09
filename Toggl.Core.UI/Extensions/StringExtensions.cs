@@ -1,5 +1,5 @@
 ﻿using System;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using static Toggl.Foundation.Helper.Constants;
 
 namespace Toggl.Foundation.MvvmCross.Extensions

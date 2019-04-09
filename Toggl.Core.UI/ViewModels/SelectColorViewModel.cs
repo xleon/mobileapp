@@ -10,8 +10,8 @@ using MvvmCross.UI;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Color = Toggl.Foundation.MvvmCross.Helper.Color;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels

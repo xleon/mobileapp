@@ -7,7 +7,7 @@ using Android.Util;
 using Android.Views;
 using MvvmCross.Base;
 using Toggl.Giskard.Extensions;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using static System.Math;
 
 namespace Toggl.Giskard.Views

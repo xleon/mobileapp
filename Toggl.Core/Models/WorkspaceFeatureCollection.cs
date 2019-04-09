@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using Toggl.Multivac;
-using Toggl.Multivac.Models;
+using Toggl.Shared;
+using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 
 namespace Toggl.Foundation.Models

@@ -5,7 +5,7 @@ using Android.Util;
 using Android.Views;
 using Android.Views.Animations;
 using Android.Widget;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using static Android.Views.MotionEventActions;
 
 namespace Toggl.Giskard.Views

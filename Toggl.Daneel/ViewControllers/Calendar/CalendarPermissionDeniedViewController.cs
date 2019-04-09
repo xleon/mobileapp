@@ -4,7 +4,7 @@ using Toggl.Daneel.Presentation.Attributes;
 using CoreGraphics;
 using UIKit;
 using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Toggl.Foundation.MvvmCross.Extensions;
 using System.Reactive;
 using Foundation;

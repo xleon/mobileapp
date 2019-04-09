@@ -1,6 +1,6 @@
 ﻿using Foundation;
 using UIKit;
-using Toggl.Multivac;
+using Toggl.Shared;
 using System;
 using System.Collections.Generic;
 using Toggl.Foundation.MvvmCross.Collections;

@@ -1,7 +1,7 @@
 using System;
 using System.Reactive.Linq;
 using Toggl.Foundation.Extensions;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.Ultrawave.Exceptions;
 
 namespace Toggl.Foundation.Sync.States.Pull

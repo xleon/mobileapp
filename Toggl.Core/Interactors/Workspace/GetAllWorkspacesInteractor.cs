@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.Interactors
 {

@@ -10,7 +10,7 @@ using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Giskard.Fragments
 {

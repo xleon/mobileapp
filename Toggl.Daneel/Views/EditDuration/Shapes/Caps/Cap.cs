@@ -3,7 +3,7 @@ using CoreAnimation;
 using CoreGraphics;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using UIKit;
-using Math = Toggl.Multivac.Math;
+using Math = Toggl.Shared.Math;
 
 namespace Toggl.Daneel.Views.EditDuration.Shapes.Caps
 {

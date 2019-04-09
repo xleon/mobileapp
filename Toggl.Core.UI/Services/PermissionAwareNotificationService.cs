@@ -6,8 +6,8 @@ using System.Reactive.Linq;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
-using Notification = Toggl.Multivac.Notification;
+using Toggl.Shared;
+using Notification = Toggl.Shared.Notification;
 
 namespace Toggl.Foundation.Calendar
 {

@@ -7,7 +7,7 @@ using System.Reactive.Subjects;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 
-namespace Toggl.Multivac.Extensions
+namespace Toggl.Shared.Extensions
 {
     public static class ReactiveExtensions
     {

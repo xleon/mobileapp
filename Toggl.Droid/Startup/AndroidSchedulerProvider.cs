@@ -1,6 +1,6 @@
 ﻿using System.Reactive.Concurrency;
 using Android.OS;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Giskard
 {

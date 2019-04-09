@@ -1,6 +1,6 @@
 ﻿using System.Reactive.Concurrency;
 
-namespace Toggl.Multivac
+namespace Toggl.Shared
 {
     public interface ISchedulerProvider
     {

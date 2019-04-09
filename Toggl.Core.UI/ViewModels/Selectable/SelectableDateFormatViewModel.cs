@@ -1,6 +1,6 @@
 ﻿using MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.Interfaces;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.Selectable
 {

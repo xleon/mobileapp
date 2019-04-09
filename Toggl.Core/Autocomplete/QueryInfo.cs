@@ -2,7 +2,7 @@
 using System.Linq;
 using Toggl.Foundation.Autocomplete.Span;
 using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Foundation.Autocomplete
 {

@@ -8,7 +8,7 @@ using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
 using Toggl.Daneel.Intents;
 using Foundation;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using SiriExtension.Models;
 using SiriExtension.Exceptions;
 using Toggl.Daneel.ExtensionKit;

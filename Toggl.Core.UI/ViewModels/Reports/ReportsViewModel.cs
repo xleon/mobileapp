@@ -24,11 +24,11 @@ using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Foundation.Reports;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models.Reports;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models.Reports;
 using Toggl.Ultrawave.Exceptions;
-using CommonFunctions = Toggl.Multivac.Extensions.CommonFunctions;
+using CommonFunctions = Toggl.Shared.Extensions.CommonFunctions;
 using Color = Toggl.Foundation.MvvmCross.Helper.Color;
 
 [assembly: MvxNavigation(typeof(ReportsViewModel), ApplicationUrls.Reports)]

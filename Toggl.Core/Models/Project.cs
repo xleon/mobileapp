@@ -3,7 +3,7 @@ using System.Text;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.PrimeRadiant;
 using static Toggl.Foundation.Helper.Constants;
-using static Toggl.Multivac.Extensions.StringExtensions;
+using static Toggl.Shared.Extensions.StringExtensions;
 
 namespace Toggl.Foundation.Models
 {

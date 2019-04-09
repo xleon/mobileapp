@@ -1,7 +1,7 @@
 using System;
 using System.Reactive.Linq;
 using Toggl.Foundation.Login;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Foundation.Services
 {

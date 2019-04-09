@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Foundation.Analytics
 {

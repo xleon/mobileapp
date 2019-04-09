@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 
-namespace Toggl.Multivac.Extensions
+namespace Toggl.Shared.Extensions
 {
     public class ObservableAddons
     {

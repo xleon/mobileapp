@@ -13,7 +13,7 @@ using Android.Views;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels.ReportsCalendar;
 using Toggl.Giskard.Views;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Object = Java.Lang.Object;
 
 namespace Toggl.Giskard.Adapters

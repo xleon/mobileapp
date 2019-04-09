@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Ultrawave.ApiClients
 {

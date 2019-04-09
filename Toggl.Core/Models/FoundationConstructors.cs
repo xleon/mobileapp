@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 

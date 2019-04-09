@@ -17,8 +17,8 @@ using Toggl.Foundation.Calendar;
 using Toggl.Foundation.MvvmCross.Calendar;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UIKit;
 using FoundationResources = Toggl.Foundation.Resources;
 

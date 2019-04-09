@@ -12,8 +12,8 @@ using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Transformations;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using static Toggl.Foundation.Helper.Constants;
 using static Toggl.Foundation.MvvmCross.Helper.TemporalInconsistency;
 

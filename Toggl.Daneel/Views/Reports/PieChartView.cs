@@ -7,7 +7,7 @@ using Foundation;
 using Toggl.Foundation.Reports;
 using MvvmCross.UI;
 using MvvmCross.Plugin.Color.Platforms.Ios;
-using static Toggl.Multivac.Math;
+using static Toggl.Shared.Math;
 
 namespace Toggl.Daneel.Views.Reports
 {

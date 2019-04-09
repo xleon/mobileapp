@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Toggl.Multivac
+namespace Toggl.Shared
 {
     public enum DurationFormat
     {

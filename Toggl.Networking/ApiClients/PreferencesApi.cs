@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;

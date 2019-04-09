@@ -9,10 +9,10 @@ using Toggl.Daneel.Extensions;
 using Toggl.Foundation;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UserNotifications;
-using Notification = Toggl.Multivac.Notification;
+using Notification = Toggl.Shared.Notification;
 using FoundationResources = Toggl.Foundation.Resources;
 
 namespace Toggl.Daneel.Services

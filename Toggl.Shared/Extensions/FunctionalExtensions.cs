@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Toggl.Multivac.Extensions
+namespace Toggl.Shared.Extensions
 {
     public static class CommonFunctions
     {

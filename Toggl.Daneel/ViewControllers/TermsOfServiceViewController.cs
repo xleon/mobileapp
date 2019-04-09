@@ -9,7 +9,7 @@ using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.Daneel.Extensions.RangeExtensions;
 

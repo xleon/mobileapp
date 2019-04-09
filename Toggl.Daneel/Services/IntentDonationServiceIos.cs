@@ -6,7 +6,7 @@ using Intents;
 using Toggl.Daneel.Intents;
 using Toggl.Foundation;
 using Toggl.Foundation.Analytics;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.Foundation.Services;
 using UIKit;
 

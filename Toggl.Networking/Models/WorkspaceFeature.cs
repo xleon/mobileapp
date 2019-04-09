@@ -1,5 +1,5 @@
-﻿using Toggl.Multivac;
-using Toggl.Multivac.Models;
+﻿using Toggl.Shared;
+using Toggl.Shared.Models;
 
 namespace Toggl.Ultrawave.Models
 {

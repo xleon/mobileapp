@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.DataSources;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.Sync.States.Pull
 {

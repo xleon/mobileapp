@@ -4,8 +4,8 @@ using System.Reactive.Linq;
 using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Sync.States.Push.Interfaces;
-using Toggl.Multivac;
-using Toggl.Multivac.Models;
+using Toggl.Shared;
+using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 
 namespace Toggl.Foundation.Sync.States.Push

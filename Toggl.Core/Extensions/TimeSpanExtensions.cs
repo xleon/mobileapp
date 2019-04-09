@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using Toggl.Multivac;
+using Toggl.Shared;
 using static System.FormattableString;
 
 namespace Toggl.Foundation.Extensions

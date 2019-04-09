@@ -4,7 +4,7 @@ using Android.Widget;
 using Toggl.Foundation.MvvmCross.Onboarding.EditView;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Helper;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Giskard.Activities
 {

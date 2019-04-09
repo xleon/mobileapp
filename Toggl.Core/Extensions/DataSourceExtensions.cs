@@ -3,7 +3,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant;
 
 namespace Toggl.Foundation.Extensions

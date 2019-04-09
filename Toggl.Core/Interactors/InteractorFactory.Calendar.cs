@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reactive;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.Interactors.Calendar;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.Interactors
 {

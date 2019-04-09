@@ -4,9 +4,9 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using Xunit;
-using static Toggl.Multivac.Math;
+using static Toggl.Shared.Math;
 
-namespace Toggl.Multivac.Tests
+namespace Toggl.Shared.Tests
 {
     public sealed class MathTests
     {

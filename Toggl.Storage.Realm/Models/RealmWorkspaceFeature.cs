@@ -1,8 +1,8 @@
 ﻿using Realms;
 using System.Linq;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.PrimeRadiant.Models;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 
 namespace Toggl.PrimeRadiant.Realm
 {

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Toggl.Multivac;
-using Toggl.Multivac.Models;
+using Toggl.Shared;
+using Toggl.Shared.Models;
 using Toggl.Ultrawave.Serialization.Converters;
 
 namespace Toggl.Ultrawave.Models

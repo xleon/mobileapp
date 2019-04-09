@@ -1,5 +1,5 @@
 using System;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.MvvmCross.Transformations
 {

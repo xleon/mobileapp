@@ -1,6 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 
 namespace Toggl.Ultrawave.Models
 {

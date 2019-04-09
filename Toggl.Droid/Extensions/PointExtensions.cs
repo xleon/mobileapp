@@ -1,5 +1,5 @@
 using Android.Graphics;
-using MultivacPoint = Toggl.Multivac.Point;
+using MultivacPoint = Toggl.Shared.Point;
 
 namespace Toggl.Giskard.Extensions
 {

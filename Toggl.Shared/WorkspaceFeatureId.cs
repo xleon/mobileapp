@@ -1,6 +1,6 @@
 using System;
 
-namespace Toggl.Multivac
+namespace Toggl.Shared
 {
     public enum WorkspaceFeatureId
     {

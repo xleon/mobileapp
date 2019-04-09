@@ -7,8 +7,8 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Foundation.Sync.States.Pull
 {

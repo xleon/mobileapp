@@ -1,5 +1,5 @@
 ﻿using System;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 
 namespace Toggl.PrimeRadiant
 {

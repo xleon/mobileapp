@@ -13,7 +13,7 @@ using Toggl.Foundation.Sync.States;
 using Toggl.Foundation.Sync.States.CleanUp;
 using Toggl.Foundation.Sync.States.Pull;
 using Toggl.Foundation.Sync.States.Push;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 using Toggl.PrimeRadiant.Settings;

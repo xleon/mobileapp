@@ -1,5 +1,5 @@
 ﻿using System.Reactive;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.Interactors.Calendar

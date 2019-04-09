@@ -8,7 +8,7 @@ using Toggl.Foundation.Sync;
 using Toggl.Foundation.Interactors.Generic;
 using System.Reactive.Linq;
 using System.Linq;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Toggl.Foundation.Extensions;
 
 namespace Toggl.Foundation.Interactors

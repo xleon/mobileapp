@@ -1,5 +1,5 @@
 ﻿using System;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Ultrawave.Network
 {

@@ -7,7 +7,7 @@ using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.Interactors.Calendar

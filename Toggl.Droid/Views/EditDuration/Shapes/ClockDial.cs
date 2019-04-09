@@ -1,6 +1,6 @@
 using Android.Graphics;
 using Toggl.Giskard.Extensions;
-using static Toggl.Multivac.Math;
+using static Toggl.Shared.Math;
 
 namespace Toggl.Giskard.Views.EditDuration.Shapes
 {

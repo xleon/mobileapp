@@ -11,7 +11,7 @@ using Toggl.Daneel.Views;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.Sync;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.Daneel.Extensions.TextExtensions;
 

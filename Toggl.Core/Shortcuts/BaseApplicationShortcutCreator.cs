@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Interactors;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Shortcuts

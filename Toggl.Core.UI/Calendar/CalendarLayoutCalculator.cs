@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.Extensions;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 using CalendarItemGroup = System.Collections.Generic.List<(Toggl.Foundation.Calendar.CalendarItem Item, int Index)>;
 using CalendarItemGroups = System.Collections.Generic.List<System.Collections.Generic.List<(Toggl.Foundation.Calendar.CalendarItem Item, int Index)>>;

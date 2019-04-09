@@ -7,7 +7,7 @@ using Java.Lang;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Span;
 using Toggl.Giskard.Autocomplete;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Giskard.Extensions
 {

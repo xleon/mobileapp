@@ -14,8 +14,8 @@ using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Exceptions;
 
@@ -34,7 +34,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private readonly IRxActionFactory rxActionFactory;
         private readonly IInteractorFactory interactorFactory;
 
-        private readonly BehaviorSubject<Email> emailSubject = new BehaviorSubject<Email>(Multivac.Email.Empty);
+        private readonly BehaviorSubject<Email> emailSubject = new BehaviorSubject<Email>(Shared.Email.Empty);
         private readonly BehaviorSubject<bool> isPasswordMaskedSubject = new BehaviorSubject<bool>(true);
 
         private bool needsSync;
@@ -106,7 +106,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 .AsDriver(schedulerProvider);
 
             NextIsEnabled = Password
-                .Select(Multivac.Password.From)
+                .Select(Shared.Password.From)
                 .CombineLatest(Done.Executing, (password, isExecuting) => password.IsValid && !isExecuting)
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
@@ -143,7 +143,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
         private IObservable<Unit> done() =>
             Password
                 .FirstAsync()
-                .Select(Multivac.Password.From)
+                .Select(Shared.Password.From)
                 .ThrowIf(password => !password.IsValid, new InvalidOperationException())
                 .SelectMany(userAccessManager.RefreshToken)
                 .Do(onLogin)

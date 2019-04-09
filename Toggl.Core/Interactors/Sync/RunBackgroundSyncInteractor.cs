@@ -5,7 +5,7 @@ using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Sync;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.Interactors
 {

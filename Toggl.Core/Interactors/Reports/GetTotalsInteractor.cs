@@ -1,6 +1,6 @@
 using System;
-using Toggl.Multivac;
-using Toggl.Multivac.Models.Reports;
+using Toggl.Shared;
+using Toggl.Shared.Models.Reports;
 using Toggl.Ultrawave.ApiClients.Interfaces;
 
 namespace Toggl.Foundation.Interactors.Reports

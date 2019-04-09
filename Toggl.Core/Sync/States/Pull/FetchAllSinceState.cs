@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using Toggl.Foundation.Extensions;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 using Toggl.Ultrawave;
 

@@ -17,8 +17,8 @@ using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {

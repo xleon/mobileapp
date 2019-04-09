@@ -5,7 +5,7 @@ using Toggl.Daneel.Extensions;
 using Toggl.Foundation.Helper;
 using UIKit;
 using static Toggl.Foundation.MvvmCross.Helper.Animation;
-using static Toggl.Multivac.Math;
+using static Toggl.Shared.Math;
 
 namespace Toggl.Daneel.Views
 {

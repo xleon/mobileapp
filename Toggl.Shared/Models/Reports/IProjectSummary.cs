@@ -1,4 +1,4 @@
-﻿namespace Toggl.Multivac.Models.Reports
+﻿namespace Toggl.Shared.Models.Reports
 {
     public interface IProjectSummary
     {

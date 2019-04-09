@@ -11,7 +11,7 @@ using Toggl.Foundation;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Helper;
-using Toggl.Multivac;
+using Toggl.Shared;
 using UIKit;
 using Toggl.Foundation.MvvmCross.Extensions;
 

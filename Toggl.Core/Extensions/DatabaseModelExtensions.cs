@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Extensions

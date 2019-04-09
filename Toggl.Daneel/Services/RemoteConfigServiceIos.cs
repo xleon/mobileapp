@@ -3,7 +3,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Firebase.RemoteConfig;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Daneel.Services
 {

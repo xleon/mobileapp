@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using Realms;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.PrimeRadiant.Realm.Models;
 
 namespace Toggl.PrimeRadiant.Realm

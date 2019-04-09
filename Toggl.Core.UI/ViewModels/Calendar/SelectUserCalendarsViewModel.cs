@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.Calendar

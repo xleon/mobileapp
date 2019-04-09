@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reactive.Linq;
 using Newtonsoft.Json;
-using Toggl.Multivac;
-using Toggl.Multivac.Models;
+using Toggl.Shared;
+using Toggl.Shared.Models;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Models;

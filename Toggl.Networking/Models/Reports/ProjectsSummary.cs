@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Multivac;
-using Toggl.Multivac.Models.Reports;
+using Toggl.Shared;
+using Toggl.Shared.Models.Reports;
 
 namespace Toggl.Ultrawave.Models.Reports
 {

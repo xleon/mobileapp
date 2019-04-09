@@ -4,8 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using Realms;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Models;
 using Toggl.PrimeRadiant.Realm.Models;
 

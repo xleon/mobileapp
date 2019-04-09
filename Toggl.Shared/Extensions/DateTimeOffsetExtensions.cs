@@ -1,8 +1,8 @@
 ﻿using System;
 using SystemMath = System.Math;
-using static Toggl.Multivac.Math;
+using static Toggl.Shared.Math;
 
-namespace Toggl.Multivac.Extensions
+namespace Toggl.Shared.Extensions
 {
     public static class DateTimeOffsetExtensions
     {

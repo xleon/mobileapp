@@ -2,8 +2,8 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Foundation.Exceptions;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Foundation.MvvmCross.Extensions
 {

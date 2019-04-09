@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Toggl.Multivac.Extensions
+namespace Toggl.Shared.Extensions
 {
     public static class TypeExtensions
     {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Serialization;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 using Toggl.Ultrawave.Serialization.Attributes;
 
 namespace Toggl.Ultrawave.Serialization

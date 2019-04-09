@@ -7,12 +7,12 @@ using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Helper;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac;
-using Toggl.Multivac.Models;
+using Toggl.Shared;
+using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Toggl.Ultrawave.Exceptions;
-using static Toggl.Multivac.Extensions.CommonFunctions;
+using static Toggl.Shared.Extensions.CommonFunctions;
 using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.PrimeRadiant.Models;
 

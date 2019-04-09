@@ -20,7 +20,7 @@ using System.Reactive;
 using Toggl.Giskard.Extensions.Reactive;
 using System.Reactive.Disposables;
 using Android.Support.V4.Content;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using System.Reactive.Linq;
 using Toggl.Foundation.Analytics;
 

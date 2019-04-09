@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.Ultrawave.ApiClients;
 using Toggl.Ultrawave.ApiClients.Interfaces;
 using Toggl.Ultrawave.Network;

@@ -3,7 +3,7 @@ using MvvmCross.Plugin.Color.Platforms.Ios;
 using UIKit;
 using Color = Toggl.Foundation.MvvmCross.Helper.Color;
 using Toggl.Daneel.Extensions;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Daneel.Views.EditDuration
 {

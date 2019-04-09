@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
 

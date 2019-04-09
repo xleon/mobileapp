@@ -6,10 +6,10 @@ using System.Reactive.Linq;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Settings;
-using Notification = Toggl.Multivac.Notification;
+using Notification = Toggl.Shared.Notification;
 
 namespace Toggl.Foundation.Interactors.Notifications
 {

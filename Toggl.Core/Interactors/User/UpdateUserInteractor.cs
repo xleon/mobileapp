@@ -4,7 +4,7 @@ using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.PrimeRadiant;
 
 namespace Toggl.Foundation.Interactors

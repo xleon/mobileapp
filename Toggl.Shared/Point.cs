@@ -1,4 +1,4 @@
-﻿namespace Toggl.Multivac
+﻿namespace Toggl.Shared
 {
     public struct Point
     {

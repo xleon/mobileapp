@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Reactive;
-using Notification = Toggl.Multivac.Notification;
+using Notification = Toggl.Shared.Notification;
 
 namespace Toggl.Foundation.Services
 {

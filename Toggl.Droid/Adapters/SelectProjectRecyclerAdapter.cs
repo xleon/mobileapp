@@ -6,7 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Giskard.ViewHolders;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Giskard.Adapters
 {

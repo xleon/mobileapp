@@ -4,7 +4,7 @@ using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.MvvmCross.ViewModels.Settings;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Color = Toggl.Foundation.MvvmCross.Helper.Color;
 using FoundationResources = Toggl.Foundation.Resources;
 

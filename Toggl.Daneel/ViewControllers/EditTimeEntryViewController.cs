@@ -14,7 +14,7 @@ using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.Onboarding.EditView;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using UIKit;
 using Toggl.Daneel.Transformations;
 using System.Linq;

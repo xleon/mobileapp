@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Foundation.Analytics;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.Services
 {

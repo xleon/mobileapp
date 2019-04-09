@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 using Xunit;
 
-namespace Toggl.Multivac.Tests
+namespace Toggl.Shared.Tests
 {
     public sealed class WorkspaceExtensionsTest
     {

@@ -4,7 +4,7 @@ using MvvmCross.Navigation;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Exceptions;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Exceptions;
 using Toggl.Foundation.Analytics;

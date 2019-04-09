@@ -1,7 +1,7 @@
 using System;
 using System.Reactive;
 using System.Threading.Tasks;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Foundation.Services
 {

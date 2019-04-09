@@ -10,9 +10,9 @@ using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using UIKit;
-using static Toggl.Multivac.Extensions.CommonFunctions;
+using static Toggl.Shared.Extensions.CommonFunctions;
 
 namespace Toggl.Daneel.ViewControllers.Settings
 {

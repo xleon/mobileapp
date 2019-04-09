@@ -1,6 +1,6 @@
 ﻿using System;
 using Toggl.Foundation.DataSources;
-using static Toggl.Multivac.WorkspaceFeatureId;
+using static Toggl.Shared.WorkspaceFeatureId;
 
 namespace Toggl.Foundation.Interactors
 {

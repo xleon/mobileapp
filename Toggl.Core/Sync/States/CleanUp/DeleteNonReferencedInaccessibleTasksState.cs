@@ -3,9 +3,9 @@ using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Sync.States.CleanUp

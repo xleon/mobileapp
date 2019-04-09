@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.PrimeRadiant.Onboarding;
 using Toggl.PrimeRadiant.Settings;
 

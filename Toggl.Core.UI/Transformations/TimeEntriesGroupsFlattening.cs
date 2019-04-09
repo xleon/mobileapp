@@ -8,8 +8,8 @@ using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
 using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.Identity;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant;
 using static Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.LogItemVisualizationIntent;
 

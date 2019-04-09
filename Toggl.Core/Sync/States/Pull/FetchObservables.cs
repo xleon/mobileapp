@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 
 namespace Toggl.Foundation.Sync.States
 {

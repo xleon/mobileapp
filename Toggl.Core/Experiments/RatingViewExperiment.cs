@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.PrimeRadiant.Settings;
 
 namespace Toggl.Foundation.Experiments

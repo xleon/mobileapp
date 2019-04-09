@@ -1,9 +1,9 @@
 using System;
 using Android.Graphics;
 using Toggl.Giskard.Extensions;
-using static Toggl.Multivac.Math;
+using static Toggl.Shared.Math;
 using Math = Java.Lang.Math;
-using Point = Toggl.Multivac.Point;
+using Point = Toggl.Shared.Point;
 
 namespace Toggl.Giskard.Views.EditDuration.Shapes
 {

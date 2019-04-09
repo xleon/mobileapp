@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.Suggestions
 {

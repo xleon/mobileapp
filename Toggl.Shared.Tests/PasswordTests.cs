@@ -3,7 +3,7 @@ using FsCheck;
 using FsCheck.Xunit;
 using Xunit;
 
-namespace Toggl.Multivac.Tests
+namespace Toggl.Shared.Tests
 {
     public sealed class PasswordTests
     {

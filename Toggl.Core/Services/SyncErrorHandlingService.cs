@@ -1,6 +1,6 @@
 using System;
 using Toggl.Foundation.Sync;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.Services
 {

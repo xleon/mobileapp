@@ -1,6 +1,6 @@
 ﻿using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.Autocomplete.Suggestions
 {

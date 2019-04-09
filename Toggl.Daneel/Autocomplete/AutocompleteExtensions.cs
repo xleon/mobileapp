@@ -10,7 +10,7 @@ using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Span;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.Daneel.Autocomplete.Constants;
 

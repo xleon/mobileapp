@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DataSources.Interfaces;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.PrimeRadiant;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;

@@ -1,6 +1,6 @@
 ﻿using System;
-using Toggl.Multivac;
-using Toggl.Multivac.Models;
+using Toggl.Shared;
+using Toggl.Shared.Models;
 using Toggl.Ultrawave.ApiClients.Interfaces;
 using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.Network;

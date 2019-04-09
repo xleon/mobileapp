@@ -2,8 +2,8 @@
 using System.Globalization;
 using System.Reactive.Linq;
 using Newtonsoft.Json;
-using Toggl.Multivac;
-using Toggl.Multivac.Models.Reports;
+using Toggl.Shared;
+using Toggl.Shared.Models.Reports;
 using Toggl.Ultrawave.Serialization;
 using Toggl.Ultrawave.Models.Reports;
 using Toggl.Ultrawave.Network;

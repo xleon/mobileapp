@@ -1,6 +1,6 @@
-﻿using Toggl.Multivac.Models;
+﻿using Toggl.Shared.Models;
 
-namespace Toggl.Multivac.Extensions
+namespace Toggl.Shared.Extensions
 {
     public static class PreferencesExtensions
     {

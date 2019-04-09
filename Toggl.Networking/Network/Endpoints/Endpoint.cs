@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net.Http;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Ultrawave.Network
 {

@@ -5,9 +5,9 @@ using System.Reactive.Subjects;
 using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 
 namespace Toggl.Foundation.DataSources

@@ -1,5 +1,5 @@
 using System.Reactive.Concurrency;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Daneel
 {

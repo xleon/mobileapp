@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using System.Reactive.Linq;
 using Toggl.Foundation.Serialization;
 using System.Reflection;
 using System.Linq;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Newtonsoft.Json;
 
 

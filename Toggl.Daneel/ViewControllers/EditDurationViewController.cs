@@ -11,7 +11,7 @@ using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.MvvmCross.Helper;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using UIKit;
 using Toggl.Foundation;
 

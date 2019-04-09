@@ -4,10 +4,10 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Xunit;
 
-namespace Toggl.Multivac.Tests
+namespace Toggl.Shared.Tests
 {
     public class ObservableExtensionTests
     {

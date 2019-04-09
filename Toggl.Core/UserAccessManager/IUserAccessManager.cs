@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reactive;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.Ultrawave;
 
 namespace Toggl.Foundation.Login

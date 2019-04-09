@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using Toggl.Foundation.Autocomplete;
 using Toggl.Foundation.Autocomplete.Suggestions;
 using Toggl.Foundation.Extensions;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.Interactors.AutocompleteSuggestions
 {

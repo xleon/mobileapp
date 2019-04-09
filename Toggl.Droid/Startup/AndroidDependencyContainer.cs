@@ -9,7 +9,7 @@ using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Shortcuts;
 using Toggl.Foundation.Suggestions;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Realm;
 using Toggl.PrimeRadiant.Settings;

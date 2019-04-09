@@ -12,7 +12,7 @@ using Toggl.Foundation.Suggestions;
 using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.ViewHelpers;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using TogglResources = Toggl.Foundation.Resources;
 
 namespace Toggl.Giskard.ViewHolders

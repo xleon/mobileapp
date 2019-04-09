@@ -14,7 +14,7 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.Fragments;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using FoundationResources = Toggl.Foundation.Resources;
 
 namespace Toggl.Giskard.Activities

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Multivac
+namespace Toggl.Shared
 {
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class IsAnonymizedAttribute : Attribute

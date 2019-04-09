@@ -1,7 +1,7 @@
 using System;
 using System.Reactive.Linq;
 using Toggl.Foundation.DataSources;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.Interactors
 {

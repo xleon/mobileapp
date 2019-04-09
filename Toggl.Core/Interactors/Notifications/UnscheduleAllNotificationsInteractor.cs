@@ -3,7 +3,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.Interactors.Notifications
 {

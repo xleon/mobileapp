@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.Ultrawave.Helpers;
 using Toggl.Ultrawave.Models;
 using Toggl.Ultrawave.Network;

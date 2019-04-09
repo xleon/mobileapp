@@ -6,8 +6,8 @@ using Toggl.Foundation.MvvmCross.ViewModels.Selectable;
 using Toggl.Foundation.MvvmCross.ViewModels.Settings;
 using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions.Reactive;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Giskard.Fragments
 {

@@ -7,7 +7,7 @@ using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.Views

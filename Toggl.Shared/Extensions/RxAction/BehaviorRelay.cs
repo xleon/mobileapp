@@ -1,7 +1,7 @@
 using System;
 using System.Reactive.Subjects;
 
-namespace Toggl.Multivac.Extensions.Reactive
+namespace Toggl.Shared.Extensions.Reactive
 {
     /// <summary>
     /// A wrapper for BehaviorSubject.

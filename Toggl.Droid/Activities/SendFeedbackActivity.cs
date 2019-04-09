@@ -10,7 +10,7 @@ using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions.Reactive;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Toggl.Ultrawave.Exceptions;
 
 namespace Toggl.Giskard.Activities

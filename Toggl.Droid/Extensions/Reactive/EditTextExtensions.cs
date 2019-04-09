@@ -3,7 +3,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using Android.Widget;
 using Toggl.Foundation.MvvmCross.Reactive;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Giskard.Extensions.Reactive
 {

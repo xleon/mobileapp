@@ -1,8 +1,8 @@
 ﻿using Toggl.PrimeRadiant;
-using Toggl.Multivac;
+using Toggl.Shared;
 using static Toggl.PrimeRadiant.ConflictResolutionMode;
 using System;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 
 namespace Toggl.Foundation.Sync.ConflictResolution
 {

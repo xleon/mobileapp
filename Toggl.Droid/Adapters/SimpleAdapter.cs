@@ -4,7 +4,7 @@ using Android.Views;
 using Toggl.Foundation.MvvmCross.Interfaces;
 using Toggl.Giskard.Adapters.DiffingStrategies;
 using Toggl.Giskard.ViewHolders;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Giskard.Adapters
 {

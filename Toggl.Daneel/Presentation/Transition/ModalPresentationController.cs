@@ -2,7 +2,7 @@
 using CoreGraphics;
 using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Multivac;
+using Toggl.Shared;
 using UIKit;
 using static System.Math;
 using Toggl.Daneel.ViewControllers;

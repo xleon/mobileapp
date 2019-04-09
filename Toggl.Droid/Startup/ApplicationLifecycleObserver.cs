@@ -5,7 +5,7 @@ using Android.Content.Res;
 using Android.OS;
 using Android.Runtime;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Giskard.Startup
 {

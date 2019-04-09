@@ -25,12 +25,12 @@ using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Extensions.Reactive;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Extensions.Reactive;
 using Toggl.PrimeRadiant.Settings;
 using static Toggl.Foundation.Helper.Constants;
-using static Toggl.Multivac.Extensions.CommonFunctions;
+using static Toggl.Shared.Extensions.CommonFunctions;
 using IStopwatch = Toggl.Foundation.Diagnostics.IStopwatch;
 using IStopwatchProvider = Toggl.Foundation.Diagnostics.IStopwatchProvider;
 

@@ -5,7 +5,7 @@ using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Views;
 using Toggl.Foundation.MvvmCross.Reactive;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using static Android.Views.View;
 
 namespace Toggl.Giskard.Extensions.Reactive

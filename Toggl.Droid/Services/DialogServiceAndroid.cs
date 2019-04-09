@@ -11,7 +11,7 @@ using Android.App;
 using Android.OS;
 using MvvmCross.Platforms.Android.Views;
 using Toggl.Giskard.Views;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using AlertDialog = Android.Support.V7.App.AlertDialog;
 using Object = Java.Lang.Object;
 

@@ -3,9 +3,9 @@
 using System.Collections.ObjectModel;
 using FluentAssertions;
 using Xunit;
-using static Toggl.Multivac.Extensions.ObservableCollectionExtensions;
+using static Toggl.Shared.Extensions.ObservableCollectionExtensions;
 
-namespace Toggl.Multivac.Tests
+namespace Toggl.Shared.Tests
 {
     public sealed class ObservableCollectionExtensionsTests
     {

@@ -23,11 +23,11 @@ using Toggl.Foundation.MvvmCross.Transformations;
 using Toggl.Foundation.MvvmCross.ViewModels.Settings;
 using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave.Network;
-using static Toggl.Multivac.Extensions.CommonFunctions;
+using static Toggl.Shared.Extensions.CommonFunctions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {

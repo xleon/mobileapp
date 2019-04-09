@@ -13,7 +13,7 @@ using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.Fragments;
 using Toggl.Giskard.Presentation;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Fragment = Android.Support.V4.App.Fragment;
 
 namespace Toggl.Giskard.Activities

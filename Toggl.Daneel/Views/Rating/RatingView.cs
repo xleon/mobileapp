@@ -11,9 +11,9 @@ using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using UIKit;
-using static Toggl.Multivac.Extensions.CommonFunctions;
+using static Toggl.Shared.Extensions.CommonFunctions;
 
 namespace Toggl.Daneel
 {

@@ -1,7 +1,7 @@
 using System;
 using Toggl.Foundation.Helper;
 using Toggl.Foundation.Models;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Suggestions

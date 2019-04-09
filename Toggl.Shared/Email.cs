@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Toggl.Multivac
+namespace Toggl.Shared
 {
     public struct Email
     {

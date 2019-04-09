@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 
 namespace Toggl.Ultrawave.Models
 {

@@ -1,4 +1,4 @@
-﻿namespace Toggl.Multivac.Extensions
+﻿namespace Toggl.Shared.Extensions
 {
     public static class EmailExtensions
     {

@@ -13,7 +13,7 @@ using Android.Views;
 using Toggl.Foundation;
 using Toggl.Foundation.Helper;
 using Toggl.Giskard.Extensions;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Color = Android.Graphics.Color;
 
 namespace Toggl.Giskard.Views
@@ -171,7 +171,7 @@ namespace Toggl.Giskard.Views
             if (lastTouch == null)
                 return false;
 
-            var distance = Multivac.Math.DistanceSq(touchUp.ToPoint(), lastTouch.ToPoint());
+            var distance = Shared.Math.DistanceSq(touchUp.ToPoint(), lastTouch.ToPoint());
 
             return distance < maxDistanceBetweenDownAndUpTouches;
         }

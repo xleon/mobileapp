@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Toggl.Foundation.Analytics;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Foundation.Sync
 {

@@ -1,5 +1,5 @@
 using Android.Graphics;
-using static Toggl.Multivac.Math;
+using static Toggl.Shared.Math;
 using Math = Java.Lang.Math;
 
 namespace Toggl.Giskard.Views.EditDuration.Shapes

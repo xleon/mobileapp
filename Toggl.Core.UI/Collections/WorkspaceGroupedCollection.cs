@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MvvmCross.ViewModels;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.MvvmCross.Collections
 {

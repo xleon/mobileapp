@@ -1,5 +1,5 @@
 ﻿using Realms;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.PrimeRadiant.Realm

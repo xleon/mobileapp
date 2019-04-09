@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
-using Toggl.Multivac;
-using Toggl.Multivac.Models;
+using Toggl.Shared;
+using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 
 namespace Toggl.Foundation.Sync.States.Pull

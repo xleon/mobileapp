@@ -1,4 +1,4 @@
-﻿using Toggl.Multivac.Models;
+﻿using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 
 namespace Toggl.Foundation.Extensions

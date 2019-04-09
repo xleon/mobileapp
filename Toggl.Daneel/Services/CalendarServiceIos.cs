@@ -6,7 +6,7 @@ using EventKit;
 using Toggl.Daneel.Extensions;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Daneel.Services
 {

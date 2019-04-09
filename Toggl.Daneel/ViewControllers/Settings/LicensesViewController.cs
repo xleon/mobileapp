@@ -5,7 +5,7 @@ using Toggl.Daneel.ViewSources.Generic.TableView;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers

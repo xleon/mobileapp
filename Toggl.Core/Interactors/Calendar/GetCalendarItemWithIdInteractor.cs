@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using Toggl.Foundation.Calendar;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.Interactors.Calendar
 {

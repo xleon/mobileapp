@@ -28,7 +28,7 @@ using Toggl.Giskard.Helper;
 using Toggl.Giskard.Presentation;
 using Toggl.Giskard.Services;
 using Toggl.Giskard.ViewHelpers;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using static Android.Content.Context;
 using static Toggl.Foundation.Sync.SyncProgress;
 using static Toggl.Giskard.Extensions.CircularRevealAnimation.AnimationType;

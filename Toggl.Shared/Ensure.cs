@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
-namespace Toggl.Multivac
+namespace Toggl.Shared
 {
     public static class Ensure
     {

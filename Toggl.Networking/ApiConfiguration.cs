@@ -1,4 +1,4 @@
-﻿using Toggl.Multivac;
+﻿using Toggl.Shared;
 using Toggl.Ultrawave.Network;
 
 namespace Toggl.Ultrawave

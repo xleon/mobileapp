@@ -17,8 +17,8 @@ using Toggl.Foundation.MvvmCross.Calendar;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.ViewHolders;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Giskard.Adapters.Calendar
 {
@@ -320,7 +320,7 @@ namespace Toggl.Giskard.Adapters.Calendar
             }
 
             private int anchoredItemHashCode(CalendarItem item)
-                => Multivac.HashCode.From(
+                => Shared.HashCode.From(
                     item.Source,
                     item.Id,
                     item.StartTime,

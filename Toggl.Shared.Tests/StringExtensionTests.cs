@@ -4,11 +4,11 @@ using System.Linq;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Xunit;
 using static System.Math;
 
-namespace Toggl.Multivac.Tests
+namespace Toggl.Shared.Tests
 {
     public sealed class StringExtensionTests
     {

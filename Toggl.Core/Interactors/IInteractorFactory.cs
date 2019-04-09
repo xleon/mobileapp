@@ -10,8 +10,8 @@ using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.Reports;
 using Toggl.Foundation.Suggestions;
-using Toggl.Multivac;
-using Toggl.Multivac.Models.Reports;
+using Toggl.Shared;
+using Toggl.Shared.Models.Reports;
 
 namespace Toggl.Foundation.Interactors
 {

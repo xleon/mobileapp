@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Toggl.Foundation.Models;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 

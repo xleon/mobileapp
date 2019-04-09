@@ -6,8 +6,8 @@ using CoreGraphics;
 using Foundation;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation.Helper;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UIKit;
 using Math = System.Math;
 

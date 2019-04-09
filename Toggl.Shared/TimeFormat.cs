@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Toggl.Multivac
+namespace Toggl.Shared
 {
     public struct TimeFormat
     {

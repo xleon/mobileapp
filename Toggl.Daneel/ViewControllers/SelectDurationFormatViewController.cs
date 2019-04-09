@@ -9,7 +9,7 @@ using Toggl.Daneel.ViewSources.Generic.TableView;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Daneel.ViewControllers
 {

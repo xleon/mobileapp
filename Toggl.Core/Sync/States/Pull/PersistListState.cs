@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.PrimeRadiant.Models;
 using Toggl.Ultrawave.Exceptions;
 

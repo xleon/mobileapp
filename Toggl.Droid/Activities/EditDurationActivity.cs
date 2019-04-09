@@ -15,7 +15,7 @@ using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.ViewHelpers;
 using Toggl.Giskard.Views.EditDuration;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using static Toggl.Foundation.MvvmCross.Helper.TemporalInconsistency;
 
 namespace Toggl.Giskard.Activities

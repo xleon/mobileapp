@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {

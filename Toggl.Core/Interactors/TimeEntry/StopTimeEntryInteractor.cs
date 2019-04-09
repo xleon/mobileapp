@@ -8,8 +8,8 @@ using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Models;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.PrimeRadiant.Models;
 
 namespace Toggl.Foundation.Interactors

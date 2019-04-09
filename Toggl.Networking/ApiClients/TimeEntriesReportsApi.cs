@@ -5,14 +5,14 @@ using Toggl.Ultrawave.Models.Reports;
 using Toggl.Ultrawave.Network;
 using Toggl.Ultrawave.Serialization;
 using Toggl.Ultrawave.Network.Reports;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Newtonsoft.Json;
 using System.Reactive.Linq;
-using Toggl.Multivac.Models.Reports;
+using Toggl.Shared.Models.Reports;
 using System.Collections.Generic;
 using System.Globalization;
 using Newtonsoft.Json.Converters;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Ultrawave.ApiClients
 {

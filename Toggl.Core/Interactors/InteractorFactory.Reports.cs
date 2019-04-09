@@ -1,7 +1,7 @@
 using System;
 using Toggl.Foundation.Interactors.Reports;
 using Toggl.Foundation.Reports;
-using Toggl.Multivac.Models.Reports;
+using Toggl.Shared.Models.Reports;
 
 namespace Toggl.Foundation.Interactors
 {

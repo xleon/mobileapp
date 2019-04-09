@@ -1,5 +1,5 @@
 ﻿using System;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 using Toggl.Ultrawave.Serialization;
 
 namespace Toggl.Ultrawave.Models

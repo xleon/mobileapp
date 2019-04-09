@@ -11,7 +11,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Giskard.ViewHolders;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Giskard.Adapters
 {

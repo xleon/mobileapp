@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Toggl.Multivac.Models
+namespace Toggl.Shared.Models
 {
     public interface IWorkspaceFeatureCollection
     {

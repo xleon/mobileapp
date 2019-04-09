@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Toggl.Foundation.MvvmCross.Interfaces;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Giskard.Adapters.DiffingStrategies
 {

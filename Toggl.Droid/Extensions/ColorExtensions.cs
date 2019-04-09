@@ -1,5 +1,5 @@
 ﻿using AndroidColor = Android.Graphics.Color;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Giskard.Extensions
 {

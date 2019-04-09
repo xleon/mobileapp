@@ -1,7 +1,7 @@
 ﻿using System;
 using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Multivac;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.Daneel.Cells.Settings

@@ -14,10 +14,10 @@ using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.ViewHelpers;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Toggl.Foundation.MvvmCross.Extensions;
 using System.Reactive;
-using static Toggl.Multivac.Extensions.CommonFunctions;
+using static Toggl.Shared.Extensions.CommonFunctions;
 using Android.Support.Constraints;
 
 namespace Toggl.Giskard.ViewHolders

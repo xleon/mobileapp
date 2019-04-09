@@ -5,9 +5,9 @@ using MvvmCross.ViewModels;
 using Toggl.Foundation.DataSources;
 using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Models.Reports;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models.Reports;
 using static System.Math;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
@@ -28,7 +28,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels.Reports
 
         public IObservable<DateFormat> DateFormat { get; }
 
-        private readonly DateFormat defaultDateFormat = Multivac.DateFormat.FromLocalizedDateFormat("mm/dd");
+        private readonly DateFormat defaultDateFormat = Shared.DateFormat.FromLocalizedDateFormat("mm/dd");
 
         public ReportsBarChartViewModel(
             ISchedulerProvider schedulerProvider,

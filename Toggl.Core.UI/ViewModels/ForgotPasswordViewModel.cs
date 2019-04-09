@@ -9,8 +9,8 @@ using Toggl.Foundation.Extensions;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.Ultrawave.Exceptions;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
@@ -26,7 +26,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
 
         private readonly TimeSpan delayAfterPassordReset = TimeSpan.FromSeconds(4);
 
-        public BehaviorSubject<Email> Email { get; } = new BehaviorSubject<Email>(Multivac.Email.Empty);
+        public BehaviorSubject<Email> Email { get; } = new BehaviorSubject<Email>(Shared.Email.Empty);
         public IObservable<string> ErrorMessage { get; }
         public IObservable<bool> PasswordResetSuccessful { get; }
 

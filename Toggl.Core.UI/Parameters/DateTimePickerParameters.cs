@@ -1,5 +1,5 @@
 ﻿using System;
-using Toggl.Multivac;
+using Toggl.Shared;
 using static Toggl.Foundation.Helper.Constants;
 
 namespace Toggl.Foundation.MvvmCross.Parameters

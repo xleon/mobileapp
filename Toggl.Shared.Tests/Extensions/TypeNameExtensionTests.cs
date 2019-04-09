@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Xunit;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using FluentAssertions;
 
-namespace Toggl.Multivac.Tests.Extensions
+namespace Toggl.Shared.Tests.Extensions
 {
     public sealed class TypeNameExtensionTests
     {

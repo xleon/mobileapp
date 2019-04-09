@@ -15,7 +15,7 @@ using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.Presentation;
 using Toggl.Giskard.ViewHolders;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using FoundationResources = Toggl.Foundation.Resources;
 
 namespace Toggl.Giskard.Fragments

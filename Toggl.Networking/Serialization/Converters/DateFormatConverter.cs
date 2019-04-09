@@ -1,6 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Ultrawave.Serialization.Converters
 {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Android.Gms.Tasks;
 using Firebase.RemoteConfig;
 using Toggl.Foundation.Services;
-using Toggl.Multivac;
+using Toggl.Shared;
 using GmsTask = Android.Gms.Tasks.Task;
 
 namespace Toggl.Giskard.Services

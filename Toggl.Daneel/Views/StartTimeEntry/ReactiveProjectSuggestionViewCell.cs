@@ -3,9 +3,9 @@ using Foundation;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
 using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Multivac;
+using Toggl.Shared;
 using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using UIKit;
 using System.Reactive.Disposables;
 

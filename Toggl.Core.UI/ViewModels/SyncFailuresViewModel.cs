@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Models;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Foundation.MvvmCross.ViewModels
 {

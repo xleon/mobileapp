@@ -23,7 +23,7 @@ using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.ViewHolders;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Observable = System.Reactive.Linq.Observable;
 
 namespace Toggl.Giskard.Views

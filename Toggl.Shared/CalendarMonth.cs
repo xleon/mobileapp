@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace Toggl.Multivac
+namespace Toggl.Shared
 {
     public struct CalendarMonth
     {

@@ -1,5 +1,5 @@
 ﻿using System;
-using Toggl.Multivac.Models.Reports;
+using Toggl.Shared.Models.Reports;
 namespace Toggl.Ultrawave.Models.Reports
 {
     public sealed class TimeEntriesTotalsGroup : ITimeEntriesTotalsGroup

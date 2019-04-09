@@ -10,7 +10,7 @@ using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Views.Tag;
 using Toggl.Daneel.ViewSources;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Daneel.ViewControllers
 {

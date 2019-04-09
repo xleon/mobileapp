@@ -8,7 +8,7 @@ using Toggl.Daneel.Extensions.Reactive;
 using UIKit;
 using System;
 using System.Reactive.Linq;
-using static Toggl.Multivac.Extensions.ReactiveExtensions;
+using static Toggl.Shared.Extensions.ReactiveExtensions;
 
 namespace Toggl.Daneel.ViewControllers
 {

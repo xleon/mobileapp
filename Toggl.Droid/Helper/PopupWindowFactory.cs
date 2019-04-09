@@ -2,7 +2,7 @@
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Giskard.Helper
 {

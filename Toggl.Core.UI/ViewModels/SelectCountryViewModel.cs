@@ -6,8 +6,8 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Services;
 

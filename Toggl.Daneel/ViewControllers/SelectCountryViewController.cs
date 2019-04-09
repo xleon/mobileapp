@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Views.CountrySelection;
 using Toggl.Foundation;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Toggl.Daneel.ViewSources.Generic.TableView;
 using Toggl.Foundation.MvvmCross.Collections;
 

@@ -10,7 +10,7 @@ using Android.Support.V4.App;
 using Toggl.Foundation.Services;
 using Toggl.Giskard.BroadcastReceivers;
 using Toggl.Giskard.Extensions;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Notification = Android.App.Notification;
 using Uri = Android.Net.Uri;
 
@@ -27,7 +27,7 @@ namespace Toggl.Giskard.Services
             sharedPreferences = Application.Context.GetSharedPreferences(scheduledNotificationsSharedPreferencesName, FileCreationMode.Private);
         }
 
-        public IObservable<Unit> Schedule(IImmutableList<Multivac.Notification> notifications)
+        public IObservable<Unit> Schedule(IImmutableList<Shared.Notification> notifications)
             => Observable.Start(() =>
             {
                 var context = Application.Context;

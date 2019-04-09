@@ -7,10 +7,10 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using Xunit;
 
-namespace Toggl.Multivac.Tests
+namespace Toggl.Shared.Tests
 {
     public sealed class RxActionTests
     {

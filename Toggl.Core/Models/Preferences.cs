@@ -1,8 +1,8 @@
 ﻿using System;
 using Toggl.Foundation.DTOs;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Multivac;
-using Toggl.Multivac.Models;
+using Toggl.Shared;
+using Toggl.Shared.Models;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Models;
 

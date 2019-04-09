@@ -7,7 +7,7 @@ using Foundation;
 using MvvmCross;
 using MvvmCross.Platforms.Ios.Presenters;
 using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Multivac;
+using Toggl.Shared;
 using LoginHandler = AgileBits.OnePasswordLoginDictionaryCompletionBlock;
 
 namespace Toggl.Daneel.Services
