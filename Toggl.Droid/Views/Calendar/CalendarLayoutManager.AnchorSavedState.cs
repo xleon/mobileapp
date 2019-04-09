@@ -6,7 +6,7 @@ using Android.Views;
 using Java.Interop;
 using Object = Java.Lang.Object;
 
-namespace Toggl.Giskard.Views.Calendar
+namespace Toggl.Droid.Views.Calendar
 {
     public partial class CalendarLayoutManager
     {

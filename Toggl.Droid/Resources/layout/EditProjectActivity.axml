@@ -55,7 +55,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true" />
-            <toggl.giskard.views.CircleView
+            <toggl.droid.views.CircleView
                 android:id="@+id/ColorCircle"
                 android:clickable="true"
                 android:layout_width="24dp"

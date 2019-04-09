@@ -1,6 +1,6 @@
 ﻿using Android.Content;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public struct PopupOffsets
     {

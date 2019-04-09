@@ -7,11 +7,11 @@ using Android.Support.V4.Graphics;
 using Android.Views;
 using Android.Widget;
 using Toggl.Core.Autocomplete.Suggestions;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Extensions.Reactive;
-using static Toggl.Giskard.Resource.Id;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Extensions.Reactive;
+using static Toggl.Droid.Resource.Id;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public class ProjectSuggestionViewHolder : SuggestionRecyclerViewHolder<ProjectSuggestion>
     {

@@ -10,12 +10,12 @@ using Toggl.Core.UI.Services;
 using Android.App;
 using Android.OS;
 using MvvmCross.Platforms.Android.Views;
-using Toggl.Giskard.Views;
+using Toggl.Droid.Views;
 using Toggl.Shared.Extensions;
 using AlertDialog = Android.Support.V7.App.AlertDialog;
 using Object = Java.Lang.Object;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     public sealed class DialogServiceAndroid : Object, IDialogService
     {

@@ -12,7 +12,7 @@ using Toggl.Shared;
 using static Android.Support.V7.Widget.Toolbar;
 using static Toggl.Core.Resources;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme",

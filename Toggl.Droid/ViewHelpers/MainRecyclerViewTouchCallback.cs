@@ -3,10 +3,10 @@ using Android.Graphics;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.ViewHolders;
 
-namespace Toggl.Giskard.ViewHelpers
+namespace Toggl.Droid.ViewHelpers
 {
     public class MainRecyclerViewTouchCallback : ItemTouchHelper.SimpleCallback
     {

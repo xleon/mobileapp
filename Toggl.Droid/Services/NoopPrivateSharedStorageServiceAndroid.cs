@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Core.Services;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     public class NoopPrivateSharedStorageServiceAndroid : IPrivateSharedStorageService
     {

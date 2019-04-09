@@ -8,17 +8,17 @@ using Android.Widget;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Onboarding.MainView;
 using Toggl.Core.Sync;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Extensions.Reactive;
-using Toggl.Giskard.Helper;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Helper;
+using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Extensions;
 using Toggl.Storage.Onboarding;
-using static Toggl.Giskard.ViewHolders.MainLogCellViewHolder;
+using static Toggl.Droid.ViewHolders.MainLogCellViewHolder;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     public sealed partial class MainFragment
     {

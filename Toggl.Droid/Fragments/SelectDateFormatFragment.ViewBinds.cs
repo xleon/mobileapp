@@ -2,7 +2,7 @@
 using Android.Support.V7.Widget;
 using Android.Views;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
 	public sealed partial class SelectDateFormatFragment
 	{

@@ -1,7 +1,7 @@
 ﻿using AndroidColor = Android.Graphics.Color;
 using Toggl.Shared;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public static class ColorExtensions
     {

@@ -1,7 +1,7 @@
 using Android.Text;
 using Java.Lang;
 
-namespace Toggl.Giskard.ViewHelpers
+namespace Toggl.Droid.ViewHelpers
 {
     public class CopylessSpannableFactory : SpannableFactory
     {

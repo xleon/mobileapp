@@ -4,7 +4,7 @@ using Android.Content;
 using Toggl.Core.Services;
 using Toggl.Storage.Settings;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     public sealed class SharedPreferencesStorageAndroid : KeyValueStorage
     {

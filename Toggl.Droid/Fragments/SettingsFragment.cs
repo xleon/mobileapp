@@ -10,15 +10,15 @@ using Android.Views;
 using Android.Widget;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Extensions.Reactive;
-using Toggl.Giskard.Presentation;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Presentation;
+using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
 using FoundationResources = Toggl.Core.Resources;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     public sealed partial class SettingsFragment : ReactiveFragment<SettingsViewModel>, IScrollableToTop
     {

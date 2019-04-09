@@ -1,10 +1,10 @@
 using Android.Support.Constraints;
 using Android.Views;
 using Android.Widget;
-using Toggl.Giskard.Views.EditDuration;
+using Toggl.Droid.Views.EditDuration;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     public partial class EditDurationActivity
     {

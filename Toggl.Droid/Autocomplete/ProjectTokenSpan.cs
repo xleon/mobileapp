@@ -1,6 +1,6 @@
 ﻿using Android.Graphics;
 
-namespace Toggl.Giskard.Autocomplete
+namespace Toggl.Droid.Autocomplete
 {
     public sealed class ProjectTokenSpan : TokenSpan
     {

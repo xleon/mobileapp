@@ -11,13 +11,13 @@ using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.UI.Onboarding.StartTimeEntryView;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Extensions.Reactive;
-using Toggl.Giskard.Helper;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Helper;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme.BlueStatusBar",

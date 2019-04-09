@@ -3,7 +3,7 @@ using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
 
-namespace Toggl.Giskard.Views.Calendar
+namespace Toggl.Droid.Views.Calendar
 {
     public partial class CalendarLayoutManager
     {

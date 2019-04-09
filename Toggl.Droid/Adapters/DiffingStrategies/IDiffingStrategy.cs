@@ -10,7 +10,7 @@ using Android.Views;
 using Android.Widget;
 using Toggl.Core.UI.Interfaces;
 
-namespace Toggl.Giskard.Adapters.DiffingStrategies
+namespace Toggl.Droid.Adapters.DiffingStrategies
 {
     public interface IDiffingStrategy<T> where T : IEquatable<T>
     {

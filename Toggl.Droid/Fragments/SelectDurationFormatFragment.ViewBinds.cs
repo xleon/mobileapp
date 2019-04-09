@@ -1,8 +1,8 @@
 using Android.Support.V7.Widget;
 using Android.Views;
-using Toggl.Giskard.Adapters;
+using Toggl.Droid.Adapters;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     public partial class SelectDurationFormatFragment
     {

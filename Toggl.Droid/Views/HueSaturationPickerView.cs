@@ -6,13 +6,13 @@ using Android.Support.V4.Graphics;
 using Android.Util;
 using Android.Views;
 using MvvmCross.Base;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Extensions;
 using Toggl.Shared.Extensions;
 using static System.Math;
 
-namespace Toggl.Giskard.Views
+namespace Toggl.Droid.Views
 {
-    [Register("toggl.giskard.views.HueSaturationPickerView")]
+    [Register("toggl.droid.views.HueSaturationPickerView")]
     public sealed class HueSaturationPickerView : View
     {
         private static readonly int[] brightnessGradientColors = { Color.Transparent.ToArgb(), Color.White.ToArgb() };

@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace Toggl.Giskard.Adapters.DiffingStrategies
+namespace Toggl.Droid.Adapters.DiffingStrategies
 {
     public sealed class EquatableDiffingStrategy<T> : IDiffingStrategy<T>
        where T : IEquatable<T>

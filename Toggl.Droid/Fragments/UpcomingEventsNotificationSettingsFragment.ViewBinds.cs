@@ -2,7 +2,7 @@
 using Android.Views;
 using Android.Widget;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     public sealed partial class UpcomingEventsNotificationSettingsFragment
     {

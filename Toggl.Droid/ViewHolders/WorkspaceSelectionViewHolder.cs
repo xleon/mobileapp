@@ -3,9 +3,9 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Extensions;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public sealed class WorkspaceSelectionViewHolder : BaseRecyclerViewHolder<SelectableWorkspaceViewModel>
     {

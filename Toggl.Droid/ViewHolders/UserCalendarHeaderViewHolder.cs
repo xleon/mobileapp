@@ -4,7 +4,7 @@ using Android.Views;
 using Android.Widget;
 using Toggl.Core.UI.ViewModels.Calendar;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public class UserCalendarHeaderViewHolder : BaseRecyclerViewHolder<UserCalendarSourceViewModel>
     {

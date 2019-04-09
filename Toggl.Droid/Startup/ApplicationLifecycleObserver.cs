@@ -7,7 +7,7 @@ using Android.Runtime;
 using Toggl.Core.Services;
 using Toggl.Shared;
 
-namespace Toggl.Giskard.Startup
+namespace Toggl.Droid.Startup
 {
     public sealed class ApplicationLifecycleObserver : Java.Lang.Object, Application.IActivityLifecycleCallbacks, IComponentCallbacks2
     {

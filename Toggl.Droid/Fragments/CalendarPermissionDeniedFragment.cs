@@ -1,10 +1,10 @@
 ﻿using Android.OS;
 using Android.Views;
 using Toggl.Core.UI.ViewModels.Calendar;
-using Toggl.Giskard.Extensions.Reactive;
+using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     public sealed partial class CalendarPermissionDeniedFragment : ReactiveDialogFragment<CalendarPermissionDeniedViewModel>
     {

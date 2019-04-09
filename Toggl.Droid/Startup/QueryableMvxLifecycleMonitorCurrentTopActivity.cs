@@ -7,7 +7,7 @@ using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android;
 using MvvmCross.ViewModels;
 
-namespace Toggl.Giskard
+namespace Toggl.Droid
 {
     public class QueryableMvxLifecycleMonitorCurrentTopActivity : Java.Lang.Object, Application.IActivityLifecycleCallbacks, IMvxAndroidCurrentTopActivity
      {

@@ -1,10 +1,10 @@
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using Toggl.Giskard.Views;
-using static Toggl.Giskard.Resource.Id;
+using Toggl.Droid.Views;
+using static Toggl.Droid.Resource.Id;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     public partial class StartTimeEntryActivity
     {

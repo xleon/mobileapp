@@ -9,11 +9,11 @@ using Android.Views;
 using MvvmCross.Droid.Support.V4;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     [MvxDialogFragmentPresentation(AddToBackStack = true)]
     public sealed partial class SelectDurationFormatFragment : MvxDialogFragment<SelectDurationFormatViewModel>

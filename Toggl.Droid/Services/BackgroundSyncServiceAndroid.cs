@@ -1,10 +1,10 @@
 using Android.App;
 using Android.App.Job;
 using Android.Content;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Extensions;
 using Toggl.Core.Services;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     public sealed class BackgroundSyncServiceAndroid : BaseBackgroundSyncService
     {

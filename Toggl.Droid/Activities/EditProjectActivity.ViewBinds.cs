@@ -1,8 +1,8 @@
 ﻿using Android.Views;
 using Android.Widget;
-using Toggl.Giskard.Views;
+using Toggl.Droid.Views;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     public sealed partial class EditProjectActivity
     {

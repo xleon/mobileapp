@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Toggl.Core.Services;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     public sealed class LicenseProviderAndroid : BaseLicenseProvider
     {

@@ -5,11 +5,11 @@ using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using Toggl.Giskard.Adapters;
+using Toggl.Droid.Adapters;
 
-namespace Toggl.Giskard.Views
+namespace Toggl.Droid.Views
 {
-    [Register("toggl.giskard.views.ReportsCalendarRecyclerView")]
+    [Register("toggl.droid.views.ReportsCalendarRecyclerView")]
     public sealed class ReportsCalendarRecyclerView : RecyclerView
     {
         public ReportsCalendarRecyclerView(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)

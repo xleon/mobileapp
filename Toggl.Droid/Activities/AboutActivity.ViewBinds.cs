@@ -1,6 +1,6 @@
 ﻿using Android.Views;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     public partial class AboutActivity
     {

@@ -4,7 +4,7 @@ using System.Reactive.Subjects;
 using Android.Support.V7.Widget;
 using Android.Views;
 
-namespace Toggl.Giskard.ViewHelpers
+namespace Toggl.Droid.ViewHelpers
 {     public sealed class SuggestionsRecyclerViewSnapHelper : LinearSnapHelper
     {
         private OrientationHelper horizontalHelper;

@@ -3,7 +3,7 @@ using System.Linq;
 using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 
-namespace Toggl.Giskard.Adapters.DiffingStrategies
+namespace Toggl.Droid.Adapters.DiffingStrategies
 {
     public sealed class IdentifierEqualityDiffingStrategy<T> : IDiffingStrategy<T>
         where T : IEquatable<T>

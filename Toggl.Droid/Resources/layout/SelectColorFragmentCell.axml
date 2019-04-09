@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <toggl.giskard.views.CircleView
+    <toggl.droid.views.CircleView
         android:id="@+id/EditProjectColorCircle"
         android:layout_width="36dp"
         android:layout_height="36dp"

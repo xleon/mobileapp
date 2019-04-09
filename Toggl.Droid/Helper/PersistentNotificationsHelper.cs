@@ -7,11 +7,11 @@ using Java.Net;
 using Toggl.Core;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Activities;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Activities;
+using Toggl.Droid.Extensions;
 using Uri = Android.Net.Uri;
 
-namespace Toggl.Giskard.Helper
+namespace Toggl.Droid.Helper
 {
     public static class PersistentNotificationsHelper
     {

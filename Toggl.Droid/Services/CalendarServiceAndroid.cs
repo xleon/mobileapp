@@ -8,7 +8,7 @@ using Toggl.Shared;
 using static Android.Provider.CalendarContract;
 using Color = Android.Graphics.Color;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     public sealed class CalendarServiceAndroid : PermissionAwareCalendarService
     {

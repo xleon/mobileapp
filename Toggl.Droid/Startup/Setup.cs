@@ -13,15 +13,15 @@ using Toggl.Core;
 using Toggl.Core.UI;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Services;
-using Toggl.Giskard.BroadcastReceivers;
-using Toggl.Giskard.Presentation;
-using Toggl.Giskard.Services;
-using Toggl.Giskard.Startup;
+using Toggl.Droid.BroadcastReceivers;
+using Toggl.Droid.Presentation;
+using Toggl.Droid.Services;
+using Toggl.Droid.Startup;
 using Toggl.Networking;
 using ColorPlugin = MvvmCross.Plugin.Color.Platforms.Android.Plugin;
 using VisibilityPlugin = MvvmCross.Plugin.Visibility.Platforms.Android.Plugin;
 
-namespace Toggl.Giskard
+namespace Toggl.Droid
 {
     public sealed partial class Setup : MvxAppCompatSetup<App<LoginViewModel>>
     {

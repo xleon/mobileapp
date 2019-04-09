@@ -2,7 +2,7 @@
 using Android.Widget;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     public partial class SendFeedbackActivity
     {

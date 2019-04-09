@@ -7,13 +7,13 @@ using Android.Runtime;
 using Android.Support.V7.Util;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
 using Toggl.Core.UI.Interfaces;
 using Handler = Android.OS.Handler;
-using Toggl.Giskard.Adapters.DiffingStrategies;
+using Toggl.Droid.Adapters.DiffingStrategies;
 
-namespace Toggl.Giskard.Adapters
+namespace Toggl.Droid.Adapters
 {
     public abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter
         where T : IEquatable<T>

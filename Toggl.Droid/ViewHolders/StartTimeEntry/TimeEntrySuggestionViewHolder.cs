@@ -2,9 +2,9 @@
 using Android.Views;
 using Android.Widget;
 using Toggl.Core.Autocomplete.Suggestions;
-using static Toggl.Giskard.Resource.Id;
+using static Toggl.Droid.Resource.Id;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public class TimeEntrySuggestionViewHolder : SuggestionRecyclerViewHolder<TimeEntrySuggestion>
     {

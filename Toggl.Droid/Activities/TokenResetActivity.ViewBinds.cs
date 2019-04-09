@@ -7,11 +7,11 @@ using Android.Widget;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Extensions;
 using static Toggl.Core.Resources;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     public sealed partial class TokenResetActivity
     {

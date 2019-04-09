@@ -5,9 +5,9 @@ using Java.Lang;
 using MvvmCross;
 using MvvmCross.Droid;
 using MvvmCross.Platforms.Android;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Extensions;
 
-namespace Toggl.Giskard.Autocomplete
+namespace Toggl.Droid.Autocomplete
 {
     public abstract class TokenSpan : ReplacementSpan
     {

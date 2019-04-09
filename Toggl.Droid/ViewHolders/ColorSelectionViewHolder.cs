@@ -4,10 +4,10 @@ using Android.Views;
 using Android.Widget;
 using MvvmCross.Plugin.Color.Platforms.Android;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Views;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Views;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public sealed class ColorSelectionViewHolder : BaseRecyclerViewHolder<SelectableColorViewModel>
     {

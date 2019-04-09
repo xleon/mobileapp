@@ -12,11 +12,11 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
-using Toggl.Giskard.Views;
+using Toggl.Droid.Views;
 using Toggl.Shared.Extensions;
 using Object = Java.Lang.Object;
 
-namespace Toggl.Giskard.Adapters
+namespace Toggl.Droid.Adapters
 {
     public sealed class ReportsCalendarPagerAdapter : PagerAdapter
     {

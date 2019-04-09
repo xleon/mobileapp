@@ -7,9 +7,9 @@ using Android.Net;
 using Android.Runtime;
 using Java.Lang;
 using Toggl.Core.Shortcuts;
-using Toggl.Giskard.Helper;
+using Toggl.Droid.Helper;
 
-namespace Toggl.Giskard
+namespace Toggl.Droid
 {
     public sealed class ApplicationShortcutCreator : BaseApplicationShortcutCreator
     {

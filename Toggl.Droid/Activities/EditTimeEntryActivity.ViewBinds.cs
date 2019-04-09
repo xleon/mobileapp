@@ -3,10 +3,10 @@ using Android.Widget;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using Toggl.Core.UI.ViewModels;
 using Android.Support.Constraints;
-using static Toggl.Giskard.Resource.Id;
+using static Toggl.Droid.Resource.Id;
 using Android.Support.V7.Widget;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     public sealed partial class EditTimeEntryActivity : ReactiveActivity<EditTimeEntryViewModel>
     {

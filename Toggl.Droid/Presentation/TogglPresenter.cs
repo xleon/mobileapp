@@ -11,9 +11,9 @@ using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Hints;
-using Toggl.Giskard.Activities;
+using Toggl.Droid.Activities;
 
-namespace Toggl.Giskard.Presentation
+namespace Toggl.Droid.Presentation
 {
     public sealed class TogglPresenter : MvxAppCompatViewPresenter
     {

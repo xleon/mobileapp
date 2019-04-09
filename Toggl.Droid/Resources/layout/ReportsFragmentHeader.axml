@@ -178,7 +178,7 @@
                     local:constraint_referenced_ids="BillableDot,BillableText,NonBillableDot,NonBillableText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-                <toggl.giskard.views.BarChartView
+                <toggl.droid.views.BarChartView
                     android:id="@+id/BarChartView"
                     tools:background="#1e1e1e"
                     local:layout_constraintLeft_toLeftOf="parent"
@@ -198,7 +198,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <toggl.giskard.views.PieChartView
+                <toggl.droid.views.PieChartView
                     android:id="@+id/PieChartView"
                     tools:background="#1e1e1e"
                     android:layout_marginTop="24dp"

@@ -2,7 +2,7 @@
 using Android.Views;
 using Android.Widget;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public static class LayoutParamsExtensions
     {

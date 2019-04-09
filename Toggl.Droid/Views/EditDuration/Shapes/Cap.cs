@@ -1,7 +1,7 @@
 using System;
 using Android.Graphics;
 
-namespace Toggl.Giskard.Views.EditDuration.Shapes
+namespace Toggl.Droid.Views.EditDuration.Shapes
 {
     public sealed class Cap
     {

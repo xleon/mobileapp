@@ -5,7 +5,7 @@ using Android.Content;
 using Android.Views;
 using Android.Views.InputMethods;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public static class ViewExtensions
     {

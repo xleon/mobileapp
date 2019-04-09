@@ -7,8 +7,8 @@ using Android.OS;
 using Android.Views;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Extensions.Reactive;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;
 using Toggl.Core.Extensions;
 using Android.Text;
@@ -16,13 +16,13 @@ using Android.Support.V7.Widget;
 using System.Linq;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Transformations;
-using Toggl.Giskard.ViewHolders;
-using TimeEntryExtensions = Toggl.Giskard.Extensions.TimeEntryExtensions;
+using Toggl.Droid.ViewHolders;
+using TimeEntryExtensions = Toggl.Droid.Extensions.TimeEntryExtensions;
 using TextResources = Toggl.Core.Resources;
-using TagsAdapter = Toggl.Giskard.Adapters.SimpleAdapter<string>;
-using static Toggl.Giskard.Resource.String;
+using TagsAdapter = Toggl.Droid.Adapters.SimpleAdapter<string>;
+using static Toggl.Droid.Resource.String;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme.BlueStatusBar",

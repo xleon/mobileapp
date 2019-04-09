@@ -5,7 +5,7 @@ using Toggl.Core.Conversions;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Shared;
 
-namespace Toggl.Giskard.ViewHelpers
+namespace Toggl.Droid.ViewHelpers
 {
     public struct BarChartData
     {

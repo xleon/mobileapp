@@ -3,7 +3,7 @@ using Android.Content;
 using Android.Net;
 using Android.Service.QuickSettings;
 
-namespace Toggl.Giskard.Tiles
+namespace Toggl.Droid.Tiles
 {
     [Service(Name = "toggl.giskard.Tiles.ReportsTileService", 
              Label = "@string/Reports", 

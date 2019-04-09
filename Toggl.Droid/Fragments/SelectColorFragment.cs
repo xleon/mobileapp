@@ -13,14 +13,14 @@ using MvvmCross.Droid.Support.V4;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Extensions.Reactive;
-using Toggl.Giskard.ViewHolders;
-using Toggl.Giskard.Views;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.ViewHolders;
+using Toggl.Droid.Views;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     [MvxDialogFragmentPresentation(AddToBackStack = true)]
     public sealed partial class SelectColorFragment : MvxDialogFragment<SelectColorViewModel>

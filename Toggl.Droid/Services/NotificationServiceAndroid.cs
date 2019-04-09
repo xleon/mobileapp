@@ -8,13 +8,13 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V4.App;
 using Toggl.Core.Services;
-using Toggl.Giskard.BroadcastReceivers;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.BroadcastReceivers;
+using Toggl.Droid.Extensions;
 using Toggl.Shared.Extensions;
 using Notification = Android.App.Notification;
 using Uri = Android.Net.Uri;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     public sealed class NotificationServiceAndroid : INotificationService
     {

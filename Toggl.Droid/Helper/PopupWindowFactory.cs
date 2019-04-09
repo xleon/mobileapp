@@ -4,7 +4,7 @@ using Android.Views;
 using Android.Widget;
 using Toggl.Shared;
 
-namespace Toggl.Giskard.Helper
+namespace Toggl.Droid.Helper
 {
     public static class PopupWindowFactory
     {

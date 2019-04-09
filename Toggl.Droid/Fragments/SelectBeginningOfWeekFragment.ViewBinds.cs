@@ -2,10 +2,10 @@
 using Android.Views;
 using Android.Widget;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.Views;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.Views;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     public partial class SelectBeginningOfWeekFragment
     {

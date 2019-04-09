@@ -4,7 +4,7 @@ using Android.Views;
 using MvvmCross.Droid.Support.V4;
 using MvvmCross.ViewModels;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     public abstract class ReactiveFragment<TViewModel> : MvxFragment<TViewModel>
         where TViewModel : class, IMvxViewModel

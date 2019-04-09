@@ -6,7 +6,7 @@ using Android.Widget;
 using Toggl.Core.UI.Transformations;
 using Toggl.Core.Reports;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public sealed class ReportsItemCellViewHolder : BaseRecyclerViewHolder<ChartSegment>
     {

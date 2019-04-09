@@ -9,7 +9,7 @@ using Toggl.Core.Services;
 using Toggl.Shared;
 using GmsTask = Android.Gms.Tasks.Task;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     public class RemoteConfigServiceAndroid : IRemoteConfigService
     {

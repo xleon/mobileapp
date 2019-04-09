@@ -10,10 +10,10 @@ using Android.Support.V7.Util;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Toggl.Core.UI.Collections;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.ViewHolders;
 using Toggl.Shared;
 
-namespace Toggl.Giskard.Adapters
+namespace Toggl.Droid.Adapters
 {
     public abstract class BaseSectionedRecyclerAdapter<TSection, TItem> : RecyclerView.Adapter
         where TItem : IEquatable<TItem>

@@ -2,7 +2,7 @@
 using Com.Google.Firebase.Perf.Metrics;
 using Toggl.Core.Diagnostics;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     public sealed class FirebaseStopwatchProviderAndroid : BaseStopwatchProvider
     {

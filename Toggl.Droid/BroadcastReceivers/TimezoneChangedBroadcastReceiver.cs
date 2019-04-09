@@ -5,7 +5,7 @@ using MvvmCross;
 using Toggl.Core;
 using Toggl.Core.UI;
 
-namespace Toggl.Giskard.BroadcastReceivers
+namespace Toggl.Droid.BroadcastReceivers
 {
     [BroadcastReceiver(Enabled = false)]
     [IntentFilter(new[] { Intent.ActionTimezoneChanged })]

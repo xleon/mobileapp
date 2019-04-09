@@ -2,7 +2,7 @@
 using Android.Net;
 using Toggl.Core.Services;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     public sealed class RatingServiceAndroid : IRatingService
     {

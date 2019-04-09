@@ -1,7 +1,7 @@
 using Toggl.Shared.Models;
 using Toggl.Core.Services;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     public class NoopIntentDonationServiceAndroid: IIntentDonationService
     {

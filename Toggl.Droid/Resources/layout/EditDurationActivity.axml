@@ -183,17 +183,17 @@
             local:layout_constraintTop_toBottomOf="@id/StartTimeText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <toggl.giskard.views.WheelBackgroundView
+            <toggl.droid.views.WheelBackgroundView
                 android:id="@+id/WheelBackground"
                 android:layout_width="296dp"
                 android:layout_height="296dp"
                 android:layout_gravity="center" />
-            <toggl.giskard.views.WheelForegroundView
+            <toggl.droid.views.WheelForegroundView
                 android:id="@+id/WheelForeground"
                 android:layout_width="296dp"
                 android:layout_height="296dp"
                 android:layout_gravity="center" />
-            <toggl.giskard.views.WheelDurationInput
+            <toggl.droid.views.WheelDurationInput
                 android:id="@+id/WheelDurationInput"
                 android:textSize="28dp"
                 android:background="@null"

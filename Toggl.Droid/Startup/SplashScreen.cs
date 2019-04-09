@@ -5,10 +5,10 @@ using MvvmCross.Droid.Support.V7.AppCompat;
 using Toggl.Core;
 using Toggl.Core.UI;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Helper;
+using Toggl.Droid.Helper;
 using static Android.Content.Intent;
 
-namespace Toggl.Giskard
+namespace Toggl.Droid
 {
     [Activity(Label = "Toggl for Devs",
               MainLauncher = true,

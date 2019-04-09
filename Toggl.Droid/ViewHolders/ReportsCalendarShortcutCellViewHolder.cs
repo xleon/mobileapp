@@ -7,7 +7,7 @@ using Android.Widget;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public class ReportsCalendarShortcutCellViewHolder : BaseRecyclerViewHolder<ReportsCalendarBaseQuickSelectShortcut>
     {

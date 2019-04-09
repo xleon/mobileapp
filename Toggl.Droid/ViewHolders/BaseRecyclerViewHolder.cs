@@ -5,7 +5,7 @@ using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public abstract class BaseRecyclerViewHolder<T> : RecyclerView.ViewHolder
     {

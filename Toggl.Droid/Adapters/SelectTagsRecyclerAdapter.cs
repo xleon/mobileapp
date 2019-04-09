@@ -2,9 +2,9 @@ using System;
 using Android.Runtime;
 using Android.Views;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.ViewHolders;
 
-namespace Toggl.Giskard.Adapters
+namespace Toggl.Droid.Adapters
 {
     public sealed class SelectTagsRecyclerAdapter : BaseRecyclerAdapter<SelectableTagBaseViewModel>
     {

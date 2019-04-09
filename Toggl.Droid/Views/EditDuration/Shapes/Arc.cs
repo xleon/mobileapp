@@ -2,7 +2,7 @@ using Android.Graphics;
 using static Toggl.Shared.Math;
 using Math = Java.Lang.Math;
 
-namespace Toggl.Giskard.Views.EditDuration.Shapes
+namespace Toggl.Droid.Views.EditDuration.Shapes
 {
     public class Arc
     {

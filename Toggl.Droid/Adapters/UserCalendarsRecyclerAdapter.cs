@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Android.Views;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Selectable;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.ViewHolders;
 
-namespace Toggl.Giskard.Adapters
+namespace Toggl.Droid.Adapters
 {
     public sealed class UserCalendarsRecyclerAdapter
         : BaseSectionedRecyclerAdapter<UserCalendarSourceViewModel, SelectableUserCalendarViewModel>

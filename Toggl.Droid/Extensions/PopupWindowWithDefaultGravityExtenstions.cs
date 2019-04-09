@@ -3,7 +3,7 @@ using Android.Views;
 using Android.Widget;
 using Java.Lang;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     //Default is Left | Bottom relative to the anchor when using ShowAsDropDown
     public static class PopupWindowWithDefaultGravityExtenstions

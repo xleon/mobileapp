@@ -85,7 +85,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize" />
-        <toggl.giskard.views.AutocompleteEditText
+        <toggl.droid.views.AutocompleteEditText
             android:id="@+id/DescriptionTextField"
             android:maxLines="1"
             android:gravity="left"

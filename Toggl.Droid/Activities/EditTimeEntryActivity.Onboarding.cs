@@ -2,11 +2,11 @@
 using System.Reactive.Linq;
 using Android.Widget;
 using Toggl.Core.UI.Onboarding.EditView;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Helper;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Helper;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     public sealed partial class EditTimeEntryActivity 
     {

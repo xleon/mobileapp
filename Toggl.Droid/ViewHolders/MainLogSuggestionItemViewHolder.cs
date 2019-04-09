@@ -6,10 +6,10 @@ using Android.Views;
 using Android.Widget;
 using MvvmCross.Commands;
 using Toggl.Core.Suggestions;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.ViewHolders;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public sealed class MainLogSuggestionItemViewHolder : BaseRecyclerViewHolder<Suggestion>
     {

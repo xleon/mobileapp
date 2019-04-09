@@ -3,7 +3,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using Android.OS;
 
-namespace Toggl.Giskard
+namespace Toggl.Droid
 {
     public sealed class HandlerScheduler : IScheduler
     {

@@ -4,7 +4,7 @@ using Android.Support.V4.Content;
 using Android.Widget;
 using Toggl.Core.UI.Reactive;
 
-namespace Toggl.Giskard.Extensions.Reactive
+namespace Toggl.Droid.Extensions.Reactive
 {
     public static class ImageViewExtensions
     {

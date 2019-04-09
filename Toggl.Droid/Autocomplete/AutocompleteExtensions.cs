@@ -6,10 +6,10 @@ using Android.Text.Style;
 using Java.Lang;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Span;
-using Toggl.Giskard.Autocomplete;
+using Toggl.Droid.Autocomplete;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public static class AutocompleteExtensions
     {

@@ -9,7 +9,7 @@ using MvvmCross.ViewModels;
 using Newtonsoft.Json.Converters;
 using V4Space = Android.Support.V4.Widget.Space;
 
-namespace Toggl.Giskard
+namespace Toggl.Droid
 {
     // This class is never actually executed, but when Xamarin linking is enabled it does so to ensure types and properties
     // are preserved in the deployed app

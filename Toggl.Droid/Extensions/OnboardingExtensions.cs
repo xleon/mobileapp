@@ -7,15 +7,15 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Base;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.ViewHolders;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Extensions;
 using Toggl.Storage.Onboarding;
 using Toggl.Storage.Settings;
-using AnimationSide = Toggl.Giskard.ViewHolders.MainLogCellViewHolder.AnimationSide;
+using AnimationSide = Toggl.Droid.ViewHolders.MainLogCellViewHolder.AnimationSide;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public static class OnboardingExtensions
     {

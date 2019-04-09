@@ -3,10 +3,10 @@ using Android.Text;
 using Android.Text.Style;
 using Android.Views;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Extensions;
 using static Toggl.Core.Helper.Color;
 
-namespace Toggl.Giskard.ViewHelpers
+namespace Toggl.Droid.ViewHelpers
 {
     public class TimeEntryViewData
     {

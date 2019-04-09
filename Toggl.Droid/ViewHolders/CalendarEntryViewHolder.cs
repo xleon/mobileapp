@@ -6,10 +6,10 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Toggl.Core.Calendar;
-using Toggl.Giskard.Adapters.Calendar;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Adapters.Calendar;
+using Toggl.Droid.Extensions;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public class CalendarEntryViewHolder : BaseRecyclerViewHolder<CalendarItem>
     {

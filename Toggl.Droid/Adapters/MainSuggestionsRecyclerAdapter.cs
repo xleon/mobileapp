@@ -9,10 +9,10 @@ using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Toggl.Core.Suggestions;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.ViewHolders;
 
-namespace Toggl.Giskard.Adapters
+namespace Toggl.Droid.Adapters
 {
     public class MainSuggestionsRecyclerAdapter : RecyclerView.Adapter
     {

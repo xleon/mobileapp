@@ -1,4 +1,4 @@
-﻿namespace Toggl.Giskard.Presentation
+﻿namespace Toggl.Droid.Presentation
 {
     public interface IScrollableToTop
     {

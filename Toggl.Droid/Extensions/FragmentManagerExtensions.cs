@@ -2,7 +2,7 @@
 using Android.Support.V4.App;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public static class FragmentManagerExtensions
     {

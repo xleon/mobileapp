@@ -1,7 +1,7 @@
 using Android.Support.V7.Widget;
 using Android.Widget;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     public partial class SelectCountryActivity
     {

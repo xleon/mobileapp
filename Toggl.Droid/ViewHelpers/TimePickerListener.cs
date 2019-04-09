@@ -2,7 +2,7 @@ using System;
 using Android.App;
 using Android.Widget;
 
-namespace Toggl.Giskard.ViewHelpers
+namespace Toggl.Droid.ViewHelpers
 {
     public sealed class TimePickerListener : Java.Lang.Object, TimePickerDialog.IOnTimeSetListener
     {

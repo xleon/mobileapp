@@ -6,7 +6,7 @@ using Activity = Android.App.Activity;
 using System.Linq;
 using Android.Content;
 
-namespace Toggl.Giskard.Views
+namespace Toggl.Droid.Views
 {
     public class ListSelectionDialog<T>
     {

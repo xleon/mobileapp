@@ -1,7 +1,7 @@
 ﻿using Java.Util;
 using Toggl.Core;
 
-namespace Toggl.Giskard
+namespace Toggl.Droid
 {
     public sealed class PlatformInfoAndroid : BasePlatformInfo
     {

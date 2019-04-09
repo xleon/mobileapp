@@ -4,7 +4,7 @@ using Android.Widget;
 using Toggl.Core.UI.Reactive;
 using static Android.Widget.CompoundButton;
 
-namespace Toggl.Giskard.Extensions.Reactive
+namespace Toggl.Droid.Extensions.Reactive
 {
     public static class CompoundButtonExtensions
     {

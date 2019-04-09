@@ -15,12 +15,12 @@ using Toggl.Core.Calendar;
 using Toggl.Core.Helper;
 using Toggl.Core.UI.Calendar;
 using Toggl.Core.UI.Collections;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.ViewHolders;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Adapters.Calendar
+namespace Toggl.Droid.Adapters.Calendar
 {
     public class CalendarAdapter : RecyclerView.Adapter
     {

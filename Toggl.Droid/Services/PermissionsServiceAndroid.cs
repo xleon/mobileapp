@@ -12,10 +12,10 @@ using Android.Support.V4.Content;
 using MvvmCross;
 using MvvmCross.Platforms.Android;
 using Toggl.Core.UI.Services;
-using Toggl.Giskard.Helper;
+using Toggl.Droid.Helper;
 using Uri = Android.Net.Uri;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     [Preserve(AllMembers = true)]
     public sealed class PermissionsServiceAndroid : IPermissionsService

@@ -8,13 +8,13 @@ using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared.Extensions;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.ViewHolders;
 using System.Reactive.Disposables;
 using Android.Support.V7.Widget;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     [MvxDialogFragmentPresentation(AddToBackStack = true)]
     public sealed partial class SelectBeginningOfWeekFragment : MvxDialogFragment<SelectBeginningOfWeekViewModel>

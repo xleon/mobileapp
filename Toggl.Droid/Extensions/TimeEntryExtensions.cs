@@ -5,7 +5,7 @@ using Android.Text.Style;
 using Toggl.Core.UI.ViewModels;
 using static Toggl.Core.Helper.Color;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public static class TimeEntryExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using Java.Lang;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public static class StringExtensions
     {

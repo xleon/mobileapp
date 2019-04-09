@@ -13,12 +13,12 @@ using Android.Views;
 using MvvmCross.WeakSubscription;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Reports;
-using Toggl.Giskard.Views;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.ViewHelpers;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.Views;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.ViewHelpers;
+using Toggl.Droid.ViewHolders;
 
-namespace Toggl.Giskard.Adapters
+namespace Toggl.Droid.Adapters
 {
     public sealed class ReportsRecyclerAdapter : RecyclerView.Adapter
     {

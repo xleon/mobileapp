@@ -1,8 +1,8 @@
 using Android.Views;
-using Toggl.Giskard.Views;
+using Toggl.Droid.Views;
 using Android.Widget;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     public partial class CalendarFragment
     {

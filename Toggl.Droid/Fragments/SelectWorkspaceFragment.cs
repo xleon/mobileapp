@@ -6,11 +6,11 @@ using MvvmCross.Droid.Support.V4;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     [MvxFragmentPresentation(typeof(EditProjectViewModel), Resource.Id.SelectWorkspaceContainer, AddToBackStack = true)]
     public partial class SelectWorkspaceFragment : MvxFragment<SelectWorkspaceViewModel>

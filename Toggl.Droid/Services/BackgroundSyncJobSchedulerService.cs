@@ -5,7 +5,7 @@ using MvvmCross;
 using MvvmCross.Platforms.Android.Core;
 using Toggl.Core.Analytics;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     [Service(Exported = true, 
              Permission = "android.permission.BIND_JOB_SERVICE",

@@ -9,9 +9,9 @@ using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Views;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
-using static Toggl.Giskard.Services.PermissionsServiceAndroid;
+using static Toggl.Droid.Services.PermissionsServiceAndroid;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     public abstract class ReactiveActivity<TViewModel> : MvxEventSourceAppCompatActivity, IMvxAndroidView, IPermissionAskingActivity
         where TViewModel : class, IMvxViewModel

@@ -8,12 +8,12 @@ using Android.Views;
 using MvvmCross.Platforms.Android.Binding.Views;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Extensions.Reactive;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme.WhiteStatusBar",

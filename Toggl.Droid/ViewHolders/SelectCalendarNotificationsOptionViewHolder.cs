@@ -5,7 +5,7 @@ using Android.Widget;
 using Toggl.Core.Extensions;
 using Toggl.Core.UI.ViewModels.Selectable;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public sealed class SelectCalendarNotificationsOptionViewHolder : BaseRecyclerViewHolder<SelectableCalendarNotificationsOptionViewModel>
     {

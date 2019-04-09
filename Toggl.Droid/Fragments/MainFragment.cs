@@ -21,21 +21,21 @@ using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.Sync;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Extensions.Reactive;
-using Toggl.Giskard.Helper;
-using Toggl.Giskard.Presentation;
-using Toggl.Giskard.Services;
-using Toggl.Giskard.ViewHelpers;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Helper;
+using Toggl.Droid.Presentation;
+using Toggl.Droid.Services;
+using Toggl.Droid.ViewHelpers;
 using Toggl.Shared.Extensions;
 using static Android.Content.Context;
 using static Toggl.Core.Sync.SyncProgress;
-using static Toggl.Giskard.Extensions.CircularRevealAnimation.AnimationType;
-using static Toggl.Giskard.Extensions.FloatingActionButtonExtensions;
+using static Toggl.Droid.Extensions.CircularRevealAnimation.AnimationType;
+using static Toggl.Droid.Extensions.FloatingActionButtonExtensions;
 using FoundationResources = Toggl.Core.Resources;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     public sealed partial class MainFragment : ReactiveFragment<MainViewModel>, IScrollableToTop
     {

@@ -5,7 +5,7 @@ using Android.Widget;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public sealed class TagCreationSelectionViewHolder : BaseRecyclerViewHolder<SelectableTagBaseViewModel>
     {

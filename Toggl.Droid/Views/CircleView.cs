@@ -5,9 +5,9 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 
-namespace Toggl.Giskard.Views
+namespace Toggl.Droid.Views
 {
-    [Register("toggl.giskard.views.CircleView")]
+    [Register("toggl.droid.views.CircleView")]
     public sealed class CircleView : View
     {
         private readonly Paint paint;

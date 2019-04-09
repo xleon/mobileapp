@@ -3,10 +3,10 @@ using Android.Support.Design.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using Toggl.Giskard.Views;
+using Toggl.Droid.Views;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     public sealed partial class ReportsFragment
     {

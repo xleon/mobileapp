@@ -5,10 +5,10 @@ using Android.OS;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Extensions.Reactive;
+using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme.OutdatedAppStatusBarColor",

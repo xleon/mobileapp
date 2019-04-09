@@ -1,5 +1,5 @@
 ﻿using System;
-using Toggl.Giskard.Services;
+using Toggl.Droid.Services;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
@@ -19,7 +19,7 @@ using Android.Content;
 using Android.App;
 using MvvmCross.Navigation;
 
-namespace Toggl.Giskard
+namespace Toggl.Droid
 {
     public sealed class AndroidDependencyContainer : UIDependencyContainer
     {

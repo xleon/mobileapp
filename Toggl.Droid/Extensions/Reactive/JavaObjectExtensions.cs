@@ -1,7 +1,7 @@
 ﻿using Java.Lang;
 using Toggl.Core.UI.Reactive;
 
-namespace Toggl.Giskard.Extensions.Reactive
+namespace Toggl.Droid.Extensions.Reactive
 {
     public static class JavaObjectExtensions
     {

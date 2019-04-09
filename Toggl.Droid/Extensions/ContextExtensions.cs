@@ -2,7 +2,7 @@ using Android.Content;
 using Android.Graphics.Drawables;
 using Android.Support.V4.Content;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public static class ContextExtensions
     {

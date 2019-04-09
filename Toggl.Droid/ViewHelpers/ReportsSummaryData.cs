@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 using Toggl.Core.Reports;
 using Toggl.Shared;
 
-namespace Toggl.Giskard.ViewHelpers
+namespace Toggl.Droid.ViewHelpers
 {
     public struct ReportsSummaryData
     {

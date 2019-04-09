@@ -6,10 +6,10 @@ using Android.Views;
 using MvvmCross.Plugin.Color.Platforms.Android;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
-using Toggl.Giskard.Views;
+using Toggl.Droid.Views;
 using static Toggl.Core.UI.Helper.Color.Reports;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public sealed class CalendarDayCellViewHolder : BaseRecyclerViewHolder<ReportsCalendarDayViewModel>
     {

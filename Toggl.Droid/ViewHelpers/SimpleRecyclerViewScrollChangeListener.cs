@@ -3,7 +3,7 @@ using System.Reactive;
 using System.Reactive.Subjects;
 using Android.Support.V7.Widget;
 
-namespace Toggl.Giskard.ViewHelpers
+namespace Toggl.Droid.ViewHelpers
 {
     public sealed class SimpleRecyclerViewScrollChangeListener : RecyclerView.OnScrollListener
     {

@@ -7,7 +7,7 @@
     android:background="@color/defaultBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.toggl.giskard.ReportsLinearLayout
+    <toggl.droid.views.ReportsLinearLayout
         android:id="@+id/ReportsFragmentMainContainer"
         tools:visibility="gone"
         android:clickable="true"
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize">
-        <toggl.giskard.views.ReportsCalendarView
+        <toggl.droid.views.ReportsCalendarView
             android:id="@+id/ReportsFragmentCalendarView"
             android:orientation="vertical"
             android:layout_marginTop="-500dp"
@@ -29,7 +29,7 @@
             android:clipToPadding="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </com.toggl.giskard.ReportsLinearLayout>
+    </toggl.droid.views.ReportsLinearLayout>
     <android.support.v7.widget.Toolbar
         android:id="@+id/Toolbar"
         android:minHeight="?attr/actionBarSize"

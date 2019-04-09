@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Reactive;
-using Toggl.Giskard.Adapters;
+using Toggl.Droid.Adapters;
 
-namespace Toggl.Giskard.Extensions.Reactive
+namespace Toggl.Droid.Extensions.Reactive
 {
     public static class RecyclerAdapterExtensions
     {

@@ -5,10 +5,10 @@ using Android.Graphics;
 using Android.Support.V4.App;
 using Android.Util;
 using Android.Views;
-using Toggl.Giskard.Helper;
-using Toggl.Giskard.Services;
+using Toggl.Droid.Helper;
+using Toggl.Droid.Services;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public static class ActivityExtensions
     {

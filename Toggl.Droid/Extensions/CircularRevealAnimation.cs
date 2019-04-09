@@ -4,7 +4,7 @@ using Android.Animation;
 using Android.Speech.Tts;
 using Android.Views;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public sealed class CircularRevealAnimation
     {

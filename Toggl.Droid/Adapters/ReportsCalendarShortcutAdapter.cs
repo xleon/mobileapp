@@ -2,9 +2,9 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.ViewHolders;
 
-namespace Toggl.Giskard.Adapters
+namespace Toggl.Droid.Adapters
 {
     public class ReportsCalendarShortcutAdapter : BaseRecyclerAdapter<ReportsCalendarBaseQuickSelectShortcut>
     {

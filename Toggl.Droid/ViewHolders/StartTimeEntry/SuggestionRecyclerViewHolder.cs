@@ -3,7 +3,7 @@ using Android.Runtime;
 using Android.Views;
 using Toggl.Core.Autocomplete.Suggestions;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
 
     public abstract class SuggestionRecyclerViewHolder<TSuggestion> : BaseRecyclerViewHolder<AutocompleteSuggestion>

@@ -1,7 +1,7 @@
 using System;
 using Toggl.Core.Diagnostics;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public static class TracingExtensions
     {

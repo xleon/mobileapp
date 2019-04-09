@@ -14,13 +14,13 @@ using Android.Views;
 using Android.Views.Accessibility;
 using Android.Widget;
 using Java.Lang;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Helper;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Helper;
 using Exception = Java.Lang.Exception;
 
-namespace Toggl.Giskard.Views
+namespace Toggl.Droid.Views
 {
-    [Register("com.toggl.giskard.TextInputLayoutWithHelperText")]
+    [Register("toggl.droid.views.TextInputLayoutWithHelperText")]
     public class TextInputLayoutWithHelperText : TextInputLayout, IViewPropertyAnimatorListener
     {
         private readonly FastOutSlowInInterpolator interpolator = new FastOutSlowInInterpolator();

@@ -9,13 +9,13 @@ using Android.Views;
 using Android.Widget;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Suggestions;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.ViewHelpers;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.ViewHelpers;
 using Toggl.Shared.Extensions;
 using TogglResources = Toggl.Core.Resources;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public class MainLogSuggestionsListViewHolder : RecyclerView.ViewHolder
     {

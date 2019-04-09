@@ -1,6 +1,6 @@
 ﻿using Android.OS;
 
-namespace Toggl.Giskard.Helper
+namespace Toggl.Droid.Helper
 {
     internal static class VibratorExtensions
     {

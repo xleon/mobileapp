@@ -2,7 +2,7 @@ using Android.Views;
 using Android.Widget;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     [MvxDialogFragmentPresentation(Cancelable = false)]
     public partial class NoWorkspaceFragment

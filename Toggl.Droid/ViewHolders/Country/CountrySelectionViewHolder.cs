@@ -4,7 +4,7 @@ using Android.Views;
 using Android.Widget;
 using Toggl.Core.UI.ViewModels;
 
-namespace Toggl.Giskard.ViewHolders.Country
+namespace Toggl.Droid.ViewHolders.Country
 {
     public class CountrySelectionViewHolder: BaseRecyclerViewHolder<SelectableCountryViewModel>
     {

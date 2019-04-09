@@ -9,14 +9,14 @@ using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Extensions.Reactive;
-using Toggl.Giskard.Fragments;
-using Toggl.Giskard.Presentation;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Fragments;
+using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
 using Fragment = Android.Support.V4.App.Fragment;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme",

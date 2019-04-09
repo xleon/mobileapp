@@ -8,9 +8,9 @@ using Android.Widget;
 using Toggl.Shared.Extensions;
 using static Android.Views.MotionEventActions;
 
-namespace Toggl.Giskard.Views
+namespace Toggl.Droid.Views
 {
-    [Register("com.toggl.giskard.ReportsLinearLayout")]
+    [Register("toggl.droid.views.ReportsLinearLayout")]
     public sealed class ReportsLinearLayout : LinearLayout, GestureDetector.IOnGestureListener
     {
         private const float flingVelocityThreshold = 1500;

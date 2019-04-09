@@ -1,4 +1,4 @@
-namespace Toggl.Giskard.Adapters.Calendar
+namespace Toggl.Droid.Adapters.Calendar
 {
     public class Anchor : Java.Lang.Object
     {

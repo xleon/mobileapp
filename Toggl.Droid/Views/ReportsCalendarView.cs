@@ -19,16 +19,16 @@ using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Extensions.Reactive;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
 using Observable = System.Reactive.Linq.Observable;
 
-namespace Toggl.Giskard.Views
+namespace Toggl.Droid.Views
 {
-    [Register("toggl.giskard.views.ReportsCalendarView")]
+    [Register("toggl.droid.views.ReportsCalendarView")]
     public sealed class ReportsCalendarView : LinearLayout
     {
         private TextView monthYear;

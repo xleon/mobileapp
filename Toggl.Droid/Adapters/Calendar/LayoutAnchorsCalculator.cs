@@ -6,9 +6,9 @@ using Android.Content;
 using Android.Util;
 using Toggl.Core.Calendar;
 using Toggl.Core.UI.Calendar;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Extensions;
 
-namespace Toggl.Giskard.Adapters.Calendar
+namespace Toggl.Droid.Adapters.Calendar
 {
     public class LayoutAnchorsCalculator
     {

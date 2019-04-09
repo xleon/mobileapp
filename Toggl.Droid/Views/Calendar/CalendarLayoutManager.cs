@@ -5,9 +5,9 @@ using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
 using Toggl.Core.Helper;
-using Toggl.Giskard.Adapters.Calendar;
+using Toggl.Droid.Adapters.Calendar;
 
-namespace Toggl.Giskard.Views.Calendar
+namespace Toggl.Droid.Views.Calendar
 {
     public partial class CalendarLayoutManager : RecyclerView.LayoutManager
     {

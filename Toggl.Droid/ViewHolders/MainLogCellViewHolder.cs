@@ -9,22 +9,22 @@ using Android.Views;
 using Android.Widget;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.ViewHelpers;
-using static Toggl.Giskard.Resource.Id;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.ViewHelpers;
+using static Toggl.Droid.Resource.Id;
 using MvvmCross.Plugin.Color.Platforms.Android;
 using Android.Graphics.Drawables;
 using GroupingColor = Toggl.Core.UI.Helper.Color.TimeEntriesLog.Grouping;
 using Android.Graphics;
 using System.Reactive;
-using Toggl.Giskard.Extensions.Reactive;
+using Toggl.Droid.Extensions.Reactive;
 using System.Reactive.Disposables;
 using Android.Support.V4.Content;
 using Toggl.Shared.Extensions;
 using System.Reactive.Linq;
 using Toggl.Core.Analytics;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public class MainLogCellViewHolder : BaseRecyclerViewHolder<TimeEntryViewData>
     {

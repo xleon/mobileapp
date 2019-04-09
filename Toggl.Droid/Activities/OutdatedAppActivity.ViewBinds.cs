@@ -1,6 +1,6 @@
 using Android.Widget;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     public sealed partial class OutdatedAppActivity
     {

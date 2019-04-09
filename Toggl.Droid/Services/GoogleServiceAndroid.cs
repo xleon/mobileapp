@@ -14,7 +14,7 @@ using MvvmCross.Platforms.Android.Views.Base;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Login;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     public sealed class GoogleServiceAndroid : MvxAndroidTask, IGoogleService
     {

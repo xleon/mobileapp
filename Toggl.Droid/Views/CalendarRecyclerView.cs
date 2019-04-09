@@ -12,13 +12,13 @@ using Android.Util;
 using Android.Views;
 using Toggl.Core;
 using Toggl.Core.Helper;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Extensions;
 using Toggl.Shared;
 using Color = Android.Graphics.Color;
 
-namespace Toggl.Giskard.Views
+namespace Toggl.Droid.Views
 {
-    [Register("toggl.giskard.views.CalendarRecyclerView")]
+    [Register("toggl.droid.views.CalendarRecyclerView")]
     public class CalendarRecyclerView : RecyclerView
     {
         private const int hoursPerDay = Constants.HoursPerDay;

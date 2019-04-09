@@ -3,7 +3,7 @@ using Android.Support.Design.Widget;
 using System;
 using Android.Graphics.Drawables;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public static class FloatingActionButtonExtensions
     {

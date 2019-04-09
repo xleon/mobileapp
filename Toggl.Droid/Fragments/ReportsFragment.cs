@@ -6,13 +6,13 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Reports;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.Extensions.Reactive;
-using Toggl.Giskard.Presentation;
-using Toggl.Giskard.ViewHelpers;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Presentation;
+using Toggl.Droid.ViewHelpers;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     public sealed partial class ReportsFragment : ReactiveFragment<ReportsViewModel>, IScrollableToTop
     {

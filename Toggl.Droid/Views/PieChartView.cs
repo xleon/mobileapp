@@ -10,11 +10,11 @@ using Android.Views;
 using MvvmCross.Plugin.Color.Platforms.Android;
 using MvvmCross.UI;
 using Toggl.Core.Reports;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Extensions;
 
-namespace Toggl.Giskard.Views
+namespace Toggl.Droid.Views
 {
-    [Register("toggl.giskard.views.PieChartView")]
+    [Register("toggl.droid.views.PieChartView")]
     public sealed class PieChartView : View
     {
         private int padding;

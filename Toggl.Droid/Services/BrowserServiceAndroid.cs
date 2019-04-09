@@ -3,7 +3,7 @@ using Android.Net;
 using MvvmCross.Platforms.Android;
 using Toggl.Core.UI.Services;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     public sealed class BrowserServiceAndroid : MvxAndroidTask, IBrowserService
     {

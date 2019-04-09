@@ -8,17 +8,17 @@ using Android.Views;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Giskard.ViewHelpers;
+using Toggl.Droid.ViewHelpers;
 using System.Reactive.Disposables;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Core.Analytics;
 
-namespace Toggl.Giskard.Adapters
+namespace Toggl.Droid.Adapters
 {
     public class MainRecyclerAdapter : ReactiveSectionedRecyclerAdapter<LogItemViewModel, TimeEntryViewData, DaySummaryViewModel, DaySummaryViewModel, MainLogCellViewHolder, MainLogSectionViewHolder, IMainLogKey>
     {

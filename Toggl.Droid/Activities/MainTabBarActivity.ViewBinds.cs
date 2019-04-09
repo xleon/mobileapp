@@ -1,7 +1,7 @@
 ﻿using System;
 using Android.Support.Design.Widget;
 
-namespace Toggl.Giskard.Activities
+namespace Toggl.Droid.Activities
 {
     public sealed partial class MainTabBarActivity
     {

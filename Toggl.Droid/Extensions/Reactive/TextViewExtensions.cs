@@ -6,7 +6,7 @@ using Java.Lang;
 using Toggl.Core.UI.Reactive;
 using static Android.Views.View;
 
-namespace Toggl.Giskard.Extensions.Reactive
+namespace Toggl.Droid.Extensions.Reactive
 {
     public static class TextViewExtensions
     {

@@ -7,7 +7,7 @@ using Microsoft.AppCenter.Crashes;
 using Toggl.Core.Analytics;
 using AppCenterAnalytics = Microsoft.AppCenter.Analytics.Analytics;
 
-namespace Toggl.Giskard.Services
+namespace Toggl.Droid.Services
 {
     public sealed class AnalyticsServiceAndroid : BaseAnalyticsService
     {

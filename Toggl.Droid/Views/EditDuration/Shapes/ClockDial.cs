@@ -1,8 +1,8 @@
 using Android.Graphics;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Extensions;
 using static Toggl.Shared.Math;
 
-namespace Toggl.Giskard.Views.EditDuration.Shapes
+namespace Toggl.Droid.Views.EditDuration.Shapes
 {
     public class ClockDial
     {

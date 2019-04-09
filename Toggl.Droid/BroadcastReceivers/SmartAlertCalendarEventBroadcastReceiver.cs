@@ -2,7 +2,7 @@ using System;
 using Android.App;
 using Android.Content;
 
-namespace Toggl.Giskard.BroadcastReceivers
+namespace Toggl.Droid.BroadcastReceivers
 {
     [BroadcastReceiver]
     public class SmartAlertCalendarEventBroadcastReceiver : BroadcastReceiver

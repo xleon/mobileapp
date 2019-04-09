@@ -4,12 +4,12 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Core.UI.ViewModels.Settings;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.Extensions.Reactive;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Fragments
+namespace Toggl.Droid.Fragments
 {
     public sealed partial class UpcomingEventsNotificationSettingsFragment : ReactiveDialogFragment<UpcomingEventsNotificationSettingsViewModel>
     {

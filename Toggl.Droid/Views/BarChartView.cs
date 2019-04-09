@@ -5,12 +5,12 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Toggl.Core.UI.ViewModels.Reports;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.ViewHelpers;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.ViewHelpers;
 
-namespace Toggl.Giskard.Views
+namespace Toggl.Droid.Views
 {
-    [Register("toggl.giskard.views.BarChartView")]
+    [Register("toggl.droid.views.BarChartView")]
     public class BarChartView : View
     {
         private const float barDrawingYTranslationAdjustmentInPixels = 1f;

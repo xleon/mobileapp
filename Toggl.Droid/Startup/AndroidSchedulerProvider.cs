@@ -2,7 +2,7 @@
 using Android.OS;
 using Toggl.Shared;
 
-namespace Toggl.Giskard
+namespace Toggl.Droid
 {
     public sealed class AndroidSchedulerProvider : ISchedulerProvider
     {

@@ -5,7 +5,7 @@ using Android.Widget;
 using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public class SelectDurationFormatViewHolder : BaseRecyclerViewHolder<SelectableDurationFormatViewModel>
     {

@@ -3,7 +3,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     /// <summary>
     /// Represents a view holder for all cell types that have only one textual piece of UI information

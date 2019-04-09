@@ -12,14 +12,14 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using Java.Lang;
 using Toggl.Core;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Views.EditDuration.Shapes;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Views.EditDuration.Shapes;
 using System.Reactive.Subjects;
 using System.Reactive.Linq;
 using System.Reactive;
 using Android.Content.Res;
 
-namespace Toggl.Giskard.Views.EditDuration
+namespace Toggl.Droid.Views.EditDuration
 {
     public static class WheelDurationInputExtensions
     {
@@ -27,7 +27,7 @@ namespace Toggl.Giskard.Views.EditDuration
             => $"{(int)value.TotalHours}:{value.Minutes.ToString("D2", CultureInfo.InvariantCulture)}:{value.Seconds.ToString("D2", CultureInfo.InvariantCulture)}";
     }
 
-    [Register("toggl.giskard.views.WheelDurationInput")]
+    [Register("toggl.droid.views.WheelDurationInput")]
     public partial class WheelDurationInput : EditText, ITextWatcher, View.IOnTouchListener
     {
         private Color fadedTextColor = Color.Gray;

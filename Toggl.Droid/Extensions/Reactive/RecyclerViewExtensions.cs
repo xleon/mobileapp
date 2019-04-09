@@ -5,9 +5,9 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Android.Support.V7.Widget;
 using Toggl.Core.UI.Reactive;
-using Toggl.Giskard.ViewHelpers;
+using Toggl.Droid.ViewHelpers;
 
-namespace Toggl.Giskard.Extensions.Reactive
+namespace Toggl.Droid.Extensions.Reactive
 {
     public static class RecyclerViewExtensions
     {

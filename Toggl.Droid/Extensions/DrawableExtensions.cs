@@ -1,7 +1,7 @@
 using Android.Graphics;
 using Android.Graphics.Drawables;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public static class DrawableExtensions
     {

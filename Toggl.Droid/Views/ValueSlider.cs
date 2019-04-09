@@ -5,11 +5,11 @@ using Android.Graphics.Drawables;
 using Android.Runtime;
 using Android.Util;
 using Android.Widget;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Extensions;
 
-namespace Toggl.Giskard.Views
+namespace Toggl.Droid.Views
 {
-    [Register("toggl.giskard.views.ValueSlider")]
+    [Register("toggl.droid.views.ValueSlider")]
     public sealed class ValueSlider : SeekBar
     {
         private float hue;

@@ -9,12 +9,12 @@ using Android.Text;
 using Android.Util;
 using Android.Widget;
 using Java.Lang;
-using Toggl.Giskard.Autocomplete;
-using Toggl.Giskard.Extensions.Reactive;
+using Toggl.Droid.Autocomplete;
+using Toggl.Droid.Extensions.Reactive;
 
-namespace Toggl.Giskard.Views
+namespace Toggl.Droid.Views
 {
-    [Register("toggl.giskard.views.AutocompleteEditText")]
+    [Register("toggl.droid.views.AutocompleteEditText")]
     public sealed class AutocompleteEditText : EditText, ITextWatcher
     {
         private bool isEditingText = false;

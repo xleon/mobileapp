@@ -10,17 +10,17 @@ using Android.Views;
 using Android.Widget;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Suggestions;
-using Toggl.Giskard.Adapters;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Extensions.Reactive;
-using Toggl.Giskard.ViewHelpers;
+using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.ViewHelpers;
 using Toggl.Shared.Extensions;
 using Toggl.Core.UI.Extensions;
 using System.Reactive;
 using static Toggl.Shared.Extensions.CommonFunctions;
 using Android.Support.Constraints;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public class MainLogUserFeedbackViewHolder : RecyclerView.ViewHolder
     {

@@ -2,11 +2,11 @@
 using Android.Runtime;
 using Android.Views;
 using Toggl.Core.UI.Interfaces;
-using Toggl.Giskard.Adapters.DiffingStrategies;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.Adapters.DiffingStrategies;
+using Toggl.Droid.ViewHolders;
 using Toggl.Shared;
 
-namespace Toggl.Giskard.Adapters
+namespace Toggl.Droid.Adapters
 {
     public sealed class SimpleAdapter<T> : BaseRecyclerAdapter<T>
         where T : IEquatable<T>

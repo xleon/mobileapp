@@ -1,7 +1,7 @@
 using Android.Graphics;
 using TogglPoint = Toggl.Shared.Point;
 
-namespace Toggl.Giskard.Extensions
+namespace Toggl.Droid.Extensions
 {
     public static class PointExtensions
     {

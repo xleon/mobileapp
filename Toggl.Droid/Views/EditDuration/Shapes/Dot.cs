@@ -1,11 +1,11 @@
 using System;
 using Android.Graphics;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Extensions;
 using static Toggl.Shared.Math;
 using Math = Java.Lang.Math;
 using Point = Toggl.Shared.Point;
 
-namespace Toggl.Giskard.Views.EditDuration.Shapes
+namespace Toggl.Droid.Views.EditDuration.Shapes
 {
     public class Dot
     {

@@ -2,10 +2,10 @@ using System;
 using Android.Text;
 using Android.Widget;
 using Java.Lang;
-using Toggl.Giskard.Extensions;
+using Toggl.Droid.Extensions;
 using Object = Java.Lang.Object;
 
-namespace Toggl.Giskard.Views.EditDuration
+namespace Toggl.Droid.Views.EditDuration
 {
     public partial class WheelDurationInput : EditText, ITextWatcher
     {

@@ -6,7 +6,7 @@ using Android.Views;
 using Toggl.Core.UI.Reactive;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Extensions.Reactive
+namespace Toggl.Droid.Extensions.Reactive
 {
     public static class PagerExtensions
     {

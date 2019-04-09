@@ -5,7 +5,7 @@ using MvvmCross.Droid.Support.V7.AppCompat;
 using Toggl.Core.UI;
 using Toggl.Core.UI.ViewModels;
 
-namespace Toggl.Giskard
+namespace Toggl.Droid
 {
     [Application(AllowBackup = false)]
     public class TogglApplication : MvxAppCompatApplication<Setup, App<LoginViewModel>>

@@ -5,10 +5,10 @@ using System.Reactive.Subjects;
 using Android.Runtime;
 using Android.Views;
 using Toggl.Core.Autocomplete.Suggestions;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.Adapters
+namespace Toggl.Droid.Adapters
 {
     public sealed class StartTimeEntryRecyclerAdapter : BaseSectionedRecyclerAdapter<string, AutocompleteSuggestion>
     {

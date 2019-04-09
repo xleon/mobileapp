@@ -1,8 +1,8 @@
 ﻿using Android.App;
 using Android.Content;
-using Toggl.Giskard.Services;
+using Toggl.Droid.Services;
 
-namespace Toggl.Giskard.BroadcastReceivers
+namespace Toggl.Droid.BroadcastReceivers
 {
     [BroadcastReceiver(
         Exported = true,

@@ -10,9 +10,9 @@ using Java.Lang;
 using MvvmCross.Binding.Extensions;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Collections.Changes;
-using Toggl.Giskard.ViewHolders;
+using Toggl.Droid.ViewHolders;
 
-namespace Toggl.Giskard.Adapters
+namespace Toggl.Droid.Adapters
 {
     public abstract class ReactiveSectionedRecyclerAdapter<TModel, TModelWrapper, TSectionHeaderModel, TSectionHeaderWrapper, TItemViewHolder, TSectionViewHolder, TKey> : RecyclerView.Adapter
         where TKey : IEquatable<TKey>

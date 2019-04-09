@@ -9,18 +9,18 @@ using Android.Util;
 using Android.Views;
 using MvvmCross.Plugin.Color.Platforms.Android;
 using Toggl.Core.Analytics;
-using Toggl.Giskard.Extensions;
-using Toggl.Giskard.Helper;
-using Toggl.Giskard.Views.EditDuration.Shapes;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Helper;
+using Toggl.Droid.Views.EditDuration.Shapes;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using static Toggl.Shared.Math;
 using FoundationColor = Toggl.Core.UI.Helper.Color;
 using Math = System.Math;
 using Color = Android.Graphics.Color;
-namespace Toggl.Giskard.Views.EditDuration
+namespace Toggl.Droid.Views.EditDuration
 {
-    [Register("toggl.giskard.views.WheelForegroundView")]
+    [Register("toggl.droid.views.WheelForegroundView")]
     public class WheelForegroundView : View
     {
         private readonly Color capBackgroundColor = Color.White;

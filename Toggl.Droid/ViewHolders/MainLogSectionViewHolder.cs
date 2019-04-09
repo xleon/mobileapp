@@ -8,10 +8,10 @@ using Toggl.Core.Extensions;
 using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Giskard.ViewHelpers;
+using Toggl.Droid.ViewHelpers;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Giskard.ViewHolders
+namespace Toggl.Droid.ViewHolders
 {
     public class MainLogSectionViewHolder : BaseRecyclerViewHolder<DaySummaryViewModel>
     {
