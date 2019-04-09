@@ -2,7 +2,7 @@
 using Toggl.Shared;
 using Toggl.Shared.Models;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     public interface IUserApi
         : IUpdatingApiClient<IUser>,

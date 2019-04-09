@@ -2,9 +2,9 @@
 using Newtonsoft.Json;
 using Toggl.Shared;
 using Toggl.Shared.Models;
-using Toggl.Ultrawave.Serialization.Converters;
+using Toggl.Networking.Serialization.Converters;
 
-namespace Toggl.Ultrawave.Models
+namespace Toggl.Networking.Models
 {
     internal sealed partial class User : IUser
     {

@@ -1,6 +1,6 @@
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Network;
 
-namespace Toggl.Ultrawave.Tests.Integration.Helper
+namespace Toggl.Networking.Tests.Integration.Helper
 {
     public static class Configuration
     {

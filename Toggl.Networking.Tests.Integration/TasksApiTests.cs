@@ -4,14 +4,14 @@ using System.Linq.Expressions;
 using System.Reactive.Linq;
 using FluentAssertions;
 using Xunit;
-using Toggl.Ultrawave.Models;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Tests.Integration.BaseTests;
+using Toggl.Networking.Models;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Tests.Integration.BaseTests;
 using Toggl.Multivac.Models;
-using Toggl.Ultrawave.Helpers;
-using Toggl.Ultrawave.Tests.Integration.Helper;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Tests.Integration.Helper;
 
-namespace Toggl.Ultrawave.Tests.Integration
+namespace Toggl.Networking.Tests.Integration
 {
     public sealed class TasksApiTests
     {

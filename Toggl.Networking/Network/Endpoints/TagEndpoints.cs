@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Ultrawave.Network
+namespace Toggl.Networking.Network
 {
     internal struct TagEndpoints
     {

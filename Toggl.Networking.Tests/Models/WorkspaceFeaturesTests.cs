@@ -5,10 +5,10 @@ using Xunit;
 using FluentAssertions;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
-using Toggl.Ultrawave.Serialization;
-using Toggl.Ultrawave.Models;
+using Toggl.Networking.Serialization;
+using Toggl.Networking.Models;
 
-namespace Toggl.Ultrawave.Tests.Models
+namespace Toggl.Networking.Tests.Models
 {
     public sealed class WorkspaceFeaturesTests
     {

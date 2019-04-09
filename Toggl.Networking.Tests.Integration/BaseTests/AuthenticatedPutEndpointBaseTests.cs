@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Networking.Exceptions;
 
-namespace Toggl.Ultrawave.Tests.Integration.BaseTests
+namespace Toggl.Networking.Tests.Integration.BaseTests
 {
     public abstract class AuthenticatedPutEndpointBaseTests<T> : AuthenticatedEndpointBaseTests<T>
     {

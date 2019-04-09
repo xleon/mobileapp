@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Ultrawave.Helpers
+namespace Toggl.Networking.Helpers
 {
     internal static class BaseUrls
     {

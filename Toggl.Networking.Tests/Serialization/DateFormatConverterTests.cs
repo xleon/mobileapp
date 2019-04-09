@@ -2,10 +2,10 @@
 using FluentAssertions;
 using Newtonsoft.Json;
 using Toggl.Multivac;
-using Toggl.Ultrawave.Serialization.Converters;
+using Toggl.Networking.Serialization.Converters;
 using Xunit;
 
-namespace Toggl.Ultrawave.Tests.Serialization
+namespace Toggl.Networking.Tests.Serialization
 {
     public sealed class DateFormatConverterTests
     {

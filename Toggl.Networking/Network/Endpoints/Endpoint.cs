@@ -2,7 +2,7 @@
 using System.Net.Http;
 using Toggl.Shared;
 
-namespace Toggl.Ultrawave.Network
+namespace Toggl.Networking.Network
 {
     internal struct Endpoint
     {

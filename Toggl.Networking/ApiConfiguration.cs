@@ -1,7 +1,7 @@
 ﻿using Toggl.Shared;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Network;
 
-namespace Toggl.Ultrawave
+namespace Toggl.Networking
 {
     public sealed class ApiConfiguration
     {

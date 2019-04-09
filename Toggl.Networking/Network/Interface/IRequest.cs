@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using Toggl.Shared;
 
-namespace Toggl.Ultrawave.Network
+namespace Toggl.Networking.Network
 {
     internal interface IRequest
     {

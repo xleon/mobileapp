@@ -1,7 +1,7 @@
 ﻿using Toggl.Shared;
 using Toggl.Shared.Models;
 
-namespace Toggl.Ultrawave.Models
+namespace Toggl.Networking.Models
 {
     [Preserve(AllMembers = true)]
     internal sealed partial class Client

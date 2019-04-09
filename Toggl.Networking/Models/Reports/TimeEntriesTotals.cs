@@ -2,7 +2,7 @@
 using Toggl.Shared;
 using Toggl.Shared.Models.Reports;
 
-namespace Toggl.Ultrawave.Models.Reports
+namespace Toggl.Networking.Models.Reports
 {
     [Preserve(AllMembers = true)]
     public sealed class TimeEntriesTotals : ITimeEntriesTotals

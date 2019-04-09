@@ -2,7 +2,7 @@
 using System.Linq;
 using Newtonsoft.Json.Serialization;
 
-namespace Toggl.Ultrawave.Serialization
+namespace Toggl.Networking.Serialization
 {
     internal sealed class IgnoreAttributeFilter<TIgnoredAttribute> : IPropertiesFilter
         where TIgnoredAttribute : IgnoreSerializationAttribute

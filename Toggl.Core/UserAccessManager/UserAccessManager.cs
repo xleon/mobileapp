@@ -10,8 +10,8 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Toggl.Storage;
-using Toggl.Ultrawave;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking;
+using Toggl.Networking.Network;
 
 namespace Toggl.Core.Login
 {

@@ -5,14 +5,14 @@ using System.Reactive;
 using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Ultrawave.ApiClients;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Helpers;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.ApiClients;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Network;
 using Xunit;
 using static System.Net.HttpStatusCode;
 
-namespace Toggl.Ultrawave.Tests.Clients
+namespace Toggl.Networking.Tests.Clients
 {
     public sealed class StatusClientTests
     {

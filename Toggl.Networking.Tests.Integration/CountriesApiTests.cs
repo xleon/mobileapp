@@ -1,12 +1,12 @@
 ﻿using System.Reactive.Linq;
 using FluentAssertions;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Models;
-using Toggl.Ultrawave.Tests.Integration.BaseTests;
+using Toggl.Networking.Network;
+using Toggl.Networking.Models;
+using Toggl.Networking.Tests.Integration.BaseTests;
 using Xunit;
 using ThreadingTask = System.Threading.Tasks.Task;
 
-namespace Toggl.Ultrawave.Tests.Integration
+namespace Toggl.Networking.Tests.Integration
 {
     public sealed class CountriesApiTests
     {

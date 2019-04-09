@@ -1,6 +1,6 @@
 ﻿using Toggl.Shared.Models;
 
-namespace Toggl.Ultrawave.Models
+namespace Toggl.Networking.Models
 {
     internal sealed partial class Country : ICountry
     {

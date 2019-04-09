@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Toggl.Shared.Models;
-using static Toggl.Ultrawave.Serialization.SerializationReason;
+using static Toggl.Networking.Serialization.SerializationReason;
 
-namespace Toggl.Ultrawave.Serialization
+namespace Toggl.Networking.Serialization
 {
     internal sealed class JsonSerializer : IJsonSerializer
     {

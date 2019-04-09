@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Ultrawave.Tests
+namespace Toggl.Networking.Tests
 {
     sealed class TestException : Exception
     {

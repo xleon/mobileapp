@@ -1,4 +1,4 @@
-﻿namespace Toggl.Ultrawave.Helpers
+﻿namespace Toggl.Networking.Helpers
 {
     public enum PricingPlans
     {

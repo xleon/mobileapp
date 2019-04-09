@@ -1,11 +1,11 @@
 ﻿using System;
 using FluentAssertions;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Network;
 using Xunit;
-using static Toggl.Ultrawave.ApiEnvironment;
-using static Toggl.Ultrawave.Network.Credentials;
+using static Toggl.Networking.ApiEnvironment;
+using static Toggl.Networking.Network.Credentials;
 
-namespace Toggl.Ultrawave.Tests
+namespace Toggl.Networking.Tests
 {
     public sealed class ApiConfigurationTests
     {

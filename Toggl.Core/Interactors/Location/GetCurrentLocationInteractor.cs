@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Shared;
 using Toggl.Shared.Models;
-using Toggl.Ultrawave;
+using Toggl.Networking;
 
 namespace Toggl.Core.Interactors.Location
 {

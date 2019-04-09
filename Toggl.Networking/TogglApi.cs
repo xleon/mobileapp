@@ -1,13 +1,13 @@
 ﻿using System.Net;
 using System.Net.Http;
 using Toggl.Shared;
-using Toggl.Ultrawave.ApiClients;
-using Toggl.Ultrawave.ApiClients.Interfaces;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.ApiClients;
+using Toggl.Networking.ApiClients.Interfaces;
+using Toggl.Networking.Network;
+using Toggl.Networking.Serialization;
 using static System.Net.DecompressionMethods;
 
-namespace Toggl.Ultrawave
+namespace Toggl.Networking
 {
     internal sealed class TogglApi : ITogglApi
     {

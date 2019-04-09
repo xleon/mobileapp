@@ -6,7 +6,7 @@ using Toggl.Core.Services;
 using Toggl.Core.Exceptions;
 using Toggl.Shared;
 using Toggl.Storage.Settings;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Networking.Exceptions;
 using Toggl.Core.Analytics;
 
 namespace Toggl.Core.MvvmCross.Services

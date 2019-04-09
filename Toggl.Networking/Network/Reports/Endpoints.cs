@@ -1,7 +1,7 @@
 ﻿using System;
-using Toggl.Ultrawave.Helpers;
+using Toggl.Networking.Helpers;
 
-namespace Toggl.Ultrawave.Network.Reports
+namespace Toggl.Networking.Network.Reports
 {
     internal sealed class Endpoints
     {

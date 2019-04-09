@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Toggl.Shared;
 
-namespace Toggl.Ultrawave.Serialization.Converters
+namespace Toggl.Networking.Serialization.Converters
 {
     [Preserve(AllMembers = true)]
     public sealed class TimeFormatConverter : JsonConverter

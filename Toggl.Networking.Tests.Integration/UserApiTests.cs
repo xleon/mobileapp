@@ -8,15 +8,15 @@ using FluentAssertions;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.Multivac.Models;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Models;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Tests.Integration.BaseTests;
-using Toggl.Ultrawave.Tests.Integration.Helper;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Models;
+using Toggl.Networking.Network;
+using Toggl.Networking.Tests.Integration.BaseTests;
+using Toggl.Networking.Tests.Integration.Helper;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 
-namespace Toggl.Ultrawave.Tests.Integration
+namespace Toggl.Networking.Tests.Integration
 {
     public sealed class UserApiTests
     {
@@ -427,7 +427,7 @@ namespace Toggl.Ultrawave.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 var secondWorkspace = await togglClient.Workspaces.Create(new Workspace { Name = Guid.NewGuid().ToString() });
 
-                var userWithUpdates = new Ultrawave.Models.User(user);
+                var userWithUpdates = new Network.Models.User(user);
                 userWithUpdates.DefaultWorkspaceId = secondWorkspace.Id;
 
                 var updatedUser = await togglClient.User.Update(userWithUpdates);
@@ -442,7 +442,7 @@ namespace Toggl.Ultrawave.Tests.Integration
             {
                 var (togglClient, user) = await SetupTestUser();
 
-                var userWithUpdates = new Ultrawave.Models.User(user);
+                var userWithUpdates = new Network.Models.User(user);
                 userWithUpdates.DefaultWorkspaceId = null;
 
                 var updatedUser = await togglClient.User.Update(userWithUpdates);
@@ -457,7 +457,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
             protected override IObservable<IUser> CallUpdateEndpoint(ITogglApi api, IUser entityToUpdate)
             {
-                var entityWithUpdates = new Ultrawave.Models.User(entityToUpdate);
+                var entityWithUpdates = new Network.Models.User(entityToUpdate);
                 entityWithUpdates.Fullname = entityToUpdate.Fullname == "Test" ? "Different name" : "Test";
 
                 return api.User.Update(entityWithUpdates);

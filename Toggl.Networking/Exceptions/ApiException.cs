@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using Toggl.Shared;
-using Toggl.Ultrawave.Extensions;
-using Toggl.Ultrawave.Models;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.Extensions;
+using Toggl.Networking.Models;
+using Toggl.Networking.Network;
+using Toggl.Networking.Serialization;
 
-namespace Toggl.Ultrawave.Exceptions
+namespace Toggl.Networking.Exceptions
 {
     [IsAnonymized]
     public class ApiException : Exception

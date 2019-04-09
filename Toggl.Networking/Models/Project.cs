@@ -1,8 +1,8 @@
 ﻿using System;
 using Toggl.Shared.Models;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.Serialization;
 
-namespace Toggl.Ultrawave.Models
+namespace Toggl.Networking.Models
 {
     internal sealed partial class Project : IProject
     {

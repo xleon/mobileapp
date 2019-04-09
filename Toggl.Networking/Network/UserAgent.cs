@@ -1,6 +1,6 @@
 ﻿using Toggl.Shared;
 
-namespace Toggl.Ultrawave.Network
+namespace Toggl.Networking.Network
 {
     public sealed class UserAgent
     {

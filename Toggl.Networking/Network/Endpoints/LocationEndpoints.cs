@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Toggl.Ultrawave.Network
+namespace Toggl.Networking.Network
 {
     internal struct LocationEndpoints
     {

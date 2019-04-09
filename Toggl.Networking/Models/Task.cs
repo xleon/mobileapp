@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Shared.Models;
 
-namespace Toggl.Ultrawave.Models
+namespace Toggl.Networking.Models
 {
     internal partial class Task : ITask
     {

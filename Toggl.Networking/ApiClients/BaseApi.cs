@@ -8,12 +8,12 @@ using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Shared;
 using Toggl.Shared.Models;
-using Toggl.Ultrawave.Helpers;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Serialization;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Network;
+using Toggl.Networking.Serialization;
+using Toggl.Networking.Exceptions;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     internal abstract class BaseApi
     {

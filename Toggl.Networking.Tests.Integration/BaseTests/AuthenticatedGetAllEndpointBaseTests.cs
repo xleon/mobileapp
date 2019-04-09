@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
 
-namespace Toggl.Ultrawave.Tests.Integration.BaseTests
+namespace Toggl.Networking.Tests.Integration.BaseTests
 {
     public abstract class AuthenticatedGetAllEndpointBaseTests<T> : AuthenticatedGetEndpointBaseTests<List<T>>
     {

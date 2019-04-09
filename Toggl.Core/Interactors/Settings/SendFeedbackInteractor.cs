@@ -9,8 +9,8 @@ using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Models;
 using Toggl.Storage.Settings;
-using Toggl.Ultrawave.ApiClients;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.ApiClients;
+using Toggl.Networking.Network;
 
 namespace Toggl.Core.Interactors.Settings
 {

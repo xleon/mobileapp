@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Toggl.Ultrawave.Network
+namespace Toggl.Networking.Network
 {
     internal interface IApiClient : IDisposable
     {

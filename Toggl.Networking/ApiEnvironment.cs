@@ -1,4 +1,4 @@
-﻿namespace Toggl.Ultrawave
+﻿namespace Toggl.Networking
 {
     public enum ApiEnvironment
     {

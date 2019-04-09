@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using Toggl.Shared;
-using Toggl.Ultrawave;
+using Toggl.Networking;
 
 namespace Toggl.Core.Login
 {

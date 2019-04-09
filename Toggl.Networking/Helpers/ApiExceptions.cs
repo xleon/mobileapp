@@ -1,7 +1,7 @@
-﻿using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Network;
+﻿using Toggl.Networking.Exceptions;
+using Toggl.Networking.Network;
 
-namespace Toggl.Ultrawave.Helpers
+namespace Toggl.Networking.Helpers
 {
     internal static class ApiExceptions
     {

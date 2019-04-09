@@ -5,11 +5,11 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Multivac.Models;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Networking.Exceptions;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 
-namespace Toggl.Ultrawave.Tests.Integration.BaseTests
+namespace Toggl.Networking.Tests.Integration.BaseTests
 {
     public abstract class AuthenticatedGetSinceEndpointBaseTests<T>
         : AuthenticatedEndpointBaseTests<List<T>>

@@ -3,9 +3,9 @@ using Toggl.Shared.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.Serialization;
 
-namespace Toggl.Ultrawave.Models
+namespace Toggl.Networking.Models
 {
     internal sealed partial class TimeEntry : ITimeEntry
     {

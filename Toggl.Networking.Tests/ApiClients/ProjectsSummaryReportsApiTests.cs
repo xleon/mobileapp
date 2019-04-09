@@ -4,12 +4,12 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.ApiClients;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.Network;
+using Toggl.Networking.ApiClients;
+using Toggl.Networking.Serialization;
 using Xunit;
 
-namespace Toggl.Ultrawave.Tests.ApiClients
+namespace Toggl.Networking.Tests.ApiClients
 {
     public sealed class ProjectsSummaryReportsApiTests
     {

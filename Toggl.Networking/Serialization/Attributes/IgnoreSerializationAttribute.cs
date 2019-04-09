@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Ultrawave.Serialization
+namespace Toggl.Networking.Serialization
 {
     [AttributeUsage(AttributeTargets.Property)]
     internal class IgnoreSerializationAttribute : Attribute

@@ -2,9 +2,9 @@
 using System.Text;
 using System.Threading.Tasks;
 using Toggl.Shared;
-using Toggl.Ultrawave.Extensions;
+using Toggl.Networking.Extensions;
 
-namespace Toggl.Ultrawave.Network
+namespace Toggl.Networking.Network
 {
     internal sealed class ApiClient : IApiClient
     {

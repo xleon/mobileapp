@@ -1,8 +1,8 @@
 ﻿using System;
 using Toggl.Core.MvvmCross.Services;
 using Toggl.Core.Services;
-using Toggl.Ultrawave;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking;
+using Toggl.Networking.Network;
 using MvvmCross.Navigation;
 
 namespace Toggl.Core.MvvmCross

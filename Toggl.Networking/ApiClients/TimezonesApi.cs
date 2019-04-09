@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Toggl.Shared;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.Network;
+using Toggl.Networking.Serialization;
 
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     internal sealed class TimezonesApi : BaseApi, ITimeZonesApi
     {

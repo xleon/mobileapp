@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Xunit.Sdk;
 
-namespace Toggl.Ultrawave.Tests.Integration
+namespace Toggl.Networking.Tests.Integration
 {
     public sealed class LogTestInfoAttribute : BeforeAfterTestAttribute
     {

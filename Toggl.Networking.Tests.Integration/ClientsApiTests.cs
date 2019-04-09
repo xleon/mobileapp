@@ -5,12 +5,12 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Multivac.Models;
-using Toggl.Ultrawave.Tests.Integration.BaseTests;
+using Toggl.Networking.Tests.Integration.BaseTests;
 using Xunit;
-using Client = Toggl.Ultrawave.Models.Client;
-using UserModel = Toggl.Ultrawave.Models.User;
+using Client = Toggl.Networking.Models.Client;
+using UserModel = Toggl.Networking.Models.User;
 
-namespace Toggl.Ultrawave.Tests.Integration
+namespace Toggl.Networking.Tests.Integration
 {
     public sealed class ClientsApiTests
     {

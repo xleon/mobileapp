@@ -3,12 +3,12 @@ using System.Net.Http;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Multivac.Extensions;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Network;
 using Toggl.Multivac.Models;
 using Toggl.Multivac;
-using Toggl.Ultrawave.Tests.Integration.Helper;
+using Toggl.Networking.Tests.Integration.Helper;
 
-namespace Toggl.Ultrawave.Tests.Integration
+namespace Toggl.Networking.Tests.Integration
 {
     internal static class User
     {

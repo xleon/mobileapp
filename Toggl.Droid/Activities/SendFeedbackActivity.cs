@@ -11,7 +11,7 @@ using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.MvvmCross.ViewModels;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Shared.Extensions;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Networking.Exceptions;
 
 namespace Toggl.Giskard.Activities
 {

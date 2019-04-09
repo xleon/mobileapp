@@ -3,14 +3,14 @@ using System.Reactive.Linq;
 using Newtonsoft.Json;
 using Toggl.Shared;
 using Toggl.Shared.Models;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Helpers;
-using Toggl.Ultrawave.Models;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Serialization;
-using Toggl.Ultrawave.Serialization.Converters;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Models;
+using Toggl.Networking.Network;
+using Toggl.Networking.Serialization;
+using Toggl.Networking.Serialization.Converters;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     internal sealed class UserApi : BaseApi, IUserApi
     {

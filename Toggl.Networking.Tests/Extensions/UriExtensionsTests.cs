@@ -2,10 +2,10 @@
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
-using Toggl.Ultrawave.Extensions;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Extensions;
+using Toggl.Networking.Network;
 
-namespace Toggl.Ultrawave.Tests.Extensions
+namespace Toggl.Networking.Tests.Extensions
 {
     public sealed class UriExtensionsTests
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using FluentAssertions;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.Serialization;
 using Xunit;
 
-namespace Toggl.Ultrawave.Tests.Serialization
+namespace Toggl.Networking.Tests.Serialization
 {
     public sealed class JsonSerializerTests
     {

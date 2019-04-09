@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Multivac.Models;
 using Toggl.Multivac.Models.Reports;
-using Toggl.Ultrawave.ApiClients;
-using Toggl.Ultrawave.Helpers;
-using Toggl.Ultrawave.Models;
-using Toggl.Ultrawave.Tests.Integration.BaseTests;
-using Toggl.Ultrawave.Tests.Integration.Helper;
+using Toggl.Networking.ApiClients;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Models;
+using Toggl.Networking.Tests.Integration.BaseTests;
+using Toggl.Networking.Tests.Integration.Helper;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 
-namespace Toggl.Ultrawave.Tests.Integration
+namespace Toggl.Networking.Tests.Integration
 {
     public sealed class ProjectsSummaryReportsApiTests
     {

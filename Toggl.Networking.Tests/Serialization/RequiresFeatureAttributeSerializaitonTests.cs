@@ -3,13 +3,13 @@ using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Toggl.Multivac.Models;
-using Toggl.Ultrawave.Models;
-using Toggl.Ultrawave.Serialization;
-using Toggl.Ultrawave.Serialization.Attributes;
+using Toggl.Networking.Models;
+using Toggl.Networking.Serialization;
+using Toggl.Networking.Serialization.Attributes;
 using Xunit;
 using static Toggl.Multivac.WorkspaceFeatureId;
 
-namespace Toggl.Ultrawave.Tests.Serialization
+namespace Toggl.Networking.Tests.Serialization
 {
     public sealed class RequiresFeatureAttributeSerializaitonTests
     {

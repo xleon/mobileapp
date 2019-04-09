@@ -6,7 +6,7 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Sync.States.Push.Interfaces;
 using Toggl.Shared;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Networking.Exceptions;
 
 namespace Toggl.Core.Sync.States.Push
 {

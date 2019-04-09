@@ -1,7 +1,7 @@
-﻿using Toggl.Ultrawave.Models.Reports;
+﻿using Toggl.Networking.Models.Reports;
 using Xunit;
 
-namespace Toggl.Ultrawave.Tests.Models.Reports
+namespace Toggl.Networking.Tests.Models.Reports
 {
     public sealed class ProjectSummaryTests
     {

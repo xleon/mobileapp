@@ -1,6 +1,6 @@
-﻿using Toggl.Ultrawave.Network;
+﻿using Toggl.Networking.Network;
 
-namespace Toggl.Ultrawave.Exceptions
+namespace Toggl.Networking.Exceptions
 {
     public class EndpointUnreachableException : ApiException
     {

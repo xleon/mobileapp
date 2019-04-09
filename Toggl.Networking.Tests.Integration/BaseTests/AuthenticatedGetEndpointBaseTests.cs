@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Network;
 using Xunit;
 
-namespace Toggl.Ultrawave.Tests.Integration.BaseTests
+namespace Toggl.Networking.Tests.Integration.BaseTests
 {
     public abstract class AuthenticatedGetEndpointBaseTests<T> : AuthenticatedEndpointBaseTests<T>
     {

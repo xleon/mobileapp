@@ -6,17 +6,17 @@ using System.Reactive.Linq;
 using FluentAssertions;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Extensions;
-using Toggl.Ultrawave.Helpers;
-using Toggl.Ultrawave.Models;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Tests.Integration.BaseTests;
-using Toggl.Ultrawave.Tests.Integration.Helper;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Extensions;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Models;
+using Toggl.Networking.Network;
+using Toggl.Networking.Tests.Integration.BaseTests;
+using Toggl.Networking.Tests.Integration.Helper;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 
-namespace Toggl.Ultrawave.Tests.Integration
+namespace Toggl.Networking.Tests.Integration
 {
     public sealed class WorkspacesApiTests
     {

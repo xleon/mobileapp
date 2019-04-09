@@ -16,7 +16,7 @@ using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Networking.Exceptions;
 
 namespace Toggl.Core.MvvmCross.ViewModels
 {

@@ -1,18 +1,18 @@
 ﻿using System;
-using Toggl.Ultrawave.Tests.Integration.BaseTests;
+using Toggl.Networking.Tests.Integration.BaseTests;
 using Toggl.Multivac.Models.Reports;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Ultrawave.ApiClients;
+using Toggl.Networking.ApiClients;
 using Xunit;
 using Toggl.Multivac.Models;
 using FluentAssertions;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
-using Toggl.Ultrawave.Tests.Integration.Helper;
-using Toggl.Ultrawave.Helpers;
+using Toggl.Networking.Tests.Integration.Helper;
+using Toggl.Networking.Helpers;
 
-namespace Toggl.Ultrawave.Tests.Integration
+namespace Toggl.Networking.Tests.Integration
 {
     public sealed class TimeEntriesReportsApiTests : AuthenticatedEndpointBaseTests<ITimeEntriesTotals>
     {

@@ -6,12 +6,12 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
-using Toggl.Ultrawave.ApiClients;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.ApiClients;
+using Toggl.Networking.Network;
+using Toggl.Networking.Serialization;
 using Xunit;
 
-namespace Toggl.Ultrawave.Tests.ApiClients
+namespace Toggl.Networking.Tests.ApiClients
 {
     public sealed class FeedbackApiTests
     {

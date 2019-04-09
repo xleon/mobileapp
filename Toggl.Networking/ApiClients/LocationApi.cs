@@ -1,12 +1,12 @@
 ﻿using System;
 using Toggl.Shared;
 using Toggl.Shared.Models;
-using Toggl.Ultrawave.ApiClients.Interfaces;
-using Toggl.Ultrawave.Models;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.ApiClients.Interfaces;
+using Toggl.Networking.Models;
+using Toggl.Networking.Network;
+using Toggl.Networking.Serialization;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     internal sealed class LocationApi : BaseApi, ILocationApi
     {

@@ -8,7 +8,7 @@ using Toggl.Daneel.ExtensionKit.Analytics;
 using Toggl.Daneel.ExtensionKit.Extensions;
 using Toggl.Daneel.Intents;
 using Toggl.Shared.Models;
-using Toggl.Ultrawave;
+using Toggl.Networking;
 
 namespace SiriExtension
 {

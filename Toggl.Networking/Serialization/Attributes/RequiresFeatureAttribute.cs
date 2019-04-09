@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Shared;
 
-namespace Toggl.Ultrawave.Serialization.Attributes
+namespace Toggl.Networking.Serialization.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     internal sealed class RequiresFeatureAttribute : Attribute

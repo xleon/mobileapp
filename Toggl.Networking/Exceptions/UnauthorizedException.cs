@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Network;
 
-namespace Toggl.Ultrawave.Exceptions
+namespace Toggl.Networking.Exceptions
 {
     public sealed class UnauthorizedException : ClientErrorException
     {

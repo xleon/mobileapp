@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     public interface ICreatingApiClient<T>
     {

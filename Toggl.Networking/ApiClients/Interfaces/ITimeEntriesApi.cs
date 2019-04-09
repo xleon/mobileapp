@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Toggl.Shared.Models;
-using Toggl.Ultrawave.ApiClients.Interfaces;
+using Toggl.Networking.ApiClients.Interfaces;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     public interface ITimeEntriesApi
         : IDeletingApiClient<ITimeEntry>,

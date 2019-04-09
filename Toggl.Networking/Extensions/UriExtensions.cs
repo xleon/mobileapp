@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Toggl.Ultrawave.Extensions
+namespace Toggl.Networking.Extensions
 {
     public static class UriExtensions
     {

@@ -5,11 +5,11 @@ using System.Reactive;
 using Newtonsoft.Json;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Serialization;
-using Toggl.Ultrawave.Serialization.Converters;
+using Toggl.Networking.Network;
+using Toggl.Networking.Serialization;
+using Toggl.Networking.Serialization.Converters;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     internal class FeedbackApiClient : BaseApi, IFeedbackApi
     {

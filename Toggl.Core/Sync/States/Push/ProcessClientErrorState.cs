@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Networking.Exceptions;
 
 namespace Toggl.Core.Sync.States.Push
 {

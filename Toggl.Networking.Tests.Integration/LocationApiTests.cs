@@ -1,11 +1,11 @@
 ﻿using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Tests.Integration.BaseTests;
+using Toggl.Networking.Network;
+using Toggl.Networking.Tests.Integration.BaseTests;
 using Xunit;
 
-namespace Toggl.Ultrawave.Tests.Integration
+namespace Toggl.Networking.Tests.Integration
 {
     public sealed class LocationApiTests
     {

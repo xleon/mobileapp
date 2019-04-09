@@ -2,10 +2,10 @@ using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Toggl.Ultrawave.Helpers;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Network;
 
-namespace Toggl.Ultrawave.Tests.Integration.Helper
+namespace Toggl.Networking.Tests.Integration.Helper
 {
     internal sealed class RetryingApiClient : IApiClient
     {

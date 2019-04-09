@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reactive;
 using Toggl.Shared;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     public interface IFeedbackApi
     {

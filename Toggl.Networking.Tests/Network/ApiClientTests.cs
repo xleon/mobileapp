@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using System.Net.Http;
 using FluentAssertions;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Network;
 using Xunit;
 
-namespace Toggl.Ultrawave.Tests.Network
+namespace Toggl.Networking.Tests.Network
 {
     public sealed class ApiClientTests
     {

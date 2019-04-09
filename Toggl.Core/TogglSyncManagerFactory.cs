@@ -17,9 +17,9 @@ using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Models;
 using Toggl.Storage.Settings;
-using Toggl.Ultrawave;
-using Toggl.Ultrawave.ApiClients;
-using Toggl.Ultrawave.ApiClients.Interfaces;
+using Toggl.Networking;
+using Toggl.Networking.ApiClients;
+using Toggl.Networking.ApiClients.Interfaces;
 
 namespace Toggl.Core
 {

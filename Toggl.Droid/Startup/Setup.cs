@@ -17,7 +17,7 @@ using Toggl.Giskard.BroadcastReceivers;
 using Toggl.Giskard.Presentation;
 using Toggl.Giskard.Services;
 using Toggl.Giskard.Startup;
-using Toggl.Ultrawave;
+using Toggl.Networking;
 using ColorPlugin = MvvmCross.Plugin.Color.Platforms.Android.Plugin;
 using VisibilityPlugin = MvvmCross.Plugin.Visibility.Platforms.Android.Plugin;
 

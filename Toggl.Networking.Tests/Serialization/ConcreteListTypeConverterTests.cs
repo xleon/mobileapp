@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Newtonsoft.Json;
-using Toggl.Ultrawave.Serialization;
-using Toggl.Ultrawave.Serialization.Converters;
+using Toggl.Networking.Serialization;
+using Toggl.Networking.Serialization.Converters;
 using Xunit;
-using JsonSerializer = Toggl.Ultrawave.Serialization.JsonSerializer;
+using JsonSerializer = Toggl.Networking.Serialization.JsonSerializer;
 
-namespace Toggl.Ultrawave.Tests.Serialization
+namespace Toggl.Networking.Tests.Serialization
 {
     public sealed class ConcreteListTypeConverterTests
     {

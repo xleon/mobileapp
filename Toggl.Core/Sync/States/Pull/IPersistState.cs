@@ -1,4 +1,4 @@
-﻿using Toggl.Ultrawave.Exceptions;
+﻿using Toggl.Networking.Exceptions;
 
 namespace Toggl.Core.Sync.States.Pull
 {

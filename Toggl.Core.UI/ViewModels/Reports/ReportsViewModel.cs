@@ -27,7 +27,7 @@ using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models.Reports;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Networking.Exceptions;
 using CommonFunctions = Toggl.Shared.Extensions.CommonFunctions;
 using Color = Toggl.Core.MvvmCross.Helper.Color;
 

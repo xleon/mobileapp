@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Multivac.Models;
-using Toggl.Ultrawave.Helpers;
+using Toggl.Networking.Helpers;
 
-namespace Toggl.Ultrawave.Tests.Integration.Helper
+namespace Toggl.Networking.Tests.Integration.Helper
 {
     internal sealed class SubscriptionPlanActivator
     {

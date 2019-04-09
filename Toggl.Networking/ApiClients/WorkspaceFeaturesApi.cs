@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Toggl.Shared.Models;
-using Toggl.Ultrawave.Models;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.Models;
+using Toggl.Networking.Network;
+using Toggl.Networking.Serialization;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     internal sealed class WorkspaceFeaturesApi : BaseApi, IWorkspaceFeaturesApi
     {

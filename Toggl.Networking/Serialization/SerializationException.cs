@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.Ultrawave.Serialization
+namespace Toggl.Networking.Serialization
 {
     public class SerializationException : Exception
     {

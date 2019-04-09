@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     public interface IStatusApi
     {

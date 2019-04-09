@@ -3,14 +3,14 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using FluentAssertions;
-using Toggl.Ultrawave.Tests.Integration.BaseTests;
+using Toggl.Networking.Tests.Integration.BaseTests;
 using Xunit;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
-using Toggl.Ultrawave.Models;
+using Toggl.Networking.Models;
 using Task = System.Threading.Tasks.Task;
 
-namespace Toggl.Ultrawave.Tests.Integration
+namespace Toggl.Networking.Tests.Integration
 {
     public sealed class WorkspaceFeaturesApiTests
     {

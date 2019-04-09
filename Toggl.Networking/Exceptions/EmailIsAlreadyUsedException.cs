@@ -1,4 +1,4 @@
-﻿namespace Toggl.Ultrawave.Exceptions
+﻿namespace Toggl.Networking.Exceptions
 {
     public sealed class EmailIsAlreadyUsedException : ClientErrorException
     {

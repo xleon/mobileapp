@@ -1,11 +1,11 @@
 ﻿using System;
 using FluentAssertions;
 using Toggl.Multivac.Models;
-using Toggl.Ultrawave.Models;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.Models;
+using Toggl.Networking.Serialization;
 using Xunit;
 
-namespace Toggl.Ultrawave.Tests.Models
+namespace Toggl.Networking.Tests.Models
 {
     public sealed class TimeEntryTests
     {

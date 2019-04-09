@@ -5,7 +5,7 @@ using Toggl.Core.Extensions;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Toggl.Storage;
-using Toggl.Ultrawave;
+using Toggl.Networking;
 
 namespace Toggl.Core.Sync.States.Pull
 {

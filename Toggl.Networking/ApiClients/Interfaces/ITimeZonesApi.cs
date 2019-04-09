@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     public interface ITimeZonesApi
     {

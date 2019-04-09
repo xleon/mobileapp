@@ -1,7 +1,7 @@
-﻿using Toggl.Ultrawave.ApiClients;
-using Toggl.Ultrawave.ApiClients.Interfaces;
+﻿using Toggl.Networking.ApiClients;
+using Toggl.Networking.ApiClients.Interfaces;
 
-namespace Toggl.Ultrawave
+namespace Toggl.Networking
 {
     public interface ITogglApi
     {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http.Headers;
-using Toggl.Ultrawave.Network;
-using static Toggl.Ultrawave.Network.HttpHeader.HeaderType;
+using Toggl.Networking.Network;
+using static Toggl.Networking.Network.HttpHeader.HeaderType;
 
-namespace Toggl.Ultrawave.Extensions
+namespace Toggl.Networking.Extensions
 {
     internal static class HttpExtensions
     {

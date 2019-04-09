@@ -11,7 +11,7 @@ using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Shared.Extensions;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Networking.Exceptions;
 using static Toggl.Shared.Extensions.CommonFunctions;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Storage.Models;

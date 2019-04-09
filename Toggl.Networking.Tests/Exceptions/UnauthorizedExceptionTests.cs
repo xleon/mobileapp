@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Network;
 using Xunit;
 using static Toggl.Multivac.Extensions.EmailExtensions;
 using static Toggl.Multivac.Extensions.PasswordExtensions;
 
-namespace Toggl.Ultrawave.Tests.Exceptions
+namespace Toggl.Networking.Tests.Exceptions
 {
     public sealed class UnauthorizedExceptionTests
     {

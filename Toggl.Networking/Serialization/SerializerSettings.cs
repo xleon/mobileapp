@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Toggl.Ultrawave.Serialization
+namespace Toggl.Networking.Serialization
 {
     internal static class SerializerSettings
     {

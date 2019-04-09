@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Tests.Integration.Helper;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Network;
+using Toggl.Networking.Tests.Integration.Helper;
 using Xunit;
 
-namespace Toggl.Ultrawave.Tests.Integration.BaseTests
+namespace Toggl.Networking.Tests.Integration.BaseTests
 {
     public abstract class AuthenticatedEndpointBaseTests<T> : EndpointTestBase
     {

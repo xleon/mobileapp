@@ -2,7 +2,7 @@
 using System.Net;
 using Toggl.Shared;
 
-namespace Toggl.Ultrawave.Network
+namespace Toggl.Networking.Network
 {
     internal sealed class Response : IResponse
     {

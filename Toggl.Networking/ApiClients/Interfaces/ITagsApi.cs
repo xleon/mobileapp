@@ -1,6 +1,6 @@
 ﻿using Toggl.Shared.Models;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     public interface ITagsApi
         : IPullingApiClient<ITag>,

@@ -1,4 +1,4 @@
-namespace Toggl.Ultrawave.Network
+namespace Toggl.Networking.Network
 {
     internal struct HttpHeader
     {

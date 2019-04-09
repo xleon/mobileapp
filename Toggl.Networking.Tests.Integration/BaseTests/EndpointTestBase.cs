@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Toggl.Multivac.Models;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Network;
 
-namespace Toggl.Ultrawave.Tests.Integration.BaseTests
+namespace Toggl.Networking.Tests.Integration.BaseTests
 {
     public abstract class EndpointTestBase
     {

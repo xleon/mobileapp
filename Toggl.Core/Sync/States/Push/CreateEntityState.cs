@@ -9,7 +9,7 @@ using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Models;
-using Toggl.Ultrawave.ApiClients;
+using Toggl.Networking.ApiClients;
 using static Toggl.Core.Sync.PushSyncOperation;
 using System.Collections;
 using System.Collections.Generic;

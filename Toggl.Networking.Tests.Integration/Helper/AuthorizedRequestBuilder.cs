@@ -1,8 +1,8 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Network;
 
-namespace Toggl.Ultrawave.Tests.Integration.Helper
+namespace Toggl.Networking.Tests.Integration.Helper
 {
     public static class AuthorizedRequestBuilder
     {

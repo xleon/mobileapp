@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Multivac.Extensions;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Helpers;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Network;
+using Toggl.Networking.Serialization;
 using Xunit;
 using static System.Net.HttpStatusCode;
 
-namespace Toggl.Ultrawave.Tests.ApiClients
+namespace Toggl.Networking.Tests.ApiClients
 {
     public sealed class BaseApiTests
     {

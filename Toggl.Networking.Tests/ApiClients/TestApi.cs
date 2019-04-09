@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Toggl.Multivac;
-using Toggl.Ultrawave.ApiClients;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.ApiClients;
+using Toggl.Networking.Network;
+using Toggl.Networking.Serialization;
 
-namespace Toggl.Ultrawave.Tests.ApiClients
+namespace Toggl.Networking.Tests.ApiClients
 {
     internal sealed class TestApi : BaseApi
     {

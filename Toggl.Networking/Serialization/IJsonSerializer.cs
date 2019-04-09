@@ -1,6 +1,6 @@
 ﻿using Toggl.Shared.Models;
 
-namespace Toggl.Ultrawave.Serialization
+namespace Toggl.Networking.Serialization
 {
     internal interface IJsonSerializer
     {

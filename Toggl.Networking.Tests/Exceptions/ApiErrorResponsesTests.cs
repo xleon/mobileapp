@@ -4,14 +4,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using FluentAssertions;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Helpers;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Network;
 using Xunit;
 using static System.Net.HttpStatusCode;
-using NotImplementedException = Toggl.Ultrawave.Exceptions.NotImplementedException;
+using NotImplementedException = Toggl.Networking.Exceptions.NotImplementedException;
 
-namespace Toggl.Ultrawave.Tests.Exceptions
+namespace Toggl.Networking.Tests.Exceptions
 {
     public sealed class ApiErrorResponsesTests
     {

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using FluentAssertions;
-using Toggl.Ultrawave.Helpers;
-using Toggl.Ultrawave.Tests.Integration.BaseTests;
-using Toggl.Ultrawave.Tests.Integration.Helper;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Tests.Integration.BaseTests;
+using Toggl.Networking.Tests.Integration.Helper;
 using Xunit;
 
-namespace Toggl.Ultrawave.Tests.Integration
+namespace Toggl.Networking.Tests.Integration
 {
     public sealed class PricingPlansTests : EndpointTestBase
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive;
 
-namespace Toggl.Ultrawave.ApiClients.Interfaces
+namespace Toggl.Networking.ApiClients.Interfaces
 {
     public interface IDeletingApiClient<T>
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using Toggl.Shared.Models.Reports;
-namespace Toggl.Ultrawave.Models.Reports
+namespace Toggl.Networking.Models.Reports
 {
     public sealed class TimeEntriesTotalsGroup : ITimeEntriesTotalsGroup
     {

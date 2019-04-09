@@ -3,9 +3,9 @@ using System.Linq;
 using Newtonsoft.Json.Serialization;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
-using Toggl.Ultrawave.Serialization.Attributes;
+using Toggl.Networking.Serialization.Attributes;
 
-namespace Toggl.Ultrawave.Serialization
+namespace Toggl.Networking.Serialization
 {
     internal sealed class RequiresFeatureAttributeFilter : IPropertiesFilter
     {

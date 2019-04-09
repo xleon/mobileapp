@@ -26,7 +26,7 @@ using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Network;
 using static Toggl.Shared.Extensions.CommonFunctions;
 
 namespace Toggl.Core.MvvmCross.ViewModels

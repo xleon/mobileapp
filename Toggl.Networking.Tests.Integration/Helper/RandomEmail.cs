@@ -1,7 +1,7 @@
 using System;
 using Toggl.Multivac;
 
-namespace Toggl.Ultrawave.Tests.Integration.Helper
+namespace Toggl.Networking.Tests.Integration.Helper
 {
     public static class RandomEmail
     {

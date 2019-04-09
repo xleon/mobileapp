@@ -6,15 +6,15 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
-using Toggl.Ultrawave.ApiClients;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Models;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.ApiClients;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Models;
+using Toggl.Networking.Network;
+using Toggl.Networking.Serialization;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 
-namespace Toggl.Ultrawave.Tests.ApiClients
+namespace Toggl.Networking.Tests.ApiClients
 {
     public class UserApiTests
     {

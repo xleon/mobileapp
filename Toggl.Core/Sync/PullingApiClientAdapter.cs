@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using Toggl.Shared;
-using Toggl.Ultrawave.ApiClients;
+using Toggl.Networking.ApiClients;
 
 namespace Toggl.Core.Sync
 {

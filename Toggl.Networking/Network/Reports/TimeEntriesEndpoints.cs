@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Toggl.Ultrawave.Network.Reports
+namespace Toggl.Networking.Network.Reports
 {
     internal sealed class TimeEntriesEndpoints
     {

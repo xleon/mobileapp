@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Ultrawave.Helpers;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Network;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     internal sealed class StatusApi : IStatusApi
     {

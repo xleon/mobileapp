@@ -7,10 +7,10 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
-using Toggl.Ultrawave.ApiClients;
+using Toggl.Networking.ApiClients;
 using System.Collections.Generic;
 using Toggl.Core.Extensions;
-using Toggl.Ultrawave.Exceptions;
+using Toggl.Networking.Exceptions;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Storage.Models;
 

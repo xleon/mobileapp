@@ -10,7 +10,7 @@ using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using Toggl.Ultrawave;
+using Toggl.Networking;
 
 namespace Toggl.Core.Interactors
 {

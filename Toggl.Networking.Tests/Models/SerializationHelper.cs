@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using Toggl.Ultrawave.Serialization;
+using Toggl.Networking.Serialization;
 
-namespace Toggl.Ultrawave.Tests
+namespace Toggl.Networking.Tests
 {
     public static class SerializationHelper
     {

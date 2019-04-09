@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using Toggl.Ultrawave.ApiClients.Interfaces;
-using Toggl.Ultrawave.Models.Reports;
-using Toggl.Ultrawave.Network;
-using Toggl.Ultrawave.Serialization;
-using Toggl.Ultrawave.Network.Reports;
+using Toggl.Networking.ApiClients.Interfaces;
+using Toggl.Networking.Models.Reports;
+using Toggl.Networking.Network;
+using Toggl.Networking.Serialization;
+using Toggl.Networking.Network.Reports;
 using Toggl.Shared;
 using Newtonsoft.Json;
 using System.Reactive.Linq;
@@ -14,7 +14,7 @@ using System.Globalization;
 using Newtonsoft.Json.Converters;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     internal sealed class TimeEntriesReportsApi : BaseApi, ITimeEntriesReportsApi
     {

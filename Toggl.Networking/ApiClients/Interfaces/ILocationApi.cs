@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Shared.Models;
 
-namespace Toggl.Ultrawave.ApiClients.Interfaces
+namespace Toggl.Networking.ApiClients.Interfaces
 {
     public interface ILocationApi
     {

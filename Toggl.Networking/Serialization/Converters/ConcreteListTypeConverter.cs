@@ -4,7 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Toggl.Shared;
 
-namespace Toggl.Ultrawave.Serialization.Converters
+namespace Toggl.Networking.Serialization.Converters
 {
     [Preserve(AllMembers=true)]
     class ConcreteListTypeConverter<TConcrete, TInterface> : JsonConverter

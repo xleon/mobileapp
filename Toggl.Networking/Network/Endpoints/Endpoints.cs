@@ -1,8 +1,8 @@
 using System;
-using Toggl.Ultrawave.Helpers;
-using ReportsEndpoints = Toggl.Ultrawave.Network.Reports.Endpoints;
+using Toggl.Networking.Helpers;
+using ReportsEndpoints = Toggl.Networking.Network.Reports.Endpoints;
 
-namespace Toggl.Ultrawave.Network
+namespace Toggl.Networking.Network
 {
     internal sealed class Endpoints
     {

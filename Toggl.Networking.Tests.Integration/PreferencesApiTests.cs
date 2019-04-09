@@ -6,13 +6,13 @@ using System.Reflection;
 using FluentAssertions;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
-using Toggl.Ultrawave.Exceptions;
-using Toggl.Ultrawave.Models;
-using Toggl.Ultrawave.Tests.Integration.BaseTests;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Models;
+using Toggl.Networking.Tests.Integration.BaseTests;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 
-namespace Toggl.Ultrawave.Tests.Integration
+namespace Toggl.Networking.Tests.Integration
 {
     public sealed class PreferencesApiTests
     {
@@ -71,7 +71,7 @@ namespace Toggl.Ultrawave.Tests.Integration
 
             protected override IObservable<IPreferences> CallUpdateEndpoint(ITogglApi api, IPreferences entityToUpdate)
             {
-                var entityWithUpdates = new Ultrawave.Models.Preferences(entityToUpdate);
+                var entityWithUpdates = new Network.Models.Preferences(entityToUpdate);
                 entityWithUpdates.CollapseTimeEntries = !entityWithUpdates.CollapseTimeEntries;
 
                 return api.Preferences.Update(entityWithUpdates)

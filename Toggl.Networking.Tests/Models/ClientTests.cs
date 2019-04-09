@@ -1,9 +1,9 @@
 ﻿using System;
 using FluentAssertions;
-using Toggl.Ultrawave.Models;
+using Toggl.Networking.Models;
 using Xunit;
 
-namespace Toggl.Ultrawave.Tests.Models
+namespace Toggl.Networking.Tests.Models
 {
     public sealed class ClientTests
     {

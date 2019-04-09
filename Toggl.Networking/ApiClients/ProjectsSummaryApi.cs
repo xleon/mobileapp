@@ -4,13 +4,13 @@ using System.Reactive.Linq;
 using Newtonsoft.Json;
 using Toggl.Shared;
 using Toggl.Shared.Models.Reports;
-using Toggl.Ultrawave.Serialization;
-using Toggl.Ultrawave.Models.Reports;
-using Toggl.Ultrawave.Network;
-using Endpoints = Toggl.Ultrawave.Network.Endpoints;
-using ProjectEndpoints = Toggl.Ultrawave.Network.Reports.ProjectEndpoints;
+using Toggl.Networking.Serialization;
+using Toggl.Networking.Models.Reports;
+using Toggl.Networking.Network;
+using Endpoints = Toggl.Networking.Network.Endpoints;
+using ProjectEndpoints = Toggl.Networking.Network.Reports.ProjectEndpoints;
 
-namespace Toggl.Ultrawave.ApiClients
+namespace Toggl.Networking.ApiClients
 {
     internal sealed class ProjectsSummaryApi : BaseApi, IProjectsSummaryApi
     {

@@ -13,8 +13,8 @@ using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
-using Toggl.Ultrawave;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking;
+using Toggl.Networking.Network;
 using Toggl.Storage.Settings;
 
 namespace Toggl.Core
