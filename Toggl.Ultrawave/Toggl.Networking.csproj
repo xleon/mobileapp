@@ -3,9 +3,6 @@
     <TargetFrameworks>netstandard2.0;netcoreapp2.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
   <PropertyGroup>
@@ -26,5 +23,8 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ModelConstructors.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Toggl.Multivac\Toggl.Shared.csproj" />
   </ItemGroup>
 </Project>

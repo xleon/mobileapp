@@ -12,6 +12,6 @@
     <OutputPath>..\bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Toggl.Multivac\Toggl.Multivac.csproj" />
+    <ProjectReference Include="..\Toggl.Multivac\Toggl.Shared.csproj" />
   </ItemGroup>
 </Project>
