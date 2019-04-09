@@ -21,7 +21,7 @@ using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross
+namespace Toggl.Core.Tests.UI
 {
     public class ViewModelLocatorTests : BaseMvvmCrossTests
     {

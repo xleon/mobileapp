@@ -13,7 +13,7 @@ using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross.Services
+namespace Toggl.Core.Tests.UI.Services
 {
     public sealed class ErrorHandlingServiceTests
     {

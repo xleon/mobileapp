@@ -15,7 +15,7 @@ using Toggl.Ultrawave.Exceptions;
 using Toggl.Ultrawave.Network;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class ForgotPasswordViewModelTests
     {

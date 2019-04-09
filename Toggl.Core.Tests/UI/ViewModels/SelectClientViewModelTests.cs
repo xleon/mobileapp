@@ -14,7 +14,7 @@ using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectClientViewModelTests
     {

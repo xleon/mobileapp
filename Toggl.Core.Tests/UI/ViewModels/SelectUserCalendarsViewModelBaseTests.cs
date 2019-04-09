@@ -19,7 +19,7 @@ using System.Reactive;
 using System;
 using Toggl.Core.Tests.TestExtensions;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectUserCalendarsViewModelBaseTests
     {

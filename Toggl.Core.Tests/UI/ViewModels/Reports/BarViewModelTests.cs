@@ -5,7 +5,7 @@ using Toggl.Core.UI.ViewModels.Reports;
 using Xunit;
 using System.Collections.Generic;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels.Reports
+namespace Toggl.Core.Tests.UI.ViewModels.Reports
 {
     public sealed class BarViewModelTests
     {

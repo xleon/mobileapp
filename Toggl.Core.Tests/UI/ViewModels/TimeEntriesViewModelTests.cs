@@ -29,7 +29,7 @@ using Toggl.Multivac.Extensions;
 using Xunit;
 using ThreadingTask = System.Threading.Tasks.Task;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     using TimeEntriesLog = IEnumerable<ISectionModel<DaySummaryViewModel, LogItemViewModel>>;
 

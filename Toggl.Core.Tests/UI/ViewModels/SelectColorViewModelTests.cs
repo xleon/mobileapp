@@ -14,7 +14,7 @@ using Toggl.Core.UI;
 using Toggl.Core.Services;
 using Toggl.Core.Tests.Generators;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectColorViewModelTests
     {

@@ -18,7 +18,7 @@ using Toggl.Multivac.Extensions;
 using Xunit;
 using ProjectPredicate = System.Func<Toggl.PrimeRadiant.Models.IDatabaseProject, bool>;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class EditProjectViewModelTests
     {

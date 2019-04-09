@@ -11,7 +11,7 @@ using Toggl.Core.Tests.Generators;
 using Toggl.Multivac.Models;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectCountryViewModelTests
     {

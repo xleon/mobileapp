@@ -36,7 +36,7 @@ using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
 using TextFieldInfo = Toggl.Core.Autocomplete.TextFieldInfo;
 using CollectionSections = System.Collections.Generic.IEnumerable<Toggl.Core.UI.Collections.SectionModel<string, Toggl.Core.Autocomplete.Suggestions.AutocompleteSuggestion>>;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class StartTimeEntryViewModelTests
     {

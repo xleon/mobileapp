@@ -20,7 +20,7 @@ using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross.Transformations
+namespace Toggl.Core.Tests.UI.Transformations
 {
     public sealed class TimeEntriesFlatenningTests
     {

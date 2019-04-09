@@ -14,7 +14,7 @@ using System.Reactive;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Exceptions;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectDefaultWorkspaceViewModelTests
     {

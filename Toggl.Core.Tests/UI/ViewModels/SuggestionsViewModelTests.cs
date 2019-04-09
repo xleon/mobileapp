@@ -19,7 +19,7 @@ using Toggl.Core.UI.Extensions;
 using Toggl.Multivac.Extensions;
 using Toggl.Core.Tests.TestExtensions;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SuggestionsViewModelTests
     {

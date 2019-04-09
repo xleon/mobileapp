@@ -30,7 +30,7 @@ using Xunit;
 using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
 using Notification = System.Reactive.Notification;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class CalendarViewModelTests
     {

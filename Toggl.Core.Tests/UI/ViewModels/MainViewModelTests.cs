@@ -37,7 +37,7 @@ using static Toggl.Core.Helper.Constants;
 using Notification = System.Reactive.Notification;
 using ThreadingTask = System.Threading.Tasks.Task;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class MainViewModelTests
     {

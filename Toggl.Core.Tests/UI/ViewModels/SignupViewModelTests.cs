@@ -24,7 +24,7 @@ using Toggl.Ultrawave.Network;
 using Xunit;
 using static Toggl.Core.UI.ViewModels.SignupViewModel;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SignupViewModelTests
     {

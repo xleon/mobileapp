@@ -16,7 +16,7 @@ using Xunit;
 using static Toggl.Multivac.Extensions.EmailExtensions;
 using static Toggl.Multivac.Extensions.PasswordExtensions;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public class TokenResetViewModelTests
     {

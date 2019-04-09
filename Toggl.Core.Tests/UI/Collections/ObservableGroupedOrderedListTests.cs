@@ -12,7 +12,7 @@ using NUnit.Framework;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Collections.Changes;
 
-namespace Toggl.Core.Tests.MvvmCross.Collections
+namespace Toggl.Core.Tests.UI.Collections
 {
     public sealed class MockItem : IEquatable<MockItem>
     {

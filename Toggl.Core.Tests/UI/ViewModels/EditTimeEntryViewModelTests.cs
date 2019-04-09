@@ -26,7 +26,7 @@ using Toggl.Multivac.Extensions;
 using Toggl.Core.Extensions;
 using static Toggl.Core.Helper.Constants;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class EditTimeEntryViewModelTests
     {

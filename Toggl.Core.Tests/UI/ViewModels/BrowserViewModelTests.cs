@@ -6,7 +6,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class BrowserViewModelTests
     {

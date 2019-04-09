@@ -15,7 +15,7 @@ using Toggl.Multivac.Extensions;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class EditDurationViewModelTests
     {

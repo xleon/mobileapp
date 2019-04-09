@@ -2,7 +2,7 @@
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 using Toggl.Multivac;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels.ReportsCalendarQuickSelectShortcuts
+namespace Toggl.Core.Tests.UI.ViewModels.ReportsCalendarQuickSelectShortcuts
 {
     public abstract class ReportsCalendarThisWeekQuickSelectShortcutTests
             : BaseReportsCalendarQuickSelectShortcutTests<ReportsCalendarThisWeekQuickSelectShortcut>

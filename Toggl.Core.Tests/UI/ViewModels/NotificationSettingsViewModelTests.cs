@@ -12,7 +12,7 @@ using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.Tests.Generators;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class NotificationSettingsViewModelTests
     {

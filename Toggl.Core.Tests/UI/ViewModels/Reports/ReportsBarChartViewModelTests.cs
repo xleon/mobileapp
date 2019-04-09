@@ -19,7 +19,7 @@ using Toggl.Multivac.Models.Reports;
 using Toggl.Ultrawave.Models.Reports;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels.Reports
+namespace Toggl.Core.Tests.UI.ViewModels.Reports
 {
     public abstract class ReportsBarChartViewModelTest : BaseViewModelTests<ReportsBarChartViewModel>
     {

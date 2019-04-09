@@ -16,7 +16,7 @@ using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public abstract class BaseViewModelTests<TViewModel> : BaseMvvmCrossTests
         where TViewModel : MvxViewModel

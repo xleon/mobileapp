@@ -4,7 +4,7 @@ using System.Linq;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Collections.Diffing;
 
-namespace Toggl.Core.Tests.MvvmCross.Collections.Extensions
+namespace Toggl.Core.Tests.UI.Collections.Extensions
 {
     public static class ChangesetExtensions
     {

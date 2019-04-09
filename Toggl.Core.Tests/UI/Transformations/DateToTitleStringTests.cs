@@ -6,7 +6,7 @@ using Toggl.Core.UI.Transformations;
 using Xunit;
 using FsCheck.Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross.Transformations
+namespace Toggl.Core.Tests.UI.Transformations
 {
     public sealed class DateToTitleStringTests
     {

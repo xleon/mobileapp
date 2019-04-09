@@ -8,7 +8,7 @@ using Xunit;
 using System.Reactive.Linq;
 using Toggl.Core.Tests.Generators;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class AboutViewModelTests
     {

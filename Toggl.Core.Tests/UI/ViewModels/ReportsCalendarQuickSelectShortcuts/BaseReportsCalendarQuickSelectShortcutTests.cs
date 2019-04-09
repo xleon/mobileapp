@@ -4,7 +4,7 @@ using NSubstitute;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels.ReportsCalendarQuickSelectShortcuts
+namespace Toggl.Core.Tests.UI.ViewModels.ReportsCalendarQuickSelectShortcuts
 {
     public abstract class BaseReportsCalendarQuickSelectShortcutTests<T> : BaseMvvmCrossTests
         where T : ReportsCalendarBaseQuickSelectShortcut

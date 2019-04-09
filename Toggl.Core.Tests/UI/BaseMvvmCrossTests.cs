@@ -11,7 +11,7 @@ using Toggl.Multivac;
 using Toggl.PrimeRadiant;
 using Toggl.PrimeRadiant.Settings;
 
-namespace Toggl.Core.Tests.MvvmCross
+namespace Toggl.Core.Tests.UI
 {
     public abstract class BaseMvvmCrossTests : ReactiveTest
     {

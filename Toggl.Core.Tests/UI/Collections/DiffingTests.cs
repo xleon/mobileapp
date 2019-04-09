@@ -5,10 +5,10 @@ using System.Linq;
 using FluentAssertions;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Collections.Diffing;
-using Toggl.Core.Tests.MvvmCross.Collections.Extensions;
+using Toggl.Core.Tests.UI.Collections.Extensions;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross.Collections
+namespace Toggl.Core.Tests.UI.Collections
 {
     public class DiffableInt : IDiffable<long>
     {

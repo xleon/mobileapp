@@ -16,7 +16,7 @@ using Toggl.Core.Tests.TestExtensions;
 using Toggl.PrimeRadiant;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class RatingViewModelTests
     {

@@ -22,7 +22,7 @@ using Toggl.Multivac.Extensions;
 using Xunit;
 using Unit = System.Reactive.Unit;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectTagsViewModelTests
     {

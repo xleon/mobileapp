@@ -10,7 +10,7 @@ using Toggl.Multivac;
 using Xunit;
 using Math = System.Math;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class ReportsCalendarPageViewModelTests
     {

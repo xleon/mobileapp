@@ -1,7 +1,7 @@
 using System;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels.ReportsCalendarQuickSelectShortcuts
+namespace Toggl.Core.Tests.UI.ViewModels.ReportsCalendarQuickSelectShortcuts
 {
     public sealed class ReportsCalendarLastYearQuickSelectShortcutTests
         : BaseReportsCalendarQuickSelectShortcutTests<ReportsCalendarLastYearQuickSelectShortcut>

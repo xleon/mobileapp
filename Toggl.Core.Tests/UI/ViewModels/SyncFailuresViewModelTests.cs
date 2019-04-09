@@ -12,7 +12,7 @@ using Toggl.Core.Tests.Mocks;
 using Toggl.PrimeRadiant.Models;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SyncFailuresViewModelTests
     {

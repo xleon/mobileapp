@@ -15,7 +15,7 @@ using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross
+namespace Toggl.Core.Tests.UI
 {
     public sealed class AppStartTests
     {

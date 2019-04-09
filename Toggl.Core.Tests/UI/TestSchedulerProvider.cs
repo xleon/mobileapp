@@ -2,7 +2,7 @@ using System.Reactive.Concurrency;
 using Microsoft.Reactive.Testing;
 using Toggl.Multivac;
 
-namespace Toggl.Core.Tests.MvvmCross
+namespace Toggl.Core.Tests.UI
 {
     public sealed class TestSchedulerProvider : ISchedulerProvider
     {

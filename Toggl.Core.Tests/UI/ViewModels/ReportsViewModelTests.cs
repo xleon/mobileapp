@@ -20,7 +20,7 @@ using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Interactors;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class ReportsViewModelTests
     {

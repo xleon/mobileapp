@@ -13,7 +13,7 @@ using Toggl.Core.Tests.Mocks;
 using Toggl.Multivac;
 using Xunit;
 
-namespace Toggl.Core.Tests.MvvmCross.ViewModels
+namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class LogItemViewModelTests
     {
