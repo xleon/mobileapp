@@ -10,7 +10,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 
-namespace Toggl.Core.MvvmCross.ViewModels.Calendar
+namespace Toggl.Core.UI.ViewModels.Calendar
 {
     [Preserve(AllMembers = true)]
     public sealed class SelectUserCalendarsViewModel : SelectUserCalendarsViewModelBase

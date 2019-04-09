@@ -2,7 +2,7 @@
 using CoreGraphics;
 using Toggl.Storage.Onboarding;
 using UIKit;
-using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.UI.Helper;
 using Toggl.Storage.Settings;
 using Toggl.Storage.Extensions;
 using System.Reactive.Linq;

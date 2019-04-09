@@ -3,7 +3,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Plugin.Color.Platforms.Android;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Views;
 

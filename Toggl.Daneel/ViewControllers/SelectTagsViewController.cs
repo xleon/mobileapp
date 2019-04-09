@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using Toggl.Daneel.Presentation.Attributes;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.ViewModels;
 using UIKit;
-using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.UI.Helper;
 using System.Threading.Tasks;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;

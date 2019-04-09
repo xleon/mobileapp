@@ -4,7 +4,7 @@ using Toggl.Shared;
 using Toggl.Storage.Onboarding;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Core.MvvmCross.Onboarding.MainView
+namespace Toggl.Core.UI.Onboarding.MainView
 {
     public sealed class SwipeLeftOnboardingStep : IOnboardingStep
     {

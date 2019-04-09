@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using Android.Widget;
-using Toggl.Core.MvvmCross.Onboarding.EditView;
+using Toggl.Core.UI.Onboarding.EditView;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Helper;
 using Toggl.Shared.Extensions;

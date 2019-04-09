@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Core.Analytics;
 
-namespace Toggl.Core.MvvmCross.Parameters
+namespace Toggl.Core.UI.Parameters
 {
     public sealed class ReportsDateRangeParameter
     {

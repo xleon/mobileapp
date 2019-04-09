@@ -32,7 +32,7 @@ namespace Toggl.Daneel.Cells.Settings
             base.AwakeFromNib();
 
             GrayBackground.Layer.BorderWidth = 1;
-            GrayBackground.Layer.BorderColor = Core.MvvmCross.Helper.Color.Licenses.Border.ToNativeColor().CGColor;
+            GrayBackground.Layer.BorderColor = Core.UI.Helper.Color.Licenses.Border.ToNativeColor().CGColor;
         }
 
         protected override void UpdateView()

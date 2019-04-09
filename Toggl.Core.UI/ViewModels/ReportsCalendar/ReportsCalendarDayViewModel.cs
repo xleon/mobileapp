@@ -1,9 +1,9 @@
 ﻿using System;
-using Toggl.Core.MvvmCross.Interfaces;
-using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.UI.Interfaces;
+using Toggl.Core.UI.Parameters;
 using Toggl.Shared;
 
-namespace Toggl.Core.MvvmCross.ViewModels.ReportsCalendar
+namespace Toggl.Core.UI.ViewModels.ReportsCalendar
 {
     [Preserve(AllMembers = true)]
     public sealed class ReportsCalendarDayViewModel : IDiffableByIdentifier<ReportsCalendarDayViewModel>

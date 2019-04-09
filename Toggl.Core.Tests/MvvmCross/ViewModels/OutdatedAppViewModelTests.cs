@@ -3,8 +3,8 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Core.MvvmCross.Services;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.Services;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Xunit;
 

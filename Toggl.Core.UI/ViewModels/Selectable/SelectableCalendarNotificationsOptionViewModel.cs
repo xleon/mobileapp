@@ -1,8 +1,8 @@
 ﻿using System;
-using Toggl.Core.MvvmCross.Interfaces;
+using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 
-namespace Toggl.Core.MvvmCross.ViewModels.Selectable
+namespace Toggl.Core.UI.ViewModels.Selectable
 {
     public sealed class SelectableCalendarNotificationsOptionViewModel : IDiffableByIdentifier<SelectableCalendarNotificationsOptionViewModel>
     {

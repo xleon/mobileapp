@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Toggl.Core.MvvmCross.Collections;
-using Toggl.Core.MvvmCross.Collections.Diffing;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Collections.Diffing;
 
 namespace Toggl.Core.Tests.MvvmCross.Collections.Extensions
 {

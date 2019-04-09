@@ -16,11 +16,11 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.MvvmCross.Extensions;
-using Toggl.Core.MvvmCross.Parameters;
-using Toggl.Core.MvvmCross.Services;
-using Toggl.Core.MvvmCross.Transformations;
-using Toggl.Core.MvvmCross.ViewModels.Settings;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Services;
+using Toggl.Core.UI.Transformations;
+using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
 using Toggl.Shared;
@@ -29,7 +29,7 @@ using Toggl.Storage.Settings;
 using Toggl.Networking.Network;
 using static Toggl.Shared.Extensions.CommonFunctions;
 
-namespace Toggl.Core.MvvmCross.ViewModels
+namespace Toggl.Core.UI.ViewModels
 {
     using WorkspaceToSelectableWorkspaceLambda = Func<IEnumerable<IThreadSafeWorkspace>, IList<SelectableWorkspaceViewModel>>;
 

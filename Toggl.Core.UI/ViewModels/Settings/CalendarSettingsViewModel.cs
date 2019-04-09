@@ -6,15 +6,15 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using Toggl.Core.Interactors;
-using Toggl.Core.MvvmCross.Extensions;
-using Toggl.Core.MvvmCross.Services;
-using Toggl.Core.MvvmCross.ViewModels.Calendar;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Services;
+using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 
-namespace Toggl.Core.MvvmCross.ViewModels.Settings
+namespace Toggl.Core.UI.ViewModels.Settings
 {
     [Preserve(AllMembers = true)]
     public sealed class CalendarSettingsViewModel : SelectUserCalendarsViewModelBase

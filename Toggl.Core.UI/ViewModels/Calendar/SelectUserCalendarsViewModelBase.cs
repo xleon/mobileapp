@@ -10,14 +10,14 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Interactors;
-using Toggl.Core.MvvmCross.Collections;
-using Toggl.Core.MvvmCross.ViewModels.Selectable;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 
-namespace Toggl.Core.MvvmCross.ViewModels.Calendar
+namespace Toggl.Core.UI.ViewModels.Calendar
 {
     using CalendarSectionModel = SectionModel<UserCalendarSourceViewModel, SelectableUserCalendarViewModel>;
     using ImmutableCalendarSectionModel = IImmutableList<SectionModel<UserCalendarSourceViewModel, SelectableUserCalendarViewModel>>;

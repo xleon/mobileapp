@@ -1,10 +1,10 @@
 ﻿using MvvmCross.ViewModels;
-using Toggl.Core.MvvmCross.Interfaces;
-using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.UI.Interfaces;
+using Toggl.Core.UI.Parameters;
 using Toggl.Shared;
 using Toggl.Core.Services;
 
-namespace Toggl.Core.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts
+namespace Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts
 {
     [Preserve(AllMembers = true)]
     public abstract class ReportsCalendarBaseQuickSelectShortcut : IDiffableByIdentifier<ReportsCalendarBaseQuickSelectShortcut>

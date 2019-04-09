@@ -11,15 +11,15 @@ using Toggl.Daneel.Presentation.Transition;
 using Toggl.Daneel.Services;
 using Toggl.Daneel.ViewControllers;
 using Toggl.Daneel.ViewControllers.Navigation;
-using Toggl.Core.MvvmCross.Helper;
-using Toggl.Core.MvvmCross.ViewModels;
-using Toggl.Core.MvvmCross.ViewModels.Hints;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.Hints;
 using UIKit;
 using MvvmCross.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Presenters;
 using MvvmCross.Presenters;
-using Toggl.Core.MvvmCross.ViewModels.Calendar;
-using Toggl.Core.MvvmCross.ViewModels.Reports;
+using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.Reports;
 
 namespace Toggl.Daneel.Presentation
 {

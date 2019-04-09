@@ -10,17 +10,17 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Helper;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.MvvmCross.Collections;
-using Toggl.Core.MvvmCross.Extensions;
-using Toggl.Core.MvvmCross.Transformations;
-using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
-using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Transformations;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Core.MvvmCross.ViewModels
+namespace Toggl.Core.UI.ViewModels
 {
 
     [Preserve(AllMembers = true)]

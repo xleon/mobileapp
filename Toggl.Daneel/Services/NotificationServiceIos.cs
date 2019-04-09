@@ -8,7 +8,7 @@ using Foundation;
 using Toggl.Daneel.Extensions;
 using Toggl.Core;
 using Toggl.Core.Calendar;
-using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.UI.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UserNotifications;

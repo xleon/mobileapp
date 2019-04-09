@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Core.MvvmCross.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.Tests.Generators;
 using Xunit;
 

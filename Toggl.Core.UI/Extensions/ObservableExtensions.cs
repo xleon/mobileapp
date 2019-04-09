@@ -5,7 +5,7 @@ using Toggl.Core.Exceptions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Core.MvvmCross.Extensions
+namespace Toggl.Core.UI.Extensions
 {
     public static class ObservableExtensions
     {

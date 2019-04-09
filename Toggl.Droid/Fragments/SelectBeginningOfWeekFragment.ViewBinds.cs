@@ -1,7 +1,7 @@
 ﻿using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Views;
 

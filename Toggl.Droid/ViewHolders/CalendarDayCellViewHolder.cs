@@ -4,10 +4,10 @@ using Android.Graphics;
 using Android.Runtime;
 using Android.Views;
 using MvvmCross.Plugin.Color.Platforms.Android;
-using Toggl.Core.MvvmCross.Parameters;
-using Toggl.Core.MvvmCross.ViewModels.ReportsCalendar;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.Giskard.Views;
-using static Toggl.Core.MvvmCross.Helper.Color.Reports;
+using static Toggl.Core.UI.Helper.Color.Reports;
 
 namespace Toggl.Giskard.ViewHolders
 {

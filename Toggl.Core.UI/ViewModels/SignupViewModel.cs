@@ -12,8 +12,8 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Interactors.Location;
 using Toggl.Core.Login;
-using Toggl.Core.MvvmCross.Extensions;
-using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -26,7 +26,7 @@ using System.Reactive.Disposables;
 using Toggl.Core.Interactors.Timezones;
 using Toggl.Core.Serialization;
 
-namespace Toggl.Core.MvvmCross.ViewModels
+namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class SignupViewModel : MvxViewModel<CredentialsParameter>

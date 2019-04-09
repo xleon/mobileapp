@@ -5,7 +5,7 @@ using System.Linq;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
-using Toggl.Core.MvvmCross.ViewModels.ReportsCalendar;
+using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.Multivac;
 using Xunit;
 using Math = System.Math;

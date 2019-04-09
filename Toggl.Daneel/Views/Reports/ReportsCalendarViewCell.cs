@@ -1,9 +1,9 @@
 ﻿using System;
 using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Core.MvvmCross.Helper;
-using Toggl.Core.MvvmCross.Parameters;
-using Toggl.Core.MvvmCross.ViewModels.ReportsCalendar;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using UIKit;
 
 namespace Toggl.Daneel.Views

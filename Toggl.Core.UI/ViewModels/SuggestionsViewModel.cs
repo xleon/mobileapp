@@ -13,7 +13,7 @@ using Toggl.Storage.Settings;
 using Toggl.Core.Extensions;
 using Toggl.Core.Services;
 
-namespace Toggl.Core.MvvmCross.ViewModels
+namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class SuggestionsViewModel : MvxViewModel

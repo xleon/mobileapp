@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Android.Support.Design.Widget;
 using Android.Views;
-using Toggl.Core.MvvmCross.Reactive;
+using Toggl.Core.UI.Reactive;
 
 namespace Toggl.Giskard.Extensions.Reactive
 {

@@ -9,7 +9,7 @@ using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Views;
 using Toggl.Core;
-using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.UI.Helper;
 using Toggl.Core.Sync;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -27,11 +27,11 @@ namespace Toggl.Daneel.ViewSources
 
         private static readonly float scrollThreshold = 3 * syncBarHeight;
 
-        private readonly UIColor pullToRefreshColor = Core.MvvmCross.Helper.Color.Main.PullToRefresh.ToNativeColor();
-        private readonly UIColor syncingColor = Core.MvvmCross.Helper.Color.Main.Syncing.ToNativeColor();
-        private readonly UIColor syncFailedColor = Core.MvvmCross.Helper.Color.Main.SyncFailed.ToNativeColor();
-        private readonly UIColor offlineColor = Core.MvvmCross.Helper.Color.Main.Offline.ToNativeColor();
-        private readonly UIColor syncCompletedColor = Core.MvvmCross.Helper.Color.Main.SyncCompleted.ToNativeColor();
+        private readonly UIColor pullToRefreshColor = Core.UI.Helper.Color.Main.PullToRefresh.ToNativeColor();
+        private readonly UIColor syncingColor = Core.UI.Helper.Color.Main.Syncing.ToNativeColor();
+        private readonly UIColor syncFailedColor = Core.UI.Helper.Color.Main.SyncFailed.ToNativeColor();
+        private readonly UIColor offlineColor = Core.UI.Helper.Color.Main.Offline.ToNativeColor();
+        private readonly UIColor syncCompletedColor = Core.UI.Helper.Color.Main.SyncCompleted.ToNativeColor();
 
         private bool wasReleased;
         private bool isSyncing = false;

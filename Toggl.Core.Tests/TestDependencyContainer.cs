@@ -4,7 +4,7 @@ using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
-using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Suggestions;
@@ -15,7 +15,7 @@ using Toggl.PrimeRadiant.Settings;
 using Toggl.Ultrawave;
 using Toggl.Ultrawave.Network;
 
-namespace Toggl.Core.MvvmCross
+namespace Toggl.Core.UI
 {
     public class TestDependencyContainer : UIDependencyContainer
     {

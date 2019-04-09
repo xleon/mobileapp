@@ -17,19 +17,19 @@ using Toggl.Daneel.Views;
 using Toggl.Daneel.ViewSources;
 using Toggl.Core;
 using Toggl.Core.Analytics;
-using Toggl.Core.MvvmCross.Collections;
-using Toggl.Core.MvvmCross.Extensions;
-using Toggl.Core.MvvmCross.Helper;
-using Toggl.Core.MvvmCross.Onboarding.MainView;
-using Toggl.Core.MvvmCross.ViewModels;
-using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
-using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Onboarding.MainView;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Extensions;
 using Toggl.Storage.Onboarding;
 using Toggl.Storage.Settings;
 using UIKit;
-using static Toggl.Core.MvvmCross.Helper.Animation;
+using static Toggl.Core.UI.Helper.Animation;
 
 namespace Toggl.Daneel.ViewControllers
 {

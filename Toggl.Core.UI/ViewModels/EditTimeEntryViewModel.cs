@@ -16,8 +16,8 @@ using Toggl.Core.DTOs;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.MvvmCross.Parameters;
-using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Services;
 using Toggl.Core.Sync;
 using Toggl.Core.Services;
 using Toggl.Shared;
@@ -25,7 +25,7 @@ using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
 using Toggl.Storage.Settings;
 
-namespace Toggl.Core.MvvmCross.ViewModels
+namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class EditTimeEntryViewModel : MvxViewModel<long[]>

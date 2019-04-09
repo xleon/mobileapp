@@ -2,7 +2,7 @@ using System;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Calendar;
-using Toggl.Core.MvvmCross.Calendar;
+using Toggl.Core.UI.Calendar;
 using Xunit;
 
 namespace Toggl.Core.Tests.Calendar

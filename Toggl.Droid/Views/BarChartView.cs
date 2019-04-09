@@ -4,7 +4,7 @@ using Android.Graphics;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
-using Toggl.Core.MvvmCross.ViewModels.Reports;
+using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.ViewHelpers;
 

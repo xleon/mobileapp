@@ -4,7 +4,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Android.Support.V7.Widget;
-using Toggl.Core.MvvmCross.Reactive;
+using Toggl.Core.UI.Reactive;
 using Toggl.Giskard.ViewHelpers;
 
 namespace Toggl.Giskard.Extensions.Reactive

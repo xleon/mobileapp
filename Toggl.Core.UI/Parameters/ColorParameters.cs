@@ -1,6 +1,6 @@
 ﻿using MvvmCross.UI;
 
-namespace Toggl.Core.MvvmCross.Parameters
+namespace Toggl.Core.UI.Parameters
 {
     public sealed class ColorParameters
     {

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using FluentAssertions;
-using Toggl.Core.MvvmCross.Collections;
-using Toggl.Core.MvvmCross.Collections.Diffing;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Collections.Diffing;
 using Toggl.Core.Tests.MvvmCross.Collections.Extensions;
 using Xunit;
 

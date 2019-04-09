@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Core.MvvmCross.Collections
+namespace Toggl.Core.UI.Collections
 {
     [Obsolete("We are moving into using CollectionSection and per platform diffing")]
     public class GroupedOrderedCollection<TItem> : IGroupOrderedCollection<TItem>

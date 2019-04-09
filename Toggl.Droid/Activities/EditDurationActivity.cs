@@ -9,14 +9,14 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
-using Toggl.Core.MvvmCross.Helper;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.ViewHelpers;
 using Toggl.Giskard.Views.EditDuration;
 using Toggl.Shared.Extensions;
-using static Toggl.Core.MvvmCross.Helper.TemporalInconsistency;
+using static Toggl.Core.UI.Helper.TemporalInconsistency;
 
 namespace Toggl.Giskard.Activities
 {

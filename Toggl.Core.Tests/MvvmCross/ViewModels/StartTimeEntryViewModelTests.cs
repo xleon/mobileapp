@@ -20,10 +20,10 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Interactors.AutocompleteSuggestions;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.MvvmCross.Collections;
-using Toggl.Core.MvvmCross.Parameters;
-using Toggl.Core.MvvmCross.Services;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Services;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Multivac;
@@ -34,7 +34,7 @@ using Xunit;
 using static Toggl.Core.Helper.Constants;
 using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
 using TextFieldInfo = Toggl.Core.Autocomplete.TextFieldInfo;
-using CollectionSections = System.Collections.Generic.IEnumerable<Toggl.Core.MvvmCross.Collections.SectionModel<string, Toggl.Core.Autocomplete.Suggestions.AutocompleteSuggestion>>;
+using CollectionSections = System.Collections.Generic.IEnumerable<Toggl.Core.UI.Collections.SectionModel<string, Toggl.Core.Autocomplete.Suggestions.AutocompleteSuggestion>>;
 
 namespace Toggl.Core.Tests.MvvmCross.ViewModels
 {

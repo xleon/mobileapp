@@ -15,7 +15,7 @@ using Toggl.Giskard.Views.EditDuration.Shapes;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using static Toggl.Shared.Math;
-using FoundationColor = Toggl.Core.MvvmCross.Helper.Color;
+using FoundationColor = Toggl.Core.UI.Helper.Color;
 using Math = System.Math;
 using Color = Android.Graphics.Color;
 namespace Toggl.Giskard.Views.EditDuration

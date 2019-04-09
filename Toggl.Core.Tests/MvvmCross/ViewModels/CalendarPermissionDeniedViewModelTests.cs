@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Core.MvvmCross.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.Tests.Generators;
 using Xunit;
 

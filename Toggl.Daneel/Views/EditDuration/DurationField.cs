@@ -6,7 +6,7 @@ using Toggl.Daneel.Extensions;
 using Toggl.Core;
 using UIKit;
 using CoreText;
-using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.UI.Helper;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using ObjCRuntime;
 using MvvmCross.Base;

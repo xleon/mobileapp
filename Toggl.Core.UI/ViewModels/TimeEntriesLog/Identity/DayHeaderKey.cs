@@ -1,6 +1,6 @@
 using System;
 
-namespace Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.Identity
+namespace Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity
 {
     internal sealed class DayHeaderKey : IMainLogKey
     {

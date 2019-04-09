@@ -16,13 +16,13 @@ using Toggl.Core.Experiments;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.MvvmCross.Collections;
-using Toggl.Core.MvvmCross.Extensions;
-using Toggl.Core.MvvmCross.Parameters;
-using Toggl.Core.MvvmCross.ViewModels;
-using Toggl.Core.MvvmCross.ViewModels.Reports;
-using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
-using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Core.Services;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
@@ -32,7 +32,7 @@ using Toggl.Storage;
 using Toggl.Storage.Settings;
 
 [assembly: MvxNavigation(typeof(MainViewModel), ApplicationUrls.Main.Regex)]
-namespace Toggl.Core.MvvmCross.ViewModels
+namespace Toggl.Core.UI.ViewModels
 {
     using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
 

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.Tests.Mocks;
 using Xunit;
 

@@ -1,4 +1,4 @@
-namespace Toggl.Core.MvvmCross.Collections.Diffing
+namespace Toggl.Core.UI.Collections.Diffing
 {
     public sealed class SectionAssociatedData
     {

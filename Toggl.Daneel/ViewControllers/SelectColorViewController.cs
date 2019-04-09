@@ -8,7 +8,7 @@ using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Views;
 using Toggl.Daneel.ViewSources;
 using Toggl.Core;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared.Extensions;
 using UIKit;
 

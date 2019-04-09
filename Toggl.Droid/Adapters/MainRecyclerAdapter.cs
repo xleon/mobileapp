@@ -6,16 +6,16 @@ using System.Reactive.Subjects;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Toggl.Core.Diagnostics;
-using Toggl.Core.MvvmCross.Collections;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.ViewHolders;
 using Toggl.Shared.Extensions;
 using Toggl.Core;
-using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Giskard.ViewHelpers;
 using System.Reactive.Disposables;
-using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Core.Analytics;
 
 namespace Toggl.Giskard.Adapters

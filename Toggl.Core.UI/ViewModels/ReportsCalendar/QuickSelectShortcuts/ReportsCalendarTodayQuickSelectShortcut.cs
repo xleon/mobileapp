@@ -1,8 +1,8 @@
 ﻿using Toggl.Core.Analytics;
-using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
 
-namespace Toggl.Core.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts
+namespace Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts
 {
     public sealed class ReportsCalendarTodayQuickSelectShortcut : ReportsCalendarBaseQuickSelectShortcut
     {

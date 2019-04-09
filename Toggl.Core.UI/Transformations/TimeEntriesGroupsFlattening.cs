@@ -4,16 +4,16 @@ using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.MvvmCross.Collections;
-using Toggl.Core.MvvmCross.Extensions;
-using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
-using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
-using static Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog.LogItemVisualizationIntent;
+using static Toggl.Core.UI.ViewModels.TimeEntriesLog.LogItemVisualizationIntent;
 
-namespace Toggl.Core.MvvmCross.Transformations
+namespace Toggl.Core.UI.Transformations
 {
     using LogGrouping = IGrouping<DateTime, IThreadSafeTimeEntry>;
     using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;

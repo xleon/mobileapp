@@ -4,7 +4,7 @@ using Foundation;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
 using UIKit;
-using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 
 namespace Toggl.Daneel.Views
 {

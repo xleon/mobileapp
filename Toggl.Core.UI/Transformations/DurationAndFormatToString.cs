@@ -2,7 +2,7 @@
 using Toggl.Core.Extensions;
 using Toggl.Shared;
 
-namespace Toggl.Core.MvvmCross.Transformations
+namespace Toggl.Core.UI.Transformations
 {
     public class DurationAndFormatToString
     {

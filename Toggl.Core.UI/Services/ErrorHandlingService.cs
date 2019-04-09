@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Services;
 using Toggl.Core.Exceptions;
 using Toggl.Shared;
@@ -9,7 +9,7 @@ using Toggl.Storage.Settings;
 using Toggl.Networking.Exceptions;
 using Toggl.Core.Analytics;
 
-namespace Toggl.Core.MvvmCross.Services
+namespace Toggl.Core.UI.Services
 {
     public sealed class ErrorHandlingService : IErrorHandlingService
     {

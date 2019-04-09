@@ -5,7 +5,7 @@ using MvvmCross.UI;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.Transformations;
 using Toggl.Core.Autocomplete.Suggestions;
-using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.UI.Helper;
 using UIKit;
 
 namespace Toggl.Daneel.Views

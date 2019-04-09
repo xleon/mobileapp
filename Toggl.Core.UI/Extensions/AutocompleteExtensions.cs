@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Toggl.Core.Autocomplete.Suggestions;
-using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.UI.Collections;
 using Toggl.Core.Autocomplete;
 using System.Collections.Immutable;
 using Toggl.Core.Autocomplete.Span;
 
-namespace Toggl.Core.MvvmCross.Extensions
+namespace Toggl.Core.UI.Extensions
 {
     using WorkspaceGroupedSuggestionsCollection = WorkspaceGroupedCollection<AutocompleteSuggestion>;
     using WorkspaceSuggestionsGrouping = IGrouping<(long workspaceId, string workspaceName), AutocompleteSuggestion>;

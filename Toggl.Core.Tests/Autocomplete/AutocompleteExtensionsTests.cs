@@ -3,7 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using Toggl.Core.Autocomplete.Span;
-using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.UI.Extensions;
 using Xunit;
 
 namespace Toggl.Core.Tests.Autocomplete

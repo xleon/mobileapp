@@ -4,7 +4,7 @@ using Toggl.Shared;
 using Toggl.Storage.Onboarding;
 using Toggl.Storage.Settings;
 
-namespace Toggl.Core.MvvmCross.Onboarding.EditView
+namespace Toggl.Core.UI.Onboarding.EditView
 {
     public class CategorizeTimeUsingProjectsOnboardingStep : IOnboardingStep
     {

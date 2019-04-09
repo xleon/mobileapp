@@ -6,7 +6,7 @@ using Toggl.Core.Interactors;
 using Toggl.Core.Models;
 using Toggl.Shared;
 
-namespace Toggl.Core.MvvmCross.ViewModels
+namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public class SyncFailuresViewModel : MvxViewModel

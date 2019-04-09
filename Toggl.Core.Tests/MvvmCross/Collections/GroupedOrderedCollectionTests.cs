@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
-using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.UI.Collections;
 using Xunit;
 
 namespace Toggl.Core.Tests.MvvmCross.Collections

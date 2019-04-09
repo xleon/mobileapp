@@ -3,7 +3,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Toggl.Core.Extensions;
-using Toggl.Core.MvvmCross.ViewModels.Selectable;
+using Toggl.Core.UI.ViewModels.Selectable;
 
 namespace Toggl.Giskard.ViewHolders
 {

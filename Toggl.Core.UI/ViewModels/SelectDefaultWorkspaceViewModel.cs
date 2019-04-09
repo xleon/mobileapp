@@ -16,7 +16,7 @@ using MvvmCross.Navigation;
 using Toggl.Core.Services;
 using Toggl.Storage.Settings;
 
-namespace Toggl.Core.MvvmCross.ViewModels
+namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class SelectDefaultWorkspaceViewModel : MvxViewModelResult<Unit>

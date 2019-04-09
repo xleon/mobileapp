@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Toggl.Core.MvvmCross.Services
+namespace Toggl.Core.UI.Services
 {
     public sealed class StubPasswordManagerService : IPasswordManagerService
     {

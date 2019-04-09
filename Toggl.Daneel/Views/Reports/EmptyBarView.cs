@@ -1,5 +1,5 @@
 ﻿using UIKit;
-using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.UI.Helper;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 
 namespace Toggl.Daneel.Views.Reports

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using Android.Widget;
-using Toggl.Core.MvvmCross.Reactive;
+using Toggl.Core.UI.Reactive;
 using static Android.Widget.CompoundButton;
 
 namespace Toggl.Giskard.Extensions.Reactive

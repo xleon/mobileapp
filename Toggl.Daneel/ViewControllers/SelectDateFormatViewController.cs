@@ -7,9 +7,9 @@ using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Views.Settings;
 using Toggl.Daneel.ViewSources.Generic.TableView;
 using Toggl.Core;
-using Toggl.Core.MvvmCross.Collections;
-using Toggl.Core.MvvmCross.ViewModels;
-using Toggl.Core.MvvmCross.ViewModels.Selectable;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Daneel.ViewControllers

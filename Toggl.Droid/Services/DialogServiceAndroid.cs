@@ -6,7 +6,7 @@ using System.Reactive.Linq;
 using MvvmCross;
 using MvvmCross.Platforms.Android;
 using Toggl.Core;
-using Toggl.Core.MvvmCross.Services;
+using Toggl.Core.UI.Services;
 using Android.App;
 using Android.OS;
 using MvvmCross.Platforms.Android.Views;

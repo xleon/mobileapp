@@ -3,7 +3,7 @@ using UIKit;
 using Toggl.Shared;
 using System;
 using System.Collections.Generic;
-using Toggl.Core.MvvmCross.Collections;
+using Toggl.Core.UI.Collections;
 
 namespace Toggl.Daneel.ViewSources.Generic.TableView
 {

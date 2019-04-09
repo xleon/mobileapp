@@ -3,8 +3,8 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CoreGraphics;
-using Toggl.Core.MvvmCross.Helper;
-using Toggl.Core.MvvmCross.Reactive;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Reactive;
 using Toggl.Shared.Extensions;
 using UIKit;
 

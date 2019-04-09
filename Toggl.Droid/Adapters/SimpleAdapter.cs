@@ -1,7 +1,7 @@
 ﻿using System;
 using Android.Runtime;
 using Android.Views;
-using Toggl.Core.MvvmCross.Interfaces;
+using Toggl.Core.UI.Interfaces;
 using Toggl.Giskard.Adapters.DiffingStrategies;
 using Toggl.Giskard.ViewHolders;
 using Toggl.Shared;

@@ -17,19 +17,19 @@ using Toggl.Core.Diagnostics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.MvvmCross.Collections;
-using Toggl.Core.MvvmCross.Extensions;
-using Toggl.Core.MvvmCross.Parameters;
-using Toggl.Core.MvvmCross.Services;
-using Toggl.Core.MvvmCross.ViewModels.Calendar;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Services;
+using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
-using Toggl.Core.MvvmCross.Transformations;
+using Toggl.Core.UI.Transformations;
 
 [assembly: MvxNavigation(typeof(CalendarViewModel), ApplicationUrls.Calendar.Regex)]
-namespace Toggl.Core.MvvmCross.ViewModels.Calendar
+namespace Toggl.Core.UI.ViewModels.Calendar
 {
     [Preserve(AllMembers = true)]
     public sealed class CalendarViewModel : MvxViewModel

@@ -1,7 +1,7 @@
 ﻿using System;
 using Foundation;
 using Toggl.Core.Extensions;
-using Toggl.Core.MvvmCross.ViewModels.Selectable;
+using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Shared;
 using UIKit;
 

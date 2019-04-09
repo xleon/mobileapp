@@ -9,8 +9,8 @@ using FluentAssertions;
 using Xunit;
 using Microsoft.Reactive.Testing;
 using NUnit.Framework;
-using Toggl.Core.MvvmCross.Collections;
-using Toggl.Core.MvvmCross.Collections.Changes;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Collections.Changes;
 
 namespace Toggl.Core.Tests.MvvmCross.Collections
 {

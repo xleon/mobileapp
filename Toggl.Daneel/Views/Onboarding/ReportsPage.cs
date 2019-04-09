@@ -4,7 +4,7 @@ using CoreGraphics;
 using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using ObjCRuntime;
-using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.UI.Helper;
 using UIKit;
 using static Toggl.Shared.Math;
 

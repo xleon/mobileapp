@@ -9,9 +9,9 @@ using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
-using Toggl.Core.MvvmCross.Services;
-using Toggl.Core.MvvmCross.ViewModels.Calendar;
-using Toggl.Core.MvvmCross.ViewModels.Reports;
+using Toggl.Core.UI.Services;
+using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Services;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
@@ -19,7 +19,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 
-namespace Toggl.Core.MvvmCross.ViewModels
+namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class MainTabBarViewModel : MvxViewModel

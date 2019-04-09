@@ -8,7 +8,7 @@ using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Core.MvvmCross.ViewModels
+namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public class SelectDurationFormatViewModel : MvxViewModel<DurationFormat, DurationFormat>

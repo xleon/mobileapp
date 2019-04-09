@@ -1,7 +1,7 @@
 using Android.Support.V7.Widget;
 using Android.Views;
-using Toggl.Core.MvvmCross.Parameters;
-using Toggl.Core.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 using Toggl.Giskard.ViewHolders;
 
 namespace Toggl.Giskard.Adapters

@@ -5,12 +5,12 @@ using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Core;
-using Toggl.Core.MvvmCross.Helper;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
-using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.UI.Extensions;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -132,7 +132,7 @@ namespace Toggl.Daneel.ViewControllers
             NavigationController.NavigationBarHidden = false;
 
             ResetPasswordButton.SetTitleColor(
-                Core.MvvmCross.Helper.Color.Login.DisabledButtonColor.ToNativeColor(),
+                Core.UI.Helper.Color.Login.DisabledButtonColor.ToNativeColor(),
                 UIControlState.Disabled
             );
 
@@ -152,7 +152,7 @@ namespace Toggl.Daneel.ViewControllers
             var image = UIImage
                 .FromBundle("icBackNoPadding")
                 .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-            var color = Core.MvvmCross.Helper.Color.NavigationBar.BackButton.ToNativeColor();
+            var color = Core.UI.Helper.Color.NavigationBar.BackButton.ToNativeColor();
             var backButton = new UIButton();
             backButton.TintColor = color;
             backButton.SetImage(image, UIControlState.Normal);

@@ -2,7 +2,7 @@
 using System.Linq;
 using MvvmCross.UI;
 
-namespace Toggl.Core.MvvmCross.Helper
+namespace Toggl.Core.UI.Helper
 {
     public static class Color
     {

@@ -9,7 +9,7 @@ using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Views;
 using Toggl.Daneel.Views.Calendar;
 using Toggl.Core.Calendar;
-using Toggl.Core.MvvmCross.Extensions;
+using Toggl.Core.UI.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.Cells.Calendar

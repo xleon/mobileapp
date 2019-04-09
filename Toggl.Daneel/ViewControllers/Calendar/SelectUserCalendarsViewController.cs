@@ -6,7 +6,7 @@ using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
 using Toggl.Core;
-using Toggl.Core.MvvmCross.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Shared.Extensions;
 using UIKit;
 

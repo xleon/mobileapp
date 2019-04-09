@@ -7,7 +7,7 @@ using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Tests.Generators;
 using Xunit;

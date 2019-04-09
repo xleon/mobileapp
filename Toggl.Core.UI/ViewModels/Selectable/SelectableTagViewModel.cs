@@ -1,7 +1,7 @@
-﻿using Toggl.Core.MvvmCross.Interfaces;
+﻿using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 
-namespace Toggl.Core.MvvmCross.ViewModels
+namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public abstract class SelectableTagBaseViewModel : IDiffableByIdentifier<SelectableTagBaseViewModel>

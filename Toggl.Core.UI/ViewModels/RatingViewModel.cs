@@ -8,15 +8,15 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
-using Toggl.Core.MvvmCross.Extensions;
-using Toggl.Core.MvvmCross.ViewModels.Hints;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.ViewModels.Hints;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 
-namespace Toggl.Core.MvvmCross.ViewModels
+namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class RatingViewModel : MvxViewModel

@@ -2,7 +2,7 @@
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using Toggl.Core.MvvmCross.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.Calendar;
 
 namespace Toggl.Giskard.ViewHolders
 {

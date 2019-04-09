@@ -7,7 +7,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Tests.Generators;
 using Toggl.Multivac;

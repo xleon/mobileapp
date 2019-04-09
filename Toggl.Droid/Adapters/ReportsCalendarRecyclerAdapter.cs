@@ -4,8 +4,8 @@ using Android.Graphics;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Toggl.Core.MvvmCross.Parameters;
-using Toggl.Core.MvvmCross.ViewModels.ReportsCalendar;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.ViewHolders;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Shared;
 
-namespace Toggl.Core.MvvmCross.Parameters
+namespace Toggl.Core.UI.Parameters
 {
     [Preserve(AllMembers = true)]
     public sealed class BrowserParameters

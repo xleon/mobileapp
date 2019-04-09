@@ -2,7 +2,7 @@
 using Android.Graphics;
 using Android.Text;
 using Android.Text.Style;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.ViewModels;
 using static Toggl.Core.Helper.Color;
 
 namespace Toggl.Giskard.Extensions

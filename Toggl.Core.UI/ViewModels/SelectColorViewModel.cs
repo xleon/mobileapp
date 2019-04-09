@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using MvvmCross.UI;
-using Toggl.Core.MvvmCross.Extensions;
-using Toggl.Core.MvvmCross.Parameters;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Color = Toggl.Core.MvvmCross.Helper.Color;
+using Color = Toggl.Core.UI.Helper.Color;
 
-namespace Toggl.Core.MvvmCross.ViewModels
+namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public class SelectColorViewModel : MvxViewModel<ColorParameters, MvxColor>

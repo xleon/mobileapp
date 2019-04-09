@@ -3,7 +3,7 @@ using MvvmCross.UI;
 using Toggl.Core.Calendar;
 using static System.Math;
 
-namespace Toggl.Core.MvvmCross.Extensions
+namespace Toggl.Core.UI.Extensions
 {
     public static class ColorExtensions
     {

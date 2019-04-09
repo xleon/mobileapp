@@ -8,9 +8,9 @@ using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Core;
-using Toggl.Core.MvvmCross.Extensions;
-using Toggl.Core.MvvmCross.Helper;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -158,8 +158,8 @@ namespace Toggl.Daneel.ViewControllers
                 => hasError ? UIColor.White : UIColor.Black;
 
             UIColor loginButtonTitleColor(bool enabled) => enabled
-                ? Core.MvvmCross.Helper.Color.Login.EnabledButtonColor.ToNativeColor()
-                : Core.MvvmCross.Helper.Color.Login.DisabledButtonColor.ToNativeColor();
+                ? Core.UI.Helper.Color.Login.EnabledButtonColor.ToNativeColor()
+                : Core.UI.Helper.Color.Login.DisabledButtonColor.ToNativeColor();
         }
 
         public override void ViewWillAppear(bool animated)
@@ -226,7 +226,7 @@ namespace Toggl.Daneel.ViewControllers
             NavigationController.NavigationBarHidden = true;
 
             LoginButton.SetTitleColor(
-                Core.MvvmCross.Helper.Color.Login.DisabledButtonColor.ToNativeColor(),
+                Core.UI.Helper.Color.Login.DisabledButtonColor.ToNativeColor(),
                 UIControlState.Disabled
             );
 
@@ -256,7 +256,7 @@ namespace Toggl.Daneel.ViewControllers
         private void prepareForgotPasswordButton()
         {
             var boldFont = UIFont.SystemFontOfSize(12, UIFontWeight.Medium);
-            var color = Core.MvvmCross.Helper.Color.Login.ForgotPassword.ToNativeColor();
+            var color = Core.UI.Helper.Color.Login.ForgotPassword.ToNativeColor();
             var text = new NSMutableAttributedString(
                 Resources.LoginForgotPassword, foregroundColor: color);
             var boldText = new NSAttributedString(

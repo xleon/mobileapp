@@ -1,7 +1,7 @@
 ﻿using System.Reactive.Subjects;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Core;
-using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.UI.Helper;
 using Toggl.Core.Suggestions;
 using UIKit;
 

@@ -15,7 +15,7 @@ using Toggl.Giskard.Extensions;
 using Toggl.Giskard.ViewHelpers;
 using Toggl.Giskard.Views;
 using Toggl.Shared;
-using static Toggl.Core.MvvmCross.Helper.Color.Reports;
+using static Toggl.Core.UI.Helper.Color.Reports;
 using Color = Android.Graphics.Color;
 
 namespace Toggl.Giskard.ViewHolders

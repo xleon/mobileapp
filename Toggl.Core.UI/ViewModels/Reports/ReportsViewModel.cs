@@ -16,12 +16,12 @@ using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.MvvmCross.Extensions;
-using Toggl.Core.MvvmCross.Helper;
-using Toggl.Core.MvvmCross.Parameters;
-using Toggl.Core.MvvmCross.Services;
-using Toggl.Core.MvvmCross.ViewModels.Hints;
-using Toggl.Core.MvvmCross.ViewModels.Reports;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Services;
+using Toggl.Core.UI.ViewModels.Hints;
+using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Reports;
 using Toggl.Core.Services;
 using Toggl.Shared;
@@ -29,11 +29,11 @@ using Toggl.Shared.Extensions;
 using Toggl.Shared.Models.Reports;
 using Toggl.Networking.Exceptions;
 using CommonFunctions = Toggl.Shared.Extensions.CommonFunctions;
-using Color = Toggl.Core.MvvmCross.Helper.Color;
+using Color = Toggl.Core.UI.Helper.Color;
 
 [assembly: MvxNavigation(typeof(ReportsViewModel), ApplicationUrls.Reports)]
 
-namespace Toggl.Core.MvvmCross.ViewModels.Reports
+namespace Toggl.Core.UI.ViewModels.Reports
 {
     [Preserve(AllMembers = true)]
     public sealed class ReportsViewModel : MvxViewModel<ReportPeriod>

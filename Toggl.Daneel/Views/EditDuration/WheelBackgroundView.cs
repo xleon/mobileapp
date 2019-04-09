@@ -1,7 +1,7 @@
 ﻿using System;
 using UIKit;
 using CoreAnimation;
-using Toggl.Core.MvvmCross.Helper;
+using Toggl.Core.UI.Helper;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using CoreGraphics;
 using static Toggl.Shared.Math;

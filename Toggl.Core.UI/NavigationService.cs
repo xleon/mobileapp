@@ -5,7 +5,7 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Core.Analytics;
 
-namespace Toggl.Core.MvvmCross
+namespace Toggl.Core.UI
 {
     public sealed class NavigationService : MvxNavigationService
     {

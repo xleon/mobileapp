@@ -1,7 +1,7 @@
 using System;
 using FluentAssertions;
 using FsCheck.Xunit;
-using Toggl.Core.MvvmCross.ViewModels.Reports;
+using Toggl.Core.UI.ViewModels.Reports;
 using Xunit;
 using System.Collections.Generic;
 

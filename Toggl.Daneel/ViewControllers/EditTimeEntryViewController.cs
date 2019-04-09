@@ -11,14 +11,14 @@ using Toggl.Core.Extensions;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Core;
-using Toggl.Core.MvvmCross.Helper;
-using Toggl.Core.MvvmCross.Onboarding.EditView;
-using Toggl.Core.MvvmCross.ViewModels;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Onboarding.EditView;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared.Extensions;
 using UIKit;
 using Toggl.Daneel.Transformations;
 using System.Linq;
-using Toggl.Core.MvvmCross.Transformations;
+using Toggl.Core.UI.Transformations;
 using Toggl.Core.Analytics;
 using System.Reactive;
 

@@ -1,5 +1,5 @@
 using System;
-using Toggl.Core.MvvmCross.ViewModels.ReportsCalendar.QuickSelectShortcuts;
+using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 
 namespace Toggl.Core.Tests.MvvmCross.ViewModels.ReportsCalendarQuickSelectShortcuts
 {

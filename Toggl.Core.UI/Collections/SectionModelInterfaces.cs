@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace Toggl.Core.MvvmCross.Collections
+namespace Toggl.Core.UI.Collections
 {
     public interface IDiffable<TKey>
         where TKey : IEquatable<TKey>

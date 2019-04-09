@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Core.MvvmCross.Reactive;
+using Toggl.Core.UI.Reactive;
 using Toggl.Giskard.Views;
 
 namespace Toggl.Giskard.Extensions.Reactive

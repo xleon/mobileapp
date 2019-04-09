@@ -6,7 +6,7 @@ using Toggl.Shared;
 using Toggl.Storage.Onboarding;
 using Toggl.Storage.Settings;
 
-namespace Toggl.Core.MvvmCross.Onboarding.StartTimeEntryView
+namespace Toggl.Core.UI.Onboarding.StartTimeEntryView
 {
     public sealed class AddProjectOrTagOnboardingStep : IOnboardingStep
     {

@@ -2,12 +2,12 @@ using System;
 using System.Linq;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.MvvmCross.Transformations;
-using Toggl.Core.MvvmCross.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.Transformations;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Shared;
 using Toggl.Storage;
 
-namespace Toggl.Core.MvvmCross.Extensions
+namespace Toggl.Core.UI.Extensions
 {
     public static class TimeEntryExtensions
     {

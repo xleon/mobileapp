@@ -10,7 +10,7 @@ using NSubstitute;
 using Toggl.Core.DataSources;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.MvvmCross.ViewModels.Reports;
+using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Multivac;
