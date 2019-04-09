@@ -39,7 +39,7 @@ namespace Toggl.Core {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Toggl.Foundation.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Toggl.Core.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -1155,15 +1155,6 @@ namespace Toggl.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sorry, this name is already taken.
-        /// </summary>
-        public static string NameTakenError {
-            get {
-                return ResourceManager.GetString("NameTakenError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to New Project.
         /// </summary>
         public static string NewProject {
@@ -1561,6 +1552,15 @@ namespace Toggl.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sorry, this project already exists.
+        /// </summary>
+        public static string ProjectNameTakenError {
+            get {
+                return ResourceManager.GetString("ProjectNameTakenError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Projects.
         /// </summary>
         public static string Projects {
@@ -1719,12 +1719,6 @@ namespace Toggl.Core {
         public static string SelectCalendars {
             get {
                 return ResourceManager.GetString("SelectCalendars", resourceCulture);
-            }
-        }
-        
-        public static string ProjectNameTakenError {
-            get {
-                return ResourceManager.GetString("ProjectNameTakenError", resourceCulture);
             }
         }
         
