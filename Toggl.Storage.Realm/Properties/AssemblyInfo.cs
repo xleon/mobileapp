@@ -7,4 +7,4 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: InternalsVisibleTo("Toggl.PrimeRadiant.Tests")]
+[assembly: InternalsVisibleTo("Toggl.Storage.Tests")]

@@ -8,5 +8,5 @@ using Toggl.Shared;
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: InternalsVisibleTo("Toggl.Foundation.Tests")]
+[assembly: InternalsVisibleTo("Toggl.Core.Tests")]
 [assembly: LinkerSafe]
