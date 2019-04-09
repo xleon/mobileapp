@@ -16,11 +16,11 @@
     <OutputPath>..\bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Toggl.Foundation\Toggl.Core.csproj" />
-    <ProjectReference Include="..\Toggl.Multivac.Tests\Toggl.Shared.Tests.csproj" />
-    <ProjectReference Include="..\Toggl.Multivac\Toggl.Shared.csproj" />
-    <ProjectReference Include="..\Toggl.PrimeRadiant.Realm\Toggl.Storage.Realm.csproj" />
-    <ProjectReference Include="..\Toggl.PrimeRadiant\Toggl.Storage.csproj" />
+    <ProjectReference Include="..\Toggl.Core\Toggl.Core.csproj" />
+    <ProjectReference Include="..\Toggl.Shared.Tests\Toggl.Shared.Tests.csproj" />
+    <ProjectReference Include="..\Toggl.Shared\Toggl.Shared.csproj" />
+    <ProjectReference Include="..\Toggl.Storage.Realm\Toggl.Storage.Realm.csproj" />
+    <ProjectReference Include="..\Toggl.Storage\Toggl.Storage.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="xunit" Version="2.4.0" />

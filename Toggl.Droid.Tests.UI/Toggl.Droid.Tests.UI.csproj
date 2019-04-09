@@ -46,7 +46,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Toggl.Giskard\Toggl.Droid.csproj">
+    <ProjectReference Include="..\Toggl.Droid\Toggl.Droid.csproj">
       <Project>{CEB93402-CEAE-4D6F-8169-3ACA1F792DF4}</Project>
       <Name>Toggl.Droid</Name>
       <ReferenceOutputAssembly>False</ReferenceOutputAssembly>

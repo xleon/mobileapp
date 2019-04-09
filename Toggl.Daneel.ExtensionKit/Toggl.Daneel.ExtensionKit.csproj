@@ -71,7 +71,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Toggl.Multivac\Toggl.Shared.csproj">
+    <ProjectReference Include="..\Toggl.Shared\Toggl.Shared.csproj">
       <Project>{6AF7BE5E-AF9D-4EA7-AF7F-28D07B8DEF24}</Project>
       <Name>Toggl.Shared</Name>
     </ProjectReference>

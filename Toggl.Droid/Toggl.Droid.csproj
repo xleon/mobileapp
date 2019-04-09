@@ -1080,27 +1080,27 @@
     <AndroidResource Include="Resources\drawable\CalendarHeaderDayBackground.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Toggl.Foundation\Toggl.Core.csproj">
+    <ProjectReference Include="..\Toggl.Core\Toggl.Core.csproj">
       <Project>{09D75C0B-3367-4678-97EF-6EADE64AF09C}</Project>
       <Name>Toggl.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Toggl.Foundation.MvvmCross\Toggl.Core.UI.csproj">
+    <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">
       <Project>{CB2B0786-217F-455A-9349-0FC69468D3B6}</Project>
       <Name>Toggl.Core.UI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Toggl.Multivac\Toggl.Shared.csproj">
+    <ProjectReference Include="..\Toggl.Shared\Toggl.Shared.csproj">
       <Project>{6AF7BE5E-AF9D-4EA7-AF7F-28D07B8DEF24}</Project>
       <Name>Toggl.Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Toggl.PrimeRadiant\Toggl.Storage.csproj">
+    <ProjectReference Include="..\Toggl.Storage\Toggl.Storage.csproj">
       <Project>{3A603451-31B2-4975-9366-3212BEA78F57}</Project>
       <Name>Toggl.Storage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Toggl.PrimeRadiant.Realm\Toggl.Storage.Realm.csproj">
+    <ProjectReference Include="..\Toggl.Storage.Realm\Toggl.Storage.Realm.csproj">
       <Project>{7716BCE9-A3D4-4359-A02E-94380BDF83C7}</Project>
       <Name>Toggl.Storage.Realm</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Toggl.Ultrawave\Toggl.Networking.csproj">
+    <ProjectReference Include="..\Toggl.Networking\Toggl.Networking.csproj">
       <Project>{5ACEB155-9DD4-4309-BCC9-997A09950393}</Project>
       <Name>Toggl.Networking</Name>
     </ProjectReference>
