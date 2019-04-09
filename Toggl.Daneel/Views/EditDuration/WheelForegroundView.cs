@@ -174,7 +174,7 @@ namespace Toggl.Daneel.Views.EditDuration
 
         private void calculateEndPointPositions()
         {
-            var center = Center.ToMultivacPoint();
+            var center = Center.ToTogglPoint();
 
             startTimePosition = PointOnCircumference(center, startTimeAngle, endPointsRadius).ToCGPoint();
             endTimePosition = PointOnCircumference(center, endTimeAngle, endPointsRadius).ToCGPoint();
@@ -231,7 +231,7 @@ namespace Toggl.Daneel.Views.EditDuration
                     break;
             }
 
-            var currentAngle = AngleBetween(position.ToMultivacPoint(), Center.ToMultivacPoint());
+            var currentAngle = AngleBetween(position.ToTogglPoint(), Center.ToTogglPoint());
 
             var angleChange = currentAngle - previousAngle;
             while (angleChange < -Math.PI) angleChange += FullCircle;
@@ -273,7 +273,7 @@ namespace Toggl.Daneel.Views.EditDuration
                 if (updateType == WheelUpdateType.EditBothAtOnce)
                 {
                     editBothAtOnceStartTimeAngleOffset =
-                        AngleBetween(position.ToMultivacPoint(), Center.ToMultivacPoint()) - startTimeAngle;
+                        AngleBetween(position.ToTogglPoint(), Center.ToTogglPoint()) - startTimeAngle;
                 }
 
                 return true;
@@ -312,11 +312,11 @@ namespace Toggl.Daneel.Views.EditDuration
             => (extendedRadius ? extendedRadiusMultiplier : 1) * (Thickness / 2);
 
         private static bool isCloseEnough(CGPoint tapPosition, CGPoint endPoint, nfloat radius)
-            => DistanceSq(tapPosition.ToMultivacPoint(), endPoint.ToMultivacPoint()) <= radius * radius;
+            => DistanceSq(tapPosition.ToTogglPoint(), endPoint.ToTogglPoint()) <= radius * radius;
 
         private bool isOnTheWheelBetweenStartAndStop(CGPoint point)
         {
-            var distanceFromCenterSq = DistanceSq(Center.ToMultivacPoint(), point.ToMultivacPoint());
+            var distanceFromCenterSq = DistanceSq(Center.ToTogglPoint(), point.ToTogglPoint());
 
             if (distanceFromCenterSq < SmallRadius * SmallRadius
                 || distanceFromCenterSq > Radius * Radius)
@@ -324,7 +324,7 @@ namespace Toggl.Daneel.Views.EditDuration
                 return false;
             }
 
-            var angle = AngleBetween(point.ToMultivacPoint(), Center.ToMultivacPoint());
+            var angle = AngleBetween(point.ToTogglPoint(), Center.ToTogglPoint());
             return isFullCircle || angle.IsBetween(startTimeAngle, endTimeAngle);
         }
 
