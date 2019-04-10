@@ -1,20 +1,18 @@
 using System;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.Services;
 using Toggl.Foundation.Services;
-using Toggl.Foundation.Sync;
 using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using Toggl.PrimeRadiant.Settings;
@@ -190,7 +188,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
                 userAccessManager
                     .Login(emailSubject.Value, passwordSubject.Value)
                     .Track(analyticsService.Login, AuthenticationMethod.EmailAndPassword)
-                    .Subscribe(onInteractorFactory, onError, onCompleted);
+                    .Subscribe(_ => onAuthenticated(), onError, onCompleted);
         }
 
         public void TogglePasswordVisibility()
@@ -205,7 +203,7 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             loginDisposable = userAccessManager
                 .LoginWithGoogle()
                 .Track(analyticsService.Login, AuthenticationMethod.Google)
-                .Subscribe(onInteractorFactory, onError, onCompleted);
+                .Subscribe(_ => onAuthenticated(), onError, onCompleted);
         }
 
         private Task signup()
@@ -249,13 +247,13 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Login();
         }
 
-        private async void onInteractorFactory(ISyncManager syncManager)
+        private async void onAuthenticated()
         {
             lastTimeUsageStorage.SetLogin(timeService.CurrentDateTime);
 
-            await syncManager.ForceFullSync();
-
             onboardingStorage.SetIsNewUser(false);
+
+            await UIDependencyContainer.Instance.SyncManager.ForceFullSync();
 
             await navigationService.Navigate<MainTabBarViewModel>();
         }

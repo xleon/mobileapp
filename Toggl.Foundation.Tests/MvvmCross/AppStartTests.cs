@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using MvvmCross.ViewModels;
 using NSubstitute;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.DataSources.Interfaces;
 using Toggl.Foundation.Interactors;
 using Toggl.Foundation.Login;
 using Toggl.Foundation.Models.Interfaces;
 using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Foundation.Services;
 using Toggl.Foundation.Sync;
-using Toggl.Foundation.Tests.Generators;
-using Toggl.PrimeRadiant.Models;
+using Toggl.Multivac;
 using Toggl.PrimeRadiant.Settings;
+using Toggl.Ultrawave;
 using Xunit;
 
 namespace Toggl.Foundation.Tests.MvvmCross
@@ -25,7 +23,6 @@ namespace Toggl.Foundation.Tests.MvvmCross
         {
             protected AppStart<OnboardingViewModel> AppStart { get; }
             protected IMvxApplication App { get; } = Substitute.For<IMvxApplication>();
-            protected ISyncManager SyncManager { get; } = Substitute.For<ISyncManager>();
             protected IUserAccessManager UserAccessManager { get; } = Substitute.For<IUserAccessManager>();
             protected IOnboardingStorage OnboardingStorage { get; } = Substitute.For<IOnboardingStorage>();
             protected IAccessRestrictionStorage AccessRestrictionStorage { get; } =
@@ -33,44 +30,23 @@ namespace Toggl.Foundation.Tests.MvvmCross
 
             protected AppStartTest()
             {
-                AppStart = new AppStart<OnboardingViewModel>(App, TimeService, UserAccessManager, OnboardingStorage, NavigationService, AccessRestrictionStorage);
-                UserAccessManager.TryInitializingAccessToUserData(out _, out _).Returns(x =>
+                var api = Substitute.For<ITogglApi>();
+                UserAccessManager.UserLoggedIn.Returns(Observable.Return(api));
+
+                var dependencyContainer = new TestDependencyContainer
                 {
-                    x[0] = SyncManager;
-                    x[1] = InteractorFactory;
-                    return true;
-                });
-            }
-        }
+                    MockTimeService = TimeService,
+                    MockUserAccessManager = UserAccessManager,
+                    MockNavigationService = NavigationService,
+                    MockOnboardingStorage = OnboardingStorage,
+                    MockAccessRestrictionStorage = AccessRestrictionStorage,
+                    MockSyncManager = Substitute.For<ISyncManager>(),
+                    MockInteractorFactory = Substitute.For<IInteractorFactory>(),
+                    MockBackgroundSyncService = Substitute.For<IBackgroundSyncService>()
+                };
+                UserAccessManager.CheckIfLoggedIn().Returns(true);
 
-        public sealed class TheConstructor : AppStartTest
-        {
-            [Theory, LogIfTooSlow]
-            [ConstructorData]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(
-                bool useTimeService,
-                bool useUserAccessManager,
-                bool useOnboardingStorage,
-                bool userNavigationService,
-                bool useAccessRestrictionStorage)
-            {
-                var timeService = useTimeService ? TimeService : null;
-                var userAccessManager = useUserAccessManager ? UserAccessManager : null;
-                var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
-                var navigationService = userNavigationService ? NavigationService : null;
-                var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
-
-                Action tryingToConstructWithEmptyParameters =
-                    () => new AppStart<OnboardingViewModel>(
-                        App,
-                        timeService,
-                        userAccessManager,
-                        onboardingStorage,
-                        navigationService,
-                        accessRestrictionStorage);
-
-                tryingToConstructWithEmptyParameters
-                    .Should().Throw<ArgumentNullException>();
+                AppStart = new AppStart<OnboardingViewModel>(App, dependencyContainer);
             }
         }
 
@@ -84,7 +60,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                 AppStart.Start();
 
                 await NavigationService.Received().Navigate<OutdatedAppViewModel>();
-                UserAccessManager.DidNotReceive().TryInitializingAccessToUserData(out _, out _);
+                UserAccessManager.DidNotReceive().CheckIfLoggedIn();
             }
 
             [Fact, LogIfTooSlow]
@@ -95,7 +71,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                 AppStart.Start();
 
                 await NavigationService.Received().Navigate<OutdatedAppViewModel>();
-                UserAccessManager.DidNotReceive().TryInitializingAccessToUserData(out _, out _);
+                UserAccessManager.DidNotReceive().CheckIfLoggedIn();
             }
 
             [Fact, LogIfTooSlow]
@@ -105,7 +81,6 @@ namespace Toggl.Foundation.Tests.MvvmCross
 
                 AppStart.Start();
 
-                await SyncManager.DidNotReceive().ForceFullSync();
                 await NavigationService.Received().Navigate<TokenResetViewModel>();
             }
 
@@ -118,7 +93,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
                 AppStart.Start();
 
                 await NavigationService.Received().Navigate<OutdatedAppViewModel>();
-                UserAccessManager.DidNotReceive().TryInitializingAccessToUserData(out _, out _);
+                UserAccessManager.DidNotReceive().CheckIfLoggedIn();
             }
 
             [Fact, LogIfTooSlow]
@@ -131,7 +106,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
 
                 await NavigationService.Received().Navigate<OutdatedAppViewModel>();
                 await NavigationService.DidNotReceive().Navigate<TokenResetViewModel>();
-                UserAccessManager.DidNotReceive().TryInitializingAccessToUserData(out _, out _);
+                UserAccessManager.DidNotReceive().CheckIfLoggedIn();
             }
 
             [Fact, LogIfTooSlow]
@@ -155,7 +130,7 @@ namespace Toggl.Foundation.Tests.MvvmCross
             [Fact, LogIfTooSlow]
             public async Task ShowsTheOnboardingViewModelIfTheUserHasNotLoggedInPreviously()
             {
-                UserAccessManager.TryInitializingAccessToUserData(out _, out _).Returns(false);
+                UserAccessManager.CheckIfLoggedIn().Returns(false);
 
                 AppStart.Start();
 
@@ -173,11 +148,26 @@ namespace Toggl.Foundation.Tests.MvvmCross
             [Fact, LogIfTooSlow]
             public void SetsFirstOpenedTime()
             {
+
                 TimeService.CurrentDateTime.Returns(new DateTimeOffset(2020, 1, 2, 3, 4, 5, TimeSpan.Zero));
 
                 AppStart.Start();
 
                 OnboardingStorage.Received().SetFirstOpened(TimeService.CurrentDateTime);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void MarksTheUserAsNotNewWhenUsingTheAppForTheFirstTimeAfterSixtyDays()
+            {
+                var now = DateTimeOffset.Now;
+
+                TimeService.CurrentDateTime.Returns(now);
+                OnboardingStorage.GetLastOpened().Returns(now.AddDays(-60));
+
+                AppStart.Start();
+
+                OnboardingStorage.Received().SetLastOpened(now);
+                OnboardingStorage.Received().SetIsNewUser(false);
             }
         }
     }

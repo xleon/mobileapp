@@ -17,7 +17,6 @@ using Android.Views;
 using Toggl.Foundation.Analytics;
 using Toggl.Foundation.Diagnostics;
 using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Collections;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
@@ -26,6 +25,7 @@ using Toggl.Giskard.Adapters;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.Helper;
+using Toggl.Giskard.Presentation;
 using Toggl.Giskard.Services;
 using Toggl.Giskard.ViewHelpers;
 using Toggl.Multivac.Extensions;
@@ -37,7 +37,7 @@ using FoundationResources = Toggl.Foundation.Resources;
 
 namespace Toggl.Giskard.Fragments
 {
-    public sealed partial class MainFragment : ReactiveFragment<MainViewModel>
+    public sealed partial class MainFragment : ReactiveFragment<MainViewModel>, IScrollableToTop
     {
         private const int snackbarDuration = 5000;
         private NotificationManager notificationManager;
@@ -217,6 +217,11 @@ namespace Toggl.Giskard.Fragments
             onCreateStopwatch.Stop();
 
             return view;
+        }
+
+        public void ScrollToTop()
+        {
+            mainRecyclerView.SmoothScrollToPosition(0);
         }
 
         public ISpannable CreateProjectClientTaskLabel(IThreadSafeTimeEntry te)

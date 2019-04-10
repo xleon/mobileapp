@@ -22,7 +22,6 @@
     <PackageReference Include="MvvmCross" Version="6.1.2" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModels\Settings\" />
-    <Folder Include="ViewModels\TimeEntriesLog\" />
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 </Project>

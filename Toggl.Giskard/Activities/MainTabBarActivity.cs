@@ -12,6 +12,7 @@ using Toggl.Foundation.MvvmCross.ViewModels.Reports;
 using Toggl.Giskard.Extensions;
 using Toggl.Giskard.Extensions.Reactive;
 using Toggl.Giskard.Fragments;
+using Toggl.Giskard.Presentation;
 using Toggl.Multivac.Extensions;
 using Fragment = Android.Support.V4.App.Fragment;
 
@@ -65,24 +66,16 @@ namespace Toggl.Giskard.Activities
             switch (itemId)
             {
                 case Resource.Id.MainTabTimerItem:
-                    var mainFragment = new MainFragment();
-                    mainFragment.ViewModel = ViewModel.Tabs[0] as MainViewModel;
-                    fragment = mainFragment;
+                    fragment = new MainFragment { ViewModel = ViewModel.Tabs[0] as MainViewModel };
                     break;
                 case Resource.Id.MainTabReportsItem:
-                    var reportsFragment = new ReportsFragment();
-                    reportsFragment.ViewModel = ViewModel.Tabs[1] as ReportsViewModel;
-                    fragment = reportsFragment;
+                    fragment = new ReportsFragment { ViewModel = ViewModel.Tabs[1] as ReportsViewModel };
                     break;
                 case Resource.Id.MainTabCalendarItem:
-                    var calendarFragment = new CalendarFragment();
-                    calendarFragment.ViewModel = ViewModel.Tabs[2] as CalendarViewModel;
-                    fragment = calendarFragment;
+                    fragment = new CalendarFragment { ViewModel = ViewModel.Tabs[2] as CalendarViewModel };
                     break;
                 case Resource.Id.MainTabSettinsItem:
-                    var settingsFragment = new SettingsFragment();
-                    settingsFragment.ViewModel = ViewModel.Tabs[3] as SettingsViewModel;
-                    fragment = settingsFragment;
+                    fragment = new SettingsFragment { ViewModel = ViewModel.Tabs[3] as SettingsViewModel };
                     break;
                 default:
                     throw new ArgumentException($"Unexpected item id {itemId}");
@@ -107,11 +100,17 @@ namespace Toggl.Giskard.Activities
 
         private void onTabSelected(IMenuItem item)
         {
-            if (item.ItemId == navigationView.SelectedItemId)
-                return;
-
             var fragment = getCachedFragment(item.ItemId);
-            showFragment(fragment);
+            if (item.ItemId != navigationView.SelectedItemId)
+            {
+                showFragment(fragment);
+                return;
+            }
+
+            if (fragment is IScrollableToTop scrollableToTop)
+            {
+                scrollableToTop.ScrollToTop();
+            }
         }
 
         private void showFragment(Fragment fragment)

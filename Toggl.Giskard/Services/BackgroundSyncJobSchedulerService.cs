@@ -4,7 +4,6 @@ using Android.App.Job;
 using MvvmCross;
 using MvvmCross.Platforms.Android.Core;
 using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Interactors;
 
 namespace Toggl.Giskard.Services
 {
@@ -28,10 +27,11 @@ namespace Toggl.Giskard.Services
                 .EnsureSingletonAvailable(ApplicationContext)
                 .EnsureInitialized();
 
-            if (!Mvx.TryResolve<IInteractorFactory>(out var interactorFactory))
+            var dependencyContainer = AndroidDependencyContainer.Instance;
+            if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())
                 return false;
 
-            disposable = interactorFactory
+            disposable = dependencyContainer.InteractorFactory
                 .RunBackgroundSync()
                 .Execute()
                 .Subscribe(_ => JobFinished(@params, false));
@@ -41,8 +41,9 @@ namespace Toggl.Giskard.Services
 
         public override bool OnStopJob(JobParameters @params)
         {
-            Mvx.TryResolve<IAnalyticsService>(out var analyticsService);
-            analyticsService?.BackgroundSyncMustStopExcecution.Track();
+            AndroidDependencyContainer
+                .Instance.AnalyticsService
+                .BackgroundSyncMustStopExcecution.Track();
             return true;
         }
     }
