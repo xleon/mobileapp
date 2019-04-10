@@ -13,6 +13,8 @@ namespace Toggl.Foundation.DataSources.Interfaces
     {
         IObservable<TThreadsafe> GetById(long id);
 
+        IObservable<IEnumerable<TThreadsafe>> GetByIds(long[] ids);
+
         IObservable<TThreadsafe> ChangeId(long currentId, long newId);
 
         IObservable<IEnumerable<TThreadsafe>> GetAll(bool includeInaccessibleEntities = false);

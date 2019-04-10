@@ -27,6 +27,6 @@ namespace Toggl.Foundation.Interactors.Generic
         }
 
         public IObservable<IEnumerable<TThreadsafe>> Execute()
-            => dataSource.GetAll(entry => ids.Contains(entry.Id), includeInaccessibleEntities: true);
+            => dataSource.GetByIds(ids);
     }
 }

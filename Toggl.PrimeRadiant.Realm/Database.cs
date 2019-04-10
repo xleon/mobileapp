@@ -30,6 +30,7 @@ namespace Toggl.PrimeRadiant.Realm
                 getRealmInstance,
                 (collection, realm) => new RealmWorkspaceFeatureCollection(collection, realm),
                 id => x => x.WorkspaceId == id,
+                ids => x => ids.Contains(x.WorkspaceId),
                 features => features.WorkspaceId);
         }
 
@@ -67,6 +68,7 @@ namespace Toggl.PrimeRadiant.Realm
                     getRealmInstance,
                     (parameter, realm) => new RealmSinceParameter(parameter),
                     id => entity => entity.Id == id,
+                    ids => entity => ids.Contains(entity.Id),
                     parameter => parameter.Id);
 
             return new SinceParameterStorage(sinceParametersRealmAdapter);

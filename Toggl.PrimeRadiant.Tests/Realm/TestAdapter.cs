@@ -12,19 +12,24 @@ namespace Toggl.PrimeRadiant.Tests.Realm
     {
         private readonly List<T> list = new List<T>();
         private readonly Func<long, Predicate<T>> matchById;
+        private readonly Func<long[], Predicate<T>> matchByIds;
 
         public GenericTestAdapter()
-            : this(id => e => e.Id == id)
+            : this(id => e => e.Id == id, ids => e => ids.Contains(e.Id))
         {
         }
 
-        public GenericTestAdapter(Func<long, Predicate<T>> matchById)
+        public GenericTestAdapter(Func<long, Predicate<T>> matchById, Func<long[], Predicate<T>> matchByIds)
         {
             this.matchById = matchById;
+            this.matchByIds = matchByIds;
         }
 
         public T Get(long id)
             => list.Single(entity => matchById(id)(entity));
+
+        public IEnumerable<T> Get(long[] ids)
+            => list.Where(entity => matchByIds(ids)(entity));
 
         public T ChangeId(long currentId, long newId)
         {
@@ -89,8 +94,8 @@ namespace Toggl.PrimeRadiant.Tests.Realm
         {
         }
 
-        public TestAdapter(Func<long, Predicate<TestModel>> matchById)
-            : base(matchById)
+        public TestAdapter(Func<long, Predicate<TestModel>> matchById, Func<long[], Predicate<TestModel>> matchByIds)
+            : base(matchById, matchByIds)
         {
         }
     }

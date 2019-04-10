@@ -32,6 +32,9 @@ namespace Toggl.Foundation.DataSources
         public IObservable<TThreadsafe> GetById(long id)
             => repository.GetById(id).Select(Convert);
 
+        public IObservable<IEnumerable<TThreadsafe>> GetByIds(long[] ids)
+            => repository.GetByIds(ids).Select(entities => entities.Select(Convert));
+
         public virtual IObservable<TThreadsafe> ChangeId(long currentId, long newId)
             => repository.ChangeId(currentId, newId).Select(Convert);
 
