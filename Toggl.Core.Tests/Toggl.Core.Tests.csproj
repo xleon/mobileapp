@@ -32,8 +32,4 @@
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="UI\ViewModels\ReportsCalendarQuickSelectShortcuts\ReportsCalendarLastWeekQuickSelectShortcutTests.cs" />
-    <Compile Remove="Sync\States\CleanUp\TrackInaccessibleDataBeforeCleanUpStateTests.cs" />
-  </ItemGroup>
 </Project>
