@@ -4,20 +4,20 @@ using CoreGraphics;
 using MvvmCross;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
+using Toggl.Daneel.Presentation;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Views.Calendar;
 using Toggl.Daneel.ViewSources;
 using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.Extensions;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
-using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers
 {
     [TabPresentation]
-    public sealed partial class CalendarViewController : ReactiveViewController<CalendarViewModel>
+    public sealed partial class CalendarViewController : ReactiveViewController<CalendarViewModel>, IScrollableToTop
     {
         private const double minimumOffsetOfCurrentTimeIndicatorFromScreenEdge = 0.2;
         private const double middleOfTheDay = 12;
@@ -36,7 +36,7 @@ namespace Toggl.Daneel.ViewControllers
         public CalendarViewController()
             : base(nameof(CalendarViewController))
         {
-            timeService = Mvx.Resolve<ITimeService>();
+            timeService = IosDependencyContainer.Instance.TimeService;
         }
 
         public override void ViewDidLoad()
@@ -140,6 +140,11 @@ namespace Toggl.Daneel.ViewControllers
                 return;
 
             selectGoodScrollPoint(timeService.CurrentDateTime.LocalDateTime.TimeOfDay);
+        }
+
+        public void ScrollToTop()
+        {
+            CalendarCollectionView.SetContentOffset(CGPoint.Empty, true);
         }
 
         private void selectGoodScrollPoint(TimeSpan timeOfDay)

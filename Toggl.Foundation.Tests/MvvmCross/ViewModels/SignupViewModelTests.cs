@@ -6,17 +6,15 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck;
-using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using NUnit.Framework;
 using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
 using Toggl.Foundation.Exceptions;
 using Toggl.Foundation.Interactors;
+using Toggl.Foundation.MvvmCross;
 using Toggl.Foundation.MvvmCross.Parameters;
 using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Sync;
 using Toggl.Foundation.Tests.Generators;
 using Toggl.Multivac;
 using Toggl.Multivac.Models;
@@ -63,6 +61,9 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 Api.Location.Get().Returns(Observable.Return(Location));
 
                 ApiFactory.CreateApiWith(Arg.Any<Credentials>()).Returns(Api);
+
+                var container = new TestDependencyContainer { MockSyncManager = SyncManager };
+                TestDependencyContainer.Initialize(container);
             }
         }
 
@@ -283,7 +284,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 NavigationService.Navigate<TermsOfServiceViewModel, bool>().Returns(true);
                 UserAccessManager
                     .SignUpWithGoogle(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>())
-                    .Returns(Observable.Throw<ISyncManager>(new Exception()));
+                    .Returns(Observable.Throw<Unit>(new Exception()));
 
                 ViewModel.GoogleSignup.Execute();
                 ViewModel.GoogleSignup.Execute();
@@ -319,7 +320,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 [Fact, LogIfTooSlow]
                 public void DoesNothingWhenThePageIsCurrentlyLoading()
                 {
-                    var never = Observable.Never<ISyncManager>();
+                    var never = Observable.Never<Unit>();
                     UserAccessManager.SignUpWithGoogle(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>()).Returns(never);
                     ViewModel.GoogleSignup.Execute();
                     ViewModel.GoogleSignup.Execute();
@@ -335,7 +336,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.IsLoading.Subscribe(observer);
 
                     UserAccessManager.SignUpWithGoogle(true, Arg.Any<int>(), Arg.Any<string>()).Returns(
-                        Observable.Never<ISyncManager>());
+                        Observable.Never<Unit>());
 
                     ViewModel.GoogleSignup.Execute();
 
@@ -350,7 +351,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 public void TracksGoogleSignupEvent()
                 {
                     UserAccessManager.SignUpWithGoogle(true, Arg.Any<int>(), Arg.Any<string>()).Returns(
-                        Observable.Return(Substitute.For<ISyncManager>()));
+                        Observable.Return(Unit.Default));
 
                     ViewModel.GoogleSignup.Execute();
 
@@ -365,7 +366,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.IsLoading.Subscribe(observer);
 
                     UserAccessManager.SignUpWithGoogle(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>()).Returns(
-                        Observable.Throw<ISyncManager>(new GoogleLoginException(false)));
+                        Observable.Throw<Unit>(new GoogleLoginException(false)));
 
                     ViewModel.GoogleSignup.Execute();
 
@@ -381,7 +382,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 public void DoesNotNavigateWhenTheLoginFails()
                 {
                     UserAccessManager.SignUpWithGoogle(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>()).Returns(
-                        Observable.Throw<ISyncManager>(new GoogleLoginException(false)));
+                        Observable.Throw<Unit>(new GoogleLoginException(false)));
 
                     ViewModel.GoogleSignup.Execute();
 
@@ -398,7 +399,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     ViewModel.ErrorMessage.Subscribe(errorTextObserver);
 
                     UserAccessManager.SignUpWithGoogle(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>()).Returns(
-                        Observable.Throw<ISyncManager>(new GoogleLoginException(true)));
+                        Observable.Throw<Unit>(new GoogleLoginException(true)));
 
                     ViewModel.GoogleSignup.Execute();
 
@@ -427,7 +428,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
 
                         UserAccessManager
                             .SignUpWithGoogle(true, Arg.Any<int>(), Arg.Any<string>())
-                            .Returns(Observable.Return(SyncManager));
+                            .Returns(Observable.Return(Unit.Default));
 
                         NavigationService.Navigate<TermsOfServiceViewModel, bool>().Returns(true);
                     }
@@ -531,7 +532,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 UserAccessManager
                     .SignUp(Arg.Any<Email>(), Arg.Any<Password>(), true, Arg.Any<int>(), Arg.Any<string>())
                     .Returns(
-                        Observable.Throw<ISyncManager>(exception)
+                        Observable.Throw<Unit>(exception)
                     );
                 NavigationService.Navigate<TermsOfServiceViewModel, bool>();
                 ViewModel.SetEmail(ValidEmail);
@@ -650,7 +651,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 NavigationService.Navigate<TermsOfServiceViewModel, bool>().Returns(true);
                 UserAccessManager
                     .SignUp(Arg.Any<Email>(), Arg.Any<Password>(), Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>())
-                    .Returns(Observable.Throw<ISyncManager>(new Exception()));
+                    .Returns(Observable.Throw<Unit>(new Exception()));
 
                 ViewModel.Signup.Execute();
                 ViewModel.Signup.Execute();
@@ -725,7 +726,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                         ViewModel.SetPassword(ValidPassword);
                         UserAccessManager
                             .SignUp(Arg.Any<Email>(), Arg.Any<Password>(), Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>())
-                            .Returns(Observable.Return(SyncManager));
+                            .Returns(Observable.Return(Unit.Default));
                         NavigationService.Navigate<TermsOfServiceViewModel, bool>().Returns(true);
                     }
 
@@ -768,7 +769,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                     {
                         UserAccessManager
                             .SignUp(Arg.Any<Email>(), Arg.Any<Password>(), Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>())
-                            .Returns(Observable.Throw<ISyncManager>(exception));
+                            .Returns(Observable.Throw<Unit>(exception));
                     }
 
                     protected override void AdditionalViewModelSetup()
@@ -897,15 +898,6 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
             protected abstract void ExecuteCommand();
 
             [Fact, LogIfTooSlow]
-            public void StartsSyncing()
-            {
-                ExecuteCommand();
-
-                TestScheduler.Start();
-                SyncManager.Received().ForceFullSync();
-            }
-
-            [Fact, LogIfTooSlow]
             public void SetsIsNewUserToTrue()
             {
                 ExecuteCommand();
@@ -986,7 +978,7 @@ namespace Toggl.Foundation.Tests.MvvmCross.ViewModels
                 NavigationService.Navigate<TermsOfServiceViewModel, bool>().Returns(true);
                 UserAccessManager
                     .SignUp(Arg.Any<Email>(), Arg.Any<Password>(), Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>())
-                    .Returns(Observable.Never<ISyncManager>());
+                    .Returns(Observable.Never<Unit>());
                 ViewModel.Signup.Execute();
 
                 TestScheduler.Start();

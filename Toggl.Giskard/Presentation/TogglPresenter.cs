@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Android.Content;
-using Android.Icu.Text;
 using Android.Support.V4.App;
 using MvvmCross;
 using MvvmCross.Droid.Support.V7.AppCompat;
@@ -14,7 +13,7 @@ using Toggl.Foundation.MvvmCross.ViewModels;
 using Toggl.Foundation.MvvmCross.ViewModels.Hints;
 using Toggl.Giskard.Activities;
 
-namespace Toggl.Giskard.Presenters
+namespace Toggl.Giskard.Presentation
 {
     public sealed class TogglPresenter : MvxAppCompatViewPresenter
     {

@@ -5,31 +5,31 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using MvvmCross;
-using Toggl.Foundation;
 using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
 using Toggl.Giskard.Adapters.Calendar;
+using Toggl.Giskard.Presentation;
 using Toggl.Giskard.Views.Calendar;
 using Toggl.Giskard.Extensions.Reactive;
+using Toggl.Multivac;
 using Toggl.Multivac.Extensions;
 using System.Linq;
 using Toggl.Foundation.Calendar;
 using System.Reactive;
-using Toggl.Multivac;
 
 namespace Toggl.Giskard.Fragments
 {
-    public partial class CalendarFragment : ReactiveFragment<CalendarViewModel>
+    public partial class CalendarFragment : ReactiveFragment<CalendarViewModel>, IScrollableToTop
     {
         private CalendarLayoutManager calendarLayoutManager;
-        private ITimeService timeService;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var view = inflater.Inflate(Resource.Layout.CalendarFragment, container, false);
             InitializeViews(view);
 
-            timeService = Mvx.Resolve<ITimeService>();
-            var schedulerProvider = Mvx.Resolve<ISchedulerProvider>();
+            var timeService = AndroidDependencyContainer.Instance.TimeService;
+            var schedulerProvider = AndroidDependencyContainer.Instance.SchedulerProvider;
+
             calendarLayoutManager = new CalendarLayoutManager();
             calendarRecyclerView.SetLayoutManager(calendarLayoutManager);
             var displayMetrics = new DisplayMetrics();
@@ -94,6 +94,11 @@ namespace Toggl.Giskard.Fragments
                 .DisposedBy(DisposeBag);
 
             return view;
+        }
+
+        public void ScrollToTop()
+        {
+            calendarRecyclerView.SmoothScrollToPosition(0);
         }
 
         private void onboardingVisibilityChanged(bool visible)

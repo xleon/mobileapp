@@ -11,6 +11,7 @@ using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.ExtensionKit;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
+using Toggl.Daneel.Presentation;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Suggestions;
 using Toggl.Daneel.Views;
@@ -37,7 +38,7 @@ namespace Toggl.Daneel.ViewControllers
     using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
 
     [TabPresentation]
-    public partial class MainViewController : ReactiveViewController<MainViewModel>
+    public partial class MainViewController : ReactiveViewController<MainViewModel>, IScrollableToTop
     {
         private const float showCardDelay = 0.1f;
 
@@ -455,6 +456,11 @@ namespace Toggl.Daneel.ViewControllers
                 .Where(visible => !visible)
                 .Subscribe(_ => hideTimeEntryCard())
                 .DisposedBy(disposeBag);
+        }
+
+        public void ScrollToTop()
+        {
+            TimeEntriesLogTableView.SetContentOffset(CGPoint.Empty, true);
         }
 
         private void showHideRatingView(bool shouldShow)
