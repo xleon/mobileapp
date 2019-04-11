@@ -20,10 +20,10 @@ Debug keystore information (MacOS):
 **:warning: Notice:** The debug binary, by default, only supports the ARM architecture, so you must either:
 
 - Have a device or simulator running ARM
-- Check `x86` (or whatever your device architecture is) in Toggl.Giskard > Options > Android Build > Advanced tab
+- Check `x86` (or whatever your device architecture is) in Toggl.Droid > Options > Android Build > Advanced tab
 
 On Visual Studio:
-1. Select the Toggl.Giskard > Options > Android Build > Uncheck `Use Shared Mono Runtime`; 
+1. Select the Toggl.Droid > Options > Android Build > Uncheck `Use Shared Mono Runtime`; 
 2. Select from Visual Studio top menu: Build > Archive for publishing (this takes a while);
 3. Now you have a new apk at `Toggl/bin/Debug/com.toggl.giskard.debug.apk`
 4. You will have a new screen open, but you can get there by going to Build > ViewArchives;
@@ -41,16 +41,16 @@ SetUp : System.Exception : Mono Shared Runtime is not supported. This can be res
 ```
 
 #### How to run the tests
-First go to `Toggl.Giskard.Tests.UI/Configuration.cs` and update the path in `ApkFile` to point to your signed apk.
+First go to `Toggl.Droid.Tests.UI/Configuration.cs` and update the path in `ApkFile` to point to your signed apk.
 Ex: 
 - if you put the apkName.apk file in your Desktop (MacOS) -> .ApkFile(`"/Users/yourusername/Desktop/apkName.apk"`)
 - if you put the apk on (Repo root folder)/bin/Release/apkName.apk -> .ApkFile(`"../../bin/Release/apkName.apk"`)
 
 ##### To run on Visual Studio:
-- Have the build target to Giskard | Debug | Any CPU
-- On the right sidebar > Unit Tests > Giskard > Toggl.Giskard.Tests.UI
+- Have the build target to Droid | Debug | Any CPU
+- On the right sidebar > Unit Tests > Droid > Toggl.Droid.Tests.UI
 - On Test Apps select the device where you want to run the tests on, it can be an actual device or a running emulator.
-- <a name="makingUITestsAppear"></a>If you don't see the tests there yet, double click Giskard > Toggl.Giskard.Tests.UI; fix whatever bugs might be there (the build might be broken) > click again > You'll eventually see all the tests from Shared.Toggl.Tests.UI;
+- <a name="makingUITestsAppear"></a>If you don't see the tests there yet, double click Droid > Toggl.Droid.Tests.UI; fix whatever bugs might be there (the build might be broken) > click again > You'll eventually see all the tests from Shared.Toggl.Tests.UI;
 - On Toggl.Tests.UI you can run all the tests or only the ones you want.
 - That's it. 
 
