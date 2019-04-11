@@ -6,10 +6,10 @@ using Foundation;
 using MvvmCross;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.ViewSources;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Collections.Diffing;
-using Toggl.Foundation.MvvmCross.Reactive;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Collections.Diffing;
+using Toggl.Core.UI.Reactive;
 using UIKit;
 
 namespace Toggl.Daneel.Extensions.Reactive

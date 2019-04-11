@@ -9,13 +9,13 @@ using System.Threading;
 using CoreGraphics;
 using Foundation;
 using Toggl.Daneel.Autocomplete;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Calendar;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Core;
+using Toggl.Core.UI.Calendar;
+using Toggl.Core.UI.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UIKit;
-using Constants = Toggl.Foundation.Helper.Constants;
+using Constants = Toggl.Core.Helper.Constants;
 using Math = System.Math;
 
 namespace Toggl.Daneel.Views.Calendar

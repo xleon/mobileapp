@@ -4,8 +4,8 @@ using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.UI;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Reports;
+using Toggl.Core.Extensions;
+using Toggl.Core.Reports;
 using UIKit;
 
 namespace Toggl.Daneel.Views.Reports

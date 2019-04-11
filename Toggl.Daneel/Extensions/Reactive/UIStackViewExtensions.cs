@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Foundation.MvvmCross.Reactive;
-using Toggl.Multivac.Extensions;
+using Toggl.Core.UI.Reactive;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.Extensions.Reactive

@@ -8,11 +8,11 @@ using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels.Reports;
-using Toggl.Multivac.Extensions;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.Daneel.Extensions.AnimationExtensions;
 

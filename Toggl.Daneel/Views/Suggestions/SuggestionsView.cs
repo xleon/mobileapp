@@ -1,8 +1,8 @@
 ﻿using System.Reactive.Subjects;
 using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.Suggestions;
+using Toggl.Core;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.Suggestions;
 using UIKit;
 
 namespace Toggl.Daneel.Suggestions

@@ -14,14 +14,14 @@ using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
-using Toggl.Foundation;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.Onboarding.CreationView;
-using Toggl.Foundation.MvvmCross.Onboarding.StartTimeEntryView;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac.Extensions;
+using Toggl.Core;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Onboarding.CreationView;
+using Toggl.Core.UI.Onboarding.StartTimeEntryView;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers

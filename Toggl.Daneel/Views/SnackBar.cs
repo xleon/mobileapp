@@ -2,7 +2,7 @@ using System;
 using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
-using Toggl.Foundation;
+using Toggl.Core;
 using UIKit;
 
 namespace Toggl.Daneel

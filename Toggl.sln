@@ -5,49 +5,47 @@ VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Daneel", "Daneel", "{4796CD10-F5B5-4843-AD7A-2691438E5A6C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ultrawave", "Ultrawave", "{0BA4407E-0470-4496-A80B-DE311A40A385}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Networking", "Networking", "{0BA4407E-0470-4496-A80B-DE311A40A385}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrimeRadiant", "PrimeRadiant", "{F8D36062-5AD3-4F2D-8E64-9ACB91C0BB50}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{F8D36062-5AD3-4F2D-8E64-9ACB91C0BB50}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Foundation", "Foundation", "{B55DCFC1-9EA2-4289-B3EE-8979E0A9AB2E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{B55DCFC1-9EA2-4289-B3EE-8979E0A9AB2E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Daneel", "Toggl.Daneel\Toggl.Daneel.csproj", "{8CE4E64C-5719-4660-96AC-CF2ABA3A335E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Daneel.Tests.UI", "Toggl.Daneel.Tests.UI\Toggl.Daneel.Tests.UI.csproj", "{C23A5DDD-D0EA-4198-88A0-89A43EBF67B6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Multivac", "Multivac", "{128F799A-3060-4D72-9F14-93620F25E5E3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{128F799A-3060-4D72-9F14-93620F25E5E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Multivac", "Toggl.Multivac\Toggl.Multivac.csproj", "{6AF7BE5E-AF9D-4EA7-AF7F-28D07B8DEF24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Shared", "Toggl.Shared\Toggl.Shared.csproj", "{6AF7BE5E-AF9D-4EA7-AF7F-28D07B8DEF24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Multivac.Tests", "Toggl.Multivac.Tests\Toggl.Multivac.Tests.csproj", "{E90E4D61-D55E-4185-AE9E-C8977140694A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Shared.Tests", "Toggl.Shared.Tests\Toggl.Shared.Tests.csproj", "{E90E4D61-D55E-4185-AE9E-C8977140694A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Ultrawave", "Toggl.Ultrawave\Toggl.Ultrawave.csproj", "{5ACEB155-9DD4-4309-BCC9-997A09950393}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Networking", "Toggl.Networking\Toggl.Networking.csproj", "{5ACEB155-9DD4-4309-BCC9-997A09950393}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Ultrawave.Tests", "Toggl.Ultrawave.Tests\Toggl.Ultrawave.Tests.csproj", "{8598D5CB-4E3A-4F99-8E80-CC4EA8609ED8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Networking.Tests", "Toggl.Networking.Tests\Toggl.Networking.Tests.csproj", "{8598D5CB-4E3A-4F99-8E80-CC4EA8609ED8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Ultrawave.Tests.Integration", "Toggl.Ultrawave.Tests.Integration\Toggl.Ultrawave.Tests.Integration.csproj", "{C400D1A6-5DC5-4A92-8DD0-FF272D0D1189}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Networking.Tests.Integration", "Toggl.Networking.Tests.Integration\Toggl.Networking.Tests.Integration.csproj", "{C400D1A6-5DC5-4A92-8DD0-FF272D0D1189}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.PrimeRadiant", "Toggl.PrimeRadiant\Toggl.PrimeRadiant.csproj", "{3A603451-31B2-4975-9366-3212BEA78F57}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Storage", "Toggl.Storage\Toggl.Storage.csproj", "{3A603451-31B2-4975-9366-3212BEA78F57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.PrimeRadiant.Realm", "Toggl.PrimeRadiant.Realm\Toggl.PrimeRadiant.Realm.csproj", "{7716BCE9-A3D4-4359-A02E-94380BDF83C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Storage.Realm", "Toggl.Storage.Realm\Toggl.Storage.Realm.csproj", "{7716BCE9-A3D4-4359-A02E-94380BDF83C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.PrimeRadiant.Tests", "Toggl.PrimeRadiant.Tests\Toggl.PrimeRadiant.Tests.csproj", "{80155A57-5BAF-4CF0-93CA-B9E99BA95E9F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Storage.Tests", "Toggl.Storage.Tests\Toggl.Storage.Tests.csproj", "{80155A57-5BAF-4CF0-93CA-B9E99BA95E9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Foundation", "Toggl.Foundation\Toggl.Foundation.csproj", "{09D75C0B-3367-4678-97EF-6EADE64AF09C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Core", "Toggl.Core\Toggl.Core.csproj", "{09D75C0B-3367-4678-97EF-6EADE64AF09C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Foundation.MvvmCross", "Toggl.Foundation.MvvmCross\Toggl.Foundation.MvvmCross.csproj", "{CB2B0786-217F-455A-9349-0FC69468D3B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Core.UI", "Toggl.Core.UI\Toggl.Core.UI.csproj", "{CB2B0786-217F-455A-9349-0FC69468D3B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Foundation.Tests", "Toggl.Foundation.Tests\Toggl.Foundation.Tests.csproj", "{8E366E3C-7BE5-4962-9E0C-9094AE1FE2F4}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{C77C5963-4D3C-4B6A-BA94-F707B2069D89}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Core.Tests", "Toggl.Core.Tests\Toggl.Core.Tests.csproj", "{8E366E3C-7BE5-4962-9E0C-9094AE1FE2F4}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Toggl.Tests.UI", "Toggl.Tests.UI\Toggl.Tests.UI.shproj", "{9DC2721A-9A49-46FA-99A4-B004360A2008}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Giskard", "Giskard", "{707BB64D-7A0C-46D0-BFC3-CC64D708FEBA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Droid", "Droid", "{707BB64D-7A0C-46D0-BFC3-CC64D708FEBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Giskard", "Toggl.Giskard\Toggl.Giskard.csproj", "{CEB93402-CEAE-4D6F-8169-3ACA1F792DF4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Droid", "Toggl.Droid\Toggl.Droid.csproj", "{CEB93402-CEAE-4D6F-8169-3ACA1F792DF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Giskard.Tests.UI", "Toggl.Giskard.Tests.UI\Toggl.Giskard.Tests.UI.csproj", "{95E279D3-026E-4E31-92D2-44F4ABA0F511}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Droid.Tests.UI", "Toggl.Droid.Tests.UI\Toggl.Droid.Tests.UI.csproj", "{95E279D3-026E-4E31-92D2-44F4ABA0F511}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{A48D346E-2233-479A-8F90-3EFBFEA97ED5}"
 EndProject
@@ -61,7 +59,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Daneel.ExtensionKit",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Daneel.SiriExtension.UI", "Toggl.Daneel.SiriExtension.UI\Toggl.Daneel.SiriExtension.UI.csproj", "{BC329A24-95D6-4D02-95B5-2AA699D8873A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Foundation.Tests.Sync", "Toggl.Foundation.Tests.Sync\Toggl.Foundation.Tests.Sync.csproj", "{F08B55D7-0A7E-4F01-B6C6-CB5ACC76A194}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Core.Tests.Sync", "Toggl.Core.Tests.Sync\Toggl.Core.Tests.Sync.csproj", "{F08B55D7-0A7E-4F01-B6C6-CB5ACC76A194}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -618,6 +616,7 @@ Global
 		{C23A5DDD-D0EA-4198-88A0-89A43EBF67B6} = {4796CD10-F5B5-4843-AD7A-2691438E5A6C}
 		{6AF7BE5E-AF9D-4EA7-AF7F-28D07B8DEF24} = {128F799A-3060-4D72-9F14-93620F25E5E3}
 		{E90E4D61-D55E-4185-AE9E-C8977140694A} = {128F799A-3060-4D72-9F14-93620F25E5E3}
+		{9DC2721A-9A49-46FA-99A4-B004360A2008} = {128F799A-3060-4D72-9F14-93620F25E5E3}
 		{5ACEB155-9DD4-4309-BCC9-997A09950393} = {0BA4407E-0470-4496-A80B-DE311A40A385}
 		{8598D5CB-4E3A-4F99-8E80-CC4EA8609ED8} = {0BA4407E-0470-4496-A80B-DE311A40A385}
 		{C400D1A6-5DC5-4A92-8DD0-FF272D0D1189} = {0BA4407E-0470-4496-A80B-DE311A40A385}
@@ -627,7 +626,6 @@ Global
 		{09D75C0B-3367-4678-97EF-6EADE64AF09C} = {B55DCFC1-9EA2-4289-B3EE-8979E0A9AB2E}
 		{CB2B0786-217F-455A-9349-0FC69468D3B6} = {B55DCFC1-9EA2-4289-B3EE-8979E0A9AB2E}
 		{8E366E3C-7BE5-4962-9E0C-9094AE1FE2F4} = {B55DCFC1-9EA2-4289-B3EE-8979E0A9AB2E}
-		{9DC2721A-9A49-46FA-99A4-B004360A2008} = {C77C5963-4D3C-4B6A-BA94-F707B2069D89}
 		{CEB93402-CEAE-4D6F-8169-3ACA1F792DF4} = {707BB64D-7A0C-46D0-BFC3-CC64D708FEBA}
 		{95E279D3-026E-4E31-92D2-44F4ABA0F511} = {707BB64D-7A0C-46D0-BFC3-CC64D708FEBA}
 		{148C791B-9824-4DC6-9494-4FEEB21988C7} = {A48D346E-2233-479A-8F90-3EFBFEA97ED5}

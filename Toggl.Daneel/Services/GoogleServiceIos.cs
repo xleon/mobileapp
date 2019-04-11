@@ -4,8 +4,8 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Foundation;
 using Google.SignIn;
-using Toggl.Foundation.Exceptions;
-using Toggl.Foundation.Login;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Login;
 using UIKit;
 
 namespace Toggl.Daneel.Services

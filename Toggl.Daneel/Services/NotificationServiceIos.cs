@@ -6,14 +6,14 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Foundation;
 using Toggl.Daneel.Extensions;
-using Toggl.Foundation;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Core;
+using Toggl.Core.Calendar;
+using Toggl.Core.UI.Services;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UserNotifications;
-using Notification = Toggl.Multivac.Notification;
-using FoundationResources = Toggl.Foundation.Resources;
+using Notification = Toggl.Shared.Notification;
+using FoundationResources = Toggl.Core.Resources;
 
 namespace Toggl.Daneel.Services
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Reactive.Linq;
 using Toggl.Daneel.Views.EditDuration;
-using Toggl.Foundation.MvvmCross.Reactive;
+using Toggl.Core.UI.Reactive;
 
 namespace Toggl.Daneel.Extensions.Reactive
 {

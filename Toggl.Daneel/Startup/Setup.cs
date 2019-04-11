@@ -7,10 +7,10 @@ using MvvmCross.Plugin;
 using MvvmCross.ViewModels;
 using Toggl.Daneel.Presentation;
 using Toggl.Daneel.Services;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Ultrawave;
+using Toggl.Core;
+using Toggl.Core.UI;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Networking;
 using ColorPlugin = MvvmCross.Plugin.Color.Platforms.Ios.Plugin;
 using VisibilityPlugin = MvvmCross.Plugin.Visibility.Platforms.Ios.Plugin;
 

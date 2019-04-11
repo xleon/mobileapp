@@ -8,12 +8,12 @@ using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac.Extensions;
+using Toggl.Core.Analytics;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Shared.Extensions;
 using UIKit;
-using Toggl.Foundation;
+using Toggl.Core;
 
 namespace Toggl.Daneel.ViewControllers
 {

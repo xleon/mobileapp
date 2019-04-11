@@ -1,5 +1,5 @@
 ﻿using CoreGraphics;
-using Toggl.Multivac;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.Daneel.Extensions

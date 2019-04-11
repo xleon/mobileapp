@@ -4,10 +4,10 @@ using System.Linq;
 using Foundation;
 using Intents;
 using Toggl.Daneel.Intents;
-using Toggl.Foundation;
-using Toggl.Foundation.Analytics;
-using Toggl.Multivac.Models;
-using Toggl.Foundation.Services;
+using Toggl.Core;
+using Toggl.Core.Analytics;
+using Toggl.Shared.Models;
+using Toggl.Core.Services;
 using UIKit;
 
 namespace Toggl.Daneel.Services
