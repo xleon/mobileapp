@@ -5,13 +5,13 @@ using System.Reactive.Concurrency;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using NSubstitute;
-using Toggl.Foundation;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.DataSources;
-using Toggl.Foundation.Sync;
-using Toggl.Foundation.Sync.States;
-using Toggl.PrimeRadiant;
-using Toggl.Ultrawave;
+using Toggl.Core;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Sync;
+using Toggl.Core.Sync.States;
+using Toggl.Storage;
+using Toggl.Networking;
 
 namespace SyncDiagramGenerator
 {

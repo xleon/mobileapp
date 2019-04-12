@@ -1,8 +1,8 @@
 ﻿using System;
 using Foundation;
 using Toggl.Daneel.Cells;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core;
+using Toggl.Core.UI.ViewModels;
 using UIKit;
 
 namespace Toggl.Daneel.Views.Client

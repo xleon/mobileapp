@@ -4,9 +4,9 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CoreGraphics;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Multivac;
+using Toggl.Core;
+using Toggl.Core.UI.Services;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.Daneel.Services

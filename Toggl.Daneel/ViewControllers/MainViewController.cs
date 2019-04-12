@@ -16,22 +16,22 @@ using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Suggestions;
 using Toggl.Daneel.Views;
 using Toggl.Daneel.ViewSources;
-using Toggl.Foundation;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.Onboarding.MainView;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.Identity;
-using Toggl.Multivac.Extensions;
-using Toggl.PrimeRadiant.Extensions;
-using Toggl.PrimeRadiant.Onboarding;
-using Toggl.PrimeRadiant.Settings;
+using Toggl.Core;
+using Toggl.Core.Extensions;
+using Toggl.Core.Analytics;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Onboarding.MainView;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Shared.Extensions;
+using Toggl.Storage.Extensions;
+using Toggl.Storage.Onboarding;
+using Toggl.Storage.Settings;
 using UIKit;
-using static Toggl.Foundation.MvvmCross.Helper.Animation;
+using static Toggl.Core.UI.Helper.Animation;
 
 namespace Toggl.Daneel.ViewControllers
 {

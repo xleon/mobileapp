@@ -9,11 +9,11 @@ using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Views;
 using Toggl.Daneel.Views.EntityCreation;
 using Toggl.Daneel.Views.StartTimeEntry;
-using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Multivac.Extensions;
-using Toggl.Multivac.Extensions.Reactive;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Helper;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Extensions.Reactive;
 using UIKit;
 
 namespace Toggl.Daneel.ViewSources

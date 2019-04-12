@@ -1,4 +1,4 @@
-using Toggl.Foundation.Services;
+using Toggl.Core.Services;
 using UIKit;
 
 namespace Toggl.Daneel.Services

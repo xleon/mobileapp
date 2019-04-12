@@ -1,0 +1,755 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System.Threading.Tasks;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
+using Toggl.Core;
+using Toggl.Core.Analytics;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Span;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.DataSources;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Extensions;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Services;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.Services;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Extensions.Reactive;
+using Toggl.Storage.Settings;
+using static Toggl.Core.Helper.Constants;
+using static Toggl.Shared.Extensions.CommonFunctions;
+using IStopwatch = Toggl.Core.Diagnostics.IStopwatch;
+using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
+
+[assembly: MvxNavigation(typeof(StartTimeEntryViewModel), ApplicationUrls.StartTimeEntry)]
+namespace Toggl.Core.UI.ViewModels
+{
+    [Preserve(AllMembers = true)]
+    public sealed class StartTimeEntryViewModel : MvxViewModel<StartTimeEntryParameters>
+    {
+        private readonly ITimeService timeService;
+        private readonly IDialogService dialogService;
+        private readonly IUserPreferences userPreferences;
+        private readonly IInteractorFactory interactorFactory;
+        private readonly IMvxNavigationService navigationService;
+        private readonly IAnalyticsService analyticsService;
+        private readonly ISchedulerProvider schedulerProvider;
+        private readonly IIntentDonationService intentDonationService;
+        private readonly IStopwatchProvider stopwatchProvider;
+
+        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
+        private readonly BehaviorRelay<TextFieldInfo> textFieldInfo = new BehaviorRelay<TextFieldInfo>(Autocomplete.TextFieldInfo.Empty(0));
+        private readonly ISubject<AutocompleteSuggestionType> queryByTypeSubject = new Subject<AutocompleteSuggestionType>();
+        private readonly BehaviorRelay<TimeSpan> displayedTime = new BehaviorRelay<TimeSpan>(TimeSpan.Zero);
+        private readonly BehaviorRelay<bool> isBillable = new BehaviorRelay<bool>(false);
+        private readonly BehaviorRelay<bool> isSuggestingTags = new BehaviorRelay<bool>(false);
+        private readonly BehaviorRelay<bool> isSuggestingProjects = new BehaviorRelay<bool>(false);
+        private readonly BehaviorRelay<bool> isBillableAvailable = new BehaviorRelay<bool>(false);
+
+        private bool isDirty => !string.IsNullOrEmpty(textFieldInfo.Value.Description)
+                                || textFieldInfo.Value.Spans.Any(s => s is ProjectSpan || s is TagSpan)
+                                || isBillable.Value
+                                || startTime != parameter.StartTime
+                                || duration != parameter.Duration;
+
+        private bool hasAnyTags;
+        private bool hasAnyProjects;
+        private bool canCreateProjectsInWorkspace;
+        private IThreadSafeWorkspace defaultWorkspace;
+        private StartTimeEntryParameters parameter;
+        private StartTimeEntryParameters initialParameters;
+
+        private DateTimeOffset startTime;
+        private TimeSpan? duration;
+
+        private IStopwatch startTimeEntryStopwatch;
+        private Dictionary<string, IStopwatch> suggestionsLoadingStopwatches = new Dictionary<string, IStopwatch>();
+        private IStopwatch suggestionsRenderingStopwatch;
+
+        private bool isRunning => !duration.HasValue;
+
+        private string currentQuery;
+
+        private BehaviorSubject<HashSet<ProjectSuggestion>> expandedProjects =
+            new BehaviorSubject<HashSet<ProjectSuggestion>>(new HashSet<ProjectSuggestion>());
+
+        public IObservable<TextFieldInfo> TextFieldInfo { get; }
+        public IObservable<bool> IsBillable { get; }
+        public IObservable<bool> IsSuggestingTags { get; }
+        public IObservable<bool> IsSuggestingProjects { get; }
+        public IObservable<bool> IsBillableAvailable { get; }
+
+        public string PlaceholderText { get; private set; }
+
+        public ITogglDataSource DataSource { get; }
+
+        public IOnboardingStorage OnboardingStorage { get; }
+
+        public OutputAction<bool> Close { get; }
+        public UIAction Done { get; }
+        public UIAction DurationTapped { get; }
+        public UIAction ToggleBillable { get; }
+        public UIAction SetStartDate { get; }
+        public UIAction ChangeTime { get; }
+        public UIAction ToggleTagSuggestions { get; }
+        public UIAction ToggleProjectSuggestions { get; }
+        public InputAction<AutocompleteSuggestion> SelectSuggestion { get; }
+        public InputAction<TimeSpan> SetRunningTime { get; }
+        public InputAction<ProjectSuggestion> ToggleTasks { get; }
+        public InputAction<IEnumerable<ISpan>> SetTextSpans { get; }
+
+        public IObservable<IList<SectionModel<string, AutocompleteSuggestion>>> Suggestions { get; }
+        public IObservable<string> DisplayedTime { get; }
+
+        public StartTimeEntryViewModel(
+            ITimeService timeService,
+            ITogglDataSource dataSource,
+            IDialogService dialogService,
+            IUserPreferences userPreferences,
+            IOnboardingStorage onboardingStorage,
+            IInteractorFactory interactorFactory,
+            IMvxNavigationService navigationService,
+            IAnalyticsService analyticsService,
+            ISchedulerProvider schedulerProvider,
+            IIntentDonationService intentDonationService,
+            IStopwatchProvider stopwatchProvider,
+            IRxActionFactory rxActionFactory
+        )
+        {
+            Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
+            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
+            Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
+            Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
+            Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
+            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
+            Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
+            Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
+            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
+            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
+            Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
+
+            this.timeService = timeService;
+            this.dialogService = dialogService;
+            this.userPreferences = userPreferences;
+            this.navigationService = navigationService;
+            this.interactorFactory = interactorFactory;
+            this.analyticsService = analyticsService;
+            this.schedulerProvider = schedulerProvider;
+            this.intentDonationService = intentDonationService;
+            this.stopwatchProvider = stopwatchProvider;
+
+            DataSource = dataSource;
+            OnboardingStorage = onboardingStorage;
+
+            TextFieldInfo = textFieldInfo.AsDriver(schedulerProvider);
+            IsBillable = isBillable.AsDriver(schedulerProvider);
+            IsSuggestingTags = isSuggestingTags.AsDriver(schedulerProvider);
+            IsSuggestingProjects = isSuggestingProjects.AsDriver(schedulerProvider);
+            IsBillableAvailable = isBillableAvailable.AsDriver(schedulerProvider);
+            DisplayedTime = displayedTime
+                .Select(time => time.ToFormattedString(DurationFormat.Improved))
+                .AsDriver(schedulerProvider);
+
+            Close = rxActionFactory.FromAsync(close); 
+            Done = rxActionFactory.FromObservable(done);
+            DurationTapped = rxActionFactory.FromAction(durationTapped);
+            ToggleBillable = rxActionFactory.FromAction(toggleBillable);
+            SetStartDate = rxActionFactory.FromAsync(setStartDate);
+            ChangeTime = rxActionFactory.FromAsync(changeTime);
+            ToggleTagSuggestions = rxActionFactory.FromAction(toggleTagSuggestions);
+            ToggleProjectSuggestions = rxActionFactory.FromAction(toggleProjectSuggestions);
+            SelectSuggestion = rxActionFactory.FromAsync<AutocompleteSuggestion>(selectSuggestion);
+            SetRunningTime = rxActionFactory.FromAction<TimeSpan>(setRunningTime);
+            ToggleTasks = rxActionFactory.FromAction<ProjectSuggestion>(toggleTasks);
+            SetTextSpans = rxActionFactory.FromAction<IEnumerable<ISpan>>(setTextSpans);
+
+            var queryByType = queryByTypeSubject
+                .AsObservable()
+                .SelectMany(type => interactorFactory.GetAutocompleteSuggestions(new QueryInfo("", type)).Execute());
+
+            var queryByText = textFieldInfo
+                .SelectMany(setBillableValues)
+                .Select(QueryInfo.ParseFieldInfo)
+                .Do(onParsedQuery)
+                .ObserveOn(schedulerProvider.BackgroundScheduler)
+                .SelectMany(query => interactorFactory.GetAutocompleteSuggestions(query).Execute());
+
+            Suggestions = Observable.Merge(queryByText, queryByType)
+                .Select(items => items.ToList()) // This is line is needed for now to read objects from realm
+                .Select(filter)
+                .Select(group)
+                .CombineLatest(expandedProjects, (groups, _) => groups)
+                .Select(toCollections)
+                .Select(addStaticElements)
+                .AsDriver(schedulerProvider);
+        }
+
+        public void Init()
+        {
+            var now = timeService.CurrentDateTime;
+            var startTimeEntryParameters = userPreferences.IsManualModeEnabled
+                ? StartTimeEntryParameters.ForManualMode(now)
+                : StartTimeEntryParameters.ForTimerMode(now);
+            Prepare(startTimeEntryParameters);
+        }
+
+        public override void Prepare(StartTimeEntryParameters parameter)
+        {
+            this.parameter = parameter;
+            startTime = parameter.StartTime;
+            duration = parameter.Duration;
+
+            PlaceholderText = parameter.PlaceholderText;
+            if (!string.IsNullOrEmpty(parameter.EntryDescription))
+            {
+                initialParameters = parameter;
+            }
+
+            displayedTime.Accept(duration ?? TimeSpan.Zero);
+
+            timeService.CurrentDateTimeObservable
+                .Where(_ => isRunning)
+                .Subscribe(currentTime => displayedTime.Accept(currentTime - startTime))
+                .DisposedBy(disposeBag);
+        }
+
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+            startTimeEntryStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenStartView);
+            stopwatchProvider.Remove(MeasuredOperation.OpenStartView);
+
+            defaultWorkspace = await interactorFactory.GetDefaultWorkspace()
+                .TrackException<InvalidOperationException, IThreadSafeWorkspace>("StartTimeEntryViewModel.Initialize")
+                .Execute();
+
+            canCreateProjectsInWorkspace =
+                await interactorFactory.GetAllWorkspaces().Execute().Select(allWorkspaces =>
+                    allWorkspaces.Any(ws => ws.IsEligibleForProjectCreation()));
+
+            if (initialParameters != null)
+            {
+                var spans = new List<ISpan>();
+                spans.Add(new TextSpan(initialParameters.EntryDescription));
+                if (initialParameters.ProjectId != null) {
+                    try
+                    {
+                        var project = await interactorFactory.GetProjectById((long)initialParameters.ProjectId).Execute();
+                        spans.Add(new ProjectSpan(project));
+                    }
+                    catch
+                    {
+                        // Intentionally left blank
+                    }
+                }
+                if (initialParameters.TagIds != null) {
+                    try
+                    {
+                        var tags = initialParameters.TagIds.ToObservable()
+                            .SelectMany<long, IThreadSafeTag>(tagId => interactorFactory.GetTagById(tagId).Execute())
+                            .ToEnumerable();
+                        spans.AddRange(tags.Select(tag => new TagSpan(tag)));
+                    }
+                    catch
+                    {
+                        // Intentionally left blank
+                    }
+                }
+
+                textFieldInfo.Accept(textFieldInfo.Value.ReplaceSpans(spans.ToImmutableList()));
+            }
+            else
+            {
+                textFieldInfo.Accept(Autocomplete.TextFieldInfo.Empty(parameter?.WorkspaceId ?? defaultWorkspace.Id));
+            }
+
+            hasAnyTags = (await DataSource.Tags.GetAll()).Any();
+            hasAnyProjects = (await DataSource.Projects.GetAll()).Any();
+        }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            startTimeEntryStopwatch?.Stop();
+            startTimeEntryStopwatch = null;
+        }
+
+        public override void ViewDestroy(bool viewFinishing)
+        {
+            base.ViewDestroy(viewFinishing);
+            disposeBag?.Dispose();
+        }
+
+        public void StopSuggestionsRenderingStopwatch()
+        {
+            suggestionsRenderingStopwatch?.Stop();
+            suggestionsRenderingStopwatch = null;
+        }
+
+        private async Task<bool> close()
+        {
+            if (isDirty)
+            {
+                var shouldDiscard = await dialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
+                if (!shouldDiscard)
+                    return false;
+            }
+
+            await navigationService.Close(this);
+            return true;
+        }
+
+        private void setTextSpans(IEnumerable<ISpan> spans)
+        {
+            textFieldInfo.Accept(textFieldInfo.Value.ReplaceSpans(spans.ToImmutableList()));
+        }
+
+        private void setRunningTime(TimeSpan runningTime)
+        {
+            if (isRunning)
+            {
+                startTime = timeService.CurrentDateTime - runningTime;
+            }
+            else
+            {
+                duration = runningTime;
+            }
+
+            displayedTime.Accept(runningTime);
+        }
+
+        private async Task selectSuggestion(AutocompleteSuggestion suggestion)
+        {
+            switch (suggestion)
+            {
+                case QuerySymbolSuggestion querySymbolSuggestion:
+
+                    if (querySymbolSuggestion.Symbol == QuerySymbols.ProjectsString)
+                    {
+                        analyticsService.StartViewTapped.Track(StartViewTapSource.PickEmptyStateProjectSuggestion);
+                        analyticsService.StartEntrySelectProject.Track(ProjectTagSuggestionSource.TableCellButton);
+                    }
+                    else if (querySymbolSuggestion.Symbol == QuerySymbols.TagsString)
+                    {
+                        analyticsService.StartViewTapped.Track(StartViewTapSource.PickEmptyStateTagSuggestion);
+                        analyticsService.StartEntrySelectTag.Track(ProjectTagSuggestionSource.TableCellButton);
+                    }
+
+                    textFieldInfo.Accept(textFieldInfo.Value.FromQuerySymbolSuggestion(querySymbolSuggestion));
+                    break;
+
+                case TimeEntrySuggestion timeEntrySuggestion:
+                    analyticsService.StartViewTapped.Track(StartViewTapSource.PickTimeEntrySuggestion);
+                    textFieldInfo.Accept(textFieldInfo.Value.FromTimeEntrySuggestion(timeEntrySuggestion));
+                    break;
+
+                case ProjectSuggestion projectSuggestion:
+                    analyticsService.StartViewTapped.Track(StartViewTapSource.PickProjectSuggestion);
+
+                    if (textFieldInfo.Value.WorkspaceId != projectSuggestion.WorkspaceId
+                        && await workspaceChangeDenied())
+                        return;
+
+                    isSuggestingProjects.Accept(false);
+                    textFieldInfo.Accept(textFieldInfo.Value.FromProjectSuggestion(projectSuggestion));
+                    queryByTypeSubject.OnNext(AutocompleteSuggestionType.None);
+
+                    break;
+
+                case TaskSuggestion taskSuggestion:
+                    analyticsService.StartViewTapped.Track(StartViewTapSource.PickTaskSuggestion);
+
+                    if (textFieldInfo.Value.WorkspaceId != taskSuggestion.WorkspaceId
+                        && await workspaceChangeDenied())
+                        return;
+
+                    isSuggestingProjects.Accept(false);
+                    textFieldInfo.Accept(textFieldInfo.Value.FromTaskSuggestion(taskSuggestion));
+                    queryByTypeSubject.OnNext(AutocompleteSuggestionType.None);
+                    break;
+
+                case TagSuggestion tagSuggestion:
+                    analyticsService.StartViewTapped.Track(StartViewTapSource.PickTagSuggestion);
+                    textFieldInfo.Accept(textFieldInfo.Value.FromTagSuggestion(tagSuggestion));
+                    break;
+
+                case CreateEntitySuggestion createEntitySuggestion:
+                    if (isSuggestingProjects.Value)
+                    {
+                        createProject();
+                    }
+                    else
+                    {
+                        createTag();
+                    }
+                    break;
+
+                default:
+                    return;
+            }
+
+            IObservable<bool> workspaceChangeDenied()
+                => dialogService.Confirm(
+                    Resources.DifferentWorkspaceAlertTitle,
+                    Resources.DifferentWorkspaceAlertMessage,
+                    Resources.Ok,
+                    Resources.Cancel
+                ).Select(Invert);
+        }
+
+        private async Task createProject()
+        {
+            var createProjectStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.OpenCreateProjectViewFromStartTimeEntryView);
+            createProjectStopwatch.Start();
+
+            var projectId = await navigationService.Navigate<EditProjectViewModel, string, long?>(currentQuery);
+            if (projectId == null) return;
+
+            var project = await interactorFactory.GetProjectById(projectId.Value).Execute();
+            var projectSuggestion = new ProjectSuggestion(project);
+
+            textFieldInfo.Accept(textFieldInfo.Value.FromProjectSuggestion(projectSuggestion));
+            isSuggestingProjects.Accept(false);
+            queryByTypeSubject.OnNext(AutocompleteSuggestionType.None);
+            hasAnyProjects = true;
+        }
+
+        private async Task createTag()
+        {
+            var createdTag = await interactorFactory.CreateTag(currentQuery, textFieldInfo.Value.WorkspaceId).Execute();
+            var tagSuggestion = new TagSuggestion(createdTag);
+            await SelectSuggestion.ExecuteWithCompletion(tagSuggestion);
+            hasAnyTags = true;
+            toggleTagSuggestions();
+        }
+
+        private void durationTapped()
+        {
+            analyticsService.StartViewTapped.Track(StartViewTapSource.Duration);
+        }
+
+        private void toggleTagSuggestions()
+        {
+            if (isSuggestingTags.Value)
+            {
+                isSuggestingTags.Accept(false);
+                textFieldInfo.Accept(textFieldInfo.Value.RemoveTagQueryIfNeeded());
+                queryByTypeSubject.OnNext(AutocompleteSuggestionType.None);
+                return;
+            }
+
+            analyticsService.StartViewTapped.Track(StartViewTapSource.Tags);
+            analyticsService.StartEntrySelectTag.Track(ProjectTagSuggestionSource.ButtonOverKeyboard);
+            OnboardingStorage.ProjectOrTagWasAdded();
+
+            textFieldInfo.Accept(textFieldInfo.Value.AddQuerySymbol(QuerySymbols.TagsString));
+        }
+
+        private void toggleProjectSuggestions()
+        {
+            if (isSuggestingProjects.Value)
+            {
+                isSuggestingProjects.Accept(false);
+                textFieldInfo.Accept(textFieldInfo.Value.RemoveProjectQueryIfNeeded());
+                queryByTypeSubject.OnNext(AutocompleteSuggestionType.None);
+                return;
+            }
+
+            analyticsService.StartViewTapped.Track(StartViewTapSource.Project);
+            analyticsService.StartEntrySelectProject.Track(ProjectTagSuggestionSource.ButtonOverKeyboard);
+            OnboardingStorage.ProjectOrTagWasAdded();
+
+            if (textFieldInfo.Value.HasProject)
+            {
+                isSuggestingProjects.Accept(true);
+                queryByTypeSubject.OnNext(AutocompleteSuggestionType.Projects);
+                return;
+            }
+
+            textFieldInfo.Accept(textFieldInfo.Value.AddQuerySymbol(QuerySymbols.ProjectsString));
+        }
+
+        private void toggleTasks(ProjectSuggestion projectSuggestion)
+        {
+            var currentExpandedProjects = expandedProjects.Value;
+            if (currentExpandedProjects.Contains(projectSuggestion))
+            {
+                currentExpandedProjects.Remove(projectSuggestion);
+            }
+            else
+            {
+                currentExpandedProjects.Add(projectSuggestion);
+            }
+            expandedProjects.OnNext(currentExpandedProjects);
+        }
+
+        private void toggleBillable()
+        {
+            analyticsService.StartViewTapped.Track(StartViewTapSource.Billable);
+            isBillable.Accept(!isBillable.Value);
+        }
+
+        private async Task changeTime()
+        {
+            analyticsService.StartViewTapped.Track(StartViewTapSource.StartTime);
+
+            var currentDuration = DurationParameter.WithStartAndDuration(startTime, duration);
+
+            var selectedDuration = await navigationService
+                .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(new EditDurationParameters(currentDuration, isStartingNewEntry: true))
+                .ConfigureAwait(false);
+
+            startTime = selectedDuration.Start;
+            duration = selectedDuration.Duration ?? duration;
+            displayedTime.Accept(duration ?? TimeSpan.Zero);
+        }
+
+        private async Task setStartDate()
+        {
+            analyticsService.StartViewTapped.Track(StartViewTapSource.StartDate);
+
+            var parameters = isRunning
+                ? DateTimePickerParameters.ForStartDateOfRunningTimeEntry(startTime, timeService.CurrentDateTime)
+                : DateTimePickerParameters.ForStartDateOfStoppedTimeEntry(startTime);
+
+            var duration = this.duration;
+
+            startTime = await navigationService
+                .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)
+                .ConfigureAwait(false);
+
+            if (isRunning == false)
+            {
+                this.duration = duration;
+            }
+        }
+
+        private IObservable<Unit> done()
+        {
+            var timeEntry = textFieldInfo.Value.AsTimeEntryPrototype(startTime, duration, isBillable.Value);
+            var origin = duration.HasValue ? TimeEntryStartOrigin.Manual : TimeEntryStartOrigin.Timer;
+            if (parameter.Origin is TimeEntryStartOrigin paramOrigin)
+            {
+                origin = paramOrigin;
+            }
+            return interactorFactory.CreateTimeEntry(timeEntry, origin).Execute()
+                .Do(_ => navigationService.Close(this))
+                .SelectUnit();
+        }
+
+        private void onParsedQuery(QueryInfo parsedQuery)
+        {
+            var newQuery = parsedQuery.Text?.Trim() ?? "";
+            if (currentQuery != newQuery)
+            {
+                currentQuery = newQuery;
+                suggestionsLoadingStopwatches[currentQuery] = stopwatchProvider.Create(MeasuredOperation.StartTimeEntrySuggestionsLoadingTime);
+                suggestionsLoadingStopwatches[currentQuery].Start();
+            }
+            bool suggestsTags = parsedQuery.SuggestionType == AutocompleteSuggestionType.Tags;
+            bool suggestsProjects = parsedQuery.SuggestionType == AutocompleteSuggestionType.Projects;
+
+            if (!isSuggestingTags.Value && suggestsTags)
+            {
+                analyticsService.StartEntrySelectTag.Track(ProjectTagSuggestionSource.TextField);
+            }
+
+            if (!isSuggestingProjects.Value && suggestsProjects)
+            {
+                analyticsService.StartEntrySelectProject.Track(ProjectTagSuggestionSource.TextField);
+            }
+
+            isSuggestingTags.Accept(suggestsTags);
+            isSuggestingProjects.Accept(suggestsProjects);
+        }
+
+        private IEnumerable<AutocompleteSuggestion> filter(IEnumerable<AutocompleteSuggestion> suggestions)
+        {
+            suggestionsRenderingStopwatch = stopwatchProvider.Create(MeasuredOperation.StartTimeEntrySuggestionsRenderingTime);
+            suggestionsRenderingStopwatch.Start();
+
+            if (textFieldInfo.Value.HasProject && !isSuggestingProjects.Value && !isSuggestingTags.Value)
+            {
+                var projectId = textFieldInfo.Value.Spans.OfType<ProjectSpan>().Single().ProjectId;
+
+                return suggestions.OfType<TimeEntrySuggestion>()
+                    .Where(suggestion => suggestion.ProjectId == projectId);
+            }
+
+            return suggestions;
+        }
+
+        private IEnumerable<IGrouping<long, AutocompleteSuggestion>> group(IEnumerable<AutocompleteSuggestion> suggestions)
+        {
+            var firstSuggestion = suggestions.FirstOrDefault();
+            if (firstSuggestion is ProjectSuggestion)
+            {
+                return suggestions
+                    .Cast<ProjectSuggestion>()
+                    .OrderBy(ps => ps.ProjectName)
+                    .Where(suggestion => !string.IsNullOrEmpty(suggestion.WorkspaceName))
+                    .GroupBy(suggestion => suggestion.WorkspaceId)
+                    .OrderByDescending(group => group.First().WorkspaceId == (defaultWorkspace?.Id ?? 0))
+                    .ThenBy(group => group.First().WorkspaceName);
+            }
+
+            if (isSuggestingTags.Value)
+                suggestions = suggestions.Where(suggestion => suggestion.WorkspaceId == textFieldInfo.Value.WorkspaceId);
+
+            return suggestions
+                .GroupBy(suggestion => suggestion.WorkspaceId);
+        }
+
+        private IEnumerable<SectionModel<string, AutocompleteSuggestion>> toCollections(IEnumerable<IGrouping<long, AutocompleteSuggestion>> suggestions)
+        {
+            var sections = suggestions.Select(group =>
+                {
+                    var header = "";
+                    var items = group
+                        .Distinct(AutocompleteSuggestionComparer.Instance)
+                        .SelectMany(includeTasksIfExpanded);
+
+                    if (group.First() is ProjectSuggestion projectSuggestion)
+                    {
+                        header = projectSuggestion.WorkspaceName;
+                        items = items.Prepend(ProjectSuggestion.NoProject(projectSuggestion.WorkspaceId,
+                            projectSuggestion.WorkspaceName));
+                    }
+
+                    return new SectionModel<string, AutocompleteSuggestion>(header, items);
+                }
+            );
+
+            if (suggestionsLoadingStopwatches.ContainsKey(currentQuery))
+            {
+                suggestionsLoadingStopwatches[currentQuery]?.Stop();
+                suggestionsLoadingStopwatches = new Dictionary<string, IStopwatch>();
+            }
+
+            return sections;
+        }
+
+        private IEnumerable<AutocompleteSuggestion> includeTasksIfExpanded(AutocompleteSuggestion suggestion)
+        {
+            yield return suggestion;
+
+            if (suggestion is ProjectSuggestion projectSuggestion && expandedProjects.Value.Contains(projectSuggestion))
+            {
+                var orderedTasks = projectSuggestion.Tasks
+                    .OrderBy(t => t.Name);
+
+                foreach (var taskSuggestion in orderedTasks)
+                    yield return taskSuggestion;
+            }
+        }
+
+        private IEnumerable<AutocompleteSuggestion> includeEmptyProject(AutocompleteSuggestion suggestion)
+        {
+            yield return suggestion;
+
+            if (suggestion is ProjectSuggestion projectSuggestion && expandedProjects.Value.Contains(projectSuggestion))
+            {
+                var orderedTasks = projectSuggestion.Tasks
+                    .OrderBy(t => t.Name);
+
+                foreach (var taskSuggestion in orderedTasks)
+                    yield return taskSuggestion;
+            }
+        }
+
+        private IList<SectionModel<string, AutocompleteSuggestion>> addStaticElements(IEnumerable<SectionModel<string, AutocompleteSuggestion>> sections)
+        {
+            var suggestions = sections.SelectMany(section => section.Items);
+            IEnumerable<SectionModel<string, AutocompleteSuggestion>> collections = sections;
+
+            if (isSuggestingProjects.Value)
+            {
+                if (shouldAddProjectCreationSuggestion())
+                {
+                    sections = sections
+                        .Prepend(
+                            SectionModel<string, AutocompleteSuggestion>.SingleElement(
+                                new CreateEntitySuggestion(Resources.CreateProject, currentQuery)
+                            )
+                        );
+                }
+
+                if (!hasAnyProjects)
+                {
+                    sections = sections.Append(SectionModel<string, AutocompleteSuggestion>.SingleElement(
+                        NoEntityInfoMessage.CreateProject())
+                    );
+                }
+            }
+
+            if (isSuggestingTags.Value)
+            {
+                if (shouldAddTagCreationSuggestion())
+                {
+                    sections = sections
+                        .Prepend(
+                            SectionModel<string, AutocompleteSuggestion>.SingleElement(
+                                new CreateEntitySuggestion(Resources.CreateTag, currentQuery)
+                            )
+                        );
+                }
+
+                if (!hasAnyTags)
+                {
+                    sections = sections.Append(SectionModel<string, AutocompleteSuggestion>.SingleElement(
+                        NoEntityInfoMessage.CreateTag())
+                    );
+                }
+            }
+
+            return sections.ToList();
+
+            bool shouldAddProjectCreationSuggestion()
+                => canCreateProjectsInWorkspace && !textFieldInfo.Value.HasProject &&
+                   currentQuery.LengthInBytes() <= MaxProjectNameLengthInBytes &&
+                   !string.IsNullOrEmpty(currentQuery);
+
+            bool shouldAddTagCreationSuggestion()
+                => !string.IsNullOrEmpty(currentQuery) && currentQuery.IsAllowedTagByteSize() &&
+                   suggestions.None(item =>
+                       item is TagSuggestion tagSuggestion &&
+                       tagSuggestion.Name.IsSameCaseInsensitiveTrimedTextAs(currentQuery));
+        }
+
+        private IObservable<TextFieldInfo> setBillableValues(TextFieldInfo textFieldInfo)
+        {
+            long? projectId = textFieldInfo.ProjectId;
+            var hasProject = projectId.HasValue && projectId.Value != ProjectSuggestion.NoProjectId;
+            if (hasProject)
+            {
+                var defaultsToBillable = interactorFactory.ProjectDefaultsToBillable(projectId.Value).Execute();
+                var billableAvailable =
+                    interactorFactory.IsBillableAvailableForProject(projectId.Value).Execute()
+                        .Do(isBillableAvailable.Accept);
+
+                return Observable.CombineLatest(billableAvailable, defaultsToBillable, And)
+                    .Do(isBillable.Accept)
+                    .SelectValue(textFieldInfo);
+            }
+
+            isBillable.Accept(false);
+            return interactorFactory.IsBillableAvailableForWorkspace(textFieldInfo.WorkspaceId).Execute()
+                .Do(isBillableAvailable.Accept)
+                .SelectValue(textFieldInfo);
+        }
+    }
+}

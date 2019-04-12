@@ -6,11 +6,11 @@ using System.Text;
 using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using MvvmCross.UI;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Autocomplete.Span;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Multivac.Extensions;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Span;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
+using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.Daneel.Autocomplete.Constants;
 

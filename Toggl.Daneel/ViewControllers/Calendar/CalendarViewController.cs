@@ -8,10 +8,10 @@ using Toggl.Daneel.Presentation;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Views.Calendar;
 using Toggl.Daneel.ViewSources;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
-using Toggl.Multivac.Extensions;
+using Toggl.Core;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers

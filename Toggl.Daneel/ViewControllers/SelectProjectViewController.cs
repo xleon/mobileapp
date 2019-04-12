@@ -3,15 +3,14 @@ using CoreGraphics;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Daneel.Extensions.Reactive;
 using UIKit;
 using System;
-using System.Reactive.Linq;
-using static Toggl.Multivac.Extensions.ReactiveExtensions;
-using Toggl.Foundation.Autocomplete.Suggestions;
 using System.Linq;
+using System.Reactive.Linq;
+using static Toggl.Shared.Extensions.ReactiveExtensions;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -60,7 +59,7 @@ namespace Toggl.Daneel.ViewControllers
                             ? numberOfSections * SelectProjectTableViewSource.HeaderHeight
                             : 0;
                         var suggestionsHeight = numberOfSuggestions * SelectProjectTableViewSource.RowHeight;
-                        var contentHeight = numberOfSuggestions == 1 
+                        var contentHeight = numberOfSuggestions == 1
                             ? placeHolderHeight
                             : headersHeight + suggestionsHeight;
                         return new CGSize(0, contentHeight + headerHeight);

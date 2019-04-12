@@ -4,10 +4,10 @@ using UIKit;
 using System.Linq;
 using CoreGraphics;
 using Foundation;
-using Toggl.Foundation.Reports;
+using Toggl.Core.Reports;
 using MvvmCross.UI;
 using MvvmCross.Plugin.Color.Platforms.Ios;
-using static Toggl.Multivac.Math;
+using static Toggl.Shared.Math;
 
 namespace Toggl.Daneel.Views.Reports
 {

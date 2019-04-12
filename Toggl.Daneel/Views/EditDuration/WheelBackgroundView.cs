@@ -1,10 +1,10 @@
 ﻿using System;
 using UIKit;
 using CoreAnimation;
-using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Core.UI.Helper;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using CoreGraphics;
-using static Toggl.Multivac.Math;
+using static Toggl.Shared.Math;
 using Foundation;
 using Toggl.Daneel.Views.EditDuration.Shapes;
 

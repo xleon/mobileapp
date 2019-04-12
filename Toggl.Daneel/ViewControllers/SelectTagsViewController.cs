@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using Toggl.Daneel.Presentation.Attributes;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.UI.ViewModels;
 using UIKit;
-using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Core.UI.Helper;
 using System.Threading.Tasks;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Views.Tag;
 using Toggl.Daneel.ViewSources;
-using Toggl.Multivac.Extensions;
 using System.Reactive;
 using System.Linq;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -49,8 +49,8 @@ namespace Toggl.Daneel.ViewControllers
                     .Select((tags) =>
                     {
                         var count = tags.ToList().Count();
-                        var contentHeight = count > 0 
-                            ? count * SelectTagsTableViewSource.RowHeight 
+                        var contentHeight = count > 0
+                            ? count * SelectTagsTableViewSource.RowHeight
                             : placeholderHeight;
                         return new CoreGraphics.CGSize(0, contentHeight + headerHeight);
                     })
