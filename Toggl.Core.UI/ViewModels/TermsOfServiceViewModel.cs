@@ -1,5 +1,4 @@
-﻿using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
+﻿using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Shared;
@@ -8,7 +7,7 @@ using Toggl.Shared.Extensions;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class TermsOfServiceViewModel : MvxViewModelResult<bool>
+    public sealed class TermsOfServiceViewModel : ViewModelWithOutput<bool>
     {
         private readonly IRxActionFactory rxActionFactory;
 
@@ -21,7 +20,7 @@ namespace Toggl.Core.UI.ViewModels
         public UIAction ViewPrivacyPolicy { get; }
         public InputAction<bool> Close { get; }
 
-        public TermsOfServiceViewModel(IBrowserService browserService, IRxActionFactory rxActionFactory, IMvxNavigationService navigationService)
+        public TermsOfServiceViewModel(IBrowserService browserService, IRxActionFactory rxActionFactory, INavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(browserService, nameof(browserService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));

@@ -7,9 +7,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
-using Toggl.Core;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.Calendar;
 using Toggl.Core.DataSources;
@@ -21,18 +19,16 @@ using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.Services;
-using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Toggl.Core.UI.Transformations;
 
-[assembly: MvxNavigation(typeof(CalendarViewModel), ApplicationUrls.Calendar.Regex)]
 namespace Toggl.Core.UI.ViewModels.Calendar
 {
     [Preserve(AllMembers = true)]
-    public sealed class CalendarViewModel : MvxViewModel
+    public sealed class CalendarViewModel : ViewModel
     {
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
@@ -44,7 +40,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private readonly IOnboardingStorage onboardingStorage;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IPermissionsService permissionsService;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly IRxActionFactory rxActionFactory;
 
@@ -96,7 +92,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             IOnboardingStorage onboardingStorage,
             ISchedulerProvider schedulerProvider,
             IPermissionsService permissionsService,
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory)
         {

@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using NSubstitute;
 using System;
@@ -20,6 +19,7 @@ using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Xunit;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.Tests.UI
 {
@@ -43,7 +43,7 @@ namespace Toggl.Core.Tests.UI
                 MockKeyValueStorage = Substitute.For<IKeyValueStorage>(),
                 MockLastTimeUsageStorage = Substitute.For<ILastTimeUsageStorage>(),
                 MockLicenseProvider = Substitute.For<ILicenseProvider>(),
-                MockNavigationService = Substitute.For<IMvxNavigationService>(),
+                MockNavigationService = Substitute.For<INavigationService>(),
                 MockNotificationService = Substitute.For<INotificationService>(),
                 MockOnboardingStorage = Substitute.For<IOnboardingStorage>(),
                 MockPasswordManagerService = Substitute.For<IPasswordManagerService>(),

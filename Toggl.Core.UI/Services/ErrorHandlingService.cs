@@ -1,23 +1,21 @@
 ﻿using System;
-using System.Threading.Tasks;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Services;
 using Toggl.Core.Exceptions;
 using Toggl.Shared;
 using Toggl.Storage.Settings;
 using Toggl.Networking.Exceptions;
-using Toggl.Core.Analytics;
 
 namespace Toggl.Core.UI.Services
 {
     public sealed class ErrorHandlingService : IErrorHandlingService
     {
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
 
         public ErrorHandlingService(
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IAccessRestrictionStorage accessRestrictionStorage)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));

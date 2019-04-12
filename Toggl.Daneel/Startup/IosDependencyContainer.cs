@@ -1,7 +1,4 @@
-﻿using Foundation;
-using MvvmCross.Navigation;
-using MvvmCross.Platforms.Ios.Presenters;
-using System;
+﻿using System;
 using Toggl.Daneel.Presentation;
 using Toggl.Daneel.Services;
 using Toggl.Core;
@@ -19,6 +16,7 @@ using Toggl.Storage.Realm;
 using Toggl.Storage.Settings;
 using Toggl.Networking;
 using Toggl.Networking.Network;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Daneel
 {
@@ -29,7 +27,7 @@ namespace Toggl.Daneel
         private readonly Lazy<SettingsStorage> settingsStorage;
 
         public TogglPresenter ViewPresenter { get; }
-        public IMvxNavigationService MvxNavigationService { get; internal set; }
+        public INavigationService MvxNavigationService { get; internal set; }
         
         public new static IosDependencyContainer Instance { get; private set; }
 
@@ -117,7 +115,7 @@ namespace Toggl.Daneel
                 new MostUsedTimeEntrySuggestionProvider(Database, TimeService, numberOfSuggestions)
             );
 
-        protected override IMvxNavigationService CreateNavigationService()
+        protected override INavigationService CreateNavigationService()
             => MvxNavigationService;
 
         protected override ILastTimeUsageStorage CreateLastTimeUsageStorage()

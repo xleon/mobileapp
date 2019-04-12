@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Extensions;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Services;
@@ -17,9 +14,9 @@ using Toggl.Storage.Settings;
 namespace Toggl.Core.UI.ViewModels.Settings
 {
     [Preserve(AllMembers = true)]
-    public sealed class NotificationSettingsViewModel : MvxViewModel
+    public sealed class NotificationSettingsViewModel : ViewModel
     {
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IPermissionsService permissionsService;
         private readonly IUserPreferences userPreferences;
         private readonly ISchedulerProvider schedulerProvider;
@@ -32,7 +29,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
         public UIAction OpenUpcomingEvents { get; }
 
         public NotificationSettingsViewModel(
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IBackgroundService backgroundService,
             IPermissionsService permissionsService,
             IUserPreferences userPreferences,

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using MvvmCross.ViewModels;
-using Toggl.Core.DataSources;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
@@ -12,7 +10,7 @@ using static System.Math;
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
-    public sealed class ReportsBarChartViewModel : MvxViewModel
+    public sealed class ReportsBarChartViewModel : ViewModel
     {
         private const int maximumLabeledNumberOfDays = 7;
 

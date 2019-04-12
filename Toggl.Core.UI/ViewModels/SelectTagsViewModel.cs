@@ -4,10 +4,8 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Autocomplete.Suggestions;
-using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
@@ -19,10 +17,10 @@ using Toggl.Shared.Extensions;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SelectTagsViewModel : MvxViewModel<(long[] tagIds, long workspaceId), long[]>
+    public sealed class SelectTagsViewModel : ViewModel<(long[] tagIds, long workspaceId), long[]>
     {
         private readonly IInteractorFactory interactorFactory;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly HashSet<long> selectedTagIds = new HashSet<long>();
@@ -40,7 +38,7 @@ namespace Toggl.Core.UI.ViewModels
         public InputAction<SelectableTagBaseViewModel> SelectTag { get; }
 
         public SelectTagsViewModel(
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IStopwatchProvider stopwatchProvider,
             IInteractorFactory interactorFactory,
             ISchedulerProvider schedulerProvider,

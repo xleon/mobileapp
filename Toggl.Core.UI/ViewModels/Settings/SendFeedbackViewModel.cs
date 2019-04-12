@@ -2,24 +2,22 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core.Interactors;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SendFeedbackViewModel : MvxViewModelResult<bool>
+    public sealed class SendFeedbackViewModel : ViewModelWithOutput<bool>
     {
         private readonly IDialogService dialogService;
         private readonly IInteractorFactory interactorFactory;
-        private readonly IMvxNavigationService navigationService;
-        private readonly IRxActionFactory rxActionFactory;
+        private readonly INavigationService navigationService;
 
         // Internal States
         private readonly ISubject<bool> isLoadingSubject = new BehaviorSubject<bool>(false);
@@ -46,7 +44,7 @@ namespace Toggl.Core.UI.ViewModels
                 (isEmpty, isLoading) => !isEmpty && !isLoading);
 
         public SendFeedbackViewModel(
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IInteractorFactory interactorFactory,
             IDialogService dialogService,
             ISchedulerProvider schedulerProvider,
@@ -61,7 +59,6 @@ namespace Toggl.Core.UI.ViewModels
             this.dialogService = dialogService;
             this.interactorFactory = interactorFactory;
             this.navigationService = navigationService;
-            this.rxActionFactory = rxActionFactory;
 
             IsFeedbackEmpty = isEmptyObservable.DistinctUntilChanged().AsDriver(schedulerProvider);
             SendEnabled = sendingIsEnabledObservable.DistinctUntilChanged().AsDriver(schedulerProvider);

@@ -5,9 +5,8 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using MvvmCross.UI;
-using MvvmCross.ViewModels;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.DTOs;
@@ -27,7 +26,7 @@ using static Toggl.Core.Helper.Color;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class EditProjectViewModel : MvxViewModel<string, long?>
+    public sealed class EditProjectViewModel : ViewModel<string, long?>
     {
         private const long noClientId = 0;
 
@@ -35,7 +34,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IDialogService dialogService;
         private readonly IInteractorFactory interactorFactory;
         private readonly IStopwatchProvider stopwatchProvider;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly ITogglDataSource dataSource;
 
         private long initialWorkspaceId;
@@ -65,7 +64,7 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
-            IMvxNavigationService navigationService)
+            INavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));

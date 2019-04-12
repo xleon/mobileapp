@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentAssertions;
-using MvvmCross.Navigation;
 using NSubstitute;
 using Toggl.Core.Exceptions;
 using Toggl.Core.UI.Services;
@@ -12,6 +11,7 @@ using Toggl.Storage.Settings;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Network;
 using Xunit;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.Tests.UI.Services
 {
@@ -19,7 +19,7 @@ namespace Toggl.Core.Tests.UI.Services
     {
         public abstract class BaseErrorHandlingServiceTests
         {
-            protected readonly IMvxNavigationService NavigationService;
+            protected readonly INavigationService NavigationService;
             protected readonly IAccessRestrictionStorage AccessRestrictionStorage;
             protected readonly IErrorHandlingService ErrorHandlingService;
             protected readonly IDatabaseUser User;
@@ -29,7 +29,7 @@ namespace Toggl.Core.Tests.UI.Services
                 User = Substitute.For<IDatabaseUser>();
                 var token = Guid.NewGuid().ToString();
                 User.ApiToken.Returns(token);
-                NavigationService = Substitute.For<IMvxNavigationService>();
+                NavigationService = Substitute.For<INavigationService>();
                 AccessRestrictionStorage = Substitute.For<IAccessRestrictionStorage>();
                 ErrorHandlingService =
                     new ErrorHandlingService(NavigationService, AccessRestrictionStorage);
@@ -42,7 +42,7 @@ namespace Toggl.Core.Tests.UI.Services
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(bool useNavigationService, bool useAccessRestrictionStorage)
             {
-                var navigationService = useNavigationService ? Substitute.For<IMvxNavigationService>() : null;
+                var navigationService = useNavigationService ? Substitute.For<INavigationService>() : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? Substitute.For<IAccessRestrictionStorage>() : null;
 
                 Action tryingToConstructWithEmptyParameters =

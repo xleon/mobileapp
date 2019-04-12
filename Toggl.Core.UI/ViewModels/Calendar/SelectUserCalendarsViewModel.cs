@@ -1,13 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using MvvmCross.Navigation;
+﻿using Toggl.Core.UI.Navigation;
 using Toggl.Core.Interactors;
 using Toggl.Core.Services;
 using Toggl.Shared;
-using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 
 namespace Toggl.Core.UI.ViewModels.Calendar
@@ -18,7 +12,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         public SelectUserCalendarsViewModel(
             IUserPreferences userPreferences,
             IInteractorFactory interactorFactory,
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IRxActionFactory rxActionFactory
             )
             : base(userPreferences, interactorFactory, navigationService, rxActionFactory)

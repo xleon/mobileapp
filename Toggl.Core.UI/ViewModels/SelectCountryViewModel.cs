@@ -4,8 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Core.Interactors;
@@ -14,20 +13,20 @@ using Toggl.Core.Services;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SelectCountryViewModel : MvxViewModel<long?, long?>
+    public sealed class SelectCountryViewModel : ViewModel<long?, long?>
     {
         private readonly IRxActionFactory rxActionFactory;
 
         private long? selectedCountryId;
 
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
 
         public IObservable<IEnumerable<SelectableCountryViewModel>> Countries { get; private set; }
         public ISubject<string> FilterText { get; } = new BehaviorSubject<string>(string.Empty);
         public InputAction<SelectableCountryViewModel> SelectCountry { get; }
         public UIAction Close { get; }
 
-        public SelectCountryViewModel(IMvxNavigationService navigationService, IRxActionFactory rxActionFactory)
+        public SelectCountryViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));

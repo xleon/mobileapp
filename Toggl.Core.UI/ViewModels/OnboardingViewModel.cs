@@ -5,8 +5,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
+using Toggl.Core.UI.Navigation;
 using MvvmCross.UI;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Extensions;
@@ -20,7 +19,7 @@ using Color = Toggl.Core.UI.Helper.Color;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class OnboardingViewModel : MvxViewModel
+    public sealed class OnboardingViewModel : ViewModel
     {
         public const int TrackPage = 0;
         public const int MostUsedPage = 1;
@@ -42,7 +41,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private readonly IAnalyticsService analyticsService;
         private readonly IOnboardingStorage onboardingStorage;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly BehaviorSubject<int> currentPage = new BehaviorSubject<int>(0);
         private readonly bool[] pagesVisited = new bool[pageInfo.Length];
         private bool visitedAllPages => pagesVisited.All(CommonFunctions.Identity);
@@ -63,7 +62,7 @@ namespace Toggl.Core.UI.ViewModels
         public int NumberOfPages => pageInfo.Length;
 
         public OnboardingViewModel(
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IOnboardingStorage onboardingStorage,
             IAnalyticsService analyticsService,
             IRxActionFactory rxActionFactory,

@@ -5,7 +5,7 @@ using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.ViewModels.Settings;
 
-namespace Toggl.Core.UI
+namespace Toggl.Core.UI.Navigation
 {
     public sealed class TogglViewModelLocator : MvxDefaultViewModelLocator
     {

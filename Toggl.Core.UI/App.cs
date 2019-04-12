@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using MvvmCross.Plugin;
 using MvvmCross.ViewModels;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 

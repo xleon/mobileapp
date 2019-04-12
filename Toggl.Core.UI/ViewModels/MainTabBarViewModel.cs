@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
@@ -22,7 +22,7 @@ using Toggl.Storage.Settings;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class MainTabBarViewModel : MvxViewModel
+    public sealed class MainTabBarViewModel : ViewModel
     {
         private readonly IRemoteConfigService remoteConfigService;
         private readonly IStopwatchProvider stopwatchProvider;
@@ -50,7 +50,7 @@ namespace Toggl.Core.UI.ViewModels
             IOnboardingStorage onboardingStorage,
             ISchedulerProvider schedulerProvider,
             IPermissionsService permissionsService,
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IRemoteConfigService remoteConfigService,
             ISuggestionProviderContainer suggestionProviders,
             IIntentDonationService intentDonationService,

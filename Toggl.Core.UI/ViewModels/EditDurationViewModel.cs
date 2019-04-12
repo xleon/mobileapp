@@ -2,8 +2,7 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Extensions;
@@ -20,10 +19,10 @@ using static Toggl.Core.UI.Helper.TemporalInconsistency;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class EditDurationViewModel : MvxViewModel<EditDurationParameters, DurationParameter>
+    public sealed class EditDurationViewModel : ViewModel<EditDurationParameters, DurationParameter>
     {
         private readonly ITimeService timeService;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IAnalyticsService analyticsService;
 
         private IDisposable runningTimeEntryDisposable;
@@ -76,7 +75,7 @@ namespace Toggl.Core.UI.ViewModels
 
         public bool IsDurationInitiallyFocused { get; private set; }
 
-        public EditDurationViewModel(IMvxNavigationService navigationService, ITimeService timeService, ITogglDataSource dataSource, IAnalyticsService analyticsService, IRxActionFactory rxActionFactory, ISchedulerProvider schedulerProvider)
+        public EditDurationViewModel(INavigationService navigationService, ITimeService timeService, ITogglDataSource dataSource, IAnalyticsService analyticsService, IRxActionFactory rxActionFactory, ISchedulerProvider schedulerProvider)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));

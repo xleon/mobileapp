@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
 using Toggl.Shared;
@@ -11,10 +10,10 @@ using Toggl.Shared.Extensions.Reactive;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public class SelectDateTimeViewModel : MvxViewModel<DateTimePickerParameters, DateTimeOffset>
+    public class SelectDateTimeViewModel : ViewModel<DateTimePickerParameters, DateTimeOffset>
     {
         private DateTimeOffset defaultResult;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
 
         public DateTimeOffset MinDate { get; private set; }
         public DateTimeOffset MaxDate { get; private set; }
@@ -25,7 +24,7 @@ namespace Toggl.Core.UI.ViewModels
         public UIAction CloseCommand { get; }
         public UIAction SaveCommand { get; }
 
-        public SelectDateTimeViewModel(IRxActionFactory rxActionFactory, IMvxNavigationService navigationService)
+        public SelectDateTimeViewModel(IRxActionFactory rxActionFactory, INavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));

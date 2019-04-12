@@ -1,5 +1,4 @@
 ﻿using Microsoft.Reactive.Testing;
-using MvvmCross.Navigation;
 using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
@@ -7,9 +6,9 @@ using Toggl.Core.Interactors;
 using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
-using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.Tests.UI
 {
@@ -26,7 +25,7 @@ namespace Toggl.Core.Tests.UI
         protected IApplicationShortcutCreator ApplicationShortcutCreator { get; }
             = Substitute.For<IApplicationShortcutCreator>();
 
-        protected IMvxNavigationService NavigationService { get; } = Substitute.For<IMvxNavigationService>();
+        protected INavigationService NavigationService { get; } = Substitute.For<INavigationService>();
         protected TestSchedulerProvider SchedulerProvider { get; } = new TestSchedulerProvider();
         protected IIntentDonationService IntentDonationService { get; } = Substitute.For<IIntentDonationService>();
         protected IPrivateSharedStorageService PrivateSharedStorageService { get; } = Substitute.For<IPrivateSharedStorageService>();

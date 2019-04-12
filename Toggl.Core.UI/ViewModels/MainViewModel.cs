@@ -6,9 +6,8 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using MvvmCross.ViewModels;
-using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
@@ -19,7 +18,6 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
@@ -31,13 +29,12 @@ using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 
-[assembly: MvxNavigation(typeof(MainViewModel), ApplicationUrls.Main.Regex)]
 namespace Toggl.Core.UI.ViewModels
 {
     using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
 
     [Preserve(AllMembers = true)]
-    public sealed class MainViewModel : MvxViewModel
+    public sealed class MainViewModel : ViewModel
     {
         private const int ratingViewTimeout = 5;
         private const double throttlePeriodInSeconds = 0.1;
@@ -57,7 +54,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IInteractorFactory interactorFactory;
         private readonly IStopwatchProvider stopwatchProvider;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IIntentDonationService intentDonationService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
         private readonly IRxActionFactory rxActionFactory;
@@ -91,7 +88,7 @@ namespace Toggl.Core.UI.ViewModels
         public SuggestionsViewModel SuggestionsViewModel { get; }
         public IOnboardingStorage OnboardingStorage => onboardingStorage;
 
-        public new IMvxNavigationService NavigationService => navigationService;
+        public new INavigationService NavigationService => navigationService;
 
         public UIAction Refresh { get; private set; }
         public UIAction OpenReports { get; private set; }
@@ -115,7 +112,7 @@ namespace Toggl.Core.UI.ViewModels
             IAnalyticsService analyticsService,
             IOnboardingStorage onboardingStorage,
             IInteractorFactory interactorFactory,
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IRemoteConfigService remoteConfigService,
             ISuggestionProviderContainer suggestionProviders,
             IIntentDonationService intentDonationService,

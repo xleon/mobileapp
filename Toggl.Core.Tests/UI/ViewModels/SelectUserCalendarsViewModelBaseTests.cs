@@ -1,22 +1,22 @@
-﻿using System.Collections.Generic;
-using Toggl.Core.Exceptions;
+﻿using System;
+using System.Collections.Generic;
+using System.Reactive;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
+using Toggl.Core.Exceptions;
 using Toggl.Core.Interactors;
-using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.Services;
+using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.ViewModels.Selectable;
+using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Xunit;
 using Toggl.Storage.Settings;
-using MvvmCross.Navigation;
-using Toggl.Core.UI.ViewModels.Selectable;
-using System.Reactive;
-using System;
-using Toggl.Core.Tests.TestExtensions;
+using Xunit;
 using static Toggl.Shared.Extensions.FunctionalExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
@@ -28,7 +28,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public MockSelectUserCalendarsViewModel(
                 IUserPreferences userPreferences,
                 IInteractorFactory interactorFactory,
-                IMvxNavigationService navigationService,
+                INavigationService navigationService,
                 IRxActionFactory rxActionFactory)
                 : base(userPreferences, interactorFactory, navigationService, rxActionFactory)
             {

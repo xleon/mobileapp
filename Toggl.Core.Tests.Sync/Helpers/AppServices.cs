@@ -10,6 +10,7 @@ using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Toggl.Networking;
 using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.Tests.Sync.Helpers
 {
@@ -24,8 +25,8 @@ namespace Toggl.Core.Tests.Sync.Helpers
         public IAccessRestrictionStorage AccessRestrictionStorageSubsitute { get; } =
             Substitute.For<IAccessRestrictionStorage>();
 
-        public IMvxNavigationService NavigationServiceSubstitute { get; } =
-            Substitute.For<IMvxNavigationService>();
+        public INavigationService NavigationServiceSubstitute { get; } =
+            Substitute.For<INavigationService>();
 
         public IAnalyticsService AnalyticsServiceSubstitute { get; } = Substitute.For<IAnalyticsService>();
 

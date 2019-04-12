@@ -2,7 +2,6 @@
 using System.Reactive.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
-using MvvmCross.ViewModels;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
@@ -12,18 +11,18 @@ using System.Linq;
 using System.Collections.Generic;
 using Toggl.Core.Exceptions;
 using System.Collections.Immutable;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Services;
 using Toggl.Storage.Settings;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SelectDefaultWorkspaceViewModel : MvxViewModelResult<Unit>
+    public sealed class SelectDefaultWorkspaceViewModel : ViewModelWithOutput<Unit>
     {
         private readonly ITogglDataSource dataSource;
         private readonly IInteractorFactory interactorFactory;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
         private readonly IRxActionFactory rxActionFactory;
 
@@ -34,7 +33,7 @@ namespace Toggl.Core.UI.ViewModels
         public SelectDefaultWorkspaceViewModel(
             ITogglDataSource dataSource,
             IInteractorFactory interactorFactory,
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IAccessRestrictionStorage accessRestrictionStorage,
             IRxActionFactory rxActionFactory)
         {

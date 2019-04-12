@@ -1,16 +1,14 @@
-﻿using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
+﻿using Toggl.Core.UI.Navigation;
 using System.Threading.Tasks;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using System.Threading.Tasks;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class BrowserViewModel : MvxViewModel<BrowserParameters>
+    public sealed class BrowserViewModel : ViewModelWithInput<BrowserParameters>
     {
         public string Url { get; private set; }
 
@@ -18,7 +16,7 @@ namespace Toggl.Core.UI.ViewModels
 
         public UIAction Close { get; }
 
-        public BrowserViewModel(IMvxNavigationService navigationService, IRxActionFactory rxActionFactory)
+        public BrowserViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));

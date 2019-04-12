@@ -6,8 +6,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Interactors;
 using Toggl.Core.UI.Collections;
@@ -22,12 +21,12 @@ namespace Toggl.Core.UI.ViewModels.Calendar
     using CalendarSectionModel = SectionModel<UserCalendarSourceViewModel, SelectableUserCalendarViewModel>;
     using ImmutableCalendarSectionModel = IImmutableList<SectionModel<UserCalendarSourceViewModel, SelectableUserCalendarViewModel>>;
 
-    public abstract class SelectUserCalendarsViewModelBase : MvxViewModel<bool, string[]>
+    public abstract class SelectUserCalendarsViewModelBase : ViewModel<bool, string[]>
     {
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         protected readonly IUserPreferences UserPreferences;
-        protected new readonly IMvxNavigationService NavigationService;
+        protected new readonly INavigationService NavigationService;
         private readonly IInteractorFactory interactorFactory;
         private readonly IRxActionFactory rxActionFactory;
 
@@ -50,7 +49,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         protected SelectUserCalendarsViewModelBase(
             IUserPreferences userPreferences,
             IInteractorFactory interactorFactory,
-            IMvxNavigationService navigationService, IRxActionFactory rxActionFactory)
+            INavigationService navigationService, IRxActionFactory rxActionFactory)
         {
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));

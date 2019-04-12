@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
-using MvvmCross.Navigation;
 using NSubstitute;
-using Toggl.Core.UI;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Core.Services;
 using Toggl.Core.Tests.Generators;
 using Toggl.Shared;
 using Xunit;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -27,7 +26,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [ConstructorData]
             public void ThrowsIfTheArgumentIsNull(bool useNavigationService, bool useRxActionFactory)
             {
-                var navigationService = useNavigationService ? Substitute.For<IMvxNavigationService>() : null;
+                var navigationService = useNavigationService ? Substitute.For<INavigationService>() : null;
                 var rxActionFactory = useRxActionFactory ? Substitute.For<IRxActionFactory>() : null;
 
                 Action tryingToConstructWithEmptyParameter =
