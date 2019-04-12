@@ -3,7 +3,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
@@ -24,7 +24,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IUserAccessManager userAccessManager;
         private readonly ITogglDataSource dataSource;
         private readonly IDialogService dialogService;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
         private readonly ISchedulerProvider schedulerProvider;
@@ -53,7 +53,7 @@ namespace Toggl.Core.UI.ViewModels
             IUserAccessManager userAccessManager,
             ITogglDataSource dataSource,
             IDialogService dialogService,
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
             ISchedulerProvider schedulerProvider,

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Extensions;
 using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Core.Services;
@@ -16,7 +16,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
     [Preserve(AllMembers = true)]
     public sealed class UpcomingEventsNotificationSettingsViewModel : ViewModelWithOutput<Unit>
     {
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IUserPreferences userPreferences;
         private readonly IRxActionFactory rxActionFactory;
 
@@ -26,7 +26,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
         public UIAction Close { get; }
 
         public UpcomingEventsNotificationSettingsViewModel(
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IUserPreferences userPreferences,
             IRxActionFactory rxActionFactory)
         {

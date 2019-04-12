@@ -2,7 +2,7 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Login;
@@ -20,7 +20,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ITimeService timeService;
         private readonly IUserAccessManager userAccessManager;
         private readonly IAnalyticsService analyticsService;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IRxActionFactory rxActionFactory;
 
         private readonly TimeSpan delayAfterPassordReset = TimeSpan.FromSeconds(4);
@@ -36,7 +36,7 @@ namespace Toggl.Core.UI.ViewModels
             ITimeService timeService,
             IUserAccessManager userAccessManager,
             IAnalyticsService analyticsService,
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IRxActionFactory rxActionFactory)
         {
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));

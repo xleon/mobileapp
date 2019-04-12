@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using MvvmCross.UI;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
@@ -18,7 +18,7 @@ namespace Toggl.Core.UI.ViewModels
     [Preserve(AllMembers = true)]
     public class SelectColorViewModel : ViewModel<ColorParameters, MvxColor>
     {
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IRxActionFactory rxActionFactory;
 
         private MvxColor defaultColor;
@@ -43,7 +43,7 @@ namespace Toggl.Core.UI.ViewModels
         public InputAction<float> SetValue { get; }
         public InputAction<MvxColor> SelectColor { get; }
 
-        public SelectColorViewModel(IMvxNavigationService navigationService, IRxActionFactory rxActionFactory)
+        public SelectColorViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));

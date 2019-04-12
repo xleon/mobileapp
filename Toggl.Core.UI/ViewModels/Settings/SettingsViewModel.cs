@@ -6,7 +6,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
@@ -48,7 +48,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IPlatformInfo platformInfo;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IInteractorFactory interactorFactory;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IPrivateSharedStorageService privateSharedStorageService;
         private readonly IIntentDonationService intentDonationService;
         private readonly IStopwatchProvider stopwatchProvider;
@@ -113,7 +113,7 @@ namespace Toggl.Core.UI.ViewModels
             IUserAccessManager userAccessManager,
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IPrivateSharedStorageService privateSharedStorageService,
             IIntentDonationService intentDonationService,
             IStopwatchProvider stopwatchProvider,

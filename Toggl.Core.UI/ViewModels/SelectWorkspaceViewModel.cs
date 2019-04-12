@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Interactors;
 using Toggl.Core.Services;
 using Toggl.Shared;
@@ -14,7 +14,7 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class SelectWorkspaceViewModel : ViewModel<long, long>
     {
         private readonly IInteractorFactory interactorFactory;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
 
         private long currentWorkspaceId;
 
@@ -26,7 +26,7 @@ namespace Toggl.Core.UI.ViewModels
 
         public SelectWorkspaceViewModel(
             IInteractorFactory interactorFactory,
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IRxActionFactory rxActionFactory)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));

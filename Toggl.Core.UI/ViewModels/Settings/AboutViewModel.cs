@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Core.UI.Parameters;
 using Toggl.Shared.Extensions;
@@ -10,14 +10,14 @@ namespace Toggl.Core.UI.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class AboutViewModel : ViewModel
     {
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IRxActionFactory rxActionFactory;
 
         public UIAction OpenPrivacyPolicyView { get; private set; }
         public UIAction OpenTermsOfServiceView { get; private set; }
         public UIAction OpenLicensesView { get; private set; }
 
-        public AboutViewModel(IMvxNavigationService navigationService, IRxActionFactory rxActionFactory)
+        public AboutViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));

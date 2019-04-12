@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Foundation;
 using Intents;
-using MvvmCross.Navigation;
 using MvvmCross.Platforms.Ios.Core;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
@@ -30,6 +29,7 @@ using Toggl.Shared.Extensions;
 using UIKit;
 using UserNotifications;
 using AdjustBindingsiOS;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Daneel
 {
@@ -38,7 +38,7 @@ namespace Toggl.Daneel
     {
         private IAnalyticsService analyticsService;
         private IBackgroundService backgroundService;
-        private IMvxNavigationService navigationService;
+        private INavigationService navigationService;
         private ITimeService timeService;
 
         public override UIWindow Window { get; set; }

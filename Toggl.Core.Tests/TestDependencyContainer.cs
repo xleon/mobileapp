@@ -1,6 +1,4 @@
-﻿using MvvmCross.Navigation;
-using System;
-using Toggl.Core.Analytics;
+﻿using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
@@ -14,6 +12,7 @@ using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Toggl.Networking;
 using Toggl.Networking.Network;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.UI
 {
@@ -81,8 +80,8 @@ namespace Toggl.Core.UI
         protected override ILicenseProvider CreateLicenseProvider()
             => MockLicenseProvider;
 
-        internal IMvxNavigationService MockNavigationService { get; set; }
-        protected override IMvxNavigationService CreateNavigationService()
+        internal INavigationService MockNavigationService { get; set; }
+        protected override INavigationService CreateNavigationService()
             => MockNavigationService;
 
         internal INotificationService MockNotificationService { get; set; }

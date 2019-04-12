@@ -2,7 +2,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -12,7 +12,7 @@ namespace Toggl.Core.UI.ViewModels
     [Preserve(AllMembers = true)]
     public class SelectDurationFormatViewModel : ViewModel<DurationFormat, DurationFormat>
     {
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
 
         private DurationFormat defaultResult;
 
@@ -23,7 +23,7 @@ namespace Toggl.Core.UI.ViewModels
         public InputAction<SelectableDurationFormatViewModel> SelectDurationFormat { get; }
 
         public SelectDurationFormatViewModel(
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IRxActionFactory rxActionFactory)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));

@@ -4,7 +4,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Interactors;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Services;
@@ -34,7 +34,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
         public CalendarSettingsViewModel(
             IUserPreferences userPreferences,
             IInteractorFactory interactorFactory,
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IRxActionFactory rxActionFactory,
             IPermissionsService permissionsService)
             : base(userPreferences, interactorFactory, navigationService, rxActionFactory)

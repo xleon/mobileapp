@@ -1,7 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
 using MvvmCross;
-using MvvmCross.Binding;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
@@ -15,11 +14,11 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Services;
 using Toggl.Droid.BroadcastReceivers;
 using Toggl.Droid.Presentation;
-using Toggl.Droid.Services;
 using Toggl.Droid.Startup;
 using Toggl.Networking;
 using ColorPlugin = MvvmCross.Plugin.Color.Platforms.Android.Plugin;
 using VisibilityPlugin = MvvmCross.Plugin.Visibility.Platforms.Android.Plugin;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Droid
 {
@@ -52,7 +51,7 @@ namespace Toggl.Droid
 
             var container = AndroidDependencyContainer.Instance;
             container.MvxNavigationService =
-                new NavigationService(null, loader, container.AnalyticsService, Platform.Giskard);
+                new NavigationService(null, loader, container.AnalyticsService);
 
             Mvx.RegisterSingleton<IMvxNavigationService>(container.MvxNavigationService);
             return container.MvxNavigationService;

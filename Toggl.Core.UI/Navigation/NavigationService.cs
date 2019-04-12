@@ -5,21 +5,19 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Core.Analytics;
 
-namespace Toggl.Core.UI
+namespace Toggl.Core.UI.Navigation
 {
-    public sealed class NavigationService : MvxNavigationService
+    public sealed class NavigationService : MvxNavigationService, INavigationService
     {
         private readonly IAnalyticsService analyticsService;
-        private readonly Platform platform;
 
         public NavigationService(
             IMvxNavigationCache navigationCache,
             IMvxViewModelLoader viewModelLoader,
-            IAnalyticsService analyticsService,
-            Platform platform) : base(navigationCache, viewModelLoader)
+            IAnalyticsService analyticsService)
+            : base(navigationCache, viewModelLoader)
         {
             this.analyticsService = analyticsService;
-            this.platform = platform;
         }
 
         public override Task Navigate(IMvxViewModel viewModel, IMvxBundle presentationBundle = null)

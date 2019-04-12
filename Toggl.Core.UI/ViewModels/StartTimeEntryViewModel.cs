@@ -7,8 +7,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
-using Toggl.Core;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Span;
@@ -22,7 +21,6 @@ using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.Services;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -33,7 +31,6 @@ using static Toggl.Shared.Extensions.CommonFunctions;
 using IStopwatch = Toggl.Core.Diagnostics.IStopwatch;
 using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
 
-[assembly: MvxNavigation(typeof(StartTimeEntryViewModel), ApplicationUrls.StartTimeEntry)]
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
@@ -43,7 +40,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IDialogService dialogService;
         private readonly IUserPreferences userPreferences;
         private readonly IInteractorFactory interactorFactory;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IAnalyticsService analyticsService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IIntentDonationService intentDonationService;
@@ -120,7 +117,7 @@ namespace Toggl.Core.UI.ViewModels
             IUserPreferences userPreferences,
             IOnboardingStorage onboardingStorage,
             IInteractorFactory interactorFactory,
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IAnalyticsService analyticsService,
             ISchedulerProvider schedulerProvider,
             IIntentDonationService intentDonationService,

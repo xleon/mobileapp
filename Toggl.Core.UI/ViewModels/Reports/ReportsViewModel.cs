@@ -8,8 +8,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
-using Toggl.Core;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
@@ -20,7 +19,6 @@ using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels.Hints;
-using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Reports;
 using Toggl.Core.Services;
 using Toggl.Shared;
@@ -29,8 +27,6 @@ using Toggl.Shared.Models.Reports;
 using Toggl.Networking.Exceptions;
 using CommonFunctions = Toggl.Shared.Extensions.CommonFunctions;
 using Color = Toggl.Core.UI.Helper.Color;
-
-[assembly: MvxNavigation(typeof(ReportsViewModel), ApplicationUrls.Reports)]
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
@@ -46,7 +42,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
         private readonly IDialogService dialogService;
@@ -114,7 +110,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         public ReportsViewModel(ITogglDataSource dataSource,
             ITimeService timeService,
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IInteractorFactory interactorFactory,
             IAnalyticsService analyticsService,
             IDialogService dialogService,

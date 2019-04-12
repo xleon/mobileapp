@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.Navigation;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
@@ -28,7 +28,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ITogglDataSource dataSource;
         private readonly IDialogService dialogService;
         private readonly IInteractorFactory interactorFactory;
-        private readonly IMvxNavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IStopwatchProvider stopwatchProvider;
 
@@ -61,7 +61,7 @@ namespace Toggl.Core.UI.ViewModels
             ITogglDataSource dataSource,
             IRxActionFactory rxActionFactory,
             IInteractorFactory interactorFactory,
-            IMvxNavigationService navigationService,
+            INavigationService navigationService,
             IDialogService dialogService,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider)
