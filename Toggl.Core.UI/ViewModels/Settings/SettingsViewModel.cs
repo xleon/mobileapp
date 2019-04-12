@@ -7,7 +7,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
@@ -26,7 +25,6 @@ using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
-using Toggl.Networking.Network;
 using static Toggl.Shared.Extensions.CommonFunctions;
 
 namespace Toggl.Core.UI.ViewModels
@@ -34,7 +32,7 @@ namespace Toggl.Core.UI.ViewModels
     using WorkspaceToSelectableWorkspaceLambda = Func<IEnumerable<IThreadSafeWorkspace>, IList<SelectableWorkspaceViewModel>>;
 
     [Preserve(AllMembers = true)]
-    public sealed class SettingsViewModel : MvxViewModel
+    public sealed class SettingsViewModel : ViewModel
     {
         private readonly ISubject<Unit> loggingOutSubject = new Subject<Unit>();
         private readonly ISubject<bool> isFeedbackSuccessViewShowing = new Subject<bool>();

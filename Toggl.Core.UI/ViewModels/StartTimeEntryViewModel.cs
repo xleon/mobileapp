@@ -8,7 +8,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Autocomplete;
@@ -38,7 +37,7 @@ using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class StartTimeEntryViewModel : MvxViewModel<StartTimeEntryParameters>
+    public sealed class StartTimeEntryViewModel : ViewModelWithInput<StartTimeEntryParameters>
     {
         private readonly ITimeService timeService;
         private readonly IDialogService dialogService;

@@ -4,16 +4,13 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
-using Toggl.Core.Interactors.UserAccess;
 using Toggl.Core.Login;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
-using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
@@ -22,7 +19,7 @@ using Toggl.Networking.Exceptions;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class TokenResetViewModel : MvxViewModel
+    public sealed class TokenResetViewModel : ViewModel
     {
         private readonly IUserAccessManager userAccessManager;
         private readonly ITogglDataSource dataSource;

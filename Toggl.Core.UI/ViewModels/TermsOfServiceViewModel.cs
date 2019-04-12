@@ -1,5 +1,4 @@
 ﻿using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Shared;
@@ -8,7 +7,7 @@ using Toggl.Shared.Extensions;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class TermsOfServiceViewModel : MvxViewModelResult<bool>
+    public sealed class TermsOfServiceViewModel : ViewModelWithOutput<bool>
     {
         private readonly IRxActionFactory rxActionFactory;
 

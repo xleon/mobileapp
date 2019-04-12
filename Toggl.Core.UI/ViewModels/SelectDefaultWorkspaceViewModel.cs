@@ -2,7 +2,6 @@
 using System.Reactive.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
-using MvvmCross.ViewModels;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
@@ -19,7 +18,7 @@ using Toggl.Storage.Settings;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SelectDefaultWorkspaceViewModel : MvxViewModelResult<Unit>
+    public sealed class SelectDefaultWorkspaceViewModel : ViewModelWithOutput<Unit>
     {
         private readonly ITogglDataSource dataSource;
         private readonly IInteractorFactory interactorFactory;

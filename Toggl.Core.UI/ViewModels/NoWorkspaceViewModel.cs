@@ -2,11 +2,8 @@ using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
-using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
@@ -17,7 +14,7 @@ using Toggl.Storage.Settings;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class NoWorkspaceViewModel : MvxViewModelResult<Unit>
+    public sealed class NoWorkspaceViewModel : ViewModelWithOutput<Unit>
     {
         private readonly ISyncManager syncManager;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;

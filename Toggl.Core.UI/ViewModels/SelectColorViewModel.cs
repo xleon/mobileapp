@@ -5,7 +5,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using MvvmCross.UI;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
@@ -17,7 +16,7 @@ using Color = Toggl.Core.UI.Helper.Color;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public class SelectColorViewModel : MvxViewModel<ColorParameters, MvxColor>
+    public class SelectColorViewModel : ViewModel<ColorParameters, MvxColor>
     {
         private readonly IMvxNavigationService navigationService;
         private readonly IRxActionFactory rxActionFactory;

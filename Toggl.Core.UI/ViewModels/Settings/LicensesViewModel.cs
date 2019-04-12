@@ -1,14 +1,13 @@
 ﻿using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive.Linq;
-using MvvmCross.ViewModels;
 using Toggl.Core.Services;
 using Toggl.Shared;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class LicensesViewModel : MvxViewModel
+    public sealed class LicensesViewModel : ViewModel
     {
         public IImmutableList<License> Licenses { get; }
 

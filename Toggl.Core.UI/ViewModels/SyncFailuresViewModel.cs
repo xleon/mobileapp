@@ -1,7 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using MvvmCross.ViewModels;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models;
 using Toggl.Shared;
@@ -9,7 +8,7 @@ using Toggl.Shared;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public class SyncFailuresViewModel : MvxViewModel
+    public class SyncFailuresViewModel : ViewModel
     {
         public IImmutableList<SyncFailureItem> SyncFailures { get; private set; }
 

@@ -5,9 +5,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core.Autocomplete.Suggestions;
-using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
@@ -19,7 +17,7 @@ using Toggl.Shared.Extensions;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SelectTagsViewModel : MvxViewModel<(long[] tagIds, long workspaceId), long[]>
+    public sealed class SelectTagsViewModel : ViewModel<(long[] tagIds, long workspaceId), long[]>
     {
         private readonly IInteractorFactory interactorFactory;
         private readonly IMvxNavigationService navigationService;

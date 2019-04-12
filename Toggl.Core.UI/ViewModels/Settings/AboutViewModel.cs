@@ -1,18 +1,14 @@
 ﻿using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Shared;
 using Toggl.Core.UI.Parameters;
 using Toggl.Shared.Extensions;
-using System;
-using System.Reactive;
-using System.Reactive.Threading.Tasks;
 using Toggl.Core.Services;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class AboutViewModel : MvxViewModel
+    public sealed class AboutViewModel : ViewModel
     {
         private readonly IMvxNavigationService navigationService;
         private readonly IRxActionFactory rxActionFactory;

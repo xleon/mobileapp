@@ -7,7 +7,6 @@ using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.UI;
-using MvvmCross.ViewModels;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.DTOs;
@@ -27,7 +26,7 @@ using static Toggl.Core.Helper.Color;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class EditProjectViewModel : MvxViewModel<string, long?>
+    public sealed class EditProjectViewModel : ViewModel<string, long?>
     {
         private const long noClientId = 0;
 

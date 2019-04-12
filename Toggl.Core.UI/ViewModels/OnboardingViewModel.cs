@@ -6,7 +6,6 @@ using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using MvvmCross.UI;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Extensions;
@@ -20,7 +19,7 @@ using Color = Toggl.Core.UI.Helper.Color;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class OnboardingViewModel : MvxViewModel
+    public sealed class OnboardingViewModel : ViewModel
     {
         public const int TrackPage = 0;
         public const int MostUsedPage = 1;

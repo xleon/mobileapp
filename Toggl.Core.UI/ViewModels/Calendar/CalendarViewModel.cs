@@ -8,7 +8,6 @@ using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Calendar;
@@ -32,7 +31,7 @@ using Toggl.Core.UI.Transformations;
 namespace Toggl.Core.UI.ViewModels.Calendar
 {
     [Preserve(AllMembers = true)]
-    public sealed class CalendarViewModel : MvxViewModel
+    public sealed class CalendarViewModel : ViewModel
     {
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;

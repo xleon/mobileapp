@@ -5,7 +5,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core.Analytics;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Extensions;
@@ -29,7 +28,7 @@ using Toggl.Core.Serialization;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SignupViewModel : MvxViewModel<CredentialsParameter>
+    public sealed class SignupViewModel : ViewModelWithInput<CredentialsParameter>
     {
         [Flags]
         public enum ShakeTargets

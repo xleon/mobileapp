@@ -5,7 +5,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Core.Interactors;
@@ -14,7 +13,7 @@ using Toggl.Core.Services;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SelectCountryViewModel : MvxViewModel<long?, long?>
+    public sealed class SelectCountryViewModel : ViewModel<long?, long?>
     {
         private readonly IRxActionFactory rxActionFactory;
 

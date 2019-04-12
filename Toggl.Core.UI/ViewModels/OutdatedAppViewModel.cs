@@ -1,10 +1,4 @@
-﻿using System;
-using System.Reactive;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using MvvmCross.Commands;
-using MvvmCross.ViewModels;
-using Toggl.Core.UI.Services;
+﻿using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -12,7 +6,7 @@ using Toggl.Shared.Extensions;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class OutdatedAppViewModel : MvxViewModel
+    public sealed class OutdatedAppViewModel : ViewModel
     {
         private readonly IRxActionFactory rxActionFactory;
 

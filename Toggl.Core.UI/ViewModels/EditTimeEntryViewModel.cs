@@ -8,7 +8,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
@@ -28,7 +27,7 @@ using Toggl.Storage.Settings;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class EditTimeEntryViewModel : MvxViewModel<long[]>
+    public sealed class EditTimeEntryViewModel : ViewModelWithInput<long[]>
     {
         internal static readonly int MaxTagLength = 30;
 

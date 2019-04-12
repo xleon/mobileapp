@@ -5,7 +5,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Parameters;
@@ -17,7 +16,7 @@ using static Toggl.Core.Helper.Constants;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SelectClientViewModel : MvxViewModel<SelectClientParameters, long?>
+    public sealed class SelectClientViewModel : ViewModel<SelectClientParameters, long?>
     {
         private readonly IRxActionFactory rxActionFactory;
         private readonly IInteractorFactory interactorFactory;

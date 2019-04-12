@@ -22,7 +22,7 @@ using Toggl.Storage.Settings;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class MainTabBarViewModel : MvxViewModel
+    public sealed class MainTabBarViewModel : ViewModel
     {
         private readonly IRemoteConfigService remoteConfigService;
         private readonly IStopwatchProvider stopwatchProvider;

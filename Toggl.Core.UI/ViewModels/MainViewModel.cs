@@ -37,7 +37,7 @@ namespace Toggl.Core.UI.ViewModels
     using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
 
     [Preserve(AllMembers = true)]
-    public sealed class MainViewModel : MvxViewModel
+    public sealed class MainViewModel : ViewModel
     {
         private const int ratingViewTimeout = 5;
         private const double throttlePeriodInSeconds = 0.1;

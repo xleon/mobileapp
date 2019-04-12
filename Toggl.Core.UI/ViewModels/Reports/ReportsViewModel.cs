@@ -9,7 +9,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
@@ -36,7 +35,7 @@ using Color = Toggl.Core.UI.Helper.Color;
 namespace Toggl.Core.UI.ViewModels.Reports
 {
     [Preserve(AllMembers = true)]
-    public sealed class ReportsViewModel : MvxViewModel<ReportPeriod>
+    public sealed class ReportsViewModel : ViewModelWithInput<ReportPeriod>
     {
         private const float minimumSegmentPercentageToBeOnItsOwn = 5f;
         private const float maximumSegmentPercentageToEndUpInOther = 1f;

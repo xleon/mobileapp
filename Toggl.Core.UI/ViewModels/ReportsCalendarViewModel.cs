@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MvvmCross.ViewModels;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.UI.Parameters;
@@ -18,7 +17,7 @@ using Toggl.Shared.Extensions;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class ReportsCalendarViewModel : MvxViewModel
+    public sealed class ReportsCalendarViewModel : ViewModel
     {
         public const int MonthsToShow = 25;
 

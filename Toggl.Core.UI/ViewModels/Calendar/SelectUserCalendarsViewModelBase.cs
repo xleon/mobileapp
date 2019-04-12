@@ -7,7 +7,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Interactors;
 using Toggl.Core.UI.Collections;
@@ -22,7 +21,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
     using CalendarSectionModel = SectionModel<UserCalendarSourceViewModel, SelectableUserCalendarViewModel>;
     using ImmutableCalendarSectionModel = IImmutableList<SectionModel<UserCalendarSourceViewModel, SelectableUserCalendarViewModel>>;
 
-    public abstract class SelectUserCalendarsViewModelBase : MvxViewModel<bool, string[]>
+    public abstract class SelectUserCalendarsViewModelBase : ViewModel<bool, string[]>
     {
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 

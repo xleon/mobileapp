@@ -3,20 +3,18 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using MvvmCross.ViewModels;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Suggestions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
-using Toggl.Core.Extensions;
 using Toggl.Core.Services;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SuggestionsViewModel : MvxViewModel
+    public sealed class SuggestionsViewModel : ViewModel
     {
         private readonly IInteractorFactory interactorFactory;
         private readonly IOnboardingStorage onboardingStorage;

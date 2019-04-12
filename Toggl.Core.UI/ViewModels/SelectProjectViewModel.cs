@@ -5,7 +5,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
@@ -24,7 +23,7 @@ namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class SelectProjectViewModel
-        : MvxViewModel<SelectProjectParameter, SelectProjectParameter>
+        : ViewModel<SelectProjectParameter, SelectProjectParameter>
     {
         private readonly ITogglDataSource dataSource;
         private readonly IDialogService dialogService;

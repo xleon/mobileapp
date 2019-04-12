@@ -3,7 +3,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core.Interactors;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Services;
@@ -14,7 +13,7 @@ using Toggl.Shared.Extensions;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SendFeedbackViewModel : MvxViewModelResult<bool>
+    public sealed class SendFeedbackViewModel : ViewModelWithOutput<bool>
     {
         private readonly IDialogService dialogService;
         private readonly IInteractorFactory interactorFactory;

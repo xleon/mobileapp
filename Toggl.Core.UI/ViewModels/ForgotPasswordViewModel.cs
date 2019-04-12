@@ -3,7 +3,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Login;
@@ -16,7 +15,7 @@ using Toggl.Networking.Exceptions;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class ForgotPasswordViewModel : MvxViewModel<EmailParameter, EmailParameter>
+    public sealed class ForgotPasswordViewModel : ViewModel<EmailParameter, EmailParameter>
     {
         private readonly ITimeService timeService;
         private readonly IUserAccessManager userAccessManager;
