@@ -63,6 +63,11 @@ private Action BuildSolution(string configuration, string platform = "")
         Configuration = configuration
     };
 
+    if (!string.IsNullOrEmpty(platform))
+    {
+        buildSettings = buildSettings.WithProperty("Platform", platform);
+    }
+
 	return () => MSBuild(togglSolution, buildSettings);
 }
 
@@ -593,6 +598,11 @@ Task("BuildSyncDiagramGenerator")
 
 Task("GenerateSyncDiagram")
     .Does(() => GenerateSyncDiagram());
+
+//iOS Builds
+Task("Build.Debug.iOS")
+    .IsDependentOn("Nuget")
+    .Does(BuildSolution("Debug.iOS.Fast", "iPhoneSimulator"));
 
 //iOS Builds
 Task("Build.Release.iOS.AdHoc")
