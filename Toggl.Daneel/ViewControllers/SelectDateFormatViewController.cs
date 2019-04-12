@@ -6,11 +6,11 @@ using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Views.Settings;
 using Toggl.Daneel.ViewSources.Generic.TableView;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.Selectable;
-using Toggl.Multivac.Extensions;
+using Toggl.Core;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.Selectable;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Daneel.ViewControllers
 {

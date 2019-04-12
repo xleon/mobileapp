@@ -8,11 +8,11 @@ using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Views.Reports;
 using Toggl.Daneel.ViewSources.Generic.TableView;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels.Reports;
-using Toggl.Foundation.Reports;
-using Toggl.Multivac.Extensions;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.Core.Reports;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.ViewSources

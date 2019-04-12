@@ -6,30 +6,30 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Foundation;
 using Intents;
-using MvvmCross.Navigation;
 using MvvmCross.Platforms.Ios.Core;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Intents;
 using Toggl.Daneel.Services;
 using Toggl.Daneel.ViewControllers;
-using Toggl.Foundation;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
-using Toggl.Foundation.MvvmCross.ViewModels.Reports;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Shortcuts;
-using Toggl.Multivac.Extensions;
+using Toggl.Core;
+using Toggl.Core.Analytics;
+using Toggl.Core.Extensions;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.UI;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.Core.Services;
+using Toggl.Core.Shortcuts;
+using Toggl.Shared.Extensions;
 using UIKit;
 using UserNotifications;
 using AdjustBindingsiOS;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Daneel
 {
@@ -38,7 +38,7 @@ namespace Toggl.Daneel
     {
         private IAnalyticsService analyticsService;
         private IBackgroundService backgroundService;
-        private IMvxNavigationService navigationService;
+        private INavigationService navigationService;
         private ITimeService timeService;
 
         public override UIWindow Window { get; set; }
@@ -346,14 +346,14 @@ namespace Toggl.Daneel
                 .Subscribe(completionHandler);
         }
 
-        private UIBackgroundFetchResult mapToNativeOutcomes(Foundation.Models.SyncOutcome outcome) {
+        private UIBackgroundFetchResult mapToNativeOutcomes(Core.Models.SyncOutcome outcome) {
             switch (outcome)
             {
-                case Foundation.Models.SyncOutcome.NewData:
+                case Core.Models.SyncOutcome.NewData:
                     return UIBackgroundFetchResult.NewData;
-                case Foundation.Models.SyncOutcome.NoData:
+                case Core.Models.SyncOutcome.NoData:
                     return UIBackgroundFetchResult.NoData;
-                case Foundation.Models.SyncOutcome.Failed:
+                case Core.Models.SyncOutcome.Failed:
                     return UIBackgroundFetchResult.Failed;
                 default:
                     return UIBackgroundFetchResult.Failed;

@@ -1,21 +1,21 @@
 using System;
 using Foundation;
 using Toggl.Daneel.Extensions;
-using Toggl.Foundation.MvvmCross.ViewModels.Reports;
+using Toggl.Core.UI.ViewModels.Reports;
 using UIKit;
 using System.Reactive.Disposables;
 using Toggl.Daneel.Extensions.Reactive;
 using System.Reactive.Linq;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using System.Linq;
-using Toggl.Multivac;
+using Toggl.Shared;
 using System.Collections.Generic;
 using System.Globalization;
-using Toggl.Foundation.Conversions;
+using Toggl.Core.Conversions;
 using System.Reactive.Subjects;
 using System.Reactive;
 using Toggl.Daneel.Cells;
-using Toggl.Foundation;
+using Toggl.Core;
 using ObjCRuntime;
 
 namespace Toggl.Daneel.Views.Reports

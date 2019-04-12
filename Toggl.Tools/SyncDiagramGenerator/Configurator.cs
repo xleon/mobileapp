@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Foundation.Sync;
+using Toggl.Core.Sync;
 
 namespace SyncDiagramGenerator
 {

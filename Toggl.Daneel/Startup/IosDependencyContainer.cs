@@ -1,24 +1,22 @@
-﻿using Foundation;
-using MvvmCross.Navigation;
-using MvvmCross.Platforms.Ios.Presenters;
-using System;
+﻿using System;
 using Toggl.Daneel.Presentation;
 using Toggl.Daneel.Services;
-using Toggl.Foundation;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Diagnostics;
-using Toggl.Foundation.Login;
-using Toggl.Foundation.MvvmCross;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Shortcuts;
-using Toggl.Foundation.Suggestions;
-using Toggl.Multivac;
-using Toggl.PrimeRadiant;
-using Toggl.PrimeRadiant.Realm;
-using Toggl.PrimeRadiant.Settings;
-using Toggl.Ultrawave;
-using Toggl.Ultrawave.Network;
+using Toggl.Core;
+using Toggl.Core.Analytics;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Login;
+using Toggl.Core.UI;
+using Toggl.Core.UI.Services;
+using Toggl.Core.Services;
+using Toggl.Core.Shortcuts;
+using Toggl.Core.Suggestions;
+using Toggl.Shared;
+using Toggl.Storage;
+using Toggl.Storage.Realm;
+using Toggl.Storage.Settings;
+using Toggl.Networking;
+using Toggl.Networking.Network;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Daneel
 {
@@ -29,7 +27,7 @@ namespace Toggl.Daneel
         private readonly Lazy<SettingsStorage> settingsStorage;
 
         public TogglPresenter ViewPresenter { get; }
-        public IMvxNavigationService MvxNavigationService { get; internal set; }
+        public INavigationService MvxNavigationService { get; internal set; }
         
         public new static IosDependencyContainer Instance { get; private set; }
 
@@ -117,7 +115,7 @@ namespace Toggl.Daneel
                 new MostUsedTimeEntrySuggestionProvider(Database, TimeService, numberOfSuggestions)
             );
 
-        protected override IMvxNavigationService CreateNavigationService()
+        protected override INavigationService CreateNavigationService()
             => MvxNavigationService;
 
         protected override ILastTimeUsageStorage CreateLastTimeUsageStorage()

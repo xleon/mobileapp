@@ -1,7 +1,7 @@
 ﻿using System;
 using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Multivac;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.Daneel.Cells.Settings
@@ -32,7 +32,7 @@ namespace Toggl.Daneel.Cells.Settings
             base.AwakeFromNib();
 
             GrayBackground.Layer.BorderWidth = 1;
-            GrayBackground.Layer.BorderColor = Foundation.MvvmCross.Helper.Color.Licenses.Border.ToNativeColor().CGColor;
+            GrayBackground.Layer.BorderColor = Core.UI.Helper.Color.Licenses.Border.ToNativeColor().CGColor;
         }
 
         protected override void UpdateView()

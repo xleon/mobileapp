@@ -4,7 +4,7 @@ using CoreGraphics;
 using Foundation;
 using MvvmCross.Base;
 using MvvmCross.Core;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.Views

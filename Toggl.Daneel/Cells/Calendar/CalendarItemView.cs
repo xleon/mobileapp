@@ -8,8 +8,8 @@ using MvvmCross.UI;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Views;
 using Toggl.Daneel.Views.Calendar;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.MvvmCross.Extensions;
+using Toggl.Core.Calendar;
+using Toggl.Core.UI.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.Cells.Calendar

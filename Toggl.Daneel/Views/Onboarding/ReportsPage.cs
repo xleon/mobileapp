@@ -4,9 +4,9 @@ using CoreGraphics;
 using Foundation;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using ObjCRuntime;
-using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Core.UI.Helper;
 using UIKit;
-using static Toggl.Multivac.Math;
+using static Toggl.Shared.Math;
 
 namespace Toggl.Daneel
 {

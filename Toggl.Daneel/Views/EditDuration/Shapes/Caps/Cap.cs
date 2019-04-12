@@ -3,14 +3,14 @@ using CoreAnimation;
 using CoreGraphics;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using UIKit;
-using Math = Toggl.Multivac.Math;
+using Math = Toggl.Shared.Math;
 
 namespace Toggl.Daneel.Views.EditDuration.Shapes.Caps
 {
     public abstract class Cap : CAShapeLayer
     {
         private readonly CGColor capColor
-            = Foundation.MvvmCross.Helper.Color.EditDuration.Wheel.Cap.ToNativeColor().CGColor;
+            = Core.UI.Helper.Color.EditDuration.Wheel.Cap.ToNativeColor().CGColor;
 
         // The sizes are relative to the radius of the wheel.
         // The radius of the wheel in the design document is 128 points.

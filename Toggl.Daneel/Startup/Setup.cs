@@ -6,13 +6,13 @@ using MvvmCross.Platforms.Ios.Presenters;
 using MvvmCross.Plugin;
 using MvvmCross.ViewModels;
 using Toggl.Daneel.Presentation;
-using Toggl.Daneel.Services;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Ultrawave;
+using Toggl.Core;
+using Toggl.Core.UI;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Networking;
 using ColorPlugin = MvvmCross.Plugin.Color.Platforms.Ios.Plugin;
 using VisibilityPlugin = MvvmCross.Plugin.Visibility.Platforms.Ios.Plugin;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Daneel
 {
@@ -50,7 +50,7 @@ namespace Toggl.Daneel
 
             var container = IosDependencyContainer.Instance;
             container.MvxNavigationService =
-                new NavigationService(null, loader, container.AnalyticsService, Platform.Daneel);
+                new NavigationService(null, loader, container.AnalyticsService);
 
             Mvx.RegisterSingleton<IMvxNavigationService>(container.MvxNavigationService);
             return container.MvxNavigationService;

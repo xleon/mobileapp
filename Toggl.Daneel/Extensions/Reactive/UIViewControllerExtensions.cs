@@ -1,6 +1,6 @@
 using System;
 using CoreGraphics;
-using Toggl.Foundation.MvvmCross.Reactive;
+using Toggl.Core.UI.Reactive;
 using UIKit;
 
 namespace Toggl.Daneel.Extensions.Reactive

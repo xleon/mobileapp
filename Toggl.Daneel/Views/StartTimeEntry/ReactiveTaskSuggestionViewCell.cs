@@ -1,7 +1,7 @@
 ﻿using System;
 using Foundation;
 using Toggl.Daneel.Cells;
-using Toggl.Foundation.Autocomplete.Suggestions;
+using Toggl.Core.Autocomplete.Suggestions;
 using UIKit;
 
 namespace Toggl.Daneel.Views.StartTimeEntry

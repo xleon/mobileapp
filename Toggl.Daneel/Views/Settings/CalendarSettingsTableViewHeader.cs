@@ -4,7 +4,7 @@ using System;
 using UIKit;
 using Toggl.Daneel.Extensions;
 using System.Reactive;
-using Toggl.Foundation;
+using Toggl.Core;
 using Toggl.Daneel.Extensions.Reactive;
 
 namespace Toggl.Daneel
