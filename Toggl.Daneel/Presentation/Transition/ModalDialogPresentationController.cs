@@ -55,6 +55,7 @@ namespace Toggl.Daneel.Presentation.Transition
         {
             PresentedView.Layer.CornerRadius = 8;
             dimmingView.Frame = ContainerView.Bounds;
+            PresentedView.Frame = FrameOfPresentedViewInContainerView;
         }
 
         public override CGSize GetSizeForChildContentContainer(IUIContentContainer contentContainer, CGSize parentContainerSize)
