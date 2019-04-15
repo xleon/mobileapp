@@ -5,14 +5,12 @@ using MvvmCross.Platforms.Ios.Core;
 using MvvmCross.Platforms.Ios.Presenters;
 using MvvmCross.Plugin;
 using MvvmCross.ViewModels;
-using Toggl.Daneel.Presentation;
 using Toggl.Core;
 using Toggl.Core.UI;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Networking;
-using ColorPlugin = MvvmCross.Plugin.Color.Platforms.Ios.Plugin;
-using VisibilityPlugin = MvvmCross.Plugin.Visibility.Platforms.Ios.Plugin;
 using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Daneel.Presentation;
+using Toggl.Networking;
 
 namespace Toggl.Daneel
 {
@@ -65,8 +63,6 @@ namespace Toggl.Daneel
 
         public override void LoadPlugins(IMvxPluginManager pluginManager)
         {
-            new ColorPlugin().Load();
-            new VisibilityPlugin().Load();
         }
 
         protected override void PerformBootstrapActions()

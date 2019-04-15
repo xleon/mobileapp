@@ -1,26 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using MvvmCross.UI;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Core.Extensions;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
+using Toggl.Daneel.Transformations;
 using Toggl.Core;
+using Toggl.Core.Analytics;
+using Toggl.Core.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Onboarding.EditView;
+using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
-using Toggl.Daneel.Transformations;
-using System.Linq;
-using Toggl.Core.UI.Transformations;
-using Toggl.Core.Analytics;
-using System.Reactive;
+using Math = System.Math;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -48,7 +47,7 @@ namespace Toggl.Daneel.ViewControllers
 
             projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
                 ProjectTaskClientLabel.Font.CapHeight,
-                Color.EditTimeEntry.ClientText.ToNativeColor(),
+                Colors.EditTimeEntry.ClientText.ToNativeColor(),
                 false);
 
             tagsListToAttributedString = new TagsListToAttributedString(TagsTextView);
@@ -96,7 +95,7 @@ namespace Toggl.Daneel.ViewControllers
                     info.Project,
                     info.Task,
                     info.Client,
-                    MvxColor.ParseHexString(info.ProjectColor).ToNativeColor()))
+                    new Color(info.ProjectColor).ToNativeColor()))
                 .Subscribe(ProjectTaskClientLabel.Rx().AttributedText())
                 .DisposedBy(DisposeBag);
 
@@ -260,7 +259,7 @@ namespace Toggl.Daneel.ViewControllers
                         = 0;
             }
 
-            DescriptionTextView.TintColor = Color.StartTimeEntry.Cursor.ToNativeColor();
+            DescriptionTextView.TintColor = Colors.StartTimeEntry.Cursor.ToNativeColor();
             DescriptionTextView.PlaceholderText = Resources.AddDescription;
 
             TimeEntryTimes.Hidden = ViewModel.IsEditingGroup;
@@ -305,8 +304,8 @@ namespace Toggl.Daneel.ViewControllers
             TagsSeparator.Hidden = isInaccessible;
 
             var textColor = isInaccessible
-                ? Color.Common.Disabled.ToNativeColor()
-                : Color.Common.TextColor.ToNativeColor();
+                ? Colors.Common.Disabled.ToNativeColor()
+                : Colors.Common.TextColor.ToNativeColor();
 
             DescriptionTextView.TextColor = textColor;
 

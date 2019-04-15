@@ -9,7 +9,6 @@ using Android.Support.V4.Graphics;
 using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
-using MvvmCross.Plugin.Color.Platforms.Android;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;

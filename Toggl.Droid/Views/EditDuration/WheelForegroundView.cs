@@ -7,7 +7,6 @@ using Android.OS;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
-using MvvmCross.Plugin.Color.Platforms.Android;
 using Toggl.Core.Analytics;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Helper;
@@ -15,9 +14,10 @@ using Toggl.Droid.Views.EditDuration.Shapes;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using static Toggl.Shared.Math;
-using FoundationColor = Toggl.Core.UI.Helper.Color;
 using Math = System.Math;
 using Color = Android.Graphics.Color;
+using FoundationColor = Toggl.Core.UI.Helper.Colors;
+
 namespace Toggl.Droid.Views.EditDuration
 {
     [Register("toggl.droid.views.WheelForegroundView")]

@@ -3,7 +3,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Views.Reports;
@@ -48,7 +47,7 @@ namespace Toggl.Daneel.ViewSources
             tableView.SectionHeaderHeight = headerHeight;
             tableView.RegisterNibForCellReuse(ReportsLegendViewCell.Nib, ReportsLegendViewCell.Identifier);
             tableView.RegisterNibForHeaderFooterViewReuse(ReportsHeaderView.Nib, ReportsHeaderView.Identifier);
-            tableView.BackgroundColor = Color.Reports.Background.ToNativeColor();
+            tableView.BackgroundColor = Colors.Reports.Background.ToNativeColor();
 
             this.viewModel.WorkspacesObservable
                 .Select(workspaces => workspaces.Count)

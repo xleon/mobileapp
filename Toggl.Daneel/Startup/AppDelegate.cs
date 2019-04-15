@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Foundation;
 using Intents;
 using MvvmCross.Platforms.Ios.Core;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Intents;
 using Toggl.Daneel.Services;
@@ -18,6 +17,7 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
@@ -28,8 +28,6 @@ using Toggl.Core.Shortcuts;
 using Toggl.Shared.Extensions;
 using UIKit;
 using UserNotifications;
-using AdjustBindingsiOS;
-using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Daneel
 {
@@ -240,7 +238,7 @@ namespace Toggl.Daneel
 
         private void setupTabBar()
         {
-            UITabBar.Appearance.SelectedImageTintColor = Color.TabBar.SelectedImageTintColor.ToNativeColor();
+            UITabBar.Appearance.SelectedImageTintColor = Colors.TabBar.SelectedImageTintColor.ToNativeColor();
             UITabBarItem.Appearance.TitlePositionAdjustment = new UIOffset(0, 200);
         }
 
@@ -250,7 +248,7 @@ namespace Toggl.Daneel
             var attributes = new UITextAttributes
             {
                 Font = UIFont.SystemFontOfSize(14, UIFontWeight.Medium),
-                TextColor = Color.NavigationBar.BackButton.ToNativeColor()
+                TextColor = Colors.NavigationBar.BackButton.ToNativeColor()
             };
             UIBarButtonItem.Appearance.SetTitleTextAttributes(attributes, UIControlState.Normal);
             UIBarButtonItem.Appearance.SetTitleTextAttributes(attributes, UIControlState.Highlighted);
@@ -262,11 +260,11 @@ namespace Toggl.Daneel
             UINavigationBar.Appearance.BackIndicatorTransitionMaskImage = image;
 
             //Title and background
-            var barBackgroundColor = Color.NavigationBar.BackgroundColor.ToNativeColor();
+            var barBackgroundColor = Colors.NavigationBar.BackgroundColor.ToNativeColor();
             UINavigationBar.Appearance.ShadowImage = new UIImage();
             UINavigationBar.Appearance.BarTintColor = barBackgroundColor;
             UINavigationBar.Appearance.BackgroundColor = barBackgroundColor;
-            UINavigationBar.Appearance.TintColor = Color.NavigationBar.BackButton.ToNativeColor();
+            UINavigationBar.Appearance.TintColor = Colors.NavigationBar.BackButton.ToNativeColor();
             UINavigationBar.Appearance.SetBackgroundImage(ImageExtension.ImageWithColor(barBackgroundColor), UIBarMetrics.Default);
             UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
             {

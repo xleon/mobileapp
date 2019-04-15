@@ -24,7 +24,7 @@ namespace Toggl.Core.Tests.Helpers
             [InlineData(null, false)]
             public void ReturnsAppropriateValue(string color, bool isValid)
             {
-                Color.IsValidHexColor(color).Should().Be(isValid);
+                Colors.IsValidHexColor(color).Should().Be(isValid);
             }
         }
     }

@@ -4,9 +4,9 @@ using System.Linq;
 using CoreGraphics;
 using CoreMotion;
 using Foundation;
-using UIKit;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Core.UI.Helper;
+using Toggl.Daneel.Extensions;
+using UIKit;
 
 namespace Toggl.Daneel.Views
 {
@@ -19,7 +19,7 @@ namespace Toggl.Daneel.Views
         private const double chainWidth = 2;
         private const float spiderResistance = 0.75f;
         private const float spiderAttachmentLength = 1;
-        private readonly CGColor ropeColor = Color.Main.SpiderNetColor.ToNativeColor().CGColor;
+        private readonly CGColor ropeColor = Colors.Main.SpiderNetColor.ToNativeColor().CGColor;
 
         private UIDynamicAnimator spiderAnimator;
         private UIGravityBehavior gravity;

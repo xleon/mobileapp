@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Threading;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.ExtensionKit;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
@@ -227,7 +226,7 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(DisposeBag);
 
             var capHeight = CurrentTimeEntryProjectTaskClientLabel.Font.CapHeight;
-            var clientColor = Color.Main.CurrentTimeEntryClientColor.ToNativeColor();
+            var clientColor = Colors.Main.CurrentTimeEntryClientColor.ToNativeColor();
             ViewModel.CurrentRunningTimeEntry
                 .Select(te => te?.ToFormattedTimeEntryString(capHeight, clientColor, shouldColorProject: true))
                 .Subscribe(CurrentTimeEntryProjectTaskClientLabel.Rx().AttributedText())
@@ -515,7 +514,7 @@ namespace Toggl.Daneel.ViewControllers
             prepareWelcomeBackViews();
             prepareEmptyStateView();
 
-            View.BackgroundColor = Color.Main.BackgroundColor.ToNativeColor();
+            View.BackgroundColor = Colors.Main.BackgroundColor.ToNativeColor();
 
             // Open edit view for the currently running time entry by swiping up
             var swipeUpRunningCardGesture = new UISwipeGestureRecognizer(async () =>
@@ -603,7 +602,7 @@ namespace Toggl.Daneel.ViewControllers
 
             spiderHinge.Layer.CornerRadius = spiderHingeCornerRadius;
             spiderHinge.TranslatesAutoresizingMaskIntoConstraints = false;
-            spiderHinge.BackgroundColor = Color.Main.SpiderHinge.ToNativeColor();
+            spiderHinge.BackgroundColor = Colors.Main.SpiderHinge.ToNativeColor();
             spiderContainerView.TranslatesAutoresizingMaskIntoConstraints = false;
             spiderBroView.TranslatesAutoresizingMaskIntoConstraints = false;
             spiderContainerView.BackgroundColor = UIColor.Clear;

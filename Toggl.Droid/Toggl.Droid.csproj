@@ -192,12 +192,6 @@
       <HintPath>..\packages\MvvmCross.6.1.2\lib\monoandroid81\MvvmCross.dll</HintPath>
     </Reference>
     <Reference Include="Java.Interop" />
-    <Reference Include="MvvmCross.Plugin.Color">
-      <HintPath>..\packages\MvvmCross.Plugin.Color.6.1.2\lib\monoandroid81\MvvmCross.Plugin.Color.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugin.Visibility">
-      <HintPath>..\packages\MvvmCross.Plugin.Visibility.6.1.2\lib\monoandroid81\MvvmCross.Plugin.Visibility.dll</HintPath>
-    </Reference>
     <Reference Include="MvvmCross.Droid.Support.V7.RecyclerView">
       <HintPath>..\packages\MvvmCross.Droid.Support.V7.RecyclerView.6.1.2\lib\monoandroid81\MvvmCross.Droid.Support.V7.RecyclerView.dll</HintPath>
     </Reference>

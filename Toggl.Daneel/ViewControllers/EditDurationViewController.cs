@@ -4,13 +4,12 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
+using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Shared.Extensions;
 using UIKit;
 using Toggl.Core;
@@ -97,8 +96,8 @@ namespace Toggl.Daneel.ViewControllers
             // Stard and end colors
             ViewModel.IsEditingStartTime
                 .Select(editingStartTime => editingStartTime
-                    ? Color.EditDuration.EditedTime.ToNativeColor()
-                    : Color.EditDuration.NotEditedTime.ToNativeColor()
+                    ? Colors.EditDuration.EditedTime.ToNativeColor()
+                    : Colors.EditDuration.NotEditedTime.ToNativeColor()
                 )
                 .Subscribe(color =>
                 {
@@ -109,8 +108,8 @@ namespace Toggl.Daneel.ViewControllers
 
             ViewModel.IsEditingStopTime
                 .Select(editingStartTime => editingStartTime
-                    ? Color.EditDuration.EditedTime.ToNativeColor()
-                    : Color.EditDuration.NotEditedTime.ToNativeColor()
+                    ? Colors.EditDuration.EditedTime.ToNativeColor()
+                    : Colors.EditDuration.NotEditedTime.ToNativeColor()
                 )
                 .Subscribe(color =>
                 {
@@ -309,7 +308,7 @@ namespace Toggl.Daneel.ViewControllers
             EndTimeLabel.Font = EndTimeLabel.Font.GetMonospacedDigitFont();
             StartTimeLabel.Font = StartTimeLabel.Font.GetMonospacedDigitFont();
 
-            SetEndButton.TintColor = Color.EditDuration.SetButton.ToNativeColor();
+            SetEndButton.TintColor = Colors.EditDuration.SetButton.ToNativeColor();
 
             StackView.Spacing = stackViewSpacing;
 

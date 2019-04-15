@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.UI.Navigation;
-using MvvmCross.UI;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.DTOs;
@@ -14,14 +13,13 @@ using Toggl.Core.Helper;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
-using static Toggl.Core.Helper.Color;
+using static Toggl.Core.Helper.Colors;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -47,12 +45,12 @@ namespace Toggl.Core.UI.ViewModels
 
         public BehaviorRelay<string> Name { get; }
         public BehaviorRelay<bool> IsPrivate { get; }
-        public IObservable<MvxColor> Color { get; }
+        public IObservable<Color> Color { get; }
         public IObservable<string> ClientName { get; }
         public IObservable<string> WorkspaceName { get; }
         public UIAction Save { get; }
         public UIAction Close { get; }
-        public OutputAction<MvxColor> PickColor { get; }
+        public OutputAction<Color> PickColor { get; }
         public OutputAction<IThreadSafeClient> PickClient { get; }
         public OutputAction<IThreadSafeWorkspace> PickWorkspace { get; }
         public IObservable<string> Error { get; }
@@ -84,7 +82,7 @@ namespace Toggl.Core.UI.ViewModels
             IsPrivate = new BehaviorRelay<bool>(false, CommonFunctions.Invert);
 
             Close = rxActionFactory.FromAsync(close);
-            PickColor = rxActionFactory.FromObservable<MvxColor>(pickColor);
+            PickColor = rxActionFactory.FromObservable<Color>(pickColor);
             PickClient = rxActionFactory.FromObservable<IThreadSafeClient>(pickClient);
             PickWorkspace = rxActionFactory.FromObservable<IThreadSafeWorkspace>(pickWorkspace);
 
@@ -121,7 +119,7 @@ namespace Toggl.Core.UI.ViewModels
                 .Merge(currentWorkspace
                     .SelectMany(customColorIsEnabled)
                     .SelectMany(customColorsAreAvailable => customColorsAreAvailable
-                        ? Observable.Empty<MvxColor>()
+                        ? Observable.Empty<Color>()
                         : Color.FirstAsync().Select(randomColorIfNotDefault)))
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
@@ -149,13 +147,13 @@ namespace Toggl.Core.UI.ViewModels
                     .AreCustomColorsEnabledForWorkspace(workspace.Id)
                     .Execute();
 
-            MvxColor getRandomColor()
+            Color getRandomColor()
             {
-                var randomColorIndex = random.Next(0, Helper.Color.DefaultProjectColors.Length);
-                return Helper.Color.DefaultProjectColors[randomColorIndex];
+                var randomColorIndex = random.Next(0, Helper.Colors.DefaultProjectColors.Length);
+                return Helper.Colors.DefaultProjectColors[randomColorIndex];
             }
 
-            MvxColor randomColorIfNotDefault(MvxColor lastColor)
+            Color randomColorIfNotDefault(Color lastColor)
             {
                 var hex = lastColor.ToHexString();
                 if (DefaultProjectColors.Any(defaultColor => defaultColor == hex))
@@ -230,7 +228,7 @@ namespace Toggl.Core.UI.ViewModels
             }
         }
 
-        private IObservable<MvxColor> pickColor()
+        private IObservable<Color> pickColor()
         {
             return currentWorkspace.FirstAsync()
                 .SelectMany(currentWorkspace => interactorFactory
@@ -239,9 +237,9 @@ namespace Toggl.Core.UI.ViewModels
                         .SelectMany(currentColor =>
                             colorFromViewmodel(currentColor, areCustomColorsEnabled))));
 
-            IObservable<MvxColor> colorFromViewmodel(MvxColor currentColor, bool areCustomColorsEnabled)
+            IObservable<Color> colorFromViewmodel(Color currentColor, bool areCustomColorsEnabled)
                 => navigationService
-                    .Navigate<SelectColorViewModel, ColorParameters, MvxColor>(
+                    .Navigate<SelectColorViewModel, ColorParameters, Color>(
                         ColorParameters.Create(currentColor, areCustomColorsEnabled))
                     .ToObservable();
         }

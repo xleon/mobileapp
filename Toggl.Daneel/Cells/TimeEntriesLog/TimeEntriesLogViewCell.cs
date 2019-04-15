@@ -2,16 +2,15 @@
 using System.Reactive;
 using System.Reactive.Disposables;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using MvvmCross.UI;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Transformations;
-using Toggl.Core.UI.Helper;
-using UIKit;
 using Toggl.Core;
+using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Shared;
+using UIKit;
 
 namespace Toggl.Daneel.Views
 {
@@ -66,7 +65,7 @@ namespace Toggl.Daneel.Views
 
             projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
                 ProjectTaskClientLabel.Font.CapHeight,
-                Color.TimeEntriesLog.ClientColor.ToNativeColor(),
+                Colors.TimeEntriesLog.ClientColor.ToNativeColor(),
                 true
             );
         }
@@ -84,7 +83,7 @@ namespace Toggl.Daneel.Views
         protected override void UpdateView()
         {
             // Text
-            var projectColor = MvxColor.ParseHexString(Item.ProjectColor).ToNativeColor();
+            var projectColor = new Color(Item.ProjectColor).ToNativeColor();
             DescriptionLabel.Text = Item.HasDescription ? Item.Description : Resources.AddDescription;
             ProjectTaskClientLabel.AttributedText = projectTaskClientToAttributedString.Convert(Item.ProjectName, Item.TaskName, Item.ClientName, projectColor);
             TimeLabel.Text = Item.Duration;
@@ -92,7 +91,7 @@ namespace Toggl.Daneel.Views
             // Colors
             DescriptionLabel.TextColor = Item.HasDescription
                 ? UIColor.Black
-                : Color.TimeEntriesLog.AddDescriptionTextColor.ToNativeColor();
+                : Colors.TimeEntriesLog.AddDescriptionTextColor.ToNativeColor();
 
             // Visibility
             ProjectTaskClientLabel.Hidden = !Item.HasProject;
@@ -140,9 +139,9 @@ namespace Toggl.Daneel.Views
             GroupSizeContainer.UserInteractionEnabled = true;
             GroupSizeBackground.Hidden = false;
             GroupSizeBackground.Layer.BorderWidth = 1;
-            GroupSizeBackground.Layer.BorderColor = Color.TimeEntriesLog.Grouping.Collapsed.Border.ToNativeColor().CGColor;
-            GroupSizeBackground.BackgroundColor = Color.TimeEntriesLog.Grouping.Collapsed.Background.ToNativeColor();
-            GroupSizeLabel.TextColor = Color.TimeEntriesLog.Grouping.Collapsed.Text.ToNativeColor();
+            GroupSizeBackground.Layer.BorderColor = Colors.TimeEntriesLog.Grouping.Collapsed.Border.ToNativeColor().CGColor;
+            GroupSizeBackground.BackgroundColor = Colors.TimeEntriesLog.Grouping.Collapsed.Background.ToNativeColor();
+            GroupSizeLabel.TextColor = Colors.TimeEntriesLog.Grouping.Collapsed.Text.ToNativeColor();
         }
 
         private void presentAsExpandedGroupHeader(int groupSize)
@@ -153,8 +152,8 @@ namespace Toggl.Daneel.Views
             GroupSizeContainer.UserInteractionEnabled = true;
             GroupSizeBackground.Hidden = false;
             GroupSizeBackground.Layer.BorderWidth = 0;
-            GroupSizeBackground.BackgroundColor = Color.TimeEntriesLog.Grouping.Expanded.Background.ToNativeColor();
-            GroupSizeLabel.TextColor = Color.TimeEntriesLog.Grouping.Expanded.Text.ToNativeColor();
+            GroupSizeBackground.BackgroundColor = Colors.TimeEntriesLog.Grouping.Expanded.Background.ToNativeColor();
+            GroupSizeLabel.TextColor = Colors.TimeEntriesLog.Grouping.Expanded.Text.ToNativeColor();
         }
 
         private void presentAsSingleTimeEntry()
@@ -169,7 +168,7 @@ namespace Toggl.Daneel.Views
             GroupSizeContainer.Hidden = false;
             GroupSizeContainer.UserInteractionEnabled = false;
             GroupSizeBackground.Hidden = true;
-            BackgroundColor = Color.TimeEntriesLog.Grouping.GroupedTimeEntry.Background.ToNativeColor();
+            BackgroundColor = Colors.TimeEntriesLog.Grouping.GroupedTimeEntry.Background.ToNativeColor();
         }
     }
 }

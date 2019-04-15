@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using MvvmCross.UI;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Views;
 using Toggl.Daneel.Views.Calendar;
 using Toggl.Core.Calendar;
 using Toggl.Core.UI.Extensions;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.Daneel.Cells.Calendar
@@ -143,7 +142,7 @@ namespace Toggl.Daneel.Cells.Calendar
         }
 
         private UIColor itemColor()
-            => MvxColor.ParseHexString(Item.Color).ToNativeColor();
+            => new Color(Item.Color).ToNativeColor();
 
         private UIColor patternColor(CalendarItemSource source, UIColor color)
         {

@@ -26,7 +26,7 @@ using Toggl.Shared.Extensions;
 using Toggl.Shared.Models.Reports;
 using Toggl.Networking.Exceptions;
 using CommonFunctions = Toggl.Shared.Extensions.CommonFunctions;
-using Color = Toggl.Core.UI.Helper.Color;
+using Colors = Toggl.Core.UI.Helper.Colors;
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
@@ -423,7 +423,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                     otherPercentage >= minimumOtherSegmentDisplayPercentage ? otherPercentage : minimumOtherSegmentDisplayPercentage,
                     finalOtherProjects.Sum(segment => (float)segment.TrackedTime.TotalSeconds),
                     finalOtherProjects.Sum(segment => segment.BillableSeconds),
-                    Color.Reports.OtherProjectsSegmentBackground.ToHexString(),
+                    Colors.Reports.OtherProjectsSegmentBackground.ToHexString(),
                     durationFormat);
             }
 

@@ -2,13 +2,12 @@
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
+using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Shared.Extensions;
 using UIKit;
 

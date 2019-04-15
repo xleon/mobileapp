@@ -126,7 +126,7 @@ namespace Toggl.Core.Interactors
             var billableSeconds = summary.BillableSeconds ?? 0;
 
             return project == null
-                ? new ChartSegment(Resources.NoProject, null, percentage, summary.TrackedSeconds, billableSeconds, Helper.Color.NoProject)
+                ? new ChartSegment(Resources.NoProject, null, percentage, summary.TrackedSeconds, billableSeconds, Helper.Colors.NoProject)
                 : new ChartSegment(project.Name, client?.Name, percentage, summary.TrackedSeconds, billableSeconds, project.Color);
         }
 

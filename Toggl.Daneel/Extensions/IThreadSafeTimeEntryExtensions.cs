@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Text;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using MvvmCross.UI;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.Daneel.Extensions
@@ -24,7 +23,7 @@ namespace Toggl.Daneel.Extensions
 
             var displayColor = timeEntry.Project.DisplayColor();
             var color = string.IsNullOrEmpty(displayColor) ? null
-                      : MvxColor.ParseHexString(displayColor).ToNativeColor();
+                      : new Color(displayColor).ToNativeColor();
 
             var projectColor = shouldColorProject ? color : null;
 

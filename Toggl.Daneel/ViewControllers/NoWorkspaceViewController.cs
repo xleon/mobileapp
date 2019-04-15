@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
 using CoreGraphics;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
@@ -72,8 +71,8 @@ namespace Toggl.Daneel.ViewControllers
 
         private void prepareViews()
         {
-            ActivityIndicatorView.IndicatorColor = Color.NoWorkspace.ActivityIndicator.ToNativeColor();
-            CreateWorkspaceButton.SetTitleColor(Color.NoWorkspace.DisabledCreateWorkspaceButton.ToNativeColor(), UIControlState.Disabled);
+            ActivityIndicatorView.IndicatorColor = Colors.NoWorkspace.ActivityIndicator.ToNativeColor();
+            CreateWorkspaceButton.SetTitleColor(Colors.NoWorkspace.DisabledCreateWorkspaceButton.ToNativeColor(), UIControlState.Disabled);
         }
     }
 }

@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using MvvmCross.UI;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Span;
-using Toggl.Core.UI.Extensions;
+using Toggl.Daneel.Extensions;
 using Toggl.Core.UI.Helper;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.Daneel.Autocomplete.Constants;
@@ -66,7 +62,7 @@ namespace Toggl.Daneel.Autocomplete
         public static TokenTextAttachment GetTagToken(this string tag)
             => new TagTextAttachment(
                 tag.TruncatedAt(maxTextLength),
-                Color.StartTimeEntry.TokenText.ToNativeColor(),
+                Colors.StartTimeEntry.TokenText.ToNativeColor(),
                 tokenFont);
 
         public static IEnumerable<ISpan> AsSpans(this NSAttributedString text, int cursorPosition)
@@ -153,7 +149,7 @@ namespace Toggl.Daneel.Autocomplete
 
         private static NSMutableAttributedString AsAttributedString(this ProjectSpan projectSpan)
         {
-            var projectColor = MvxColor.ParseHexString(projectSpan.ProjectColor).ToNativeColor();
+            var projectColor = new Color(projectSpan.ProjectColor).ToNativeColor();
 
             var projectNameString = projectSpan.ProjectName;
             if (!string.IsNullOrEmpty(projectSpan.TaskName))

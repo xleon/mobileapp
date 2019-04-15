@@ -75,7 +75,7 @@ namespace Toggl.Core.Tests.Sync.Scenarios.ServerHelper
                     {
                         Id = -2,
                         Name = "Project",
-                        Color = Helper.Color.DefaultProjectColors[0],
+                        Color = Helper.Colors.DefaultProjectColors[0],
                         ClientId = -3,
                         WorkspaceId = -7,
                         Active = true

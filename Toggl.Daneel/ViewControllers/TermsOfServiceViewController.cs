@@ -1,12 +1,10 @@
 ﻿using System;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Core;
-using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared.Extensions;
@@ -32,7 +30,7 @@ namespace Toggl.Daneel.ViewControllers
         private readonly UIStringAttributes highlitedTextAttributes = new UIStringAttributes
         {
             Font = UIFont.SystemFontOfSize(fontSize),
-            ForegroundColor = Color.Signup.HighlightedText.ToNativeColor()
+            ForegroundColor = Colors.Signup.HighlightedText.ToNativeColor()
         };
 
         public TermsOfServiceViewController() : base(nameof(TermsOfServiceViewController))

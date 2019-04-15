@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reactive.Linq;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Core;
@@ -14,7 +13,6 @@ using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.Daneel.Extensions.LoginSignupViewExtensions;
 using static Toggl.Daneel.Extensions.ViewExtensions;
-using AdjustBindingsiOS;
 
 
 namespace Toggl.Daneel.ViewControllers
@@ -168,8 +166,8 @@ namespace Toggl.Daneel.ViewControllers
                 => hasError ? UIColor.White : UIColor.Black;
 
             UIColor signupButtonTitleColor(bool enabled) => enabled
-                ? Core.UI.Helper.Color.Login.EnabledButtonColor.ToNativeColor()
-                : Core.UI.Helper.Color.Login.DisabledButtonColor.ToNativeColor();
+                ? Core.UI.Helper.Colors.Login.EnabledButtonColor.ToNativeColor()
+                : Core.UI.Helper.Colors.Login.DisabledButtonColor.ToNativeColor();
         }
 
         public override void ViewDidLayoutSubviews()
@@ -219,7 +217,7 @@ namespace Toggl.Daneel.ViewControllers
             ActivityIndicator.StartSpinning();
 
             SignupButton.SetTitleColor(
-                Core.UI.Helper.Color.Login.DisabledButtonColor.ToNativeColor(),
+                Core.UI.Helper.Colors.Login.DisabledButtonColor.ToNativeColor(),
                 UIControlState.Disabled
             );
 

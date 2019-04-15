@@ -6,7 +6,6 @@ using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.UI.Navigation;
-using MvvmCross.UI;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.Services;
@@ -14,7 +13,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Math = System.Math;
-using Color = Toggl.Core.UI.Helper.Color;
+using Colors = Toggl.Core.UI.Helper.Colors;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -32,11 +31,11 @@ namespace Toggl.Core.UI.ViewModels
             nameof(ReportsPage)
         };
 
-        private static readonly (MvxColor BackgroundColor, MvxColor BorderColor)[] pageInfo =
+        private static readonly (Color BackgroundColor, Color BorderColor)[] pageInfo =
         {
-            (Color.Onboarding.TrackPageBackgroundColor, Color.Onboarding.TrackPageBorderColor),
-            (Color.Onboarding.LogPageBackgroundColor, Color.Onboarding.LogPageBorderColor),
-            (Color.Onboarding.ReportsPageBackgroundColor, Color.Onboarding.ReportsPageBorderColor)
+            (Colors.Onboarding.TrackPageBackgroundColor, Colors.Onboarding.TrackPageBorderColor),
+            (Colors.Onboarding.LogPageBackgroundColor, Colors.Onboarding.LogPageBorderColor),
+            (Colors.Onboarding.ReportsPageBackgroundColor, Colors.Onboarding.ReportsPageBorderColor)
         };
 
         private readonly IAnalyticsService analyticsService;
@@ -52,8 +51,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> IsSummaryPage { get; }
         public IObservable<bool> IsFirstPage { get; }
         public IObservable<bool> IsLastPage { get; }
-        public IObservable<MvxColor> BorderColor { get; }
-        public IObservable<MvxColor> BackgroundColor { get; }
+        public IObservable<Color> BorderColor { get; }
+        public IObservable<Color> BackgroundColor { get; }
 
         public UIAction SkipOnboarding { get; }
         public UIAction GoToNextPage { get; }

@@ -3,17 +3,16 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CoreAnimation;
 using CoreGraphics;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Core.UI.Helper;
 using Foundation;
-using UIKit;
-using static Toggl.Shared.Math;
-using Toggl.Daneel.Extensions;
-using Toggl.Core.Analytics;
-using Toggl.Shared.Extensions;
 using MvvmCross.Base;
+using Toggl.Core.Analytics;
+using Toggl.Core.UI.Helper;
+using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Views.EditDuration.Shapes;
 using Toggl.Daneel.Views.EditDuration.Shapes.Caps;
+using Toggl.Shared.Extensions;
+using UIKit;
+using static Toggl.Shared.Math;
 
 namespace Toggl.Daneel.Views.EditDuration
 {
@@ -71,10 +70,10 @@ namespace Toggl.Daneel.Views.EditDuration
         }
 
         private CGColor backgroundColor
-            => Color.EditDuration.Wheel.Rainbow.GetPingPongIndexedItem(numberOfFullLoops).ToNativeColor().CGColor;
+            => Colors.EditDuration.Wheel.Rainbow.GetPingPongIndexedItem(numberOfFullLoops).ToNativeColor().CGColor;
 
         private CGColor foregroundColor
-            => Color.EditDuration.Wheel.Rainbow.GetPingPongIndexedItem(numberOfFullLoops + 1).ToNativeColor().CGColor;
+            => Colors.EditDuration.Wheel.Rainbow.GetPingPongIndexedItem(numberOfFullLoops + 1).ToNativeColor().CGColor;
 
         private bool isRunning;
 

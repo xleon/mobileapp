@@ -1,25 +1,24 @@
 ﻿using System;
-using CoreGraphics;
-using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Daneel.Extensions;
-using Toggl.Core.UI.ViewModels.Reports;
-using UIKit;
-using System.Reactive.Disposables;
-using Toggl.Daneel.Extensions.Reactive;
-using System.Reactive.Linq;
-using Toggl.Shared.Extensions;
-using System.Linq;
-using Toggl.Shared;
 using System.Collections.Generic;
 using System.Globalization;
-using Toggl.Core.Conversions;
-using System.Reactive.Subjects;
+using System.Linq;
 using System.Reactive;
-using Toggl.Daneel.Cells;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using CoreGraphics;
+using Foundation;
 using Toggl.Core;
 using Toggl.Core.Extensions;
-using Color = Toggl.Core.UI.Helper.Color;
+using Toggl.Core.Conversions;
+using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.Daneel.Cells;
+using Toggl.Daneel.Extensions.Reactive;
+using Toggl.Daneel.Extensions;
+using Toggl.Shared.Extensions;
+using Toggl.Shared;
+using UIKit;
+using Colors = Toggl.Core.UI.Helper.Colors;
 
 namespace Toggl.Daneel.Views.Reports
 {
@@ -28,8 +27,8 @@ namespace Toggl.Daneel.Views.Reports
         private const int fontSize = 24;
         private const float barChartSpacingProportion = 0.3f;
 
-        private static readonly UIColor normalColor = Color.Reports.PercentageActivated.ToNativeColor();
-        private static readonly UIColor disabledColor = Color.Reports.Disabled.ToNativeColor();
+        private static readonly UIColor normalColor = Colors.Reports.PercentageActivated.ToNativeColor();
+        private static readonly UIColor disabledColor = Colors.Reports.Disabled.ToNativeColor();
 
         public static readonly string Identifier = nameof(ReportsHeaderView);
         public static readonly NSString Key = new NSString(nameof(ReportsHeaderView));
@@ -110,8 +109,8 @@ namespace Toggl.Daneel.Views.Reports
 
             var totalDurationColorObservable = Item.TotalTimeIsZeroObservable
                 .Select(isZero => isZero
-                    ? Core.UI.Helper.Color.Reports.Disabled.ToNativeColor()
-                    : Core.UI.Helper.Color.Reports.TotalTimeActivated.ToNativeColor());
+                    ? Core.UI.Helper.Colors.Reports.Disabled.ToNativeColor()
+                    : Core.UI.Helper.Colors.Reports.TotalTimeActivated.ToNativeColor());
 
             totalDurationColorObservable
                 .Subscribe(TotalDurationGraph.Rx().TintColor())

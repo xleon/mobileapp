@@ -1,6 +1,4 @@
-﻿using System;
-using MvvmCross.UI;
-using Toggl.Core.UI.Interfaces;
+﻿using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 
 namespace Toggl.Core.UI.ViewModels
@@ -8,11 +6,11 @@ namespace Toggl.Core.UI.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class SelectableColorViewModel : IDiffableByIdentifier<SelectableColorViewModel>
     {
-        public MvxColor Color { get; }
+        public Color Color { get; }
 
         public bool Selected { get; }
 
-        public SelectableColorViewModel(MvxColor color, bool selected)
+        public SelectableColorViewModel(Color color, bool selected)
         {
             Ensure.Argument.IsNotNull(color, nameof(color));
 

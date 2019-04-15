@@ -60,7 +60,7 @@ namespace Toggl.Core.Sync.States.Pull
             var placeholder = Project.Builder.Create(timeEntry.ProjectId.Value)
                 .SetName(Resources.InaccessibleProject)
                 .SetWorkspaceId(timeEntry.WorkspaceId)
-                .SetColor(Helper.Color.NoProject)
+                .SetColor(Helper.Colors.NoProject)
                 .SetActive(false)
                 .SetAt(default(DateTimeOffset))
                 .SetSyncStatus(SyncStatus.RefetchingNeeded)

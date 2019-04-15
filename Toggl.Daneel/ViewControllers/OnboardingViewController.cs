@@ -2,7 +2,6 @@
 using System.Reactive.Linq;
 using CoreGraphics;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Core;

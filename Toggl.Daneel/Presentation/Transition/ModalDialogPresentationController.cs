@@ -1,6 +1,6 @@
 ﻿using CoreGraphics;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Core.UI.Helper;
+using Toggl.Daneel.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.Presentation.Transition
@@ -9,7 +9,7 @@ namespace Toggl.Daneel.Presentation.Transition
     {
         private readonly UIView dimmingView = new UIView
         {
-            BackgroundColor = Color.ModalDialog.BackgroundOverlay.ToNativeColor(),
+            BackgroundColor = Colors.ModalDialog.BackgroundOverlay.ToNativeColor(),
             Alpha = 0
         };
 

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
-using MvvmCross.UI;
 using NSubstitute;
 using Toggl.Core.DTOs;
 using Toggl.Core.Models.Interfaces;
@@ -17,6 +15,7 @@ using Toggl.Core.Tests.TestExtensions;
 using Toggl.Shared.Extensions;
 using Xunit;
 using ProjectPredicate = System.Func<Toggl.Storage.Models.IDatabaseProject, bool>;
+using Toggl.Shared;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -561,23 +560,23 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
 
                 NavigationService.Received()
-                    .Navigate<SelectColorViewModel, ColorParameters, MvxColor>(Arg.Any<ColorParameters>());
+                    .Navigate<SelectColorViewModel, ColorParameters, Color>(Arg.Any<ColorParameters>());
             }
 
             [Fact, LogIfTooSlow]
             public void SetsTheReturnedColorAsTheColorProperty()
             {
-                var colorObserver = TestScheduler.CreateObserver<MvxColor>();
-                var expectedColor = MvxColors.AliceBlue;
+                var colorObserver = TestScheduler.CreateObserver<Color>();
+                var expectedColor = new Color(23, 45, 125);
                 NavigationService
-                    .Navigate<SelectColorViewModel, ColorParameters, MvxColor>(Arg.Any<ColorParameters>())
+                    .Navigate<SelectColorViewModel, ColorParameters, Color>(Arg.Any<ColorParameters>())
                     .Returns(Task.FromResult(expectedColor));
                 ViewModel.Color.Subscribe(colorObserver);
 
                 ViewModel.PickColor.Execute();
                 TestScheduler.Start();
 
-                colorObserver.LastEmittedValue().ARGB.Should().Be(expectedColor.ARGB);
+                colorObserver.LastEmittedValue().Should().Be(expectedColor);
             }
         }
 
@@ -652,9 +651,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void PicksADefaultColorIfTheSelectedColorIsCustomAndTheWorkspaceIsNotPro()
             {
+                var someColor = new Color(23, 45, 125);
                 NavigationService
-                    .Navigate<SelectColorViewModel, ColorParameters, MvxColor>(Arg.Any<ColorParameters>())
-                    .Returns(Task.FromResult(MvxColors.Azure));
+                    .Navigate<SelectColorViewModel, ColorParameters, Color>(Arg.Any<ColorParameters>())
+                    .Returns(Task.FromResult(someColor));
                 NavigationService
                     .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>())
                     .Returns(Task.FromResult(workspaceId));
@@ -666,7 +666,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.PickWorkspace.Execute();
                 TestScheduler.Start();
 
-                ViewModel.Color.Should().NotBe(MvxColors.Azure);
+                ViewModel.Color.Should().NotBe(someColor);
             }
         }
 

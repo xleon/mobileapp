@@ -1,11 +1,11 @@
 ﻿using System;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using MvvmCross.UI;
 using Toggl.Daneel.Cells;
+using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Transformations;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.UI.Helper;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.Daneel.Views
@@ -36,7 +36,7 @@ namespace Toggl.Daneel.Views
 
             projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
                 ProjectLabel.Font.CapHeight,
-                Color.Suggestions.ClientColor.ToNativeColor(),
+                Colors.Suggestions.ClientColor.ToNativeColor(),
                 true);
         }
 
@@ -48,7 +48,7 @@ namespace Toggl.Daneel.Views
                 Item.ProjectName,
                 Item.TaskName,
                 Item.ClientName,
-                MvxColor.ParseHexString(Item.ProjectColor).ToNativeColor());
+                new Color(Item.ProjectColor).ToNativeColor());
 
             //Visibility
             DescriptionTopDistanceConstraint.Constant = Item.HasProject ? HasProjectDistance : NoProjectDistance;

@@ -1,9 +1,9 @@
 ﻿using System.Reactive.Subjects;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.Suggestions;
 using UIKit;
+using Toggl.Daneel.Extensions;
 
 namespace Toggl.Daneel.Suggestions
 {
@@ -83,7 +83,7 @@ namespace Toggl.Daneel.Suggestions
             titleLabel.TranslatesAutoresizingMaskIntoConstraints = false;
             titleLabel.Text = Resources.SuggestionsHeader;
             titleLabel.Font = UIFont.SystemFontOfSize(titleSize, UIFontWeight.Medium);
-            titleLabel.TextColor = Color.Main.SuggestionsTitle.ToNativeColor();
+            titleLabel.TextColor = Colors.Main.SuggestionsTitle.ToNativeColor();
             titleLabel.TopAnchor.ConstraintEqualTo(Superview.TopAnchor, distanceAboveTitleLabel).Active = true;
             titleLabel.LeadingAnchor.ConstraintEqualTo(Superview.LeadingAnchor, sideMargin).Active = true;
         }

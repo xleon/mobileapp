@@ -1,18 +1,18 @@
 ﻿using System;
-using UIKit;
 using Foundation;
 using CoreAnimation;
 using CoreGraphics;
 using Toggl.Core.UI.Helper;
-using MvvmCross.Plugin.Color.Platforms.Ios;
+using Toggl.Daneel.Extensions;
+using UIKit;
 
 namespace Toggl.Daneel.Views.Reports
 {
     [Register(nameof(PercentageView))]
     public sealed class PercentageView : UIView
     {
-        private static readonly UIColor disabledColor = Color.Reports.PercentageDisabled.ToNativeColor();
-        private static readonly UIColor activeColor = Color.Reports.PercentageActivatedBackground.ToNativeColor();
+        private static readonly UIColor disabledColor = Colors.Reports.PercentageDisabled.ToNativeColor();
+        private static readonly UIColor activeColor = Colors.Reports.PercentageActivatedBackground.ToNativeColor();
 
         private readonly CALayer percentageFilledLayer = new CALayer();
 
@@ -41,7 +41,7 @@ namespace Toggl.Daneel.Views.Reports
             base.AwakeFromNib();
 
             Layer.AddSublayer(percentageFilledLayer);
-            percentageFilledLayer.BackgroundColor = Color.Reports.PercentageActivated.ToNativeColor().CGColor;
+            percentageFilledLayer.BackgroundColor = Colors.Reports.PercentageActivated.ToNativeColor().CGColor;
             percentageFilledLayer.Frame = new CGRect(0, 0, 0, Frame.Height);
             percentageFilledLayer.CornerRadius = Layer.CornerRadius;
         }

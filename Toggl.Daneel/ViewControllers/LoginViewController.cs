@@ -4,13 +4,12 @@ using System.Reactive.Linq;
 using Foundation;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -158,8 +157,8 @@ namespace Toggl.Daneel.ViewControllers
                 => hasError ? UIColor.White : UIColor.Black;
 
             UIColor loginButtonTitleColor(bool enabled) => enabled
-                ? Core.UI.Helper.Color.Login.EnabledButtonColor.ToNativeColor()
-                : Core.UI.Helper.Color.Login.DisabledButtonColor.ToNativeColor();
+                ? Core.UI.Helper.Colors.Login.EnabledButtonColor.ToNativeColor()
+                : Core.UI.Helper.Colors.Login.DisabledButtonColor.ToNativeColor();
         }
 
         public override void ViewWillAppear(bool animated)
@@ -226,7 +225,7 @@ namespace Toggl.Daneel.ViewControllers
             NavigationController.NavigationBarHidden = true;
 
             LoginButton.SetTitleColor(
-                Core.UI.Helper.Color.Login.DisabledButtonColor.ToNativeColor(),
+                Core.UI.Helper.Colors.Login.DisabledButtonColor.ToNativeColor(),
                 UIControlState.Disabled
             );
 
@@ -256,7 +255,7 @@ namespace Toggl.Daneel.ViewControllers
         private void prepareForgotPasswordButton()
         {
             var boldFont = UIFont.SystemFontOfSize(12, UIFontWeight.Medium);
-            var color = Core.UI.Helper.Color.Login.ForgotPassword.ToNativeColor();
+            var color = Core.UI.Helper.Colors.Login.ForgotPassword.ToNativeColor();
             var text = new NSMutableAttributedString(
                 Resources.LoginForgotPassword, foregroundColor: color);
             var boldText = new NSAttributedString(

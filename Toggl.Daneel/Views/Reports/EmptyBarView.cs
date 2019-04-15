@@ -1,6 +1,6 @@
 ﻿using UIKit;
 using Toggl.Core.UI.Helper;
-using MvvmCross.Plugin.Color.Platforms.Ios;
+using Toggl.Daneel.Extensions;
 
 namespace Toggl.Daneel.Views.Reports
 {
@@ -12,7 +12,7 @@ namespace Toggl.Daneel.Views.Reports
         {
             var bottomLine = new UIView
             {
-                BackgroundColor = Color.Reports.BarChart.EmptyBar.ToNativeColor(),
+                BackgroundColor = Colors.Reports.BarChart.EmptyBar.ToNativeColor(),
                 TranslatesAutoresizingMaskIntoConstraints = false
             };
             AddSubview(bottomLine);
