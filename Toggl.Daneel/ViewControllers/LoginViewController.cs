@@ -4,15 +4,14 @@ using System.Reactive.Linq;
 using Foundation;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
-using MvvmCross.Plugin.Color.Platforms.Ios;
+using Toggl.Core;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.Daneel.Extensions.LoginSignupViewExtensions;
 using static Toggl.Daneel.Extensions.ViewExtensions;
@@ -158,8 +157,8 @@ namespace Toggl.Daneel.ViewControllers
                 => hasError ? UIColor.White : UIColor.Black;
 
             UIColor loginButtonTitleColor(bool enabled) => enabled
-                ? Foundation.MvvmCross.Helper.Color.Login.EnabledButtonColor.ToNativeColor()
-                : Foundation.MvvmCross.Helper.Color.Login.DisabledButtonColor.ToNativeColor();
+                ? Core.UI.Helper.Colors.Login.EnabledButtonColor.ToNativeColor()
+                : Core.UI.Helper.Colors.Login.DisabledButtonColor.ToNativeColor();
         }
 
         public override void ViewWillAppear(bool animated)
@@ -226,7 +225,7 @@ namespace Toggl.Daneel.ViewControllers
             NavigationController.NavigationBarHidden = true;
 
             LoginButton.SetTitleColor(
-                Foundation.MvvmCross.Helper.Color.Login.DisabledButtonColor.ToNativeColor(),
+                Core.UI.Helper.Colors.Login.DisabledButtonColor.ToNativeColor(),
                 UIControlState.Disabled
             );
 
@@ -256,7 +255,7 @@ namespace Toggl.Daneel.ViewControllers
         private void prepareForgotPasswordButton()
         {
             var boldFont = UIFont.SystemFontOfSize(12, UIFontWeight.Medium);
-            var color = Foundation.MvvmCross.Helper.Color.Login.ForgotPassword.ToNativeColor();
+            var color = Core.UI.Helper.Colors.Login.ForgotPassword.ToNativeColor();
             var text = new NSMutableAttributedString(
                 Resources.LoginForgotPassword, foregroundColor: color);
             var boldText = new NSAttributedString(

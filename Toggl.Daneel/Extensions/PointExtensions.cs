@@ -1,5 +1,5 @@
 ﻿using CoreGraphics;
-using Toggl.Multivac;
+using Toggl.Shared;
 
 namespace Toggl.Daneel.Extensions
 {
@@ -8,7 +8,7 @@ namespace Toggl.Daneel.Extensions
         public static CGPoint ToCGPoint(this Point point)
             => new CGPoint(point.X, point.Y);
 
-        public static Point ToMultivacPoint(this CGPoint point)
+        public static Point ToTogglPoint(this CGPoint point)
             => new Point { X = point.X, Y = point.Y };
     }
 }

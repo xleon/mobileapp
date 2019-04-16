@@ -2,11 +2,11 @@
 using UIKit;
 using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Daneel.Cells;
-using Toggl.Foundation.Models;
+using Toggl.Core.Models;
 using Toggl.Daneel.ViewSources.Generic.TableView;
-using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Core.UI.Collections;
 
 namespace Toggl.Daneel.ViewControllers
 {

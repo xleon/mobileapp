@@ -2,7 +2,7 @@ using System;
 using CoreAnimation;
 using CoreGraphics;
 using UIKit;
-using Math = Toggl.Multivac.Math;
+using Math = Toggl.Shared.Math;
 
 namespace Toggl.Daneel.Views.EditDuration.Shapes
 {

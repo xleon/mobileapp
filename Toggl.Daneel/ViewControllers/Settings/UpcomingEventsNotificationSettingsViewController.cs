@@ -7,14 +7,14 @@ using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
 using Toggl.Daneel.ViewSources.Generic.TableView;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.Selectable;
-using Toggl.Foundation.MvvmCross.ViewModels.Settings;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Core;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.Selectable;
+using Toggl.Core.UI.ViewModels.Settings;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers.Settings

@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using CoreGraphics;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Views;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog;
-using Toggl.Foundation.MvvmCross.ViewModels.TimeEntriesLog.Identity;
-using Toggl.Multivac.Extensions;
+using Toggl.Core;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Daneel.Extensions;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.ViewSources
@@ -140,7 +138,7 @@ namespace Toggl.Daneel.ViewSources
                 UITableViewRowActionStyle.Destructive,
                 Resources.Delete,
                 handleDeleteTableViewRowAction);
-            deleteAction.BackgroundColor = Foundation.MvvmCross.Helper.Color.TimeEntriesLog.DeleteSwipeActionBackground.ToNativeColor();
+            deleteAction.BackgroundColor = Core.UI.Helper.Colors.TimeEntriesLog.DeleteSwipeActionBackground.ToNativeColor();
             return deleteAction;
         }
 
@@ -168,7 +166,7 @@ namespace Toggl.Daneel.ViewSources
                     completionHandler.Invoke(finished: true);
                 }
             );
-            continueAction.BackgroundColor = Foundation.MvvmCross.Helper.Color.TimeEntriesLog.ContinueSwipeActionBackground.ToNativeColor();
+            continueAction.BackgroundColor = Core.UI.Helper.Colors.TimeEntriesLog.ContinueSwipeActionBackground.ToNativeColor();
             return continueAction;
         }
 
@@ -183,7 +181,7 @@ namespace Toggl.Daneel.ViewSources
                     completionHandler.Invoke(finished: true);
                 }
             );
-            deleteAction.BackgroundColor = Foundation.MvvmCross.Helper.Color.TimeEntriesLog.DeleteSwipeActionBackground.ToNativeColor();
+            deleteAction.BackgroundColor = Core.UI.Helper.Colors.TimeEntriesLog.DeleteSwipeActionBackground.ToNativeColor();
             return deleteAction;
         }
     }

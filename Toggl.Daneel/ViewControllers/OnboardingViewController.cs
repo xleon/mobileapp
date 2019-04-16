@@ -2,12 +2,11 @@
 using System.Reactive.Linq;
 using CoreGraphics;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac.Extensions;
+using Toggl.Core;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers
