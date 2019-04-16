@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Runtime;
 using Android.Views;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Foundation.MvvmCross.ViewModels;
@@ -31,6 +32,16 @@ namespace Toggl.Giskard.Activities
     public sealed partial class EditTimeEntryActivity : ReactiveActivity<EditTimeEntryViewModel>
     {
         private TagsAdapter tagsAdapter = new TagsAdapter(Resource.Layout.EditTimeEntryTagCell, StringViewHolder.Create);
+
+        public EditTimeEntryActivity()
+        {
+
+        }
+
+        public EditTimeEntryActivity(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
+        {
+
+        }
 
         protected override void OnCreate(Bundle bundle)
         {
