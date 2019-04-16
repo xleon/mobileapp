@@ -25,7 +25,8 @@ namespace Toggl.Daneel.ViewControllers
     {
         private const string boundsKey = "bounds";
 
-        private const double maximumWorkspaceNameLabelWidth = 144;
+        private const double maximumWorkspaceNameLabelWidthCompact = 144;
+        private const double maximumWorkspaceNameLabelWidthRegular = 288;
 
         private nfloat calendarHeight => CalendarContainer.Bounds.Height;
 
@@ -96,7 +97,10 @@ namespace Toggl.Daneel.ViewControllers
             {
                 var attributes = new UIStringAttributes { Font = WorkspaceLabel.Font };
                 var size = new NSString(workspaceName).GetSizeUsingAttributes(attributes);
-                return size.Width >= maximumWorkspaceNameLabelWidth;
+                var maxWidth = TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
+                    ? maximumWorkspaceNameLabelWidthRegular
+                    : maximumWorkspaceNameLabelWidthCompact;
+                return size.Width >= maxWidth;
             };
 
             //Text
