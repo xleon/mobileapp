@@ -1,11 +1,9 @@
 ﻿using System;
-
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels;
 using UIKit;
 
 namespace Toggl.Daneel.Views.Tag
@@ -16,7 +14,7 @@ namespace Toggl.Daneel.Views.Tag
         public static readonly UINib Nib;
 
         private static readonly UIColor selectedBackgroundColor
-            = Color.Common.LightGray.ToNativeColor();
+            = Colors.Common.LightGray.ToNativeColor();
         private static UIImage checkBoxCheckedImage = UIImage.FromBundle("icCheckBoxChecked");
         private static UIImage checkBoxUncheckedImage = UIImage.FromBundle("icCheckBoxUnchecked");
 

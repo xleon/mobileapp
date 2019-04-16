@@ -3,6 +3,7 @@ using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.IoC;
 using MvvmCross.ViewModels;
+using Newtonsoft.Json.Converters;
 using Toggl.Daneel.Views;
 
 namespace Toggl.Daneel
@@ -45,6 +46,11 @@ namespace Toggl.Daneel
         public void Include(TextViewWithPlaceholder textView)
         {
             textView.TextColor = textView.TextColor;
+        }
+
+        public void Include(StringEnumConverter converter)
+        {
+            converter = new StringEnumConverter(true);
         }
     }
 }

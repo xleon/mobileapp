@@ -1,14 +1,14 @@
 ﻿using Toggl.Daneel.Extensions;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Daneel.Presentation.Attributes;
 using CoreGraphics;
 using UIKit;
 using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Multivac.Extensions;
-using Toggl.Foundation.MvvmCross.Extensions;
+using Toggl.Shared.Extensions;
+using Toggl.Core.UI.Extensions;
 using System.Reactive;
 using Foundation;
-using Toggl.Foundation;
+using Toggl.Core;
 
 namespace Toggl.Daneel.ViewControllers.Calendar
 {

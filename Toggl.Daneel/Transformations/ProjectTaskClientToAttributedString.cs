@@ -2,7 +2,7 @@
 using System.Text;
 using Foundation;
 using Toggl.Daneel.Extensions;
-using Toggl.Multivac;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.Daneel.Transformations

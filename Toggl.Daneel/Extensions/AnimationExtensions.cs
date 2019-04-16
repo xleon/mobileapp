@@ -3,7 +3,7 @@ using System.Threading;
 using CoreAnimation;
 using CoreGraphics;
 using UIKit;
-using static Toggl.Foundation.MvvmCross.Helper.Animation;
+using static Toggl.Core.UI.Helper.Animation;
 
 namespace Toggl.Daneel.Extensions
 {

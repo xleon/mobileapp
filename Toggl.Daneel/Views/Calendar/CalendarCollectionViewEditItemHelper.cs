@@ -7,13 +7,13 @@ using Foundation;
 using Toggl.Daneel.Cells.Calendar;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.ViewSources;
-using Toggl.Foundation;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Helper;
-using Toggl.Multivac;
+using Toggl.Core;
+using Toggl.Core.Calendar;
+using Toggl.Core.Extensions;
+using Toggl.Core.Helper;
+using Toggl.Shared;
 using UIKit;
-using Toggl.Foundation.MvvmCross.Extensions;
+using Toggl.Core.UI.Extensions;
 
 namespace Toggl.Daneel.Views.Calendar
 {

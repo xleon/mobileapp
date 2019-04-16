@@ -1,13 +1,13 @@
 ﻿using System;
-using CoreGraphics;
-using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Multivac;
-using UIKit;
-using static System.Math;
-using Toggl.Daneel.ViewControllers;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using CoreGraphics;
+using Foundation;
+using Toggl.Daneel.Extensions;
+using Toggl.Daneel.ViewControllers;
+using Toggl.Shared;
+using UIKit;
+using static System.Math;
 
 namespace Toggl.Daneel.Presentation.Transition
 {
@@ -40,7 +40,7 @@ namespace Toggl.Daneel.Presentation.Transition
 
         private readonly UIView dimmingView = new UIView
         {
-            BackgroundColor = Foundation.MvvmCross.Helper.Color.ModalDialog.BackgroundOverlay.ToNativeColor(),
+            BackgroundColor = Core.UI.Helper.Colors.ModalDialog.BackgroundOverlay.ToNativeColor(),
             Alpha = 0
         };
 

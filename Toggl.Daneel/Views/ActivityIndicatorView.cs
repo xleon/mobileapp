@@ -2,10 +2,10 @@
 using CoreAnimation;
 using Foundation;
 using Toggl.Daneel.Extensions;
-using Toggl.Foundation.Helper;
+using Toggl.Core.Helper;
 using UIKit;
-using static Toggl.Foundation.MvvmCross.Helper.Animation;
-using static Toggl.Multivac.Math;
+using static Toggl.Core.UI.Helper.Animation;
+using static Toggl.Shared.Math;
 
 namespace Toggl.Daneel.Views
 {

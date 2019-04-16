@@ -1,6 +1,6 @@
 ﻿using System;
 using Foundation;
-using Toggl.Multivac;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.Daneel.Cells.Settings
