@@ -11,16 +11,16 @@ using Foundation;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using Toggl.Daneel.Cells.Calendar;
 using Toggl.Daneel.Views.Calendar;
-using Toggl.Foundation;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.MvvmCross.Calendar;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.Extensions;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Core;
+using Toggl.Core.Extensions;
+using Toggl.Core.Calendar;
+using Toggl.Core.UI.Calendar;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UIKit;
-using FoundationResources = Toggl.Foundation.Resources;
+using FoundationResources = Toggl.Core.Resources;
 
 namespace Toggl.Daneel.ViewSources
 {

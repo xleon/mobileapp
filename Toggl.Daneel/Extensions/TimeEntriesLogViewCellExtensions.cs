@@ -2,7 +2,7 @@
 using Foundation;
 using CoreAnimation;
 using Toggl.Daneel.Views;
-using static Toggl.Foundation.MvvmCross.Helper.Animation;
+using static Toggl.Core.UI.Helper.Animation;
 using System.Reactive.Disposables;
 
 namespace Toggl.Daneel.Extensions

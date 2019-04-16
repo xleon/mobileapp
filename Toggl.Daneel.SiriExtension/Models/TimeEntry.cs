@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Multivac.Models;
+using Toggl.Shared.Models;
 
 namespace SiriExtension.Models
 {

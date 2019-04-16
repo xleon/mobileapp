@@ -6,8 +6,8 @@ using AgileBits;
 using Foundation;
 using MvvmCross;
 using MvvmCross.Platforms.Ios.Presenters;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Multivac;
+using Toggl.Core.UI.Services;
+using Toggl.Shared;
 using LoginHandler = AgileBits.OnePasswordLoginDictionaryCompletionBlock;
 
 namespace Toggl.Daneel.Services
@@ -20,7 +20,7 @@ namespace Toggl.Daneel.Services
         {
             return Observable.Create<PasswordManagerResult>(observer =>
             {
-                var presenter = Mvx.Resolve<IMvxIosViewPresenter>() as MvxIosViewPresenter;
+                var presenter = IosDependencyContainer.Instance.ViewPresenter;
 
                 OnePasswordExtension.SharedExtension.FindLoginForURLString(
                     "https://www.toggl.com", 

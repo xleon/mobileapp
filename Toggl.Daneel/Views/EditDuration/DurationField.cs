@@ -1,15 +1,13 @@
 ﻿using System;
 using CoreGraphics;
-using Foundation;
-using MvvmCross.Core;
-using Toggl.Daneel.Extensions;
-using Toggl.Foundation;
-using UIKit;
 using CoreText;
-using Toggl.Foundation.MvvmCross.Helper;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using ObjCRuntime;
+using Foundation;
 using MvvmCross.Base;
+using ObjCRuntime;
+using Toggl.Daneel.Extensions;
+using Toggl.Core;
+using Toggl.Core.UI.Helper;
+using UIKit;
 
 namespace Toggl.Daneel.Views.EditDuration
 {
@@ -58,7 +56,7 @@ namespace Toggl.Daneel.Views.EditDuration
             KeyboardType = UIKeyboardType.NumberPad;
             AdjustsFontSizeToFitWidth = false;
             Font = Font.GetMonospacedDigitFont();
-            TintColor = Color.DurationField.Cursor.ToNativeColor();
+            TintColor = Colors.DurationField.Cursor.ToNativeColor();
 
             durationInputDelegate = new DurationInputDelegate();
             Delegate = durationInputDelegate;

@@ -1,17 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Reactive.Subjects;
-using MvvmCross.Binding.BindingContext;
-using MvvmCross.Platforms.Ios.Binding;
-using MvvmCross.Platforms.Ios.Binding.Views;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Converters;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.Suggestions;
-using Toggl.Multivac.Extensions;
+﻿using System.Reactive.Subjects;
+using Toggl.Core;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.Suggestions;
 using UIKit;
-using static Toggl.Daneel.Extensions.ViewBindingExtensions;
+using Toggl.Daneel.Extensions;
 
 namespace Toggl.Daneel.Suggestions
 {
@@ -91,7 +83,7 @@ namespace Toggl.Daneel.Suggestions
             titleLabel.TranslatesAutoresizingMaskIntoConstraints = false;
             titleLabel.Text = Resources.SuggestionsHeader;
             titleLabel.Font = UIFont.SystemFontOfSize(titleSize, UIFontWeight.Medium);
-            titleLabel.TextColor = Color.Main.SuggestionsTitle.ToNativeColor();
+            titleLabel.TextColor = Colors.Main.SuggestionsTitle.ToNativeColor();
             titleLabel.TopAnchor.ConstraintEqualTo(Superview.TopAnchor, distanceAboveTitleLabel).Active = true;
             titleLabel.LeadingAnchor.ConstraintEqualTo(Superview.LeadingAnchor, sideMargin).Active = true;
         }

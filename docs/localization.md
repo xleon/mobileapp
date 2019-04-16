@@ -19,9 +19,9 @@ _Note: The string in the IB will be replaced, so it's better to make it somethin
 
 - Setup the text of those outlets in `ViewDidLoad` or `AwakeFromNib`
 
-## 🤖 Giskard
+## 🤖 Droid
 
-Giskard is a little bit easier to deal with, since it can look up for `Resources.resx` strings directly in the `.xaml`
+Droid is a little bit easier to deal with, since it can look up for `Resources.resx` strings directly in the `.xaml`
 
 ```xml
 <TextView
