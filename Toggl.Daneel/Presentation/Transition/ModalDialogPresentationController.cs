@@ -72,7 +72,7 @@ namespace Toggl.Daneel.Presentation.Transition
                     ? PresentedViewController.PreferredContentSize.Height
                     : iPadMaxHeight;
 
-                var height = Max(iPadMinHeightWithoutKeyboard, preferredContentHeight);
+                var height = preferredContentHeight;
                 var width = Min(iPadMaxWidth, parentContainerSize.Width);
 
                 height -= iPadStackModalViewSpacing * levelsOfModalViews();

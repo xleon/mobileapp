@@ -46,7 +46,12 @@ namespace Toggl.Daneel.ViewControllers
             TitleLabel.Text = Resources.ReviewTheTerms;
             AcceptButton.SetTitle(Resources.IAgree, UIControlState.Normal);
 
-            PreferredContentSize = new CGSize(View.Frame.Width, View.Frame.Height);
+            var height = UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad
+                ? 260
+                : View.Frame.Height;
+
+            PreferredContentSize = new CGSize(View.Frame.Width, height);
+
             prepareTextView();
 
             AcceptButton.Rx()
