@@ -146,6 +146,10 @@ namespace Toggl.Daneel.ViewControllers
         public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
         {
             base.ViewWillTransitionToSize(toSize, coordinator);
+
+            if (PageControl == null)
+                return;
+
             var scrollPoint = new CGPoint(toSize.Width * PageControl.CurrentPage, 0);
             ScrollView.SetContentOffset(scrollPoint, true);
         }
