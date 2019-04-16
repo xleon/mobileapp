@@ -668,9 +668,6 @@
     <AndroidResource Include="Resources\layout\SelectBeginningOfWeekFragmentCell.axml" />
     <AndroidResource Include="Resources\layout\SelectDurationFormatFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDurationFormatFragmentCell.axml" />
-    <AndroidResource Include="Resources\layout\ReportsActivity.axml" />
-    <AndroidResource Include="Resources\layout\ReportsActivityHeader.axml" />
-    <AndroidResource Include="Resources\drawable\RoundedRectangle.xml" />
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
     <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
@@ -919,7 +916,6 @@
     <AndroidResource Include="Resources\layout\SelectWorkspaceFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectWorkspaceFragmentCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentItem.axml" />
-    <AndroidResource Include="Resources\layout\ReportsCalendarFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentDayCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentPage.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarShortcutCell.axml" />
