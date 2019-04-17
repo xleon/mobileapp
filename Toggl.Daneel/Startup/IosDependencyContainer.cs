@@ -40,6 +40,8 @@ namespace Toggl.Daneel
             UIDependencyContainer.Instance = Instance;
         }
 
+        public OnePasswordServiceIos OnePasswordService => PasswordManagerService as OnePasswordServiceIos;
+
         private IosDependencyContainer(TogglPresenter viewPresenter, ApiEnvironment environment, Platform platform, string version)
             : base(environment, new UserAgent(platform.ToString(), version))
         {

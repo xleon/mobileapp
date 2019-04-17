@@ -7,6 +7,7 @@ using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
+using Toggl.Daneel.Services;
 using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
@@ -53,6 +54,7 @@ namespace Toggl.Daneel.ViewControllers
             SignUpForFreeLabel.Text = Resources.SignUpTitle;
 
             NavigationController.NavigationBarHidden = true;
+            IosDependencyContainer.Instance.OnePasswordService.SetSourceView(PasswordManagerButton);
             PasswordManagerButton.Hidden = !ViewModel.IsPasswordManagerAvailable;
 
             UIKeyboard.Notifications.ObserveWillShow(KeyboardWillShow);
@@ -289,4 +291,3 @@ namespace Toggl.Daneel.ViewControllers
             => isLoading ? "" : Resources.LoginTitle;
     }
 }
-
