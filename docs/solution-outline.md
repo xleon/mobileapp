@@ -6,60 +6,58 @@ This document outlines the projects contained in this repository, dependencies a
 In general, our goal is to keep concerns separated as much as sensibly possible. It is important to us that any subset of the projects (and including their dependencies) can be treated as modules and reused independently for other Toggl apps.
 
 
-## :computer: Multivac
+## :computer: Toggl.Shared
 
-Toggl.Multivac is a shared helper library.
+Toggl.Shared is a shared helper library.
 
 Dependencies: None
 
 It contains several simple helper types, as well as shared model interfaces.
 
 
-## :satellite: Ultrawave
+## :satellite: Toggl.Networking
 
-Ultrawave provides a thin layer around the public Toggl Api.
+Toggl.Networking provides a thin layer around the public Toggl Api.
 
-Dependencies: Multivac
+Dependencies: Toggl.Shared
 
 Its main responsibility is calling the correct Http endpoints, and (de)serializing models from/for the api.
 To allow for the latter, it has limited knowledge of Toggl's business logic in the sense that it will only serialise model properties valid for a specific endpoint and given business logic specific constraints.
 
 
-## :crystal_ball: PrimeRadiant
+## :crystal_ball: Toggl.Storage
 
-PrimeRadiant is our local storage (database) project.
+Toggl.Storage is our local storage (database) project.
 
-Dependencies: Multivac
+Dependencies: Toggl.Shared
 
 This project contains interfaces representing the local storage repository and database models of a Toggl app. These interfaces can be implemented in additional projects corresponding to specifics database/storage frameworks/libraries.
 
 
-## :rocket: Foundation
+## :rocket: Toggl.Core
 
-Foundation contains Toggl's business logic.
+Toggl.Core contains Toggl's business logic.
 
-Dependencies: Multivac, Ultrawave, PrimeRadiant
+Dependencies: Toggl.Shared, Toggl.Networking, Toggl.Storage
 
 Next to containing business logic, this project also ties together the Toggl Api and local storage with a comprehensive syncing algorithm.
 This is the _foundation_ for any of our Toggl mobile apps, though it contains no mobile specific code itself, and can be used to run a Toggl app on any platform.
 
 
-## :twisted_rightwards_arrows: Foundation.MvvmCross
+## :twisted_rightwards_arrows: Toggl.Core.UI
 
-Foundation.MvvmCross is a shared MvvmCross view model library.
+Toggl.Core.UI is a shared UI view model library.
 
-Dependencies: Multivac, Foundation
+Dependencies: Toggl.Shared, Toggl.Core
 
-This project contains shared view models for all our app, and uses MvvmCross for IoC, UI bindings, and navigation within the individual apps. Only business logic related directly to specific UI components that cannot be handled easily in Foundation is dealt with here. Otherwise the project is kept as light as possible.
+This project contains shared view models for all our app. Only business logic related directly to specific UI components that cannot be handled easily in Toggl.Core is dealt with here. Otherwise the project is kept as light as possible.
 This allows us to use a lot of UI behaviour between the apps, and keep the platform specific code minimal.
 
-## :sunny: Daneel & :robot: Giskard
+## :sunny: Toggl.iOS & :robot: Toggl.Droid
 
-Daneel is the Toggl iOS app and Giskard is the Toggl Android app.
+Dependencies: Toggl.Core.UI
 
-Dependencies: Foundation.MvvmCross
-
-These projects contain .storyboard/.xib/.axml files and minimal UI code binding to the view models of Foundation.MvvmCross. The only non-UI code in this project are platform specific features that can not be handled otherwise.
+These projects contain .storyboard/.xib/.axml files and minimal UI code binding to the view models of Toggl.Core.UI. The only non-UI code in this project are platform specific features that can not be handled otherwise.
 
 ## :vertical_traffic_light: Tests
 
@@ -73,13 +71,13 @@ To facilitate this, unit tests are run on every commit automatically.
 
 ### :link: Integration Tests
 
-Ultrawave has extensive integration tests, which tests all endpoints against Toggl's staging api.
+Toggl.Networking has extensive integration tests, which tests all endpoints against Toggl's staging api.
 
 These tests are run nightly on the `develop` branch.
 
 ### :art: UI Tests
 
-Daneel has UI Tests, which test all UI components for correct behaviour.
+Toggl.iOS has UI Tests, which test all UI components for correct behaviour.
 
 These tests are run nightly on the `develop` branch.
 

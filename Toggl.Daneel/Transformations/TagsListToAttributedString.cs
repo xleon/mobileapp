@@ -4,7 +4,7 @@ using System.Linq;
 using Foundation;
 using Toggl.Daneel.Autocomplete;
 using UIKit;
-using static Toggl.Multivac.Extensions.EnumerableExtensions;
+using static Toggl.Shared.Extensions.EnumerableExtensions;
 
 namespace Toggl.Daneel.Transformations
 {

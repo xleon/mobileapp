@@ -1,9 +1,9 @@
 ﻿using Foundation;
 using UIKit;
-using Toggl.Multivac;
+using Toggl.Shared;
 using System;
 using System.Collections.Generic;
-using Toggl.Foundation.MvvmCross.Collections;
+using Toggl.Core.UI.Collections;
 
 namespace Toggl.Daneel.ViewSources.Generic.TableView
 {

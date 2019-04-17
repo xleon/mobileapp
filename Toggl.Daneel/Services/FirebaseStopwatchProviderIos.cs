@@ -1,5 +1,5 @@
 ﻿using Firebase.PerformanceMonitoring;
-using Toggl.Foundation.Diagnostics;
+using Toggl.Core.Diagnostics;
 
 namespace Toggl.Daneel.Services
 {

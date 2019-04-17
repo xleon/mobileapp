@@ -1,5 +1,5 @@
 ﻿using System;
-using Toggl.Ultrawave;
+using Toggl.Networking;
 using Toggl.Daneel.Intents;
 using Foundation;
 using Intents;

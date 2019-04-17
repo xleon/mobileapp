@@ -1,6 +1,6 @@
 ﻿using System;
 using Foundation;
-using Toggl.Foundation;
+using Toggl.Core;
 
 namespace Toggl.Daneel
 {

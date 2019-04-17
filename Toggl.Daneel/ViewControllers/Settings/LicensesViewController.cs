@@ -2,10 +2,10 @@
 using MvvmCross.Platforms.Ios.Views;
 using Toggl.Daneel.Cells.Settings;
 using Toggl.Daneel.ViewSources.Generic.TableView;
-using Toggl.Foundation;
-using Toggl.Foundation.MvvmCross.Collections;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac;
+using Toggl.Core;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers
