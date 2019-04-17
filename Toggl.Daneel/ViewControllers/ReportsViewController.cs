@@ -28,6 +28,8 @@ namespace Toggl.Daneel.ViewControllers
         private const double maximumWorkspaceNameLabelWidthCompact = 144;
         private const double maximumWorkspaceNameLabelWidthRegular = 288;
 
+        private const double maxWidth = 834;
+
         private nfloat calendarHeight => CalendarContainer.Bounds.Height;
 
         private UIButton titleButton;
@@ -222,6 +224,12 @@ namespace Toggl.Daneel.ViewControllers
             base.ViewDidLayoutSubviews();
 
             source.UpdateContentInset();
+        }
+
+        public override void ViewWillLayoutSubviews()
+        {
+            base.ViewWillLayoutSubviews();
+            ContentWidthConstraint.Constant = (nfloat) Math.Min(View.Bounds.Width, maxWidth);
         }
 
         private void prepareViews()

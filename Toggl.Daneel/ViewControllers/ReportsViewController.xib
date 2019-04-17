@@ -14,6 +14,7 @@
             <connections>
                 <outlet property="BarChartsContainerView" destination="wAq-Fg-HWt" id="4oM-h3-0oe"/>
                 <outlet property="CalendarContainer" destination="X3Z-yh-5bj" id="Ru0-0R-Od4"/>
+                <outlet property="ContentWidthConstraint" destination="rc7-fl-15U" id="GId-1C-kMn"/>
                 <outlet property="OverviewContainerView" destination="8Hf-oq-EJm" id="zU8-UN-y36"/>
                 <outlet property="ReportsTableView" destination="2L8-Wo-D6t" id="XRh-uZ-odE"/>
                 <outlet property="TopCalendarConstraint" destination="n2c-Zc-JQ4" id="gUx-CG-OR6"/>
@@ -104,8 +105,8 @@
                     </subviews>
                     <color key="backgroundColor" red="0.98039215686274506" green="0.98431372549019602" blue="0.9882352941176471" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstItem="Suw-ZF-YQn" firstAttribute="width" secondItem="25z-Nh-oKr" secondAttribute="width" multiplier="0.5" constant="10" id="fKa-kJ-JQF"/>
-                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="834" id="rc7-fl-15U"/>
+                        <constraint firstItem="Suw-ZF-YQn" firstAttribute="width" secondItem="2L8-Wo-D6t" secondAttribute="width" id="SWu-pZ-OOd"/>
+                        <constraint firstAttribute="width" constant="834" id="rc7-fl-15U"/>
                     </constraints>
                 </stackView>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eOn-bU-NQ3">

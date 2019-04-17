@@ -19,6 +19,9 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIView CalendarContainer { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint ContentWidthConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIView OverviewContainerView { get; set; }
 
 		[Outlet]
@@ -38,9 +41,19 @@ namespace Toggl.Daneel.ViewControllers
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (BarChartsContainerView != null) {
+				BarChartsContainerView.Dispose ();
+				BarChartsContainerView = null;
+			}
+
 			if (CalendarContainer != null) {
 				CalendarContainer.Dispose ();
 				CalendarContainer = null;
+			}
+
+			if (OverviewContainerView != null) {
+				OverviewContainerView.Dispose ();
+				OverviewContainerView = null;
 			}
 
 			if (ReportsTableView != null) {
@@ -68,14 +81,9 @@ namespace Toggl.Daneel.ViewControllers
 				WorkspaceLabel = null;
 			}
 
-			if (OverviewContainerView != null) {
-				OverviewContainerView.Dispose ();
-				OverviewContainerView = null;
-			}
-
-			if (BarChartsContainerView != null) {
-				BarChartsContainerView.Dispose ();
-				BarChartsContainerView = null;
+			if (ContentWidthConstraint != null) {
+				ContentWidthConstraint.Dispose ();
+				ContentWidthConstraint = null;
 			}
 		}
 	}
