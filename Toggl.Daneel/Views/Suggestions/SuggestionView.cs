@@ -4,8 +4,8 @@ using UIKit;
 using ObjCRuntime;
 using CoreGraphics;
 using Toggl.Core.Suggestions;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using MvvmCross.UI;
+using Toggl.Daneel.Extensions;
+using Toggl.Shared;
 
 namespace Toggl.Daneel
 {
@@ -67,9 +67,7 @@ namespace Toggl.Daneel
                 return;
             }
 
-            var projectColor = MvxColor
-                .ParseHexString(Suggestion.ProjectColor)
-                .ToNativeColor();
+            var projectColor = new Color(Suggestion.ProjectColor).ToNativeColor();
             ProjectDot.TintColor = projectColor;
             ProjectLabel.TextColor = projectColor;
 

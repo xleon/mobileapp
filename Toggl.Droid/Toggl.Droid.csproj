@@ -192,12 +192,6 @@
       <HintPath>..\packages\MvvmCross.6.1.2\lib\monoandroid81\MvvmCross.dll</HintPath>
     </Reference>
     <Reference Include="Java.Interop" />
-    <Reference Include="MvvmCross.Plugin.Color">
-      <HintPath>..\packages\MvvmCross.Plugin.Color.6.1.2\lib\monoandroid81\MvvmCross.Plugin.Color.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugin.Visibility">
-      <HintPath>..\packages\MvvmCross.Plugin.Visibility.6.1.2\lib\monoandroid81\MvvmCross.Plugin.Visibility.dll</HintPath>
-    </Reference>
     <Reference Include="MvvmCross.Droid.Support.V7.RecyclerView">
       <HintPath>..\packages\MvvmCross.Droid.Support.V7.RecyclerView.6.1.2\lib\monoandroid81\MvvmCross.Droid.Support.V7.RecyclerView.dll</HintPath>
     </Reference>
@@ -674,9 +668,6 @@
     <AndroidResource Include="Resources\layout\SelectBeginningOfWeekFragmentCell.axml" />
     <AndroidResource Include="Resources\layout\SelectDurationFormatFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDurationFormatFragmentCell.axml" />
-    <AndroidResource Include="Resources\layout\ReportsActivity.axml" />
-    <AndroidResource Include="Resources\layout\ReportsActivityHeader.axml" />
-    <AndroidResource Include="Resources\drawable\RoundedRectangle.xml" />
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
     <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
@@ -925,7 +916,6 @@
     <AndroidResource Include="Resources\layout\SelectWorkspaceFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectWorkspaceFragmentCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentItem.axml" />
-    <AndroidResource Include="Resources\layout\ReportsCalendarFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentDayCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentPage.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarShortcutCell.axml" />

@@ -1,11 +1,11 @@
 ﻿using System;
 using FluentAssertions;
 using FsCheck.Xunit;
-using MvvmCross.UI;
 using Toggl.Core.Calendar;
 using Toggl.Core.Helper;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.Tests.Mocks;
+using Toggl.Shared;
 using Toggl.Storage;
 using Xunit;
 
@@ -54,7 +54,7 @@ namespace Toggl.Core.Tests
 
                 var calendarItem = CalendarItem.From(timeEntry);
 
-                calendarItem.Color.Should().Be(Color.NoProject);
+                calendarItem.Color.Should().Be(Colors.NoProject);
             }
 
             [Fact, LogIfTooSlow]
@@ -74,11 +74,11 @@ namespace Toggl.Core.Tests
 
                 var calendarItem = CalendarItem.From(timeEntry);
 
-                calendarItem.Color.Should().Be(Color.NoProject);
+                calendarItem.Color.Should().Be(Colors.NoProject);
             }
 
             [Theory, LogIfTooSlow]
-            [InlineData(Color.NoProject, "#FFFFFF")]
+            [InlineData(Colors.NoProject, "#FFFFFF")]
             [InlineData("#000000", "#FFFFFF")]
             [InlineData("#222222", "#FFFFFF")]
             [InlineData("#FFFFFF", "#000000")]
@@ -103,7 +103,7 @@ namespace Toggl.Core.Tests
                 var calendarItem = CalendarItem.From(timeEntry);
                 var foregroundColor = calendarItem.ForegroundColor();
 
-                foregroundColor.Should().BeEquivalentTo(MvxColor.ParseHexString(expectedColor));
+                foregroundColor.Should().BeEquivalentTo(new Color(expectedColor));
             }
         }
 

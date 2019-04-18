@@ -5,25 +5,24 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Toggl.Core.UI.Navigation;
-using MvvmCross.UI;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Color = Toggl.Core.UI.Helper.Color;
+using Colors = Toggl.Core.UI.Helper.Colors;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public class SelectColorViewModel : ViewModel<ColorParameters, MvxColor>
+    public class SelectColorViewModel : ViewModel<ColorParameters, Color>
     {
         private readonly INavigationService navigationService;
         private readonly IRxActionFactory rxActionFactory;
 
-        private MvxColor defaultColor;
-        private IObservable<MvxColor> customColor;
-        private BehaviorSubject<MvxColor> selectedColor = new BehaviorSubject<MvxColor>(MvxColors.Transparent);
+        private Color defaultColor;
+        private IObservable<Color> customColor;
+        private BehaviorSubject<Color> selectedColor = new BehaviorSubject<Color>(Colors.Transparent);
 
         private BehaviorSubject<float> hue { get; } = new BehaviorSubject<float>(0.0f);
         private BehaviorSubject<float> saturation { get; } = new BehaviorSubject<float>(0.0f);
@@ -41,7 +40,7 @@ namespace Toggl.Core.UI.ViewModels
         public InputAction<float> SetHue { get; }
         public InputAction<float> SetSaturation { get; }
         public InputAction<float> SetValue { get; }
-        public InputAction<MvxColor> SelectColor { get; }
+        public InputAction<Color> SelectColor { get; }
 
         public SelectColorViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
         {
@@ -61,13 +60,13 @@ namespace Toggl.Core.UI.ViewModels
             SetHue = rxActionFactory.FromAction<float>(hue.OnNext);
             SetSaturation = rxActionFactory.FromAction<float>(saturation.OnNext);
             SetValue = rxActionFactory.FromAction<float>(value.OnNext);
-            SelectColor = rxActionFactory.FromAction<MvxColor>(selectColor);
+            SelectColor = rxActionFactory.FromAction<Color>(selectColor);
 
             customColor = Observable
-                .CombineLatest(hue, saturation, value, Color.FromHSV)
+                .CombineLatest(hue, saturation, value, Colors.FromHSV)
                 .Do(selectedColor.OnNext);
 
-            var availableColors = Observable.Return(Color.DefaultProjectColors)
+            var availableColors = Observable.Return(Colors.DefaultProjectColors)
                 .CombineLatest(customColor, combineAllColors);
 
             SelectableColors = availableColors
@@ -79,7 +78,7 @@ namespace Toggl.Core.UI.ViewModels
             defaultColor = parameter.Color;
             AllowCustomColors = parameter.AllowCustomColors;
 
-            var noColorsSelected = Color.DefaultProjectColors.None(color => color == defaultColor);
+            var noColorsSelected = Colors.DefaultProjectColors.None(color => color == defaultColor);
 
             if (noColorsSelected)
             {
@@ -92,7 +91,7 @@ namespace Toggl.Core.UI.ViewModels
                 }
                 else
                 {
-                    selectedColor.OnNext(Color.DefaultProjectColors.First());
+                    selectedColor.OnNext(Colors.DefaultProjectColors.First());
                 }
             }
             else
@@ -101,7 +100,7 @@ namespace Toggl.Core.UI.ViewModels
             }
         }
 
-        private IEnumerable<MvxColor> combineAllColors(MvxColor[] defaultColors, MvxColor custom)
+        private IEnumerable<Color> combineAllColors(Color[] defaultColors, Color custom)
         {
             if (AllowCustomColors)
             {
@@ -111,7 +110,7 @@ namespace Toggl.Core.UI.ViewModels
             return defaultColors;
         }
 
-        private void selectColor(MvxColor color)
+        private void selectColor(Color color)
         {
             selectedColor.OnNext(color);
 
@@ -119,7 +118,7 @@ namespace Toggl.Core.UI.ViewModels
                 save();
         }
 
-        private IEnumerable<SelectableColorViewModel> updateSelectableColors(IEnumerable<MvxColor> availableColors, MvxColor selectedColor)
+        private IEnumerable<SelectableColorViewModel> updateSelectableColors(IEnumerable<Color> availableColors, Color selectedColor)
             => availableColors.Select(color => new SelectableColorViewModel(color, color == selectedColor));
 
         private Task close()

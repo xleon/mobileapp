@@ -233,7 +233,7 @@ namespace Toggl.Core.Tests.Interactors
                     .Execute()
                     .Wait();
 
-                report.Segments.Single(s => s.Color == Color.NoProject).ProjectName.Should().Be(Resources.NoProject);
+                report.Segments.Single(s => s.Color == Colors.NoProject).ProjectName.Should().Be(Resources.NoProject);
             }
 
             [Property]

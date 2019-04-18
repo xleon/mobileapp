@@ -5,25 +5,12 @@ using System.Reactive.Linq;
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
+using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
-using Toggl.Core.UI.ViewModels.Reports;
-using UIKit;
-using System.Reactive.Disposables;
 using Toggl.Daneel.Extensions.Reactive;
-using System.Reactive.Linq;
 using Toggl.Shared.Extensions;
-using System.Linq;
-using Toggl.Shared;
-using System.Collections.Generic;
-using System.Globalization;
-using Toggl.Core.Conversions;
-using System.Reactive.Subjects;
-using System.Reactive;
-using Toggl.Daneel.Cells;
-using Toggl.Core;
-using Toggl.Core.Extensions;
-using Color = Toggl.Core.UI.Helper.Color;
+using UIKit;
 
 namespace Toggl.Daneel.Views.Reports
 {
@@ -107,7 +94,7 @@ namespace Toggl.Daneel.Views.Reports
             Item.GroupedSegmentsObservable
                 .Subscribe(groupedSegments => PieChartView.Segments = groupedSegments)
                 .DisposedBy(disposeBag);
-
+                
             Item.IsLoadingObservable
                 .Select(CommonFunctions.Invert)
                 .Subscribe(BarChartContainerView.Rx().IsVisible())

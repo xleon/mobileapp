@@ -1,6 +1,6 @@
-﻿using System;
-using MvvmCross.UI;
-using Toggl.Core.Calendar;
+﻿using Toggl.Core.Calendar;
+using Toggl.Core.UI.Helper;
+using Toggl.Shared;
 using static System.Math;
 
 namespace Toggl.Core.UI.Extensions
@@ -8,10 +8,10 @@ namespace Toggl.Core.UI.Extensions
     public static class ColorExtensions
     {
         // Taken from http://referencesource.microsoft.com/#System.Drawing/commonui/System/Drawing/Color.cs,23adaaa39209cc1f
-        public static (float hue, float saturation, float value) GetHSV(this MvxColor color)
+        public static (float hue, float saturation, float value) GetHSV(this Color color)
         {
-            var max = Max(color.R, Max(color.G, color.B));
-            var min = Min(color.R, Min(color.G, color.B));
+            var max = Max(color.Red, Max(color.Green, color.Blue));
+            var min = Min(color.Red, Min(color.Green, color.Blue));
 
             return (
                 hue: color.GetHue(),
@@ -19,14 +19,14 @@ namespace Toggl.Core.UI.Extensions
                 value: (float)(max / 255d));
         }
 
-        public static float GetHue(this MvxColor self)
+        public static float GetHue(this Color self)
         {
-            if (self.R == self.G && self.G == self.B)
+            if (self.Red == self.Green && self.Green == self.Blue)
                 return 0; // 0 makes as good an UNDEFINED value as any
 
-            float r = (float)self.R / 255.0f;
-            float g = (float)self.G / 255.0f;
-            float b = (float)self.B / 255.0f;
+            float r = (float)self.Red / 255.0f;
+            float g = (float)self.Green / 255.0f;
+            float b = (float)self.Blue / 255.0f;
 
             float max, min;
             float delta;
@@ -63,16 +63,16 @@ namespace Toggl.Core.UI.Extensions
             return hue / 360;
         }
 
-        public static MvxColor ForegroundColor(this CalendarItem calendarItem)
+        public static Color ForegroundColor(this CalendarItem calendarItem)
         {
             // Adjusted relative luminance
             // math based on https://www.w3.org/WAI/GL/wiki/Relative_luminance
 
-            var color = MvxColor.ParseHexString(calendarItem.Color);
+            var color = new Color(calendarItem.Color);
 
-            var rsrgb = color.R / 255.0;
-            var gsrgb = color.G / 255.0;
-            var bsrgb = color.B / 255.0;
+            var rsrgb = color.Red / 255.0;
+            var gsrgb = color.Green / 255.0;
+            var bsrgb = color.Blue / 255.0;
 
             var lowGammaCoeficient = 1 / 12.92;
 
@@ -82,10 +82,10 @@ namespace Toggl.Core.UI.Extensions
 
             var luma = r * 0.2126 + g * 0.7152 + b * 0.0722;
 
-            return luma < 0.5 ? MvxColors.White : MvxColors.Black;
+            return luma < 0.5 ? Colors.White : Colors.Black;
 
             double adjustGamma(double channel)
-                => Math.Pow((channel + 0.055) / 1.055, 2.4);
+                => Pow((channel + 0.055) / 1.055, 2.4);
         }
     }
 }

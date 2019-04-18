@@ -4,7 +4,7 @@ using Android.Text.Style;
 using Android.Views;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Droid.Extensions;
-using static Toggl.Core.Helper.Color;
+using static Toggl.Core.Helper.Colors;
 
 namespace Toggl.Droid.ViewHelpers
 {

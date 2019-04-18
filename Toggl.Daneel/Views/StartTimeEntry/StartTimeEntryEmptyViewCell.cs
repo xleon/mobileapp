@@ -1,10 +1,10 @@
 ﻿using System;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Cells;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.UI.Helper;
 using UIKit;
+using Toggl.Daneel.Extensions;
 
 namespace Toggl.Daneel.Views
 {
@@ -35,13 +35,13 @@ namespace Toggl.Daneel.Views
             result.AddAttributes(new UIStringAttributes
             {
                 Font = UIFont.BoldSystemFontOfSize(16),
-                ForegroundColor = Color.StartTimeEntry.BoldQuerySuggestionColor.ToNativeColor()
+                ForegroundColor = Colors.StartTimeEntry.BoldQuerySuggestionColor.ToNativeColor()
             }, new NSRange(0, 1));
 
             result.AddAttributes(new UIStringAttributes
             {
                 Font = UIFont.SystemFontOfSize(13),
-                ForegroundColor = Color.StartTimeEntry.Placeholder.ToNativeColor()
+                ForegroundColor = Colors.StartTimeEntry.Placeholder.ToNativeColor()
             }, new NSRange(2, value.Description.Length));
 
             return result;

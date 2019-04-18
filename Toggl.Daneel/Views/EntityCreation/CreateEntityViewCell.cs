@@ -1,6 +1,5 @@
 ﻿using System;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
 using Toggl.Core.Autocomplete.Suggestions;
@@ -38,7 +37,7 @@ namespace Toggl.Daneel.Views.EntityCreation
         {
             var result = new NSMutableAttributedString(cachedAddIcon);
             var text = new NSMutableAttributedString(Item.CreateEntityMessage);
-            var textColor = Color.StartTimeEntry.Placeholder.ToNativeColor();
+            var textColor = Colors.StartTimeEntry.Placeholder.ToNativeColor();
 
             text.AddAttribute(UIStringAttributeKey.ForegroundColor, textColor, new NSRange(0, text.Length));
             result.Append(text);

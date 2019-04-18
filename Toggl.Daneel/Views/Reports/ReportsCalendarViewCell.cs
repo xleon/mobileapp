@@ -1,9 +1,9 @@
 ﻿using System;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
+using Toggl.Daneel.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.Views
@@ -42,12 +42,12 @@ namespace Toggl.Daneel.Views
             TodayBackgroundView.CornerRadius = cornerRadius;
             TodayBackgroundView.RoundLeft = true;
             TodayBackgroundView.RoundRight = true;
-            TodayBackgroundView.BackgroundColor = Color.ReportsCalendar.Today.ToNativeColor();
+            TodayBackgroundView.BackgroundColor = Colors.ReportsCalendar.Today.ToNativeColor();
         }
 
-        private readonly UIColor otherMonthColor = Color.ReportsCalendar.CellTextColorOutOfCurrentMonth.ToNativeColor();
-        private readonly UIColor thisMonthColor = Color.ReportsCalendar.CellTextColorInCurrentMonth.ToNativeColor();
-        private readonly UIColor selectedColor = Color.ReportsCalendar.CellTextColorSelected.ToNativeColor();
+        private readonly UIColor otherMonthColor = Colors.ReportsCalendar.CellTextColorOutOfCurrentMonth.ToNativeColor();
+        private readonly UIColor thisMonthColor = Colors.ReportsCalendar.CellTextColorInCurrentMonth.ToNativeColor();
+        private readonly UIColor selectedColor = Colors.ReportsCalendar.CellTextColorSelected.ToNativeColor();
 
         protected override void UpdateView()
         {
@@ -63,8 +63,8 @@ namespace Toggl.Daneel.Views
             }
 
             BackgroundView.BackgroundColor = Item.IsSelected(dateRange)
-                ? Color.ReportsCalendar.SelectedDayBackgoundColor.ToNativeColor()
-                : Color.Common.Transparent.ToNativeColor();
+                ? Colors.ReportsCalendar.SelectedDayBackgoundColor.ToNativeColor()
+                : Colors.Common.Transparent.ToNativeColor();
 
             BackgroundView.RoundLeft = Item.IsStartOfSelectedPeriod(dateRange);
             BackgroundView.RoundRight = Item.IsEndOfSelectedPeriod(dateRange);

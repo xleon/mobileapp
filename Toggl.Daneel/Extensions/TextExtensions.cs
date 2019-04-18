@@ -1,6 +1,5 @@
 ﻿using CoreGraphics;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Core.UI.Helper;
 using UIKit;
 
@@ -12,8 +11,8 @@ namespace Toggl.Daneel.Extensions
 
         public static NSAttributedString PrependWithAddIcon(this string self, double fontHeight)
         {
-            var textColor = Color.StartTimeEntry.Placeholder.ToNativeColor();
-            var addIconColor = Color.StartTimeEntry.AddIconColor.ToNativeColor();
+            var textColor = Colors.StartTimeEntry.Placeholder.ToNativeColor();
+            var addIconColor = Colors.StartTimeEntry.AddIconColor.ToNativeColor();
 
             var emptyTextString = new NSMutableAttributedString($" {self}");
             emptyTextString.AddAttribute(UIStringAttributeKey.ForegroundColor, textColor, new NSRange(0, emptyTextString.Length));

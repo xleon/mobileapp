@@ -48,8 +48,7 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
             var observable = Observable.Return(timeEntries);
             timeEntriesSource = Substitute.For<ITimeEntriesSource>();
             DataSource.TimeEntries.Returns(timeEntriesSource);
-            timeEntriesSource.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>(), Arg.Any<bool>())
-                .Returns(observable);
+            timeEntriesSource.GetByIds(Arg.Any<long[]>()).Returns(observable);
         }
 
         private EditTimeEntryDto[] prepareTimeEntries()

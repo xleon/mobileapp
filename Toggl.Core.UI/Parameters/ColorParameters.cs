@@ -1,14 +1,14 @@
-﻿using MvvmCross.UI;
+﻿using Toggl.Shared;
 
 namespace Toggl.Core.UI.Parameters
 {
     public sealed class ColorParameters
     {
-        public MvxColor Color { get; set; }
+        public Color Color { get; set; }
 
         public bool AllowCustomColors { get; set; }
 
-        public static ColorParameters Create(MvxColor color, bool allowCustomColor) => new ColorParameters
+        public static ColorParameters Create(Color color, bool allowCustomColor) => new ColorParameters
         {
             Color = color,
             AllowCustomColors = allowCustomColor

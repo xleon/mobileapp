@@ -1,6 +1,5 @@
 ﻿using System;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Core.UI.ViewModels.Reports;
 using UIKit;
@@ -14,7 +13,7 @@ using Toggl.Core;
 using Toggl.Core.Extensions;
 using ObjCRuntime;
 using Toggl.Core.UI.Extensions;
-using Color = Toggl.Core.UI.Helper.Color;
+using Toggl.Core.UI.Helper;
 
 namespace Toggl.Daneel.Views.Reports
 {
@@ -25,8 +24,8 @@ namespace Toggl.Daneel.Views.Reports
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
-        private static readonly UIColor normalColor = Color.Reports.PercentageActivated.ToNativeColor();
-        private static readonly UIColor disabledColor = Color.Reports.Disabled.ToNativeColor();
+        private static readonly UIColor normalColor = Colors.Reports.PercentageActivated.ToNativeColor();
+        private static readonly UIColor disabledColor = Colors.Reports.Disabled.ToNativeColor();
 
         private readonly UIStringAttributes normalAttributes = new UIStringAttributes
         {
@@ -90,8 +89,8 @@ namespace Toggl.Daneel.Views.Reports
 
             var totalDurationColorObservable = Item.TotalTimeIsZeroObservable
                 .Select(isZero => isZero
-                    ? Core.UI.Helper.Color.Reports.Disabled.ToNativeColor()
-                    : Core.UI.Helper.Color.Reports.TotalTimeActivated.ToNativeColor());
+                    ? Colors.Reports.Disabled.ToNativeColor()
+                    : Colors.Reports.TotalTimeActivated.ToNativeColor());
 
             totalDurationColorObservable
                 .Subscribe(TotalDurationGraph.Rx().TintColor())

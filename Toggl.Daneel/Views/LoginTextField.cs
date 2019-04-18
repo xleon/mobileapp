@@ -5,9 +5,8 @@ using CoreAnimation;
 using CoreGraphics;
 using Foundation;
 using MvvmCross.Base;
-using MvvmCross.Core;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Core.UI.Helper;
+using Toggl.Daneel.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.Views
@@ -30,7 +29,7 @@ namespace Toggl.Daneel.Views
         private const float placeholderAnimationDuration = 0.5f;
 
         private readonly CGColor placeholderColor
-            = Color.Login.TextViewPlaceholder.ToNativeColor().CGColor;
+            = Colors.Login.TextViewPlaceholder.ToNativeColor().CGColor;
         private readonly CALayer underlineLayer = new CALayer();
         private readonly CATextLayer placeholderLayer = new CATextLayer();
 

@@ -7,8 +7,6 @@ using Android.Runtime;
 using Android.Text;
 using Android.Util;
 using Android.Views;
-using MvvmCross.Plugin.Color.Platforms.Android;
-using MvvmCross.UI;
 using Toggl.Core.Reports;
 using Toggl.Droid.Extensions;
 
@@ -79,7 +77,7 @@ namespace Toggl.Droid.Views
             foreach (var segment in Segments)
             {
                 var segmentPaint = new Paint();
-                segmentPaint.Color = MvxColor.ParseHexString(segment.Color).ToNativeColor();
+                segmentPaint.Color = Color.ParseColor(segment.Color);
 
                 var percent = (float)segment.TrackedTime.TotalSeconds / totalSeconds;
                 var sweepDegrees = fullCircle * percent;

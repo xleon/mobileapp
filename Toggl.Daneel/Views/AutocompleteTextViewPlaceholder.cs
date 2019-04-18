@@ -1,8 +1,8 @@
 ﻿using System;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
+using Toggl.Daneel.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.Views
@@ -18,7 +18,7 @@ namespace Toggl.Daneel.Views
         public void ConfigureWith(UITextView textView)
         {
             Font = UIFont.SystemFontOfSize(textView.Font.PointSize);
-            TextColor = Color.StartTimeEntry.Placeholder.ToNativeColor();
+            TextColor = Colors.StartTimeEntry.Placeholder.ToNativeColor();
             Text = Resources.StartTimeEntryPlaceholder;
             TextAlignment = UITextAlignment.Left;
             TranslatesAutoresizingMaskIntoConstraints = false;

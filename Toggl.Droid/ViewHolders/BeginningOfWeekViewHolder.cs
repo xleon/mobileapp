@@ -2,10 +2,7 @@
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using MvvmCross.Plugin.Color.Platforms.Android;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Droid.Extensions;
-using Toggl.Droid.Views;
 
 namespace Toggl.Droid.ViewHolders
 {

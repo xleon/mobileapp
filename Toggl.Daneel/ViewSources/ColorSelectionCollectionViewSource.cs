@@ -4,16 +4,17 @@ using System.Collections.Immutable;
 using System.Reactive.Linq;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.UI;
-using Toggl.Daneel.Views;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Daneel.Views;
+using Toggl.Shared;
 using UIKit;
+using static System.Math;
 
 namespace Toggl.Daneel.ViewSources
 {
     public sealed class ColorSelectionCollectionViewSource : ReloadCollectionViewSource<SelectableColorViewModel>, IUICollectionViewDelegateFlowLayout
     {
-        public IObservable<MvxColor> ColorSelected
+        public IObservable<Color> ColorSelected
             => Observable
                 .FromEventPattern<SelectableColorViewModel>(e => OnItemTapped += e, e => OnItemTapped -= e)
                 .Select(e => e.EventArgs.Color);
@@ -31,7 +32,7 @@ namespace Toggl.Daneel.ViewSources
         [Export("collectionView:layout:sizeForItemAtIndexPath:")]
         public CGSize GetSizeForItem(
             UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
-            => new CGSize(Math.Floor(collectionView.Frame.Width / 5), 36);
+            => new CGSize(Floor(collectionView.Frame.Width / 5), 36);
 
         [Export("collectionView:layout:minimumLineSpacingForSectionAtIndex:")]
         public nfloat GetMinimumLineSpacingForSection(

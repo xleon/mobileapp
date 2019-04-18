@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using CoreGraphics;
-using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
+using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.Shared.Extensions.CommonFunctions;
@@ -115,13 +112,13 @@ namespace Toggl.Daneel.ViewControllers.Settings
         private void prepareViews()
         {
             ErrorView.Hidden = true;
-            FeedbackTextView.TintColor = Color.Feedback.Cursor.ToNativeColor();
-            FeedbackPlaceholderTextView.TintColor = Color.Feedback.Cursor.ToNativeColor();
+            FeedbackTextView.TintColor = Colors.Feedback.Cursor.ToNativeColor();
+            FeedbackPlaceholderTextView.TintColor = Colors.Feedback.Cursor.ToNativeColor();
         }
 
         private void prepareIndicatorView()
         {
-            IndicatorView.IndicatorColor = Color.Feedback.ActivityIndicator.ToNativeColor();
+            IndicatorView.IndicatorColor = Colors.Feedback.ActivityIndicator.ToNativeColor();
             IndicatorView.Hidden = true;
         }
     }

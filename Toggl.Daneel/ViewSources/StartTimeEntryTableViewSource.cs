@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Commands;
-using MvvmCross.Plugin.Color.Platforms.Ios;
+using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Views;
 using Toggl.Daneel.Views.EntityCreation;
 using Toggl.Daneel.Views.StartTimeEntry;
@@ -31,7 +29,7 @@ namespace Toggl.Daneel.ViewSources
         public StartTimeEntryTableViewSource(UITableView tableView)
         {
             tableView.SeparatorStyle = UITableViewCellSeparatorStyle.SingleLine;
-            tableView.SeparatorColor = Color.StartTimeEntry.SeparatorColor.ToNativeColor();
+            tableView.SeparatorColor = Colors.StartTimeEntry.SeparatorColor.ToNativeColor();
             tableView.SeparatorInset = UIEdgeInsets.Zero;
             tableView.TableFooterView = new UIView(new CGRect(0, 0, 0, 1));
             tableView.RegisterNibForCellReuse(TagSuggestionViewCell.Nib, TagSuggestionViewCell.Identifier);

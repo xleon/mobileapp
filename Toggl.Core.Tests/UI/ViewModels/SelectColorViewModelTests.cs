@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using MvvmCross.UI;
 using NSubstitute;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Xunit;
 using System.Reactive.Linq;
-using Toggl.Core.UI;
-using Toggl.Core.Services;
 using Toggl.Core.Tests.Generators;
+using Toggl.Shared;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -48,8 +46,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void ChangesTheSelectedColor()
             {
-                var initiallySelectedColor = Color.DefaultProjectColors.First();
-                var colorToSelect = Color.DefaultProjectColors.Last();
+                var initiallySelectedColor = Colors.DefaultProjectColors.First();
+                var colorToSelect = Colors.DefaultProjectColors.Last();
                 var parameters = ColorParameters.Create(initiallySelectedColor, true);
 
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
@@ -62,14 +60,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 observer.Messages
                     .Select( m => m.Value.Value)
                     .Last()
-                    .Single(c => c.Selected).Color.ARGB.Should().Be(colorToSelect.ARGB);
+                    .Single(c => c.Selected).Color.Should().BeEquivalentTo(colorToSelect);
             }
 
             [Fact, LogIfTooSlow]
             public async Task ReturnsTheSelectedColorIfCustomColorsAreNotAllowed()
             {
-                var initiallySelectedColor = Color.DefaultProjectColors.First();
-                var colorToSelect = Color.DefaultProjectColors.Last();
+                var initiallySelectedColor = Colors.DefaultProjectColors.First();
+                var colorToSelect = Colors.DefaultProjectColors.Last();
                 var parameters = ColorParameters.Create(initiallySelectedColor, false);
 
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
@@ -80,14 +78,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectColor.Execute(colorToSelect);
 
                 await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Is<MvxColor>(c => c.ARGB == colorToSelect.ARGB));
+                    .Close(Arg.Is(ViewModel), Arg.Is<Color>(c => c == colorToSelect));
             }
 
             [Fact, LogIfTooSlow]
             public async Task DoesNotReturnIfCustomColorsAreAllowed()
             {
-                var initiallySelectedColor = Color.DefaultProjectColors.First();
-                var colorToSelect = Color.DefaultProjectColors.Last();
+                var initiallySelectedColor = Colors.DefaultProjectColors.First();
+                var colorToSelect = Colors.DefaultProjectColors.Last();
                 var parameters = ColorParameters.Create(initiallySelectedColor, true);
 
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
@@ -98,7 +96,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectColor.Execute(colorToSelect);
 
                 await NavigationService.DidNotReceive()
-                    .Close(Arg.Is(ViewModel), Arg.Any<MvxColor>());
+                    .Close(Arg.Is(ViewModel), Arg.Any<Color>());
             }
         }
 
@@ -108,7 +106,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void AddsFourteenItemsToTheListOfSelectableColorsIfTheUserIsNotPro()
             {
-                var parameters = ColorParameters.Create(MvxColors.Azure, false);
+                var someColor = new Color(23, 45, 125);
+                var parameters = ColorParameters.Create(someColor, false);
 
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
                 ViewModel.SelectableColors.Subscribe(observer);
@@ -124,7 +123,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void AddsFifteenItemsToTheListOfSelectableColorsIfTheUserIsPro()
             {
-                var parameters = ColorParameters.Create(MvxColors.Azure, true);
+                var someColor = new Color(23, 45, 125);
+                var parameters = ColorParameters.Create(someColor, true);
 
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
                 ViewModel.SelectableColors.Subscribe(observer);
@@ -140,7 +140,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void SelectsTheColorPassedAsTheParameter()
             {
-                var passedColor = Color.DefaultProjectColors.Skip(3).First();
+                var passedColor = Colors.DefaultProjectColors.Skip(3).First();
                 var parameters = ColorParameters.Create(passedColor, false);
 
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
@@ -151,14 +151,15 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 observer.Messages
                     .Select( m => m.Value.Value)
                     .Last()
-                    .Single(c => c.Selected).Color.ARGB.Should().Be(passedColor.ARGB);
+                    .Single(c => c.Selected).Color.Should().Be(passedColor);
             }
 
             [Fact, LogIfTooSlow]
             public void SelectsTheFirstColorIfThePassedColorIsNotPartOfTheDefaultColorsAndWorkspaceIsNotPro()
             {
-                var expected = Color.DefaultProjectColors.First();
-                var parameters = ColorParameters.Create(MvxColors.Azure, false);
+                var someColor = new Color(23, 45, 125);
+                var expected = Colors.DefaultProjectColors.First();
+                var parameters = ColorParameters.Create(someColor, false);
 
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
                 ViewModel.SelectableColors.Subscribe(observer);
@@ -168,13 +169,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 observer.Messages
                     .Select( m => m.Value.Value)
                     .Last()
-                    .Single(c => c.Selected).Color.ARGB.Should().Be(expected.ARGB);
+                    .Single(c => c.Selected).Color.Should().Be(expected);
             }
 
             [Fact, LogIfTooSlow]
             public void SelectsThePassedColorIfThePassedColorIsNotPartOfTheDefaultColorsAndWorkspaceIsPro()
             {
-                var parameters = ColorParameters.Create(MvxColors.Azure, true);
+                var someColor = new Color(23, 45, 125);
+                var parameters = ColorParameters.Create(someColor, true);
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
                 ViewModel.SelectableColors.Subscribe(observer);
 
@@ -183,7 +185,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 observer.Messages
                     .Select( m => m.Value.Value)
                     .Last()
-                    .Single(c => c.Selected).Color.ARGB.Should().Be(MvxColors.Azure.ARGB);
+                    .Single(c => c.Selected).Color.Should().Be(someColor);
             }
         }
 
@@ -195,13 +197,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<MvxColor>());
+                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<Color>());
             }
 
             [Fact, LogIfTooSlow]
             public async Task ReturnsTheDefaultParameter()
             {
-                var color = Color.DefaultProjectColors.Last();
+                var color = Colors.DefaultProjectColors.Last();
                 var parameters = ColorParameters.Create(color, true);
                 ViewModel.Prepare(parameters);
 
@@ -220,22 +222,23 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<MvxColor>());
+                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<Color>());
             }
 
             [Fact, LogIfTooSlow]
             public async Task ReturnsTheSelectedColor()
             {
-                var parameters = ColorParameters.Create(MvxColors.Azure, true);
+                var someColor = new Color(23, 45, 125);
+                var parameters = ColorParameters.Create(someColor, true);
                 ViewModel.Prepare(parameters);
-                var expected = Color.DefaultProjectColors.First();
+                var expected = Colors.DefaultProjectColors.First();
                 ViewModel.SelectColor.Execute(expected);
 
                 ViewModel.Save.Execute();
                 TestScheduler.Start();
 
                 await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Is<MvxColor>(c => c.ARGB == expected.ARGB));
+                    .Close(Arg.Is(ViewModel), Arg.Is<Color>(c => c == expected));
             }
         }
     }

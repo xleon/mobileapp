@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using UIKit;
 using System.Linq;
+using UIKit;
 using CoreGraphics;
 using Foundation;
 using Toggl.Core.Reports;
-using MvvmCross.UI;
-using MvvmCross.Plugin.Color.Platforms.Ios;
+using Toggl.Daneel.Extensions;
+using Toggl.Shared;
 using static Toggl.Shared.Math;
+using Math = System.Math;
 
 namespace Toggl.Daneel.Views.Reports
 {
@@ -50,7 +51,7 @@ namespace Toggl.Daneel.Views.Reports
 
             foreach (var segment in Segments)
             {
-                ctx.SetFillColor(MvxColor.ParseHexString(segment.Color).ToNativeColor().CGColor);
+                ctx.SetFillColor(new Color(segment.Color).ToNativeColor().CGColor);
 
                 var percent = (float)segment.TrackedTime.TotalSeconds / totalSeconds;
                 var endAngle = startAngle + (float)FullCircle * percent;

@@ -3,9 +3,8 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Foundation;
 using MvvmCross.Base;
-using MvvmCross.Core;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Core.UI.Helper;
+using Toggl.Daneel.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.Views
@@ -14,7 +13,7 @@ namespace Toggl.Daneel.Views
     public class TextViewWithPlaceholder : UITextView, IUITextViewDelegate
     {
         private readonly int defaultPlaceholderSize = 14;
-        private readonly UIColor defaultPlaceholderColor = Color.Common.PlaceholderText.ToNativeColor();
+        private readonly UIColor defaultPlaceholderColor = Colors.Common.PlaceholderText.ToNativeColor();
         private readonly ISubject<String> textSubject = new Subject<string>();
 
         private bool isFocused;

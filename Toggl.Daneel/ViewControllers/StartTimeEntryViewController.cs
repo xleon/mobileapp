@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Autocomplete;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
@@ -126,8 +124,8 @@ namespace Toggl.Daneel.ViewControllers
 
             // Buttons
             UIColor booleanToColor(bool b) => b
-                ? Color.StartTimeEntry.ActiveButton.ToNativeColor()
-                : Color.StartTimeEntry.InactiveButton.ToNativeColor();
+                ? Colors.StartTimeEntry.ActiveButton.ToNativeColor()
+                : Colors.StartTimeEntry.InactiveButton.ToNativeColor();
 
             ViewModel.IsBillable
                 .Select(booleanToColor)
@@ -280,12 +278,12 @@ namespace Toggl.Daneel.ViewControllers
                           .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate),
                     UIControlState.Normal
                 );
-                button.TintColor = Color.StartTimeEntry.InactiveButton.ToNativeColor();
+                button.TintColor = Colors.StartTimeEntry.InactiveButton.ToNativeColor();
             }
 
-            TimeInput.TintColor = Color.StartTimeEntry.Cursor.ToNativeColor();
+            TimeInput.TintColor = Colors.StartTimeEntry.Cursor.ToNativeColor();
 
-            DescriptionTextView.TintColor = Color.StartTimeEntry.Cursor.ToNativeColor();
+            DescriptionTextView.TintColor = Colors.StartTimeEntry.Cursor.ToNativeColor();
             DescriptionTextView.BecomeFirstResponder();
 
             Placeholder.ConfigureWith(DescriptionTextView);

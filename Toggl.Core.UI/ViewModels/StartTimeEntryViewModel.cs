@@ -653,20 +653,6 @@ namespace Toggl.Core.UI.ViewModels
             }
         }
 
-        private IEnumerable<AutocompleteSuggestion> includeEmptyProject(AutocompleteSuggestion suggestion)
-        {
-            yield return suggestion;
-
-            if (suggestion is ProjectSuggestion projectSuggestion && expandedProjects.Value.Contains(projectSuggestion))
-            {
-                var orderedTasks = projectSuggestion.Tasks
-                    .OrderBy(t => t.Name);
-
-                foreach (var taskSuggestion in orderedTasks)
-                    yield return taskSuggestion;
-            }
-        }
-
         private IList<SectionModel<string, AutocompleteSuggestion>> addStaticElements(IEnumerable<SectionModel<string, AutocompleteSuggestion>> sections)
         {
             var suggestions = sections.SelectMany(section => section.Items);

@@ -2,12 +2,12 @@
 using Foundation;
 using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using UIKit;
 using WebKit;
+using Toggl.Daneel.Extensions;
 
 namespace Toggl.Daneel.ViewControllers
 {
@@ -36,7 +36,7 @@ namespace Toggl.Daneel.ViewControllers
             // This needs to be turned into an .xib file after the bug is fixed.
             var backgroundView = new UIView(new CGRect(0, 0, View.Frame.Width, View.Frame.Height))
             {
-                BackgroundColor = Color.NavigationBar.BackgroundColor.ToNativeColor()
+                BackgroundColor = Colors.NavigationBar.BackgroundColor.ToNativeColor()
             };
 
             webView = new WKWebView(CGRect.Empty, new WKWebViewConfiguration());
@@ -59,7 +59,7 @@ namespace Toggl.Daneel.ViewControllers
 
         private void setNavBar()
         {
-            var tintColor = Color.NavigationBar.BackButton.ToNativeColor();
+            var tintColor = Colors.NavigationBar.BackButton.ToNativeColor();
             NavigationController.NavigationBar.TintColor = tintColor;
             NavigationController.NavigationBar.BarStyle = UIBarStyle.Default;
             NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes

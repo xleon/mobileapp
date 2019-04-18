@@ -40,7 +40,7 @@ namespace Toggl.Core.Autocomplete.Suggestions
         {
             ProjectId = NoProjectId;
             ClientName = "";
-            ProjectColor = Helper.Color.NoProject;
+            ProjectColor = Helper.Colors.NoProject;
             ProjectName = Resources.NoProject;
             WorkspaceId = workspaceId;
             WorkspaceName = workspaceName;

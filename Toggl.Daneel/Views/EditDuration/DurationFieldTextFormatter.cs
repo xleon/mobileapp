@@ -1,15 +1,14 @@
 ﻿using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using UIKit;
-using Color = Toggl.Core.UI.Helper.Color;
 using Toggl.Daneel.Extensions;
 using Toggl.Shared;
+using UIKit;
+using Colors = Toggl.Core.UI.Helper.Colors;
 
 namespace Toggl.Daneel.Views.EditDuration
 {
     public static class DurationFieldTextFormatter
     {
-        private static readonly UIColor placeHolderColor = Color.Common.PlaceholderText.ToNativeColor();
+        private static readonly UIColor placeHolderColor = Colors.Common.PlaceholderText.ToNativeColor();
 
         public static NSAttributedString AttributedStringFor(string durationText, UIFont font)
         {

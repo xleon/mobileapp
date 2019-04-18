@@ -16,8 +16,6 @@ using Toggl.Droid.BroadcastReceivers;
 using Toggl.Droid.Presentation;
 using Toggl.Droid.Startup;
 using Toggl.Networking;
-using ColorPlugin = MvvmCross.Plugin.Color.Platforms.Android.Plugin;
-using VisibilityPlugin = MvvmCross.Plugin.Visibility.Platforms.Android.Plugin;
 using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Droid
@@ -91,8 +89,6 @@ namespace Toggl.Droid
 
         public override void LoadPlugins(IMvxPluginManager pluginManager)
         {
-            new ColorPlugin().Load();
-            new VisibilityPlugin().Load();
         }
 
         protected override void PerformBootstrapActions()
