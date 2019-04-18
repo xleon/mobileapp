@@ -1,14 +1,14 @@
 ﻿using CoreGraphics;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Core.UI.Helper;
+using Toggl.Daneel.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.Autocomplete
 {
     public sealed class TagTextAttachment : TokenTextAttachment
     {
-        private static readonly UIColor borderColor = Color.StartTimeEntry.TokenBorder.ToNativeColor();
+        private static readonly UIColor borderColor = Colors.StartTimeEntry.TokenBorder.ToNativeColor();
 
         public TagTextAttachment(string tagName, UIColor color, UIFont font)
         {

@@ -5,9 +5,8 @@ using Android.Runtime;
 using Android.Support.V4.Content;
 using Android.Util;
 using Android.Widget;
-using MvvmCross.Plugin.Color.Platforms.Android;
 using Toggl.Droid.Extensions;
-using static Toggl.Core.UI.Helper.Color;
+using static Toggl.Core.UI.Helper.Colors;
 
 namespace Toggl.Droid.Views
 {

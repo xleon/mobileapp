@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Reactive;
 using System.Reactive.Linq;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Core;
@@ -209,7 +207,7 @@ namespace Toggl.Daneel.ViewControllers
         private void setIndicatorSyncColor(UIImageView imageView)
         {
             imageView.Image = imageView.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-            imageView.TintColor = Color.Settings.SyncStatusText.ToNativeColor();
+            imageView.TintColor = Colors.Settings.SyncStatusText.ToNativeColor();
         }
 
         private void startAnimations()

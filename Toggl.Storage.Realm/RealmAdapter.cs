@@ -17,6 +17,8 @@ namespace Toggl.Storage.Realm
 
         TModel Get(long id);
 
+        IEnumerable<TModel> Get(long[] ids);
+
         TModel ChangeId(long currentId, long newId);
 
         void Delete(long id);
@@ -38,6 +40,8 @@ namespace Toggl.Storage.Realm
 
         private readonly Func<long, Expression<Func<TRealmEntity, bool>>> matchEntity;
 
+        private readonly Func<long[], Expression<Func<TRealmEntity, bool>>> matchMultipleEntities;
+
         private readonly Func<TRealmEntity, long> getId;
 
         private readonly Func<Realms.Realm> getRealmInstance;
@@ -46,16 +50,19 @@ namespace Toggl.Storage.Realm
             Func<Realms.Realm> getRealmInstance,
             Func<TModel, Realms.Realm, TRealmEntity> clone,
             Func<long, Expression<Func<TRealmEntity, bool>>> matchEntity,
+            Func<long[], Expression<Func<TRealmEntity, bool>>> matchMultipleEntities,
             Func<TRealmEntity, long> getId)
         {
             Ensure.Argument.IsNotNull(getRealmInstance, nameof(getRealmInstance));
             Ensure.Argument.IsNotNull(clone, nameof(clone));
             Ensure.Argument.IsNotNull(matchEntity, nameof(matchEntity));
+            Ensure.Argument.IsNotNull(matchMultipleEntities, nameof(matchMultipleEntities));
             Ensure.Argument.IsNotNull(getId, nameof(getId));
 
             this.getRealmInstance = getRealmInstance;
             this.clone = clone;
             this.matchEntity = matchEntity;
+            this.matchMultipleEntities = matchMultipleEntities;
             this.getId = getId;
         }
 
@@ -64,6 +71,9 @@ namespace Toggl.Storage.Realm
 
         public TModel Get(long id)
             => getRealmInstance().All<TRealmEntity>().Single(matchEntity(id));
+
+        public IEnumerable<TModel> Get(long[] ids)
+            => getRealmInstance().All<TRealmEntity>().Where(matchMultipleEntities(ids)).ToList();
 
         public TModel ChangeId(long currentId, long newId)
         {

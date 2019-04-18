@@ -1,9 +1,8 @@
 ﻿using System.Text.RegularExpressions;
-using System.Threading;
 
 namespace Toggl.Core.Helper
 {
-    public static class Color
+    public static class Colors
     {
         private const string pattern = @"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
         private static readonly Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);

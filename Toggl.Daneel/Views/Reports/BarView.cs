@@ -1,8 +1,8 @@
-﻿using MvvmCross.Plugin.Color.Platforms.Ios;
+﻿using System;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.Daneel.Extensions;
 using UIKit;
-using System;
 
 namespace Toggl.Daneel.Views.Reports
 {
@@ -24,12 +24,12 @@ namespace Toggl.Daneel.Views.Reports
         {
             this.bar = bar;
 
-            nonBillableView = new BarSegmentView(Color.Reports.BarChart.NonBillable.ToNativeColor());
-            billableView = new BarSegmentView(Color.Reports.BarChart.Billable.ToNativeColor());
+            nonBillableView = new BarSegmentView(Colors.Reports.BarChart.NonBillable.ToNativeColor());
+            billableView = new BarSegmentView(Colors.Reports.BarChart.Billable.ToNativeColor());
             minimumLevelView = new BarSegmentView(
                 bar.BillablePercent > bar.NonBillablePercent
-                    ? Color.Reports.BarChart.Billable.ToNativeColor()
-                    : Color.Reports.BarChart.NonBillable.ToNativeColor());
+                    ? Colors.Reports.BarChart.Billable.ToNativeColor()
+                    : Colors.Reports.BarChart.NonBillable.ToNativeColor());
 
             AddSubview(minimumLevelView);
             AddSubview(nonBillableView);

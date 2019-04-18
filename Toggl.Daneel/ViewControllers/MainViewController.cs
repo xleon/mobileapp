@@ -7,7 +7,16 @@ using System.Reactive.Subjects;
 using System.Threading;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
+using Toggl.Core;
+using Toggl.Core.Analytics;
+using Toggl.Core.Extensions;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Onboarding.MainView;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Daneel.ExtensionKit;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
@@ -16,16 +25,6 @@ using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Suggestions;
 using Toggl.Daneel.Views;
 using Toggl.Daneel.ViewSources;
-using Toggl.Core;
-using Toggl.Core.Extensions;
-using Toggl.Core.Analytics;
-using Toggl.Core.UI.Collections;
-using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Helper;
-using Toggl.Core.UI.Onboarding.MainView;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Extensions;
 using Toggl.Storage.Onboarding;
@@ -231,7 +230,7 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(DisposeBag);
 
             var capHeight = CurrentTimeEntryProjectTaskClientLabel.Font.CapHeight;
-            var clientColor = Color.Main.CurrentTimeEntryClientColor.ToNativeColor();
+            var clientColor = Colors.Main.CurrentTimeEntryClientColor.ToNativeColor();
             ViewModel.CurrentRunningTimeEntry
                 .Select(te => te?.ToFormattedTimeEntryString(capHeight, clientColor, shouldColorProject: true))
                 .Subscribe(CurrentTimeEntryProjectTaskClientLabel.Rx().AttributedText())
@@ -613,7 +612,7 @@ namespace Toggl.Daneel.ViewControllers
 
             spiderHinge.Layer.CornerRadius = spiderHingeCornerRadius;
             spiderHinge.TranslatesAutoresizingMaskIntoConstraints = false;
-            spiderHinge.BackgroundColor = Color.Main.SpiderHinge.ToNativeColor();
+            spiderHinge.BackgroundColor = Colors.Main.SpiderHinge.ToNativeColor();
             spiderContainerView.TranslatesAutoresizingMaskIntoConstraints = false;
             spiderBroView.TranslatesAutoresizingMaskIntoConstraints = false;
             spiderContainerView.BackgroundColor = UIColor.Clear;

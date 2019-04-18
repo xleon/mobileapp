@@ -3,11 +3,11 @@ using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Views;
-using MvvmCross.Plugin.Color.Platforms.Android;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.Droid.Views;
-using static Toggl.Core.UI.Helper.Color.Reports;
+using Toggl.Droid.Extensions;
+using static Toggl.Core.UI.Helper.Colors.Reports;
 
 namespace Toggl.Droid.ViewHolders
 {

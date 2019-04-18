@@ -9,14 +9,13 @@ using Android.Text;
 using Android.Text.Style;
 using Android.Views;
 using Android.Widget;
-using MvvmCross.Plugin.Color.Platforms.Android;
 using Toggl.Core.Extensions;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Droid.Views;
 using Toggl.Shared;
-using static Toggl.Core.UI.Helper.Color.Reports;
 using Color = Android.Graphics.Color;
+using static Toggl.Core.UI.Helper.Colors.Reports;
 
 namespace Toggl.Droid.ViewHolders
 {

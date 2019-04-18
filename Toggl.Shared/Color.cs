@@ -1,7 +1,8 @@
 ﻿using System;
+
 namespace Toggl.Shared
 {
-    public struct Color
+    public struct Color : IEquatable<Color>
     {
         public byte Alpha { get; }
         public byte Red { get; }
@@ -33,7 +34,8 @@ namespace Toggl.Shared
 
         private static uint hexStringToInt(string hex)
         {
-            Ensure.Argument.IsNotNullOrWhiteSpaceString(hex, nameof(hex));
+            if (string.IsNullOrEmpty(hex))
+                return 0;
 
             hex = hex.TrimStart('#');
 
@@ -55,5 +57,31 @@ namespace Toggl.Shared
 
         public override int GetHashCode()
             => HashCode.From(Alpha, Red, Green, Blue);
+
+        public static bool operator ==(Color color, Color otherColor)
+            => color.Red == otherColor.Red
+            && color.Green == otherColor.Green
+            && color.Blue == otherColor.Blue
+            && color.Alpha == otherColor.Alpha;
+
+        public static bool operator !=(Color color, Color otherColor)
+            => !(color == otherColor);
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Color color)
+                return this == color;
+
+            return false;
+        }
+
+        public bool Equals(Color other)
+            => this == other;
+    }
+
+    public static class ColorExtensions
+    {
+        public static string ToHexString(this Color color)
+            => $"#{color.Red:X2}{color.Green:X2}{color.Blue:X2}";
     }
 }

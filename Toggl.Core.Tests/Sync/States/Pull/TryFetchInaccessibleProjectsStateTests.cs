@@ -74,7 +74,7 @@ namespace Toggl.Core.Tests.Sync.States.Pull
                 Id = 234,
                 WorkspaceId = 987,
                 Name = Resources.InaccessibleProject,
-                Color = Color.NoProject,
+                Color = Colors.NoProject,
                 SyncStatus = SyncStatus.RefetchingNeeded,
                 At = now.AddHours(-25)
             };
@@ -135,7 +135,7 @@ namespace Toggl.Core.Tests.Sync.States.Pull
                 Id = 123,
                 WorkspaceId = 456,
                 Name = Resources.InaccessibleProject,
-                Color = Color.NoProject,
+                Color = Colors.NoProject,
                 SyncStatus = SyncStatus.RefetchingNeeded,
                 At = now.AddHours(-25)
             };

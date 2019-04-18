@@ -1,28 +1,20 @@
 using System;
-using System.Reactive.Subjects;
-using Android.Runtime;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Android.Animation;
+using Android.Graphics;
+using Android.Runtime;
 using Android.Support.Constraints;
-using Android.Text;
 using Android.Views;
 using Android.Widget;
-using Toggl.Core.UI.ViewModels;
+using Toggl.Core.Analytics;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
-using static Toggl.Droid.Resource.Id;
-using MvvmCross.Plugin.Color.Platforms.Android;
-using Android.Graphics.Drawables;
-using GroupingColor = Toggl.Core.UI.Helper.Color.TimeEntriesLog.Grouping;
-using Android.Graphics;
-using System.Reactive;
-using Toggl.Droid.Extensions.Reactive;
-using System.Reactive.Disposables;
-using Android.Support.V4.Content;
 using Toggl.Shared.Extensions;
-using System.Reactive.Linq;
-using Toggl.Core.Analytics;
+using GroupingColor = Toggl.Core.UI.Helper.Colors.TimeEntriesLog.Grouping;
+using static Toggl.Droid.Resource.Id;
 
 namespace Toggl.Droid.ViewHolders
 {

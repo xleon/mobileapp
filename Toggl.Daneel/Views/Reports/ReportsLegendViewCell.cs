@@ -2,12 +2,11 @@
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using MvvmCross.UI;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
 using Toggl.Core.Extensions;
 using Toggl.Core.Reports;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.Daneel.Views.Reports
@@ -60,7 +59,7 @@ namespace Toggl.Daneel.Views.Reports
             ClientLabel.Hidden = !Item.HasClient;
 
             // Color
-            var color = MvxColor.ParseHexString(Item.Color).ToNativeColor();
+            var color = new Color(Item.Color).ToNativeColor();
             ProjectLabel.TextColor = color;
             CircleView.BackgroundColor = color;
         }

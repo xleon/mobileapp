@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
-using MvvmCross.UI;
 using Toggl.Daneel.Cells;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 
@@ -74,7 +73,7 @@ namespace Toggl.Daneel.Views
             AmountOfTasksLabel.Text = Item.FormattedNumberOfTasks();
 
             //Color
-            var projectColor = MvxColor.ParseHexString(Item.ProjectColor).ToNativeColor();
+            var projectColor = new Color(Item.ProjectColor).ToNativeColor();
             ProjectNameLabel.TextColor = projectColor;
             ProjectDotView.BackgroundColor = projectColor;
             SelectedProjectView.BackgroundColor = Item.Selected

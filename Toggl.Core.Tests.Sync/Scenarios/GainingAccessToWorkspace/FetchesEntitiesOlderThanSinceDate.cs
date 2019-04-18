@@ -32,7 +32,7 @@ namespace Toggl.Core.Tests.Sync.Scenarios.GainingAccessToWorkspace
                         WorkspaceId = -2,
                         ClientId = -1,
                         Name = "p1",
-                        Color = Helper.Color.DefaultProjectColors[0],
+                        Color = Helper.Colors.DefaultProjectColors[0],
                         Active = true
                     }
                 },

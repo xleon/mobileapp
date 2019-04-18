@@ -26,6 +26,7 @@ namespace Toggl.Core
 
         // Require recreation during login/logout
         private Lazy<ITogglApi> api;
+        private Lazy<ITogglDataSource> dataSource;
         private Lazy<ISyncManager> syncManager;
         private Lazy<IInteractorFactory> interactorFactory;
 
@@ -34,7 +35,6 @@ namespace Toggl.Core
         private readonly Lazy<ITogglDatabase> database;
         private readonly Lazy<ITimeService> timeService;
         private readonly Lazy<IPlatformInfo> platformInfo;
-        private readonly Lazy<ITogglDataSource> dataSource;
         private readonly Lazy<IGoogleService> googleService;
         private readonly Lazy<IRatingService> ratingService;
         private readonly Lazy<ICalendarService> calendarService;
@@ -59,7 +59,7 @@ namespace Toggl.Core
         private readonly Lazy<ISyncErrorHandlingService> syncErrorHandlingService;
         private readonly Lazy<IPrivateSharedStorageService> privateSharedStorageService;
         private readonly Lazy<ISuggestionProviderContainer> suggestionProviderContainer;
-        
+
         // Non lazy
         public virtual IUserAccessManager UserAccessManager { get; }
         public ApiEnvironment ApiEnvironment { get; }
@@ -148,7 +148,7 @@ namespace Toggl.Core
                 .Subscribe(_ => recreateLazyDependenciesForLogout())
                 .DisposedBy(disposeBag);
         }
-        
+
         protected abstract ITogglDatabase CreateDatabase();
         protected abstract IPlatformInfo CreatePlatformInfo();
         protected abstract IGoogleService CreateGoogleService();
@@ -235,6 +235,7 @@ namespace Toggl.Core
         {
             this.api = new Lazy<ITogglApi>(() => api);
 
+            dataSource = new Lazy<ITogglDataSource>(CreateDataSource);
             syncManager = new Lazy<ISyncManager>(CreateSyncManager);
             interactorFactory = new Lazy<IInteractorFactory>(CreateInteractorFactory);
         }
@@ -243,6 +244,7 @@ namespace Toggl.Core
         {
             api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None));
 
+            dataSource = new Lazy<ITogglDataSource>(CreateDataSource);
             syncManager = new Lazy<ISyncManager>(CreateSyncManager);
             interactorFactory = new Lazy<IInteractorFactory>(CreateInteractorFactory);
         }

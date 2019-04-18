@@ -90,6 +90,18 @@ namespace Toggl.Shared.Tests
             }
 
             [Theory, LogIfTooSlow]
+            [InlineData("")]
+            [InlineData(null)]
+            public void ReturnsTransparentBlackIfTheHexIsNullOrEmpty(string hex)
+            {
+                // This is meant to mimic MvvmCross behaviour to prevent bugs during transition.
+                // We can change this in the future.
+                var color = new Color(hex);
+
+                assertExpectedValues(color, 0, 0, 0, 0);
+            }
+
+            [Theory, LogIfTooSlow]
             [InlineData("1")]
             [InlineData("12")]
             [InlineData("123")]

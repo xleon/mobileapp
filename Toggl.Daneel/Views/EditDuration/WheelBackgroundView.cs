@@ -1,23 +1,23 @@
 ﻿using System;
-using UIKit;
 using CoreAnimation;
-using Toggl.Core.UI.Helper;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using CoreGraphics;
-using static Toggl.Shared.Math;
 using Foundation;
+using Toggl.Core.UI.Helper;
+using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Views.EditDuration.Shapes;
+using UIKit;
+using static Toggl.Shared.Math;
 
 namespace Toggl.Daneel.Views.EditDuration
 {
     [Register(nameof(WheelBackgroundView))]
     public sealed class WheelBackgroundView : BaseWheelView
     {
-        private readonly CGColor wheelBackgroundColor = Color.EditDuration.Wheel.Background.ToNativeColor().CGColor;
+        private readonly CGColor wheelBackgroundColor = Colors.EditDuration.Wheel.Background.ToNativeColor().CGColor;
 
-        private readonly CGColor thickSegmentColor = Color.EditDuration.Wheel.ThickMinuteSegment.ToNativeColor().CGColor;
+        private readonly CGColor thickSegmentColor = Colors.EditDuration.Wheel.ThickMinuteSegment.ToNativeColor().CGColor;
 
-        private readonly CGColor thinSegmentColor = Color.EditDuration.Wheel.ThinMinuteSegment.ToNativeColor().CGColor;
+        private readonly CGColor thinSegmentColor = Colors.EditDuration.Wheel.ThinMinuteSegment.ToNativeColor().CGColor;
 
         // The sizes are relative to the radius of the wheel.
         // The radius of the wheel in the design document is 128 points.
