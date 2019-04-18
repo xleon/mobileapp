@@ -94,7 +94,7 @@ namespace Toggl.Daneel.Views.Reports
             Item.GroupedSegmentsObservable
                 .Subscribe(groupedSegments => PieChartView.Segments = groupedSegments)
                 .DisposedBy(disposeBag);
-                
+
             Item.IsLoadingObservable
                 .Select(CommonFunctions.Invert)
                 .Subscribe(BarChartContainerView.Rx().IsVisible())
