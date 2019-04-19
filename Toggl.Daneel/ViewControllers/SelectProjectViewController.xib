@@ -109,6 +109,7 @@ Use them to categorize your time.</string>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="137.59999999999999" y="153.82308845577214"/>
         </view>
     </objects>
     <resources>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
+using CoreGraphics;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
@@ -18,6 +19,7 @@ namespace Toggl.Daneel.ViewControllers
     [NestedPresentation]
     public partial class ReportsCalendarViewController : ReactiveViewController<ReportsCalendarViewModel>, IUICollectionViewDelegate
     {
+        private CGSize popoverPreferedSize = new CGSize(319, 355);
         private bool calendarInitialized;
         private List<ReportsCalendarPageViewModel> pendingMonthsUpdate;
         private ReportsCalendarCollectionViewSource calendarCollectionViewSource;
@@ -30,6 +32,8 @@ namespace Toggl.Daneel.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            PreferredContentSize = popoverPreferedSize;
 
             calendarCollectionViewSource = new ReportsCalendarCollectionViewSource(CalendarCollectionView);
             var calendarCollectionViewLayout = new ReportsCalendarCollectionViewLayout();
@@ -77,6 +81,11 @@ namespace Toggl.Daneel.ViewControllers
 
             ViewModel.QuickSelectShortcutsObservable
                 .Subscribe(quickSelectCollectionViewSource.UpdateShortcuts)
+                .DisposedBy(DisposeBag);
+
+            ViewModel.ReloadObservable
+                .Select(_ => ViewModel.CurrentPage)
+                .Subscribe(calendarCollectionViewSource.RefreshUIAtPage)
                 .DisposedBy(DisposeBag);
         }
 

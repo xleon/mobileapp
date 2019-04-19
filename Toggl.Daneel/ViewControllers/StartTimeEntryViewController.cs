@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using CoreGraphics;
 using Foundation;
 using Toggl.Daneel.Autocomplete;
 using Toggl.Daneel.Extensions;
@@ -27,6 +28,8 @@ namespace Toggl.Daneel.ViewControllers
     [ModalCardPresentation]
     public sealed partial class StartTimeEntryViewController : KeyboardAwareViewController<StartTimeEntryViewModel>, IDismissableViewController
     {
+        private const double desiredIpadHeight = 360;
+
         private bool isUpdatingDescriptionField;
 
         private UIImage greyCheckmarkButtonImage;
@@ -61,6 +64,26 @@ namespace Toggl.Daneel.ViewControllers
             disabledConfirmationButtonOnboardingDisposable = null;
 
             TimeInput.LostFocus -= onTimeInputLostFocus;
+        }
+
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            {
+                View.ClipsToBounds = true;
+            }
+        }
+
+        public override void ViewWillLayoutSubviews()
+        {
+            base.ViewWillLayoutSubviews();
+
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            {
+                View.ClipsToBounds = true;
+            }
         }
 
         public override void ViewDidLoad()
@@ -242,6 +265,11 @@ namespace Toggl.Daneel.ViewControllers
 
         private void prepareViews()
         {
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            {
+                PreferredContentSize = new CGSize(0, desiredIpadHeight);
+            }
+
             //This is needed for the ImageView.TintColor bindings to work
             foreach (var button in getButtons())
             {

@@ -69,6 +69,12 @@ namespace Toggl.Daneel.ViewSources
             collectionView.ReloadData();
         }
 
+        public void RefreshUIAtPage(int page)
+        {
+            currentPageNotScrollingSubject.OnNext(page);
+            UpdateSelection(currentSelectedDateRange);
+        }
+
         public override nint NumberOfSections(UICollectionView collectionView)
             => months.Count;
 

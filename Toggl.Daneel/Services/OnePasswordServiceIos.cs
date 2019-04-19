@@ -4,8 +4,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using AgileBits;
 using Foundation;
-using MvvmCross;
-using MvvmCross.Platforms.Ios.Presenters;
 using Toggl.Core.UI.Services;
 using Toggl.Shared;
 using LoginHandler = AgileBits.OnePasswordLoginDictionaryCompletionBlock;
@@ -14,18 +12,29 @@ namespace Toggl.Daneel.Services
 {
     public sealed class OnePasswordServiceIos : NSObject, IPasswordManagerService
     {
+        private NSObject sourceView;
         public bool IsAvailable => OnePasswordExtension.SharedExtension.IsAppExtensionAvailable;
+
+        public void SetSourceView(NSObject view)
+        {
+            sourceView = view;
+        }
 
         public IObservable<PasswordManagerResult> GetLoginInformation()
         {
             return Observable.Create<PasswordManagerResult>(observer =>
             {
+                if (sourceView == null)
+                {
+                    return Disposable.Empty;
+                }
+
                 var presenter = IosDependencyContainer.Instance.ViewPresenter;
 
                 OnePasswordExtension.SharedExtension.FindLoginForURLString(
-                    "https://www.toggl.com", 
-                    presenter.MasterNavigationController, 
-                    this, 
+                    "https://www.toggl.com",
+                    presenter.MasterNavigationController,
+                    sourceView,
                     getOnePasswordHandler(observer)
                 );
 

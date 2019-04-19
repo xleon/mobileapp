@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
-using Toggl.Core.UI.Services;
-using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
@@ -35,11 +36,13 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IDialogService dialogService;
         private readonly ITogglDataSource dataSource;
         private readonly IIntentDonationService intentDonationService;
+        private readonly ISubject<Unit> reloadSubject = new Subject<Unit>();
         private readonly ISubject<ReportsDateRangeParameter> selectedDateRangeSubject = new Subject<ReportsDateRangeParameter>();
         private readonly ISubject<ReportsDateRangeParameter> highlightedDateRangeSubject = new BehaviorSubject<ReportsDateRangeParameter>(default(ReportsDateRangeParameter));
         private IObservable<BeginningOfWeek> beginningOfWeekObservable;
 
         private bool isInitialized;
+        private bool viewAppearedOnce;
         private CalendarMonth initialMonth;
         private ReportsCalendarDayViewModel startOfSelection;
         private ReportPeriod reportPeriod = ReportPeriod.ThisWeek;
@@ -49,16 +52,19 @@ namespace Toggl.Core.UI.ViewModels
 
         public IObservable<CalendarMonth> CurrentMonthObservable { get; private set; }
 
-        private readonly ISubject<int> currentPageSubject = new Subject<int>();
+        private readonly BehaviorSubject<int> currentPageSubject = new BehaviorSubject<int>(MonthsToShow - 1);
+
+        public int CurrentPage => currentPageSubject.Value;
+
         private readonly ISubject<int> monthSubject = new Subject<int>();
 
         public IObservable<int> CurrentPageObservable { get; }
 
-        public IObservable<ReportsDateRangeParameter> SelectedDateRangeObservable
-            => selectedDateRangeSubject.AsObservable();
+        public IObservable<Unit> ReloadObservable { get; private set; }
 
-        public IObservable<ReportsDateRangeParameter> HighlightedDateRangeObservable
-            => highlightedDateRangeSubject.AsObservable();
+        public IObservable<ReportsDateRangeParameter> SelectedDateRangeObservable;
+
+        public IObservable<ReportsDateRangeParameter> HighlightedDateRangeObservable;
 
         public List<ReportsCalendarBaseQuickSelectShortcut> QuickSelectShortcuts { get; private set; }
 
@@ -93,9 +99,13 @@ namespace Toggl.Core.UI.ViewModels
             SelectDay = rxActionFactory.FromAsync<ReportsCalendarDayViewModel>(calendarDayTapped);
             SelectShortcut = rxActionFactory.FromAction<ReportsCalendarBaseQuickSelectShortcut>(quickSelect);
 
-            CurrentPageObservable = currentPageSubject
-                .StartWith(MonthsToShow - 1)
-                .DistinctUntilChanged();
+            CurrentPageObservable = currentPageSubject.AsObservable();
+
+            SelectedDateRangeObservable = selectedDateRangeSubject
+                .ShareReplay(1);
+
+            HighlightedDateRangeObservable = highlightedDateRangeSubject
+                .ShareReplay(1);
         }
 
         public void SetCurrentPage(int newPage)
@@ -126,6 +136,8 @@ namespace Toggl.Core.UI.ViewModels
 
             DayHeadersObservable = beginningOfWeekObservable.Select(mapDayHeaders);
 
+            ReloadObservable = reloadSubject.AsObservable();
+
             MonthsObservable = beginningOfWeekObservable.CombineLatest(
                 timeService.MidnightObservable.StartWith(timeService.CurrentDateTime),
                 (beginningOfWeek, today) =>
@@ -138,14 +150,15 @@ namespace Toggl.Core.UI.ViewModels
                 });
 
             RowsInCurrentMonthObservable = MonthsObservable.CombineLatest(
-                CurrentPageObservable,
+                CurrentPageObservable.DistinctUntilChanged(),
                 (months, page) => months[page].RowCount)
                 .Select(CommonFunctions.Identity);
 
             CurrentMonthObservable = monthSubject
                 .AsObservable()
                 .StartWith(MonthsToShow - 1)
-                .Select(convertPageIndexToCalendarMonth);
+                .Select(convertPageIndexToCalendarMonth)
+                .Share();
 
             QuickSelectShortcutsObservable = beginningOfWeekObservable.Select(createQuickSelectShortcuts);
 
@@ -156,14 +169,25 @@ namespace Toggl.Core.UI.ViewModels
             SelectPeriod(reportPeriod);
 
             isInitialized = true;
+            viewAppearedOnce = false;
         }
 
         public override void ViewAppeared()
         {
             base.ViewAppeared();
-            var initialShortcut = QuickSelectShortcuts.Single(shortcut => shortcut.Period == reportPeriod);
-            selectedDateRangeSubject.OnNext(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
-            highlightedDateRangeSubject.OnNext(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
+
+            if (!viewAppearedOnce)
+            {
+                viewAppearedOnce = true;
+                var initialShortcut = QuickSelectShortcuts.Single(shortcut => shortcut.Period == reportPeriod);
+                selectedDateRangeSubject.OnNext(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
+                highlightedDateRangeSubject.OnNext(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
+            }
+        }
+
+        public void Reload()
+        {
+            reloadSubject.OnNext(Unit.Default);
         }
 
         public void OnToggleCalendar() => selectStartOfSelectionIfNeeded();

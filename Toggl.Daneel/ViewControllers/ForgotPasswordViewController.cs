@@ -17,9 +17,7 @@ namespace Toggl.Daneel.ViewControllers
     public sealed partial class ForgotPasswordViewController
         : KeyboardAwareViewController<ForgotPasswordViewModel>
     {
-        private const int distanceFromTop = 136;
         private const int backButtonFontSize = 14;
-        private const int iPhoneSeScreenHeight = 568;
         private const int resetButtonBottomSpacing = 32;
 
         private bool viewInitialized;
@@ -102,9 +100,6 @@ namespace Toggl.Daneel.ViewControllers
             if (viewInitialized) return;
 
             viewInitialized = true;
-
-            if (View.Frame.Height > iPhoneSeScreenHeight)
-                TopConstraint.Constant = distanceFromTop;
         }
 
         public override void ViewDidAppear(bool animated)

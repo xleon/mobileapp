@@ -3,9 +3,20 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading;
 using CoreGraphics;
 using Foundation;
+using Toggl.Core;
+using Toggl.Core.Analytics;
+using Toggl.Core.Extensions;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Onboarding.MainView;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Daneel.ExtensionKit;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
@@ -14,15 +25,6 @@ using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.Suggestions;
 using Toggl.Daneel.Views;
 using Toggl.Daneel.ViewSources;
-using Toggl.Core;
-using Toggl.Core.Analytics;
-using Toggl.Core.UI.Collections;
-using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Helper;
-using Toggl.Core.UI.Onboarding.MainView;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Extensions;
 using Toggl.Storage.Onboarding;
@@ -69,6 +71,8 @@ namespace Toggl.Daneel.ViewControllers
 
         private IDisposable swipeLeftAnimationDisposable;
         private IDisposable swipeRightAnimationDisposable;
+
+        private Subject<Unit> traitCollectionSubject = new Subject<Unit>();
 
         private readonly UIView tableHeader = new UIView();
         private readonly UIView suggestionsContaier = new UIView { TranslatesAutoresizingMaskIntoConstraints = false };
@@ -268,6 +272,7 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ViewModel.SuggestionsViewModel.Suggestions
+                .ReemitWhen(traitCollectionSubject)
                 .Subscribe(suggestionsView.OnSuggestions)
                 .DisposedBy(DisposeBag);
 
@@ -345,6 +350,13 @@ namespace Toggl.Daneel.ViewControllers
                 new UIBarButtonItem(syncFailuresButton)
             };
 #endif
+        }
+
+        public override void TraitCollectionDidChange(UITraitCollection previousTraitCollection)
+        {
+            base.TraitCollectionDidChange(previousTraitCollection);
+            traitCollectionSubject.OnNext(Unit.Default);
+            TimeEntriesLogTableView.ReloadData();
         }
 
         private void trackSiriEvents()
@@ -513,8 +525,6 @@ namespace Toggl.Daneel.ViewControllers
 
             prepareWelcomeBackViews();
             prepareEmptyStateView();
-
-            View.BackgroundColor = Colors.Main.BackgroundColor.ToNativeColor();
 
             // Open edit view for the currently running time entry by swiping up
             var swipeUpRunningCardGesture = new UISwipeGestureRecognizer(async () =>

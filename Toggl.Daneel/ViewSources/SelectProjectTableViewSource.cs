@@ -16,7 +16,8 @@ namespace Toggl.Daneel.ViewSources
 
     public sealed class SelectProjectTableViewSource : BaseTableViewSource<ProjectSection, string, AutocompleteSuggestion>
     {
-        private const int headerHeight = 40;
+        public const int HeaderHeight = 40;
+        public const int RowHeight = 48;
 
         public bool UseGrouping { get; set; }
 
@@ -37,7 +38,7 @@ namespace Toggl.Daneel.ViewSources
                 return 0;
 
             var header = Sections[(int)section].Header;
-            return header == null ? 0 : headerHeight;
+            return header == null ? 0 : HeaderHeight;
         }
 
         public override UIView GetViewForHeader(UITableView tableView, nint section)

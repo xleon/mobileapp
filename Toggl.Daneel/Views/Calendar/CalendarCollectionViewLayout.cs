@@ -8,7 +8,6 @@ using System.Reactive.Subjects;
 using System.Threading;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.Autocomplete;
 using Toggl.Core;
 using Toggl.Core.UI.Calendar;
 using Toggl.Core.UI.Extensions;
@@ -32,11 +31,18 @@ namespace Toggl.Daneel.Views.Calendar
         public IObservable<Unit> ScalingEnded => scalingEndedSubject.AsObservable();
 
         private static readonly nfloat leftPadding = 76;
-        private static readonly nfloat rightPadding = 16;
         private static readonly nfloat hourSupplementaryLabelHeight = 20;
         private static readonly nfloat currentTimeSupplementaryLeftOffset = -18;
-        private static readonly nfloat horizontalItemSpacing = 4;
         private static readonly nfloat verticalItemSpacing = 1;
+
+        private nfloat rightPadding
+            => CollectionView.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
+                ? 20
+                : 16;
+        private nfloat horizontalItemSpacing
+            => CollectionView.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
+                ? 11
+                : 4;
 
         private DateTime date;
         private readonly ITimeService timeService;
@@ -172,6 +178,8 @@ namespace Toggl.Daneel.Views.Calendar
 
             var editingHoursIndexPaths = indexPathsForEditingHours();
             var editingHoursAttributes = editingHoursIndexPaths.Select(layoutAttributesForHourView);
+
+            currentTimeLayoutAttributes.Frame = FrameForCurrentTime();
 
             var attributes = itemsAttributes
                 .Concat(hoursAttributes)

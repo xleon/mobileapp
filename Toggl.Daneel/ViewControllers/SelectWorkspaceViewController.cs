@@ -17,6 +17,7 @@ namespace Toggl.Daneel.ViewControllers
     public partial class SelectWorkspaceViewController : ReactiveViewController<SelectWorkspaceViewModel>, IDismissableViewController
     {
         private const int rowHeight = 64;
+        private const double headerHeight = 54;
 
         public SelectWorkspaceViewController()
             : base(nameof(SelectWorkspaceViewController))
@@ -46,6 +47,21 @@ namespace Toggl.Daneel.ViewControllers
             source.Rx().ModelSelected()
                 .Subscribe(ViewModel.SelectWorkspace.Inputs)
                 .DisposedBy(DisposeBag);
+
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+                PreferredContentSize = new CoreGraphics.CGSize(0, headerHeight + (ViewModel.Workspaces.Count * rowHeight));
+        }
+
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+            View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
+        }
+
+        public override void ViewWillLayoutSubviews()
+        {
+            base.ViewWillLayoutSubviews();
+            View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
         }
 
         public async Task<bool> Dismiss()

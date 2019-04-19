@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using CoreGraphics;
+using Foundation;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
@@ -71,7 +72,7 @@ namespace Toggl.Daneel.ViewControllers
                 .Select(color => color.ToNativeColor())
                 .Subscribe(PhoneFrame.Rx().AnimatedBackgroundColor())
                 .DisposedBy(DisposeBag);
-            
+
             ViewModel.CurrentPage
                 .Select(backgroundImageForPage)
                 .Subscribe(image => BackgroundImage.Image = image)
@@ -139,6 +140,17 @@ namespace Toggl.Daneel.ViewControllers
                 mostUsedPagePlaceholder.Frame = PhoneContents.Bounds;
             if (reportsPagePlaceholder != null)
                 reportsPagePlaceholder.Frame = PhoneContents.Bounds;
+        }
+
+        public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
+        {
+            base.ViewWillTransitionToSize(toSize, coordinator);
+
+            if (PageControl == null)
+                return;
+
+            var scrollPoint = new CGPoint(toSize.Width * PageControl.CurrentPage, 0);
+            ScrollView.SetContentOffset(scrollPoint, true);
         }
 
         private UIImage backgroundImageForPage(int page)

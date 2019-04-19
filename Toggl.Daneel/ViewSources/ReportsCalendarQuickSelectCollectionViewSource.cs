@@ -19,14 +19,13 @@ namespace Toggl.Daneel.ViewSources
         private const int cellHeight = 32;
         private const string cellIdentifier = nameof(ReportsCalendarQuickSelectViewCell);
 
+        private ISubject<ReportsCalendarBaseQuickSelectShortcut> shortcutTaps = new Subject<ReportsCalendarBaseQuickSelectShortcut>();
         private readonly UICollectionView collectionView;
-        private readonly ISubject<ReportsCalendarBaseQuickSelectShortcut> shortcutTaps = new Subject<ReportsCalendarBaseQuickSelectShortcut>();
-
         private ReportsDateRangeParameter currentDateRange;
         private IList<ReportsCalendarBaseQuickSelectShortcut> shortcuts = new List<ReportsCalendarBaseQuickSelectShortcut>();
-        
+
         public IObservable<ReportsCalendarBaseQuickSelectShortcut> ShortcutTaps { get; }
-        
+
         public ReportsCalendarQuickSelectCollectionViewSource(UICollectionView collectionView)
         {
             Ensure.Argument.IsNotNull(collectionView, nameof(collectionView));
@@ -34,7 +33,7 @@ namespace Toggl.Daneel.ViewSources
             ShortcutTaps = shortcutTaps.AsObservable();
             this.collectionView = collectionView;
         }
-        
+
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
             var item = shortcuts[indexPath.Row] as ReportsCalendarBaseQuickSelectShortcut;

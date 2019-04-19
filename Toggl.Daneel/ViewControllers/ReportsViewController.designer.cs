@@ -13,19 +13,22 @@ namespace Toggl.Daneel.ViewControllers
 	partial class ReportsViewController
 	{
 		[Outlet]
+		UIKit.UIView BarChartsContainerView { get; set; }
+
+		[Outlet]
 		UIKit.UIView CalendarContainer { get; set; }
 
 		[Outlet]
-		UIKit.NSLayoutConstraint CalendarHeightConstraint { get; set; }
+		UIKit.NSLayoutConstraint ContentWidthConstraint { get; set; }
+
+		[Outlet]
+		UIKit.UIView OverviewContainerView { get; set; }
 
 		[Outlet]
 		UIKit.UITableView ReportsTableView { get; set; }
 
 		[Outlet]
 		UIKit.NSLayoutConstraint TopCalendarConstraint { get; set; }
-
-		[Outlet]
-		UIKit.NSLayoutConstraint TopConstraint { get; set; }
 
 		[Outlet]
 		UIKit.UIView WorkspaceButton { get; set; }
@@ -38,14 +41,19 @@ namespace Toggl.Daneel.ViewControllers
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (BarChartsContainerView != null) {
+				BarChartsContainerView.Dispose ();
+				BarChartsContainerView = null;
+			}
+
 			if (CalendarContainer != null) {
 				CalendarContainer.Dispose ();
 				CalendarContainer = null;
 			}
 
-			if (CalendarHeightConstraint != null) {
-				CalendarHeightConstraint.Dispose ();
-				CalendarHeightConstraint = null;
+			if (OverviewContainerView != null) {
+				OverviewContainerView.Dispose ();
+				OverviewContainerView = null;
 			}
 
 			if (ReportsTableView != null) {
@@ -58,14 +66,14 @@ namespace Toggl.Daneel.ViewControllers
 				TopCalendarConstraint = null;
 			}
 
-			if (TopConstraint != null) {
-				TopConstraint.Dispose ();
-				TopConstraint = null;
-			}
-
 			if (WorkspaceButton != null) {
 				WorkspaceButton.Dispose ();
 				WorkspaceButton = null;
+			}
+
+			if (WorkspaceFadeView != null) {
+				WorkspaceFadeView.Dispose ();
+				WorkspaceFadeView = null;
 			}
 
 			if (WorkspaceLabel != null) {
@@ -73,9 +81,9 @@ namespace Toggl.Daneel.ViewControllers
 				WorkspaceLabel = null;
 			}
 
-			if (WorkspaceFadeView != null) {
-				WorkspaceFadeView.Dispose ();
-				WorkspaceFadeView = null;
+			if (ContentWidthConstraint != null) {
+				ContentWidthConstraint.Dispose ();
+				ContentWidthConstraint = null;
 			}
 		}
 	}

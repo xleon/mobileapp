@@ -1,4 +1,8 @@
-﻿using System.Reactive;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
@@ -16,6 +20,8 @@ namespace Toggl.Daneel.ViewControllers
     [ModalCardPresentation]
     public partial class SelectClientViewController : KeyboardAwareViewController<SelectClientViewModel>, IDismissableViewController
     {
+        private const double headerHeight = 100;
+
         public SelectClientViewController()
             : base(nameof(SelectClientViewController))
         {
@@ -35,9 +41,24 @@ namespace Toggl.Daneel.ViewControllers
             var tableViewSource = new ClientTableViewSource(SuggestionsTableView);
             SuggestionsTableView.Source = tableViewSource;
 
-            ViewModel.Clients
+            var clientsReplay = ViewModel.Clients.Replay();
+
+            clientsReplay
                 .Subscribe(SuggestionsTableView.Rx().ReloadItems(tableViewSource))
                 .DisposedBy(DisposeBag);
+
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            {
+                clientsReplay
+                    .Select((clients) =>
+                    {
+                        return new CoreGraphics.CGSize(0, (clients.ToList().Count() * ClientTableViewSource.RowHeight) + headerHeight);
+                    })
+                    .Subscribe(this.Rx().PreferredContentSize())
+                    .DisposedBy(DisposeBag);
+            }
+
+            clientsReplay.Connect();
 
             CloseButton.Rx()
                 .BindAction(ViewModel.Close)
@@ -51,13 +72,19 @@ namespace Toggl.Daneel.ViewControllers
                 .Subscribe(ViewModel.SelectClient.Inputs)
                 .DisposedBy(DisposeBag);
 
-            SearchTextField.BecomeFirstResponder();
+            BottomConstraint.Active |= UIDevice.CurrentDevice.UserInterfaceIdiom != UIUserInterfaceIdiom.Pad;
         }
 
         public async Task<bool> Dismiss()
         {
             ViewModel.Close.Execute(Unit.Default);
             return true;
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            SearchTextField.BecomeFirstResponder();
         }
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
@@ -70,6 +97,18 @@ namespace Toggl.Daneel.ViewControllers
         {
             BottomConstraint.Constant = 0;
             UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
+        }
+
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+            View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
+        }
+
+        public override void ViewWillLayoutSubviews()
+        {
+            base.ViewWillLayoutSubviews();
+            View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
         }
     }
 }

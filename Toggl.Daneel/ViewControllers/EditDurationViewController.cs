@@ -24,6 +24,8 @@ namespace Toggl.Daneel.ViewControllers
     {
         private const int additionalVerticalContentSize = 100;
         private const int stackViewSpacing = 26;
+        private const double desiredIpadRegularHeight = 435;
+        private const double desiredIpadCompactHeight = 470;
 
         private CompositeDisposable disposeBag = new CompositeDisposable();
         private CGRect frameBeforeShowingKeyboard;
@@ -259,6 +261,12 @@ namespace Toggl.Daneel.ViewControllers
             disposeBag?.Dispose();
         }
 
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            adjustHeight(TraitCollection);
+        }
+
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
@@ -294,16 +302,27 @@ namespace Toggl.Daneel.ViewControllers
             UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
         }
 
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+            View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
+        }
+
+        public override void ViewWillLayoutSubviews()
+        {
+            base.ViewWillLayoutSubviews();
+            adjustHeight(TraitCollection);
+            View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
+        }
+
         private void prepareViews()
         {
-            var width = UIScreen.MainScreen.Bounds.Width;
-            var height = width + additionalVerticalContentSize;
-
-            PreferredContentSize = new CGSize
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom != UIUserInterfaceIdiom.Pad)
             {
-                Width = width,
-                Height = height
-            };
+                var width = UIScreen.MainScreen.Bounds.Width;
+                var height = width + additionalVerticalContentSize;
+                PreferredContentSize = new CGSize(width, height);
+            }
 
             EndTimeLabel.Font = EndTimeLabel.Font.GetMonospacedDigitFont();
             StartTimeLabel.Font = StartTimeLabel.Font.GetMonospacedDigitFont();
@@ -331,8 +350,27 @@ namespace Toggl.Daneel.ViewControllers
         {
             if (DurationInput.IsEditing)
                 DurationInput.ResignFirstResponder();
-                
+
             ViewModel.StopEditingTime.Execute();
+        }
+
+        private void adjustHeight(UITraitCollection traitCollection)
+        {
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            {
+                if (traitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
+                {
+                    PreferredContentSize = new CGSize(0, desiredIpadRegularHeight);
+                }
+                else
+                {
+                    var width = PresentingViewController.View.Frame.Width;
+                    var height = desiredIpadCompactHeight > width + additionalVerticalContentSize
+                        ? width + additionalVerticalContentSize
+                        : desiredIpadCompactHeight;
+                    PreferredContentSize = new CGSize(0, height);
+                }
+            }
         }
 
         [Export("gestureRecognizer:shouldReceiveTouch:")]

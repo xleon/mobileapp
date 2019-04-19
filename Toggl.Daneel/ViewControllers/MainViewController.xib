@@ -86,6 +86,9 @@ time entries will appear here.</string>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="64" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hoP-Tg-vBM" customClass="TimeEntriesLogTableView">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="595"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="834" id="Jw8-mK-mKg"/>
+                            </constraints>
                         </tableView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="niU-tX-YTJ" userLabel="TopSeparator">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
@@ -232,6 +235,7 @@ time entries will appear here.</string>
                                 <constraint firstItem="WZs-Ym-448" firstAttribute="top" secondItem="r2K-j0-0fe" secondAttribute="top" constant="14" id="1dx-Uw-mtJ"/>
                                 <constraint firstItem="rqr-jp-a3k" firstAttribute="bottom" secondItem="r2K-j0-0fe" secondAttribute="top" constant="6" id="EBH-0v-DaS"/>
                                 <constraint firstItem="WZs-Ym-448" firstAttribute="centerX" secondItem="r2K-j0-0fe" secondAttribute="centerX" id="Rbs-xd-mRs"/>
+                                <constraint firstAttribute="width" constant="343" id="Ytb-ez-E34"/>
                                 <constraint firstItem="UiD-si-fSa" firstAttribute="centerX" secondItem="r2K-j0-0fe" secondAttribute="centerX" id="ZXk-uq-b8e"/>
                                 <constraint firstItem="rqr-jp-a3k" firstAttribute="centerX" secondItem="r2K-j0-0fe" secondAttribute="centerX" id="hPy-Pu-2zz"/>
                                 <constraint firstAttribute="bottom" secondItem="UiD-si-fSa" secondAttribute="bottom" constant="14" id="j1z-lu-pup"/>
@@ -253,16 +257,16 @@ time entries will appear here.</string>
                         <constraint firstItem="niU-tX-YTJ" firstAttribute="top" secondItem="Jhd-oR-xIN" secondAttribute="top" id="4NL-xh-dB2"/>
                         <constraint firstItem="Xqe-XF-nVb" firstAttribute="top" secondItem="Jhd-oR-xIN" secondAttribute="top" constant="239" placeholder="YES" id="62i-O9-M2r"/>
                         <constraint firstAttribute="bottom" secondItem="hoP-Tg-vBM" secondAttribute="bottom" id="E1H-dm-543"/>
-                        <constraint firstItem="hoP-Tg-vBM" firstAttribute="leading" secondItem="Jhd-oR-xIN" secondAttribute="leading" id="NUU-Sd-J6p"/>
                         <constraint firstItem="niU-tX-YTJ" firstAttribute="leading" secondItem="Jhd-oR-xIN" secondAttribute="leading" id="PBF-qP-0Bd"/>
-                        <constraint firstAttribute="trailing" secondItem="hoP-Tg-vBM" secondAttribute="trailing" id="b3b-4n-lvE"/>
-                        <constraint firstItem="VHN-jJ-Qpp" firstAttribute="leading" secondItem="Jhd-oR-xIN" secondAttribute="leading" constant="8" id="gWs-jm-NJ6"/>
+                        <constraint firstItem="hoP-Tg-vBM" firstAttribute="leading" secondItem="Jhd-oR-xIN" secondAttribute="leading" priority="750" id="b5K-aJ-504"/>
+                        <constraint firstItem="VHN-jJ-Qpp" firstAttribute="leading" secondItem="hoP-Tg-vBM" secondAttribute="leading" constant="8" id="gWs-jm-NJ6"/>
                         <constraint firstItem="hoP-Tg-vBM" firstAttribute="top" secondItem="Jhd-oR-xIN" secondAttribute="top" id="kGY-lz-B5m"/>
+                        <constraint firstAttribute="trailing" secondItem="hoP-Tg-vBM" secondAttribute="trailing" priority="750" id="l5Y-zT-bpE"/>
                         <constraint firstAttribute="trailing" secondItem="niU-tX-YTJ" secondAttribute="trailing" id="nAW-O6-gVs"/>
-                        <constraint firstAttribute="trailing" secondItem="r2K-j0-0fe" secondAttribute="trailing" constant="16" id="oPZ-Aa-oZE"/>
-                        <constraint firstItem="r2K-j0-0fe" firstAttribute="leading" secondItem="Jhd-oR-xIN" secondAttribute="leading" constant="16" id="ob8-RK-VrH"/>
+                        <constraint firstAttribute="trailing" secondItem="r2K-j0-0fe" secondAttribute="trailing" priority="750" constant="16" id="oPZ-Aa-oZE"/>
+                        <constraint firstItem="r2K-j0-0fe" firstAttribute="leading" secondItem="Jhd-oR-xIN" secondAttribute="leading" priority="750" constant="16" id="ob8-RK-VrH"/>
                         <constraint firstItem="r2K-j0-0fe" firstAttribute="top" secondItem="Jhd-oR-xIN" secondAttribute="top" constant="200" id="ont-yx-MAU"/>
-                        <constraint firstAttribute="trailing" secondItem="w5c-30-czh" secondAttribute="trailing" constant="8" id="uiW-XF-Y2B"/>
+                        <constraint firstItem="hoP-Tg-vBM" firstAttribute="trailing" secondItem="w5c-30-czh" secondAttribute="trailing" constant="8" id="uiW-XF-Y2B"/>
                         <constraint firstItem="VHN-jJ-Qpp" firstAttribute="top" secondItem="Jhd-oR-xIN" secondAttribute="top" constant="307" id="yZb-Q0-xGk"/>
                     </constraints>
                 </view>
@@ -378,6 +382,7 @@ time entries will appear here.</string>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="E3W-8n-IfX" secondAttribute="trailing" constant="48" id="1A5-Au-Kqb"/>
                         <constraint firstItem="0J7-Pj-geT" firstAttribute="top" secondItem="vou-B4-go4" secondAttribute="top" constant="14" id="E1E-1G-lz6"/>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="834" id="enN-HN-huO"/>
                         <constraint firstAttribute="bottom" secondItem="E3W-8n-IfX" secondAttribute="bottom" id="k3B-ta-yO5"/>
                         <constraint firstItem="E3W-8n-IfX" firstAttribute="top" secondItem="0J7-Pj-geT" secondAttribute="bottom" id="lQe-PR-fVd"/>
                         <constraint firstItem="0J7-Pj-geT" firstAttribute="centerX" secondItem="vou-B4-go4" secondAttribute="centerX" id="oCw-6x-no1"/>
@@ -465,6 +470,7 @@ time entries will appear here.</string>
                         </label>
                     </subviews>
                     <constraints>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="818" id="1fX-kh-GPY"/>
                         <constraint firstAttribute="trailing" secondItem="FOL-Gh-maB" secondAttribute="trailing" constant="12" id="6Dd-yp-QCw"/>
                         <constraint firstItem="dOM-nz-0rF" firstAttribute="top" secondItem="fge-d2-Ud2" secondAttribute="top" id="84C-Bv-xVo"/>
                         <constraint firstItem="FOL-Gh-maB" firstAttribute="leading" secondItem="fge-d2-Ud2" secondAttribute="leading" constant="42" id="Bnz-fA-d79"/>
@@ -485,11 +491,12 @@ time entries will appear here.</string>
                     </userDefinedRuntimeAttributes>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="0.98039215686274506" green="0.98431372549019602" blue="0.9882352941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="fge-d2-Ud2" secondAttribute="trailing" constant="8" id="1SE-ip-Wha"/>
+                <constraint firstAttribute="trailing" secondItem="fge-d2-Ud2" secondAttribute="trailing" priority="750" constant="8" id="1SE-ip-Wha"/>
                 <constraint firstItem="4Kk-Hz-RBS" firstAttribute="top" secondItem="fge-d2-Ud2" secondAttribute="bottom" constant="16" id="25m-1j-RN6"/>
-                <constraint firstAttribute="trailing" secondItem="vou-B4-go4" secondAttribute="trailing" id="83s-7t-oAW"/>
+                <constraint firstItem="r2K-j0-0fe" firstAttribute="centerX" secondItem="S4t-q9-ct9" secondAttribute="centerX" id="3uB-jc-0RQ"/>
+                <constraint firstAttribute="trailing" secondItem="vou-B4-go4" secondAttribute="trailing" priority="750" id="83s-7t-oAW"/>
                 <constraint firstAttribute="trailing" secondItem="4Kk-Hz-RBS" secondAttribute="trailing" id="90o-lU-zgz"/>
                 <constraint firstItem="4Kk-Hz-RBS" firstAttribute="leading" secondItem="jpn-gJ-vFB" secondAttribute="trailing" constant="15" id="9bb-2W-Ulw"/>
                 <constraint firstItem="jpn-gJ-vFB" firstAttribute="centerY" secondItem="4Kk-Hz-RBS" secondAttribute="centerY" id="DHx-Nf-c5q"/>
@@ -497,16 +504,19 @@ time entries will appear here.</string>
                 <constraint firstItem="vou-B4-go4" firstAttribute="top" secondItem="S4t-q9-ct9" secondAttribute="bottom" constant="-72" id="Lpx-CQ-TA7"/>
                 <constraint firstItem="Ddo-IW-xE3" firstAttribute="top" secondItem="0wI-i0-MgR" secondAttribute="bottom" constant="4" id="MVm-2l-BA6"/>
                 <constraint firstItem="0wI-i0-MgR" firstAttribute="trailing" secondItem="Ddo-IW-xE3" secondAttribute="centerX" constant="20" id="Pmg-mN-KVS"/>
+                <constraint firstItem="hoP-Tg-vBM" firstAttribute="centerX" secondItem="S4t-q9-ct9" secondAttribute="centerX" id="Q2g-g8-PMQ"/>
                 <constraint firstItem="Ddo-IW-xE3" firstAttribute="trailing" secondItem="vou-B4-go4" secondAttribute="trailing" id="RsZ-Od-g2H"/>
                 <constraint firstAttribute="trailing" secondItem="Jhd-oR-xIN" secondAttribute="trailing" id="TAP-Mf-VjB"/>
-                <constraint firstItem="Jhd-oR-xIN" firstAttribute="top" secondItem="S4t-q9-ct9" secondAttribute="top" constant="3" id="cO8-xe-txr"/>
+                <constraint firstItem="Jhd-oR-xIN" firstAttribute="top" secondItem="S4t-q9-ct9" secondAttribute="top" id="cO8-xe-txr"/>
                 <constraint firstAttribute="bottom" secondItem="vou-B4-go4" secondAttribute="bottom" id="eTc-gF-8yE"/>
                 <constraint firstItem="S4t-q9-ct9" firstAttribute="bottom" secondItem="Jhd-oR-xIN" secondAttribute="bottom" priority="750" id="jk0-Wh-1za"/>
                 <constraint firstItem="Jhd-oR-xIN" firstAttribute="bottom" secondItem="vou-B4-go4" secondAttribute="top" id="oMA-0v-07i"/>
-                <constraint firstItem="vou-B4-go4" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="q3O-7e-AfR"/>
-                <constraint firstItem="fge-d2-Ud2" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="8" id="r4o-tI-pyA"/>
+                <constraint firstItem="fge-d2-Ud2" firstAttribute="centerX" secondItem="S4t-q9-ct9" secondAttribute="centerX" id="pke-Cq-lDE"/>
+                <constraint firstItem="vou-B4-go4" firstAttribute="leading" secondItem="2" secondAttribute="leading" priority="750" id="q3O-7e-AfR"/>
+                <constraint firstItem="fge-d2-Ud2" firstAttribute="leading" secondItem="2" secondAttribute="leading" priority="750" constant="8" id="r4o-tI-pyA"/>
                 <constraint firstItem="Ddo-IW-xE3" firstAttribute="top" secondItem="vou-B4-go4" secondAttribute="top" constant="8" id="rDp-HB-uui"/>
                 <constraint firstItem="iEb-UM-o0r" firstAttribute="centerX" secondItem="Ddo-IW-xE3" secondAttribute="centerX" id="tRU-y4-0ll"/>
+                <constraint firstItem="vou-B4-go4" firstAttribute="centerX" secondItem="S4t-q9-ct9" secondAttribute="centerX" id="xZy-96-mgm"/>
                 <constraint firstItem="Jhd-oR-xIN" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="yWZ-Xb-sTX"/>
             </constraints>
             <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>

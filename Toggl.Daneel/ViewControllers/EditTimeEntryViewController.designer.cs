@@ -53,10 +53,13 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIButton DeleteButton { get; set; }
 
 		[Outlet]
-		UIKit.NSLayoutConstraint DeleteButtonBottomConstraint { get; set; }
+		UIKit.NSLayoutConstraint ButtonsContainerBottomConstraint { get; set; }
 
 		[Outlet]
 		Toggl.Daneel.Views.TextViewWithPlaceholder DescriptionTextView { get; set; }
+
+		[Outlet]
+		UIKit.UIView DescriptionView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel DurationDescriptionLabel { get; set; }
@@ -146,7 +149,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (AddProjectAndTaskView != null) {
@@ -214,9 +217,9 @@ namespace Toggl.Daneel.ViewControllers
 				DeleteButton = null;
 			}
 
-			if (DeleteButtonBottomConstraint != null) {
-				DeleteButtonBottomConstraint.Dispose ();
-				DeleteButtonBottomConstraint = null;
+			if (ButtonsContainerBottomConstraint != null) {
+				ButtonsContainerBottomConstraint.Dispose ();
+				ButtonsContainerBottomConstraint = null;
 			}
 
 			if (DescriptionTextView != null) {
@@ -362,6 +365,11 @@ namespace Toggl.Daneel.ViewControllers
 			if (TitleLabel != null) {
 				TitleLabel.Dispose ();
 				TitleLabel = null;
+			}
+
+			if (DescriptionView != null) {
+				DescriptionView.Dispose ();
+				DescriptionView = null;
 			}
 
 			if (SelectProject != null) {

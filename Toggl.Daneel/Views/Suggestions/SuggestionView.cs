@@ -59,7 +59,7 @@ namespace Toggl.Daneel
             DescriptionLabel.Text = Suggestion.Description;
 
             var hasProject = Suggestion.ProjectId != null;
-            DescriptionTopDistanceConstraint.Constant = hasProject ? hasProjectDistance : noProjectDistance;
+            ProjectFadeView.Hidden = !hasProject;
 
             if (!hasProject)
             {
@@ -87,7 +87,8 @@ namespace Toggl.Daneel
                 .Image
                 .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
 
-            FadeView.FadeRight = true;
+            DescriptionFadeView.FadeRight = true;
+            ProjectFadeView.FadeRight = true;
 
             if (Suggestion == null)
                 Hidden = true;

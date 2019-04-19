@@ -234,14 +234,12 @@
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UPo-1v-886" customClass="WheelBackgroundView">
                                     <rect key="frame" x="32" y="0.0" width="224" height="224"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" secondItem="UPo-1v-886" secondAttribute="height" multiplier="1:1" id="5x7-W2-T2n"/>
-                                    </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5uR-7c-EpB" customClass="WheelForegroundView">
                                     <rect key="frame" x="32" y="0.0" width="224" height="224"/>
                                     <constraints>
                                         <constraint firstAttribute="width" secondItem="5uR-7c-EpB" secondAttribute="height" multiplier="1:1" id="S1t-cB-fCd"/>
+                                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="300" id="erK-yJ-xZk"/>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A8e-aL-HzQ">
@@ -279,19 +277,20 @@
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstItem="UPo-1v-886" firstAttribute="width" secondItem="5uR-7c-EpB" secondAttribute="width" id="3V4-1r-PqH"/>
-                                <constraint firstItem="5uR-7c-EpB" firstAttribute="leading" secondItem="urI-dQ-w1K" secondAttribute="leading" constant="32" id="8IG-SO-Tml"/>
+                                <constraint firstItem="UPo-1v-886" firstAttribute="top" secondItem="5uR-7c-EpB" secondAttribute="top" id="9dI-VX-bQa"/>
                                 <constraint firstItem="A8e-aL-HzQ" firstAttribute="centerX" secondItem="urI-dQ-w1K" secondAttribute="centerX" id="FnF-6K-x63"/>
                                 <constraint firstItem="5uR-7c-EpB" firstAttribute="centerY" secondItem="urI-dQ-w1K" secondAttribute="centerY" id="HXo-fA-myX"/>
-                                <constraint firstAttribute="trailing" secondItem="5uR-7c-EpB" secondAttribute="trailing" constant="32" id="Jgp-LJ-BX3"/>
-                                <constraint firstItem="UPo-1v-886" firstAttribute="centerY" secondItem="urI-dQ-w1K" secondAttribute="centerY" id="QZU-KA-abx"/>
+                                <constraint firstItem="UPo-1v-886" firstAttribute="leading" secondItem="5uR-7c-EpB" secondAttribute="leading" id="RzM-lS-r2F"/>
                                 <constraint firstItem="5uR-7c-EpB" firstAttribute="top" secondItem="urI-dQ-w1K" secondAttribute="top" id="UgV-sF-umX"/>
+                                <constraint firstItem="5uR-7c-EpB" firstAttribute="width" secondItem="urI-dQ-w1K" secondAttribute="width" priority="750" constant="-64" id="ZUD-rw-KQt"/>
+                                <constraint firstItem="5uR-7c-EpB" firstAttribute="centerX" secondItem="urI-dQ-w1K" secondAttribute="centerX" id="Zfk-Gh-unP"/>
                                 <constraint firstItem="A8e-aL-HzQ" firstAttribute="centerY" secondItem="urI-dQ-w1K" secondAttribute="centerY" id="elA-bV-Fh6"/>
                                 <constraint firstAttribute="bottom" secondItem="5uR-7c-EpB" secondAttribute="bottom" id="lzW-BW-O1e"/>
                                 <constraint firstItem="UPo-1v-886" firstAttribute="height" secondItem="5uR-7c-EpB" secondAttribute="height" id="tZz-QS-cHe"/>
-                                <constraint firstItem="UPo-1v-886" firstAttribute="centerX" secondItem="urI-dQ-w1K" secondAttribute="centerX" id="zv0-lh-RvJ"/>
                             </constraints>
                         </view>
                     </subviews>
+                    <variation key="heightClass=regular-widthClass=regular" spacing="6"/>
                 </stackView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

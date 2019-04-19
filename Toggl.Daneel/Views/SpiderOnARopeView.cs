@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoreGraphics;
@@ -255,20 +255,38 @@ namespace Toggl.Daneel.Views
             return path.CGPath;
         }
 
+        private (double, double) convertXYCoordinate(double originX, double originY,
+            UIInterfaceOrientation orientation)
+        {
+            switch (orientation)
+            {
+                case UIInterfaceOrientation.LandscapeLeft:
+                    return (originY, -originX);
+                case UIInterfaceOrientation.LandscapeRight:
+                    return (-originY, originX);
+                case UIInterfaceOrientation.PortraitUpsideDown:
+                    return (-originX, -originY);
+                default:
+                    return (originX, originY);
+            }
+        }
         private void processAccelerometerData(CMAccelerometerData data, NSError error)
         {
             if (spiderView == null) return;
 
-            var ax = data.Acceleration.X;
-            var ay = data.Acceleration.Y;
-            var angle = -(nfloat)Math.Atan2(ay, ax);
+            var (ax, ay) = convertXYCoordinate(data.Acceleration.X, data.Acceleration.Y,
+                UIApplication.SharedApplication.StatusBarOrientation);
 
+            var angle = -(nfloat)Math.Atan2(ay, ax);
             gravity.Angle = angle;
 
             if (previousAcceleration.HasValue)
             {
-                var dx = (nfloat)(ax - previousAcceleration.Value.X);
-                var dy = (nfloat)(ay - previousAcceleration.Value.Y);
+                var (previousX, previousY) = convertXYCoordinate(previousAcceleration.Value.X,
+                    previousAcceleration.Value.Y, UIApplication.SharedApplication.StatusBarOrientation);
+
+                var dx = (nfloat)(ax - previousX);
+                var dy = (nfloat)(ay - previousY);
 
                 var direction = new CGVector(dx, dy);
                 var magnitude = (nfloat)Math.Sqrt(dx * dx + dy * dy);

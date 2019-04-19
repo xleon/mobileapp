@@ -1,53 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
+using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using Toggl.Core;
-using Toggl.Core.Extensions;
-using Toggl.Core.Conversions;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Daneel.Cells;
-using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Extensions;
+using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Shared.Extensions;
-using Toggl.Shared;
 using UIKit;
-using Colors = Toggl.Core.UI.Helper.Colors;
 
 namespace Toggl.Daneel.Views.Reports
 {
     public partial class ReportsHeaderView : BaseTableHeaderFooterView<ReportsViewModel>
     {
-        private const int fontSize = 24;
-        private const float barChartSpacingProportion = 0.3f;
-
-        private static readonly UIColor normalColor = Colors.Reports.PercentageActivated.ToNativeColor();
-        private static readonly UIColor disabledColor = Colors.Reports.Disabled.ToNativeColor();
-
         public static readonly string Identifier = nameof(ReportsHeaderView);
         public static readonly NSString Key = new NSString(nameof(ReportsHeaderView));
         public static readonly UINib Nib;
 
-        private readonly UIStringAttributes normalAttributes = new UIStringAttributes
-        {
-            Font = UIFont.SystemFontOfSize(fontSize, UIFontWeight.Medium),
-            ForegroundColor = normalColor
-        };
-
-        private readonly UIStringAttributes disabledAttributes = new UIStringAttributes
-        {
-            Font = UIFont.SystemFontOfSize(fontSize, UIFontWeight.Medium),
-            ForegroundColor = disabledColor
-        };
-
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
-        private readonly ISubject<Unit> updateLayout = new BehaviorSubject<Unit>(Unit.Default);
+
+        private ReportsOverviewCardView overview = ReportsOverviewCardView.CreateFromNib();
+        private ReportsBarChartCardView barChart = ReportsBarChartCardView.CreateFromNib();
+
+        private CAShapeLayer borderLayer = new CAShapeLayer();
+        private CAShapeLayer mask = new CAShapeLayer();
 
         static ReportsHeaderView()
         {
@@ -63,128 +42,57 @@ namespace Toggl.Daneel.Views.Reports
         {
             base.AwakeFromNib();
 
-            TotalTitleLabel.Text = Resources.Total.ToUpper();
-            BillableTitleLabel.Text = Resources.Billable.ToUpper();
-            ClockedHoursTitleLabel.Text = Resources.ClockedHours.ToUpper();
-            BillableLegendLabel.Text = Resources.Billable.ToUpper();
-            NonBillableLegendLabel.Text = Resources.NonBillable.ToUpper();
+            OverviewContainerView.AddSubview(overview);
+            BarChartContainerView.AddSubview(barChart);
+            overview.Frame = OverviewContainerView.Bounds;
+            barChart.Frame = BarChartContainerView.Bounds;
+        }
 
-            var templateImage = TotalDurationGraph.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-            TotalDurationGraph.Image = templateImage;
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
 
-            prepareViews();
+            if (BarChartContainerView != null)
+            {
+                BarChartContainerView.Hidden = TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular;
+            }
+
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
+            {
+                var cornerRadius = 8;
+                var cornersToRound = PieChartView.Segments.Count() > 0
+                    ? UIRectCorner.TopLeft | UIRectCorner.TopRight
+                    : UIRectCorner.TopLeft | UIRectCorner.TopRight | UIRectCorner.BottomLeft | UIRectCorner.BottomRight;
+
+                mask.Path = UIBezierPath.FromRoundedRect(Bounds, cornersToRound, new CGSize(cornerRadius, cornerRadius)).CGPath;
+                Layer.Mask = mask;
+
+                borderLayer.FillColor = UIColor.Clear.CGColor;
+                borderLayer.LineWidth = 1;
+                borderLayer.StrokeColor = UIColor.GroupTableViewBackgroundColor.CGColor;
+                borderLayer.Path = UIBezierPath.FromRoundedRect(new CGRect(0.5, 0.5, Bounds.Width - 1, Bounds.Height - 1), cornersToRound, new CGSize(cornerRadius + 1, cornerRadius + 1)).CGPath;
+                Layer.AddSublayer(borderLayer);
+            }
+            else
+            {
+                Layer.Mask = null;
+                borderLayer.RemoveFromSuperLayer();
+            }
         }
 
         protected override void UpdateView()
         {
-            //Text
-            Item.BillablePercentageObservable
-                .Select(billableFormattedString)
-                .Subscribe(BillablePercentageLabel.Rx().AttributedText())
-                .DisposedBy(disposeBag);
-
-            Item.TotalTimeObservable
-                .CombineLatest(Item.DurationFormatObservable,
-                    (totalTime, durationFormat) => totalTime.ToFormattedString(durationFormat))
-                .Subscribe(TotalDurationLabel.Rx().Text())
-                .DisposedBy(disposeBag);
+            overview.Item = Item;
+            barChart.Item = Item;
 
             //Loading chart
             Item.IsLoadingObservable
                 .Subscribe(LoadingPieChartView.Rx().IsVisibleWithFade())
                 .DisposedBy(disposeBag);
 
-            Item.IsLoadingObservable
-                .Subscribe(LoadingOverviewView.Rx().IsVisibleWithFade())
-                .DisposedBy(disposeBag);
-
             //Pretty stuff
             Item.GroupedSegmentsObservable
                 .Subscribe(groupedSegments => PieChartView.Segments = groupedSegments)
-                .DisposedBy(disposeBag);
-
-            Item.BillablePercentageObservable
-                .Subscribe(percentage => BillablePercentageView.Percentage = percentage)
-                .DisposedBy(disposeBag);
-
-            var totalDurationColorObservable = Item.TotalTimeIsZeroObservable
-                .Select(isZero => isZero
-                    ? Core.UI.Helper.Colors.Reports.Disabled.ToNativeColor()
-                    : Core.UI.Helper.Colors.Reports.TotalTimeActivated.ToNativeColor());
-
-            totalDurationColorObservable
-                .Subscribe(TotalDurationGraph.Rx().TintColor())
-                .DisposedBy(disposeBag);
-
-            totalDurationColorObservable
-                .Subscribe(TotalDurationLabel.Rx().TextColor())
-                .DisposedBy(disposeBag);
-
-            // Bar chart
-            Item.WorkspaceHasBillableFeatureEnabled
-                .Subscribe(ColorsLegendContainerView.Rx().IsVisible())
-                .DisposedBy(disposeBag);
-
-            Item.StartDate
-                .CombineLatest(
-                    Item.BarChartViewModel.DateFormat,
-                    (startDate, format) => startDate.ToString(format.Short, CultureInfo.InvariantCulture))
-                .Subscribe(StartDateLabel.Rx().Text())
-                .DisposedBy(disposeBag);
-
-            Item.EndDate
-                .CombineLatest(
-                    Item.BarChartViewModel.DateFormat,
-                    (endDate, format) => endDate.ToString(format.Short, CultureInfo.InvariantCulture))
-                .Subscribe(EndDateLabel.Rx().Text())
-                .DisposedBy(disposeBag);
-
-            Item.BarChartViewModel.MaximumHoursPerBar
-                .Select(hours => $"{hours} h")
-                .Subscribe(MaximumHoursLabel.Rx().Text())
-                .DisposedBy(disposeBag);
-
-            Item.BarChartViewModel.MaximumHoursPerBar
-                .Select(hours => $"{hours / 2} h")
-                .Subscribe(HalfHoursLabel.Rx().Text())
-                .DisposedBy(disposeBag);
-
-            Item.BarChartViewModel.HorizontalLegend
-                .Where(legend => legend == null)
-                .Subscribe((DateTimeOffset[] _) =>
-                {
-                    HorizontalLegendStackView.Subviews.ForEach(subview => subview.RemoveFromSuperview());
-                    StartDateLabel.Hidden = false;
-                    EndDateLabel.Hidden = false;
-                })
-                .DisposedBy(disposeBag);
-
-            Item.BarChartViewModel.HorizontalLegend
-                .Where(legend => legend != null)
-                .CombineLatest(Item.BarChartViewModel.DateFormat, createHorizontalLegendLabels)
-                .Do(_ =>
-                {
-                    StartDateLabel.Hidden = true;
-                    EndDateLabel.Hidden = true;
-                })
-                .Subscribe(HorizontalLegendStackView.Rx().ArrangedViews())
-                .DisposedBy(disposeBag);
-
-            Item.BarChartViewModel.Bars
-                .Select(createBarViews)
-                .Subscribe(BarsStackView.Rx().ArrangedViews())
-                .DisposedBy(disposeBag);
-
-            var spacingObservable = Item.BarChartViewModel.Bars
-                .CombineLatest(updateLayout, (bars, _) => bars)
-                .Select(bars => BarsStackView.Frame.Width / bars.Length * barChartSpacingProportion);
-
-            spacingObservable
-                .Subscribe(BarsStackView.Rx().Spacing())
-                .DisposedBy(disposeBag);
-
-            spacingObservable
-                .Subscribe(HorizontalLegendStackView.Rx().Spacing())
                 .DisposedBy(disposeBag);
 
             Item.IsLoadingObservable
@@ -196,65 +104,6 @@ namespace Toggl.Daneel.Views.Reports
             Item.ShowEmptyStateObservable
                 .Subscribe(EmptyStateView.Rx().IsVisible())
                 .DisposedBy(disposeBag);
-
-            NSAttributedString billableFormattedString(float? value)
-            {
-                var isDisabled = value == null;
-                var actualValue = isDisabled ? 0 : value.Value;
-
-                var percentage = $"{actualValue.ToString("0.00")}%";
-
-                var attributes = isDisabled ? disabledAttributes : normalAttributes;
-                return new NSAttributedString(percentage, attributes);
-            }
         }
-
-
-        public override void LayoutSubviews()
-        {
-            base.LayoutSubviews();
-
-            updateLayout.OnNext(Unit.Default);
-        }
-
-        private void prepareViews()
-        {
-            prepareCard(OverviewCardView);
-            prepareCard(BarChartCardView);
-
-            TotalTitleLabel.SetKerning(-0.2);
-            TotalDurationLabel.SetKerning(-0.2);
-            BillableTitleLabel.SetKerning(-0.2);
-            BillablePercentageLabel.SetKerning(-0.2);
-            ClockedHoursTitleLabel.SetKerning(-0.2);
-            BillableLegendLabel.SetKerning(-0.2);
-            NonBillableLegendLabel.SetKerning(-0.2);
-        }
-
-        private void prepareCard(UIView view)
-        {
-            view.Layer.CornerRadius = 8;
-            view.Layer.ShadowColor = UIColor.Black.CGColor;
-            view.Layer.ShadowRadius = 16;
-            view.Layer.ShadowOffset = new CGSize(0, 2);
-            view.Layer.ShadowOpacity = 0.1f;
-        }
-
-        private IEnumerable<UIView> createBarViews(IEnumerable<BarViewModel> bars)
-            => bars.Select<BarViewModel, UIView>(bar =>
-            {
-                if (bar.NonBillablePercent == 0 && bar.BillablePercent == 0)
-                {
-                    return new EmptyBarView();
-                }
-
-                return new BarView(bar);
-            });
-
-        private IEnumerable<UILabel> createHorizontalLegendLabels(IEnumerable<DateTimeOffset> dates, DateFormat format)
-            => dates.Select(date =>
-                new BarLegendLabel(
-                    DateTimeOffsetConversion.ToDayOfWeekInitial(date),
-                    date.ToString(format.Short, CultureInfo.InvariantCulture)));
     }
 }

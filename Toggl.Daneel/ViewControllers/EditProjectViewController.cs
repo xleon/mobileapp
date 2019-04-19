@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using CoreGraphics;
 using Foundation;
 using Toggl.Core;
 using Toggl.Core.UI.Extensions;
@@ -16,6 +17,7 @@ namespace Toggl.Daneel.ViewControllers
     [ModalCardPresentation]
     public sealed partial class EditProjectViewController : ReactiveViewController<EditProjectViewModel>, IDismissableViewController
     {
+        private const double desiredIpadHeight = 360;
         private static readonly nfloat errorVisibleHeight = 16;
 
         public EditProjectViewController()
@@ -67,6 +69,15 @@ namespace Toggl.Daneel.ViewControllers
                 .Select(e => string.IsNullOrEmpty(e) ? new nfloat(0) : errorVisibleHeight)
                 .Subscribe(ProjectNameUsedErrorTextHeight.Rx().Constant())
                 .DisposedBy(DisposeBag);
+
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            {
+                ViewModel.Error
+                    .Select(e => string.IsNullOrEmpty(e) ? desiredIpadHeight : errorVisibleHeight + desiredIpadHeight)
+                    .Select(h => new CGSize(0, h))
+                    .Subscribe(this.Rx().PreferredContentSize())
+                    .DisposedBy(DisposeBag);
+            }
 
             // Workspace
             WorkspaceLabel.Rx()

@@ -10,6 +10,8 @@ using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Views.Tag;
 using Toggl.Daneel.ViewSources;
+using System.Reactive;
+using System.Linq;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Daneel.ViewControllers
@@ -17,6 +19,9 @@ namespace Toggl.Daneel.ViewControllers
     [ModalCardPresentation]
     public sealed partial class SelectTagsViewController : KeyboardAwareViewController<SelectTagsViewModel>, IDismissableViewController
     {
+        private const double headerHeight = 100;
+        private const double placeholderHeight = 250;
+
         public SelectTagsViewController()
             : base(nameof(SelectTagsViewController))
         {
@@ -32,9 +37,28 @@ namespace Toggl.Daneel.ViewControllers
                 .Subscribe(ViewModel.SelectTag.Inputs)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.Tags
+            var tagsReplay = ViewModel.Tags.Replay();
+
+            tagsReplay
                 .Subscribe(TagsTableView.Rx().ReloadItems(tableViewSource))
                 .DisposedBy(DisposeBag);
+
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            {
+                tagsReplay
+                    .Select((tags) =>
+                    {
+                        var count = tags.ToList().Count();
+                        var contentHeight = count > 0
+                            ? count * SelectTagsTableViewSource.RowHeight
+                            : placeholderHeight;
+                        return new CoreGraphics.CGSize(0, contentHeight + headerHeight);
+                    })
+                    .Subscribe(this.Rx().PreferredContentSize())
+                    .DisposedBy(DisposeBag);
+            }
+
+            tagsReplay.Connect();
 
             ViewModel.IsEmpty
                 .Subscribe(EmptyStateImage.Rx().IsVisible())
@@ -59,6 +83,8 @@ namespace Toggl.Daneel.ViewControllers
             TextField.Rx().Text()
                 .Subscribe(ViewModel.FilterText)
                 .DisposedBy(DisposeBag);
+
+            BottomConstraint.Active |= UIDevice.CurrentDevice.UserInterfaceIdiom != UIUserInterfaceIdiom.Pad;
         }
 
         public override void ViewWillAppear(bool animated)
@@ -83,6 +109,18 @@ namespace Toggl.Daneel.ViewControllers
         {
             BottomConstraint.Constant = 0;
             UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
+        }
+
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+            View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
+        }
+
+        public override void ViewWillLayoutSubviews()
+        {
+            base.ViewWillLayoutSubviews();
+            View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
         }
     }
 }

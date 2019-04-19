@@ -27,6 +27,7 @@ namespace Toggl.Daneel.ViewControllers
     public partial class EditTimeEntryViewController : KeyboardAwareViewController<EditTimeEntryViewModel>, IDismissableViewController
     {
         private const float nonScrollableContentHeight = 116f;
+        private const double preferredIpadHeight = 228;
 
         private IDisposable projectOnboardingDisposable;
         private IDisposable contentSizeChangedDisposable;
@@ -219,22 +220,25 @@ namespace Toggl.Daneel.ViewControllers
                 .DisposedBy(DisposeBag);
         }
 
-        public override void ViewWillLayoutSubviews()
-        {
-            adjustHeight();
-        }
-
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
 
-            //This binding needs to be created, when TagsTextView has it's
-            //proper size. In ViewDidLoad() TagsTextView width isn't initialized
-            //yet, which results in displaying less tags than possible
             ViewModel.Tags
                 .Select(tagsListToAttributedString.Convert)
                 .Subscribe(TagsTextView.Rx().AttributedTextObserver())
                 .DisposedBy(DisposeBag);
+
+            View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
+        }
+
+        public override void ViewWillLayoutSubviews()
+        {
+            base.ViewWillLayoutSubviews();
+
+            adjustHeight();
+
+            View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
         }
 
         public async Task<bool> Dismiss()
@@ -245,18 +249,16 @@ namespace Toggl.Daneel.ViewControllers
         private void prepareViews()
         {
             DurationLabel.Font = DurationLabel.Font.GetMonospacedDigitFont();
-            PreferredContentSize = View.Frame.Size;
 
             centerTextVertically(TagsTextView);
             TagsTextView.TextContainer.LineFragmentPadding = 0;
 
-            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
+                && UIDevice.CurrentDevice.UserInterfaceIdiom != UIUserInterfaceIdiom.Pad)
             {
                 var bottomSafeAreaInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
-                if (bottomSafeAreaInset >= DeleteButtonBottomConstraint.Constant)
-                    DeleteButtonBottomConstraint.Constant
-                        = ConfirmButtonBottomConstraint.Constant
-                        = 0;
+                if (bottomSafeAreaInset >= ButtonsContainerBottomConstraint.Constant)
+                    ButtonsContainerBottomConstraint.Constant = 0;
             }
 
             DescriptionTextView.TintColor = Colors.StartTimeEntry.Cursor.ToNativeColor();
@@ -336,19 +338,31 @@ namespace Toggl.Daneel.ViewControllers
 
         private void adjustHeight()
         {
-            var height = nonScrollableContentHeight + ScrollViewContent.Bounds.Height;
-            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            double height;
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
             {
-                height += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+                height = nonScrollableContentHeight + ScrollViewContent.Bounds.Height;
+                if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                {
+                    height += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+                }
             }
-
+            else
+            {
+                var errorHeight = ErrorView.Hidden
+                    ? 0
+                    : ErrorView.SizeThatFits(UIView.UILayoutFittingCompressedSize).Height;
+                var titleHeight = DescriptionView.SizeThatFits(UIView.UILayoutFittingCompressedSize).Height;
+                var isBillableHeight = BillableView.Hidden ? 0 : 56;
+                var timeFieldsHeight = ViewModel.IsEditingGroup ? 0 : 167;
+                height = preferredIpadHeight + errorHeight + titleHeight + timeFieldsHeight + isBillableHeight;
+            }
             var newSize = new CGSize(0, height);
             if (newSize != PreferredContentSize)
             {
                 PreferredContentSize = newSize;
                 PresentationController.ContainerViewWillLayoutSubviews();
             }
-
             ScrollView.ScrollEnabled = ScrollViewContent.Bounds.Height > ScrollView.Bounds.Height;
         }
 

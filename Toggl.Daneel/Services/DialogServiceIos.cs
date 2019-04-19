@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using CoreGraphics;
 using Toggl.Core;
 using Toggl.Core.UI.Services;
 using Toggl.Shared;
@@ -82,8 +83,20 @@ namespace Toggl.Daneel.Services
                     observer.OnCompleted();
                 });
 
-                actionSheet.AddAction(cancelAction);
+                if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+                {
+                    var extraCancelAction = UIAlertAction.Create(cancelText, UIAlertActionStyle.Default, _ =>
+                    {
+                        observer.OnNext(false);
+                        observer.OnCompleted();
+                    });
+                    actionSheet.AddAction(extraCancelAction);
+                }
+
                 actionSheet.AddAction(confirmAction);
+                actionSheet.AddAction(cancelAction);
+
+                applyPopoverDetailsIfNeeded(actionSheet);
 
                 topViewControllerProvider
                     .TopViewController
@@ -142,6 +155,8 @@ namespace Toggl.Daneel.Services
 
                 actionSheet.AddAction(cancelAction);
 
+                applyPopoverDetailsIfNeeded(actionSheet);
+
                 topViewControllerProvider
                     .TopViewController
                     .PresentViewController(actionSheet, true, null);
@@ -155,7 +170,7 @@ namespace Toggl.Daneel.Services
             switch (type)
             {
                 case ActionType.DiscardNewTimeEntry:
-                    return (null, Resources.Discard, Resources.Cancel);
+                    return (Resources.ConfirmDeleteNewTETitle, Resources.Discard, Resources.Cancel);
                 case ActionType.DiscardEditingChanges:
                     return (null, Resources.Discard, Resources.ContinueEditing);
                 case ActionType.DeleteExistingTimeEntry:
@@ -167,6 +182,18 @@ namespace Toggl.Daneel.Services
             }
 
             throw new ArgumentOutOfRangeException(nameof(type));
+        }
+
+        private void applyPopoverDetailsIfNeeded(UIAlertController alert)
+        {
+            var popoverController = alert.PopoverPresentationController;
+            if (popoverController != null && UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            {
+                var view = topViewControllerProvider.TopViewController.View;
+                popoverController.SourceView = view;
+                popoverController.SourceRect = new CGRect(view.Bounds.GetMidX(), view.Bounds.GetMidY(), 0, 0);
+                popoverController.PermittedArrowDirections = new UIPopoverArrowDirection();
+            }
         }
     }
 }

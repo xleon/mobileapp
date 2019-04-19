@@ -11,11 +11,11 @@ namespace Toggl.Daneel.ViewSources
 
     public sealed class SelectTagsTableViewSource : BaseTableViewSource<TagsSection, string, SelectableTagBaseViewModel>
     {
-        private const int rowHeight = 48;
+        public const int RowHeight = 48;
 
         public SelectTagsTableViewSource(UITableView tableView)
         {
-            tableView.RowHeight = rowHeight;
+            tableView.RowHeight = RowHeight;
             tableView.RegisterNibForCellReuse(NewTagViewCell.Nib, NewTagViewCell.Identifier);
             tableView.RegisterNibForCellReuse(CreateTagViewCell.Nib, CreateTagViewCell.Identifier);
             tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;

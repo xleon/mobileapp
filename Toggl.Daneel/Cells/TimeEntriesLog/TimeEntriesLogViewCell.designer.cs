@@ -27,12 +27,11 @@ namespace Toggl.Daneel.Views
 		UIKit.UIImageView ContinueImageView { get; set; }
 
 		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UILabel DescriptionLabel { get; set; }
+		Toggl.Daneel.Views.FadeView DescriptionFadeView { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		Toggl.Daneel.Views.FadeView FadeView { get; set; }
+		UIKit.UILabel DescriptionLabel { get; set; }
 
 		[Outlet]
 		UIKit.UIView GroupSizeBackground { get; set; }
@@ -42,6 +41,9 @@ namespace Toggl.Daneel.Views
 
 		[Outlet]
 		UIKit.UILabel GroupSizeLabel { get; set; }
+
+		[Outlet]
+		Toggl.Daneel.Views.FadeView ProjectTaskClientFadeView { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -92,9 +94,14 @@ namespace Toggl.Daneel.Views
 				DescriptionLabel = null;
 			}
 
-			if (FadeView != null) {
-				FadeView.Dispose ();
-				FadeView = null;
+			if (DescriptionFadeView != null) {
+				DescriptionFadeView.Dispose ();
+				DescriptionFadeView = null;
+			}
+
+			if (ProjectTaskClientFadeView != null) {
+				ProjectTaskClientFadeView.Dispose ();
+				ProjectTaskClientFadeView = null;
 			}
 
 			if (GroupSizeBackground != null) {

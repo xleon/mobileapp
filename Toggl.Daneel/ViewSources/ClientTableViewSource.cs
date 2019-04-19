@@ -11,11 +11,11 @@ namespace Toggl.Daneel.ViewSources
 
     public sealed class ClientTableViewSource : BaseTableViewSource<ClientSection, string, SelectableClientBaseViewModel>
     {
-        private const int rowHeight = 48;
+        public const int RowHeight = 48;
 
         public ClientTableViewSource(UITableView tableView)
         {
-            tableView.RowHeight = rowHeight;
+            tableView.RowHeight = RowHeight;
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
