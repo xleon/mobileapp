@@ -2,26 +2,24 @@
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Autocomplete;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Daneel.ViewSources;
-using Toggl.Foundation;
-using Toggl.Foundation.Autocomplete;
-using Toggl.Foundation.Autocomplete.Suggestions;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.Onboarding.CreationView;
-using Toggl.Foundation.MvvmCross.Onboarding.StartTimeEntryView;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Multivac.Extensions;
+using Toggl.Core;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Onboarding.CreationView;
+using Toggl.Core.UI.Onboarding.StartTimeEntryView;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers
@@ -103,8 +101,8 @@ namespace Toggl.Daneel.ViewControllers
 
             // Buttons
             UIColor booleanToColor(bool b) => b
-                ? Color.StartTimeEntry.ActiveButton.ToNativeColor()
-                : Color.StartTimeEntry.InactiveButton.ToNativeColor();
+                ? Colors.StartTimeEntry.ActiveButton.ToNativeColor()
+                : Colors.StartTimeEntry.InactiveButton.ToNativeColor();
 
             ViewModel.IsBillable
                 .Select(booleanToColor)
@@ -252,12 +250,12 @@ namespace Toggl.Daneel.ViewControllers
                           .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate),
                     UIControlState.Normal
                 );
-                button.TintColor = Color.StartTimeEntry.InactiveButton.ToNativeColor();
+                button.TintColor = Colors.StartTimeEntry.InactiveButton.ToNativeColor();
             }
 
-            TimeInput.TintColor = Color.StartTimeEntry.Cursor.ToNativeColor();
+            TimeInput.TintColor = Colors.StartTimeEntry.Cursor.ToNativeColor();
 
-            DescriptionTextView.TintColor = Color.StartTimeEntry.Cursor.ToNativeColor();
+            DescriptionTextView.TintColor = Colors.StartTimeEntry.Cursor.ToNativeColor();
             DescriptionTextView.BecomeFirstResponder();
 
             Placeholder.ConfigureWith(DescriptionTextView);

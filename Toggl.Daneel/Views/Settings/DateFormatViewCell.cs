@@ -1,7 +1,7 @@
 ﻿using System;
 using Foundation;
 using Toggl.Daneel.Cells;
-using Toggl.Foundation.MvvmCross.ViewModels.Selectable;
+using Toggl.Core.UI.ViewModels.Selectable;
 using UIKit;
 
 namespace Toggl.Daneel.Views.Settings

@@ -1,7 +1,7 @@
 using Foundation;
 using Toggl.Daneel.ExtensionKit;
-using Toggl.Ultrawave;
-using Toggl.Ultrawave.Network;
+using Toggl.Networking;
+using Toggl.Networking.Network;
 
 namespace SiriExtension
 {

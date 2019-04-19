@@ -5,10 +5,10 @@ using CoreAnimation;
 using CoreGraphics;
 using Foundation;
 using Toggl.Daneel.Extensions;
-using Toggl.Multivac;
+using Toggl.Shared;
 using UIKit;
 using Math = System.Math;
-using Toggl.Multivac.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Daneel.Views.Calendar
 {

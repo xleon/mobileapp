@@ -4,9 +4,10 @@ using System.Linq;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
-using Toggl.Foundation.MvvmCross.ViewModels.Reports;
+using Toggl.Daneel.Presentation;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.Reports;
 using UIKit;
 
 namespace Toggl.Daneel.ViewControllers
@@ -50,10 +51,28 @@ namespace Toggl.Daneel.ViewControllers
         public override void ItemSelected(UITabBar tabbar, UITabBarItem item)
         {
             var targetViewController = ViewControllers.Single(vc => vc.TabBarItem == item);
+
             if (targetViewController is UINavigationController navigationController
                 && navigationController.TopViewController is ReportsViewController)
             {
                 ViewModel.StartReportsStopwatch();
+            }
+
+            if (targetViewController == SelectedViewController
+                && tryGetScrollableController() is IScrollableToTop scrollable)
+            {
+                scrollable.ScrollToTop();
+            }
+
+            UIViewController tryGetScrollableController()
+            {
+                if (targetViewController is IScrollableToTop)
+                    return targetViewController;
+
+                if (targetViewController is UINavigationController nav)
+                    return nav.TopViewController;
+
+                return null;
             }
         }
     }

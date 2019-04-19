@@ -1,5 +1,5 @@
 ﻿using System;
-using Toggl.Foundation.Services;
+using Toggl.Core.Services;
 using Foundation;
 using Toggl.Daneel.ExtensionKit;
 

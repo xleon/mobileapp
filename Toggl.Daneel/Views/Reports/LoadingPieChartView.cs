@@ -2,11 +2,10 @@
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
-using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Core.UI.Helper;
 using UIKit;
-using static Toggl.Foundation.MvvmCross.Helper.Animation;
+using static Toggl.Core.UI.Helper.Animation;
 
 namespace Toggl.Daneel.Views.Reports
 {
@@ -18,8 +17,8 @@ namespace Toggl.Daneel.Views.Reports
         private static readonly nfloat startAngle = -0.5f * pi;
         private const double fps = 60.0;
 
-        private readonly CGColor lightColor = Color.Reports.Loading.LightColor.ToNativeColor().CGColor;
-        private readonly CGColor darkColor = Color.Reports.Loading.DarkColor.ToNativeColor().CGColor;
+        private readonly CGColor lightColor = Colors.Reports.Loading.LightColor.ToNativeColor().CGColor;
+        private readonly CGColor darkColor = Colors.Reports.Loading.DarkColor.ToNativeColor().CGColor;
 
         private CGPoint start;
         private nfloat radius;

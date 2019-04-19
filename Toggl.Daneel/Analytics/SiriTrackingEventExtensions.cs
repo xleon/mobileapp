@@ -1,7 +1,7 @@
 using System;
 using Foundation;
 using Toggl.Daneel.ExtensionKit.Analytics;
-using Toggl.Foundation.Analytics;
+using Toggl.Core.Analytics;
 
 namespace Toggl.Daneel
 {
