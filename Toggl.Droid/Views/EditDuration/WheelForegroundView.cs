@@ -111,7 +111,7 @@ namespace Toggl.Droid.Views.EditDuration
 
         public DateTimeOffset EndTime
         {
-            get => endTime;
+            get => endTime < startTime ? startTime : endTime;
             set
             {
                 if (endTime == value) return;
