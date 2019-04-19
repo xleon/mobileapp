@@ -7,8 +7,8 @@
     <ProjectGuid>{8CE4E64C-5719-4660-96AC-CF2ABA3A335E}</ProjectGuid>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Toggl.Daneel</RootNamespace>
-    <AssemblyName>Toggl.Daneel</AssemblyName>
+    <RootNamespace>Toggl.iOS</RootNamespace>
+    <AssemblyName>Toggl.iOS</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
@@ -29,7 +29,7 @@
     <MtouchLink>Full</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <MtouchExtraArgs>--linkskip Toggl.Daneel --registrar:static</MtouchExtraArgs>
+    <MtouchExtraArgs>--linkskip Toggl.iOS --registrar:static</MtouchExtraArgs>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
@@ -58,7 +58,7 @@
     <DefineConstants>__UNIFIED__;__MOBILE__;__IOS__;USE_PRODUCTION_API;USE_ANALYTICS</DefineConstants>
     <WarningLevel>4</WarningLevel>
     <CodesignKey>iPhone Distribution: Toggl OU (B227VTMZ94)</CodesignKey>
-    <MtouchExtraArgs>--linkskip Toggl.Daneel</MtouchExtraArgs>
+    <MtouchExtraArgs>--linkskip Toggl.iOS</MtouchExtraArgs>
     <MtouchFloat32>true</MtouchFloat32>
     <MtouchLink>Full</MtouchLink>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
@@ -78,7 +78,7 @@
     <WarningLevel>4</WarningLevel>
     <CodesignProvision>Daneel AdHoc</CodesignProvision>
     <CodesignKey>iPhone Distribution: Toggl OU (B227VTMZ94)</CodesignKey>
-    <MtouchExtraArgs>--linkskip Toggl.Daneel</MtouchExtraArgs>
+    <MtouchExtraArgs>--linkskip Toggl.iOS</MtouchExtraArgs>
     <MtouchVerbosity>
     </MtouchVerbosity>
     <MtouchFloat32>true</MtouchFloat32>
@@ -1843,23 +1843,23 @@
       <Project>{6AF7BE5E-AF9D-4EA7-AF7F-28D07B8DEF24}</Project>
       <Name>Toggl.Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Toggl.Daneel.IntentBinding\Toggl.Daneel.IntentBinding.csproj">
+    <ProjectReference Include="..\Toggl.iOS.IntentBinding\Toggl.iOS.IntentBinding.csproj">
       <Project>{A1BBF640-E712-4E35-8E3F-AE07C7C7EDB0}</Project>
-      <Name>Toggl.Daneel.IntentBinding</Name>
+      <Name>Toggl.iOS.IntentBinding</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Toggl.Daneel.SiriExtension\Toggl.Daneel.SiriExtension.csproj">
+    <ProjectReference Include="..\Toggl.iOS.SiriExtension\Toggl.iOS.SiriExtension.csproj">
       <IsAppExtension>true</IsAppExtension>
       <Project>{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}</Project>
-      <Name>Toggl.Daneel.SiriExtension</Name>
+      <Name>Toggl.iOS.SiriExtension</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Toggl.Daneel.ExtensionKit\Toggl.Daneel.ExtensionKit.csproj">
+    <ProjectReference Include="..\Toggl.iOS.ExtensionKit\Toggl.iOS.ExtensionKit.csproj">
       <Project>{ACA2821E-0FF9-4036-BFF6-E775BB4E6732}</Project>
-      <Name>Toggl.Daneel.ExtensionKit</Name>
+      <Name>Toggl.iOS.ExtensionKit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Toggl.Daneel.SiriExtension.UI\Toggl.Daneel.SiriExtension.UI.csproj">
+    <ProjectReference Include="..\Toggl.iOS.SiriExtension.UI\Toggl.iOS.SiriExtension.UI.csproj">
       <IsAppExtension>true</IsAppExtension>
       <Project>{BC329A24-95D6-4D02-95B5-2AA699D8873A}</Project>
-      <Name>Toggl.Daneel.SiriExtension.UI</Name>
+      <Name>Toggl.iOS.SiriExtension.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -6,8 +6,8 @@
     <ProjectGuid>{BC329A24-95D6-4D02-95B5-2AA699D8873A}</ProjectGuid>
     <ProjectTypeGuids>{EE2C853D-36AF-4FDB-B1AD-8E90477E2198};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>Toggl.Daneel.SiriExtension.UI</RootNamespace>
-    <AssemblyName>Toggl.Daneel.SiriExtension.UI</AssemblyName>
+    <RootNamespace>Toggl.iOS.SiriExtension.UI</RootNamespace>
+    <AssemblyName>Toggl.iOS.SiriExtension.UI</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
@@ -128,13 +128,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Toggl.Daneel.IntentBinding\Toggl.Daneel.IntentBinding.csproj">
+    <ProjectReference Include="..\Toggl.iOS.IntentBinding\Toggl.iOS.IntentBinding.csproj">
       <Project>{A1BBF640-E712-4E35-8E3F-AE07C7C7EDB0}</Project>
-      <Name>Toggl.Daneel.IntentBinding</Name>
+      <Name>Toggl.iOS.IntentBinding</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Toggl.Daneel.ExtensionKit\Toggl.Daneel.ExtensionKit.csproj">
+    <ProjectReference Include="..\Toggl.iOS.ExtensionKit\Toggl.iOS.ExtensionKit.csproj">
       <Project>{ACA2821E-0FF9-4036-BFF6-E775BB4E6732}</Project>
-      <Name>Toggl.Daneel.ExtensionKit</Name>
+      <Name>Toggl.iOS.ExtensionKit</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.AppExtension.CSharp.targets" />

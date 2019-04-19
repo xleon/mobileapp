@@ -6,8 +6,8 @@
     <ProjectGuid>{ACA2821E-0FF9-4036-BFF6-E775BB4E6732}</ProjectGuid>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>Toggl.Daneel.ExtensionKit</RootNamespace>
-    <AssemblyName>Toggl.Daneel.ExtensionKit</AssemblyName>
+    <RootNamespace>Toggl.iOS.ExtensionKit</RootNamespace>
+    <AssemblyName>Toggl.iOS.ExtensionKit</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -61,12 +61,12 @@
     <Compile Include="Extensions\UserActivityExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="..\Toggl.Daneel.IntentCodeGen\Toggl.Daneel.IntentCodeGen\en.lproj\Intents.strings">
+    <BundleResource Include="..\Toggl.iOS.IntentCodeGen\Toggl.iOS.IntentCodeGen\en.lproj\Intents.strings">
       <Link>en.lproj\Intents.strings</Link>
     </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Toggl.Daneel.IntentCodeGen\Toggl.Daneel.IntentCodeGen\Base.lproj\Intents.intentdefinition">
+    <Content Include="..\Toggl.iOS.IntentCodeGen\Toggl.iOS.IntentCodeGen\Base.lproj\Intents.intentdefinition">
       <Link>Base.lproj\Intents.intentdefinition</Link>
     </Content>
   </ItemGroup>
