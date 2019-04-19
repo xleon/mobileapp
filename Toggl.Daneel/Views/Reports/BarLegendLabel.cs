@@ -1,6 +1,6 @@
 ﻿using UIKit;
-using Toggl.Foundation.MvvmCross.Helper;
-using MvvmCross.Plugin.Color.Platforms.Ios;
+using Toggl.Core.UI.Helper;
+using Toggl.Daneel.Extensions;
 
 namespace Toggl.Daneel.Views.Reports
 {
@@ -11,7 +11,7 @@ namespace Toggl.Daneel.Views.Reports
             Text = $"{dayInitial}\n{shortDate}";
             TextAlignment = UITextAlignment.Center;
             Lines = 2;
-            TextColor = Color.Reports.BarChart.Legend.ToNativeColor();
+            TextColor = Colors.Reports.BarChart.Legend.ToNativeColor();
             Font = UIFont.SystemFontOfSize(12);
             AdjustsFontSizeToFitWidth = true;
         }

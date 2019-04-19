@@ -1,14 +1,11 @@
-﻿using MvvmCross;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using MvvmCross.Plugin.Color.Platforms.Ios;
+using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
 using Toggl.Daneel.ViewSources;
-using Toggl.Foundation.MvvmCross.ViewModels.Settings;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
-using Color = Toggl.Foundation.MvvmCross.Helper.Color;
-using FoundationResources = Toggl.Foundation.Resources;
+using Toggl.Shared.Extensions;
+using Colors = Toggl.Core.UI.Helper.Colors;
+using FoundationResources = Toggl.Core.Resources;
 
 namespace Toggl.Daneel.ViewControllers.Settings
 {
@@ -17,11 +14,9 @@ namespace Toggl.Daneel.ViewControllers.Settings
     {
         private const int tableViewHeaderHeight = 106;
 
-        private readonly ISchedulerProvider schedulerProvider;
-
-        public CalendarSettingsViewController() : base(nameof(CalendarSettingsViewController))
+        public CalendarSettingsViewController()
+            : base(nameof(CalendarSettingsViewController))
         {
-            schedulerProvider = Mvx.Resolve<ISchedulerProvider>();
         }
 
         public override void ViewDidLoad()
@@ -38,7 +33,7 @@ namespace Toggl.Daneel.ViewControllers.Settings
             header.SetCalendarPermissionStatus(ViewModel.PermissionGranted);
 
             var source = new SelectUserCalendarsTableViewSource(UserCalendarsTableView);
-            source.SectionHeaderBackgroundColor = Color.Settings.Background.ToNativeColor();
+            source.SectionHeaderBackgroundColor = Colors.Settings.Background.ToNativeColor();
             UserCalendarsTableView.Source = source;
 
             ViewModel.Calendars

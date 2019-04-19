@@ -6,31 +6,28 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Foundation;
 using Intents;
-using MvvmCross;
-using MvvmCross.Navigation;
 using MvvmCross.Platforms.Ios.Core;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Intents;
 using Toggl.Daneel.Services;
 using Toggl.Daneel.ViewControllers;
-using Toggl.Foundation;
-using Toggl.Foundation.Analytics;
-using Toggl.Foundation.Extensions;
-using Toggl.Foundation.Interactors;
-using Toggl.Foundation.Models.Interfaces;
-using Toggl.Foundation.MvvmCross;
-using Toggl.Foundation.MvvmCross.Helper;
-using Toggl.Foundation.MvvmCross.Parameters;
-using Toggl.Foundation.MvvmCross.ViewModels;
-using Toggl.Foundation.MvvmCross.ViewModels.Calendar;
-using Toggl.Foundation.MvvmCross.ViewModels.Reports;
-using Toggl.Foundation.Services;
-using Toggl.Foundation.Shortcuts;
-using Toggl.Multivac.Extensions;
+using Toggl.Core;
+using Toggl.Core.Analytics;
+using Toggl.Core.Extensions;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.UI;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.Core.Services;
+using Toggl.Core.Shortcuts;
+using Toggl.Shared.Extensions;
 using UIKit;
 using UserNotifications;
-using AdjustBindingsiOS;
 
 namespace Toggl.Daneel
 {
@@ -39,7 +36,7 @@ namespace Toggl.Daneel
     {
         private IAnalyticsService analyticsService;
         private IBackgroundService backgroundService;
-        private IMvxNavigationService navigationService;
+        private INavigationService navigationService;
         private ITimeService timeService;
 
         public override UIWindow Window { get; set; }
@@ -74,10 +71,12 @@ namespace Toggl.Daneel
         {
             base.RunAppStart(hint);
 
-            analyticsService = Mvx.Resolve<IAnalyticsService>();
-            backgroundService = Mvx.Resolve<IBackgroundService>();
-            navigationService = Mvx.Resolve<IMvxNavigationService>();
-            timeService = Mvx.Resolve<ITimeService>();
+            var container = IosDependencyContainer.Instance;
+
+            timeService = container.TimeService;
+            analyticsService = container.AnalyticsService;
+            backgroundService = container.BackgroundService;
+            navigationService = container.NavigationService;
             setupNavigationBar();
             setupTabBar();
         }
@@ -152,7 +151,7 @@ namespace Toggl.Daneel
             {
                 case ShortcutType.ContinueLastTimeEntry:
                     navigationService.Navigate<MainViewModel>();
-                    var interactorFactory = Mvx.Resolve<IInteractorFactory>();
+                    var interactorFactory = IosDependencyContainer.Instance.InteractorFactory;
                     if (interactorFactory == null) return;
                     IDisposable subscription = null;
                     subscription = interactorFactory
@@ -239,7 +238,7 @@ namespace Toggl.Daneel
 
         private void setupTabBar()
         {
-            UITabBar.Appearance.SelectedImageTintColor = Color.TabBar.SelectedImageTintColor.ToNativeColor();
+            UITabBar.Appearance.SelectedImageTintColor = Colors.TabBar.SelectedImageTintColor.ToNativeColor();
             UITabBarItem.Appearance.TitlePositionAdjustment = new UIOffset(0, 200);
         }
 
@@ -249,7 +248,7 @@ namespace Toggl.Daneel
             var attributes = new UITextAttributes
             {
                 Font = UIFont.SystemFontOfSize(14, UIFontWeight.Medium),
-                TextColor = Color.NavigationBar.BackButton.ToNativeColor()
+                TextColor = Colors.NavigationBar.BackButton.ToNativeColor()
             };
             UIBarButtonItem.Appearance.SetTitleTextAttributes(attributes, UIControlState.Normal);
             UIBarButtonItem.Appearance.SetTitleTextAttributes(attributes, UIControlState.Highlighted);
@@ -261,11 +260,11 @@ namespace Toggl.Daneel
             UINavigationBar.Appearance.BackIndicatorTransitionMaskImage = image;
 
             //Title and background
-            var barBackgroundColor = Color.NavigationBar.BackgroundColor.ToNativeColor();
+            var barBackgroundColor = Colors.NavigationBar.BackgroundColor.ToNativeColor();
             UINavigationBar.Appearance.ShadowImage = new UIImage();
             UINavigationBar.Appearance.BarTintColor = barBackgroundColor;
             UINavigationBar.Appearance.BackgroundColor = barBackgroundColor;
-            UINavigationBar.Appearance.TintColor = Color.NavigationBar.BackButton.ToNativeColor();
+            UINavigationBar.Appearance.TintColor = Colors.NavigationBar.BackButton.ToNativeColor();
             UINavigationBar.Appearance.SetBackgroundImage(ImageExtension.ImageWithColor(barBackgroundColor), UIBarMetrics.Default);
             UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
             {
@@ -279,13 +278,20 @@ namespace Toggl.Daneel
             lastUpdateDateDisposable.Dispose();
             lastUpdateDateDisposable = new CompositeDisposable();
 
-            if (Mvx.TryResolve<IInteractorFactory>(out var interactorFactory) && Mvx.TryResolve<IPrivateSharedStorageService>(out var privateSharedStorage))
+            try
             {
+                var interactorFactory = IosDependencyContainer.Instance.InteractorFactory;
+                var privateSharedStorage = IosDependencyContainer.Instance.PrivateSharedStorageService;
+
                 interactorFactory.ObserveTimeEntriesChanges().Execute().StartWith(default(Unit))
                     .SelectMany(interactorFactory.GetAllTimeEntriesVisibleToTheUser().Execute())
                     .Select(timeEntries => timeEntries.OrderBy(te => te.At).Last().At)
                     .Subscribe(privateSharedStorage.SaveLastUpdateDate)
                     .DisposedBy(lastUpdateDateDisposable);
+            }
+            catch (Exception)
+            {
+                // Ignore errors when logged out
             }
         }
 
@@ -307,8 +313,8 @@ namespace Toggl.Daneel
 
         private void startTimeEntryInBackground(string eventId, Action completionHandler)
         {
-            var interactorFactory = Mvx.Resolve<IInteractorFactory>();
-            var timeService = Mvx.Resolve<ITimeService>();
+            var timeService = IosDependencyContainer.Instance.TimeService;
+            var interactorFactory = IosDependencyContainer.Instance.InteractorFactory;
 
             Task.Run(async () =>
             {
@@ -331,21 +337,21 @@ namespace Toggl.Daneel
 
         public override void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
         {
-            var interactorFactory = Mvx.Resolve<IInteractorFactory>();
+            var interactorFactory = IosDependencyContainer.Instance.InteractorFactory;
             interactorFactory?.RunBackgroundSync()
                 .Execute()
                 .Select(mapToNativeOutcomes)
                 .Subscribe(completionHandler);
         }
 
-        private UIBackgroundFetchResult mapToNativeOutcomes(Foundation.Models.SyncOutcome outcome) {
+        private UIBackgroundFetchResult mapToNativeOutcomes(Core.Models.SyncOutcome outcome) {
             switch (outcome)
             {
-                case Foundation.Models.SyncOutcome.NewData:
+                case Core.Models.SyncOutcome.NewData:
                     return UIBackgroundFetchResult.NewData;
-                case Foundation.Models.SyncOutcome.NoData:
+                case Core.Models.SyncOutcome.NoData:
                     return UIBackgroundFetchResult.NoData;
-                case Foundation.Models.SyncOutcome.Failed:
+                case Core.Models.SyncOutcome.Failed:
                     return UIBackgroundFetchResult.Failed;
                 default:
                     return UIBackgroundFetchResult.Failed;

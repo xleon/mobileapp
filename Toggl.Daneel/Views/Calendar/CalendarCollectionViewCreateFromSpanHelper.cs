@@ -5,9 +5,9 @@ using System.Reactive.Subjects;
 using CoreGraphics;
 using Foundation;
 using Toggl.Daneel.ViewSources;
-using Toggl.Foundation.Helper;
-using Toggl.Multivac;
-using Toggl.Multivac.Extensions;
+using Toggl.Core.Helper;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.Views.Calendar

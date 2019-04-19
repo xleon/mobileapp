@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reactive.Linq;
 using EventKit;
 using Toggl.Daneel.Extensions;
-using Toggl.Foundation.Calendar;
-using Toggl.Foundation.MvvmCross.Services;
-using Toggl.Multivac;
+using Toggl.Core.Calendar;
+using Toggl.Core.UI.Services;
+using Toggl.Shared;
 
 namespace Toggl.Daneel.Services
 {

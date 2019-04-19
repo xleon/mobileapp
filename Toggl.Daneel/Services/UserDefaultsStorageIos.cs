@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Foundation;
-using Toggl.Foundation.Services;
+using Toggl.Core.Services;
 
 namespace Toggl.Daneel.Services
 {

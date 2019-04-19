@@ -2,11 +2,11 @@
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Plugin.Color.Platforms.Ios;
 using ObjCRuntime;
-using Toggl.Foundation.MvvmCross.Helper;
+using Toggl.Core.UI.Helper;
+using Toggl.Daneel.Extensions;
 using UIKit;
-using static Toggl.Multivac.Math;
+using static Toggl.Shared.Math;
 
 namespace Toggl.Daneel
 {
@@ -20,13 +20,13 @@ namespace Toggl.Daneel
 
         private readonly nfloat grayPercent = 0.13f;
 
-        private readonly CGColor blueColor = Color.Onboarding.BlueColor.ToNativeColor().CGColor;
+        private readonly CGColor blueColor = Colors.Onboarding.BlueColor.ToNativeColor().CGColor;
 
-        private readonly CGColor purpleColor = Color.Onboarding.PurpleColor.ToNativeColor().CGColor;
+        private readonly CGColor purpleColor = Colors.Onboarding.PurpleColor.ToNativeColor().CGColor;
 
-        private readonly CGColor yellowColor = Color.Onboarding.YellowColor.ToNativeColor().CGColor;
+        private readonly CGColor yellowColor = Colors.Onboarding.YellowColor.ToNativeColor().CGColor;
 
-        private readonly CGColor grayColor = Color.Onboarding.GrayColor.ToNativeColor().CGColor;
+        private readonly CGColor grayColor = Colors.Onboarding.GrayColor.ToNativeColor().CGColor;
 
         private CAShapeLayer blueSegment;
 

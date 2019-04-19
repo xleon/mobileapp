@@ -1,5 +1,5 @@
 using Toggl.Daneel.Intents;
-using Toggl.Foundation.Services;
+using Toggl.Core.Services;
 
 namespace Toggl.Daneel.Extensions
 {

@@ -71,7 +71,7 @@ In the example above, the following will happen:
 Extensions are usually platform independent and located at `Toggl.Tests.UI/Extensions`, but sometimes you'll need to write an extension that behaves differently on iOS and Android. 
 The suggested way of writing extensions for that case is to create one extension in Android and another in iOS.
 All you have to do is to add the same extension in Android and iOS, but with different implementations.
-You'll add the Android version on: `Toggl.Giskard.Tests.UI/Extensions` and the iOS version on `Toggl.Daneel.Tests.UI/Extensions`.
+You'll add the Android version on: `Toggl.Droid.Tests.UI/Extensions` and the iOS version on `Toggl.Daneel.Tests.UI/Extensions`.
 Ex:
 
 For iOS, in `Toggl.Daneel.Tests.UI/Extensions`:
@@ -89,7 +89,7 @@ namespace Toggl.Tests.UI.Extensions
 }
 ```
 
-For Android, in `Toggl.Giskard.Tests.UI/Extensions`:
+For Android, in `Toggl.Droid.Tests.UI/Extensions`:
 
 ```cs
 namespace Toggl.Tests.UI.Extensions

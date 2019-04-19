@@ -2,8 +2,8 @@
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Toggl.Foundation.MvvmCross.Reactive;
-using Toggl.Multivac.Extensions;
+using Toggl.Core.UI.Reactive;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.Daneel.Extensions.Reactive
