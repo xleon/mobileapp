@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using AdjustBindingsiOS;
 using Foundation;
 using Intents;
 using MvvmCross.Platforms.Ios.Core;
