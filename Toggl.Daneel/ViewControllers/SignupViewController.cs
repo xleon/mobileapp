@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using AdjustBindingsiOS;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Extensions.Reactive;
