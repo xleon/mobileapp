@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using Toggl.Core.UI.Reactive;
 using UIKit;
 
-namespace Toggl.Daneel.Extensions.Reactive
+namespace Toggl.iOS.Extensions.Reactive
 {
     public static class UITextFieldExtensions
     {

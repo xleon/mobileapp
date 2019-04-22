@@ -7,10 +7,6 @@ using System.Threading.Tasks;
 using Foundation;
 using Intents;
 using MvvmCross.Platforms.Ios.Core;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Intents;
-using Toggl.Daneel.Services;
-using Toggl.Daneel.ViewControllers;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
@@ -25,11 +21,15 @@ using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Intents;
+using Toggl.iOS.Services;
+using Toggl.iOS.ViewControllers;
 using Toggl.Shared.Extensions;
 using UIKit;
 using UserNotifications;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     [Register(nameof(AppDelegate))]
     public sealed class AppDelegate : MvxApplicationDelegate<Setup, App<OnboardingViewModel>>, IUNUserNotificationCenterDelegate

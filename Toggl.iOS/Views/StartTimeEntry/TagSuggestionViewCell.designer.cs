@@ -8,7 +8,7 @@ using Foundation;
 using System;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     [Register ("TagSuggestionViewCell")]
     partial class TagSuggestionViewCell

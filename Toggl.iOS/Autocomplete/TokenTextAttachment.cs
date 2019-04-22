@@ -3,7 +3,7 @@ using CoreGraphics;
 using Foundation;
 using UIKit;
 
-namespace Toggl.Daneel.Autocomplete
+namespace Toggl.iOS.Autocomplete
 {
     public abstract class TokenTextAttachment : NSTextAttachment
     {

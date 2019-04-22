@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
 	[Register ("LogPage")]
 	partial class MostUsedPage
@@ -20,7 +20,7 @@ namespace Toggl.Daneel
 
 		[Outlet]
 		UIKit.UIView ThirdCell { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (FirstCell != null) {

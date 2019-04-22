@@ -1,8 +1,8 @@
 ﻿using UIKit;
 using Toggl.Core.UI.Helper;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
     internal sealed class BarLegendLabel : UILabel
     {

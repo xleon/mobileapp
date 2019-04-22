@@ -2,7 +2,7 @@
 using Foundation;
 using Toggl.Core;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public sealed class PlatformInfoIos : BasePlatformInfo
     {

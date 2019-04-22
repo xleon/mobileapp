@@ -3,7 +3,7 @@ using System.Linq;
 using Foundation;
 using Toggl.Shared.Models;
 
-namespace Toggl.Daneel.ExtensionKit.Analytics
+namespace Toggl.iOS.ExtensionKit.Analytics
 {
     public enum SiriTrackingEventType
     {

@@ -3,10 +3,10 @@ using System.Linq;
 using System.Reactive.Linq;
 using Foundation;
 using SiriExtension.Models;
-using Toggl.Daneel.ExtensionKit;
-using Toggl.Daneel.ExtensionKit.Analytics;
-using Toggl.Daneel.ExtensionKit.Extensions;
-using Toggl.Daneel.Intents;
+using Toggl.iOS.ExtensionKit;
+using Toggl.iOS.ExtensionKit.Analytics;
+using Toggl.iOS.ExtensionKit.Extensions;
+using Toggl.iOS.Intents;
 using Toggl.Shared.Models;
 using Toggl.Networking;
 

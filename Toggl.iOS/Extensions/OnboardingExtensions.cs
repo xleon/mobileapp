@@ -6,12 +6,12 @@ using Toggl.Core.UI.Helper;
 using Toggl.Storage.Settings;
 using Toggl.Storage.Extensions;
 using System.Reactive.Linq;
-using Toggl.Daneel.Views;
 using static System.Math;
 using System.Reactive.Disposables;
 using System.Threading;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.iOS.Extensions
 {
     public static class Onboarding
     {

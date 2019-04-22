@@ -4,14 +4,14 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.ViewSources;
+using Toggl.iOS.ViewSources;
 using Toggl.Core.Helper;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 using Math = System.Math;
 
-namespace Toggl.Daneel.Views.Calendar
+namespace Toggl.iOS.Views.Calendar
 {
     public sealed class CalendarCollectionViewZoomHelper : NSObject, IUIGestureRecognizerDelegate
     {

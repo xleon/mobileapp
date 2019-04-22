@@ -1,15 +1,15 @@
 ﻿using System;
 using Foundation;
-using Toggl.Daneel.Cells;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Shared;
-using Toggl.Daneel.Extensions.Reactive;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Shared.Extensions;
 using UIKit;
 using System.Reactive.Disposables;
+using Toggl.iOS.Cells;
 
-namespace Toggl.Daneel.Views.StartTimeEntry
+namespace Toggl.iOS.Views.StartTimeEntry
 {
     public sealed partial class ReactiveProjectSuggestionViewCell : BaseTableViewCell<AutocompleteSuggestion>
     {

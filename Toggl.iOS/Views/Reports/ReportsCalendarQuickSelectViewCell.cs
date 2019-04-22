@@ -3,10 +3,10 @@ using Foundation;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
     public sealed partial class ReportsCalendarQuickSelectViewCell : ReactiveCollectionViewCell<ReportsCalendarBaseQuickSelectShortcut>
     {

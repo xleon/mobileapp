@@ -1,20 +1,20 @@
 ﻿using System;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Presentation.Attributes;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Presentation.Attributes;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     [ModalDialogPresentation]
     public partial class SelectDateTimeViewController : ReactiveViewController<SelectDateTimeViewModel>
     {
-        public SelectDateTimeViewController() 
+        public SelectDateTimeViewController()
             : base(nameof(SelectDateTimeViewController))
         {
         }

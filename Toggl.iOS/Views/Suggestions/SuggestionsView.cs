@@ -3,9 +3,9 @@ using Toggl.Core;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.Suggestions;
 using UIKit;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 
-namespace Toggl.Daneel.Suggestions
+namespace Toggl.iOS.Suggestions
 {
     public sealed class SuggestionsView: UIView
     {

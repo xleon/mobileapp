@@ -4,7 +4,7 @@ using CoreGraphics;
 using Foundation;
 using UIKit;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public class ReportsCalendarCollectionViewLayout : UICollectionViewLayout
     {

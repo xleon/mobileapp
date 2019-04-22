@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views.Tag
+namespace Toggl.iOS.Views.Tag
 {
 	[Register ("NewTagViewCell")]
 	partial class NewTagViewCell
@@ -17,7 +17,7 @@ namespace Toggl.Daneel.Views.Tag
 
 		[Outlet]
 		UIKit.UILabel TextLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (TextLabel != null) {

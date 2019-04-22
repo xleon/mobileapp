@@ -1,9 +1,9 @@
 using System;
 using System.Reactive.Linq;
-using Toggl.Daneel.Views.EditDuration;
 using Toggl.Core.UI.Reactive;
+using Toggl.iOS.Views.EditDuration;
 
-namespace Toggl.Daneel.Extensions.Reactive
+namespace Toggl.iOS.Extensions.Reactive
 {
     public static class DurationFieldExtensions
     {

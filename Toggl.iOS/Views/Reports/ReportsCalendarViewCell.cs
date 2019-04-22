@@ -3,10 +3,10 @@ using Foundation;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     public sealed partial class ReportsCalendarViewCell : ReactiveCollectionViewCell<ReportsCalendarDayViewModel>
     {

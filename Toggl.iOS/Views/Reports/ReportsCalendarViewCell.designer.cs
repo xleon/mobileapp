@@ -7,20 +7,20 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
 	[Register ("ReportsCalendarViewCell")]
 	partial class ReportsCalendarViewCell
 	{
 		[Outlet]
-		Toggl.Daneel.Views.RoundedView BackgroundView { get; set; }
+		RoundedView BackgroundView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel Text { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.RoundedView TodayBackgroundView { get; set; }
-		
+		RoundedView TodayBackgroundView { get; set; }
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (BackgroundView != null) {

@@ -6,8 +6,9 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("SettingsViewController")]
 	partial class SettingsViewController
@@ -91,7 +92,7 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIView HelpView { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.ActivityIndicatorView LoggingOutActivityIndicatorView { get; set; }
+		ActivityIndicatorView LoggingOutActivityIndicatorView { get; set; }
 
 		[Outlet]
 		UIKit.UIImageView LoggingOutIndicator { get; set; }
@@ -149,7 +150,7 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIView SyncedView { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.ActivityIndicatorView SyncingActivityIndicatorView { get; set; }
+		ActivityIndicatorView SyncingActivityIndicatorView { get; set; }
 
 		[Outlet]
 		UIKit.UIImageView SyncingIndicator { get; set; }
@@ -186,7 +187,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.UILabel YourProfileCellLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (AboutCellLabel != null) {

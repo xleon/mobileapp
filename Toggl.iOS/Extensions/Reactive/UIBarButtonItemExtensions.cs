@@ -5,7 +5,7 @@ using Toggl.Core.UI.Reactive;
 using UIKit;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.iOS.Extensions
 {
     public static class UIBarButtonItemExtensions
     {

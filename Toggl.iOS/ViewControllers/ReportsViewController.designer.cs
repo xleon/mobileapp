@@ -6,8 +6,9 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("ReportsViewController")]
 	partial class ReportsViewController
@@ -34,11 +35,11 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIView WorkspaceButton { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.FadeView WorkspaceFadeView { get; set; }
+		FadeView WorkspaceFadeView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel WorkspaceLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (BarChartsContainerView != null) {

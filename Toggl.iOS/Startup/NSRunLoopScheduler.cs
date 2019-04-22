@@ -4,7 +4,7 @@ using System.Reactive.Disposables;
 using CoreFoundation;
 using Foundation;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public sealed class NSRunloopScheduler : IScheduler
     {
@@ -14,14 +14,14 @@ namespace Toggl.Daneel
         {
             var innerDisp = new SingleAssignmentDisposable();
 
-            DispatchQueue.MainQueue.DispatchAsync(() => 
+            DispatchQueue.MainQueue.DispatchAsync(() =>
             {
                 if (innerDisp.IsDisposed)
                     return;
 
                 innerDisp.Disposable = action(this, state);
             });
-            
+
             return innerDisp;
         }
 
@@ -29,7 +29,7 @@ namespace Toggl.Daneel
         {
             if (dueTime <= Now)
                 return Schedule(state, action);
-            
+
             return Schedule(state, dueTime - Now, action);
         }
 
@@ -38,15 +38,15 @@ namespace Toggl.Daneel
             var innerDisp = Disposable.Empty;
             var isCancelled = false;
 
-            var timer = NSTimer.CreateScheduledTimer(dueTime, _ => 
+            var timer = NSTimer.CreateScheduledTimer(dueTime, _ =>
             {
                 if (isCancelled)
                     return;
 
                 innerDisp = action(this, state);
             });
-            
-            return Disposable.Create(() => 
+
+            return Disposable.Create(() =>
             {
                 isCancelled = true;
                 timer.Invalidate();

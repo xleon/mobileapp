@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("OnboardingView")]
 	partial class OnboardingViewController
@@ -71,7 +71,7 @@ namespace Toggl.Daneel.ViewControllers
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UILabel ThirdPageLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (BackgroundImage != null) {

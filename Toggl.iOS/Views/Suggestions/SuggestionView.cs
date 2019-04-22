@@ -4,10 +4,10 @@ using UIKit;
 using ObjCRuntime;
 using CoreGraphics;
 using Toggl.Core.Suggestions;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Shared;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public sealed partial class SuggestionView : UIView
     {

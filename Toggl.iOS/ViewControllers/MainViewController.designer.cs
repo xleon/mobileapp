@@ -6,8 +6,9 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("MainViewController")]
 	partial class MainViewController
@@ -38,7 +39,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		Toggl.Daneel.Views.FadeView RunningEntryDescriptionFadeView { get; set; }
+		FadeView RunningEntryDescriptionFadeView { get; set; }
 
 		[Outlet]
 		UIKit.UIView SendFeedbackSuccessView { get; set; }
@@ -91,7 +92,7 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UILabel TapToStopTimerLabel { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.TimeEntriesLogTableView TimeEntriesLogTableView { get; set; }
+		TimeEntriesLogTableView TimeEntriesLogTableView { get; set; }
 
 		[Outlet]
 		UIKit.NSLayoutConstraint TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint { get; set; }
@@ -110,7 +111,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.UIView WelcomeBackView { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (CurrentTimeEntryProjectTaskClientLabel != null) {

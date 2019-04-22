@@ -1,4 +1,4 @@
-﻿namespace Toggl.Daneel.Views.Interfaces
+﻿namespace Toggl.iOS.Views.Interfaces
 {
     public interface IHeaderViewCellWithHideableTopSeparator
     {

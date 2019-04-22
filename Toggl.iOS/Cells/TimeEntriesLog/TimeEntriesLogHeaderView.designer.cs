@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     [Register ("TimeEntriesLogHeaderView")]
 	partial class TimeEntriesLogHeaderView
@@ -22,7 +22,7 @@ namespace Toggl.Daneel.Views
 
 		[Outlet]
 		UIKit.UIView TopSeparator { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (DateLabel != null) {

@@ -3,7 +3,7 @@ using System;
 using Toggl.Core.UI.Helper;
 using Toggl.Shared;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.iOS.Extensions
 {
     public static class LayoutConstraintExtensions
     {

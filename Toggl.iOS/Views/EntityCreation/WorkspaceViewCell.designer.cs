@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
 	[Register ("WorkspaceViewCell")]
 	partial class WorkspaceViewCell
@@ -17,7 +17,7 @@ namespace Toggl.Daneel.Views
 
 		[Outlet]
 		UIKit.UIImageView SelectedImage { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (NameLabel != null) {

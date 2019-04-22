@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
 using Toggl.Core.UI.Helper;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.ViewControllers;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.ViewControllers;
 using Toggl.Shared;
 using UIKit;
 using static System.Math;
 
-namespace Toggl.Daneel.Presentation.Transition
+namespace Toggl.iOS.Presentation.Transition
 {
     public sealed class ModalPresentationController : UIPresentationController
     {

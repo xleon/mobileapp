@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("ReportsCalendarViewController")]
 	partial class ReportsCalendarViewController
@@ -47,7 +47,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.UICollectionViewFlowLayout QuickSelectCollectionViewLayout { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (CalendarCollectionView != null) {

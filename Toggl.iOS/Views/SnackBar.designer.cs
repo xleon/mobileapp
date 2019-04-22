@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
 	[Register ("SnackBar")]
 	partial class SnackBar
@@ -20,7 +20,7 @@ namespace Toggl.Daneel
 
 		[Outlet]
 		UIKit.UIStackView stackView { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (label != null) {

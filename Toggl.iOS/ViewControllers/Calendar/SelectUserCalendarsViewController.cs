@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Reactive.Linq;
 using CoreGraphics;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Presentation.Attributes;
-using Toggl.Daneel.ViewSources;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.iOS.Presentation.Attributes;
+using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.ViewControllers.Calendar
+namespace Toggl.iOS.ViewControllers.Calendar
 {
     [ModalDialogPresentation]
     public sealed partial class SelectUserCalendarsViewController

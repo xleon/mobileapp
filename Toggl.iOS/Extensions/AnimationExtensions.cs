@@ -5,7 +5,7 @@ using CoreGraphics;
 using UIKit;
 using static Toggl.Core.UI.Helper.Animation;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.iOS.Extensions
 {
     public static class AnimationExtensions
     {

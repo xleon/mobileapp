@@ -4,13 +4,13 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.ViewSources;
 using Toggl.Core.Helper;
+using Toggl.iOS.ViewSources;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Views.Calendar
+namespace Toggl.iOS.Views.Calendar
 {
     public sealed class CalendarCollectionViewCreateFromSpanHelper : CalendarCollectionViewAutoScrollHelper, IUIGestureRecognizerDelegate
     {

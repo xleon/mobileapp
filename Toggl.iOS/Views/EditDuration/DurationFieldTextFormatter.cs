@@ -1,10 +1,10 @@
 ﻿using Foundation;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Shared;
 using UIKit;
 using Colors = Toggl.Core.UI.Helper.Colors;
 
-namespace Toggl.Daneel.Views.EditDuration
+namespace Toggl.iOS.Views.EditDuration
 {
     public static class DurationFieldTextFormatter
     {

@@ -1,6 +1,4 @@
 ﻿using System;
-using Toggl.Daneel.Presentation;
-using Toggl.Daneel.Services;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
@@ -17,8 +15,10 @@ using Toggl.Storage.Settings;
 using Toggl.Networking;
 using Toggl.Networking.Network;
 using Toggl.Core.UI.Navigation;
+using Toggl.iOS.Presentation;
+using Toggl.iOS.Services;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public sealed class IosDependencyContainer : UIDependencyContainer
     {
@@ -28,7 +28,7 @@ namespace Toggl.Daneel
 
         public TogglPresenter ViewPresenter { get; }
         public INavigationService MvxNavigationService { get; internal set; }
-        
+
         public new static IosDependencyContainer Instance { get; private set; }
 
         public static void EnsureInitialized(TogglPresenter viewPresenter, ApiEnvironment environment, Platform platform, string version)

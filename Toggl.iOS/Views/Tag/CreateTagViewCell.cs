@@ -1,11 +1,11 @@
 ﻿using System;
 
 using Foundation;
-using Toggl.Daneel.Cells;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Cells;
 using UIKit;
 
-namespace Toggl.Daneel.Views.Tag
+namespace Toggl.iOS.Views.Tag
 {
     public partial class CreateTagViewCell : BaseTableViewCell<SelectableTagBaseViewModel>
     {

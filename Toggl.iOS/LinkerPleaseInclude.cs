@@ -4,9 +4,9 @@ using MvvmCross.Binding.BindingContext;
 using MvvmCross.IoC;
 using MvvmCross.ViewModels;
 using Newtonsoft.Json.Converters;
-using Toggl.Daneel.Views;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     // This class is never actually executed, but when Xamarin linking is enabled it does ensure types and properties
     // are preserved in the deployed app

@@ -1,7 +1,7 @@
 ﻿using Firebase.PerformanceMonitoring;
 using Toggl.Core.Diagnostics;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     public sealed class FirebaseStopwatchProviderIos : BaseStopwatchProvider
     {

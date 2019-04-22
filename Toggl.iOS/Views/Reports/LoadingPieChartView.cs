@@ -2,12 +2,12 @@
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Core.UI.Helper;
 using UIKit;
 using static Toggl.Core.UI.Helper.Animation;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
     [Register(nameof(LoadingPieChartView))]
     public sealed class LoadingPieChartView : UIView

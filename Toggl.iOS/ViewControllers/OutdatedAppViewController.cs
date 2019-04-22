@@ -1,12 +1,12 @@
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     [MvxRootPresentation]
     public sealed partial class OutdatedAppViewController : ReactiveViewController<OutdatedAppViewModel>

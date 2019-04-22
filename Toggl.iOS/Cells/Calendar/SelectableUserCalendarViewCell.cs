@@ -1,10 +1,10 @@
 ﻿using System;
 using Foundation;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Core.UI.ViewModels.Selectable;
 using UIKit;
 
-namespace Toggl.Daneel.Cells.Calendar
+namespace Toggl.iOS.Cells.Calendar
 {
     public sealed partial class SelectableUserCalendarViewCell : BaseTableViewCell<SelectableUserCalendarViewModel>
     {

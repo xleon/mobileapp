@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("TermsOfServiceViewController")]
 	partial class TermsOfServiceViewController
@@ -23,7 +23,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (AcceptButton != null) {

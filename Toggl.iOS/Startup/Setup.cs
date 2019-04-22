@@ -9,10 +9,10 @@ using Toggl.Core;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Daneel.Presentation;
+using Toggl.iOS.Presentation;
 using Toggl.Networking;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public partial class Setup : MvxIosSetup<App<OnboardingViewModel>>
     {

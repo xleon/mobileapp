@@ -1,12 +1,12 @@
 ﻿using System;
 using Foundation;
-using Toggl.Daneel.Cells;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.UI.Helper;
+using Toggl.iOS.Cells;
 using UIKit;
 
-namespace Toggl.Daneel.Views.EntityCreation
+namespace Toggl.iOS.Views.EntityCreation
 {
     public sealed partial class CreateEntityViewCell : BaseTableViewCell<CreateEntitySuggestion>
     {

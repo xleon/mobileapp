@@ -1,7 +1,7 @@
 ﻿using System;
 using Toggl.Shared;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.iOS.Extensions
 {
     public static class NotificationExtensions
     {

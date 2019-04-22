@@ -6,14 +6,15 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("LoginView")]
 	partial class LoginViewController
 	{
 		[Outlet]
-		Toggl.Daneel.Views.ActivityIndicatorView ActivityIndicator { get; set; }
+		ActivityIndicatorView ActivityIndicator { get; set; }
 
 		[Outlet]
 		UIKit.UILabel DontHaveAnAccountLabel { get; set; }
@@ -23,7 +24,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		Toggl.Daneel.Views.LoginTextField EmailTextField { get; set; }
+		LoginTextField EmailTextField { get; set; }
 
 		[Outlet]
 		UIKit.UILabel ErrorLabel { get; set; }
@@ -49,7 +50,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		Toggl.Daneel.Views.LoginTextField PasswordTextField { get; set; }
+		LoginTextField PasswordTextField { get; set; }
 
 		[Outlet]
 		UIKit.UIButton ShowPasswordButton { get; set; }
@@ -62,7 +63,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.NSLayoutConstraint TopConstraint { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (ActivityIndicator != null) {

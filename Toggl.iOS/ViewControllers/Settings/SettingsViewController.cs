@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reactive.Linq;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
@@ -11,7 +11,7 @@ using Toggl.Shared.Extensions;
 using UIKit;
 using Math = System.Math;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     [MvxChildPresentation]
     public partial class SettingsViewController : ReactiveViewController<SettingsViewModel>

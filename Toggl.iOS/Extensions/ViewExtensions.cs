@@ -3,7 +3,7 @@ using Foundation;
 using UIKit;
 using CoreAnimation;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.iOS.Extensions
 {
     public static class ViewExtensions
     {

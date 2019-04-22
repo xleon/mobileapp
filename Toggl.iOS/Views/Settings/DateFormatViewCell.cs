@@ -1,10 +1,10 @@
 ﻿using System;
 using Foundation;
-using Toggl.Daneel.Cells;
 using Toggl.Core.UI.ViewModels.Selectable;
+using Toggl.iOS.Cells;
 using UIKit;
 
-namespace Toggl.Daneel.Views.Settings
+namespace Toggl.iOS.Views.Settings
 {
     public sealed partial class DateFormatViewCell : BaseTableViewCell<SelectableDateFormatViewModel>
     {

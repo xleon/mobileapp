@@ -1,7 +1,7 @@
 ﻿using System;
 using Foundation;
 
-namespace Toggl.Daneel.ExtensionKit.Extensions
+namespace Toggl.iOS.ExtensionKit.Extensions
 {
     public static class UserActivityExtensions
     {

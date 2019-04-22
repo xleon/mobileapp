@@ -2,19 +2,19 @@ using System;
 using System.Reactive.Linq;
 using CoreGraphics;
 using MvvmCross;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Presentation;
-using Toggl.Daneel.Presentation.Attributes;
-using Toggl.Daneel.Views.Calendar;
-using Toggl.Daneel.ViewSources;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.iOS.Presentation;
+using Toggl.iOS.Presentation.Attributes;
+using Toggl.iOS.Views.Calendar;
+using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     [TabPresentation]
     public sealed partial class CalendarViewController : ReactiveViewController<CalendarViewModel>, IScrollableToTop

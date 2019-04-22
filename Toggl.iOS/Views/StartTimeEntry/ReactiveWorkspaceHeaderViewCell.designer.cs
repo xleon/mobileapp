@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views.StartTimeEntry
+namespace Toggl.iOS.Views.StartTimeEntry
 {
 	[Register ("ReactiveWorkspaceHeaderViewCell")]
 	partial class ReactiveWorkspaceHeaderViewCell
@@ -17,7 +17,7 @@ namespace Toggl.Daneel.Views.StartTimeEntry
 
 		[Outlet]
 		UIKit.UILabel WorkspaceNameLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (TopSeparator != null) {

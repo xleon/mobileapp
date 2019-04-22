@@ -6,20 +6,21 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("ForgotPasswordViewController")]
 	partial class ForgotPasswordViewController
 	{
 		[Outlet]
-		Toggl.Daneel.Views.ActivityIndicatorView ActivityIndicator { get; set; }
+		ActivityIndicatorView ActivityIndicator { get; set; }
 
 		[Outlet]
 		UIKit.UIView DoneCard { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.LoginTextField EmailTextField { get; set; }
+		LoginTextField EmailTextField { get; set; }
 
 		[Outlet]
 		UIKit.UILabel ErrorLabel { get; set; }

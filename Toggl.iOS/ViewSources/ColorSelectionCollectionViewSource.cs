@@ -5,12 +5,12 @@ using System.Reactive.Linq;
 using CoreGraphics;
 using Foundation;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Daneel.Views;
+using Toggl.iOS.Views;
 using Toggl.Shared;
 using UIKit;
 using static System.Math;
 
-namespace Toggl.Daneel.ViewSources
+namespace Toggl.iOS.ViewSources
 {
     public sealed class ColorSelectionCollectionViewSource : ReloadCollectionViewSource<SelectableColorViewModel>, IUICollectionViewDelegateFlowLayout
     {

@@ -1,7 +1,7 @@
 using Toggl.Core.Services;
 using UIKit;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     public sealed class BackgroundSyncServiceIos : BaseBackgroundSyncService
     {

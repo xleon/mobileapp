@@ -4,15 +4,15 @@ using System.Linq;
 using System.Reactive;
 using Foundation;
 using MvvmCross;
-using Toggl.Daneel.Cells;
-using Toggl.Daneel.ViewSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Collections.Diffing;
 using Toggl.Core.UI.Reactive;
+using Toggl.iOS.Cells;
+using Toggl.iOS.ViewSources;
 using UIKit;
 
-namespace Toggl.Daneel.Extensions.Reactive
+namespace Toggl.iOS.Extensions.Reactive
 {
     public static class UITableViewExtensions
     {

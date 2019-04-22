@@ -1,9 +1,9 @@
 ﻿using System;
 using Foundation;
-using Toggl.Daneel.ViewSources;
+using Toggl.iOS.ViewSources;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     [Register("TimeEntriesLogTableView")]
     public class TimeEntriesLogTableView : UITableView

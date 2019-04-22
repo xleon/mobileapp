@@ -7,14 +7,14 @@ using Foundation;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Presentation.Attributes;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Shared.Extensions;
 using UIKit;
 using Toggl.Core;
+using Toggl.iOS.Presentation.Attributes;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     [ModalCardPresentation]
     public sealed partial class EditDurationViewController

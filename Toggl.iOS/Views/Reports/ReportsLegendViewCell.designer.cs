@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
 	[Register ("ReportsLegendViewCell")]
 	partial class ReportsLegendViewCell
@@ -19,7 +19,7 @@ namespace Toggl.Daneel.Views.Reports
 		UIKit.UILabel ClientLabel { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.FadeView FadeView { get; set; }
+		FadeView FadeView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel PercentageLabel { get; set; }
@@ -29,7 +29,7 @@ namespace Toggl.Daneel.Views.Reports
 
 		[Outlet]
 		UIKit.UILabel TotalTimeLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (CircleView != null) {

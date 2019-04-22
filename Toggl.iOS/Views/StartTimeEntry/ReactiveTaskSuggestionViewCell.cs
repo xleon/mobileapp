@@ -1,10 +1,10 @@
 ﻿using System;
 using Foundation;
-using Toggl.Daneel.Cells;
 using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.iOS.Cells;
 using UIKit;
 
-namespace Toggl.Daneel.Views.StartTimeEntry
+namespace Toggl.iOS.Views.StartTimeEntry
 {
     public sealed partial class ReactiveTaskSuggestionViewCell : BaseTableViewCell<TaskSuggestion>
     {

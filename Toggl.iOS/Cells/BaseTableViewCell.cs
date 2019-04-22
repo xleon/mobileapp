@@ -1,8 +1,8 @@
 ﻿using System;
-using Toggl.Daneel.ViewSources.Generic.TableView;
+using Toggl.iOS.ViewSources.Generic.TableView;
 using UIKit;
 
-namespace Toggl.Daneel.Cells
+namespace Toggl.iOS.Cells
 {
     public abstract class BaseTableViewCell<TModel> : UITableViewCell
     {

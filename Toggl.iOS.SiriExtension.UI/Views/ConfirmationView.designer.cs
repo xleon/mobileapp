@@ -7,13 +7,13 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.SiriExtension.UI
+namespace Toggl.iOS.SiriExtension.UI
 {
 	partial class ConfirmationView
 	{
 		[Outlet]
 		UIKit.UILabel confirmationLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (confirmationLabel != null) {

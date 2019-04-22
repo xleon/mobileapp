@@ -3,12 +3,12 @@ using CoreAnimation;
 using CoreGraphics;
 using Foundation;
 using Toggl.Core.UI.Helper;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Views.EditDuration.Shapes;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Views.EditDuration.Shapes;
 using UIKit;
 using static Toggl.Shared.Math;
 
-namespace Toggl.Daneel.Views.EditDuration
+namespace Toggl.iOS.Views.EditDuration
 {
     [Register(nameof(WheelBackgroundView))]
     public sealed class WheelBackgroundView : BaseWheelView

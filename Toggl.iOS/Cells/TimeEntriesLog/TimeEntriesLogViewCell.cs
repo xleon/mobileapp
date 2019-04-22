@@ -2,17 +2,17 @@
 using System.Reactive;
 using System.Reactive.Disposables;
 using Foundation;
-using Toggl.Daneel.Cells;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Transformations;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.iOS.Cells;
+using Toggl.iOS.Transformations;
 using Toggl.Shared;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     public partial class TimeEntriesLogViewCell : BaseTableViewCell<LogItemViewModel>
     {

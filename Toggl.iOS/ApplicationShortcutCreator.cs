@@ -4,7 +4,7 @@ using Foundation;
 using Toggl.Core.Shortcuts;
 using UIKit;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     [Preserve(AllMembers = true)]
     public sealed class ApplicationShortcutCreator : BaseApplicationShortcutCreator

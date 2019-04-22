@@ -1,11 +1,11 @@
 ﻿using CoreGraphics;
 using Toggl.Core.UI.Helper;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using UIKit;
 using static System.Math;
 using System;
 
-namespace Toggl.Daneel.Presentation.Transition
+namespace Toggl.iOS.Presentation.Transition
 {
     public class ModalDialogPresentationController : UIPresentationController
     {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Toggl.Core.Analytics;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public class SiriIntentErrorTrackingEvent: ITrackableEvent
     {

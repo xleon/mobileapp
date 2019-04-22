@@ -2,7 +2,7 @@
 using CoreGraphics;
 using UIKit;
 
-namespace Toggl.Daneel.Cells
+namespace Toggl.iOS.Cells
 {
     public abstract class BaseReportsCardView<T> : UIView
     {

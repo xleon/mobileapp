@@ -1,10 +1,10 @@
 ﻿using System;
 using Foundation;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Shared;
 using UIKit;
 
-namespace Toggl.Daneel.Cells.Settings
+namespace Toggl.iOS.Cells.Settings
 {
     public sealed partial class LicensesViewCell : BaseTableViewCell<License>
     {

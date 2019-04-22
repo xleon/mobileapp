@@ -7,14 +7,14 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
 	[Register ("ReportsCalendarQuickSelectViewCell")]
 	partial class ReportsCalendarQuickSelectViewCell
 	{
 		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (TitleLabel != null) {

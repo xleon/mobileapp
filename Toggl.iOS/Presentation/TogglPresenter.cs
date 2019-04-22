@@ -5,12 +5,7 @@ using CoreAnimation;
 using MvvmCross.ViewModels;
 using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Presentation.Attributes;
-using Toggl.Daneel.Presentation.Transition;
-using Toggl.Daneel.Services;
-using Toggl.Daneel.ViewControllers;
-using Toggl.Daneel.ViewControllers.Navigation;
+using Toggl.iOS.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Hints;
@@ -20,8 +15,13 @@ using MvvmCross.Platforms.Ios.Presenters;
 using MvvmCross.Presenters;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.iOS.Presentation.Attributes;
+using Toggl.iOS.Presentation.Transition;
+using Toggl.iOS.Services;
+using Toggl.iOS.ViewControllers;
+using Toggl.iOS.ViewControllers.Navigation;
 
-namespace Toggl.Daneel.Presentation
+namespace Toggl.iOS.Presentation
 {
     public sealed class TogglPresenter : MvxIosViewPresenter, ITopViewControllerProvider
     {
@@ -238,7 +238,7 @@ namespace Toggl.Daneel.Presentation
                             if (TopViewController.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact)
                             {
                                 reportsViewController.ShowCalendar();
-                            } 
+                            }
                             else
                             {
                                 reportsViewController.ShowPopoverCalendar();

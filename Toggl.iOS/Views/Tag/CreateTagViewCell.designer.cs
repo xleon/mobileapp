@@ -7,14 +7,14 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views.Tag
+namespace Toggl.iOS.Views.Tag
 {
 	[Register ("CreateTagViewCell")]
 	partial class CreateTagViewCell
 	{
 		[Outlet]
 		UIKit.UILabel NameLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (NameLabel != null) {

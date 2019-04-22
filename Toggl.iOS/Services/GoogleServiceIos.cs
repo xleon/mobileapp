@@ -8,7 +8,7 @@ using Toggl.Core.Exceptions;
 using Toggl.Core.Login;
 using UIKit;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     [MvvmCross.Preserve(AllMembers = true)]
     public sealed class GoogleServiceIos : NSObject, IGoogleService, ISignInDelegate, ISignInUIDelegate

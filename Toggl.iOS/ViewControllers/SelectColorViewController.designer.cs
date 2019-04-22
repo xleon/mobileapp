@@ -6,8 +6,9 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("SelectColorViewController")]
 	partial class SelectColorViewController
@@ -19,20 +20,20 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UICollectionView ColorCollectionView { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.HueSaturationPickerView PickerView { get; set; }
+		HueSaturationPickerView PickerView { get; set; }
 
 		[Outlet]
 		UIKit.UIButton SaveButton { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.ValueSliderView SliderBackgroundView { get; set; }
+		ValueSliderView SliderBackgroundView { get; set; }
 
 		[Outlet]
 		UIKit.UISlider SliderView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (CloseButton != null) {

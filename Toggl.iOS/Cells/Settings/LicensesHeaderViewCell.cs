@@ -3,7 +3,7 @@ using Foundation;
 using Toggl.Shared;
 using UIKit;
 
-namespace Toggl.Daneel.Cells.Settings
+namespace Toggl.iOS.Cells.Settings
 {
     public sealed partial class LicensesHeaderViewCell : BaseTableHeaderFooterView<License>
     {

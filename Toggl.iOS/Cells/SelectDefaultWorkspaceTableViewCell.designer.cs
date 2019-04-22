@@ -7,14 +7,14 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Cells
+namespace Toggl.iOS.Cells
 {
 	[Register ("SelectDefaultWorkspaceTableViewCell")]
 	partial class SelectDefaultWorkspaceTableViewCell
 	{
 		[Outlet]
 		UIKit.UILabel Label { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (Label != null) {

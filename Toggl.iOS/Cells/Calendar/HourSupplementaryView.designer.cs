@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Cells.Calendar
+namespace Toggl.iOS.Cells.Calendar
 {
 	[Register ("HourSupplementaryView")]
 	partial class HourSupplementaryView

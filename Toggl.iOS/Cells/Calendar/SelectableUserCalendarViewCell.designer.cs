@@ -6,8 +6,9 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.Cells.Calendar
+namespace Toggl.iOS.Cells.Calendar
 {
 	[Register ("SelectableUserCalendarViewCell")]
 	partial class SelectableUserCalendarViewCell
@@ -16,11 +17,11 @@ namespace Toggl.Daneel.Cells.Calendar
 		UIKit.UILabel CalendarNameLabel { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.FadeView FadeView { get; set; }
+		FadeView FadeView { get; set; }
 
 		[Outlet]
 		UIKit.UISwitch IsSelectedSwitch { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (CalendarNameLabel != null) {

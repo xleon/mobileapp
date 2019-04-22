@@ -2,12 +2,12 @@ using ObjCRuntime;
 using Foundation;
 using System;
 using UIKit;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using System.Reactive;
 using Toggl.Core;
-using Toggl.Daneel.Extensions.Reactive;
+using Toggl.iOS.Extensions.Reactive;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public sealed partial class CalendarSettingsTableViewHeader : UIView
     {

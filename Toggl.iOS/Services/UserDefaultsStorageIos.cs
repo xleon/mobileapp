@@ -3,7 +3,7 @@ using System.Linq;
 using Foundation;
 using Toggl.Core.Services;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     internal sealed class UserDefaultsStorageIos : KeyValueStorage
     {

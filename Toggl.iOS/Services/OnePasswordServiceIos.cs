@@ -8,7 +8,7 @@ using Toggl.Core.UI.Services;
 using Toggl.Shared;
 using LoginHandler = AgileBits.OnePasswordLoginDictionaryCompletionBlock;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     public sealed class OnePasswordServiceIos : NSObject, IPasswordManagerService
     {

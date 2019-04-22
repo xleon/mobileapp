@@ -3,7 +3,7 @@ using Foundation;
 using Toggl.Core.UI.ViewModels;
 using UIKit;
 
-namespace Toggl.Daneel.Cells
+namespace Toggl.iOS.Cells
 {
     public sealed partial class SelectDefaultWorkspaceTableViewCell : BaseTableViewCell<SelectableWorkspaceViewModel>
     {

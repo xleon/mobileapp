@@ -9,20 +9,20 @@ using System.Threading;
 using CoreGraphics;
 using Foundation;
 using MvvmCross.Platforms.Ios.Binding.Views;
-using Toggl.Daneel.Cells.Calendar;
-using Toggl.Daneel.Views.Calendar;
 using Toggl.Core;
 using Toggl.Core.Extensions;
 using Toggl.Core.Calendar;
 using Toggl.Core.UI.Calendar;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
+using Toggl.iOS.Cells.Calendar;
+using Toggl.iOS.Views.Calendar;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 using FoundationResources = Toggl.Core.Resources;
 
-namespace Toggl.Daneel.ViewSources
+namespace Toggl.iOS.ViewSources
 {
     public sealed class CalendarCollectionViewSource : MvxCollectionViewSource, ICalendarCollectionViewLayoutDataSource
     {

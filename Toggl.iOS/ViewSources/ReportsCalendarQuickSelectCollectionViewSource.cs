@@ -4,13 +4,13 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.Views.Reports;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
+using Toggl.iOS.Views.Reports;
 using Toggl.Shared;
 using UIKit;
 
-namespace Toggl.Daneel.ViewSources
+namespace Toggl.iOS.ViewSources
 {
     public sealed class ReportsCalendarQuickSelectCollectionViewSource
         : UICollectionViewSource, IUICollectionViewDelegateFlowLayout

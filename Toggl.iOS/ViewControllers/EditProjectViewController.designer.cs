@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("EditProjectViewController")]
 	partial class EditProjectViewController
@@ -53,7 +53,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.UILabel WorkspaceLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (ClientLabel != null) {

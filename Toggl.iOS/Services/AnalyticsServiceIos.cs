@@ -7,7 +7,7 @@ using Toggl.Core.Analytics;
 using FirebaseAnalytics = Firebase.Analytics.Analytics;
 using AppCenterAnalytics = Microsoft.AppCenter.Analytics.Analytics;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     public sealed class AnalyticsServiceIos : BaseAnalyticsService
     {

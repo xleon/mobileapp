@@ -4,7 +4,7 @@ using UIKit;
 using Toggl.Core.Models;
 using static Toggl.Storage.SyncStatus;
 
-namespace Toggl.Daneel.Cells
+namespace Toggl.iOS.Cells
 {
     public partial class SyncFailureCell : BaseTableViewCell<SyncFailureItem>
     {
@@ -30,7 +30,7 @@ namespace Toggl.Daneel.Cells
             errorMessageLabel.Text = Item.SyncErrorMessage;
             syncStatusLabel.Text = Item.SyncStatus.ToString();
 
-            switch (Item.SyncStatus) 
+            switch (Item.SyncStatus)
             {
                 case SyncFailed:
                     syncStatusLabel.TextColor = UIColor.Red;

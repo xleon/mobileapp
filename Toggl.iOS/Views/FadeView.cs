@@ -4,7 +4,7 @@ using CoreGraphics;
 using Foundation;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     [Register(nameof(FadeView))]
     public sealed class FadeView : UIView

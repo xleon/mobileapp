@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Foundation;
 using Intents;
-using Toggl.Daneel.Intents;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Shared.Models;
 using Toggl.Core.Services;
+using Toggl.iOS.Intents;
 using UIKit;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     public class IntentDonationServiceIos : IIntentDonationService
     {

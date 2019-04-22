@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views.StartTimeEntry
+namespace Toggl.iOS.Views.StartTimeEntry
 {
 	[Register ("ReactiveProjectSuggestionViewCell")]
 	partial class ReactiveProjectSuggestionViewCell
@@ -22,7 +22,7 @@ namespace Toggl.Daneel.Views.StartTimeEntry
 		UIKit.UILabel ClientNameLabel { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.FadeView FadeView { get; set; }
+		FadeView FadeView { get; set; }
 
 		[Outlet]
 		UIKit.NSLayoutConstraint FadeViewTrailingConstraint { get; set; }
@@ -44,7 +44,7 @@ namespace Toggl.Daneel.Views.StartTimeEntry
 
 		[Outlet]
 		UIKit.UIView TopSeparatorView { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (AmountOfTasksLabel != null) {

@@ -3,18 +3,18 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Views.Reports;
-using Toggl.Daneel.ViewSources.Generic.TableView;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Reports;
+using Toggl.iOS.Views.Reports;
+using Toggl.iOS.ViewSources.Generic.TableView;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.ViewSources
+namespace Toggl.iOS.ViewSources
 {
     using ReportsSection = SectionModel<ReportsViewModel, ChartSegment>;
     public sealed class ReportsTableViewSource : BaseTableViewSource<ReportsSection, ReportsViewModel, ChartSegment>
@@ -54,7 +54,7 @@ namespace Toggl.Daneel.ViewSources
 
             headerViewSpacer.Frame = new CGRect(0, 0, tableView.Bounds.Width, headerHeight);
             tableView.TableHeaderView = headerViewSpacer;
-            tableView.ContentInset = new UIEdgeInsets(-headerHeight + topAndBottomPadding, 0, topAndBottomPadding, 0); 
+            tableView.ContentInset = new UIEdgeInsets(-headerHeight + topAndBottomPadding, 0, topAndBottomPadding, 0);
             tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             tableView.RowHeight = rowHeight;
             tableView.SectionHeaderHeight = headerHeight;

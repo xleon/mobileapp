@@ -6,14 +6,15 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("NoWorkspaceViewController")]
 	partial class NoWorkspaceViewController
 	{
 		[Outlet]
-		Toggl.Daneel.Views.ActivityIndicatorView ActivityIndicatorView { get; set; }
+		ActivityIndicatorView ActivityIndicatorView { get; set; }
 
 		[Outlet]
 		UIKit.UIButton CreateWorkspaceButton { get; set; }
@@ -26,7 +27,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.UIButton TryAgainButton { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (ActivityIndicatorView != null) {

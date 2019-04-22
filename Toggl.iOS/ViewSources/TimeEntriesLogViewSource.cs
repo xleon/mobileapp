@@ -2,17 +2,17 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Foundation;
-using Toggl.Daneel.Views;
 using Toggl.Core;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Views;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.ViewSources
+namespace Toggl.iOS.ViewSources
 {
     using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
 

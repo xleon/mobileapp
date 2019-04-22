@@ -7,14 +7,14 @@ using Foundation;
 using MvvmCross.Base;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Helper;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Views.EditDuration.Shapes;
-using Toggl.Daneel.Views.EditDuration.Shapes.Caps;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Views.EditDuration.Shapes;
+using Toggl.iOS.Views.EditDuration.Shapes.Caps;
 using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.Shared.Math;
 
-namespace Toggl.Daneel.Views.EditDuration
+namespace Toggl.iOS.Views.EditDuration
 {
     [Register(nameof(WheelForegroundView))]
     public sealed class WheelForegroundView : BaseWheelView

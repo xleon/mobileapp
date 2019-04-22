@@ -2,7 +2,7 @@
 using Foundation;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     public partial class SuggestionsEmptyViewCell : UITableViewCell
     {
@@ -49,4 +49,3 @@ namespace Toggl.Daneel.Views
         }
     }
 }
-    

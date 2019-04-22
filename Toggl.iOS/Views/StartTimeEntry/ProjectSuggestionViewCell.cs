@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using Foundation;
-using Toggl.Daneel.Cells;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.iOS.Cells;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     public partial class ProjectSuggestionViewCell : BaseTableViewCell<ProjectSuggestion>
     {
@@ -58,13 +58,13 @@ namespace Toggl.Daneel.Views
         public override void PrepareForReuse()
         {
             base.PrepareForReuse();
-            
+
             DisposeBag.Dispose();
             DisposeBag = new CompositeDisposable();
         }
 
         protected override void UpdateView()
-        {            
+        {
             ToggleTasks = ToggleTasksButton.Rx().Tap().SelectValue(Item);
 
             //Text

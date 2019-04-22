@@ -1,9 +1,9 @@
 using System;
 using Foundation;
-using Toggl.Daneel.ExtensionKit.Analytics;
 using Toggl.Core.Analytics;
+using Toggl.iOS.ExtensionKit.Analytics;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public static class SiriTrackingEventExtensions
     {

@@ -3,18 +3,18 @@ using System.Linq;
 using System.Reactive.Linq;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Views;
-using Toggl.Daneel.Views.EntityCreation;
-using Toggl.Daneel.Views.StartTimeEntry;
+using Toggl.iOS.Extensions;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
+using Toggl.iOS.Views;
+using Toggl.iOS.Views.EntityCreation;
+using Toggl.iOS.Views.StartTimeEntry;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
 using UIKit;
 
-namespace Toggl.Daneel.ViewSources
+namespace Toggl.iOS.ViewSources
 {
     public sealed class StartTimeEntryTableViewSource : BaseTableViewSource<SectionModel<string, AutocompleteSuggestion>, string, AutocompleteSuggestion>
     {

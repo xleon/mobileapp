@@ -1,14 +1,14 @@
 ﻿using System.Reactive;
 using CoreGraphics;
-using Toggl.Daneel.Cells;
-using Toggl.Daneel.Presentation.Attributes;
-using Toggl.Daneel.ViewSources.Generic.TableView;
 using Toggl.Core;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Cells;
+using Toggl.iOS.Presentation.Attributes;
+using Toggl.iOS.ViewSources.Generic.TableView;
 using UIKit;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     [ModalDialogPresentation]
     public sealed partial class SelectDefaultWorkspaceViewController : ReactiveViewController<SelectDefaultWorkspaceViewModel>

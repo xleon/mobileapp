@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Foundation;
-using Toggl.Daneel.Views;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
+using Toggl.iOS.Views;
 using UIKit;
 
-namespace Toggl.Daneel.ViewSources
+namespace Toggl.iOS.ViewSources
 {
     public sealed class ReportsCalendarCollectionViewSource : UICollectionViewSource
     {

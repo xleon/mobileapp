@@ -4,7 +4,7 @@ using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.ViewModels;
 using Toggl.Core.UI.ViewModels;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     public abstract class ReactiveViewController<TViewModel> : MvxViewController<TViewModel>
         where TViewModel : class, IMvxViewModel

@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
 	[Register ("ColorSelectionViewCell")]
 	partial class ColorSelectionViewCell
@@ -17,7 +17,7 @@ namespace Toggl.Daneel.Views
 
 		[Outlet]
 		UIKit.UIImageView SelectedImageView { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (SelectedImageView != null) {

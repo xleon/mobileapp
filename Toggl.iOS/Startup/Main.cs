@@ -1,6 +1,6 @@
 ﻿using UIKit;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public sealed class Application
     {

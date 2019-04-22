@@ -5,12 +5,12 @@ using UIKit;
 using CoreGraphics;
 using Foundation;
 using Toggl.Core.Reports;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Shared;
 using static Toggl.Shared.Math;
 using Math = System.Math;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
     [Register(nameof(PieChartView))]
     public sealed class PieChartView : UIView

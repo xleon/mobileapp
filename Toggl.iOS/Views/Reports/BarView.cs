@@ -1,10 +1,10 @@
 ﻿using System;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Reports;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
     internal sealed class BarView : UIView
     {

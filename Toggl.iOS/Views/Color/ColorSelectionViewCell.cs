@@ -1,11 +1,11 @@
 ﻿using System;
 using Foundation;
-using Toggl.Daneel.Cells;
 using Toggl.Core.UI.ViewModels;
 using UIKit;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Cells;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     public partial class ColorSelectionViewCell : BaseCollectionViewCell<SelectableColorViewModel>
     {

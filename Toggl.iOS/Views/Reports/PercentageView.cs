@@ -3,10 +3,10 @@ using Foundation;
 using CoreAnimation;
 using CoreGraphics;
 using Toggl.Core.UI.Helper;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
     [Register(nameof(PercentageView))]
     public sealed class PercentageView : UIView

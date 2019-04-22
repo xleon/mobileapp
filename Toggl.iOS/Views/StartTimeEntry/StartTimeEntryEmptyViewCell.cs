@@ -1,12 +1,12 @@
 ﻿using System;
 using Foundation;
-using Toggl.Daneel.Cells;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.UI.Helper;
 using UIKit;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Cells;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     public partial class StartTimeEntryEmptyViewCell : BaseTableViewCell<QuerySymbolSuggestion>
     {

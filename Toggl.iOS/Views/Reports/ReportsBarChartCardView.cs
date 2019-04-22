@@ -1,10 +1,10 @@
 using System;
 using Foundation;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Core.UI.ViewModels.Reports;
 using UIKit;
 using System.Reactive.Disposables;
-using Toggl.Daneel.Extensions.Reactive;
+using Toggl.iOS.Extensions.Reactive;
 using System.Reactive.Linq;
 using Toggl.Shared.Extensions;
 using System.Linq;
@@ -14,11 +14,11 @@ using System.Globalization;
 using Toggl.Core.Conversions;
 using System.Reactive.Subjects;
 using System.Reactive;
-using Toggl.Daneel.Cells;
 using Toggl.Core;
 using ObjCRuntime;
+using Toggl.iOS.Cells;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
     [Register(nameof(ReportsBarChartCardView))]
     public partial class ReportsBarChartCardView : BaseReportsCardView<ReportsViewModel>

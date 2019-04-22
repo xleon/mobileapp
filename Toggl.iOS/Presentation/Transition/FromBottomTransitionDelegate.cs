@@ -3,7 +3,7 @@ using Foundation;
 using Toggl.Shared;
 using UIKit;
 
-namespace Toggl.Daneel.Presentation.Transition
+namespace Toggl.iOS.Presentation.Transition
 {
     public sealed class FromBottomTransitionDelegate : NSObject, IUIViewControllerTransitioningDelegate
     {

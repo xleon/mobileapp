@@ -6,10 +6,10 @@ using CoreGraphics;
 using Foundation;
 using MvvmCross.Base;
 using Toggl.Core.UI.Helper;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     [Register(nameof(LoginTextField))]
     public sealed class LoginTextField : UITextField

@@ -8,11 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.Autocomplete;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Presentation.Attributes;
-using Toggl.Daneel.ViewSources;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Suggestions;
@@ -20,10 +17,13 @@ using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Onboarding.CreationView;
 using Toggl.Core.UI.Onboarding.StartTimeEntryView;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Autocomplete;
+using Toggl.iOS.Presentation.Attributes;
+using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     [ModalCardPresentation]
     public sealed partial class StartTimeEntryViewController : KeyboardAwareViewController<StartTimeEntryViewModel>, IDismissableViewController

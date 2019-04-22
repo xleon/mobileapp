@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Views;
-using Toggl.Daneel.Views.Calendar;
+using Toggl.iOS.Extensions;
 using Toggl.Core.Calendar;
 using Toggl.Core.UI.Extensions;
+using Toggl.iOS.Views;
+using Toggl.iOS.Views.Calendar;
 using Toggl.Shared;
 using UIKit;
 
-namespace Toggl.Daneel.Cells.Calendar
+namespace Toggl.iOS.Cells.Calendar
 {
     public sealed partial class CalendarItemView : ReactiveCollectionViewCell<CalendarItem>
     {

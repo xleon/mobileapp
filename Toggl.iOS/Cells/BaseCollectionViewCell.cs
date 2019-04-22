@@ -1,7 +1,7 @@
 using System;
 using UIKit;
 
-namespace Toggl.Daneel.Cells
+namespace Toggl.iOS.Cells
 {
     public abstract class BaseCollectionViewCell<T> : UICollectionViewCell
     {

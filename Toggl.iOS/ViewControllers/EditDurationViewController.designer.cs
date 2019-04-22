@@ -6,8 +6,9 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views.EditDuration;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("EditDurationViewController")]
 	partial class EditDurationViewController
@@ -25,7 +26,7 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIView DatePickerContainer { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.EditDuration.DurationField DurationInput { get; set; }
+		DurationField DurationInput { get; set; }
 
 		[Outlet]
 		UIKit.UILabel EndDateLabel { get; set; }
@@ -64,8 +65,8 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UILabel TitleLabel { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.EditDuration.WheelForegroundView WheelView { get; set; }
-		
+		WheelForegroundView WheelView { get; set; }
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (CloseButton != null) {

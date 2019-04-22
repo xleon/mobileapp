@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
 	[Register ("ReportsHeaderView")]
 	partial class ReportsHeaderView
@@ -19,14 +19,14 @@ namespace Toggl.Daneel.Views.Reports
 		UIKit.UIView EmptyStateView { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.Reports.LoadingPieChartView LoadingPieChartView { get; set; }
+		LoadingPieChartView LoadingPieChartView { get; set; }
 
 		[Outlet]
 		UIKit.UIView OverviewContainerView { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.Reports.PieChartView PieChartView { get; set; }
-		
+		PieChartView PieChartView { get; set; }
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (BarChartContainerView != null) {

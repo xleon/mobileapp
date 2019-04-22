@@ -8,7 +8,7 @@ using Toggl.Core.UI.Services;
 using UIKit;
 using UserNotifications;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     [Preserve(AllMembers = true)]
     public sealed class PermissionsServiceIos : IPermissionsService
@@ -48,7 +48,7 @@ namespace Toggl.Daneel.Services
         }
 
         private IObservable<bool> requestPermission(
-            IObservable<bool> permissionChecker, 
+            IObservable<bool> permissionChecker,
             Func<Task<Tuple<bool, NSError>>> permissionRequestFunction,
             bool force)
             => Observable.DeferAsync(async cancellationToken =>

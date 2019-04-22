@@ -1,7 +1,7 @@
 ﻿using System;
 using ObjCRuntime;
 
-namespace Toggl.Daneel.Intents
+namespace Toggl.iOS.Intents
 {
     [Native]
     public enum ContinueTimerIntentResponseCode : long

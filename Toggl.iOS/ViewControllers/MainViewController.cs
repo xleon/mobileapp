@@ -17,14 +17,14 @@ using Toggl.Core.UI.Onboarding.MainView;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
-using Toggl.Daneel.ExtensionKit;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Presentation;
-using Toggl.Daneel.Presentation.Attributes;
-using Toggl.Daneel.Suggestions;
-using Toggl.Daneel.Views;
-using Toggl.Daneel.ViewSources;
+using Toggl.iOS.ExtensionKit;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
+using Toggl.iOS.Presentation;
+using Toggl.iOS.Presentation.Attributes;
+using Toggl.iOS.Suggestions;
+using Toggl.iOS.Views;
+using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Extensions;
 using Toggl.Storage.Onboarding;
@@ -32,7 +32,7 @@ using Toggl.Storage.Settings;
 using UIKit;
 using static Toggl.Core.UI.Helper.Animation;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
 

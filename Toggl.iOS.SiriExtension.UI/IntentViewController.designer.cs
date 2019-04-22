@@ -7,17 +7,17 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.SiriExtension.UI
+namespace Toggl.iOS.SiriExtension.UI
 {
 	[Register ("IntentViewController")]
 	partial class IntentViewController
 	{
 		[Outlet]
-		Toggl.Daneel.SiriExtension.UI.ConfirmationView confirmationView { get; set; }
+		ConfirmationView confirmationView { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.SiriExtension.UI.EntryInfoView entryInfoView { get; set; }
-		
+		EntryInfoView entryInfoView { get; set; }
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (entryInfoView != null) {

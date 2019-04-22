@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("SelectDefaultWorkspaceViewController")]
 	partial class SelectDefaultWorkspaceViewController
@@ -20,7 +20,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.UITableView WorkspacesTableView { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (WorkspacesTableView != null) {

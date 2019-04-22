@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using Foundation;
-using Toggl.Daneel.ExtensionKit.Analytics;
+using Toggl.iOS.ExtensionKit.Analytics;
 
-namespace Toggl.Daneel.ExtensionKit
+namespace Toggl.iOS.ExtensionKit
 {
     public class SharedStorage
     {

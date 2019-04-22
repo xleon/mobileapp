@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Foundation;
-using Toggl.Daneel.Autocomplete;
+using Toggl.iOS.Autocomplete;
 using UIKit;
 using static Toggl.Shared.Extensions.EnumerableExtensions;
 
-namespace Toggl.Daneel.Transformations
+namespace Toggl.iOS.Transformations
 {
     public sealed class TagsListToAttributedString
     {

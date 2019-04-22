@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
 	[Register ("StartTimeEntryProjectsViewCell")]
 	partial class ProjectSuggestionViewCell
@@ -24,7 +24,7 @@ namespace Toggl.Daneel.Views
 		UIKit.UILabel ClientNameLabel { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.FadeView FadeView { get; set; }
+		FadeView FadeView { get; set; }
 
 		[Outlet]
 		UIKit.NSLayoutConstraint FadeViewTrailingConstraint { get; set; }
@@ -51,7 +51,7 @@ namespace Toggl.Daneel.Views
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIView TopSeparatorView { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (AmountOfTasksLabel != null) {

@@ -7,14 +7,14 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     [Register ("ReportsPage")]
     partial class ReportsPage
     {
         [Outlet]
         UIKit.UIView Chart { get; set; }
-        
+
         void ReleaseDesignerOutlets ()
         {
             if (Chart != null) {

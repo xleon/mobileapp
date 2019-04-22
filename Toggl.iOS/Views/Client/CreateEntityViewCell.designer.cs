@@ -7,14 +7,14 @@
 
 using Foundation;
 
-namespace Toggl.Daneel.Views.Client
+namespace Toggl.iOS.Views.Client
 {
 	[Register ("CreateClientViewCell")]
 	partial class CreateClientViewCell
 	{
 		[Outlet]
 		UIKit.UILabel TextLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (TextLabel != null) {

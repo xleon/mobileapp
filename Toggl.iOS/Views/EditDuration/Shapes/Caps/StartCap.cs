@@ -2,7 +2,7 @@ using System;
 using CoreGraphics;
 using UIKit;
 
-namespace Toggl.Daneel.Views.EditDuration.Shapes.Caps
+namespace Toggl.iOS.Views.EditDuration.Shapes.Caps
 {
     public sealed class StartCap : Cap
     {

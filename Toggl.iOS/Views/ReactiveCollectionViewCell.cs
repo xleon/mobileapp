@@ -4,7 +4,7 @@ using CoreGraphics;
 using Toggl.Core.UI.ViewModels;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     public abstract class ReactiveCollectionViewCell<TViewModel> : UICollectionViewCell
     {

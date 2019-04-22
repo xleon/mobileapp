@@ -2,7 +2,7 @@
 using CoreGraphics;
 using UIKit;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.iOS.Extensions
 {
     public static class TableViewExtensions
     {
@@ -25,7 +25,7 @@ namespace Toggl.Daneel.Extensions
                     var originallyVisibleContentHeight = originalOffset.Y + originalFrameHeight;
                     adjustedVerticalOffset = originalOffset.Y + updatedContentHeight - originallyVisibleContentHeight;
                 }
-                
+
                 if (adjustedVerticalOffset != originalOffset.Y)
                     table.SetContentOffset(new CGPoint(originalOffset.X, (nfloat)Math.Max(0, adjustedVerticalOffset)), true);
             }

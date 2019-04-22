@@ -7,17 +7,17 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views.StartTimeEntry
+namespace Toggl.iOS.Views.StartTimeEntry
 {
 	[Register ("ReactiveTaskSuggestionViewCell")]
 	partial class ReactiveTaskSuggestionViewCell
 	{
 		[Outlet]
-		Toggl.Daneel.Views.FadeView FadeView { get; set; }
+		FadeView FadeView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel TaskNameLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (FadeView != null) {

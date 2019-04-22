@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.ViewControllers.Calendar
+namespace Toggl.iOS.ViewControllers.Calendar
 {
 	[Register ("CalendarPermissionDeniedViewController")]
 	partial class CalendarPermissionDeniedViewController
@@ -23,7 +23,7 @@ namespace Toggl.Daneel.ViewControllers.Calendar
 
 		[Outlet]
 		UIKit.UILabel MessageLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (ContinueWithoutAccessButton != null) {

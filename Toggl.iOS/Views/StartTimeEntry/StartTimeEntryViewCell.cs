@@ -1,14 +1,14 @@
 ﻿using System;
 using Foundation;
-using Toggl.Daneel.Cells;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Transformations;
+using Toggl.iOS.Extensions;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.UI.Helper;
+using Toggl.iOS.Cells;
+using Toggl.iOS.Transformations;
 using Toggl.Shared;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     public partial class StartTimeEntryViewCell : BaseTableViewCell<TimeEntrySuggestion>
     {

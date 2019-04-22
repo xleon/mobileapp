@@ -1,7 +1,7 @@
 ﻿using StoreKit;
 using Toggl.Core.Services;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     public sealed class RatingServiceIos : IRatingService
     {

@@ -2,15 +2,15 @@
 using Foundation;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     [Register(nameof(AutocompleteTextViewPlaceholder))]
     public sealed class AutocompleteTextViewPlaceholder : UILabel
     {
-        public AutocompleteTextViewPlaceholder(IntPtr handle) 
+        public AutocompleteTextViewPlaceholder(IntPtr handle)
             : base(handle)
         {
         }
@@ -25,7 +25,7 @@ namespace Toggl.Daneel.Views
 
             // AttributedText at this point has a length of 1, which is
             // a strange behaviour for an otherwise empty TextView.
-            // It is set here to an empty string so that the initial visibility  
+            // It is set here to an empty string so that the initial visibility
             // of the placeholder can be correctly inferred.
             textView.AttributedText = new NSAttributedString("");
         }

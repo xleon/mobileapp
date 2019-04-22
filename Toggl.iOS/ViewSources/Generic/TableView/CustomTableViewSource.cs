@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using Toggl.Core.UI.Collections;
 
-namespace Toggl.Daneel.ViewSources.Generic.TableView
+namespace Toggl.iOS.ViewSources.Generic.TableView
 {
     public delegate UITableViewCell CellConfiguration<TModel>(UITableView tableView, NSIndexPath indexPath, TModel model);
     public delegate UIView HeaderConfiguration<THeader>(UITableView tableView, nint section, THeader header);

@@ -7,9 +7,9 @@ using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using UIKit;
 using WebKit;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     [MvxChildPresentation]
     public sealed class BrowserViewController : MvxViewController<BrowserViewModel>, IWKNavigationDelegate

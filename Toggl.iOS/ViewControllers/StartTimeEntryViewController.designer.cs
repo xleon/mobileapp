@@ -6,8 +6,10 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views;
+using Toggl.iOS.Views.EditDuration;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("StartTimeEntryViewController")]
 	partial class StartTimeEntryViewController
@@ -54,7 +56,7 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIButton DoneButton { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.AutocompleteTextViewPlaceholder Placeholder { get; set; }
+		AutocompleteTextViewPlaceholder Placeholder { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -72,7 +74,7 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UIButton TagsButton { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.EditDuration.DurationField TimeInput { get; set; }
+		DurationField TimeInput { get; set; }
 
 		[Outlet]
 		UIKit.NSLayoutConstraint TimeInputTrailingConstraint { get; set; }
@@ -82,7 +84,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.NSLayoutConstraint TimeLabelTrailingConstraint { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (AddProjectOnboardingBubble != null) {

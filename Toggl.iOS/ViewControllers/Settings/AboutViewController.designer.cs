@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("AboutViewController")]
 	partial class AboutViewController
@@ -32,7 +32,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.NSLayoutConstraint TopConstraint { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (LicensesView != null) {

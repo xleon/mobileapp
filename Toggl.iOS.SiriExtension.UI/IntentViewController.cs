@@ -8,10 +8,10 @@ using IntentsUI;
 using UIKit;
 using CoreFoundation;
 using CoreAnimation;
-using Toggl.Daneel.Intents;
-using Toggl.Daneel.ExtensionKit.Extensions;
+using Toggl.iOS.ExtensionKit.Extensions;
+using Toggl.iOS.Intents;
 
-namespace Toggl.Daneel.SiriExtension.UI
+namespace Toggl.iOS.SiriExtension.UI
 {
     public partial class IntentViewController : UIViewController, IINUIHostedViewControlling
     {

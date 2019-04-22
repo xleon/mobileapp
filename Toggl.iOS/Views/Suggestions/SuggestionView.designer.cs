@@ -6,8 +6,9 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
 	[Register ("SuggestionView")]
 	partial class SuggestionView
@@ -16,7 +17,7 @@ namespace Toggl.Daneel
 		UIKit.UILabel ClientLabel { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.FadeView DescriptionFadeView { get; set; }
+		FadeView DescriptionFadeView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel DescriptionLabel { get; set; }
@@ -25,14 +26,14 @@ namespace Toggl.Daneel
 		UIKit.UIImageView ProjectDot { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.FadeView ProjectFadeView { get; set; }
+		FadeView ProjectFadeView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel ProjectLabel { get; set; }
 
 		[Outlet]
 		UIKit.UIView ProjectView { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (ClientLabel != null) {

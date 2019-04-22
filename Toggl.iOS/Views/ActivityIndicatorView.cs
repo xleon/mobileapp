@@ -1,13 +1,13 @@
 ﻿using System;
 using CoreAnimation;
 using Foundation;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Core.Helper;
 using UIKit;
 using static Toggl.Core.UI.Helper.Animation;
 using static Toggl.Shared.Math;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     [Register(nameof(ActivityIndicatorView))]
     public sealed class ActivityIndicatorView : UIImageView

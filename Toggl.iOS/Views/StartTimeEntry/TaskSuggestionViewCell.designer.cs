@@ -7,18 +7,18 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
 	[Register ("TaskSuggestionViewCell")]
 	partial class TaskSuggestionViewCell
 	{
 		[Outlet]
-		Toggl.Daneel.Views.FadeView FadeView { get; set; }
+		FadeView FadeView { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UILabel TaskNameLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (TaskNameLabel != null) {

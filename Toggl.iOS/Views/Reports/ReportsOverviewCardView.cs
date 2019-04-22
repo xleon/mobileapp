@@ -1,21 +1,21 @@
 ﻿using System;
 using Foundation;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Core.UI.ViewModels.Reports;
 using UIKit;
 using System.Reactive.Disposables;
-using Toggl.Daneel.Extensions.Reactive;
+using Toggl.iOS.Extensions.Reactive;
 using System.Reactive.Linq;
 using Toggl.Shared.Extensions;
 using System.Linq;
-using Toggl.Daneel.Cells;
 using Toggl.Core;
 using Toggl.Core.Extensions;
 using ObjCRuntime;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
+using Toggl.iOS.Cells;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
     [Register(nameof(ReportsOverviewCardView))]
     public sealed partial class ReportsOverviewCardView : BaseReportsCardView<ReportsViewModel>

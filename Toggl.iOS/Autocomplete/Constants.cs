@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace Toggl.Daneel.Autocomplete
+namespace Toggl.iOS.Autocomplete
 {
     public static class Constants
     {

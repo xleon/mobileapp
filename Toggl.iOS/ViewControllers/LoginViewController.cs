@@ -8,15 +8,15 @@ using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
-using static Toggl.Daneel.Extensions.LoginSignupViewExtensions;
-using static Toggl.Daneel.Extensions.ViewExtensions;
+using static Toggl.iOS.Extensions.LoginSignupViewExtensions;
+using static Toggl.iOS.Extensions.ViewExtensions;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     [MvxRootPresentation(WrapInNavigationController = true)]
     [MvxFromStoryboard("Login")]

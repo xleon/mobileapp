@@ -1,11 +1,11 @@
 ﻿using Foundation;
-using Toggl.Daneel.Cells;
-using Toggl.Daneel.Views.Client;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Cells;
+using Toggl.iOS.Views.Client;
 using UIKit;
 
-namespace Toggl.Daneel.ViewSources
+namespace Toggl.iOS.ViewSources
 {
     using ClientSection = SectionModel<string, SelectableClientBaseViewModel>;
 

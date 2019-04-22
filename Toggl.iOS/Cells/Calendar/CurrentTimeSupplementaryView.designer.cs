@@ -6,7 +6,7 @@
 //
 using Foundation;
 
-namespace Toggl.Daneel.Cells.Calendar
+namespace Toggl.iOS.Cells.Calendar
 {
     [Register("CurrentTimeSupplementaryView")]
     partial class CurrentTimeSupplementaryView

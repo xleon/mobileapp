@@ -2,7 +2,7 @@
 using Foundation;
 using Toggl.Core.UI.Calendar;
 
-namespace Toggl.Daneel.Views.Calendar
+namespace Toggl.iOS.Views.Calendar
 {
     public interface ICalendarCollectionViewLayoutDataSource
     {

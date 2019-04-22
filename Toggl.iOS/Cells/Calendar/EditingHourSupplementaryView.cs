@@ -3,7 +3,7 @@
 using Foundation;
 using UIKit;
 
-namespace Toggl.Daneel.Cells.Calendar
+namespace Toggl.iOS.Cells.Calendar
 {
     public sealed partial class EditingHourSupplementaryView : UICollectionViewCell
     {

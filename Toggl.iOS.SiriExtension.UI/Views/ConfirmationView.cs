@@ -2,7 +2,7 @@ using System;
 using UIKit;
 using Foundation;
 
-namespace Toggl.Daneel.SiriExtension.UI
+namespace Toggl.iOS.SiriExtension.UI
 {
     [Register("ConfirmationView")]
     public partial class ConfirmationView : UIView

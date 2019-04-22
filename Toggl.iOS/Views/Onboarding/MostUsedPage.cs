@@ -2,9 +2,9 @@ using Foundation;
 using System;
 using UIKit;
 using ObjCRuntime;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public sealed partial class MostUsedPage : UIView
     {

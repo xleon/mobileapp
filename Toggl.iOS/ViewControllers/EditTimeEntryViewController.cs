@@ -5,10 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Presentation.Attributes;
-using Toggl.Daneel.Transformations;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
@@ -16,12 +14,14 @@ using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Onboarding.EditView;
 using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Presentation.Attributes;
+using Toggl.iOS.Transformations;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 using Math = System.Math;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     [ModalCardPresentation]
     public partial class EditTimeEntryViewController : KeyboardAwareViewController<EditTimeEntryViewModel>, IDismissableViewController

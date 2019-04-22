@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.ViewControllers.Settings
+namespace Toggl.iOS.ViewControllers.Settings
 {
 	[Register ("UpcomingEventsNotificationSettingsViewController")]
 	partial class UpcomingEventsNotificationSettingsViewController
@@ -20,7 +20,7 @@ namespace Toggl.Daneel.ViewControllers.Settings
 
 		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (CloseButton != null) {

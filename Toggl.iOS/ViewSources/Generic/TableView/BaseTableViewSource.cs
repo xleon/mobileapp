@@ -7,7 +7,7 @@ using Foundation;
 using Toggl.Core.UI.Collections;
 using UIKit;
 
-namespace Toggl.Daneel.ViewSources
+namespace Toggl.iOS.ViewSources
 {
     public abstract class BaseTableViewSource<TSection, THeader, TModel> : UITableViewSource
     where TSection : ISectionModel<THeader, TModel>, new()

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using EventKit;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Core.Calendar;
 using Toggl.Core.UI.Services;
 using Toggl.Shared;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     public sealed class CalendarServiceIos : PermissionAwareCalendarService
     {

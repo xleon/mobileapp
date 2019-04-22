@@ -1,14 +1,14 @@
 ﻿using System.Linq;
 using MvvmCross.Platforms.Ios.Views;
-using Toggl.Daneel.Cells.Settings;
-using Toggl.Daneel.ViewSources.Generic.TableView;
 using Toggl.Core;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Cells.Settings;
+using Toggl.iOS.ViewSources.Generic.TableView;
 using Toggl.Shared;
 using UIKit;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     public sealed class LicensesViewController : MvxTableViewController<LicensesViewModel>
     {

@@ -4,12 +4,12 @@ using CoreText;
 using Foundation;
 using MvvmCross.Base;
 using ObjCRuntime;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
 using UIKit;
 
-namespace Toggl.Daneel.Views.EditDuration
+namespace Toggl.iOS.Views.EditDuration
 {
     [Register(nameof(DurationField))]
     public sealed class DurationField : UITextField

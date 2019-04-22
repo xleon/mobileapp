@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.ViewControllers.Calendar
+namespace Toggl.iOS.ViewControllers.Calendar
 {
 	[Register ("SelectUserCalendarsViewController")]
 	partial class SelectUserCalendarsViewController
@@ -23,7 +23,7 @@ namespace Toggl.Daneel.ViewControllers.Calendar
 
 		[Outlet]
 		UIKit.UITableView TableView { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (DoneButton != null) {

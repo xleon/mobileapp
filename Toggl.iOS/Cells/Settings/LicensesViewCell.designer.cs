@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Cells.Settings
+namespace Toggl.iOS.Cells.Settings
 {
 	[Register ("LicensesViewCell")]
 	partial class LicensesViewCell
@@ -17,7 +17,7 @@ namespace Toggl.Daneel.Cells.Settings
 
 		[Outlet]
 		UIKit.UILabel LicenseLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (LicenseLabel != null) {

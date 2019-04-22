@@ -1,10 +1,10 @@
 ﻿using CoreGraphics;
 using Foundation;
 using Toggl.Core.UI.Helper;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Autocomplete
+namespace Toggl.iOS.Autocomplete
 {
     public sealed class TagTextAttachment : TokenTextAttachment
     {

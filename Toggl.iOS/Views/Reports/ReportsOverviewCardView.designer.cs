@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
 	partial class ReportsOverviewCardView
 	{
@@ -15,7 +15,7 @@ namespace Toggl.Daneel.Views.Reports
 		UIKit.UILabel BillablePercentageLabel { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.Reports.PercentageView BillablePercentageView { get; set; }
+		PercentageView BillablePercentageView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel BillableTitleLabel { get; set; }
@@ -34,7 +34,7 @@ namespace Toggl.Daneel.Views.Reports
 
 		[Outlet]
 		UIKit.UILabel TotalTitleLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (BillablePercentageLabel != null) {

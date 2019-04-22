@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Toggl.Daneel.Views.EditDuration
+namespace Toggl.iOS.Views.EditDuration
 {
     public sealed class NumberKeyPressedEventArgs : EventArgs
     {

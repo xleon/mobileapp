@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("OutdatedAppViewController")]
 	partial class OutdatedAppViewController
@@ -23,7 +23,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.UIButton WebsiteButton { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (UpdateButton != null) {

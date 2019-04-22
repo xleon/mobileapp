@@ -6,14 +6,15 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("SignupViewController")]
 	partial class SignupViewController
 	{
 		[Outlet]
-		Toggl.Daneel.Views.ActivityIndicatorView ActivityIndicator { get; set; }
+		ActivityIndicatorView ActivityIndicator { get; set; }
 
 		[Outlet]
 		UIKit.UIImageView CountryDropDownCaretImageView { get; set; }
@@ -25,7 +26,7 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.NSLayoutConstraint EmailFieldTopConstraint { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.LoginTextField EmailTextField { get; set; }
+		LoginTextField EmailTextField { get; set; }
 
 		[Outlet]
 		UIKit.UILabel ErrorLabel { get; set; }
@@ -40,7 +41,7 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.UILabel OrLabel { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.LoginTextField PasswordTextField { get; set; }
+		LoginTextField PasswordTextField { get; set; }
 
 		[Outlet]
 		UIKit.UIButton SelectCountryButton { get; set; }
@@ -62,7 +63,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.NSLayoutConstraint TopConstraint { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (ActivityIndicator != null) {

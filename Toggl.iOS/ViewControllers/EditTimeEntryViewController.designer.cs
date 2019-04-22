@@ -6,8 +6,9 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("EditViewController")]
 	partial class EditTimeEntryViewController
@@ -56,7 +57,7 @@ namespace Toggl.Daneel.ViewControllers
 		UIKit.NSLayoutConstraint ButtonsContainerBottomConstraint { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.TextViewWithPlaceholder DescriptionTextView { get; set; }
+		TextViewWithPlaceholder DescriptionTextView { get; set; }
 
 		[Outlet]
 		UIKit.UIView DescriptionView { get; set; }

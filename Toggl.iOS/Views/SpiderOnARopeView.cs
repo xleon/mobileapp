@@ -5,10 +5,10 @@ using CoreGraphics;
 using CoreMotion;
 using Foundation;
 using Toggl.Core.UI.Helper;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     [Register(nameof(SpiderOnARopeView))]
     public class SpiderOnARopeView : UIView
@@ -133,7 +133,7 @@ namespace Toggl.Daneel.Views
             {
                 subview.RemoveFromSuperview();
             }
-            
+
             motionManager?.Dispose();
             gravity?.Dispose();
             spiderAnimator?.Dispose();

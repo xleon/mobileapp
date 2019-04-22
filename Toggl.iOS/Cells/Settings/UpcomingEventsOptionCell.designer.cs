@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Cells.Settings
+namespace Toggl.iOS.Cells.Settings
 {
 	[Register ("UpcomingEventsOptionCell")]
 	partial class UpcomingEventsOptionCell
@@ -17,7 +17,7 @@ namespace Toggl.Daneel.Cells.Settings
 
 		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (TitleLabel != null) {

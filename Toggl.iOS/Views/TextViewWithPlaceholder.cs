@@ -4,10 +4,10 @@ using System.Reactive.Subjects;
 using Foundation;
 using MvvmCross.Base;
 using Toggl.Core.UI.Helper;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     [Register(nameof(TextViewWithPlaceholder))]
     public class TextViewWithPlaceholder : UITextView, IUITextViewDelegate

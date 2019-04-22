@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
 	[Register ("CalendarSettingsTableViewHeader")]
 	partial class CalendarSettingsTableViewHeader
@@ -23,7 +23,7 @@ namespace Toggl.Daneel
 
 		[Outlet]
 		UIKit.UILabel TextLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (CalendarPermissionStatusLabel != null) {

@@ -2,14 +2,14 @@
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.Cells;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Core.Extensions;
 using Toggl.Core.Reports;
+using Toggl.iOS.Cells;
 using Toggl.Shared;
 using UIKit;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
     public partial class ReportsLegendViewCell : BaseTableViewCell<ChartSegment>
     {

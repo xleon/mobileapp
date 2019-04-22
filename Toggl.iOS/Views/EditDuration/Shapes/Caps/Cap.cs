@@ -1,11 +1,11 @@
 using System;
 using CoreAnimation;
 using CoreGraphics;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using UIKit;
 using Math = Toggl.Shared.Math;
 
-namespace Toggl.Daneel.Views.EditDuration.Shapes.Caps
+namespace Toggl.iOS.Views.EditDuration.Shapes.Caps
 {
     public abstract class Cap : CAShapeLayer
     {

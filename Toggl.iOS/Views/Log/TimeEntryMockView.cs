@@ -4,7 +4,7 @@ using ObjCRuntime;
 using System;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     public partial class TimeEntryMockView : UIView
     {

@@ -4,7 +4,7 @@ using CoreGraphics;
 using CoreAnimation;
 using static Toggl.Shared.Math;
 
-namespace Toggl.Daneel.Views.EditDuration
+namespace Toggl.iOS.Views.EditDuration
 {
     public abstract class BaseWheelView : UIView
     {

@@ -2,7 +2,7 @@
 using Toggl.Shared;
 using UIKit;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.iOS.Extensions
 {
     public static class ColorExtensions
     {

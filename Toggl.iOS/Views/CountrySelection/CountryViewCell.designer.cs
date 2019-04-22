@@ -8,7 +8,7 @@ using Foundation;
 using System;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views.CountrySelection
+namespace Toggl.iOS.Views.CountrySelection
 {
     [Register ("CountryViewCell")]
     partial class CountryViewCell

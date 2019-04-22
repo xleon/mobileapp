@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.SiriExtension.UI
+namespace Toggl.iOS.SiriExtension.UI
 {
 	partial class EntryInfoView
 	{
@@ -19,7 +19,7 @@ namespace Toggl.Daneel.SiriExtension.UI
 
 		[Outlet]
 		UIKit.UILabel timeLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (descriptionLabel != null) {

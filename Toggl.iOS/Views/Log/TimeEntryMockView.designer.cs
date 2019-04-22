@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
 	[Register ("TimeEntryMockView")]
 	partial class TimeEntryMockView
@@ -29,7 +29,7 @@ namespace Toggl.Daneel.Views
 
 		[Outlet]
 		UIKit.UIView RootView { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (ClientView != null) {

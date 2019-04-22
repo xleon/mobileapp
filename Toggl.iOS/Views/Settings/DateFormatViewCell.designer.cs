@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views.Settings
+namespace Toggl.iOS.Views.Settings
 {
 	[Register ("DateFormatViewCell")]
 	partial class DateFormatViewCell
@@ -17,7 +17,7 @@ namespace Toggl.Daneel.Views.Settings
 
 		[Outlet]
 		UIKit.UIImageView SelectedImageView { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (DateFormatLabel != null) {

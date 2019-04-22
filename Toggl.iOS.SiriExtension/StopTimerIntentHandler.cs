@@ -6,14 +6,14 @@ using System.Reactive.Linq;
 using System.Reactive.Concurrency;
 using Toggl.Networking;
 using Toggl.Networking.Network;
-using Toggl.Daneel.Intents;
+using Toggl.iOS.Intents;
 using Foundation;
 using Toggl.Shared.Models;
 using SiriExtension.Models;
 using SiriExtension.Exceptions;
-using Toggl.Daneel.ExtensionKit;
-using Toggl.Daneel.ExtensionKit.Analytics;
-using Toggl.Daneel.ExtensionKit.Extensions;
+using Toggl.iOS.ExtensionKit;
+using Toggl.iOS.ExtensionKit.Analytics;
+using Toggl.iOS.ExtensionKit.Extensions;
 
 namespace SiriExtension
 {

@@ -1,7 +1,7 @@
 ﻿using Foundation;
 using Toggl.Core.UI.Reactive;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.iOS.Extensions
 {
     public static class NSObjectExtensions
     {

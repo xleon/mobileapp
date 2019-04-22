@@ -1,11 +1,11 @@
 ﻿using Foundation;
-using Toggl.Daneel.Cells;
-using Toggl.Daneel.Views.Tag;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Cells;
+using Toggl.iOS.Views.Tag;
 using UIKit;
 
-namespace Toggl.Daneel.ViewSources
+namespace Toggl.iOS.ViewSources
 {
     using TagsSection = SectionModel<string, SelectableTagBaseViewModel>;
 

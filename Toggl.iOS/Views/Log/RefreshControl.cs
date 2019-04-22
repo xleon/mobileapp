@@ -6,16 +6,16 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.Views;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.Sync;
 using Toggl.Shared.Extensions;
 using UIKit;
-using static Toggl.Daneel.Extensions.TextExtensions;
-using Toggl.Daneel.Extensions;
+using static Toggl.iOS.Extensions.TextExtensions;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.ViewSources
+namespace Toggl.iOS.ViewSources
 {
     public sealed class RefreshControl
     {
@@ -194,7 +194,7 @@ namespace Toggl.Daneel.ViewSources
         {
             if (!scrollView.Dragging || wasReleased) return;
 
-            if (offset.Y >= 0) 
+            if (offset.Y >= 0)
             {
                 heightConstraint.Constant = 0;
                 return;

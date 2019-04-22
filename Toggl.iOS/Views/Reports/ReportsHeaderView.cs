@@ -6,13 +6,13 @@ using CoreAnimation;
 using CoreGraphics;
 using Foundation;
 using Toggl.Core.UI.ViewModels.Reports;
-using Toggl.Daneel.Cells;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
+using Toggl.iOS.Cells;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
     public partial class ReportsHeaderView : BaseTableHeaderFooterView<ReportsViewModel>
     {

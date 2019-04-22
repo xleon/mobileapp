@@ -1,13 +1,13 @@
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels.Settings;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.ViewSources;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
+using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using Colors = Toggl.Core.UI.Helper.Colors;
 using FoundationResources = Toggl.Core.Resources;
 
-namespace Toggl.Daneel.ViewControllers.Settings
+namespace Toggl.iOS.ViewControllers.Settings
 {
     [MvxChildPresentation]
     public sealed partial class CalendarSettingsViewController : ReactiveViewController<CalendarSettingsViewModel>

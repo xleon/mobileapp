@@ -1,11 +1,11 @@
 using System;
 using System.Reactive.Linq;
 using CoreGraphics;
-using Toggl.Daneel.ViewSources;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Reactive;
+using Toggl.iOS.ViewSources;
 
-namespace Toggl.Daneel.Extensions.Reactive
+namespace Toggl.iOS.Extensions.Reactive
 {
     public static class BaseTableViewSourceExtensions
     {

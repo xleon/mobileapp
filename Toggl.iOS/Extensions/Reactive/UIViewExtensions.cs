@@ -8,7 +8,7 @@ using Toggl.Core.UI.Reactive;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Extensions.Reactive
+namespace Toggl.iOS.Extensions.Reactive
 {
     public static class UIViewExtensions
     {
@@ -121,8 +121,8 @@ namespace Toggl.Daneel.Extensions.Reactive
         }
 
         public static IDisposable BindAction<TInput, TOutput>(
-            this IReactive<UIView> reactive, 
-            RxAction<TInput, TOutput> action, 
+            this IReactive<UIView> reactive,
+            RxAction<TInput, TOutput> action,
             Func<TInput> transformationFunction)
         {
             return Observable.Using(

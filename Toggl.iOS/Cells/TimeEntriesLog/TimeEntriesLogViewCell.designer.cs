@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
 	[Register ("TimeEntriesLogViewCell")]
 	partial class TimeEntriesLogViewCell
@@ -27,7 +27,7 @@ namespace Toggl.Daneel.Views
 		UIKit.UIImageView ContinueImageView { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.FadeView DescriptionFadeView { get; set; }
+		FadeView DescriptionFadeView { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -43,7 +43,7 @@ namespace Toggl.Daneel.Views
 		UIKit.UILabel GroupSizeLabel { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.FadeView ProjectTaskClientFadeView { get; set; }
+		FadeView ProjectTaskClientFadeView { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -66,7 +66,7 @@ namespace Toggl.Daneel.Views
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIImageView UnsyncedImageView { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (AddDescriptionLabel != null) {

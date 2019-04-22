@@ -1,10 +1,10 @@
 ﻿using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using UIKit;
 using static Toggl.Core.UI.Helper.Animation;
 
-namespace Toggl.Daneel.Presentation.Transition
+namespace Toggl.iOS.Presentation.Transition
 {
     public sealed class FromBottomTransition : NSObject, IUIViewControllerAnimatedTransitioning
     {

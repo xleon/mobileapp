@@ -7,14 +7,14 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Cells.Settings
+namespace Toggl.iOS.Cells.Settings
 {
 	[Register ("LicensesHeaderViewCell")]
 	partial class LicensesHeaderViewCell
 	{
 		[Outlet]
 		UIKit.UILabel HeaderLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (HeaderLabel != null) {

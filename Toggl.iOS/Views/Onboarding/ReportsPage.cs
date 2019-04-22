@@ -4,11 +4,11 @@ using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
 using Toggl.Core.UI.Helper;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using UIKit;
 using static Toggl.Shared.Math;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public sealed partial class ReportsPage : UIView
     {

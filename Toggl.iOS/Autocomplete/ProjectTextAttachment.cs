@@ -2,7 +2,7 @@
 using Foundation;
 using UIKit;
 
-namespace Toggl.Daneel.Autocomplete
+namespace Toggl.iOS.Autocomplete
 {
     public sealed class ProjectTextAttachment : TokenTextAttachment
     {

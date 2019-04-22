@@ -1,10 +1,10 @@
 ﻿using System;
 using Foundation;
-using Toggl.Daneel.Cells;
 using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.iOS.Cells;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     public sealed partial class TaskSuggestionViewCell : BaseTableViewCell<TaskSuggestion>
     {

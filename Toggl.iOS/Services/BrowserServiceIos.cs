@@ -3,7 +3,7 @@ using Foundation;
 using Toggl.Core.UI.Services;
 using UIKit;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     public sealed class BrowserServiceIos : IBrowserService
     {

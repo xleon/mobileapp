@@ -2,7 +2,7 @@
 using CoreGraphics;
 using UIKit;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.iOS.Extensions
 {
     public static class LoginSignupViewExtensions
     {

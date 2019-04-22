@@ -1,12 +1,12 @@
 ﻿using System;
 using Toggl.Core.Services;
 using Foundation;
-using Toggl.Daneel.ExtensionKit;
+using Toggl.iOS.ExtensionKit;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     public class PrivateSharedStorageServiceIos : IPrivateSharedStorageService
-    {        
+    {
         public void SaveApiToken(string apiToken)
         {
             SharedStorage.instance.SetApiToken(apiToken);

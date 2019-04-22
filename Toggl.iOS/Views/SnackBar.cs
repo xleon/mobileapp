@@ -5,7 +5,7 @@ using ObjCRuntime;
 using Toggl.Core;
 using UIKit;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public partial class SnackBar : UIView
     {

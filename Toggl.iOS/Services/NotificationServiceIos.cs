@@ -5,7 +5,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Foundation;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Core;
 using Toggl.Core.Calendar;
 using Toggl.Core.UI.Services;
@@ -15,7 +15,7 @@ using UserNotifications;
 using Notification = Toggl.Shared.Notification;
 using FoundationResources = Toggl.Core.Resources;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     public sealed class NotificationServiceIos : PermissionAwareNotificationService
     {

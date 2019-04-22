@@ -1,7 +1,7 @@
 ﻿using System;
 using Foundation;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.iOS.Extensions
 {
     public static class DateExtensions
     {

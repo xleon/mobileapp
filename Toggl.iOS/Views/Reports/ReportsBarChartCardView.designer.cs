@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
 	partial class ReportsBarChartCardView
 	{
@@ -46,7 +46,7 @@ namespace Toggl.Daneel.Views.Reports
 
 		[Outlet]
 		UIKit.UILabel StartDateLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (BarChartCardView != null) {

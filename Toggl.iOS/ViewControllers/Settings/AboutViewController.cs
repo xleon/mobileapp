@@ -1,10 +1,10 @@
-﻿using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
+﻿using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     public sealed partial class AboutViewController : ReactiveViewController<AboutViewModel>
     {

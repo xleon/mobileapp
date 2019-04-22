@@ -2,7 +2,7 @@
 using Toggl.Shared;
 using UIKit;
 
-namespace Toggl.Daneel.Presentation
+namespace Toggl.iOS.Presentation
 {
     public interface INestedPresentationInfo
     {

@@ -17,7 +17,7 @@ using UIKit;
 using Constants = Toggl.Core.Helper.Constants;
 using Math = System.Math;
 
-namespace Toggl.Daneel.Views.Calendar
+namespace Toggl.iOS.Views.Calendar
 {
     public sealed class CalendarCollectionViewLayout : UICollectionViewLayout
     {

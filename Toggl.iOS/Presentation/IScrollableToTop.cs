@@ -1,4 +1,4 @@
-﻿namespace Toggl.Daneel.Presentation
+﻿namespace Toggl.iOS.Presentation
 {
     public interface IScrollableToTop
     {

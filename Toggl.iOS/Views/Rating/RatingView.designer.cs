@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
 	[Register ("RatingView")]
 	partial class RatingView
@@ -53,7 +53,7 @@ namespace Toggl.Daneel
 
 		[Outlet]
 		UIKit.UIView YesView { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (CtaButton != null) {

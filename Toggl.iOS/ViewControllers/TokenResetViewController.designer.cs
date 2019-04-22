@@ -6,14 +6,15 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
 	[Register ("TokenResetViewController")]
 	partial class TokenResetViewController
 	{
 		[Outlet]
-		Toggl.Daneel.Views.ActivityIndicatorView ActivityIndicatorView { get; set; }
+		ActivityIndicatorView ActivityIndicatorView { get; set; }
 
 		[Outlet]
 		UIKit.NSLayoutConstraint BottomConstraint { get; set; }
@@ -41,7 +42,7 @@ namespace Toggl.Daneel.ViewControllers
 
 		[Outlet]
 		UIKit.UIButton SignOutButton { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (ActivityIndicatorView != null) {

@@ -1,5 +1,5 @@
 using Foundation;
-using Toggl.Daneel.ExtensionKit;
+using Toggl.iOS.ExtensionKit;
 using Toggl.Networking;
 using Toggl.Networking.Network;
 

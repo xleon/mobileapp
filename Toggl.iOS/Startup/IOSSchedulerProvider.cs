@@ -1,7 +1,7 @@
 using System.Reactive.Concurrency;
 using Toggl.Shared;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public class IOSSchedulerProvider : ISchedulerProvider
     {

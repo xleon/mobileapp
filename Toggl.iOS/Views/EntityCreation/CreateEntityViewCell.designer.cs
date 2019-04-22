@@ -7,14 +7,14 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views.EntityCreation
+namespace Toggl.iOS.Views.EntityCreation
 {
 	[Register ("CreateEntityViewCell")]
 	partial class CreateEntityViewCell
 	{
 		[Outlet]
 		UIKit.UILabel TextLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (TextLabel != null) {

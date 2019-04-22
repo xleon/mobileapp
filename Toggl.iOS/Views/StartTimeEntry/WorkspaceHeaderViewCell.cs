@@ -1,10 +1,10 @@
 ﻿using System;
 using Foundation;
-using Toggl.Daneel.Cells;
-using Toggl.Daneel.Views.Interfaces;
+using Toggl.iOS.Cells;
+using Toggl.iOS.Views.Interfaces;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     public sealed partial class WorkspaceHeaderViewCell : BaseTableHeaderFooterView<string>, IHeaderViewCellWithHideableTopSeparator
     {

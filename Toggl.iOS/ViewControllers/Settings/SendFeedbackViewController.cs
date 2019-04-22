@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Presentation.Attributes;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
+using Toggl.iOS.Presentation.Attributes;
 using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.Shared.Extensions.CommonFunctions;
 
-namespace Toggl.Daneel.ViewControllers.Settings
+namespace Toggl.iOS.ViewControllers.Settings
 {
     [ModalCardPresentation]
     public sealed partial class SendFeedbackViewController : KeyboardAwareViewController<SendFeedbackViewModel>, IDismissableViewController

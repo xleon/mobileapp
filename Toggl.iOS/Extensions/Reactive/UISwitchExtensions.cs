@@ -6,7 +6,7 @@ using Toggl.Core.UI.Reactive;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Extensions.Reactive
+namespace Toggl.iOS.Extensions.Reactive
 {
     public static class UISwitchExtensions
     {
@@ -52,7 +52,7 @@ namespace Toggl.Daneel.Extensions.Reactive
                 }
             };
         }
-        
+
         public static Action<bool> On(this IReactive<UISwitch> reactive)
             => isOn => reactive.Base.SetState(isOn, true);
     }

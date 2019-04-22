@@ -1,13 +1,13 @@
 ﻿using System;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.ViewControllers.Settings
+namespace Toggl.iOS.ViewControllers.Settings
 {
     [MvxChildPresentation]
     public sealed partial class NotificationSettingsViewController : ReactiveViewController<NotificationSettingsViewModel>

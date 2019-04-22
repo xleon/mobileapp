@@ -1,16 +1,16 @@
-﻿using Toggl.Daneel.Extensions;
+﻿using Toggl.iOS.Extensions;
 using Toggl.Core.UI.ViewModels.Calendar;
-using Toggl.Daneel.Presentation.Attributes;
 using CoreGraphics;
 using UIKit;
-using Toggl.Daneel.Extensions.Reactive;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Shared.Extensions;
 using Toggl.Core.UI.Extensions;
 using System.Reactive;
 using Foundation;
 using Toggl.Core;
+using Toggl.iOS.Presentation.Attributes;
 
-namespace Toggl.Daneel.ViewControllers.Calendar
+namespace Toggl.iOS.ViewControllers.Calendar
 {
     [ModalDialogPresentation]
     public sealed partial class CalendarPermissionDeniedViewController

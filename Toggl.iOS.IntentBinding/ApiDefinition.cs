@@ -3,7 +3,7 @@ using Foundation;
 using Intents;
 using ObjCRuntime;
 
-namespace Toggl.Daneel.Intents
+namespace Toggl.iOS.Intents
 {
 	// @interface ContinueTimerIntent : INIntent
 	[BaseType (typeof(INIntent))]

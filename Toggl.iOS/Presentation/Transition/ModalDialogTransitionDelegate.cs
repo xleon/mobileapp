@@ -1,7 +1,7 @@
 ﻿using Foundation;
 using UIKit;
 
-namespace Toggl.Daneel.Presentation.Transition
+namespace Toggl.iOS.Presentation.Transition
 {
     public class ModalTransitionDelegate : NSObject, IUIViewControllerTransitioningDelegate
     {

@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Cells
+namespace Toggl.iOS.Cells
 {
 	[Register ("SyncFailureCell")]
 	partial class SyncFailureCell
@@ -23,7 +23,7 @@ namespace Toggl.Daneel.Cells
 
 		[Outlet]
 		UIKit.UILabel typeLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (typeLabel != null) {

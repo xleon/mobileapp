@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Cells.Calendar
+namespace Toggl.iOS.Cells.Calendar
 {
 	[Register ("CalendarItemView")]
 	partial class CalendarItemView
@@ -47,7 +47,7 @@ namespace Toggl.Daneel.Cells.Calendar
 
 		[Outlet]
 		UIKit.UIView TopDragIndicator { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (DescriptionLabelLeadingConstraint != null) {

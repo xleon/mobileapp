@@ -5,7 +5,7 @@ using Firebase.RemoteConfig;
 using Toggl.Core.Services;
 using Toggl.Shared;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     public sealed class RemoteConfigServiceIos : IRemoteConfigService
     {

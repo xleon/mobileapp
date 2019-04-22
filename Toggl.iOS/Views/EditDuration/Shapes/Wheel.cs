@@ -4,7 +4,7 @@ using CoreGraphics;
 using UIKit;
 using static Toggl.Shared.Math;
 
-namespace Toggl.Daneel.Views.EditDuration.Shapes
+namespace Toggl.iOS.Views.EditDuration.Shapes
 {
     public sealed class Wheel : CAShapeLayer
     {

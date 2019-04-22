@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
-using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Core.UI.ViewModels;
 using UIKit;
 using Toggl.Core.UI.Helper;
 using System.Threading.Tasks;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Views.Tag;
-using Toggl.Daneel.ViewSources;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
+using Toggl.iOS.Views.Tag;
 using System.Reactive;
 using System.Linq;
+using Toggl.iOS.Presentation.Attributes;
+using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     [ModalCardPresentation]
     public sealed partial class SelectTagsViewController : KeyboardAwareViewController<SelectTagsViewModel>, IDismissableViewController

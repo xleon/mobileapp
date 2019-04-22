@@ -1,6 +1,6 @@
 ﻿using UIKit;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     public interface ITopViewControllerProvider
     {

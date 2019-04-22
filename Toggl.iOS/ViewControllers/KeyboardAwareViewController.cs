@@ -2,7 +2,7 @@
 using MvvmCross.ViewModels;
 using UIKit;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     public abstract class KeyboardAwareViewController<TViewModel> : ReactiveViewController<TViewModel>
         where TViewModel : class, IMvxViewModel

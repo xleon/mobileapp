@@ -2,7 +2,7 @@
 using Foundation;
 using UIKit;
 
-namespace Toggl.Daneel.Views.StartTimeEntry
+namespace Toggl.iOS.Views.StartTimeEntry
 {
     public sealed partial class ReactiveWorkspaceHeaderViewCell : UITableViewHeaderFooterView
     {

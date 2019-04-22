@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Daneel.Views;
 using Toggl.Core.UI.Reactive;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.Extensions.Reactive
+namespace Toggl.iOS.Extensions.Reactive
 {
     public static class HueSaturationPickerViewExtensions
     {

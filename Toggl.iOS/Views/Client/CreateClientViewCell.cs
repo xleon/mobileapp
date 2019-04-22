@@ -1,11 +1,11 @@
 ﻿using System;
 using Foundation;
-using Toggl.Daneel.Cells;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Cells;
 using UIKit;
 
-namespace Toggl.Daneel.Views.Client
+namespace Toggl.iOS.Views.Client
 {
     public partial class CreateClientViewCell : BaseTableViewCell<SelectableClientBaseViewModel>
     {

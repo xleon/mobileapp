@@ -4,7 +4,7 @@ using Toggl.Core.UI.Reactive;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Extensions.Reactive
+namespace Toggl.iOS.Extensions.Reactive
 {
     public static class UIStackViewExtensions
     {

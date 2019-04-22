@@ -6,8 +6,8 @@ using Foundation;
 using MvvmCross.Commands;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using ObjCRuntime;
-using Toggl.Daneel.Extensions;
-using Toggl.Daneel.Extensions.Reactive;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
@@ -15,7 +15,7 @@ using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.Shared.Extensions.CommonFunctions;
 
-namespace Toggl.Daneel
+namespace Toggl.iOS
 {
     public partial class RatingView : MvxView
     {

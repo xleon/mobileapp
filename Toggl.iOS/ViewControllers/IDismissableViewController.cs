@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     public interface IDismissableViewController
     {

@@ -2,15 +2,15 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Foundation;
-using Toggl.Daneel.Views.EntityCreation;
-using Toggl.Daneel.Views.StartTimeEntry;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
+using Toggl.iOS.Views.EntityCreation;
+using Toggl.iOS.Views.StartTimeEntry;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.ViewSources
+namespace Toggl.iOS.ViewSources
 {
     using ProjectSection = SectionModel<string, AutocompleteSuggestion>;
 

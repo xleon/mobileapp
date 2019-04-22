@@ -8,7 +8,7 @@ using Foundation;
 using System;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.ViewControllers.Settings
+namespace Toggl.iOS.ViewControllers.Settings
 {
     [Register ("CalendarSettingsViewController")]
     partial class CalendarSettingsViewController

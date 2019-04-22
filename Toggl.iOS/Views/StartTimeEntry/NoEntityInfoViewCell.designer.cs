@@ -7,14 +7,14 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Toggl.Daneel.Views.StartTimeEntry
+namespace Toggl.iOS.Views.StartTimeEntry
 {
 	[Register ("NoEntityInfoViewCell")]
 	partial class NoEntityInfoViewCell
 	{
 		[Outlet]
 		UIKit.UILabel Label { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (Label != null) {

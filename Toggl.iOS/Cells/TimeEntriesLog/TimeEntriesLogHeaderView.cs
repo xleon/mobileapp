@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using Foundation;
-using Toggl.Daneel.Cells;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using UIKit;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.iOS.Cells;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     public partial class TimeEntriesLogHeaderView : BaseTableHeaderFooterView<DaySummaryViewModel>
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using UIKit;
 
-namespace Toggl.Daneel.Views.Reports
+namespace Toggl.iOS.Views.Reports
 {
     internal sealed class BarSegmentView : UIView
     {

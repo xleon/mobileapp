@@ -1,11 +1,11 @@
 ﻿using System;
 using Foundation;
 using CoreAnimation;
-using Toggl.Daneel.Views;
 using static Toggl.Core.UI.Helper.Animation;
 using System.Reactive.Disposables;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.iOS.Extensions
 {
     public enum Direction
     {

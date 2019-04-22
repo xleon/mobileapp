@@ -1,7 +1,7 @@
 ﻿using MvvmCross.Platforms.Ios.Views;
 using UIKit;
 
-namespace Toggl.Daneel.ViewControllers.Navigation
+namespace Toggl.iOS.ViewControllers.Navigation
 {
     public sealed class OnboardingFlowNavigationController : MvxNavigationController
     {

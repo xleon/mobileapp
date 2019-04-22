@@ -6,8 +6,9 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
+using Toggl.iOS.Views;
 
-namespace Toggl.Daneel.ViewControllers.Settings
+namespace Toggl.iOS.ViewControllers.Settings
 {
 	[Register ("SendFeedbackViewController")]
 	partial class SendFeedbackViewController
@@ -31,14 +32,14 @@ namespace Toggl.Daneel.ViewControllers.Settings
 		UIKit.UITextView FeedbackTextView { get; set; }
 
 		[Outlet]
-		Toggl.Daneel.Views.ActivityIndicatorView IndicatorView { get; set; }
+		ActivityIndicatorView IndicatorView { get; set; }
 
 		[Outlet]
 		UIKit.UIButton SendButton { get; set; }
 
 		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (CloseButton != null) {

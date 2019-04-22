@@ -1,17 +1,17 @@
 ﻿using System.Reactive;
-using Toggl.Daneel.Presentation.Attributes;
 using Toggl.Core.UI.ViewModels;
 using UIKit;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using System.Threading.Tasks;
-using Toggl.Daneel.Extensions.Reactive;
-using Toggl.Daneel.Views.CountrySelection;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Shared.Extensions;
-using Toggl.Daneel.ViewSources.Generic.TableView;
 using Toggl.Core.UI.Collections;
+using Toggl.iOS.Presentation.Attributes;
+using Toggl.iOS.Views.CountrySelection;
+using Toggl.iOS.ViewSources.Generic.TableView;
 
-namespace Toggl.Daneel.ViewControllers
+namespace Toggl.iOS.ViewControllers
 {
     [ModalCardPresentation]
     public sealed partial class SelectCountryViewController : KeyboardAwareViewController<SelectCountryViewModel>, IDismissableViewController

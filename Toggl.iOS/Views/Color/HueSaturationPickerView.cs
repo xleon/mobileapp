@@ -7,7 +7,7 @@ using MvvmCross.Core;
 using Toggl.Shared.Extensions;
 using UIKit;
 
-namespace Toggl.Daneel.Views
+namespace Toggl.iOS.Views
 {
     [Register(nameof(HueSaturationPickerView))]
     public sealed class HueSaturationPickerView : UIView

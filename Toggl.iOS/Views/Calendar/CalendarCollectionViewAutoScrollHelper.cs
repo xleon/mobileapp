@@ -4,13 +4,13 @@ using System.Linq;
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Shared;
 using UIKit;
 using Math = System.Math;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Daneel.Views.Calendar
+namespace Toggl.iOS.Views.Calendar
 {
     public abstract class CalendarCollectionViewAutoScrollHelper : NSObject
     {

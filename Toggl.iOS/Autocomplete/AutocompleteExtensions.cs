@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using Foundation;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Span;
-using Toggl.Daneel.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
-using static Toggl.Daneel.Autocomplete.Constants;
+using static Toggl.iOS.Autocomplete.Constants;
 
-namespace Toggl.Daneel.Autocomplete
+namespace Toggl.iOS.Autocomplete
 {
     using ProjectInformationTuple = ValueTuple<long, string, string, long?, string>;
     using TagInformationTuple = ValueTuple<long, string>;

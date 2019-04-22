@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Immutable;
 using Foundation;
-using Toggl.Daneel.Cells;
-using Toggl.Daneel.Cells.Calendar;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Selectable;
+using Toggl.iOS.Cells;
+using Toggl.iOS.Cells.Calendar;
 using UIKit;
 
-namespace Toggl.Daneel.ViewSources
+namespace Toggl.iOS.ViewSources
 {
     using CalendarSectionModel = SectionModel<UserCalendarSourceViewModel, SelectableUserCalendarViewModel>;
     public sealed class SelectUserCalendarsTableViewSource : BaseTableViewSource<CalendarSectionModel, UserCalendarSourceViewModel, SelectableUserCalendarViewModel>

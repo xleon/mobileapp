@@ -1,7 +1,7 @@
-using Toggl.Daneel.Intents;
 using Toggl.Core.Services;
+using Toggl.iOS.Intents;
 
-namespace Toggl.Daneel.Extensions
+namespace Toggl.iOS.Extensions
 {
     public static class IntentPeriodExtension
     {

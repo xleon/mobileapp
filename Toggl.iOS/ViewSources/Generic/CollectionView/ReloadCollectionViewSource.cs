@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using Foundation;
 using UIKit;
 
-namespace Toggl.Daneel.ViewSources
+namespace Toggl.iOS.ViewSources
 {
     public class ReloadCollectionViewSource<TModel> : UICollectionViewSource
     {

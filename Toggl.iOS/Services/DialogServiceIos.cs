@@ -9,7 +9,7 @@ using Toggl.Core.UI.Services;
 using Toggl.Shared;
 using UIKit;
 
-namespace Toggl.Daneel.Services
+namespace Toggl.iOS.Services
 {
     public sealed class DialogServiceIos : IDialogService
     {
