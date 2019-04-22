@@ -30,17 +30,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		8CA99189223857B1003D0731 /* StopTimerIntent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StopTimerIntent.m; path = "../../../../../../Library/Developer/Xcode/DerivedData/Toggl.Daneel.IntentCodeGen-fgqupaxohandobbwvoqvnytgmtmp/Build/Intermediates.noindex/Toggl.Daneel.IntentCodeGen.build/Debug-iphonesimulator/Toggl.Daneel.IntentCodeGen.build/DerivedSources/IntentDefinitionGenerated/Intents/StopTimerIntent.m"; sourceTree = "<group>"; };
-		8CA9918A223857B1003D0731 /* StartTimerIntent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StartTimerIntent.m; path = "../../../../../../Library/Developer/Xcode/DerivedData/Toggl.Daneel.IntentCodeGen-fgqupaxohandobbwvoqvnytgmtmp/Build/Intermediates.noindex/Toggl.Daneel.IntentCodeGen.build/Debug-iphonesimulator/Toggl.Daneel.IntentCodeGen.build/DerivedSources/IntentDefinitionGenerated/Intents/StartTimerIntent.m"; sourceTree = "<group>"; };
-		8CA9918B223857B1003D0731 /* ShowReportPeriodIntent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShowReportPeriodIntent.m; path = "../../../../../../Library/Developer/Xcode/DerivedData/Toggl.Daneel.IntentCodeGen-fgqupaxohandobbwvoqvnytgmtmp/Build/Intermediates.noindex/Toggl.Daneel.IntentCodeGen.build/Debug-iphonesimulator/Toggl.Daneel.IntentCodeGen.build/DerivedSources/IntentDefinitionGenerated/Intents/ShowReportPeriodIntent.m"; sourceTree = "<group>"; };
+		8CA99189223857B1003D0731 /* StopTimerIntent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StopTimerIntent.m; sourceTree = "<group>"; };
+		8CA9918A223857B1003D0731 /* StartTimerIntent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartTimerIntent.m; sourceTree = "<group>"; };
+		8CA9918B223857B1003D0731 /* ShowReportPeriodIntent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowReportPeriodIntent.m; sourceTree = "<group>"; };
 		8CA9918C223857B1003D0731 /* ContinueTimerIntent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContinueTimerIntent.h; sourceTree = "<group>"; };
-		8CA9918D223857B1003D0731 /* ShowReportPeriodIntent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShowReportPeriodIntent.h; path = "../../../../../../Library/Developer/Xcode/DerivedData/Toggl.Daneel.IntentCodeGen-fgqupaxohandobbwvoqvnytgmtmp/Build/Intermediates.noindex/Toggl.Daneel.IntentCodeGen.build/Debug-iphonesimulator/Toggl.Daneel.IntentCodeGen.build/DerivedSources/IntentDefinitionGenerated/Intents/ShowReportPeriodIntent.h"; sourceTree = "<group>"; };
-		8CA9918E223857B1003D0731 /* ShowReportIntent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShowReportIntent.h; path = "../../../../../../Library/Developer/Xcode/DerivedData/Toggl.Daneel.IntentCodeGen-fgqupaxohandobbwvoqvnytgmtmp/Build/Intermediates.noindex/Toggl.Daneel.IntentCodeGen.build/Debug-iphonesimulator/Toggl.Daneel.IntentCodeGen.build/DerivedSources/IntentDefinitionGenerated/Intents/ShowReportIntent.h"; sourceTree = "<group>"; };
-		8CA9918F223857B1003D0731 /* ShowReportIntent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShowReportIntent.m; path = "../../../../../../Library/Developer/Xcode/DerivedData/Toggl.Daneel.IntentCodeGen-fgqupaxohandobbwvoqvnytgmtmp/Build/Intermediates.noindex/Toggl.Daneel.IntentCodeGen.build/Debug-iphonesimulator/Toggl.Daneel.IntentCodeGen.build/DerivedSources/IntentDefinitionGenerated/Intents/ShowReportIntent.m"; sourceTree = "<group>"; };
+		8CA9918D223857B1003D0731 /* ShowReportPeriodIntent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowReportPeriodIntent.h; sourceTree = "<group>"; };
+		8CA9918E223857B1003D0731 /* ShowReportIntent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowReportIntent.h; sourceTree = "<group>"; };
+		8CA9918F223857B1003D0731 /* ShowReportIntent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowReportIntent.m; sourceTree = "<group>"; };
 		8CA99190223857B1003D0731 /* ContinueTimerIntent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContinueTimerIntent.m; sourceTree = "<group>"; };
-		8CA99191223857B1003D0731 /* StartTimerIntent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StartTimerIntent.h; path = "../../../../../../Library/Developer/Xcode/DerivedData/Toggl.Daneel.IntentCodeGen-fgqupaxohandobbwvoqvnytgmtmp/Build/Intermediates.noindex/Toggl.Daneel.IntentCodeGen.build/Debug-iphonesimulator/Toggl.Daneel.IntentCodeGen.build/DerivedSources/IntentDefinitionGenerated/Intents/StartTimerIntent.h"; sourceTree = "<group>"; };
-		8CA99192223857B1003D0731 /* StopTimerIntent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StopTimerIntent.h; path = "../../../../../../Library/Developer/Xcode/DerivedData/Toggl.Daneel.IntentCodeGen-fgqupaxohandobbwvoqvnytgmtmp/Build/Intermediates.noindex/Toggl.Daneel.IntentCodeGen.build/Debug-iphonesimulator/Toggl.Daneel.IntentCodeGen.build/DerivedSources/IntentDefinitionGenerated/Intents/StopTimerIntent.h"; sourceTree = "<group>"; };
-		D62EA1A6212F145200350CA9 /* libToggl.Daneel.IntentStaticLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libToggl.Daneel.IntentStaticLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8CA99191223857B1003D0731 /* StartTimerIntent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartTimerIntent.h; sourceTree = "<group>"; };
+		8CA99192223857B1003D0731 /* StopTimerIntent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StopTimerIntent.h; sourceTree = "<group>"; };
+		D62EA1A6212F145200350CA9 /* libToggl.iOS.IntentStaticLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libToggl.iOS.IntentStaticLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D62EA1B6212F172800350CA9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D62EA1B8212F172B00350CA9 /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		D62EA1BA212FAD4900350CA9 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -63,7 +63,7 @@
 			isa = PBXGroup;
 			children = (
 				D62EA1BA212FAD4900350CA9 /* Makefile */,
-				D62EA1A8212F145200350CA9 /* Toggl.Daneel.IntentStaticLib */,
+				D62EA1A8212F145200350CA9 /* Toggl.iOS.IntentStaticLib */,
 				D62EA1A7212F145200350CA9 /* Products */,
 				D62EA1B5212F172800350CA9 /* Frameworks */,
 			);
@@ -72,12 +72,12 @@
 		D62EA1A7212F145200350CA9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D62EA1A6212F145200350CA9 /* libToggl.Daneel.IntentStaticLib.a */,
+				D62EA1A6212F145200350CA9 /* libToggl.iOS.IntentStaticLib.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D62EA1A8212F145200350CA9 /* Toggl.Daneel.IntentStaticLib */ = {
+		D62EA1A8212F145200350CA9 /* Toggl.iOS.IntentStaticLib */ = {
 			isa = PBXGroup;
 			children = (
 				8CA9918C223857B1003D0731 /* ContinueTimerIntent.h */,
@@ -91,7 +91,7 @@
 				8CA99192223857B1003D0731 /* StopTimerIntent.h */,
 				8CA99189223857B1003D0731 /* StopTimerIntent.m */,
 			);
-			path = Toggl.Daneel.IntentStaticLib;
+			path = Toggl.iOS.IntentStaticLib;
 			sourceTree = "<group>";
 		};
 		D62EA1B5212F172800350CA9 /* Frameworks */ = {
@@ -106,9 +106,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D62EA1A5212F145200350CA9 /* Toggl.Daneel.IntentStaticLib */ = {
+		D62EA1A5212F145200350CA9 /* Toggl.iOS.IntentStaticLib */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D62EA1AF212F145200350CA9 /* Build configuration list for PBXNativeTarget "Toggl.Daneel.IntentStaticLib" */;
+			buildConfigurationList = D62EA1AF212F145200350CA9 /* Build configuration list for PBXNativeTarget "Toggl.iOS.IntentStaticLib" */;
 			buildPhases = (
 				D62EA1A2212F145200350CA9 /* Sources */,
 				D62EA1A3212F145200350CA9 /* Frameworks */,
@@ -118,9 +118,9 @@
 			);
 			dependencies = (
 			);
-			name = Toggl.Daneel.IntentStaticLib;
+			name = Toggl.iOS.IntentStaticLib;
 			productName = Toggl.Daneel.IntentStaticLib;
-			productReference = D62EA1A6212F145200350CA9 /* libToggl.Daneel.IntentStaticLib.a */;
+			productReference = D62EA1A6212F145200350CA9 /* libToggl.iOS.IntentStaticLib.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -137,7 +137,7 @@
 					};
 				};
 			};
-			buildConfigurationList = D62EA1A1212F145200350CA9 /* Build configuration list for PBXProject "Toggl.Daneel.IntentStaticLib" */;
+			buildConfigurationList = D62EA1A1212F145200350CA9 /* Build configuration list for PBXProject "Toggl.iOS.IntentStaticLib" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -149,7 +149,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D62EA1A5212F145200350CA9 /* Toggl.Daneel.IntentStaticLib */,
+				D62EA1A5212F145200350CA9 /* Toggl.iOS.IntentStaticLib */,
 			);
 		};
 /* End PBXProject section */
@@ -308,7 +308,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D62EA1A1212F145200350CA9 /* Build configuration list for PBXProject "Toggl.Daneel.IntentStaticLib" */ = {
+		D62EA1A1212F145200350CA9 /* Build configuration list for PBXProject "Toggl.iOS.IntentStaticLib" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D62EA1AD212F145200350CA9 /* Debug */,
@@ -317,7 +317,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D62EA1AF212F145200350CA9 /* Build configuration list for PBXNativeTarget "Toggl.Daneel.IntentStaticLib" */ = {
+		D62EA1AF212F145200350CA9 /* Build configuration list for PBXNativeTarget "Toggl.iOS.IntentStaticLib" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D62EA1B0212F145200350CA9 /* Debug */,

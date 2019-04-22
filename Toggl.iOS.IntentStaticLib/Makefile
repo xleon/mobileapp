@@ -1,8 +1,8 @@
 XBUILD=xcodebuild
 PROJECT_ROOT=./
-PROJECT=$(PROJECT_ROOT)/Toggl.Daneel.IntentStaticLib.xcodeproj
-TARGET=Toggl.Daneel.IntentStaticLib
-NAMESPACE=Toggl.Daneel.Intents
+PROJECT=$(PROJECT_ROOT)/Toggl.iOS.IntentStaticLib.xcodeproj
+TARGET=Toggl.iOS.IntentStaticLib
+NAMESPACE=Toggl.iOS.Intents
 
 all: bind
 
@@ -22,7 +22,7 @@ lib$(TARGET).a: lib$(TARGET)-i386.a lib$(TARGET)-armv7.a lib$(TARGET)-arm64.a
 	xcrun -sdk iphoneos lipo -create -output $@ $^
 
 bind: lib$(TARGET).a
-	sharpie bind -scope Toggl.Daneel.IntentStaticLib -output bo -namespace $(NAMESPACE) -sdk iphoneos Toggl.Daneel.IntentStaticLib/*.h
+	sharpie bind -scope Toggl.iOS.IntentStaticLib -output bo -namespace $(NAMESPACE) -sdk iphoneos Toggl.iOS.IntentStaticLib/*.h
 
 clean:
 	-rm -rf bo build *.a *.dll
