@@ -242,6 +242,9 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("Origin")]
         public IAnalyticsEvent<EditTimeEntryOrigin> EditViewOpened { get; protected set; }
 
+        [AnalyticsEvent("Type", "Source", "ExceptionType", "StackTrace")]
+        public IAnalyticsEvent<string, string, string, string> DebugScheduleError { get; protected set; }
+
         public void TrackAnonymized(Exception exception)
         {
             if (exception.IsAnonymized())
