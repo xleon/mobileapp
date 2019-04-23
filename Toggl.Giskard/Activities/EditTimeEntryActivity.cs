@@ -22,6 +22,7 @@ using TimeEntryExtensions = Toggl.Giskard.Extensions.TimeEntryExtensions;
 using TextResources = Toggl.Foundation.Resources;
 using TagsAdapter = Toggl.Giskard.Adapters.SimpleAdapter<string>;
 using static Toggl.Giskard.Resource.String;
+using MvvmCross;
 
 namespace Toggl.Giskard.Activities
 {
@@ -33,26 +34,48 @@ namespace Toggl.Giskard.Activities
     {
         private TagsAdapter tagsAdapter = new TagsAdapter(Resource.Layout.EditTimeEntryTagCell, StringViewHolder.Create);
 
-        public EditTimeEntryActivity()
-        {
-
-        }
-
-        public EditTimeEntryActivity(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
-        {
-
-        }
+        private int rehydrationCount = 0;
+        private IAnalyticsService analyticsService;
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+
+            analyticsService = Mvx.Resolve<IAnalyticsService>();
+
+            if (bundle != null)
+            {
+                rehydrationCount = bundle.GetInt(nameof(rehydrationCount));
+            }
+
             SetContentView(Resource.Layout.EditTimeEntryActivity);
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
 
             InitializeViews();
 
-            setupViews();
+            bool hasViewModel = ViewModel != null;
+            bool hasTimeEntries = hasViewModel && ViewModel.TimeEntryIds != null;
+            int timeEntriesCount = ViewModel?.TimeEntryIds?.Length ?? 0;
+
+            try
+            {
+                setupViews();
+            }
+            catch (Exception exception)
+            {
+                analyticsService.Track(exception, $"{nameof(setupViews)} failed to execute.");
+                analyticsService.DebugEditViewInitialSetup.Track(hasViewModel, hasTimeEntries, timeEntriesCount, rehydrationCount);
+
+                throw;
+            }
+
             setupBindings();
+        }
+
+        protected override void OnSaveInstanceState(Bundle outState)
+        {
+            base.OnSaveInstanceState(outState);
+            outState.PutInt(nameof(rehydrationCount), rehydrationCount + 1);
         }
 
         protected override void OnResume()

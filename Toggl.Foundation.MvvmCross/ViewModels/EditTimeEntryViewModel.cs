@@ -239,6 +239,25 @@ namespace Toggl.Foundation.MvvmCross.ViewModels
             Delete = actionFactory.FromAsync(delete);
         }
 
+        protected override void ReloadFromBundle(IMvxBundle state)
+        {
+            base.ReloadFromBundle(state);
+
+            var ids = state.Data[nameof(TimeEntryIds)];
+
+            if (ids == null)
+                return;
+
+            TimeEntryIds = ids.Split(',').Select(long.Parse).ToArray();
+        }
+
+        protected override void SaveStateToBundle(IMvxBundle bundle)
+        {
+            base.SaveStateToBundle(bundle);
+
+            bundle.Data[nameof(TimeEntryIds)] = string.Join(",", TimeEntryIds);
+        }
+
         public override void Prepare(long[] parameter)
         {
             if (parameter == null || parameter.Length == 0)

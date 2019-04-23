@@ -242,6 +242,9 @@ namespace Toggl.Foundation.Analytics
         [AnalyticsEvent("Origin")]
         public IAnalyticsEvent<EditTimeEntryOrigin> EditViewOpened { get; protected set; }
 
+        [AnalyticsEvent("HasViewModel", "HasTimeEntries", "TimeEntriesCount", "RehydrationCount")]
+        public IAnalyticsEvent<bool, bool, int, int> DebugEditViewInitialSetup { get; }
+
         public void TrackAnonymized(Exception exception)
         {
             if (exception.IsAnonymized())
