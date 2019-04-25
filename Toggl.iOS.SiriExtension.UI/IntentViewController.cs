@@ -71,6 +71,18 @@ namespace Toggl.iOS.SiriExtension.UI
                     }
 
                     break;
+                case StartTimerFromClipboardIntent _:
+                    var description = interaction.IntentResponse.UserActivity.GetResponseText();
+                    if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Success)
+                    {
+                        desiredSize = showStartTimerSuccess(description);
+                    }
+
+                    if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Ready)
+                    {
+                        desiredSize = showMessage($"Start tracking {description ?? "time"}?");
+                    }
+                    break;
                 case StopTimerIntent _:
                     if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Success)
                     {

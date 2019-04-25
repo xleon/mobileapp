@@ -55,6 +55,20 @@ namespace Toggl.iOS.Intents
     }
 
     [Native]
+    public enum StartTimerFromClipboardIntentResponseCode : long
+    {
+        Unspecified = 0,
+        Ready,
+        ContinueInApp,
+        InProgress,
+        Success,
+        Failure,
+        FailureRequiringAppLaunch,
+        FailureNoApiToken = 100,
+        FailureSyncConflict
+    }
+
+    [Native]
     public enum StartTimerIntentResponseCode : long
     {
         Unspecified = 0,

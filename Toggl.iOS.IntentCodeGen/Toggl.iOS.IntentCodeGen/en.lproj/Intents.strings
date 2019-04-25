@@ -2,6 +2,10 @@
 
 "0vfpVe" = "Time-tracking started.";
 
+"3fSmL9" = "Start time tracking from clipboard";
+
+"3gmF02" = "Start timer from clipboard";
+
 "5xqJdx" = "in ${workspace}";
 
 "6vfiCX" = "Here is the report.";
@@ -12,11 +16,15 @@
 
 "ArvZvi" = "Start timer for ${entryDescription}";
 
+"C2Ujo0" = "Log in to use this shortcut.";
+
 "C84CvN" = "Log in to use this shortcut.";
 
 "DcWrhF" = "Continue tracking";
 
 "DxHT4S" = "App data is outdated.";
+
+"E8rYzi" = "Start timer from clipboard";
 
 "Emkvsq-EagY8C" = "Here is the report for This Week.";
 
@@ -42,7 +50,17 @@
 
 "Mr6glC" = "in ${workspace}";
 
+"Np6x0m" = "Time-tracking started.";
+
+"Q15AN4" = "in ${workspace}";
+
+"Q7oQLD" = "Start timer from clipboard";
+
 "QmBKnK" = "Stop a running timer";
+
+"Rv6kvt" = "Start a new time tracking from clipboard";
+
+"T5OmeC" = "Start timer from clipboard";
 
 "UHcyyr" = "Stop a running timer";
 
@@ -50,11 +68,19 @@
 
 "WSMrGS" = "Stopped. You've tracked time for ${entryDurationString}.";
 
+"XDhgAw" = "for ${projectId} in ${workspace}";
+
 "akQb1h" = "Stopped. You've tracked ${entryDescription} for ${entryDurationString}.";
+
+"bCeUiv" = "in ${workspace}";
 
 "bHlXe3" = "in ${workspace}";
 
+"ciMjmD" = "in ${workspace}";
+
 "dZOAcx" = "Start timer for ${entryDescription}";
+
+"ftAUTw" = "Start timer from clipboard";
 
 "hxXp2c" = "Show report for a period";
 
@@ -90,7 +116,11 @@
 
 "ttEh92" = "Log in to use this shortcut.";
 
+"vtK4O7" = "for ${projectId} in ${workspace}";
+
 "vvtqdG" = "Show report";
 
 "xGukxu" = "Start timer for ${entryDescription}";
+
+"yhKeN0" = "App data is outdated.";
 

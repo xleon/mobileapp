@@ -32,7 +32,8 @@
 				<string>ShowReportIntent</string>
 				<string>ShowReportPeriodIntent</string>
 				<string>StartTimerIntent</string>
-                <string>ContinueTimerIntent</string>
+				<string>StartTimerFromClipboardIntent</string>
+				<string>ContinueTimerIntent</string>
 			</array>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>

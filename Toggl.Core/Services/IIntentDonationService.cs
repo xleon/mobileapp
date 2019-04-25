@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Toggl.Shared.Models;
 
 namespace Toggl.Core.Services
@@ -18,7 +19,7 @@ namespace Toggl.Core.Services
     public interface IIntentDonationService
     {
         void SetDefaultShortcutSuggestions(IWorkspace workspace);
-        void DonateStartTimeEntry(IWorkspace workspace, ITimeEntry timeEntry);
+        Task DonateStartTimeEntry(IWorkspace workspace, ITimeEntry timeEntry);
         void DonateStopCurrentTimeEntry();
         void DonateShowReport(ReportPeriod period);
         void DonateShowReport();

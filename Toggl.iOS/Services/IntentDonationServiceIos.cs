@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Foundation;
 using Intents;
 using Toggl.Core;
 using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
 using Toggl.Shared.Models;
 using Toggl.Core.Services;
 using Toggl.iOS.Intents;
@@ -15,10 +18,17 @@ namespace Toggl.iOS.Services
     public class IntentDonationServiceIos : IIntentDonationService
     {
         private IAnalyticsService analyticsService;
+        private readonly ITogglDataSource dataSource;
 
-        public IntentDonationServiceIos(IAnalyticsService analyticsService)
+        private INRelevanceProvider[] startTimerRelevanceProviders = {
+            new INDailyRoutineRelevanceProvider(INDailyRoutineSituation.Work),
+            new INDailyRoutineRelevanceProvider(INDailyRoutineSituation.Gym),
+            new INDailyRoutineRelevanceProvider(INDailyRoutineSituation.School)
+        };
+        public IntentDonationServiceIos(IAnalyticsService analyticsService, ITogglDataSource dataSource)
         {
             this.analyticsService = analyticsService;
+            this.dataSource = dataSource;
         }
 
         public void SetDefaultShortcutSuggestions(IWorkspace workspace)
@@ -31,7 +41,7 @@ namespace Toggl.iOS.Services
             setupDefaultShortcuts(workspace);
         }
 
-        public void DonateStartTimeEntry(IWorkspace workspace, ITimeEntry timeEntry)
+        public async Task DonateStartTimeEntry(IWorkspace workspace, ITimeEntry timeEntry)
         {
             if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
             {
@@ -40,33 +50,46 @@ namespace Toggl.iOS.Services
 
             var relevantShortcuts = new List<INRelevantShortcut>();
 
-            var intent = new StartTimerIntent();
-            intent.Workspace = new INObject(workspace.Id.ToString(), workspace.Name);
+            var startTimerIntent = new StartTimerIntent();
+            var startTimerWithClipboardIntent = new StartTimerFromClipboardIntent();
+            startTimerIntent.Workspace = new INObject(workspace.Id.ToString(), workspace.Name);
+            startTimerWithClipboardIntent.Workspace = new INObject(workspace.Id.ToString(), workspace.Name);
+
             if (!string.IsNullOrEmpty(timeEntry.Description))
             {
                 // If any of the tags or the project id were just created and haven't sync we ignore this action until the user repeats it
-                if (timeEntry.ProjectId < 0 || timeEntry.TagIds.Any(tagId => tagId < 0))
+                if (!(timeEntry.ProjectId is long projectId))
                 {
                     return;
                 }
 
-                intent.EntryDescription = timeEntry.Description;
-                intent.ProjectId = new INObject(timeEntry.ProjectId.ToString(), timeEntry.ProjectId.ToString());
-                intent.Tags = timeEntry.TagIds.Select(tag => new INObject(tag.ToString(), tag.ToString())).ToArray();
-                intent.Billable = new INObject(timeEntry.Billable.ToString(), timeEntry.Billable.ToString());
-                intent.SuggestedInvocationPhrase = $"Track {timeEntry.Description}";
+                if (projectId < 0 || timeEntry.TagIds.Any(tagId => tagId < 0))
+                {
+                    return;
+                }
+
+                var project = await dataSource.Projects.GetById(projectId).FirstAsync();
+
+                startTimerIntent.EntryDescription = timeEntry.Description;
+                startTimerIntent.ProjectId = startTimerWithClipboardIntent.ProjectId = new INObject(timeEntry.ProjectId.ToString(), project.Name);
+                startTimerIntent.Tags = startTimerWithClipboardIntent.Tags = timeEntry.TagIds.Select(tag => new INObject(tag.ToString(), tag.ToString())).ToArray();
+                startTimerIntent.Billable = startTimerWithClipboardIntent.Billable = new INObject(timeEntry.Billable.ToString(), timeEntry.Billable.ToString());
+                startTimerIntent.SuggestedInvocationPhrase = $"Track {timeEntry.Description}";
 
                 // Relevant shortcut for the Siri Watch Face
-                var shortcut = createRelevantShortcut(intent);
-                relevantShortcuts.Add(shortcut);
+                relevantShortcuts.Add(createRelevantShortcut(startTimerIntent));
+                relevantShortcuts.Add(createRelevantShortcut(startTimerWithClipboardIntent));
             }
             else
             {
-                intent.SuggestedInvocationPhrase = Resources.StartTimerInvocationPhrase;
+                startTimerIntent.SuggestedInvocationPhrase = Resources.StartTimerInvocationPhrase;
             }
 
-            var interaction = new INInteraction(intent, null);
-            interaction.DonateInteraction(trackError);
+            var startTimerInteraction = new INInteraction(startTimerIntent, null);
+            startTimerInteraction.DonateInteraction(trackError);
+
+            var startTimerFromClipboardInteraction = new INInteraction(startTimerWithClipboardIntent, null);
+            startTimerFromClipboardInteraction.DonateInteraction(trackError);
 
             // Descriptionless Relevant Shortcut. Always added even if the intent has one
             var descriptionlessIntent = new StartTimerIntent();
@@ -173,12 +196,13 @@ namespace Toggl.iOS.Services
             startTimerIntent.SuggestedInvocationPhrase = Resources.StartTimerInvocationPhrase;
             var startShortcut = new INShortcut(startTimerIntent);
             var startRelevantShorcut = new INRelevantShortcut(startShortcut);
-            INRelevanceProvider[] startTimerProviders = {
-                new INDailyRoutineRelevanceProvider(INDailyRoutineSituation.Work),
-                new INDailyRoutineRelevanceProvider(INDailyRoutineSituation.Gym),
-                new INDailyRoutineRelevanceProvider(INDailyRoutineSituation.School)
-            };
-            startRelevantShorcut.RelevanceProviders = startTimerProviders;
+            startRelevantShorcut.RelevanceProviders = startTimerRelevanceProviders;
+
+            var startTimerWithClipboardIntent = new StartTimerFromClipboardIntent();
+            startTimerWithClipboardIntent.Workspace = new INObject(workspace.Id.ToString(), workspace.Name);
+            var startTimerWithClipboardShortcut = new INShortcut(startTimerWithClipboardIntent);
+            var startTimerWithClipboardRelevantShorcut = new INRelevantShortcut(startTimerWithClipboardShortcut);
+            startTimerWithClipboardRelevantShorcut.RelevanceProviders = startTimerRelevanceProviders;
 
             var stopTimerIntent = new StopTimerIntent();
             stopTimerIntent.SuggestedInvocationPhrase = Resources.StopTimerInvocationPhrase;
@@ -201,13 +225,13 @@ namespace Toggl.iOS.Services
             var continueTimerShortcut = new INShortcut(continueTimerIntent);
             var continueTimerRelevantShortcut = new INRelevantShortcut(continueTimerShortcut)
             {
-                RelevanceProviders = startTimerProviders
+                RelevanceProviders = startTimerRelevanceProviders
             };
 
-            var shortcuts = new[] { startShortcut, stopShortcut, reportShortcut, continueTimerShortcut };
+            var shortcuts = new[] { startShortcut, stopShortcut, reportShortcut, continueTimerShortcut, startTimerWithClipboardShortcut };
             INVoiceShortcutCenter.SharedCenter.SetShortcutSuggestions(shortcuts);
 
-            var relevantShortcuts = new[] { startRelevantShorcut, stopRelevantShortcut, continueTimerRelevantShortcut };
+            var relevantShortcuts = new[] { startRelevantShorcut, stopRelevantShortcut, continueTimerRelevantShortcut, startTimerWithClipboardRelevantShorcut };
             INRelevantShortcutStore.DefaultStore.SetRelevantShortcuts(relevantShortcuts, trackError);
         }
 

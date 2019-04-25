@@ -74,7 +74,7 @@ namespace Toggl.iOS
             => new GoogleServiceIos();
 
         protected override IIntentDonationService CreateIntentDonationService()
-            => new IntentDonationServiceIos(AnalyticsService);
+            => new IntentDonationServiceIos(AnalyticsService, DataSource);
 
         protected override IKeyValueStorage CreateKeyValueStorage()
             => new UserDefaultsStorageIos();

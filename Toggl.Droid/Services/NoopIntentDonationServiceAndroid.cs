@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Toggl.Shared.Models;
 using Toggl.Core.Services;
 
@@ -9,8 +10,9 @@ namespace Toggl.Droid.Services
         {
         }
 
-        public void DonateStartTimeEntry(IWorkspace workspace, ITimeEntry timeEntry)
+        public Task DonateStartTimeEntry(IWorkspace workspace, ITimeEntry timeEntry)
         {
+            return null;
         }
 
         public void DonateStopCurrentTimeEntry()
