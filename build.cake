@@ -13,7 +13,7 @@ var buildAll = Argument("buildall", Bitrise.IsRunningOnBitrise);
 
 private void FormatAndroidAxml()
 {
-	var args = "tools/xml-format/WilliamizeXml.Console.dll Toggl.Giskard/Resources/layout/";
+	var args = "tools/xml-format/WilliamizeXml.Console.dll Toggl.Droid/Resources/layout/";
 
 	StartProcess("mono", new ProcessSettings { Arguments = args });
 }
@@ -73,7 +73,7 @@ private Action BuildSolution(string configuration, string platform = "")
 
 private Action GenerateApk(string configuration)
 {
-    const string droidProject = "./Toggl.Giskard/Toggl.Giskard.csproj";
+    const string droidProject = "./Toggl.Droid/Toggl.Droid.csproj";
     var buildSettings = new MSBuildSettings
     {
         Verbosity = Bitrise.IsRunningOnBitrise ? Verbosity.Verbose : Verbosity.Minimal,
@@ -111,7 +111,7 @@ private string GetCommitCount()
 
 private TemporaryFileTransformation GetAndroidProjectConfigurationTransformation()
 {
-    const string path = "Toggl.Giskard/Toggl.Giskard.csproj";
+    const string path = "Toggl.Droid/Toggl.Droid.csproj";
     var storePass = EnvironmentVariable("BITRISEIO_ANDROID_KEYSTORE_PASSWORD");
     var keyAlias = EnvironmentVariable("BITRISEIO_ANDROID_KEYSTORE_ALIAS");
     var keyPass = EnvironmentVariable("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD");
@@ -131,7 +131,7 @@ private TemporaryFileTransformation GetAndroidProjectConfigurationTransformation
 
 private TemporaryFileTransformation GetIosAnalyticsServicesConfigurationTransformation()
 {
-    const string path = "Toggl.Daneel/GoogleService-Info.plist";
+    const string path = "Toggl.iOS/GoogleService-Info.plist";
     var adUnitForBannerTest = EnvironmentVariable("TOGGL_AD_UNIT_ID_FOR_BANNER_TEST");
     var adUnitIdForInterstitialTest = EnvironmentVariable("TOGGL_AD_UNIT_ID_FOR_INTERSTITIAL_TEST");
     var clientId = EnvironmentVariable("TOGGL_CLIENT_ID");
@@ -163,7 +163,7 @@ private TemporaryFileTransformation GetIosAnalyticsServicesConfigurationTransfor
 
 private TemporaryFileTransformation GetIosAppDelegateTransformation()
 {
-    const string path = "Toggl.Daneel/Startup/AppDelegate.cs";
+    const string path = "Toggl.iOS/Startup/AppDelegate.cs";
     var appCenterId = EnvironmentVariable("TOGGL_APP_CENTER_ID_IOS");
     var adjustToken = EnvironmentVariable("TOGGL_ADJUST_APP_TOKEN");
 
@@ -181,7 +181,7 @@ private TemporaryFileTransformation GetIosAppDelegateTransformation()
 
 private TemporaryFileTransformation GetAndroidGoogleServicesTransformation()
 {
-    const string path = "Toggl.Giskard/google-services.json";
+    const string path = "Toggl.Droid/google-services.json";
     var gcmSenderId = EnvironmentVariable("TOGGL_GCM_SENDER_ID");
     var databaseUrl = EnvironmentVariable("TOGGL_DATABASE_URL");
     var projectId = EnvironmentVariable("TOGGL_PROJECT_ID");
@@ -209,7 +209,7 @@ private TemporaryFileTransformation GetAndroidGoogleServicesTransformation()
 
 private TemporaryFileTransformation GetAndroidGoogleLoginTransformation()
 {
-    const string path = "Toggl.Giskard/Services/GoogleServiceAndroid.cs";
+    const string path = "Toggl.Droid/Services/GoogleServiceAndroid.cs";
     var clientId = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID");
 
     var filePath = GetFiles(path).Single();
@@ -225,7 +225,7 @@ private TemporaryFileTransformation GetAndroidGoogleLoginTransformation()
 
 private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
 {
-    const string path = "Toggl.Daneel/Info.plist";
+    const string path = "Toggl.iOS/Info.plist";
     const string bundleIdToReplace = "com.toggl.daneel.debug";
     const string appNameToReplace = "Toggl for Devs";
     const string iconSetToReplace = "Assets.xcassets/AppIcon-debug.appiconset";
@@ -267,7 +267,7 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
 
 private TemporaryFileTransformation GetIosSiriExtensionInfoConfigurationTransformation()
 {
-    const string path = "Toggl.Daneel.SiriExtension/Info.plist";
+    const string path = "Toggl.iOS.SiriExtension/Info.plist";
     const string bundleIdToReplace = "com.toggl.daneel.debug.SiriExtension";
     const string appNameToReplace = "Siri Extension Development";
 
@@ -302,7 +302,7 @@ private TemporaryFileTransformation GetIosSiriExtensionInfoConfigurationTransfor
 
 private TemporaryFileTransformation GetIosSiriUIExtensionInfoConfigurationTransformation()
 {
-    const string path = "Toggl.Daneel.SiriExtension.UI/Info.plist";
+    const string path = "Toggl.iOS.SiriExtension.UI/Info.plist";
     const string bundleIdToReplace = "com.toggl.daneel.debug.SiriUIExtension";
     const string appNameToReplace = "Toggl.Daneel.SiriExtension.UI";
 
@@ -337,7 +337,7 @@ private TemporaryFileTransformation GetIosSiriUIExtensionInfoConfigurationTransf
 
 private TemporaryFileTransformation GetIosEntitlementsConfigurationTransformation()
 {
-    const string path = "Toggl.Daneel/Entitlements.plist";
+    const string path = "Toggl.iOS/Entitlements.plist";
     const string groupIdToReplace = "group.com.toggl.daneel.debug.extensions";
 
     var groupId = groupIdToReplace;
@@ -364,7 +364,7 @@ private TemporaryFileTransformation GetIosEntitlementsConfigurationTransformatio
 
 private TemporaryFileTransformation GetIosExtensionEntitlementsConfigurationTransformation()
 {
-    const string path = "Toggl.Daneel.SiriExtension/Entitlements.plist";
+    const string path = "Toggl.iOS.SiriExtension/Entitlements.plist";
     const string groupIdToReplace = "group.com.toggl.daneel.debug.extensions";
 
     var groupId = groupIdToReplace;
@@ -391,7 +391,7 @@ private TemporaryFileTransformation GetIosExtensionEntitlementsConfigurationTran
 
 private TemporaryFileTransformation GetAndroidManifestTransformation()
 {
-    const string path = "Toggl.Giskard/Properties/AndroidManifest.xml";
+    const string path = "Toggl.Droid/Properties/AndroidManifest.xml";
     const string packageNameToReplace = "com.toggl.giskard.debug";
     const string versionNumberToReplace = "987654321";
     const string appNameToReplace = "Toggl for Devs";
@@ -426,7 +426,7 @@ private TemporaryFileTransformation GetAndroidManifestTransformation()
 
 private TemporaryFileTransformation GetAndroidSplashScreenTransformation()
 {
-    const string path = "Toggl.Giskard/Startup/SplashScreen.cs";
+    const string path = "Toggl.Droid/Startup/SplashScreen.cs";
     const string appNameToReplace = "Toggl for Devs";
 
     var appName = appNameToReplace;
@@ -453,7 +453,7 @@ private TemporaryFileTransformation GetAndroidSplashScreenTransformation()
 
 private TemporaryFileTransformation GetAndroidTogglApplicationTransformation()
 {
-    const string path = "Toggl.Giskard/Startup/TogglApplication.cs";
+    const string path = "Toggl.Droid/Startup/TogglApplication.cs";
     var appCenterId = EnvironmentVariable("TOGGL_APP_CENTER_ID_DROID");
 
     var filePath = GetFiles(path).Single();
@@ -469,7 +469,7 @@ private TemporaryFileTransformation GetAndroidTogglApplicationTransformation()
 
 private TemporaryFileTransformation GetIntegrationTestsConfigurationTransformation()
 {
-    const string path = "Toggl.Ultrawave.Tests.Integration/Helper/Configuration.cs";
+    const string path = "Toggl.Networking.Tests.Integration/Helper/Configuration.cs";
     var commitHash = GetCommitHash();
     var filePath = GetFiles(path).Single();
     var file = TransformTextFile(filePath).ToString();
@@ -510,22 +510,22 @@ private HashSet<string> targetsThatSkipTearDown = new HashSet<string>
 
 private string[] GetUnitTestProjects() => new []
 {
-    "./Toggl.Multivac.Tests/Toggl.Multivac.Tests.csproj",
-    "./Toggl.Ultrawave.Tests/Toggl.Ultrawave.Tests.csproj",
-    "./Toggl.PrimeRadiant.Tests/Toggl.PrimeRadiant.Tests.csproj",
-    "./Toggl.Foundation.Tests/Toggl.Foundation.Tests.csproj",
+    "./Toggl.Shared.Tests/Toggl.Shared.Tests.csproj",
+    "./Toggl.Networking.Tests/Toggl.Networking.Tests.csproj",
+    "./Toggl.Storage.Tests/Toggl.Storage.Tests.csproj",
+    "./Toggl.Core.Tests/Toggl.Core.Tests.csproj",
 };
 
 private string[] GetUITestFiles() => new []
 {
-    "./bin/Release/Toggl.Daneel.Tests.UI.dll"
+    "./bin/Release/Toggl.iOS.Tests.UI.dll"
 };
 
 private string[] GetIntegrationTestProjects()
-    => new [] { "./Toggl.Ultrawave.Tests.Integration/Toggl.Ultrawave.Tests.Integration.csproj" };
+    => new [] { "./Toggl.Networking.Tests.Integration/Toggl.Networking.Tests.Integration.csproj" };
 
 private string[] GetSyncTestProjects()
-    => new [] { "./Toggl.Foundation.Tests.Sync/Toggl.Foundation.Tests.Sync.csproj" };
+    => new [] { "./Toggl.Core.Tests.Sync/Toggl.Core.Tests.Sync.csproj" };
 
 Setup(context => transformations.ForEach(transformation => System.IO.File.WriteAllText(transformation.Path, transformation.Temporary)));
 Teardown(context =>
@@ -541,25 +541,25 @@ Task("Clean")
     .Does(() =>
         {
             CleanDirectory("./bin");
-            CleanDirectory("./Toggl.Daneel/obj");
-            CleanDirectory("./Toggl.Daneel.SiriExtension/obj");
-            CleanDirectory("./Toggl.Daneel.SiriExtension.UI/obj");
-            CleanDirectory("./Toggl.Daneel.Tests/obj");
-            CleanDirectory("./Toggl.Daneel.Tests.UI/obj");
-            CleanDirectory("./Toggl.Giskard/obj");
-            CleanDirectory("./Toggl.Giskard.Tests/obj");
-            CleanDirectory("./Toggl.Giskard.Tests.UI/obj");
-            CleanDirectory("./Toggl.Foundation/obj");
-            CleanDirectory("./Toggl.Foundation.MvvmCross/obj");
-            CleanDirectory("./Toggl.Foundation.Tests/obj");
-            CleanDirectory("./Toggl.Multivac/obj");
-            CleanDirectory("./Toggl.Multivac.Tests/obj");
-            CleanDirectory("./Toggl.PrimeRadiant/obj");
-            CleanDirectory("./Toggl.PrimeRadiant.Realm/obj");
-            CleanDirectory("./Toggl.PrimeRadiant.Tests/obj");
-            CleanDirectory("./Toggl.Ultrawave/obj");
-            CleanDirectory("./Toggl.Ultrawave.Tests/obj");
-            CleanDirectory("./Toggl.Ultrawave.Tests.Integration/obj");
+            CleanDirectory("./Toggl.iOS/obj");
+            CleanDirectory("./Toggl.iOS.SiriExtension/obj");
+            CleanDirectory("./Toggl.iOS.SiriExtension.UI/obj");
+            CleanDirectory("./Toggl.iOS.Tests/obj");
+            CleanDirectory("./Toggl.iOS.Tests.UI/obj");
+            CleanDirectory("./Toggl.Droid/obj");
+            CleanDirectory("./Toggl.Droid.Tests/obj");
+            CleanDirectory("./Toggl.Droid.Tests.UI/obj");
+            CleanDirectory("./Toggl.Core/obj");
+            CleanDirectory("./Toggl.Core.UI/obj");
+            CleanDirectory("./Toggl.Core.Tests/obj");
+            CleanDirectory("./Toggl.Shared/obj");
+            CleanDirectory("./Toggl.Shared.Tests/obj");
+            CleanDirectory("./Toggl.Storage/obj");
+            CleanDirectory("./Toggl.Storage.Realm/obj");
+            CleanDirectory("./Toggl.Storage.Tests/obj");
+            CleanDirectory("./Toggl.Networking/obj");
+            CleanDirectory("./Toggl.Networking.Tests/obj");
+            CleanDirectory("./Toggl.Networking.Tests.Integration/obj");
             CleanDirectory("./Toggl.Tools/SyncDiagramGenerator/obj");
         });
 

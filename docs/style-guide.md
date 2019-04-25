@@ -360,13 +360,13 @@ public interface IFooService
     void Bar();
 }
 
-//In Daneel
+//In iOS
 public class FooServiceIos : IFooService
 {
     public void Bar() { }
 }
 
-//In Giskard
+//In Toggl.Droid
 public class FooServiceAndroid : IFooService
 {
     public void Bar() { }

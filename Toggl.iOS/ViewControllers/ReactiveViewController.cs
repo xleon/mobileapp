@@ -1,0 +1,28 @@
+﻿using System;
+using System.Reactive.Disposables;
+using MvvmCross.Platforms.Ios.Views;
+using MvvmCross.ViewModels;
+using Toggl.Core.UI.ViewModels;
+
+namespace Toggl.iOS.ViewControllers
+{
+    public abstract class ReactiveViewController<TViewModel> : MvxViewController<TViewModel>
+        where TViewModel : class, IMvxViewModel
+    {
+        public CompositeDisposable DisposeBag { get; private set; } = new CompositeDisposable();
+
+        protected ReactiveViewController(string nibName)
+            : base(nibName, null) { }
+
+        protected ReactiveViewController(IntPtr handle)
+            : base(handle) { }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (!disposing) return;
+            DisposeBag?.Dispose();
+        }
+    }
+}
