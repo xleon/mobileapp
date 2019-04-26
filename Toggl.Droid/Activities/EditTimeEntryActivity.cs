@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
@@ -22,7 +20,6 @@ using TimeEntryExtensions = Toggl.Droid.Extensions.TimeEntryExtensions;
 using TextResources = Toggl.Core.Resources;
 using TagsAdapter = Toggl.Droid.Adapters.SimpleAdapter<string>;
 using static Toggl.Droid.Resource.String;
-using MvvmCross;
 
 namespace Toggl.Droid.Activities
 {
@@ -40,8 +37,6 @@ namespace Toggl.Droid.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
-            analyticsService = Mvx.Resolve<IAnalyticsService>();
 
             if (bundle != null)
             {
@@ -63,6 +58,7 @@ namespace Toggl.Droid.Activities
             }
             catch (Exception exception)
             {
+                analyticsService = AndroidDependencyContainer.Instance.AnalyticsService;
                 analyticsService.Track(exception, $"{nameof(setupViews)} failed to execute.");
                 analyticsService.DebugEditViewInitialSetup.Track(hasViewModel, hasTimeEntries, timeEntriesCount, rehydrationCount);
 
