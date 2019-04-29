@@ -1,0 +1,175 @@
+﻿using System;
+using System.Reactive;
+using System.Reactive.Disposables;
+using Foundation;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
+using Toggl.Core;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.iOS.Cells;
+using Toggl.iOS.Transformations;
+using Toggl.Shared;
+using UIKit;
+
+namespace Toggl.iOS.Views
+{
+    public partial class TimeEntriesLogViewCell : BaseTableViewCell<LogItemViewModel>
+    {
+        public static readonly string Identifier = "timeEntryCell";
+
+        private ProjectTaskClientToAttributedString projectTaskClientToAttributedString;
+
+        public static readonly NSString Key = new NSString(nameof(TimeEntriesLogViewCell));
+        public static readonly UINib Nib;
+
+        public CompositeDisposable DisposeBag = new CompositeDisposable();
+
+        public IObservable<Unit> ContinueButtonTap
+            => ContinueButton.Rx().Tap();
+
+        public IObservable<Unit> ToggleGroup
+            => GroupSizeContainer.Rx().Tap();
+
+        static TimeEntriesLogViewCell()
+        {
+            Nib = UINib.FromName(nameof(TimeEntriesLogViewCell), NSBundle.MainBundle);
+        }
+
+        protected TimeEntriesLogViewCell(IntPtr handle)
+            : base(handle)
+        {
+        }
+
+        public override string AccessibilityLabel
+        {
+            get
+            {
+                var accessibilityLabel = "Time entry, ";
+                if (Item.HasDescription)
+                    accessibilityLabel += $"Description: {Item.Description}, ";
+                if (Item.HasProject)
+                    accessibilityLabel += $"Project: {Item.ProjectName }";
+                return accessibilityLabel;
+            }
+            set => base.AccessibilityLabel = value;
+        }
+
+        public override void AwakeFromNib()
+        {
+            base.AwakeFromNib();
+
+            DescriptionFadeView.FadeRight = true;
+            ProjectTaskClientFadeView.FadeRight = true;
+
+            TimeLabel.Font = TimeLabel.Font.GetMonospacedDigitFont();
+
+            projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
+                ProjectTaskClientLabel.Font.CapHeight,
+                Colors.TimeEntriesLog.ClientColor.ToNativeColor(),
+                true
+            );
+        }
+
+        public override void PrepareForReuse()
+        {
+            base.PrepareForReuse();
+            DisposeBag.Dispose();
+            DisposeBag = new CompositeDisposable();
+
+            BackgroundColor = UIColor.White;
+            GroupSizeBackground.Layer.CornerRadius = 14;
+        }
+
+        protected override void UpdateView()
+        {
+            // Text
+            var projectColor = new Color(Item.ProjectColor).ToNativeColor();
+            DescriptionLabel.Text = Item.HasDescription ? Item.Description : Resources.AddDescription;
+            ProjectTaskClientLabel.AttributedText = projectTaskClientToAttributedString.Convert(Item.ProjectName, Item.TaskName, Item.ClientName, projectColor);
+            TimeLabel.Text = Item.Duration;
+
+            // Colors
+            DescriptionLabel.TextColor = Item.HasDescription
+                ? UIColor.Black
+                : Colors.TimeEntriesLog.AddDescriptionTextColor.ToNativeColor();
+
+            // Visibility
+            ProjectTaskClientFadeView.Hidden = !Item.HasProject;
+            SyncErrorImageView.Hidden = Item.CanContinue;
+            UnsyncedImageView.Hidden = !Item.NeedsSync;
+            ContinueButton.Hidden = !Item.CanContinue;
+            ContinueImageView.Hidden = !Item.CanContinue;
+            BillableIcon.Hidden = !Item.IsBillable;
+            TagIcon.Hidden = !Item.HasTags;
+
+            switch (Item.VisualizationIntent)
+            {
+                case LogItemVisualizationIntent.SingleItem:
+                    presentAsSingleTimeEntry();
+                    break;
+
+                case LogItemVisualizationIntent.GroupItem:
+                    presentAsTimeEntryInAGroup();
+                    break;
+
+                case LogItemVisualizationIntent.CollapsedGroupHeader:
+                    presentAsCollapsedGroupHeader(Item.RepresentedTimeEntriesIds.Length);
+                    break;
+
+                case LogItemVisualizationIntent.ExpandedGroupHeader:
+                    presentAsExpandedGroupHeader(Item.RepresentedTimeEntriesIds.Length);
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException($"Cannot visualize {Item.VisualizationIntent} in the time entries log table.");
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            DisposeBag.Dispose();
+            base.Dispose(disposing);
+        }
+
+        private void presentAsCollapsedGroupHeader(int groupSize)
+        {
+            TimeEntryContentLeadingConstraint.Constant = 0;
+            GroupSizeLabel.Text = groupSize.ToString();
+            GroupSizeContainer.Hidden = false;
+            GroupSizeContainer.UserInteractionEnabled = true;
+            GroupSizeBackground.Hidden = false;
+            GroupSizeBackground.Layer.BorderWidth = 1;
+            GroupSizeBackground.Layer.BorderColor = Colors.TimeEntriesLog.Grouping.Collapsed.Border.ToNativeColor().CGColor;
+            GroupSizeBackground.BackgroundColor = Colors.TimeEntriesLog.Grouping.Collapsed.Background.ToNativeColor();
+            GroupSizeLabel.TextColor = Colors.TimeEntriesLog.Grouping.Collapsed.Text.ToNativeColor();
+        }
+
+        private void presentAsExpandedGroupHeader(int groupSize)
+        {
+            TimeEntryContentLeadingConstraint.Constant = 0;
+            GroupSizeLabel.Text = groupSize.ToString();
+            GroupSizeContainer.Hidden = false;
+            GroupSizeContainer.UserInteractionEnabled = true;
+            GroupSizeBackground.Hidden = false;
+            GroupSizeBackground.Layer.BorderWidth = 0;
+            GroupSizeBackground.BackgroundColor = Colors.TimeEntriesLog.Grouping.Expanded.Background.ToNativeColor();
+            GroupSizeLabel.TextColor = Colors.TimeEntriesLog.Grouping.Expanded.Text.ToNativeColor();
+        }
+
+        private void presentAsSingleTimeEntry()
+        {
+            GroupSizeContainer.Hidden = true;
+            TimeEntryContentLeadingConstraint.Constant = 16;
+        }
+
+        private void presentAsTimeEntryInAGroup()
+        {
+            TimeEntryContentLeadingConstraint.Constant = 0;
+            GroupSizeContainer.Hidden = false;
+            GroupSizeContainer.UserInteractionEnabled = false;
+            GroupSizeBackground.Hidden = true;
+            BackgroundColor = Colors.TimeEntriesLog.Grouping.GroupedTimeEntry.Background.ToNativeColor();
+        }
+    }
+}
