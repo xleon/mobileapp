@@ -100,7 +100,7 @@ namespace Toggl.Core.UI.ViewModels
             => new SelectableClientViewModel(client.Id, client.Name, client.Id == selectedClientId);
 
         private Task close()
-            => navigationService.Close(this, null);
+            => Finish(null);
 
         private async Task selectClient(SelectableClientBaseViewModel client)
         {
@@ -108,10 +108,10 @@ namespace Toggl.Core.UI.ViewModels
             {
                 case SelectableClientCreationViewModel c:
                     var newClient = await interactorFactory.CreateClient(c.Name.Trim(), workspaceId).Execute();
-                    await navigationService.Close(this, newClient.Id);
+                    await Finish(newClient.Id);
                     break;
                 case SelectableClientViewModel c:
-                    await navigationService.Close(this, c.Id);
+                    await Finish(c.Id);
                     break;
             }
         }

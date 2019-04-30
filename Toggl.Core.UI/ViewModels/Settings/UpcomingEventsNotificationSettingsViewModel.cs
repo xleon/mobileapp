@@ -14,7 +14,7 @@ using Toggl.Storage.Settings;
 namespace Toggl.Core.UI.ViewModels.Settings
 {
     [Preserve(AllMembers = true)]
-    public sealed class UpcomingEventsNotificationSettingsViewModel : ViewModelWithOutput<Unit>
+    public sealed class UpcomingEventsNotificationSettingsViewModel : ViewModel
     {
         private readonly INavigationService navigationService;
         private readonly IUserPreferences userPreferences;
@@ -62,7 +62,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
         }
 
         private Task close()
-            => navigationService.Close(this, Unit.Default);
+            => Finish();
 
         private void onSelectOption(SelectableCalendarNotificationsOptionViewModel selectableOption)
         {
@@ -73,7 +73,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
             if (enabled)
                 userPreferences.SetTimeSpanBeforeCalendarNotifications(selectableOption.Option.Duration());
 
-            navigationService.Close(this, Unit.Default);
+            Finish();
         }
 
         private SelectableCalendarNotificationsOptionViewModel toSelectableOption(CalendarNotificationsOption option)

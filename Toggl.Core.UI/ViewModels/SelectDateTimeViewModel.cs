@@ -70,8 +70,8 @@ namespace Toggl.Core.UI.ViewModels
             return result.Clamp(MinDate, MaxDate);
         }
 
-        private Task close() => navigationService.Close(this, defaultResult);
+        private Task close() => Finish(defaultResult);
 
-        private Task save() => navigationService.Close(this, CurrentDateTime.Value);
+        private Task save() => Finish(CurrentDateTime.Value);
     }
 }

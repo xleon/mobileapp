@@ -44,10 +44,10 @@ namespace Toggl.Core.UI.ViewModels
             return base.Initialize(defaultValue);
         }
 
-        private Task close() => navigationService.Close(this, defaultResult);
+        private Task close() => Finish(defaultResult);
 
         private Task selectFormat(SelectableBeginningOfWeekViewModel viewModel)
-            => navigationService.Close(this, viewModel.BeginningOfWeek);
+            => Finish(viewModel.BeginningOfWeek);
 
         private void updateSelectedFormat(BeginningOfWeek selected)
             => BeginningOfWeekCollection.ForEach(viewModel

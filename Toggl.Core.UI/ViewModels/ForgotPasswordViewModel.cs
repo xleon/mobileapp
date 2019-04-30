@@ -93,7 +93,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private void returnEmail()
         {
-            navigationService.Close(this, EmailParameter.With(Email.Value));
+            Finish(EmailParameter.With(Email.Value));
         }
 
         private string toErrorString(Exception exception)

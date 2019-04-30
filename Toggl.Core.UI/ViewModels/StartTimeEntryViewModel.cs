@@ -304,7 +304,7 @@ namespace Toggl.Core.UI.ViewModels
                     return false;
             }
 
-            await navigationService.Close(this);
+            await Finish();
             return true;
         }
 
@@ -542,7 +542,7 @@ namespace Toggl.Core.UI.ViewModels
                 origin = paramOrigin;
             }
             return interactorFactory.CreateTimeEntry(timeEntry, origin).Execute()
-                .Do(_ => navigationService.Close(this))
+                .Do(_ => Finish())
                 .SelectUnit();
         }
 

@@ -286,7 +286,7 @@ namespace Toggl.Core.UI.ViewModels
             SelectBeginningOfWeek = rxActionFactory.FromAsync(selectBeginningOfWeek);
             ToggleTimeEntriesGrouping = rxActionFactory.FromAsync(toggleTimeEntriesGrouping);
             SelectDefaultWorkspace = rxActionFactory.FromAsync<SelectableWorkspaceViewModel>(selectDefaultWorkspace);
-            Close = rxActionFactory.FromAsync(close);
+            Close = rxActionFactory.FromAsync(Finish);
         }
 
         public override async Task Initialize()
@@ -504,7 +504,5 @@ namespace Toggl.Core.UI.ViewModels
             var authorized = await permissionsService.CalendarPermissionGranted;
             calendarPermissionGranted.OnNext(authorized);
         }
-        
-        private Task close() => navigationService.Close(this);
     }
 }

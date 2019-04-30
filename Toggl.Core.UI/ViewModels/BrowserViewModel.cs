@@ -21,9 +21,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            Close = rxActionFactory.FromAsync(close);
-
-            Task close() => navigationService.Close(this);
+            Close = rxActionFactory.FromAsync(Finish);
         }
 
         public override Task Initialize(BrowserParameters parameter)

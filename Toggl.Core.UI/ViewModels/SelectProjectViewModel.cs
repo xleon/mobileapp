@@ -190,13 +190,11 @@ namespace Toggl.Core.UI.ViewModels
 
             var project = await interactorFactory.GetProjectById(createdProjectId.Value).Execute();
             var parameter = SelectProjectParameter.WithIds(project.Id, null, project.WorkspaceId);
-            await navigationService.Close(this, parameter);
+            await Finish(parameter);
         }
 
         private Task close()
-            => navigationService.Close(
-                this,
-                SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
+            => Finish(SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
 
         private async Task selectProject(AutocompleteSuggestion suggestion)
         {

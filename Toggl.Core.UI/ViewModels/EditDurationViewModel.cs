@@ -189,7 +189,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             analyticsEvent = analyticsEvent.With(result: EditDurationEvent.Result.Cancel);
             analyticsService.Track(analyticsEvent);
-            return navigationService.Close(this, defaultResult);
+            return Finish(defaultResult);
         }
 
         private Task save()
@@ -198,7 +198,7 @@ namespace Toggl.Core.UI.ViewModels
             analyticsService.Track(analyticsEvent);
             var duration = stopTime.Value - startTime.Value;
             var result = DurationParameter.WithStartAndDuration(startTime.Value, isRunning.Value ? (TimeSpan?)null : duration);
-            return navigationService.Close(this, result);
+            return Finish(result);
         }
 
         private void stopTimeEntry()

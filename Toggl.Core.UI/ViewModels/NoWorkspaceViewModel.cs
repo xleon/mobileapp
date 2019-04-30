@@ -14,7 +14,7 @@ using Toggl.Storage.Settings;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class NoWorkspaceViewModel : ViewModelWithOutput<Unit>
+    public sealed class NoWorkspaceViewModel : ViewModel
     {
         private readonly ISyncManager syncManager;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
@@ -75,7 +75,7 @@ namespace Toggl.Core.UI.ViewModels
         private void close()
         {
             accessRestrictionStorage.SetNoWorkspaceStateReached(false);
-            navigationService.Close(this, Unit.Default);
+            Finish();
         }
     }
 }

@@ -124,9 +124,9 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         }
 
         protected virtual Task OnClose()
-            => NavigationService.Close(this, InitialSelectedCalendarIds.ToArray());
+            => Finish(InitialSelectedCalendarIds.ToArray());
 
         protected virtual Task OnDone()
-            => NavigationService.Close(this, SelectedCalendarIds.ToArray());
+            => Finish(SelectedCalendarIds.ToArray());
     }
 }

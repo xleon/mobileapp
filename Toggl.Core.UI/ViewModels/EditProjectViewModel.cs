@@ -185,7 +185,7 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task close()
-            => navigationService.Close(this, null);
+            => Finish(null);
 
         private IObservable<IThreadSafeWorkspace> pickWorkspace()
         {
@@ -260,7 +260,7 @@ namespace Toggl.Core.UI.ViewModels
                         : getDto(workspace)
                             .SelectMany(dto => interactorFactory.CreateProject(dto).Execute())
                             .SelectMany(createdProject =>
-                                navigationService.Close(this, createdProject.Id).ToObservable())
+                                Finish(createdProject.Id).ToObservable())
                             .SelectUnit()
                     )
                 );

@@ -503,7 +503,7 @@ namespace Toggl.Core.UI.ViewModels
                     return false;
             }
 
-            await navigationService.Close(this);
+            await Finish();
             return true;
         }
 
@@ -548,7 +548,7 @@ namespace Toggl.Core.UI.ViewModels
             interactorFactory
                 .UpdateMultipleTimeEntries(timeEntriesDtos)
                 .Execute()
-                .SubscribeToErrorsAndCompletion((Exception ex) => close(), () => close())
+                .SubscribeToErrorsAndCompletion((Exception ex) => Finish(), () => Finish())
                 .DisposedBy(disposeBag);
         }
 
@@ -579,7 +579,7 @@ namespace Toggl.Core.UI.ViewModels
             var isDeletionConfirmed = await delete(actionType, TimeEntryIds.Length, interactor);
 
             if (isDeletionConfirmed)
-                await close();
+                await Finish();
         }
 
         private async Task<bool> delete(ActionType actionType, int entriesCount, IInteractor<IObservable<Unit>> deletionInteractor)
@@ -596,9 +596,6 @@ namespace Toggl.Core.UI.ViewModels
 
             return true;
         }
-
-        private Task close()
-            => navigationService.Close(this);
 
         public struct ProjectClientTaskInfo
         {

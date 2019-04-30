@@ -56,9 +56,9 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task close()
-            => navigationService.Close(this, currentWorkspaceId);
+            => Finish(currentWorkspaceId);
 
         private Task selectWorkspace(SelectableWorkspaceViewModel workspace)
-            => navigationService.Close(this, workspace.WorkspaceId);
+            => Finish(workspace.WorkspaceId);
     }
 }

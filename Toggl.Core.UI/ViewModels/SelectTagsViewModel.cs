@@ -156,8 +156,8 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task close()
-            => navigationService.Close(this, defaultResult);
+            => Finish(defaultResult);
 
-        private Task save() => navigationService.Close(this, selectedTagIds.ToArray());
+        private Task save() => Finish(selectedTagIds.ToArray());
     }
 }
