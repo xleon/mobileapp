@@ -124,9 +124,9 @@ namespace Toggl.Core.UI.ViewModels
             => availableColors.Select(color => new SelectableColorViewModel(color, color == selectedColor));
 
         private Task close()
-            => navigationService.Close(this, defaultColor);
+            => Finish(defaultColor);
 
         private Task save()
-            => navigationService.Close(this, selectedColor.Value);
+            => Finish(selectedColor.Value);
     }
 }

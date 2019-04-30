@@ -244,9 +244,7 @@ namespace Toggl.Core.UI.ViewModels
                     throw new ArgumentException($"{nameof(suggestion)} must be either of type {nameof(ProjectSuggestion)} or {nameof(TaskSuggestion)}.");
             }
 
-            navigationService.Close(
-                this,
-                SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
+            Finish(SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
         }
 
         private void toggleTaskSuggestions(ProjectSuggestion projectSuggestion)

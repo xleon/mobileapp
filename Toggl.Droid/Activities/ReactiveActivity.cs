@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
@@ -108,6 +109,12 @@ namespace Toggl.Droid.Activities
 
             if (!disposing) return;
             DisposeBag?.Dispose();
+        }
+
+        public Task Close()
+        {
+            Finish();
+            return Task.CompletedTask;
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)

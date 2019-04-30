@@ -48,10 +48,10 @@ namespace Toggl.Core.UI.ViewModels
             return base.Initialize(defaultDuration);
         }
 
-        private Task close() => navigationService.Close(this, defaultResult);
+        private Task close() => Finish(defaultResult);
 
         private Task selectFormat(SelectableDurationFormatViewModel viewModel)
-            => navigationService.Close(this, viewModel.DurationFormat);
+            => Finish(viewModel.DurationFormat);
 
         private void updateSelectedFormat(DurationFormat selected)
             => DurationFormats.ForEach(viewModel

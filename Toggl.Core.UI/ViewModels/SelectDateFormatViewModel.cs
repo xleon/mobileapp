@@ -54,10 +54,10 @@ namespace Toggl.Core.UI.ViewModels
             return base.Initialize(parameter);
         }
 
-        private Task close() => navigationService.Close(this, defaultResult);
+        private Task close() => Finish(defaultResult);
 
         private Task selectFormat(SelectableDateFormatViewModel dateFormatViewModel)
-            => navigationService.Close(this, dateFormatViewModel.DateFormat);
+            => Finish(dateFormatViewModel.DateFormat);
 
         private void updateSelectedFormat(DateFormat selected)
             => DateTimeFormats.ForEach(dateFormat

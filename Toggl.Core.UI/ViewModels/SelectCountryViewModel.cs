@@ -61,9 +61,9 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task close()
-            => navigationService.Close(this);
+            => Finish(null);
 
         private async Task selectCountry(SelectableCountryViewModel selectedCountry)
-            => await navigationService.Close(this, selectedCountry.Country.Id);
+            => await Finish(selectedCountry.Country.Id);
     }
 }

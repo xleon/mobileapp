@@ -18,7 +18,7 @@ using Toggl.Storage.Settings;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SelectDefaultWorkspaceViewModel : ViewModelWithOutput<Unit>
+    public sealed class SelectDefaultWorkspaceViewModel : ViewModel
     {
         private readonly ITogglDataSource dataSource;
         private readonly IInteractorFactory interactorFactory;
@@ -73,7 +73,7 @@ namespace Toggl.Core.UI.ViewModels
             {
                 await interactorFactory.SetDefaultWorkspace(workspace.WorkspaceId).Execute();
                 accessRestrictionStorage.SetNoDefaultWorkspaceStateReached(false);
-                await navigationService.Close(this, Unit.Default);
+                await Finish();
                 return Observable.Return(Unit.Default);
             });
 

@@ -12,6 +12,12 @@ namespace Toggl.Core.UI.ViewModels
         public virtual Task Initialize(TInput payload)
             => Task.CompletedTask;
 
+        public async Task Finish(TOutput output)
+        {
+            await View.Close();
+            CloseCompletionSource.SetResult(output);
+        }
+
         public void AttachView(IView viewToAttach)
         {
             View = viewToAttach;
@@ -45,6 +51,9 @@ namespace Toggl.Core.UI.ViewModels
 
     public abstract class ViewModel : ViewModel<Unit, Unit>
     {
+        public Task Finish()
+            => Finish(Unit.Default);
+
         public virtual Task Initialize()
             => Task.CompletedTask;
 
