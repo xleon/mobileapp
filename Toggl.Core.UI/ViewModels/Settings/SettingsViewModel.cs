@@ -347,7 +347,7 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task openCalendarSettings()
-            => navigationService.Navigate<CalendarSettingsViewModel>();
+            => navigationService.Navigate<CalendarSettingsViewModel, bool, string[]>(false);
 
         private Task openCalendarSmartReminders()
             => navigationService.Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
@@ -362,7 +362,7 @@ namespace Toggl.Core.UI.ViewModels
 
             return interactorFactory.Logout(LogoutSource.Settings)
                 .Execute()
-                .Do(_ => navigationService.Navigate<LoginViewModel>());
+                .Do(_ => navigationService.Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty));
         }
 
         private IObservable<bool> isSynced()

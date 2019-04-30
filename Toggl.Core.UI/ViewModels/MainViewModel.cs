@@ -488,7 +488,7 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task navigate<TModel, TParameters>(TParameters value)
-            where TModel : IMvxViewModel<TParameters>
+            where TModel : ViewModelWithInput<TParameters>
         {
             if (hasStopButtonEverBeenUsed)
                 onboardingStorage.SetNavigatedAwayFromMainViewAfterStopButton();
@@ -497,7 +497,7 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task navigate<TModel>()
-            where TModel : IMvxViewModel
+            where TModel : ViewModel
         {
             if (hasStopButtonEverBeenUsed)
                 onboardingStorage.SetNavigatedAwayFromMainViewAfterStopButton();

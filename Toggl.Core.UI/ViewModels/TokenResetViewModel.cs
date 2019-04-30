@@ -15,6 +15,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Toggl.Networking.Exceptions;
+using Toggl.Core.UI.Parameters;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -134,7 +135,7 @@ namespace Toggl.Core.UI.ViewModels
             }
 
             await interactorFactory.Logout(LogoutSource.TokenReset).Execute();
-            await navigationService.Navigate<LoginViewModel>();
+            await navigationService.Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty);
         }
 
         private IObservable<Unit> done() =>

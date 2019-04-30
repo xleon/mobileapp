@@ -14,6 +14,7 @@ using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Math = System.Math;
 using Colors = Toggl.Core.UI.Helper.Colors;
+using Toggl.Core.UI.Parameters;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -101,7 +102,7 @@ namespace Toggl.Core.UI.ViewModels
 
             if (onboardingStorage.CompletedOnboarding())
             {
-                await navigationService.Navigate<LoginViewModel>();
+                await navigationService.Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty);
             }
         }
 
@@ -120,7 +121,7 @@ namespace Toggl.Core.UI.ViewModels
             currentPage.OnNext(boundCheckedPage);
         }
 
-        private IObservable<Unit> skip() => navigationService.Navigate<LoginViewModel>()
+        private IObservable<Unit> skip() => navigationService.Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty)
             .ToObservable()
             .Do(_ => analyticsService.OnboardingSkip.Track(pageNames[currentPage.Value]));
 
@@ -132,7 +133,7 @@ namespace Toggl.Core.UI.ViewModels
                 onboardingStorage.SetCompletedOnboarding();
             }
 
-            return navigationService.Navigate<LoginViewModel>();
+            return navigationService.Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty);
         }
 
         private Task next() => ChangePage(currentPage.Value + 1);
