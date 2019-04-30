@@ -52,16 +52,13 @@ namespace Toggl.Core.UI.ViewModels
             SelectClient = rxActionFactory.FromAsync<SelectableClientBaseViewModel>(selectClient);
         }
 
-        public override void Prepare(SelectClientParameters parameter)
+        public override async Task Initialize(SelectClientParameters parameter)
         {
+            await base.Initialize(parameter);
+
             workspaceId = parameter.WorkspaceId;
             selectedClientId = parameter.SelectedClientId;
             noClient = new SelectableClientViewModel(0, Resources.NoClient, selectedClientId == 0);
-        }
-
-        public override async Task Initialize()
-        {
-            await base.Initialize();
 
             var allClients = await interactorFactory
                 .GetAllClientsInWorkspace(workspaceId)

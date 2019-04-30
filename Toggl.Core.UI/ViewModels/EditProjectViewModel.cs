@@ -167,12 +167,14 @@ namespace Toggl.Core.UI.ViewModels
                     && name.LengthInBytes() <= Constants.MaxProjectNameLengthInBytes;
         }
 
-        public override void Prepare(string parameter)
+        public override Task Initialize(string name)
         {
-            Name.Accept(parameter);
+            Name.Accept(name);
 
             navigationFromStartTimeEntryViewModelStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenCreateProjectViewFromStartTimeEntryView);
             stopwatchProvider.Remove(MeasuredOperation.OpenCreateProjectViewFromStartTimeEntryView);
+
+            return base.Initialize(name);
         }
 
         public override void ViewAppeared()

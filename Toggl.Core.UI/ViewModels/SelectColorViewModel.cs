@@ -73,7 +73,7 @@ namespace Toggl.Core.UI.ViewModels
                 .CombineLatest(selectedColor, updateSelectableColors);
         }
 
-        public override void Prepare(ColorParameters parameter)
+        public override Task Initialize(ColorParameters parameter)
         {
             defaultColor = parameter.Color;
             AllowCustomColors = parameter.AllowCustomColors;
@@ -98,6 +98,8 @@ namespace Toggl.Core.UI.ViewModels
             {
                 selectedColor.OnNext(defaultColor);
             }
+
+            return base.Initialize(parameter);
         }
 
         private IEnumerable<Color> combineAllColors(Color[] defaultColors, Color custom)

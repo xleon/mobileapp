@@ -68,14 +68,11 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             Calendars = calendarsSubject.AsObservable().DistinctUntilChanged();
         }
 
-        public sealed override void Prepare(bool parameter)
+        public override async Task Initialize(bool forceItemSelection)
         {
-            ForceItemSelection = parameter;
-        }
+            base.Initialize(forceItemSelection);
 
-        public override async Task Initialize()
-        {
-            await base.Initialize();
+            ForceItemSelection = forceItemSelection;
 
             var calendarIds = UserPreferences.EnabledCalendarIds();
             InitialSelectedCalendarIds.AddRange(calendarIds);

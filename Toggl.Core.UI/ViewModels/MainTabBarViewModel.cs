@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.UI.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
@@ -35,7 +34,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private bool hasOpenedReports = false;
 
-        public IList<MvxViewModel> Tabs { get; }
+        public IList<ViewModel> Tabs { get; }
 
         public MainTabBarViewModel(
             ITimeService timeService,
@@ -175,7 +174,7 @@ namespace Toggl.Core.UI.ViewModels
             }
         }
 
-        private IEnumerable<MvxViewModel> getViewModels()
+        private IEnumerable<ViewModel> getViewModels()
         {
             yield return mainViewModel;
             yield return reportsViewModel;

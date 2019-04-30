@@ -26,10 +26,12 @@ namespace Toggl.Core.UI.ViewModels
             Task close() => navigationService.Close(this);
         }
 
-        public override void Prepare(BrowserParameters parameter)
+        public override Task Initialize(BrowserParameters parameter)
         {
             Url = parameter.Url;
             Title = parameter.Title;
+
+            return base.Initialize(parameter);
         }
     }
 }

@@ -15,7 +15,6 @@ using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels.Hints;
@@ -31,7 +30,7 @@ using Colors = Toggl.Core.UI.Helper.Colors;
 namespace Toggl.Core.UI.ViewModels.Reports
 {
     [Preserve(AllMembers = true)]
-    public sealed class ReportsViewModel : ViewModelWithInput<ReportPeriod>
+    public sealed class ReportsViewModel : ViewModel
     {
         private const float minimumSegmentPercentageToBeOnItsOwn = 5f;
         private const float maximumSegmentPercentageToEndUpInOther = 1f;
@@ -184,14 +183,12 @@ namespace Toggl.Core.UI.ViewModels.Reports
             ShowEmptyStateObservable = SegmentsObservable.CombineLatest(IsLoadingObservable, shouldShowEmptyState);
         }
 
-        public override void Prepare(ReportPeriod parameter)
-        {
-            base.Prepare();
-            calendarViewModel.SelectPeriod(parameter);
-        }
-
         public override async Task Initialize()
         {
+            await base.Initialize();
+
+            calendarViewModel.SelectPeriod(ReportPeriod.ThisWeek);
+
             WorkspacesObservable
                 .Subscribe(data => Workspaces = data)
                 .DisposedBy(disposeBag);
@@ -220,7 +217,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Subscribe(onPreferencesChanged)
                 .DisposedBy(disposeBag);
 
-            await calendarViewModel.Initialize();
+            calendarViewModel.Initialize();
         }
 
         public override void ViewAppeared()

@@ -188,12 +188,6 @@ namespace Toggl.Core.UI.ViewModels
                 .AsDriver(this.schedulerProvider);
         }
 
-        public override void Prepare(CredentialsParameter parameter)
-        {
-            emailSubject.OnNext(parameter.Email);
-            passwordSubject.OnNext(parameter.Password);
-        }
-
         public void SetEmail(Email email)
             => emailSubject.OnNext(email);
 
@@ -203,9 +197,12 @@ namespace Toggl.Core.UI.ViewModels
         public void SetIsShowPasswordButtonVisible(bool visible)
             => isShowPasswordButtonVisibleSubject.OnNext(visible);
 
-        public override async Task Initialize()
+        public override async Task Initialize(CredentialsParameter parameter)
         {
-            await base.Initialize();
+            await base.Initialize(parameter);
+
+            emailSubject.OnNext(parameter.Email);
+            passwordSubject.OnNext(parameter.Password);
 
             allCountries = await new GetAllCountriesInteractor().Execute();
 

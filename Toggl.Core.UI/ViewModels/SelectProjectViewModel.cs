@@ -106,16 +106,14 @@ namespace Toggl.Core.UI.ViewModels
             return true;
         }
 
-        public override void Prepare(SelectProjectParameter parameter)
+        public override async Task Initialize(SelectProjectParameter parameter)
         {
+            await base.Initialize(parameter);
+
             taskId = parameter.TaskId;
             projectId = parameter.ProjectId;
             workspaceId = parameter.WorkspaceId;
-        }
 
-        public override async Task Initialize()
-        {
-            await base.Initialize();
             navigationFromEditTimeEntryViewModelStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenSelectProjectFromEditView);
             stopwatchProvider.Remove(MeasuredOperation.OpenSelectProjectFromEditView);
 

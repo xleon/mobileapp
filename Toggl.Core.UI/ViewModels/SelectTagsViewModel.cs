@@ -60,16 +60,11 @@ namespace Toggl.Core.UI.ViewModels
             SelectTag = rxActionFactory.FromAsync<SelectableTagBaseViewModel>(selectTag);
         }
 
-        public override void Prepare((long[] tagIds, long workspaceId) parameter)
+        public override Task Initialize((long[] tagIds, long workspaceId) parameter)
         {
             workspaceId = parameter.workspaceId;
             defaultResult = parameter.tagIds;
             selectedTagIds.AddRange(parameter.tagIds);
-        }
-
-        public override async Task Initialize()
-        {
-            await base.Initialize();
 
             navigationFromEditTimeEntryStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenSelectTagsView);
             stopwatchProvider.Remove(MeasuredOperation.OpenSelectTagsView);
@@ -114,6 +109,8 @@ namespace Toggl.Core.UI.ViewModels
                 .Invert()
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
+
+            return base.Initialize(parameter);
         }
 
         public override void ViewAppeared()

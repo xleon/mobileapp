@@ -36,10 +36,12 @@ namespace Toggl.Core.UI.ViewModels
                             .ToArray();
         }
 
-        public override void Prepare(BeginningOfWeek parameter)
+        public override Task Initialize(BeginningOfWeek defaultValue)
         {
-            defaultResult = parameter;
-            updateSelectedFormat(parameter);
+            defaultResult = defaultValue;
+            updateSelectedFormat(defaultValue);
+
+            return base.Initialize(defaultValue);
         }
 
         private Task close() => navigationService.Close(this, defaultResult);

@@ -239,35 +239,35 @@ namespace Toggl.Core.UI.ViewModels
             Delete = actionFactory.FromAsync(delete);
         }
 
-        protected override void ReloadFromBundle(IMvxBundle state)
+        // TODO: Move this fix to the droid layer
+        //protected override void ReloadFromBundle(IMvxBundle state)
+        //{
+        //    base.ReloadFromBundle(state);
+
+        //    var ids = state.Data[nameof(TimeEntryIds)];
+
+        //    if (ids == null)
+        //        return;
+
+        //    TimeEntryIds = ids.Split(',').Select(long.Parse).ToArray();
+        //}
+
+        //protected override void SaveStateToBundle(IMvxBundle bundle)
+        //{
+        //    base.SaveStateToBundle(bundle);
+
+        //    bundle.Data[nameof(TimeEntryIds)] = string.Join(",", TimeEntryIds);
+        //}
+
+        public override async Task Initialize(long[] timeEntryIds)
         {
-            base.ReloadFromBundle(state);
+            await base.Initialize(timeEntryIds);
 
-            var ids = state.Data[nameof(TimeEntryIds)];
-
-            if (ids == null)
-                return;
-
-            TimeEntryIds = ids.Split(',').Select(long.Parse).ToArray();
-        }
-
-        protected override void SaveStateToBundle(IMvxBundle bundle)
-        {
-            base.SaveStateToBundle(bundle);
-
-            bundle.Data[nameof(TimeEntryIds)] = string.Join(",", TimeEntryIds);
-        }
-
-        public override void Prepare(long[] parameter)
-        {
-            if (parameter == null || parameter.Length == 0)
+            if (timeEntryIds == null || timeEntryIds.Length == 0)
                 throw new ArgumentException("Edit view has no Time Entries to edit.");
 
-            TimeEntryIds = parameter;
-        }
+            TimeEntryIds = timeEntryIds;
 
-        public override async Task Initialize()
-        {
             stopwatchFromCalendar = stopwatchProvider.Get(MeasuredOperation.EditTimeEntryFromCalendar);
             stopwatchProvider.Remove(MeasuredOperation.EditTimeEntryFromCalendar);
             stopwatchFromMainLog = stopwatchProvider.Get(MeasuredOperation.EditTimeEntryFromMainLog);

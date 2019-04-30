@@ -50,10 +50,8 @@ namespace Toggl.Core.UI.ViewModels
             this.rxActionFactory = rxActionFactory;
         }
 
-        public override async Task Initialize()
+        public override Task Initialize()
         {
-            await base.Initialize();
-
             StartTimeEntry = rxActionFactory.FromAsync<Suggestion>(suggestion => startTimeEntry(suggestion));
 
             Suggestions = interactorFactory.ObserveWorkspaceOrTimeEntriesChanges().Execute()
@@ -65,6 +63,8 @@ namespace Toggl.Core.UI.ViewModels
                 .Select(suggestions => suggestions.Length == 0)
                 .StartWith(true)
                 .AsDriver(onErrorJustReturn: true, schedulerProvider: schedulerProvider);
+
+            return base.Initialize();
         }
 
         private IObservable<Suggestion[]> getSuggestions()

@@ -202,7 +202,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                 .DisposedBy(disposeBag);
         }
 
-        public async override Task Initialize()
+        public override Task Initialize()
         {
             var dayChangedObservable = timeService
                 .MidnightObservable
@@ -235,6 +235,8 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                 .SelectMany(refreshNotifications)
                 .Subscribe()
                 .DisposedBy(disposeBag);
+
+            return base.Initialize();
         }
 
         public override void ViewAppeared()

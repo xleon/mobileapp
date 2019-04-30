@@ -6,7 +6,6 @@ using Android.Support.V7.Widget;
 using Android.Webkit;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
-using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 using static Android.Support.V7.Widget.Toolbar;

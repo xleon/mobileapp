@@ -150,10 +150,12 @@ namespace Toggl.Core.UI.ViewModels
             IsPasswordManagerAvailable = passwordManagerService.IsAvailable;
         }
 
-        public override void Prepare(CredentialsParameter parameter)
+        public override Task Initialize(CredentialsParameter parameter)
         {
             emailSubject.OnNext(parameter.Email);
             passwordSubject.OnNext(parameter.Password);
+
+            return base.Initialize(parameter);
         }
 
         public void SetEmail(Email email)

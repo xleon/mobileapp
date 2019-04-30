@@ -53,7 +53,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
             CalendarListVisible = calendarListVisibleSubject.AsObservable().DistinctUntilChanged();
         }
 
-        public async override Task Initialize()
+        public override async Task Initialize(bool forceItemSelection)
         {
             PermissionGranted = await permissionsService.CalendarPermissionGranted;
 
@@ -62,7 +62,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
                 UserPreferences.SetEnabledCalendars();
             }
 
-            await base.Initialize();
+            await base.Initialize(forceItemSelection);
 
             calendarListVisible = PermissionGranted && SelectedCalendarIds.Any();
             calendarListVisibleSubject.OnNext(calendarListVisible);

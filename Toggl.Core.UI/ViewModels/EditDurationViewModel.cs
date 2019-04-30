@@ -149,7 +149,7 @@ namespace Toggl.Core.UI.ViewModels
             this.startTime.OnNext(startTime.RoundDownToMinute());
         }
 
-        public override void Prepare(EditDurationParameters parameter)
+        public override Task Initialize(EditDurationParameters parameter)
         {
             defaultResult = parameter.DurationParam;
             isRunning.OnNext(defaultResult.Duration.HasValue == false);
@@ -176,6 +176,8 @@ namespace Toggl.Core.UI.ViewModels
             minimumDateTime.OnNext(start);
             maximumDateTime.OnNext(stop);
             IsDurationInitiallyFocused = parameter.IsDurationInitiallyFocused;
+
+            return base.Initialize(parameter);
         }
 
         public void TimeEditedWithSource(EditTimeSource source)
@@ -321,9 +323,9 @@ namespace Toggl.Core.UI.ViewModels
             return timeSpan.ToFormattedString(format);
         }
 
-        public override void ViewDestroy(bool viewFinishing)
+        public override void ViewDestroyed()
         {
-            base.ViewDestroy(viewFinishing);
+            base.ViewDestroyed();
             runningTimeEntryDisposable?.Dispose();
         }
 

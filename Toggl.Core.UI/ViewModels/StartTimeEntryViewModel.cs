@@ -194,17 +194,20 @@ namespace Toggl.Core.UI.ViewModels
                 .AsDriver(schedulerProvider);
         }
 
+        //TODO: Remove this bit of code when implementing deeplinking in #4867 and #4868
         public void Init()
         {
             var now = timeService.CurrentDateTime;
             var startTimeEntryParameters = userPreferences.IsManualModeEnabled
                 ? StartTimeEntryParameters.ForManualMode(now)
                 : StartTimeEntryParameters.ForTimerMode(now);
-            Prepare(startTimeEntryParameters);
+            Initialize(startTimeEntryParameters);
         }
 
-        public override void Prepare(StartTimeEntryParameters parameter)
+        public override async Task Initialize(StartTimeEntryParameters parameter)
         {
+            await base.Initialize(parameter);
+
             this.parameter = parameter;
             startTime = parameter.StartTime;
             duration = parameter.Duration;
@@ -221,11 +224,7 @@ namespace Toggl.Core.UI.ViewModels
                 .Where(_ => isRunning)
                 .Subscribe(currentTime => displayedTime.Accept(currentTime - startTime))
                 .DisposedBy(disposeBag);
-        }
 
-        public override async Task Initialize()
-        {
-            await base.Initialize();
             startTimeEntryStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenStartView);
             stopwatchProvider.Remove(MeasuredOperation.OpenStartView);
 
