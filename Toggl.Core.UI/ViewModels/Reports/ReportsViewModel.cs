@@ -231,7 +231,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             if (!didNavigateToCalendar)
             {
-                navigationService.Navigate(calendarViewModel);
+                // TODO: Reimplement this
+                //navigationService.Navigate(calendarViewModel);
                 didNavigateToCalendar = true;
                 intentDonationService.DonateShowReport();
                 return;
@@ -249,13 +250,15 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         public void ToggleCalendar()
         {
-            navigationService.ChangePresentation(new ToggleReportsCalendarVisibilityHint());
+            // TODO: Reimplement this
+            //navigationService.ChangePresentation(new ToggleReportsCalendarVisibilityHint());
             calendarViewModel.OnToggleCalendar();
         }
 
         public void HideCalendar()
         {
-            navigationService.ChangePresentation(new ToggleReportsCalendarVisibilityHint(forceHide: true));
+            // TODO: Reimplement this
+            //navigationService.ChangePresentation(new ToggleReportsCalendarVisibilityHint(forceHide: true));
             calendarViewModel.OnHideCalendar();
         }
 
