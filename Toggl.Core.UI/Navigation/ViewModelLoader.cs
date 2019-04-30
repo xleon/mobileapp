@@ -1,5 +1,5 @@
 ﻿using System;
-using MvvmCross.ViewModels;
+using System.Threading.Tasks;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
@@ -7,35 +7,23 @@ using Toggl.Core.UI.ViewModels.Settings;
 
 namespace Toggl.Core.UI.Navigation
 {
-    public sealed class ViewModelLoader : MvxDefaultViewModelLocator
+    public sealed class ViewModelLoader
     {
         private readonly UIDependencyContainer dependencyContainer;
 
         public ViewModelLoader(UIDependencyContainer dependencyContainer)
-            : base(dependencyContainer.NavigationService)
         {
             this.dependencyContainer = dependencyContainer;
         }
 
-        public override IMvxViewModel Load(Type viewModelType, IMvxBundle parameterValues, IMvxBundle savedState)
+        public async Task<ViewModel<TInput, TOutput>> Load<TInput, TOutput>(Type viewModelType, TInput payload)
         {
-            var viewModel = findViewModel(viewModelType);
-
-            RunViewModelLifecycle(viewModel, parameterValues, savedState);
-
+            var viewModel = (ViewModel<TInput, TOutput>)findViewModel(viewModelType);
+            await viewModel.Initialize(payload);
             return viewModel;
         }
 
-        public override IMvxViewModel<TParameter> Load<TParameter>(Type viewModelType, TParameter param, IMvxBundle parameterValues, IMvxBundle savedState)
-        {
-            var viewModel = (IMvxViewModel<TParameter>)findViewModel(viewModelType);
-
-            RunViewModelLifecycle(viewModel, param, parameterValues, savedState);
-
-            return viewModel;
-        }
-
-        private IMvxViewModel findViewModel(Type viewModelType)
+        private IViewModel findViewModel(Type viewModelType)
         {
             if (viewModelType == typeof(BrowserViewModel))
                 return new BrowserViewModel(

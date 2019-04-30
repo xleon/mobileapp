@@ -6,6 +6,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
 
+//TODO: Remove when implementing deep linking
 [assembly: MvxNavigation(typeof(MainViewModel), ApplicationUrls.Main.Regex)]
 [assembly: MvxNavigation(typeof(ReportsViewModel), ApplicationUrls.Reports)]
 [assembly: MvxNavigation(typeof(CalendarViewModel), ApplicationUrls.Calendar.Regex)]
@@ -13,7 +14,7 @@ using Toggl.Core.UI.ViewModels.Reports;
 
 namespace Toggl.Core.UI.Navigation
 {
-    public interface INavigationService : IMvxNavigationService
+    public interface INavigationService
     {
         Task<TOutput> Navigate<TViewModel, TInput, TOutput>(TInput payload)
                where TViewModel : ViewModel<TInput, TOutput>;
