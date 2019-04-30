@@ -278,7 +278,7 @@ namespace Toggl.Core.UI.ViewModels
                 if (initialWorkspaceId == workspace.Id)
                     return Observable.Return(true);
 
-                return dialogService.Confirm(
+                return this.SelectDialogService(dialogService).Confirm(
                     Resources.WorkspaceChangedAlertTitle,
                     Resources.WorkspaceChangedAlertMessage,
                     Resources.Ok,

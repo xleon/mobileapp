@@ -81,7 +81,7 @@ namespace Toggl.Core.UI.ViewModels
                 .Select(string.IsNullOrEmpty)
                 .SelectMany(isEmpty => isEmpty
                     ? Observable.Return(true)
-                    : dialogService.ConfirmDestructiveAction(ActionType.DiscardFeedback))
+                    : this.SelectDialogService(dialogService).ConfirmDestructiveAction(ActionType.DiscardFeedback))
                 .DoIf(shouldBeClosed => shouldBeClosed, _ => navigationService.Close(this, false))
                 .SelectUnit();
 

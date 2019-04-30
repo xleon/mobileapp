@@ -429,7 +429,7 @@ namespace Toggl.Core.UI.ViewModels
                 ? (Resources.SettingsSyncInProgressTitle, Resources.SettingsSyncInProgressMessage)
                 : (Resources.SettingsUnsyncedTitle, Resources.SettingsUnsyncedMessage);
 
-            await dialogService
+            await this.SelectDialogService(dialogService)
                 .Confirm(title, message, Resources.SettingsDialogButtonSignOut, Resources.Cancel)
                 .SelectMany(shouldLogout
                     => shouldLogout ? logout() : Observable.Return(Unit.Default));

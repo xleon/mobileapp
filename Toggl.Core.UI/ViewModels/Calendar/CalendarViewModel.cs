@@ -312,7 +312,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             }
             else if (!isOnboarding)
             {
-                await dialogService.Alert(Resources.Oops, Resources.NoCalendarsFoundMessage, Resources.Ok);
+                await this.SelectDialogService(dialogService).Alert(Resources.Oops, Resources.NoCalendarsFoundMessage, Resources.Ok);
             }
         }
 
@@ -353,7 +353,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                 options.Add(option);
             }
 
-            var selectedOption = await dialogService.Select(Resources.CalendarWhatToDoWithCalendarEvent, options, initialSelectionIndex: 0);
+            var selectedOption = await this.SelectDialogService(dialogService).Select(Resources.CalendarWhatToDoWithCalendarEvent, options, initialSelectionIndex: 0);
             if (selectedOption.HasValue)
             {
                 await createTimeEntryFromCalendarItem(selectedOption.Value);

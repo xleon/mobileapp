@@ -437,7 +437,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         {
             var currentWorkspaceIndex = Workspaces.IndexOf(w => w.Item.Id == workspaceId);
 
-            var workspace = await dialogService.Select(Resources.SelectWorkspace, Workspaces, currentWorkspaceIndex);
+            var workspace = await this.SelectDialogService(dialogService).Select(Resources.SelectWorkspace, Workspaces, currentWorkspaceIndex);
 
             if (workspace == null || workspace.Id == workspaceId) return;
 

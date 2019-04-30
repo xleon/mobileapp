@@ -214,7 +214,7 @@ namespace Toggl.Core.UI.ViewModels
                 return;
             }
 
-            var shouldSetProject = await dialogService.Confirm(
+            var shouldSetProject = await this.SelectDialogService(dialogService).Confirm(
                 Resources.DifferentWorkspaceAlertTitle,
                 Resources.DifferentWorkspaceAlertMessage,
                 Resources.Ok,

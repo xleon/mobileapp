@@ -300,7 +300,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             if (isDirty)
             {
-                var shouldDiscard = await dialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
+                var shouldDiscard = await this.SelectDialogService(dialogService).ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
                 if (!shouldDiscard)
                     return false;
             }
@@ -399,7 +399,7 @@ namespace Toggl.Core.UI.ViewModels
             }
 
             IObservable<bool> workspaceChangeDenied()
-                => dialogService.Confirm(
+                => this.SelectDialogService(dialogService).Confirm(
                     Resources.DifferentWorkspaceAlertTitle,
                     Resources.DifferentWorkspaceAlertMessage,
                     Resources.Ok,

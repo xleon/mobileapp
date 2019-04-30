@@ -497,7 +497,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             if (await isDirty())
             {
-                var userConfirmedDiscardingChanges = await dialogService.ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                var userConfirmedDiscardingChanges = await this.SelectDialogService(dialogService).ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
 
                 if (!userConfirmedDiscardingChanges)
                     return false;
@@ -584,7 +584,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task<bool> delete(ActionType actionType, int entriesCount, IInteractor<IObservable<Unit>> deletionInteractor)
         {
-            var isDeletionConfirmed = await dialogService.ConfirmDestructiveAction(actionType, entriesCount);
+            var isDeletionConfirmed = await this.SelectDialogService(dialogService).ConfirmDestructiveAction(actionType, entriesCount);
 
             if (!isDeletionConfirmed)
                 return false;

@@ -224,7 +224,7 @@ namespace Toggl.Core.UI.ViewModels
 
                 if (System.Math.Abs((endDate - startDate).Days) > 365)
                 {
-                    await dialogService.Alert(
+                    await this.SelectDialogService(dialogService).Alert(
                         Resources.ReportTooLongTitle,
                         Resources.ReportTooLongDescription,
                         Resources.Ok

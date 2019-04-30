@@ -10,12 +10,18 @@ using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Views;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views;
 using static Toggl.Droid.Services.PermissionsServiceAndroid;
 
 namespace Toggl.Droid.Activities
 {
-    public abstract class ReactiveActivity<TViewModel> : MvxEventSourceAppCompatActivity, IMvxAndroidView, IPermissionAskingActivity
-        where TViewModel : class, IMvxViewModel
+    public abstract partial class ReactiveActivity<TViewModel> : 
+        MvxEventSourceAppCompatActivity, 
+        IMvxAndroidView, 
+        IPermissionAskingActivity,
+        IView
+        where TViewModel : class, IMvxViewModel, IViewModel
     {
         public CompositeDisposable DisposeBag { get; private set; } = new CompositeDisposable();
 
@@ -57,11 +63,13 @@ namespace Toggl.Droid.Activities
         {
             base.OnCreate(bundle);
             ViewModel?.ViewCreated();
+            ViewModel?.AttachView(this);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            ViewModel?.DetachView();
             ViewModel?.ViewDestroy();
         }
 

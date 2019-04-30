@@ -533,6 +533,9 @@
       <DependentUpon>TermsOfServiceFragment.cs</DependentUpon>
     </Compile>
     <Compile Include="Activities\ReactiveActivity.cs" />
+    <Compile Include="Activities\ReactiveActivity.DialogProvider.cs">
+      <DependentUpon>ReactiveActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Adapters\BaseRecyclerAdapter.cs" />
     <Compile Include="ViewHolders\BaseRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\WorkspaceSelectionViewHolder.cs" />

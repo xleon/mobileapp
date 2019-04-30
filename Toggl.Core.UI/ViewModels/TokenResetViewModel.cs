@@ -159,7 +159,7 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private IObservable<bool> askToLogOut()
-            => dialogService.Confirm(
+            => this.SelectDialogService(dialogService).Confirm(
                 Resources.AreYouSure,
                 Resources.SettingsUnsyncedMessage,
                 Resources.SettingsDialogButtonSignOut,
