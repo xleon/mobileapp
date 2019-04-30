@@ -7,7 +7,12 @@ namespace Toggl.Core.UI.ViewModels
         IView View { get; set; }
 
         void AttachView(IView viewToAttach);
-
         void DetachView();
+
+        void ViewAppeared();
+        void ViewAppearing();
+        void ViewDisappearing();
+        void ViewDisappeared();
+        void ViewDestroyed();
     }
 }

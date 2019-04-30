@@ -1,20 +1,14 @@
-﻿using MvvmCross.ViewModels;
-using Toggl.Core.UI.Views;
+﻿using System.Reactive;
+using System.Threading.Tasks;
 
 namespace Toggl.Core.UI.ViewModels
 {
-    public abstract class ViewModelWithOutput<TResult> : MvxViewModelResult<TResult>, IViewModel
+    public abstract class ViewModelWithOutput<TOutput> : ViewModel<Unit, TOutput>
     {
-        public IView View { get; set; }
+        public virtual Task Initialize()
+            => Task.CompletedTask;
 
-        public void AttachView(IView viewToAttach)
-        {
-            View = viewToAttach;
-        }
-
-        public void DetachView()
-        {
-            View = null;
-        }
+        public sealed override Task Initialize(Unit payload)
+            => Initialize();
     }
 }
