@@ -283,9 +283,9 @@ namespace Toggl.Core.UI.ViewModels
             startTimeEntryStopwatch = null;
         }
 
-        public override void ViewDestroy(bool viewFinishing)
+        public override void ViewDestroyed()
         {
-            base.ViewDestroy(viewFinishing);
+            base.ViewDestroyed();
             disposeBag?.Dispose();
         }
 

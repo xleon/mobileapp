@@ -54,12 +54,10 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .AsDriver(onErrorJustReturn: null, schedulerProvider: schedulerProvider);
         }
 
-        public override void ViewDestroy(bool viewFinishing = true)
+        public override void ViewDestroyed()
         {
-            base.ViewDestroy(viewFinishing);
-
-            if (!viewFinishing) return;
-
+            base.ViewDestroyed();
+            
             reportsDisposable.Dispose();
         }
 
