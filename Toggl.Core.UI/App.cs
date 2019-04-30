@@ -1,62 +1,60 @@
 ﻿using System;
+using System.Reactive;
 using System.Reactive.Linq;
-using MvvmCross.Plugin;
-using MvvmCross.ViewModels;
+using System.Threading.Tasks;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Shared;
 
 namespace Toggl.Core.UI
 {
-    public sealed class App<TFirstViewModelWhenNotLoggedIn> : MvxApplication
-        where TFirstViewModelWhenNotLoggedIn : MvxViewModel
+    public sealed class App<TFirstViewModelWhenNotLoggedIn, TInput>
+        where TFirstViewModelWhenNotLoggedIn : ViewModel<TInput, Unit>
+        where TInput : new()
     {
         private readonly UIDependencyContainer dependencyContainer;
-
-        public App()
-        {
-        }
-
+        
         public App(UIDependencyContainer dependencyContainer)
         {
             this.dependencyContainer = dependencyContainer;
         }
         
-        public override void Initialize()
-        {
-            var appStart = new AppStart<TFirstViewModelWhenNotLoggedIn>(this, dependencyContainer);
-            RegisterAppStart(appStart);
-        }
-
-        public override void LoadPlugins(IMvxPluginManager pluginManager)
-        {
-        }
-
-        protected override IMvxViewModelLocator CreateDefaultViewModelLocator()
-            => new ViewModelLoader(dependencyContainer);
-    }
-
-    [Preserve(AllMembers = true)]
-    public sealed class AppStart<TFirstViewModelWhenNotLoggedIn> : MvxAppStart
-        where TFirstViewModelWhenNotLoggedIn : MvxViewModel
-    {
-        private readonly UIDependencyContainer dependencyContainer;
-
-        public AppStart(IMvxApplication app, UIDependencyContainer dependencyContainer)
-            : base (app, dependencyContainer.NavigationService)
-        {
-            this.dependencyContainer = dependencyContainer;
-        }
-
-        protected override void Startup(object hint = null)
+        public async Task Start()
         {
             revokeNewUserIfNeeded();
 
             dependencyContainer.BackgroundSyncService.SetupBackgroundSync(dependencyContainer.UserAccessManager);
+            
+            var timeService = dependencyContainer.TimeService;
+            var navigationService = dependencyContainer.NavigationService;
+            var onboardingStorage = dependencyContainer.OnboardingStorage;
+            var accessRestrictionStorage = dependencyContainer.AccessRestrictionStorage;
 
-            base.Startup(hint);
+            onboardingStorage.SetFirstOpened(timeService.CurrentDateTime);
+
+            if (accessRestrictionStorage.IsApiOutdated() || accessRestrictionStorage.IsClientOutdated())
+            {
+                await navigationService.Navigate<OutdatedAppViewModel>();
+                return;
+            }
+
+            if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())
+            {
+                await navigationService.Navigate<TFirstViewModelWhenNotLoggedIn, TInput>(new TInput());
+                return;
+            }
+            
+            var user = await dependencyContainer.InteractorFactory.GetCurrentUser().Execute();
+            if (accessRestrictionStorage.IsUnauthorized(user.ApiToken))
+            {
+                await navigationService.Navigate<TokenResetViewModel>();
+                return;
+            }
+
+            dependencyContainer.SyncManager.ForceFullSync().Subscribe();
+
+            await navigationService.Navigate<MainTabBarViewModel>();
         }
-        
+
         private void revokeNewUserIfNeeded()
         {
             const int newUserThreshold = 60;
@@ -73,37 +71,5 @@ namespace Toggl.Core.UI
             dependencyContainer.OnboardingStorage.SetIsNewUser(false);
         }
 
-        protected override async void NavigateToFirstViewModel(object hint = null)
-        {
-            var timeService = dependencyContainer.TimeService;
-            var navigationService = dependencyContainer.NavigationService;
-            var onboardingStorage = dependencyContainer.OnboardingStorage;
-            var accessRestrictionStorage = dependencyContainer.AccessRestrictionStorage;
-
-            onboardingStorage.SetFirstOpened(timeService.CurrentDateTime);
-
-            if (accessRestrictionStorage.IsApiOutdated() || accessRestrictionStorage.IsClientOutdated())
-            {
-                await navigationService.Navigate<OutdatedAppViewModel>();
-                return;
-            }
-
-            if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())
-            {
-                await navigationService.Navigate<TFirstViewModelWhenNotLoggedIn>();
-                return;
-            }
-            
-            var user = await dependencyContainer.InteractorFactory.GetCurrentUser().Execute();
-            if (accessRestrictionStorage.IsUnauthorized(user.ApiToken))
-            {
-                await navigationService.Navigate<TokenResetViewModel>();
-                return;
-            }
-
-            dependencyContainer.SyncManager.ForceFullSync().Subscribe();
-
-            await navigationService.Navigate<MainTabBarViewModel>();
-        }
     }
 }
