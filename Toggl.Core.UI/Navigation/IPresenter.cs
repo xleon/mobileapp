@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Toggl.Core.UI.ViewModels;
 
 namespace Toggl.Core.UI.Navigation
 {
     public interface IPresenter
     {
-        bool CanPresent<TInput>(NavigationInfo<TInput> navigationInfo);
+        bool CanPresent<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel);
 
-        Task<TOutput> Present<TInput, TOutput>(NavigationInfo<TInput> navigationInfo);
+        Task Present<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel);
     }
     
     public sealed class CompositePresenter : IPresenter
@@ -20,16 +21,16 @@ namespace Toggl.Core.UI.Navigation
             this.presenters = presenters;
         }
 
-        public bool CanPresent<TInput>(NavigationInfo<TInput> navigationInfo)
-            => presenters.Any(p => p.CanPresent(navigationInfo));
+        public bool CanPresent<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel)
+            => presenters.Any(p => p.CanPresent(viewModel));
 
-        public Task<TOutput> Present<TInput, TOutput>(NavigationInfo<TInput> navigationInfo)
+        public Task Present<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel)
         {
-            var presenter = presenters.FirstOrDefault(p => p.CanPresent(navigationInfo));
+            var presenter = presenters.FirstOrDefault(p => p.CanPresent(viewModel));
             if (presenter == null)
-                throw new InvalidOperationException($"Failed to find a presenter that could present ViewModel with type {navigationInfo.ViewModelType.Name}");
+                throw new InvalidOperationException($"Failed to find a presenter that could present ViewModel with type {viewModel.GetType().Name}");
 
-            return presenter.Present<TInput, TOutput>(navigationInfo);
+            return presenter.Present(viewModel);
         }
     }
     

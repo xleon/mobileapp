@@ -33,7 +33,7 @@ namespace Toggl.Core.UI
         }
 
         protected override IMvxViewModelLocator CreateDefaultViewModelLocator()
-            => new TogglViewModelLocator(dependencyContainer);
+            => new ViewModelLoader(dependencyContainer);
     }
 
     [Preserve(AllMembers = true)]

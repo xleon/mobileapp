@@ -28,7 +28,7 @@ namespace Toggl.Core.Tests.UI
         [Fact(Skip = "Fixing this while MvvmCross is still there is too complex"), LogIfTooSlow]
         public void IsAbleToCreateEveryViewModel()
         {
-            var locator = new TogglViewModelLocator(new TestDependencyContainer
+            var locator = new ViewModelLoader(new TestDependencyContainer
             {
                 MockUserAccessManager = Substitute.For<IUserAccessManager>(),
                 MockAccessRestrictionStorage = Substitute.For<IAccessRestrictionStorage>(),

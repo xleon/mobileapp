@@ -4,13 +4,46 @@ using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Toggl.Core.Analytics;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Shared;
 
 namespace Toggl.Core.UI.Navigation
 {
     public sealed class NavigationService : MvxNavigationService, INavigationService
     {
+        private readonly CompositePresenter presenter;
         private readonly IAnalyticsService analyticsService;
+        private readonly ViewModelLoader viewModelLocator;
 
+        public NavigationService(
+            CompositePresenter presenter,
+            ViewModelLoader viewModelLocator,
+            IAnalyticsService analyticsService)
+            : base(null, null)
+        {
+            Ensure.Argument.IsNotNull(presenter, nameof(presenter));
+            Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
+            Ensure.Argument.IsNotNull(viewModelLocator, nameof(viewModelLocator));
+            
+            this.presenter = presenter;
+            this.analyticsService = analyticsService;
+            this.viewModelLocator = viewModelLocator;
+        }
+
+        public async Task<TOutput> Navigate<TViewModel, TInput, TOutput>(TInput payload)
+            where TViewModel : ViewModel<TInput, TOutput>
+        {
+            //TODO: Pass the payload for initialization once the lifecycle is unified
+            var viewModel = (TViewModel)viewModelLocator.Load(typeof(TViewModel), null, null);
+            await presenter.Present(viewModel);
+
+            analyticsService.CurrentPage.Track(typeof(TViewModel));
+
+            viewModel.CloseCompletionSource = new TaskCompletionSource<TOutput>();
+            return await viewModel.CloseCompletionSource.Task;
+        }
+
+        #region Old implementation, delete when removing MvvmCross
         public NavigationService(
             IMvxNavigationCache navigationCache,
             IMvxViewModelLoader viewModelLoader,
@@ -67,5 +100,6 @@ namespace Toggl.Core.UI.Navigation
             analyticsService.CurrentPage.Track(viewModelType);
             return base.Navigate<TParameter, TResult>(viewModelType, param, presentationBundle, cancellationToken);
         }
+        #endregion
     }
 }

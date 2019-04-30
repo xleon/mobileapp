@@ -7,11 +7,11 @@ using Toggl.Core.UI.ViewModels.Settings;
 
 namespace Toggl.Core.UI.Navigation
 {
-    public sealed class TogglViewModelLocator : MvxDefaultViewModelLocator
+    public sealed class ViewModelLoader : MvxDefaultViewModelLocator
     {
         private readonly UIDependencyContainer dependencyContainer;
 
-        public TogglViewModelLocator(UIDependencyContainer dependencyContainer)
+        public ViewModelLoader(UIDependencyContainer dependencyContainer)
             : base(dependencyContainer.NavigationService)
         {
             this.dependencyContainer = dependencyContainer;
