@@ -1,11 +1,17 @@
 using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
+using Android.Support.V7.App;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using Toggl.Core;
+using Toggl.Core.Services;
 using Toggl.Core.UI;
+using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Droid.BroadcastReceivers;
 using Toggl.Droid.Helper;
+using Toggl.Networking;
 using static Android.Content.Intent;
 
 namespace Toggl.Droid
@@ -25,29 +31,48 @@ namespace Toggl.Droid
         new[] { "android.intent.action.PROCESS_TEXT" },
         Categories = new[] { "android.intent.category.DEFAULT" },
         DataMimeType = "text/plain")]
-    public class SplashScreen : MvxSplashScreenAppCompatActivity<Setup, App<LoginViewModel>>
+    public class SplashScreen : AppCompatActivity
     {
         public SplashScreen()
-            : base(Resource.Layout.SplashScreen)
+            : base()
         {
-
+#if !USE_PRODUCTION_API
+            System.Net.ServicePointManager.ServerCertificateValidationCallback
+                  += (sender, certificate, chain, sslPolicyErrors) => true;
+#endif
         }
 
-        protected override void RunAppStart(Bundle bundle)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.RunAppStart(bundle);
-            var navigationUrl = Intent.Data?.ToString() ?? getTrackUrlFromProcessedText();
-            var navigationService = AndroidDependencyContainer.Instance.NavigationService;
-            if (string.IsNullOrEmpty(navigationUrl))
-            {
-                Finish();
-                return;
-            }
+            base.OnCreate(savedInstanceState);
+            SetContentView(Resource.Layout.SplashScreen);
 
-            navigationService.Navigate(navigationUrl).ContinueWith(_ =>
+            var dependencyContainer = AndroidDependencyContainer.Instance;
+            var app = new App<LoginViewModel, CredentialsParameter>(dependencyContainer);
+
+            ApplicationContext.RegisterReceiver(new TimezoneChangedBroadcastReceiver(dependencyContainer.TimeService),
+                new IntentFilter(ActionTimezoneChanged));
+
+            createApplicationLifecycleObserver(dependencyContainer.BackgroundService);
+
+            app.Start().ContinueWith(_ =>
             {
                 Finish();
             });
+
+            // TODO: Reimplement this when working on deeplinking
+            //var navigationUrl = Intent.Data?.ToString() ?? getTrackUrlFromProcessedText();
+            //var navigationService = AndroidDependencyContainer.Instance.NavigationService;
+            //if (string.IsNullOrEmpty(navigationUrl))
+            //{
+            //    Finish();
+            //    return;
+            //}
+
+            //navigationService.Navigate(navigationUrl).ContinueWith(_ =>
+            //{
+            //    Finish();
+            //});
         }
 
         private string getTrackUrlFromProcessedText()
@@ -62,5 +87,15 @@ namespace Toggl.Droid
             var applicationUrl = ApplicationUrls.Main.Track(description);
             return applicationUrl;
         }
-    }
+
+
+        private void createApplicationLifecycleObserver(IBackgroundService backgroundService)
+        {
+            //TODO: Reimplement this
+            //var mvxApplication = MvxAndroidApplication.Instance;
+            //var appLifecycleObserver = new ApplicationLifecycleObserver(backgroundService);
+            //mvxApplication.RegisterActivityLifecycleCallbacks(appLifecycleObserver);
+            //mvxApplication.RegisterComponentCallbacks(appLifecycleObserver);
+        }
+}
 }

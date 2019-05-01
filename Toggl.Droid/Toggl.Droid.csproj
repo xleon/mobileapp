@@ -407,7 +407,6 @@
     <Compile Include="Services\NoopIntentDonationServiceAndroid.cs" />
     <Compile Include="Startup\AndroidSchedulerProvider.cs" />
     <Compile Include="Startup\QueryableMvxLifecycleMonitorCurrentTopActivity.cs" />
-    <Compile Include="Startup\Setup.cs" />
     <Compile Include="Startup\SplashScreen.cs" />
     <Compile Include="Services\GoogleServiceAndroid.cs" />
     <Compile Include="Services\DialogServiceAndroid.cs" />
