@@ -16,14 +16,15 @@ namespace Toggl.iOS.ViewControllers
 {
     [ModalCardPresentation]
     public sealed partial class SelectDateFormatViewController
-        : MvxViewController<SelectDateFormatViewModel>,
+        : ReactiveViewController<SelectDateFormatViewModel>,
           IDismissableViewController
     {
         private const int rowHeight = 48;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
-        public SelectDateFormatViewController() : base(nameof(SelectDateFormatViewController), null)
+        public SelectDateFormatViewController() 
+            : base(nameof(SelectDateFormatViewController))
         {
         }
 

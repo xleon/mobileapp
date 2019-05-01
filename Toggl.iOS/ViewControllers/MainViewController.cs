@@ -409,7 +409,8 @@ namespace Toggl.iOS.ViewControllers
             if (!disposing) return;
 
             spiderBroView.Dispose();
-            ViewModel.NavigationService.AfterNavigate -= onNavigate;
+            //TODO: Reimplement this
+            //ViewModel.NavigationService.AfterNavigate -= onNavigate;
 
             disposeBag?.Dispose();
             disposeBag = null;
@@ -675,7 +676,8 @@ namespace Toggl.iOS.ViewControllers
 
             prepareSwipeGesturesOnboarding(storage, tapToEditStep.ShouldBeVisible);
 
-            ViewModel.NavigationService.AfterNavigate += onNavigate;
+            //TODO: Reimplement this
+            //ViewModel.NavigationService.AfterNavigate += onNavigate;
         }
 
         private void prepareSwipeGesturesOnboarding(IOnboardingStorage storage, IObservable<bool> tapToEditStepIsVisible)
@@ -728,7 +730,8 @@ namespace Toggl.iOS.ViewControllers
             if (isHidden == false)
             {
                 tapToEditStep.Dismiss();
-                ViewModel.NavigationService.AfterNavigate -= onNavigate;
+                //TODO: Reimplement this
+                //ViewModel.NavigationService.AfterNavigate -= onNavigate;
             }
         }
 

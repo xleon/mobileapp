@@ -1,6 +1,5 @@
 ﻿using CoreGraphics;
 using Foundation;
-using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
@@ -12,11 +11,16 @@ using Toggl.iOS.Extensions;
 namespace Toggl.iOS.ViewControllers
 {
     [MvxChildPresentation]
-    public sealed class BrowserViewController : MvxViewController<BrowserViewModel>, IWKNavigationDelegate
+    public sealed class BrowserViewController : ReactiveViewController<BrowserViewModel>, IWKNavigationDelegate
     {
         private const int distanceFromTopForIos10 = 3;
 
         private WKWebView webView;
+
+        public BrowserViewController()
+            : base(null)
+        {
+        }
 
         public override void ViewDidLoad()
         {

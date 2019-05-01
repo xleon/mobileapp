@@ -10,7 +10,7 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public sealed class LicensesViewController : MvxTableViewController<LicensesViewModel>
+    public sealed class LicensesViewController : ReactiveTableViewController<LicensesViewModel>
     {
         public override void ViewDidLoad()
         {

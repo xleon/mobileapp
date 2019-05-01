@@ -1,11 +1,11 @@
 ﻿using Foundation;
-using MvvmCross.ViewModels;
+using Toggl.Core.UI.ViewModels;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
     public abstract class KeyboardAwareViewController<TViewModel> : ReactiveViewController<TViewModel>
-        where TViewModel : class, IMvxViewModel
+        where TViewModel : IViewModel
     {
         private NSObject willShowNotification;
         private NSObject willHideNotification;

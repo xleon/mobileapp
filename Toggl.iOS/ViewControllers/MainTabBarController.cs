@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using MvvmCross.Platforms.Ios.Views;
-using MvvmCross.ViewModels;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
@@ -13,9 +11,11 @@ using UIKit;
 namespace Toggl.iOS.ViewControllers
 {
     [MvxRootPresentation(WrapInNavigationController = false)]
-    public class MainTabBarController : MvxTabBarViewController<MainTabBarViewModel>
+    public class MainTabBarController : UITabBarController
     {
-        private static readonly Dictionary<Type, String> imageNameForType = new Dictionary<Type, String>
+        public MainTabBarViewModel ViewModel { get; set; }
+
+        private static readonly Dictionary<Type, string> imageNameForType = new Dictionary<Type, string>
         {
             { typeof(MainViewModel), "icTime" },
             { typeof(ReportsViewModel), "icReports" },
@@ -27,10 +27,10 @@ namespace Toggl.iOS.ViewControllers
         {
             ViewControllers = ViewModel.Tabs.Select(createTabFor).ToArray();
 
-            UIViewController createTabFor(IMvxViewModel viewModel)
+            UIViewController createTabFor(ViewModel viewModel)
             {
                 var controller = new UINavigationController();
-                var screen = this.CreateViewControllerFor(viewModel) as UIViewController;
+                var screen = createViewControllerFor(viewModel) as UIViewController;
                 var item = new UITabBarItem();
                 item.Title = "";
                 item.Image = UIImage.FromBundle(imageNameForType[viewModel.GetType()]);
@@ -38,6 +38,12 @@ namespace Toggl.iOS.ViewControllers
                 controller.PushViewController(screen, true);
                 return controller;
             }
+        }
+
+        // TODO: Implement as part of #4860
+        private UIViewController createViewControllerFor(ViewModel viewModel)
+        {
+            throw new NotImplementedException();
         }
 
         public override void ViewDidLoad()

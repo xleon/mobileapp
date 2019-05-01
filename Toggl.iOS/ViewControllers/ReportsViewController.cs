@@ -70,7 +70,8 @@ namespace Toggl.iOS.ViewControllers
 
             prepareViews();
 
-            popoverCalendar = this.CreateViewControllerFor(ViewModel.CalendarViewModel) as ReportsCalendarViewController;
+            // TODO: Reimplement this
+            //popoverCalendar = this.CreateViewControllerFor(ViewModel.CalendarViewModel) as ReportsCalendarViewController;
 
             OverviewContainerView.AddSubview(overview);
             overview.Frame = OverviewContainerView.Bounds;
