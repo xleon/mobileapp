@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Reactive.Linq;
 using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
-using MvvmCross.Platforms.Android.Binding.Views;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
@@ -99,11 +97,6 @@ namespace Toggl.Droid.Activities
 
             string signupButtonTitle(bool isLoading)
                 => isLoading ? "" : Resources.GetString(Resource.String.SignUpForFree);
-        }
-
-        protected override void AttachBaseContext(Context @base)
-        {
-            base.AttachBaseContext(MvxContextWrapper.Wrap(@base, this));
         }
     }
 }

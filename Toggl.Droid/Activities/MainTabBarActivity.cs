@@ -30,9 +30,6 @@ namespace Toggl.Droid.Activities
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            var setup = MvxAndroidSetupSingleton.EnsureSingletonAvailable(ApplicationContext);
-            setup.EnsureInitialized();
-
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.MainTabBarActivity);
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);

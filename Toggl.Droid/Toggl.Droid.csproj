@@ -329,7 +329,9 @@
     <Compile Include="Activities\EditDurationActivity.ViewBinds.cs">
       <DependentUpon>EditDurationActivity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Activities\EditTimeEntryActivity.Onboarding.cs" />
+    <Compile Include="Activities\EditTimeEntryActivity.Onboarding.cs">
+      <DependentUpon>EditTimeEntryActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Activities\ForgotPasswordActivity.cs" />
     <Compile Include="Activities\ForgotPasswordActivity.ViewBinds.cs">
       <DependentUpon>ForgotPasswordActivity.cs</DependentUpon>
@@ -343,7 +345,6 @@
     <Compile Include="Activities\SelectCountryActivity.ViewBinds.cs">
       <DependentUpon>SelectCountryActivity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Activities\SelectProjectActivity.ViewBinds.cs" />
     <Compile Include="Activities\SelectTagsActivity.cs" />
     <Compile Include="Activities\SelectTagsActivity.ViewBinds.cs">
       <DependentUpon>SelectTagsActivity.cs</DependentUpon>
@@ -363,6 +364,9 @@
     <Compile Include="Adapters\SelectDurationFormatRecyclerAdapter.cs" />
     <Compile Include="Adapters\SelectTagsRecyclerAdapter.cs" />
     <Compile Include="Activities\SelectProjectActivity.cs" />
+    <Compile Include="Activities\SelectProjectActivity.ViewBinds.cs">
+      <DependentUpon>SelectProjectActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
     <Compile Include="Presentation\AndroidPresenter.cs" />
     <Compile Include="Startup\AndroidDependencyContainer.cs" />

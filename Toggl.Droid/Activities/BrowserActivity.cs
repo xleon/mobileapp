@@ -4,7 +4,6 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Webkit;
-using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
@@ -17,7 +16,7 @@ namespace Toggl.Droid.Activities
     [Activity(Theme = "@style/AppTheme",
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
-    public sealed class BrowserActivity : MvxAppCompatActivity<BrowserViewModel>
+    public sealed class BrowserActivity : ReactiveActivity<BrowserViewModel>
     {
         private Toolbar toolbar;
 
@@ -28,7 +27,7 @@ namespace Toggl.Droid.Activities
             OverridePendingTransition(Resource.Animation.abc_slide_in_right, Resource.Animation.abc_fade_out);
 
             setupToolbar();
-            setupBrowser();
+            InitializeViews();
         }
 
         public override void Finish()
@@ -50,7 +49,7 @@ namespace Toggl.Droid.Activities
             toolbar.NavigationClick += onNavigateBack;
         }
 
-        private void setupBrowser()
+        protected override void InitializeViews()
         {
             var webView = FindViewById<WebView>(Resource.Id.BrowserWebView);
             webView.SetWebViewClient(new TogglWebViewClient(onPageFinishedLoading));
