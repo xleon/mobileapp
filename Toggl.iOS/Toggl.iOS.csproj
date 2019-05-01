@@ -1347,7 +1347,6 @@
     <Compile Include="Services\UserDefaultsStorageIos.cs" />
     <Compile Include="Startup\IosDependencyContainer.cs" />
     <Compile Include="Startup\IOSSchedulerProvider.cs" />
-    <Compile Include="Startup\Setup.cs" />
     <Compile Include="Extensions\AnimationExtensions.cs" />
     <Compile Include="Transformations\ProjectTaskClientToAttributedString.cs" />
     <Compile Include="ViewControllers\OnboardingViewController.cs" />
@@ -1460,6 +1459,24 @@
     </Compile>
     <Compile Include="Views\TextViewWithPlaceholder.cs" />
     <Compile Include="Startup\AppDelegate.cs" />
+    <Compile Include="Startup\AppDelegate.Analytics.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Startup\AppDelegate.UI.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Startup\AppDelegate.Siri.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Startup\AppDelegate.Notification.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Startup\AppDelegate.Background.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Startup\AppDelegate.Shortcuts.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Startup\Main.cs" />
     <Compile Include="ViewControllers\OutdatedAppViewController.cs" />
     <Compile Include="ViewControllers\OutdatedAppViewController.designer.cs">
