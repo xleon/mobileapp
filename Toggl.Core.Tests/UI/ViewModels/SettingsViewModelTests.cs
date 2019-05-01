@@ -13,6 +13,7 @@ using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DTOs;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Settings;
@@ -293,7 +294,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
                 ViewModel.TryLogout.Execute();
 
-                await NavigationService.Received().Navigate<LoginViewModel>();
+                await NavigationService.Received()
+                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>());
             }
 
             [Fact, LogIfTooSlow]
@@ -356,7 +358,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.TryLogout.Execute();
 
                 InteractorFactory.DidNotReceive().Logout(Arg.Any<LogoutSource>());
-                await NavigationService.DidNotReceive().Navigate<LoginViewModel>();
+                await NavigationService.DidNotReceive()
+                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>());
             }
 
             [Fact, LogIfTooSlow]
@@ -373,7 +376,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.TryLogout.Execute();
 
                 await InteractorFactory.Received().Logout(LogoutSource.Settings).Execute();
-                await NavigationService.Received().Navigate<LoginViewModel>();
+                await NavigationService.Received()
+                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>());
             }
 
             private void doNotShowConfirmationDialog()
@@ -409,7 +413,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetWorkspaceById(workspaceId).Execute()
                     .Returns(Observable.Return(workspace));
 
-                ViewModel.Prepare();
+                ViewModel.Initialize();
             }
 
             [Fact, LogIfTooSlow]
@@ -896,7 +900,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.OpenCalendarSettings.Execute(Unit.Default);
 
-                NavigationService.Received().Navigate<CalendarSettingsViewModel>();
+                await NavigationService.Received()
+                    .Navigate<CalendarSettingsViewModel, bool, string[]>(Arg.Any<bool>());
             }
         }
 

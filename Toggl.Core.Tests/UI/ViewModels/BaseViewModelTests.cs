@@ -1,25 +1,21 @@
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using MvvmCross.ViewModels;
 using NSubstitute;
-using Toggl.Core.Autocomplete;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Login;
 using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
-using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Toggl.Networking;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
-    public abstract class BaseViewModelTests<TViewModel> : BaseMvvmCrossTests
-        where TViewModel : MvxViewModel
+    public abstract class BaseViewModelTests<TViewModel> : BaseTest
+        where TViewModel : IViewModel
     {
         protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
         protected IApiFactory ApiFactory { get; } = Substitute.For<IApiFactory>();
@@ -45,6 +41,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
         protected TestScheduler TestScheduler { get; }
         protected IRxActionFactory RxActionFactory { get; }
 
+        protected IView View { get; } = Substitute.For<IView>();
+
         protected TViewModel ViewModel { get; private set; }
 
         protected BaseViewModelTests()
@@ -62,6 +60,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             AdditionalSetup();
 
             ViewModel = CreateViewModel();
+            ViewModel.AttachView(View);
 
             AdditionalViewModelSetup();
         }

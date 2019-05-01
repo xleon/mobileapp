@@ -8,7 +8,6 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
-using MvvmCross.ViewModels;
 using NSubstitute;
 using Toggl.Core.Interactors;
 using Toggl.Core.UI.Services;
@@ -241,7 +240,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.Received().Close(ViewModel, false);
+                await View.Received().Close();
             }
 
             [Property]
@@ -264,7 +263,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
 
                 TestScheduler.Start();
-                NavigationService.Received().Close(ViewModel, false);
+                View.Received().Close().Wait();
             }
 
             [Property]
@@ -276,7 +275,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
 
                 TestScheduler.Start();
-                NavigationService.DidNotReceive().Close(Arg.Any<IMvxViewModelResult<bool>>(), Arg.Any<bool>());
+                View.DidNotReceive().Close().Wait();
             }
         }
 
@@ -313,7 +312,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Send.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.Received().Close(ViewModel, true);
+                (await ViewModel.ReturnedValue()).Should().BeTrue();
             }
 
             [Fact]

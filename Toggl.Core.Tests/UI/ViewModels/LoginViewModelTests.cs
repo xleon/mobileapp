@@ -12,6 +12,7 @@ using NUnit.Framework;
 using Toggl.Core.Analytics;
 using Toggl.Core.Exceptions;
 using Toggl.Core.UI;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels;
@@ -715,7 +716,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var actualValues = new List<string>();
                 viewModel.Email.Subscribe(actualValues.Add);
 
-                viewModel.Prepare(parameter);
+                viewModel.Initialize(parameter);
 
                 TestScheduler.Start();
                 CollectionAssert.AreEqual(expectedValues, actualValues);
@@ -732,7 +733,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var actualValues = new List<string>();
                 viewModel.Password.Subscribe(actualValues.Add);
 
-                viewModel.Prepare(parameter);
+                viewModel.Initialize(parameter);
 
                 TestScheduler.Start();
                 CollectionAssert.AreEqual(expectedValues, actualValues);

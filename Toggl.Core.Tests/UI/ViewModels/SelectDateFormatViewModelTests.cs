@@ -9,6 +9,7 @@ using Toggl.Core.Tests.Generators;
 using Toggl.Shared;
 using Xunit;
 using Toggl.Core.UI.Navigation;
+using Toggl.Core.Tests.TestExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -43,7 +44,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var selectedDateFormat = ViewModel.DateTimeFormats[0];
 
-                ViewModel.Prepare(selectedDateFormat.DateFormat);
+                ViewModel.Initialize(selectedDateFormat.DateFormat);
 
                 selectedDateFormat.Selected.Should().BeTrue();
             }
@@ -55,12 +56,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task ClosesTheViewModelPassingTheDefaultResult()
             {
                 var defaultResult = DateFormat.FromLocalizedDateFormat("YYYY.MM.DD");
-                ViewModel.Prepare(defaultResult);
+                await ViewModel.Initialize(defaultResult);
 
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(ViewModel, defaultResult);
+                (await ViewModel.ReturnedValue()).Should().Be(defaultResult);
             }
         }
 
@@ -75,7 +76,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectDateFormat.Execute(selectableDateFormatViewModel);
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(ViewModel, selectedDateFormat);    
+                (await ViewModel.ReturnedValue()).Should().Be(selectedDateFormat);    
             }
         }
     }

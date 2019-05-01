@@ -60,7 +60,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(ViewModel, Unit.Default);
+                await View.Received().Close();
             }
 
             [Fact]
@@ -71,7 +71,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
 
-                await NavigationService.DidNotReceive().Close(Arg.Any<CalendarPermissionDeniedViewModel>(), Unit.Default);
+                await View.DidNotReceive().Close();
             }
         }
     }

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels.ReportsCalendarQuickSelectShortcuts
 {
-    public abstract class BaseReportsCalendarQuickSelectShortcutTests<T> : BaseMvvmCrossTests
+    public abstract class BaseReportsCalendarQuickSelectShortcutTests<T> : BaseTest
         where T : ReportsCalendarBaseQuickSelectShortcut
     {
         protected BaseReportsCalendarQuickSelectShortcutTests()

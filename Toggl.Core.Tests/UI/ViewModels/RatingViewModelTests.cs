@@ -8,11 +8,9 @@ using Microsoft.Reactive.Testing;
 using NSubstitute;
 using NUnit.Framework;
 using Toggl.Core.Analytics;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.Hints;
-using Toggl.Core.Services;
 using Toggl.Core.Tests.Generators;
-using Toggl.Core.Tests.TestExtensions;
 using Toggl.Storage;
 using Xunit;
 

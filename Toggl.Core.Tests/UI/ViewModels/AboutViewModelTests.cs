@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
+using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Xunit;
-using System.Reactive.Linq;
-using Toggl.Core.Tests.Generators;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {

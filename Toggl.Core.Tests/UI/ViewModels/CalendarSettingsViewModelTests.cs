@@ -59,7 +59,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 UserPreferences.EnabledCalendarIds().Returns(new List<string>());
                 PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(permissionGranted));
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(false);
 
                 ViewModel.PermissionGranted.Should().Be(permissionGranted);
             }
@@ -99,7 +99,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Returns(Observable.Return(userCalendars));
                 var viewModel = CreateViewModel();
 
-                viewModel.Initialize().Wait();
+                viewModel.Initialize(false).Wait();
 
                 var calendars = viewModel.Calendars.FirstAsync().Wait();
                 foreach (var calendarGroup in calendars)
@@ -120,7 +120,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 var viewModel = CreateViewModel();
 
-                viewModel.Initialize().Wait();
+                viewModel.Initialize(false).Wait();
 
                 UserPreferences.Received().SetEnabledCalendars(Arg.Is<string[]>(strings => strings == null || strings.Length == 0));
             }
@@ -133,7 +133,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 var viewModel = CreateViewModel();
 
-                viewModel.Initialize().Wait();
+                viewModel.Initialize(false).Wait();
 
                 UserPreferences.DidNotReceive().SetEnabledCalendars(Arg.Is<string[]>(strings => strings == null || strings.Length == 0));
             }
@@ -186,7 +186,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .GetUserCalendars()
                     .Execute()
                     .Returns(Observable.Return(userCalendars));
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(false);
                 var selectedIds = new[] { "0", "2", "4", "7" };
 
                 var calendars = userCalendars
@@ -225,7 +225,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Execute()
                     .Returns(Observable.Return(userCalendars));
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(false);
                 var selectedIds = new[] { "2", "4", "7" };
 
                 var calendars = userCalendars
@@ -267,7 +267,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Execute()
                     .Returns(Observable.Return(userCalendars));
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(false);
                 var selectedIds = new[] { "2", "4", "7" };
 
                 var calendars = userCalendars

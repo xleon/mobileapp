@@ -14,6 +14,7 @@ using Toggl.Shared;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Network;
 using Xunit;
+using System.Threading.Tasks;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -61,7 +62,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var email = Email.From(emailString.Get);
 
-                ViewModel.Prepare(EmailParameter.With(email));
+                ViewModel.Initialize(EmailParameter.With(email));
 
                 ViewModel.Email.Value.Should().Be(email);
             }
@@ -231,7 +232,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public void ClosesTheViewModelAfterFourSecondDelay()
+                public async Task ClosesTheViewModelAfterFourSecondDelay()
                 {
                     var testScheduler = new TestScheduler();
                     var timeService = new TimeService(testScheduler);
@@ -246,12 +247,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     TestScheduler.Start();
                     testScheduler.AdvanceBy(TimeSpan.FromSeconds(4).Ticks);
 
-                    NavigationService
-                        .Received()
-                        .Close(
-                            viewModel,
-                            Arg.Is<EmailParameter>(
-                                parameter => parameter.Email.Equals(ValidEmail)));
+                    var result = await ViewModel.ReturnedValue();
+                    result.Email.Should().BeEquivalentTo(ValidEmail);
                 }
             }
 
@@ -360,12 +357,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
 
                 TestScheduler.Start();
-                NavigationService
-                    .Received()
-                    .Close(
-                        ViewModel,
-                        Arg.Is<EmailParameter>(
-                            parameter => parameter.Email.Equals(email)));
+
+                var result = ViewModel.ReturnedValue().GetAwaiter().GetResult();
+                result.Email.Should().BeEquivalentTo(email);
             }
         }
     }

@@ -12,7 +12,7 @@ using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.Tests.UI
 {
-    public abstract class BaseMvvmCrossTests : ReactiveTest
+    public abstract class BaseTest : ReactiveTest
     {
         protected IIdProvider IdProvider { get; } = Substitute.For<IIdProvider>();
         protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();

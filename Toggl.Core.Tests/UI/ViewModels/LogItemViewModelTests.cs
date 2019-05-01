@@ -19,7 +19,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
     {
         private static readonly IThreadSafeWorkspace workspace = new MockWorkspace { Id = 1 };
 
-        public abstract class LogItemViewModelTest : BaseMvvmCrossTests
+        public abstract class LogItemViewModelTest : BaseTest
         {
             protected MockProject Project = new MockProject { Id = 1, Name = "Project1", Color = "#123456" };
             protected IThreadSafeTimeEntry MockTimeEntry = Substitute.For<IThreadSafeTimeEntry>();

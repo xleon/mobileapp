@@ -78,8 +78,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
                     .Execute()
                     .Returns(Observable.Return(clients));
-                ViewModel.Prepare(Parameters);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(Parameters);
                 var observer = CreateClientsObserver();
 
                 TestScheduler.Start();
@@ -94,8 +93,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
                     .Execute()
                     .Returns(Observable.Return(clients));
-                ViewModel.Prepare(Parameters);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(Parameters);
                 var observer = CreateClientsObserver();
 
                 TestScheduler.Start();
@@ -111,8 +109,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
                     .Execute()
                     .Returns(Observable.Return(clients));
-                ViewModel.Prepare(Parameters);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(Parameters);
                 var observer = CreateClientsObserver();
 
                 TestScheduler.Start();
@@ -137,8 +134,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
                     .Execute()
                     .Returns(Observable.Return(clients));
-                ViewModel.Prepare(parameter);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(parameter);
                 var observer = CreateClientsObserver();
 
                 TestScheduler.Start();
@@ -154,8 +150,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
                     .Execute()
                     .Returns(Observable.Return(clients));
-                ViewModel.Prepare(Parameters);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(Parameters);
                 var observer = CreateClientsObserver();
 
                 TestScheduler.Start();
@@ -172,25 +167,23 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(Parameters);
 
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Any<long?>());
+                await View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
             public async Task ReturnsNull()
             {
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(Parameters);
 
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), null);
+                (await ViewModel.ReturnedValue()).Should().BeNull();
             }
         }
 
@@ -209,36 +202,31 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(Parameters);
 
                 ViewModel.SelectClient.Execute(client);
                 TestScheduler.Start();
 
-                await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Any<long?>());
+                await View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
             public async Task ReturnsTheSelectedClientId()
             {
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(Parameters);
 
                 ViewModel.SelectClient.Execute(client);
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(
-                    Arg.Is(ViewModel),
-                    Arg.Is<long?>(client.Id)
-                );
+                (await ViewModel.ReturnedValue()).Should().Be(client.Id);
             }
 
             [Fact, LogIfTooSlow]
             public async Task CreatesANewClientWithTheGivenNameInTheCurrentWorkspace()
             {
                 long workspaceId = 10;
-                await ViewModel.Initialize();
                 var newClient = new SelectableClientCreationViewModel("Some name of the client");
-                ViewModel.Prepare(Parameters);
+                await ViewModel.Initialize(Parameters);
 
                 ViewModel.SelectClient.Execute(newClient);
                 TestScheduler.Start();
@@ -257,7 +245,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData("      abcd\nefgh     ", "abcd\nefgh")]
             public async Task TrimsNameFromTheStartAndTheEndBeforeSaving(string name, string trimmed)
             {
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(Parameters);
 
                 ViewModel.SelectClient.Execute(new SelectableClientCreationViewModel(name));
                 TestScheduler.Start();
@@ -279,7 +267,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
                     .Execute()
                     .Returns(Observable.Return(clients));
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(Parameters);
                 var observer = CreateClientsObserver();
 
                 ViewModel.FilterText.OnNext("0");
@@ -295,7 +283,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
                     .Execute()
                     .Returns(Observable.Return(clients));
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(Parameters);
                 var observer = CreateClientsObserver();
 
                 var nonExistingClientName = "Some none existing name";
@@ -319,8 +307,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
                     .Execute()
                     .Returns(Observable.Return(clients));
-                ViewModel.Prepare(Parameters);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(Parameters);
                 var observer = CreateClientsObserver();
 
                 ViewModel.FilterText.OnNext(name);
@@ -336,7 +323,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
                     .Execute()
                     .Returns(Observable.Return(clients));
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(Parameters);
                 var observer = CreateClientsObserver();
 
                 ViewModel.FilterText.OnNext(clients.First().Name);
@@ -353,8 +340,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetAllClientsInWorkspace(Arg.Any<long>())
                     .Execute()
                     .Returns(Observable.Return(clients));
-                ViewModel.Prepare(Parameters);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(Parameters);
                 var observer = CreateClientsObserver();
 
                 ViewModel.FilterText.OnNext("a");

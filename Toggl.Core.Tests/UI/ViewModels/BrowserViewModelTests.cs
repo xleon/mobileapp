@@ -46,7 +46,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void SetsTheUrlProperty()
             {
-                ViewModel.Prepare(parameters);
+                ViewModel.Initialize(parameters);
 
                 ViewModel.Url.Should().Be(parameters.Url);
             }
@@ -54,7 +54,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void SetsTheTitleProperty()
             {
-                ViewModel.Prepare(parameters);
+                ViewModel.Initialize(parameters);
 
                 ViewModel.Title.Should().Be(parameters.Title);
             }

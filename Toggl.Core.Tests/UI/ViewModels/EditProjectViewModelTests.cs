@@ -58,7 +58,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
             protected EditProjectViewModelTest()
             {
-                ViewModel.Prepare("A valid name");
+                ViewModel.Initialize("A valid name");
             }
 
             protected override EditProjectViewModel CreateViewModel()
@@ -265,7 +265,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 Workspace.Name.Returns(DefaultWorkspaceName);
 
                 var viewModel = CreateViewModel();
-                viewModel.Prepare("Some name");
+                await viewModel.Initialize("Some name");
 
                 viewModel.Save.Execute();
                 TestScheduler.Start();
@@ -329,31 +329,30 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheCloseAction : EditProjectViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public void ClosesTheViewModel()
+            public async Task ClosesTheViewModel()
             {
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Any<long?>());
+                await View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
-            public void ReturnsNull()
+            public async Task ReturnsNull()
             {
-                ViewModel.Prepare("Some name");
+                ViewModel.Initialize("Some name");
 
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Is<long?>(result => result == null));
+                (await ViewModel.ReturnedValue())
+                    .Should().Be(null);
             }
 
             [Fact, LogIfTooSlow]
             public void DoesNotTrySavingTheChanges()
             {
-                ViewModel.Prepare("Some name");
+                ViewModel.Initialize("Some name");
 
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
@@ -403,20 +402,20 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ReturnsTheIdOfTheCreatedProject()
             {
-                ViewModel.Prepare("Some name");
+                ViewModel.Initialize("Some name");
                 TestScheduler.Start();
 
                 ViewModel.Save.Execute();
                 TestScheduler.Start();
 
-                await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Is(projectId));
+                (await ViewModel.ReturnedValue())
+                    .Should().Be(projectId);
             }
 
             [Fact, LogIfTooSlow]
             public void DoesNotCallCreateIfTheProjectNameIsInvalid()
             {
-                ViewModel.Prepare("Some name");
+                ViewModel.Initialize("Some name");
                 TestScheduler.Start();
                 ViewModel.Name.Accept("");
                 TestScheduler.Start();
@@ -433,7 +432,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void DoesNotCloseTheViewModelIfTheProjectNameIsInvalid()
             {
-                ViewModel.Prepare("Some name");
+                ViewModel.Initialize("Some name");
                 TestScheduler.Start();
                 ViewModel.Name.Accept("");
                 TestScheduler.Start();
@@ -441,8 +440,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Save.Execute();
                 TestScheduler.Start();
 
-                NavigationService.DidNotReceive()
-                    .Close(ViewModel, projectId);
+                View.DidNotReceive().Close();
             }
 
             [Theory, LogIfTooSlow]
@@ -453,7 +451,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData("      abcd\nefgh     ", "abcd\nefgh")]
             public async Task TrimsNameFromTheStartAndTheEndBeforeSaving(string name, string trimmed)
             {
-                ViewModel.Prepare(name);
+                ViewModel.Initialize(name);
 
                 ViewModel.Save.Execute();
 
@@ -507,7 +505,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 protected override void AdditionalViewModelSetup()
                 {
                     TestScheduler.Start();
-                    ViewModel.Prepare("Some project");
+                    ViewModel.Initialize("Some project");
                     TestScheduler.Start();
                     ViewModel.WorkspaceName.Subscribe();
                     TestScheduler.Start();
@@ -544,7 +542,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     TestScheduler.Start();
 
                     InteractorFactory.CreateProject(Arg.Any<CreateProjectDTO>()).DidNotReceive().Execute();
-                    NavigationService.DidNotReceive().Close(Arg.Is(ViewModel), Arg.Any<long>());
+                    View.DidNotReceive().Close();
                 }
             }
         }
@@ -554,7 +552,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void CallsTheSelectColorViewModel()
             {
-                ViewModel.Prepare("Some name");
+                ViewModel.Initialize("Some name");
 
                 ViewModel.PickColor.Execute();
                 TestScheduler.Start();
@@ -604,7 +602,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Execute()
                     .Returns(Observable.Return(workspace));
 
-                ViewModel.Prepare();
+                ViewModel.Initialize("");
             }
 
             [Fact, LogIfTooSlow]
@@ -675,7 +673,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void CallsTheSelectClientViewModel()
             {
-                ViewModel.Prepare("Some name");
+                ViewModel.Initialize("Some name");
 
                 ViewModel.PickClient.Execute();
                 TestScheduler.Start();
@@ -693,7 +691,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Returns(Observable.Return(Workspace));
                 Workspace.Id.Returns(DefaultWorkspaceId);
                 var viewModel = CreateViewModel();
-                viewModel.Prepare("Some name");
+                viewModel.Initialize("Some name");
                 TestScheduler.Start();
 
                 viewModel.PickClient.Execute();
@@ -725,7 +723,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Execute()
                     .Returns(Observable.Return(client));
                 Workspace.Id.Returns(DefaultWorkspaceId);
-                ViewModel.Prepare("Some name");
+                ViewModel.Initialize("Some name");
                 ViewModel.ClientName.Subscribe(clientObserver);
 
                 ViewModel.PickClient.Execute();
@@ -749,7 +747,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(Workspace));
                 InteractorFactory.GetClientById(expectedId.Value).Execute().Returns(Observable.Return(client));
                 Workspace.Id.Returns(DefaultWorkspaceId);
-                ViewModel.Prepare("Some name");
+                ViewModel.Initialize("Some name");
                 ViewModel.PickClient.Execute();
                 TestScheduler.Start();
                 ViewModel.ClientName.Subscribe(clientObserver);

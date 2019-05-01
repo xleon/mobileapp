@@ -6,22 +6,18 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using FluentAssertions;
-using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using MvvmCross.Binding.Extensions;
 using NSubstitute;
 using Toggl.Core.Analytics;
-using Toggl.Core.DataSources;
-using Toggl.Core.Experiments;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.Hints;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
@@ -34,7 +30,6 @@ using Toggl.Shared.Models;
 using Toggl.Storage;
 using Xunit;
 using static Toggl.Core.Helper.Constants;
-using Notification = System.Reactive.Notification;
 using ThreadingTask = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.UI.ViewModels
@@ -65,7 +60,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     StopwatchProvider,
                     RxActionFactory);
 
-                vm.Prepare();
+                vm.Initialize();
 
                 return vm;
             }

@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Tests.Generators;
 using Xunit;
+using Toggl.Core.UI.Parameters;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -124,7 +126,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.SkipOnboarding.Execute();
 
-                await NavigationService.Received().Navigate<LoginViewModel>();
+                await NavigationService.Received()
+                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>());
             }
 
             [Theory, LogIfTooSlow]
@@ -173,7 +176,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.GoToNextPage.Execute();
                 TestScheduler.Start();
 
-                await NavigationService.Received().Navigate<LoginViewModel>();
+                await NavigationService.Received()
+                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>());
             }
 
             [Fact, LogIfTooSlow]
@@ -250,7 +254,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await ViewModel.Initialize();
 
-                await NavigationService.Received().Navigate<LoginViewModel>();
+                await NavigationService.Received()
+                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>());
             }
         }
     }
