@@ -11,7 +11,7 @@ namespace Toggl.Droid.Fragments
         private TextView tryAgainTextView;
         private TextView createWorkspaceTextView;
 
-        public void InitializeViews(View rootView)
+        protected override void InitializeViews(View rootView)
         {
             progressBar = rootView.FindViewById<ProgressBar>(Resource.Id.ProgressBar);
             tryAgainTextView = rootView.FindViewById<TextView>(Resource.Id.TryAgainTextView);

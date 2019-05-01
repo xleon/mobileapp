@@ -1,9 +1,6 @@
-﻿using System.Reactive.Disposables;
-using Android.OS;
+﻿using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Droid.Support.V4;
-using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
@@ -13,10 +10,8 @@ using Toggl.Shared.Extensions;
 namespace Toggl.Droid.Fragments
 {
     [MvxFragmentPresentation(typeof(EditProjectViewModel), Resource.Id.SelectWorkspaceContainer, AddToBackStack = true)]
-    public partial class SelectWorkspaceFragment : MvxFragment<SelectWorkspaceViewModel>
+    public partial class SelectWorkspaceFragment : ReactiveFragment<SelectWorkspaceViewModel>
     {
-        public CompositeDisposable DisposeBag { get; } = new CompositeDisposable();
-
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             base.OnCreateView(inflater, container, savedInstanceState);

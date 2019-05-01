@@ -9,7 +9,7 @@ namespace Toggl.Droid.Fragments
         private RecyclerView recyclerView;
         private SelectDurationFormatRecyclerAdapter selectDurationRecyclerAdapter;
 
-        private void initializeViews(View view)
+        protected override void InitializeViews(View view)
         {
             recyclerView = view.FindViewById<RecyclerView>(Resource.Id.SelectDurationFormatRecyclerView);
         }

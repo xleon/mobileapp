@@ -9,7 +9,7 @@ namespace Toggl.Droid.Fragments
         private TextView termsOfServiceTextView;
         private Button acceptButton;
 
-        public void InitializeViews(View fragmentView)
+        protected override void InitializeViews(View fragmentView)
         {
             privacyPolicyTextView = fragmentView.FindViewById<TextView>(Resource.Id.ViewPrivacyPolicyTextView);
             termsOfServiceTextView = fragmentView.FindViewById<TextView>(Resource.Id.ViewTermsOfServiceTextView);

@@ -16,10 +16,8 @@ using Toggl.Shared.Extensions;
 namespace Toggl.Droid.Fragments
 {
     [MvxDialogFragmentPresentation(AddToBackStack = true)]
-    public sealed partial class SelectDurationFormatFragment : MvxDialogFragment<SelectDurationFormatViewModel>
+    public sealed partial class SelectDurationFormatFragment : ReactiveDialogFragment<SelectDurationFormatViewModel>
     {
-        private readonly CompositeDisposable disposeBag  = new CompositeDisposable();
-
         public SelectDurationFormatFragment() { }
 
         public SelectDurationFormatFragment(IntPtr javaReference, JniHandleOwnership transfer)
@@ -30,7 +28,7 @@ namespace Toggl.Droid.Fragments
             base.OnCreateView(inflater, container, savedInstanceState);
             var view = inflater.Inflate(Resource.Layout.SelectDurationFormatFragment, null);
 
-            initializeViews(view);
+            InitializeViews(view);
 
             recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
             selectDurationRecyclerAdapter = new SelectDurationFormatRecyclerAdapter();
@@ -39,7 +37,7 @@ namespace Toggl.Droid.Fragments
 
             selectDurationRecyclerAdapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectDurationFormat.Inputs)
-                .DisposedBy(disposeBag);
+                .DisposedBy(DisposeBag);
 
             return view;
         }
@@ -60,7 +58,7 @@ namespace Toggl.Droid.Fragments
         {
             base.Dispose(disposing);
             if (!disposing) return;
-            disposeBag.Dispose();
+            DisposeBag.Dispose();
         }
     }
 }

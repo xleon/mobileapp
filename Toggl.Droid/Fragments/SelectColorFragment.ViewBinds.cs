@@ -16,7 +16,7 @@ namespace Toggl.Droid.Fragments
         private RecyclerView recyclerView;
         private SimpleAdapter<SelectableColorViewModel> selectableColorsAdapter;
 
-        private void initializeViews(View view) 
+        protected override void InitializeViews(View view) 
         {
             recyclerView = view.FindViewById<RecyclerView>(Resource.Id.SelectColorRecyclerView);
             saveButton = view.FindViewById<Button>(Resource.Id.SelectColorSave);

@@ -8,27 +8,21 @@ using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Android.Widget;
-using MvvmCross.Droid.Support.V4;
-using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.ViewHolders;
-using Toggl.Droid.Views;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
     [MvxDialogFragmentPresentation(AddToBackStack = true)]
-    public sealed partial class SelectColorFragment : MvxDialogFragment<SelectColorViewModel>
+    public sealed partial class SelectColorFragment : ReactiveDialogFragment<SelectColorViewModel>
     {
         private const int customColorEnabledHeight = 425;
         private const int customColorDisabledHeight = 270;
-
-        public CompositeDisposable DisposeBag { get; } = new CompositeDisposable();
 
         public SelectColorFragment() { }
 
@@ -40,7 +34,7 @@ namespace Toggl.Droid.Fragments
             base.OnCreateView(inflater, container, savedInstanceState);
             var view = inflater.Inflate(Resource.Layout.SelectColorFragment, null);
 
-            initializeViews(view);
+            InitializeViews(view);
 
             recyclerView.SetLayoutManager(new GridLayoutManager(Context, 5));
 
