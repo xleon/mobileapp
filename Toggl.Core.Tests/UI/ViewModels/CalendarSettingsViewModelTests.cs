@@ -19,7 +19,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class CalendarSettingsViewModelTests
     {
-        public abstract class CalendarSettingsViewModelTest : BaseViewModelTests<CalendarSettingsViewModel>
+        public abstract class CalendarSettingsViewModelTest : BaseViewModelTests<CalendarSettingsViewModel, bool, string[]>
         {
             protected override CalendarSettingsViewModel CreateViewModel()
                 => new CalendarSettingsViewModel(UserPreferences, InteractorFactory, NavigationService, RxActionFactory, PermissionsService);

@@ -17,7 +17,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectColorViewModelTests
     {
-        public abstract class SelectColorViewModelTest : BaseViewModelTests<SelectColorViewModel>
+        public abstract class SelectColorViewModelTest : BaseViewModelTests<SelectColorViewModel, ColorParameters, Color>
         {
             protected override SelectColorViewModel CreateViewModel()
                 => new SelectColorViewModel(NavigationService, RxActionFactory);

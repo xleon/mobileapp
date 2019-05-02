@@ -2,13 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.Analytics;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Reports;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
@@ -59,24 +56,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             protected async Task Initialize()
             {
-                using (var block = new AutoResetEvent(false))
-                {
-                    // TODO: Figure out when fixing the TViewModel navigation
-                    //NavigationService
-                    //    .When(service => service.Navigate(Arg.Any<ReportsCalendarViewModel>()))
-                    //    .Do(async callInfo =>
-                    //    {
-                    //        var calendarViewModel = callInfo.Arg<ReportsCalendarViewModel>();
-                    //        calendarViewModel.Initialize();
-                    //        await calendarViewModel.Initialize();
-                    //        block.Set();
-                    //    });
-
-                    await ViewModel.Initialize();
-                    ViewModel.ViewAppeared();
-
-                    block.WaitOne();
-                }
+                await ViewModel.Initialize();
+                ViewModel.ViewAppeared();
+                ViewModel.CalendarViewModel.ViewAppeared();
             }
         }
 
@@ -123,61 +105,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheInitializeMethod : ReportsViewModelTest
-        {
-            [Fact, LogIfTooSlow]
-            public async Task TracksAnEventWhenReportLoadsSuccessfully()
-            {
-                var startDateRange = new DateTimeOffset(2018, 05, 05, 0, 0, 0, TimeSpan.Zero);
-                var endDateRange = startDateRange.AddDays(7);
-
-                var totalDays = (int)(endDateRange - startDateRange).TotalDays;
-                var projectsNotSyncedCount = 0;
-                var loadingDuration = TimeSpan.FromSeconds(5);
-                var now = new DateTimeOffset(2018, 01, 01, 0, 0, 0, TimeSpan.Zero);
-
-                TimeService.CurrentDateTime.Returns(_ =>
-                {
-                    now = now + loadingDuration;
-                    return now;
-                });
-
-                Interactor.Execute()
-                    .Returns(Observable.Return(new ProjectSummaryReport(new ChartSegment[0], projectsNotSyncedCount)));
-
-                await Initialize();
-
-                AnalyticsService.Received().ReportsSuccess.Track(ReportsSource.Initial, totalDays, projectsNotSyncedCount, loadingDuration.TotalMilliseconds);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task TracksAnEventWhenReportFailsToLoad()
-            {
-                var startDateRange = new DateTimeOffset(2018, 05, 05, 0, 0, 0, TimeSpan.Zero);
-                var endDateRange = startDateRange.AddDays(7);
-
-                var totalDays = (int)(endDateRange - startDateRange).TotalDays;
-                var loadingDuration = TimeSpan.FromSeconds(5);
-                var now = new DateTimeOffset(2018, 01, 01, 0, 0, 0, TimeSpan.Zero);
-
-                TimeService.CurrentDateTime.Returns(_ =>
-                {
-                    now = now + loadingDuration;
-                    return now;
-                });
-
-                Interactor.Execute().Returns(Observable.Throw<ProjectSummaryReport>(new Exception()));
-
-                await Initialize();
-
-                AnalyticsService.Received().ReportsFailure.Track(ReportsSource.Initial, totalDays, loadingDuration.TotalMilliseconds);
-            }
-        }
-
         public sealed class TheBillablePercentageMethod : ReportsViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public void IsSetToNullIfTheTotalTimeOfAReportIsZero()
+            public async Task IsSetToNullIfTheTotalTimeOfAReportIsZero()
             {
                 var billableObserver = TestScheduler.CreateObserver<float?>();
                 var projectsNotSyncedCount = 0;
@@ -188,7 +119,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.BillablePercentageObservable.Subscribe(billableObserver);
 
-                Initialize().Wait();
+                await Initialize();
 
                 TestScheduler.Start();
 
@@ -520,14 +451,15 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
 
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId + 1 };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
+                View.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
                     .Returns(Observable.Return(mockWorkspace));
 
                 ViewModel.SelectWorkspace.Execute();
                 TestScheduler.Start();
 
                 InteractorFactory.Received().GetProjectSummary(
-                    Arg.Is(mockWorkspace.Id), Arg.Any<DateTimeOffset>(),
+                    Arg.Is(mockWorkspace.Id),
+                    Arg.Any<DateTimeOffset>(),
                     Arg.Any<DateTimeOffset>());
             }
 
@@ -539,7 +471,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.WorkspaceNameObservable.Subscribe(observer);
 
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId + 1, Name = "Selected workspace" };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
+                View.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
                     .Returns(Observable.Return(mockWorkspace));
                 InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(mockWorkspace));
 
@@ -559,7 +491,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
                 await ViewModel.Initialize();
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
+                View.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(null));
 
                 ViewModel.SelectWorkspace.Execute();
@@ -578,7 +510,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await ViewModel.Initialize();
 
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId };
-                DialogService.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
+                View.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(mockWorkspace));
 
                 ViewModel.SelectWorkspace.Execute();
@@ -676,7 +608,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetWorkspaceFeaturesById(workspace.Id)
                     .Execute()
                     .Returns(workspaceFeaturesObservable);
-                DialogService.Select(Arg.Any<string>(), Arg.Any<ICollection<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>()).Returns(workspaceObservable);
+                View.Select(Arg.Any<string>(), Arg.Any<ICollection<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>()).Returns(workspaceObservable);
             }
         }
 

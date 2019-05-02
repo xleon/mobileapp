@@ -20,7 +20,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectTagsViewModelTests
     {
-        public abstract class SelectTagsViewModelTest : BaseViewModelTests<SelectTagsViewModel>
+        public abstract class SelectTagsViewModelTest : BaseViewModelTests<SelectTagsViewModel, (long[] tagIds, long workspaceId), long[]>
         {
             protected (long[] tagIds, long workspaceId) DefaultParameter { get; } = (new long[0], 1);
 

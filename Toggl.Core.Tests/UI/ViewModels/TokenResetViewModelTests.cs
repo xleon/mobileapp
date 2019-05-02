@@ -233,7 +233,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         {
             private async Task setup(bool hasUnsyncedData = false, bool userConfirmsSignout = true)
             {
-                DialogService.Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
+                View.Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
                              .Returns(Observable.Return(userConfirmsSignout));
                 DataSource.HasUnsyncedData().Returns(Observable.Return(hasUnsyncedData));
 
@@ -271,7 +271,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SignOut.Execute();
 
                 TestScheduler.Start();
-                await DialogService.Received().Confirm(
+                await View.Received().Confirm(
                     Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
             }
 

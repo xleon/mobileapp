@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
@@ -10,7 +9,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class BrowserViewModelTests
     {
-        public abstract class BrowserViewModelTest : BaseViewModelTests<BrowserViewModel>
+        public abstract class BrowserViewModelTest : BaseViewModelWithInputTests<BrowserViewModel, BrowserParameters>
         {
             protected override BrowserViewModel CreateViewModel()
                 => new BrowserViewModel(NavigationService, RxActionFactory);

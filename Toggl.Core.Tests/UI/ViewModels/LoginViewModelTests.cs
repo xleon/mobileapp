@@ -27,7 +27,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class LoginViewModelTests
     {
-        public abstract class LoginViewModelTest : BaseViewModelTests<LoginViewModel>
+        public abstract class LoginViewModelTest : BaseViewModelWithInputTests<LoginViewModel, CredentialsParameter>
         {
             protected Email ValidEmail { get; } = Email.From("person@company.com");
             protected Email InvalidEmail { get; } = Email.From("this is not an email");

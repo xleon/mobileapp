@@ -12,7 +12,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public class SelectDurationFormatViewModelTests
     {
-        public abstract class SelectDurationFormatViewModelTest : BaseViewModelTests<SelectDurationFormatViewModel>
+        public abstract class SelectDurationFormatViewModelTest : BaseViewModelTests<SelectDurationFormatViewModel, DurationFormat, DurationFormat>
         {
             protected override SelectDurationFormatViewModel CreateViewModel()
                 => new SelectDurationFormatViewModel(NavigationService, RxActionFactory);

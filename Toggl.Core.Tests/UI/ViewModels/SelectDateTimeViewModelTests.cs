@@ -13,7 +13,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public class SelectDateTimeViewModelTests
     {
-        public class SelectDateTimeDialogViewModelTest : BaseViewModelTests<SelectDateTimeViewModel>
+        public class SelectDateTimeDialogViewModelTest : BaseViewModelTests<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>
         {
             protected override SelectDateTimeViewModel CreateViewModel()
                 => new SelectDateTimeViewModel(RxActionFactory, NavigationService);

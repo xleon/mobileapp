@@ -11,15 +11,15 @@ using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Tests.Generators;
-using Toggl.Shared.Extensions;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
+using System.Threading.Tasks;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class EditDurationViewModelTests
     {
-        public abstract class EditDurationViewModelTest : BaseViewModelTests<EditDurationViewModel>
+        public abstract class EditDurationViewModelTest : BaseViewModelTests<EditDurationViewModel, EditDurationParameters, DurationParameter>
         {
             protected override EditDurationViewModel CreateViewModel()
                 => new EditDurationViewModel(NavigationService, TimeService, DataSource, AnalyticsService, RxActionFactory, SchedulerProvider);
@@ -280,6 +280,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var result = ViewModel.ReturnedValue().GetAwaiter().GetResult();
                 result.Start.Should().Be(startObserver.LastEmittedValue());
                 result.Duration.Should().Be(durationObserver.LastEmittedValue());
+
+                ViewModel.CloseCompletionSource = new TaskCompletionSource<DurationParameter>();
             }
 
             [Property]
@@ -299,6 +301,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var result = ViewModel.ReturnedValue().GetAwaiter().GetResult();
                 result.Start.Should().Be(startObserver.LastEmittedValue());
                 result.Duration.Should().BeNull();
+
+                ViewModel.CloseCompletionSource = new TaskCompletionSource<DurationParameter>();
             }
         }
 

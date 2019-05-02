@@ -21,7 +21,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class EditProjectViewModelTests
     {
-        public abstract class EditProjectViewModelTest : BaseViewModelTests<EditProjectViewModel>
+        public abstract class EditProjectViewModelTest : BaseViewModelTests<EditProjectViewModel, string, long?>
         {
             protected const long DefaultWorkspaceId = 10;
             protected const string DefaultWorkspaceName = "Some workspace name";
@@ -519,7 +519,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.Save.Execute();
                     TestScheduler.Start();
 
-                    DialogService.Received().Confirm(
+                    View.Received().Confirm(
                         Arg.Is(Resources.WorkspaceChangedAlertTitle),
                         Arg.Is(Resources.WorkspaceChangedAlertMessage),
                         Arg.Is(Resources.Ok),
@@ -530,7 +530,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 [Fact, LogIfTooSlow]
                 public void DoesNothingIfUserCancels()
                 {
-                    DialogService
+                    View
                         .Confirm(
                             Arg.Is(Resources.WorkspaceChangedAlertTitle),
                             Arg.Is(Resources.WorkspaceChangedAlertMessage),

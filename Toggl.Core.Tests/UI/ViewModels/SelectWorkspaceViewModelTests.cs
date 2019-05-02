@@ -8,15 +8,15 @@ using NSubstitute;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Shared.Extensions;
 using Xunit;
-using Toggl.Core.Tests.TestExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectWorkspaceViewModelTests
     {
-        public abstract class SelectWorkspaceViewModelTest : BaseViewModelTests<SelectWorkspaceViewModel>
+        public abstract class SelectWorkspaceViewModelTest : BaseViewModelTests<SelectWorkspaceViewModel, long, long>
         {
             protected override SelectWorkspaceViewModel CreateViewModel()
                 => new SelectWorkspaceViewModel(InteractorFactory, NavigationService, RxActionFactory);

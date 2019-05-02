@@ -18,7 +18,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectClientViewModelTests
     {
-        public abstract class SelectClientViewModelTest : BaseViewModelTests<SelectClientViewModel>
+        public abstract class SelectClientViewModelTest : BaseViewModelTests<SelectClientViewModel, SelectClientParameters, long?>
         {
             protected SelectClientParameters Parameters { get; }
                 = SelectClientParameters.WithIds(10, null);

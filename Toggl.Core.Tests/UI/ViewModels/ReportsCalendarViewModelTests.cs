@@ -115,8 +115,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 };
                 var now = new DateTimeOffset(2020, 4, 2, 1, 1, 1, TimeSpan.Zero);
                 TimeService.CurrentDateTime.Returns(now);
-                ViewModel.Initialize();
-
+                
                 await ViewModel.Initialize();
 
                 for (int i = 0; i < ViewModel.QuickSelectShortcuts.Count; i++)
@@ -124,7 +123,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public void InitializesTheDateRangeWithTheCurrentWeek()
+            public async Task InitializesTheDateRangeWithTheCurrentWeek()
             {
                 var user = Substitute.For<IThreadSafeUser>();
                 user.BeginningOfWeek.Returns(BeginningOfWeek.Sunday);
@@ -133,9 +132,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TimeService.CurrentDateTime.Returns(now);
                 var dateRangeObserver = TestScheduler.CreateObserver<ReportsDateRangeParameter>();
                 var monthsObserver = TestScheduler.CreateObserver<List<ReportsCalendarPageViewModel>>();
-                ViewModel.Initialize();
                 ViewModel.SelectedDateRangeObservable.Subscribe(dateRangeObserver);
-                ViewModel.Initialize().Wait();
+                await ViewModel.Initialize();
                 ViewModel.MonthsObservable.Subscribe(monthsObserver);
                 ViewModel.ViewAppeared();
                 TestScheduler.Start();

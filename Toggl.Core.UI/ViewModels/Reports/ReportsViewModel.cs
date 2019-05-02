@@ -217,7 +217,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Subscribe(onPreferencesChanged)
                 .DisposedBy(disposeBag);
 
-            calendarViewModel.Initialize();
+            await calendarViewModel.Initialize();
         }
 
         public override void ViewAppeared()

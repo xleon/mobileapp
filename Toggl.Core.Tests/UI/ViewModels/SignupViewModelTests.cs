@@ -29,7 +29,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SignupViewModelTests
     {
-        public abstract class SignupViewModelTest : BaseViewModelTests<SignupViewModel>
+        public abstract class SignupViewModelTest : BaseViewModelWithInputTests<SignupViewModel, CredentialsParameter>
         {
             protected CredentialsParameter DefaultParameters { get; } = CredentialsParameter.Empty;
 
@@ -651,10 +651,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 base.AdditionalViewModelSetup();
 
+                ViewModel.Initialize(DefaultParameters).Wait();
+
                 ViewModel.SetEmail(ValidEmail);
                 ViewModel.SetPassword(ValidPassword);
-
-                ViewModel.Initialize(DefaultParameters).Wait();
             }
 
             [Fact, LogIfTooSlow]
@@ -966,9 +966,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
         {
             protected override void AdditionalViewModelSetup()
             {
-                base.AdditionalViewModelSetup();
-
                 ViewModel.Initialize(DefaultParameters).Wait();
+
+                base.AdditionalViewModelSetup();
             }
 
             [Fact, LogIfTooSlow]
@@ -994,18 +994,18 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var observer = TestScheduler.CreateObserver<bool>();
                 ViewModel.SignupEnabled.Subscribe(observer);
-
+                
                 ViewModel.SetEmail(Email.From(email));
                 ViewModel.SetPassword(Password.From(password));
 
                 TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(2, false)
+                    OnNext(2, false)
                 );
             }
 
             [Fact]
-            public void ReturnsFlaseWhenIsLoading()
+            public void ReturnsFalseWhenIsLoading()
             {
                 var observer = TestScheduler.CreateObserver<bool>();
                 ViewModel.SignupEnabled.Subscribe(observer);
@@ -1020,8 +1020,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
                 observer.Messages.AssertEqual(
-                    ReactiveTest.OnNext(2, true),
-                    ReactiveTest.OnNext(3, false)
+                    OnNext(2, true),
+                    OnNext(3, false)
                 );
             }
         }

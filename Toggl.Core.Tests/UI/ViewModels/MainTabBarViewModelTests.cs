@@ -138,15 +138,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Theory]
             [InlineData(Platform.Daneel, false)]
             [InlineData(Platform.Giskard, true)]
-            public async Task ShouldContainTheSettingsViewModelBasedOntheRemoteConfigService(Platform platform, bool includesSettings)
+            public void ShouldContainTheSettingsViewModelBasedOntheRemoteConfigService(Platform platform, bool includesSettings)
             {
                 PlatformInfo.Platform.Returns(platform);
 
                 var viewModel = CreateViewModel();
 
                 var expectedTabCount = 3 + (includesSettings ? 1 : 0);
-
-                await viewModel.Initialize();
 
                 viewModel.Tabs.Count().Should().Be(expectedTabCount);
             }

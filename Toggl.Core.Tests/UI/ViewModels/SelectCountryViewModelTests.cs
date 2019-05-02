@@ -16,7 +16,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectCountryViewModelTests
     {
-        public abstract class SelectCountryViewModelTest : BaseViewModelTests<SelectCountryViewModel>
+        public abstract class SelectCountryViewModelTest : BaseViewModelTests<SelectCountryViewModel, long?, long?>
         {
             protected override SelectCountryViewModel CreateViewModel()
                 => new SelectCountryViewModel(NavigationService, RxActionFactory);

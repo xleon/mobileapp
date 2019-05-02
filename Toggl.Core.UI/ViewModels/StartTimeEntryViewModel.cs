@@ -385,11 +385,11 @@ namespace Toggl.Core.UI.ViewModels
                 case CreateEntitySuggestion createEntitySuggestion:
                     if (isSuggestingProjects.Value)
                     {
-                        createProject();
+                        await createProject();
                     }
                     else
                     {
-                        createTag();
+                        await createTag();
                     }
                     break;
 

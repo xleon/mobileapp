@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive.Linq;
 using FluentAssertions;
 using FsCheck;
@@ -20,7 +19,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class ForgotPasswordViewModelTests
     {
-        public abstract class ForgotPasswordViewModelTest : BaseViewModelTests<ForgotPasswordViewModel>
+        public abstract class ForgotPasswordViewModelTest : BaseViewModelTests<ForgotPasswordViewModel, EmailParameter, EmailParameter>
         {
             protected Email ValidEmail { get; } = Email.From("person@company.com");
             protected Email InvalidEmail { get; } = Email.From("This is not an email");
@@ -238,6 +237,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var timeService = new TimeService(testScheduler);
                     var viewModel = new ForgotPasswordViewModel(
                         timeService, UserAccessManager, AnalyticsService, NavigationService, RxActionFactory);
+                    viewModel.AttachView(View);
+                    viewModel.CloseCompletionSource = new TaskCompletionSource<EmailParameter>();
                     viewModel.Email.OnNext(ValidEmail);
                     UserAccessManager
                         .ResetPassword(Arg.Any<Email>())
@@ -247,7 +248,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     TestScheduler.Start();
                     testScheduler.AdvanceBy(TimeSpan.FromSeconds(4).Ticks);
 
-                    var result = await ViewModel.ReturnedValue();
+                    var result = await viewModel.ReturnedValue();
                     result.Email.Should().BeEquivalentTo(ValidEmail);
                 }
             }
@@ -360,6 +361,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 var result = ViewModel.ReturnedValue().GetAwaiter().GetResult();
                 result.Email.Should().BeEquivalentTo(email);
+
+                ViewModel.CloseCompletionSource = new TaskCompletionSource<EmailParameter>();
             }
         }
     }

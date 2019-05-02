@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FsCheck;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
@@ -26,22 +26,19 @@ using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Shared;
 using Toggl.Core.Tests.TestExtensions;
-using Toggl.Storage.Exceptions;
-using Toggl.Storage.Models;
+using Toggl.Shared;
 using Xunit;
 using static Toggl.Core.Helper.Constants;
-using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
 using TextFieldInfo = Toggl.Core.Autocomplete.TextFieldInfo;
+using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
 using CollectionSections = System.Collections.Generic.IEnumerable<Toggl.Core.UI.Collections.SectionModel<string, Toggl.Core.Autocomplete.Suggestions.AutocompleteSuggestion>>;
-using FsCheck;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class StartTimeEntryViewModelTests
     {
-        public abstract class StartTimeEntryViewModelTest : BaseViewModelTests<StartTimeEntryViewModel>
+        public abstract class StartTimeEntryViewModelTest : BaseViewModelWithInputTests<StartTimeEntryViewModel, StartTimeEntryParameters>
         {
             protected const string TagName = "Mobile";
 
@@ -61,7 +58,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             protected override void AdditionalSetup()
             {
-                DialogService.Confirm(
+                View.Confirm(
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
@@ -549,6 +546,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 public WhenSuggestingProjects()
                 {
+                    ViewModel.Initialize(DefaultParameter).Wait();
+
                     var project = Substitute.For<IThreadSafeProject>();
                     project.Id.Returns(10);
                     InteractorFactory.GetProjectById(Arg.Any<long>()).Execute().Returns(Observable.Return(project));
@@ -556,8 +555,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         new QueryTextSpan($"@{currentQuery}", 15)
                     );
                     
-                    ViewModel.Initialize(DefaultParameter);
-
                     TestScheduler.Start();
                 }
 
@@ -615,7 +612,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             public WhenSuggestingTags()
             {
-                ViewModel.Initialize(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter).Wait();
                 TestScheduler.Start();
                 ViewModel.OnTextFieldInfoFromView(querySpan);
                 TestScheduler.Start();
@@ -650,7 +647,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var projectSpan = new ProjectSpan(projectId, "Project", "0000AF", null, null);
                 var tagSuggestion = new CreateEntitySuggestion(Resources.CreateTag, "");
 
-                InteractorFactory.GetProjectById(Arg.Is(projectId)).Execute().Returns(Observable.Return(project));
+                InteractorFactory.GetProjectById(Arg.Is(projectId)).Execute()
+                    .Returns(Observable.Return(project));
 
                 ViewModel.SelectSuggestion.ExecuteWithCompletion(new ProjectSuggestion(project))
                     .PrependAction(ViewModel.SetTextSpans, new List<ISpan> { querySpan, projectSpan })
@@ -733,14 +731,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute(Unit.Default);
 
                 TestScheduler.Start();
-                await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
+                await View.Received().ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
             }
 
             [Fact, LogIfTooSlow]
             public async Task DoesNotCloseTheViewIfUserWantsToContinueEditing()
             {
                 makeDirty();
-                DialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
+                View.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
                     .Returns(_ => Observable.Return(false));
 
                 ViewModel.Close.Execute(Unit.Default);
@@ -753,7 +751,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task ClosesTheViewIfUserWantsToDiscardTheEnteredInformation()
             {
                 makeDirty();
-                DialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
+                View.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
                     .Returns(_ => Observable.Return(true));
 
                 ViewModel.Close.Execute(Unit.Default);
@@ -1556,7 +1554,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
                     TestScheduler.Start();
-                    await DialogService.Received().Confirm(
+                    await View.Received().Confirm(
                         Arg.Is(Resources.DifferentWorkspaceAlertTitle),
                         Arg.Is(Resources.DifferentWorkspaceAlertMessage),
                         Arg.Is(Resources.Ok),
@@ -1577,7 +1575,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
                     TestScheduler.Start();
-                    await DialogService.DidNotReceive().Confirm(
+                    await View.DidNotReceive().Confirm(
                         Arg.Any<string>(),
                         Arg.Any<string>(),
                         Arg.Any<string>(),
@@ -1726,7 +1724,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 [Fact, LogIfTooSlow]
                 public async Task TracksWhenProjectSuggestionSelected()
                 {
-                    DialogService
+                    View
                         .Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
                         .Returns(Observable.Return(false));
 

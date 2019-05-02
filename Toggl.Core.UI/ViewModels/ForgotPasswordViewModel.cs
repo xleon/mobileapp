@@ -93,7 +93,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private void returnEmail()
         {
-            Finish(EmailParameter.With(Email.Value));
+            Finish(EmailParameter.With(Email.Value)).Wait();
         }
 
         private string toErrorString(Exception exception)

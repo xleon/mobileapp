@@ -11,11 +11,13 @@ using Toggl.Storage.Settings;
 using Toggl.Networking;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
+using System.Threading.Tasks;
+using System.Reactive;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
-    public abstract class BaseViewModelTests<TViewModel> : BaseTest
-        where TViewModel : IViewModel
+    public abstract class BaseViewModelTests<TViewModel, TInput, TOutput> : BaseTest
+        where TViewModel : ViewModel<TInput, TOutput>
     {
         protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
         protected IApiFactory ApiFactory { get; } = Substitute.For<IApiFactory>();
@@ -61,6 +63,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             ViewModel = CreateViewModel();
             ViewModel.AttachView(View);
+            ViewModel.CloseCompletionSource = new TaskCompletionSource<TOutput>();
 
             AdditionalViewModelSetup();
         }
@@ -72,5 +75,20 @@ namespace Toggl.Core.Tests.UI.ViewModels
         protected virtual void AdditionalViewModelSetup()
         {
         }
+    }
+
+    public abstract class BaseViewModelWithInputTests<TViewModel, TInput> : BaseViewModelTests<TViewModel, TInput, Unit>
+        where TViewModel : ViewModelWithInput<TInput>
+    {
+    }
+
+    public abstract class BaseViewModelWithOutputTests<TViewModel, TOutput> : BaseViewModelTests<TViewModel, Unit, TOutput>
+        where TViewModel : ViewModelWithOutput<TOutput>
+    {
+    }
+
+    public abstract class BaseViewModelTests<TViewModel> : BaseViewModelTests<TViewModel, Unit, Unit>
+        where TViewModel : ViewModel
+    {
     }
 }

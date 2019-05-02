@@ -21,7 +21,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SendFeedbackViewModelTests
     {
-        public abstract class SendFeedbackViewModelTest : BaseViewModelTests<SendFeedbackViewModel>
+        public abstract class SendFeedbackViewModelTest : BaseViewModelWithOutputTests<SendFeedbackViewModel, bool>
         {
             protected override SendFeedbackViewModel CreateViewModel()
                 => new SendFeedbackViewModel(NavigationService, InteractorFactory, DialogService, SchedulerProvider, RxActionFactory);
@@ -251,13 +251,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
 
                 TestScheduler.Start();
-                DialogService.Received().ConfirmDestructiveAction(Arg.Any<ActionType>());
+                View.Received().ConfirmDestructiveAction(Arg.Any<ActionType>());
             }
 
             [Property]
             public void ClosesTheDialogWithoutSendingFeedbackWhenUserConfirmsDestructiveAction(NonEmptyString feedbackText)
             {
-                DialogService.ConfirmDestructiveAction(Arg.Any<ActionType>()).Returns(Observable.Return(true));
+                View.ConfirmDestructiveAction(Arg.Any<ActionType>()).Returns(Observable.Return(true));
                 ViewModel.FeedbackText.OnNext(feedbackText.Get);
 
                 ViewModel.Close.Execute();
@@ -269,7 +269,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Property]
             public void DoesNotCloseTheDialogWhenUserCancelsDestructiveAction(NonEmptyString feedbackText)
             {
-                DialogService.ConfirmDestructiveAction(Arg.Any<ActionType>()).Returns(Observable.Return(false));
+                View.ConfirmDestructiveAction(Arg.Any<ActionType>()).Returns(Observable.Return(false));
                 ViewModel.FeedbackText.OnNext(feedbackText.Get);
 
                 ViewModel.Close.Execute();

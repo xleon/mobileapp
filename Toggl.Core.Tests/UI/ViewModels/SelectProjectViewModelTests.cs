@@ -22,7 +22,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectProjectViewModelTests
     {
-        public abstract class SelectProjectViewModelTest : BaseViewModelTests<SelectProjectViewModel>
+        public abstract class SelectProjectViewModelTest : BaseViewModelTests<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>
         {
             protected SelectProjectParameter DefaultParameter { get; } = SelectProjectParameter.WithIds(null, null, 1);
 
@@ -188,7 +188,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ReturnsWorkspaceIfNoProjectWasSelected()
             {
-                DialogService.Confirm(
+                View.Confirm(
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
@@ -214,7 +214,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.SelectProject.Execute(new ProjectSuggestion(project));
 
-                DialogService.Received().Confirm(
+                View.Received().Confirm(
                     Arg.Is(Resources.DifferentWorkspaceAlertTitle),
                     Arg.Is(Resources.DifferentWorkspaceAlertMessage),
                     Arg.Is(Resources.Ok),
@@ -232,7 +232,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.SelectProject.Execute(new ProjectSuggestion(project));
 
-                DialogService.DidNotReceive().Confirm(
+                View.DidNotReceive().Confirm(
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
@@ -246,7 +246,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var project = Substitute.For<IThreadSafeProject>();
                 project.WorkspaceId.Returns(13);
                 var projectSuggestion = new ProjectSuggestion(project);
-                prepareDialogService();
+                prepareDialoag();
 
                 ViewModel.SelectProject.Execute(projectSuggestion);
 
@@ -257,7 +257,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task ReturnsWorksaceIdIfNoProjectWasSelected()
             {
                 var noProjectSuggestion = ProjectSuggestion.NoProject(13, "");
-                prepareDialogService();
+                prepareDialoag();
 
                 ViewModel.SelectProject.Execute(noProjectSuggestion);
 
@@ -270,15 +270,15 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var task = Substitute.For<IThreadSafeTask>();
                 task.Id.Returns(13);
                 var taskSuggestion = new TaskSuggestion(task);
-                prepareDialogService();
+                prepareDialoag();
 
                 ViewModel.SelectProject.Execute(taskSuggestion);
 
                 await ensureReturnsWorkspaceIdOfSuggestion(taskSuggestion);
             }
 
-            private void prepareDialogService()
-                => DialogService.Confirm(
+            private void prepareDialoag()
+                => View.Confirm(
                        Resources.DifferentWorkspaceAlertTitle,
                        Resources.DifferentWorkspaceAlertMessage,
                        Resources.Ok,

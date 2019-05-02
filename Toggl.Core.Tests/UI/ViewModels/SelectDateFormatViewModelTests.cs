@@ -15,7 +15,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectDateFormatViewModelTests
     {
-        public abstract class SelectDateFormatViewModelTest : BaseViewModelTests<SelectDateFormatViewModel>
+        public abstract class SelectDateFormatViewModelTest : BaseViewModelTests<SelectDateFormatViewModel, DateFormat, DateFormat>
         {
             protected override SelectDateFormatViewModel CreateViewModel()
                 => new SelectDateFormatViewModel(NavigationService, RxActionFactory);

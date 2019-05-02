@@ -317,7 +317,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
                 ViewModel.TryLogout.Execute();
 
-                await DialogService.DidNotReceiveWithAnyArgs().Confirm("", "", "", "");
+                await View.DidNotReceiveWithAnyArgs().Confirm("", "", "", "");
             }
 
             [Fact, LogIfTooSlow]
@@ -329,7 +329,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
                 ViewModel.TryLogout.Execute();
 
-                await DialogService.ReceivedWithAnyArgs().Confirm("", "", "", "");
+                await View.ReceivedWithAnyArgs().Confirm("", "", "", "");
             }
 
             [Fact, LogIfTooSlow]
@@ -341,14 +341,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
                 ViewModel.TryLogout.Execute();
 
-                await DialogService.ReceivedWithAnyArgs().Confirm("", "", "", "");
+                await View.ReceivedWithAnyArgs().Confirm("", "", "", "");
             }
 
             [Fact, LogIfTooSlow]
             public async Task DoesNotProceedWithLogoutWhenUserClicksCancelButtonInTheDialog()
             {
                 ProgressSubject.OnNext(SyncProgress.Syncing);
-                DialogService.Confirm(
+                View.Confirm(
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
@@ -366,7 +366,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task ProceedsWithLogoutWhenUserClicksSignOutButtonInTheDialog()
             {
                 ProgressSubject.OnNext(SyncProgress.Syncing);
-                DialogService.Confirm(
+                View.Confirm(
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),

@@ -59,7 +59,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.TryAgain.Execute();
                 TestScheduler.Start();
 
-                await View.DidNotReceive().Close();
+                await View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]

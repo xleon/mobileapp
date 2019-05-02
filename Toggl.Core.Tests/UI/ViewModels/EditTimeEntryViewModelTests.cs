@@ -7,6 +7,7 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
+using Microsoft.Reactive.Testing;
 using Toggl.Core.DTOs;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Parameters;
@@ -14,23 +15,22 @@ using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Analytics;
+using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Tests.Mocks;
-using Xunit;
-using Task = System.Threading.Tasks.Task;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Shared;
-using ProjectClientTaskInfo = Toggl.Core.UI.ViewModels.EditTimeEntryViewModel.ProjectClientTaskInfo;
-using Microsoft.Reactive.Testing;
 using Toggl.Shared.Extensions;
-using Toggl.Core.Extensions;
+using Xunit;
+using Task = System.Threading.Tasks.Task;
+using ProjectClientTaskInfo = Toggl.Core.UI.ViewModels.EditTimeEntryViewModel.ProjectClientTaskInfo;
 using static Toggl.Core.Helper.Constants;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class EditTimeEntryViewModelTests
     {
-        public abstract class EditTimeEntryViewModelTest : BaseViewModelTests<EditTimeEntryViewModel>
+        public abstract class EditTimeEntryViewModelTest : BaseViewModelWithInputTests<EditTimeEntryViewModel, long[]>
         {
             protected static readonly string WorkspaceName = "The best workspace ever";
             protected static readonly string ProjectName = "Very nice project";
@@ -326,7 +326,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void ThrowsIfReceivedEmptyArray()
             {
-                Action work = () => ViewModel.Initialize(EmptyArray);
+                Func<Task> work = async () => await ViewModel.Initialize(EmptyArray);
 
                 work.Should().Throw<ArgumentException>();
             }
@@ -334,7 +334,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void ThrowsIfReceivedNullArray()
             {
-                Action work = () => ViewModel.Initialize(NullArray);
+                Func<Task> work = async () => await ViewModel.Initialize(NullArray);
 
                 work.Should().Throw<ArgumentException>();
             }
@@ -457,72 +457,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Description.Accept(dirtyString);
 
                 observer.LastEmittedValue().Should().Be(StringSample);
-            }
-        }
-
-        public sealed class TheSyncErrorMessageProperty : InitializableEditTimeEntryViewModelTest
-        {
-            private const string lastSyncError = "This time entry been naughty!";
-
-            [Fact, LogIfTooSlow]
-            public async Task ReturnsLastSyncError()
-            {
-                AdjustTimeEntries(TimeEntriesIds, te =>
-                {
-                    te.LastSyncErrorMessage = lastSyncError;
-                    return te;
-                });
-                var observer = TestScheduler.CreateObserverFor(ViewModel.SyncErrorMessage);
-
-                await ViewModel.Initialize(TimeEntriesGroupIds);
-                TestScheduler.Start();
-
-                observer.LastEmittedValue().Should().Be(lastSyncError);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task ReturnsCorrectMessageForInaccessibleTimeEntry()
-            {
-                AdjustTimeEntries(TimeEntriesIds, te =>
-                {
-                    te.Workspace = InaccessibleWorkspace;
-                    return te;
-                });
-                var observer = TestScheduler.CreateObserverFor(ViewModel.SyncErrorMessage);
-
-                await ViewModel.Initialize(TimeEntriesGroupIds);
-                TestScheduler.Start();
-
-                observer.LastEmittedValue().Should().Be(Resources.InaccessibleTimeEntryErrorMessage);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task ReturnsCorrectMessageForGroupTimeEntries()
-            {
-                var expectedMessage = string.Format(Resources.TimeEntriesGroupSyncErrorMessage, 1, TimeEntriesGroupIds.Length);
-                ViewModel.Initialize(TimeEntriesGroupIds);
-                SetupTimeEntries(TimeEntriesGroupIds, (te, index) =>
-                {
-                    te.Workspace = index > 0 ? te.Workspace : InaccessibleWorkspace;
-                    return te;
-                });
-                var observer = TestScheduler.CreateObserverFor(ViewModel.SyncErrorMessage);
-
-                await ViewModel.Initialize(TimeEntriesGroupIds);
-                TestScheduler.Start();
-
-                observer.LastEmittedValue().Should().Be(expectedMessage);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task ReturnsEmptyStringWhenTimeEntriesContainNoError()
-            {
-                var observer = TestScheduler.CreateObserverFor(ViewModel.SyncErrorMessage);
-
-                await ViewModel.Initialize(TimeEntriesGroupIds);
-                TestScheduler.Start();
-
-                observer.LastEmittedValue().Should().Be(string.Empty);
             }
         }
 
@@ -913,7 +847,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
             }
 
             [Fact, LogIfTooSlow]
@@ -938,7 +872,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
             }
 
             [Fact, LogIfTooSlow]
@@ -963,7 +897,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
             }
 
             [Fact, LogIfTooSlow]
@@ -988,7 +922,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
             }
 
             [Fact, LogIfTooSlow]
@@ -1010,7 +944,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
             }
 
             [Fact, LogIfTooSlow]
@@ -1034,7 +968,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
             }
 
             [Fact, LogIfTooSlow]
@@ -1055,7 +989,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
             }
 
             [Fact, LogIfTooSlow]
@@ -1073,7 +1007,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
             }
 
             [Fact, LogIfTooSlow]
@@ -1095,13 +1029,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
             }
 
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewIfUserClicksOnTheDiscardButton()
             {
-                DialogService
+                View
                     .ConfirmDestructiveAction(ActionType.DiscardEditingChanges)
                     .Returns(Observable.Return(true));
 
@@ -1117,7 +1051,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task DoesNotCloseTheViewIfUserClicksOnTheContinueEditingButton()
             {
-                DialogService
+                View
                     .ConfirmDestructiveAction(ActionType.DiscardEditingChanges)
                     .Returns(Observable.Return(false));
 
@@ -1754,7 +1688,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public TheDeleteAction()
             {
                 var trueObservable = Observable.Return(true);
-                DialogService
+                View
                     .ConfirmDestructiveAction(Arg.Any<ActionType>(), Arg.Any<object>())
                     .Returns(trueObservable);
 
@@ -1773,11 +1707,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task AsksForDestructiveActionConfirmationForSingleTimeEntry()
             {
-                await ViewModel.Initialize(TimeEntriesGroupIds);
                 ViewModel.Delete.Execute();
                 TestScheduler.Start();
 
-                await DialogService.Received().ConfirmDestructiveAction(
+                await View.Received().ConfirmDestructiveAction(
                     ActionType.DeleteExistingTimeEntry, 1);
             }
 
@@ -1790,7 +1723,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Delete.Execute();
                 TestScheduler.Start();
 
-                await DialogService.Received().ConfirmDestructiveAction(
+                await View.Received().ConfirmDestructiveAction(
                     ActionType.DeleteMultipleExistingTimeEntries, TimeEntriesGroupIds.Length);
             }
 

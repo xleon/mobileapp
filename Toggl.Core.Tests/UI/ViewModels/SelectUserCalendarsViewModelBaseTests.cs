@@ -35,7 +35,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public abstract class SelectUserCalendarsViewModelBaseTest : BaseViewModelTests<MockSelectUserCalendarsViewModel>
+        public abstract class SelectUserCalendarsViewModelBaseTest : BaseViewModelTests<MockSelectUserCalendarsViewModel, bool, string[]>
         {
             protected SelectUserCalendarsViewModelBaseTest()
             {

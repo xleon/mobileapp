@@ -334,8 +334,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectCalendars.Execute();
                 TestScheduler.Start();
 
-                await DialogService
-                    .Received()
+                await View.Received()
                     .Alert(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
             }
 
@@ -1062,7 +1061,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.OnCalendarEventLongPressed.Inputs.OnNext(calendarEvent);
 
-                await DialogService.Received().Select(
+                await View.Received().Select(
                     Arg.Any<string>(),
                     Arg.Is<IEnumerable<(string, CalendarItem?)>>(options => options.Count() == 2),
                     Arg.Any<int>());
@@ -1075,7 +1074,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.OnCalendarEventLongPressed.Inputs.OnNext(calendarEvent);
 
-                await DialogService.Received().Select(
+                await View.Received().Select(
                     Arg.Any<string>(),
                     Arg.Is<IEnumerable<(string, CalendarItem?)>>(options => options.Count() == 3),
                     Arg.Any<int>());
@@ -1136,7 +1135,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             private void selectOptionByOptionText(string text)
             {
-                DialogService.Select<CalendarItem?>(null, null, 0)
+                View.Select<CalendarItem?>(null, null, 0)
                     .ReturnsForAnyArgs(callInfo =>
                     {
                         var copyOption = callInfo.Arg<IEnumerable<(string, CalendarItem?)>>()
