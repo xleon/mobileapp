@@ -24,6 +24,9 @@ namespace Toggl.Droid.Activities
 
         protected ReactiveActivity()
         {
+            ViewModel = AndroidDependencyContainer.Instance
+                .ActivityPresenter
+                .GetCachedViewModel<TViewModel>();
         }
 
         protected ReactiveActivity(IntPtr javaReference, JniHandleOwnership transfer)

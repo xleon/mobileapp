@@ -40,7 +40,7 @@ namespace Toggl.Droid.Extensions
                     return permissionRequester.CalendarAuthorizationSubject.AsObservable();
                 
                 permissionRequester.CalendarAuthorizationSubject = new Subject<bool>();
-                permissionRequester.RequestPermissions(new[] { Manifest.Permission.ReadCalendar, Manifest.Permission.WriteCalendar }, calendarAuthCode);
+                permissionRequester.RequestPermissions(new[] { Manifest.Permission.ReadCalendar }, calendarAuthCode);
 
                 return permissionRequester.CalendarAuthorizationSubject.AsObservable();
             });
