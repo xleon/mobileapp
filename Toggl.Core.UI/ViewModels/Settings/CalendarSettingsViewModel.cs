@@ -19,7 +19,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
     [Preserve(AllMembers = true)]
     public sealed class CalendarSettingsViewModel : SelectUserCalendarsViewModelBase
     {
-        private readonly IPermissionsService permissionsService;
+        private readonly IPermissionsChecker permissionsChecker;
         private readonly IRxActionFactory rxActionFactory;
 
         private bool calendarListVisible = false;
@@ -36,12 +36,12 @@ namespace Toggl.Core.UI.ViewModels.Settings
             IInteractorFactory interactorFactory,
             INavigationService navigationService,
             IRxActionFactory rxActionFactory,
-            IPermissionsService permissionsService)
+            IPermissionsChecker permissionsChecker)
             : base(userPreferences, interactorFactory, navigationService, rxActionFactory)
         {
-            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
+            Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
 
-            this.permissionsService = permissionsService;
+            this.permissionsChecker = permissionsChecker;
 
             RequestAccess = rxActionFactory.FromAction(requestAccess);
             TogglCalendarIntegration = rxActionFactory.FromAsync(togglCalendarIntegration);
@@ -55,7 +55,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
         public override async Task Initialize(bool forceItemSelection)
         {
-            PermissionGranted = await permissionsService.CalendarPermissionGranted;
+            PermissionGranted = await permissionsChecker.CalendarPermissionGranted;
 
             if (!PermissionGranted)
             {
@@ -85,7 +85,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
         private void requestAccess()
         {
-            permissionsService.OpenAppSettings();
+            permissionsChecker.OpenAppSettings();
         }
 
         private void onCalendarSelected()
@@ -101,14 +101,14 @@ namespace Toggl.Core.UI.ViewModels.Settings
             }
             else
             {
-                var authorized = await permissionsService.CalendarPermissionGranted;
+                var authorized = await permissionsChecker.CalendarPermissionGranted;
                 if (!authorized)
                 {
-                    authorized = await permissionsService.RequestCalendarAuthorization();
+                    authorized = await permissionsChecker.RequestCalendarAuthorization();
                     if (!authorized)
                         await NavigationService.Navigate<CalendarPermissionDeniedViewModel, Unit>();
 
-                    calendarListVisible = await permissionsService.CalendarPermissionGranted;
+                    calendarListVisible = await permissionsChecker.CalendarPermissionGranted;
                     ReloadCalendars();
                 }
                 else

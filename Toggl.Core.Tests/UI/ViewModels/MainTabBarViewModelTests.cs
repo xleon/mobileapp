@@ -28,7 +28,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     InteractorFactory,
                     OnboardingStorage,
                     SchedulerProvider,
-                    PermissionsService,
+                    PermissionsChecker,
                     NavigationService,
                     RemoteConfigService,
                     SuggestionProviderContainer,
@@ -66,7 +66,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     bool useInteractorFactory,
                     bool useOnboardingStorage,
                     bool useSchedulerProvider,
-                    bool usePermissionsService,
+                    bool usePermissionsChecker,
                     bool useNavigationService,
                     bool useRemoteConfigService,
                     bool useIntentDonationService,
@@ -90,7 +90,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var backgroundService = useBackgroundService ? BackgroundService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
-                var permissionsService = usePermissionsService ? PermissionsService : null;
+                var permissionsService = usePermissionsChecker ? PermissionsChecker : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;

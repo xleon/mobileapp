@@ -8,11 +8,10 @@ using Android.Runtime;
 using Android.Support.V7.App;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
-using static Toggl.Droid.Services.PermissionsServiceAndroid;
 
 namespace Toggl.Droid.Activities
 {
-    public abstract partial class ReactiveActivity<TViewModel> : AppCompatActivity, IPermissionAskingActivity, IView
+    public abstract partial class ReactiveActivity<TViewModel> : AppCompatActivity, IView
         where TViewModel : class, IViewModel
     {
         public CompositeDisposable DisposeBag { get; private set; } = new CompositeDisposable();
@@ -86,14 +85,6 @@ namespace Toggl.Droid.Activities
         {
             Finish();
             return Task.CompletedTask;
-        }
-
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
-        {
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
-            OnPermissionChangedCallback?.Invoke(requestCode, permissions, grantResults);
-            OnPermissionChangedCallback = null;
         }
     }
 }

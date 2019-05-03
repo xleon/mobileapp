@@ -64,7 +64,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     IntentDonationService,
                     StopwatchProvider,
                     RxActionFactory,
-                    PermissionsService,
+                    PermissionsChecker,
                     SchedulerProvider);
             }
 
@@ -92,7 +92,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useIntentDonationService,
                 bool useStopwatchProvider,
                 bool useRxActionFactory,
-                bool usePermissionsService,
+                bool usePermissionsChecker,
                 bool useSchedulerProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
@@ -109,7 +109,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
-                var permissionsService = usePermissionsService ? PermissionsService : null;
+                var permissionsService = usePermissionsChecker ? PermissionsChecker : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
@@ -910,7 +910,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task EmitsTrueWhenCalendarPermissionsAreGrantedAndCalendarsAreSelected()
             {
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(true));
                 UserPreferences.EnabledCalendars.Returns(Observable.Return(new List<string>() { "1" }));
 
                 var observer = TestScheduler.CreateObserver<bool>();
@@ -927,7 +927,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task EmitsFalseWhenCalendarPermissionsAreNotGranted()
             {
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(false));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(false));
                 UserPreferences.EnabledCalendars.Returns(Observable.Return(new List<string>() { "1" }));
 
                 var observer = TestScheduler.CreateObserver<bool>();
@@ -944,7 +944,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task EmitsFalseWhenNoCalendarsAreSelected()
             {
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(true));
                 UserPreferences.EnabledCalendars.Returns(Observable.Return(new List<string>()));
 
                 var observer = TestScheduler.CreateObserver<bool>();
@@ -961,7 +961,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task EmitsAgainWhenCalendarPermissionsChangeAfterViewAppears()
             {
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(false), Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(false), Observable.Return(true));
                 UserPreferences.EnabledCalendars.Returns(Observable.Return(new List<string>() { "1" }));
 
                 var observer = TestScheduler.CreateObserver<bool>();

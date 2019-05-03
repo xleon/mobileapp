@@ -89,7 +89,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     InteractorFactory,
                     OnboardingStorage,
                     SchedulerProvider,
-                    PermissionsService,
+                    PermissionsChecker,
                     NavigationService,
                     StopwatchProvider,
                     RxActionFactory
@@ -111,7 +111,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useOnboardingStorage,
                 bool useSchedulerProvider,
                 bool useNavigationService,
-                bool usePermissionsService,
+                bool usePermissionsChecker,
                 bool useStopwatchProvider,
                 bool useRxActionFactory)
             {
@@ -125,7 +125,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var navigationService = useNavigationService ? NavigationService : null;
-                var permissionsService = usePermissionsService ? PermissionsService : null;
+                var permissionsService = usePermissionsChecker ? PermissionsChecker : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
 
@@ -240,7 +240,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 OnboardingStorage.CompletedCalendarOnboarding().Returns(false);
                 var observer = TestScheduler.CreateObserver<bool>();
                 ViewModel.ShouldShowOnboarding.Subscribe(observer);
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                View.RequestCalendarAuthorization().Returns(Observable.Return(true));
                 NavigationService.Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>()).Returns(new string[0]);
 
                 ViewModel.GetStarted.Execute();
@@ -255,7 +255,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 OnboardingStorage.CompletedCalendarOnboarding().Returns(false);
                 var observer = TestScheduler.CreateObserver<bool>();
                 ViewModel.ShouldShowOnboarding.Subscribe(observer);
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(false));
+                View.RequestCalendarAuthorization().Returns(Observable.Return(false));
                 NavigationService.Navigate<CalendarPermissionDeniedViewModel, Unit>().Returns(Unit.Default);
 
                 ViewModel.GetStarted.Execute();
@@ -270,10 +270,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task EmitsWheneverTheShouldShowOnboardingObservablesOmits()
             {
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(false));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(false));
                 var observer = TestScheduler.CreateObserver<bool>();
                 ViewModel.SettingsAreVisible.Subscribe(observer);
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(true));
                 ViewModel.GetStarted.Execute();
 
                 TestScheduler.Start();
@@ -293,7 +293,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .CompletedCalendarOnboarding()
                     .Returns(true);
 
-                PermissionsService
+                PermissionsChecker
                     .CalendarPermissionGranted
                     .Returns(Observable.Return(true));
 
@@ -362,7 +362,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 var calendarIds = nonEmptyStrings.Select(str => str.Get).ToArray();
                 NavigationService.Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>()).Returns(calendarIds);
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                View.RequestCalendarAuthorization().Returns(Observable.Return(true));
                 InteractorFactory.GetUserCalendars().Execute().Returns(
                     Observable.Return(new UserCalendar[] { new UserCalendar() })
                 );
@@ -384,13 +384,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 Action.Execute();
                 TestScheduler.Start();
 
-                await PermissionsService.Received().RequestCalendarAuthorization();
+                await View.Received().RequestCalendarAuthorization();
             }
 
             [Fact, LogIfTooSlow]
             public async Task NavigatesToTheCalendarPermissionDeniedViewModelWhenPermissionIsDenied()
             {
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(false));
+                View.RequestCalendarAuthorization().Returns(Observable.Return(false));
 
                 Action.Execute();
 
@@ -400,7 +400,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task NavigatesToTheSelectUserCalendarsViewModelWhenThereAreCalendars()
             {
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                View.RequestCalendarAuthorization().Returns(Observable.Return(true));
                 InteractorFactory.GetUserCalendars().Execute().Returns(
                     Observable.Return(new UserCalendar[] { new UserCalendar() })
                 );
@@ -416,7 +416,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task DoesNotNavigateToTheSelectUserCalendarsViewModelWhenThereAreNoCalendars()
             {
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                View.RequestCalendarAuthorization().Returns(Observable.Return(true));
                 InteractorFactory.GetUserCalendars().Execute().Returns(
                     Observable.Return(new UserCalendar[0])
                 );
@@ -437,7 +437,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 var calendarIds = nonEmptyStrings.Select(str => str.Get).ToArray();
                 NavigationService.Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>()).Returns(calendarIds);
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                View.RequestCalendarAuthorization().Returns(Observable.Return(true));
                 InteractorFactory.GetUserCalendars().Execute().Returns(
                     Observable.Return(new UserCalendar[] { new UserCalendar() })
                 );
@@ -451,13 +451,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task RequestsNotificationsPermissionIfCalendarPermissionWasGranted()
             {
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                View.RequestCalendarAuthorization().Returns(Observable.Return(true));
                 NavigationService.Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>()).Returns(new string[0]);
 
                 Action.Execute(Unit.Default);
                 TestScheduler.Start();
 
-                await PermissionsService.Received().RequestNotificationAuthorization();
+                await View.Received().RequestNotificationAuthorization();
             }
 
             [Theory, LogIfTooSlow]
@@ -465,9 +465,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData(false)]
             public async Task SetsTheNotificationPropertyAfterAskingForPermission(bool permissionWasGiven)
             {
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                View.RequestCalendarAuthorization().Returns(Observable.Return(true));
                 NavigationService.Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>()).Returns(new string[0]);
-                PermissionsService.RequestNotificationAuthorization().Returns(Observable.Return(permissionWasGiven));
+                View.RequestNotificationAuthorization().Returns(Observable.Return(permissionWasGiven));
 
                 Action.Execute();
                 TestScheduler.Start();
@@ -478,13 +478,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task DoesNotRequestNotificationsPermissionIfCalendarPermissionWasNotGranted()
             {
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(false));
+                View.RequestCalendarAuthorization().Returns(Observable.Return(false));
                 NavigationService.Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>()).Returns(new string[0]);
 
                 Action.Execute();
                 TestScheduler.Start();
 
-                await PermissionsService.DidNotReceive().RequestNotificationAuthorization();
+                await View.DidNotReceive().RequestNotificationAuthorization();
             }
         }
 
@@ -499,7 +499,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task EmitsFalseOnceWhenThereAreNoCalendarsEnabled()
             {
                 UserPreferences.EnabledCalendars.Returns(Observable.Return(new List<string>()));
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(true));
                 var observer = TestScheduler.CreateObserver<bool>();
                 var viewModel = CreateViewModel();
                 viewModel.HasCalendarsLinked.Subscribe(observer);
@@ -517,7 +517,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task EmitsTrueWhenThereAreCalendarsEnabled()
             {
                 UserPreferences.EnabledCalendars.Returns(Observable.Return(new List<string> { "nice event" }));
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(true));
                 var observer = TestScheduler.CreateObserver<bool>();
 
                 var viewModel = CreateViewModel();
@@ -537,7 +537,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task EmitsFalseWhenCalendarPermissionsWereNotGranted()
             {
                 UserPreferences.EnabledCalendars.Returns(Observable.Return(new List<string> { "nice event" }));
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(false));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(false));
                 var observer = TestScheduler.CreateObserver<bool>();
 
                 var viewModel = CreateViewModel();
@@ -557,7 +557,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task EmitsFalseWhenCalendarPermissionsWereNotGrantedBeforeAppearedThenTrueIfPermissionWasGrantedAfterAppeared()
             {
                 UserPreferences.EnabledCalendars.Returns(Observable.Return(new List<string> { "nice event" }));
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(false));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(false));
                 var observer = TestScheduler.CreateObserver<bool>();
 
                 var viewModel = CreateViewModel();
@@ -567,7 +567,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await viewModel.Initialize();
                 TestScheduler.Start();
 
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(true));
                 TestScheduler.AdvanceTo(100);
                 viewModel.ViewAppeared();
                 TestScheduler.Start();
@@ -586,7 +586,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     new Recorded<Notification<List<string>>>(200, Notification.CreateOnNext(new List<string> { "nice event" })));
 
                 UserPreferences.EnabledCalendars.Returns(calendars);
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(true));
                 var observer = TestScheduler.CreateObserver<bool>();
                 var viewModel = CreateViewModel();
                 viewModel.HasCalendarsLinked.Subscribe(observer);
@@ -613,7 +613,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task SetsCalendarOnboardingAsCompletedIfUserGrantsAccess()
             {
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(true));
+                View.RequestCalendarAuthorization().Returns(Observable.Return(true));
                 NavigationService.Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>()).Returns(new string[0]);
 
                 Action.Execute(Unit.Default);
@@ -624,7 +624,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task SetsCalendarOnboardingAsCompletedIfUserWantsToContinueWithoutGivingPermission()
             {
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(false));
+                View.RequestCalendarAuthorization().Returns(Observable.Return(false));
                 NavigationService.Navigate<CalendarPermissionDeniedViewModel, Unit>().Returns(Unit.Default);
 
                 ViewModel.GetStarted.Execute();
@@ -636,7 +636,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task TracksTheCalendarOnbardingStartedEvent()
             {
-                PermissionsService.RequestCalendarAuthorization().Returns(Observable.Return(false));
+                View.RequestCalendarAuthorization().Returns(Observable.Return(false));
 
                 ViewModel.GetStarted.Execute();
                 TestScheduler.Start();

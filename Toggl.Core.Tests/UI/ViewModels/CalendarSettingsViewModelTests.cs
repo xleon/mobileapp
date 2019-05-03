@@ -22,7 +22,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class CalendarSettingsViewModelTest : BaseViewModelTests<CalendarSettingsViewModel, bool, string[]>
         {
             protected override CalendarSettingsViewModel CreateViewModel()
-                => new CalendarSettingsViewModel(UserPreferences, InteractorFactory, NavigationService, RxActionFactory, PermissionsService);
+                => new CalendarSettingsViewModel(UserPreferences, InteractorFactory, NavigationService, RxActionFactory, PermissionsChecker);
         }
 
         public sealed class TheConstructor : CalendarSettingsViewModelTest
@@ -34,7 +34,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useInteractorFactory,
                 bool useNavigationService,
                 bool useRxActionFactory,
-                bool usePermissionsService)
+                bool usePermissionsChecker)
             {
                 Action tryingToConstructWithEmptyParameters =
                     () => new CalendarSettingsViewModel(
@@ -42,7 +42,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         useInteractorFactory ? InteractorFactory : null,
                         useNavigationService ? NavigationService : null,
                         useRxActionFactory ? RxActionFactory : null,
-                        usePermissionsService ? PermissionsService : null
+                        usePermissionsChecker ? PermissionsChecker : null
                     );
 
                 tryingToConstructWithEmptyParameters.Should().Throw<ArgumentNullException>();
@@ -57,7 +57,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task GetsInitialisedToTheProperValue(bool permissionGranted)
             {
                 UserPreferences.EnabledCalendarIds().Returns(new List<string>());
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(permissionGranted));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(permissionGranted));
 
                 await ViewModel.Initialize(false);
 
@@ -72,7 +72,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.RequestAccess.Execute();
 
-                PermissionsService.Received().OpenAppSettings();
+                PermissionsChecker.Received().OpenAppSettings();
             }
         }
 
@@ -115,7 +115,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public void SetsTheEnabledCalendarsToNullWhenCalendarPermissionsWereNotGranted()
             {
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(false));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(false));
                 UserPreferences.EnabledCalendarIds().Returns(new List<string>());
 
                 var viewModel = CreateViewModel();
@@ -128,7 +128,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public void DoesNotSetTheEnabledCalendarsToNullWhenCalendarPermissionsWereGranted()
             {
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(true));
                 UserPreferences.EnabledCalendarIds().Returns(new List<string>());
 
                 var viewModel = CreateViewModel();
@@ -172,7 +172,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var initialSelectedIds = new List<string> { "0", "1", "2", "3" };
                 UserPreferences.EnabledCalendarIds().Returns(initialSelectedIds);
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(true));
 
                 var userCalendars = Enumerable
                     .Range(0, 9)
@@ -210,7 +210,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var initialSelectedIds = new List<string> { "0" };
                 UserPreferences.EnabledCalendarIds().Returns(initialSelectedIds);
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(true));
 
                 var userCalendars = Enumerable
                     .Range(0, 9)
@@ -252,7 +252,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var initialSelectedIds = new List<string> { "0" };
                 UserPreferences.EnabledCalendarIds().Returns(initialSelectedIds);
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(true));
 
                 var userCalendars = Enumerable
                     .Range(0, 9)

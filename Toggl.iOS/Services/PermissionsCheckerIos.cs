@@ -11,7 +11,7 @@ using UserNotifications;
 namespace Toggl.iOS.Services
 {
     [Preserve(AllMembers = true)]
-    public sealed class PermissionsServiceIos : IPermissionsService
+    public sealed class PermissionsCheckerIos : IPermissionsChecker
     {
         private readonly UNAuthorizationOptions options = UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge | UNAuthorizationOptions.Sound;
 

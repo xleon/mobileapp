@@ -21,7 +21,7 @@ namespace Toggl.Core.Tests.UI
         protected ICalendarService CalendarService { get; } = Substitute.For<ICalendarService>();
         protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
         protected IInteractorFactory InteractorFactory { get; } = Substitute.For<IInteractorFactory>();
-        protected IPermissionsService PermissionsService { get; } = Substitute.For<IPermissionsService>();
+        protected IPermissionsChecker PermissionsChecker { get; } = Substitute.For<IPermissionsChecker>();
         protected IApplicationShortcutCreator ApplicationShortcutCreator { get; }
             = Substitute.For<IApplicationShortcutCreator>();
 

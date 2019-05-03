@@ -48,7 +48,7 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
             ISchedulerProvider schedulerProvider,
-            IPermissionsService permissionsService,
+            IPermissionsChecker permissionsChecker,
             INavigationService navigationService,
             IRemoteConfigService remoteConfigService,
             ISuggestionProviderContainer suggestionProviders,
@@ -72,7 +72,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
-            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
+            Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
             Ensure.Argument.IsNotNull(suggestionProviders, nameof(suggestionProviders));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
@@ -129,7 +129,7 @@ namespace Toggl.Core.UI.ViewModels
                 interactorFactory,
                 onboardingStorage,
                 schedulerProvider,
-                permissionsService,
+                permissionsChecker,
                 navigationService,
                 stopwatchProvider,
                 rxActionFactory);
@@ -149,7 +149,7 @@ namespace Toggl.Core.UI.ViewModels
                 intentDonationService,
                 stopwatchProvider,
                 rxActionFactory,
-                permissionsService,
+                permissionsChecker,
                 schedulerProvider);
 
             Tabs = getViewModels().ToList();

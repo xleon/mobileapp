@@ -13,20 +13,20 @@ namespace Toggl.Core.UI.ViewModels.Calendar
     public sealed class CalendarPermissionDeniedViewModel : ViewModel
     {
         private readonly INavigationService navigationService;
-        private readonly IPermissionsService permissionsService;
+        private readonly IPermissionsChecker permissionsChecker;
         private readonly IRxActionFactory rxActionFactory;
 
         public UIAction EnableAccess { get; }
         public UIAction Close { get; }
 
-        public CalendarPermissionDeniedViewModel(INavigationService navigationService, IPermissionsService permissionsService, IRxActionFactory rxActionFactory)
+        public CalendarPermissionDeniedViewModel(INavigationService navigationService, IPermissionsChecker permissionsChecker, IRxActionFactory rxActionFactory)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
-            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
+            Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.navigationService = navigationService;
-            this.permissionsService = permissionsService;
+            this.permissionsChecker = permissionsChecker;
 
             EnableAccess = rxActionFactory.FromAction(enableAccess);
             Close = rxActionFactory.FromAsync(Finish);
@@ -40,12 +40,12 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
         private void enableAccess()
         {
-            permissionsService.OpenAppSettings();
+            permissionsChecker.OpenAppSettings();
         }
 
         private async Task closeIfPermissionIsGranted()
         {
-            var authorized = await permissionsService.CalendarPermissionGranted;
+            var authorized = await permissionsChecker.CalendarPermissionGranted;
             if (authorized)
                 await Finish();
         }

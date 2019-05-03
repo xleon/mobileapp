@@ -62,7 +62,7 @@ namespace Toggl.iOS
             => new BrowserServiceIos();
 
         protected override ICalendarService CreateCalendarService()
-            => new CalendarServiceIos(PermissionsService);
+            => new CalendarServiceIos(PermissionsChecker);
 
         protected override ITogglDatabase CreateDatabase()
             => new Database();
@@ -83,13 +83,13 @@ namespace Toggl.iOS
             => new LicenseProviderIos();
 
         protected override INotificationService CreateNotificationService()
-            => new NotificationServiceIos(PermissionsService, TimeService);
+            => new NotificationServiceIos(PermissionsChecker, TimeService);
 
         protected override IPasswordManagerService CreatePasswordManagerService()
             => new OnePasswordServiceIos();
 
-        protected override IPermissionsService CreatePermissionsService()
-            => new PermissionsServiceIos();
+        protected override IPermissionsChecker CreatePermissionsChecker()
+            => new PermissionsCheckerIos();
 
         protected override IPlatformInfo CreatePlatformInfo()
             => new PlatformInfoIos();

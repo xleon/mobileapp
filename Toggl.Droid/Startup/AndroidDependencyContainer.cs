@@ -58,7 +58,7 @@ namespace Toggl.Droid
             => new BrowserServiceAndroid();
 
         protected override ICalendarService CreateCalendarService()
-            => new CalendarServiceAndroid(PermissionsService);
+            => new CalendarServiceAndroid(PermissionsChecker);
 
         protected override ITogglDatabase CreateDatabase()
             => new Database();
@@ -87,8 +87,8 @@ namespace Toggl.Droid
         protected override IPasswordManagerService CreatePasswordManagerService()
             => new StubPasswordManagerService();
 
-        protected override IPermissionsService CreatePermissionsService()
-            => new PermissionsServiceAndroid();
+        protected override IPermissionsChecker CreatePermissionsChecker()
+            => new PermissionsCheckerAndroid();
 
         protected override IPlatformInfo CreatePlatformInfo()
             => new PlatformInfoAndroid();

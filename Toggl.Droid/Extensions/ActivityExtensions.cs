@@ -1,12 +1,19 @@
-﻿using Android.App;
+﻿using System;
+using System.Collections.Generic;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using Android.App;
 using Android.App.Job;
 using Android.Content;
 using Android.Graphics;
 using Android.Support.V4.App;
 using Android.Util;
 using Android.Views;
+using Toggl.Core.UI.Services;
 using Toggl.Droid.Helper;
 using Toggl.Droid.Services;
+using Toggl.Droid.Views;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Extensions
 {
@@ -106,6 +113,72 @@ namespace Toggl.Droid.Extensions
         {
             var notificationManager = context.GetSystemService(Context.NotificationService) as NotificationManager;
             notificationManager?.CancelAll();
+        }
+
+        public static IObservable<bool> ShowConfirmationDialog(this Activity activity, string title, string message, string confirmButtonText, string dismissButtonText)
+        {
+            return Observable.Create<bool>(observer =>
+            {
+                void showDialogIfActivityIsThere()
+                {
+                    if (activity.IsFinishing)
+                    {
+                        observer.CompleteWith(false);
+                        return;
+                    }
+
+                    var builder = new AlertDialog.Builder(activity, Resource.Style.TogglDialog).SetMessage(message)
+                        .SetPositiveButton(confirmButtonText, (s, e) => observer.CompleteWith(true));
+
+                    if (!string.IsNullOrWhiteSpace(title))
+                    {
+                        builder = builder.SetTitle(title);
+                    }
+
+                    if (!string.IsNullOrEmpty(dismissButtonText))
+                    {
+                        builder = builder.SetNegativeButton(dismissButtonText, (s, e) => observer.CompleteWith(false));
+                    }
+
+                    var dialog = builder.Create();
+                    dialog.CancelEvent += (s, e) => observer.CompleteWith(false);
+
+                    dialog.Show();
+                }
+
+                activity.RunOnUiThread(showDialogIfActivityIsThere);
+
+                return Disposable.Empty;
+            });
+        }
+        
+        public static IObservable<T> ShowSelectionDialog<T>(this Activity activity, string title, IEnumerable<(string ItemName, T Item)> options, int initialSelectionIndex = 0)
+        {
+            return Observable.Create<T>(observer =>
+            {
+                var dialog = new ListSelectionDialog<T>(activity, title, options, initialSelectionIndex, observer.CompleteWith);
+                activity.RunOnUiThread(dialog.Show);
+                return Disposable.Empty;
+            });
+        }
+
+        public static IObservable<bool> ShowDestructiveActionConfirmationDialog(this Activity activity, ActionType type, params object[] formatArguments)
+        {
+            switch (type)
+            {
+                case ActionType.DiscardNewTimeEntry:
+                    return ShowConfirmationDialog(activity, null, Core.Resources.DiscardThisTimeEntry, Core.Resources.Discard, Core.Resources.Cancel);
+                case ActionType.DiscardEditingChanges:
+                    return ShowConfirmationDialog(activity, null, Core.Resources.DiscardEditingChanges, Core.Resources.Discard, Core.Resources.ContinueEditing);
+                case ActionType.DeleteExistingTimeEntry:
+                    return ShowConfirmationDialog(activity, null, Core.Resources.DeleteThisTimeEntry, Core.Resources.Delete, Core.Resources.Cancel);
+                case ActionType.DeleteMultipleExistingTimeEntries:
+                    return ShowConfirmationDialog(activity, null, string.Format(Core.Resources.DeleteMultipleTimeEntries, formatArguments), Core.Resources.Delete, Core.Resources.Cancel);
+                case ActionType.DiscardFeedback:
+                    return ShowConfirmationDialog(activity, null, Core.Resources.DiscardMessage, Core.Resources.Discard, Core.Resources.ContinueEditing);
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(type));
         }
     }
 }

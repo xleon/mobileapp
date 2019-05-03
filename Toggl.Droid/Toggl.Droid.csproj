@@ -1,4 +1,4 @@
-﻿<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.props" Condition="Exists('..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -368,6 +368,8 @@
       <DependentUpon>SelectProjectActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
+    <Compile Include="Extensions\PermissionRequesterComponentExtensions.cs" />
+    <Compile Include="Helper\IPermissionRequesterComponent.cs" />
     <Compile Include="Presentation\AndroidPresenter.cs" />
     <Compile Include="Startup\AndroidDependencyContainer.cs" />
     <Compile Include="Extensions\FloatingActionButtonExtensions.cs" />
@@ -406,7 +408,7 @@
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
-    <Compile Include="Services\PermissionsServiceAndroid.cs" />
+    <Compile Include="Services\PermissionsCheckerAndroid.cs" />
     <Compile Include="Services\CalendarServiceAndroid.cs" />
     <Compile Include="Services\NoopIntentDonationServiceAndroid.cs" />
     <Compile Include="Startup\AndroidSchedulerProvider.cs" />
@@ -539,6 +541,9 @@
     <Compile Include="Activities\ReactiveActivity.DialogProvider.cs">
       <DependentUpon>ReactiveActivity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Activities\ReactiveActivity.PermissionsHandler.cs">
+      <DependentUpon>ReactiveActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Adapters\BaseRecyclerAdapter.cs" />
     <Compile Include="ViewHolders\BaseRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\WorkspaceSelectionViewHolder.cs" />
@@ -610,6 +615,12 @@
       <DependentUpon>SettingsFragment.cs</DependentUpon>
     </Compile>
     <Compile Include="Fragments\ReactiveFragment.cs" />
+    <Compile Include="Fragments\ReactiveFragment.DialogProvider.cs">
+      <DependentUpon>ReactiveFragment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fragments\ReactiveFragment.PermissionHandler.cs">
+      <DependentUpon>ReactiveFragment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fragments\ReportsFragment.cs" />
     <Compile Include="Fragments\ReportsFragment.ViewBinds.cs">
       <DependentUpon>ReportsFragment.cs</DependentUpon>

@@ -39,7 +39,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private readonly IInteractorFactory interactorFactory;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly IPermissionsService permissionsService;
+        private readonly IPermissionsChecker permissionsChecker;
         private readonly INavigationService navigationService;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly IRxActionFactory rxActionFactory;
@@ -91,7 +91,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
             ISchedulerProvider schedulerProvider,
-            IPermissionsService permissionsService,
+            IPermissionsChecker permissionsChecker,
             INavigationService navigationService,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory)
@@ -106,7 +106,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
-            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
+            Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
@@ -120,7 +120,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             this.onboardingStorage = onboardingStorage;
             this.schedulerProvider = schedulerProvider;
             this.navigationService = navigationService;
-            this.permissionsService = permissionsService;
+            this.permissionsChecker = permissionsChecker;
             this.stopwatchProvider = stopwatchProvider;
             this.rxActionFactory = rxActionFactory;
 
@@ -163,11 +163,11 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             OnCalendarEventLongPressed = rxActionFactory.FromAsync<CalendarItem>(handleCalendarEventLongPressed);
 
             SettingsAreVisible = onboardingObservable
-                .SelectMany(_ => permissionsService.CalendarPermissionGranted)
+                .SelectMany(_ => permissionsChecker.CalendarPermissionGranted)
                 .DistinctUntilChanged();
 
             HasCalendarsLinked = userPreferences.EnabledCalendars.CombineLatest(
-                    permissionsService.CalendarPermissionGranted,
+                    permissionsChecker.CalendarPermissionGranted,
                     hasCalendarsLinkedSubject.AsObservable(),
                     calendarPermissionsOnViewAppearedSubject,
                     hasCalendarsLinked)
@@ -247,7 +247,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
         private async Task checkCalendarPermissions()
         {
-            var authorized = await permissionsService.CalendarPermissionGranted;
+            var authorized = await permissionsChecker.CalendarPermissionGranted;
             calendarPermissionsOnViewAppearedSubject.OnNext(authorized);
         }
 
@@ -278,12 +278,12 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
         private async Task linkCalendars(bool isOnboarding)
         {
-            var calendarPermissionGranted = await permissionsService.RequestCalendarAuthorization();
+            var calendarPermissionGranted = await this.SelectPermissionService(permissionsChecker).RequestCalendarAuthorization();
             hasCalendarsLinkedSubject.OnNext(calendarPermissionGranted);
             if (calendarPermissionGranted)
             {
                 await selectUserCalendars(isOnboarding);
-                var notificationPermissionGranted = await permissionsService.RequestNotificationAuthorization();
+                var notificationPermissionGranted = await this.SelectPermissionService(permissionsChecker).RequestNotificationAuthorization();
                 userPreferences.SetCalendarNotificationsEnabled(notificationPermissionGranted);
             }
             else

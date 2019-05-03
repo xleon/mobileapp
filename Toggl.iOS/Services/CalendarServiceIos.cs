@@ -14,8 +14,8 @@ namespace Toggl.iOS.Services
     {
         private EKEventStore eventStore => new EKEventStore();
 
-        public CalendarServiceIos(IPermissionsService permissionsService)
-            : base (permissionsService)
+        public CalendarServiceIos(IPermissionsChecker permissionsChecker)
+            : base (permissionsChecker)
         {
         }
 

@@ -54,7 +54,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly IRxActionFactory rxActionFactory;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly IPermissionsService permissionsService;
+        private readonly IPermissionsChecker permissionsChecker;
 
         private bool isSyncing;
         private bool isLoggingOut;
@@ -118,7 +118,7 @@ namespace Toggl.Core.UI.ViewModels
             IIntentDonationService intentDonationService,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory,
-            IPermissionsService permissionsService,
+            IPermissionsChecker permissionsChecker,
             ISchedulerProvider schedulerProvider)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -135,7 +135,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
-            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
+            Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
             this.dataSource = dataSource;
@@ -154,7 +154,7 @@ namespace Toggl.Core.UI.ViewModels
             this.privateSharedStorageService = privateSharedStorageService;
             this.rxActionFactory = rxActionFactory;
             this.schedulerProvider = schedulerProvider;
-            this.permissionsService = permissionsService;
+            this.permissionsChecker = permissionsChecker;
 
             IsSynced =
                 syncManager.ProgressObservable
@@ -501,7 +501,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task checkCalendarPermissions()
         {
-            var authorized = await permissionsService.CalendarPermissionGranted;
+            var authorized = await permissionsChecker.CalendarPermissionGranted;
             calendarPermissionGranted.OnNext(authorized);
         }
     }
