@@ -1331,6 +1331,8 @@
     <Compile Include="Extensions\Reactive\UISliderExtensions.cs" />
     <Compile Include="Extensions\Reactive\WheelForegroundViewExtensions.cs" />
     <Compile Include="Extensions\SectionedIndexExtensions.cs" />
+    <Compile Include="Extensions\ViewControllerExtensions.cs" />
+    <Compile Include="Helper\PermissionsHelper.cs" />
     <Compile Include="Presentation\IosPresenter.cs" />
     <Compile Include="Services\PermissionsCheckerIos.cs" />
     <Compile Include="Services\CalendarServiceIos.cs" />
@@ -1355,6 +1357,20 @@
     </Compile>
     <Compile Include="Services\OnePasswordServiceIos.cs" />
     <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationController.cs" />
+    <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.cs" />
+    <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.DialogProvider.cs">
+      <DependentUpon>ReactiveTableViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.PermissionsHandler.cs">
+      <DependentUpon>ReactiveTableViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Reactive\ReactiveViewController.cs" />
+    <Compile Include="ViewControllers\Reactive\ReactiveViewController.DialogProvider.cs">
+      <DependentUpon>ReactiveViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Reactive\ReactiveViewController.PermissionsHandler.cs">
+      <DependentUpon>ReactiveViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\SyncFailuresViewController.cs" />
     <Compile Include="ViewSources\Generic\CollectionView\ReloadCollectionViewSource.cs" />
     <Compile Include="ViewSources\Generic\TableView\BaseTableViewSource.cs" />
@@ -1662,7 +1678,6 @@
     <Compile Include="Services\RemoteConfigServiceIos.cs" />
     <Compile Include="Extensions\ImageExtension.cs" />
     <Compile Include="Services\RatingServiceIos.cs" />
-    <Compile Include="ViewControllers\ReactiveViewController.cs" />
     <Compile Include="Cells\BaseTableViewCell.cs" />
     <Compile Include="Cells\BaseTableHeaderFooterView.cs" />
     <Compile Include="Cells\SyncFailures\SyncFailureCell.cs" />
