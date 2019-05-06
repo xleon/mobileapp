@@ -12,6 +12,7 @@ namespace Toggl.Daneel.Views.EditDuration
 
         public static NSAttributedString AttributedStringFor(string durationText, UIFont font)
         {
+            durationText = durationText ?? "";
             var prefixLength = DurationHelper.LengthOfDurationPrefix(durationText);
             var result = new NSMutableAttributedString(durationText, font: font.GetMonospacedDigitFont(), foregroundColor: UIColor.Black);
             result.AddAttribute(UIStringAttributeKey.ForegroundColor, placeHolderColor, new NSRange(0, prefixLength));
