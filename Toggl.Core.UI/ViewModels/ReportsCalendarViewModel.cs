@@ -35,7 +35,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ITimeService timeService;
         private readonly IDialogService dialogService;
         private readonly ITogglDataSource dataSource;
-        private readonly IIntentDonationService intentDonationService;
         private readonly ISubject<Unit> reloadSubject = new Subject<Unit>();
         private readonly ISubject<ReportsDateRangeParameter> selectedDateRangeSubject = new Subject<ReportsDateRangeParameter>();
         private readonly ISubject<ReportsDateRangeParameter> highlightedDateRangeSubject = new BehaviorSubject<ReportsDateRangeParameter>(default(ReportsDateRangeParameter));
@@ -82,19 +81,16 @@ namespace Toggl.Core.UI.ViewModels
             ITimeService timeService,
             IDialogService dialogService,
             ITogglDataSource dataSource,
-            IIntentDonationService intentDonationService,
             IRxActionFactory rxActionFactory)
         {
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.timeService = timeService;
             this.dialogService = dialogService;
             this.dataSource = dataSource;
-            this.intentDonationService = intentDonationService;
 
             SelectDay = rxActionFactory.FromAsync<ReportsCalendarDayViewModel>(calendarDayTapped);
             SelectShortcut = rxActionFactory.FromAction<ReportsCalendarBaseQuickSelectShortcut>(quickSelect);
@@ -293,7 +289,6 @@ namespace Toggl.Core.UI.ViewModels
 
         private void quickSelect(ReportsCalendarBaseQuickSelectShortcut quickSelectShortCut)
         {
-            intentDonationService.DonateShowReport(quickSelectShortCut.Period);
             changeDateRange(quickSelectShortCut.GetDateRange());
         }
 

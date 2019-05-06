@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Suggestions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -25,7 +26,7 @@ namespace Toggl.Core.UI.ViewModels
 
         public IObservable<Suggestion[]> Suggestions { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
-        public InputAction<Suggestion> StartTimeEntry { get; private set; }
+        public RxAction<Suggestion, IThreadSafeTimeEntry> StartTimeEntry { get; private set; }
 
         public SuggestionsViewModel(
             ITogglDataSource dataSource,
@@ -54,7 +55,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             await base.Initialize();
 
-            StartTimeEntry = rxActionFactory.FromAsync<Suggestion>(suggestion => startTimeEntry(suggestion));
+            StartTimeEntry = rxActionFactory.FromObservable<Suggestion, IThreadSafeTimeEntry>(startTimeEntry);
 
             Suggestions = interactorFactory.ObserveWorkspaceOrTimeEntriesChanges().Execute()
                 .StartWith(Unit.Default)
@@ -76,11 +77,11 @@ namespace Toggl.Core.UI.ViewModels
                 .ToArray();
         }
 
-        private async Task startTimeEntry(Suggestion suggestion)
+        private IObservable<IThreadSafeTimeEntry> startTimeEntry(Suggestion suggestion)
         {
             onboardingStorage.SetTimeEntryContinued();
 
-            await interactorFactory
+            return interactorFactory
                 .StartSuggestion(suggestion)
                 .Execute();
         }

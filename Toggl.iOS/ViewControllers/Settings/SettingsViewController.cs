@@ -106,6 +106,10 @@ namespace Toggl.iOS.ViewControllers
                 .BindAction(ViewModel.TryLogout)
                 .DisposedBy(DisposeBag);
 
+            ViewModel.TryLogout.Elements
+                .Subscribe(IosDependencyContainer.Instance.IntentDonationService.ClearAll)
+                .DisposedBy(DisposeBag);
+
             AboutView.Rx()
                 .BindAction(ViewModel.OpenAboutView)
                 .DisposedBy(DisposeBag);

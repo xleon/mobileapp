@@ -46,7 +46,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
         private readonly IDialogService dialogService;
-        private readonly IIntentDonationService intentDonationService;
         private readonly IStopwatchProvider stopwatchProvider;
 
         private readonly ReportsCalendarViewModel calendarViewModel;
@@ -114,7 +113,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
             IInteractorFactory interactorFactory,
             IAnalyticsService analyticsService,
             IDialogService dialogService,
-            IIntentDonationService intentDonationService,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory)
@@ -125,7 +123,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
-            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
@@ -136,10 +133,9 @@ namespace Toggl.Core.UI.ViewModels.Reports
             this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
             this.dialogService = dialogService;
-            this.intentDonationService = intentDonationService;
             this.stopwatchProvider = stopwatchProvider;
 
-            calendarViewModel = new ReportsCalendarViewModel(timeService, dialogService, dataSource, intentDonationService, rxActionFactory);
+            calendarViewModel = new ReportsCalendarViewModel(timeService, dialogService, dataSource, rxActionFactory);
 
             var totalsObservable = reportSubject
                 .SelectMany(_ => interactorFactory.GetReportsTotals(userId, workspaceId, startDate, endDate).Execute())
@@ -236,7 +232,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
             {
                 navigationService.Navigate(calendarViewModel);
                 didNavigateToCalendar = true;
-                intentDonationService.DonateShowReport();
                 return;
             }
 

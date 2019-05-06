@@ -32,7 +32,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     NavigationService,
                     RemoteConfigService,
                     SuggestionProviderContainer,
-                    IntentDonationService,
                     AccessRestrictionStorage,
                     StopwatchProvider,
                     RxActionFactory,
@@ -69,7 +68,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     bool usePermissionsService,
                     bool useNavigationService,
                     bool useRemoteConfigService,
-                    bool useIntentDonationService,
                     bool useAccessRestrictionStorage,
                     bool useSuggestionProviderContainer,
                     bool useStopwatchProvider,
@@ -95,7 +93,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
                 var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
-                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var userAccessManager = useUserAccessManager ? UserAccessManager : null;
@@ -119,7 +116,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         navigationService,
                         remoteConfigService,
                         suggestionProviderContainer,
-                        intentDonationService,
                         accessRestrictionStorage,
                         stopwatchProvider,
                         rxActionFactory,

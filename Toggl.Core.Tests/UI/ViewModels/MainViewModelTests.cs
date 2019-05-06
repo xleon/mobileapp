@@ -59,7 +59,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     NavigationService,
                     RemoteConfigService,
                     SuggestionProviderContainer,
-                    IntentDonationService,
                     AccessRestrictionStorage,
                     SchedulerProvider,
                     StopwatchProvider,
@@ -113,7 +112,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useNavigationService,
                 bool useRemoteConfigService,
                 bool useSuggestionProviderContainer,
-                bool useIntentDonationService,
                 bool useAccessRestrictionStorage,
                 bool useSchedulerProvider,
                 bool useStopwatchProvider,
@@ -130,7 +128,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
                 var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
-                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
@@ -149,7 +146,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         navigationService,
                         remoteConfigService,
                         suggestionProviderContainer,
-                        intentDonationService,
                         accessRestrictionStorage,
                         schedulerProvider,
                         stopwatchProvider,
@@ -577,22 +573,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await InteractorFactory.DidNotReceive().StopTimeEntry(Arg.Any<DateTimeOffset>(), Arg.Any<TimeEntryStopOrigin>()).Execute();
             }
-
-            [Fact, LogIfTooSlow]
-            public void ShouldDonateStopTimerIntent()
-            {
-                var secondTimeEntry = Substitute.For<IThreadSafeTimeEntry>();
-
-                ViewModel.StopTimeEntry.Execute(Arg.Any<TimeEntryStopOrigin>());
-                TestScheduler.Start();
-                TestScheduler.Stop();
-                subject.OnNext(secondTimeEntry);
-                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
-                ViewModel.StopTimeEntry.Execute(Arg.Any<TimeEntryStopOrigin>());
-
-                TestScheduler.Start();
-                IntentDonationService.Received().DonateStopCurrentTimeEntry();
-            }
         }
 
         public sealed class TheNumberOfSyncFailuresProperty : MainViewModelTest
@@ -937,16 +917,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     TestScheduler.Start();
                     observer.LastEmittedValue().Should().BeFalse();
-                }
-            }
-
-            public sealed class InvokeIntentDonationService : MainViewModelTest
-            {
-                [Fact, LogIfTooSlow]
-                public async void ShouldSetShortcutSuggestions()
-                {
-                    await ViewModel.Initialize();
-                    IntentDonationService.Received().SetDefaultShortcutSuggestions(Arg.Any<IWorkspace>());
                 }
             }
         }

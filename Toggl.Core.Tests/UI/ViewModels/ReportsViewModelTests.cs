@@ -50,7 +50,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     InteractorFactory,
                     AnalyticsService,
                     DialogService,
-                    IntentDonationService,
                     SchedulerProvider,
                     StopwatchProvider,
                     RxActionFactory
@@ -89,7 +88,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                                                         bool useAnalyticsService,
                                                         bool useInteractorFactory,
                                                         bool useDialogService,
-                                                        bool useIntentDonationService,
                                                         bool useSchedulerProvider,
                                                         bool useStopwatchProvider,
                                                         bool useRxActionFactory)
@@ -100,7 +98,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var dialogService = useDialogService ? DialogService : null;
-                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
@@ -112,7 +109,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                                                interactorFactory,
                                                analyticsService,
                                                dialogService,
-                                               intentDonationService,
                                                schedulerProvider,
                                                stopwatchProvider,
                                                rxActionFactory);
@@ -374,7 +370,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.GroupedSegmentsObservable.Subscribe(groupedSegmentsObservable);
 
                 TestScheduler.Start();
-                
+
                 await Initialize();
 
                 var actualSegments = segmentsObservable.Values().Last();

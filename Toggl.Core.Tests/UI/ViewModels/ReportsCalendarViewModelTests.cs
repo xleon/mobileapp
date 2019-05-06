@@ -28,7 +28,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             : BaseViewModelTests<ReportsCalendarViewModel>
         {
             protected override ReportsCalendarViewModel CreateViewModel()
-                => new ReportsCalendarViewModel(TimeService, DialogService, DataSource, IntentDonationService, RxActionFactory);
+                => new ReportsCalendarViewModel(TimeService, DialogService, DataSource, RxActionFactory);
         }
 
         public sealed class TheConstructor : ReportsCalendarViewModelTest
@@ -39,18 +39,16 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useTimeService,
                 bool useDialogService,
                 bool useDataSource,
-                bool useIntentDonationService,
                 bool useRxActionFactory
             )
             {
                 var timeService = useTimeService ? TimeService : null;
                 var dialogService = useDialogService ? DialogService : null;
                 var dataSource = useDataSource ? DataSource : null;
-                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new ReportsCalendarViewModel(timeService, dialogService, dataSource, intentDonationService, rxActionFactory);
+                    () => new ReportsCalendarViewModel(timeService, dialogService, dataSource, rxActionFactory);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();

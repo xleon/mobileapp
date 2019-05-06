@@ -50,7 +50,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IInteractorFactory interactorFactory;
         private readonly INavigationService navigationService;
         private readonly IPrivateSharedStorageService privateSharedStorageService;
-        private readonly IIntentDonationService intentDonationService;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly IRxActionFactory rxActionFactory;
         private readonly ISchedulerProvider schedulerProvider;
@@ -115,7 +114,6 @@ namespace Toggl.Core.UI.ViewModels
             IOnboardingStorage onboardingStorage,
             INavigationService navigationService,
             IPrivateSharedStorageService privateSharedStorageService,
-            IIntentDonationService intentDonationService,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory,
             IPermissionsService permissionsService,
@@ -132,7 +130,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
-            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
@@ -150,7 +147,6 @@ namespace Toggl.Core.UI.ViewModels
             this.userAccessManager = userAccessManager;
             this.onboardingStorage = onboardingStorage;
             this.stopwatchProvider = stopwatchProvider;
-            this.intentDonationService = intentDonationService;
             this.privateSharedStorageService = privateSharedStorageService;
             this.rxActionFactory = rxActionFactory;
             this.schedulerProvider = schedulerProvider;
@@ -228,7 +224,7 @@ namespace Toggl.Core.UI.ViewModels
                     .Select(preferences => preferences.CollapseTimeEntries)
                     .DistinctUntilChanged()
                     .AsDriver(false, schedulerProvider);
-                    
+
             IsCalendarSmartRemindersVisible = calendarPermissionGranted.AsObservable()
                 .CombineLatest(userPreferences.EnabledCalendars.Select(ids => ids.Any()), CommonFunctions.And);
 
@@ -504,7 +500,7 @@ namespace Toggl.Core.UI.ViewModels
             var authorized = await permissionsService.CalendarPermissionGranted;
             calendarPermissionGranted.OnNext(authorized);
         }
-        
+
         private Task close() => navigationService.Close(this);
     }
 }
