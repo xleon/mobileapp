@@ -312,7 +312,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.GoogleSignup.Execute();
 
                 TestScheduler.Start();
-                UserAccessManager.DidNotReceive().SignUpWithGoogle(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>());
+                UserAccessManager.DidNotReceive().SignUpWithGoogle(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>());
             }
 
             [Fact, LogIfTooSlow]
@@ -320,7 +320,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 NavigationService.Navigate<TermsOfServiceViewModel, bool>().Returns(true);
                 UserAccessManager
-                    .SignUpWithGoogle(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>())
+                    .SignUpWithGoogle(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>())
                     .Returns(Observable.Throw<Unit>(new Exception()));
 
                 ViewModel.GoogleSignup.Execute();
@@ -351,19 +351,19 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.GoogleSignup.Execute();
 
                     TestScheduler.Start();
-                    UserAccessManager.Received().SignUpWithGoogle(true, Arg.Any<int>(), Arg.Any<string>());
+                    UserAccessManager.Received().SignUpWithGoogle(Arg.Any<string>(), true, Arg.Any<int>(), Arg.Any<string>());
                 }
 
                 [Fact, LogIfTooSlow]
                 public void DoesNothingWhenThePageIsCurrentlyLoading()
                 {
                     var never = Observable.Never<Unit>();
-                    UserAccessManager.SignUpWithGoogle(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>()).Returns(never);
+                    UserAccessManager.SignUpWithGoogle(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>()).Returns(never);
                     ViewModel.GoogleSignup.Execute();
                     ViewModel.GoogleSignup.Execute();
 
                     TestScheduler.Start();
-                    UserAccessManager.Received(1).SignUpWithGoogle(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>());
+                    UserAccessManager.Received(1).SignUpWithGoogle(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>());
                 }
 
                 [Fact, LogIfTooSlow]
@@ -372,7 +372,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var observer = TestScheduler.CreateObserver<bool>();
                     ViewModel.IsLoading.Subscribe(observer);
 
-                    UserAccessManager.SignUpWithGoogle(true, Arg.Any<int>(), Arg.Any<string>()).Returns(
+                    UserAccessManager.SignUpWithGoogle(Arg.Any<string>(), true, Arg.Any<int>(), Arg.Any<string>()).Returns(
                         Observable.Never<Unit>());
 
                     ViewModel.GoogleSignup.Execute();
@@ -387,7 +387,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 [Fact, LogIfTooSlow]
                 public void TracksGoogleSignupEvent()
                 {
-                    UserAccessManager.SignUpWithGoogle(true, Arg.Any<int>(), Arg.Any<string>()).Returns(
+                    UserAccessManager.SignUpWithGoogle(Arg.Any<string>(), true, Arg.Any<int>(), Arg.Any<string>()).Returns(
                         Observable.Return(Unit.Default));
 
                     ViewModel.GoogleSignup.Execute();
@@ -402,7 +402,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var observer = TestScheduler.CreateObserver<bool>();
                     ViewModel.IsLoading.Subscribe(observer);
 
-                    UserAccessManager.SignUpWithGoogle(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>()).Returns(
+                    UserAccessManager.SignUpWithGoogle(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>()).Returns(
                         Observable.Throw<Unit>(new GoogleLoginException(false)));
 
                     ViewModel.GoogleSignup.Execute();
@@ -418,7 +418,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 [Fact, LogIfTooSlow]
                 public void DoesNotNavigateWhenTheLoginFails()
                 {
-                    UserAccessManager.SignUpWithGoogle(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>()).Returns(
+                    UserAccessManager.SignUpWithGoogle(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>()).Returns(
                         Observable.Throw<Unit>(new GoogleLoginException(false)));
 
                     ViewModel.GoogleSignup.Execute();
@@ -435,7 +435,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var errorTextObserver = TestScheduler.CreateObserver<string>();
                     ViewModel.ErrorMessage.Subscribe(errorTextObserver);
 
-                    UserAccessManager.SignUpWithGoogle(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>()).Returns(
+                    UserAccessManager.SignUpWithGoogle(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string>()).Returns(
                         Observable.Throw<Unit>(new GoogleLoginException(true)));
 
                     ViewModel.GoogleSignup.Execute();
@@ -464,7 +464,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         ViewModel.Initialize(DefaultParameters).Wait();
 
                         UserAccessManager
-                            .SignUpWithGoogle(true, Arg.Any<int>(), Arg.Any<string>())
+                            .SignUpWithGoogle(Arg.Any<string>(), true, Arg.Any<int>(), Arg.Any<string>())
                             .Returns(Observable.Return(Unit.Default));
 
                         NavigationService.Navigate<TermsOfServiceViewModel, bool>().Returns(true);
@@ -476,6 +476,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         TimeService.CurrentDateTime.Returns(now);
 
                         var viewModel = CreateViewModel();
+                        viewModel.AttachView(View);
 
                         viewModel.Initialize(DefaultParameters).Wait();
                         viewModel.GoogleSignup.Execute();
@@ -488,6 +489,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     public void FiresSuccessfulSignupEvent()
                     {
                         var viewModel = CreateViewModel();
+                        viewModel.AttachView(View);
                         var observer = TestScheduler.CreateObserver<Unit>();
                         viewModel.SuccessfulSignup.Subscribe(observer);
 

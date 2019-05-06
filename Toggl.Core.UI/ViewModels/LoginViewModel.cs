@@ -200,8 +200,9 @@ namespace Toggl.Core.UI.ViewModels
 
             isLoadingSubject.OnNext(true);
 
-            loginDisposable = userAccessManager
-                .LoginWithGoogle()
+            loginDisposable = View
+                .GetGoogleToken()
+                .SelectMany(userAccessManager.LoginWithGoogle)
                 .Track(analyticsService.Login, AuthenticationMethod.Google)
                 .Subscribe(_ => onAuthenticated(), onError, onCompleted);
         }

@@ -60,10 +60,6 @@ namespace Toggl.Core.UI
         protected override IDialogService CreateDialogService()
             => MockDialogService;
 
-        internal IGoogleService MockGoogleService { get; set; }
-        protected override IGoogleService CreateGoogleService()
-            => MockGoogleService;
-
         internal IIntentDonationService MockIntentDonationService { get; set; }
         protected override IIntentDonationService CreateIntentDonationService()
             => MockIntentDonationService;

@@ -20,7 +20,7 @@
     <EnableProguard>true</EnableProguard>
     <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-      <LangVersion>7.1</LangVersion>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -416,7 +416,6 @@
     <Compile Include="Startup\AndroidSchedulerProvider.cs" />
     <Compile Include="Startup\QueryableMvxLifecycleMonitorCurrentTopActivity.cs" />
     <Compile Include="Startup\SplashScreen.cs" />
-    <Compile Include="Services\GoogleServiceAndroid.cs" />
     <Compile Include="Services\DialogServiceAndroid.cs" />
     <Compile Include="Services\BrowserServiceAndroid.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
@@ -541,6 +540,9 @@
     </Compile>
     <Compile Include="Activities\ReactiveActivity.cs" />
     <Compile Include="Activities\ReactiveActivity.DialogProvider.cs">
+      <DependentUpon>ReactiveActivity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Activities\ReactiveActivity.GoogleTokenProvider.cs">
       <DependentUpon>ReactiveActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="Activities\ReactiveActivity.PermissionsHandler.cs">

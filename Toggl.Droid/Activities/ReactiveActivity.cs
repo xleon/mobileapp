@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
+using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
@@ -71,17 +72,24 @@ namespace Toggl.Droid.Activities
             ViewModel?.ViewDisappeared();
         }
 
-        public void MvxInternalStartActivityForResult(Intent intent, int requestCode)
-        {
-            StartActivityForResult(intent, requestCode);
-        }
-
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
 
             if (!disposing) return;
             DisposeBag?.Dispose();
+        }
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+
+            switch (requestCode)
+            {
+                case googleSignInResult:
+                    onGoogleSignInResult(data);
+                    break;
+            }
         }
 
         public Task Close()

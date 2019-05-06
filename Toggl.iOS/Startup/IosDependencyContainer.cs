@@ -72,9 +72,6 @@ namespace Toggl.iOS
         protected override IDialogService CreateDialogService()
             => new DialogServiceIos(OldPresenter);
 
-        protected override IGoogleService CreateGoogleService()
-            => new GoogleServiceIos();
-
         protected override IIntentDonationService CreateIntentDonationService()
             => new IntentDonationServiceIos(AnalyticsService);
 

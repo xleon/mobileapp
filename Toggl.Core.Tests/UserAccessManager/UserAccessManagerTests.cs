@@ -42,8 +42,7 @@ namespace Toggl.Core.Tests.Login
             protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
             protected IApiFactory ApiFactory { get; } = Substitute.For<IApiFactory>();
             protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
-            protected IGoogleService GoogleService { get; } = Substitute.For<IGoogleService>();
-            protected IAccessRestrictionStorage AccessRestrictionStorage { get; } = Substitute.For<IAccessRestrictionStorage>();
+             protected IAccessRestrictionStorage AccessRestrictionStorage { get; } = Substitute.For<IAccessRestrictionStorage>();
             protected ITogglDataSource DataSource { get; } = Substitute.For<ITogglDataSource>();
             protected readonly IUserAccessManager UserAccessManager;
             protected IScheduler Scheduler { get; } = System.Reactive.Concurrency.Scheduler.Default;
@@ -59,7 +58,6 @@ namespace Toggl.Core.Tests.Login
                 UserAccessManager = new UserAccessManager(
                     new Lazy<IApiFactory>(() => ApiFactory),
                     new Lazy<ITogglDatabase>(() => Database),
-                    new Lazy<IGoogleService>(() => GoogleService),
                     new Lazy<IPrivateSharedStorageService>(() => PrivateSharedStorageService)
                 );
 
@@ -84,16 +82,14 @@ namespace Toggl.Core.Tests.Login
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useApiFactory,
                 bool useDatabase,
-                bool useGoogleService,
                 bool usePrivateSharedStorageService)
             {
                 var database = useDatabase ? new Lazy<ITogglDatabase>(() => Database) : null;
                 var apiFactory = useApiFactory ? new Lazy<IApiFactory>(() => ApiFactory) : null;
-                var googleService = useGoogleService ? new Lazy<IGoogleService>(() => GoogleService) : null;
                 var privateSharedStorageService = usePrivateSharedStorageService ? new Lazy<IPrivateSharedStorageService>(() => PrivateSharedStorageService) : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new UserAccessManager(apiFactory, database, googleService, privateSharedStorageService);
+                    () => new UserAccessManager(apiFactory, database, privateSharedStorageService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -454,15 +450,12 @@ namespace Toggl.Core.Tests.Login
 
         public sealed class TheUserAccessUsingGoogleMethod : UserAccessManagerTest
         {
-            public TheUserAccessUsingGoogleMethod()
-            {
-                GoogleService.GetAuthToken().Returns(Observable.Return("sometoken"));
-            }
+            private const string googleToken = "sometoken";
 
             [Fact, LogIfTooSlow]
             public async Task EmptiesTheDatabaseBeforeTryingToCreateTheUser()
             {
-                await UserAccessManager.LoginWithGoogle();
+                await UserAccessManager.LoginWithGoogle(googleToken);
 
                 Received.InOrder(async () =>
                 {
@@ -472,17 +465,9 @@ namespace Toggl.Core.Tests.Login
             }
 
             [Fact, LogIfTooSlow]
-            public async Task UsesTheGoogleServiceToGetTheToken()
-            {
-                await UserAccessManager.LoginWithGoogle();
-
-                await GoogleService.Received().GetAuthToken();
-            }
-
-            [Fact, LogIfTooSlow]
             public async Task CallsTheGetWithGoogleOfTheUserApi()
             {
-                await UserAccessManager.LoginWithGoogle();
+                await UserAccessManager.LoginWithGoogle(googleToken);
 
                 await Api.User.Received().GetWithGoogle();
             }
@@ -490,7 +475,7 @@ namespace Toggl.Core.Tests.Login
             [Fact, LogIfTooSlow]
             public async Task PersistsTheUserToTheDatabase()
             {
-                await UserAccessManager.LoginWithGoogle();
+                await UserAccessManager.LoginWithGoogle(googleToken);
 
                 await Database.User.Received().Create(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.Id == User.Id));
             }
@@ -498,7 +483,7 @@ namespace Toggl.Core.Tests.Login
             [Fact, LogIfTooSlow]
             public async Task PersistsTheUserWithTheSyncStatusSetToInSync()
             {
-                await UserAccessManager.LoginWithGoogle();
+                await UserAccessManager.LoginWithGoogle(googleToken);
 
                 await Database.User.Received().Create(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.SyncStatus == SyncStatus.InSync));
             }
@@ -507,14 +492,14 @@ namespace Toggl.Core.Tests.Login
             public async Task AlwaysReturnsASingleResult()
             {
                 await UserAccessManager
-                        .LoginWithGoogle()
+                        .LoginWithGoogle(googleToken)
                         .SingleAsync();
             }
 
             [Fact, LogIfTooSlow]
             public async Task SavesTheApiTokenToPrivateSharedStorage()
             {
-                await UserAccessManager.LoginWithGoogle();
+                await UserAccessManager.LoginWithGoogle(googleToken);
 
                 PrivateSharedStorageService.Received().SaveApiToken(Arg.Any<string>());
             }
@@ -522,7 +507,7 @@ namespace Toggl.Core.Tests.Login
             [Fact, LogIfTooSlow]
             public async Task SavesTheUserIdToPrivateSharedStorage()
             {
-                await UserAccessManager.LoginWithGoogle();
+                await UserAccessManager.LoginWithGoogle(googleToken);
 
                 PrivateSharedStorageService.Received().SaveUserId(Arg.Any<long>());
             }

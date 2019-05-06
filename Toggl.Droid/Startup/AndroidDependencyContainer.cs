@@ -67,9 +67,6 @@ namespace Toggl.Droid
         protected override IDialogService CreateDialogService()
             => new DialogServiceAndroid();
 
-        protected override IGoogleService CreateGoogleService()
-            => new GoogleServiceAndroid();
-
         protected override IIntentDonationService CreateIntentDonationService()
             => new NoopIntentDonationServiceAndroid();
 

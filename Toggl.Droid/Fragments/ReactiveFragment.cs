@@ -78,5 +78,13 @@ namespace Toggl.Droid.Fragments
         {
             return Task.CompletedTask;
         }
+
+        public IObservable<string> GetGoogleToken()
+        {
+            if (!(Activity is IGoogleTokenProvider tokenProvider))
+                throw new InvalidOperationException();
+
+            return tokenProvider.GetGoogleToken();
+        }
     }
 }

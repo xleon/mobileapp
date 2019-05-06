@@ -11,7 +11,7 @@ namespace Toggl.Droid.Presentation
     public class ActivityPresenter : AndroidPresenter
     {
         private const ActivityFlags clearBackStackFlags = ActivityFlags.ClearTop | ActivityFlags.ClearTask | ActivityFlags.NewTask;
-        
+
         private readonly Dictionary<Type, IViewModel> viewModelCache = new Dictionary<Type, IViewModel>();
 
         protected override HashSet<Type> AcceptedViewModels { get; } = new HashSet<Type>
@@ -79,7 +79,7 @@ namespace Toggl.Droid.Presentation
             viewModelCache[typeof(TViewModel)] = null;
             return cachedViewModel;
         }
-        
+
         private struct ActivityPresenterInfo
         {
             public Type ActivityType { get; }

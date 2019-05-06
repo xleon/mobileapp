@@ -348,8 +348,9 @@ namespace Toggl.Core.UI.ViewModels
             isLoadingSubject.OnNext(true);
             errorMessageSubject.OnNext(string.Empty);
 
-            signupDisposable = userAccessManager
-                .SignUpWithGoogle(termsOfServiceAccepted, (int)countryId.Value, timezone)
+            signupDisposable = View.GetGoogleToken()
+                .SelectMany(googleToken => userAccessManager
+                    .SignUpWithGoogle(googleToken, termsOfServiceAccepted, (int)countryId.Value, timezone))
                 .Track(analyticsService.SignUp, AuthenticationMethod.Google)
                 .Subscribe(_ => onAuthenticated(), onError, onCompleted);
         }

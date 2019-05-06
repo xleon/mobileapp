@@ -64,5 +64,8 @@ namespace Toggl.iOS.ViewControllers
             if (!disposing) return;
             DisposeBag?.Dispose();
         }
+
+        public IObservable<string> GetGoogleToken()
+            => throw new InvalidOperationException();
     }
 }

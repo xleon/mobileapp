@@ -1370,6 +1370,9 @@
     <Compile Include="ViewControllers\Reactive\ReactiveViewController.DialogProvider.cs">
       <DependentUpon>ReactiveViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewControllers\Reactive\ReactiveViewController.GoogleTokenProvider.cs">
+      <DependentUpon>ReactiveViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\Reactive\ReactiveViewController.PermissionsHandler.cs">
       <DependentUpon>ReactiveViewController.cs</DependentUpon>
     </Compile>
@@ -1501,7 +1504,6 @@
       <DependentUpon>OutdatedAppViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\BrowserServiceIos.cs" />
-    <Compile Include="Services\GoogleServiceIos.cs" />
     <Compile Include="ViewControllers\TokenResetViewController.cs" />
     <Compile Include="ViewControllers\TokenResetViewController.designer.cs">
       <DependentUpon>TokenResetViewController.cs</DependentUpon>
