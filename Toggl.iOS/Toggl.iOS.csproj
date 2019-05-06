@@ -10,6 +10,7 @@
     <RootNamespace>Toggl.iOS</RootNamespace>
     <AssemblyName>Toggl.iOS</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1334,6 +1335,7 @@
     <Compile Include="Extensions\ViewControllerExtensions.cs" />
     <Compile Include="Helper\PermissionsHelper.cs" />
     <Compile Include="Presentation\IosPresenter.cs" />
+    <Compile Include="Presentation\RootPresenter.cs" />
     <Compile Include="Services\PermissionsCheckerIos.cs" />
     <Compile Include="Services\CalendarServiceIos.cs" />
     <Compile Include="Extensions\Reactive\NSConstraintExtensions.cs" />

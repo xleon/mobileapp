@@ -2,6 +2,7 @@ using System.Reactive;
 using Foundation;
 using Toggl.Core;
 using Toggl.Core.UI;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Presentation;
 using Toggl.Networking;
@@ -31,16 +32,21 @@ namespace Toggl.iOS
 
             initializeAnalytics();
 
-            base.FinishedLaunching(application, launchOptions);
-
             var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"].ToString();
-            IosDependencyContainer.EnsureInitialized(new TogglPresenter(this, Window), environment, Platform.Daneel, version);
-            var app = new App<OnboardingViewModel, Unit>(IosDependencyContainer.Instance);
 
-            app.Start();
+            Window = new UIWindow(UIScreen.MainScreen.Bounds);
+            Window.MakeKeyAndVisible();
 
             setupNavigationBar();
             setupTabBar();
+
+            var rootPresenter = new RootPresenter(Window, this);
+            var compositePresenter = new CompositePresenter(rootPresenter);
+
+            IosDependencyContainer.EnsureInitialized(new TogglPresenter(this, Window), compositePresenter, environment, Platform.Daneel, version);
+            var app = new App<OnboardingViewModel, Unit>(IosDependencyContainer.Instance);
+
+            app.Start();
 
             UNUserNotificationCenter.Current.Delegate = this;
 

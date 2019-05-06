@@ -28,7 +28,7 @@ namespace Toggl.iOS.Presentation
         public Task Present<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel)
         {
             var tcs = new TaskCompletionSource<object>();
-            DispatchQueue.MainQueue.DispatchAsync(() =>
+            UIApplication.SharedApplication.InvokeOnMainThread(() =>
             {
                 PresentOnMainThread(viewModel);
                 tcs.SetResult(true);

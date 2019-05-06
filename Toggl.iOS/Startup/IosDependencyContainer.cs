@@ -26,25 +26,27 @@ namespace Toggl.iOS
 
         private readonly Lazy<SettingsStorage> settingsStorage;
 
-        public TogglPresenter ViewPresenter { get; }
+        public TogglPresenter OldPresenter { get; }
+        public CompositePresenter ViewPresenter { get; }
         public INavigationService MvxNavigationService { get; internal set; }
 
         public new static IosDependencyContainer Instance { get; private set; }
 
-        public static void EnsureInitialized(TogglPresenter viewPresenter, ApiEnvironment environment, Platform platform, string version)
+        public static void EnsureInitialized(TogglPresenter oldPresenter, CompositePresenter viewPresenter, ApiEnvironment environment, Platform platform, string version)
         {
             if (Instance != null)
                 return;
 
-            Instance = new IosDependencyContainer(viewPresenter, environment, platform, version);
+            Instance = new IosDependencyContainer(oldPresenter, viewPresenter, environment, platform, version);
             UIDependencyContainer.Instance = Instance;
         }
 
         public OnePasswordServiceIos OnePasswordService => PasswordManagerService as OnePasswordServiceIos;
 
-        private IosDependencyContainer(TogglPresenter viewPresenter, ApiEnvironment environment, Platform platform, string version)
+        private IosDependencyContainer(TogglPresenter oldPresenter, CompositePresenter viewPresenter, ApiEnvironment environment, Platform platform, string version)
             : base(environment, new UserAgent(platform.ToString(), version))
         {
+            OldPresenter = oldPresenter;
             ViewPresenter = viewPresenter;
 
             var appVersion = Version.Parse(version);
@@ -68,7 +70,7 @@ namespace Toggl.iOS
             => new Database();
 
         protected override IDialogService CreateDialogService()
-            => new DialogServiceIos(ViewPresenter);
+            => new DialogServiceIos(OldPresenter);
 
         protected override IGoogleService CreateGoogleService()
             => new GoogleServiceIos();
@@ -118,7 +120,7 @@ namespace Toggl.iOS
             );
 
         protected override INavigationService CreateNavigationService()
-            => MvxNavigationService;
+            => new NavigationService(ViewPresenter, new ViewModelLoader(this), AnalyticsService);
 
         protected override ILastTimeUsageStorage CreateLastTimeUsageStorage()
             => settingsStorage.Value;

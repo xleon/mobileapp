@@ -63,19 +63,21 @@ namespace Toggl.iOS.Services
         [Export("signIn:presentViewController:")]
         public void PresentViewController(SignIn signIn, UIViewController viewController)
         {
-            IosDependencyContainer.Instance
-                .ViewPresenter
-                .MasterNavigationController
-                .PresentViewController(viewController, true, null);
+            // TODO Fix view controller presentation
+            // IosDependencyContainer.Instance
+            // .ViewPresenter
+            // .MasterNavigationController
+            // .PresentViewController(viewController, true, null);
         }
 
         [Export("signIn:dismissViewController:")]
         public void DismissViewController(SignIn signIn, UIViewController viewController)
         {
-            IosDependencyContainer.Instance
-                .ViewPresenter
-                .MasterNavigationController
-                .DismissViewController(true, null);
+            // TODO Fix view controller presentation
+            // IosDependencyContainer.Instance
+            // .ViewPresenter
+            // .MasterNavigationController
+            // .DismissViewController(true, null);
         }
     }
 }

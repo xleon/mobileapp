@@ -31,12 +31,13 @@ namespace Toggl.iOS.Services
 
                 var presenter = IosDependencyContainer.Instance.ViewPresenter;
 
-                OnePasswordExtension.SharedExtension.FindLoginForURLString(
-                    "https://www.toggl.com",
-                    presenter.MasterNavigationController,
-                    sourceView,
-                    getOnePasswordHandler(observer)
-                );
+                // TODO Fix view controller presentation
+                // OnePasswordExtension.SharedExtension.FindLoginForURLString(
+                // "https://www.toggl.com",
+                // presenter.MasterNavigationController,
+                // sourceView,
+                // getOnePasswordHandler(observer)
+                // );
 
                 return Disposable.Empty;
             });
