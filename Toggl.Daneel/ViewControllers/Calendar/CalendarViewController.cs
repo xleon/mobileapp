@@ -144,7 +144,7 @@ namespace Toggl.Daneel.ViewControllers
 
         public void ScrollToTop()
         {
-            CalendarCollectionView.SetContentOffset(CGPoint.Empty, true);
+            CalendarCollectionView?.SetContentOffset(CGPoint.Empty, true);
         }
 
         private void selectGoodScrollPoint(TimeSpan timeOfDay)
