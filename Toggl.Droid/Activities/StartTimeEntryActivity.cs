@@ -7,7 +7,6 @@ using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.UI.Onboarding.StartTimeEntryView;
 using Toggl.Core.UI.ViewModels;
@@ -19,7 +18,6 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Activities
 {
-    [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme.BlueStatusBar",
               ScreenOrientation = ScreenOrientation.Portrait,
               WindowSoftInputMode = SoftInput.StateVisible,

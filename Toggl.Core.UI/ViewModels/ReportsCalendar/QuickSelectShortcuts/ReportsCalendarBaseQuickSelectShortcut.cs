@@ -1,5 +1,4 @@
-﻿using MvvmCross.ViewModels;
-using Toggl.Core.UI.Interfaces;
+﻿using Toggl.Core.UI.Interfaces;
 using Toggl.Core.UI.Parameters;
 using Toggl.Shared;
 using Toggl.Core.Services;

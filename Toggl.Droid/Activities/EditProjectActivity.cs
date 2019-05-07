@@ -8,7 +8,6 @@ using Android.OS;
 using Android.Support.V4.Graphics;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
@@ -18,7 +17,6 @@ using FoundationResources = Toggl.Core.Resources;
 
 namespace Toggl.Droid.Activities
 {
-    [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme.BlueStatusBar",
               WindowSoftInputMode = SoftInput.AdjustResize,
               ScreenOrientation = ScreenOrientation.Portrait,

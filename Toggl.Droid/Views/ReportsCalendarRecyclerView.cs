@@ -4,8 +4,6 @@ using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
-using MvvmCross.Droid.Support.V7.RecyclerView;
-using Toggl.Droid.Adapters;
 
 namespace Toggl.Droid.Views
 {

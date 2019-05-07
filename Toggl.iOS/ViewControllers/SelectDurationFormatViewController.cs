@@ -6,14 +6,12 @@ using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Views.Settings;
 using Toggl.iOS.ViewSources.Generic.TableView;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalCardPresentation]
     public partial class SelectDurationFormatViewController : ReactiveViewController<SelectDurationFormatViewModel>, IDismissableViewController
     {
         private const int rowHeight = 48;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using Foundation;
-using MvvmCross;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Collections.Diffing;

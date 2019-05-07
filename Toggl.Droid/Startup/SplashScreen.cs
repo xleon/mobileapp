@@ -3,7 +3,6 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.App;
-using MvvmCross.Droid.Support.V7.AppCompat;
 using Toggl.Core;
 using Toggl.Core.Services;
 using Toggl.Core.UI;
@@ -11,7 +10,6 @@ using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.BroadcastReceivers;
 using Toggl.Droid.Helper;
-using Toggl.Networking;
 using static Android.Content.Intent;
 
 namespace Toggl.Droid

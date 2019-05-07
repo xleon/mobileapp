@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Platforms.Ios.Views;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core.Models.Interfaces;
@@ -11,7 +10,6 @@ using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.iOS.Presentation;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Views.Reports;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
@@ -21,7 +19,6 @@ using Toggl.Core.UI.Views;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [TabPresentation]
     public sealed partial class ReportsViewController : ReactiveViewController<ReportsViewModel>, IScrollableToTop
     {
         private const string boundsKey = "bounds";

@@ -19,9 +19,6 @@
     <ProjectReference Include="..\Toggl.Networking\Toggl.Networking.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MvvmCross" Version="6.1.2" />
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 </Project>

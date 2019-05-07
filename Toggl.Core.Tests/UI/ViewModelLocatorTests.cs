@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using MvvmCross.ViewModels;
 using NSubstitute;
 using System;
 using System.Linq;
@@ -25,10 +24,10 @@ namespace Toggl.Core.Tests.UI
 {
     public class ViewModelLocatorTests : BaseTest
     {
-        [Fact(Skip = "Fixing this while MvvmCross is still there is too complex"), LogIfTooSlow]
+        [Fact, LogIfTooSlow]
         public void IsAbleToCreateEveryViewModel()
         {
-            var locator = new ViewModelLoader(new TestDependencyContainer
+            var loader = new ViewModelLoader(new TestDependencyContainer
             {
                 MockUserAccessManager = Substitute.For<IUserAccessManager>(),
                 MockAccessRestrictionStorage = Substitute.For<IAccessRestrictionStorage>(),
@@ -64,15 +63,38 @@ namespace Toggl.Core.Tests.UI
                 .GetTypes()
                 .Where(isViewModel);
 
+            var loadMethod = typeof(ViewModelLoader)
+                .GetMethod(nameof(ViewModelLoader.Load));
+
             foreach (var viewModelType in viewModelTypes)
             {
-                //Action tryingToFindAViewModel = () => locator.Load(viewModelType, null);
-                //tryingToFindAViewModel.Should().NotThrow();
+                var typeArguments = getGenericArguments(viewModelType);
+                var genericLoadMethod = loadMethod.MakeGenericMethod(typeArguments);
+
+                var arguments = new object[]
+                {
+                    viewModelType,
+                    getDefaultValue(typeArguments.First())
+                };
+
+                Action tryingToFindAViewModel = () => genericLoadMethod.Invoke(loader, arguments);
+                tryingToFindAViewModel.Should().NotThrow();
             }
 
             bool isViewModel(Type type)
-                => type.ImplementsOrDerivesFrom<IMvxViewModel>();
-        }
+                => type.IsAbstract == false &&
+                   type.Name != nameof(IViewModel) &&
+                   type.ImplementsOrDerivesFrom<IViewModel>();
 
+            Type[] getGenericArguments(Type type)
+                => type.BaseType.GetGenericArguments().Count() == 2
+                ? type.BaseType.GetGenericArguments()
+                : getGenericArguments(type.BaseType);
+
+            object getDefaultValue(Type type)
+                => type.IsValueType
+                ? Activator.CreateInstance(type)
+                : null;
+        }
     }
 }

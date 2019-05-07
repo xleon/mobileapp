@@ -4,8 +4,6 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
-using MvvmCross.Platforms.Android.Core;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
@@ -18,7 +16,6 @@ using Fragment = Android.Support.V4.App.Fragment;
 
 namespace Toggl.Droid.Activities
 {
-    [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme",
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]

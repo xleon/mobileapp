@@ -3,7 +3,6 @@ using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared.Extensions;
 using Toggl.Droid.Adapters;
@@ -13,7 +12,6 @@ using Android.Support.V7.Widget;
 
 namespace Toggl.Droid.Fragments
 {
-    [MvxDialogFragmentPresentation(AddToBackStack = true)]
     public sealed partial class SelectBeginningOfWeekFragment : ReactiveDialogFragment<SelectBeginningOfWeekViewModel>
     {
         public SelectBeginningOfWeekFragment() { }

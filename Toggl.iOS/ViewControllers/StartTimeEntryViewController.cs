@@ -18,14 +18,12 @@ using Toggl.Core.UI.Onboarding.CreationView;
 using Toggl.Core.UI.Onboarding.StartTimeEntryView;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Autocomplete;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalCardPresentation]
     public sealed partial class StartTimeEntryViewController : KeyboardAwareViewController<StartTimeEntryViewModel>, IDismissableViewController
     {
         private const double desiredIpadHeight = 360;

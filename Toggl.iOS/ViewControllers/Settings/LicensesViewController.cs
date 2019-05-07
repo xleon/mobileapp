@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using MvvmCross.Platforms.Ios.Views;
 using Toggl.Core;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;

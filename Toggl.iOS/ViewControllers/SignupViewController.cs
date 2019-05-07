@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
@@ -17,7 +16,6 @@ using static Toggl.iOS.Extensions.ViewExtensions;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [MvxRootPresentation(WrapInNavigationController = true)]
     public sealed partial class SignupViewController : ReactiveViewController<SignupViewModel>
     {
         private const int iPhoneSeScreenHeight = 568;

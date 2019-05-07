@@ -14,7 +14,6 @@ using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Onboarding.EditView;
 using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Transformations;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -23,7 +22,6 @@ using Math = System.Math;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalCardPresentation]
     public partial class EditTimeEntryViewController : KeyboardAwareViewController<EditTimeEntryViewModel>, IDismissableViewController
     {
         private const float nonScrollableContentHeight = 116f;

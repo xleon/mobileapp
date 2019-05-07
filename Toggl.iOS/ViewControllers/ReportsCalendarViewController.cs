@@ -9,14 +9,12 @@ using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [NestedPresentation]
     public partial class ReportsCalendarViewController : ReactiveViewController<ReportsCalendarViewModel>, IUICollectionViewDelegate
     {
         private CGSize popoverPreferedSize = new CGSize(319, 355);

@@ -4,7 +4,6 @@ using System.Reactive.Subjects;
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Base;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using UIKit;
@@ -109,7 +108,7 @@ namespace Toggl.iOS.Views
             if (becomeFirstResponder)
             {
                 firstResponderSubject.OnNext(true);
-                IsFirstResponderChanged?.Raise(this);
+                IsFirstResponderChanged?.Invoke(this, new EventArgs());
 
                 if (placeholderLayer.Frame.Top != 0)
                     movePlaceholderUp();
@@ -124,7 +123,7 @@ namespace Toggl.iOS.Views
             if (resignFirstResponder)
             {
                 firstResponderSubject.OnNext(false);
-                IsFirstResponderChanged?.Raise(this);
+                IsFirstResponderChanged?.Invoke(this, new EventArgs());
 
                 if (string.IsNullOrEmpty(Text))
                     movePlaceholderDown();

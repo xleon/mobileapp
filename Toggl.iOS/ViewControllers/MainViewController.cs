@@ -21,7 +21,6 @@ using Toggl.iOS.ExtensionKit;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Presentation;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Suggestions;
 using Toggl.iOS.Views;
 using Toggl.iOS.ViewSources;
@@ -36,7 +35,6 @@ namespace Toggl.iOS.ViewControllers
 {
     using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
 
-    [TabPresentation]
     public partial class MainViewController : ReactiveViewController<MainViewModel>, IScrollableToTop
     {
         private const float showCardDelay = 0.1f;
@@ -478,7 +476,7 @@ namespace Toggl.iOS.ViewControllers
         {
             ratingView = RatingView.Create();
             ratingView.TranslatesAutoresizingMaskIntoConstraints = false;
-            ratingView.DataContext = ViewModel.RatingViewModel;
+            ratingView.ViewModel = ViewModel.RatingViewModel;
             ratingViewContainer.AddSubview(ratingView);
             ratingView.ConstrainInView(ratingViewContainer);
             View.SetNeedsLayout();

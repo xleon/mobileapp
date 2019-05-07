@@ -5,14 +5,12 @@ using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels.Calendar;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers.Calendar
 {
-    [ModalDialogPresentation]
     public sealed partial class SelectUserCalendarsViewController
         : ReactiveViewController<SelectUserCalendarsViewModel>
     {

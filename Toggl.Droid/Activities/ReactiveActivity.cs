@@ -3,7 +3,6 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
-using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.App;
@@ -20,8 +19,6 @@ namespace Toggl.Droid.Activities
         protected abstract void InitializeViews();
 
         public TViewModel ViewModel { get; set; }
-
-        public Action<int, string[], Permission[]> OnPermissionChangedCallback { get; set; }
 
         protected ReactiveActivity()
         {

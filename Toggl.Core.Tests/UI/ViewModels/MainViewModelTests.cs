@@ -9,7 +9,6 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
-using MvvmCross.Binding.Extensions;
 using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.Interactors;

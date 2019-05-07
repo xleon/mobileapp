@@ -218,15 +218,6 @@
     <Reference Include="Firebase.PerformanceMonitoring">
       <HintPath>..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.1.1.0.1\lib\Xamarin.iOS10\Firebase.PerformanceMonitoring.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross">
-      <HintPath>..\packages\MvvmCross.6.1.2\lib\xamarinios10\MvvmCross.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugin.Color">
-      <HintPath>..\packages\MvvmCross.Plugin.Color.6.1.2\lib\xamarinios10\MvvmCross.Plugin.Color.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugin.Visibility">
-      <HintPath>..\packages\MvvmCross.Plugin.Visibility.6.1.2\lib\xamarinios10\MvvmCross.Plugin.Visibility.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.Essentials">
       <HintPath>..\packages\Xamarin.Essentials.1.0.0\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
     </Reference>
@@ -1379,7 +1370,6 @@
     <Compile Include="ViewControllers\SyncFailuresViewController.cs" />
     <Compile Include="ViewSources\Generic\CollectionView\ReloadCollectionViewSource.cs" />
     <Compile Include="ViewSources\Generic\TableView\BaseTableViewSource.cs" />
-    <Compile Include="Presentation\TogglPresenter.cs" />
     <Compile Include="ViewSources\TimeEntriesLogViewSource.cs" />
     <Compile Include="ViewControllers\MainViewController.cs" />
     <Compile Include="ViewControllers\MainViewController.designer.cs">
@@ -1390,8 +1380,6 @@
       <DependentUpon>StartTimeEntryViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ActivityIndicatorView.cs" />
-    <Compile Include="Presentation\Attributes\ModalCardPresentationAttribute.cs" />
-    <Compile Include="Presentation\Attributes\NestedChildPresentationAttribute.cs" />
     <Compile Include="Presentation\Transition\FromBottomTransition.cs" />
     <Compile Include="Presentation\Transition\FromBottomTransitionDelegate.cs" />
     <Compile Include="Presentation\Transition\ModalPresentationController.cs" />
@@ -1402,7 +1390,6 @@
     <Compile Include="Extensions\FontExtensions.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="ViewSources\StartTimeEntryTableViewSource.cs" />
-    <Compile Include="Presentation\Attributes\ModalDialogPresentationAttribute.cs" />
     <Compile Include="Presentation\Transition\ModalDialogPresentationController.cs" />
     <Compile Include="Presentation\Transition\ModalDialogTransitionDelegate.cs" />
     <Compile Include="ViewControllers\EditDurationViewController.cs" />
@@ -1780,7 +1767,6 @@
       <DependentUpon>UpcomingEventsOptionCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\ScrollViewExtensions.cs" />
-    <Compile Include="Presentation\Attributes\TabPresentationAttribute.cs" />
     <Compile Include="Views\Calendar\CalendarCollectionViewAutoScrollHelper.cs" />
     <Compile Include="Extensions\Reactive\UIControlExtensions.cs" />
     <Compile Include="ViewControllers\IDismissableViewController.cs" />

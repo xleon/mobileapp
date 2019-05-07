@@ -1,4 +1,3 @@
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
@@ -9,7 +8,6 @@ using FoundationResources = Toggl.Core.Resources;
 
 namespace Toggl.iOS.ViewControllers.Settings
 {
-    [MvxChildPresentation]
     public sealed partial class CalendarSettingsViewController : ReactiveViewController<CalendarSettingsViewModel>
     {
         private const int tableViewHeaderHeight = 106;

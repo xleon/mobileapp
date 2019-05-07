@@ -6,13 +6,11 @@ using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalDialogPresentation]
     public sealed partial class NoWorkspaceViewController
         : ReactiveViewController<NoWorkspaceViewModel>
     {

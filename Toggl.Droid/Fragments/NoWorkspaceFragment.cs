@@ -3,7 +3,6 @@ using System.Reactive.Linq;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
@@ -11,7 +10,6 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
-    [MvxDialogFragmentPresentation(Cancelable = false)]
     public sealed partial class NoWorkspaceFragment : ReactiveDialogFragment<NoWorkspaceViewModel>
     {
         public NoWorkspaceFragment()

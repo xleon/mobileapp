@@ -2,7 +2,6 @@ using System;
 using System.Reactive.Linq;
 using CoreText;
 using Foundation;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
@@ -13,7 +12,6 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [MvxRootPresentation(WrapInNavigationController = true)]
     public partial class TokenResetViewController : KeyboardAwareViewController<TokenResetViewModel>
     {
         private const int forgotPasswordLabelOffset = 27;

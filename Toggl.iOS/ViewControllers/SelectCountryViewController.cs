@@ -7,13 +7,11 @@ using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Shared.Extensions;
 using Toggl.Core.UI.Collections;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Views.CountrySelection;
 using Toggl.iOS.ViewSources.Generic.TableView;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalCardPresentation]
     public sealed partial class SelectCountryViewController : KeyboardAwareViewController<SelectCountryViewModel>, IDismissableViewController
     {
         private const int rowHeight = 48;

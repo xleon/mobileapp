@@ -5,13 +5,11 @@ using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalDialogPresentation]
     public partial class SelectDateTimeViewController : ReactiveViewController<SelectDateTimeViewModel>
     {
         public SelectDateTimeViewController()

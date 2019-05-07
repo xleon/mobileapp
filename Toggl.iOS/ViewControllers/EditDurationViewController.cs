@@ -12,11 +12,9 @@ using Toggl.iOS.Extensions.Reactive;
 using Toggl.Shared.Extensions;
 using UIKit;
 using Toggl.Core;
-using Toggl.iOS.Presentation.Attributes;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalCardPresentation]
     public sealed partial class EditDurationViewController
         : KeyboardAwareViewController<EditDurationViewModel>,
           IDismissableViewController,

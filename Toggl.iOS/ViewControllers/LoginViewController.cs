@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Foundation;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using MvvmCross.Platforms.Ios.Views;
 using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
@@ -18,8 +16,6 @@ using static Toggl.iOS.Extensions.ViewExtensions;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [MvxRootPresentation(WrapInNavigationController = true)]
-    [MvxFromStoryboard("Login")]
     public sealed partial class LoginViewController : ReactiveViewController<LoginViewModel>
     {
         private const int iPhoneSeScreenHeight = 568;

@@ -4,7 +4,6 @@ using System.Reactive.Subjects;
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Base;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
@@ -41,7 +40,7 @@ namespace Toggl.iOS.Views.EditDuration
             {
                 if (startTime == value) return;
                 startTime = value.Clamp(MinimumStartTime, MaximumStartTime);
-                StartTimeChanged.Raise(this);
+                StartTimeChanged?.Invoke(this, new EventArgs());
                 SetNeedsLayout();
             }
         }
@@ -53,7 +52,7 @@ namespace Toggl.iOS.Views.EditDuration
             {
                 if (endTime == value) return;
                 endTime = value.Clamp(MinimumEndTime, MaximumEndTime);
-                EndTimeChanged.Raise(this);
+                EndTimeChanged?.Invoke(this, new EventArgs());
                 SetNeedsLayout();
             }
         }

@@ -4,15 +4,10 @@ using CoreGraphics;
 using UIKit;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Shared.Extensions;
-using Toggl.Core.UI.Extensions;
-using System.Reactive;
-using Foundation;
 using Toggl.Core;
-using Toggl.iOS.Presentation.Attributes;
 
 namespace Toggl.iOS.ViewControllers.Calendar
 {
-    [ModalDialogPresentation]
     public sealed partial class CalendarPermissionDeniedViewController
         : ReactiveViewController<CalendarPermissionDeniedViewModel>
     {

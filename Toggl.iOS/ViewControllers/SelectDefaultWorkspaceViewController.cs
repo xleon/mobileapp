@@ -4,13 +4,11 @@ using Toggl.Core;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Cells;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.ViewSources.Generic.TableView;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalDialogPresentation]
     public sealed partial class SelectDefaultWorkspaceViewController : ReactiveViewController<SelectDefaultWorkspaceViewModel>
     {
         private const int heightAboveTableView = 127;

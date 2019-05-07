@@ -8,7 +8,6 @@ using System.Reactive.Subjects;
 using System.Threading;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Platforms.Ios.Binding.Views;
 using Toggl.Core;
 using Toggl.Core.Extensions;
 using Toggl.Core.Calendar;
@@ -24,7 +23,7 @@ using FoundationResources = Toggl.Core.Resources;
 
 namespace Toggl.iOS.ViewSources
 {
-    public sealed class CalendarCollectionViewSource : MvxCollectionViewSource, ICalendarCollectionViewLayoutDataSource
+    public sealed class CalendarCollectionViewSource : UICollectionViewSource, ICalendarCollectionViewLayoutDataSource
     {
         private static readonly string twelveHoursFormat = Resources.TwelveHoursFormat;
         private static readonly string twentyFourHoursFormat = Resources.TwentyFourHoursFormat;
@@ -46,11 +45,12 @@ namespace Toggl.iOS.ViewSources
         private DateTime date;
         private NSIndexPath editingItemIndexPath;
         private NSIndexPath runningTimeEntryIndexPath;
+        private UICollectionView collectionView;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
         private readonly ISubject<CalendarItem> itemTappedSubject = new Subject<CalendarItem>();
 
-        private CalendarCollectionViewLayout layout => CollectionView.CollectionViewLayout as CalendarCollectionViewLayout;
+        private CalendarCollectionViewLayout layout => collectionView.CollectionViewLayout as CalendarCollectionViewLayout;
         private CalendarLayoutCalculator layoutCalculator;
 
         public bool IsEditing { get; private set; }
@@ -62,7 +62,6 @@ namespace Toggl.iOS.ViewSources
             UICollectionView collectionView,
             IObservable<TimeFormat> timeOfDayFormat,
             ObservableGroupedOrderedCollection<CalendarItem> collection)
-            : base(collectionView)
         {
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(timeOfDayFormat, nameof(timeOfDayFormat));
@@ -70,6 +69,7 @@ namespace Toggl.iOS.ViewSources
             this.timeService = timeService;
             this.timeOfDayFormatObservable = timeOfDayFormat;
             this.collection = collection;
+            this.collectionView = collectionView;
 
             layoutCalculator = new CalendarLayoutCalculator(timeService);
             calendarItems = new List<CalendarItem>();
@@ -102,7 +102,7 @@ namespace Toggl.iOS.ViewSources
             onCollectionChanges();
         }
 
-        protected override UICollectionViewCell GetOrCreateCellFor(UICollectionView collectionView, NSIndexPath indexPath, object item)
+        public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
             var cell = collectionView.DequeueReusableCell(itemReuseIdentifier, indexPath) as CalendarItemView;
             cell.Layout = layout;
@@ -168,7 +168,7 @@ namespace Toggl.iOS.ViewSources
 
         public CalendarItem? CalendarItemAtPoint(CGPoint point)
         {
-            var indexPath = CollectionView.IndexPathForItemAtPoint(point);
+            var indexPath = collectionView.IndexPathForItemAtPoint(point);
             if (indexPath != null && indexPath.Item < calendarItems.Count)
             {
                 return calendarItems[(int)indexPath.Item];
@@ -194,7 +194,7 @@ namespace Toggl.iOS.ViewSources
             IsEditing = true;
             editingItemIndexPath = indexPath;
             layout.IsEditing = true;
-            CollectionView.ReloadItems(new NSIndexPath[] { indexPath });
+            collectionView.ReloadItems(new NSIndexPath[] { indexPath });
         }
 
         public void StopEditing()
@@ -211,7 +211,7 @@ namespace Toggl.iOS.ViewSources
                 throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
 
             editingItemIndexPath = insertCalendarItem(startTime, duration);
-            CollectionView.InsertItems(new NSIndexPath[] { editingItemIndexPath });
+            collectionView.InsertItems(new NSIndexPath[] { editingItemIndexPath });
             return editingItemIndexPath;
         }
 
@@ -234,7 +234,7 @@ namespace Toggl.iOS.ViewSources
                 throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
 
             removeCalendarItem(indexPath);
-            CollectionView.DeleteItems(new NSIndexPath[] { indexPath });
+            collectionView.DeleteItems(new NSIndexPath[] { indexPath });
         }
 
         protected override void Dispose(bool disposing)
@@ -249,7 +249,7 @@ namespace Toggl.iOS.ViewSources
         private void timeOfDayFormatChanged(TimeFormat timeFormat)
         {
             timeOfDayFormat = timeFormat;
-            CollectionView.ReloadData();
+            collectionView.ReloadData();
         }
 
         private void onCollectionChanges()
@@ -260,7 +260,7 @@ namespace Toggl.iOS.ViewSources
             var index = calendarItems.IndexOf(item => item.Duration == null);
             runningTimeEntryIndexPath = index >= 0 ? NSIndexPath.FromItemSection(index, 0) : null;
 
-            CollectionView.ReloadData();
+            collectionView.ReloadData();
         }
 
         private void dateChanged(DateTimeOffset dateTimeOffset)
@@ -279,17 +279,17 @@ namespace Toggl.iOS.ViewSources
 
         private void registerCells()
         {
-            CollectionView.RegisterNibForCell(CalendarItemView.Nib, itemReuseIdentifier);
+            collectionView.RegisterNibForCell(CalendarItemView.Nib, itemReuseIdentifier);
 
-            CollectionView.RegisterNibForSupplementaryView(HourSupplementaryView.Nib,
+            collectionView.RegisterNibForSupplementaryView(HourSupplementaryView.Nib,
                                                            CalendarCollectionViewLayout.HourSupplementaryViewKind,
                                                            new NSString(hourReuseIdentifier));
 
-            CollectionView.RegisterNibForSupplementaryView(EditingHourSupplementaryView.Nib,
+            collectionView.RegisterNibForSupplementaryView(EditingHourSupplementaryView.Nib,
                                                            CalendarCollectionViewLayout.EditingHourSupplementaryViewKind,
                                                            new NSString(editingHourReuseIdentifier));
 
-            CollectionView.RegisterNibForSupplementaryView(CurrentTimeSupplementaryView.Nib,
+            collectionView.RegisterNibForSupplementaryView(CurrentTimeSupplementaryView.Nib,
                                                            CalendarCollectionViewLayout.CurrentTimeSupplementaryViewKind,
                                                            new NSString(currentTimeReuseIdentifier));
         }
@@ -332,9 +332,9 @@ namespace Toggl.iOS.ViewSources
 
         private void updateEditingHours()
         {
-            var startEditingHour = CollectionView
+            var startEditingHour = collectionView
                 .GetSupplementaryView(CalendarCollectionViewLayout.EditingHourSupplementaryViewKind, NSIndexPath.FromItemSection(0, 0)) as EditingHourSupplementaryView;
-            var endEditingHour = CollectionView
+            var endEditingHour = collectionView
                 .GetSupplementaryView(CalendarCollectionViewLayout.EditingHourSupplementaryViewKind, NSIndexPath.FromItemSection(1, 0)) as EditingHourSupplementaryView;
 
             var attrs = layoutAttributes[(int)editingItemIndexPath.Item];

@@ -1,11 +1,11 @@
-﻿using Android.Content;
+﻿using Android.App;
+using Android.Content;
 using Android.Net;
-using MvvmCross.Platforms.Android;
 using Toggl.Core.UI.Services;
 
 namespace Toggl.Droid.Services
 {
-    public sealed class BrowserServiceAndroid : MvxAndroidTask, IBrowserService
+    public sealed class BrowserServiceAndroid : IBrowserService
     {
         public void OpenStore()
         {
@@ -15,7 +15,7 @@ namespace Toggl.Droid.Services
         public void OpenUrl(string url)
         {
             var intent = new Intent(Intent.ActionView).SetData(Uri.Parse(url));
-            StartActivity(intent);
+            Application.Context.StartActivity(intent);
         }
     }
 }

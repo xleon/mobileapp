@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -9,7 +8,6 @@ using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Views.Client;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
@@ -17,7 +15,6 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalCardPresentation]
     public partial class SelectClientViewController : KeyboardAwareViewController<SelectClientViewModel>, IDismissableViewController
     {
         private const double headerHeight = 100;

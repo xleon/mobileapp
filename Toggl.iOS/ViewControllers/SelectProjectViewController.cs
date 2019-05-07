@@ -8,13 +8,11 @@ using UIKit;
 using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.ViewSources;
 using static Toggl.Shared.Extensions.ReactiveExtensions;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalCardPresentation]
     public sealed partial class SelectProjectViewController : KeyboardAwareViewController<SelectProjectViewModel>, IDismissableViewController
     {
         private const double headerHeight = 99;

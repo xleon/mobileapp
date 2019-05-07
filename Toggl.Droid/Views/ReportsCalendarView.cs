@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -11,10 +10,7 @@ using Android.Support.V4.Content;
 using Android.Support.V4.View;
 using Android.Support.V7.Widget;
 using Android.Util;
-using Android.Views;
 using Android.Widget;
-using Java.Util;
-using MvvmCross.WeakSubscription;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
@@ -22,9 +18,7 @@ using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
-using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
-using Observable = System.Reactive.Linq.Observable;
 
 namespace Toggl.Droid.Views
 {

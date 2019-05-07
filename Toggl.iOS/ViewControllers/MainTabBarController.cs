@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
@@ -10,7 +9,6 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [MvxRootPresentation(WrapInNavigationController = false)]
     public class MainTabBarController : UITabBarController
     {
         public MainTabBarViewModel ViewModel { get; set; }

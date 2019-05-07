@@ -16,13 +16,13 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Views;
 using Toggl.Core.Sync;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
 using Toggl.Storage.Settings;
-using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.UI.ViewModels
 {
