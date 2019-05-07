@@ -53,7 +53,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IInteractorFactory interactorFactory;
         private readonly IStopwatchProvider stopwatchProvider;
-        private readonly INavigationService navigationService;
         private readonly IIntentDonationService intentDonationService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
         private readonly IRxActionFactory rxActionFactory;
@@ -87,8 +86,6 @@ namespace Toggl.Core.UI.ViewModels
         public SuggestionsViewModel SuggestionsViewModel { get; }
         public IOnboardingStorage OnboardingStorage => onboardingStorage;
 
-        public new INavigationService NavigationService => navigationService;
-
         public UIAction Refresh { get; private set; }
         public UIAction OpenReports { get; private set; }
         public UIAction OpenSettings { get; private set; }
@@ -119,6 +116,7 @@ namespace Toggl.Core.UI.ViewModels
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
@@ -128,7 +126,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
@@ -142,7 +139,6 @@ namespace Toggl.Core.UI.ViewModels
             this.userPreferences = userPreferences;
             this.analyticsService = analyticsService;
             this.interactorFactory = interactorFactory;
-            this.navigationService = navigationService;
             this.onboardingStorage = onboardingStorage;
             this.schedulerProvider = schedulerProvider;
             this.intentDonationService = intentDonationService;
@@ -152,7 +148,7 @@ namespace Toggl.Core.UI.ViewModels
 
             TimeService = timeService;
 
-            SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, suggestionProviders, schedulerProvider, rxActionFactory);
+            SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, suggestionProviders, schedulerProvider, rxActionFactory, navigationService);
             RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService, schedulerProvider, rxActionFactory);
             TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, syncManager, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
 
@@ -383,7 +379,7 @@ namespace Toggl.Core.UI.ViewModels
             if (accessRestrictionStorage.HasNoWorkspace() && !noWorkspaceViewPresented)
             {
                 noWorkspaceViewPresented = true;
-                await navigationService.Navigate<NoWorkspaceViewModel, Unit>();
+                await Navigate<NoWorkspaceViewModel, Unit>();
                 noWorkspaceViewPresented = false;
             }
         }
@@ -393,7 +389,7 @@ namespace Toggl.Core.UI.ViewModels
             if (accessRestrictionStorage.HasNoDefaultWorkspace() && !noDefaultWorkspaceViewPresented)
             {
                 noDefaultWorkspaceViewPresented = true;
-                await navigationService.Navigate<SelectDefaultWorkspaceViewModel, Unit>();
+                await Navigate<SelectDefaultWorkspaceViewModel, Unit>();
                 noDefaultWorkspaceViewPresented = false;
             }
         }
@@ -492,7 +488,7 @@ namespace Toggl.Core.UI.ViewModels
             if (hasStopButtonEverBeenUsed)
                 onboardingStorage.SetNavigatedAwayFromMainViewAfterStopButton();
 
-            return navigationService.Navigate<TModel, TParameters>(value);
+            return Navigate<TModel, TParameters>(value);
         }
 
         private Task navigate<TModel>()
@@ -501,7 +497,7 @@ namespace Toggl.Core.UI.ViewModels
             if (hasStopButtonEverBeenUsed)
                 onboardingStorage.SetNavigatedAwayFromMainViewAfterStopButton();
 
-            return navigationService.Navigate<TModel>();
+            return Navigate<TModel>();
         }
     }
 }

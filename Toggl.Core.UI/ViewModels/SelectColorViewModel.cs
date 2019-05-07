@@ -17,7 +17,6 @@ namespace Toggl.Core.UI.ViewModels
     [Preserve(AllMembers = true)]
     public class SelectColorViewModel : ViewModel<ColorParameters, Color>
     {
-        private readonly INavigationService navigationService;
         private readonly IRxActionFactory rxActionFactory;
 
         private Color defaultColor;
@@ -43,11 +42,10 @@ namespace Toggl.Core.UI.ViewModels
         public InputAction<Color> SelectColor { get; }
 
         public SelectColorViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            this.navigationService = navigationService;
             this.rxActionFactory = rxActionFactory;
 
             // Public properties

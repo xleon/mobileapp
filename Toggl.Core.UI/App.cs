@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.UI
 {
@@ -33,26 +34,26 @@ namespace Toggl.Core.UI
 
             if (accessRestrictionStorage.IsApiOutdated() || accessRestrictionStorage.IsClientOutdated())
             {
-                await navigationService.Navigate<OutdatedAppViewModel>();
+                await navigationService.Navigate<OutdatedAppViewModel>(null);
                 return;
             }
 
             if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())
             {
-                await navigationService.Navigate<TFirstViewModelWhenNotLoggedIn, TInput>(new TInput());
+                await navigationService.Navigate<TFirstViewModelWhenNotLoggedIn, TInput>(new TInput(), null);
                 return;
             }
             
             var user = await dependencyContainer.InteractorFactory.GetCurrentUser().Execute();
             if (accessRestrictionStorage.IsUnauthorized(user.ApiToken))
             {
-                await navigationService.Navigate<TokenResetViewModel>();
+                await navigationService.Navigate<TokenResetViewModel>(null);
                 return;
             }
 
             dependencyContainer.SyncManager.ForceFullSync().Subscribe();
 
-            await navigationService.Navigate<MainTabBarViewModel>();
+            await navigationService.Navigate<MainTabBarViewModel>(null);
         }
 
         private void revokeNewUserIfNeeded()

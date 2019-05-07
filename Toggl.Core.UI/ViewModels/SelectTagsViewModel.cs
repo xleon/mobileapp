@@ -20,7 +20,6 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class SelectTagsViewModel : ViewModel<(long[] tagIds, long workspaceId), long[]>
     {
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly HashSet<long> selectedTagIds = new HashSet<long>();
@@ -43,14 +42,13 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
-            this.navigationService = navigationService;
             this.stopwatchProvider = stopwatchProvider;
             this.interactorFactory = interactorFactory;
             this.schedulerProvider = schedulerProvider;

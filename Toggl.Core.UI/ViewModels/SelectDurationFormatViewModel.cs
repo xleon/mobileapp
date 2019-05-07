@@ -12,8 +12,6 @@ namespace Toggl.Core.UI.ViewModels
     [Preserve(AllMembers = true)]
     public class SelectDurationFormatViewModel : ViewModel<DurationFormat, DurationFormat>
     {
-        private readonly INavigationService navigationService;
-
         private DurationFormat defaultResult;
 
         public IImmutableList<SelectableDurationFormatViewModel> DurationFormats { get; }
@@ -25,11 +23,9 @@ namespace Toggl.Core.UI.ViewModels
         public SelectDurationFormatViewModel(
             INavigationService navigationService,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
-
-            this.navigationService = navigationService;
 
             Close = rxActionFactory.FromAsync(close);
             SelectDurationFormat = rxActionFactory.FromAsync<SelectableDurationFormatViewModel>(selectFormat);

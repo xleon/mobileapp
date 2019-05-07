@@ -285,7 +285,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 protected override void EnsureCorrectActionWasPerformed()
                 {
-                    NavigationService.Received().Navigate<SendFeedbackViewModel, bool>()
+                    NavigationService.Received().Navigate<SendFeedbackViewModel, bool>(ViewModel.View)
                         .Wait();
                 }
             }

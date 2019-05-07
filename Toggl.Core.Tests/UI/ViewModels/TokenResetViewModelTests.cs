@@ -177,7 +177,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Done.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.Received().Navigate<MainTabBarViewModel>();
+                await NavigationService.Received().Navigate<MainTabBarViewModel>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -221,7 +221,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Done.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.DidNotReceive().Navigate<MainViewModel>();
+                await NavigationService.DidNotReceive().Navigate<MainViewModel>(View);
             }
         }
 
@@ -256,7 +256,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
                 await NavigationService.Received()
-                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>());
+                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>(), ViewModel.View);
             }
 
             [Fact, LogIfTooSlow]

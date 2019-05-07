@@ -26,7 +26,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         protected readonly IUserPreferences UserPreferences;
-        protected new readonly INavigationService NavigationService;
         private readonly IInteractorFactory interactorFactory;
         private readonly IRxActionFactory rxActionFactory;
 
@@ -50,14 +49,13 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             IUserPreferences userPreferences,
             IInteractorFactory interactorFactory,
             INavigationService navigationService, IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             UserPreferences = userPreferences;
-            NavigationService = navigationService;
             this.interactorFactory = interactorFactory;
             this.rxActionFactory = rxActionFactory;
 

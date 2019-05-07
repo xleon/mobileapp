@@ -34,7 +34,7 @@ namespace Toggl.iOS
             switch (shortcutType)
             {
                 case ShortcutType.ContinueLastTimeEntry:
-                    navigationService.Navigate<MainViewModel>();
+                    navigationService.Navigate<MainViewModel>(null);
                     var interactorFactory = IosDependencyContainer.Instance.InteractorFactory;
                     if (interactorFactory == null) return;
                     IDisposable subscription = null;
@@ -49,16 +49,16 @@ namespace Toggl.iOS
                     break;
 
                 case ShortcutType.Reports:
-                    navigationService.Navigate<ReportsViewModel>();
+                    navigationService.Navigate<ReportsViewModel>(null);
                     break;
 
                 case ShortcutType.StartTimeEntry:
-                    navigationService.Navigate<MainViewModel>();
-                    navigationService.Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(StartTimeEntryParameters.ForTimerMode(DateTime.UtcNow));
+                    navigationService.Navigate<MainViewModel>(null);
+                    navigationService.Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(StartTimeEntryParameters.ForTimerMode(DateTime.UtcNow), null);
                     break;
 
                 case ShortcutType.Calendar:
-                    navigationService.Navigate<CalendarViewModel>();
+                    navigationService.Navigate<CalendarViewModel>(null);
                     break;
             }
         }

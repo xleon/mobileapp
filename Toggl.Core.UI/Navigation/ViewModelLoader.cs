@@ -145,7 +145,8 @@ namespace Toggl.Core.UI.Navigation
             if (viewModelType == typeof(OutdatedAppViewModel))
                 return new OutdatedAppViewModel(
                     dependencyContainer.BrowserService,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.NavigationService);
 
             if (viewModelType == typeof(RatingViewModel))
                 return new RatingViewModel(
@@ -163,7 +164,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.TimeService,
                     dependencyContainer.DataSource,
                     dependencyContainer.IntentDonationService,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.NavigationService);
 
             if (viewModelType == typeof(SelectBeginningOfWeekViewModel))
                 return new SelectBeginningOfWeekViewModel(
@@ -268,11 +270,13 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.OnboardingStorage,
                     dependencyContainer.SuggestionProviderContainer,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.NavigationService);
 
             if (viewModelType == typeof(SyncFailuresViewModel))
                 return new SyncFailuresViewModel(
-                    dependencyContainer.InteractorFactory);
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.NavigationService);
 
             if (viewModelType == typeof(TermsOfServiceViewModel))
                 return new TermsOfServiceViewModel(
@@ -346,7 +350,8 @@ namespace Toggl.Core.UI.Navigation
 
             if (viewModelType == typeof(LicensesViewModel))
                 return new LicensesViewModel(
-                    dependencyContainer.LicenseProvider);
+                    dependencyContainer.LicenseProvider,
+                    dependencyContainer.NavigationService);
 
             if (viewModelType == typeof(NotificationSettingsViewModel))
                 return new NotificationSettingsViewModel(

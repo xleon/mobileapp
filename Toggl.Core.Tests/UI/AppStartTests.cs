@@ -58,7 +58,7 @@ namespace Toggl.Core.Tests.UI
 
                 await App.Start();
 
-                await NavigationService.Received().Navigate<OutdatedAppViewModel>();
+                await NavigationService.Received().Navigate<OutdatedAppViewModel>(null);
                 UserAccessManager.DidNotReceive().CheckIfLoggedIn();
             }
 
@@ -69,7 +69,7 @@ namespace Toggl.Core.Tests.UI
 
                 await App.Start();
 
-                await NavigationService.Received().Navigate<OutdatedAppViewModel>();
+                await NavigationService.Received().Navigate<OutdatedAppViewModel>(null);
                 UserAccessManager.DidNotReceive().CheckIfLoggedIn();
             }
 
@@ -80,7 +80,7 @@ namespace Toggl.Core.Tests.UI
 
                 await App.Start();
 
-                await NavigationService.Received().Navigate<TokenResetViewModel>();
+                await NavigationService.Received().Navigate<TokenResetViewModel>(null);
             }
 
             [Fact, LogIfTooSlow]
@@ -91,7 +91,7 @@ namespace Toggl.Core.Tests.UI
 
                 await App.Start();
 
-                await NavigationService.Received().Navigate<OutdatedAppViewModel>();
+                await NavigationService.Received().Navigate<OutdatedAppViewModel>(null);
                 UserAccessManager.DidNotReceive().CheckIfLoggedIn();
             }
 
@@ -103,8 +103,8 @@ namespace Toggl.Core.Tests.UI
 
                 await App.Start();
 
-                await NavigationService.Received().Navigate<OutdatedAppViewModel>();
-                await NavigationService.DidNotReceive().Navigate<TokenResetViewModel>();
+                await NavigationService.Received().Navigate<OutdatedAppViewModel>(null);
+                await NavigationService.DidNotReceive().Navigate<TokenResetViewModel>(null);
                 UserAccessManager.DidNotReceive().CheckIfLoggedIn();
             }
 
@@ -123,7 +123,7 @@ namespace Toggl.Core.Tests.UI
 
                 await App.Start();
 
-                await NavigationService.Received().Navigate<MainTabBarViewModel>();
+                await NavigationService.Received().Navigate<MainTabBarViewModel>(null);
             }
 
             [Fact, LogIfTooSlow]
@@ -133,7 +133,7 @@ namespace Toggl.Core.Tests.UI
 
                 await App.Start();
 
-                await NavigationService.Received().Navigate<OnboardingViewModel>();
+                await NavigationService.Received().Navigate<OnboardingViewModel>(null);
             }
 
             [Fact, LogIfTooSlow]
@@ -141,7 +141,7 @@ namespace Toggl.Core.Tests.UI
             {
                 await App.Start();
 
-                await NavigationService.Received().Navigate<MainTabBarViewModel>();
+                await NavigationService.Received().Navigate<MainTabBarViewModel>(null);
             }
 
             [Fact, LogIfTooSlow]

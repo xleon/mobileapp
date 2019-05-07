@@ -152,6 +152,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 PasswordManagerService.IsAvailable.Returns(isAvailable);
 
                 var viewModel = CreateViewModel();
+                viewModel.AttachView(View);
 
                 viewModel.IsPasswordManagerAvailable.Should().Be(isAvailable);
             }
@@ -207,7 +208,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 {
                     ViewModel.Login();
 
-                    NavigationService.Received().Navigate<MainTabBarViewModel>();
+                    NavigationService.Received().Navigate<MainTabBarViewModel>(ViewModel.View);
                 }
 
                 [Fact, LogIfTooSlow]
@@ -223,6 +224,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 {
                     TimeService.CurrentDateTime.Returns(now);
                     var viewModel = CreateViewModel();
+                    viewModel.AttachView(View);
                     viewModel.SetEmail(ValidEmail);
                     viewModel.SetPassword(ValidPassword);
 
@@ -266,7 +268,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     ViewModel.Login();
 
-                    NavigationService.DidNotReceive().Navigate<MainViewModel>();
+                    NavigationService.DidNotReceive().Navigate<MainViewModel>(ViewModel.View);
                 }
 
                 [Fact, LogIfTooSlow]
@@ -390,7 +392,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.GoogleLogin();
 
-                NavigationService.Received().Navigate<MainTabBarViewModel>();
+                NavigationService.Received().Navigate<MainTabBarViewModel>(ViewModel.View);
             }
 
             [Fact, LogIfTooSlow]
@@ -433,7 +435,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.GoogleLogin();
 
-                NavigationService.DidNotReceive().Navigate<MainViewModel>();
+                NavigationService.DidNotReceive().Navigate<MainViewModel>(ViewModel.View);
             }
 
             [Fact, LogIfTooSlow]
@@ -706,7 +708,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         Arg.Is<CredentialsParameter>(parameter
                             => parameter.Email.Equals(email)
                             && parameter.Password.Equals(password)
-                        )
+                        ), ViewModel.View
                     ).Wait();
             }
         }
@@ -717,6 +719,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public void SetsTheEmail(NonEmptyString emailString)
             {
                 var viewModel = CreateViewModel();
+                viewModel.AttachView(View);
                 var email = Email.From(emailString.Get);
                 var password = Password.Empty;
                 var parameter = CredentialsParameter.With(email, password);
@@ -734,6 +737,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public void SetsThePassword(NonEmptyString passwordString)
             {
                 var viewModel = CreateViewModel();
+                viewModel.AttachView(View);
                 var email = Email.Empty;
                 var password = Password.From(passwordString.Get);
                 var parameter = CredentialsParameter.With(email, password);

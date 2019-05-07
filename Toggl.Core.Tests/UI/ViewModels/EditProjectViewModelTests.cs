@@ -126,7 +126,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                             .Select(p => p.Where<IThreadSafeProject>(callInfo.Arg<ProjectPredicate>())));
 
                 NavigationService
-                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>())
+                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>(), ViewModel.View)
                     .Returns(Task.FromResult(1L));
 
             }
@@ -494,7 +494,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         .Execute()
                         .Returns(Observable.Return(defaultWorkspace));
                     NavigationService
-                       .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>())
+                       .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>(), View)
                        .Returns(Task.FromResult(selectedWorkspaceId));
                 }
 
@@ -554,7 +554,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
 
                 NavigationService.Received()
-                    .Navigate<SelectColorViewModel, ColorParameters, Color>(Arg.Any<ColorParameters>());
+                    .Navigate<SelectColorViewModel, ColorParameters, Color>(Arg.Any<ColorParameters>(), ViewModel.View);
             }
 
             [Fact, LogIfTooSlow]
@@ -563,7 +563,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var colorObserver = TestScheduler.CreateObserver<Color>();
                 var expectedColor = new Color(23, 45, 125);
                 NavigationService
-                    .Navigate<SelectColorViewModel, ColorParameters, Color>(Arg.Any<ColorParameters>())
+                    .Navigate<SelectColorViewModel, ColorParameters, Color>(Arg.Any<ColorParameters>(), ViewModel.View)
                     .Returns(Task.FromResult(expectedColor));
                 ViewModel.Color.Subscribe(colorObserver);
 
@@ -608,14 +608,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
 
                 NavigationService.Received()
-                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>());
+                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>(), ViewModel.View);
             }
 
             [Fact, LogIfTooSlow]
             public void SetsTheReturnedWorkspaceNameAsTheWorkspaceNameProperty()
             {
                 NavigationService
-                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>())
+                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>(), ViewModel.View)
                     .Returns(Task.FromResult(workspaceId));
                 TestScheduler.Start();
                 var workspaceObserver = TestScheduler.CreateObserver<string>();
@@ -631,7 +631,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public void ResetsTheClientNameWhenTheWorkspaceChanges()
             {
                 NavigationService
-                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>())
+                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>(), ViewModel.View)
                     .Returns(Task.FromResult(workspaceId));
                 var clientObserver = TestScheduler.CreateObserver<string>();
                 ViewModel.ClientName.Subscribe(clientObserver);
@@ -647,10 +647,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var someColor = new Color(23, 45, 125);
                 NavigationService
-                    .Navigate<SelectColorViewModel, ColorParameters, Color>(Arg.Any<ColorParameters>())
+                    .Navigate<SelectColorViewModel, ColorParameters, Color>(Arg.Any<ColorParameters>(), ViewModel.View)
                     .Returns(Task.FromResult(someColor));
                 NavigationService
-                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>())
+                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>(), ViewModel.View)
                     .Returns(Task.FromResult(workspaceId));
                 InteractorFactory.AreCustomColorsEnabledForWorkspace(workspaceId).Execute()
                     .Returns(Observable.Return(false));
@@ -675,7 +675,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
 
                 NavigationService.Received()
-                    .Navigate<SelectClientViewModel, SelectClientParameters, long?>(Arg.Any<SelectClientParameters>());
+                    .Navigate<SelectClientViewModel, SelectClientParameters, long?>(Arg.Any<SelectClientParameters>(), ViewModel.View);
             }
 
             [Fact, LogIfTooSlow]
@@ -688,6 +688,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 Workspace.Id.Returns(DefaultWorkspaceId);
                 var viewModel = CreateViewModel();
                 viewModel.Initialize("Some name");
+                viewModel.AttachView(View);
                 TestScheduler.Start();
 
                 viewModel.PickClient.Execute();
@@ -695,7 +696,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 NavigationService.Received()
                     .Navigate<SelectClientViewModel, SelectClientParameters, long?>(
-                        Arg.Is<SelectClientParameters>(parameter => parameter.WorkspaceId == DefaultWorkspaceId)
+                        Arg.Is<SelectClientParameters>(parameter => parameter.WorkspaceId == DefaultWorkspaceId),
+                        viewModel.View
                     );
             }
 
@@ -709,7 +711,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 client.Id.Returns(expectedId.Value);
                 client.Name.Returns(expectedName);
                 NavigationService
-                    .Navigate<SelectClientViewModel, SelectClientParameters, long?>(Arg.Any<SelectClientParameters>())
+                    .Navigate<SelectClientViewModel, SelectClientParameters, long?>(Arg.Any<SelectClientParameters>(), ViewModel.View)
                     .Returns(Task.FromResult(expectedId));
                 InteractorFactory
                     .GetDefaultWorkspace()
@@ -738,7 +740,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 client.Id.Returns(expectedId.Value);
                 client.Name.Returns(expectedName);
                 NavigationService
-                    .Navigate<SelectClientViewModel, SelectClientParameters, long?>(Arg.Any<SelectClientParameters>())
+                    .Navigate<SelectClientViewModel, SelectClientParameters, long?>(Arg.Any<SelectClientParameters>(), ViewModel.View)
                     .Returns(Task.FromResult(expectedId), Task.FromResult<long?>(0));
                 InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(Workspace));
                 InteractorFactory.GetClientById(expectedId.Value).Execute().Returns(Observable.Return(client));

@@ -22,7 +22,6 @@ namespace Toggl.Core.UI.ViewModels
     {
         private readonly ITogglDataSource dataSource;
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
         private readonly IRxActionFactory rxActionFactory;
 
@@ -36,16 +35,15 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService,
             IAccessRestrictionStorage accessRestrictionStorage,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
-            this.navigationService = navigationService;
             this.accessRestrictionStorage = accessRestrictionStorage;
             this.rxActionFactory = rxActionFactory;
 

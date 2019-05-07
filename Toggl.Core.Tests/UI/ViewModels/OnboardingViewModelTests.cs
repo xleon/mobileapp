@@ -127,7 +127,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SkipOnboarding.Execute();
 
                 await NavigationService.Received()
-                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>());
+                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>(), ViewModel.View);
             }
 
             [Theory, LogIfTooSlow]
@@ -177,7 +177,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
 
                 await NavigationService.Received()
-                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>());
+                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>(), ViewModel.View);
             }
 
             [Fact, LogIfTooSlow]
@@ -255,7 +255,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await ViewModel.Initialize();
 
                 await NavigationService.Received()
-                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>());
+                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>(), ViewModel.View);
             }
         }
     }

@@ -86,7 +86,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OpenUpcomingEvents.Execute();
                 TestScheduler.Start();
 
-                NavigationService.Received().Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
+                NavigationService.Received().Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>(View);
             }
         }
     }

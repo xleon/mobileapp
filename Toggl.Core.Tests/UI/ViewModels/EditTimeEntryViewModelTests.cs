@@ -860,7 +860,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 });
                 var selectProjectParameter = SelectProjectParameter.WithIds(newProjectId, newTaskId, newWorkspaceId);
                 NavigationService
-                    .Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(Arg.Any<SelectProjectParameter>())
+                    .Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(Arg.Any<SelectProjectParameter>(), ViewModel.View)
                     .Returns(selectProjectParameter);
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
@@ -885,7 +885,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 });
                 var selectProjectParameter = SelectProjectParameter.WithIds(newProjectId, newTaskId, newWorkspaceId);
                 NavigationService
-                    .Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(Arg.Any<SelectProjectParameter>())
+                    .Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(Arg.Any<SelectProjectParameter>(), ViewModel.View)
                     .Returns(selectProjectParameter);
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
@@ -910,7 +910,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 });
                 var selectProjectParameter = SelectProjectParameter.WithIds(newProjectId, newTaskId, newWorkspaceId);
                 NavigationService
-                    .Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(Arg.Any<SelectProjectParameter>())
+                    .Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(Arg.Any<SelectProjectParameter>(), ViewModel.View)
                     .Returns(selectProjectParameter);
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
@@ -932,7 +932,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 });
                 var newDurationParameter = DurationParameter.WithStartAndDuration(newStartTime, null);
                 NavigationService
-                    .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>())
+                    .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>(), ViewModel.View)
                     .Returns(newDurationParameter);
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
@@ -956,7 +956,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 });
                 var newDurationParameter = DurationParameter.WithStartAndDuration(newStartTime, newDuration);
                 NavigationService
-                    .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>())
+                    .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>(), ViewModel.View)
                     .Returns(newDurationParameter);
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
@@ -1016,7 +1016,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     return te;
                 });
                 NavigationService
-                    .Navigate<SelectTagsViewModel, (long[], long), long[]>(Arg.Any<(long[], long)>())
+                    .Navigate<SelectTagsViewModel, (long[], long), long[]>(Arg.Any<(long[], long)>(), ViewModel.View)
                     .Returns(newTags);
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
@@ -1170,7 +1170,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 var parameter = SelectProjectParameter.WithIds(projectId, taskId, WorkspaceIdWithBillableAvailable);
                 NavigationService
-                    .Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(Arg.Any<SelectProjectParameter>())
+                    .Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(Arg.Any<SelectProjectParameter>(), ViewModel.View)
                     .Returns(parameter);
 
                 var selectedProjectObservable = projectId.HasValue ? Observable.Return(selectedProject) : null;
@@ -1295,7 +1295,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Returns(tagsObservable);
 
                 NavigationService
-                    .Navigate<SelectTagsViewModel, (long[], long), long[]>(Arg.Any<(long[], long)>())
+                    .Navigate<SelectTagsViewModel, (long[], long), long[]>(Arg.Any<(long[], long)>(), ViewModel.View)
                     .Returns(tagsIds);
             }
 
@@ -1318,7 +1318,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 NavigationService
                     .Received()
                     .Navigate<SelectTagsViewModel, (long[] tagIds, long workspaceId), long[]>(
-                        Arg.Is<(long[] tagIds, long workspaceId)>(tuple => tuple.tagIds.SetEquals(tagIds, null)))
+                        Arg.Is<(long[] tagIds, long workspaceId)>(tuple => tuple.tagIds.SetEquals(tagIds, null)),
+                        ViewModel.View)
                     .Wait();
             }
 
@@ -1340,7 +1341,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await NavigationService
                     .Received()
                     .Navigate<SelectTagsViewModel, (long[] tagIds, long workspaceId), long[]>(
-                        Arg.Is<(long[] tagIds, long workspaceId)>(tuple => tuple.workspaceId == workspaceId));
+                        Arg.Is<(long[] tagIds, long workspaceId)>(tuple => tuple.workspaceId == workspaceId), 
+                        ViewModel.View);
             }
 
             [Fact, LogIfTooSlow]
@@ -1446,7 +1448,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var durationParameter = DurationParameter.WithStartAndDuration(start, duration);
                 NavigationService
-                    .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>())
+                    .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>(), ViewModel.View)
                     .Returns(durationParameter);
             }
 
@@ -1485,7 +1487,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await NavigationService
                     .Received()
-                    .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>());
+                    .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>(), ViewModel.View);
             }
 
             [Fact, LogIfTooSlow]
@@ -1504,7 +1506,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await NavigationService
                     .Received()
                     .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(
-                        Arg.Is<EditDurationParameters>(parameter => parameter.IsDurationInitiallyFocused));
+                        Arg.Is<EditDurationParameters>(parameter => parameter.IsDurationInitiallyFocused), ViewModel.View);
             }
 
             [Fact, LogIfTooSlow]
@@ -1529,7 +1531,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(
                         Arg.Is<EditDurationParameters>(parameter =>
                             parameter.DurationParam.Start == startTime
-                            && parameter.DurationParam.Duration == duration));
+                            && parameter.DurationParam.Duration == duration), ViewModel.View);
             }
 
             [Fact, LogIfTooSlow]
@@ -1588,7 +1590,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await NavigationService.Received()
                     .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(
-                        Arg.Any<DateTimePickerParameters>());
+                        Arg.Any<DateTimePickerParameters>(),
+                        ViewModel.View);
             }
 
             [Fact]
@@ -1603,7 +1606,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await NavigationService.Received()
                     .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(
-                        Arg.Is<DateTimePickerParameters>(param => param.MinDate == Now - MaxTimeEntryDuration && param.MaxDate == Now));
+                        Arg.Is<DateTimePickerParameters>(param => param.MinDate == Now - MaxTimeEntryDuration && param.MaxDate == Now),
+                        ViewModel.View);
             }
 
             [Fact]
@@ -1618,7 +1622,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await NavigationService.Received()
                     .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(
-                        Arg.Is<DateTimePickerParameters>(param => param.MinDate == EarliestAllowedStartTime && param.MaxDate == LatestAllowedStartTime));
+                        Arg.Is<DateTimePickerParameters>(param => param.MinDate == EarliestAllowedStartTime && param.MaxDate == LatestAllowedStartTime),
+                        ViewModel.View);
             }
 
             [Theory]
@@ -1629,7 +1634,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var startTime = Now.AddMonths(-1);
                 entry.Duration = isRunning ? (long?)null : 2 * 60;
                 NavigationService
-                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>())
+                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>(), ViewModel.View)
                     .Returns(startTime);
 
                 ViewModel.Initialize(SingleTimeEntryId);
@@ -1645,7 +1650,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 entry.Duration = 2 * 60;
                 NavigationService
-                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>())
+                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>(), ViewModel.View)
                     .Returns(entry.Start - TimeSpan.FromDays(1));
 
                 ViewModel.Initialize(SingleTimeEntryId);
@@ -1664,7 +1669,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var newStartTime = entry.Start.AddHours(1);
                 NavigationService
                     .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(
-                        Arg.Any<DateTimePickerParameters>())
+                        Arg.Any<DateTimePickerParameters>(), ViewModel.View)
                     .Returns(newStartTime);
 
                 ViewModel.Initialize(SingleTimeEntryId);
@@ -1836,7 +1841,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task PreservesStartAndEndTimesWhenEditingAGroupOfTimeEntries()
             {
                 NavigationService
-                    .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>())
+                    .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>(), ViewModel.View)
                     .Returns(new DurationParameter { Start = new DateTimeOffset(), Duration = TimeSpan.FromDays(365) });
                 var interactor = SetupUpdateInteractor(entries);
 

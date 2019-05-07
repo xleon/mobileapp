@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
@@ -80,7 +81,9 @@ namespace Toggl.Core.UI.ViewModels
             ITimeService timeService,
             ITogglDataSource dataSource,
             IIntentDonationService intentDonationService,
-            IRxActionFactory rxActionFactory)
+            IRxActionFactory rxActionFactory,
+            INavigationService navigationService)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));

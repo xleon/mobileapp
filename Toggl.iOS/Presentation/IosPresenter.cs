@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views;
 using UIKit;
 
 namespace Toggl.iOS.Presentation
@@ -14,7 +15,7 @@ namespace Toggl.iOS.Presentation
         protected AppDelegate AppDelegate { get; }
         
         protected abstract HashSet<Type> AcceptedViewModels { get; }
-        protected abstract void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel);
+        protected abstract void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView);
         
         public IosPresenter(UIWindow window, AppDelegate appDelegate)
         {
@@ -25,12 +26,12 @@ namespace Toggl.iOS.Presentation
         public virtual bool CanPresent<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel)
             => AcceptedViewModels.Contains(viewModel.GetType());
 
-        public Task Present<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel)
+        public Task Present<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView)
         {
             var tcs = new TaskCompletionSource<object>();
             UIApplication.SharedApplication.InvokeOnMainThread(() =>
             {
-                PresentOnMainThread(viewModel);
+                PresentOnMainThread(viewModel, sourceView);
                 tcs.SetResult(true);
             });
 

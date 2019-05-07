@@ -43,7 +43,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IUserAccessManager userAccessManager;
         private readonly IAnalyticsService analyticsService;
         private readonly IOnboardingStorage onboardingStorage;
-        private readonly INavigationService navigationService;
         private readonly IErrorHandlingService errorHandlingService;
         private readonly ILastTimeUsageStorage lastTimeUsageStorage;
         private readonly ITimeService timeService;
@@ -100,12 +99,12 @@ namespace Toggl.Core.UI.ViewModels
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory,
             IPlatformInfo platformInfo)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(apiFactory, nameof(apiFactory));
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(errorHandlingService, nameof(errorHandlingService));
             Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
@@ -117,7 +116,6 @@ namespace Toggl.Core.UI.ViewModels
             this.userAccessManager = userAccessManager;
             this.analyticsService = analyticsService;
             this.onboardingStorage = onboardingStorage;
-            this.navigationService = navigationService;
             this.errorHandlingService = errorHandlingService;
             this.lastTimeUsageStorage = lastTimeUsageStorage;
             this.timeService = timeService;
@@ -297,7 +295,7 @@ namespace Toggl.Core.UI.ViewModels
 
             await UIDependencyContainer.Instance.SyncManager.ForceFullSync();
 
-            await navigationService.Navigate<MainTabBarViewModel>();
+            await Navigate<MainTabBarViewModel>();
         }
 
         private void onError(Exception exception)
@@ -363,8 +361,7 @@ namespace Toggl.Core.UI.ViewModels
             getCountrySubscription?.Dispose();
             getCountrySubscription = null;
 
-            var selectedCountryId = await navigationService
-                .Navigate<SelectCountryViewModel, long?, long?>(countryId);
+            var selectedCountryId = await Navigate<SelectCountryViewModel, long?, long?>(countryId);
 
             if (selectedCountryId == null)
             {
@@ -386,7 +383,7 @@ namespace Toggl.Core.UI.ViewModels
                 return Task.CompletedTask;
 
             var parameter = CredentialsParameter.With(emailSubject.Value, passwordSubject.Value);
-            return navigationService.Navigate<LoginViewModel, CredentialsParameter>(parameter);
+            return Navigate<LoginViewModel, CredentialsParameter>(parameter);
         }
 
         private async Task<bool> requestAcceptanceOfTermsAndConditionsIfNeeded()
@@ -394,7 +391,7 @@ namespace Toggl.Core.UI.ViewModels
             if (termsOfServiceAccepted)
                 return true;
 
-            termsOfServiceAccepted = await navigationService.Navigate<TermsOfServiceViewModel, bool>();
+            termsOfServiceAccepted = await Navigate<TermsOfServiceViewModel, bool>();
             return termsOfServiceAccepted;
         }
     }

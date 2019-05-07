@@ -16,7 +16,6 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class SendFeedbackViewModel : ViewModelWithOutput<bool>
     {
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
 
         // Internal States
         private readonly ISubject<bool> isLoadingSubject = new BehaviorSubject<bool>(false);
@@ -47,14 +46,13 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.interactorFactory = interactorFactory;
-            this.navigationService = navigationService;
 
             IsFeedbackEmpty = isEmptyObservable.DistinctUntilChanged().AsDriver(schedulerProvider);
             SendEnabled = sendingIsEnabledObservable.DistinctUntilChanged().AsDriver(schedulerProvider);

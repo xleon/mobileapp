@@ -12,7 +12,6 @@ namespace Toggl.Core.UI.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class SelectDateFormatViewModel : ViewModel<DateFormat, DateFormat>
     {
-        private readonly INavigationService navigationService;
         private readonly DateFormat[] availableDateFormats =
         {
             DateFormat.FromLocalizedDateFormat("MM/DD/YYYY"),
@@ -32,11 +31,9 @@ namespace Toggl.Core.UI.ViewModels
         public InputAction<SelectableDateFormatViewModel> SelectDateFormat { get; }
 
         public SelectDateFormatViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
-
-            this.navigationService = navigationService;
 
             Close = rxActionFactory.FromAsync(close);
             SelectDateFormat = rxActionFactory.FromAsync<SelectableDateFormatViewModel>(selectFormat);

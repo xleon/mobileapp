@@ -40,7 +40,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
-        private readonly INavigationService navigationService;
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
         private readonly IIntentDonationService intentDonationService;
@@ -114,8 +113,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
@@ -126,20 +125,19 @@ namespace Toggl.Core.UI.ViewModels.Reports
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.timeService = timeService;
-            this.navigationService = navigationService;
             this.analyticsService = analyticsService;
             this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
             this.intentDonationService = intentDonationService;
             this.stopwatchProvider = stopwatchProvider;
 
-            calendarViewModel = new ReportsCalendarViewModel(timeService, dataSource, intentDonationService, rxActionFactory);
+            calendarViewModel = new ReportsCalendarViewModel(timeService, dataSource, intentDonationService, rxActionFactory, navigationService);
 
             var totalsObservable = reportSubject
                 .SelectMany(_ => interactorFactory.GetReportsTotals(userId, workspaceId, startDate, endDate).Execute())
                 .Catch<ITimeEntriesTotals, OfflineException>(_ => Observable.Return<ITimeEntriesTotals>(null))
                 .Where(report => report != null);
-            BarChartViewModel = new ReportsBarChartViewModel(schedulerProvider, dataSource.Preferences, totalsObservable);
+            BarChartViewModel = new ReportsBarChartViewModel(schedulerProvider, dataSource.Preferences, totalsObservable, navigationService);
 
             IsLoadingObservable = isLoading.AsObservable().StartWith(true).AsDriver(schedulerProvider);
             StartDate = startDateSubject.AsObservable().AsDriver(schedulerProvider);

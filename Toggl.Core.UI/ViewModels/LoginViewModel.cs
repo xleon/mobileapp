@@ -32,7 +32,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IUserAccessManager userAccessManager;
         private readonly IAnalyticsService analyticsService;
         private readonly IOnboardingStorage onboardingStorage;
-        private readonly INavigationService navigationService;
         private readonly IPasswordManagerService passwordManagerService;
         private readonly IErrorHandlingService errorHandlingService;
         private readonly ILastTimeUsageStorage lastTimeUsageStorage;
@@ -76,11 +75,11 @@ namespace Toggl.Core.UI.ViewModels
             ITimeService timeService,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(passwordManagerService, nameof(passwordManagerService));
             Ensure.Argument.IsNotNull(errorHandlingService, nameof(errorHandlingService));
             Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
@@ -92,7 +91,6 @@ namespace Toggl.Core.UI.ViewModels
             this.userAccessManager = userAccessManager;
             this.analyticsService = analyticsService;
             this.onboardingStorage = onboardingStorage;
-            this.navigationService = navigationService;
             this.errorHandlingService = errorHandlingService;
             this.lastTimeUsageStorage = lastTimeUsageStorage;
             this.passwordManagerService = passwordManagerService;
@@ -213,17 +211,15 @@ namespace Toggl.Core.UI.ViewModels
                 return Task.CompletedTask;
 
             var parameter = CredentialsParameter.With(emailSubject.Value, passwordSubject.Value);
-            return navigationService.Navigate<SignupViewModel, CredentialsParameter>(parameter);
+            return Navigate<SignupViewModel, CredentialsParameter>(parameter);
         }
-
 
         private async Task forgotPassword()
         {
             if (isLoadingSubject.Value) return;
 
             var emailParameter = EmailParameter.With(emailSubject.Value);
-            emailParameter = await navigationService
-                .Navigate<ForgotPasswordViewModel, EmailParameter, EmailParameter>(emailParameter);
+            emailParameter = await Navigate<ForgotPasswordViewModel, EmailParameter, EmailParameter>(emailParameter);
             if (emailParameter != null)
                 emailSubject.OnNext(emailParameter.Email);
         }
@@ -256,7 +252,7 @@ namespace Toggl.Core.UI.ViewModels
 
             await UIDependencyContainer.Instance.SyncManager.ForceFullSync();
 
-            await navigationService.Navigate<MainTabBarViewModel>();
+            await Navigate<MainTabBarViewModel>();
         }
 
         private void onError(Exception exception)

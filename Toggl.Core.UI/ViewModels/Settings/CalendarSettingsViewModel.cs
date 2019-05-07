@@ -106,7 +106,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
                 {
                     authorized = await View.RequestCalendarAuthorization();
                     if (!authorized)
-                        await NavigationService.Navigate<CalendarPermissionDeniedViewModel, Unit>();
+                        await Navigate<CalendarPermissionDeniedViewModel, Unit>();
 
                     calendarListVisible = await permissionsChecker.CalendarPermissionGranted;
                     ReloadCalendars();

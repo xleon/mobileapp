@@ -21,10 +21,10 @@ namespace Toggl.Core.UI.ViewModels
         public InputAction<bool> Close { get; }
 
         public TermsOfServiceViewModel(IBrowserService browserService, IRxActionFactory rxActionFactory, INavigationService navigationService)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(browserService, nameof(browserService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.browserService = browserService;
             this.rxActionFactory = rxActionFactory;

@@ -4,6 +4,7 @@ using Android.App;
 using Android.Content;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Settings;
+using Toggl.Core.UI.Views;
 using Toggl.Droid.Activities;
 
 namespace Toggl.Droid.Presentation
@@ -58,7 +59,7 @@ namespace Toggl.Droid.Presentation
             [typeof(TokenResetViewModel)] = new ActivityPresenterInfo(typeof(TokenResetActivity), clearBackStackFlags)
         };
         
-        protected override void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel)
+        protected override void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView)
         {
             var viewModelType = viewModel.GetType();
             

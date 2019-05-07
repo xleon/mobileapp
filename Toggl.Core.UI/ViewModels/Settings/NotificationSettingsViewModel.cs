@@ -16,7 +16,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
     [Preserve(AllMembers = true)]
     public sealed class NotificationSettingsViewModel : ViewModel
     {
-        private readonly INavigationService navigationService;
         private readonly IPermissionsChecker permissionsChecker;
         private readonly IUserPreferences userPreferences;
         private readonly ISchedulerProvider schedulerProvider;
@@ -35,15 +34,14 @@ namespace Toggl.Core.UI.ViewModels.Settings
             IUserPreferences userPreferences,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            this.navigationService = navigationService;
             this.permissionsChecker = permissionsChecker;
             this.userPreferences = userPreferences;
             this.schedulerProvider = schedulerProvider;
@@ -72,7 +70,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
         private async Task openUpcomingEvents()
         {
-            await navigationService.Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
+            await Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
         }
     }
 }

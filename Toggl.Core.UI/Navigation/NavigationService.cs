@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views;
 using Toggl.Shared;
 
 namespace Toggl.Core.UI.Navigation
@@ -19,17 +20,17 @@ namespace Toggl.Core.UI.Navigation
             Ensure.Argument.IsNotNull(presenter, nameof(presenter));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(viewModelLocator, nameof(viewModelLocator));
-            
+
             this.presenter = presenter;
             this.analyticsService = analyticsService;
             this.viewModelLocator = viewModelLocator;
         }
 
-        public async Task<TOutput> Navigate<TViewModel, TInput, TOutput>(TInput payload)
+        public async Task<TOutput> Navigate<TViewModel, TInput, TOutput>(TInput payload, IView sourceView = null)
             where TViewModel : ViewModel<TInput, TOutput>
         {
             var viewModel = await viewModelLocator.Load<TInput, TOutput>(typeof(TViewModel), payload);
-            await presenter.Present(viewModel);
+            await presenter.Present(viewModel, sourceView);
 
             analyticsService.CurrentPage.Track(typeof(TViewModel));
 

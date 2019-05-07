@@ -301,7 +301,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.SelectProject.Execute(createEntitySuggestion);
                     TestScheduler.Start();
 
-                    await NavigationService.Received().Navigate<EditProjectViewModel, string, long?>(projectName);
+                    await NavigationService.Received().Navigate<EditProjectViewModel, string, long?>(projectName, View);
                 }
 
                 [Fact, LogIfTooSlow]
@@ -340,7 +340,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 private void setupProjectCreationResult(long? returnedId)
                 {
                     NavigationService
-                        .Navigate<EditProjectViewModel, string, long?>(Arg.Any<string>())
+                        .Navigate<EditProjectViewModel, string, long?>(Arg.Any<string>(), ViewModel.View)
                         .Returns(Task.FromResult(returnedId));
 
                     if (returnedId == null) return;

@@ -291,7 +291,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.TryLogout.Execute();
 
                 await NavigationService.Received()
-                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>());
+                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>(), View);
             }
 
             [Fact, LogIfTooSlow]
@@ -355,7 +355,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 InteractorFactory.DidNotReceive().Logout(Arg.Any<LogoutSource>());
                 await NavigationService.DidNotReceive()
-                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>());
+                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>(), View);
             }
 
             [Fact, LogIfTooSlow]
@@ -373,7 +373,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await InteractorFactory.Received().Logout(LogoutSource.Settings).Execute();
                 await NavigationService.Received()
-                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>());
+                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>(), View);
             }
 
             private void doNotShowConfirmationDialog()
@@ -419,14 +419,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
 
                 await NavigationService.Received()
-                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>());
+                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>(), View);
             }
 
             [Fact, LogIfTooSlow]
             public async Task UpdatesTheUserWithTheReceivedWorspace()
             {
                 NavigationService
-                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>())
+                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>(), View)
                     .Returns(Task.FromResult(workspaceId));
 
                 ViewModel.PickDefaultWorkspace.Execute();
@@ -442,7 +442,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task StartsTheSyncAlgorithm()
             {
                 NavigationService
-                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>())
+                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>(), View)
                     .Returns(Task.FromResult(workspaceId));
 
                 ViewModel.PickDefaultWorkspace.Execute();
@@ -493,7 +493,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
 
                 NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
-                    Arg.Is<BrowserParameters>(parameter => parameter.Url == helpUrl));
+                    Arg.Is<BrowserParameters>(parameter => parameter.Url == helpUrl), ViewModel.View);
             }
 
             [Fact, LogIfTooSlow]
@@ -502,7 +502,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OpenHelpView.Execute();
 
                 NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
-                    Arg.Is<BrowserParameters>(parameter => parameter.Title == Resources.Help));
+                    Arg.Is<BrowserParameters>(parameter => parameter.Title == Resources.Help), ViewModel.View);
             }
         }
 
@@ -601,7 +601,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await NavigationService
                     .Received()
-                    .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(dateFormat);
+                    .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(dateFormat, View);
             }
 
             [Fact, LogIfTooSlow]
@@ -612,7 +612,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var preferences = new MockPreferences { DateFormat = oldDateFormat };
                 PreferencesSubject.OnNext(preferences);
                 NavigationService
-                    .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(Arg.Any<DateFormat>())
+                    .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(Arg.Any<DateFormat>(), View)
                     .Returns(Task.FromResult(newDateFormat));
 
                 ViewModel.SelectDateFormat.Execute();
@@ -633,7 +633,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var newPreferences = new MockPreferences { DateFormat = newDateFormat };
                 PreferencesSubject.OnNext(oldPreferences);
                 NavigationService
-                    .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(Arg.Any<DateFormat>())
+                    .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(Arg.Any<DateFormat>(), View)
                     .Returns(Task.FromResult(newDateFormat));
                 InteractorFactory.UpdatePreferences(Arg.Any<EditPreferencesDTO>())
                     .Execute()
@@ -656,7 +656,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var preferences = new MockPreferences { DateFormat = oldDateFormat };
                 PreferencesSubject.OnNext(preferences);
                 NavigationService
-                    .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(Arg.Any<DateFormat>())
+                    .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(Arg.Any<DateFormat>(), View)
                     .Returns(Task.FromResult(newDateFormat));
 
                 ViewModel.SelectDateFormat.Execute();
@@ -715,7 +715,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await NavigationService
                     .Received()
-                    .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(durationFormat);
+                    .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(durationFormat, View);
             }
 
             [Fact, LogIfTooSlow]
@@ -726,7 +726,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var preferences = new MockPreferences { DurationFormat = oldDurationFormat };
                 PreferencesSubject.OnNext(preferences);
                 NavigationService
-                    .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(Arg.Any<DurationFormat>())
+                    .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(Arg.Any<DurationFormat>(), View)
                     .Returns(Task.FromResult(newDurationFormat));
 
                 ViewModel.SelectDurationFormat.Execute();
@@ -746,7 +746,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var preferences = new MockPreferences { DurationFormat = oldDurationFormat };
                 PreferencesSubject.OnNext(preferences);
                 NavigationService
-                    .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(Arg.Any<DurationFormat>())
+                    .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(Arg.Any<DurationFormat>(), View)
                     .Returns(Task.FromResult(newDurationFormat));
 
                 ViewModel.SelectDurationFormat.Execute();
@@ -764,7 +764,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var newPreferences = new MockPreferences { DurationFormat = newDurationFormat };
                 PreferencesSubject.OnNext(oldPreferences);
                 NavigationService
-                    .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(Arg.Any<DurationFormat>())
+                    .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(Arg.Any<DurationFormat>(), View)
                     .Returns(Task.FromResult(newDurationFormat));
                 InteractorFactory
                     .UpdatePreferences(Arg.Any<EditPreferencesDTO>())
@@ -795,7 +795,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await NavigationService
                     .Received()
-                    .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(beginningOfWeek);
+                    .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(beginningOfWeek, View);
             }
 
             [Fact, LogIfTooSlow]
@@ -808,7 +808,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 user.BeginningOfWeek.Returns(oldBeginningOfWeek);
                 UserSubject.OnNext(user);
                 NavigationService
-                    .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(Arg.Any<BeginningOfWeek>())
+                    .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(Arg.Any<BeginningOfWeek>(), View)
                     .Returns(Task.FromResult(newBeginningOfWeek));
 
                 ViewModel.SelectBeginningOfWeek.Execute();
@@ -828,7 +828,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var user = new MockUser { BeginningOfWeek = oldBeginningOfWeek };
                 UserSubject.OnNext(user);
                 NavigationService
-                    .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(Arg.Any<BeginningOfWeek>())
+                    .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(Arg.Any<BeginningOfWeek>(), View)
                     .Returns(Task.FromResult(newBeginningOfWeek));
 
                 ViewModel.SelectBeginningOfWeek.Execute();
@@ -846,7 +846,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var newUser = new MockUser { BeginningOfWeek = newBeginningOfWeek };
                 UserSubject.OnNext(oldUser);
                 NavigationService
-                    .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(Arg.Any<BeginningOfWeek>())
+                    .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(Arg.Any<BeginningOfWeek>(), View)
                     .Returns(Task.FromResult(newBeginningOfWeek));
                 InteractorFactory
                     .UpdateUser(Arg.Any<EditUserDTO>())
@@ -869,7 +869,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.OpenAboutView.Execute();
 
-                NavigationService.Received().Navigate<AboutViewModel>();
+                NavigationService.Received().Navigate<AboutViewModel>(ViewModel.View);
             }
         }
 
@@ -897,7 +897,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OpenCalendarSettings.Execute(Unit.Default);
 
                 await NavigationService.Received()
-                    .Navigate<CalendarSettingsViewModel, bool, string[]>(Arg.Any<bool>());
+                    .Navigate<CalendarSettingsViewModel, bool, string[]>(Arg.Any<bool>(), View);
             }
         }
 

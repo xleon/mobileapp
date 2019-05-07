@@ -47,7 +47,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IPlatformInfo platformInfo;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
         private readonly IPrivateSharedStorageService privateSharedStorageService;
         private readonly IIntentDonationService intentDonationService;
         private readonly IStopwatchProvider stopwatchProvider;
@@ -118,6 +117,7 @@ namespace Toggl.Core.UI.ViewModels
             IRxActionFactory rxActionFactory,
             IPermissionsChecker permissionsChecker,
             ISchedulerProvider schedulerProvider)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
@@ -126,7 +126,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
@@ -142,7 +141,6 @@ namespace Toggl.Core.UI.ViewModels
             this.rxActionFactory = rxActionFactory;
             this.analyticsService = analyticsService;
             this.interactorFactory = interactorFactory;
-            this.navigationService = navigationService;
             this.userAccessManager = userAccessManager;
             this.onboardingStorage = onboardingStorage;
             this.stopwatchProvider = stopwatchProvider;
@@ -343,13 +341,13 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task openCalendarSettings()
-            => navigationService.Navigate<CalendarSettingsViewModel, bool, string[]>(false);
+            => Navigate<CalendarSettingsViewModel, bool, string[]>(false);
 
         private Task openCalendarSmartReminders()
-            => navigationService.Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
+            => Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
 
         private Task openNotificationSettings()
-            => navigationService.Navigate<NotificationSettingsViewModel>();
+            => Navigate<NotificationSettingsViewModel>();
 
         private IObservable<Unit> logout()
         {
@@ -358,7 +356,7 @@ namespace Toggl.Core.UI.ViewModels
 
             return interactorFactory.Logout(LogoutSource.Settings)
                 .Execute()
-                .Do(_ => navigationService.Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty));
+                .Do(_ => Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty));
         }
 
         private IObservable<bool> isSynced()
@@ -408,7 +406,7 @@ namespace Toggl.Core.UI.ViewModels
                     .ToList();
 
         private Task openHelpView() =>
-            navigationService.Navigate<BrowserViewModel, BrowserParameters>(
+            Navigate<BrowserViewModel, BrowserParameters>(
                 BrowserParameters.WithUrlAndTitle(platformInfo.HelpUrl, Resources.Help)
             );
 
@@ -432,18 +430,17 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task openAboutView()
-            => navigationService.Navigate<AboutViewModel>();
+            => Navigate<AboutViewModel>();
 
         private async Task submitFeedback()
         {
-            var sendFeedbackSucceed = await navigationService.Navigate<SendFeedbackViewModel, bool>();
+            var sendFeedbackSucceed = await Navigate<SendFeedbackViewModel, bool>();
             isFeedbackSuccessViewShowing.OnNext(sendFeedbackSucceed);
         }
 
         private async Task selectDateFormat()
         {
-            var newDateFormat = await navigationService
-                .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(currentPreferences.DateFormat);
+            var newDateFormat = await Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(currentPreferences.DateFormat);
 
             if (currentPreferences.DateFormat == newDateFormat)
                 return;
@@ -458,8 +455,7 @@ namespace Toggl.Core.UI.ViewModels
                 .Execute();
 
             var selectedWorkspaceId =
-                await navigationService
-                    .Navigate<SelectWorkspaceViewModel, long, long>(defaultWorkspace.Id);
+                await Navigate<SelectWorkspaceViewModel, long, long>(defaultWorkspace.Id);
 
             await changeDefaultWorkspace(selectedWorkspaceId);
         }
@@ -473,8 +469,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task selectDurationFormat()
         {
-            var newDurationFormat = await navigationService
-                .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(currentPreferences.DurationFormat);
+            var newDurationFormat = await Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(currentPreferences.DurationFormat);
 
             if (currentPreferences.DurationFormat == newDurationFormat)
                 return;
@@ -484,8 +479,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task selectBeginningOfWeek()
         {
-            var newBeginningOfWeek = await navigationService
-                .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(currentUser
+            var newBeginningOfWeek = await Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(currentUser
                     .BeginningOfWeek);
 
             if (currentUser.BeginningOfWeek == newBeginningOfWeek)

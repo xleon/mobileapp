@@ -13,7 +13,6 @@ namespace Toggl.Core.UI.ViewModels
     public class SelectDateTimeViewModel : ViewModel<DateTimePickerParameters, DateTimeOffset>
     {
         private DateTimeOffset defaultResult;
-        private readonly INavigationService navigationService;
 
         public DateTimeOffset MinDate { get; private set; }
         public DateTimeOffset MaxDate { get; private set; }
@@ -25,11 +24,9 @@ namespace Toggl.Core.UI.ViewModels
         public UIAction SaveCommand { get; }
 
         public SelectDateTimeViewModel(IRxActionFactory rxActionFactory, INavigationService navigationService)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
-
-            this.navigationService = navigationService;
 
             SaveCommand = rxActionFactory.FromAsync(save);
             CloseCommand = rxActionFactory.FromAsync(close);
@@ -62,7 +59,7 @@ namespace Toggl.Core.UI.ViewModels
                 case DateTimePickerMode.DateTime:
                     result = dateTime;
                     break;
-                
+
                 default:
                     throw new NotSupportedException("Invalid DateTimePicker mode");
             }

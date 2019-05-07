@@ -26,7 +26,6 @@ namespace Toggl.Core.UI.ViewModels
     {
         private readonly ITogglDataSource dataSource;
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IStopwatchProvider stopwatchProvider;
 
@@ -62,17 +61,16 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
             this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
-            this.navigationService = navigationService;
             this.schedulerProvider = schedulerProvider;
             this.stopwatchProvider = stopwatchProvider;
 
@@ -180,7 +178,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task createProject(string name)
         {
-            var createdProjectId = await navigationService.Navigate<EditProjectViewModel, string, long?>(name);
+            var createdProjectId = await Navigate<EditProjectViewModel, string, long?>(name);
             if (createdProjectId == null) return;
 
             var project = await interactorFactory.GetProjectById(createdProjectId.Value).Execute();

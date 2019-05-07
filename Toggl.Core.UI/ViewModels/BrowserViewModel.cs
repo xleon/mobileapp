@@ -17,8 +17,8 @@ namespace Toggl.Core.UI.ViewModels
         public UIAction Close { get; }
 
         public BrowserViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             Close = rxActionFactory.FromAsync(Finish);

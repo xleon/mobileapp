@@ -20,7 +20,6 @@ namespace Toggl.Core.UI.ViewModels
     {
         private readonly IRxActionFactory rxActionFactory;
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
         private readonly ISchedulerProvider schedulerProvider;
 
         private long workspaceId;
@@ -37,14 +36,13 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.interactorFactory = interactorFactory;
-            this.navigationService = navigationService;
             this.rxActionFactory = rxActionFactory;
             this.schedulerProvider = schedulerProvider;
 

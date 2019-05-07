@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views;
 using Toggl.iOS.ViewControllers;
 using UIKit;
 
@@ -23,7 +24,7 @@ namespace Toggl.iOS.Presentation
         {
         }
 
-        protected override void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel)
+        protected override void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView view)
         {
             UIViewController rootViewController = null;
 

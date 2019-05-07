@@ -46,8 +46,8 @@ namespace Toggl.iOS
                     return true;
                 case StartTimerIntent startTimerIntent:
                     var timeEntryParams = createStartTimeEntryParameters(startTimerIntent);
-                    navigationService.Navigate<MainViewModel>();
-                    navigationService.Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(timeEntryParams);
+                    navigationService.Navigate<MainViewModel>(null);
+                    navigationService.Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(timeEntryParams, null);
                     return true;
                 default:
                     return false;

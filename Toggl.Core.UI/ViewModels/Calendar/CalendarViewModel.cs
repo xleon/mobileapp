@@ -40,7 +40,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private readonly IOnboardingStorage onboardingStorage;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IPermissionsChecker permissionsChecker;
-        private readonly INavigationService navigationService;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly IRxActionFactory rxActionFactory;
 
@@ -94,6 +93,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             INavigationService navigationService,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
@@ -103,7 +103,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
@@ -116,7 +115,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
             this.schedulerProvider = schedulerProvider;
-            this.navigationService = navigationService;
             this.permissionsChecker = permissionsChecker;
             this.stopwatchProvider = stopwatchProvider;
             this.rxActionFactory = rxActionFactory;
@@ -285,7 +283,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             }
             else
             {
-                await navigationService.Navigate<CalendarPermissionDeniedViewModel, Unit>();
+                await Navigate<CalendarPermissionDeniedViewModel, Unit>();
             }
         }
 
@@ -304,8 +302,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
             if (calendarsExist)
             {
-                var calendarIds = await navigationService
-                    .Navigate<SelectUserCalendarsViewModel, bool, string[]>(isOnboarding);
+                var calendarIds = await Navigate<SelectUserCalendarsViewModel, bool, string[]>(isOnboarding);
 
                 interactorFactory.SetEnabledCalendars(calendarIds).Execute();
             }
@@ -323,7 +320,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                     analyticsService.EditViewOpenedFromCalendar.Track();
                     var stopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.EditTimeEntryFromCalendar);
                     stopwatch.Start();
-                    await navigationService.Navigate<EditTimeEntryViewModel, long[]>(new[] { calendarItem.TimeEntryId.Value });
+                    await Navigate<EditTimeEntryViewModel, long[]>(new[] { calendarItem.TimeEntryId.Value });
                     break;
 
                 case CalendarItemSource.Calendar:
@@ -377,13 +374,13 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             var prototype = duration.AsTimeEntryPrototype(startTime, workspace.Id);
             var timeEntry = await interactorFactory.CreateTimeEntry(prototype, TimeEntryStartOrigin.CalendarTapAndDrag).Execute();
 
-            await navigationService.Navigate<EditTimeEntryViewModel, long[]>(new[] { timeEntry.Id });
+            await Navigate<EditTimeEntryViewModel, long[]>(new[] { timeEntry.Id });
         }
 
         private async Task createTimeEntryAtOffset(DateTimeOffset startTime)
         {
             var startParams = StartTimeEntryParameters.ForManualMode(startTime);
-            await navigationService.Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(startParams);
+            await Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(startParams);
         }
 
         private async Task updateTimeEntry(CalendarItem calendarItem)

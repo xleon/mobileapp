@@ -163,7 +163,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.ViewAppearing();
 
-                await NavigationService.Received().Navigate<NoWorkspaceViewModel, Unit>();
+                await NavigationService.Received().Navigate<NoWorkspaceViewModel, Unit>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -173,7 +173,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.ViewAppearing();
 
-                await NavigationService.DidNotReceive().Navigate<NoWorkspaceViewModel, Unit>();
+                await NavigationService.DidNotReceive().Navigate<NoWorkspaceViewModel, Unit>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -181,14 +181,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 AccessRestrictionStorage.HasNoWorkspace().Returns(true);
                 var task = new TaskCompletionSource<Unit>().Task;
-                NavigationService.Navigate<NoWorkspaceViewModel, Unit>().Returns(task);
+                NavigationService.Navigate<NoWorkspaceViewModel, Unit>(View).Returns(task);
 
                 ViewModel.ViewAppearing();
                 ViewModel.ViewAppearing();
                 ViewModel.ViewAppearing();
                 ViewModel.ViewAppearing();
 
-                await NavigationService.Received(1).Navigate<NoWorkspaceViewModel, Unit>();
+                await NavigationService.Received(1).Navigate<NoWorkspaceViewModel, Unit>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -199,7 +199,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await ViewModel.ViewAppearingAsync();
 
-                await NavigationService.Received().Navigate<SelectDefaultWorkspaceViewModel, Unit>();
+                await NavigationService.Received().Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -209,7 +209,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.ViewAppearing();
 
-                await NavigationService.DidNotReceive().Navigate<SelectDefaultWorkspaceViewModel, Unit>();
+                await NavigationService.DidNotReceive().Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -218,7 +218,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 AccessRestrictionStorage.HasNoWorkspace().Returns(false);
                 AccessRestrictionStorage.HasNoDefaultWorkspace().Returns(true);
                 var task = new TaskCompletionSource<Unit>().Task;
-                NavigationService.Navigate<SelectDefaultWorkspaceViewModel, Unit>().Returns(task);
+                NavigationService.Navigate<SelectDefaultWorkspaceViewModel, Unit>(View).Returns(task);
 
                 ViewModel.ViewAppearing();
                 ViewModel.ViewAppearing();
@@ -227,7 +227,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 //ViewAppearing calls an async method. The delay is here to ensure that the async method completes before the assertion
                 await ThreadingTask.Delay(200);
 
-                await NavigationService.Received(1).Navigate<SelectDefaultWorkspaceViewModel, Unit>();
+                await NavigationService.Received(1).Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
             }
         }
 
@@ -258,7 +258,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
                 await NavigationService.Received()
-                   .Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(Arg.Any<StartTimeEntryParameters>());
+                   .Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(Arg.Any<StartTimeEntryParameters>(), ViewModel.View);
             }
 
             [Theory, LogIfTooSlow]
@@ -277,7 +277,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ? Resources.ManualTimeEntryPlaceholder
                     : Resources.StartTimeEntryPlaceholder;
                 await NavigationService.Received().Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(
-                    Arg.Is<StartTimeEntryParameters>(parameter => parameter.PlaceholderText == expected)
+                    Arg.Is<StartTimeEntryParameters>(parameter => parameter.PlaceholderText == expected),
+                    ViewModel.View
                 );
             }
 
@@ -297,7 +298,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ? TimeSpan.FromMinutes(DefaultTimeEntryDurationForManualModeInMinutes)
                     : (TimeSpan?)null;
                 await NavigationService.Received().Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(
-                    Arg.Is<StartTimeEntryParameters>(parameter => parameter.Duration == expected)
+                    Arg.Is<StartTimeEntryParameters>(parameter => parameter.Duration == expected),
+                    ViewModel.View
                 );
             }
 
@@ -319,7 +321,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ? date.Subtract(TimeSpan.FromMinutes(DefaultTimeEntryDurationForManualModeInMinutes))
                     : date;
                 await NavigationService.Received().Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(
-                    Arg.Is<StartTimeEntryParameters>(parameter => parameter.StartTime == expected)
+                    Arg.Is<StartTimeEntryParameters>(parameter => parameter.StartTime == expected), 
+                    ViewModel.View
                 );
             }
 
@@ -399,7 +402,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OpenSettings.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.Received().Navigate<SettingsViewModel>();
+                await NavigationService.Received().Navigate<SettingsViewModel>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -442,7 +445,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OpenReports.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.Received().Navigate<ReportsViewModel>();
+                await NavigationService.Received().Navigate<ReportsViewModel>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -488,7 +491,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OpenSyncFailures.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.Received().Navigate<SyncFailuresViewModel>();
+                await NavigationService.Received().Navigate<SyncFailuresViewModel>(View);
             }
         }
 

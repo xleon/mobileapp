@@ -22,7 +22,6 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class EditDurationViewModel : ViewModel<EditDurationParameters, DurationParameter>
     {
         private readonly ITimeService timeService;
-        private readonly INavigationService navigationService;
         private readonly IAnalyticsService analyticsService;
 
         private IDisposable runningTimeEntryDisposable;
@@ -76,8 +75,8 @@ namespace Toggl.Core.UI.ViewModels
         public bool IsDurationInitiallyFocused { get; private set; }
 
         public EditDurationViewModel(INavigationService navigationService, ITimeService timeService, ITogglDataSource dataSource, IAnalyticsService analyticsService, IRxActionFactory rxActionFactory, ISchedulerProvider schedulerProvider)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
@@ -85,7 +84,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
             this.timeService = timeService;
-            this.navigationService = navigationService;
             this.analyticsService = analyticsService;
 
             Save = rxActionFactory.FromAsync(save);

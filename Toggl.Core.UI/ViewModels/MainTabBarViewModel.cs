@@ -58,6 +58,7 @@ namespace Toggl.Core.UI.ViewModels
             IUserAccessManager userAccessManager,
             IPrivateSharedStorageService privateSharedStorageService,
             IPlatformInfo platformInfo)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
@@ -69,7 +70,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
             Ensure.Argument.IsNotNull(suggestionProviders, nameof(suggestionProviders));

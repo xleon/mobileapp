@@ -17,19 +17,16 @@ namespace Toggl.Core.UI.ViewModels
     {
         private readonly IRxActionFactory rxActionFactory;
 
-        private readonly INavigationService navigationService;
-
         public IObservable<IEnumerable<SelectableCountryViewModel>> Countries { get; private set; }
         public ISubject<string> FilterText { get; } = new BehaviorSubject<string>(string.Empty);
         public InputAction<SelectableCountryViewModel> SelectCountry { get; }
         public UIAction Close { get; }
 
         public SelectCountryViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            this.navigationService = navigationService;
             this.rxActionFactory = rxActionFactory;
 
             SelectCountry = rxActionFactory.FromAsync<SelectableCountryViewModel>(selectCountry);

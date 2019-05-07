@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.UI.Navigation
 {
@@ -9,7 +10,7 @@ namespace Toggl.Core.UI.Navigation
     {
         bool CanPresent<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel);
 
-        Task Present<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel);
+        Task Present<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView);
     }
     
     public sealed class CompositePresenter : IPresenter
@@ -24,13 +25,13 @@ namespace Toggl.Core.UI.Navigation
         public bool CanPresent<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel)
             => presenters.Any(p => p.CanPresent(viewModel));
 
-        public Task Present<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel)
+        public Task Present<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView)
         {
             var presenter = presenters.FirstOrDefault(p => p.CanPresent(viewModel));
             if (presenter == null)
                 throw new InvalidOperationException($"Failed to find a presenter that could present ViewModel with type {viewModel.GetType().Name}");
 
-            return presenter.Present(viewModel);
+            return presenter.Present(viewModel, sourceView);
         }
     }
     

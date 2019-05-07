@@ -14,7 +14,6 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class SelectWorkspaceViewModel : ViewModel<long, long>
     {
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
 
         private long currentWorkspaceId;
 
@@ -28,13 +27,12 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             INavigationService navigationService,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.interactorFactory = interactorFactory;
-            this.navigationService = navigationService;
 
             Close = rxActionFactory.FromAsync(close);
             SelectWorkspace = rxActionFactory.FromAsync<SelectableWorkspaceViewModel>(selectWorkspace);

@@ -23,7 +23,6 @@ namespace Toggl.Core.UI.ViewModels
     {
         private readonly IUserAccessManager userAccessManager;
         private readonly ITogglDataSource dataSource;
-        private readonly INavigationService navigationService;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
         private readonly ISchedulerProvider schedulerProvider;
@@ -56,12 +55,11 @@ namespace Toggl.Core.UI.ViewModels
             IAnalyticsService analyticsService,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory,
-            IInteractorFactory interactorFactory
-        )
+            IInteractorFactory interactorFactory)
+        : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
@@ -70,7 +68,6 @@ namespace Toggl.Core.UI.ViewModels
 
             this.dataSource = dataSource;
             this.userAccessManager = userAccessManager;
-            this.navigationService = navigationService;
             this.userPreferences = userPreferences;
             this.analyticsService = analyticsService;
             this.schedulerProvider = schedulerProvider;
@@ -130,7 +127,7 @@ namespace Toggl.Core.UI.ViewModels
             }
 
             await interactorFactory.Logout(LogoutSource.TokenReset).Execute();
-            await navigationService.Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty);
+            await Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty);
         }
 
         private IObservable<Unit> done() =>
@@ -144,7 +141,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private void onLogin()
         {
-            navigationService.Navigate<MainTabBarViewModel>();
+            Navigate<MainTabBarViewModel>();
         }
 
         private string transformException(Exception ex)
