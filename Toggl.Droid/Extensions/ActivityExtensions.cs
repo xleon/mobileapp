@@ -10,6 +10,7 @@ using Android.Support.V4.App;
 using Android.Util;
 using Android.Views;
 using Toggl.Core.UI.Services;
+using Toggl.Core.UI.Views;
 using Toggl.Droid.Helper;
 using Toggl.Droid.Services;
 using Toggl.Droid.Views;
@@ -152,7 +153,7 @@ namespace Toggl.Droid.Extensions
             });
         }
         
-        public static IObservable<T> ShowSelectionDialog<T>(this Activity activity, string title, IEnumerable<(string ItemName, T Item)> options, int initialSelectionIndex = 0)
+        public static IObservable<T> ShowSelectionDialog<T>(this Activity activity, string title, IEnumerable<SelectOption<T>> options, int initialSelectionIndex = 0)
         {
             return Observable.Create<T>(observer =>
             {

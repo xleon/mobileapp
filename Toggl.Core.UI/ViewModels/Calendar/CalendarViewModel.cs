@@ -24,6 +24,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Toggl.Core.UI.Transformations;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.UI.ViewModels.Calendar
 {
@@ -32,7 +33,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
     {
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
-        private readonly IDialogService dialogService;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
         private readonly IBackgroundService backgroundService;
@@ -84,7 +84,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         public CalendarViewModel(
             ITogglDataSource dataSource,
             ITimeService timeService,
-            IDialogService dialogService,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
             IBackgroundService backgroundService,
@@ -98,7 +97,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
@@ -112,7 +110,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
             this.dataSource = dataSource;
             this.timeService = timeService;
-            this.dialogService = dialogService;
             this.userPreferences = userPreferences;
             this.analyticsService = analyticsService;
             this.backgroundService = backgroundService;
@@ -278,12 +275,12 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
         private async Task linkCalendars(bool isOnboarding)
         {
-            var calendarPermissionGranted = await this.SelectPermissionService(permissionsChecker).RequestCalendarAuthorization();
+            var calendarPermissionGranted = await View.RequestCalendarAuthorization();
             hasCalendarsLinkedSubject.OnNext(calendarPermissionGranted);
             if (calendarPermissionGranted)
             {
                 await selectUserCalendars(isOnboarding);
-                var notificationPermissionGranted = await this.SelectPermissionService(permissionsChecker).RequestNotificationAuthorization();
+                var notificationPermissionGranted = await View.RequestNotificationAuthorization();
                 userPreferences.SetCalendarNotificationsEnabled(notificationPermissionGranted);
             }
             else
@@ -314,7 +311,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             }
             else if (!isOnboarding)
             {
-                await this.SelectDialogService(dialogService).Alert(Resources.Oops, Resources.NoCalendarsFoundMessage, Resources.Ok);
+                await View.Alert(Resources.Oops, Resources.NoCalendarsFoundMessage, Resources.Ok);
             }
         }
 
@@ -342,20 +339,20 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                     .WithStartTime(timeService.CurrentDateTime)
                     .WithDuration(null);
 
-            var options = new List<(string, CalendarItem?)>
+            var options = new List<SelectOption<CalendarItem?>>
             {
-                (Resources.CalendarCopyEventToTimeEntry, calendarItem),
-                (Resources.CalendarStartNow, runningStartedNow)
+                new SelectOption<CalendarItem?>(calendarItem, Resources.CalendarCopyEventToTimeEntry),
+                new SelectOption<CalendarItem?>(runningStartedNow, Resources.CalendarStartNow)
             };
 
             if (timeService.CurrentDateTime >= calendarItem.StartTime)
             {
                 var runningStartingAtTheEventStart = calendarItem.WithDuration(null);
-                var option = (Resources.CalendarStartWhenTheEventStarts, runningStartingAtTheEventStart);
+                var option = new SelectOption<CalendarItem?>(runningStartingAtTheEventStart, Resources.CalendarStartWhenTheEventStarts);
                 options.Add(option);
             }
 
-            var selectedOption = await this.SelectDialogService(dialogService).Select(Resources.CalendarWhatToDoWithCalendarEvent, options, initialSelectionIndex: 0);
+            var selectedOption = await View.Select(Resources.CalendarWhatToDoWithCalendarEvent, options, initialSelectionIndex: 0);
             if (selectedOption.HasValue)
             {
                 await createTimeEntryFromCalendarItem(selectedOption.Value);

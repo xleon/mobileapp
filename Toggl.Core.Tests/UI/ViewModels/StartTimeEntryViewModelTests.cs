@@ -22,8 +22,8 @@ using Toggl.Core.Interactors.AutocompleteSuggestions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
@@ -76,7 +76,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 => new StartTimeEntryViewModel(
                     TimeService,
                     DataSource,
-                    DialogService,
                     UserPreferences,
                     OnboardingStorage,
                     InteractorFactory,
@@ -96,7 +95,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
                 bool useTimeService,
-                bool useDialogService,
                 bool useUserPreferences,
                 bool useInteractorFactory,
                 bool useOnboardingStorage,
@@ -109,7 +107,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
-                var dialogService = useDialogService ? DialogService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
@@ -124,7 +121,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     () => new StartTimeEntryViewModel(
                         timeService,
                         dataSource,
-                        dialogService,
                         userPreferences,
                         onboardingStorage,
                         interactorFactory,

@@ -9,13 +9,11 @@ namespace Toggl.Core.UI
 {
     public abstract class UIDependencyContainer : DependencyContainer
     {
-        private readonly Lazy<IDialogService> dialogService;
         private readonly Lazy<IBrowserService> browserService;
         private readonly Lazy<IPermissionsChecker> permissionsService;
         private readonly Lazy<INavigationService> navigationService;
         private readonly Lazy<IPasswordManagerService> passwordManagerService;
 
-        public IDialogService DialogService => dialogService.Value;
         public IBrowserService BrowserService => browserService.Value;
         public IPermissionsChecker PermissionsChecker => permissionsService.Value;
         public INavigationService NavigationService => navigationService.Value;
@@ -26,14 +24,12 @@ namespace Toggl.Core.UI
         protected UIDependencyContainer(ApiEnvironment apiEnvironment, UserAgent userAgent)
             : base(apiEnvironment, userAgent)
         {
-            dialogService = new Lazy<IDialogService>(CreateDialogService);
             browserService = new Lazy<IBrowserService>(CreateBrowserService);
             permissionsService = new Lazy<IPermissionsChecker>(CreatePermissionsChecker);
             navigationService = new Lazy<INavigationService>(CreateNavigationService);
             passwordManagerService = new Lazy<IPasswordManagerService>(CreatePasswordManagerService);
         }
 
-        protected abstract IDialogService CreateDialogService();
         protected abstract IBrowserService CreateBrowserService();
         protected abstract IPermissionsChecker CreatePermissionsChecker();
         protected abstract INavigationService CreateNavigationService();

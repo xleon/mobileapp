@@ -16,14 +16,13 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Sync;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
 using Toggl.Storage.Settings;
-using MvvmCross.ViewModels;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -34,7 +33,6 @@ namespace Toggl.Core.UI.ViewModels
 
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
-        private readonly IDialogService dialogService;
         private readonly IInteractorFactory interactorFactory;
         private readonly INavigationService navigationService;
         private readonly IAnalyticsService analyticsService;
@@ -117,7 +115,6 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             INavigationService navigationService,
             IOnboardingStorage onboardingStorage,
-            IDialogService dialogService,
             IAnalyticsService analyticsService,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory actionFactory,
@@ -126,7 +123,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
@@ -138,7 +134,6 @@ namespace Toggl.Core.UI.ViewModels
             this.dataSource = dataSource;
             this.syncManager = syncManager;
             this.timeService = timeService;
-            this.dialogService = dialogService;
             this.interactorFactory = interactorFactory;
             this.navigationService = navigationService;
             this.analyticsService = analyticsService;
@@ -497,7 +492,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             if (await isDirty())
             {
-                var userConfirmedDiscardingChanges = await this.SelectDialogService(dialogService).ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                var userConfirmedDiscardingChanges = await View.ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
 
                 if (!userConfirmedDiscardingChanges)
                     return false;
@@ -584,7 +579,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task<bool> delete(ActionType actionType, int entriesCount, IInteractor<IObservable<Unit>> deletionInteractor)
         {
-            var isDeletionConfirmed = await this.SelectDialogService(dialogService).ConfirmDestructiveAction(actionType, entriesCount);
+            var isDeletionConfirmed = await View.ConfirmDestructiveAction(actionType, entriesCount);
 
             if (!isDeletionConfirmed)
                 return false;

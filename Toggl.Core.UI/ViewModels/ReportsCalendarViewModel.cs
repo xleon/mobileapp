@@ -9,7 +9,6 @@ using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Services;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 using Toggl.Shared;
@@ -33,7 +32,6 @@ namespace Toggl.Core.UI.ViewModels
             Resources.SaturdayInitial
         };
         private readonly ITimeService timeService;
-        private readonly IDialogService dialogService;
         private readonly ITogglDataSource dataSource;
         private readonly IIntentDonationService intentDonationService;
         private readonly ISubject<Unit> reloadSubject = new Subject<Unit>();
@@ -80,20 +78,17 @@ namespace Toggl.Core.UI.ViewModels
 
         public ReportsCalendarViewModel(
             ITimeService timeService,
-            IDialogService dialogService,
             ITogglDataSource dataSource,
             IIntentDonationService intentDonationService,
             IRxActionFactory rxActionFactory)
         {
-            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
+            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
+            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
 
-            this.timeService = timeService;
-            this.dialogService = dialogService;
             this.dataSource = dataSource;
+            this.timeService = timeService;
             this.intentDonationService = intentDonationService;
 
             SelectDay = rxActionFactory.FromAsync<ReportsCalendarDayViewModel>(calendarDayTapped);
@@ -219,7 +214,7 @@ namespace Toggl.Core.UI.ViewModels
 
                 if (System.Math.Abs((endDate - startDate).Days) > 365)
                 {
-                    await this.SelectDialogService(dialogService).Alert(
+                    await View.Alert(
                         Resources.ReportTooLongTitle,
                         Resources.ReportTooLongDescription,
                         Resources.Ok

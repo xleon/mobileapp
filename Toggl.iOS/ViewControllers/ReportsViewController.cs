@@ -17,6 +17,7 @@ using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.iOS.Extensions.AnimationExtensions;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.iOS.ViewControllers
 {
@@ -94,7 +95,7 @@ namespace Toggl.iOS.ViewControllers
 
             ReportsTableView.Source = source;
 
-            bool areThereEnoughWorkspaces(ICollection<(string ItemName, IThreadSafeWorkspace Item)> workspaces) => workspaces.Count > 1;
+            bool areThereEnoughWorkspaces(ICollection<SelectOption<IThreadSafeWorkspace>> workspaces) => workspaces.Count > 1;
 
             bool isWorkspaceNameTooLong(string workspaceName)
             {

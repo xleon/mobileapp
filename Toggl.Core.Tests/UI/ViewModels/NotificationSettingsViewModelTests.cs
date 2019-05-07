@@ -74,7 +74,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.RequestAccess.Execute(Unit.Default);
                 TestScheduler.Start();
 
-                PermissionsChecker.Received().OpenAppSettings();
+                View.Received().OpenAppSettings();
             }
         }
 

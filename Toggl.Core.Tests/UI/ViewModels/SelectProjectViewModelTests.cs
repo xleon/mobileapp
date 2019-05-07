@@ -27,7 +27,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             protected SelectProjectParameter DefaultParameter { get; } = SelectProjectParameter.WithIds(null, null, 1);
 
             protected override SelectProjectViewModel CreateViewModel()
-            => new SelectProjectViewModel(DataSource, RxActionFactory, InteractorFactory, NavigationService, DialogService, SchedulerProvider, StopwatchProvider);
+            => new SelectProjectViewModel(DataSource, RxActionFactory, InteractorFactory, NavigationService, SchedulerProvider, StopwatchProvider);
         }
 
         public sealed class TheConstructor : SelectProjectViewModelTest
@@ -39,12 +39,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useRxActionFactory,
                 bool useInteractorFactory,
                 bool useNavigationService,
-                bool useDialogService,
                 bool useSchedulerProvider,
                 bool useStopwatchProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
-                var dialogService = useDialogService ? DialogService : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var navigationService = useNavigationService ? NavigationService : null;
@@ -52,7 +50,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SelectProjectViewModel(dataSource, rxActionFactory, interactorFactory, navigationService, dialogService, schedulerProvider, stopwatchProvider);
+                    () => new SelectProjectViewModel(dataSource, rxActionFactory, interactorFactory, navigationService, schedulerProvider, stopwatchProvider);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();

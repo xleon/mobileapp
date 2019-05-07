@@ -38,20 +38,5 @@ namespace Toggl.Droid.Services
 
             return true;
         }
-
-        public IObservable<bool> RequestCalendarAuthorization(bool force = false)
-        {
-            throw new NotImplementedException("Use the IView IPermissionRequester interface");
-        }
-
-        public IObservable<bool> RequestNotificationAuthorization(bool force = false)
-        {
-            throw new NotImplementedException("Use the IView IPermissionRequester interface");
-        }
-
-        public void OpenAppSettings()
-        {
-            throw new NotImplementedException("Use the IView IPermissionRequester interface");
-        }
     }
 }

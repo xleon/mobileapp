@@ -4,18 +4,17 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core.Interactors;
 using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class SendFeedbackViewModel : ViewModelWithOutput<bool>
     {
-        private readonly IDialogService dialogService;
         private readonly IInteractorFactory interactorFactory;
         private readonly INavigationService navigationService;
 
@@ -46,17 +45,14 @@ namespace Toggl.Core.UI.ViewModels
         public SendFeedbackViewModel(
             INavigationService navigationService,
             IInteractorFactory interactorFactory,
-            IDialogService dialogService,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            this.dialogService = dialogService;
             this.interactorFactory = interactorFactory;
             this.navigationService = navigationService;
 
@@ -81,7 +77,7 @@ namespace Toggl.Core.UI.ViewModels
                 .Select(string.IsNullOrEmpty)
                 .SelectMany(isEmpty => isEmpty
                     ? Observable.Return(true)
-                    : this.SelectDialogService(dialogService).ConfirmDestructiveAction(ActionType.DiscardFeedback))
+                    : View.ConfirmDestructiveAction(ActionType.DiscardFeedback))
                 .DoIf(shouldBeClosed => shouldBeClosed, _ => Finish(false))
                 .SelectUnit();
 

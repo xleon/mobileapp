@@ -85,7 +85,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
         private void requestAccess()
         {
-            permissionsChecker.OpenAppSettings();
+            View.OpenAppSettings();
         }
 
         private void onCalendarSelected()
@@ -104,7 +104,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
                 var authorized = await permissionsChecker.CalendarPermissionGranted;
                 if (!authorized)
                 {
-                    authorized = await permissionsChecker.RequestCalendarAuthorization();
+                    authorized = await View.RequestCalendarAuthorization();
                     if (!authorized)
                         await NavigationService.Navigate<CalendarPermissionDeniedViewModel, Unit>();
 

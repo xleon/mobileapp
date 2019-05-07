@@ -30,6 +30,7 @@ using static Toggl.Core.Helper.Constants;
 using static Toggl.Shared.Extensions.CommonFunctions;
 using IStopwatch = Toggl.Core.Diagnostics.IStopwatch;
 using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -37,7 +38,6 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class StartTimeEntryViewModel : ViewModelWithInput<StartTimeEntryParameters>
     {
         private readonly ITimeService timeService;
-        private readonly IDialogService dialogService;
         private readonly IUserPreferences userPreferences;
         private readonly IInteractorFactory interactorFactory;
         private readonly INavigationService navigationService;
@@ -113,7 +113,6 @@ namespace Toggl.Core.UI.ViewModels
         public StartTimeEntryViewModel(
             ITimeService timeService,
             ITogglDataSource dataSource,
-            IDialogService dialogService,
             IUserPreferences userPreferences,
             IOnboardingStorage onboardingStorage,
             IInteractorFactory interactorFactory,
@@ -127,7 +126,6 @@ namespace Toggl.Core.UI.ViewModels
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
@@ -139,7 +137,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.timeService = timeService;
-            this.dialogService = dialogService;
             this.userPreferences = userPreferences;
             this.navigationService = navigationService;
             this.interactorFactory = interactorFactory;
@@ -299,7 +296,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             if (isDirty)
             {
-                var shouldDiscard = await this.SelectDialogService(dialogService).ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
+                var shouldDiscard = await View.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
                 if (!shouldDiscard)
                     return false;
             }
@@ -398,7 +395,7 @@ namespace Toggl.Core.UI.ViewModels
             }
 
             IObservable<bool> workspaceChangeDenied()
-                => this.SelectDialogService(dialogService).Confirm(
+                => View.Confirm(
                     Resources.DifferentWorkspaceAlertTitle,
                     Resources.DifferentWorkspaceAlertMessage,
                     Resources.Ok,

@@ -37,7 +37,6 @@ namespace Toggl.Core.Tests.UI
                 MockBrowserService = Substitute.For<IBrowserService>(),
                 MockCalendarService = Substitute.For<ICalendarService>(),
                 MockDatabase = Substitute.For<ITogglDatabase>(),
-                MockDialogService = Substitute.For<IDialogService>(),
                 MockIntentDonationService = Substitute.For<IIntentDonationService>(),
                 MockKeyValueStorage = Substitute.For<IKeyValueStorage>(),
                 MockLastTimeUsageStorage = Substitute.For<ILastTimeUsageStorage>(),

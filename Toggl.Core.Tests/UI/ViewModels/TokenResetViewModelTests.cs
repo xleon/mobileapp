@@ -41,7 +41,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 => new TokenResetViewModel(
                     UserAccessManager,
                     DataSource,
-                    DialogService,
                     NavigationService,
                     UserPreferences,
                     AnalyticsService,
@@ -57,7 +56,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useUserAccessManager,
                 bool userNavigationService,
                 bool useDataSource,
-                bool useDialogService,
                 bool useUserPreferences,
                 bool useAnalyticsService,
                 bool useSchedulerProvider,
@@ -68,7 +66,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var userAccessManager = useUserAccessManager ? UserAccessManager : null;
                 var navigationService = userNavigationService ? NavigationService : null;
                 var dataSource = useDataSource ? DataSource : null;
-                var dialogService = useDialogService ? DialogService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
@@ -79,7 +76,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     () => new TokenResetViewModel(
                         userAccessManager,
                         dataSource,
-                        dialogService,
                         navigationService,
                         userPreferences,
                         analyticsService,

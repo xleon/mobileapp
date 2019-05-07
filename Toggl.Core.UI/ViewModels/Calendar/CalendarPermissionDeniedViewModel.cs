@@ -40,7 +40,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
         private void enableAccess()
         {
-            permissionsChecker.OpenAppSettings();
+            View.OpenAppSettings();
         }
 
         private async Task closeIfPermissionIsGranted()

@@ -68,11 +68,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheRequestAccessAction : CalendarSettingsViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task OpensAppSettings()
+            public void OpensAppSettings()
             {
                 ViewModel.RequestAccess.Execute();
 
-                PermissionsChecker.Received().OpenAppSettings();
+                View.Received().OpenAppSettings();
             }
         }
 

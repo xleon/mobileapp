@@ -53,7 +53,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     DataSource,
                     SyncManager,
                     PlatformInfo,
-                    DialogService,
                     UserPreferences,
                     AnalyticsService,
                     UserAccessManager,
@@ -81,7 +80,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useDataSource,
                 bool useSyncManager,
                 bool useUserAccessManager,
-                bool useDialogService,
                 bool useUserPreferences,
                 bool useAnalyticsService,
                 bool useInteractorFactory,
@@ -98,7 +96,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var dataSource = useDataSource ? DataSource : null;
                 var syncManager = useSyncManager ? SyncManager : null;
                 var platformInfo = useplatformInfo ? PlatformInfo : null;
-                var dialogService = useDialogService ? DialogService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var userAccessManager = useUserAccessManager ? UserAccessManager : null;
@@ -117,7 +114,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         dataSource,
                         syncManager,
                         platformInfo,
-                        dialogService,
                         userPreferences,
                         analyticsService,
                         userAccessManager,

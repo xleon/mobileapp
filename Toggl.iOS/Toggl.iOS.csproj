@@ -1454,7 +1454,6 @@
     <Compile Include="Views\Onboarding\ReportsPage.designer.cs">
       <DependentUpon>ReportsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\DialogServiceIos.cs" />
     <Compile Include="Views\FadeView.cs" />
     <Compile Include="Views\Interfaces\IHeaderViewCellWithHideableTopSeparator.cs" />
     <Compile Include="ViewControllers\BrowserViewController.cs" />

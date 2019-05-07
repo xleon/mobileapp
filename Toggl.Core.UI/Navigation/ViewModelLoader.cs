@@ -42,7 +42,6 @@ namespace Toggl.Core.UI.Navigation
             if (viewModelType == typeof(EditProjectViewModel))
                 return new EditProjectViewModel(
                     dependencyContainer.DataSource,
-                    dependencyContainer.DialogService,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.SchedulerProvider,
@@ -57,7 +56,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.NavigationService,
                     dependencyContainer.OnboardingStorage,
-                    dependencyContainer.DialogService,
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory,
@@ -89,7 +87,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.TimeService,
                     dependencyContainer.DataSource,
                     dependencyContainer.SyncManager,
-                    dependencyContainer.DialogService,
                     dependencyContainer.RatingService,
                     dependencyContainer.UserPreferences,
                     dependencyContainer.AnalyticsService,
@@ -164,7 +161,6 @@ namespace Toggl.Core.UI.Navigation
             if (viewModelType == typeof(ReportsCalendarViewModel))
                 return new ReportsCalendarViewModel(
                     dependencyContainer.TimeService,
-                    dependencyContainer.DialogService,
                     dependencyContainer.DataSource,
                     dependencyContainer.IntentDonationService,
                     dependencyContainer.RxActionFactory);
@@ -220,7 +216,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.NavigationService,
-                    dependencyContainer.DialogService,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.StopwatchProvider);
 
@@ -256,7 +251,6 @@ namespace Toggl.Core.UI.Navigation
                 return new StartTimeEntryViewModel(
                     dependencyContainer.TimeService,
                     dependencyContainer.DataSource,
-                    dependencyContainer.DialogService,
                     dependencyContainer.UserPreferences,
                     dependencyContainer.OnboardingStorage,
                     dependencyContainer.InteractorFactory,
@@ -290,7 +284,6 @@ namespace Toggl.Core.UI.Navigation
                 return new TokenResetViewModel(
                     dependencyContainer.UserAccessManager,
                     dependencyContainer.DataSource,
-                    dependencyContainer.DialogService,
                     dependencyContainer.NavigationService,
                     dependencyContainer.UserPreferences,
                     dependencyContainer.AnalyticsService,
@@ -308,7 +301,6 @@ namespace Toggl.Core.UI.Navigation
                 return new CalendarViewModel(
                     dependencyContainer.DataSource,
                     dependencyContainer.TimeService,
-                    dependencyContainer.DialogService,
                     dependencyContainer.UserPreferences,
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.BackgroundService,
@@ -334,7 +326,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.AnalyticsService,
-                    dependencyContainer.DialogService,
                     dependencyContainer.IntentDonationService,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.StopwatchProvider,
@@ -370,7 +361,6 @@ namespace Toggl.Core.UI.Navigation
                 return new SendFeedbackViewModel(
                     dependencyContainer.NavigationService,
                     dependencyContainer.InteractorFactory,
-                    dependencyContainer.DialogService,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.RxActionFactory);
 
@@ -379,7 +369,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.DataSource,
                     dependencyContainer.SyncManager,
                     dependencyContainer.PlatformInfo,
-                    dependencyContainer.DialogService,
                     dependencyContainer.UserPreferences,
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.UserAccessManager,

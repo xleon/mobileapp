@@ -67,7 +67,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
         private void requestAccess()
         {
-            permissionsChecker.OpenAppSettings();
+            View.OpenAppSettings();
         }
 
         private async Task openUpcomingEvents()

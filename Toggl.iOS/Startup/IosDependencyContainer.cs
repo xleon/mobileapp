@@ -24,30 +24,28 @@ namespace Toggl.iOS
     {
         private const int numberOfSuggestions = 3;
 
+        private readonly CompositePresenter viewPresenter;
         private readonly Lazy<SettingsStorage> settingsStorage;
 
-        public TogglPresenter OldPresenter { get; }
-        public CompositePresenter ViewPresenter { get; }
         public INavigationService MvxNavigationService { get; internal set; }
 
         public new static IosDependencyContainer Instance { get; private set; }
 
-        public static void EnsureInitialized(TogglPresenter oldPresenter, CompositePresenter viewPresenter, ApiEnvironment environment, Platform platform, string version)
+        public static void EnsureInitialized(CompositePresenter viewPresenter, ApiEnvironment environment, Platform platform, string version)
         {
             if (Instance != null)
                 return;
 
-            Instance = new IosDependencyContainer(oldPresenter, viewPresenter, environment, platform, version);
+            Instance = new IosDependencyContainer(viewPresenter, environment, platform, version);
             UIDependencyContainer.Instance = Instance;
         }
 
         public OnePasswordServiceIos OnePasswordService => PasswordManagerService as OnePasswordServiceIos;
 
-        private IosDependencyContainer(TogglPresenter oldPresenter, CompositePresenter viewPresenter, ApiEnvironment environment, Platform platform, string version)
+        private IosDependencyContainer(CompositePresenter viewPresenter, ApiEnvironment environment, Platform platform, string version)
             : base(environment, new UserAgent(platform.ToString(), version))
         {
-            OldPresenter = oldPresenter;
-            ViewPresenter = viewPresenter;
+            this.viewPresenter = viewPresenter;
 
             var appVersion = Version.Parse(version);
 
@@ -68,9 +66,6 @@ namespace Toggl.iOS
 
         protected override ITogglDatabase CreateDatabase()
             => new Database();
-
-        protected override IDialogService CreateDialogService()
-            => new DialogServiceIos(OldPresenter);
 
         protected override IIntentDonationService CreateIntentDonationService()
             => new IntentDonationServiceIos(AnalyticsService);
@@ -117,7 +112,7 @@ namespace Toggl.iOS
             );
 
         protected override INavigationService CreateNavigationService()
-            => new NavigationService(ViewPresenter, new ViewModelLoader(this), AnalyticsService);
+            => new NavigationService(viewPresenter, new ViewModelLoader(this), AnalyticsService);
 
         protected override ILastTimeUsageStorage CreateLastTimeUsageStorage()
             => settingsStorage.Value;

@@ -14,7 +14,6 @@ using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -29,7 +28,6 @@ namespace Toggl.Core.UI.ViewModels
         private const long noClientId = 0;
 
         private readonly Random random = new Random();
-        private readonly IDialogService dialogService;
         private readonly IInteractorFactory interactorFactory;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly INavigationService navigationService;
@@ -57,7 +55,6 @@ namespace Toggl.Core.UI.ViewModels
 
         public EditProjectViewModel(
             ITogglDataSource dataSource,
-            IDialogService dialogService,
             IRxActionFactory rxActionFactory,
             IInteractorFactory interactorFactory,
             ISchedulerProvider schedulerProvider,
@@ -65,14 +62,12 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
-            this.dialogService = dialogService;
             this.navigationService = navigationService;
             this.stopwatchProvider = stopwatchProvider;
             this.interactorFactory = interactorFactory;
@@ -280,7 +275,7 @@ namespace Toggl.Core.UI.ViewModels
                 if (initialWorkspaceId == workspace.Id)
                     return Observable.Return(true);
 
-                return this.SelectDialogService(dialogService).Confirm(
+                return View.Confirm(
                     Resources.WorkspaceChangedAlertTitle,
                     Resources.WorkspaceChangedAlertMessage,
                     Resources.Ok,

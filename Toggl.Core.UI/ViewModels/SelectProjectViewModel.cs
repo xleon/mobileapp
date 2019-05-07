@@ -13,7 +13,6 @@ using Toggl.Core.Interactors;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -26,7 +25,6 @@ namespace Toggl.Core.UI.ViewModels
         : ViewModel<SelectProjectParameter, SelectProjectParameter>
     {
         private readonly ITogglDataSource dataSource;
-        private readonly IDialogService dialogService;
         private readonly IInteractorFactory interactorFactory;
         private readonly INavigationService navigationService;
         private readonly ISchedulerProvider schedulerProvider;
@@ -62,12 +60,10 @@ namespace Toggl.Core.UI.ViewModels
             IRxActionFactory rxActionFactory,
             IInteractorFactory interactorFactory,
             INavigationService navigationService,
-            IDialogService dialogService,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
@@ -75,7 +71,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
             this.dataSource = dataSource;
-            this.dialogService = dialogService;
             this.interactorFactory = interactorFactory;
             this.navigationService = navigationService;
             this.schedulerProvider = schedulerProvider;
@@ -210,7 +205,7 @@ namespace Toggl.Core.UI.ViewModels
                 return;
             }
 
-            var shouldSetProject = await this.SelectDialogService(dialogService).Confirm(
+            var shouldSetProject = await View.Confirm(
                 Resources.DifferentWorkspaceAlertTitle,
                 Resources.DifferentWorkspaceAlertMessage,
                 Resources.Ok,

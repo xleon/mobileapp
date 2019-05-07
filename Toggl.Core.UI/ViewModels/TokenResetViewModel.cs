@@ -9,7 +9,6 @@ using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
 using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -24,7 +23,6 @@ namespace Toggl.Core.UI.ViewModels
     {
         private readonly IUserAccessManager userAccessManager;
         private readonly ITogglDataSource dataSource;
-        private readonly IDialogService dialogService;
         private readonly INavigationService navigationService;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
@@ -53,7 +51,6 @@ namespace Toggl.Core.UI.ViewModels
         public TokenResetViewModel(
             IUserAccessManager userAccessManager,
             ITogglDataSource dataSource,
-            IDialogService dialogService,
             INavigationService navigationService,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
@@ -64,7 +61,6 @@ namespace Toggl.Core.UI.ViewModels
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
@@ -74,7 +70,6 @@ namespace Toggl.Core.UI.ViewModels
 
             this.dataSource = dataSource;
             this.userAccessManager = userAccessManager;
-            this.dialogService = dialogService;
             this.navigationService = navigationService;
             this.userPreferences = userPreferences;
             this.analyticsService = analyticsService;
@@ -160,7 +155,7 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private IObservable<bool> askToLogOut()
-            => this.SelectDialogService(dialogService).Confirm(
+            => View.Confirm(
                 Resources.AreYouSure,
                 Resources.SettingsUnsyncedMessage,
                 Resources.SettingsDialogButtonSignOut,

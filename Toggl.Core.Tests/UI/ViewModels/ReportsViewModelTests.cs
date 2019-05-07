@@ -16,6 +16,7 @@ using Microsoft.Reactive.Testing;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Interactors;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -46,7 +47,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     NavigationService,
                     InteractorFactory,
                     AnalyticsService,
-                    DialogService,
                     IntentDonationService,
                     SchedulerProvider,
                     StopwatchProvider,
@@ -66,23 +66,22 @@ namespace Toggl.Core.Tests.UI.ViewModels
         {
             [Theory, LogIfTooSlow]
             [ConstructorData]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource,
-                                                        bool useTimeService,
-                                                        bool useNavigationService,
-                                                        bool useAnalyticsService,
-                                                        bool useInteractorFactory,
-                                                        bool useDialogService,
-                                                        bool useIntentDonationService,
-                                                        bool useSchedulerProvider,
-                                                        bool useStopwatchProvider,
-                                                        bool useRxActionFactory)
+            public void ThrowsIfAnyOfTheArgumentsIsNull(
+                bool useDataSource,
+                bool useTimeService,
+                bool useNavigationService,
+                bool useAnalyticsService,
+                bool useInteractorFactory,
+                bool useIntentDonationService,
+                bool useSchedulerProvider,
+                bool useStopwatchProvider,
+                bool useRxActionFactory)
             {
                 var timeService = useTimeService ? TimeService : null;
                 var reportsProvider = useDataSource ? DataSource : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
-                var dialogService = useDialogService ? DialogService : null;
                 var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
@@ -94,7 +93,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                                                navigationService,
                                                interactorFactory,
                                                analyticsService,
-                                               dialogService,
                                                intentDonationService,
                                                schedulerProvider,
                                                stopwatchProvider,
@@ -451,7 +449,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
 
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId + 1 };
-                View.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
+                View.Select(Arg.Any<string>(), Arg.Any<IEnumerable<SelectOption<IThreadSafeWorkspace>>>(), Arg.Any<int>())
                     .Returns(Observable.Return(mockWorkspace));
 
                 ViewModel.SelectWorkspace.Execute();
@@ -471,7 +469,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.WorkspaceNameObservable.Subscribe(observer);
 
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId + 1, Name = "Selected workspace" };
-                View.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
+                View.Select(Arg.Any<string>(), Arg.Any<IEnumerable<SelectOption<IThreadSafeWorkspace>>>(), Arg.Any<int>())
                     .Returns(Observable.Return(mockWorkspace));
                 InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(mockWorkspace));
 
@@ -491,7 +489,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
                 await ViewModel.Initialize();
-                View.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
+                View.Select(Arg.Any<string>(), Arg.Any<IEnumerable<SelectOption<IThreadSafeWorkspace>>>(), Arg.Any<int>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(null));
 
                 ViewModel.SelectWorkspace.Execute();
@@ -510,7 +508,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await ViewModel.Initialize();
 
                 var mockWorkspace = new MockWorkspace { Id = WorkspaceId };
-                View.Select(Arg.Any<string>(), Arg.Any<IEnumerable<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>())
+                View.Select(Arg.Any<string>(), Arg.Any<IEnumerable<SelectOption<IThreadSafeWorkspace>>>(), Arg.Any<int>())
                     .Returns(Observable.Return<IThreadSafeWorkspace>(mockWorkspace));
 
                 ViewModel.SelectWorkspace.Execute();
@@ -608,7 +606,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetWorkspaceFeaturesById(workspace.Id)
                     .Execute()
                     .Returns(workspaceFeaturesObservable);
-                View.Select(Arg.Any<string>(), Arg.Any<ICollection<(string, IThreadSafeWorkspace)>>(), Arg.Any<int>()).Returns(workspaceObservable);
+                
+                View.Select(Arg.Any<string>(), Arg.Any<IEnumerable<SelectOption<IThreadSafeWorkspace>>>(), Arg.Any<int>())
+                    .Returns(workspaceObservable);
             }
         }
 

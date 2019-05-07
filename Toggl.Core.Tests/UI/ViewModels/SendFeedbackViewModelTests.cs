@@ -16,6 +16,7 @@ using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Shared.Extensions;
 using Xunit;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -24,7 +25,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class SendFeedbackViewModelTest : BaseViewModelWithOutputTests<SendFeedbackViewModel, bool>
         {
             protected override SendFeedbackViewModel CreateViewModel()
-                => new SendFeedbackViewModel(NavigationService, InteractorFactory, DialogService, SchedulerProvider, RxActionFactory);
+                => new SendFeedbackViewModel(NavigationService, InteractorFactory, SchedulerProvider, RxActionFactory);
         }
 
         public sealed class TheConstructor : SendFeedbackViewModelTest
@@ -34,19 +35,17 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useNavigationService,
                 bool useInteractorFactory,
-                bool useDialogService,
                 bool useSchedulerProvider,
                 bool useRxActionFactory
             )
             {
                 var navigationService = useNavigationService ? NavigationService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
-                var dialogService = useDialogService ? DialogService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
 
                 Action tryingToConstructWithEmptyParameters = ()
-                    => new SendFeedbackViewModel(navigationService, interactorFactory, dialogService, schedulerProvider, rxActionFactory);
+                    => new SendFeedbackViewModel(navigationService, interactorFactory, schedulerProvider, rxActionFactory);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();

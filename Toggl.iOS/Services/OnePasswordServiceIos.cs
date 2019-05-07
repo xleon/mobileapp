@@ -29,9 +29,9 @@ namespace Toggl.iOS.Services
                     return Disposable.Empty;
                 }
 
-                var presenter = IosDependencyContainer.Instance.ViewPresenter;
 
                 // TODO Fix view controller presentation
+                //var presenter = IosDependencyContainer.Instance.ViewPresenter;
                 // OnePasswordExtension.SharedExtension.FindLoginForURLString(
                 // "https://www.toggl.com",
                 // presenter.MasterNavigationController,

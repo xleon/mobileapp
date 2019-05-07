@@ -11,8 +11,8 @@ using Microsoft.Reactive.Testing;
 using Toggl.Core.DTOs;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
@@ -77,7 +77,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     InteractorFactory,
                     NavigationService,
                     OnboardingStorage,
-                    DialogService,
                     AnalyticsService,
                     StopwatchProvider,
                     RxActionFactory,
@@ -285,7 +284,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useTimeService,
                 bool useInteractorFactory,
                 bool useOnboardingStorage,
-                bool useDialogService,
                 bool useAnalyticsService,
                 bool useStopwatchProvider,
                 bool useRxActionFactory,
@@ -294,7 +292,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var dataSource = useDataSource ? DataSource : null;
                 var syncManager = useSyncManager ? SyncManager : null;
                 var timeService = useTimeService ? TimeService : null;
-                var dialogService = useDialogService ? DialogService : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
@@ -311,7 +308,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         interactorFactory,
                         navigationService,
                         onboardingStorage,
-                        dialogService,
                         analyticsService,
                         stopwatchProvider,
                         rxActionFactory,
@@ -1731,7 +1727,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task DoesNotDeleteIfCancelledSingleTimeEntry()
             {
                 var falseObservable = Observable.Return(false);
-                DialogService
+                View
                     .ConfirmDestructiveAction(Arg.Any<ActionType>(), Arg.Any<object>())
                     .Returns(falseObservable);
 
@@ -1747,7 +1743,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task DoesNotDeleteIfCancelledTimeEntriesGroup()
             {
                 var falseObservable = Observable.Return(false);
-                DialogService
+                View
                     .ConfirmDestructiveAction(Arg.Any<ActionType>())
                     .Returns(falseObservable);
                 AdjustTimeEntries(TimeEntriesGroupIds, te => te);

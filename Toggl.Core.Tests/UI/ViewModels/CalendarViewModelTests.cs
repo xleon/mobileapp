@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck;
@@ -22,6 +21,7 @@ using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.Views;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
@@ -82,7 +82,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 => new CalendarViewModel(
                     DataSource,
                     TimeService,
-                    DialogService,
                     UserPreferences,
                     AnalyticsService,
                     BackgroundService,
@@ -103,7 +102,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
                 bool useTimeService,
-                bool useDialogService,
                 bool useUserPreferences,
                 bool useAnalyticsService,
                 bool useBackgroundService,
@@ -117,7 +115,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
-                var dialogService = useDialogService ? DialogService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var backgroundService = useBackgroundService ? BackgroundService : null;
@@ -133,7 +130,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     () => new CalendarViewModel(
                         dataSource,
                         timeService,
-                        dialogService,
                         userPreferences,
                         analyticsService,
                         backgroundService,
@@ -306,7 +302,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Execute()
                     .Returns(Observable.Return(new UserCalendar().Yield()));
 
-                DialogService
+                View
                     .Alert(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
                     .Returns(Observable.Return(Unit.Default));
 
@@ -1063,7 +1059,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await View.Received().Select(
                     Arg.Any<string>(),
-                    Arg.Is<IEnumerable<(string, CalendarItem?)>>(options => options.Count() == 2),
+                    Arg.Is<IEnumerable<SelectOption<CalendarItem?>>>(options => options.Count() == 2),
                     Arg.Any<int>());
             }
 
@@ -1076,14 +1072,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await View.Received().Select(
                     Arg.Any<string>(),
-                    Arg.Is<IEnumerable<(string, CalendarItem?)>>(options => options.Count() == 3),
+                    Arg.Is<IEnumerable<SelectOption<CalendarItem?>>>(options => options.Count() == 3),
                     Arg.Any<int>());
             }
 
             [Fact, LogIfTooSlow]
             public void DoesNotCreateAnyTimeEntryWhenUserSelectsTheCancelOption()
             {
-                DialogService.Select<CalendarItem?>(null, null, 0)
+                View.Select<CalendarItem?>(null, null, 0)
                     .ReturnsForAnyArgs(Observable.Return<CalendarItem?>(null));
 
                 ViewModel.OnCalendarEventLongPressed.Inputs.OnNext(calendarEvent);
@@ -1138,9 +1134,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 View.Select<CalendarItem?>(null, null, 0)
                     .ReturnsForAnyArgs(callInfo =>
                     {
-                        var copyOption = callInfo.Arg<IEnumerable<(string, CalendarItem?)>>()
-                            .Single(option => option.Item1 == text)
-                            .Item2;
+                        var copyOption = callInfo.Arg<IEnumerable<SelectOption<CalendarItem?>>>()
+                            .Single(option => option.ItemName == text)
+                            .Item;
                         return Observable.Return(copyOption);
                     });
             }

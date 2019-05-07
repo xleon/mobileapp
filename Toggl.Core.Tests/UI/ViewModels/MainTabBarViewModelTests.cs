@@ -20,7 +20,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     TimeService,
                     DataSource,
                     SyncManager,
-                    DialogService,
                     RatingService,
                     UserPreferences,
                     AnalyticsService,
@@ -58,7 +57,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     bool useTimeService,
                     bool useDataSource,
                     bool useSyncManager,
-                    bool useDialogService,
                     bool useRatingService,
                     bool useUserPreferences,
                     bool useAnalyticsService,
@@ -82,7 +80,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var timeService = useTimeService ? TimeService : null;
                 var dataSource = useDataSource ? DataSource : null;
                 var syncManager = useSyncManager ? SyncManager : null;
-                var dialogService = useDialogService ? DialogService : null;
                 var ratingService = useRatingService ? RatingService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
@@ -107,7 +104,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         timeService,
                         dataSource,
                         syncManager,
-                        dialogService,
                         ratingService,
                         userPreferences,
                         analyticsService,

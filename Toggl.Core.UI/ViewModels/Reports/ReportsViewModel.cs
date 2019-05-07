@@ -16,8 +16,6 @@ using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
-using Toggl.Core.UI.ViewModels.Hints;
 using Toggl.Core.Reports;
 using Toggl.Core.Services;
 using Toggl.Shared;
@@ -26,6 +24,7 @@ using Toggl.Shared.Models.Reports;
 using Toggl.Networking.Exceptions;
 using CommonFunctions = Toggl.Shared.Extensions.CommonFunctions;
 using Colors = Toggl.Core.UI.Helper.Colors;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
@@ -44,7 +43,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private readonly INavigationService navigationService;
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
-        private readonly IDialogService dialogService;
         private readonly IIntentDonationService intentDonationService;
         private readonly IStopwatchProvider stopwatchProvider;
 
@@ -99,8 +97,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
         public IObservable<string> CurrentDateRangeStringObservable { get; }
 
         public IObservable<string> WorkspaceNameObservable { get; }
-        public ICollection<(string ItemName, IThreadSafeWorkspace Item)> Workspaces { get; private set; }
-        public IObservable<ICollection<(string ItemName, IThreadSafeWorkspace Item)>> WorkspacesObservable { get; }
+        public ICollection<SelectOption<IThreadSafeWorkspace>> Workspaces { get; private set; }
+        public IObservable<ICollection<SelectOption<IThreadSafeWorkspace>>> WorkspacesObservable { get; }
         public IObservable<DateTimeOffset> StartDate { get; }
         public IObservable<DateTimeOffset> EndDate { get; }
         public IObservable<bool> WorkspaceHasBillableFeatureEnabled { get; }
@@ -112,7 +110,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
             INavigationService navigationService,
             IInteractorFactory interactorFactory,
             IAnalyticsService analyticsService,
-            IDialogService dialogService,
             IIntentDonationService intentDonationService,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
@@ -123,7 +120,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
@@ -134,11 +130,10 @@ namespace Toggl.Core.UI.ViewModels.Reports
             this.analyticsService = analyticsService;
             this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
-            this.dialogService = dialogService;
             this.intentDonationService = intentDonationService;
             this.stopwatchProvider = stopwatchProvider;
 
-            calendarViewModel = new ReportsCalendarViewModel(timeService, dialogService, dataSource, intentDonationService, rxActionFactory);
+            calendarViewModel = new ReportsCalendarViewModel(timeService, dataSource, intentDonationService, rxActionFactory);
 
             var totalsObservable = reportSubject
                 .SelectMany(_ => interactorFactory.GetReportsTotals(userId, workspaceId, startDate, endDate).Execute())
@@ -171,7 +166,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             WorkspacesObservable = interactorFactory.ObserveAllWorkspaces().Execute()
                 .Select(list => list.Where(w => !w.IsInaccessible))
-                .Select(readOnlyWorkspaceNameTuples)
+                .Select(readOnlyWorkspaceSelectOptions)
                 .AsDriver(schedulerProvider);
 
             DurationFormatObservable = dataSource.Preferences.Current
@@ -272,9 +267,9 @@ namespace Toggl.Core.UI.ViewModels.Reports
                    && endDate.Date == endOfWeek;
         }
 
-        private static ReadOnlyCollection<(string, IThreadSafeWorkspace)> readOnlyWorkspaceNameTuples(IEnumerable<IThreadSafeWorkspace> workspaces)
+        private static ReadOnlyCollection<SelectOption<IThreadSafeWorkspace>> readOnlyWorkspaceSelectOptions(IEnumerable<IThreadSafeWorkspace> workspaces)
             => workspaces
-                .Select(ws => (ws.Name, ws))
+                .Select(ws => new SelectOption<IThreadSafeWorkspace>(ws, ws.Name))
                 .ToList()
                 .AsReadOnly();
 
@@ -437,7 +432,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         {
             var currentWorkspaceIndex = Workspaces.IndexOf(w => w.Item.Id == workspaceId);
 
-            var workspace = await this.SelectDialogService(dialogService).Select(Resources.SelectWorkspace, Workspaces, currentWorkspaceIndex);
+            var workspace = await View.Select(Resources.SelectWorkspace, Workspaces, currentWorkspaceIndex);
 
             if (workspace == null || workspace.Id == workspaceId) return;
 

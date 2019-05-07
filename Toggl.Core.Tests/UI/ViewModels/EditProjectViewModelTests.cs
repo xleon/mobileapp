@@ -64,7 +64,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             protected override EditProjectViewModel CreateViewModel()
                 => new EditProjectViewModel(
                     DataSource,
-                    DialogService,
                     RxActionFactory,
                     InteractorFactory,
                     SchedulerProvider,
@@ -139,7 +138,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
-                bool useDialogService,
                 bool useRxActionFactory,
                 bool useInteractorFactory,
                 bool useSchedulerProvider,
@@ -147,7 +145,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useStopwatchProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
-                var dialogService = useDialogService ? DialogService : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var navigationService = useNavigationService ? NavigationService : null;
@@ -157,7 +154,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 Action tryingToConstructWithEmptyParameters =
                     () => new EditProjectViewModel(
                         dataSource,
-                        dialogService,
                         rxActionFactory,
                         interactorFactory,
                         schedulerProvider,

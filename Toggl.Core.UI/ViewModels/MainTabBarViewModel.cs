@@ -40,7 +40,6 @@ namespace Toggl.Core.UI.ViewModels
             ITimeService timeService,
             ITogglDataSource dataSource,
             ISyncManager syncManager,
-            IDialogService dialogService,
             IRatingService ratingService,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
@@ -63,7 +62,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(ratingService, nameof(ratingService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
@@ -77,7 +75,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(suggestionProviders, nameof(suggestionProviders));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
@@ -113,7 +110,6 @@ namespace Toggl.Core.UI.ViewModels
                 navigationService,
                 interactorFactory,
                 analyticsService,
-                dialogService,
                 intentDonationService,
                 schedulerProvider,
                 stopwatchProvider,
@@ -122,7 +118,6 @@ namespace Toggl.Core.UI.ViewModels
             calendarViewModel = new CalendarViewModel(
                 dataSource,
                 timeService,
-                dialogService,
                 userPreferences,
                 analyticsService,
                 backgroundService,
@@ -138,7 +133,6 @@ namespace Toggl.Core.UI.ViewModels
                 dataSource,
                 syncManager,
                 platformInfo,
-                dialogService,
                 userPreferences,
                 analyticsService,
                 userAccessManager,

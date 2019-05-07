@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive;
-using Toggl.Core.UI.Services;
+using Toggl.Core.UI.Views;
 using Toggl.iOS.Extensions;
 
 namespace Toggl.iOS.ViewControllers
@@ -17,7 +17,7 @@ namespace Toggl.iOS.ViewControllers
         public IObservable<bool> ConfirmDestructiveAction(ActionType type, params object[] formatArguments)
             => this.ShowConfirmDestructiveActionDialog(type, formatArguments);
 
-        public IObservable<T> Select<T>(string title, IEnumerable<(string ItemName, T Item)> options, int initialSelectionIndex)
+        public IObservable<T> Select<T>(string title, IEnumerable<SelectOption<T>> options, int initialSelectionIndex)
             => this.ShowSelectDialog(title, options, initialSelectionIndex);
     }
 }

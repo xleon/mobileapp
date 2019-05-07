@@ -40,10 +40,11 @@ namespace Toggl.iOS
             setupNavigationBar();
             setupTabBar();
 
-            var rootPresenter = new RootPresenter(Window, this);
-            var compositePresenter = new CompositePresenter(rootPresenter);
+            var compositePresenter = new CompositePresenter(
+                new RootPresenter(Window, this)
+            );
 
-            IosDependencyContainer.EnsureInitialized(new TogglPresenter(this, Window), compositePresenter, environment, Platform.Daneel, version);
+            IosDependencyContainer.EnsureInitialized(compositePresenter, environment, Platform.Daneel, version);
             var app = new App<OnboardingViewModel, Unit>(IosDependencyContainer.Instance);
 
             app.Start();

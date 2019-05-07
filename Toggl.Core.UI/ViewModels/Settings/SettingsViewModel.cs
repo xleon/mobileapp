@@ -42,7 +42,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ITogglDataSource dataSource;
         private readonly ISyncManager syncManager;
         private readonly IUserAccessManager userAccessManager;
-        private readonly IDialogService dialogService;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
         private readonly IPlatformInfo platformInfo;
@@ -107,7 +106,6 @@ namespace Toggl.Core.UI.ViewModels
             ITogglDataSource dataSource,
             ISyncManager syncManager,
             IPlatformInfo platformInfo,
-            IDialogService dialogService,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
             IUserAccessManager userAccessManager,
@@ -124,7 +122,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
@@ -141,7 +138,6 @@ namespace Toggl.Core.UI.ViewModels
             this.dataSource = dataSource;
             this.syncManager = syncManager;
             this.platformInfo = platformInfo;
-            this.dialogService = dialogService;
             this.userPreferences = userPreferences;
             this.rxActionFactory = rxActionFactory;
             this.analyticsService = analyticsService;
@@ -429,7 +425,7 @@ namespace Toggl.Core.UI.ViewModels
                 ? (Resources.SettingsSyncInProgressTitle, Resources.SettingsSyncInProgressMessage)
                 : (Resources.SettingsUnsyncedTitle, Resources.SettingsUnsyncedMessage);
 
-            await this.SelectDialogService(dialogService)
+            await View
                 .Confirm(title, message, Resources.SettingsDialogButtonSignOut, Resources.Cancel)
                 .SelectMany(shouldLogout
                     => shouldLogout ? logout() : Observable.Return(Unit.Default));

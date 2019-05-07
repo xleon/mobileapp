@@ -6,7 +6,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CoreGraphics;
 using Toggl.Core;
-using Toggl.Core.UI.Services;
+using Toggl.Core.UI.Views;
 using UIKit;
 
 namespace Toggl.iOS.Extensions
@@ -130,7 +130,7 @@ namespace Toggl.iOS.Extensions
             });
         }
 
-        internal static IObservable<T> ShowSelectDialog<T>(this UIViewController viewController, string title, IEnumerable<(string ItemName, T Item)> options, int initialSelectionIndex)
+        internal static IObservable<T> ShowSelectDialog<T>(this UIViewController viewController, string title, IEnumerable<SelectOption<T>> options, int initialSelectionIndex)
         {
             return Observable.Create<T>(observer =>
             {
@@ -149,7 +149,7 @@ namespace Toggl.iOS.Extensions
 
                 var cancelAction = UIAlertAction.Create(Resources.Cancel, UIAlertActionStyle.Cancel, _ =>
                 {
-                    observer.OnNext(default(T));
+                    observer.OnNext(default);
                     observer.OnCompleted();
                 });
 

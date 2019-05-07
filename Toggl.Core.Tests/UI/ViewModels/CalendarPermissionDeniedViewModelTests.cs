@@ -42,11 +42,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheEnableAccessAction : CalendarPermissionDeniedViewModelTest
         {
             [Fact]
-            public async Task OpensAppSettings()
+            public void OpensAppSettings()
             {
                 ViewModel.EnableAccess.Execute();
 
-                PermissionsChecker.Received().OpenAppSettings();
+                View.Received().OpenAppSettings();
             }
         }
 
