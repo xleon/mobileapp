@@ -335,27 +335,46 @@ namespace Toggl.Daneel.Views.EditDuration
             if (updateType == WheelUpdateType.EditStartTime
                 || updateType == WheelUpdateType.EditBothAtOnce)
             {
-                var nextStartTime = (StartTime + diff).RoundToClosestMinute();
+                var nextStartTime = getNewDateTimeOffset(StartTime, diff).RoundToClosestMinute();
                 giveFeedback = nextStartTime != StartTime;
                 StartTime = nextStartTime;
             }
 
             if (updateType == WheelUpdateType.EditEndTime)
             {
-                var nextEndTime = (EndTime + diff).RoundToClosestMinute();
+                var nextEndTime = getNewDateTimeOffset(EndTime, diff).RoundToClosestMinute();
                 giveFeedback = nextEndTime != EndTime;
                 EndTime = nextEndTime;
             }
 
             if (updateType == WheelUpdateType.EditBothAtOnce)
             {
-                EndTime = StartTime + duration;
+                EndTime = getNewDateTimeOffset(StartTime, duration);
             }
 
             if (giveFeedback)
             {
                 feedbackGenerator.SelectionChanged();
                 feedbackGenerator.Prepare();
+            }
+        }
+
+        private DateTimeOffset getNewDateTimeOffset(
+            DateTimeOffset currentDateTimeOffset,
+            TimeSpan difference)
+        {
+            try
+            {
+                return currentDateTimeOffset + difference;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                IosDependencyContainer.Instance.AnalyticsService.UnrepresentableDateError.Track(
+                    currentDateTimeOffset,
+                    difference,
+                    UnrepresentableDateErrorLocation.WheelForegroundView
+                );
+                return currentDateTimeOffset;
             }
         }
 
