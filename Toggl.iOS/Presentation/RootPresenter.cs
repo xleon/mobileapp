@@ -30,8 +30,7 @@ namespace Toggl.iOS.Presentation
             switch (viewModel)
             {
                 case MainTabBarViewModel mainTabBarViewModel:
-                    var mainTabBarController = new MainTabBarController();
-                    mainTabBarController.ViewModel = mainTabBarViewModel;
+                    var mainTabBarController = new MainTabBarController(mainTabBarViewModel);
                     rootViewController = mainTabBarController;
                     break;
                 case OnboardingViewModel onboardingViewModel:

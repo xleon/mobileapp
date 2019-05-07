@@ -23,27 +23,45 @@ namespace Toggl.iOS.ViewControllers
             { typeof(SettingsViewModel), "icSettings" }
         };
 
-        public MainTabBarController()
+        public MainTabBarController(MainTabBarViewModel viewModel)
         {
+            ViewModel = viewModel;
             ViewControllers = ViewModel.Tabs.Select(createTabFor).ToArray();
 
-            UIViewController createTabFor(ViewModel viewModel)
+            UIViewController createTabFor(ViewModel childViewModel)
             {
-                var controller = new UINavigationController();
-                var screen = createViewControllerFor(viewModel) as UIViewController;
+                var childViewController = createViewControllerFor(childViewModel);
                 var item = new UITabBarItem();
                 item.Title = "";
-                item.Image = UIImage.FromBundle(imageNameForType[viewModel.GetType()]);
-                screen.TabBarItem = item;
-                controller.PushViewController(screen, true);
-                return controller;
+                item.Image = UIImage.FromBundle(imageNameForType[childViewModel.GetType()]);
+                childViewController.TabBarItem = item;
+                return new UINavigationController(childViewController);
             }
         }
 
-        // TODO: Implement as part of #4860
         private UIViewController createViewControllerFor(ViewModel viewModel)
         {
-            throw new NotImplementedException();
+            switch (viewModel)
+            {
+                case MainViewModel mainViewModel:
+                    var mainViewController = new MainViewController();
+                    mainViewController.ViewModel = mainViewModel;
+                    return mainViewController;
+                case ReportsViewModel reportsViewModel:
+                    var reportsViewController = new ReportsViewController();
+                    reportsViewController.ViewModel = reportsViewModel;
+                    return reportsViewController;
+                case CalendarViewModel calendarViewModel:
+                    var calendarViewController = new CalendarViewController();
+                    calendarViewController.ViewModel = calendarViewModel;
+                    return calendarViewController;
+                case SettingsViewModel settingsViewModel:
+                    var settingsViewController = new SettingsViewController();
+                    settingsViewController.ViewModel = settingsViewModel;
+                    return settingsViewController;
+                default:
+                    throw new Exception($"Cannot create view controller for view model of type {viewModel.GetType().Name}");
+            }
         }
 
         public override void ViewDidLoad()
