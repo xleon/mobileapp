@@ -248,6 +248,9 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("HasViewModel", "HasTimeEntries", "TimeEntriesCount", "RehydrationCount")]
         public IAnalyticsEvent<bool, bool, int, int> DebugEditViewInitialSetup { get; protected set; }
 
+        [AnalyticsEvent("Platform")]
+        public IAnalyticsEvent<Platform> ReceivedLowMemoryWarning { get; protected set; }
+
         public void TrackAnonymized(Exception exception)
         {
             if (exception.IsAnonymized())

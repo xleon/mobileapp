@@ -162,6 +162,8 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<bool, bool, int, int> DebugEditViewInitialSetup { get; }
 
+        IAnalyticsEvent<Platform> ReceivedLowMemoryWarning { get; }
+
         void Track(string eventName, Dictionary<string, string> parameters = null);
 
         void TrackAnonymized(Exception exception);
