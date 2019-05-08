@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CoreAnimation;
@@ -6,6 +7,7 @@ using CoreGraphics;
 using Foundation;
 using MvvmCross.Base;
 using Toggl.Core.Analytics;
+using Toggl.Core.Exceptions;
 using Toggl.Core.UI.Helper;
 using Toggl.Daneel.Extensions;
 using Toggl.Daneel.Views.EditDuration.Shapes;
@@ -367,13 +369,15 @@ namespace Toggl.Daneel.Views.EditDuration
             {
                 return currentDateTimeOffset + difference;
             }
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentOutOfRangeException argumentOutOfRangeException)
             {
-                IosDependencyContainer.Instance.AnalyticsService.UnrepresentableDateError.Track(
-                    currentDateTimeOffset,
-                    difference,
-                    UnrepresentableDateErrorLocation.WheelForegroundView
-                );
+                var exceptionProperties = new Dictionary<string, string>
+                {
+                    { "DateTimeOffset", currentDateTimeOffset.ToString() },
+                    { "TimeSpan", difference.ToString() }
+                };
+                var exception = new UnrepresentableDateException("Unrepresentable DateTimeOffset encountered in WheelForegroundView", argumentOutOfRangeException);
+                IosDependencyContainer.Instance.AnalyticsService.Track(exception, exceptionProperties);
                 return currentDateTimeOffset;
             }
         }
