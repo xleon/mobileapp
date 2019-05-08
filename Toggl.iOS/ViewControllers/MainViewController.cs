@@ -278,9 +278,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             // Intent Donation
-            ViewModel.DefaultWorkspace
-                .Subscribe(IosDependencyContainer.Instance.IntentDonationService.SetDefaultShortcutSuggestions)
-                .DisposedBy(disposeBag);
+            IosDependencyContainer.Instance.IntentDonationService.SetDefaultShortcutSuggestions();
 
             Observable.Merge(
                     ViewModel.ContinueTimeEntry.Elements,
