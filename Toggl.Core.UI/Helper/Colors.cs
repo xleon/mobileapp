@@ -23,7 +23,15 @@ namespace Toggl.Core.UI.Helper
         public static readonly Color Black = new Color(0, 0, 0);
         public static readonly Color White = new Color(255, 255, 255);
         public static readonly Color Transparent = new Color(0, 0, 0, 0);
-        
+
+        public static class Siri
+        {
+            public static readonly Color AddButton = lightishGreen;
+            public static readonly Color InvocationPhrase = brownishGrey;
+            public static readonly Color HeaderLabel = silver;
+            public static readonly Color HeaderBackground = paleGreyTwo;
+        }
+
         public static class Onboarding
         {
             internal static readonly Color TrackPageBorderColor = new Color(14, 150, 213);
