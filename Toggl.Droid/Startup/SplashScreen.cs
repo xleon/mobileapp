@@ -43,7 +43,6 @@ namespace Toggl.Droid
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            SetContentView(Resource.Layout.SplashScreen);
 
             var dependencyContainer = AndroidDependencyContainer.Instance;
             var app = new App<LoginViewModel, CredentialsParameter>(dependencyContainer);
