@@ -914,15 +914,6 @@ Use them to add keywords to your time entries.</value>
   <data name="ContinueTimerInvocationPhrase" xml:space="preserve">
     <value>Continue tracking</value>
   </data>
-  <data name="ContinueTimerInvocationPhrase">
-      <value>Continue timer</value>
-  </data>
-  <data name="NumberOfTasksPlural" xml:space="preserve">
-    <value>{0} Tasks</value>
-  </data>
-  <data name="NumberOfTasksSingular" xml:space="preserve">
-    <value>{0} Task</value>
-  </data>
   <data name="TwelveHoursFormat">
     <value>h tt</value>
   </data>
