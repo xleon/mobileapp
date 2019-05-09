@@ -242,9 +242,6 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("Origin")]
         public IAnalyticsEvent<EditTimeEntryOrigin> EditViewOpened { get; protected set; }
 
-        [AnalyticsEvent("DateTimeOffset", "TimeSpan", "Location")]
-        public IAnalyticsEvent<DateTimeOffset, TimeSpan, UnrepresentableDateErrorLocation> UnrepresentableDateError { get; protected set; }
-
         public void TrackAnonymized(Exception exception)
         {
             if (exception.IsAnonymized())
@@ -258,6 +255,8 @@ namespace Toggl.Core.Analytics
         }
 
         public abstract void Track(Exception exception, string message);
+
+        public abstract void Track(Exception exception, IDictionary<string, string> properties);
 
         public abstract void Track(string eventName, Dictionary<string, string> parameters = null);
 
