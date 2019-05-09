@@ -3,12 +3,13 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
-    public partial class SelectWorkspaceFragment : ReactiveFragment<SelectWorkspaceViewModel>
+    public partial class SelectWorkspaceFragment : ReactiveDialogFragment<SelectWorkspaceViewModel>
     {
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -20,7 +21,7 @@ namespace Toggl.Droid.Fragments
                 Resource.Layout.SelectWorkspaceFragmentCell,
                 SelectWorkspaceViewHolder.Create
             );
-
+            
             adapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectWorkspace.Inputs)
                 .DisposedBy(DisposeBag);
@@ -31,6 +32,12 @@ namespace Toggl.Droid.Fragments
             recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
 
             return view;
+        }
+
+        public override void OnResume()
+        {
+            base.OnResume();
+            Dialog.Window.SetDefaultDialogLayout(Activity, Context, ViewGroup.LayoutParams.WrapContent);
         }
 
         public override void OnDestroy()
