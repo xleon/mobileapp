@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using Realms;
 using Remotion.Linq.Clauses;
+using Toggl.Shared.Extensions;
 using Toggl.Storage.Models;
 using Toggl.Storage.Realm.Models;
 
@@ -77,7 +78,7 @@ namespace Toggl.Storage.Realm
         private RealmConfiguration createRealmConfiguration()
             => new RealmConfiguration
             {
-                SchemaVersion = 7,
+                SchemaVersion = 8,
                 MigrationCallback = (migration, oldSchemaVersion) =>
                 {
                     if (oldSchemaVersion < 3)
@@ -106,6 +107,12 @@ namespace Toggl.Storage.Realm
                     {
                         // RealmWorkspace: IsGhost was renamed to IsInaccessible
                         // A migration is not required because the property was not used until now
+                    }
+
+                    if (oldSchemaVersion < 8)
+                    {
+                        // RealmUser: Added new property Timezone
+                        // A migration is not required because it's acceptable for the timezone to be unspecified (null)
                     }
                 }
             };
