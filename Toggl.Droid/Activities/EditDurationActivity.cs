@@ -15,6 +15,7 @@ using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Droid.Views.EditDuration;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using static Toggl.Core.UI.Helper.TemporalInconsistency;
 
@@ -311,13 +312,16 @@ namespace Toggl.Droid.Activities
                 editDialog.Show();
             }
         }
-
         private void editDate(DateTimeOffset currentDate)
         {
             if (editDialog == null)
             {
                 var datePickerDialog = new DatePickerDialog(this, Resource.Style.WheelDialogStyle, new DatePickerListener(currentDate, activeEditionChangedSubject.OnNext),
                     currentDate.Year, currentDate.Month - 1, currentDate.Day);
+
+                // FirstDayOfWeek days start with sunday at 1 and finish with saturday at 7
+                var normalizedBeginningOfWeek = (int)ViewModel.BeginningOfWeek + 1;
+                datePickerDialog.DatePicker.FirstDayOfWeek = normalizedBeginningOfWeek;
 
                 void updateDateBounds()
                 {
