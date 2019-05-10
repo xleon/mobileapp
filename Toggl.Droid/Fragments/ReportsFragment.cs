@@ -14,7 +14,7 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
-    public sealed partial class ReportsFragment : ReactiveFragment<ReportsViewModel>, IScrollableToTop
+    public sealed partial class ReportsFragment : ReactiveTabFragment<ReportsViewModel>, IScrollableToTop
     {
         private static readonly TimeSpan toggleCalendarThrottleDuration = TimeSpan.FromMilliseconds(300);
         private ReportsRecyclerAdapter reportsRecyclerAdapter;
@@ -73,10 +73,46 @@ namespace Toggl.Droid.Fragments
             return view;
         }
 
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
+            ViewModel?.CalendarViewModel.AttachView(this);
+        }
+
+        public override void OnStart()
+        {
+            base.OnStart();
+            ViewModel?.CalendarViewModel.ViewAppearing();
+        }
+
         public override void OnResume()
         {
             base.OnResume();
-            ViewModel.CalendarViewModel.ViewAppeared();
+            
+            if (IsHidden) return;
+            
+            ViewModel?.CalendarViewModel.ViewAppeared();
+        }
+
+        public override void OnStop()
+        {
+            base.OnStop();
+            ViewModel?.CalendarViewModel.ViewDisappeared();
+        }
+
+        public override void OnDestroy()
+        {
+            ViewModel?.CalendarViewModel.DetachView();
+            base.OnDestroy();
+        }
+
+        public override void OnHiddenChanged(bool hidden)
+        {
+            base.OnHiddenChanged(hidden);
+            if (hidden)
+                ViewModel.CalendarViewModel.ViewDisappeared();
+            else
+                ViewModel.CalendarViewModel.ViewAppeared();
         }
 
         public void ScrollToTop()

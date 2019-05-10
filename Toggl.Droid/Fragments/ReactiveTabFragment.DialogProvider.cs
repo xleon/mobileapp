@@ -7,7 +7,7 @@ using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
-    public abstract partial class ReactiveFragment<TViewModel>
+    public abstract partial class ReactiveTabFragment<TViewModel>
     {
         public IObservable<bool> Confirm(string title, string message, string confirmButtonText,
             string dismissButtonText)

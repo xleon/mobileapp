@@ -16,7 +16,7 @@ using System.Reactive;
 
 namespace Toggl.Droid.Fragments
 {
-    public partial class CalendarFragment : ReactiveFragment<CalendarViewModel>, IScrollableToTop
+    public partial class CalendarFragment : ReactiveTabFragment<CalendarViewModel>, IScrollableToTop
     {
         private CalendarLayoutManager calendarLayoutManager;
 

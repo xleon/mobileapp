@@ -9,7 +9,7 @@ using Toggl.Droid.Helper;
 
 namespace Toggl.Droid.Fragments
 {
-    public abstract partial class ReactiveFragment<TViewModel> : IPermissionRequesterComponent
+    public abstract partial class ReactiveTabFragment<TViewModel> : IPermissionRequesterComponent
     {
         public Subject<bool> CalendarAuthorizationSubject { get; set; }
 

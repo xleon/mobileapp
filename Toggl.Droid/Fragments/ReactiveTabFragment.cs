@@ -10,7 +10,7 @@ using Toggl.Core.UI.Views;
 
 namespace Toggl.Droid.Fragments
 {
-    public abstract partial class ReactiveFragment<TViewModel> : Fragment, IView
+    public abstract partial class ReactiveTabFragment<TViewModel> : Fragment, IView
         where TViewModel : class, IViewModel
     {
         protected CompositeDisposable DisposeBag = new CompositeDisposable();
@@ -19,11 +19,11 @@ namespace Toggl.Droid.Fragments
 
         protected abstract void InitializeViews(View view);
 
-        protected ReactiveFragment()
+        protected ReactiveTabFragment()
         {
         }
 
-        protected ReactiveFragment(IntPtr javaReference, JniHandleOwnership transfer)
+        protected ReactiveTabFragment(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
         }
@@ -43,6 +43,9 @@ namespace Toggl.Droid.Fragments
         public override void OnResume()
         {
             base.OnResume();
+            
+            if (IsHidden) return;
+            
             ViewModel?.ViewAppeared();
         }
 
@@ -64,6 +67,15 @@ namespace Toggl.Droid.Fragments
             base.OnDestroyView();
             DisposeBag.Dispose();
             DisposeBag = new CompositeDisposable();
+        }
+
+        public override void OnHiddenChanged(bool hidden)
+        {
+            base.OnHiddenChanged(hidden);
+            if (hidden) 
+                ViewModel?.ViewDisappeared();
+            else
+                ViewModel?.ViewAppeared();
         }
 
         protected override void Dispose(bool disposing)
