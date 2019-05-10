@@ -261,8 +261,10 @@ namespace Toggl.iOS.Presentation.Transition
                 if (await dismissableViewController.Dismiss() == false)
                     return false;
             }
-
-            PresentedViewController.DismissViewController(true, null);
+            else
+            {
+                PresentedViewController.DismissViewController(true, null);
+            }
 
             return true;
         }

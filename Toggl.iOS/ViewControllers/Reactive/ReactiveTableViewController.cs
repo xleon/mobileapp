@@ -11,7 +11,7 @@ namespace Toggl.iOS.ViewControllers
     public abstract partial class ReactiveTableViewController<TViewModel> : UITableViewController, IView
         where TViewModel : IViewModel
     {
-        private bool isDismissing;
+        private bool hasFinished;
 
         public CompositeDisposable DisposeBag { get; private set; } = new CompositeDisposable();
 
@@ -61,18 +61,28 @@ namespace Toggl.iOS.ViewControllers
             // then the view is destroyed and the view model needs to be cancelled
             if (parent == null)
             {
-                isDismissing = true;
+                if (!hasFinished)
+                {
+                    ViewModel?.Cancel();
+                }
+
+                ViewModel?.DetachView();
                 ViewModel?.ViewDestroyed();
-                ViewModel?.Cancel();
             }
+        }
+
+        public override void DismissViewController(bool animated, Action completionHandler)
+        {
+            base.DismissViewController(animated, completionHandler);
+
+            ViewModel?.DetachView();
+            ViewModel?.ViewDestroyed();
         }
 
         public Task Close()
         {
-            if (!isDismissing)
-            {
-                UIApplication.SharedApplication.InvokeOnMainThread(this.Dismiss);
-            }
+            hasFinished = true;
+            UIApplication.SharedApplication.InvokeOnMainThread(this.Dismiss);
             return Task.CompletedTask;
         }
 

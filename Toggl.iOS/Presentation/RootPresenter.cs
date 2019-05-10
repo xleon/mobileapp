@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
@@ -69,16 +70,55 @@ namespace Toggl.iOS.Presentation
 
         private void setRootViewController(UIViewController controller)
         {
+            var oldRootViewController = Window.RootViewController;
+
             UIView.Transition(
                 Window,
                 Animation.Timings.EnterTiming,
                 UIViewAnimationOptions.TransitionCrossDissolve,
                 () => Window.RootViewController = controller,
-                null
+                () => detachOldRootViewController(oldRootViewController)
             );
         }
 
         private UINavigationController wrapInNavigationController(UIViewController viewController)
             => new UINavigationController(viewController);
+
+        private void detachOldRootViewController(UIViewController viewController)
+        {
+            var viewControllerToDetach = viewController is UINavigationController navigationController
+                ? navigationController.ViewControllers.First()
+                : viewController;
+
+            switch (viewControllerToDetach)
+            {
+                case MainTabBarController mainTabBarController:
+                    detachViewModel(mainTabBarController.ViewModel);
+                    break;
+                case OnboardingViewController onboardingViewController:
+                    detachViewModel(onboardingViewController.ViewModel);
+                    break;
+                case LoginViewController loginViewController:
+                    detachViewModel(loginViewController.ViewModel);
+                    break;
+                case SignupViewController signupViewController:
+                    detachViewModel(signupViewController.ViewModel);
+                    break;
+                case TokenResetViewController tokenResetViewController:
+                    detachViewModel(tokenResetViewController.ViewModel);
+                    break;
+                case OutdatedAppViewController outdatedAppViewController:
+                    detachViewModel(outdatedAppViewController.ViewModel);
+                    break;
+            }
+        }
+
+        private void detachViewModel<TViewModel>(TViewModel viewModel)
+            where TViewModel : IViewModel
+        {
+            viewModel?.Cancel();
+            viewModel?.DetachView();
+            viewModel?.ViewDestroyed();
+        }
     }
 }

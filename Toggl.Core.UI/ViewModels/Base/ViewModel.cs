@@ -51,7 +51,6 @@ namespace Toggl.Core.UI.ViewModels
 
         public async Task Cancel()
         {
-            await View.Close();
             CloseCompletionSource.SetCanceled();
         }
 
