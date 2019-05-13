@@ -201,7 +201,15 @@ namespace Toggl.iOS
                 case ShowReportPeriodIntent periodIntent:
                     var tabbarVC = (MainTabBarController)UIApplication.SharedApplication.KeyWindow.RootViewController;
                     var reportViewModel = (ReportsViewModel)tabbarVC.ViewModel.Tabs.Single(viewModel => viewModel is ReportsViewModel);
-                    navigationService.Navigate(reportViewModel, periodIntent.Period.ToReportPeriod());
+
+                    int? parseLong (string val)
+                    {
+                        long i;
+                        return long.TryParse (val, out i) ? (int?) i : null;
+                    }
+
+                    long? workspaceId = parseLong(periodIntent.Workspace?.Identifier);
+                    navigationService.Navigate(reportViewModel, new ReportParameter(periodIntent.Period.ToReportPeriod(), workspaceId));
                     return true;
                 case StartTimerIntent startTimerIntent:
                     var timeEntryParams = createStartTimeEntryParameters(startTimerIntent);

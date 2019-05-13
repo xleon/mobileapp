@@ -8,6 +8,7 @@ using NSubstitute;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.UI.Parameters;
 using Toggl.Shared.Extensions;
 using Xunit;
 
@@ -65,7 +66,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 const long expectedId = 8;
 
-                ViewModel.Prepare(expectedId);
+                ViewModel.Prepare(new SelectWorkspaceParameters(string.Empty, expectedId));
 
                 await ViewModel.Initialize();
                 ViewModel.Workspaces.Single(x => x.Selected).WorkspaceId.Should().Be(expectedId);
@@ -75,9 +76,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheTitleProperty : SelectWorkspaceViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public void HasCorrectValue()
+            public async Task HasCorrectValue()
             {
-                ViewModel.Title.Should().Be(Resources.SetDefaultWorkspace);
+                var title = "some title";
+                ViewModel.Prepare(new SelectWorkspaceParameters(title, 0));
+
+                await ViewModel.Initialize();
+                ViewModel.Title.Should().Be(title);
             }
         }
 
@@ -114,7 +119,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task ReturnsTheWorkspacePassedOnPrepare()
             {
                 const long expectedId = 10;
-                ViewModel.Prepare(expectedId);
+                ViewModel.Prepare(new SelectWorkspaceParameters(string.Empty, expectedId));
                 await ViewModel.Initialize();
 
                 ViewModel.Close.Execute();

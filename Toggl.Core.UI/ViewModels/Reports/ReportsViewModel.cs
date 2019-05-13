@@ -32,7 +32,7 @@ using Colors = Toggl.Core.UI.Helper.Colors;
 namespace Toggl.Core.UI.ViewModels.Reports
 {
     [Preserve(AllMembers = true)]
-    public sealed class ReportsViewModel : ViewModelWithInput<ReportPeriod>
+    public sealed class ReportsViewModel : ViewModelWithInput<ReportParameter>
     {
         private const float minimumSegmentPercentageToBeOnItsOwn = 5f;
         private const float maximumSegmentPercentageToEndUpInOther = 1f;
@@ -74,6 +74,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private long workspaceId;
         private long userId;
         private DateFormat dateFormat;
+        private ReportParameter parameter;
 
         public IObservable<bool> IsLoadingObservable { get; }
 
@@ -181,10 +182,11 @@ namespace Toggl.Core.UI.ViewModels.Reports
             ShowEmptyStateObservable = SegmentsObservable.CombineLatest(IsLoadingObservable, shouldShowEmptyState);
         }
 
-        public override void Prepare(ReportPeriod parameter)
+        public override void Prepare(ReportParameter parameter)
         {
             base.Prepare();
-            calendarViewModel.SelectPeriod(parameter);
+            calendarViewModel.SelectPeriod(parameter.ReportPeriod);
+            this.parameter = parameter;
         }
 
         public override async Task Initialize()
@@ -196,9 +198,21 @@ namespace Toggl.Core.UI.ViewModels.Reports
             var user = await dataSource.User.Get();
             userId = user.Id;
 
-            var workspace = await interactorFactory.GetDefaultWorkspace()
+            IInteractor<IObservable<IThreadSafeWorkspace>> workspaceInteractor;
+
+            if (parameter?.WorkspaceId is long parameterWorkspaceId)
+            {
+                workspaceInteractor = interactorFactory.GetWorkspaceById(parameterWorkspaceId);
+            }
+            else
+            {
+                workspaceInteractor = interactorFactory.GetDefaultWorkspace();
+            }
+
+            var workspace = await workspaceInteractor
                 .TrackException<InvalidOperationException, IThreadSafeWorkspace>("ReportsViewModel.Initialize")
                 .Execute();
+
             workspaceId = workspace.Id;
             workspaceSubject.OnNext(workspace);
 

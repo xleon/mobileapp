@@ -39,7 +39,8 @@ namespace Toggl.iOS.Intents
         LastWeek = 4,
         ThisMonth = 5,
         LastMonth = 6,
-        ThisYear = 7
+        ThisYear = 7,
+        LastYear = 8
     }
 
     [Native]

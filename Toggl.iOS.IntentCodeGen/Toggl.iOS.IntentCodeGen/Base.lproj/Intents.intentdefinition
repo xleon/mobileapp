@@ -91,6 +91,16 @@
 					<key>INEnumValueName</key>
 					<string>ThisYear</string>
 				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Last Year</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>XDraDt</string>
+					<key>INEnumValueIndex</key>
+					<integer>8</integer>
+					<key>INEnumValueName</key>
+					<string>LastYear</string>
+				</dict>
 			</array>
 		</dict>
 	</array>
@@ -99,9 +109,9 @@
 	<key>INIntentDefinitionSystemVersion</key>
 	<string>18E226</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>10E125</string>
+	<string>10E1001</string>
 	<key>INIntentDefinitionToolsVersion</key>
-	<string>10.2</string>
+	<string>10.2.1</string>
 	<key>INIntents</key>
 	<array>
 		<dict>
@@ -273,7 +283,7 @@
 			<key>INIntentDescriptionID</key>
 			<string>hxXp2c</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>3</integer>
+			<integer>5</integer>
 			<key>INIntentName</key>
 			<string>ShowReportPeriod</string>
 			<key>INIntentParameterCombinations</key>
@@ -293,6 +303,21 @@
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>7JD33K</string>
 				</dict>
+				<key>period,workspace</key>
+				<dict>
+					<key>INIntentParameterCombinationIsPrimary</key>
+					<true/>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>for ${period} in ${workspace}</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>2VrJyI</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<false/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Show report </string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>uAAbQw</string>
+				</dict>
 			</dict>
 			<key>INIntentParameters</key>
 			<array>
@@ -309,6 +334,18 @@
 					<integer>3</integer>
 					<key>INIntentParameterType</key>
 					<string>Integer</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>2</integer>
+					<key>INIntentParameterName</key>
+					<string>workspace</string>
+					<key>INIntentParameterSupportsMultipleValues</key>
+					<false/>
+					<key>INIntentParameterTag</key>
+					<integer>5</integer>
+					<key>INIntentParameterType</key>
+					<string>Object</string>
 				</dict>
 			</array>
 			<key>INIntentResponse</key>

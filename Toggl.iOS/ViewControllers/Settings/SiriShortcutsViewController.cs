@@ -73,7 +73,7 @@ namespace Toggl.iOS.ViewControllers.Settings
 
                 if (shortcut.Type == SiriShortcutType.CustomReport)
                 {
-                    // Navigate to custom report creation
+                    ViewModel.NavigateToCustomReportShortcut.Execute();
                     return;
                 }
 
