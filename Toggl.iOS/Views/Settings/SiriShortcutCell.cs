@@ -7,11 +7,12 @@ using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Models;
+using Toggl.iOS.ViewControllers.Settings;
 using UIKit;
 
 namespace Toggl.iOS.Views.Settings
 {
-    public partial class SiriShortcutCell : BaseTableViewCell<SiriShortcut>
+    public partial class SiriShortcutCell : BaseTableViewCell<SiriShortcutViewModel>
     {
         public static readonly string Identifier = nameof(SiriShortcutCell);
         public static readonly UINib Nib;

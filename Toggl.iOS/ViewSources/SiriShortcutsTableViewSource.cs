@@ -4,14 +4,15 @@ using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Models;
+using Toggl.iOS.ViewControllers.Settings;
 using Toggl.iOS.Views.Settings;
 using UIKit;
 
 namespace Toggl.iOS.ViewSources
 {
-    using SiriShortcutsSection = SectionModel<string, SiriShortcut>;
+    using SiriShortcutsSection = SectionModel<string, SiriShortcutViewModel>;
 
-    public class SiriShortcutsTableViewSource : BaseTableViewSource<SiriShortcutsSection, string, SiriShortcut>
+    public class SiriShortcutsTableViewSource : BaseTableViewSource<SiriShortcutsSection, string, SiriShortcutViewModel>
     {
         public SiriShortcutsTableViewSource(UITableView tableView)
         {
@@ -25,11 +26,11 @@ namespace Toggl.iOS.ViewSources
         {
             var model = ModelAt(indexPath);
 
-            var identifier = model.IsCustomStart()
+            var identifier = model.IsCustomStart
                 ? CustomSiriShortcutCell.Identifier
                 : SiriShortcutCell.Identifier;
 
-            var cell = (BaseTableViewCell<SiriShortcut>)tableView.DequeueReusableCell(identifier, indexPath);
+            var cell = (BaseTableViewCell<SiriShortcutViewModel>)tableView.DequeueReusableCell(identifier, indexPath);
             cell.Item = model;
             return cell;
         }
@@ -44,7 +45,7 @@ namespace Toggl.iOS.ViewSources
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
         {
             var model = ModelAt(indexPath);
-            return model.IsCustomStart() ? 64 : 44;
+            return model.IsCustomStart ? 64 : 44;
         }
     }
 }

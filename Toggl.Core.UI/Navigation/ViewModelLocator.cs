@@ -415,6 +415,7 @@ namespace Toggl.Core.UI.Navigation
 
             if (viewModelType == typeof(SiriShortcutsViewModel))
                 return new SiriShortcutsViewModel(
+                    dependencyContainer.InteractorFactory,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RxActionFactory);
 

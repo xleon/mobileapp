@@ -20,7 +20,7 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers.Settings
 {
-    using ShortcutSection = SectionModel<string, SiriShortcut>;
+    using ShortcutSection = SectionModel<string, SiriShortcutViewModel>;
 
     public sealed partial class SiriShortcutsViewController : ReactiveViewController<SiriShortcutsViewModel>, IINUIAddVoiceShortcutViewControllerDelegate, IINUIEditVoiceShortcutViewControllerDelegate
     {
@@ -50,7 +50,8 @@ namespace Toggl.iOS.ViewControllers.Settings
             TableView.Source = tableViewSource;
 
             refreshSubject.StartWith(Unit.Default)
-                .SelectMany(_ => IosDependencyContainer.Instance.IntentDonationService.GetCurrentShortcuts())
+                .SelectMany(getAllShortcuts())
+                .SelectMany(toViewModels)
                 .Select(toSections)
                 .ObserveOn(new NSRunloopScheduler())
                 .Subscribe(TableView.Rx().ReloadSections(tableViewSource))
@@ -61,9 +62,9 @@ namespace Toggl.iOS.ViewControllers.Settings
                 .DisposedBy(DisposeBag);
         }
 
-        private void handleShortcutTap(SiriShortcut shortcut)
+        private void handleShortcutTap(SiriShortcutViewModel shortcut)
         {
-            if (shortcut.Identifier == null)
+            if (!shortcut.IsActive)
             {
                 if (shortcut.Type == SiriShortcutType.CustomStart)
                 {
@@ -92,12 +93,34 @@ namespace Toggl.iOS.ViewControllers.Settings
             }
         }
 
-        private IEnumerable<ShortcutSection> toSections(IEnumerable<SiriShortcut> shortcuts)
+        private IObservable<IEnumerable<SiriShortcut>> getAllShortcuts()
         {
-            var defaultShortcuts = SiriShortcut.TimerShortcuts.Concat(SiriShortcut.ReportsShortcuts);
+            return IosDependencyContainer.Instance.IntentDonationService.GetCurrentShortcuts()
+                .Select(shortcuts => SiriShortcut.DefaultShortcuts
+                    .Concat(shortcuts));
+        }
 
-            var allShortcuts = defaultShortcuts.Concat(shortcuts)
-                .Aggregate(new List<SiriShortcut>(), (acc, shortcut) =>
+        private IObservable<IEnumerable<SiriShortcutViewModel>> toViewModels(IEnumerable<SiriShortcut> shortcuts)
+        {
+            return shortcuts
+                .Select(shortcut =>
+                {
+                    var projectId = stringToLong((string) shortcut.Parameters?[SiriShortcutParametersKey.ProjectId]);
+                    if (shortcut.VoiceShortcut != null && projectId.HasValue)
+                    {
+                        return ViewModel.GetProject(projectId.Value)
+                            .Select(project => new SiriShortcutViewModel(shortcut, project));
+                    }
+
+                    return Observable.Return(new SiriShortcutViewModel(shortcut));
+                })
+                .ToObservable().Merge().ToList();
+        }
+
+        private IEnumerable<ShortcutSection> toSections(IEnumerable<SiriShortcutViewModel> shortcuts)
+        {
+            var allShortcuts = shortcuts
+                .Aggregate(new List<SiriShortcutViewModel>(), (acc, shortcut) =>
                 {
                     if (shortcut.Type != SiriShortcutType.CustomStart && shortcut.Type != SiriShortcutType.CustomReport)
                     {
@@ -117,25 +140,21 @@ namespace Toggl.iOS.ViewControllers.Settings
             {
                 new ShortcutSection(
                     "Timer shortcuts",
-                    allShortcuts.Where(isTimerShortcut)
+                    allShortcuts.Where(s => s.IsTimerShortcut())
                 ),
                 new ShortcutSection(
                     "Reports shortcuts",
-                    allShortcuts.Where(isReportsShortcut)
+                    allShortcuts.Where(s => s.IsReportsShortcut())
                 )
             };
         }
 
-        private bool isTimerShortcut(SiriShortcut shortcut)
+        private long? stringToLong(string str)
         {
-            return shortcut.Type == SiriShortcutType.Stop || shortcut.Type == SiriShortcutType.Start ||
-                   shortcut.Type == SiriShortcutType.Continue || shortcut.Type == SiriShortcutType.CustomStart ||
-                   shortcut.Type == SiriShortcutType.StartFromClipboard;
-        }
+            if (string.IsNullOrEmpty(str))
+                return null;
 
-        private bool isReportsShortcut(SiriShortcut shortcut)
-        {
-            return shortcut.Type == SiriShortcutType.ShowReport || shortcut.Type == SiriShortcutType.CustomReport;
+            return (long)Convert.ToDouble(str);
         }
 
         // IINUIAddVoiceShortcutViewControllerDelegate
