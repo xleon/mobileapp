@@ -9,7 +9,7 @@ using UIKit;
 
 namespace Toggl.iOS.Presentation
 {
-    public class RootPresenter : IosPresenter
+    public sealed class RootPresenter : IosPresenter
     {
         protected override HashSet<Type> AcceptedViewModels { get; } = new HashSet<Type>
         {

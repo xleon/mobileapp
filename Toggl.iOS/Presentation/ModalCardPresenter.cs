@@ -10,7 +10,7 @@ using UIKit;
 
 namespace Toggl.iOS.Presentation
 {
-    public class ModalCardPresenter : IosPresenter
+    public sealed class ModalCardPresenter : IosPresenter
     {
         private readonly FromBottomTransitionDelegate fromBottomTransitionDelegate = new FromBottomTransitionDelegate();
 
