@@ -10,8 +10,13 @@ namespace Toggl.iOS.ViewControllers
         private NSObject willShowNotification;
         private NSObject willHideNotification;
 
-        protected KeyboardAwareViewController(string nibName)
-            : base(nibName) { }
+        protected KeyboardAwareViewController(TViewModel viewModel) : base(viewModel)
+        {
+        }
+
+        protected KeyboardAwareViewController(TViewModel viewModel, string nibName) : base(viewModel, nibName)
+        {
+        }
 
         public override void ViewDidLoad()
         {

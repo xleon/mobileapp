@@ -17,8 +17,15 @@ namespace Toggl.iOS.ViewControllers
 
         public TViewModel ViewModel { get; set; }
 
-        protected ReactiveViewController(string nibName)
-            : base(nibName, null) { }
+        protected ReactiveViewController(TViewModel viewModel) : this(viewModel, null)
+        {
+            ViewModel = viewModel;
+        }
+
+        protected ReactiveViewController(TViewModel viewModel, string nibName) : base(nibName, null)
+        {
+            ViewModel = viewModel;
+        }
 
         protected ReactiveViewController(IntPtr handle)
             : base(handle) { }

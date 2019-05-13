@@ -19,8 +19,8 @@ namespace Toggl.iOS.ViewControllers
     {
         private const double headerHeight = 100;
 
-        public SelectClientViewController()
-            : base(nameof(SelectClientViewController))
+        public SelectClientViewController(SelectClientViewModel viewModel)
+            : base(viewModel, nameof(SelectClientViewController))
         {
         }
 

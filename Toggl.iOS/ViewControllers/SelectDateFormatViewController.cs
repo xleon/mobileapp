@@ -20,8 +20,8 @@ namespace Toggl.iOS.ViewControllers
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
-        public SelectDateFormatViewController() 
-            : base(nameof(SelectDateFormatViewController))
+        public SelectDateFormatViewController(SelectDateFormatViewModel viewModel)
+            : base(viewModel, nameof(SelectDateFormatViewController))
         {
         }
 

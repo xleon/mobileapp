@@ -27,50 +27,8 @@ namespace Toggl.iOS.Presentation
 
         protected override void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView view)
         {
-            UIViewController viewController = null;
+            UIViewController viewController = ViewControllerLocator.GetViewController(viewModel);
 
-            switch (viewModel)
-            {
-                case BrowserViewModel browserViewModel:
-                    var browserViewController = new BrowserViewController();
-                    browserViewController.ViewModel = browserViewModel;
-                    viewController = browserViewController;
-                    break;
-                case CalendarSettingsViewModel calendarSettingsViewModel:
-                    var calendarSettingsViewController = new CalendarSettingsViewController();
-                    calendarSettingsViewController.ViewModel = calendarSettingsViewModel;
-                    viewController = calendarSettingsViewController;
-                    break;
-                case ForgotPasswordViewModel forgotPasswordViewModel:
-                    var forgotPasswordViewController = new ForgotPasswordViewController();
-                    forgotPasswordViewController.ViewModel = forgotPasswordViewModel;
-                    viewController = forgotPasswordViewController;
-                    break;
-                case NotificationSettingsViewModel notificationSettingsViewModel:
-                    var notificationSettingsViewController = new NotificationSettingsViewController();
-                    notificationSettingsViewController.ViewModel = notificationSettingsViewModel;
-                    viewController = notificationSettingsViewController;
-                    break;
-                case SettingsViewModel settingsViewModel:
-                    var settingsViewController = new SettingsViewController();
-                    settingsViewController.ViewModel = settingsViewModel;
-                    viewController = settingsViewController;
-                    break;
-                case SyncFailuresViewModel syncFailuresViewModel:
-                    var syncFailuresViewController = new SyncFailuresViewController();
-                    syncFailuresViewController.ViewModel = syncFailuresViewModel;
-                    viewController = syncFailuresViewController;
-                    break;
-            }
-
-            if (viewController == null)
-                throw new Exception($"Failed to create ViewController for ViewModel of type {viewModel.GetType().Name}");
-
-            presentChildNavigationController(viewController);
-        }
-
-        private void presentChildNavigationController(UIViewController viewController)
-        {
             var presentedViewController = FindPresentedViewController();
 
             if (tryPushOnViewController(presentedViewController, viewController))

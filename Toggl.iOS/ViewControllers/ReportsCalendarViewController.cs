@@ -22,8 +22,8 @@ namespace Toggl.iOS.ViewControllers
         private List<ReportsCalendarPageViewModel> pendingMonthsUpdate;
         private ReportsCalendarCollectionViewSource calendarCollectionViewSource;
 
-        public ReportsCalendarViewController()
-            : base(nameof(ReportsCalendarViewController))
+        public ReportsCalendarViewController(ReportsCalendarViewModel viewModel)
+            : base(viewModel, nameof(ReportsCalendarViewController))
         {
         }
 

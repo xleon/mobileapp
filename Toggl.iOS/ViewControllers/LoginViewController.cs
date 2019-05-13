@@ -31,10 +31,11 @@ namespace Toggl.iOS.ViewControllers
         private const int tabletFormOffset = 246;
         private const int tabletLandscapeKeyboardOffset = 90;
 
-        public static LoginViewController NewInstance()
+        public static LoginViewController NewInstance(LoginViewModel viewModel)
         {
             var storyboard = UIStoryboard.FromName("Login", null);
             var instance = storyboard.InstantiateViewController(nameof(LoginViewController)) as LoginViewController;
+            instance.ViewModel = viewModel;
             return instance;
         }
 

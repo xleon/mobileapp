@@ -17,8 +17,8 @@ namespace Toggl.iOS.ViewControllers
         private const int rowHeight = 64;
         private const double headerHeight = 54;
 
-        public SelectWorkspaceViewController()
-            : base(nameof(SelectWorkspaceViewController))
+        public SelectWorkspaceViewController(SelectWorkspaceViewModel viewModel)
+            : base(viewModel, nameof(SelectWorkspaceViewController))
         {
         }
 

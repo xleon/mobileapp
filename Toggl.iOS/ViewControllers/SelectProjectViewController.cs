@@ -18,8 +18,8 @@ namespace Toggl.iOS.ViewControllers
         private const double headerHeight = 99;
         private const double placeHolderHeight = 250;
 
-        public SelectProjectViewController()
-            : base(nameof(SelectProjectViewController))
+        public SelectProjectViewController(SelectProjectViewModel viewModel)
+            : base(viewModel, nameof(SelectProjectViewController))
         {
         }
 

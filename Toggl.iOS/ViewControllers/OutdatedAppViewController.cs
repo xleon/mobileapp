@@ -9,8 +9,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public sealed partial class OutdatedAppViewController : ReactiveViewController<OutdatedAppViewModel>
     {
-        public OutdatedAppViewController()
-            : base(nameof(OutdatedAppViewController))
+        public OutdatedAppViewController(OutdatedAppViewModel viewModel)
+            : base(viewModel, nameof(OutdatedAppViewController))
         {
         }
 

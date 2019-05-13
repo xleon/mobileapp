@@ -13,8 +13,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public partial class SelectBeginningOfWeekViewController : ReactiveViewController<SelectBeginningOfWeekViewModel>, IDismissableViewController
     {
-        public SelectBeginningOfWeekViewController()
-            : base(nameof(SelectBeginningOfWeekViewController))
+        public SelectBeginningOfWeekViewController(SelectBeginningOfWeekViewModel viewModel)
+            : base(viewModel, nameof(SelectBeginningOfWeekViewController))
         {
         }
 

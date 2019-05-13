@@ -21,8 +21,8 @@ namespace Toggl.iOS.ViewControllers
 
         private ColorSelectionCollectionViewSource source;
 
-        public SelectColorViewController()
-            : base(nameof(SelectColorViewController))
+        public SelectColorViewController(SelectColorViewModel viewModel)
+            : base(viewModel, nameof(SelectColorViewController))
         {
         }
 

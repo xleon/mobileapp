@@ -18,8 +18,8 @@ namespace Toggl.iOS.ViewControllers
 
         CompositeDisposable disposeBag = new CompositeDisposable();
 
-        public SelectDurationFormatViewController()
-            : base(nameof(SelectDurationFormatViewController))
+        public SelectDurationFormatViewController(SelectDurationFormatViewModel viewModel)
+            : base(viewModel, nameof(SelectDurationFormatViewController))
         {
         }
 

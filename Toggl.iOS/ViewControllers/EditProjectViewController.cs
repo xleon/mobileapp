@@ -18,8 +18,8 @@ namespace Toggl.iOS.ViewControllers
         private const double desiredIpadHeight = 360;
         private static readonly nfloat errorVisibleHeight = 16;
 
-        public EditProjectViewController()
-            : base(nameof(EditProjectViewController))
+        public EditProjectViewController(EditProjectViewModel viewModel)
+            : base(viewModel, nameof(EditProjectViewController))
         {
         }
 

@@ -19,8 +19,8 @@ namespace Toggl.iOS.ViewControllers
         private readonly UIBarButtonItem nextButton =
             new UIBarButtonItem { Title = Resources.LoginNextButton, TintColor = UIColor.White };
 
-        public TokenResetViewController()
-            : base(nameof(TokenResetViewController))
+        public TokenResetViewController(TokenResetViewModel viewModel)
+            : base(viewModel, nameof(TokenResetViewController))
         {
         }
 

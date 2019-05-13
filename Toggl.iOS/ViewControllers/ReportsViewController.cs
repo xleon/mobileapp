@@ -39,7 +39,7 @@ namespace Toggl.iOS.ViewControllers
         private ReportsOverviewCardView overview = ReportsOverviewCardView.CreateFromNib();
         private ReportsBarChartCardView barChart = ReportsBarChartCardView.CreateFromNib();
 
-        public ReportsViewController() : base(nameof(ReportsViewController))
+        public ReportsViewController(ReportsViewModel viewModel) : base(viewModel, nameof(ReportsViewController))
         {
         }
 
@@ -61,7 +61,7 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
-            calendarViewController = new ReportsCalendarViewController { ViewModel = ViewModel.CalendarViewModel };
+            calendarViewController = ViewControllerLocator.GetViewController(ViewModel.CalendarViewModel) as ReportsCalendarViewController;
             prepareViews();
 
             OverviewContainerView.AddSubview(overview);

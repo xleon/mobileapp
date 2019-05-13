@@ -82,8 +82,8 @@ namespace Toggl.iOS.ViewControllers
         private SnackBar snackBar;
         private RatingView ratingView;
 
-        public MainViewController()
-            : base(nameof(MainViewController))
+        public MainViewController(MainViewModel viewModel)
+            : base(viewModel, nameof(MainViewController))
         {
         }
 

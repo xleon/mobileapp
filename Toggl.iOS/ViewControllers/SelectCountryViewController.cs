@@ -16,7 +16,7 @@ namespace Toggl.iOS.ViewControllers
     {
         private const int rowHeight = 48;
 
-        public SelectCountryViewController() : base(nameof(SelectCountryViewController))
+        public SelectCountryViewController(SelectCountryViewModel viewModel) : base(viewModel, nameof(SelectCountryViewController))
         {
         }
 

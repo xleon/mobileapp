@@ -12,8 +12,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public partial class SelectDateTimeViewController : ReactiveViewController<SelectDateTimeViewModel>
     {
-        public SelectDateTimeViewController()
-            : base(nameof(SelectDateTimeViewController))
+        public SelectDateTimeViewController(SelectDateTimeViewModel viewModel)
+            : base(viewModel, nameof(SelectDateTimeViewController))
         {
         }
 

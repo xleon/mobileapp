@@ -16,8 +16,8 @@ namespace Toggl.iOS.ViewControllers
     {
         private const int verticalSpacing = 24;
 
-        public SettingsViewController()
-            : base(nameof(SettingsViewController))
+        public SettingsViewController(SettingsViewModel viewModel)
+            : base(viewModel, nameof(SettingsViewController))
         {
         }
 

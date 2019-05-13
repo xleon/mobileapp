@@ -15,8 +15,8 @@ namespace Toggl.iOS.ViewControllers
 
         private WKWebView webView;
 
-        public BrowserViewController()
-            : base(null)
+        public BrowserViewController(BrowserViewModel viewModel)
+            : base(viewModel)
         {
         }
 

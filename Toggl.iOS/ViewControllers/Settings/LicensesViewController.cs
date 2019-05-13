@@ -11,6 +11,11 @@ namespace Toggl.iOS.ViewControllers
 {
     public sealed class LicensesViewController : ReactiveTableViewController<LicensesViewModel>
     {
+        public LicensesViewController(LicensesViewModel viewModel)
+            : base(viewModel)
+        {
+        }
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();

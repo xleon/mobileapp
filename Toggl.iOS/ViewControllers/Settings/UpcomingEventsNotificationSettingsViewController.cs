@@ -20,7 +20,8 @@ namespace Toggl.iOS.ViewControllers.Settings
 
         private const int rowHeight = 44;
 
-        public UpcomingEventsNotificationSettingsViewController() : base(nameof(UpcomingEventsNotificationSettingsViewController))
+        public UpcomingEventsNotificationSettingsViewController(UpcomingEventsNotificationSettingsViewModel viewModel)
+            : base(viewModel, nameof(UpcomingEventsNotificationSettingsViewController))
         {
         }
 

@@ -30,8 +30,8 @@ namespace Toggl.iOS.ViewControllers
 
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 50));
 
-        public CalendarViewController()
-            : base(nameof(CalendarViewController))
+        public CalendarViewController(CalendarViewModel viewModel)
+            : base(viewModel, nameof(CalendarViewController))
         {
             timeService = IosDependencyContainer.Instance.TimeService;
         }

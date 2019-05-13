@@ -17,8 +17,8 @@ namespace Toggl.iOS.ViewControllers
         private const double headerHeight = 100;
         private const double placeholderHeight = 250;
 
-        public SelectTagsViewController()
-            : base(nameof(SelectTagsViewController))
+        public SelectTagsViewController(SelectTagsViewModel viewModel)
+            : base(viewModel, nameof(SelectTagsViewController))
         {
         }
 

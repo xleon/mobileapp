@@ -12,8 +12,8 @@ namespace Toggl.iOS.ViewControllers.Settings
     {
         private const int tableViewHeaderHeight = 106;
 
-        public CalendarSettingsViewController()
-            : base(nameof(CalendarSettingsViewController))
+        public CalendarSettingsViewController(CalendarSettingsViewModel viewModel)
+            : base(viewModel, nameof(CalendarSettingsViewController))
         {
         }
 

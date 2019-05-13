@@ -28,7 +28,7 @@ namespace Toggl.iOS.ViewControllers
         private CompositeDisposable disposeBag = new CompositeDisposable();
         private CGRect frameBeforeShowingKeyboard;
 
-        public EditDurationViewController() : base(nameof(EditDurationViewController))
+        public EditDurationViewController(EditDurationViewModel viewModel) : base(viewModel, nameof(EditDurationViewController))
         {
         }
 

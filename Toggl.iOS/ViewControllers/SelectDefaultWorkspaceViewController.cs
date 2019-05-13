@@ -15,7 +15,8 @@ namespace Toggl.iOS.ViewControllers
         private const int width = 288;
         private readonly int maxHeight = UIScreen.MainScreen.Bounds.Width > 320 ? 627 : 528;
 
-        public SelectDefaultWorkspaceViewController() : base(nameof(SelectDefaultWorkspaceViewController))
+        public SelectDefaultWorkspaceViewController(SelectDefaultWorkspaceViewModel viewModel)
+            : base(viewModel, nameof(SelectDefaultWorkspaceViewController))
         {
         }
 

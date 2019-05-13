@@ -41,8 +41,8 @@ namespace Toggl.iOS.ViewControllers
 
         private IUITextInputDelegate emptyInputDelegate = new EmptyInputDelegate();
 
-        public StartTimeEntryViewController()
-            : base(nameof(StartTimeEntryViewController))
+        public StartTimeEntryViewController(StartTimeEntryViewModel viewModel)
+            : base(viewModel, nameof(StartTimeEntryViewController))
         {
         }
 

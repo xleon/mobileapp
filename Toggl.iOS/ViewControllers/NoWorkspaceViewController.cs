@@ -16,7 +16,7 @@ namespace Toggl.iOS.ViewControllers
     {
         private const float cardHeight = 368;
 
-        public NoWorkspaceViewController() : base(nameof(NoWorkspaceViewController))
+        public NoWorkspaceViewController(NoWorkspaceViewModel viewModel) : base(viewModel, nameof(NoWorkspaceViewController))
         {
         }
 

@@ -16,8 +16,8 @@ namespace Toggl.iOS.ViewControllers
         private readonly MostUsedPage mostUsedPagePlaceholder = MostUsedPage.Create();
         private readonly ReportsPage reportsPagePlaceholder = ReportsPage.Create();
 
-        public OnboardingViewController()
-            : base(nameof(OnboardingViewController))
+        public OnboardingViewController(OnboardingViewModel viewModel)
+            : base(viewModel, nameof(OnboardingViewController))
         {
         }
 

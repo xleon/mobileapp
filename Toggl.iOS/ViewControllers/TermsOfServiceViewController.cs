@@ -31,7 +31,8 @@ namespace Toggl.iOS.ViewControllers
             ForegroundColor = Colors.Signup.HighlightedText.ToNativeColor()
         };
 
-        public TermsOfServiceViewController() : base(nameof(TermsOfServiceViewController))
+        public TermsOfServiceViewController(TermsOfServiceViewModel viewModel)
+            : base(viewModel, nameof(TermsOfServiceViewController))
         {
         }
 

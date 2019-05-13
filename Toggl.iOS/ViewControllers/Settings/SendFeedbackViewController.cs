@@ -15,8 +15,8 @@ namespace Toggl.iOS.ViewControllers.Settings
     public sealed partial class SendFeedbackViewController : KeyboardAwareViewController<SendFeedbackViewModel>, IDismissableViewController
     {
 
-        public SendFeedbackViewController()
-            : base(nameof(SendFeedbackViewController))
+        public SendFeedbackViewController(SendFeedbackViewModel viewModel)
+            : base(viewModel, nameof(SendFeedbackViewController))
         {
         }
 

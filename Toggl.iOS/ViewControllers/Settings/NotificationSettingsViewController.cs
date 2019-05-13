@@ -10,7 +10,8 @@ namespace Toggl.iOS.ViewControllers.Settings
 {
     public sealed partial class NotificationSettingsViewController : ReactiveViewController<NotificationSettingsViewModel>
     {
-        public NotificationSettingsViewController() : base(nameof(NotificationSettingsViewController))
+        public NotificationSettingsViewController(NotificationSettingsViewModel viewModel)
+            : base(viewModel, nameof(NotificationSettingsViewController))
         {
         }
 

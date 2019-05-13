@@ -28,37 +28,12 @@ namespace Toggl.iOS.ViewControllers
 
             UIViewController createTabFor(ViewModel childViewModel)
             {
-                var childViewController = createViewControllerFor(childViewModel);
+                var viewController = ViewControllerLocator.GetViewController(childViewModel, true);
                 var item = new UITabBarItem();
                 item.Title = "";
                 item.Image = UIImage.FromBundle(imageNameForType[childViewModel.GetType()]);
-                childViewController.TabBarItem = item;
-                return new UINavigationController(childViewController);
-            }
-        }
-
-        private UIViewController createViewControllerFor(ViewModel viewModel)
-        {
-            switch (viewModel)
-            {
-                case MainViewModel mainViewModel:
-                    var mainViewController = new MainViewController();
-                    mainViewController.ViewModel = mainViewModel;
-                    return mainViewController;
-                case ReportsViewModel reportsViewModel:
-                    var reportsViewController = new ReportsViewController();
-                    reportsViewController.ViewModel = reportsViewModel;
-                    return reportsViewController;
-                case CalendarViewModel calendarViewModel:
-                    var calendarViewController = new CalendarViewController();
-                    calendarViewController.ViewModel = calendarViewModel;
-                    return calendarViewController;
-                case SettingsViewModel settingsViewModel:
-                    var settingsViewController = new SettingsViewController();
-                    settingsViewController.ViewModel = settingsViewModel;
-                    return settingsViewController;
-                default:
-                    throw new Exception($"Cannot create view controller for view model of type {viewModel.GetType().Name}");
+                viewController.TabBarItem = item;
+                return viewController;
             }
         }
 

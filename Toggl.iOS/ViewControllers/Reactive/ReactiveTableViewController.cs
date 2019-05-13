@@ -15,10 +15,12 @@ namespace Toggl.iOS.ViewControllers
 
         public CompositeDisposable DisposeBag { get; private set; } = new CompositeDisposable();
 
-        public TViewModel ViewModel { get; set; }
+        public TViewModel ViewModel { get; }
 
-        protected ReactiveTableViewController()
-            : base(null, null) { }
+        protected ReactiveTableViewController(TViewModel viewModel) : base(null, null)
+        {
+            ViewModel = viewModel;
+        }
 
         protected ReactiveTableViewController(IntPtr handle)
             : base(handle) { }

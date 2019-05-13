@@ -22,8 +22,8 @@ namespace Toggl.iOS.ViewControllers.Calendar
         private const float enabledDoneButtonAlpha = 1;
         private const float disabledDoneButtonAlpha = 0.32f;
 
-        public SelectUserCalendarsViewController()
-            : base(null)
+        public SelectUserCalendarsViewController(SelectUserCalendarsViewModel viewModel)
+            : base(viewModel)
         {
         }
 

@@ -35,8 +35,8 @@ namespace Toggl.iOS.ViewControllers
 
         private const string boundsKey = "bounds";
 
-        public EditTimeEntryViewController()
-            : base(nameof(EditTimeEntryViewController))
+        public EditTimeEntryViewController(EditTimeEntryViewModel viewModel)
+            : base(viewModel, nameof(EditTimeEntryViewController))
         {
         }
 

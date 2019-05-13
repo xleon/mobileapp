@@ -13,7 +13,7 @@ namespace Toggl.iOS.ViewControllers.Calendar
     {
         private const float cardHeight = 342;
 
-        public CalendarPermissionDeniedViewController() : base(null)
+        public CalendarPermissionDeniedViewController(CalendarPermissionDeniedViewModel viewModel) : base(viewModel)
         {
         }
 

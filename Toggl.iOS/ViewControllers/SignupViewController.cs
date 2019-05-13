@@ -32,7 +32,7 @@ namespace Toggl.iOS.ViewControllers
         private const int tabletFormOffset = 246;
         private const int tabletLandscapeKeyboardOffset = 80;
 
-        public SignupViewController() : base(nameof(SignupViewController))
+        public SignupViewController(SignupViewModel viewModel) : base(viewModel, nameof(SignupViewController))
         {
         }
 

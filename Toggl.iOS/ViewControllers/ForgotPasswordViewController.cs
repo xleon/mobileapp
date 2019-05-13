@@ -20,7 +20,8 @@ namespace Toggl.iOS.ViewControllers
 
         private bool viewInitialized;
 
-        public ForgotPasswordViewController() : base(nameof(ForgotPasswordViewController))
+        public ForgotPasswordViewController(ForgotPasswordViewModel viewModel)
+            : base(viewModel, nameof(ForgotPasswordViewController))
         {
         }
 

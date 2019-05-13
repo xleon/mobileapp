@@ -10,6 +10,10 @@ namespace Toggl.iOS.ViewControllers
 {
     public sealed class SyncFailuresViewController : ReactiveTableViewController<SyncFailuresViewModel>
     {
+        public SyncFailuresViewController(SyncFailuresViewModel viewModel) : base(viewModel)
+        {
+        }
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
