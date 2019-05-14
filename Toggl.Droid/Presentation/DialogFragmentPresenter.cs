@@ -12,7 +12,7 @@ using FragmentManager = Android.Support.V4.App.FragmentManager;
 
 namespace Toggl.Droid.Presentation
 {
-    public class DialogFragmentPresenter : AndroidPresenter
+    public sealed class DialogFragmentPresenter : AndroidPresenter
     {
         protected override HashSet<Type> AcceptedViewModels { get; } = new HashSet<Type>
         {

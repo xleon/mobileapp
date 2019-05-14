@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.Views;
 using Toggl.iOS.Presentation.Transition;
-using Toggl.iOS.ViewControllers;
-using Toggl.iOS.ViewControllers.Calendar;
 using UIKit;
 
 namespace Toggl.iOS.Presentation

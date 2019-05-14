@@ -4,8 +4,6 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.Views;
 using Toggl.iOS.Presentation.Transition;
-using Toggl.iOS.ViewControllers;
-using Toggl.iOS.ViewControllers.Settings;
 using UIKit;
 
 namespace Toggl.iOS.Presentation

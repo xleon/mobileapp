@@ -9,7 +9,7 @@ using Toggl.Droid.Activities;
 
 namespace Toggl.Droid.Presentation
 {
-    public class ActivityPresenter : AndroidPresenter
+    public sealed class ActivityPresenter : AndroidPresenter
     {
         private const ActivityFlags clearBackStackFlags = ActivityFlags.ClearTop | ActivityFlags.ClearTask | ActivityFlags.NewTask;
 
