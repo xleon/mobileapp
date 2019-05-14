@@ -109,9 +109,9 @@
 	<key>INIntentDefinitionSystemVersion</key>
 	<string>18E226</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>10E1001</string>
+	<string>10E125</string>
 	<key>INIntentDefinitionToolsVersion</key>
-	<string>10.2.1</string>
+	<string>10.2</string>
 	<key>INIntents</key>
 	<array>
 		<dict>
@@ -511,13 +511,13 @@
 					<key>INIntentParameterCombinationIsPrimary</key>
 					<false/>
 					<key>INIntentParameterCombinationSubtitle</key>
-					<string>in ${workspace}</string>
+					<string>${entryDescription}</string>
 					<key>INIntentParameterCombinationSubtitleID</key>
 					<string>KKrxVY</string>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Start timer for ${entryDescription}</string>
+					<string>Start timer</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>IUEfYE</string>
 				</dict>
@@ -526,13 +526,13 @@
 					<key>INIntentParameterCombinationIsPrimary</key>
 					<false/>
 					<key>INIntentParameterCombinationSubtitle</key>
-					<string>in ${workspace}</string>
+					<string>${entryDescription}</string>
 					<key>INIntentParameterCombinationSubtitleID</key>
 					<string>Mr6glC</string>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Start timer for ${entryDescription}</string>
+					<string>Start timer</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>xGukxu</string>
 				</dict>
@@ -541,13 +541,13 @@
 					<key>INIntentParameterCombinationIsPrimary</key>
 					<false/>
 					<key>INIntentParameterCombinationSubtitle</key>
-					<string>in ${workspace}</string>
+					<string>${entryDescription}</string>
 					<key>INIntentParameterCombinationSubtitleID</key>
 					<string>5xqJdx</string>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Start timer for ${entryDescription}</string>
+					<string>Start timer</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>tjn3qS</string>
 				</dict>
@@ -556,13 +556,13 @@
 					<key>INIntentParameterCombinationIsPrimary</key>
 					<false/>
 					<key>INIntentParameterCombinationSubtitle</key>
-					<string>in ${workspace}</string>
+					<string>${entryDescription}</string>
 					<key>INIntentParameterCombinationSubtitleID</key>
 					<string>msGSif</string>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Start timer for ${entryDescription}</string>
+					<string>Start timer</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>ArvZvi</string>
 				</dict>
@@ -571,13 +571,13 @@
 					<key>INIntentParameterCombinationIsPrimary</key>
 					<false/>
 					<key>INIntentParameterCombinationSubtitle</key>
-					<string>in ${workspace}</string>
+					<string>${entryDescription}</string>
 					<key>INIntentParameterCombinationSubtitleID</key>
 					<string>bHlXe3</string>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Start timer for ${entryDescription}</string>
+					<string>Start timer</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>dZOAcx</string>
 				</dict>

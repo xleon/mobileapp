@@ -26,7 +26,7 @@
 
 "3gmF02" = "Start timer from clipboard";
 
-"5xqJdx" = "in ${workspace}";
+"5xqJdx" = "${entryDescription}";
 
 "6vfiCX" = "Here is the report.";
 
@@ -34,7 +34,7 @@
 
 "A6lrEf" = "in ${workspace}";
 
-"ArvZvi" = "Start timer for ${entryDescription}";
+"ArvZvi" = "Start timer";
 
 "C2Ujo0" = "Log in to use this shortcut.";
 
@@ -64,15 +64,15 @@
 
 "HVyNMs" = "App data is outdated.";
 
-"IUEfYE" = "Start timer for ${entryDescription}";
+"IUEfYE" = "Start timer";
 
 "JErccw" = "Start timer from clipboard";
 
 "JuvQpB" = "There's no timer running. ";
 
-"KKrxVY" = "in ${workspace}";
+"KKrxVY" = "${entryDescription}";
 
-"Mr6glC" = "in ${workspace}";
+"Mr6glC" = "${entryDescription}";
 
 "Np6x0m" = "Time-tracking started.";
 
@@ -98,13 +98,13 @@
 
 "bCeUiv" = "in ${workspace}";
 
-"bHlXe3" = "in ${workspace}";
+"bHlXe3" = "${entryDescription}";
 
 "cAT3Em" = "with no parameters";
 
 "ciMjmD" = "in ${workspace}";
 
-"dZOAcx" = "Start timer for ${entryDescription}";
+"dZOAcx" = "Start timer";
 
 "ftAUTw" = "Start timer from clipboard";
 
@@ -134,13 +134,13 @@
 
 "m9jvM4-g5ag4g" = "for Last Week";
 
-"msGSif" = "in ${workspace}";
+"msGSif" = "${entryDescription}";
 
 "rWNsdx" = "Continue tracking";
 
 "sC56D6" = "Log in to use this shortcut.";
 
-"tjn3qS" = "Start timer for ${entryDescription}";
+"tjn3qS" = "Start timer";
 
 "ttEh92" = "Log in to use this shortcut.";
 
@@ -150,7 +150,7 @@
 
 "vvtqdG" = "Show report";
 
-"xGukxu" = "Start timer for ${entryDescription}";
+"xGukxu" = "Start timer";
 
 "yhKeN0" = "App data is outdated.";
 
