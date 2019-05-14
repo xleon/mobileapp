@@ -154,6 +154,7 @@ namespace Toggl.Networking.Models
             BeginningOfWeek = entity.BeginningOfWeek;
             Language = entity.Language;
             ImageUrl = entity.ImageUrl;
+            Timezone = entity.Timezone;
             At = entity.At;
         }
     }

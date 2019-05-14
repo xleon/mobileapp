@@ -15,6 +15,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using static Toggl.Core.Helper.Constants;
 using static Toggl.Core.UI.Helper.TemporalInconsistency;
+using static Toggl.Shared.BeginningOfWeek;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -23,7 +24,9 @@ namespace Toggl.Core.UI.ViewModels
     {
         private readonly ITimeService timeService;
         private readonly IAnalyticsService analyticsService;
+        private readonly ITogglDataSource dataSource;
 
+        private IDisposable beginningOfWeekDisposable;
         private IDisposable runningTimeEntryDisposable;
         private DurationParameter defaultResult;
         private EditDurationEvent analyticsEvent;
@@ -63,6 +66,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<TimeFormat> TimeFormat { get; }
         public IObservable<bool> IsRunning { get; }
 
+        public BeginningOfWeek BeginningOfWeek { get; private set; }
+
         public IObservable<DateTimeOffset> MinimumDateTime { get; }
         public IObservable<DateTimeOffset> MaximumDateTime { get; }
         public IObservable<TemporalInconsistency> TemporalInconsistencies => temporalInconsistencies.AsObservable();
@@ -85,6 +90,7 @@ namespace Toggl.Core.UI.ViewModels
 
             this.timeService = timeService;
             this.analyticsService = analyticsService;
+            this.dataSource = dataSource;
 
             Save = rxActionFactory.FromAsync(save);
             Close = rxActionFactory.FromAsync(close);
@@ -151,6 +157,9 @@ namespace Toggl.Core.UI.ViewModels
         {
             defaultResult = parameter.DurationParam;
             isRunning.OnNext(defaultResult.Duration.HasValue == false);
+
+            beginningOfWeekDisposable = dataSource.User.Current
+                .Subscribe(user => BeginningOfWeek = user.BeginningOfWeek);
 
             analyticsEvent = new EditDurationEvent(isRunning.Value,
                 parameter.IsStartingNewEntry
@@ -325,6 +334,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             base.ViewDestroyed();
             runningTimeEntryDisposable?.Dispose();
+            beginningOfWeekDisposable?.Dispose();
         }
 
         private enum EditMode

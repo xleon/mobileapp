@@ -1,8 +1,10 @@
 using System;
 using Android.App;
 using Android.Runtime;
-using Toggl.Core;
 using Toggl.Networking;
+using Toggl.Core;
+using Toggl.Core.UI;
+using Toggl.Core.UI.ViewModels;
 
 namespace Toggl.Droid
 {
@@ -29,12 +31,22 @@ namespace Toggl.Droid
             var applicationContext = Context;
             var packageInfo = applicationContext.PackageManager.GetPackageInfo(applicationContext.PackageName, 0);
             AndroidDependencyContainer.EnsureInitialized(environment, Platform.Giskard, packageInfo.VersionName);
-#if USE_ANALYTICS
+#if USE_APPCENTER
             Microsoft.AppCenter.AppCenter.Start(
                 "{TOGGL_APP_CENTER_ID_DROID}",
                 typeof(Microsoft.AppCenter.Crashes.Crashes),
                 typeof(Microsoft.AppCenter.Analytics.Analytics));
 #endif
+        }
+
+        public override void OnLowMemory()
+        {
+            base.OnLowMemory();
+
+            AndroidDependencyContainer.Instance
+                .AnalyticsService
+                .ReceivedLowMemoryWarning
+                .Track(Platform.Giskard);
         }
     }
 }

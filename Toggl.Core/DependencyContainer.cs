@@ -233,7 +233,12 @@ namespace Toggl.Core
 
             dataSource = new Lazy<ITogglDataSource>(CreateDataSource);
             syncManager = new Lazy<ISyncManager>(CreateSyncManager);
-            interactorFactory = new Lazy<IInteractorFactory>(CreateInteractorFactory);
+            interactorFactory = shortcutCreator.Select(creator =>
+            {
+                var factory = CreateInteractorFactory();
+                creator.OnLogin(factory);
+                return factory;
+            });
         }
 
         private void recreateLazyDependenciesForLogout()
