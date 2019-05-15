@@ -70,6 +70,13 @@ namespace Toggl.Droid.Activities
             ViewModel?.ViewDisappeared();
         }
 
+        public override void OnBackPressed()
+        {
+            ViewModel?.Cancel();
+
+            base.OnBackPressed();
+        }
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);

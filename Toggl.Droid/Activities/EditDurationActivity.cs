@@ -248,7 +248,6 @@ namespace Toggl.Droid.Activities
         public override void OnBackPressed()
         {
             navigateBack();
-            base.OnBackPressed();
         }
 
         private void navigateBack()

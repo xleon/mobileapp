@@ -21,7 +21,6 @@ namespace Toggl.Droid.Activities
     {
         private bool sendEnabled;
         private Subject<Unit> sendFeedbackSubject = new Subject<Unit>();
-        private Subject<Unit> closeSubject = new Subject<Unit>();
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -56,10 +55,6 @@ namespace Toggl.Droid.Activities
 
             sendFeedbackSubject
                 .Subscribe(ViewModel.Send.Inputs)
-                .DisposedBy(DisposeBag);
-
-            closeSubject
-                .Subscribe(ViewModel.Close.Inputs)
                 .DisposedBy(DisposeBag);
 
             ViewModel.Error
@@ -99,7 +94,7 @@ namespace Toggl.Droid.Activities
                     return true;
 
                 case Android.Resource.Id.Home:
-                    closeSubject.OnNext(Unit.Default);
+                    ViewModel.Close.Execute();
                     return true;
 
                 default:
@@ -109,7 +104,7 @@ namespace Toggl.Droid.Activities
 
         public override void OnBackPressed()
         {
-            closeSubject.OnNext(Unit.Default);
+            ViewModel.Close.Execute();
         }
 
         private void onSendEnabled(bool enabled)
