@@ -33,11 +33,30 @@ namespace Toggl.Droid.Activities
         {
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.EditTimeEntryActivity);
+            restoreTimeEntryIds(bundle);
+            
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
 
             InitializeViews();
             setupViews();
             setupBindings();
+        }
+
+        private void restoreTimeEntryIds(Bundle bundle)
+        {
+            if (bundle == null) return;
+            if (!bundle.ContainsKey(nameof(ViewModel.TimeEntryIds))) return;
+            
+            var viewModelTimeEntryIds = bundle.GetLongArray(nameof(ViewModel.TimeEntryIds));
+            if (viewModelTimeEntryIds == null) return;
+            
+            ViewModel.TimeEntryIds = viewModelTimeEntryIds;
+        }
+
+        protected override void OnSaveInstanceState(Bundle outState)
+        {
+            outState?.PutLongArray(nameof(ViewModel.TimeEntryIds), ViewModel.TimeEntryIds);
+            base.OnSaveInstanceState(outState);
         }
 
         protected override void OnResume()

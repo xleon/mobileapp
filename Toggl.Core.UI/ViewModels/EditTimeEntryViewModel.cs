@@ -232,26 +232,6 @@ namespace Toggl.Core.UI.ViewModels
             Delete = actionFactory.FromAsync(delete);
         }
 
-        // TODO: Move this fix to the droid layer
-        //protected override void ReloadFromBundle(IMvxBundle state)
-        //{
-        //    base.ReloadFromBundle(state);
-
-        //    var ids = state.Data[nameof(TimeEntryIds)];
-
-        //    if (ids == null)
-        //        return;
-
-        //    TimeEntryIds = ids.Split(',').Select(long.Parse).ToArray();
-        //}
-
-        //protected override void SaveStateToBundle(IMvxBundle bundle)
-        //{
-        //    base.SaveStateToBundle(bundle);
-
-        //    bundle.Data[nameof(TimeEntryIds)] = string.Join(",", TimeEntryIds);
-        //}
-
         public override async Task Initialize(long[] timeEntryIds)
         {
             await base.Initialize(timeEntryIds);
