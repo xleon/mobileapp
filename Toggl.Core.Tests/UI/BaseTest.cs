@@ -26,6 +26,7 @@ namespace Toggl.Core.Tests.UI
             = Substitute.For<IApplicationShortcutCreator>();
 
         protected INavigationService NavigationService { get; } = Substitute.For<INavigationService>();
+        protected IPresenter ViewPresenter { get; } = Substitute.For<IPresenter>();
         protected TestSchedulerProvider SchedulerProvider { get; } = new TestSchedulerProvider();
         protected IIntentDonationService IntentDonationService { get; } = Substitute.For<IIntentDonationService>();
         protected IPrivateSharedStorageService PrivateSharedStorageService { get; } = Substitute.For<IPrivateSharedStorageService>();

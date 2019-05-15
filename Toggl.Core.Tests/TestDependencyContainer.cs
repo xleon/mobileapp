@@ -76,6 +76,11 @@ namespace Toggl.Core.UI
         protected override INavigationService CreateNavigationService()
             => MockNavigationService;
 
+        internal IUrlHandler MockUrlHandler { get; set; }
+
+        protected override IUrlHandler CreateUrlHandler()
+            => MockUrlHandler;
+
         internal INotificationService MockNotificationService { get; set; }
         protected override INotificationService CreateNotificationService()
             => MockNotificationService;

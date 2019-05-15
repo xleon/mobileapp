@@ -1,5 +1,6 @@
 ﻿using System;
 using Foundation;
+using Toggl.Core;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
@@ -19,48 +20,19 @@ namespace Toggl.iOS
                 .ApplicationShortcut
                 .Track(shortcutItem.LocalizedTitle);
 
-            var navigationService = IosDependencyContainer.Instance.NavigationService;
+            var urlHandler = IosDependencyContainer.Instance.UrlHandler;
 
-            var key = new NSString(nameof(ApplicationShortcut.Type));
-            if (!shortcutItem.UserInfo.ContainsKey(key))
+            var shortcutUrlKey = new NSString(nameof(ApplicationShortcut.Url));
+            if (!shortcutItem.UserInfo.ContainsKey(shortcutUrlKey))
                 return;
 
-            var shortcutNumber = shortcutItem.UserInfo[key] as NSNumber;
-            if (shortcutNumber == null)
+            var shortcutUrlString = shortcutItem.UserInfo[shortcutUrlKey] as NSString;
+            if (shortcutUrlString == null)
                 return;
 
-            var shortcutType = (ShortcutType)(int)shortcutNumber;
+            var shortcutUrl = new NSUrl(shortcutUrlString);
 
-            switch (shortcutType)
-            {
-                case ShortcutType.ContinueLastTimeEntry:
-                    navigationService.Navigate<MainViewModel>(null);
-                    var interactorFactory = IosDependencyContainer.Instance.InteractorFactory;
-                    if (interactorFactory == null) return;
-                    IDisposable subscription = null;
-                    subscription = interactorFactory
-                        .ContinueMostRecentTimeEntry()
-                        .Execute()
-                        .Subscribe(_ =>
-                        {
-                            subscription.Dispose();
-                            subscription = null;
-                        });
-                    break;
-
-                case ShortcutType.Reports:
-                    navigationService.Navigate<ReportsViewModel>(null);
-                    break;
-
-                case ShortcutType.StartTimeEntry:
-                    navigationService.Navigate<MainViewModel>(null);
-                    navigationService.Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(StartTimeEntryParameters.ForTimerMode(DateTime.UtcNow), null);
-                    break;
-
-                case ShortcutType.Calendar:
-                    navigationService.Navigate<CalendarViewModel>(null);
-                    break;
-            }
+            urlHandler.Handle(shortcutUrl);
         }
     }
 }

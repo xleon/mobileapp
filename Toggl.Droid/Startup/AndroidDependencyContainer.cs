@@ -27,10 +27,11 @@ namespace Toggl.Droid
     {
         private const int numberOfSuggestions = 5;
 
+        private readonly CompositePresenter viewPresenter;
         private readonly Lazy<SettingsStorage> settingsStorage;
 
         public ViewModelCache ViewModelCache { get; } = new ViewModelCache();
-        
+
         public new static AndroidDependencyContainer Instance { get; private set; }
 
         public static void EnsureInitialized(ApiEnvironment environment, Platform platform, string version)
@@ -46,7 +47,9 @@ namespace Toggl.Droid
             : base(environment, new UserAgent(platform.ToString(), version))
         {
             var appVersion = Version.Parse(version);
-            
+
+            viewPresenter = new CompositePresenter(new ActivityPresenter(), new DialogFragmentPresenter());
+
             settingsStorage = new Lazy<SettingsStorage>(() => new SettingsStorage(appVersion, KeyValueStorage));
         }
 
@@ -114,7 +117,7 @@ namespace Toggl.Droid
 
         protected override INavigationService CreateNavigationService()
             => new NavigationService(
-                new CompositePresenter(new ActivityPresenter(), new DialogFragmentPresenter()), 
+                viewPresenter,
                 new ViewModelLoader(this),
                 AnalyticsService
             );
@@ -130,5 +133,8 @@ namespace Toggl.Droid
 
         protected override IAccessRestrictionStorage CreateAccessRestrictionStorage()
             => settingsStorage.Value;
+
+        protected override IUrlHandler CreateUrlHandler()
+            => new UrlHandler(TimeService, InteractorFactory, NavigationService, viewPresenter);
     }
 }

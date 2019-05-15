@@ -28,13 +28,11 @@ namespace Toggl.iOS
 
         public override void WillEnterForeground(UIApplication application)
         {
-            base.WillEnterForeground(application);
             IosDependencyContainer.Instance.BackgroundService.EnterForeground();
         }
 
         public override void DidEnterBackground(UIApplication application)
         {
-            base.DidEnterBackground(application);
             IosDependencyContainer.Instance.BackgroundService.EnterBackground();
         }
 

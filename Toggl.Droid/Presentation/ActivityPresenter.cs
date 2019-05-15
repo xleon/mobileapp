@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Android.App;
 using Android.Content;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.Views;
@@ -12,7 +13,7 @@ namespace Toggl.Droid.Presentation
     public sealed class ActivityPresenter : AndroidPresenter
     {
         private const ActivityFlags clearBackStackFlags = ActivityFlags.ClearTop | ActivityFlags.ClearTask | ActivityFlags.NewTask;
-        
+
         protected override HashSet<Type> AcceptedViewModels { get; } = new HashSet<Type>
         {
             typeof(AboutViewModel),
@@ -34,9 +35,9 @@ namespace Toggl.Droid.Presentation
             typeof(StartTimeEntryViewModel),
             typeof(TokenResetViewModel)
         };
-        
+
         private readonly Dictionary<Type, ActivityPresenterInfo> presentableActivitiesInfos = new Dictionary<Type,ActivityPresenterInfo>
-        {  
+        {
             [typeof(AboutViewModel)] = new ActivityPresenterInfo(typeof(AboutActivity)),
             [typeof(BrowserViewModel)] = new ActivityPresenterInfo(typeof(BrowserActivity)),
             [typeof(CalendarSettingsViewModel)] = new ActivityPresenterInfo(typeof(CalendarSettingsActivity)),
@@ -56,28 +57,28 @@ namespace Toggl.Droid.Presentation
             [typeof(StartTimeEntryViewModel)] = new ActivityPresenterInfo(typeof(StartTimeEntryActivity)),
             [typeof(TokenResetViewModel)] = new ActivityPresenterInfo(typeof(TokenResetActivity), clearBackStackFlags)
         };
-        
+
         protected override void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView)
         {
             var viewModelType = viewModel.GetType();
-            
+
             if (!presentableActivitiesInfos.TryGetValue(viewModelType, out var presentableInfo))
             {
                 throw new Exception($"Failed to start Activity for viewModel with type {viewModelType.Name}");
             }
-            
+
             var intent = new Intent(Application.Context, presentableInfo.ActivityType).AddFlags(presentableInfo.Flags);
 
             if (presentableInfo.Flags == clearBackStackFlags)
             {
                 AndroidDependencyContainer.Instance.ViewModelCache.ClearAll();
             }
-            
+
             AndroidDependencyContainer
                 .Instance
                 .ViewModelCache
                 .Cache(viewModel);
-            
+
             Application.Context.StartActivity(intent);
         }
 

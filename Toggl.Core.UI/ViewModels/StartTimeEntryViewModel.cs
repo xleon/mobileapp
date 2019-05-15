@@ -154,7 +154,7 @@ namespace Toggl.Core.UI.ViewModels
                 .Select(time => time.ToFormattedString(DurationFormat.Improved))
                 .AsDriver(schedulerProvider);
 
-            Close = rxActionFactory.FromAsync(close); 
+            Close = rxActionFactory.FromAsync(close);
             Done = rxActionFactory.FromObservable(done);
             DurationTapped = rxActionFactory.FromAction(durationTapped);
             ToggleBillable = rxActionFactory.FromAction(toggleBillable);
@@ -186,16 +186,6 @@ namespace Toggl.Core.UI.ViewModels
                 .Select(toCollections)
                 .Select(addStaticElements)
                 .AsDriver(schedulerProvider);
-        }
-
-        //TODO: Remove this bit of code when implementing deeplinking in #4867 and #4868
-        public void Init()
-        {
-            var now = timeService.CurrentDateTime;
-            var startTimeEntryParameters = userPreferences.IsManualModeEnabled
-                ? StartTimeEntryParameters.ForManualMode(now)
-                : StartTimeEntryParameters.ForTimerMode(now);
-            Initialize(startTimeEntryParameters);
         }
 
         public override async Task Initialize(StartTimeEntryParameters parameter)

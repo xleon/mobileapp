@@ -81,7 +81,7 @@ namespace Toggl.Droid
             if (string.IsNullOrWhiteSpace(description))
                 return null;
 
-            var applicationUrl = ApplicationUrls.Main.Track(description);
+            var applicationUrl = ApplicationUrls.Track.Default(description);
             return applicationUrl;
         }
 

@@ -61,15 +61,22 @@ namespace Toggl.iOS
             return true;
         }
 
-        #if USE_ANALYTICS
         public override bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
         {
-            var openUrlOptions = new UIApplicationOpenUrlOptions(options);
+            if (url.Scheme == ApplicationUrls.Scheme)
+            {
+                var urlHandler = IosDependencyContainer.Instance.UrlHandler;
+                return urlHandler.Handle(url).GetAwaiter().GetResult();
+            }
 
+            #if USE_ANALYTICS
+            var openUrlOptions = new UIApplicationOpenUrlOptions(options);
             return Google.SignIn.SignIn.SharedInstance.HandleUrl(url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
+            #else
+            return false;
+            #endif
         }
-        #endif
-        
+
         public override void ReceiveMemoryWarning(UIApplication application)
         {
             IosDependencyContainer.Instance.AnalyticsService.ReceivedLowMemoryWarning.Track(Platform.Daneel);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Android.Support.V7.App;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Settings;
@@ -36,11 +37,11 @@ namespace Toggl.Droid.Presentation
                 throw new Exception($"Parent ViewModel's view trying to present {viewModel.GetType().Name} doesn't have a FragmentManager");
 
             var dialog = createReactiveDialog(viewModel);
-            
+
             AndroidDependencyContainer.Instance
                 .ViewModelCache
                 .Cache(viewModel);
-            
+
             dialog.Show(fragmentManager, dialog.GetType().Name);
         }
 
@@ -77,7 +78,7 @@ namespace Toggl.Droid.Presentation
 
                 case UpcomingEventsNotificationSettingsViewModel _:
                     return new UpcomingEventsNotificationSettingsFragment();
-                
+
                 case SelectWorkspaceViewModel _:
                     return new SelectWorkspaceFragment();
             }

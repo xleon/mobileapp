@@ -11,7 +11,7 @@ namespace Toggl.Droid.Presentation
     public abstract class AndroidPresenter : IPresenter
     {
         protected abstract HashSet<Type> AcceptedViewModels { get; }
-        
+
         protected abstract void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView);
 
         public virtual bool CanPresent<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel)
@@ -28,5 +28,8 @@ namespace Toggl.Droid.Presentation
 
             return tcs.Task;
         }
+
+        public virtual bool ChangePresentation(IPresentationChange presentationChange)
+            => false;
     }
 }

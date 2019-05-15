@@ -14,19 +14,19 @@ namespace Toggl.Core.Shortcuts
         private bool noTimeEntries;
 
         private readonly ApplicationShortcut reportsShortcut = new ApplicationShortcut(
-            ApplicationUrls.Reports,
+            ApplicationUrls.Reports.Default,
             Resources.Reports,
             ShortcutType.Reports
         );
 
         private readonly ApplicationShortcut startTimeEntryShortcut = new ApplicationShortcut(
-            ApplicationUrls.StartTimeEntry,
+            ApplicationUrls.TimeEntry.New.Default,
             Resources.StartTimeEntry,
             ShortcutType.StartTimeEntry
         );
 
         private readonly ApplicationShortcut continueLastEntryShortcut = new ApplicationShortcut(
-            ApplicationUrls.Main.ContinueLastEntry,
+            ApplicationUrls.TimeEntry.ContinueLast.Default,
             Resources.ContinueLastEntry,
             ShortcutType.ContinueLastTimeEntry
         );

@@ -39,7 +39,6 @@ namespace Toggl.Core.UI.ViewModels
         private const double throttlePeriodInSeconds = 0.1;
 
         private bool isEditViewOpen;
-        private string urlNavigationAction;
         private bool noWorkspaceViewPresented;
         private bool hasStopButtonEverBeenUsed;
         private bool noDefaultWorkspaceViewPresented;
@@ -158,23 +157,6 @@ namespace Toggl.Core.UI.ViewModels
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService);
         }
 
-        public void Init(string action, string description)
-        {
-            urlNavigationAction = action;
-
-            if (!string.IsNullOrEmpty(description))
-            {
-                interactorFactory.GetDefaultWorkspace()
-                    .TrackException<InvalidOperationException, IThreadSafeWorkspace>("MainViewModel.Init")
-                    .Execute()
-                    .SelectMany(workspace => interactorFactory
-                        .CreateTimeEntry(description.AsTimeEntryPrototype(TimeService.CurrentDateTime, workspace.Id), TimeEntryStartOrigin.Timer)
-                        .Execute())
-                    .Subscribe()
-                    .DisposedBy(disposeBag);
-            }
-        }
-
         public override async Task Initialize()
         {
             await base.Initialize();
@@ -254,21 +236,6 @@ namespace Toggl.Core.UI.ViewModels
             ContinueTimeEntry = rxActionFactory.FromObservable<(long, ContinueTimeEntryMode)>(continueTimeEntry);
             StartTimeEntry = rxActionFactory.FromAsync<bool>(startTimeEntry, IsTimeEntryRunning.Invert());
             StopTimeEntry = rxActionFactory.FromAsync<TimeEntryStopOrigin>(stopTimeEntry, IsTimeEntryRunning);
-
-            switch (urlNavigationAction)
-            {
-                case ApplicationUrls.Main.Action.Continue:
-                    await continueMostRecentEntry();
-                    break;
-
-                case ApplicationUrls.Main.Action.Stop:
-                    await stopTimeEntry(TimeEntryStopOrigin.Deeplink);
-                    break;
-
-                case ApplicationUrls.Main.Action.StopFromSiri:
-                    await stopTimeEntry(TimeEntryStopOrigin.Siri);
-                    break;
-            }
 
             ShouldShowRatingView = Observable.Merge(
                     ratingViewExperiment.RatingViewShouldBeVisible,

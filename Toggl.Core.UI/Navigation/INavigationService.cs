@@ -3,12 +3,6 @@ using System.Threading.Tasks;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
 
-//TODO: Remove when implementing deep linking
-//[assembly: MvxNavigation(typeof(MainViewModel), ApplicationUrls.Main.Regex)]
-//[assembly: MvxNavigation(typeof(ReportsViewModel), ApplicationUrls.Reports)]
-//[assembly: MvxNavigation(typeof(CalendarViewModel), ApplicationUrls.Calendar.Regex)]
-//[assembly: MvxNavigation(typeof(StartTimeEntryViewModel), ApplicationUrls.StartTimeEntry)]
-
 namespace Toggl.Core.UI.Navigation
 {
     public interface INavigationService

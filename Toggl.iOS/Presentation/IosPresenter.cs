@@ -38,6 +38,9 @@ namespace Toggl.iOS.Presentation
             return tcs.Task;
         }
 
+        public virtual bool ChangePresentation(IPresentationChange presentationChange)
+            => false;
+
         protected UIViewController FindPresentedViewController()
             => findPresentedViewController(Window.RootViewController);
 

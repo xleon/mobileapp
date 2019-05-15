@@ -65,6 +65,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         private DateTime reportSubjectStartTime;
         private long workspaceId;
+        private IThreadSafeWorkspace workspace;
         private long userId;
         private DateFormat dateFormat;
         private BeginningOfWeek beginningOfWeek;
@@ -187,7 +188,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
             var user = await dataSource.User.Get();
             userId = user.Id;
 
-            var workspace = await interactorFactory.GetDefaultWorkspace()
+            workspace = await interactorFactory.GetDefaultWorkspace()
                 .TrackException<InvalidOperationException, IThreadSafeWorkspace>("ReportsViewModel.Initialize")
                 .Execute();
             workspaceId = workspace.Id;
@@ -291,13 +292,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         private void changeDateRange(ReportsDateRangeParameter dateRange)
         {
-            startDate = dateRange.StartDate;
-            endDate = dateRange.EndDate;
-            startDateSubject.OnNext(dateRange.StartDate);
-            endDateSubject.OnNext(dateRange.EndDate);
-            source = dateRange.Source;
-            updateCurrentDateRangeString();
-            reportSubject.OnNext(Unit.Default);
+            LoadReport(workspaceId, dateRange.StartDate, dateRange.EndDate, source);
         }
 
         private void updateCurrentDateRangeString()
@@ -421,12 +416,41 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             if (workspace == null || workspace.Id == workspaceId) return;
 
-            workspaceId = workspace.Id;
-            workspaceSubject.OnNext(workspace);
-            reportSubject.OnNext(Unit.Default);
+            loadReport(workspace, startDate, endDate, source);
         }
 
         private float percentageOf(List<ChartSegment> list)
             => list.Sum(segment => segment.Percentage);
+
+        private void loadReport(IThreadSafeWorkspace workspace, DateTimeOffset startDate, DateTimeOffset endDate, ReportsSource source)
+        {
+            if (this.startDate == startDate && this.endDate == endDate && workspaceId == workspace.Id)
+                return;
+
+            workspaceId = workspace.Id;
+            this.workspace = workspace;
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.source = source;
+
+            workspaceSubject.OnNext(workspace);
+            startDateSubject.OnNext(startDate);
+            endDateSubject.OnNext(endDate);
+
+            updateCurrentDateRangeString();
+
+            reportSubject.OnNext(Unit.Default);
+        }
+
+        public async Task LoadReport(long? workspaceId, DateTimeOffset startDate, DateTimeOffset endDate, ReportsSource source)
+        {
+            var getWorkspaceInteractor = workspaceId.HasValue
+                ? interactorFactory.GetWorkspaceById(this.workspaceId)
+                : interactorFactory.GetDefaultWorkspace();
+
+            var workspace = await getWorkspaceInteractor.Execute();
+
+            loadReport(workspace, startDate, endDate, source);
+        }
     }
 }

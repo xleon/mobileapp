@@ -125,5 +125,8 @@ namespace Toggl.iOS
 
         protected override IAccessRestrictionStorage CreateAccessRestrictionStorage()
             => settingsStorage.Value;
+
+        protected override IUrlHandler CreateUrlHandler()
+            => new UrlHandler(TimeService, InteractorFactory, NavigationService, viewPresenter);
     }
 }

@@ -15,7 +15,7 @@ namespace Toggl.Droid.Helper
 {
     public static class PersistentNotificationsHelper
     {
-        private static Uri togglMainNavigationUri = Uri.Parse(ApplicationUrls.Main.Open);
+        private static Uri togglMainNavigationUri = Uri.Parse(ApplicationUrls.Main.Default);
         private static int runningTimeEntryNotificationId = 111;
         private static int idleTimerNotificationId = 112;
         private static char dotSeparator = '\u00b7';

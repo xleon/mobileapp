@@ -321,7 +321,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ? date.Subtract(TimeSpan.FromMinutes(DefaultTimeEntryDurationForManualModeInMinutes))
                     : date;
                 await NavigationService.Received().Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(
-                    Arg.Is<StartTimeEntryParameters>(parameter => parameter.StartTime == expected), 
+                    Arg.Is<StartTimeEntryParameters>(parameter => parameter.StartTime == expected),
                     ViewModel.View
                 );
             }
@@ -782,74 +782,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public sealed class TheInitializeMethod
         {
-            public sealed class WhenReceivingADescription : MainViewModelTest
-            {
-                [Fact, LogIfTooSlow]
-                public async ThreadingTask CreatesANewTimeEntryWithThePassedDescriptionInTheDefaultWorkspace()
-                {
-                    const string description = "working on something";
-                    var defaultWorkspace = new MockWorkspace { Id = 1 };
-                    InteractorFactory
-                        .GetDefaultWorkspace()
-                        .Execute()
-                        .Returns(Observable.Return(defaultWorkspace));
-                    ViewModel.Init(null, description);
-
-                    await InteractorFactory
-                        .Received()
-                        .CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(
-                                te => te.Description == description
-                                   && te.WorkspaceId == defaultWorkspace.Id), TimeEntryStartOrigin.Timer)
-                        .Execute();
-                }
-            }
-
-            public sealed class WhenNavigationActionIsStop : MainViewModelTest
-            {
-                [Fact, LogIfTooSlow]
-                public async ThreadingTask StopsTheCurrentEntry()
-                {
-                    ViewModel.Init(ApplicationUrls.Main.Action.Stop, null);
-                    await ViewModel.Initialize();
-
-                    await InteractorFactory.Received().StopTimeEntry(TimeService.CurrentDateTime, Arg.Any<TimeEntryStopOrigin>()).Execute();
-                }
-
-                [Fact, LogIfTooSlow]
-                public async ThreadingTask StartsPushSync()
-                {
-                    ViewModel.Init(ApplicationUrls.Main.Action.Stop, null);
-                    await ViewModel.Initialize();
-
-                    SyncManager.Received().PushSync();
-                }
-            }
-
-            public sealed class WhenNavigationActionIsContinue : MainViewModelTest
-            {
-                [Fact, LogIfTooSlow]
-                public async ThreadingTask GetsTheContinueMostRecentTimeEntryInteractor()
-                {
-                    ViewModel.Init(ApplicationUrls.Main.Action.Continue, null);
-
-                    await ViewModel.Initialize();
-
-                    InteractorFactory.Received().ContinueMostRecentTimeEntry();
-                }
-
-                [Fact, LogIfTooSlow]
-                public async ThreadingTask ExecutesTheContinueMostRecentTimeEntryInteractor()
-                {
-                    var interactor = Substitute.For<IInteractor<IObservable<IThreadSafeTimeEntry>>>();
-                    InteractorFactory.ContinueMostRecentTimeEntry().Returns(interactor);
-                    ViewModel.Init(ApplicationUrls.Main.Action.Continue, null);
-
-                    await ViewModel.Initialize();
-
-                    await interactor.Received().Execute();
-                }
-            }
-
             public sealed class WhenShowingTheRatingsView : MainViewModelTest
             {
                 [Fact, LogIfTooSlow]

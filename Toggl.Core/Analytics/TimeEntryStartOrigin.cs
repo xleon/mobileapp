@@ -64,6 +64,11 @@ namespace Toggl.Core.Analytics
         /// <summary>
         /// Starting a time entry via Siri
         /// </summary>
-        Siri
+        Siri,
+
+        /// <summary>
+        /// Starting a time entry via an url
+        /// </summary>
+        Deeplink,
     }
 }

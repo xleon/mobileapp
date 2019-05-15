@@ -2,6 +2,7 @@
 using System.Linq;
 using Foundation;
 using Intents;
+using Toggl.Core;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
@@ -15,11 +16,12 @@ namespace Toggl.iOS
     public partial class AppDelegate
     {
         public override bool ContinueUserActivity(
-            UIApplication application, 
+            UIApplication application,
             NSUserActivity userActivity,
             UIApplicationRestorationHandler completionHandler)
         {
             var navigationService = IosDependencyContainer.Instance.NavigationService;
+            var urlHandler = IosDependencyContainer.Instance.UrlHandler;
 
             var interaction = userActivity.GetInteraction();
             if (interaction == null || interaction.IntentHandlingStatus != INIntentHandlingStatus.DeferredToApplication)
@@ -31,12 +33,11 @@ namespace Toggl.iOS
 
             switch (intent)
             {
-                // TODO: Reimplement when working on Deeplinks
                 case StopTimerIntent _:
-                    //navigationService.Navigate(ApplicationUrls.Main.StopFromSiri);
+                    urlHandler.Handle(new Uri(ApplicationUrls.TimeEntry.Stop.FromSiri));
                     return true;
                 case ShowReportIntent _:
-                    //navigationService.Navigate(ApplicationUrls.Reports);
+                    urlHandler.Handle(new Uri(ApplicationUrls.Reports.Default));
                     return true;
                 case ShowReportPeriodIntent periodIntent:
                     var tabbarVC = (MainTabBarController)UIApplication.SharedApplication.KeyWindow.RootViewController;

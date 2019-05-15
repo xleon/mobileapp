@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Contacts;
 using Foundation;
 using Toggl.Core.Shortcuts;
 using UIKit;
@@ -61,6 +62,6 @@ namespace Toggl.iOS
             );
 
         private NSDictionary<NSString, NSObject> userInfoFor(ApplicationShortcut shortcut)
-            => new NSDictionary<NSString, NSObject>(new NSString(nameof(ApplicationShortcut.Type)), new NSNumber((int)shortcut.Type));
+            => new NSDictionary<NSString, NSObject>(new NSString(nameof(ApplicationShortcut.Url)), new NSString(shortcut.Url));
     }
 }

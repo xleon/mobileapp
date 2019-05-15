@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.Navigation
 {
@@ -11,8 +12,10 @@ namespace Toggl.Core.UI.Navigation
         bool CanPresent<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel);
 
         Task Present<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView);
+
+        bool ChangePresentation(IPresentationChange presentationChange);
     }
-    
+
     public sealed class CompositePresenter : IPresenter
     {
         private readonly IPresenter[] presenters;
@@ -33,6 +36,10 @@ namespace Toggl.Core.UI.Navigation
 
             return presenter.Present(viewModel, sourceView);
         }
+
+        public bool ChangePresentation(IPresentationChange presentationChange)
+            => presenters
+                .Select(presenter => presenter.ChangePresentation(presentationChange))
+                .Aggregate(CommonFunctions.Or);
     }
-    
 }
