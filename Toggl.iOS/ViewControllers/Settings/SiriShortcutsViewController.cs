@@ -134,7 +134,8 @@ namespace Toggl.iOS.ViewControllers.Settings
 
                     acc.Add(shortcut);
                     return acc;
-                });
+                })
+                .OrderBy(shortcut => !shortcut.IsActive);
 
             return new[]
             {

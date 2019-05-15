@@ -39,6 +39,8 @@ namespace Toggl.iOS.Models
             if (Intent is ShowReportPeriodIntent showReportPeriodIntent)
             {
                 Parameters = new Dictionary<string, object> {
+                    { SiriShortcutParametersKey.WorkspaceId, showReportPeriodIntent.Workspace?.Identifier },
+                    { SiriShortcutParametersKey.WorkspaceName, showReportPeriodIntent.Workspace?.DisplayString },
                     { SiriShortcutParametersKey.ReportPeriod, showReportPeriodIntent.Period.ToReportPeriod() }
                 };
             }

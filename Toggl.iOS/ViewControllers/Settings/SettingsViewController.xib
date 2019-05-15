@@ -16,7 +16,7 @@
                 <outlet property="AboutView" destination="8oj-5n-iTi" id="KSe-ue-jsZ"/>
                 <outlet property="BeginningOfWeekLabel" destination="RVi-in-fBC" id="M3J-Hk-Ldn"/>
                 <outlet property="BeginningOfWeekView" destination="kdM-dN-ITR" id="m5n-6w-mNR"/>
-                <outlet property="CalendarSectionTopConstraint" destination="AdU-ve-oAx" id="MYi-xc-IHp"/>
+                <outlet property="CalendarSectionTopConstraint" destination="Ip0-hv-Fad" id="CBJ-Qz-7Wk"/>
                 <outlet property="CalendarSettingsCellLabel" destination="TQi-7l-nWd" id="d3x-5u-g5a"/>
                 <outlet property="CalendarSettingsSection" destination="oNB-p4-T5l" id="Ytt-6z-9iM"/>
                 <outlet property="CalendarSettingsView" destination="DTp-wG-K74" id="tGk-ja-zEL"/>
@@ -611,8 +611,8 @@
                                         <constraint firstItem="taq-h9-x0G" firstAttribute="top" secondItem="YYU-zf-XnV" secondAttribute="bottom" id="52l-r8-rxw"/>
                                         <constraint firstItem="ILj-Fd-xjW" firstAttribute="leading" secondItem="oNB-p4-T5l" secondAttribute="leading" id="6B9-0D-lMj"/>
                                         <constraint firstItem="YYU-zf-XnV" firstAttribute="top" secondItem="DTp-wG-K74" secondAttribute="bottom" id="7Hg-xP-gfP"/>
+                                        <constraint firstItem="DTp-wG-K74" firstAttribute="top" secondItem="ILj-Fd-xjW" secondAttribute="bottom" id="9Nc-K7-Muj"/>
                                         <constraint firstItem="ILj-Fd-xjW" firstAttribute="top" secondItem="eVF-K2-5bP" secondAttribute="bottom" constant="8" id="AZU-MK-t0V"/>
-                                        <constraint firstItem="DTp-wG-K74" firstAttribute="top" secondItem="ILj-Fd-xjW" secondAttribute="bottom" id="AdU-ve-oAx"/>
                                         <constraint firstItem="rg6-s3-6Aa" firstAttribute="top" secondItem="taq-h9-x0G" secondAttribute="bottom" id="DEw-6P-XIS"/>
                                         <constraint firstAttribute="trailing" secondItem="rg6-s3-6Aa" secondAttribute="trailing" id="XCn-9P-0mz"/>
                                         <constraint firstAttribute="trailing" secondItem="YYU-zf-XnV" secondAttribute="trailing" id="XYj-58-AWb"/>
@@ -1020,6 +1020,7 @@
                                 <constraint firstItem="dsU-1j-Z4S" firstAttribute="top" secondItem="PRE-Ar-6sY" secondAttribute="top" id="A6U-aq-ftB"/>
                                 <constraint firstItem="0bh-ZU-DVv" firstAttribute="leading" secondItem="PRE-Ar-6sY" secondAttribute="leading" id="DbG-vu-ypG"/>
                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="834" id="HgQ-HB-p7y"/>
+                                <constraint firstItem="DTp-wG-K74" firstAttribute="top" secondItem="YmB-qg-e0b" secondAttribute="bottom" constant="47.5" id="Ip0-hv-Fad"/>
                                 <constraint firstAttribute="trailing" secondItem="e5t-dK-F9o" secondAttribute="trailing" id="KA0-Je-9LM"/>
                                 <constraint firstItem="dsU-1j-Z4S" firstAttribute="leading" secondItem="PRE-Ar-6sY" secondAttribute="leading" id="MHM-IP-Ttt"/>
                                 <constraint firstItem="oNB-p4-T5l" firstAttribute="leading" secondItem="PRE-Ar-6sY" secondAttribute="leading" id="MJJ-0k-UXc"/>
@@ -1027,7 +1028,6 @@
                                 <constraint firstItem="7XI-te-r4v" firstAttribute="top" secondItem="e5t-dK-F9o" secondAttribute="bottom" constant="24" id="XRr-pw-oi7"/>
                                 <constraint firstItem="7XI-te-r4v" firstAttribute="leading" secondItem="PRE-Ar-6sY" secondAttribute="leading" id="YXc-ht-mcC"/>
                                 <constraint firstItem="YmB-qg-e0b" firstAttribute="leading" secondItem="PRE-Ar-6sY" secondAttribute="leading" id="ZHu-Lx-DY9"/>
-                                <constraint firstItem="eVF-K2-5bP" firstAttribute="top" secondItem="YmB-qg-e0b" secondAttribute="bottom" constant="24" id="cyr-Bf-0RN"/>
                                 <constraint firstAttribute="trailing" secondItem="YmB-qg-e0b" secondAttribute="trailing" id="dTR-bz-F1U"/>
                                 <constraint firstItem="0bh-ZU-DVv" firstAttribute="top" secondItem="dsU-1j-Z4S" secondAttribute="bottom" id="jZN-gy-IuR"/>
                                 <constraint firstItem="iZL-PO-ChW" firstAttribute="top" secondItem="0bh-ZU-DVv" secondAttribute="bottom" constant="24" id="l0J-Sw-GUL"/>
