@@ -163,7 +163,7 @@ private TemporaryFileTransformation GetIosAnalyticsServicesConfigurationTransfor
 
 private TemporaryFileTransformation GetIosAppDelegateTransformation()
 {
-    const string path = "Toggl.iOS/Startup/AppDelegate.cs";
+    const string path = "Toggl.iOS/Startup/AppDelegate.Analytics.cs";
     var adjustToken = EnvironmentVariable("TOGGL_ADJUST_APP_TOKEN");
     string appCenterId = "";
 
