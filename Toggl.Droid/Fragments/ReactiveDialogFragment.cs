@@ -19,7 +19,7 @@ namespace Toggl.Droid.Fragments
 
         protected abstract void InitializeViews(View view);
 
-        public TViewModel ViewModel { get; set; }
+        public TViewModel ViewModel { get; private set; }
 
         protected ReactiveDialogFragment()
         {
@@ -33,6 +33,11 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
+            ViewModel = AndroidDependencyContainer
+                .Instance
+                .ViewModelCache
+                .Get<TViewModel>();
+
             ViewModel?.AttachView(this);
         }
 
@@ -78,6 +83,11 @@ namespace Toggl.Droid.Fragments
         
         public Task Close()
         {
+            AndroidDependencyContainer
+                .Instance
+                .ViewModelCache
+                .Clear<TViewModel>();
+            
             Dismiss();
             return Task.CompletedTask;
         }

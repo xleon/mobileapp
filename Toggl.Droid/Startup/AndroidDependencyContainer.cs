@@ -17,6 +17,7 @@ using Toggl.Networking;
 using Toggl.Networking.Network;
 using Android.Content;
 using Android.App;
+using Android.Arch.Lifecycle;
 using Toggl.Core.UI.Navigation;
 using Toggl.Droid.Presentation;
 
@@ -28,7 +29,7 @@ namespace Toggl.Droid
 
         private readonly Lazy<SettingsStorage> settingsStorage;
 
-        public ActivityPresenter ActivityPresenter { get; } = new ActivityPresenter();
+        public ViewModelCache ViewModelCache { get; } = new ViewModelCache();
         
         public new static AndroidDependencyContainer Instance { get; private set; }
 
@@ -113,7 +114,7 @@ namespace Toggl.Droid
 
         protected override INavigationService CreateNavigationService()
             => new NavigationService(
-                new CompositePresenter(ActivityPresenter, new DialogFragmentPresenter()), 
+                new CompositePresenter(new ActivityPresenter(), new DialogFragmentPresenter()), 
                 new ViewModelLoader(this),
                 AnalyticsService
             );

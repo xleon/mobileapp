@@ -26,6 +26,13 @@ namespace Toggl.Droid.Fragments
 
             InitializeViews(view);
 
+            return view;
+        }
+
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
+            
             recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
             selectDurationRecyclerAdapter = new SelectDurationFormatRecyclerAdapter();
             selectDurationRecyclerAdapter.Items = ViewModel.DurationFormats.ToList();
@@ -34,8 +41,6 @@ namespace Toggl.Droid.Fragments
             selectDurationRecyclerAdapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectDurationFormat.Inputs)
                 .DisposedBy(DisposeBag);
-
-            return view;
         }
 
         public override void OnResume()

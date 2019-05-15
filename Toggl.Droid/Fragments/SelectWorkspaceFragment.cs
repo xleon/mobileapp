@@ -16,7 +16,12 @@ namespace Toggl.Droid.Fragments
             base.OnCreateView(inflater, container, savedInstanceState);
             var view = inflater.Inflate(Resource.Layout.SelectWorkspaceFragment, container, false);
             InitializeViews(view);
+            return view;
+        }
 
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
             var adapter = new SimpleAdapter<SelectableWorkspaceViewModel>(
                 Resource.Layout.SelectWorkspaceFragmentCell,
                 SelectWorkspaceViewHolder.Create
@@ -30,8 +35,6 @@ namespace Toggl.Droid.Fragments
 
             recyclerView.SetAdapter(adapter);
             recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
-
-            return view;
         }
 
         public override void OnResume()

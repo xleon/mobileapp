@@ -12,9 +12,7 @@ namespace Toggl.Droid.Presentation
     public sealed class ActivityPresenter : AndroidPresenter
     {
         private const ActivityFlags clearBackStackFlags = ActivityFlags.ClearTop | ActivityFlags.ClearTask | ActivityFlags.NewTask;
-
-        private readonly Dictionary<Type, IViewModel> viewModelCache = new Dictionary<Type, IViewModel>();
-
+        
         protected override HashSet<Type> AcceptedViewModels { get; } = new HashSet<Type>
         {
             typeof(AboutViewModel),
@@ -68,17 +66,19 @@ namespace Toggl.Droid.Presentation
                 throw new Exception($"Failed to start Activity for viewModel with type {viewModelType.Name}");
             }
             
-            viewModelCache[viewModelType] = viewModel;
             var intent = new Intent(Application.Context, presentableInfo.ActivityType).AddFlags(presentableInfo.Flags);
-            Application.Context.StartActivity(intent);
-        }
 
-        public TViewModel GetCachedViewModel<TViewModel>()
-        where TViewModel : IViewModel
-        {
-            var cachedViewModel = (TViewModel)viewModelCache[typeof(TViewModel)];
-            viewModelCache[typeof(TViewModel)] = null;
-            return cachedViewModel;
+            if (presentableInfo.Flags == clearBackStackFlags)
+            {
+                AndroidDependencyContainer.Instance.ViewModelCache.ClearAll();
+            }
+            
+            AndroidDependencyContainer
+                .Instance
+                .ViewModelCache
+                .Cache(viewModel);
+            
+            Application.Context.StartActivity(intent);
         }
 
         private struct ActivityPresenterInfo

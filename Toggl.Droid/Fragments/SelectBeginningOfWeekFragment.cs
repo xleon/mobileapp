@@ -25,16 +25,20 @@ namespace Toggl.Droid.Fragments
         {
             base.OnCreateView(inflater, container, savedInstanceState);
             var view = inflater.Inflate(Resource.Layout.SelectBeginningOfWeekFragment, null);
-
             InitializeViews(view);
+            
+            return view;
+        }
 
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
+            
             setupRecyclerView();
-
+            
             adapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectBeginningOfWeek.Inputs)
                 .DisposedBy(DisposeBag);
-
-            return view;
         }
 
         private void setupRecyclerView()

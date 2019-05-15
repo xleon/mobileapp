@@ -35,70 +35,53 @@ namespace Toggl.Droid.Presentation
             if (fragmentManager == null)
                 throw new Exception($"Parent ViewModel's view trying to present {viewModel.GetType().Name} doesn't have a FragmentManager");
 
-            var dialog = createAndPrepareReactiveDialog(viewModel);
+            var dialog = createReactiveDialog(viewModel);
+            
+            AndroidDependencyContainer.Instance
+                .ViewModelCache
+                .Cache(viewModel);
+            
             dialog.Show(fragmentManager, dialog.GetType().Name);
         }
 
-        private DialogFragment createAndPrepareReactiveDialog<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel)
+        private DialogFragment createReactiveDialog<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel)
         {
             switch (viewModel)
             {
-                case CalendarPermissionDeniedViewModel calendarPermissionDeniedViewModel:
-                    var calendarPermissionDeniedDialog = new CalendarPermissionDeniedFragment();
-                    calendarPermissionDeniedDialog.ViewModel = calendarPermissionDeniedViewModel;
-                    return calendarPermissionDeniedDialog;
+                case CalendarPermissionDeniedViewModel _:
+                    return new CalendarPermissionDeniedFragment();
 
-                case NoWorkspaceViewModel noWorkspaceViewModel:
-                    var noWorkspaceDialog = new NoWorkspaceFragment();
-                    noWorkspaceDialog.ViewModel = noWorkspaceViewModel;
-                    return noWorkspaceDialog;
+                case NoWorkspaceViewModel _:
+                    return new NoWorkspaceFragment();
 
-                case SelectBeginningOfWeekViewModel selectBeginningOfWeekViewModel:
-                    var selectBeginningOfWeekDialog = new SelectBeginningOfWeekFragment();
-                    selectBeginningOfWeekDialog.ViewModel = selectBeginningOfWeekViewModel;
-                    return selectBeginningOfWeekDialog;
+                case SelectBeginningOfWeekViewModel _:
+                    return new SelectBeginningOfWeekFragment();
 
-                case SelectColorViewModel selectColorViewModel:
-                    var selectColorDialog = new SelectColorFragment();
-                    selectColorDialog.ViewModel = selectColorViewModel;
-                    return selectColorDialog;
+                case SelectColorViewModel _:
+                    return new SelectColorFragment();
 
-                case SelectDateFormatViewModel selectDateFormatViewModel:
-                    var selectDateFormatDialog = new SelectDateFormatFragment();
-                    selectDateFormatDialog.ViewModel = selectDateFormatViewModel;
-                    return selectDateFormatDialog;
+                case SelectDateFormatViewModel _:
+                    return new SelectDateFormatFragment();
 
-                case SelectDefaultWorkspaceViewModel selectDefaultWorkspaceViewModel:
-                    var selectDefaultWorkspaceDialog = new SelectDefaultWorkspaceFragment();
-                    selectDefaultWorkspaceDialog.ViewModel = selectDefaultWorkspaceViewModel;
-                    return selectDefaultWorkspaceDialog;
+                case SelectDefaultWorkspaceViewModel _:
+                    return new SelectDefaultWorkspaceFragment();
 
-                case SelectDurationFormatViewModel selectDurationFormatViewModel:
-                    var selectDurationFormatDialog = new SelectDurationFormatFragment();
-                    selectDurationFormatDialog.ViewModel = selectDurationFormatViewModel;
-                    return selectDurationFormatDialog;
+                case SelectDurationFormatViewModel _:
+                    return new SelectDurationFormatFragment();
 
-                case SelectUserCalendarsViewModel selectUserCalendarsViewModel:
-                    var selectUserCalendarsDialog = new SelectUserCalendarsFragment();
-                    selectUserCalendarsDialog.ViewModel = selectUserCalendarsViewModel;
-                    return selectUserCalendarsDialog;
+                case SelectUserCalendarsViewModel _:
+                    return new SelectUserCalendarsFragment();
 
-                case TermsOfServiceViewModel termsOfServiceViewModel:
-                    var termsOfServiceDialog = new TermsOfServiceFragment();
-                    termsOfServiceDialog.ViewModel = termsOfServiceViewModel;
-                    return termsOfServiceDialog;
+                case TermsOfServiceViewModel _:
+                    return new TermsOfServiceFragment();
 
-                case UpcomingEventsNotificationSettingsViewModel upcomingEventsNotificationSettingsViewModel:
-                    var upcomingEventsNotificationSettingsDialog = new UpcomingEventsNotificationSettingsFragment();
-                    upcomingEventsNotificationSettingsDialog.ViewModel = upcomingEventsNotificationSettingsViewModel;
-                    return upcomingEventsNotificationSettingsDialog;
+                case UpcomingEventsNotificationSettingsViewModel _:
+                    return new UpcomingEventsNotificationSettingsFragment();
                 
-                case SelectWorkspaceViewModel selectWorkspaceViewModel:
-                    var selectWorkspaceDialogFragment = new SelectWorkspaceFragment();
-                    selectWorkspaceDialogFragment.ViewModel = selectWorkspaceViewModel;
-                    return selectWorkspaceDialogFragment;
+                case SelectWorkspaceViewModel _:
+                    return new SelectWorkspaceFragment();
             }
-            
+
             throw new InvalidOperationException($"There's no reactive dialog implementation for {viewModel.GetType().Name}");
         }
 

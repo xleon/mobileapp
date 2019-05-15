@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
@@ -32,6 +33,8 @@ namespace Toggl.Droid.Activities
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
 
             InitializeViews();
+
+            restoreFragmentsViewModels();
             showInitialFragment();
 
             navigationView
@@ -39,6 +42,28 @@ namespace Toggl.Droid.Activities
                 .ItemSelected()
                 .Subscribe(onTabSelected)
                 .DisposedBy(DisposeBag);
+        }
+
+        private void restoreFragmentsViewModels()
+        {
+            foreach (var frag in SupportFragmentManager.Fragments)
+            {
+                switch (frag)
+                {
+                    case MainFragment mainFragment:
+                        mainFragment.ViewModel = getTabViewModel<MainViewModel>();
+                        break;
+                    case ReportsFragment reportsFragment:
+                        reportsFragment.ViewModel = getTabViewModel<ReportsViewModel>();
+                        break;
+                    case CalendarFragment calendarFragment:
+                        calendarFragment.ViewModel = getTabViewModel<CalendarViewModel>();
+                        break;
+                    case SettingsFragment settingsFragment:
+                        settingsFragment.ViewModel = getTabViewModel<SettingsViewModel>();
+                        break;
+                }
+            }
         }
 
         protected override void OnResume()
@@ -60,16 +85,16 @@ namespace Toggl.Droid.Activities
             switch (itemId)
             {
                 case Resource.Id.MainTabTimerItem:
-                    fragment = new MainFragment { ViewModel = ViewModel.Tabs[0] as MainViewModel };
+                    fragment = new MainFragment { ViewModel = getTabViewModel<MainViewModel>() };
                     break;
                 case Resource.Id.MainTabReportsItem:
-                    fragment = new ReportsFragment { ViewModel = ViewModel.Tabs[1] as ReportsViewModel };
+                    fragment = new ReportsFragment { ViewModel = getTabViewModel<ReportsViewModel>() };
                     break;
                 case Resource.Id.MainTabCalendarItem:
-                    fragment = new CalendarFragment { ViewModel = ViewModel.Tabs[2] as CalendarViewModel };
+                    fragment = new CalendarFragment { ViewModel = getTabViewModel<CalendarViewModel>() };
                     break;
                 case Resource.Id.MainTabSettinsItem:
-                    fragment = new SettingsFragment { ViewModel = ViewModel.Tabs[3] as SettingsViewModel };
+                    fragment = new SettingsFragment { ViewModel = getTabViewModel<SettingsViewModel>() };
                     break;
                 default:
                     throw new ArgumentException($"Unexpected item id {itemId}");
@@ -77,6 +102,10 @@ namespace Toggl.Droid.Activities
             fragments[itemId] = fragment;
             return fragment;
         }
+
+        private TTabViewModel getTabViewModel<TTabViewModel>()
+            where TTabViewModel : class, IViewModel
+            => ViewModel.Tabs.OfType<TTabViewModel>().Single();
 
         public override void OnBackPressed()
         {

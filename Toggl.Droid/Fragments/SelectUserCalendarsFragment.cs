@@ -25,6 +25,12 @@ namespace Toggl.Droid.Fragments
             var view = wrappedInflater.Inflate(Resource.Layout.SelectUserCalendarsFragment, container, false);
             InitializeViews(view);
 
+            return view;
+        }
+
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
             setupRecyclerView();
 
             cancelButton
@@ -47,8 +53,6 @@ namespace Toggl.Droid.Fragments
                 .ItemTapObservable
                 .Subscribe(ViewModel.SelectCalendar.Inputs)
                 .DisposedBy(DisposeBag);
-
-            return view;
         }
 
         public override void OnResume()

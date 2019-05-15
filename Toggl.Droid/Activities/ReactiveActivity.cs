@@ -18,13 +18,10 @@ namespace Toggl.Droid.Activities
 
         protected abstract void InitializeViews();
 
-        public TViewModel ViewModel { get; set; }
+        public TViewModel ViewModel { get; private set; }
 
         protected ReactiveActivity()
         {
-            ViewModel = AndroidDependencyContainer.Instance
-                .ActivityPresenter
-                .GetCachedViewModel<TViewModel>();
         }
 
         protected ReactiveActivity(IntPtr javaReference, JniHandleOwnership transfer)
@@ -35,6 +32,10 @@ namespace Toggl.Droid.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+            ViewModel = AndroidDependencyContainer.Instance
+                .ViewModelCache
+                .Get<TViewModel>();
+
             ViewModel?.AttachView(this);
         }
 
@@ -91,7 +92,12 @@ namespace Toggl.Droid.Activities
 
         public Task Close()
         {
+            AndroidDependencyContainer.Instance
+                .ViewModelCache
+                .Clear<TViewModel>();
+            
             Finish();
+            
             return Task.CompletedTask;
         }
     }

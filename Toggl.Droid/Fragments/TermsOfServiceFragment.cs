@@ -23,9 +23,14 @@ namespace Toggl.Droid.Fragments
             var view = inflater.Inflate(Resource.Layout.TermsOfServiceFragment, null);
 
             InitializeViews(view);
-            bindViews();
 
             return view;
+        }
+
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
+            bindViews();
         }
 
         private void bindViews()

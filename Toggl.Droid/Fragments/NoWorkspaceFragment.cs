@@ -26,7 +26,12 @@ namespace Toggl.Droid.Fragments
             base.OnCreateView(LayoutInflater, container, savedInstanceState);
             var rootView = inflater.Inflate(Resource.Layout.NoWorkspaceFragment, container, false);
             InitializeViews(rootView);
+            return rootView;
+        }
 
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
             createWorkspaceTextView.Rx()
                 .BindAction(ViewModel.CreateWorkspaceWithDefaultName)
                 .DisposedBy(DisposeBag);
@@ -49,8 +54,6 @@ namespace Toggl.Droid.Fragments
                 .StartWith(false)
                 .Subscribe(onLoadingStateChanged)
                 .DisposedBy(DisposeBag);
-
-            return rootView;
         }
 
         public override void OnResume()

@@ -33,6 +33,12 @@ namespace Toggl.Droid.Fragments
 
             InitializeViews(view);
 
+            return view;
+        }
+
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
             recyclerView.SetLayoutManager(new GridLayoutManager(Context, 5));
 
             selectableColorsAdapter = new SimpleAdapter<SelectableColorViewModel>(
@@ -92,8 +98,6 @@ namespace Toggl.Droid.Fragments
 
             hueSaturationPicker.Visibility = ViewModel.AllowCustomColors.ToVisibility();
             valueSlider.Visibility = ViewModel.AllowCustomColors.ToVisibility();
-
-            return view;
         }
 
         private void updateColors(IEnumerable<SelectableColorViewModel> colors)
