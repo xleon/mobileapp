@@ -88,11 +88,9 @@ namespace Toggl.Droid
 
         private void createApplicationLifecycleObserver(IBackgroundService backgroundService)
         {
-            //TODO: Reimplement this
-            //var mvxApplication = MvxAndroidApplication.Instance;
-            //var appLifecycleObserver = new ApplicationLifecycleObserver(backgroundService);
-            //mvxApplication.RegisterActivityLifecycleCallbacks(appLifecycleObserver);
-            //mvxApplication.RegisterComponentCallbacks(appLifecycleObserver);
+            var appLifecycleObserver = new ApplicationLifecycleObserver(backgroundService);
+            Application.RegisterActivityLifecycleCallbacks(appLifecycleObserver);
+            Application.RegisterComponentCallbacks(appLifecycleObserver);
         }
-}
+    }
 }
