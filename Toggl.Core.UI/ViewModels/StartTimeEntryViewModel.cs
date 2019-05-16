@@ -241,7 +241,8 @@ namespace Toggl.Core.UI.ViewModels
             {
                 var spans = new List<ISpan>();
                 spans.Add(new TextSpan(initialParameters.EntryDescription));
-                if (initialParameters.ProjectId != null) {
+                if (initialParameters.ProjectId != null)
+                {
                     try
                     {
                         var project = await interactorFactory.GetProjectById((long)initialParameters.ProjectId).Execute();
@@ -252,7 +253,8 @@ namespace Toggl.Core.UI.ViewModels
                         // Intentionally left blank
                     }
                 }
-                if (initialParameters.TagIds != null) {
+                if (initialParameters.TagIds != null)
+                {
                     try
                     {
                         var tags = initialParameters.TagIds.ToObservable()
