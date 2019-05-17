@@ -300,7 +300,7 @@ namespace Toggl.iOS.ViewControllers
             ratingViewContainer.BottomAnchor.ConstraintEqualTo(tableHeader.BottomAnchor).Active = true;
 
             suggestionsContaier.AddSubview(suggestionsView);
-            suggestionsView.ConstrainInView(suggestionsContaier);
+            suggestionsView.ConstrainToViewHeight(suggestionsContaier);
         }
 
         private (long[], EditTimeEntryOrigin) editEventInfo(LogItemViewModel item)

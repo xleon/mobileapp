@@ -38,7 +38,13 @@ namespace Toggl.iOS.Suggestions
             base.MovedToSuperview();
 
             TopAnchor.ConstraintEqualTo(Superview.TopAnchor).Active = true;
-            WidthAnchor.ConstraintEqualTo(Superview.WidthAnchor).Active = true;
+            WidthAnchor.ConstraintLessThanOrEqualTo(834).Active = true;
+            var leftConstraint = LeadingAnchor.ConstraintEqualTo(Superview.LeadingAnchor);
+            leftConstraint.Priority = 750;
+            leftConstraint.Active = true;
+            var rightConstraint = TrailingAnchor.ConstraintEqualTo(Superview.TrailingAnchor);
+            rightConstraint.Priority = 750;
+            rightConstraint.Active = true;
             CenterXAnchor.ConstraintEqualTo(Superview.CenterXAnchor).Active = true;
             //Actual value is set with bindings a few lines below
             heightConstraint.Active = true;
@@ -69,8 +75,8 @@ namespace Toggl.iOS.Suggestions
                 AddSubview(suggestionView);
                 suggestionView.TranslatesAutoresizingMaskIntoConstraints = false;
                 suggestionView.HeightAnchor.ConstraintEqualTo(suggestionHeight).Active = true;
-                suggestionView.CenterXAnchor.ConstraintEqualTo(Superview.CenterXAnchor).Active = true;
-                suggestionView.WidthAnchor.ConstraintEqualTo(Superview.WidthAnchor, 1, -2 * sideMargin).Active = true;
+                suggestionView.CenterXAnchor.ConstraintEqualTo(CenterXAnchor).Active = true;
+                suggestionView.WidthAnchor.ConstraintEqualTo(WidthAnchor, 1, -2 * sideMargin).Active = true;
                 suggestionView.TopAnchor.ConstraintEqualTo(titleLabel.BottomAnchor, distanceFromTitleLabel(i)).Active = true;
 
                 suggestionView.AddGestureRecognizer(new UITapGestureRecognizer(() =>
@@ -90,8 +96,8 @@ namespace Toggl.iOS.Suggestions
             titleLabel.Text = Resources.SuggestionsHeader;
             titleLabel.Font = UIFont.SystemFontOfSize(titleSize, UIFontWeight.Medium);
             titleLabel.TextColor = Colors.Main.SuggestionsTitle.ToNativeColor();
-            titleLabel.TopAnchor.ConstraintEqualTo(Superview.TopAnchor, distanceAboveTitleLabel).Active = true;
-            titleLabel.LeadingAnchor.ConstraintEqualTo(Superview.LeadingAnchor, sideMargin).Active = true;
+            titleLabel.TopAnchor.ConstraintEqualTo(TopAnchor, distanceAboveTitleLabel).Active = true;
+            titleLabel.LeadingAnchor.ConstraintEqualTo(LeadingAnchor, sideMargin).Active = true;
         }
 
         private float distanceFromTitleLabel(int index)

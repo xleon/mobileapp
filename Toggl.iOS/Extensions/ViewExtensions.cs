@@ -33,5 +33,12 @@ namespace Toggl.iOS.Extensions
             self.LeadingAnchor.ConstraintEqualTo(view.LeadingAnchor).Active = true;
             self.TrailingAnchor.ConstraintEqualTo(view.TrailingAnchor).Active = true;
         }
+
+
+        public static void ConstrainToViewHeight(this UIView self, UIView view)
+        {
+            self.TopAnchor.ConstraintEqualTo(view.TopAnchor).Active = true;
+            self.BottomAnchor.ConstraintEqualTo(view.BottomAnchor).Active = true;
+        }
     }
 }
