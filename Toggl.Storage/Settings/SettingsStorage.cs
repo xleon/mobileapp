@@ -53,6 +53,8 @@ namespace Toggl.Storage.Settings
         private const string calendarNotificationsEnabledKey = "CalendarNotificationsEnabled";
         private const string timeSpanBeforeCalendarNotificationsKey = "TimeSpanBeforeCalendarNotifications";
 
+        private const string didShowSiriClipboardInstructionKey = "didShowSiriClipboardInstructionKey";
+
         private readonly Version version;
         private readonly IKeyValueStorage keyValueStorage;
 
@@ -296,6 +298,10 @@ namespace Toggl.Storage.Settings
 
         public DateTimeOffset? RatingViewOutcomeTime()
             => keyValueStorage.GetDateTimeOffset(ratingViewOutcomeTimeKey);
+
+        public bool DidShowSiriClipboardInstruction() => keyValueStorage.GetBool(didShowSiriClipboardInstructionKey);
+
+        public void SetDidShowSiriClipboardInstruction(bool value) => keyValueStorage.SetBool(didShowSiriClipboardInstructionKey, value);
 
         public bool WasDismissed(IDismissable dismissable) => keyValueStorage.GetBool(onboardingPrefix + dismissable.Key);
 

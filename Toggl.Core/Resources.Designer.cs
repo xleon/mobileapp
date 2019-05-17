@@ -562,6 +562,12 @@ namespace Toggl.Core {
             }
         }
         
+        public static string SiriCustomTimeEntryInstruction {
+            get {
+                return ResourceManager.GetString("SiriCustomTimeEntryInstruction", resourceCulture);
+            }
+        }
+        
         public static string WorkingOnThis {
             get {
                 return ResourceManager.GetString("WorkingOnThis", resourceCulture);
@@ -1681,6 +1687,42 @@ namespace Toggl.Core {
         public static string Siri_Shortcuts_Description {
             get {
                 return ResourceManager.GetString("Siri Shortcuts Description", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutCustomTimeEntryTitle {
+            get {
+                return ResourceManager.GetString("SiriShortcutCustomTimeEntryTitle", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutDescriptionFromClipboard {
+            get {
+                return ResourceManager.GetString("SiriShortcutDescriptionFromClipboard", resourceCulture);
+            }
+        }
+        
+        public static string SiriClipboardInstructionTitle {
+            get {
+                return ResourceManager.GetString("SiriClipboardInstructionTitle", resourceCulture);
+            }
+        }
+        
+        public static string SiriClipboardInstructionDescription {
+            get {
+                return ResourceManager.GetString("SiriClipboardInstructionDescription", resourceCulture);
+            }
+        }
+        
+        public static string SiriClipboardInstructionDoNotShowAgain {
+            get {
+                return ResourceManager.GetString("SiriClipboardInstructionDoNotShowAgain", resourceCulture);
+            }
+        }
+        
+        public static string SiriClipboardHintLabel {
+            get {
+                return ResourceManager.GetString("SiriClipboardHintLabel", resourceCulture);
             }
         }
     }

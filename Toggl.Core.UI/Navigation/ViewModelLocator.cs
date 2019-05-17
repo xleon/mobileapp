@@ -4,6 +4,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.ViewModels.Settings;
+using Toggl.Core.UI.ViewModels.Settings.Siri;
 
 namespace Toggl.Core.UI.Navigation
 {
@@ -418,6 +419,24 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RxActionFactory);
+
+            if (viewModelType == typeof(SiriShortcutsCustomTimeEntryViewModel))
+                return new SiriShortcutsCustomTimeEntryViewModel(
+                    dependencyContainer.DataSource,
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.OnboardingStorage,
+                    dependencyContainer.SchedulerProvider
+                    );
+
+            if (viewModelType == typeof(PasteFromClipboardViewModel))
+                return new PasteFromClipboardViewModel(
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.OnboardingStorage
+                    );
 
             throw new InvalidOperationException($"Trying to locate ViewModel {viewModelType.Name} failed.");
         }

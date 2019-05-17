@@ -377,6 +377,9 @@ Start the timer and your most used time entries will appear here.</value>
   <data name="SiriReportPeriodInstruction" xml:space="preserve">
     <value>Ask Siri to view a report for this period</value>
   </data>
+  <data name="SiriCustomTimeEntryInstruction" xml:space="preserve">
+    <value>Ask Siri to start a timer with these entry details</value>
+  </data>
   <data name="WorkingOnThis" xml:space="preserve">
     <value>Working on this?</value>
   </data>
@@ -950,4 +953,22 @@ Use them to add keywords to your time entries.</value>
   <data name="Siri Shortcuts Description" xml:space="preserve">
     <value>Add shortcuts to control Toggl with Siri and the Shortcuts app</value>
   </data>  
+  <data name="SiriShortcutCustomTimeEntryTitle" xml:space="preserve">
+    <value>Time entry details</value>
+  </data>
+  <data name="SiriShortcutDescriptionFromClipboard" xml:space="preserve">
+    <value>Description from Clipboard</value>
+  </data>
+  <data name="SiriClipboardInstructionTitle" xml:space="preserve">
+    <value>Paste Description from Clipboard</value>
+  </data>
+  <data name="SiriClipboardInstructionDescription" xml:space="preserve">
+    <value>When you choose this option, whatever text has been copied to the system’s clipboard will be used as the description for the time entry.</value>
+  </data>
+  <data name="SiriClipboardInstructionDoNotShowAgain" xml:space="preserve">
+    <value>Don’t show this again</value>
+  </data>
+  <data name="SiriClipboardHintLabel" xml:space="preserve">
+    <value>When you run this shortcut, the Description will be pasted from Clipboard</value>
+  </data>
 </root>

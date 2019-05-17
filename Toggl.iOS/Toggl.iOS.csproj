@@ -1224,12 +1224,20 @@
     <ImageAsset Include="Resources\Images.xcassets\stripes.imageset\stripes%403x.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboard.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboard.imageset\pasteFromClipboard.pdf" />
+    <ImageAsset Include="Resources\Images.xcassets\clipboardInstruction.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\clipboardInstruction.imageset\clipboardInstruction.pdf" />
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboardEnabled.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboardEnabled.imageset\pasteFromClipboardEnabled.pdf" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="ViewControllers\OnboardingViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\MainViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\EditTimeEntryViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriShortcutsSelectReportPeriodViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriShortcutsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\StartTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\EditDurationViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectProjectViewController.xib" />
@@ -1313,11 +1321,11 @@
     <InterfaceDefinition Include="Views\Reports\ReportsBarChartCardView.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\CreateEntityViewCell.xib" />
     <InterfaceDefinition Include="Views\Settings\SiriShortcutCell.xib" />
-    <InterfaceDefinition Include="ViewControllers\Settings\SiriShortcutsViewController.xib" />
     <InterfaceDefinition Include="Views\Settings\CustomSiriShortcutCell.xib" />
     <InterfaceDefinition Include="Views\Settings\SiriShortcutTableViewHeader.xib" />
-    <InterfaceDefinition Include="ViewControllers\Settings\SiriShortcutsSelectReportPeriodViewController.xib" />
     <InterfaceDefinition Include="Views\Settings\SiriShortcutReportPeriodCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriShortcutsCustomTimeEntryViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\Siri\PasteFromClipboardViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -1363,6 +1371,14 @@
     </Compile>
     <Compile Include="Services\OnePasswordServiceIos.cs" />
     <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationController.cs" />
+    <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsSelectReportPeriodViewController.cs" />
+    <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsSelectReportPeriodViewController.designer.cs">
+      <DependentUpon>SiriShortcutsSelectReportPeriodViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsViewController.cs" />
+    <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsViewController.designer.cs">
+      <DependentUpon>SiriShortcutsViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\Settings\SiriShortcutViewModel.cs" />
     <Compile Include="ViewControllers\SyncFailuresViewController.cs" />
     <Compile Include="ViewSources\Generic\CollectionView\ReloadCollectionViewSource.cs" />
@@ -1831,10 +1847,6 @@
     <Compile Include="Views\Settings\SiriShortcutCell.designer.cs">
       <DependentUpon>SiriShortcutCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewControllers\Settings\SiriShortcutsViewController.cs" />
-    <Compile Include="ViewControllers\Settings\SiriShortcutsViewController.designer.cs">
-      <DependentUpon>SiriShortcutsViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\Settings\CustomSiriShortcutCell.cs" />
     <Compile Include="Views\Settings\CustomSiriShortcutCell.designer.cs">
       <DependentUpon>CustomSiriShortcutCell.cs</DependentUpon>
@@ -1843,13 +1855,17 @@
     <Compile Include="Views\Settings\SiriShortcutTableViewHeader.designer.cs">
       <DependentUpon>SiriShortcutTableViewHeader.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewControllers\Settings\SiriShortcutsSelectReportPeriodViewController.cs" />
-    <Compile Include="ViewControllers\Settings\SiriShortcutsSelectReportPeriodViewController.designer.cs">
-      <DependentUpon>SiriShortcutsSelectReportPeriodViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\Settings\SiriShortcutReportPeriodCell.cs" />
     <Compile Include="Views\Settings\SiriShortcutReportPeriodCell.designer.cs">
       <DependentUpon>SiriShortcutReportPeriodCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsCustomTimeEntryViewController.cs" />
+    <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsCustomTimeEntryViewController.designer.cs">
+      <DependentUpon>SiriShortcutsCustomTimeEntryViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\Siri\PasteFromClipboardViewController.cs" />
+    <Compile Include="ViewControllers\Settings\Siri\PasteFromClipboardViewController.designer.cs">
+      <DependentUpon>PasteFromClipboardViewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

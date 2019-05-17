@@ -18,6 +18,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly INavigationService navigationService;
 
         public UIAction NavigateToCustomReportShortcut;
+        public UIAction NavigateToCustomTimeEntryShortcut;
 
         public SiriShortcutsViewModel(
             IInteractorFactory interactorFactory,
@@ -32,12 +33,15 @@ namespace Toggl.Core.UI.ViewModels
             this.navigationService = navigationService;
 
             NavigateToCustomReportShortcut = rxActionFactory.FromAsync(navigateToCustomReportShortcut);
+            NavigateToCustomTimeEntryShortcut = rxActionFactory.FromAsync(navigateToCustomTimeEntryShortcut);
         }
+
+        private Task navigateToCustomReportShortcut() => navigationService.Navigate<SiriShortcutsSelectReportPeriodViewModel>();
+
+        private Task navigateToCustomTimeEntryShortcut() =>
+            navigationService.Navigate<SiriShortcutsCustomTimeEntryViewModel>();
 
         public IObservable<IThreadSafeProject> GetProject(long projectId)
             => interactorFactory.GetProjectById(projectId).Execute();
-
-        private Task navigateToCustomReportShortcut()
-            => navigationService.Navigate<SiriShortcutsSelectReportPeriodViewModel>();
     }
 }

@@ -68,7 +68,7 @@ namespace Toggl.iOS.ViewControllers.Settings
             {
                 if (shortcut.Type == SiriShortcutType.CustomStart)
                 {
-                    // Navigate to custom shortcut creation
+                    ViewModel.NavigateToCustomTimeEntryShortcut.Execute();
                     return;
                 }
 
@@ -105,7 +105,12 @@ namespace Toggl.iOS.ViewControllers.Settings
             return shortcuts
                 .Select(shortcut =>
                 {
-                    var projectId = stringToLong((string) shortcut.Parameters?[SiriShortcutParametersKey.ProjectId]);
+                    var hasProjectId =
+                        shortcut.Parameters?.ContainsKey(SiriShortcutParametersKey.ProjectId) ?? false;
+                    var projectId = stringToLong(hasProjectId
+                        ? (string) shortcut.Parameters?[SiriShortcutParametersKey.ProjectId]
+                        : string.Empty);
+
                     if (shortcut.VoiceShortcut != null && projectId.HasValue)
                     {
                         return ViewModel.GetProject(projectId.Value)
@@ -152,10 +157,7 @@ namespace Toggl.iOS.ViewControllers.Settings
 
         private long? stringToLong(string str)
         {
-            if (string.IsNullOrEmpty(str))
-                return null;
-
-            return (long)Convert.ToDouble(str);
+            return long.TryParse(str, out var i) ? i : (long?)null;
         }
 
         // IINUIAddVoiceShortcutViewControllerDelegate
