@@ -10,6 +10,7 @@ namespace Toggl.iOS.Views
 {
     public partial class TimeEntriesLogHeaderView : BaseTableHeaderFooterView<DaySummaryViewModel>
     {
+        private const double maxWidth = 834;
         public static readonly string Identifier = "timeEntryLogHeaderCell";
 
         public static readonly NSString Key = new NSString(nameof(TimeEntriesLogHeaderView));
@@ -37,6 +38,13 @@ namespace Toggl.iOS.Views
         {
             DateLabel.Text = Item.Title;
             DurationLabel.Text = Item.TotalTrackedTime;
+        }
+
+        public override void LayoutSubviews()
+        {
+            if (Superview != null)
+                ContentWidthConstraint.Constant = (nfloat)Math.Min(Superview.Bounds.Width, maxWidth);
+            base.LayoutSubviews();
         }
     }
 }

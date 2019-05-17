@@ -9,9 +9,12 @@ using System.CodeDom.Compiler;
 
 namespace Toggl.iOS.Views
 {
-    [Register ("TimeEntriesLogHeaderView")]
+	[Register ("TimeEntriesLogHeaderView")]
 	partial class TimeEntriesLogHeaderView
 	{
+		[Outlet]
+		UIKit.NSLayoutConstraint ContentWidthConstraint { get; set; }
+
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UILabel DateLabel { get; set; }
@@ -22,7 +25,7 @@ namespace Toggl.iOS.Views
 
 		[Outlet]
 		UIKit.UIView TopSeparator { get; set; }
-
+		
 		void ReleaseDesignerOutlets ()
 		{
 			if (DateLabel != null) {
@@ -38,6 +41,11 @@ namespace Toggl.iOS.Views
 			if (TopSeparator != null) {
 				TopSeparator.Dispose ();
 				TopSeparator = null;
+			}
+
+			if (ContentWidthConstraint != null) {
+				ContentWidthConstraint.Dispose ();
+				ContentWidthConstraint = null;
 			}
 		}
 	}
