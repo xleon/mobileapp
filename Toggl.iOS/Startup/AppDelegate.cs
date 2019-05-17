@@ -202,11 +202,7 @@ namespace Toggl.iOS
                     var tabbarVC = (MainTabBarController)UIApplication.SharedApplication.KeyWindow.RootViewController;
                     var reportViewModel = (ReportsViewModel)tabbarVC.ViewModel.Tabs.Single(viewModel => viewModel is ReportsViewModel);
 
-                    int? parseLong (string val)
-                    {
-                        long i;
-                        return long.TryParse (val, out i) ? (int?) i : null;
-                    }
+                    long? parseLong(string val) => long.TryParse(val, out var i) ? i : (long?)null;
 
                     long? workspaceId = parseLong(periodIntent.Workspace?.Identifier);
                     navigationService.Navigate(reportViewModel, new ReportParameter(periodIntent.Period.ToReportPeriod(), workspaceId));
