@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using Android.App;
 using Android.Content;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.Views;
 using Toggl.Droid.Activities;
+using Fragment = Android.Support.V4.App.Fragment;
 
 namespace Toggl.Droid.Presentation
 {
@@ -63,10 +63,8 @@ namespace Toggl.Droid.Presentation
             var viewModelType = viewModel.GetType();
 
             if (!presentableActivitiesInfos.TryGetValue(viewModelType, out var presentableInfo))
-            {
                 throw new Exception($"Failed to start Activity for viewModel with type {viewModelType.Name}");
-            }
-
+            
             var intent = new Intent(Application.Context, presentableInfo.ActivityType).AddFlags(presentableInfo.Flags);
 
             if (presentableInfo.Flags == clearBackStackFlags)
@@ -79,7 +77,18 @@ namespace Toggl.Droid.Presentation
                 .ViewModelCache
                 .Cache(viewModel);
 
-            Application.Context.StartActivity(intent);
+            getContextFromView(sourceView).StartActivity(intent);
+        }
+
+        private Context getContextFromView(IView view)
+        {
+            if (view is Activity activity)
+                return activity;
+
+            if (view is Fragment fragment)
+                return fragment.Activity;
+
+            return Application.Context;
         }
 
         private struct ActivityPresenterInfo
