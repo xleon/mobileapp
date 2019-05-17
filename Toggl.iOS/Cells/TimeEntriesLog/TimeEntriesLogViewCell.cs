@@ -16,6 +16,8 @@ namespace Toggl.iOS.Views
 {
     public partial class TimeEntriesLogViewCell : BaseTableViewCell<LogItemViewModel>
     {
+        private const double maxWidth = 834;
+
         public static readonly string Identifier = "timeEntryCell";
 
         private ProjectTaskClientToAttributedString projectTaskClientToAttributedString;
@@ -130,6 +132,13 @@ namespace Toggl.iOS.Views
         {
             DisposeBag.Dispose();
             base.Dispose(disposing);
+        }
+
+        public override void LayoutSubviews()
+        {
+            if (Superview != null)
+                ContentWidthConstraint.Constant = (nfloat) System.Math.Min(Superview.Bounds.Width, maxWidth);
+            base.LayoutSubviews();
         }
 
         private void presentAsCollapsedGroupHeader(int groupSize)
