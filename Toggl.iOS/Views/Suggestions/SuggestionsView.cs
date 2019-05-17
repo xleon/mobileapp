@@ -16,6 +16,7 @@ namespace Toggl.iOS.Suggestions
         private const float distanceAboveTitleLabel = 20;
         private const float distanceBelowTitleLabel = 16;
         private const float distanceBetweenSuggestions = 12;
+        private const float maxWidth = 834;
 
         private readonly UILabel titleLabel = new UILabel();
 
@@ -38,7 +39,7 @@ namespace Toggl.iOS.Suggestions
             base.MovedToSuperview();
 
             TopAnchor.ConstraintEqualTo(Superview.TopAnchor).Active = true;
-            WidthAnchor.ConstraintLessThanOrEqualTo(834).Active = true;
+            WidthAnchor.ConstraintLessThanOrEqualTo(maxWidth).Active = true;
             var leftConstraint = LeadingAnchor.ConstraintEqualTo(Superview.LeadingAnchor);
             leftConstraint.Priority = 750;
             leftConstraint.Active = true;
