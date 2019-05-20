@@ -262,6 +262,8 @@ namespace Toggl.Core.Analytics
 
         public abstract void Track(Exception exception, string message);
 
+        public abstract void Track(Exception exception, IDictionary<string, string> properties);
+
         public abstract void Track(string eventName, Dictionary<string, string> parameters = null);
 
         public void Track(ITrackableEvent trackableEvent)
