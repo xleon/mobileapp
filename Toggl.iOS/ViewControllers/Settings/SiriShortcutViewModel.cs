@@ -30,31 +30,10 @@ namespace Toggl.iOS.ViewControllers.Settings
                 InvocationPhrase = VoiceShortcut.InvocationPhrase;
                 IsActive = true;
 
-                object value;
-                if (siriShortcut.Parameters.TryGetValue(SiriShortcutParametersKey.Description, out value)) 
-                {
-                    Description = (string)value;
-                }
-                if (siriShortcut.Parameters.TryGetValue(SiriShortcutParametersKey.WorkspaceName, out value))
-                {
-                    WorkspaceName = (string)value;
-                }
-                if (siriShortcut.Parameters.TryGetValue(SiriShortcutParametersKey.Tags, out value))
-                {
-                    HasTags = true;
-                }
-                else
-                {
-                    HasTags = false;
-                }
-                if (siriShortcut.Parameters.TryGetValue(SiriShortcutParametersKey.Billable, out value))
-                {
-                    IsBillable = (bool)value;
-                }
-                else
-                {
-                    IsBillable = false;
-                }
+                Description = siriShortcut.Parameters.Description;
+                WorkspaceName = siriShortcut.Parameters.WorkspaceName;
+                HasTags = siriShortcut.Parameters.Tags != null;
+                IsBillable = siriShortcut.Parameters.Billable;
 
                 ProjectName = project?.Name;
                 ClientName = project?.Client.Name;

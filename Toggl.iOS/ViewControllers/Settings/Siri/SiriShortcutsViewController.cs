@@ -111,15 +111,9 @@ namespace Toggl.iOS.ViewControllers.Settings
             return shortcuts
                 .Select(shortcut =>
                 {
-                    var hasProjectId =
-                        shortcut.Parameters?.ContainsKey(SiriShortcutParametersKey.ProjectId) ?? false;
-                    var projectId = stringToLong(hasProjectId
-                        ? (string) shortcut.Parameters?[SiriShortcutParametersKey.ProjectId]
-                        : string.Empty);
-
-                    if (shortcut.VoiceShortcut != null && projectId.HasValue)
+                    if (shortcut.VoiceShortcut != null && shortcut.Parameters.ProjectId.HasValue)
                     {
-                        return ViewModel.GetProject(projectId.Value)
+                        return ViewModel.GetProject(shortcut.Parameters.ProjectId.Value)
                             .Select(project => new SiriShortcutViewModel(shortcut, project));
                     }
 

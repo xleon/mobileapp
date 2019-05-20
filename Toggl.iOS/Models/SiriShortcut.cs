@@ -9,23 +9,23 @@ using Toggl.iOS.Services;
 
 namespace Toggl.iOS.Models
 {
-    public struct SiriShortcutParametersKey
+    public struct SiriShortcutParameters
     {
-        public static string Description = "Description";
-        public static string WorkspaceId = "WorkspaceId";
-        public static string WorkspaceName = "WorkspaceName";
-        public static string Billable = "Billable";
-        public static string Tags = "Tags";
-        public static string ProjectId = "ProjectId";
-        public static string ReportPeriod = "ReportPeriod";
+        public string Description;
+        public long? WorkspaceId;
+        public string WorkspaceName;
+        public bool Billable;
+        public IEnumerable<long> Tags;
+        public long? ProjectId;
+        public ReportPeriod ReportPeriod;
     }
 
     public class SiriShortcut
     {
         public SiriShortcutType Type { get; }
         public string Identifier { get; }
-        public Dictionary<string, object> Parameters { get; }
         public INVoiceShortcut VoiceShortcut { get; }
+        public SiriShortcutParameters Parameters = new SiriShortcutParameters();
 
         private INIntent Intent { get; }
 
@@ -38,34 +38,32 @@ namespace Toggl.iOS.Models
 
             if (Intent is ShowReportPeriodIntent showReportPeriodIntent)
             {
-                Parameters = new Dictionary<string, object> {
-                    { SiriShortcutParametersKey.WorkspaceId, showReportPeriodIntent.Workspace?.Identifier },
-                    { SiriShortcutParametersKey.WorkspaceName, showReportPeriodIntent.Workspace?.DisplayString },
-                    { SiriShortcutParametersKey.ReportPeriod, showReportPeriodIntent.Period.ToReportPeriod() }
-                };
+                Parameters.WorkspaceId = stringToLong(showReportPeriodIntent.Workspace?.Identifier);
+                Parameters.WorkspaceName = showReportPeriodIntent.Workspace?.DisplayString;
+                Parameters.ReportPeriod = showReportPeriodIntent.Period.ToReportPeriod();
             }
 
             if (Intent is StartTimerIntent startTimerIntent)
             {
-                Parameters = new Dictionary<string, object> {
-                    { SiriShortcutParametersKey.Description, startTimerIntent.EntryDescription },
-                    { SiriShortcutParametersKey.WorkspaceId, startTimerIntent.Workspace?.Identifier },
-                    { SiriShortcutParametersKey.WorkspaceName, startTimerIntent.Workspace?.DisplayString },
-                    { SiriShortcutParametersKey.Billable, startTimerIntent.Billable?.Identifier == "True" },
-                    { SiriShortcutParametersKey.Tags, startTimerIntent.Tags == null ? null : stringToLongCollection(startTimerIntent.Tags.Select(tag => tag.Identifier)) },
-                    { SiriShortcutParametersKey.ProjectId, startTimerIntent.ProjectId?.Identifier }
-                };
+                Parameters.Description = startTimerIntent.EntryDescription;
+                Parameters.WorkspaceId = stringToLong(startTimerIntent.Workspace?.Identifier);
+                Parameters.WorkspaceName = startTimerIntent.Workspace?.DisplayString;
+                Parameters.Billable = startTimerIntent.Billable?.Identifier == "True";
+                Parameters.Tags = startTimerIntent.Tags == null
+                    ? null
+                    : stringToLongCollection(startTimerIntent.Tags.Select(tag => tag.Identifier));
+                Parameters.ProjectId = stringToLong(startTimerIntent.ProjectId?.Identifier);
             }
 
             if (Intent is StartTimerFromClipboardIntent startTimerFromClipboardIntent)
             {
-                Parameters = new Dictionary<string, object> {
-                    { SiriShortcutParametersKey.WorkspaceId, startTimerFromClipboardIntent.Workspace?.Identifier },
-                    { SiriShortcutParametersKey.WorkspaceName, startTimerFromClipboardIntent.Workspace?.DisplayString },
-                    { SiriShortcutParametersKey.Billable, startTimerFromClipboardIntent.Billable?.Identifier == "True" },
-                    { SiriShortcutParametersKey.Tags, startTimerFromClipboardIntent.Tags == null ? new long[0] : stringToLongCollection(startTimerFromClipboardIntent.Tags.Select(tag => tag.Identifier)) },
-                    { SiriShortcutParametersKey.ProjectId, stringToLong(startTimerFromClipboardIntent.ProjectId?.Identifier) }
-                };
+                Parameters.WorkspaceId = stringToLong(startTimerFromClipboardIntent.Workspace?.Identifier);
+                Parameters.WorkspaceName = startTimerFromClipboardIntent.Workspace?.DisplayString;
+                Parameters.Billable = startTimerFromClipboardIntent.Billable?.Identifier == "True";
+                Parameters.Tags = startTimerFromClipboardIntent.Tags == null
+                    ? null
+                    : stringToLongCollection(startTimerFromClipboardIntent.Tags.Select(tag => tag.Identifier));
+                Parameters.ProjectId = stringToLong(startTimerFromClipboardIntent.ProjectId?.Identifier);
             }
         }
 
