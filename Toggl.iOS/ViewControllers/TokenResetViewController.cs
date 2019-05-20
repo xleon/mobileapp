@@ -38,13 +38,10 @@ namespace Toggl.iOS.ViewControllers
 
             prepareViews();
 
+            EmailLabel.Text = ViewModel.Email.ToString();
+
             ViewModel.Error
                 .Subscribe(ErrorLabel.Rx().Text())
-                .DisposedBy(DisposeBag);
-
-            ViewModel.Email
-                .SelectToString()
-                .Subscribe(EmailLabel.Rx().Text())
                 .DisposedBy(DisposeBag);
 
             ViewModel.Password
@@ -55,16 +52,17 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(ViewModel.Password)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.IsPasswordMasked
-                .Subscribe(PasswordTextField.Rx().SecureTextEntry())
-                .DisposedBy(DisposeBag);
-
             SignOutButton.Rx()
                 .BindAction(ViewModel.SignOut)
                 .DisposedBy(DisposeBag);
 
-            ShowPasswordButton.Rx()
-                .BindAction(ViewModel.TogglePasswordVisibility)
+            ShowPasswordButton.Rx().Tap()
+                .Subscribe(_ =>
+                {
+                    PasswordTextField.ResignFirstResponder();
+                    PasswordTextField.SecureTextEntry = !PasswordTextField.SecureTextEntry;
+                    PasswordTextField.BecomeFirstResponder();
+                })
                 .DisposedBy(DisposeBag);
 
             nextButton.Rx().Tap()

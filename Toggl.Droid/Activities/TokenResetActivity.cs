@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
@@ -31,14 +32,11 @@ namespace Toggl.Droid.Activities
             SupportActionBar.SetDisplayShowHomeEnabled(false);
             this.CancelAllNotifications();
 
-            ViewModel.Email
-                .SelectToString()
-                .Subscribe(emailLabel.Rx().TextObserver())
-                .DisposedBy(DisposeBag);
+            emailLabel.Text = ViewModel.Email.ToString();
 
-            ViewModel.Password
-                .SelectToString()
-                .Subscribe(passwordEditText.Rx().TextObserver())
+            passwordEditText
+                .Rx().Text()
+                .Subscribe(ViewModel.Password)
                 .DisposedBy(DisposeBag);
 
             ViewModel.Done.Executing
