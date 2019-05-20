@@ -49,7 +49,7 @@ namespace Toggl.iOS.ViewControllers.Settings
             var tableViewSource = new SiriShortcutsTableViewSource(TableView);
             TableView.Source = tableViewSource;
 
-            refreshSubject.StartWith(Unit.Default)
+            refreshSubject
                 .SelectMany(getAllShortcuts())
                 .SelectMany(toViewModels)
                 .Select(toSections)
@@ -60,6 +60,12 @@ namespace Toggl.iOS.ViewControllers.Settings
             tableViewSource.Rx().ModelSelected()
                 .Subscribe(handleShortcutTap)
                 .DisposedBy(DisposeBag);
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            refreshSubject.OnNext(Unit.Default);
         }
 
         private void handleShortcutTap(SiriShortcutViewModel shortcut)

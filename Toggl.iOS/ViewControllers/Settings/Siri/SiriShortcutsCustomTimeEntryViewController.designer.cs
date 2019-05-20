@@ -28,9 +28,6 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
 		UIKit.UIView AddToSiriWrapperView { get; set; }
 
 		[Outlet]
-		UIKit.UIButton BackButton { get; set; }
-
-		[Outlet]
 		UIKit.UILabel BillabelLabel { get; set; }
 
 		[Outlet]
@@ -77,9 +74,6 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
 
 		[Outlet]
 		UIKit.UITextView TagsTextView { get; set; }
-
-		[Outlet]
-		UIKit.UILabel TitleLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -106,11 +100,6 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
 			if (AddToSiriWrapperView != null) {
 				AddToSiriWrapperView.Dispose ();
 				AddToSiriWrapperView = null;
-			}
-
-			if (BackButton != null) {
-				BackButton.Dispose ();
-				BackButton = null;
 			}
 
 			if (BillabelLabel != null) {
@@ -153,6 +142,16 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
 				PasteFromClipboardButton = null;
 			}
 
+			if (PasteFromClipboardHintLabel != null) {
+				PasteFromClipboardHintLabel.Dispose ();
+				PasteFromClipboardHintLabel = null;
+			}
+
+			if (PasteFromClipboardHintView != null) {
+				PasteFromClipboardHintView.Dispose ();
+				PasteFromClipboardHintView = null;
+			}
+
 			if (ProjectTaskClientLabel != null) {
 				ProjectTaskClientLabel.Dispose ();
 				ProjectTaskClientLabel = null;
@@ -181,21 +180,6 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
 			if (TagsTextView != null) {
 				TagsTextView.Dispose ();
 				TagsTextView = null;
-			}
-
-			if (TitleLabel != null) {
-				TitleLabel.Dispose ();
-				TitleLabel = null;
-			}
-
-			if (PasteFromClipboardHintView != null) {
-				PasteFromClipboardHintView.Dispose ();
-				PasteFromClipboardHintView = null;
-			}
-
-			if (PasteFromClipboardHintLabel != null) {
-				PasteFromClipboardHintLabel.Dispose ();
-				PasteFromClipboardHintLabel = null;
 			}
 		}
 	}

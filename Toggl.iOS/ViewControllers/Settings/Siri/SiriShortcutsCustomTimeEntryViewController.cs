@@ -20,7 +20,6 @@ using Colors = Toggl.Core.UI.Helper.Colors;
 
 namespace Toggl.iOS.ViewControllers.Settings.Siri
 {
-    [ModalCardPresentation]
     public partial class SiriShortcutsCustomTimeEntryViewController : KeyboardAwareViewController<SiriShortcutsCustomTimeEntryViewModel>, IINUIAddVoiceShortcutViewControllerDelegate
     {
         private ProjectTaskClientToAttributedString projectTaskClientToAttributedString;
@@ -138,10 +137,6 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
                 .Subscribe(ViewModel.Description.Accept)
                 .DisposedBy(DisposeBag);
 
-            BackButton.Rx()
-                .BindAction(ViewModel.Close)
-                .DisposedBy(DisposeBag);
-
             PasteFromClipboardButton.Rx()
                 .BindAction(ViewModel.SelectClipboard)
                 .DisposedBy(DisposeBag);
@@ -167,7 +162,7 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
         }
         private void localizeLabels()
         {
-            TitleLabel.Text = Resources.SiriShortcutCustomTimeEntryTitle;
+            NavigationItem.Title= Resources.SiriShortcutCustomTimeEntryTitle;
             BillabelLabel.Text = Resources.Billable;
             AddProjectTaskLabel.Text = Resources.AddProjectTask;
             AddTagsLabel.Text = Resources.AddTags;

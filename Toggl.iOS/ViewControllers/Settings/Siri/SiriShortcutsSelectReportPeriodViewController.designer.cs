@@ -16,9 +16,6 @@ namespace Toggl.iOS.ViewControllers.Settings
 		UIKit.UIView AddToSiriWrapperView { get; set; }
 
 		[Outlet]
-		UIKit.UIButton BackButton { get; set; }
-
-		[Outlet]
 		UIKit.UILabel SelectWorkspaceCellLabel { get; set; }
 
 		[Outlet]
@@ -29,35 +26,17 @@ namespace Toggl.iOS.ViewControllers.Settings
 
 		[Outlet]
 		UIKit.UITableView TableView { get; set; }
-
-		[Outlet]
-		UIKit.UILabel TitleLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (BackButton != null) {
-				BackButton.Dispose ();
-				BackButton = null;
-			}
-
-			if (TableView != null) {
-				TableView.Dispose ();
-				TableView = null;
-			}
-
-			if (TitleLabel != null) {
-				TitleLabel.Dispose ();
-				TitleLabel = null;
-			}
-
 			if (AddToSiriWrapperView != null) {
 				AddToSiriWrapperView.Dispose ();
 				AddToSiriWrapperView = null;
 			}
 
-			if (SelectWorkspaceView != null) {
-				SelectWorkspaceView.Dispose ();
-				SelectWorkspaceView = null;
+			if (SelectWorkspaceCellLabel != null) {
+				SelectWorkspaceCellLabel.Dispose ();
+				SelectWorkspaceCellLabel = null;
 			}
 
 			if (SelectWorkspaceNameLabel != null) {
@@ -65,9 +44,14 @@ namespace Toggl.iOS.ViewControllers.Settings
 				SelectWorkspaceNameLabel = null;
 			}
 
-			if (SelectWorkspaceCellLabel != null) {
-				SelectWorkspaceCellLabel.Dispose ();
-				SelectWorkspaceCellLabel = null;
+			if (SelectWorkspaceView != null) {
+				SelectWorkspaceView.Dispose ();
+				SelectWorkspaceView = null;
+			}
+
+			if (TableView != null) {
+				TableView.Dispose ();
+				TableView = null;
 			}
 		}
 	}

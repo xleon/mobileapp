@@ -24,7 +24,6 @@ using UIKit;
 namespace Toggl.iOS.ViewControllers.Settings
 {
     using ReportSection = SectionModel<Unit, SelectableReportPeriodViewModel>;
-    [ModalCardPresentation]
     public partial class SiriShortcutsSelectReportPeriodViewController : ReactiveViewController<SiriShortcutsSelectReportPeriodViewModel>, IINUIAddVoiceShortcutViewControllerDelegate
     {
         private const int rowHeight = 48;
@@ -40,7 +39,7 @@ namespace Toggl.iOS.ViewControllers.Settings
 
             prepareSiriButton();
 
-            TitleLabel.Text = Resources.ReportPeriod;
+            NavigationItem.Title = Resources.ReportPeriod;
             SelectWorkspaceCellLabel.Text = Resources.SelectWorkspace;
 
             TableView.RegisterNibForCellReuse(SiriShortcutReportPeriodCell.Nib, SiriShortcutReportPeriodCell.Identifier);
@@ -63,10 +62,6 @@ namespace Toggl.iOS.ViewControllers.Settings
                 .DisposedBy(DisposeBag);
 
             TableView.Source = source;
-
-            BackButton.Rx()
-                .BindAction(ViewModel.Close)
-                .DisposedBy(DisposeBag);
 
             SelectWorkspaceView.Rx()
                 .BindAction(ViewModel.PickWorkspace)
