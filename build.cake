@@ -131,7 +131,7 @@ private TemporaryFileTransformation GetAndroidProjectConfigurationTransformation
 
 private TemporaryFileTransformation GetIosAnalyticsServicesConfigurationTransformation()
 {
-    const string path = "Toggl.Daneel/GoogleService-Info.plist";
+    const string path = "Toggl.iOS/GoogleService-Info.plist";
     var adUnitForBannerTest = EnvironmentVariable("TOGGL_AD_UNIT_ID_FOR_BANNER_TEST");
     var adUnitIdForInterstitialTest = EnvironmentVariable("TOGGL_AD_UNIT_ID_FOR_INTERSTITIAL_TEST");
     var clientId = EnvironmentVariable("TOGGL_CLIENT_ID");
@@ -163,9 +163,18 @@ private TemporaryFileTransformation GetIosAnalyticsServicesConfigurationTransfor
 
 private TemporaryFileTransformation GetIosAppDelegateTransformation()
 {
-    const string path = "Toggl.Daneel/Startup/AppDelegate.cs";
-    var appCenterId = EnvironmentVariable("TOGGL_APP_CENTER_ID_IOS");
+    const string path = "Toggl.iOS/Startup/AppDelegate.cs";
     var adjustToken = EnvironmentVariable("TOGGL_ADJUST_APP_TOKEN");
+    string appCenterId = "";
+
+    if (target == "Build.Release.iOS.AdHoc")
+    {
+        appCenterId = EnvironmentVariable("TOGGL_APP_CENTER_ID_IOS_ADHOC");
+    }
+    else if (target == "Build.Release.iOS.AppStore")
+    {
+        appCenterId = EnvironmentVariable("TOGGL_APP_CENTER_ID_IOS");
+    }
 
     var filePath = GetFiles(path).Single();
     var file = TransformTextFile(filePath).ToString();
@@ -225,7 +234,7 @@ private TemporaryFileTransformation GetAndroidGoogleLoginTransformation()
 
 private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
 {
-    const string path = "Toggl.Daneel/Info.plist";
+    const string path = "Toggl.iOS/Info.plist";
     const string bundleIdToReplace = "com.toggl.daneel.debug";
     const string appNameToReplace = "Toggl for Devs";
     const string iconSetToReplace = "Assets.xcassets/AppIcon-debug.appiconset";
@@ -267,7 +276,7 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
 
 private TemporaryFileTransformation GetIosSiriExtensionInfoConfigurationTransformation()
 {
-    const string path = "Toggl.Daneel.SiriExtension/Info.plist";
+    const string path = "Toggl.iOS.SiriExtension/Info.plist";
     const string bundleIdToReplace = "com.toggl.daneel.debug.SiriExtension";
     const string appNameToReplace = "Siri Extension Development";
 
@@ -302,7 +311,7 @@ private TemporaryFileTransformation GetIosSiriExtensionInfoConfigurationTransfor
 
 private TemporaryFileTransformation GetIosSiriUIExtensionInfoConfigurationTransformation()
 {
-    const string path = "Toggl.Daneel.SiriExtension.UI/Info.plist";
+    const string path = "Toggl.iOS.SiriExtension.UI/Info.plist";
     const string bundleIdToReplace = "com.toggl.daneel.debug.SiriUIExtension";
     const string appNameToReplace = "Toggl.Daneel.SiriExtension.UI";
 
@@ -337,7 +346,7 @@ private TemporaryFileTransformation GetIosSiriUIExtensionInfoConfigurationTransf
 
 private TemporaryFileTransformation GetIosEntitlementsConfigurationTransformation()
 {
-    const string path = "Toggl.Daneel/Entitlements.plist";
+    const string path = "Toggl.iOS/Entitlements.plist";
     const string groupIdToReplace = "group.com.toggl.daneel.debug.extensions";
 
     var groupId = groupIdToReplace;
@@ -364,7 +373,7 @@ private TemporaryFileTransformation GetIosEntitlementsConfigurationTransformatio
 
 private TemporaryFileTransformation GetIosExtensionEntitlementsConfigurationTransformation()
 {
-    const string path = "Toggl.Daneel.SiriExtension/Entitlements.plist";
+    const string path = "Toggl.iOS.SiriExtension/Entitlements.plist";
     const string groupIdToReplace = "group.com.toggl.daneel.debug.extensions";
 
     var groupId = groupIdToReplace;
@@ -454,7 +463,16 @@ private TemporaryFileTransformation GetAndroidSplashScreenTransformation()
 private TemporaryFileTransformation GetAndroidTogglApplicationTransformation()
 {
     const string path = "Toggl.Droid/Startup/TogglApplication.cs";
-    var appCenterId = EnvironmentVariable("TOGGL_APP_CENTER_ID_DROID");
+    string appCenterId = "";
+
+    if (target == "Build.Release.Android.AdHoc")
+    {
+        appCenterId = EnvironmentVariable("TOGGL_APP_CENTER_ID_DROID_ADHOC");
+    }
+    else if (target == "Build.Release.Android.PlayStore")
+    {
+        appCenterId = EnvironmentVariable("TOGGL_APP_CENTER_ID_DROID");
+    }
 
     var filePath = GetFiles(path).Single();
     var file = TransformTextFile(filePath).ToString();
@@ -518,7 +536,7 @@ private string[] GetUnitTestProjects() => new []
 
 private string[] GetUITestFiles() => new []
 {
-    "./bin/Release/Toggl.Daneel.Tests.UI.dll"
+    "./bin/Release/Toggl.iOS.Tests.UI.dll"
 };
 
 private string[] GetIntegrationTestProjects()
@@ -541,11 +559,11 @@ Task("Clean")
     .Does(() =>
         {
             CleanDirectory("./bin");
-            CleanDirectory("./Toggl.Daneel/obj");
-            CleanDirectory("./Toggl.Daneel.SiriExtension/obj");
-            CleanDirectory("./Toggl.Daneel.SiriExtension.UI/obj");
-            CleanDirectory("./Toggl.Daneel.Tests/obj");
-            CleanDirectory("./Toggl.Daneel.Tests.UI/obj");
+            CleanDirectory("./Toggl.iOS/obj");
+            CleanDirectory("./Toggl.iOS.SiriExtension/obj");
+            CleanDirectory("./Toggl.iOS.SiriExtension.UI/obj");
+            CleanDirectory("./Toggl.iOS.Tests/obj");
+            CleanDirectory("./Toggl.iOS.Tests.UI/obj");
             CleanDirectory("./Toggl.Droid/obj");
             CleanDirectory("./Toggl.Droid.Tests/obj");
             CleanDirectory("./Toggl.Droid.Tests.UI/obj");

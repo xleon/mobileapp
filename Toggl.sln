@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Daneel", "Daneel", "{4796CD10-F5B5-4843-AD7A-2691438E5A6C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "iOS", "iOS", "{4796CD10-F5B5-4843-AD7A-2691438E5A6C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Networking", "Networking", "{0BA4407E-0470-4496-A80B-DE311A40A385}"
 EndProject
@@ -11,9 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{F8D3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{B55DCFC1-9EA2-4289-B3EE-8979E0A9AB2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Daneel", "Toggl.Daneel\Toggl.Daneel.csproj", "{8CE4E64C-5719-4660-96AC-CF2ABA3A335E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.iOS", "Toggl.iOS\Toggl.iOS.csproj", "{8CE4E64C-5719-4660-96AC-CF2ABA3A335E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Daneel.Tests.UI", "Toggl.Daneel.Tests.UI\Toggl.Daneel.Tests.UI.csproj", "{C23A5DDD-D0EA-4198-88A0-89A43EBF67B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.iOS.Tests.UI", "Toggl.iOS.Tests.UI\Toggl.iOS.Tests.UI.csproj", "{C23A5DDD-D0EA-4198-88A0-89A43EBF67B6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{128F799A-3060-4D72-9F14-93620F25E5E3}"
 EndProject
@@ -51,13 +51,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{A48D346E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncDiagramGenerator", "Toggl.Tools\SyncDiagramGenerator\SyncDiagramGenerator.csproj", "{148C791B-9824-4DC6-9494-4FEEB21988C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Daneel.IntentBinding", "Toggl.Daneel.IntentBinding\Toggl.Daneel.IntentBinding.csproj", "{A1BBF640-E712-4E35-8E3F-AE07C7C7EDB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.iOS.IntentBinding", "Toggl.iOS.IntentBinding\Toggl.iOS.IntentBinding.csproj", "{A1BBF640-E712-4E35-8E3F-AE07C7C7EDB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Daneel.SiriExtension", "Toggl.Daneel.SiriExtension\Toggl.Daneel.SiriExtension.csproj", "{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.iOS.SiriExtension", "Toggl.iOS.SiriExtension\Toggl.iOS.SiriExtension.csproj", "{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Daneel.ExtensionKit", "Toggl.Daneel.ExtensionKit\Toggl.Daneel.ExtensionKit.csproj", "{ACA2821E-0FF9-4036-BFF6-E775BB4E6732}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.iOS.ExtensionKit", "Toggl.iOS.ExtensionKit\Toggl.iOS.ExtensionKit.csproj", "{ACA2821E-0FF9-4036-BFF6-E775BB4E6732}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Daneel.SiriExtension.UI", "Toggl.Daneel.SiriExtension.UI\Toggl.Daneel.SiriExtension.UI.csproj", "{BC329A24-95D6-4D02-95B5-2AA699D8873A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.iOS.SiriExtension.UI", "Toggl.iOS.SiriExtension.UI\Toggl.iOS.SiriExtension.UI.csproj", "{BC329A24-95D6-4D02-95B5-2AA699D8873A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Core.Tests.Sync", "Toggl.Core.Tests.Sync\Toggl.Core.Tests.Sync.csproj", "{F08B55D7-0A7E-4F01-B6C6-CB5ACC76A194}"
 EndProject

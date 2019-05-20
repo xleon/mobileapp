@@ -2,6 +2,7 @@ using System;
 using Android.App;
 using Android.Runtime;
 using MvvmCross.Droid.Support.V7.AppCompat;
+using Toggl.Core;
 using Toggl.Core.UI;
 using Toggl.Core.UI.ViewModels;
 
@@ -18,12 +19,22 @@ namespace Toggl.Droid
         {
             base.OnCreate();
             Firebase.FirebaseApp.InitializeApp(this);
-#if USE_ANALYTICS
+#if USE_APPCENTER
             Microsoft.AppCenter.AppCenter.Start(
                 "{TOGGL_APP_CENTER_ID_DROID}",
                 typeof(Microsoft.AppCenter.Crashes.Crashes),
                 typeof(Microsoft.AppCenter.Analytics.Analytics));
 #endif
+        }
+
+        public override void OnLowMemory()
+        {
+            base.OnLowMemory();
+
+            AndroidDependencyContainer.Instance
+                .AnalyticsService
+                .ReceivedLowMemoryWarning
+                .Track(Platform.Giskard);
         }
     }
 }

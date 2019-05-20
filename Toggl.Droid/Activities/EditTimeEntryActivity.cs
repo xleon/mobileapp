@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
@@ -33,16 +31,6 @@ namespace Toggl.Droid.Activities
     {
         private TagsAdapter tagsAdapter = new TagsAdapter(Resource.Layout.EditTimeEntryTagCell, StringViewHolder.Create);
 
-        public EditTimeEntryActivity()
-        {
-
-        }
-
-        public EditTimeEntryActivity(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
-        {
-
-        }
-
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -50,7 +38,6 @@ namespace Toggl.Droid.Activities
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
 
             InitializeViews();
-
             setupViews();
             setupBindings();
         }
@@ -289,7 +276,7 @@ namespace Toggl.Droid.Activities
                 ViewModel.Save.Execute();
             }
         }
-        
+
         private ISpannable generateProjectTaskClientFormattedString(EditTimeEntryViewModel.ProjectClientTaskInfo projectClientTask)
             => TimeEntryExtensions.ToProjectTaskClient(
                     projectClientTask.HasProject,
