@@ -36,7 +36,7 @@ namespace Toggl.iOS.ViewControllers.Settings
                 IsBillable = siriShortcut.Parameters.Billable;
 
                 ProjectName = project?.Name;
-                ClientName = project?.Client.Name;
+                ClientName = project?.Client?.Name;
                 ProjectColor = project?.Color;
 
                 if (Type == SiriShortcutType.CustomStart)
