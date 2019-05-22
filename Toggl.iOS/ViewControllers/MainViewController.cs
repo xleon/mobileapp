@@ -25,6 +25,7 @@ using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Suggestions;
 using Toggl.iOS.Views;
 using Toggl.iOS.ViewSources;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Extensions;
 using Toggl.Storage.Onboarding;

@@ -14,6 +14,7 @@ using ObjCRuntime;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Cells;
+using Toggl.Shared;
 
 namespace Toggl.iOS.Views.Reports
 {

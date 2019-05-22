@@ -9,7 +9,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;
-using static Toggl.Core.Resources;
+using static Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Activities
 {

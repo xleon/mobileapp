@@ -4,6 +4,7 @@ using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels.Settings;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 

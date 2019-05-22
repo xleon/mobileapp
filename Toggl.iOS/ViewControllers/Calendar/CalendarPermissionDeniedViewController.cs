@@ -9,6 +9,7 @@ using System.Reactive;
 using Foundation;
 using Toggl.Core;
 using Toggl.iOS.Presentation.Attributes;
+using Toggl.Shared;
 
 namespace Toggl.iOS.ViewControllers.Calendar
 {

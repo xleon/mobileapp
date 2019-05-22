@@ -19,6 +19,7 @@ using Toggl.Core.UI.Collections;
 using Microsoft.Reactive.Testing;
 using System.Reactive;
 using Toggl.Core.Tests.TestExtensions;
+using Toggl.Shared;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {

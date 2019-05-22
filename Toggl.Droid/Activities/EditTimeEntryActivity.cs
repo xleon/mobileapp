@@ -17,7 +17,7 @@ using Toggl.Core.Analytics;
 using Toggl.Core.UI.Transformations;
 using Toggl.Droid.ViewHolders;
 using TimeEntryExtensions = Toggl.Droid.Extensions.TimeEntryExtensions;
-using TextResources = Toggl.Core.Resources;
+using TextResources = Toggl.Shared.Resources;
 using TagsAdapter = Toggl.Droid.Adapters.SimpleAdapter<string>;
 using static Toggl.Droid.Resource.String;
 

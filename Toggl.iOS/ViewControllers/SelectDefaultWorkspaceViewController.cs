@@ -6,6 +6,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.ViewSources.Generic.TableView;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers

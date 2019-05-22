@@ -20,7 +20,7 @@ using Toggl.iOS.Views.Calendar;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
-using FoundationResources = Toggl.Core.Resources;
+using FoundationResources = Toggl.Shared.Resources;
 
 namespace Toggl.iOS.ViewSources
 {

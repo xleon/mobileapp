@@ -11,6 +11,7 @@ using Toggl.iOS.Presentation;
 using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Views.Calendar;
 using Toggl.iOS.ViewSources;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 
