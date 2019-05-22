@@ -16,6 +16,7 @@ using Toggl.Storage;
 using Toggl.Networking;
 using Toggl.Networking.Network;
 using Toggl.Storage.Settings;
+using System.Threading.Tasks;
 
 namespace Toggl.Core
 {
@@ -240,7 +241,7 @@ namespace Toggl.Core
             interactorFactory = shortcutCreator.Select(creator =>
             {
                 var factory = CreateInteractorFactory();
-                creator.OnLogin(factory);
+                Task.Run(() => creator.OnLogin(factory));
                 return factory;
             });
         }
