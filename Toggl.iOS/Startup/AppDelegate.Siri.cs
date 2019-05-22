@@ -21,7 +21,6 @@ namespace Toggl.iOS
             UIApplicationRestorationHandler completionHandler)
         {
             var navigationService = IosDependencyContainer.Instance.NavigationService;
-            var urlHandler = IosDependencyContainer.Instance.UrlHandler;
 
             var interaction = userActivity.GetInteraction();
             if (interaction == null || interaction.IntentHandlingStatus != INIntentHandlingStatus.DeferredToApplication)
@@ -34,10 +33,10 @@ namespace Toggl.iOS
             switch (intent)
             {
                 case StopTimerIntent _:
-                    urlHandler.Handle(new Uri(ApplicationUrls.TimeEntry.Stop.FromSiri));
+                    handleDeeplink(new Uri(ApplicationUrls.TimeEntry.Stop.FromSiri));
                     return true;
                 case ShowReportIntent _:
-                    urlHandler.Handle(new Uri(ApplicationUrls.Reports.Default));
+                    handleDeeplink(new Uri(ApplicationUrls.Reports.Default));
                     return true;
                 case ShowReportPeriodIntent periodIntent:
                     var tabbarVC = (MainTabBarController)UIApplication.SharedApplication.KeyWindow.RootViewController;

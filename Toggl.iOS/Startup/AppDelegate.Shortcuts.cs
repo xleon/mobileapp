@@ -20,8 +20,6 @@ namespace Toggl.iOS
                 .ApplicationShortcut
                 .Track(shortcutItem.LocalizedTitle);
 
-            var urlHandler = IosDependencyContainer.Instance.UrlHandler;
-
             var shortcutUrlKey = new NSString(nameof(ApplicationShortcut.Url));
             if (!shortcutItem.UserInfo.ContainsKey(shortcutUrlKey))
                 return;
@@ -32,7 +30,7 @@ namespace Toggl.iOS
 
             var shortcutUrl = new NSUrl(shortcutUrlString);
 
-            urlHandler.Handle(shortcutUrl);
+            handleDeeplink(shortcutUrl);
         }
     }
 }

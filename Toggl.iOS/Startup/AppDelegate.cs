@@ -21,6 +21,7 @@ namespace Toggl.iOS
                         ApiEnvironment.Staging;
 #endif
 
+        private CompositePresenter compositePresenter;
         public override UIWindow Window { get; set; }
 
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
@@ -40,7 +41,7 @@ namespace Toggl.iOS
             setupNavigationBar();
             setupTabBar();
 
-            var compositePresenter = new CompositePresenter(
+            compositePresenter = new CompositePresenter(
                 new RootPresenter(Window, this),
                 new NavigationPresenter(Window, this),
                 new ModalDialogPresenter(Window, this),
@@ -70,8 +71,7 @@ namespace Toggl.iOS
         {
             if (url.Scheme == ApplicationUrls.Scheme)
             {
-                var urlHandler = IosDependencyContainer.Instance.UrlHandler;
-                return urlHandler.Handle(url).GetAwaiter().GetResult();
+                handleDeeplink(url);
             }
 
             #if USE_ANALYTICS

@@ -2,7 +2,6 @@
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
-using Toggl.Core.Login;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
@@ -15,7 +14,6 @@ using Toggl.Storage.Settings;
 using Toggl.Networking;
 using Toggl.Networking.Network;
 using Toggl.Core.UI.Navigation;
-using Toggl.iOS.Presentation;
 using Toggl.iOS.Services;
 
 namespace Toggl.iOS
@@ -120,8 +118,5 @@ namespace Toggl.iOS
 
         protected override IAccessRestrictionStorage CreateAccessRestrictionStorage()
             => settingsStorage.Value;
-
-        protected override IUrlHandler CreateUrlHandler()
-            => new UrlHandler(TimeService, InteractorFactory, NavigationService, viewPresenter);
     }
 }

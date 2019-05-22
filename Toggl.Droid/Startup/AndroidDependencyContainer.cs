@@ -131,7 +131,5 @@ namespace Toggl.Droid
         protected override IAccessRestrictionStorage CreateAccessRestrictionStorage()
             => settingsStorage.Value;
 
-        protected override IUrlHandler CreateUrlHandler()
-            => new UrlHandler(TimeService, InteractorFactory, NavigationService, viewPresenter);
     }
 }

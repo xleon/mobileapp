@@ -44,14 +44,14 @@ namespace Toggl.iOS
         {
             completionHandler();
             var url = ApplicationUrls.Calendar.ForId(eventId);
-            IosDependencyContainer.Instance.UrlHandler.Handle(new Uri(url));
+            handleDeeplink(new Uri(url));
         }
 
         private void openAndNavigateToCalendar(Action completionHandler)
         {
             completionHandler();
             var url = ApplicationUrls.Calendar.Default;
-            IosDependencyContainer.Instance.UrlHandler.Handle(new Uri(url));
+            handleDeeplink(new Uri(url));
         }
 
         private void startTimeEntryInBackground(string eventId, Action completionHandler)
