@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Models.Interfaces;
@@ -19,6 +18,8 @@ using Microsoft.Reactive.Testing;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Interactors;
+using Toggl.Core.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -326,7 +327,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     TimeService.CurrentDateTime.Returns(now);
                     ViewModel.CurrentDateRangeStringObservable.Subscribe(observer);
                     await ViewModel.Initialize();
-                    ViewModel.CalendarViewModel.SelectPeriod(Core.Services.ReportPeriod.ThisWeek);
+                    ViewModel.CalendarViewModel.SelectPeriod(ReportPeriod.ThisWeek);
 
                     TestScheduler.Start();
                     observer.LastEmittedValue().Should().Be($"{Resources.ThisWeek} ▾");
