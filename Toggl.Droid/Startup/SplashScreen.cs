@@ -3,11 +3,14 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.App;
+using System.Reactive;
 using Toggl.Core;
 using Toggl.Core.Services;
 using Toggl.Core.UI;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Droid.Activities;
 using Toggl.Droid.BroadcastReceivers;
 using Toggl.Droid.Helper;
 using static Android.Content.Intent;
@@ -45,17 +48,26 @@ namespace Toggl.Droid
             base.OnCreate(savedInstanceState);
 
             var dependencyContainer = AndroidDependencyContainer.Instance;
-            var app = new App<LoginViewModel, CredentialsParameter>(dependencyContainer);
 
             ApplicationContext.RegisterReceiver(new TimezoneChangedBroadcastReceiver(dependencyContainer.TimeService),
                 new IntentFilter(ActionTimezoneChanged));
 
             createApplicationLifecycleObserver(dependencyContainer.BackgroundService);
 
-            app.Start().ContinueWith(_ =>
+            var app = new App<LoginViewModel, CredentialsParameter>(dependencyContainer);
+            var hasFullAccess = app.NavigateIfUserDoesNotHaveFullAccess();
+            if (!hasFullAccess)
             {
                 Finish();
-            });
+                return;
+            }
+
+            var viewModel = AndroidDependencyContainer.Instance.ViewModelLoader
+                .Load<Unit, Unit>(typeof(MainTabBarViewModel), Unit.Default).GetAwaiter().GetResult();
+            dependencyContainer.ViewModelCache.Cache(viewModel);
+
+            StartActivity(typeof(MainTabBarActivity));
+            Finish();
 
             // TODO: Reimplement this when working on deeplinking
             //var navigationUrl = Intent.Data?.ToString() ?? getTrackUrlFromProcessedText();
@@ -84,7 +96,6 @@ namespace Toggl.Droid
             var applicationUrl = ApplicationUrls.Track.Default(description);
             return applicationUrl;
         }
-
 
         private void createApplicationLifecycleObserver(IBackgroundService backgroundService)
         {

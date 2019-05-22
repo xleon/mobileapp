@@ -4,7 +4,6 @@ using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Networking;
 using Toggl.Networking.Network;
-using Toggl.Shared;
 
 namespace Toggl.Core.UI
 {
@@ -12,11 +11,13 @@ namespace Toggl.Core.UI
     {
         private readonly Lazy<IUrlHandler> urlHandler;
         private readonly Lazy<IBrowserService> browserService;
+        private readonly Lazy<ViewModelLoader> viewModelLoader;
         private readonly Lazy<INavigationService> navigationService;
         private readonly Lazy<IPermissionsChecker> permissionsService;
 
         public IUrlHandler UrlHandler => urlHandler.Value;
         public IBrowserService BrowserService => browserService.Value;
+        public ViewModelLoader ViewModelLoader => viewModelLoader.Value;
         public INavigationService NavigationService => navigationService.Value;
         public IPermissionsChecker PermissionsChecker => permissionsService.Value;
 
@@ -27,6 +28,7 @@ namespace Toggl.Core.UI
         {
             urlHandler = new Lazy<IUrlHandler>(CreateUrlHandler);
             browserService = new Lazy<IBrowserService>(CreateBrowserService);
+            viewModelLoader = new Lazy<ViewModelLoader>(CreateViewModelLoader);
             navigationService = new Lazy<INavigationService>(CreateNavigationService);
             permissionsService = new Lazy<IPermissionsChecker>(CreatePermissionsChecker);
         }
@@ -36,6 +38,7 @@ namespace Toggl.Core.UI
         protected abstract INavigationService CreateNavigationService();
         protected abstract IPermissionsChecker CreatePermissionsChecker();
 
+        protected virtual ViewModelLoader CreateViewModelLoader() => new ViewModelLoader(this);
         protected override IErrorHandlingService CreateErrorHandlingService()
             => new ErrorHandlingService(NavigationService, AccessRestrictionStorage);
     }

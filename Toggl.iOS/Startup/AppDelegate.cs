@@ -49,8 +49,13 @@ namespace Toggl.iOS
 
             IosDependencyContainer.EnsureInitialized(compositePresenter, environment, Platform.Daneel, version);
             var app = new App<OnboardingViewModel, Unit>(IosDependencyContainer.Instance);
-
-            app.Start();
+            var hasFullAccess = app.NavigateIfUserDoesNotHaveFullAccess();
+            if (hasFullAccess)
+            {
+                var viewModel = IosDependencyContainer.Instance.ViewModelLoader
+                    .Load<Unit, Unit>(typeof(MainTabBarViewModel), Unit.Default).GetAwaiter().GetResult();
+                Window.RootViewController = ViewControllerLocator.GetViewController(viewModel, true);
+            }
 
             UNUserNotificationCenter.Current.Delegate = this;
 

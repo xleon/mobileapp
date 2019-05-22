@@ -107,7 +107,7 @@ namespace Toggl.iOS
             );
 
         protected override INavigationService CreateNavigationService()
-            => new NavigationService(viewPresenter, new ViewModelLoader(this), AnalyticsService);
+            => new NavigationService(viewPresenter, ViewModelLoader, AnalyticsService);
 
         protected override ILastTimeUsageStorage CreateLastTimeUsageStorage()
             => settingsStorage.Value;

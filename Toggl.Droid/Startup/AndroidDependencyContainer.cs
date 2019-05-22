@@ -115,7 +115,7 @@ namespace Toggl.Droid
         protected override INavigationService CreateNavigationService()
             => new NavigationService(
                 viewPresenter,
-                new ViewModelLoader(this),
+                ViewModelLoader,
                 AnalyticsService
             );
 
