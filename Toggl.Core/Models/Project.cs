@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Shared.Models;
 using Toggl.Storage;
 using static Toggl.Core.Helper.Constants;
 using static Toggl.Shared.Extensions.StringExtensions;
@@ -140,6 +141,18 @@ namespace Toggl.Core.Models
                 if (Name.LengthInBytes() > MaxClientNameLengthInBytes)
                     throw new InvalidOperationException("Client name must have less than {MaxClientNameLengthInBytes} bytes");
             }
+        }
+
+        internal static Project CreatePlaceholder(long projectId, ITimeEntry timeEntry)
+        {
+            return Builder.Create(projectId)
+                .SetName(Resources.InaccessibleProject)
+                .SetWorkspaceId(timeEntry.WorkspaceId)
+                .SetColor(Helper.Colors.NoProject)
+                .SetActive(false)
+                .SetAt(default(DateTimeOffset))
+                .SetSyncStatus(SyncStatus.RefetchingNeeded)
+                .Build();
         }
 
         private Project(Builder builder)
