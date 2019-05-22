@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Reactive;
-using System.Reactive.Linq;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 
@@ -11,7 +10,7 @@ namespace Toggl.Core.UI
         where TInput : new()
     {
         private readonly UIDependencyContainer dependencyContainer;
-        
+
         public App(UIDependencyContainer dependencyContainer)
         {
             this.dependencyContainer = dependencyContainer;
@@ -42,10 +41,9 @@ namespace Toggl.Core.UI
                 navigationService.Navigate<TFirstViewModelWhenNotLoggedIn, TInput>(new TInput(), null);
                 return false;
             }
-            
-            var user = dependencyContainer.InteractorFactory
-                .GetCurrentUser().Execute().GetAwaiter().GetResult();
-            if (accessRestrictionStorage.IsUnauthorized(user.ApiToken))
+
+            var apiToken = dependencyContainer.UserAccessManager.GetSavedApiToken();
+            if (accessRestrictionStorage.IsUnauthorized(apiToken))
             {
                 navigationService.Navigate<TokenResetViewModel>(null);
                 return false;

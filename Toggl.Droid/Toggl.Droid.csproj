@@ -553,7 +553,7 @@
       <DependentUpon>SignUpActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="Startup\HandlerScheduler.cs" />
-    <Compile Include="Services\NoopPrivateSharedStorageServiceAndroid.cs" />
+    <Compile Include="Services\PrivateSharedStorageServiceAndroid.cs" />
     <Compile Include="Views\ListSelectionDialog.cs" />
     <Compile Include="Extensions\Reactive\ViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\TextViewExtensions.cs" />

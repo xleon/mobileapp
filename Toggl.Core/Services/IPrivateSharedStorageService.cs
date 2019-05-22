@@ -11,5 +11,9 @@ namespace Toggl.Core.Services
         void SaveLastUpdateDate(DateTimeOffset date);
 
         void ClearAll();
+
+        bool HasUserDataStored();
+
+        string GetApiToken();
     }
 }

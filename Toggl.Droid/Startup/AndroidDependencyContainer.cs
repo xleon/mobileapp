@@ -90,7 +90,7 @@ namespace Toggl.Droid
             => new PlatformInfoAndroid();
 
         protected override IPrivateSharedStorageService CreatePrivateSharedStorageService()
-            => new NoopPrivateSharedStorageServiceAndroid();
+            => new PrivateSharedStorageServiceAndroid(KeyValueStorage);
 
         protected override IRatingService CreateRatingService()
             => new RatingServiceAndroid(Application.Context);

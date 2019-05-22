@@ -95,12 +95,32 @@ namespace Toggl.Core.Login
         }
 
         public bool CheckIfLoggedIn()
-            => database.Value
+        {
+            if (privateSharedStorageService.Value.HasUserDataStored())
+            {
+                userLoggedInSubject.OnNext(apiFromSharedStorage());
+                return true;
+            }
+
+            return
+                database.Value
                 .User.Single()
                 .Do(user => userLoggedInSubject.OnNext(apiFromUser(user)))
                 .SelectValue(true)
                 .Catch(Observable.Return(false))
                 .Wait();
+        }
+
+        public string GetSavedApiToken()
+            => privateSharedStorageService.Value.GetApiToken();
+
+        private ITogglApi apiFromSharedStorage()
+        {
+            var apiToken = privateSharedStorageService.Value.GetApiToken();
+            var newCredentials = Credentials.WithApiToken(apiToken);
+            var api = apiFactory.Value.CreateApiWith(newCredentials);
+            return api;
+        }
 
         public IObservable<Unit> RefreshToken(Password password)
         {

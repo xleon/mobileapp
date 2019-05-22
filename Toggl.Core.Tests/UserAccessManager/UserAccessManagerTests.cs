@@ -98,6 +98,14 @@ namespace Toggl.Core.Tests.Login
 
         public sealed class TheUserAccessMethod : UserAccessManagerTest
         {
+            public TheUserAccessMethod()
+            {
+                var databaseUserSubstitute = Substitute.For<IDatabaseUser>();
+                databaseUserSubstitute.ApiToken.Returns("ApiToken");
+                Database.User.Create(Arg.Any<IDatabaseUser>())
+                    .Returns(Observable.Return(databaseUserSubstitute));
+            }
+
             [Theory, LogIfTooSlow]
             [InlineData("susancalvin@psychohistorian.museum", null)]
             [InlineData("susancalvin@psychohistorian.museum", "")]
@@ -222,13 +230,14 @@ namespace Toggl.Core.Tests.Login
             }
         }
 
-        public sealed class TheGetDataSourceIfLoggedInInMethod : UserAccessManagerTest
+        public sealed class TheCheckIfLoggedInMethod : UserAccessManagerTest
         {
             [Fact, LogIfTooSlow]
-            public void ReturnsNullIfTheDatabaseHasNoUsers()
+            public void ReturnsFalseIfTheDatabaseHasNoUsers()
             {
                 var observable = Observable.Throw<IDatabaseUser>(new InvalidOperationException());
                 Database.User.Single().Returns(observable);
+                PrivateSharedStorageService.HasUserDataStored().Returns(false);
 
                 var result = UserAccessManager.CheckIfLoggedIn();
 
@@ -236,10 +245,35 @@ namespace Toggl.Core.Tests.Login
             }
 
             [Fact, LogIfTooSlow]
-            public void ReturnsADataSourceIfTheUserExistsInTheDatabase()
+            public void ReturnsTrueIfTheUserDataWasStoredInThePrivateStorage()
+            {
+                PrivateSharedStorageService.HasUserDataStored().Returns(true);
+                PrivateSharedStorageService.GetApiToken().Returns("ApiToken");
+
+                var result = UserAccessManager.CheckIfLoggedIn();
+
+                result.Should().BeTrue();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsTrueAndStoresTheUserDataIfUserIsInTheDatabaseButNotInThePrivateStorage()
+            {
+                PrivateSharedStorageService.HasUserDataStored().Returns(false);
+                var observable = Observable.Return<IDatabaseUser>(FoundationUser.Clean(User));
+                Database.User.Single().Returns(observable);
+
+                var result = UserAccessManager.CheckIfLoggedIn();
+
+                result.Should().BeTrue();
+                PrivateSharedStorageService.Received().SaveApiToken(Arg.Any<string>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsTrueTheUserExistsInTheDatabase()
             {
                 var observable = Observable.Return<IDatabaseUser>(FoundationUser.Clean(User));
                 Database.User.Single().Returns(observable);
+                PrivateSharedStorageService.HasUserDataStored().Returns(false);
 
                 var result = UserAccessManager.CheckIfLoggedIn();
 
@@ -260,7 +294,7 @@ namespace Toggl.Core.Tests.Login
             }
 
             [Fact, LogIfTooSlow]
-            public void EmitsWhenUserIsLoggedIn()
+            public void EmitsWhenUserIsLoggedAndDataIsInTheDataBase()
             {
                 var observer = Substitute.For<IObserver<ITogglApi>>();
                 var observable = Observable.Return<IDatabaseUser>(FoundationUser.Clean(User));
@@ -271,10 +305,32 @@ namespace Toggl.Core.Tests.Login
 
                 observer.Received().OnNext(Arg.Any<ITogglApi>());
             }
+            
+            [Fact, LogIfTooSlow]
+            public void EmitsWhenUserIsLoggedInAndDataIsAlreadyStoredInThePrivateStorage()
+            {
+                var observer = Substitute.For<IObserver<ITogglApi>>();
+                UserAccessManager.UserLoggedIn.Subscribe(observer);
+                PrivateSharedStorageService.HasUserDataStored().Returns(true);
+                PrivateSharedStorageService.GetApiToken().Returns("ApiToken");
+
+                UserAccessManager.CheckIfLoggedIn();
+
+                observer.Received().OnNext(Arg.Any<ITogglApi>());
+            }
         }
 
         public sealed class TheSignUpMethod : UserAccessManagerTest
         {
+
+            public TheSignUpMethod()
+            {
+                var databaseUserSubstitute = Substitute.For<IDatabaseUser>();
+                databaseUserSubstitute.ApiToken.Returns("ApiToken");
+                Database.User.Create(Arg.Any<IDatabaseUser>())
+                    .Returns(Observable.Return(databaseUserSubstitute));
+            }
+
             [Theory, LogIfTooSlow]
             [InlineData("susancalvin@psychohistorian.museum", null)]
             [InlineData("susancalvin@psychohistorian.museum", "")]
@@ -383,7 +439,9 @@ namespace Toggl.Core.Tests.Login
             {
                 var user = Substitute.For<IDatabaseUser>();
                 user.Email.Returns(Email);
+                user.ApiToken.Returns("ApiToken");
                 Database.User.Single().Returns(Observable.Return(user));
+                Database.User.Update(Arg.Any<IDatabaseUser>()).Returns(Observable.Return(user));
             }
 
             [Theory, LogIfTooSlow]
@@ -450,6 +508,14 @@ namespace Toggl.Core.Tests.Login
 
         public sealed class TheUserAccessUsingGoogleMethod : UserAccessManagerTest
         {
+            public TheUserAccessUsingGoogleMethod()
+            {
+                var databaseUserSubstitute = Substitute.For<IDatabaseUser>();
+                databaseUserSubstitute.ApiToken.Returns("ApiToken");
+                Database.User.Create(Arg.Any<IDatabaseUser>())
+                    .Returns(Observable.Return(databaseUserSubstitute));
+            }
+
             private const string googleToken = "sometoken";
 
             [Fact, LogIfTooSlow]
