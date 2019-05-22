@@ -1,3 +1,5 @@
+using Toggl.Shared;
+
 namespace Toggl.Core.Models
 {
     public enum ReportPeriod

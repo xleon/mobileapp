@@ -261,14 +261,27 @@ namespace Toggl.iOS.ViewControllers
                 return false;
             };
 
-            View.AddGestureRecognizer(new UITapGestureRecognizer(() =>
-            {
-                EmailTextField.ResignFirstResponder();
-                PasswordTextField.ResignFirstResponder();
-            }));
+            setupKeyboardDismissingGestureRecognizers();
 
             prepareForgotPasswordButton();
             ShowPasswordButton.SetupShowPasswordButton();
+        }
+
+        private void setupKeyboardDismissingGestureRecognizers()
+        {
+            void dismissKeyboard()
+            {
+                EmailTextField.ResignFirstResponder();
+                PasswordTextField.ResignFirstResponder();
+            }
+
+            View.AddGestureRecognizer(new UITapGestureRecognizer(dismissKeyboard));
+
+            View.AddGestureRecognizer(new UIPanGestureRecognizer((recognizer) =>
+            {
+                if (recognizer.TranslationInView(View).Y > 0)
+                    dismissKeyboard();
+            }));
         }
 
         private void prepareForgotPasswordButton()

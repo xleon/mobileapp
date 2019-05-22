@@ -3,6 +3,7 @@ using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
 using Toggl.Core;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.iOS

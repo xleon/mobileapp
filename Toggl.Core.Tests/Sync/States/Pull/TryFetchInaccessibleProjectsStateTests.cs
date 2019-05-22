@@ -17,6 +17,7 @@ using Toggl.Storage;
 using Toggl.Storage.Models;
 using Toggl.Networking.ApiClients;
 using Toggl.Networking.Exceptions;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync.States.Pull
@@ -28,7 +29,7 @@ namespace Toggl.Core.Tests.Sync.States.Pull
         private readonly ITimeService timeService = Substitute.For<ITimeService>();
         private readonly IFetchObservables fetch = Substitute.For<IFetchObservables>();
         private readonly DateTimeOffset now = new DateTimeOffset(2018, 06, 01, 12, 52, 00, TimeSpan.Zero);
-        private readonly IDataSource<IThreadSafeProject, IDatabaseProject> dataSource = 
+        private readonly IDataSource<IThreadSafeProject, IDatabaseProject> dataSource =
             Substitute.For<IDataSource<IThreadSafeProject, IDatabaseProject>>();
 
         public TryFetchInaccessibleProjectsStateTests()

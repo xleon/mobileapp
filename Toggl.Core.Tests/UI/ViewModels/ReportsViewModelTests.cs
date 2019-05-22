@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Models.Interfaces;
@@ -19,6 +18,8 @@ using Microsoft.Reactive.Testing;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Interactors;
+using Toggl.Core.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -305,6 +306,32 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
                 var currentDateRangeString = observer.Values().First();
                 currentDateRangeString.Should().BeNullOrEmpty();
+            }
+
+            public sealed class WhenThisWeekShortcutIsSelected : ReportsViewModelTest
+            {
+                [Theory, LogIfTooSlow]
+                [InlineData(BeginningOfWeek.Monday)]
+                [InlineData(BeginningOfWeek.Tuesday)]
+                [InlineData(BeginningOfWeek.Wednesday)]
+                [InlineData(BeginningOfWeek.Thursday)]
+                [InlineData(BeginningOfWeek.Friday)]
+                [InlineData(BeginningOfWeek.Saturday)]
+                [InlineData(BeginningOfWeek.Sunday)]
+                public async Task EmitsThisWeekWhenCurrentWeekIsSelected(BeginningOfWeek beginningOfWeek)
+                {
+                    var user = new MockUser { BeginningOfWeek = beginningOfWeek };
+                    DataSource.User.Current.Returns(Observable.Return(user));
+                    var observer = TestScheduler.CreateObserver<string>();
+                    var now = DateTimeOffset.Now;
+                    TimeService.CurrentDateTime.Returns(now);
+                    ViewModel.CurrentDateRangeStringObservable.Subscribe(observer);
+                    await ViewModel.Initialize();
+                    ViewModel.CalendarViewModel.SelectPeriod(ReportPeriod.ThisWeek);
+
+                    TestScheduler.Start();
+                    observer.LastEmittedValue().Should().Be($"{Resources.ThisWeek} ▾");
+                }
             }
         }
 

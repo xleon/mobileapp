@@ -1,4 +1,5 @@
 ﻿using System;
+using Toggl.Shared;
 
 namespace Toggl.Core.Conversions
 {

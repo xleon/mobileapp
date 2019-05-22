@@ -14,6 +14,7 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Shared.Models;
 using Toggl.iOS.Intents;
 using Toggl.iOS.Models;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.iOS.Services

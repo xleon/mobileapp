@@ -294,18 +294,18 @@ Tools/**
 # macOS Finder creates this in every folder opened
 .DS_STORE
 
-Toggl.Daneel/Views/TimeEntryTagsTextView.designer.cs
+Toggl.iOS/Views/TimeEntryTagsTextView.designer.cs
 
-Toggl.Daneel/Views/ResizableView.designer.cs
+Toggl.iOS/Views/ResizableView.designer.cs
 
-Toggl.Daneel/Views/ActivityIndicatorView.designer.cs
+Toggl.iOS/Views/ActivityIndicatorView.designer.cs
 
 giskard.keystore
 Toggl.Droid*/Resources/Resource.designer.cs
 
 # macOS Rider creates this .dll folders
 Toggl.Droid/\*Undefined\*Tools
-Toggl.Daneel/\*Undefined\*Tools
+Toggl.iOS/\*Undefined\*Tools
 Toggl.PrimeRadiant.Realm/\*Undefined\*Tools
 
 # Xcode

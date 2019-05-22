@@ -5,7 +5,7 @@ using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using Colors = Toggl.Core.UI.Helper.Colors;
-using FoundationResources = Toggl.Core.Resources;
+using FoundationResources = Toggl.Shared.Resources;
 
 namespace Toggl.iOS.ViewControllers.Settings
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Shared;
 using Toggl.Storage;
 using ColorHelper = Toggl.Core.Helper.Colors;
 

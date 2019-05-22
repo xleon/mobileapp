@@ -14,6 +14,7 @@ using UIKit;
 using static Toggl.iOS.Extensions.TextExtensions;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Views;
+using Toggl.Shared;
 
 namespace Toggl.iOS.ViewSources
 {

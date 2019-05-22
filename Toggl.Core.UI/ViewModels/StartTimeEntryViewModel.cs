@@ -78,8 +78,8 @@ namespace Toggl.Core.UI.ViewModels
 
         private string currentQuery;
 
-        private BehaviorSubject<HashSet<ProjectSuggestion>> expandedProjects =
-            new BehaviorSubject<HashSet<ProjectSuggestion>>(new HashSet<ProjectSuggestion>());
+        private BehaviorSubject<HashSet<long>> expandedProjects =
+            new BehaviorSubject<HashSet<long>>(new HashSet<long>());
 
         public IObservable<TextFieldInfo> TextFieldInfo { get; }
         public IObservable<bool> IsBillable { get; }
@@ -237,7 +237,8 @@ namespace Toggl.Core.UI.ViewModels
             {
                 var spans = new List<ISpan>();
                 spans.Add(new TextSpan(initialParameters.EntryDescription));
-                if (initialParameters.ProjectId != null) {
+                if (initialParameters.ProjectId != null)
+                {
                     try
                     {
                         var project = await interactorFactory.GetProjectById((long)initialParameters.ProjectId).Execute();
@@ -248,7 +249,8 @@ namespace Toggl.Core.UI.ViewModels
                         // Intentionally left blank
                     }
                 }
-                if (initialParameters.TagIds != null) {
+                if (initialParameters.TagIds != null)
+                {
                     try
                     {
                         var tags = initialParameters.TagIds.ToObservable()
@@ -478,13 +480,13 @@ namespace Toggl.Core.UI.ViewModels
         private void toggleTasks(ProjectSuggestion projectSuggestion)
         {
             var currentExpandedProjects = expandedProjects.Value;
-            if (currentExpandedProjects.Contains(projectSuggestion))
+            if (currentExpandedProjects.Contains(projectSuggestion.ProjectId))
             {
-                currentExpandedProjects.Remove(projectSuggestion);
+                currentExpandedProjects.Remove(projectSuggestion.ProjectId);
             }
             else
             {
-                currentExpandedProjects.Add(projectSuggestion);
+                currentExpandedProjects.Add(projectSuggestion.ProjectId);
             }
             expandedProjects.OnNext(currentExpandedProjects);
         }
@@ -639,7 +641,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             yield return suggestion;
 
-            if (suggestion is ProjectSuggestion projectSuggestion && expandedProjects.Value.Contains(projectSuggestion))
+            if (suggestion is ProjectSuggestion projectSuggestion && expandedProjects.Value.Contains(projectSuggestion.ProjectId))
             {
                 var orderedTasks = projectSuggestion.Tasks
                     .OrderBy(t => t.Name);
@@ -652,7 +654,6 @@ namespace Toggl.Core.UI.ViewModels
         private IList<SectionModel<string, AutocompleteSuggestion>> addStaticElements(IEnumerable<SectionModel<string, AutocompleteSuggestion>> sections)
         {
             var suggestions = sections.SelectMany(section => section.Items);
-            IEnumerable<SectionModel<string, AutocompleteSuggestion>> collections = sections;
 
             if (isSuggestingProjects.Value)
             {

@@ -5,6 +5,7 @@ using FsCheck;
 using Toggl.Core.UI.Transformations;
 using Xunit;
 using FsCheck.Xunit;
+using Toggl.Shared;
 
 namespace Toggl.Core.Tests.UI.Transformations
 {

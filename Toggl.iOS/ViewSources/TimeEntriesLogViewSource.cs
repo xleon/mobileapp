@@ -9,6 +9,7 @@ using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Views;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 

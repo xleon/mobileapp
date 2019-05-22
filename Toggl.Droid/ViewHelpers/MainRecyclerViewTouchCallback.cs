@@ -96,5 +96,20 @@ namespace Toggl.Droid.ViewHelpers
                 base.ClearView(recyclerView, viewHolder);
             }
         }
+
+        public override float GetSwipeVelocityThreshold(float defaultValue)
+        {
+            return defaultValue * 0.1f;
+        }
+
+        public override float GetSwipeEscapeVelocity(float defaultValue)
+        {
+            return defaultValue * 2.0f;
+        }
+
+        public override float GetSwipeThreshold(RecyclerView.ViewHolder viewHolder)
+        {
+            return 0.75f;
+        }
     }
 }
