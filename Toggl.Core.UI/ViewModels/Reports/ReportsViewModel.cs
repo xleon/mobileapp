@@ -53,6 +53,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private readonly ReportsCalendarViewModel calendarViewModel;
 
         private readonly Subject<Unit> reportSubject = new Subject<Unit>();
+        private readonly Subject<Unit> viewAppearedSubject = new Subject<Unit>();
         private readonly BehaviorSubject<bool> isLoading = new BehaviorSubject<bool>(true);
         private readonly BehaviorSubject<IThreadSafeWorkspace> workspaceSubject = new BehaviorSubject<IThreadSafeWorkspace>(null);
         private readonly BehaviorSubject<string> currentDateRangeStringSubject = new BehaviorSubject<string>(string.Empty);
@@ -211,6 +212,15 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Subscribe(changeDateRange)
                 .DisposedBy(disposeBag);
 
+            viewAppearedSubject
+                .AsObservable()
+                .Throttle(new TimeSpan(0, 5, 0))
+                .Subscribe((_ =>
+                {
+                    reportSubject.OnNext(Unit.Default);
+                }))
+                .DisposedBy(disposeBag);
+
             reportSubject
                 .AsObservable()
                 .Do(setLoadingState)
@@ -247,7 +257,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 return;
             }
 
-            reportSubject.OnNext(Unit.Default);
+            viewAppearedSubject.OnNext(Unit.Default);
         }
 
         public void StopNavigationFromMainLogStopwatch()
