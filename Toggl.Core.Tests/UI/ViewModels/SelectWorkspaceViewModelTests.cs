@@ -9,6 +9,7 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI.Parameters;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Xunit;
 

@@ -13,7 +13,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UserNotifications;
 using Notification = Toggl.Shared.Notification;
-using FoundationResources = Toggl.Core.Resources;
+using FoundationResources = Toggl.Shared.Resources;
 
 namespace Toggl.iOS.Services
 {

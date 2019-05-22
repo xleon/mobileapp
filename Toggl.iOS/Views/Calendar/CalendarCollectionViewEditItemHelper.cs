@@ -39,7 +39,6 @@ namespace Toggl.iOS.Views.Calendar
         private CalendarItem calendarItem;
         private List<DateTimeOffset> allItemsStartAndEndTime;
 
-        private NSIndexPath itemIndexPath;
         private nfloat verticalOffset;
         private CGPoint firstPoint;
         private CGPoint previousPoint;
@@ -188,7 +187,7 @@ namespace Toggl.iOS.Views.Calendar
             if (!calendarItem.IsEditable())
                 return;
 
-            itemIndexPath = CollectionView.IndexPathForItemAtPoint(point);
+            var itemIndexPath = CollectionView.IndexPathForItemAtPoint(point);
             dataSource.StartEditing(itemIndexPath);
             becomeActive();
 
@@ -234,6 +233,7 @@ namespace Toggl.iOS.Views.Calendar
             previousStartTime = calendarItem.StartTime;
             previousEndTime = calendarItem.EndTime;
 
+            var itemIndexPath = dataSource.IndexPathForEditingItem();
             var cell = CollectionView.CellForItem(itemIndexPath) as CalendarItemView;
             if (cell == null)
             {
@@ -284,7 +284,7 @@ namespace Toggl.iOS.Views.Calendar
 
         private void changeOffset(CGPoint point)
         {
-            if (!isActive || itemIndexPath == null)
+            if (!isActive)
                 return;
 
             var currentPointWithOffest = new CGPoint(point.X, point.Y - verticalOffset);
@@ -300,7 +300,7 @@ namespace Toggl.iOS.Views.Calendar
             calendarItem = calendarItem
                 .WithStartTime(newStartTime);
 
-            itemIndexPath = dataSource.UpdateItemView(itemIndexPath, calendarItem.StartTime, calendarItem.Duration(now));
+            dataSource.UpdateItemView(calendarItem.StartTime, calendarItem.Duration(now));
 
             if (previousStartTime != newStartTime)
             {
@@ -320,7 +320,7 @@ namespace Toggl.iOS.Views.Calendar
 
         private void changeStartTime(CGPoint point)
         {
-            if (!isActive || itemIndexPath == null)
+            if (!isActive)
                 return;
 
             if (point.Y < 0 || point.Y >= Layout.ContentViewHeight)
@@ -341,7 +341,7 @@ namespace Toggl.iOS.Views.Calendar
                 .WithStartTime(newStartTime)
                 .WithDuration(newDuration);
 
-            itemIndexPath = dataSource.UpdateItemView(itemIndexPath, calendarItem.StartTime, calendarItem.Duration(now));
+            dataSource.UpdateItemView(calendarItem.StartTime, calendarItem.Duration(now));
 
             if (previousStartTime != newStartTime)
             {
@@ -359,7 +359,7 @@ namespace Toggl.iOS.Views.Calendar
 
         private void changeEndTime(CGPoint point)
         {
-            if (calendarItem.Duration == null || !isActive || itemIndexPath == null)
+            if (calendarItem.Duration == null || !isActive)
                 return;
 
             if (point.Y < 0 || point.Y >= Layout.ContentViewHeight)
@@ -378,7 +378,7 @@ namespace Toggl.iOS.Views.Calendar
             calendarItem = calendarItem
                 .WithDuration(newDuration);
 
-            itemIndexPath = dataSource.UpdateItemView(itemIndexPath, calendarItem.StartTime, calendarItem.Duration(now));
+            dataSource.UpdateItemView(calendarItem.StartTime, calendarItem.Duration(now));
 
             if (previousEndTime != newEndTime)
             {
@@ -447,6 +447,7 @@ namespace Toggl.iOS.Views.Calendar
 
         private void stopEditingCurrentCellIfNotVisible()
         {
+            var itemIndexPath = dataSource.IndexPathForEditingItem();
             var cellNotVisible = CollectionView.CellForItem(itemIndexPath) == null;
             if (cellNotVisible)
             {

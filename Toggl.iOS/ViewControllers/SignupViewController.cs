@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using AdjustBindingsiOS;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
@@ -251,13 +252,26 @@ namespace Toggl.iOS.ViewControllers
                 return false;
             };
 
-            View.AddGestureRecognizer(new UITapGestureRecognizer(() =>
+            ShowPasswordButton.SetupShowPasswordButton();
+
+            setupKeyboardDismissingGestureRecognizers();
+        }
+
+        private void setupKeyboardDismissingGestureRecognizers()
+        {
+            void dismissKeyboard()
             {
                 EmailTextField.ResignFirstResponder();
                 PasswordTextField.ResignFirstResponder();
-            }));
+            }
 
-            ShowPasswordButton.SetupShowPasswordButton();
+            View.AddGestureRecognizer(new UITapGestureRecognizer(dismissKeyboard));
+
+            View.AddGestureRecognizer(new UIPanGestureRecognizer((recognizer) =>
+            {
+                if (recognizer.TranslationInView(View).Y > 0)
+                    dismissKeyboard();
+            }));
         }
 
         private string signupButtonTitle(bool isLoading)

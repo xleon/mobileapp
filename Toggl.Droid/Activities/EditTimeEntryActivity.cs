@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
@@ -19,7 +17,7 @@ using Toggl.Core.Analytics;
 using Toggl.Core.UI.Transformations;
 using Toggl.Droid.ViewHolders;
 using TimeEntryExtensions = Toggl.Droid.Extensions.TimeEntryExtensions;
-using TextResources = Toggl.Core.Resources;
+using TextResources = Toggl.Shared.Resources;
 using TagsAdapter = Toggl.Droid.Adapters.SimpleAdapter<string>;
 using static Toggl.Droid.Resource.String;
 
@@ -33,16 +31,6 @@ namespace Toggl.Droid.Activities
     {
         private TagsAdapter tagsAdapter = new TagsAdapter(Resource.Layout.EditTimeEntryTagCell, StringViewHolder.Create);
 
-        public EditTimeEntryActivity()
-        {
-
-        }
-
-        public EditTimeEntryActivity(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
-        {
-
-        }
-
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -50,7 +38,6 @@ namespace Toggl.Droid.Activities
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
 
             InitializeViews();
-
             setupViews();
             setupBindings();
         }
@@ -193,13 +180,13 @@ namespace Toggl.Droid.Activities
 
             ViewModel.StartTime
                 .WithLatestFrom(ViewModel.Preferences,
-                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.TimeOfDayFormat.Format))
+                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.TimeOfDayFormat.Format, AndroidDependencyContainer.Instance.AnalyticsService))
                 .Subscribe(startTimeTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
             ViewModel.StartTime
                 .WithLatestFrom(ViewModel.Preferences,
-                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.DateFormat.Short))
+                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.DateFormat.Short, AndroidDependencyContainer.Instance.AnalyticsService))
                 .Subscribe(startDateTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
@@ -214,13 +201,13 @@ namespace Toggl.Droid.Activities
 
             stopTimeObservable
                 .WithLatestFrom(ViewModel.Preferences,
-                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.TimeOfDayFormat.Format))
+                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.TimeOfDayFormat.Format, AndroidDependencyContainer.Instance.AnalyticsService))
                 .Subscribe(stopTimeTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
             stopTimeObservable
                 .WithLatestFrom(ViewModel.Preferences,
-                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.DateFormat.Short))
+                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.DateFormat.Short, AndroidDependencyContainer.Instance.AnalyticsService))
                 .Subscribe(stopDateTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
@@ -289,7 +276,7 @@ namespace Toggl.Droid.Activities
                 ViewModel.Save.Execute();
             }
         }
-        
+
         private ISpannable generateProjectTaskClientFormattedString(EditTimeEntryViewModel.ProjectClientTaskInfo projectClientTask)
             => TimeEntryExtensions.ToProjectTaskClient(
                     projectClientTask.HasProject,

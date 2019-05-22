@@ -245,6 +245,9 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("Type", "Source", "ExceptionType", "StackTrace")]
         public IAnalyticsEvent<string, string, string, string> DebugScheduleError { get; protected set; }
 
+        [AnalyticsEvent("Platform")]
+        public IAnalyticsEvent<Platform> ReceivedLowMemoryWarning { get; protected set; }
+
         public void TrackAnonymized(Exception exception)
         {
             if (exception.IsAnonymized())
@@ -258,6 +261,8 @@ namespace Toggl.Core.Analytics
         }
 
         public abstract void Track(Exception exception, string message);
+
+        public abstract void Track(Exception exception, IDictionary<string, string> properties);
 
         public abstract void Track(string eventName, Dictionary<string, string> parameters = null);
 

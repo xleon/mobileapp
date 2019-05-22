@@ -12,7 +12,7 @@ using UIKit;
 namespace Toggl.iOS.Views
 {
     [Register(nameof(LoginTextField))]
-    public sealed class LoginTextField : UITextField
+    public class LoginTextField : UITextField
     {
         [Obsolete("Prefer using the FirstResponder observable instead")]
         public event EventHandler IsFirstResponderChanged;

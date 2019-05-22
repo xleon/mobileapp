@@ -35,6 +35,7 @@ using static Toggl.Core.Helper.Constants;
 using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
 using TextFieldInfo = Toggl.Core.Autocomplete.TextFieldInfo;
 using CollectionSections = System.Collections.Generic.IEnumerable<Toggl.Core.UI.Collections.SectionModel<string, Toggl.Core.Autocomplete.Suggestions.AutocompleteSuggestion>>;
+using FsCheck;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -218,7 +219,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
                 observer.LastEmittedValue()
-                    .Where(hasCreateSuggestions)
+                    .Where(firstItemIsCreateSuggestion)
                     .Should().BeEmpty();
             }
 
@@ -234,7 +235,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
                 observer.LastEmittedValue()
-                    .Where(hasCreateSuggestions)
+                    .Where(firstItemIsCreateSuggestion)
                     .Should().BeEmpty();
             }
 
@@ -250,7 +251,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
                 observer.LastEmittedValue()
-                    .Where(hasCreateSuggestions)
+                    .Where(firstItemIsCreateSuggestion)
                     .Should().BeEmpty();
             }
 
@@ -267,7 +268,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
                 observer.LastEmittedValue()
-                    .Where(hasCreateSuggestions)
+                    .Where(firstItemIsCreateSuggestion)
                     .Should().BeEmpty();
             }
 
@@ -285,7 +286,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
 
                 observer.LastEmittedValue()
-                    .Where(hasCreateSuggestions)
+                    .Where(firstItemIsCreateSuggestion)
                     .Should().BeEmpty();
             }
 
@@ -302,7 +303,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
                 observer.LastEmittedValue()
-                    .Where(hasCreateSuggestions)
+                    .Where(firstItemIsCreateSuggestion)
                     .Should().BeEmpty();
             }
 
@@ -312,10 +313,15 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Aggregate(new StringBuilder(), (builder, _) => builder.Append('A'))
                     .ToString();
 
-            private bool hasCreateSuggestions(SectionModel<string, AutocompleteSuggestion> collection)
+            private bool firstItemIsCreateSuggestion(SectionModel<string, AutocompleteSuggestion> collection)
             {
-                return collection.Items.Any(suggestion => suggestion is CreateEntitySuggestion);
+                return collection.Items.FirstOrDefault() is CreateEntitySuggestion;
+            }
 
+            private bool firstItemIsCreateSuggestion(SectionModel<string, AutocompleteSuggestion> collection, string expectedEntityName)
+            {
+                return collection.Items.FirstOrDefault() is CreateEntitySuggestion createEntitySuggestion
+                    && createEntitySuggestion.EntityName == expectedEntityName;
             }
 
             public sealed class WhenSuggestingProjects : CreateSuggestionCellModels
@@ -356,7 +362,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     TestScheduler.Start();
                     observer.LastEmittedValue()
-                        .Where(hasCreateSuggestions)
+                        .Where(firstItemIsCreateSuggestion)
                         .Should().BeEmpty();
                 }
 
@@ -376,7 +382,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     TestScheduler.Start();
                     observer.LastEmittedValue()
-                        .Where(hasCreateSuggestions)
+                        .Where(firstItemIsCreateSuggestion)
                         .Should().BeEmpty();
                 }
 
@@ -393,11 +399,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     await ViewModel.Initialize();
                     TestScheduler.Start();
 
-                    ViewModel.OnTextFieldInfoFromView(new QueryTextSpan("@bongo", 6));
+                    var projectName = "bongo";
+                    ViewModel.OnTextFieldInfoFromView(new QueryTextSpan($"@{projectName}", 6));
 
                     TestScheduler.Start();
                     observer.LastEmittedValue()
-                        .Where(hasCreateSuggestions)
+                        .Where(section => firstItemIsCreateSuggestion(section, projectName))
                         .Should().NotBeEmpty();
                 }
 
@@ -414,11 +421,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     await ViewModel.Initialize();
                     TestScheduler.Start();
 
-                    ViewModel.OnTextFieldInfoFromView(new QueryTextSpan($"@${ProjectName}", 6));
+                    ViewModel.OnTextFieldInfoFromView(new QueryTextSpan($"@{ProjectName}", 6));
 
                     TestScheduler.Start();
                     observer.LastEmittedValue()
-                        .Where(hasCreateSuggestions)
+                        .Where(section => firstItemIsCreateSuggestion(section, ProjectName))
                         .Should().NotBeEmpty();
                 }
 
@@ -464,7 +471,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var observer = TestScheduler.CreateObserver<CollectionSections>();
                     ViewModel.Suggestions.Subscribe(observer);
                     var projectSpan = new ProjectSpan(ProjectId, ProjectName, ProjectColor, null, null);
-                    var querySpan = new QueryTextSpan("abcde #fgh", 10);
+                    var tagName = "fgh";
+                    var querySpan = new QueryTextSpan($"abcde #{tagName}", 10);
 
                     await ViewModel.Initialize();
 
@@ -476,7 +484,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     TestScheduler.Start();
                     observer.LastEmittedValue()
-                        .Where(hasCreateSuggestions)
+                        .Where(section => firstItemIsCreateSuggestion(section, tagName))
                         .Should().NotBeEmpty();
                 }
 
@@ -484,7 +492,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 public async Task ExistNoMatterThatAProjectIsAlreadySelectedAndInTagSuccestionMode()
                 {
                     var projectSpan = new ProjectSpan(ProjectId, ProjectName, ProjectColor, null, null);
-                    var querySpan = new QueryTextSpan("abcde #fgh", 10);
+                    var tagName = "fgh";
+                    var querySpan = new QueryTextSpan($"abcde #{tagName}", 10);
 
                     await ViewModel.Initialize();
                     var observer = TestScheduler.CreateObserver<CollectionSections>();
@@ -497,7 +506,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     TestScheduler.Start();
                     observer.LastEmittedValue()
-                        .Where(hasCreateSuggestions)
+                        .Where(section => firstItemIsCreateSuggestion(section, tagName))
                         .Should().NotBeEmpty();
                 }
 
@@ -520,7 +529,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     TestScheduler.Start();
                     observer.LastEmittedValue()
-                        .Where(hasCreateSuggestions)
+                        .Where(firstItemIsCreateSuggestion)
                         .Should().BeEmpty();
                 }
 

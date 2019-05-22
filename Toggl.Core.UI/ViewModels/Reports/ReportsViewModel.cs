@@ -28,6 +28,7 @@ using Toggl.Shared.Models.Reports;
 using Toggl.Networking.Exceptions;
 using CommonFunctions = Toggl.Shared.Extensions.CommonFunctions;
 using Colors = Toggl.Core.UI.Helper.Colors;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
@@ -75,6 +76,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private long userId;
         private DateFormat dateFormat;
         private ReportParameter parameter;
+        private BeginningOfWeek beginningOfWeek;
 
         public IObservable<bool> IsLoadingObservable { get; }
 
@@ -231,6 +233,11 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Subscribe(onPreferencesChanged)
                 .DisposedBy(disposeBag);
 
+            dataSource.User.Current
+                .Select(currentUser => currentUser.BeginningOfWeek)
+                .Subscribe(onBeginningOfWeekChanged)
+                .DisposedBy(disposeBag);
+
             await calendarViewModel.Initialize();
         }
 
@@ -274,12 +281,11 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         private bool isCurrentWeek()
         {
-            var currentDate = timeService.CurrentDateTime.Date;
-            var startOfWeek = currentDate.AddDays(1 - (int)currentDate.DayOfWeek);
-            var endOfWeek = startOfWeek.AddDays(6);
+            var firstDayOfCurrentWeek = timeService.CurrentDateTime.BeginningOfWeek(beginningOfWeek);
+            var lastDayOfCurrentWeek = firstDayOfCurrentWeek.AddDays(6);
 
-            return startDate.Date == startOfWeek
-                   && endDate.Date == endOfWeek;
+            return startDate.Date == firstDayOfCurrentWeek
+                   && endDate.Date == lastDayOfCurrentWeek;
         }
 
         private static ReadOnlyCollection<(string, IThreadSafeWorkspace)> readOnlyWorkspaceNameTuples(IEnumerable<IThreadSafeWorkspace> workspaces)
@@ -355,6 +361,12 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private void onPreferencesChanged(IThreadSafePreferences preferences)
         {
             dateFormat = preferences.DateFormat;
+            updateCurrentDateRangeString();
+        }
+
+        private void onBeginningOfWeekChanged(BeginningOfWeek beginningOfWeek)
+        {
+            this.beginningOfWeek = beginningOfWeek;
             updateCurrentDateRangeString();
         }
 

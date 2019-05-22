@@ -15,6 +15,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using static Toggl.Core.Helper.Constants;
 using static Toggl.Core.UI.Helper.TemporalInconsistency;
+using static Toggl.Shared.BeginningOfWeek;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -24,7 +25,9 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ITimeService timeService;
         private readonly INavigationService navigationService;
         private readonly IAnalyticsService analyticsService;
+        private readonly ITogglDataSource dataSource;
 
+        private IDisposable beginningOfWeekDisposable;
         private IDisposable runningTimeEntryDisposable;
         private DurationParameter defaultResult;
         private EditDurationEvent analyticsEvent;
@@ -64,6 +67,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<TimeFormat> TimeFormat { get; }
         public IObservable<bool> IsRunning { get; }
 
+        public BeginningOfWeek BeginningOfWeek { get; private set; }
+
         public IObservable<DateTimeOffset> MinimumDateTime { get; }
         public IObservable<DateTimeOffset> MaximumDateTime { get; }
         public IObservable<TemporalInconsistency> TemporalInconsistencies => temporalInconsistencies.AsObservable();
@@ -87,6 +92,7 @@ namespace Toggl.Core.UI.ViewModels
             this.timeService = timeService;
             this.navigationService = navigationService;
             this.analyticsService = analyticsService;
+            this.dataSource = dataSource;
 
             Save = rxActionFactory.FromAsync(save);
             Close = rxActionFactory.FromAsync(close);
@@ -137,6 +143,14 @@ namespace Toggl.Core.UI.ViewModels
             MaximumStartTime = stopTime.AsDriver(schedulerProvider);
             MinimumStopTime = startTime.AsDriver(schedulerProvider);
             MaximumStopTime = startTime.Select(v => v.AddHours(MaxTimeEntryDurationInHours)).AsDriver(schedulerProvider);
+        }
+
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+
+            beginningOfWeekDisposable = dataSource.User.Current
+                .Subscribe(user => BeginningOfWeek = user.BeginningOfWeek);
         }
 
         private void updateStopTime(DateTimeOffset stopTime)
@@ -308,12 +322,12 @@ namespace Toggl.Core.UI.ViewModels
 
         private string toFormattedString(DateTimeOffset dateTimeOffset, TimeFormat timeFormat)
         {
-            return DateTimeToFormattedString.Convert(dateTimeOffset, timeFormat.Format);
+            return DateTimeToFormattedString.Convert(dateTimeOffset, timeFormat.Format, analyticsService);
         }
 
         private string toFormattedString(DateTimeOffset dateTimeOffset, DateFormat dateFormat)
         {
-            return DateTimeToFormattedString.Convert(dateTimeOffset, dateFormat.Short);
+            return DateTimeToFormattedString.Convert(dateTimeOffset, dateFormat.Short, analyticsService);
         }
 
         private string toFormattedString(TimeSpan timeSpan, DurationFormat format)
@@ -325,6 +339,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             base.ViewDestroy(viewFinishing);
             runningTimeEntryDisposable?.Dispose();
+            beginningOfWeekDisposable?.Dispose();
         }
 
         private enum EditMode
