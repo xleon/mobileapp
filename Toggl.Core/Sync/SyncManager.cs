@@ -108,6 +108,7 @@ namespace Toggl.Core.Sync
         {
             lock (stateLock)
             {
+                queue.QueuePullTimeEntries();
                 return startSyncIfNeededAndObserve();
             }
         }

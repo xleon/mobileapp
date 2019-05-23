@@ -64,6 +64,7 @@ namespace Toggl.Core
             configurePullTransitions(transitions, database, api, dataSource, timeService, analyticsService, scheduler, entryPoints.StartPullSync, minutesLeakyBucket, rateLimiter, queue);
             configurePushTransitions(transitions, api, dataSource, analyticsService, minutesLeakyBucket, rateLimiter, scheduler, entryPoints.StartPushSync);
             configureCleanUpTransitions(transitions, timeService, dataSource, analyticsService, entryPoints.StartCleanUp);
+            configurePullTimeEntriesTransitions(transitions, entryPoints.StartPullTimeEntries);
         }
 
         private static void configurePullTransitions(
@@ -310,6 +311,13 @@ namespace Toggl.Core
             transitions.ConfigureTransition(trackInaccesssibleDataAfterCleanUp.Done, deleteInaccessibleWorkspaces);
             transitions.ConfigureTransition(deleteInaccessibleWorkspaces.Done, trackInaccesssibleWorkspacesAfterCleanUp);
             transitions.ConfigureTransition(trackInaccesssibleWorkspacesAfterCleanUp.Done, new DeadEndState());
+        }
+
+        private static void configurePullTimeEntriesTransitions(
+            ITransitionConfigurator transitions,
+            StateResult entryPoint)
+        {
+            transitions.ConfigureTransition(entryPoint, new DeadEndState());
         }
 
         private static LookForChangeToPushState<TDatabase, TThreadsafe> configurePush<TModel, TDatabase, TThreadsafe>(
