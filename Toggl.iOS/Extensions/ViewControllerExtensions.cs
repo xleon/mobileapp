@@ -5,8 +5,8 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CoreGraphics;
-using Toggl.Core;
 using Toggl.Core.UI.Views;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.iOS.Extensions

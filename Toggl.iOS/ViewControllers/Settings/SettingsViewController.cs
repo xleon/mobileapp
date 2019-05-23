@@ -6,6 +6,7 @@ using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 using Math = System.Math;

@@ -6,6 +6,7 @@ using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.Shared.Extensions.CommonFunctions;

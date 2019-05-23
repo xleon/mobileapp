@@ -6,6 +6,7 @@ using Toggl.Core.UI.ViewModels;
 using UIKit;
 using WebKit;
 using Toggl.iOS.Extensions;
+using Toggl.Shared;
 
 namespace Toggl.iOS.ViewControllers
 {

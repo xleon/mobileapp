@@ -1,10 +1,11 @@
 ﻿using Toggl.iOS.Extensions;
 using Toggl.Core.UI.ViewModels.Calendar;
 using CoreGraphics;
-using UIKit;
-using Toggl.iOS.Extensions.Reactive;
-using Toggl.Shared.Extensions;
 using Toggl.Core;
+using Toggl.iOS.Extensions.Reactive;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using UIKit;
 
 namespace Toggl.iOS.ViewControllers.Calendar
 {

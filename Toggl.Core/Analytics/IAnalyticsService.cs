@@ -168,6 +168,8 @@ namespace Toggl.Core.Analytics
 
         void Track(Exception exception, string message);
 
+        void Track(Exception exception, IDictionary<string, string> properties);
+
         void Track(ITrackableEvent trackableEvent);
     }
 }

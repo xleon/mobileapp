@@ -4,6 +4,7 @@ using Android.Views;
 using Android.Widget;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Shared;
 
 namespace Toggl.Droid.ViewHolders
 {

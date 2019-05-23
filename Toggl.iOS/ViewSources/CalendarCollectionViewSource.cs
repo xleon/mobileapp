@@ -19,7 +19,7 @@ using Toggl.iOS.Views.Calendar;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
-using FoundationResources = Toggl.Core.Resources;
+using FoundationResources = Toggl.Shared.Resources;
 
 namespace Toggl.iOS.ViewSources
 {
@@ -200,6 +200,7 @@ namespace Toggl.iOS.ViewSources
         public void StopEditing()
         {
             IsEditing = false;
+            editingItemIndexPath = null;
             layout.IsEditing = false;
             layoutAttributes = calculateLayoutAttributes();
             layout.InvalidateLayoutForVisibleItems();
@@ -215,12 +216,12 @@ namespace Toggl.iOS.ViewSources
             return editingItemIndexPath;
         }
 
-        public NSIndexPath UpdateItemView(NSIndexPath indexPath, DateTimeOffset startTime, TimeSpan duration)
+        public NSIndexPath UpdateItemView(DateTimeOffset startTime, TimeSpan duration)
         {
             if (!IsEditing)
                 throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
 
-            editingItemIndexPath = updateCalendarItem(indexPath, startTime, duration);
+            editingItemIndexPath = updateCalendarItem(editingItemIndexPath, startTime, duration);
 
             updateEditingHours();
             layout.InvalidateLayoutForVisibleItems();
@@ -228,13 +229,13 @@ namespace Toggl.iOS.ViewSources
             return editingItemIndexPath;
         }
 
-        public void RemoveItemView(NSIndexPath indexPath)
+        public void RemoveItemView()
         {
             if (!IsEditing)
                 throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
 
-            removeCalendarItem(indexPath);
-            collectionView.DeleteItems(new NSIndexPath[] { indexPath });
+            removeCalendarItem(editingItemIndexPath);
+            collectionView.DeleteItems(new NSIndexPath[] { editingItemIndexPath });
         }
 
         protected override void Dispose(bool disposing)
@@ -254,11 +255,24 @@ namespace Toggl.iOS.ViewSources
 
         private void onCollectionChanges()
         {
+            long? originalId = null;
+            if (IsEditing)
+            {
+                var editingIndex = (int) editingItemIndexPath.Item;
+                originalId = calendarItems[editingIndex].TimeEntryId;
+            }
+
             calendarItems = collection.IsEmpty ? new List<CalendarItem>() : collection[0].ToList();
             layoutAttributes = calculateLayoutAttributes();
 
-            var index = calendarItems.IndexOf(item => item.Duration == null);
-            runningTimeEntryIndexPath = index >= 0 ? NSIndexPath.FromItemSection(index, 0) : null;
+            var runningIndex = calendarItems.IndexOf(item => item.Duration == null);
+            runningTimeEntryIndexPath = runningIndex >= 0 ? NSIndexPath.FromItemSection(runningIndex, 0) : null;
+
+            if (originalId != null)
+            {
+                var editingIndex = calendarItems.IndexOf(item => item.TimeEntryId == originalId);
+                editingItemIndexPath = editingIndex >= 0 ? NSIndexPath.FromItemSection(editingIndex, 0) : null;
+            }
 
             collectionView.ReloadData();
         }

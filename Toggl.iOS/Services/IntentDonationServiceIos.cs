@@ -8,6 +8,7 @@ using Toggl.Core.Analytics;
 using Toggl.Shared.Models;
 using Toggl.Core.Services;
 using Toggl.iOS.Intents;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.iOS.Services

@@ -168,15 +168,15 @@ namespace Toggl.Droid.Extensions
             switch (type)
             {
                 case ActionType.DiscardNewTimeEntry:
-                    return ShowConfirmationDialog(activity, null, Core.Resources.DiscardThisTimeEntry, Core.Resources.Discard, Core.Resources.Cancel);
+                    return ShowConfirmationDialog(activity, null, Shared.Resources.DiscardThisTimeEntry, Shared.Resources.Discard, Shared.Resources.Cancel);
                 case ActionType.DiscardEditingChanges:
-                    return ShowConfirmationDialog(activity, null, Core.Resources.DiscardEditingChanges, Core.Resources.Discard, Core.Resources.ContinueEditing);
+                    return ShowConfirmationDialog(activity, null, Shared.Resources.DiscardEditingChanges, Shared.Resources.Discard, Shared.Resources.ContinueEditing);
                 case ActionType.DeleteExistingTimeEntry:
-                    return ShowConfirmationDialog(activity, null, Core.Resources.DeleteThisTimeEntry, Core.Resources.Delete, Core.Resources.Cancel);
+                    return ShowConfirmationDialog(activity, null, Shared.Resources.DeleteThisTimeEntry, Shared.Resources.Delete, Shared.Resources.Cancel);
                 case ActionType.DeleteMultipleExistingTimeEntries:
-                    return ShowConfirmationDialog(activity, null, string.Format(Core.Resources.DeleteMultipleTimeEntries, formatArguments), Core.Resources.Delete, Core.Resources.Cancel);
+                    return ShowConfirmationDialog(activity, null, string.Format(Shared.Resources.DeleteMultipleTimeEntries, formatArguments), Shared.Resources.Delete, Shared.Resources.Cancel);
                 case ActionType.DiscardFeedback:
-                    return ShowConfirmationDialog(activity, null, Core.Resources.DiscardMessage, Core.Resources.Discard, Core.Resources.ContinueEditing);
+                    return ShowConfirmationDialog(activity, null, Shared.Resources.DiscardMessage, Shared.Resources.Discard, Shared.Resources.ContinueEditing);
             }
 
             throw new ArgumentOutOfRangeException(nameof(type));

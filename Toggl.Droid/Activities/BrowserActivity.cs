@@ -7,7 +7,7 @@ using Android.Webkit;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 using static Android.Support.V7.Widget.Toolbar;
-using static Toggl.Core.Resources;
+using static Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Activities
 {

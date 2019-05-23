@@ -4,6 +4,7 @@ using Toggl.Core.UI.Helper;
 using Toggl.Core.Suggestions;
 using UIKit;
 using Toggl.iOS.Extensions;
+using Toggl.Shared;
 
 namespace Toggl.iOS.Suggestions
 {

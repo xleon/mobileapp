@@ -14,7 +14,9 @@ namespace Toggl.Core.Autocomplete.Suggestions
             {
                 case TimeEntrySuggestion teX:
                     return y is TimeEntrySuggestion teY
-                        && teX.Description == teY.Description && teX.ProjectId == teY.ProjectId;
+                        && teX.Description == teY.Description
+                        && teX.ProjectId == teY.ProjectId
+                        && teX.TaskId == teY.TaskId;
 
                 case ProjectSuggestion pX:
                     return y is ProjectSuggestion pY && pX.ProjectId == pY.ProjectId;

@@ -1,6 +1,7 @@
 ﻿using Android.Support.Design.Widget;
 using Android.Widget;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
+using static Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Activities
 {

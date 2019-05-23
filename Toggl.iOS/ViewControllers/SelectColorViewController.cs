@@ -8,6 +8,7 @@ using Toggl.Core;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Views;
 using Toggl.iOS.ViewSources;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 
