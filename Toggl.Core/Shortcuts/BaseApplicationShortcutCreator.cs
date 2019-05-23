@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Models;
 

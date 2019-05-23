@@ -9,6 +9,7 @@ using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.iOS.Presentation;
 using Toggl.iOS.Views.Calendar;
 using Toggl.iOS.ViewSources;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 
@@ -141,7 +142,7 @@ namespace Toggl.iOS.ViewControllers
 
         public void ScrollToTop()
         {
-            CalendarCollectionView.SetContentOffset(CGPoint.Empty, true);
+            CalendarCollectionView?.SetContentOffset(CGPoint.Empty, true);
         }
 
         private void selectGoodScrollPoint(TimeSpan timeOfDay)

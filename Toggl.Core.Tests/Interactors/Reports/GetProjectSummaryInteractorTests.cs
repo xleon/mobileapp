@@ -19,7 +19,9 @@ using Toggl.Storage.Models;
 using Toggl.Networking;
 using Toggl.Networking.ApiClients;
 using Toggl.Networking.Models.Reports;
+using Toggl.Shared;
 using Xunit;
+using Math = System.Math;
 
 namespace Toggl.Core.Tests.Interactors
 {

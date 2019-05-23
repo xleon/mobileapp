@@ -19,6 +19,7 @@ using Toggl.Core.UI.Onboarding.StartTimeEntryView;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Autocomplete;
 using Toggl.iOS.ViewSources;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 

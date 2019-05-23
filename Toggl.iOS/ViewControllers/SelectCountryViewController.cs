@@ -9,6 +9,7 @@ using Toggl.Shared.Extensions;
 using Toggl.Core.UI.Collections;
 using Toggl.iOS.Views.CountrySelection;
 using Toggl.iOS.ViewSources.Generic.TableView;
+using Toggl.Shared;
 
 namespace Toggl.iOS.ViewControllers
 {

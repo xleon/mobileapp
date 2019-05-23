@@ -3,6 +3,7 @@ using Foundation;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Cells;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.iOS.Views.Client

@@ -24,8 +24,8 @@ namespace Toggl.Droid.Views
         private const int hoursPerDay = Constants.HoursPerDay;
         private const float secondsInOneHour = 60f * 60f;
 
-        private static readonly string twelveHoursFormat = Core.Resources.TwelveHoursFormat;
-        private static readonly string twentyFourHoursFormat = Core.Resources.TwentyFourHoursFormat;
+        private static readonly string twelveHoursFormat = Shared.Resources.TwelveHoursFormat;
+        private static readonly string twentyFourHoursFormat = Shared.Resources.TwentyFourHoursFormat;
 
         private readonly ISubject<PointF> emptySpaceTouchedSubject = new Subject<PointF>();
 

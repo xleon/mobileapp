@@ -13,7 +13,7 @@ using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Shared.Extensions;
-using TogglResources = Toggl.Core.Resources;
+using TogglResources = Toggl.Shared.Resources;
 
 namespace Toggl.Droid.ViewHolders
 {

@@ -8,6 +8,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.iOS.Views.Settings;
 using Toggl.iOS.ViewSources.Generic.TableView;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.iOS.ViewControllers

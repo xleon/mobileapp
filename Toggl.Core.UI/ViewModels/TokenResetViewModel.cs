@@ -9,43 +9,32 @@ using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
 using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
+using Toggl.Networking.Exceptions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
-using Toggl.Networking.Exceptions;
-using Toggl.Core.UI.Parameters;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class TokenResetViewModel : ViewModel
     {
-        private readonly IUserAccessManager userAccessManager;
         private readonly ITogglDataSource dataSource;
-        private readonly IUserPreferences userPreferences;
-        private readonly IAnalyticsService analyticsService;
-        private readonly ISchedulerProvider schedulerProvider;
-        private readonly IRxActionFactory rxActionFactory;
+        private readonly IUserAccessManager userAccessManager;
         private readonly IInteractorFactory interactorFactory;
-
-        private readonly BehaviorSubject<Email> emailSubject = new BehaviorSubject<Email>(Shared.Email.Empty);
-        private readonly BehaviorSubject<bool> isPasswordMaskedSubject = new BehaviorSubject<bool>(true);
 
         private bool needsSync;
 
-        public IObservable<Email> Email { get; }
-        public IObservable<bool> IsPasswordMasked { get; }
+        public Email Email { get; private set; }
         public IObservable<bool> HasError { get; }
         public IObservable<string> Error { get; }
         public IObservable<bool> NextIsEnabled { get; }
-
         public ISubject<string> Password { get; } = new BehaviorSubject<string>(string.Empty);
 
         public UIAction Done { get; private set; }
         public UIAction SignOut { get; private set; }
-        public UIAction TogglePasswordVisibility { get; private set; }
-
 
         public TokenResetViewModel(
             IUserAccessManager userAccessManager,
@@ -59,30 +48,16 @@ namespace Toggl.Core.UI.ViewModels
         : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
+            Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
+            Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
-            Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
 
             this.dataSource = dataSource;
             this.userAccessManager = userAccessManager;
-            this.userPreferences = userPreferences;
-            this.analyticsService = analyticsService;
-            this.schedulerProvider = schedulerProvider;
-            this.rxActionFactory = rxActionFactory;
             this.interactorFactory = interactorFactory;
-
-            Email = emailSubject
-                .DistinctUntilChanged()
-                .AsDriver(schedulerProvider);
-
-            IsPasswordMasked = isPasswordMaskedSubject
-                .DistinctUntilChanged()
-                .AsDriver(schedulerProvider);
-
-            TogglePasswordVisibility = rxActionFactory.FromAction(togglePasswordVisibility);
 
             Done = rxActionFactory.FromObservable(done);
             SignOut = rxActionFactory.FromAsync(signout);
@@ -107,14 +82,7 @@ namespace Toggl.Core.UI.ViewModels
             await base.Initialize();
 
             needsSync = await dataSource.HasUnsyncedData();
-            var user = await dataSource.User.Current.FirstAsync();
-
-            emailSubject.OnNext(user.Email);
-        }
-
-        private void togglePasswordVisibility()
-        {
-            isPasswordMaskedSubject.OnNext(!isPasswordMaskedSubject.Value);
+            Email = await dataSource.User.Current.FirstAsync().Select(u => u.Email);
         }
 
         private async Task signout()

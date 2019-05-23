@@ -11,6 +11,7 @@ using Toggl.Core.Analytics;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
+using Toggl.Shared;
 using Toggl.Storage;
 using Xunit;
 

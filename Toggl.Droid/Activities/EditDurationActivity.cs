@@ -228,7 +228,7 @@ namespace Toggl.Droid.Activities
 
         private void setupToolbar()
         {
-            toolbar.Title = Core.Resources.StartAndStopTime;
+            toolbar.Title = Shared.Resources.StartAndStopTime;
 
             SetSupportActionBar(toolbar);
 

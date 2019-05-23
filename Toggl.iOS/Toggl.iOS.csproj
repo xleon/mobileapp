@@ -1833,6 +1833,7 @@
       <DependentUpon>ReportsBarChartCardView.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentation\IScrollableToTop.cs" />
+    <Compile Include="Views\EmailTextField.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">

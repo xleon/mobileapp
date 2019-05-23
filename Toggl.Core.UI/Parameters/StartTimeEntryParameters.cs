@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Toggl.Core;
 using Toggl.Core.Analytics;
+using Toggl.Shared;
 using static Toggl.Core.Helper.Constants;
 
 namespace Toggl.Core.UI.Parameters
