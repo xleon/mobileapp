@@ -491,7 +491,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task checkCalendarPermissions()
         {
-            var authorized = await permissionsChecker.CalendarPermissionGranted;
+            var authorized = permissionsChecker.CalendarPermissionGranted.FirstAsync().GetAwaiter().GetResult();
             calendarPermissionGranted.OnNext(authorized);
         }
     }

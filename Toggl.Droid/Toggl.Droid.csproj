@@ -398,6 +398,9 @@
     <Compile Include="Services\NoopIntentDonationServiceAndroid.cs" />
     <Compile Include="Startup\AndroidSchedulerProvider.cs" />
     <Compile Include="Startup\SplashScreen.cs" />
+    <Compile Include="Startup\SplashScreen.DeepLink.cs">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\BrowserServiceAndroid.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="Activities\LoginActivity.ViewBinds.cs">

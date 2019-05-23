@@ -51,7 +51,7 @@ namespace Toggl.Core.UI.ViewModels
 
         public async Task Cancel()
         {
-            CloseCompletionSource.SetResult(default);
+            CloseCompletionSource?.SetResult(default);
         }
 
         public void AttachView(IView viewToAttach)

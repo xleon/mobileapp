@@ -1,3 +1,4 @@
+using System;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -12,7 +13,7 @@ using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Activities;
 using Toggl.Droid.BroadcastReceivers;
-using Toggl.Droid.Helper;
+using Toggl.Droid.Presentation;
 using static Android.Content.Intent;
 
 namespace Toggl.Droid
@@ -32,7 +33,7 @@ namespace Toggl.Droid
         new[] { "android.intent.action.PROCESS_TEXT" },
         Categories = new[] { "android.intent.category.DEFAULT" },
         DataMimeType = "text/plain")]
-    public class SplashScreen : AppCompatActivity
+    public partial class SplashScreen : AppCompatActivity
     {
         public SplashScreen()
             : base()
@@ -49,10 +50,8 @@ namespace Toggl.Droid
 
             var dependencyContainer = AndroidDependencyContainer.Instance;
 
-            ApplicationContext.RegisterReceiver(new TimezoneChangedBroadcastReceiver(dependencyContainer.TimeService),
-                new IntentFilter(ActionTimezoneChanged));
-
-            createApplicationLifecycleObserver(dependencyContainer.BackgroundService);
+            registerTimezoneChangedBroadcastReceiver(dependencyContainer.TimeService);
+            registerApplicationLifecycleObserver(dependencyContainer.BackgroundService);
 
             var app = new App<LoginViewModel, CredentialsParameter>(dependencyContainer);
             var hasFullAccess = app.NavigateIfUserDoesNotHaveFullAccess();
@@ -61,47 +60,59 @@ namespace Toggl.Droid
                 Finish();
                 return;
             }
+            
+            clearAllViewModelsAndSetupRootViewModel(dependencyContainer.ViewModelCache, dependencyContainer.ViewModelLoader); 
+            
+            var navigationUrl = Intent.Data?.ToString() ?? getTrackUrlFromProcessedText();
+            if (string.IsNullOrEmpty(navigationUrl))
+            {
+                StartActivity(typeof(MainTabBarActivity));
+                Finish();
+                return;
+            }
 
-            var viewModel = AndroidDependencyContainer.Instance.ViewModelLoader
-                .Load<Unit, Unit>(typeof(MainTabBarViewModel), Unit.Default).GetAwaiter().GetResult();
-            dependencyContainer.ViewModelCache.Cache(viewModel);
-
-            StartActivity(typeof(MainTabBarActivity));
-            Finish();
-
-            // TODO: Reimplement this when working on deeplinking
-            //var navigationUrl = Intent.Data?.ToString() ?? getTrackUrlFromProcessedText();
-            //var navigationService = AndroidDependencyContainer.Instance.NavigationService;
-            //if (string.IsNullOrEmpty(navigationUrl))
-            //{
-            //    Finish();
-            //    return;
-            //}
-
-            //navigationService.Navigate(navigationUrl).ContinueWith(_ =>
-            //{
-            //    Finish();
-            //});
+            handleDeepLink(new Uri(navigationUrl), dependencyContainer);
+            return;
         }
 
-        private string getTrackUrlFromProcessedText()
+        private void clearAllViewModelsAndSetupRootViewModel(ViewModelCache viewModelCache, ViewModelLoader viewModelLoader)
         {
-            if (MarshmallowApis.AreNotAvailable)
-                return null;
-
-            var description = Intent.GetStringExtra(ExtraProcessText);
-            if (string.IsNullOrWhiteSpace(description))
-                return null;
-
-            var applicationUrl = ApplicationUrls.Track.Default(description);
-            return applicationUrl;
+            viewModelCache.ClearAll();
+            var viewModel = (MainTabBarViewModel)viewModelLoader.Load<Unit, Unit>(typeof(MainTabBarViewModel), Unit.Default)
+                .GetAwaiter()
+                .GetResult();
+            viewModelCache.Cache(viewModel);  
         }
 
-        private void createApplicationLifecycleObserver(IBackgroundService backgroundService)
+        private void registerApplicationLifecycleObserver(IBackgroundService backgroundService)
         {
-            var appLifecycleObserver = new ApplicationLifecycleObserver(backgroundService);
-            Application.RegisterActivityLifecycleCallbacks(appLifecycleObserver);
-            Application.RegisterComponentCallbacks(appLifecycleObserver);
+            var togglApplication = getTogglApplication();
+            var currentAppLifecycleObserver = togglApplication.ApplicationLifecycleObserver;
+            if (currentAppLifecycleObserver != null)
+            {
+                Application.UnregisterActivityLifecycleCallbacks(currentAppLifecycleObserver);
+                Application.UnregisterComponentCallbacks(currentAppLifecycleObserver);
+            }
+            
+            togglApplication.ApplicationLifecycleObserver = new ApplicationLifecycleObserver(backgroundService);
+            Application.RegisterActivityLifecycleCallbacks(togglApplication.ApplicationLifecycleObserver);
+            Application.RegisterComponentCallbacks(togglApplication.ApplicationLifecycleObserver);
         }
+
+        private void registerTimezoneChangedBroadcastReceiver(ITimeService timeService)
+        {
+            var togglApplication = getTogglApplication();
+            var currentTimezoneChangedBroadcastReceiver = togglApplication.TimezoneChangedBroadcastReceiver;
+            if (currentTimezoneChangedBroadcastReceiver != null)
+            {
+                Application.UnregisterReceiver(currentTimezoneChangedBroadcastReceiver);
+            }
+
+            togglApplication.TimezoneChangedBroadcastReceiver = new TimezoneChangedBroadcastReceiver(timeService);
+            ApplicationContext.RegisterReceiver(togglApplication.TimezoneChangedBroadcastReceiver, new IntentFilter(ActionTimezoneChanged));    
+        }
+
+        private TogglApplication getTogglApplication()
+            => (TogglApplication)Application;
     }
 }
