@@ -411,7 +411,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             var createdTag = await interactorFactory.CreateTag(currentQuery, textFieldInfo.Value.WorkspaceId).Execute();
             var tagSuggestion = new TagSuggestion(createdTag);
-            await SelectSuggestion.ExecuteWithCompletion(tagSuggestion);
+            await selectSuggestion(tagSuggestion);
             hasAnyTags = true;
             toggleTagSuggestions();
         }
