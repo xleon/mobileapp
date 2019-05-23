@@ -55,7 +55,7 @@ namespace Toggl.iOS
             {
                 var viewModel = IosDependencyContainer.Instance.ViewModelLoader
                     .Load<Unit, Unit>(typeof(MainTabBarViewModel), Unit.Default).GetAwaiter().GetResult();
-                Window.RootViewController = ViewControllerLocator.GetViewController(viewModel, true);
+                Window.RootViewController = ViewControllerLocator.GetViewController(viewModel);
             }
 
             UNUserNotificationCenter.Current.Delegate = this;
