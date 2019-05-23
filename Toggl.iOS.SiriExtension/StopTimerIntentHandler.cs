@@ -14,6 +14,7 @@ using SiriExtension.Exceptions;
 using Toggl.iOS.ExtensionKit;
 using Toggl.iOS.ExtensionKit.Analytics;
 using Toggl.iOS.ExtensionKit.Extensions;
+using Toggl.Shared;
 
 namespace SiriExtension
 {
@@ -33,7 +34,7 @@ namespace SiriExtension
             if (togglAPI == null)
             {
                 var userActivity = new NSUserActivity(stopTimerActivityType);
-                userActivity.SetResponseText("Log in to use this shortcut.");
+                userActivity.SetResponseText(Resources.SiriShortcutLoginToUseShortcut);
                 completion(new StopTimerIntentResponse(StopTimerIntentResponseCode.FailureNoApiToken, userActivity));
                 return;
             }
@@ -43,18 +44,18 @@ namespace SiriExtension
                 .Select(checkSyncConflicts(lastUpdated))
                 .Select(getRunningTimeEntry)
                 .Subscribe(
-                runningTE =>
-                {
-                    runningEntry = runningTE;
-                    var userActivity = new NSUserActivity(stopTimerActivityType);
-                    userActivity.SetEntryDescription(runningTE.Description);
-                    completion(new StopTimerIntentResponse(StopTimerIntentResponseCode.Ready, userActivity));
-                },
-                exception =>
-                {
-                    SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
-                    completion(responseFromException(exception));
-                });
+                    runningTE =>
+                    {
+                        runningEntry = runningTE;
+                        var userActivity = new NSUserActivity(stopTimerActivityType);
+                        userActivity.SetEntryDescription(runningTE.Description);
+                        completion(new StopTimerIntentResponse(StopTimerIntentResponseCode.Ready, userActivity));
+                    },
+                    exception =>
+                    {
+                        SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
+                        completion(responseFromException(exception));
+                    });
         }
 
         public override void HandleStopTimer(StopTimerIntent intent, Action<StopTimerIntentResponse> completion)
@@ -106,20 +107,20 @@ namespace SiriExtension
         {
             if (timeSpan.Hours == 0 && timeSpan.Minutes == 0)
             {
-                return $"{timeSpan.Seconds} seconds";
+                return string.Format(Resources.SiriDurationWithSeconds, timeSpan.Seconds);
             }
 
             if (timeSpan.Hours == 0)
             {
-                return $"{timeSpan.Minutes} minutes and {timeSpan.Seconds} seconds";
+                return string.Format(Resources.SiriDurationWithMinutesAndSeconds, timeSpan.Minutes, timeSpan.Seconds);
             }
 
             if (timeSpan.Minutes == 0)
             {
-                return $"{timeSpan.Hours} hours and {timeSpan.Seconds} seconds";
+                return string.Format(Resources.SiriDurationWithHoursAndSeconds, timeSpan.Hours, timeSpan.Seconds);
             }
 
-            return $"{timeSpan.Hours} hours, {timeSpan.Minutes} minutes and {timeSpan.Seconds} seconds";
+            return string.Format(Resources.SiriDurationWithHoursMinutesAndSeconds, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
         }
 
         private ITimeEntry getRunningTimeEntry(IList<ITimeEntry> timeEntries)
@@ -128,14 +129,16 @@ namespace SiriExtension
             {
                 var runningTE = timeEntries.Where(te => te.Duration == null).First();
                 return runningTE;
-            } catch {
+            }
+            catch
+            {
                 throw new NoRunningEntryException();
             }
         }
 
         private IObservable<ITimeEntry> stopTimeEntry(ITimeEntry timeEntry)
         {
-            var duration = (long)(DateTime.Now - timeEntry.Start).TotalSeconds;
+            var duration = (long) (DateTime.Now - timeEntry.Start).TotalSeconds;
             return togglAPI.TimeEntries.Update(
                 TimeEntry.from(timeEntry).with(duration)
             );
@@ -146,16 +149,17 @@ namespace SiriExtension
             var userActivity = new NSUserActivity(stopTimerActivityType);
             if (exception is NoRunningEntryException)
             {
-                userActivity.SetResponseText("There's no entry currently running.");
+                userActivity.SetResponseText(Resources.SiriNoCurrentEntryRunning);
                 return new StopTimerIntentResponse(StopTimerIntentResponseCode.FailureNoTimerRunning, userActivity);
             }
 
-            if (exception is AppOutdatedException) {
-                userActivity.SetResponseText("Open the app to sync your data, then try again.");
+            if (exception is AppOutdatedException)
+            {
+                userActivity.SetResponseText(Resources.SiriShortcutOpenTheAppToSync);
                 return new StopTimerIntentResponse(StopTimerIntentResponseCode.FailureSyncConflict, userActivity);
             }
 
-            userActivity.SetResponseText("Something went wrong, please try again.");
+            userActivity.SetResponseText(Resources.SiriShortcutOpenTheAppToSync);
             return new StopTimerIntentResponse(StopTimerIntentResponseCode.Failure, userActivity);
         }
     }

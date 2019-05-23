@@ -121,7 +121,8 @@ namespace Toggl.iOS.Services
 
                 var billable = new INObject(timeEntry.Billable.ToString(), timeEntry.Billable.ToString());
                 startTimerIntent.Billable = billable;
-                startTimerIntent.SuggestedInvocationPhrase = $"Track {timeEntry.Description}";
+                startTimerIntent.SuggestedInvocationPhrase = string.Format(Resources.SiriTrackEntrySuggestedInvocationPhrase, timeEntry.Description);
+
 
                 // Relevant shortcut for the Siri Watch Face
                 relevantShortcuts.Add(createRelevantShortcut(startTimerIntent));
@@ -196,7 +197,9 @@ namespace Toggl.iOS.Services
                     break;
             }
 
-            intent.SuggestedInvocationPhrase = $"Show {period.ToHumanReadableString().ToLower()}'s time";
+            intent.SuggestedInvocationPhrase = string.Format(
+                Resources.SiriShowReportSuggestedInvocationPhrase,
+                period.ToHumanReadableString().ToLower());
 
             var interaction = new INInteraction(intent, null);
             interaction.DonateInteraction(trackError);

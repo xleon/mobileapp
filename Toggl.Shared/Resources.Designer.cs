@@ -1725,5 +1725,83 @@ namespace Toggl.Shared {
                 return ResourceManager.GetString("SiriClipboardHintLabel", resourceCulture);
             }
         }
+        
+        public static string SiriTrackEntrySuggestedInvocationPhrase {
+            get {
+                return ResourceManager.GetString("SiriTrackEntrySuggestedInvocationPhrase", resourceCulture);
+            }
+        }
+        
+        public static string SiriShowReportSuggestedInvocationPhrase {
+            get {
+                return ResourceManager.GetString("SiriShowReportSuggestedInvocationPhrase", resourceCulture);
+            }
+        }
+        
+        public static string SiriStartTimerConfirmationMessage {
+            get {
+                return ResourceManager.GetString("SiriStartTimerConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        public static string SiriStartTimerWithEmptyDescConfirmationMessage {
+            get {
+                return ResourceManager.GetString("SiriStartTimerWithEmptyDescConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        public static string SiriStopTimerConfirmationMessage {
+            get {
+                return ResourceManager.GetString("SiriStopTimerConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        public static string SiriStopTimerWithEmptyDescConfirmationMessage {
+            get {
+                return ResourceManager.GetString("SiriStopTimerWithEmptyDescConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutLoginToUseShortcut {
+            get {
+                return ResourceManager.GetString("SiriShortcutLoginToUseShortcut", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutOpenTheAppToSync {
+            get {
+                return ResourceManager.GetString("SiriShortcutOpenTheAppToSync", resourceCulture);
+            }
+        }
+        
+        public static string SiriDurationWithSeconds {
+            get {
+                return ResourceManager.GetString("SiriDurationWithSeconds", resourceCulture);
+            }
+        }
+        
+        public static string SiriDurationWithMinutesAndSeconds {
+            get {
+                return ResourceManager.GetString("SiriDurationWithMinutesAndSeconds", resourceCulture);
+            }
+        }
+        
+        public static string SiriDurationWithHoursAndSeconds {
+            get {
+                return ResourceManager.GetString("SiriDurationWithHoursAndSeconds", resourceCulture);
+            }
+        }
+        
+        public static string SiriDurationWithHoursMinutesAndSeconds {
+            get {
+                return ResourceManager.GetString("SiriDurationWithHoursMinutesAndSeconds", resourceCulture);
+            }
+        }
+        
+        public static string SiriNoCurrentEntryRunning {
+            get {
+                return ResourceManager.GetString("SiriNoCurrentEntryRunning", resourceCulture);
+            }
+        }
     }
 }

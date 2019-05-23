@@ -971,4 +971,43 @@ Use them to add keywords to your time entries.</value>
   <data name="SiriClipboardHintLabel" xml:space="preserve">
     <value>When you run this shortcut, the Description will be pasted from Clipboard</value>
   </data>
+  <data name="SiriTrackEntrySuggestedInvocationPhrase" xml:space="preserve">
+    <value>Track {0}</value>
+  </data>
+  <data name="SiriShowReportSuggestedInvocationPhrase" xml:space="preserve">
+    <value>Show {0}'s time</value>
+  </data>
+  <data name="SiriStartTimerConfirmationMessage" xml:space="preserve">
+    <value>Start tracking {0}?</value>
+  </data>
+  <data name="SiriStartTimerWithEmptyDescConfirmationMessage" xml:space="preserve">
+    <value>Start tracking time?</value>
+  </data>
+  <data name="SiriStopTimerConfirmationMessage" xml:space="preserve">
+    <value>Stop tracking {0}?</value>
+  </data>
+  <data name="SiriStopTimerWithEmptyDescConfirmationMessage" xml:space="preserve">
+    <value>Stop tracking time?</value>
+  </data>
+  <data name="SiriShortcutLoginToUseShortcut" xml:space="preserve">
+    <value>Log in to use this shortcut.</value>
+  </data>
+  <data name="SiriShortcutOpenTheAppToSync" xml:space="preserve">
+    <value>Open the app to sync your data, then try again.</value>
+  </data>
+  <data name="SiriDurationWithSeconds" xml:space="preserve">
+    <value>{0} seconds</value>
+  </data>
+  <data name="SiriDurationWithMinutesAndSeconds" xml:space="preserve">
+    <value>{0} minutes and {1} seconds</value>
+  </data>
+  <data name="SiriDurationWithHoursAndSeconds" xml:space="preserve">
+    <value>{0} hours and {1} seconds</value>
+  </data>
+  <data name="SiriDurationWithHoursMinutesAndSeconds" xml:space="preserve">
+    <value>{0} hours and {1} minutes and {2} seconds</value>
+  </data>
+  <data name="SiriNoCurrentEntryRunning" xml:space="preserve">
+    <value>There's no entry currently running.</value>
+  </data>
 </root>

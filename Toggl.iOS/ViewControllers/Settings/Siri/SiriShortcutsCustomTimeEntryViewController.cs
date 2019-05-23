@@ -271,7 +271,7 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
                 Tags = tags,
                 Billable = billable,
                 EntryDescription = ViewModel.Description.Value,
-                SuggestedInvocationPhrase = $"Track {entryDescription}"
+                SuggestedInvocationPhrase = string.Format(Resources.SiriTrackEntrySuggestedInvocationPhrase, entryDescription)
             };
         }
 

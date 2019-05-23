@@ -9,6 +9,7 @@ using Toggl.iOS.ExtensionKit.Analytics;
 using Toggl.iOS.ExtensionKit.Extensions;
 using Toggl.iOS.Intents;
 using Toggl.Networking;
+using Toggl.Shared;
 
 namespace SiriExtension
 {
@@ -27,7 +28,7 @@ namespace SiriExtension
             if (togglAPI == null)
             {
                 var userActivity = new NSUserActivity(startTimerActivityType);
-                userActivity.SetResponseText("Log in to use this shortcut.");
+                userActivity.SetResponseText(Resources.SiriShortcutLoginToUseShortcut);
                 completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.FailureNoApiToken, userActivity));
                 return;
             }
@@ -44,7 +45,7 @@ namespace SiriExtension
                         else
                         {
                             var userActivity = new NSUserActivity(startTimerActivityType);
-                            userActivity.SetResponseText("Open the app to sync your data, then try again.");
+                            userActivity.SetResponseText(Resources.SiriShortcutOpenTheAppToSync);
                             completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.FailureSyncConflict, userActivity));
                         }
                     }
@@ -65,7 +66,7 @@ namespace SiriExtension
             {
                 SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
                 var userActivity = new NSUserActivity(startTimerActivityType);
-                userActivity.SetResponseText("Something went wrong, please try again.");
+                userActivity.SetResponseText(Resources.SomethingWentWrongTryAgain);
                 completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.Failure, userActivity));
             });
         }
