@@ -204,7 +204,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .AsObservable()
                 .Do(setLoadingState)
                 .SelectMany( _ =>
-                    startDate == default(DateTimeOffset) || endDate == default
+                    startDate == default(DateTimeOffset) || endDate == default(DateTimeOffset)
                         ? Observable.Empty<ProjectSummaryReport>()
                         : interactorFactory.GetProjectSummary(workspaceId, startDate, endDate).Execute())
                 .Catch(Observable.Return<ProjectSummaryReport>(null))
