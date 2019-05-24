@@ -28,6 +28,11 @@ namespace Toggl.iOS.Services
             Crashes.TrackError(exception);
         }
 
+        public override void Track(Exception exception, IDictionary<string, string> properties)
+        {
+            Crashes.TrackError(exception, properties);
+        }
+
         public override void Track(Exception exception, string message)
         {
             var dict = new Dictionary<string, string>

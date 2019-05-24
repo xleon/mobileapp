@@ -20,8 +20,6 @@ namespace Toggl.iOS.Views.Calendar
 
         private UILongPressGestureRecognizer longPressGestureRecognizer;
 
-        private NSIndexPath itemIndexPath;
-
         private CGPoint firstPoint;
 
         private TimeSpan? previousDuration;
@@ -76,7 +74,6 @@ namespace Toggl.iOS.Views.Calendar
         private void onLongPress(UILongPressGestureRecognizer gesture)
         {
             var point = gesture.LocationInView(CollectionView);
-            var isEditing = dataSource.IsEditing && itemIndexPath != null;
 
             switch (gesture.State)
             {
@@ -84,26 +81,20 @@ namespace Toggl.iOS.Views.Calendar
                     longPressBegan(point);
                     break;
 
-                case UIGestureRecognizerState.Changed when isEditing:
+                case UIGestureRecognizerState.Changed when dataSource.IsEditing:
                     longPressChanged(point);
                     break;
 
-                case UIGestureRecognizerState.Ended when isEditing:
+                case UIGestureRecognizerState.Ended when dataSource.IsEditing:
                     longPressEnded(point);
                     break;
 
                 case UIGestureRecognizerState.Failed:
-                    itemIndexPath = null;
                     break;
 
                 case UIGestureRecognizerState.Cancelled:
-                    if (itemIndexPath != null)
-                    {
-                        dataSource.RemoveItemView(itemIndexPath);
-                        dataSource.StopEditing();
-                        itemIndexPath = null;
-                    }
-
+                    dataSource.RemoveItemView();
+                    dataSource.StopEditing();
                     break;
             }
         }
@@ -116,7 +107,7 @@ namespace Toggl.iOS.Views.Calendar
             firstPoint = point;
             LastPoint = point;
             var startTime = Layout.DateAtPoint(firstPoint).RoundDownToClosestQuarter();
-            itemIndexPath = dataSource.InsertItemView(startTime, defaultDuration);
+            dataSource.InsertItemView(startTime, defaultDuration);
             impactFeedback.ImpactOccurred();
             selectionFeedback.Prepare();
             previousDuration = defaultDuration;
@@ -154,7 +145,7 @@ namespace Toggl.iOS.Views.Calendar
 
             var duration = endTime - startTime;
 
-            dataSource.UpdateItemView(itemIndexPath, startTime, duration);
+            dataSource.UpdateItemView(startTime, duration);
 
             if (duration != previousDuration)
             {
@@ -186,7 +177,6 @@ namespace Toggl.iOS.Views.Calendar
             createFromSpanSuject.OnNext((startTime, duration));
 
             dataSource.StopEditing();
-            itemIndexPath = null;
             StopAutoScroll();
 
             impactFeedback.ImpactOccurred();

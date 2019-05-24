@@ -6,6 +6,7 @@ using Toggl.iOS.Extensions;
 using System.Reactive;
 using Toggl.Core;
 using Toggl.iOS.Extensions.Reactive;
+using Toggl.Shared;
 
 namespace Toggl.iOS
 {

@@ -33,7 +33,7 @@ using static Android.Content.Context;
 using static Toggl.Core.Sync.SyncProgress;
 using static Toggl.Droid.Extensions.CircularRevealAnimation.AnimationType;
 using static Toggl.Droid.Extensions.FloatingActionButtonExtensions;
-using FoundationResources = Toggl.Core.Resources;
+using FoundationResources = Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Fragments
 {

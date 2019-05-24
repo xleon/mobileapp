@@ -153,7 +153,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             CurrentDate = timeService.CurrentDateTimeObservable
                 .Select(dateTime => dateTime.ToLocalTime().Date)
                 .DistinctUntilChanged()
-                .CombineLatest(dateFormat, (date, format) => DateTimeToFormattedString.Convert(date, format.Long))
+                .CombineLatest(dateFormat, (date, format) => DateTimeToFormattedString.Convert(date, format.Long, analyticsService))
                 .AsDriver(schedulerProvider);
 
             GetStarted = rxActionFactory.FromAsync(getStarted);

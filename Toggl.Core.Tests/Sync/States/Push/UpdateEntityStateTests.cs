@@ -16,6 +16,7 @@ using Toggl.Core.Tests.Sync.States.Push.BaseStates;
 using Toggl.Storage;
 using Toggl.Networking.ApiClients;
 using Toggl.Networking.Exceptions;
+using Toggl.Shared;
 using Xunit;
 using static Toggl.Core.Sync.PushSyncOperation;
 

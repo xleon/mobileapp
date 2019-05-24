@@ -2,6 +2,7 @@ using System;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
+using Toggl.Shared;
 
 namespace Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts
 {

@@ -12,6 +12,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Views.Client;
 using Toggl.iOS.ViewSources;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 

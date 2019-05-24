@@ -17,7 +17,7 @@ using Toggl.Core.Analytics;
 using Toggl.Core.UI.Transformations;
 using Toggl.Droid.ViewHolders;
 using TimeEntryExtensions = Toggl.Droid.Extensions.TimeEntryExtensions;
-using TextResources = Toggl.Core.Resources;
+using TextResources = Toggl.Shared.Resources;
 using TagsAdapter = Toggl.Droid.Adapters.SimpleAdapter<string>;
 using static Toggl.Droid.Resource.String;
 
@@ -180,13 +180,13 @@ namespace Toggl.Droid.Activities
 
             ViewModel.StartTime
                 .WithLatestFrom(ViewModel.Preferences,
-                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.TimeOfDayFormat.Format))
+                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.TimeOfDayFormat.Format, AndroidDependencyContainer.Instance.AnalyticsService))
                 .Subscribe(startTimeTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
             ViewModel.StartTime
                 .WithLatestFrom(ViewModel.Preferences,
-                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.DateFormat.Short))
+                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.DateFormat.Short, AndroidDependencyContainer.Instance.AnalyticsService))
                 .Subscribe(startDateTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
@@ -201,13 +201,13 @@ namespace Toggl.Droid.Activities
 
             stopTimeObservable
                 .WithLatestFrom(ViewModel.Preferences,
-                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.TimeOfDayFormat.Format))
+                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.TimeOfDayFormat.Format, AndroidDependencyContainer.Instance.AnalyticsService))
                 .Subscribe(stopTimeTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
             stopTimeObservable
                 .WithLatestFrom(ViewModel.Preferences,
-                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.DateFormat.Short))
+                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.DateFormat.Short, AndroidDependencyContainer.Instance.AnalyticsService))
                 .Subscribe(stopDateTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 

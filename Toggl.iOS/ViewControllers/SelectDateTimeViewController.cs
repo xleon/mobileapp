@@ -6,6 +6,7 @@ using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Presentation.Attributes;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 

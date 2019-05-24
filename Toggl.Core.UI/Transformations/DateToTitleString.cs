@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Toggl.Shared;
 
 namespace Toggl.Core.UI.Transformations
 {
