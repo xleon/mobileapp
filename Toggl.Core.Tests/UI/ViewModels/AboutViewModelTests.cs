@@ -7,6 +7,7 @@ using Toggl.Core.UI.ViewModels;
 using Xunit;
 using System.Reactive.Linq;
 using Toggl.Core.Tests.Generators;
+using Toggl.Shared;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {

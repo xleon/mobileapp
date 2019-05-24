@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using Toggl.Core.Serialization;
+using Toggl.Shared;
 
 namespace Toggl.Core.Interactors.Timezones
 {

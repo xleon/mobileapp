@@ -32,8 +32,8 @@ namespace Toggl.Droid
             base.OnLowMemory();
 
             AndroidDependencyContainer.Instance
-                .AnalyticsService
-                .ReceivedLowMemoryWarning
+                ?.AnalyticsService
+                ?.ReceivedLowMemoryWarning
                 .Track(Platform.Giskard);
         }
     }

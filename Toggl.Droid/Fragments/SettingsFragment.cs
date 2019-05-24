@@ -16,7 +16,7 @@ using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Presentation;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
-using FoundationResources = Toggl.Core.Resources;
+using FoundationResources = Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Fragments
 {

@@ -13,6 +13,8 @@ using Toggl.Shared.Extensions;
 using UIKit;
 using Toggl.Core;
 using Toggl.iOS.Presentation.Attributes;
+using Toggl.Shared;
+using Math = System.Math;
 
 namespace Toggl.iOS.ViewControllers
 {

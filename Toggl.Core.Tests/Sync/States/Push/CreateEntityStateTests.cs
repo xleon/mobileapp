@@ -13,8 +13,10 @@ using Toggl.Core.Sync.States.Push;
 using Toggl.Core.Tests.Sync.States.Push.BaseStates;
 using Toggl.Storage;
 using Toggl.Networking.ApiClients;
+using Toggl.Shared;
 using Xunit;
 using static Toggl.Core.Sync.PushSyncOperation;
+using Math = System.Math;
 
 namespace Toggl.Core.Tests.Sync.States.Push
 {

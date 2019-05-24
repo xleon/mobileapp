@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CoreAnimation;
@@ -6,6 +7,7 @@ using CoreGraphics;
 using Foundation;
 using MvvmCross.Base;
 using Toggl.Core.Analytics;
+using Toggl.Core.Exceptions;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Views.EditDuration.Shapes;
@@ -335,27 +337,48 @@ namespace Toggl.iOS.Views.EditDuration
             if (updateType == WheelUpdateType.EditStartTime
                 || updateType == WheelUpdateType.EditBothAtOnce)
             {
-                var nextStartTime = (StartTime + diff).RoundToClosestMinute();
+                var nextStartTime = getNewDateTimeOffset(StartTime, diff).RoundToClosestMinute();
                 giveFeedback = nextStartTime != StartTime;
                 StartTime = nextStartTime;
             }
 
             if (updateType == WheelUpdateType.EditEndTime)
             {
-                var nextEndTime = (EndTime + diff).RoundToClosestMinute();
+                var nextEndTime = getNewDateTimeOffset(EndTime, diff).RoundToClosestMinute();
                 giveFeedback = nextEndTime != EndTime;
                 EndTime = nextEndTime;
             }
 
             if (updateType == WheelUpdateType.EditBothAtOnce)
             {
-                EndTime = StartTime + duration;
+                EndTime = getNewDateTimeOffset(StartTime, duration);
             }
 
             if (giveFeedback)
             {
                 feedbackGenerator.SelectionChanged();
                 feedbackGenerator.Prepare();
+            }
+        }
+
+        private DateTimeOffset getNewDateTimeOffset(
+            DateTimeOffset currentDateTimeOffset,
+            TimeSpan difference)
+        {
+            try
+            {
+                return currentDateTimeOffset + difference;
+            }
+            catch (ArgumentOutOfRangeException argumentOutOfRangeException)
+            {
+                var exceptionProperties = new Dictionary<string, string>
+                {
+                    { "DateTimeOffset", currentDateTimeOffset.ToString() },
+                    { "TimeSpan", difference.ToString() }
+                };
+                var exception = new UnrepresentableDateException("Unrepresentable DateTimeOffset encountered in WheelForegroundView", argumentOutOfRangeException);
+                IosDependencyContainer.Instance.AnalyticsService.Track(exception, exceptionProperties);
+                return currentDateTimeOffset;
             }
         }
 
