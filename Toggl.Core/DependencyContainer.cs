@@ -180,7 +180,7 @@ namespace Toggl.Core
             => new BackgroundService(TimeService, AnalyticsService);
 
         protected virtual IAutomaticSyncingService CreateAutomaticSyncingService()
-            => new AutomaticSyncingService(BackgroundService, TimeService);
+            => new AutomaticSyncingService(BackgroundService, TimeService, LastTimeUsageStorage);
 
         protected virtual ISyncErrorHandlingService CreateSyncErrorHandlingService()
             => new SyncErrorHandlingService(ErrorHandlingService);

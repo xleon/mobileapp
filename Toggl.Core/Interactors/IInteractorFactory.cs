@@ -105,6 +105,8 @@ namespace Toggl.Core.Interactors
 
         IInteractor<IObservable<SyncOutcome>> RunBackgroundSync();
 
+        IInteractor<IObservable<bool>> ContainsPlaceholders();
+
         #endregion
 
         #region Autocomplete Suggestions
