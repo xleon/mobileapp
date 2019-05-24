@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -22,7 +21,7 @@ namespace Toggl.Core.Tests.Sync.Scenarios.SyncLight
                     workspaces: new[] { initialServerState.DefaultWorkspace, new MockWorkspace { Id = -1, Name = "Workspace" } },
                     clients: new[] { new MockClient { Id = -2, Name = "Client", WorkspaceId = -1 } },
                     projects: new[] { new MockProject { Id = -3, Name = "Project", Color = "#06AAF5", Active = true, ClientId = -2, WorkspaceId = -1 } },
-                    tasks: new[] { new MockTask { Id = -4, Name = "Task", ProjectId = -3, WorkspaceId = -1 } },
+                    tasks: new[] { new MockTask { Id = -4, Name = "Task", ProjectId = -3, WorkspaceId = -1, Active = true } },
                     tags: new[]
                     {
                         new MockTag { Id = -5, Name = "Tag A", WorkspaceId = -1 },
@@ -70,7 +69,7 @@ namespace Toggl.Core.Tests.Sync.Scenarios.SyncLight
             finalDatabaseState.Tasks.Should().HaveCount(1);
             finalDatabaseState.Tasks.ContainsNoPlaceholders();
 
-            finalDatabaseState.Tags.Should().HaveCount(1);
+            finalDatabaseState.Tags.Should().HaveCount(3);
             finalDatabaseState.Tags.ContainsNoPlaceholders();
 
             finalDatabaseState.TimeEntries

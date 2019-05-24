@@ -14,22 +14,20 @@ namespace Toggl.Core.Tests.Sync.States.PullTimeEntries
     {
         private readonly ILastTimeUsageStorage lastTimeUsageStorage = Substitute.For<ILastTimeUsageStorage>();
         private readonly ITimeService timeService = Substitute.For<ITimeService>();
-        private readonly IInteractorFactory interactorFactory = Substitute.For<IInteractorFactory>();
+        private readonly IInteractor<IObservable<bool>> interactor = Substitute.For<IInteractor<IObservable<bool>>>();
 
         private readonly DetectPlaceholdersWereCreatedState state;
 
         public DetectPlaceholdersWereCreatedStateTests()
         {
-            state = new DetectPlaceholdersWereCreatedState(lastTimeUsageStorage, timeService, interactorFactory);
+            state = new DetectPlaceholdersWereCreatedState(lastTimeUsageStorage, timeService, () => interactor);
         }
 
         [Fact]
         public async Task DoesNotMarkPlaceholderCreationWhenNoPlaceholdersWereCreated()
         {
             var placeholdersExist = Observable.Return(false);
-            var interactor = Substitute.For<IInteractor<IObservable<bool>>>();
             interactor.Execute().Returns(placeholdersExist);
-            interactorFactory.ContainsPlaceholders().Returns(interactor);
 
             var transition = await state.Start();
 
@@ -41,11 +39,9 @@ namespace Toggl.Core.Tests.Sync.States.PullTimeEntries
         public async Task MarksPlaceholderCreationWhenNoPlaceholdersWereCreated()
         {
             var placeholdersExist = Observable.Return(true);
-            var interactor = Substitute.For<IInteractor<IObservable<bool>>>();
             var now = new DateTimeOffset(2019, 5, 21, 19, 20, 00, TimeSpan.Zero);
             timeService.CurrentDateTime.Returns(now);
             interactor.Execute().Returns(placeholdersExist);
-            interactorFactory.ContainsPlaceholders().Returns(interactor);
 
             var transition = await state.Start();
 
