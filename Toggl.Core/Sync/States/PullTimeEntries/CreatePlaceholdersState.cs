@@ -13,7 +13,7 @@ using static Toggl.Shared.Extensions.CommonFunctions;
 
 namespace Toggl.Core.Sync.States.PullTimeEntries
 {
-    public sealed class CreatePlaceholdersState<TThreadSafe, TDatabase>
+    public sealed class CreatePlaceholdersState<TThreadSafe, TDatabase> : ISyncState<IFetchObservables>
         where TDatabase : IDatabaseModel, IIdentifiable
         where TThreadSafe : TDatabase, IThreadSafeModel
     {

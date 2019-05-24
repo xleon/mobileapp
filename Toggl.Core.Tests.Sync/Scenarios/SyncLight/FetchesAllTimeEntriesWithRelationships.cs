@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using FsCheck;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.Sync.Extensions;
@@ -27,7 +25,7 @@ namespace Toggl.Core.Tests.Sync.Scenarios.SyncLight
                     },
                     tasks: new[]
                     {
-                        new MockTask { Id = -2, Name = "Task", WorkspaceId = initialServerState.DefaultWorkspace.Id, ProjectId = -1 }
+                        new MockTask { Id = -2, Name = "Task", WorkspaceId = initialServerState.DefaultWorkspace.Id, ProjectId = -1, Active = true }
                     },
                     tags: new[]
                     {

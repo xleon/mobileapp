@@ -10,26 +10,26 @@ namespace Toggl.Core.Sync.States.PullTimeEntries
     {
         private readonly ILastTimeUsageStorage lastTimeUsageStorage;
         private readonly ITimeService timeService;
-        private readonly IInteractorFactory interactorFactory;
+        private readonly Func<IInteractor<IObservable<bool>>> containsPlaceholdersFactory;
 
         public StateResult Done { get; } = new StateResult();
 
         public DetectPlaceholdersWereCreatedState(
             ILastTimeUsageStorage lastTimeUsageStorage,
             ITimeService timeService,
-            IInteractorFactory interactorFactory)
+            Func<IInteractor<IObservable<bool>>> containsPlaceholdersFactory)
         {
             Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
+            Ensure.Argument.IsNotNull(containsPlaceholdersFactory, nameof(containsPlaceholdersFactory));
 
             this.lastTimeUsageStorage = lastTimeUsageStorage;
             this.timeService = timeService;
-            this.interactorFactory = interactorFactory;
+            this.containsPlaceholdersFactory = containsPlaceholdersFactory;
         }
 
         public IObservable<ITransition> Start()
-            => interactorFactory.ContainsPlaceholders()
+            => containsPlaceholdersFactory()
                 .Execute()
                 .Select(containsPlaceholders =>
                 {
