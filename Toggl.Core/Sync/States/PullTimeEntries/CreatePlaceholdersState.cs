@@ -20,7 +20,7 @@ namespace Toggl.Core.Sync.States.PullTimeEntries
         private readonly IDataSource<TThreadSafe, TDatabase> dataSource;
         private readonly IAnalyticsEvent<int> analyticsEvent;
         private readonly Func<ITimeEntry, long[]> dependencyIdsSelector;
-        private readonly Func<long, ITimeEntry, TThreadSafe> buildDependencyPlaceholder;
+        private readonly Func<long, long, TThreadSafe> buildDependencyPlaceholder;
 
         public StateResult<IFetchObservables> Done { get; } = new StateResult<IFetchObservables>();
 
@@ -28,7 +28,7 @@ namespace Toggl.Core.Sync.States.PullTimeEntries
             IDataSource<TThreadSafe, TDatabase> dataSource,
             IAnalyticsEvent<int> analyticsEvent,
             Func<ITimeEntry, long[]> dependencyIdsSelector,
-            Func<long, ITimeEntry, TThreadSafe> buildDependencyPlaceholder)
+            Func<long, long, TThreadSafe> buildDependencyPlaceholder)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(analyticsEvent, nameof(analyticsEvent));
@@ -48,9 +48,9 @@ namespace Toggl.Core.Sync.States.PullTimeEntries
                 .WhereAsync(hasUnknownDependency)
                 .SelectMany(timeEntry =>
                     dependencyIdsSelector(timeEntry)
-                        .Select(id => (timeEntry: timeEntry, dependencyId: id)))
+                        .Select(id => (workspaceId: timeEntry.WorkspaceId, dependencyId: id)))
                 .Distinct(tuple => tuple.dependencyId)
-                .Select(tuple => buildDependencyPlaceholder(tuple.dependencyId, tuple.timeEntry))
+                .Select(tuple => buildDependencyPlaceholder(tuple.dependencyId, tuple.workspaceId))
                 .SelectMany(dataSource.Create)
                 .Count()
                 .Track(analyticsEvent)

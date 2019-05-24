@@ -9,9 +9,7 @@ namespace Toggl.Core.Tests
         [Fact]
         public void TheCreatedProjectPlaceholderIsNotActive()
         {
-            var timeEntry = new MockTimeEntry { WorkspaceId = 456 };
-
-            var project = Models.Project.CreatePlaceholder(123, timeEntry);
+            var project = Models.Project.CreatePlaceholder(123, 456);
 
             project.Id.Should().Be(123);
             project.WorkspaceId.Should().Be(456);

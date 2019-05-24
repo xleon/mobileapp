@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.Storage;
 using static Toggl.Core.Helper.Constants;
@@ -143,11 +144,11 @@ namespace Toggl.Core.Models
             }
         }
 
-        internal static Project CreatePlaceholder(long projectId, ITimeEntry timeEntry)
+        internal static Project CreatePlaceholder(long projectId, long workspaceId)
         {
             return Builder.Create(projectId)
-                .SetName(Resources.InaccessibleProject)
-                .SetWorkspaceId(timeEntry.WorkspaceId)
+                .SetName(Resources.ProjectPlaceholder)
+                .SetWorkspaceId(workspaceId)
                 .SetColor(Helper.Colors.NoProject)
                 .SetActive(false)
                 .SetAt(default(DateTimeOffset))
