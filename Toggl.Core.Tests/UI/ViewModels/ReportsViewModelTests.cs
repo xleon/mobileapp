@@ -400,7 +400,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.GroupedSegmentsObservable.Subscribe(groupedSegmentsObservable);
 
                 TestScheduler.Start();
-                
+
                 await Initialize();
 
                 var actualSegments = segmentsObservable.Values().Last();
@@ -707,14 +707,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public sealed class TheViewAppearedMethod : ReportsViewModelTest
         {
-            [Theory, LogIfTooSlow]
-            [InlineData(1)]
-            [InlineData(2)]
-            [InlineData(3)]
-            [InlineData(5)]
-            [InlineData(8)]
-            [InlineData(13)]
-            public async Task ShouldTriggerReloadForEveryAppearance(int numberOfAppearances)
+            [Fact, LogIfTooSlow]
+            public async Task ShouldReloadOnAppearance()
             {
                 TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
                 Interactor.Execute()
@@ -722,14 +716,41 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await ViewModel.Initialize();
                 ViewModel.ViewAppeared(); // First call is skipped
 
-                for (int i = 0; i < numberOfAppearances; ++i)
-                {
-                    ViewModel.ViewAppeared();
-                }
+                ViewModel.ViewAppeared();
                 TestScheduler.Start();
 
                 InteractorFactory
-                    .Received(numberOfAppearances)
+                    .Received()
+                    .GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>());
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData(1, 5)]
+            [InlineData(2, 5)]
+            [InlineData(3, 5)]
+            [InlineData(5, 10)]
+            [InlineData(8, 10)]
+            [InlineData(13, 15)]
+            public async Task ShouldRateLimitReloadsOnAppearance(int numberOfAppearances, int numberOfMinutes)
+            {
+                TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
+                Interactor.Execute()
+                    .ReturnsForAnyArgs(Observable.Empty<ProjectSummaryReport>(SchedulerProvider.TestScheduler));
+                await ViewModel.Initialize();
+                ViewModel.ViewAppeared(); // First call is skipped
+                var interval = numberOfMinutes / numberOfAppearances;
+
+                for (int i = 0; i < numberOfAppearances; ++i)
+                {
+                    ViewModel.ViewAppeared();
+                    TestScheduler.AdvanceBy(TimeSpan.FromMinutes(interval).Ticks);
+                }
+
+                var numberOfReloads = numberOfMinutes / 5;
+
+                TestScheduler.Start();
+                InteractorFactory
+                    .Received(numberOfReloads)
                     .GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>());
             }
         }
