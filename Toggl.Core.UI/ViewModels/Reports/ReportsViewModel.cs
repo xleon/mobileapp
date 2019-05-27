@@ -214,11 +214,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             viewAppearedSubject
                 .AsObservable()
-                .Throttle(new TimeSpan(0, 5, 0))
-                .Subscribe((_ =>
-                {
-                    reportSubject.OnNext(Unit.Default);
-                }))
+                .Throttle(TimeSpan.FromMinutes(5))
+                .Subscribe(_ => reloadReportsWhenViewAppears())
                 .DisposedBy(disposeBag);
 
             reportSubject
@@ -309,6 +306,11 @@ namespace Toggl.Core.UI.ViewModels.Reports
             isLoading.OnNext(false);
 
             trackReportsEvent(true);
+        }
+
+        private void reloadReportsWhenViewAppears()
+        {
+            reportSubject.OnNext(Unit.Default);
         }
 
         private void onError(Exception ex)
