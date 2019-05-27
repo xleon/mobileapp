@@ -48,7 +48,7 @@ Deeplinking is used from inside the app for:
 
 ## ReactiveViewController
 
-`ReactiveViewController`, ahd its twin `ReactiveTableViewController`, are our implementation of `IView`. All our view controllers are subclasses of these two base classes (with a few exceptions).
+`ReactiveViewController`, and its twin `ReactiveTableViewController`, are our implementation of `IView`. All our view controllers are subclasses of these two base classes (with a few exceptions).
 The `ReactiveViewController` base class is responsible for binding their own lifecycle with the view model lifecycle.
 
 The `ViewModel` property in `ReactiveViewController` is not read-only, but should be used like that (there's an exception that doesn't allow us to have an actual read-only property).
