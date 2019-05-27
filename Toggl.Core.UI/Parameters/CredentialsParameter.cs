@@ -6,6 +6,12 @@ namespace Toggl.Core.UI.Parameters
     {
         public static CredentialsParameter Empty { get; } = new CredentialsParameter { Email = Email.Empty, Password = Password.Empty };
 
+        public CredentialsParameter()
+        {
+            Email = Email.Empty;
+            Password = Password.Empty;
+        }
+
         public Email Email { get; set; }
 
         public Password Password { get; set; }
