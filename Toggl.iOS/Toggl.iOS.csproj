@@ -128,6 +128,9 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
+    <Reference Include="Xamarin.Firebase.Iid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Xamarin.Firebase.Iid.60.1142.1\lib\MonoAndroid80\Xamarin.Firebase.Iid.dll</HintPath>
+    </Reference>
     <Reference Include="Xamarin.iOS" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.IO.Compression" />
@@ -142,7 +145,7 @@
       <HintPath>..\packages\Xamarin.Google.iOS.Core.3.1.0\lib\Xamarin.iOS10\Google.Core.dll</HintPath>
     </Reference>
     <Reference Include="Google.SignIn">
-      <HintPath>..\packages\Xamarin.Google.iOS.SignIn.4.1.0\lib\Xamarin.iOS10\Google.SignIn.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Google.iOS.SignIn.4.4.0\lib\Xamarin.iOS10\Google.SignIn.dll</HintPath>
     </Reference>
     <Reference Include="DotNetCross.Memory.Unsafe">
       <HintPath>..\packages\DotNetCross.Memory.Unsafe.0.2.3.4\lib\netstandard1.0\DotNetCross.Memory.Unsafe.dll</HintPath>
@@ -177,20 +180,8 @@
     <Reference Include="Realm.Sync">
       <HintPath>..\packages\Realm.3.0.0\lib\netstandard1.4\Realm.Sync.dll</HintPath>
     </Reference>
-    <Reference Include="Firebase.Core">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.Core.4.0.13.1\lib\Xamarin.iOS10\Firebase.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Firebase.InstanceID">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.InstanceID.2.0.8\lib\Xamarin.iOS10\Firebase.InstanceID.dll</HintPath>
-    </Reference>
-    <Reference Include="Firebase.Analytics">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.Analytics.4.0.5.1\lib\Xamarin.iOS10\Firebase.Analytics.dll</HintPath>
-    </Reference>
     <Reference Include="Google.Core">
       <HintPath>..\packages\Xamarin.Google.iOS.Core.3.1.0.1\lib\Xamarin.iOS10\Google.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.SignIn">
-      <HintPath>..\packages\Xamarin.Google.iOS.SignIn.4.1.1.1\lib\Xamarin.iOS10\Google.SignIn.dll</HintPath>
     </Reference>
     <Reference Include="Calabash">
       <HintPath>..\packages\Xamarin.TestCloud.Agent.0.21.5\lib\Xamarin.iOS\Calabash.dll</HintPath>
@@ -199,22 +190,22 @@
       <HintPath>..\packages\System.Reactive.Core.4.0.0\lib\netstandard2.0\System.Reactive.Core.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.Core">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.Core.4.0.13.1\lib\Xamarin.iOS10\Firebase.Core.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.Core.5.2.0\lib\Xamarin.iOS10\Firebase.Core.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.InstanceID">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.InstanceID.2.0.8\lib\Xamarin.iOS10\Firebase.InstanceID.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.InstanceID.3.4.0\lib\Xamarin.iOS10\Firebase.InstanceID.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.Analytics">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.Analytics.4.0.5.1\lib\Xamarin.iOS10\Firebase.Analytics.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.Analytics.5.5.0\lib\Xamarin.iOS10\Firebase.Analytics.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.RemoteConfig">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.RemoteConfig.2.0.3.2\lib\Xamarin.iOS10\Firebase.RemoteConfig.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.RemoteConfig.3.0.1\lib\Xamarin.iOS10\Firebase.RemoteConfig.dll</HintPath>
     </Reference>
     <Reference Include="System.Collections.Immutable">
       <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.PerformanceMonitoring">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.1.1.0.1\lib\Xamarin.iOS10\Firebase.PerformanceMonitoring.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.2.1.2\lib\Xamarin.iOS10\Firebase.PerformanceMonitoring.dll</HintPath>
     </Reference>
     <Reference Include="MvvmCross">
       <HintPath>..\packages\MvvmCross.6.1.2\lib\xamarinios10\MvvmCross.dll</HintPath>
@@ -230,6 +221,12 @@
     </Reference>
     <Reference Include="AdjustSdk.Xamarin.iOS">
       <HintPath>..\packages\AdjustSdk.Xamarin.iOS.4.17.0\lib\xamarinios10\AdjustSdk.Xamarin.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.CloudMessaging">
+      <HintPath>..\packages\Xamarin.Firebase.iOS.CloudMessaging.3.1.2\lib\Xamarin.iOS10\Firebase.CloudMessaging.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.ABTesting">
+      <HintPath>..\packages\Xamarin.Firebase.iOS.ABTesting.2.0.0.2\lib\Xamarin.iOS10\Firebase.ABTesting.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -1905,15 +1902,15 @@
     <BundleResource Include="GoogleService-Info.plist" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.RemoteConfig.2.0.3.2\build\Xamarin.Firebase.iOS.RemoteConfig.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.RemoteConfig.2.0.3.2\build\Xamarin.Firebase.iOS.RemoteConfig.targets')" />
   <Import Project="..\packages\Fody.2.4.6\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.6\build\Fody.targets')" />
   <Import Project="..\packages\Realm.Database.3.0.0\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.3.0.0\build\Realm.Database.targets')" />
   <Import Project="..\packages\Realm.3.0.0\build\Realm.targets" Condition="Exists('..\packages\Realm.3.0.0\build\Realm.targets')" />
   <Import Project="..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.targets" Condition="Exists('..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.Core.4.0.13.1\build\Xamarin.Firebase.iOS.Core.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.Core.4.0.13.1\build\Xamarin.Firebase.iOS.Core.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.InstanceID.2.0.8\build\Xamarin.Firebase.iOS.InstanceID.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.InstanceID.2.0.8\build\Xamarin.Firebase.iOS.InstanceID.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.Analytics.4.0.5.1\build\Xamarin.Firebase.iOS.Analytics.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.Analytics.4.0.5.1\build\Xamarin.Firebase.iOS.Analytics.targets')" />
   <Import Project="..\packages\Xamarin.Google.iOS.Core.3.1.0.1\build\Xamarin.Google.iOS.Core.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.Core.3.1.0.1\build\Xamarin.Google.iOS.Core.targets')" />
-  <Import Project="..\packages\Xamarin.Google.iOS.SignIn.4.1.1.1\build\Xamarin.Google.iOS.SignIn.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.SignIn.4.1.1.1\build\Xamarin.Google.iOS.SignIn.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.1.1.0.1\build\Xamarin.Firebase.iOS.PerformanceMonitoring.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.1.1.0.1\build\Xamarin.Firebase.iOS.PerformanceMonitoring.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.RemoteConfig.3.0.1\build\Xamarin.Firebase.iOS.RemoteConfig.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.RemoteConfig.3.0.1\build\Xamarin.Firebase.iOS.RemoteConfig.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.2.1.2\build\Xamarin.Firebase.iOS.PerformanceMonitoring.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.2.1.2\build\Xamarin.Firebase.iOS.PerformanceMonitoring.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.InstanceID.3.4.0\build\Xamarin.Firebase.iOS.InstanceID.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.InstanceID.3.4.0\build\Xamarin.Firebase.iOS.InstanceID.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.Analytics.5.5.0\build\Xamarin.Firebase.iOS.Analytics.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.Analytics.5.5.0\build\Xamarin.Firebase.iOS.Analytics.targets')" />
+  <Import Project="..\packages\Xamarin.Google.iOS.SignIn.4.4.0\build\Xamarin.Google.iOS.SignIn.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.SignIn.4.4.0\build\Xamarin.Google.iOS.SignIn.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.ABTesting.2.0.0.2\build\Xamarin.Firebase.iOS.ABTesting.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.ABTesting.2.0.0.2\build\Xamarin.Firebase.iOS.ABTesting.targets')" />
 </Project>
