@@ -223,6 +223,9 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
         {
             var intent = constructStartTimerIntent(ViewModel.PasteFromClipboard.Value);
 
+            var interaction = new INInteraction(intent, null);
+            interaction.DonateInteraction(null);
+
             var vc = new INUIAddVoiceShortcutViewController(new INShortcut(intent));
             vc.ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
             vc.Delegate = this;

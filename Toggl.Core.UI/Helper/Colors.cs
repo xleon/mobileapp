@@ -19,6 +19,7 @@ namespace Toggl.Core.UI.Helper
         private static readonly Color brownishGrey = new Color(94, 91, 91);
         private static readonly Color whiteTwo = new Color(244, 244, 244);
         private static readonly Color paleGreyTwo = nearlyWhite;
+        private static readonly Color mediumPink = new Color(234, 70, 141);
 
         public static readonly Color Black = new Color(0, 0, 0);
         public static readonly Color White = new Color(255, 255, 255);
@@ -30,6 +31,10 @@ namespace Toggl.Core.UI.Helper
             public static readonly Color InvocationPhrase = brownishGrey;
             public static readonly Color HeaderLabel = silver;
             public static readonly Color HeaderBackground = paleGreyTwo;
+
+            public static readonly Color WorkflowPink = mediumPink;
+            public static readonly Color WorkflowPurple = easterPurple;
+            public static readonly Color WorkflowBlue = azure;
         }
 
         public static class Onboarding

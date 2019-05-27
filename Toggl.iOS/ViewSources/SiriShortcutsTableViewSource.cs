@@ -39,6 +39,7 @@ namespace Toggl.iOS.ViewSources
         {
             var header = (SiriShortcutTableViewHeader)tableView.DequeueReusableHeaderFooterView(SiriShortcutTableViewHeader.Identifier);
             header.Item = HeaderOf(section);
+            header.TopSeparator.Hidden = section == 0;
             return header;
         }
 

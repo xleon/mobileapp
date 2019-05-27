@@ -115,6 +115,10 @@ namespace Toggl.iOS.ViewControllers
                 .BindAction(ViewModel.OpenSiriShortcuts)
                 .DisposedBy(DisposeBag);
 
+            WorkflowsSettingsView.Rx()
+                .BindAction(ViewModel.OpenSiriWorkflows)
+                .DisposedBy(DisposeBag);
+
             FeedbackView.Rx()
                 .BindAction(ViewModel.SubmitFeedback)
                 .DisposedBy(DisposeBag);

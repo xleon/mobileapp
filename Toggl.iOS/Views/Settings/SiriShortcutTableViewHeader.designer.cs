@@ -14,12 +14,20 @@ namespace Toggl.iOS.Views.Settings
 	{
 		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView TopSeparatorLine { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
 			if (TitleLabel != null) {
 				TitleLabel.Dispose ();
 				TitleLabel = null;
+			}
+
+			if (TopSeparatorLine != null) {
+				TopSeparatorLine.Dispose ();
+				TopSeparatorLine = null;
 			}
 		}
 	}

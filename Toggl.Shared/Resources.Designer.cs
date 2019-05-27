@@ -322,6 +322,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string Download {
+            get {
+                return ResourceManager.GetString("Download", resourceCulture);
+            }
+        }
+        
         public static string ConfirmDeleteNewTETitle {
             get {
                 return ResourceManager.GetString("ConfirmDeleteNewTETitle", resourceCulture);
@@ -1690,6 +1696,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string Siri_Workflows_Description {
+            get {
+                return ResourceManager.GetString("Siri Workflows Description", resourceCulture);
+            }
+        }
+        
         public static string SiriShortcutCustomTimeEntryTitle {
             get {
                 return ResourceManager.GetString("SiriShortcutCustomTimeEntryTitle", resourceCulture);
@@ -1723,6 +1735,24 @@ namespace Toggl.Shared {
         public static string SiriClipboardHintLabel {
             get {
                 return ResourceManager.GetString("SiriClipboardHintLabel", resourceCulture);
+            }
+        }
+        
+        public static string Siri_Workflows {
+            get {
+                return ResourceManager.GetString("Siri Workflows", resourceCulture);
+            }
+        }
+        
+        public static string CantOpenWorkflowTitle {
+            get {
+                return ResourceManager.GetString("CantOpenWorkflowTitle", resourceCulture);
+            }
+        }
+        
+        public static string CantOpenWorkflowDescription {
+            get {
+                return ResourceManager.GetString("CantOpenWorkflowDescription", resourceCulture);
             }
         }
         

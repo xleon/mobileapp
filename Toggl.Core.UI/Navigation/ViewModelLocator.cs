@@ -420,6 +420,10 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.RxActionFactory);
 
+            if (viewModelType == typeof(SiriWorkflowsViewModel))
+                return new SiriWorkflowsViewModel(
+                    dependencyContainer.SchedulerProvider);
+
             if (viewModelType == typeof(SiriShortcutsCustomTimeEntryViewModel))
                 return new SiriShortcutsCustomTimeEntryViewModel(
                     dependencyContainer.DataSource,

@@ -93,6 +93,7 @@ namespace Toggl.Core.UI.ViewModels
         public UIAction TryLogout { get; }
         public UIAction OpenAboutView { get; }
         public UIAction OpenSiriShortcuts { get; }
+        public UIAction OpenSiriWorkflows { get; }
         public UIAction SubmitFeedback { get; }
         public UIAction SelectDateFormat { get; }
         public UIAction PickDefaultWorkspace { get; }
@@ -277,6 +278,7 @@ namespace Toggl.Core.UI.ViewModels
             TryLogout = rxActionFactory.FromAsync(tryLogout);
             OpenAboutView = rxActionFactory.FromAsync(openAboutView);
             OpenSiriShortcuts = rxActionFactory.FromAsync(openSiriShorcuts);
+            OpenSiriWorkflows = rxActionFactory.FromAsync(openSiriWorkflows);
             SubmitFeedback = rxActionFactory.FromAsync(submitFeedback);
             SelectDateFormat = rxActionFactory.FromAsync(selectDateFormat);
             PickDefaultWorkspace = rxActionFactory.FromAsync(pickDefaultWorkspace);
@@ -438,6 +440,9 @@ namespace Toggl.Core.UI.ViewModels
 
         private Task openSiriShorcuts()
             => navigationService.Navigate<SiriShortcutsViewModel>();
+
+        private Task openSiriWorkflows()
+            => navigationService.Navigate<SiriWorkflowsViewModel>();
 
         private async Task submitFeedback()
         {

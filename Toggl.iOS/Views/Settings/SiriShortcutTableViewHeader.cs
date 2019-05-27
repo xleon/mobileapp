@@ -13,6 +13,8 @@ namespace Toggl.iOS.Views.Settings
         public static readonly string Identifier = nameof(SiriShortcutTableViewHeader);
         public static readonly UINib Nib;
 
+        public UIView TopSeparator => TopSeparatorLine;
+
         static SiriShortcutTableViewHeader()
         {
             Nib = UINib.FromName("SiriShortcutTableViewHeader", NSBundle.MainBundle);

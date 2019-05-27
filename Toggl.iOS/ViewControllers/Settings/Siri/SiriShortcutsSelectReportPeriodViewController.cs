@@ -110,6 +110,10 @@ namespace Toggl.iOS.ViewControllers.Settings
             var intent = new ShowReportPeriodIntent();
             intent.Period = ViewModel.SelectReportPeriod.Value.ToShowReportPeriodReportPeriod();
             intent.Workspace = new INObject(workspace.Id.ToString(), workspace.Name);
+
+            var interaction = new INInteraction(intent, null);
+            interaction.DonateInteraction(null);
+            
             var vc = new INUIAddVoiceShortcutViewController(new INShortcut(intent));
             vc.ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
             vc.Delegate = this;
