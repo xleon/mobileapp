@@ -21,7 +21,8 @@ The JSON payload contains an array of "shortcut" as follow:
     "fileName": "dictate.shortcut",
     "color": "#06AAF5",
     "icon": "icMic"
-  },
+  }
+]
 ```
 
 Most of the fields are self descriptive, except:
