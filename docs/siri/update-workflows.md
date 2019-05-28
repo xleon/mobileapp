@@ -31,7 +31,7 @@ Most of the fields are self descriptive, except:
 
 ### How to update?
 
-The files are put under version control in the [../public](../public) folder.
+The files are put under version control in the [../../public](../../public) folder.
 
 - Install [Firebase CLI](https://firebase.google.com/docs/cli)
 - Open a shell at root of this repo
