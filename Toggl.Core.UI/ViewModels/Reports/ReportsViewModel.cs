@@ -181,8 +181,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             await CalendarViewModel.Initialize();
 
-            CalendarViewModel.SelectPeriod(ReportPeriod.ThisWeek);
-
             WorkspacesObservable
                 .Subscribe(data => Workspaces = data)
                 .DisposedBy(disposeBag);
@@ -232,7 +230,10 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             intentDonationService.DonateShowReport();
 
-            reportSubject.OnNext(Unit.Default);
+            if (viewAppearedForTheFirstTime())
+                CalendarViewModel.ViewAppeared();
+            else
+                reportSubject.OnNext(Unit.Default);
         }
 
         public void StopNavigationFromMainLogStopwatch()
@@ -241,6 +242,9 @@ namespace Toggl.Core.UI.ViewModels.Reports
             stopwatchProvider.Remove(MeasuredOperation.OpenReportsFromGiskard);
             navigationStopwatch?.Stop();
         }
+
+        private bool viewAppearedForTheFirstTime()
+            => startDate == default(DateTimeOffset);
 
         private bool isCurrentWeek()
         {
