@@ -400,7 +400,7 @@ namespace Toggl.iOS.ViewControllers
                 text: undoText);
 
             snackBar.SnackBottomAnchor = StartTimeEntryButton.TopAnchor;
-            snackBar.Show(superView: View);
+            snackBar.Show(View);
         }
 
         protected override void Dispose(bool disposing)

@@ -548,6 +548,7 @@ namespace Toggl.Core.UI.ViewModels
             interactorFactory
                 .UpdateMultipleTimeEntries(timeEntriesDtos)
                 .Execute()
+                .ObserveOn(schedulerProvider.MainScheduler)
                 .SubscribeToErrorsAndCompletion((Exception ex) => close(), () => close())
                 .DisposedBy(disposeBag);
         }
