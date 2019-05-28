@@ -214,6 +214,8 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
                 descriptionLabel.TopAnchor.ConstraintEqualTo(AddToSiriWrapperView.TopAnchor, 16),
                 button.CenterXAnchor.ConstraintEqualTo(AddToSiriWrapperView.CenterXAnchor),
                 button.TopAnchor.ConstraintEqualTo(descriptionLabel.BottomAnchor, 16),
+                button.WidthAnchor.ConstraintEqualTo(150),
+                button.HeightAnchor.ConstraintEqualTo(50),
             });
 
             button.TouchUpInside += siriButtonHandler;
