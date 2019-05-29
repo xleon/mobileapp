@@ -92,7 +92,7 @@ namespace Toggl.iOS
             return Google.SignIn.SignIn.SharedInstance.HandleUrl(url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
         }
         #endif
-        
+
         public override void ReceiveMemoryWarning(UIApplication application)
         {
             analyticsService.ReceivedLowMemoryWarning.Track(Platform.Daneel);
@@ -294,12 +294,6 @@ namespace Toggl.iOS
             {
                 var interactorFactory = IosDependencyContainer.Instance.InteractorFactory;
                 var privateSharedStorage = IosDependencyContainer.Instance.PrivateSharedStorageService;
-
-                interactorFactory.ObserveTimeEntriesChanges().Execute().StartWith(default(Unit))
-                    .SelectMany(interactorFactory.GetAllTimeEntriesVisibleToTheUser().Execute())
-                    .Select(timeEntries => timeEntries.OrderBy(te => te.At).Last().At)
-                    .Subscribe(privateSharedStorage.SaveLastUpdateDate)
-                    .DisposedBy(lastUpdateDateDisposable);
 
                 interactorFactory.ObserveDefaultWorkspaceId().Execute()
                     .Subscribe(privateSharedStorage.SaveDefaultWorkspaceId)

@@ -38,23 +38,8 @@ namespace SiriExtension
                 return;
             }
 
-            var lastUpdated = SharedStorage.instance.GetLastUpdateDate();
-            togglAPI.TimeEntries.GetAllSince(lastUpdated)
-                .Subscribe(tes =>
-                    {
-                        // If there are no changes since last sync, or there are changes in the server but not in the app, we are ok
-                        if (tes.Count == 0 || tes.OrderBy(te => te.At).Last().At >= lastUpdated)
-                        {
-                            userActivity.SetResponseText(clipboardText);
-                            completion(new StartTimerFromClipboardIntentResponse(StartTimerFromClipboardIntentResponseCode.Ready, userActivity));
-                        }
-                        else
-                        {
-                            userActivity.SetResponseText(Resources.SiriShortcutOpenTheAppToSync);
-                            completion(new StartTimerFromClipboardIntentResponse(StartTimerFromClipboardIntentResponseCode.FailureSyncConflict, userActivity));
-                        }
-                    }
-                );
+            userActivity.SetResponseText(clipboardText);
+            completion(new StartTimerFromClipboardIntentResponse(StartTimerFromClipboardIntentResponseCode.Ready, userActivity));
         }
 
         public override void HandleStartTimerFromClipboard(StartTimerFromClipboardIntent intent, Action<StartTimerFromClipboardIntentResponse> completion)

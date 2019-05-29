@@ -39,9 +39,7 @@ namespace SiriExtension
                 return;
             }
 
-            var lastUpdated = SharedStorage.instance.GetLastUpdateDate();
             togglAPI.TimeEntries.GetAll()
-                .Select(checkSyncConflicts(lastUpdated))
                 .Select(getRunningTimeEntry)
                 .Subscribe(
                     runningTE =>
@@ -87,20 +85,6 @@ namespace SiriExtension
                         completion(responseFromException(exception));
                     }
                 );
-        }
-
-        private Func<List<ITimeEntry>, List<ITimeEntry>> checkSyncConflicts(DateTimeOffset lastUpdated)
-        {
-            return tes =>
-            {
-                // If there are no changes since last sync, or there are changes in the server but not in the app, we are ok
-                if (tes.Count == 0 || tes.OrderBy(te => te.At).Last().At >= lastUpdated)
-                {
-                    return tes;
-                }
-
-                throw new AppOutdatedException();
-            };
         }
 
         private string durationStringForTimeSpan(TimeSpan timeSpan)
@@ -151,12 +135,6 @@ namespace SiriExtension
             {
                 userActivity.SetResponseText(Resources.SiriNoCurrentEntryRunning);
                 return new StopTimerIntentResponse(StopTimerIntentResponseCode.FailureNoTimerRunning, userActivity);
-            }
-
-            if (exception is AppOutdatedException)
-            {
-                userActivity.SetResponseText(Resources.SiriShortcutOpenTheAppToSync);
-                return new StopTimerIntentResponse(StopTimerIntentResponseCode.FailureSyncConflict, userActivity);
             }
 
             userActivity.SetResponseText(Resources.SiriShortcutOpenTheAppToSync);

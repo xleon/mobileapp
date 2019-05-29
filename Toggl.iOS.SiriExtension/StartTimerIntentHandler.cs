@@ -33,23 +33,7 @@ namespace SiriExtension
                 return;
             }
 
-            var lastUpdated = SharedStorage.instance.GetLastUpdateDate();
-            togglAPI.TimeEntries.GetAllSince(lastUpdated)
-                .Subscribe(tes =>
-                    {
-                        // If there are no changes since last sync, or there are changes in the server but not in the app, we are ok
-                        if (tes.Count == 0 || tes.OrderBy(te => te.At).Last().At >= lastUpdated)
-                        {
-                            completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.Ready, null));
-                        }
-                        else
-                        {
-                            var userActivity = new NSUserActivity(startTimerActivityType);
-                            userActivity.SetResponseText(Resources.SiriShortcutOpenTheAppToSync);
-                            completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.FailureSyncConflict, userActivity));
-                        }
-                    }
-                );
+            completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.Ready, null));
         }
 
         public override void HandleStartTimer(StartTimerIntent intent, Action<StartTimerIntentResponse> completion)
@@ -73,7 +57,7 @@ namespace SiriExtension
 
         private TimeEntry createTimeEntry(StartTimerIntent intent)
         {
-            var workspaceId = intent.Workspace == null ? SharedStorage.instance.GetDefaultWorkspaceId() : (long)Convert.ToDouble(intent.Workspace.Identifier);                                                            
+            var workspaceId = intent.Workspace == null ? SharedStorage.instance.GetDefaultWorkspaceId() : (long)Convert.ToDouble(intent.Workspace.Identifier);
 
             if (string.IsNullOrEmpty(intent.EntryDescription))
             {
