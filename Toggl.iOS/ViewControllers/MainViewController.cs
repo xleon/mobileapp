@@ -281,6 +281,16 @@ namespace Toggl.iOS.ViewControllers
             NSNotificationCenter.DefaultCenter.AddObserver(UIApplication.DidBecomeActiveNotification, onApplicationDidBecomeActive);
         }
 
+        public override void ViewDidDisappear(bool animated)
+        {
+            base.ViewDidDisappear(animated);
+
+            if (!TapToEditBubbleView.Hidden)
+            {
+                tapToEditStep.Dismiss();
+            }
+        }
+
         private void setupTableViewHeader()
         {
             TimeEntriesLogTableView.TableHeaderView = tableHeader;
@@ -408,8 +418,6 @@ namespace Toggl.iOS.ViewControllers
             if (!disposing) return;
 
             spiderBroView.Dispose();
-            //TODO: Reimplement this
-            //ViewModel.NavigationService.AfterNavigate -= onNavigate;
 
             disposeBag?.Dispose();
             disposeBag = null;
@@ -674,9 +682,6 @@ namespace Toggl.iOS.ViewControllers
             tapToEditStep.ManageVisibilityOf(TapToEditBubbleView).DisposedBy(disposeBag);
 
             prepareSwipeGesturesOnboarding(storage, tapToEditStep.ShouldBeVisible);
-
-            //TODO: Reimplement this
-            //ViewModel.NavigationService.AfterNavigate += onNavigate;
         }
 
         private void prepareSwipeGesturesOnboarding(IOnboardingStorage storage, IObservable<bool> tapToEditStepIsVisible)
@@ -719,19 +724,6 @@ namespace Toggl.iOS.ViewControllers
             updateSwipeDismissGestures(nextFirstTimeEntry);
             firstTimeEntryCell = nextFirstTimeEntry;
             updateTooltipPositions();
-        }
-
-        private void onNavigate(object sender, EventArgs e)
-        {
-            bool isHidden = false;
-            InvokeOnMainThread(() => isHidden = TapToEditBubbleView.Hidden);
-
-            if (isHidden == false)
-            {
-                tapToEditStep.Dismiss();
-                //TODO: Reimplement this
-                //ViewModel.NavigationService.AfterNavigate -= onNavigate;
-            }
         }
 
         private void updateTooltipPositions()
