@@ -29,6 +29,7 @@ Most of the fields are self descriptive, except:
 
 - `fileName` is the relative path used to construct the download URL. For instance: `https://toggl-mobile.firebaseapp.com/dev/dictate.shortcut`
 - `icon` is the asset name preloaded in the app.
+- `color` the color of the card in hex format start with `#`, for instance `#06AAF5`
 
 ### How to update?
 
