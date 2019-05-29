@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.Services;
@@ -16,6 +19,7 @@ namespace Toggl.Core.UI.ViewModels
     {
         private readonly IInteractorFactory interactorFactory;
         private readonly INavigationService navigationService;
+        private readonly ISchedulerProvider schedulerProvider;
 
         public UIAction NavigateToCustomReportShortcut;
         public UIAction NavigateToCustomTimeEntryShortcut;
@@ -23,14 +27,17 @@ namespace Toggl.Core.UI.ViewModels
         public SiriShortcutsViewModel(
             IInteractorFactory interactorFactory,
             INavigationService navigationService,
-            IRxActionFactory rxActionFactory)
+            IRxActionFactory rxActionFactory,
+            ISchedulerProvider schedulerProvider)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
+            Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
             this.interactorFactory = interactorFactory;
             this.navigationService = navigationService;
+            this.schedulerProvider = schedulerProvider;
 
             NavigateToCustomReportShortcut = rxActionFactory.FromAsync(navigateToCustomReportShortcut);
             NavigateToCustomTimeEntryShortcut = rxActionFactory.FromAsync(navigateToCustomTimeEntryShortcut);
@@ -42,6 +49,12 @@ namespace Toggl.Core.UI.ViewModels
             navigationService.Navigate<SiriShortcutsCustomTimeEntryViewModel>();
 
         public IObservable<IThreadSafeProject> GetProject(long projectId)
-            => interactorFactory.GetProjectById(projectId).Execute();
+            => interactorFactory.GetProjectById(projectId).Execute()
+                .ObserveOn(schedulerProvider.MainScheduler);
+
+        public IObservable<IEnumerable<IThreadSafeWorkspace>> GetUserWorkspaces()
+            => interactorFactory.GetAllWorkspaces().Execute()
+                .Select(ws => ws.ToList()) // <- This is to avoid Realm threading issues
+                .ObserveOn(schedulerProvider.MainScheduler);
     }
 }

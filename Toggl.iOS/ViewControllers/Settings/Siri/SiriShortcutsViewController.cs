@@ -8,11 +8,13 @@ using Foundation;
 using Intents;
 using IntentsUI;
 using Toggl.Core;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
+using Toggl.iOS.Intents;
 using Toggl.iOS.Models;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared;
@@ -103,9 +105,43 @@ namespace Toggl.iOS.ViewControllers.Settings
         private IObservable<IEnumerable<SiriShortcut>> getAllShortcuts()
         {
             return IosDependencyContainer.Instance.IntentDonationService.GetCurrentShortcuts()
-                .Select(shortcuts => SiriShortcut.DefaultShortcuts
-                    .Concat(shortcuts));
+                .CombineLatest(ViewModel.GetUserWorkspaces(), filterByWorkspace)
+                .SelectMany(filterByProject)
+                .Select(shortcuts => SiriShortcut.DefaultShortcuts.Concat(shortcuts));
         }
+
+        private IEnumerable<SiriShortcut> filterByWorkspace(IEnumerable<SiriShortcut> shortcuts, IEnumerable<IThreadSafeWorkspace> userWorkspaces)
+        {
+            var workspaceIds = userWorkspaces.Select(ws => ws.Id);
+
+            return shortcuts.Where(shortcut =>
+            {
+                if (shortcut.Parameters.WorkspaceId.HasValue)
+                {
+                    return workspaceIds.Contains(shortcut.Parameters.WorkspaceId.Value);
+                }
+
+                return true;
+            });
+        }
+
+        private IObservable<IEnumerable<SiriShortcut>> filterByProject(IEnumerable<SiriShortcut> shortcuts)
+        {
+            return shortcuts
+                .Select(shortcut =>
+                {
+                    if (shortcut.Parameters.ProjectId.HasValue)
+                    {
+                        return ViewModel.GetProject(shortcut.Parameters.ProjectId.Value)
+                            .SelectValue(shortcut)
+                            .Catch(Observable.Empty<SiriShortcut>());
+                    }
+
+                    return Observable.Return(shortcut);
+                })
+                .Merge().ToList();
+        }
+
 
         private IObservable<IEnumerable<SiriShortcutViewModel>> toViewModels(IEnumerable<SiriShortcut> shortcuts)
         {

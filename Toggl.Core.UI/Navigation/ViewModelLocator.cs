@@ -418,7 +418,8 @@ namespace Toggl.Core.UI.Navigation
                 return new SiriShortcutsViewModel(
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.NavigationService,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.SchedulerProvider);
 
             if (viewModelType == typeof(SiriWorkflowsViewModel))
                 return new SiriWorkflowsViewModel(
