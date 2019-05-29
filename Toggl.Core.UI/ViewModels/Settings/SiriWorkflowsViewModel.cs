@@ -16,8 +16,10 @@ namespace Toggl.Core.UI.ViewModels.Settings
     {
         #if USE_PRODUCTION_API
             private const string baseURL = "https://toggl-mobile.firebaseapp.com/";
-        #else
+        #elif DEBUG
             private const string baseURL = "https://toggl-mobile.firebaseapp.com/dev/";
+        #else
+            private const string baseURL = "https://toggl-mobile.firebaseapp.com/adhoc/";
         #endif
 
         public IObservable<IEnumerable<SiriWorkflow>> Workflows { get; }
