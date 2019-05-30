@@ -345,6 +345,8 @@ namespace Toggl.iOS.ViewControllers
                 new UIBarButtonItem(settingsButton)
             };
 
+            updateTableViewScrollbarPosition();
+
 #if DEBUG
             NavigationItem.LeftBarButtonItems = new[]
             {
@@ -358,6 +360,12 @@ namespace Toggl.iOS.ViewControllers
             base.TraitCollectionDidChange(previousTraitCollection);
             traitCollectionSubject.OnNext(Unit.Default);
             TimeEntriesLogTableView.ReloadData();
+        }
+
+        public override void DidRotate(UIInterfaceOrientation fromInterfaceOrientation)
+        {
+            base.DidRotate(fromInterfaceOrientation);
+            updateTableViewScrollbarPosition();
         }
 
         private void trackSiriEvents()
@@ -762,6 +770,20 @@ namespace Toggl.iOS.ViewControllers
             swipeRightAnimationDisposable = swipeRightStep.ManageSwipeActionAnimationOf(nextFirstTimeEntry, Direction.Right);
 
             swipeLeftGestureRecognizer = swipeLeftStep.DismissBySwiping(nextFirstTimeEntry, Direction.Left);
+        }
+
+        private void updateTableViewScrollbarPosition()
+        {
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
+                && (UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeLeft ||
+                    UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeRight))
+            {
+                TimeEntriesLogTableView.ScrollIndicatorInsets = new UIEdgeInsets(0, 0, 0, -8);
+            }
+            else
+            {
+                TimeEntriesLogTableView.ScrollIndicatorInsets = UIEdgeInsets.Zero;
+            }
         }
     }
 }
