@@ -223,6 +223,18 @@ Please try again.</value>
     <data name="InaccessibleProject" xml:space="preserve">
     <value>(inaccessible project)</value>
   </data>
+    <data name="WorkspacePlaceholder" xml:space="preserve">
+    <value>(unsynced workspace)</value>
+  </data>
+  <data name="ProjectPlaceholder" xml:space="preserve">
+    <value>(unsynced project)</value>
+  </data>
+  <data name="TaskPlaceholder" xml:space="preserve">
+    <value>(unsynced task)</value>
+  </data>
+  <data name="TagPlaceholder" xml:space="preserve">
+    <value>(unsynced tag)</value>
+  </data>
     <data name="SyncCompleted" xml:space="preserve">
     <value>Synced</value>
   </data>
