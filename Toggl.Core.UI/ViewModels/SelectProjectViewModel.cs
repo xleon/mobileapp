@@ -37,6 +37,7 @@ namespace Toggl.Core.UI.ViewModels
         private long workspaceId;
         private IStopwatch navigationFromEditTimeEntryViewModelStopwatch;
 
+        private bool creationEnabled = true;
         private bool projectCreationSuggestionsAreEnabled;
 
         public bool UseGrouping { get; private set; }
@@ -108,6 +109,7 @@ namespace Toggl.Core.UI.ViewModels
 
         public override void Prepare(SelectProjectParameter parameter)
         {
+            creationEnabled = parameter.CreationEnabled;
             taskId = parameter.TaskId;
             projectId = parameter.ProjectId;
             workspaceId = parameter.WorkspaceId;
@@ -137,7 +139,7 @@ namespace Toggl.Core.UI.ViewModels
                     .Select(grouping => collectionSection(grouping, prependNoProject: string.IsNullOrEmpty(text)))
                     .ToList();
 
-                if (shouldSuggestCreation(text))
+                if (creationEnabled && shouldSuggestCreation(text))
                 {
                     var createEntitySuggestion = new CreateEntitySuggestion(Resources.CreateProject, text);
                     var section = new SectionModel<string, AutocompleteSuggestion>(null, new[] { createEntitySuggestion });
@@ -182,7 +184,7 @@ namespace Toggl.Core.UI.ViewModels
         private ProjectSuggestion setSelectedProject(ProjectSuggestion suggestion)
         {
             suggestion.Selected = suggestion.ProjectId == projectId;
-            return suggestion; 
+            return suggestion;
         }
 
         private async Task createProject(string name)
@@ -191,14 +193,14 @@ namespace Toggl.Core.UI.ViewModels
             if (createdProjectId == null) return;
 
             var project = await interactorFactory.GetProjectById(createdProjectId.Value).Execute();
-            var parameter = SelectProjectParameter.WithIds(project.Id, null, project.WorkspaceId);
+            var parameter = new SelectProjectParameter(project.Id, null, project.WorkspaceId);
             await navigationService.Close(this, parameter);
         }
 
         private Task close()
             => navigationService.Close(
                 this,
-                SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
+                new SelectProjectParameter(projectId, taskId, workspaceId));
 
         private async Task selectProject(AutocompleteSuggestion suggestion)
         {
@@ -248,7 +250,7 @@ namespace Toggl.Core.UI.ViewModels
 
             navigationService.Close(
                 this,
-                SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
+                new SelectProjectParameter(projectId, taskId, workspaceId));
         }
 
         private void toggleTaskSuggestions(ProjectSuggestion projectSuggestion)
