@@ -55,13 +55,12 @@ namespace Toggl.Core.Tests.UI
                 MockSchedulerProvider = Substitute.For<ISchedulerProvider>(),
                 MockShortcutCreator = Substitute.For<IApplicationShortcutCreator>(),
                 MockStopwatchProvider = Substitute.For<IStopwatchProvider>(),
-                MockSuggestionProviderContainer = Substitute.For<ISuggestionProviderContainer>(),
                 MockUserPreferences = Substitute.For<IUserPreferences>(),
                 MockInteractorFactory = Substitute.For<IInteractorFactory>(),
                 MockTimeService = Substitute.For<ITimeService>(),
                 MockSyncManager = Substitute.For<ISyncManager>(),
             });
-            
+
             var viewModelTypes = typeof(MainViewModel).Assembly
                 .GetTypes()
                 .Where(isViewModel);

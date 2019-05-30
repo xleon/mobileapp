@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -10,20 +9,22 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Toggl.Core.Services;
+using System.Collections.Immutable;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class SuggestionsViewModel : ViewModel
     {
+        private const int suggestionCount = 3;
+
         private readonly IInteractorFactory interactorFactory;
         private readonly IOnboardingStorage onboardingStorage;
-        private readonly ISuggestionProviderContainer suggestionProviders;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly ITogglDataSource dataSource;
         private readonly IRxActionFactory rxActionFactory;
 
-        public IObservable<Suggestion[]> Suggestions { get; private set; }
+        public IObservable<IImmutableList<Suggestion>> Suggestions { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
         public InputAction<Suggestion> StartTimeEntry { get; private set; }
 
@@ -31,20 +32,17 @@ namespace Toggl.Core.UI.ViewModels
             ITogglDataSource dataSource,
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
-            ISuggestionProviderContainer suggestionProviders,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(suggestionProviders, nameof(suggestionProviders));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
-            this.suggestionProviders = suggestionProviders;
             this.schedulerProvider = schedulerProvider;
             this.dataSource = dataSource;
             this.rxActionFactory = rxActionFactory;
@@ -59,22 +57,17 @@ namespace Toggl.Core.UI.ViewModels
             Suggestions = interactorFactory.ObserveWorkspaceOrTimeEntriesChanges().Execute()
                 .StartWith(Unit.Default)
                 .SelectMany(_ => getSuggestions())
-                .AsDriver(onErrorJustReturn: new Suggestion[0], schedulerProvider: schedulerProvider);
+                .AsDriver(onErrorJustReturn: ImmutableList.Create<Suggestion>(), schedulerProvider: schedulerProvider);
 
             IsEmpty = Suggestions
-                .Select(suggestions => suggestions.Length == 0)
+                .Select(suggestions => suggestions.None())
                 .StartWith(true)
                 .AsDriver(onErrorJustReturn: true, schedulerProvider: schedulerProvider);
         }
 
-        private IObservable<Suggestion[]> getSuggestions()
-        {
-            return suggestionProviders
-                .Providers
-                .Select(provider => provider.GetSuggestions())
-                .Aggregate(Observable.Merge)
-                .ToArray();
-        }
+        private IObservable<IImmutableList<Suggestion>> getSuggestions()
+            => interactorFactory.GetSuggestions(suggestionCount).Execute()
+                .Select(suggestions => suggestions.ToImmutableList());
 
         private async Task startTimeEntry(Suggestion suggestion)
         {

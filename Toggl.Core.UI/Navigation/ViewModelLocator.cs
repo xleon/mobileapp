@@ -112,7 +112,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.PermissionsService,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RemoteConfigService,
-                    dependencyContainer.SuggestionProviderContainer,
                     dependencyContainer.IntentDonationService,
                     dependencyContainer.AccessRestrictionStorage,
                     dependencyContainer.StopwatchProvider,
@@ -133,7 +132,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RemoteConfigService,
-                    dependencyContainer.SuggestionProviderContainer,
                     dependencyContainer.IntentDonationService,
                     dependencyContainer.AccessRestrictionStorage,
                     dependencyContainer.SchedulerProvider,
@@ -284,7 +282,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.DataSource,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.OnboardingStorage,
-                    dependencyContainer.SuggestionProviderContainer,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.RxActionFactory);
 

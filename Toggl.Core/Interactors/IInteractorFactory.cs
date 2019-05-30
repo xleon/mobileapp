@@ -224,5 +224,11 @@ namespace Toggl.Core.Interactors
             long workspaceId, DateTimeOffset startDate, DateTimeOffset? endDate);
 
         #endregion
+
+        #region Suggestions
+
+        IInteractor<IObservable<IEnumerable<Suggestion>>> GetSuggestions(int count);
+
+        #endregion
     }
 }

@@ -8,7 +8,6 @@ using Toggl.Core.Interactors;
 using Toggl.Core.Login;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
-using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -59,7 +58,6 @@ namespace Toggl.Core
         private readonly Lazy<IAccessRestrictionStorage> accessRestrictionStorage;
         private readonly Lazy<ISyncErrorHandlingService> syncErrorHandlingService;
         private readonly Lazy<IPrivateSharedStorageService> privateSharedStorageService;
-        private readonly Lazy<ISuggestionProviderContainer> suggestionProviderContainer;
 
         // Non lazy
         public virtual IUserAccessManager UserAccessManager { get; }
@@ -92,7 +90,6 @@ namespace Toggl.Core
         public IAccessRestrictionStorage AccessRestrictionStorage => accessRestrictionStorage.Value;
         public ISyncErrorHandlingService SyncErrorHandlingService => syncErrorHandlingService.Value;
         public IPrivateSharedStorageService PrivateSharedStorageService => privateSharedStorageService.Value;
-        public ISuggestionProviderContainer SuggestionProviderContainer => suggestionProviderContainer.Value;
 
         protected DependencyContainer(ApiEnvironment apiEnvironment, UserAgent userAgent)
         {
@@ -130,7 +127,6 @@ namespace Toggl.Core
             accessRestrictionStorage = new Lazy<IAccessRestrictionStorage>(CreateAccessRestrictionStorage);
             syncErrorHandlingService = new Lazy<ISyncErrorHandlingService>(CreateSyncErrorHandlingService);
             privateSharedStorageService = new Lazy<IPrivateSharedStorageService>(CreatePrivateSharedStorageService);
-            suggestionProviderContainer = new Lazy<ISuggestionProviderContainer>(CreateSuggestionProviderContainer);
 
             api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None));
             UserAccessManager = new UserAccessManager(
@@ -171,7 +167,6 @@ namespace Toggl.Core
         protected abstract IIntentDonationService CreateIntentDonationService();
         protected abstract IAccessRestrictionStorage CreateAccessRestrictionStorage();
         protected abstract IPrivateSharedStorageService CreatePrivateSharedStorageService();
-        protected abstract ISuggestionProviderContainer CreateSuggestionProviderContainer();
 
         protected virtual ITimeService CreateTimeService()
             => new TimeService(SchedulerProvider.DefaultScheduler);

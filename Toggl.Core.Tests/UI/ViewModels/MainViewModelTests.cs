@@ -58,7 +58,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     InteractorFactory,
                     NavigationService,
                     RemoteConfigService,
-                    SuggestionProviderContainer,
                     IntentDonationService,
                     AccessRestrictionStorage,
                     SchedulerProvider,
@@ -81,10 +80,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 RemoteConfigService
                     .RatingViewConfiguration
                     .Returns(Observable.Return(defaultRemoteConfiguration));
-
-                var provider = Substitute.For<ISuggestionProvider>();
-                provider.GetSuggestions().Returns(Observable.Empty<Suggestion>());
-                SuggestionProviderContainer.Providers.Returns(new[] { provider }.ToList().AsReadOnly());
 
                 DataSource.Preferences.Current.Returns(Observable.Create<IThreadSafePreferences>(observer =>
                 {
@@ -112,7 +107,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useInteractorFactory,
                 bool useNavigationService,
                 bool useRemoteConfigService,
-                bool useSuggestionProviderContainer,
                 bool useIntentDonationService,
                 bool useAccessRestrictionStorage,
                 bool useSchedulerProvider,
@@ -129,7 +123,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
-                var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
                 var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
@@ -148,7 +141,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         interactorFactory,
                         navigationService,
                         remoteConfigService,
-                        suggestionProviderContainer,
                         intentDonationService,
                         accessRestrictionStorage,
                         schedulerProvider,
@@ -635,11 +627,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 timeEntry.Duration.Returns((long?)null);
                 timeEntry.Description.Returns("something");
                 var suggestion = new Suggestion(timeEntry);
-                suggestionProvider.GetSuggestions().Returns(Observable.Return(suggestion));
-                var providers = new ReadOnlyCollection<ISuggestionProvider>(
-                    new List<ISuggestionProvider> { suggestionProvider }
-                );
-                SuggestionProviderContainer.Providers.Returns(providers);
+                InteractorFactory.GetSuggestions(Arg.Any<int>()).Execute().Returns(Observable.Return(new[] { suggestion }));
             }
 
             protected void PrepareTimeEntry()

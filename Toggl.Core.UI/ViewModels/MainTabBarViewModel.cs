@@ -52,7 +52,6 @@ namespace Toggl.Core.UI.ViewModels
             IPermissionsService permissionsService,
             INavigationService navigationService,
             IRemoteConfigService remoteConfigService,
-            ISuggestionProviderContainer suggestionProviders,
             IIntentDonationService intentDonationService,
             IAccessRestrictionStorage accessRestrictionStorage,
             IStopwatchProvider stopwatchProvider,
@@ -75,7 +74,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
-            Ensure.Argument.IsNotNull(suggestionProviders, nameof(suggestionProviders));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
@@ -101,7 +99,6 @@ namespace Toggl.Core.UI.ViewModels
                 interactorFactory,
                 navigationService,
                 remoteConfigService,
-                suggestionProviders,
                 intentDonationService,
                 accessRestrictionStorage,
                 schedulerProvider,

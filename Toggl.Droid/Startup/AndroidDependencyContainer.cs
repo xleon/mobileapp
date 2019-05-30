@@ -44,7 +44,7 @@ namespace Toggl.Droid
             : base(environment, new UserAgent(platform.ToString(), version))
         {
             var appVersion = Version.Parse(version);
-            
+
             settingsStorage = new Lazy<SettingsStorage>(() => new SettingsStorage(appVersion, KeyValueStorage));
         }
 
@@ -110,11 +110,6 @@ namespace Toggl.Droid
 
         protected override IStopwatchProvider CreateStopwatchProvider()
             => new FirebaseStopwatchProviderAndroid();
-
-        protected override ISuggestionProviderContainer CreateSuggestionProviderContainer()
-            => new SuggestionProviderContainer(
-                new MostUsedTimeEntrySuggestionProvider(Database, TimeService, numberOfSuggestions)
-            );
 
         protected override INavigationService CreateNavigationService()
             => MvxNavigationService;
