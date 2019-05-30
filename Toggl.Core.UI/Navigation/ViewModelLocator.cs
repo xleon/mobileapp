@@ -422,8 +422,7 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.SchedulerProvider);
 
             if (viewModelType == typeof(SiriWorkflowsViewModel))
-                return new SiriWorkflowsViewModel(
-                    dependencyContainer.SchedulerProvider);
+                return new SiriWorkflowsViewModel();
 
             if (viewModelType == typeof(SiriShortcutsCustomTimeEntryViewModel))
                 return new SiriShortcutsCustomTimeEntryViewModel(
