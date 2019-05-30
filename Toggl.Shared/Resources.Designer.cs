@@ -10,7 +10,6 @@
 
 namespace Toggl.Shared {
     using System;
-    using System.Reflection;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
@@ -254,6 +253,30 @@ namespace Toggl.Shared {
         public static string InaccessibleProject {
             get {
                 return ResourceManager.GetString("InaccessibleProject", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePlaceholder {
+            get {
+                return ResourceManager.GetString("WorkspacePlaceholder", resourceCulture);
+            }
+        }
+        
+        public static string ProjectPlaceholder {
+            get {
+                return ResourceManager.GetString("ProjectPlaceholder", resourceCulture);
+            }
+        }
+        
+        public static string TaskPlaceholder {
+            get {
+                return ResourceManager.GetString("TaskPlaceholder", resourceCulture);
+            }
+        }
+        
+        public static string TagPlaceholder {
+            get {
+                return ResourceManager.GetString("TagPlaceholder", resourceCulture);
             }
         }
         

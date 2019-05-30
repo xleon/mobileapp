@@ -31,10 +31,5 @@ namespace Toggl.Core.Extensions
                     return project.Color ?? "";
             }
         }
-
-        public static TimeSpan? TimeSpanDuration(this IThreadSafeTimeEntry timeEntry)
-            => timeEntry.Duration.HasValue
-            ? TimeSpan.FromSeconds(timeEntry.Duration.Value)
-            : (TimeSpan?)null;
     }
 }

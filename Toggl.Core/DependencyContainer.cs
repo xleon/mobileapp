@@ -16,6 +16,7 @@ using Toggl.Storage;
 using Toggl.Networking;
 using Toggl.Networking.Network;
 using Toggl.Storage.Settings;
+using System.Threading.Tasks;
 
 namespace Toggl.Core
 {
@@ -175,7 +176,7 @@ namespace Toggl.Core
             => new BackgroundService(TimeService, AnalyticsService);
 
         protected virtual IAutomaticSyncingService CreateAutomaticSyncingService()
-            => new AutomaticSyncingService(BackgroundService, TimeService);
+            => new AutomaticSyncingService(BackgroundService, TimeService, LastTimeUsageStorage);
 
         protected virtual ISyncErrorHandlingService CreateSyncErrorHandlingService()
             => new SyncErrorHandlingService(ErrorHandlingService);
@@ -235,7 +236,7 @@ namespace Toggl.Core
             interactorFactory = shortcutCreator.Select(creator =>
             {
                 var factory = CreateInteractorFactory();
-                creator.OnLogin(factory);
+                Task.Run(() => creator.OnLogin(factory));
                 return factory;
             });
         }
