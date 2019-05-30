@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using Foundation;
@@ -46,6 +46,7 @@ namespace Toggl.iOS.ViewControllers.Settings
             TableView.RegisterNibForCellReuse(SiriShortcutReportPeriodCell.Nib, SiriShortcutReportPeriodCell.Identifier);
 
             TableView.RowHeight = rowHeight;
+            TableView.TableFooterView = TableFooterView;
 
             var source =
                 new CustomTableViewSource<ReportSection, Unit,

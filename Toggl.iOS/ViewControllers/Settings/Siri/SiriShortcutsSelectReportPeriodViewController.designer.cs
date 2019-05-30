@@ -1,7 +1,8 @@
-// WARNING
+﻿// WARNING
 //
-// This file has been generated automatically by Visual Studio to store outlets and
-// actions made in the UI designer. If it is removed, they will be lost.
+// This file has been generated automatically by Rider IDE
+//   to store outlets and actions made in the XCode.
+// If it is removed, they will be lost.
 // Manual changes to this file may not be handled correctly.
 //
 using Foundation;
@@ -25,8 +26,11 @@ namespace Toggl.iOS.ViewControllers.Settings
 		UIKit.UIView SelectWorkspaceView { get; set; }
 
 		[Outlet]
+		UIKit.UIView TableFooterView { get; set; }
+
+		[Outlet]
 		UIKit.UITableView TableView { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (AddToSiriWrapperView != null) {
@@ -49,10 +53,16 @@ namespace Toggl.iOS.ViewControllers.Settings
 				SelectWorkspaceView = null;
 			}
 
+			if (TableFooterView != null) {
+				TableFooterView.Dispose ();
+				TableFooterView = null;
+			}
+
 			if (TableView != null) {
 				TableView.Dispose ();
 				TableView = null;
 			}
+
 		}
 	}
 }
