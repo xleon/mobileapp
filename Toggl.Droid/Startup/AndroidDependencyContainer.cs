@@ -44,7 +44,7 @@ namespace Toggl.Droid
             : base(environment, new UserAgent(platform.ToString(), version))
         {
             var appVersion = Version.Parse(version);
-            
+
             settingsStorage = new Lazy<SettingsStorage>(() => new SettingsStorage(appVersion, KeyValueStorage));
         }
 
@@ -68,9 +68,6 @@ namespace Toggl.Droid
 
         protected override IGoogleService CreateGoogleService()
             => new GoogleServiceAndroid();
-
-        protected override IIntentDonationService CreateIntentDonationService()
-            => new NoopIntentDonationServiceAndroid();
 
         protected override IKeyValueStorage CreateKeyValueStorage()
         {

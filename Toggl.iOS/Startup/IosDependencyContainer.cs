@@ -28,6 +28,7 @@ namespace Toggl.iOS
 
         public TogglPresenter ViewPresenter { get; }
         public INavigationService MvxNavigationService { get; internal set; }
+        public IntentDonationService IntentDonationService { get; }
 
         public new static IosDependencyContainer Instance { get; private set; }
 
@@ -46,6 +47,7 @@ namespace Toggl.iOS
             : base(environment, new UserAgent(platform.ToString(), version))
         {
             ViewPresenter = viewPresenter;
+            IntentDonationService = new IntentDonationService(AnalyticsService);
 
             var appVersion = Version.Parse(version);
 
@@ -72,9 +74,6 @@ namespace Toggl.iOS
 
         protected override IGoogleService CreateGoogleService()
             => new GoogleServiceIos();
-
-        protected override IIntentDonationService CreateIntentDonationService()
-            => new IntentDonationServiceIos(AnalyticsService);
 
         protected override IKeyValueStorage CreateKeyValueStorage()
             => new UserDefaultsStorageIos();

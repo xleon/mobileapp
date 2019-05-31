@@ -11,13 +11,14 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Parameters;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SelectTagsViewModel : ViewModel<(long[] tagIds, long workspaceId), long[]>
+    public sealed class SelectTagsViewModel : ViewModel<SelectTagsParameter, long[]>
     {
         private readonly IInteractorFactory interactorFactory;
         private readonly INavigationService navigationService;
@@ -27,6 +28,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private long[] defaultResult;
         private long workspaceId;
+        private bool creationEnabled = true;
         private IStopwatch navigationFromEditTimeEntryStopwatch;
 
         public IObservable<IEnumerable<SelectableTagBaseViewModel>> Tags { get; private set; }
@@ -60,11 +62,12 @@ namespace Toggl.Core.UI.ViewModels
             SelectTag = rxActionFactory.FromAsync<SelectableTagBaseViewModel>(selectTag);
         }
 
-        public override void Prepare((long[] tagIds, long workspaceId) parameter)
+        public override void Prepare(SelectTagsParameter parameter)
         {
-            workspaceId = parameter.workspaceId;
-            defaultResult = parameter.tagIds;
-            selectedTagIds.AddRange(parameter.tagIds);
+            workspaceId = parameter.WorkspaceId;
+            defaultResult = parameter.TagIds;
+            selectedTagIds.AddRange(parameter.TagIds);
+            creationEnabled = parameter.CreationEnabled;
         }
 
         public override async Task Initialize()
@@ -87,7 +90,7 @@ namespace Toggl.Core.UI.ViewModels
                         .Cast<TagSuggestion>()
                         .Where(s => s.WorkspaceId == workspaceId);
 
-                    var suggestCreation = !string.IsNullOrEmpty(queryText)
+                    var suggestCreation = creationEnabled && !string.IsNullOrEmpty(queryText)
                                           && tagSuggestionInWorkspace.None(tag
                                               => tag.Name.IsSameCaseInsensitiveTrimedTextAs(queryText))
                                           && queryText.IsAllowedTagByteSize();

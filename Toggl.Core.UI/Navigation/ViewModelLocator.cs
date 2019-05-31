@@ -4,6 +4,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.ViewModels.Settings;
+using Toggl.Core.UI.ViewModels.Settings.Siri;
 
 namespace Toggl.Core.UI.Navigation
 {
@@ -113,7 +114,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.RemoteConfigService,
                     dependencyContainer.SuggestionProviderContainer,
-                    dependencyContainer.IntentDonationService,
                     dependencyContainer.AccessRestrictionStorage,
                     dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory,
@@ -134,7 +134,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.RemoteConfigService,
                     dependencyContainer.SuggestionProviderContainer,
-                    dependencyContainer.IntentDonationService,
                     dependencyContainer.AccessRestrictionStorage,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.StopwatchProvider,
@@ -178,7 +177,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.TimeService,
                     dependencyContainer.DialogService,
                     dependencyContainer.DataSource,
-                    dependencyContainer.IntentDonationService,
                     dependencyContainer.RxActionFactory);
 
             if (viewModelType == typeof(SelectBeginningOfWeekViewModel))
@@ -275,7 +273,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.IntentDonationService,
                     dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory);
 
@@ -347,7 +344,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.DialogService,
-                    dependencyContainer.IntentDonationService,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory);
@@ -399,7 +395,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.OnboardingStorage,
                     dependencyContainer.NavigationService,
                     dependencyContainer.PrivateSharedStorageService,
-                    dependencyContainer.IntentDonationService,
                     dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.PermissionsService,
@@ -411,6 +406,41 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.UserPreferences,
                     dependencyContainer.RxActionFactory);
 
+            if (viewModelType == typeof(SiriShortcutsSelectReportPeriodViewModel))
+                return new SiriShortcutsSelectReportPeriodViewModel(
+                    dependencyContainer.DataSource,
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.SchedulerProvider);
+
+            if (viewModelType == typeof(SiriShortcutsViewModel))
+                return new SiriShortcutsViewModel(
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.SchedulerProvider);
+
+            if (viewModelType == typeof(SiriWorkflowsViewModel))
+                return new SiriWorkflowsViewModel();
+
+            if (viewModelType == typeof(SiriShortcutsCustomTimeEntryViewModel))
+                return new SiriShortcutsCustomTimeEntryViewModel(
+                    dependencyContainer.DataSource,
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.OnboardingStorage,
+                    dependencyContainer.SchedulerProvider
+                    );
+
+            if (viewModelType == typeof(PasteFromClipboardViewModel))
+                return new PasteFromClipboardViewModel(
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.OnboardingStorage
+                    );
 
             throw new InvalidOperationException($"Trying to locate ViewModel {viewModelType.Name} failed.");
         }

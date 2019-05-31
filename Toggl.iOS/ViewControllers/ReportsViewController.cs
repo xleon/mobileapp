@@ -219,6 +219,13 @@ namespace Toggl.iOS.ViewControllers
             ViewModel.CalendarViewModel.Reload();
         }
 
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            IosDependencyContainer.Instance.IntentDonationService.DonateShowReport();
+        }
+
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();

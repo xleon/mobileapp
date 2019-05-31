@@ -92,7 +92,7 @@ namespace Toggl.iOS
             return Google.SignIn.SignIn.SharedInstance.HandleUrl(url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
         }
         #endif
-        
+
         public override void ReceiveMemoryWarning(UIApplication application)
         {
             analyticsService.ReceivedLowMemoryWarning.Track(Platform.Daneel);
@@ -100,7 +100,7 @@ namespace Toggl.iOS
 
         public override void OnActivated(UIApplication application)
         {
-            observeAndStoreLastUpdateDate();
+            observeAndStoreProperties();
         }
 
         public override void WillEnterForeground(UIApplication application)
@@ -209,7 +209,11 @@ namespace Toggl.iOS
                 case ShowReportPeriodIntent periodIntent:
                     var tabbarVC = (MainTabBarController)UIApplication.SharedApplication.KeyWindow.RootViewController;
                     var reportViewModel = (ReportsViewModel)tabbarVC.ViewModel.Tabs.Single(viewModel => viewModel is ReportsViewModel);
-                    navigationService.Navigate(reportViewModel, periodIntent.Period.ToReportPeriod());
+
+                    long? parseLong(string val) => long.TryParse(val, out var i) ? i : (long?)null;
+
+                    long? workspaceId = parseLong(periodIntent.Workspace?.Identifier);
+                    navigationService.Navigate(reportViewModel, new ReportParameter(periodIntent.Period.ToReportPeriod(), workspaceId));
                     return true;
                 case StartTimerIntent startTimerIntent:
                     var timeEntryParams = createStartTimeEntryParameters(startTimerIntent);
@@ -281,7 +285,7 @@ namespace Toggl.iOS
             };
         }
 
-        private void observeAndStoreLastUpdateDate()
+        private void observeAndStoreProperties()
         {
             lastUpdateDateDisposable.Dispose();
             lastUpdateDateDisposable = new CompositeDisposable();
@@ -291,10 +295,8 @@ namespace Toggl.iOS
                 var interactorFactory = IosDependencyContainer.Instance.InteractorFactory;
                 var privateSharedStorage = IosDependencyContainer.Instance.PrivateSharedStorageService;
 
-                interactorFactory.ObserveTimeEntriesChanges().Execute().StartWith(default(Unit))
-                    .SelectMany(interactorFactory.GetAllTimeEntriesVisibleToTheUser().Execute())
-                    .Select(timeEntries => timeEntries.OrderBy(te => te.At).Last().At)
-                    .Subscribe(privateSharedStorage.SaveLastUpdateDate)
+                interactorFactory.ObserveDefaultWorkspaceId().Execute()
+                    .Subscribe(privateSharedStorage.SaveDefaultWorkspaceId)
                     .DisposedBy(lastUpdateDateDisposable);
             }
             catch (Exception)

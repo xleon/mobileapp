@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Models.Interfaces;
@@ -19,6 +18,8 @@ using Microsoft.Reactive.Testing;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Interactors;
+using Toggl.Core.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -50,7 +51,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     InteractorFactory,
                     AnalyticsService,
                     DialogService,
-                    IntentDonationService,
                     SchedulerProvider,
                     StopwatchProvider,
                     RxActionFactory
@@ -89,7 +89,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                                                         bool useAnalyticsService,
                                                         bool useInteractorFactory,
                                                         bool useDialogService,
-                                                        bool useIntentDonationService,
                                                         bool useSchedulerProvider,
                                                         bool useStopwatchProvider,
                                                         bool useRxActionFactory)
@@ -100,7 +99,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var dialogService = useDialogService ? DialogService : null;
-                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
@@ -112,7 +110,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                                                interactorFactory,
                                                analyticsService,
                                                dialogService,
-                                               intentDonationService,
                                                schedulerProvider,
                                                stopwatchProvider,
                                                rxActionFactory);
@@ -330,7 +327,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     TimeService.CurrentDateTime.Returns(now);
                     ViewModel.CurrentDateRangeStringObservable.Subscribe(observer);
                     await ViewModel.Initialize();
-                    ViewModel.CalendarViewModel.SelectPeriod(Core.Services.ReportPeriod.ThisWeek);
+                    ViewModel.CalendarViewModel.SelectPeriod(ReportPeriod.ThisWeek);
 
                     TestScheduler.Start();
                     observer.LastEmittedValue().Should().Be($"{Resources.ThisWeek} ▾");
@@ -400,7 +397,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.GroupedSegmentsObservable.Subscribe(groupedSegmentsObservable);
 
                 TestScheduler.Start();
-                
+
                 await Initialize();
 
                 var actualSegments = segmentsObservable.Values().Last();
