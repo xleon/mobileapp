@@ -275,6 +275,20 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(suggestionsView.OnSuggestions)
                 .DisposedBy(DisposeBag);
 
+            // Intent Donation
+            IosDependencyContainer.Instance.IntentDonationService.SetDefaultShortcutSuggestions();
+
+            Observable.Merge(
+                    ViewModel.ContinueTimeEntry.Elements,
+                    ViewModel.SuggestionsViewModel.StartTimeEntry.Elements
+                )
+                .Subscribe(IosDependencyContainer.Instance.IntentDonationService.DonateStartTimeEntry)
+                .DisposedBy(DisposeBag);
+
+            ViewModel.StopTimeEntry.Elements
+                .Subscribe(IosDependencyContainer.Instance.IntentDonationService.DonateStopCurrentTimeEntry)
+                .DisposedBy(DisposeBag);
+
             View.SetNeedsLayout();
             View.LayoutIfNeeded();
 
@@ -408,7 +422,7 @@ namespace Toggl.iOS.ViewControllers
                 text: undoText);
 
             snackBar.SnackBottomAnchor = StartTimeEntryButton.TopAnchor;
-            snackBar.Show(superView: View);
+            snackBar.Show(View);
         }
 
         protected override void Dispose(bool disposing)

@@ -3,9 +3,11 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.ViewModels.Settings;
+using Toggl.Core.UI.ViewModels.Settings.Siri;
 using Toggl.iOS.ViewControllers;
 using Toggl.iOS.ViewControllers.Calendar;
 using Toggl.iOS.ViewControllers.Settings;
+using Toggl.iOS.ViewControllers.Settings.Siri;
 using Toggl.Shared.Extensions;
 using UIKit;
 
@@ -52,6 +54,8 @@ namespace Toggl.iOS.Presentation
                     return new OnboardingViewController(vm);
                 case OutdatedAppViewModel vm:
                     return new OutdatedAppViewController(vm);
+                case PasteFromClipboardViewModel vm:
+                    return new PasteFromClipboardViewController(vm);
                 case ReportsViewModel vm:
                     return new ReportsViewController(vm);
                 case ReportsCalendarViewModel vm:
@@ -86,6 +90,14 @@ namespace Toggl.iOS.Presentation
                     return new SettingsViewController(vm);
                 case SignupViewModel vm:
                     return new SignupViewController(vm);
+                case SiriShortcutsCustomTimeEntryViewModel vm:
+                    return new SiriShortcutsCustomTimeEntryViewController(vm);
+                case SiriShortcutsSelectReportPeriodViewModel vm:
+                    return new SiriShortcutsSelectReportPeriodViewController(vm);
+                case SiriShortcutsViewModel vm:
+                    return new SiriShortcutsViewController(vm);
+                case SiriWorkflowsViewModel vm:
+                    return new SiriWorkflowsViewController(vm);
                 case StartTimeEntryViewModel vm:
                     return new StartTimeEntryViewController(vm);
                 case SyncFailuresViewModel vm:
