@@ -132,6 +132,10 @@ namespace Toggl.Core.UI
         protected override ISuggestionProviderContainer CreateSuggestionProviderContainer()
             => MockSuggestionProviderContainer;
 
+        internal IPushNotificationsTokenService MockPushNotificationsTokenService { get; set; }
+        protected override IPushNotificationsTokenService CreatePushNotificationsTokenService()
+            => MockPushNotificationsTokenService;
+
         internal IUserPreferences MockUserPreferences { get; set; }
         protected override IUserPreferences CreateUserPreferences()
             => MockUserPreferences;

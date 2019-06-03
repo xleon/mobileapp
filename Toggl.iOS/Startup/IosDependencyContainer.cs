@@ -117,6 +117,9 @@ namespace Toggl.iOS
                 new MostUsedTimeEntrySuggestionProvider(Database, TimeService, numberOfSuggestions)
             );
 
+        protected override IPushNotificationsTokenService CreatePushNotificationsTokenService()
+            => new PushNotificationsTokenServiceIos();
+
         protected override INavigationService CreateNavigationService()
             => MvxNavigationService;
 

@@ -60,6 +60,7 @@ namespace Toggl.Core
         private readonly Lazy<ISyncErrorHandlingService> syncErrorHandlingService;
         private readonly Lazy<IPrivateSharedStorageService> privateSharedStorageService;
         private readonly Lazy<ISuggestionProviderContainer> suggestionProviderContainer;
+        private readonly Lazy<IPushNotificationsTokenService> pushNotificationsTokenService;
 
         // Non lazy
         public virtual IUserAccessManager UserAccessManager { get; }
@@ -93,6 +94,7 @@ namespace Toggl.Core
         public ISyncErrorHandlingService SyncErrorHandlingService => syncErrorHandlingService.Value;
         public IPrivateSharedStorageService PrivateSharedStorageService => privateSharedStorageService.Value;
         public ISuggestionProviderContainer SuggestionProviderContainer => suggestionProviderContainer.Value;
+        public IPushNotificationsTokenService PushNotificationsTokenService => pushNotificationsTokenService.Value;
 
         protected DependencyContainer(ApiEnvironment apiEnvironment, UserAgent userAgent)
         {
@@ -131,6 +133,8 @@ namespace Toggl.Core
             syncErrorHandlingService = new Lazy<ISyncErrorHandlingService>(CreateSyncErrorHandlingService);
             privateSharedStorageService = new Lazy<IPrivateSharedStorageService>(CreatePrivateSharedStorageService);
             suggestionProviderContainer = new Lazy<ISuggestionProviderContainer>(CreateSuggestionProviderContainer);
+            pushNotificationsTokenService = new Lazy<IPushNotificationsTokenService>(CreatePushNotificationsTokenService);
+
 
             api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None));
             UserAccessManager = new UserAccessManager(
@@ -172,6 +176,7 @@ namespace Toggl.Core
         protected abstract IAccessRestrictionStorage CreateAccessRestrictionStorage();
         protected abstract IPrivateSharedStorageService CreatePrivateSharedStorageService();
         protected abstract ISuggestionProviderContainer CreateSuggestionProviderContainer();
+        protected abstract IPushNotificationsTokenService CreatePushNotificationsTokenService();
 
         protected virtual ITimeService CreateTimeService()
             => new TimeService(SchedulerProvider.DefaultScheduler);

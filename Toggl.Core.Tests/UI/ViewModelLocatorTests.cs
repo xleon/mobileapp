@@ -60,8 +60,9 @@ namespace Toggl.Core.Tests.UI
                 MockInteractorFactory = Substitute.For<IInteractorFactory>(),
                 MockTimeService = Substitute.For<ITimeService>(),
                 MockSyncManager = Substitute.For<ISyncManager>(),
+                MockPushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>(),
             });
-            
+
             var viewModelTypes = typeof(MainViewModel).Assembly
                 .GetTypes()
                 .Where(isViewModel);
