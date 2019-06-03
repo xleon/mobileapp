@@ -1,4 +1,4 @@
-using Xamarin.UITest;
+﻿using Xamarin.UITest;
 using Xamarin.UITest.Android;
 
 namespace Toggl.Tests.UI
@@ -8,7 +8,7 @@ namespace Toggl.Tests.UI
         public static AndroidApp GetApp()
             => ConfigureApp
                 .Android
-                .ApkFile("../../bin/Release/com.toggl.giskard.apk")
+                .InstalledApp("com.toggl.giskard.debug")
                 .EnableLocalScreenshots()
                 .StartApp();
     }

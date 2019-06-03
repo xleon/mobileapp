@@ -346,6 +346,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string Download {
+            get {
+                return ResourceManager.GetString("Download", resourceCulture);
+            }
+        }
+        
         public static string ConfirmDeleteNewTETitle {
             get {
                 return ResourceManager.GetString("ConfirmDeleteNewTETitle", resourceCulture);
@@ -565,6 +571,30 @@ namespace Toggl.Shared {
         public static string LastYear {
             get {
                 return ResourceManager.GetString("LastYear", resourceCulture);
+            }
+        }
+        
+        public static string Unknown {
+            get {
+                return ResourceManager.GetString("Unknown", resourceCulture);
+            }
+        }
+        
+        public static string ReportPeriod {
+            get {
+                return ResourceManager.GetString("ReportPeriod", resourceCulture);
+            }
+        }
+        
+        public static string SiriReportPeriodInstruction {
+            get {
+                return ResourceManager.GetString("SiriReportPeriodInstruction", resourceCulture);
+            }
+        }
+        
+        public static string SiriCustomTimeEntryInstruction {
+            get {
+                return ResourceManager.GetString("SiriCustomTimeEntryInstruction", resourceCulture);
             }
         }
         
@@ -1675,6 +1705,156 @@ namespace Toggl.Shared {
         public static string EditingTwentyFourHoursFormat {
             get {
                 return ResourceManager.GetString("EditingTwentyFourHoursFormat", resourceCulture);
+            }
+        }
+        
+        public static string Siri_Shortcuts {
+            get {
+                return ResourceManager.GetString("Siri Shortcuts", resourceCulture);
+            }
+        }
+        
+        public static string Siri_Shortcuts_Description {
+            get {
+                return ResourceManager.GetString("Siri Shortcuts Description", resourceCulture);
+            }
+        }
+        
+        public static string Siri_Workflows_Description {
+            get {
+                return ResourceManager.GetString("Siri Workflows Description", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutCustomTimeEntryTitle {
+            get {
+                return ResourceManager.GetString("SiriShortcutCustomTimeEntryTitle", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutDescriptionFromClipboard {
+            get {
+                return ResourceManager.GetString("SiriShortcutDescriptionFromClipboard", resourceCulture);
+            }
+        }
+        
+        public static string SiriClipboardInstructionTitle {
+            get {
+                return ResourceManager.GetString("SiriClipboardInstructionTitle", resourceCulture);
+            }
+        }
+        
+        public static string SiriClipboardInstructionDescription {
+            get {
+                return ResourceManager.GetString("SiriClipboardInstructionDescription", resourceCulture);
+            }
+        }
+        
+        public static string SiriClipboardInstructionDoNotShowAgain {
+            get {
+                return ResourceManager.GetString("SiriClipboardInstructionDoNotShowAgain", resourceCulture);
+            }
+        }
+        
+        public static string SiriClipboardHintLabel {
+            get {
+                return ResourceManager.GetString("SiriClipboardHintLabel", resourceCulture);
+            }
+        }
+        
+        public static string Siri_Workflows {
+            get {
+                return ResourceManager.GetString("Siri Workflows", resourceCulture);
+            }
+        }
+        
+        public static string CantOpenWorkflowTitle {
+            get {
+                return ResourceManager.GetString("CantOpenWorkflowTitle", resourceCulture);
+            }
+        }
+        
+        public static string CantOpenWorkflowDescription {
+            get {
+                return ResourceManager.GetString("CantOpenWorkflowDescription", resourceCulture);
+            }
+        }
+        
+        public static string SiriTrackEntrySuggestedInvocationPhrase {
+            get {
+                return ResourceManager.GetString("SiriTrackEntrySuggestedInvocationPhrase", resourceCulture);
+            }
+        }
+        
+        public static string SiriShowReportSuggestedInvocationPhrase {
+            get {
+                return ResourceManager.GetString("SiriShowReportSuggestedInvocationPhrase", resourceCulture);
+            }
+        }
+        
+        public static string SiriStartTimerConfirmationMessage {
+            get {
+                return ResourceManager.GetString("SiriStartTimerConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        public static string SiriStartTimerWithEmptyDescConfirmationMessage {
+            get {
+                return ResourceManager.GetString("SiriStartTimerWithEmptyDescConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        public static string SiriStopTimerConfirmationMessage {
+            get {
+                return ResourceManager.GetString("SiriStopTimerConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        public static string SiriStopTimerWithEmptyDescConfirmationMessage {
+            get {
+                return ResourceManager.GetString("SiriStopTimerWithEmptyDescConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutLoginToUseShortcut {
+            get {
+                return ResourceManager.GetString("SiriShortcutLoginToUseShortcut", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutOpenTheAppToSync {
+            get {
+                return ResourceManager.GetString("SiriShortcutOpenTheAppToSync", resourceCulture);
+            }
+        }
+        
+        public static string SiriDurationWithSeconds {
+            get {
+                return ResourceManager.GetString("SiriDurationWithSeconds", resourceCulture);
+            }
+        }
+        
+        public static string SiriDurationWithMinutesAndSeconds {
+            get {
+                return ResourceManager.GetString("SiriDurationWithMinutesAndSeconds", resourceCulture);
+            }
+        }
+        
+        public static string SiriDurationWithHoursAndSeconds {
+            get {
+                return ResourceManager.GetString("SiriDurationWithHoursAndSeconds", resourceCulture);
+            }
+        }
+        
+        public static string SiriDurationWithHoursMinutesAndSeconds {
+            get {
+                return ResourceManager.GetString("SiriDurationWithHoursMinutesAndSeconds", resourceCulture);
+            }
+        }
+        
+        public static string SiriNoCurrentEntryRunning {
+            get {
+                return ResourceManager.GetString("SiriNoCurrentEntryRunning", resourceCulture);
             }
         }
     }

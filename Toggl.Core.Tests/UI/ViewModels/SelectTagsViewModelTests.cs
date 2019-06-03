@@ -18,6 +18,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Extensions;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Parameters;
 using Toggl.Shared.Extensions;
 using Xunit;
 using Unit = System.Reactive.Unit;
@@ -115,7 +116,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 await ViewModel.Initialize();
                 var tagids = new long[] { 1, 4, 29, 2 };
-                ViewModel.Prepare((tagids, 0));
+                ViewModel.Prepare(new SelectTagsParameter(tagids, 0));
 
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
@@ -240,7 +241,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 setup(i => irrelevantWorkspaceId);
 
-                ViewModel.Prepare((new long[] { }, workspaceId));
+                ViewModel.Prepare(new SelectTagsParameter(new long[] { }, workspaceId));
                 await ViewModel.Initialize();
                 var observer = TestScheduler.CreateObserver<bool>();
                 ViewModel.IsEmpty.Subscribe(observer);
@@ -255,7 +256,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 setup(i => i % 2 == 0 ? irrelevantWorkspaceId : workspaceId);
 
-                ViewModel.Prepare((new long[] { }, workspaceId));
+                ViewModel.Prepare(new SelectTagsParameter(new long[] { }, workspaceId));
                 await ViewModel.Initialize();
                 var observer = TestScheduler.CreateObserver<bool>();
                 ViewModel.IsEmpty.Subscribe(observer);
@@ -270,7 +271,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 setup(i => i % 2 == 0 ? irrelevantWorkspaceId : workspaceId);
 
-                ViewModel.Prepare((new long[] { }, workspaceId));
+                ViewModel.Prepare(new SelectTagsParameter(new long[] { }, workspaceId));
                 await ViewModel.Initialize();
                 var observer = TestScheduler.CreateObserver<bool>();
                 ViewModel.IsEmpty.Subscribe(observer);
@@ -293,7 +294,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 newTag.WorkspaceId.Returns(workspaceId);
                 newTag.Name.Returns("new tag");
 
-                ViewModel.Prepare((new long[] { }, workspaceId));
+                ViewModel.Prepare(new SelectTagsParameter(new long[] { }, workspaceId));
 
                 var observer = TestScheduler.CreateObserver<bool>();
                 await ViewModel.Initialize();
@@ -355,7 +356,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Returns(Observable.Return(targetWorkspace));
                 var tagIds = tags.Select(tag => tag.TagId).ToArray();
 
-                ViewModel.Prepare((tagIds, targetWorkspace.Id));
+                ViewModel.Prepare(new SelectTagsParameter(tagIds, targetWorkspace.Id));
                 await ViewModel.Initialize();
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableTagBaseViewModel>>();
                 ViewModel.Tags.Subscribe(observer);
@@ -378,7 +379,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetWorkspaceById(workspace.Id).Execute()
                     .Returns(Observable.Return(workspace));
 
-                ViewModel.Prepare((tagIds, workspace.Id));
+                ViewModel.Prepare(new SelectTagsParameter(tagIds, workspace.Id));
                 await ViewModel.Initialize();
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableTagBaseViewModel>>();
                 ViewModel.Tags.Subscribe(observer);
@@ -401,7 +402,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetWorkspaceById(workspace.Id).Execute()
                     .Returns(Observable.Return(workspace));
 
-                ViewModel.Prepare((selectedTagIds, workspace.Id));
+                ViewModel.Prepare(new SelectTagsParameter(selectedTagIds, workspace.Id));
                 await ViewModel.Initialize();
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableTagBaseViewModel>>();
                 ViewModel.Tags.Subscribe(observer);
@@ -436,7 +437,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Returns(Observable.Return(newSuggestions));
                 InteractorFactory.GetWorkspaceById(workspace.Id).Execute()
                     .Returns(Observable.Return(workspace));
-                ViewModel.Prepare((oldTagIds, workspace.Id));
+                ViewModel.Prepare(new SelectTagsParameter(oldTagIds, workspace.Id));
                 await ViewModel.Initialize();
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableTagBaseViewModel>>();
                 ViewModel.Tags.Subscribe(observer);
@@ -460,7 +461,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var tagIds = tagSuggestions.Select(tag => tag.TagId).ToArray();
 
                 var nonExistingTag = "Non existing tag";
-                ViewModel.Prepare((tagIds, workspace.Id));
+                ViewModel.Prepare(new SelectTagsParameter(tagIds, workspace.Id));
                 await ViewModel.Initialize();
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableTagBaseViewModel>>();
                 ViewModel.Tags.Subscribe(observer);
@@ -525,7 +526,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task RemovesTheTagIdFromSelectedTagIdsIfSelectedAlready()
             {
                var selectableTag = new SelectableTagViewModel(tagSuggestion.TagId, tagSuggestion.Name, true, 1);
-               ViewModel.Prepare((new long[] { selectableTag.Id }, 0));
+               ViewModel.Prepare(new SelectTagsParameter(new long[] { selectableTag.Id }, 0));
 
                ViewModel.SelectTag.Execute(selectableTag);
                ViewModel.Save.Execute();
@@ -546,7 +547,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var tagIds = new long[] { 100, 3, 10, 34, 532 };
 
-                ViewModel.Prepare((tagIds, 0));
+                ViewModel.Prepare(new SelectTagsParameter(tagIds, 0));
                 ViewModel.Save.Execute();
 
                 await NavigationService

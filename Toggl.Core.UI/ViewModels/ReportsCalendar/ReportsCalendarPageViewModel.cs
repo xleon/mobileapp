@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels.ReportsCalendar
 {
@@ -20,7 +21,7 @@ namespace Toggl.Core.UI.ViewModels.ReportsCalendar
             CalendarMonth calendarMonth, BeginningOfWeek beginningOfWeek, DateTimeOffset today)
         {
             this.beginningOfWeek = beginningOfWeek;
-            this.today = today;
+            this.today = today.RoundDownToLocalDate();
 
             CalendarMonth = calendarMonth;
 

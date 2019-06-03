@@ -13,6 +13,7 @@ using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
+using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
@@ -27,12 +28,11 @@ using Toggl.Shared.Models.Reports;
 using Toggl.Networking.Exceptions;
 using CommonFunctions = Toggl.Shared.Extensions.CommonFunctions;
 using Colors = Toggl.Core.UI.Helper.Colors;
-using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
     [Preserve(AllMembers = true)]
-    public sealed class ReportsViewModel : ViewModelWithInput<ReportPeriod>
+    public sealed class ReportsViewModel : ViewModelWithInput<ReportParameter>
     {
         private const float minimumSegmentPercentageToBeOnItsOwn = 5f;
         private const float maximumSegmentPercentageToEndUpInOther = 1f;
@@ -47,7 +47,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
         private readonly IDialogService dialogService;
-        private readonly IIntentDonationService intentDonationService;
         private readonly IStopwatchProvider stopwatchProvider;
 
         private readonly ReportsCalendarViewModel calendarViewModel;
@@ -75,6 +74,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private long workspaceId;
         private long userId;
         private DateFormat dateFormat;
+        private ReportParameter parameter;
         private BeginningOfWeek beginningOfWeek;
 
         public IObservable<bool> IsLoadingObservable { get; }
@@ -116,7 +116,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
             IInteractorFactory interactorFactory,
             IAnalyticsService analyticsService,
             IDialogService dialogService,
-            IIntentDonationService intentDonationService,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory)
@@ -127,7 +126,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
-            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
@@ -138,10 +136,9 @@ namespace Toggl.Core.UI.ViewModels.Reports
             this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
             this.dialogService = dialogService;
-            this.intentDonationService = intentDonationService;
             this.stopwatchProvider = stopwatchProvider;
 
-            calendarViewModel = new ReportsCalendarViewModel(timeService, dialogService, dataSource, intentDonationService, rxActionFactory);
+            calendarViewModel = new ReportsCalendarViewModel(timeService, dialogService, dataSource, rxActionFactory);
 
             var totalsObservable = reportSubject
                 .SelectMany(_ => interactorFactory.GetReportsTotals(userId, workspaceId, startDate, endDate).Execute())
@@ -169,6 +166,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .AsDriver(schedulerProvider);
 
             CurrentDateRangeStringObservable = currentDateRangeStringSubject
+                .Select(text => !string.IsNullOrEmpty(text) ? $"{text} ▾" : "")
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
@@ -186,10 +184,11 @@ namespace Toggl.Core.UI.ViewModels.Reports
             ShowEmptyStateObservable = SegmentsObservable.CombineLatest(IsLoadingObservable, shouldShowEmptyState);
         }
 
-        public override void Prepare(ReportPeriod parameter)
+        public override void Prepare(ReportParameter parameter)
         {
             base.Prepare();
-            calendarViewModel.SelectPeriod(parameter);
+            calendarViewModel.SelectPeriod(parameter.ReportPeriod);
+            this.parameter = parameter;
         }
 
         public override async Task Initialize()
@@ -201,9 +200,21 @@ namespace Toggl.Core.UI.ViewModels.Reports
             var user = await dataSource.User.Get();
             userId = user.Id;
 
-            var workspace = await interactorFactory.GetDefaultWorkspace()
+            IInteractor<IObservable<IThreadSafeWorkspace>> workspaceInteractor;
+
+            if (parameter?.WorkspaceId is long parameterWorkspaceId)
+            {
+                workspaceInteractor = interactorFactory.GetWorkspaceById(parameterWorkspaceId);
+            }
+            else
+            {
+                workspaceInteractor = interactorFactory.GetDefaultWorkspace();
+            }
+
+            var workspace = await workspaceInteractor
                 .TrackException<InvalidOperationException, IThreadSafeWorkspace>("ReportsViewModel.Initialize")
                 .Execute();
+
             workspaceId = workspace.Id;
             workspaceSubject.OnNext(workspace);
 
@@ -243,7 +254,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
             {
                 navigationService.Navigate(calendarViewModel);
                 didNavigateToCalendar = true;
-                intentDonationService.DonateShowReport();
                 return;
             }
 
@@ -267,15 +277,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
         {
             navigationService.ChangePresentation(new ToggleReportsCalendarVisibilityHint(forceHide: true));
             calendarViewModel.OnHideCalendar();
-        }
-
-        private bool isCurrentWeek()
-        {
-            var firstDayOfCurrentWeek = timeService.CurrentDateTime.BeginningOfWeek(beginningOfWeek);
-            var lastDayOfCurrentWeek = firstDayOfCurrentWeek.AddDays(6);
-
-            return startDate.Date == firstDayOfCurrentWeek
-                   && endDate.Date == lastDayOfCurrentWeek;
         }
 
         private static ReadOnlyCollection<(string, IThreadSafeWorkspace)> readOnlyWorkspaceNameTuples(IEnumerable<IThreadSafeWorkspace> workspaces)
@@ -337,15 +338,48 @@ namespace Toggl.Core.UI.ViewModels.Reports
             if (startDate == default(DateTimeOffset) || endDate == default(DateTimeOffset))
                 return;
 
-            if (startDate == endDate)
+            var currentTime = timeService.CurrentDateTime;
+
+            if (startDate == endDate && startDate == currentTime.RoundDownToLocalDate())
             {
-                currentDateRangeStringSubject.OnNext($"{startDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture)} ▾");
+                currentDateRangeStringSubject.OnNext(Resources.Today);
+            }
+            else if (startDate == endDate && startDate == currentTime.RoundDownToLocalDate().AddDays(-1))
+            {
+                currentDateRangeStringSubject.OnNext(Resources.Yesterday);
                 return;
             }
-
-            currentDateRangeStringSubject.OnNext(isCurrentWeek()
-                ? $"{Resources.ThisWeek} ▾"
-                : $"{startDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture)} - {endDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture)} ▾");
+            else if ((startDate, endDate).IsCurrentWeek(currentTime, beginningOfWeek))
+            {
+                currentDateRangeStringSubject.OnNext(Resources.ThisWeek);
+            }
+            else if ((startDate, endDate).IsLastWeek(currentTime, beginningOfWeek))
+            {
+                currentDateRangeStringSubject.OnNext(Resources.LastWeek);
+            }
+            else if ((startDate, endDate).IsCurrentMonth(currentTime))
+            {
+                currentDateRangeStringSubject.OnNext(Resources.ThisMonth);
+            }
+            else if ((startDate, endDate).IsLastMonth(currentTime))
+            {
+                currentDateRangeStringSubject.OnNext(Resources.LastMonth);
+            }
+            else if ((startDate, endDate).IsCurrentYear(currentTime))
+            {
+                currentDateRangeStringSubject.OnNext(Resources.ThisYear);
+            }
+            else if ((startDate, endDate).IsLastYear(currentTime))
+            {
+                currentDateRangeStringSubject.OnNext(Resources.LastYear);
+            }
+            else
+            {
+                var startDateText = startDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture);
+                var endDateText = endDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture);
+                var dateRangeText = $"{startDateText} - {endDateText}";
+                currentDateRangeStringSubject.OnNext(dateRangeText);
+            }
         }
 
         private void onPreferencesChanged(IThreadSafePreferences preferences)

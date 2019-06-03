@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CoreFoundation;
 using Foundation;
 using Toggl.Core.Shortcuts;
 using UIKit;
@@ -35,7 +36,7 @@ namespace Toggl.iOS
 
         protected override void ClearAllShortCuts()
         {
-            UIApplication.SharedApplication.InvokeOnMainThread(() =>
+            DispatchQueue.MainQueue.DispatchAsync(() =>
             {
                 UIApplication.SharedApplication.ShortcutItems = new UIApplicationShortcutItem[0];
             });
@@ -43,7 +44,7 @@ namespace Toggl.iOS
 
         protected override void SetShortcuts(IEnumerable<ApplicationShortcut> shortcuts)
         {
-            UIApplication.SharedApplication.InvokeOnMainThread(() =>
+            DispatchQueue.MainQueue.DispatchAsync(() =>
             {
                 UIApplication.SharedApplication.ShortcutItems = shortcuts
                     .Select(createIosShortcut)

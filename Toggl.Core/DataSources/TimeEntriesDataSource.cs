@@ -125,8 +125,8 @@ namespace Toggl.Core.DataSources
 
         public override IObservable<IEnumerable<IConflictResolutionResult<IThreadSafeTimeEntry>>> BatchUpdate(IEnumerable<IThreadSafeTimeEntry> entities)
             => entities.Select(timeEntry => checkForOutOfBoundsDate(timeEntry, "BatchUpdate"))
-                .Aggregate((accumulator, observable) => accumulator.Merge(observable))
-                .TakeLast(1)
+                .Merge()
+                .LastOrDefaultAsync()
                 .SelectMany(_ => base.BatchUpdate(entities));
 
         public override IObservable<IThreadSafeTimeEntry> Update(IThreadSafeTimeEntry entity)
