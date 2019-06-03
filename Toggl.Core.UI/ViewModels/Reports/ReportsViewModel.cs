@@ -42,7 +42,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private readonly ITogglDataSource dataSource;
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
-        private readonly IIntentDonationService intentDonationService;
         private readonly IStopwatchProvider stopwatchProvider;
 
         private readonly Subject<Unit> reportSubject = new Subject<Unit>();
@@ -68,6 +67,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private IThreadSafeWorkspace workspace;
         private long userId;
         private DateFormat dateFormat;
+        private ReportParameter parameter;
         private BeginningOfWeek beginningOfWeek;
 
         public IObservable<bool> IsLoadingObservable { get; }
@@ -108,7 +108,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
             INavigationService navigationService,
             IInteractorFactory interactorFactory,
             IAnalyticsService analyticsService,
-            IIntentDonationService intentDonationService,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory)
@@ -121,16 +120,15 @@ namespace Toggl.Core.UI.ViewModels.Reports
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
-            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
+            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
             this.analyticsService = analyticsService;
             this.interactorFactory = interactorFactory;
             this.stopwatchProvider = stopwatchProvider;
-            this.intentDonationService = intentDonationService;
 
-            CalendarViewModel = new ReportsCalendarViewModel(timeService, dataSource, intentDonationService, rxActionFactory, navigationService);
+            CalendarViewModel = new ReportsCalendarViewModel(timeService, dataSource, rxActionFactory, navigationService);
 
             var totalsObservable = reportSubject
                 .SelectMany(_ => interactorFactory.GetReportsTotals(userId, workspaceId, startDate, endDate).Execute())
@@ -181,6 +179,10 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             await CalendarViewModel.Initialize();
 
+            // TODO: Fix the parameter usage
+            // CalendarViewModel.SelectPeriod(parameter.ReportPeriod);
+            // this.parameter = parameter;
+
             WorkspacesObservable
                 .Subscribe(data => Workspaces = data)
                 .DisposedBy(disposeBag);
@@ -188,9 +190,21 @@ namespace Toggl.Core.UI.ViewModels.Reports
             var user = await dataSource.User.Get();
             userId = user.Id;
 
-            workspace = await interactorFactory.GetDefaultWorkspace()
+            IInteractor<IObservable<IThreadSafeWorkspace>> workspaceInteractor;
+
+            if (parameter?.WorkspaceId is long parameterWorkspaceId)
+            {
+                workspaceInteractor = interactorFactory.GetWorkspaceById(parameterWorkspaceId);
+            }
+            else
+            {
+                workspaceInteractor = interactorFactory.GetDefaultWorkspace();
+            }
+
+            var workspace = await workspaceInteractor
                 .TrackException<InvalidOperationException, IThreadSafeWorkspace>("ReportsViewModel.Initialize")
                 .Execute();
+
             workspaceId = workspace.Id;
             workspaceSubject.OnNext(workspace);
 
@@ -227,8 +241,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
             stopwatchProvider.Remove(MeasuredOperation.OpenReportsViewForTheFirstTime);
             firstTimeOpenedFromMainTabBarStopwatch?.Stop();
             firstTimeOpenedFromMainTabBarStopwatch = null;
-
-            intentDonationService.DonateShowReport();
 
             if (viewAppearedForTheFirstTime())
                 CalendarViewModel.ViewAppeared();
