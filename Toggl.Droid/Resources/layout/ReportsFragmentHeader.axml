@@ -10,15 +10,22 @@
         android:id="@+id/SummaryCard"
         android:elevation="2dp"
         local:cardBackgroundColor="@android:color/white"
-        android:layout_height="114dp"
+        android:minHeight="114dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="24dp"
         android:layout_width="match_parent">
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+            <android.support.constraint.Guideline
+                android:id="@+id/ReportsSummaryCenterView"
+                android:orientation="vertical"
+                local:layout_constraintGuide_percent="0.5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/ReportsSummaryTotalLabel"
                 android:textSize="12sp"
@@ -26,6 +33,8 @@
                 android:letterSpacing="0.04"
                 android:fontFamily="sans-serif-medium"
                 android:textColor="@color/reportsLabelColor"
+                local:layout_constraintTop_toTopOf="parent"
+                local:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginTop="16dp"
                 android:layout_marginLeft="12dp"
                 android:layout_width="wrap_content"
@@ -37,24 +46,19 @@
                 android:textSize="24sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ReportsSummaryTotalLabel"
-                android:layout_alignStart="@+id/ReportsSummaryTotalLabel" />
+                local:layout_constraintLeft_toLeftOf="@id/ReportsSummaryTotalLabel"
+                local:layout_constraintTop_toBottomOf="@id/ReportsSummaryTotalLabel" />
             <ImageView
                 android:id="@+id/ReportsTotalChartImageView"
                 android:scaleType="fitStart"
                 android:src="@drawable/reports_total_chart"
                 android:layout_height="22dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="12dp"
-                android:layout_width="match_parent"
-                android:layout_below="@+id/ReportsSummaryTotal"
-                android:layout_alignEnd="@+id/ReportsSummaryCenterView" />
-            <View
-                android:id="@+id/ReportsSummaryCenterView"
-                android:layout_width="0.5dp"
-                android:layout_height="match_parent"
-                android:layout_centerHorizontal="true" />
+                android:layout_marginBottom="16dp"
+                android:layout_width="0dp"
+                local:layout_constraintTop_toBottomOf="@id/ReportsSummaryTotal"
+                local:layout_constraintLeft_toLeftOf="@id/ReportsSummaryTotal"
+                local:layout_constraintBottom_toBottomOf="parent" />
             <TextView
                 android:id="@+id/ReportsSummaryBillableLabel"
                 android:textSize="12sp"
@@ -66,7 +70,8 @@
                 android:layout_marginLeft="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/ReportsSummaryCenterView" />
+                local:layout_constraintTop_toTopOf="parent"
+                local:layout_constraintLeft_toRightOf="@id/ReportsSummaryCenterView" />
             <TextView
                 android:id="@+id/ReportsSummaryBillable"
                 tools:text="86%"
@@ -76,23 +81,24 @@
                 android:fontFamily="sans-serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ReportsSummaryBillableLabel"
-                android:layout_alignStart="@+id/ReportsSummaryBillableLabel" />
+                local:layout_constraintTop_toBottomOf="@id/ReportsSummaryBillableLabel"
+                local:layout_constraintLeft_toLeftOf="@id/ReportsSummaryBillableLabel" />
             <FrameLayout
                 android:background="#1E328FFF"
                 android:layout_height="6dp"
-                android:layout_marginTop="26dp"
                 android:layout_marginRight="12dp"
-                android:layout_width="match_parent"
-                android:layout_below="@+id/ReportsSummaryBillable"
-                android:layout_alignStart="@+id/ReportsSummaryBillable">
+                android:layout_marginBottom="16dp"
+                android:layout_width="0dp"
+                local:layout_constraintLeft_toLeftOf="@id/ReportsSummaryBillable"
+                local:layout_constraintRight_toRightOf="parent"
+                local:layout_constraintBottom_toBottomOf="parent">
                 <View
                     android:id="@+id/BillablePercentageView"
                     android:background="#328FFF"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </FrameLayout>
-        </RelativeLayout>
+        </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
     <LinearLayout
         android:orientation="vertical"
