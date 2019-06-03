@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
@@ -10,6 +9,7 @@ using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Analytics;
+using Toggl.Core.Models;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
@@ -19,6 +19,7 @@ using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Tests.Generators;
 using Toggl.Shared;
 using Xunit;
+using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -28,7 +29,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             : BaseViewModelTests<ReportsCalendarViewModel>
         {
             protected override ReportsCalendarViewModel CreateViewModel()
-                => new ReportsCalendarViewModel(TimeService, DialogService, DataSource, IntentDonationService, RxActionFactory);
+                => new ReportsCalendarViewModel(TimeService, DialogService, DataSource, RxActionFactory);
         }
 
         public sealed class TheConstructor : ReportsCalendarViewModelTest
@@ -39,18 +40,16 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useTimeService,
                 bool useDialogService,
                 bool useDataSource,
-                bool useIntentDonationService,
                 bool useRxActionFactory
             )
             {
                 var timeService = useTimeService ? TimeService : null;
                 var dialogService = useDialogService ? DialogService : null;
                 var dataSource = useDataSource ? DataSource : null;
-                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new ReportsCalendarViewModel(timeService, dialogService, dataSource, intentDonationService, rxActionFactory);
+                    () => new ReportsCalendarViewModel(timeService, dialogService, dataSource, rxActionFactory);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();

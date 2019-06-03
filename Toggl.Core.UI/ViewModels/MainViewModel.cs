@@ -54,7 +54,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IInteractorFactory interactorFactory;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly INavigationService navigationService;
-        private readonly IIntentDonationService intentDonationService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
         private readonly IRxActionFactory rxActionFactory;
         private readonly ISchedulerProvider schedulerProvider;
@@ -96,7 +95,7 @@ namespace Toggl.Core.UI.ViewModels
         public InputAction<bool> StartTimeEntry { get; private set; }
         public InputAction<(long[], EditTimeEntryOrigin)> SelectTimeEntry { get; private set; }
         public InputAction<TimeEntryStopOrigin> StopTimeEntry { get; private set; }
-        public InputAction<(long, ContinueTimeEntryMode)> ContinueTimeEntry { get; private set; }
+        public RxAction<(long, ContinueTimeEntryMode), IThreadSafeTimeEntry> ContinueTimeEntry { get; private set; }
 
         public ITimeService TimeService { get; }
 
@@ -113,7 +112,6 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             INavigationService navigationService,
             IRemoteConfigService remoteConfigService,
-            IIntentDonationService intentDonationService,
             IAccessRestrictionStorage accessRestrictionStorage,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
@@ -131,7 +129,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
-            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
@@ -143,7 +140,6 @@ namespace Toggl.Core.UI.ViewModels
             this.navigationService = navigationService;
             this.onboardingStorage = onboardingStorage;
             this.schedulerProvider = schedulerProvider;
-            this.intentDonationService = intentDonationService;
             this.accessRestrictionStorage = accessRestrictionStorage;
             this.stopwatchProvider = stopwatchProvider;
             this.rxActionFactory = rxActionFactory;
@@ -253,9 +249,9 @@ namespace Toggl.Core.UI.ViewModels
             OpenSettings = rxActionFactory.FromAsync(openSettings);
             OpenSyncFailures = rxActionFactory.FromAsync(openSyncFailures);
             SelectTimeEntry = rxActionFactory.FromAsync<(long[], EditTimeEntryOrigin)>(timeEntrySelected);
-            ContinueTimeEntry = rxActionFactory.FromObservable<(long, ContinueTimeEntryMode)>(continueTimeEntry);
+            ContinueTimeEntry = rxActionFactory.FromObservable<(long, ContinueTimeEntryMode), IThreadSafeTimeEntry>(continueTimeEntry);
             StartTimeEntry = rxActionFactory.FromAsync<bool>(startTimeEntry, IsTimeEntryRunning.Invert());
-            StopTimeEntry = rxActionFactory.FromAsync<TimeEntryStopOrigin>(stopTimeEntry, IsTimeEntryRunning);
+            StopTimeEntry = rxActionFactory.FromObservable<TimeEntryStopOrigin>(stopTimeEntry, IsTimeEntryRunning);
 
             switch (urlNavigationAction)
             {
@@ -285,12 +281,6 @@ namespace Toggl.Core.UI.ViewModels
             onboardingStorage.StopButtonWasTappedBefore
                              .Subscribe(hasBeen => hasStopButtonEverBeenUsed = hasBeen)
                              .DisposedBy(disposeBag);
-
-            interactorFactory.GetDefaultWorkspace()
-                .TrackException<InvalidOperationException, IThreadSafeWorkspace>("MainViewModel.Initialize")
-                .Execute()
-                .Subscribe(intentDonationService.SetDefaultShortcutSuggestions)
-                .DisposedBy(disposeBag);
         }
 
         public void Track(ITrackableEvent e)
@@ -431,15 +421,15 @@ namespace Toggl.Core.UI.ViewModels
             return navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(parameter);
         }
 
-        private IObservable<Unit> continueTimeEntry((long, ContinueTimeEntryMode) continueInfo)
+        private IObservable<IThreadSafeTimeEntry> continueTimeEntry((long, ContinueTimeEntryMode) continueInfo)
         {
             var (timeEntryId, continueMode) = continueInfo;
+
             return interactorFactory.GetTimeEntryById(timeEntryId).Execute()
                 .Select(timeEntry => timeEntry.AsTimeEntryPrototype())
                 .SelectMany(prototype =>
                     interactorFactory.ContinueTimeEntry(prototype, continueMode).Execute())
-                .Do(_ => onboardingStorage.SetTimeEntryContinued())
-                .SelectUnit();
+                .Do(_ => onboardingStorage.SetTimeEntryContinued());
         }
 
         private async Task timeEntrySelected((long[], EditTimeEntryOrigin) timeEntrySelection)
@@ -473,15 +463,15 @@ namespace Toggl.Core.UI.ViewModels
             await syncManager.ForceFullSync();
         }
 
-        private async Task stopTimeEntry(TimeEntryStopOrigin origin)
+        private IObservable<Unit> stopTimeEntry(TimeEntryStopOrigin origin)
         {
             OnboardingStorage.StopButtonWasTapped();
 
-            await interactorFactory
+            return interactorFactory
                 .StopTimeEntry(TimeService.CurrentDateTime, origin)
                 .Execute()
-                .Do(_ => intentDonationService.DonateStopCurrentTimeEntry())
-                .Do(syncManager.InitiatePushSync);
+                .Do(syncManager.InitiatePushSync)
+                .SelectUnit();
         }
 
         private Task navigate<TModel, TParameters>(TParameters value)

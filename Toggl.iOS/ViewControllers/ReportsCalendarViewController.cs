@@ -76,6 +76,10 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             quickSelectCollectionViewSource.ShortcutTaps
+                .Do(shortcut =>
+                {
+                    IosDependencyContainer.Instance.IntentDonationService.DonateShowReport(shortcut.Period);
+                })
                 .Subscribe(ViewModel.SelectShortcut.Inputs)
                 .DisposedBy(DisposeBag);
 

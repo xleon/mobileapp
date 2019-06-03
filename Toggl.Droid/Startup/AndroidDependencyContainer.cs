@@ -69,9 +69,6 @@ namespace Toggl.Droid
         protected override IGoogleService CreateGoogleService()
             => new GoogleServiceAndroid();
 
-        protected override IIntentDonationService CreateIntentDonationService()
-            => new NoopIntentDonationServiceAndroid();
-
         protected override IKeyValueStorage CreateKeyValueStorage()
         {
             var sharedPreferences = Application.Context.GetSharedPreferences(Platform.Giskard.ToString(), FileCreationMode.Private);

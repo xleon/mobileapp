@@ -50,7 +50,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IInteractorFactory interactorFactory;
         private readonly INavigationService navigationService;
         private readonly IPrivateSharedStorageService privateSharedStorageService;
-        private readonly IIntentDonationService intentDonationService;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly IRxActionFactory rxActionFactory;
         private readonly ISchedulerProvider schedulerProvider;
@@ -93,6 +92,8 @@ namespace Toggl.Core.UI.ViewModels
         public UIAction OpenHelpView { get; }
         public UIAction TryLogout { get; }
         public UIAction OpenAboutView { get; }
+        public UIAction OpenSiriShortcuts { get; }
+        public UIAction OpenSiriWorkflows { get; }
         public UIAction SubmitFeedback { get; }
         public UIAction SelectDateFormat { get; }
         public UIAction PickDefaultWorkspace { get; }
@@ -115,7 +116,6 @@ namespace Toggl.Core.UI.ViewModels
             IOnboardingStorage onboardingStorage,
             INavigationService navigationService,
             IPrivateSharedStorageService privateSharedStorageService,
-            IIntentDonationService intentDonationService,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory,
             IPermissionsService permissionsService,
@@ -132,7 +132,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
-            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
@@ -150,7 +149,6 @@ namespace Toggl.Core.UI.ViewModels
             this.userAccessManager = userAccessManager;
             this.onboardingStorage = onboardingStorage;
             this.stopwatchProvider = stopwatchProvider;
-            this.intentDonationService = intentDonationService;
             this.privateSharedStorageService = privateSharedStorageService;
             this.rxActionFactory = rxActionFactory;
             this.schedulerProvider = schedulerProvider;
@@ -228,7 +226,7 @@ namespace Toggl.Core.UI.ViewModels
                     .Select(preferences => preferences.CollapseTimeEntries)
                     .DistinctUntilChanged()
                     .AsDriver(false, schedulerProvider);
-                    
+
             IsCalendarSmartRemindersVisible = calendarPermissionGranted.AsObservable()
                 .CombineLatest(userPreferences.EnabledCalendars.Select(ids => ids.Any()), CommonFunctions.And);
 
@@ -279,6 +277,8 @@ namespace Toggl.Core.UI.ViewModels
             OpenHelpView = rxActionFactory.FromAsync(openHelpView);
             TryLogout = rxActionFactory.FromAsync(tryLogout);
             OpenAboutView = rxActionFactory.FromAsync(openAboutView);
+            OpenSiriShortcuts = rxActionFactory.FromAsync(openSiriShorcuts);
+            OpenSiriWorkflows = rxActionFactory.FromAsync(openSiriWorkflows);
             SubmitFeedback = rxActionFactory.FromAsync(submitFeedback);
             SelectDateFormat = rxActionFactory.FromAsync(selectDateFormat);
             PickDefaultWorkspace = rxActionFactory.FromAsync(pickDefaultWorkspace);
@@ -438,6 +438,12 @@ namespace Toggl.Core.UI.ViewModels
         private Task openAboutView()
             => navigationService.Navigate<AboutViewModel>();
 
+        private Task openSiriShorcuts()
+            => navigationService.Navigate<SiriShortcutsViewModel>();
+
+        private Task openSiriWorkflows()
+            => navigationService.Navigate<SiriWorkflowsViewModel>();
+
         private async Task submitFeedback()
         {
             var sendFeedbackSucceed = await navigationService.Navigate<SendFeedbackViewModel, bool>();
@@ -463,7 +469,7 @@ namespace Toggl.Core.UI.ViewModels
 
             var selectedWorkspaceId =
                 await navigationService
-                    .Navigate<SelectWorkspaceViewModel, long, long>(defaultWorkspace.Id);
+                    .Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(new SelectWorkspaceParameters(Resources.SetDefaultWorkspace, defaultWorkspace.Id));
 
             await changeDefaultWorkspace(selectedWorkspaceId);
         }
@@ -504,7 +510,7 @@ namespace Toggl.Core.UI.ViewModels
             var authorized = await permissionsService.CalendarPermissionGranted;
             calendarPermissionGranted.OnNext(authorized);
         }
-        
+
         private Task close() => navigationService.Close(this);
     }
 }

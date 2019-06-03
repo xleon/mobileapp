@@ -52,7 +52,6 @@ namespace Toggl.Core.UI.ViewModels
             IPermissionsService permissionsService,
             INavigationService navigationService,
             IRemoteConfigService remoteConfigService,
-            IIntentDonationService intentDonationService,
             IAccessRestrictionStorage accessRestrictionStorage,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory,
@@ -75,7 +74,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
-            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
@@ -99,7 +97,6 @@ namespace Toggl.Core.UI.ViewModels
                 interactorFactory,
                 navigationService,
                 remoteConfigService,
-                intentDonationService,
                 accessRestrictionStorage,
                 schedulerProvider,
                 stopwatchProvider,
@@ -112,7 +109,6 @@ namespace Toggl.Core.UI.ViewModels
                 interactorFactory,
                 analyticsService,
                 dialogService,
-                intentDonationService,
                 schedulerProvider,
                 stopwatchProvider,
                 rxActionFactory);
@@ -144,7 +140,6 @@ namespace Toggl.Core.UI.ViewModels
                 onboardingStorage,
                 navigationService,
                 privateSharedStorageService,
-                intentDonationService,
                 stopwatchProvider,
                 rxActionFactory,
                 permissionsService,

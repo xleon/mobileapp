@@ -371,7 +371,7 @@ namespace Toggl.Core.UI.ViewModels
 
             var chosenProject = await navigationService
                 .Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(
-                    SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
+                    new SelectProjectParameter(projectId, taskId, workspaceId));
 
             if (chosenProject.WorkspaceId == workspaceId
                 && chosenProject.ProjectId == projectId
@@ -429,7 +429,8 @@ namespace Toggl.Core.UI.ViewModels
             var currentTags = tagIds.OrderBy(CommonFunctions.Identity).ToArray();
 
             var chosenTags = await navigationService
-                .Navigate<SelectTagsViewModel, (long[], long), long[]>((currentTags, workspaceId));
+                .Navigate<SelectTagsViewModel, SelectTagsParameter, long[]>(
+                    new SelectTagsParameter(currentTags, workspaceId));
 
             if (chosenTags.OrderBy(CommonFunctions.Identity).SequenceEqual(currentTags))
                 return;

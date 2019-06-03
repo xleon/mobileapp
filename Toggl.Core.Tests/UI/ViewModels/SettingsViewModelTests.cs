@@ -60,7 +60,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     OnboardingStorage,
                     NavigationService,
                     PrivateSharedStorageService,
-                    IntentDonationService,
                     StopwatchProvider,
                     RxActionFactory,
                     PermissionsService,
@@ -88,7 +87,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useOnboardingStorage,
                 bool useNavigationService,
                 bool usePrivateSharedStorageService,
-                bool useIntentDonationService,
                 bool useStopwatchProvider,
                 bool useRxActionFactory,
                 bool usePermissionsService,
@@ -105,7 +103,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var navigationService = useNavigationService ? NavigationService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
-                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var permissionsService = usePermissionsService ? PermissionsService : null;
@@ -124,7 +121,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         onboardingStorage,
                         navigationService,
                         privateSharedStorageService,
-                        intentDonationService,
                         stopwatchProvider,
                         rxActionFactory,
                         permissionsService,
@@ -419,14 +415,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
 
                 await NavigationService.Received()
-                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>());
+                    .Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(Arg.Any<SelectWorkspaceParameters>());
             }
 
             [Fact, LogIfTooSlow]
             public async Task UpdatesTheUserWithTheReceivedWorspace()
             {
                 NavigationService
-                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>())
+                    .Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(Arg.Any<SelectWorkspaceParameters>())
                     .Returns(Task.FromResult(workspaceId));
 
                 ViewModel.PickDefaultWorkspace.Execute();
@@ -442,7 +438,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task StartsTheSyncAlgorithm()
             {
                 NavigationService
-                    .Navigate<SelectWorkspaceViewModel, long, long>(Arg.Any<long>())
+                    .Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(Arg.Any<SelectWorkspaceParameters>())
                     .Returns(Task.FromResult(workspaceId));
 
                 ViewModel.PickDefaultWorkspace.Execute();
