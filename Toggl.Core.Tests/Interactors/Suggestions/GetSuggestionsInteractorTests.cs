@@ -12,10 +12,11 @@ namespace Toggl.Core.Tests.Interactors.Suggestions
         {
             [Theory, LogIfTooSlow]
             [ConstructorData]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useTimeService)
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useStopWatchProvider, bool useDataSource, bool useTimeService)
             {
                 Action createInstance = () => new GetSuggestionsInteractor(
                     3,
+                    useStopWatchProvider ? StopwatchProvider : null,
                     useDataSource ? DataSource : null,
                     useTimeService ? TimeService : null);
 
@@ -32,6 +33,7 @@ namespace Toggl.Core.Tests.Interactors.Suggestions
             {
                 Action createInstance = () => new GetSuggestionsInteractor(
                     count,
+                    StopwatchProvider,
                     DataSource,
                     TimeService);
 

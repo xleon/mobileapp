@@ -35,8 +35,33 @@ namespace Toggl.Core.Suggestions
 
         public TimeSpan? Duration { get; } = null;
 
+        public SuggestionProviderType ProviderName { get; }
+
         internal Suggestion(IDatabaseTimeEntry timeEntry)
         {
+            TaskId = timeEntry.TaskId;
+            ProjectId = timeEntry.ProjectId;
+            IsBillable = timeEntry.Billable;
+            Description = timeEntry.Description;
+            WorkspaceId = timeEntry.WorkspaceId;
+
+            if (timeEntry.Project == null) return;
+
+            HasProject = true;
+            ProjectName = timeEntry.Project.Name;
+            ProjectColor = timeEntry.Project.Color;
+
+            ClientName = timeEntry.Project.Client?.Name ?? "";
+
+            if (timeEntry.Task == null) return;
+
+            TaskName = timeEntry.Task.Name;
+        }
+
+        internal Suggestion(IDatabaseTimeEntry timeEntry, SuggestionProviderType providerName)
+        {
+            ProviderName = providerName;
+
             TaskId = timeEntry.TaskId;
             ProjectId = timeEntry.ProjectId;
             IsBillable = timeEntry.Billable;
