@@ -1,13 +1,15 @@
 using System;
+using System.Linq;
 using Toggl.Core.Helper;
 using Toggl.Core.Models;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.Storage.Models;
 
 namespace Toggl.Core.Suggestions
 {
     [Preserve(AllMembers = true)]
-    public sealed class Suggestion : ITimeEntryPrototype
+    public sealed class Suggestion : ITimeEntryPrototype, IEquatable<Suggestion>
     {
         public string Description { get; } = "";
 
@@ -68,7 +70,8 @@ namespace Toggl.Core.Suggestions
             Description = timeEntry.Description;
             WorkspaceId = timeEntry.WorkspaceId;
 
-            if (timeEntry.Project == null) return;
+            if (timeEntry.Project == null) 
+                return;
 
             HasProject = true;
             ProjectName = timeEntry.Project.Name;
@@ -76,9 +79,25 @@ namespace Toggl.Core.Suggestions
 
             ClientName = timeEntry.Project.Client?.Name ?? "";
 
-            if (timeEntry.Task == null) return;
+            if (timeEntry.Task == null)
+                return;
 
             TaskName = timeEntry.Task.Name;
+        }
+        
+        public bool Equals(Suggestion other)
+        {
+            if (other is null)
+                return false;
+
+            return Description == other.Description
+                && ProjectId == other.ProjectId
+                && TaskId == other.TaskId
+                && WorkspaceId == other.WorkspaceId
+                && StartTime == other.StartTime
+                && Duration == other.Duration
+                && IsBillable == other.IsBillable
+                && TagIds.SetEquals(other.TagIds);
         }
     }
 }
