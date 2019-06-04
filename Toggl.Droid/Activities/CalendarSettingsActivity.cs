@@ -13,7 +13,7 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Activities
 {
-    [Activity(Theme = "@style/AppTheme",
+    [Activity(Theme = "@style/Theme.Splash",
               WindowSoftInputMode = SoftInput.AdjustResize,
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
@@ -23,7 +23,13 @@ namespace Toggl.Droid.Activities
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            SetTheme(Resource.Style.AppTheme);
             base.OnCreate(savedInstanceState);
+            if (ViewModelWasNotCached())
+            {
+                BailOutToSplashScreen();
+                return;
+            }
             SetContentView(Resource.Layout.CalendarSettingsActivity);
 
             InitializeViews();

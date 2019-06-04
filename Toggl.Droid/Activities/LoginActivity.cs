@@ -13,7 +13,7 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Activities
 {
-    [Activity(Theme = "@style/AppTheme.WhiteStatusBar",
+    [Activity(Theme = "@style/Theme.Splash",
               ScreenOrientation = ScreenOrientation.Portrait,
               WindowSoftInputMode = SoftInput.AdjustPan | SoftInput.StateHidden,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
@@ -21,7 +21,13 @@ namespace Toggl.Droid.Activities
     {
         protected override void OnCreate(Bundle bundle)
         {
+            SetTheme(Resource.Style.AppTheme_WhiteStatusBar);
             base.OnCreate(bundle);
+            if (ViewModelWasNotCached())
+            {
+                BailOutToSplashScreen();
+                return;
+            }
             SetContentView(Resource.Layout.LoginActivity);
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
 

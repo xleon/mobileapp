@@ -19,7 +19,7 @@ using Fragment = Android.Support.V4.App.Fragment;
 
 namespace Toggl.Droid.Activities
 {
-    [Activity(Theme = "@style/AppTheme",
+    [Activity(Theme = "@style/Theme.Splash",
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class MainTabBarActivity : ReactiveActivity<MainTabBarViewModel>
@@ -39,7 +39,13 @@ namespace Toggl.Droid.Activities
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            SetTheme(Resource.Style.AppTheme);
             base.OnCreate(savedInstanceState);
+            if (ViewModelWasNotCached())
+            {
+                BailOutToSplashScreen();
+                return;
+            }
             SetContentView(Resource.Layout.MainTabBarActivity);
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
 

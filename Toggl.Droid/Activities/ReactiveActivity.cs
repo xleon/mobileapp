@@ -6,6 +6,7 @@ using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.App;
+using Android.Util;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
 
@@ -27,6 +28,15 @@ namespace Toggl.Droid.Activities
         protected ReactiveActivity(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
+        }
+
+        public bool ViewModelWasNotCached()
+            => ViewModel == null;
+
+        public void BailOutToSplashScreen()
+        {
+            StartActivity(new Intent(this, typeof(SplashScreen)).AddFlags(ActivityFlags.TaskOnHome));
+            Finish();
         }
 
         protected override void OnCreate(Bundle bundle)

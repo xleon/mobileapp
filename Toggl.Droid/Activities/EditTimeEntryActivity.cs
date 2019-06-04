@@ -22,7 +22,7 @@ using static Toggl.Droid.Resource.String;
 
 namespace Toggl.Droid.Activities
 {
-    [Activity(Theme = "@style/AppTheme.BlueStatusBar",
+    [Activity(Theme = "@style/Theme.Splash",
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class EditTimeEntryActivity : ReactiveActivity<EditTimeEntryViewModel>
@@ -31,7 +31,13 @@ namespace Toggl.Droid.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
+            SetTheme(Resource.Style.AppTheme_BlueStatusBar);
             base.OnCreate(bundle);
+            if (ViewModelWasNotCached())
+            {
+                BailOutToSplashScreen();
+                return;
+            }
             SetContentView(Resource.Layout.EditTimeEntryActivity);
             restoreTimeEntryIds(bundle);
             

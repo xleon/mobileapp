@@ -17,7 +17,7 @@ using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace Toggl.Droid.Activities
 {
-    [Activity(Theme = "@style/AppTheme.WhiteStatusBar",
+    [Activity(Theme = "@style/Theme.Splash",
         ScreenOrientation = ScreenOrientation.Portrait,
         WindowSoftInputMode = SoftInput.StateVisible,
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
@@ -27,7 +27,13 @@ namespace Toggl.Droid.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
+            SetTheme(Resource.Style.AppTheme_WhiteStatusBar);
             base.OnCreate(bundle);
+            if (ViewModelWasNotCached())
+            {
+                BailOutToSplashScreen();
+                return;
+            }
             SetContentView(Resource.Layout.ForgotPasswordActivity);
             OverridePendingTransition(Resource.Animation.abc_slide_in_right, Resource.Animation.abc_fade_out);
 

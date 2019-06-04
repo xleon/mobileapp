@@ -13,7 +13,7 @@ using Toggl.Networking.Exceptions;
 
 namespace Toggl.Droid.Activities
 {
-    [Activity(Theme = "@style/AppTheme",
+    [Activity(Theme = "@style/Theme.Splash",
         ScreenOrientation = ScreenOrientation.Portrait,
         WindowSoftInputMode = SoftInput.StateVisible,
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
@@ -24,7 +24,13 @@ namespace Toggl.Droid.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
+            SetTheme(Resource.Style.AppTheme);
             base.OnCreate(bundle);
+            if (ViewModelWasNotCached())
+            {
+                BailOutToSplashScreen();
+                return;
+            }
             SetContentView(Resource.Layout.SendFeedbackActivity);
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
 

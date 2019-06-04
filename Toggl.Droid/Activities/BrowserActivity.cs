@@ -11,7 +11,7 @@ using static Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Activities
 {
-    [Activity(Theme = "@style/AppTheme",
+    [Activity(Theme = "@style/Theme.Splash",
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed class BrowserActivity : ReactiveActivity<BrowserViewModel>
@@ -20,7 +20,13 @@ namespace Toggl.Droid.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
+            SetTheme(Resource.Style.AppTheme);
             base.OnCreate(bundle);
+            if (ViewModelWasNotCached())
+            {
+                BailOutToSplashScreen();
+                return;
+            }
             SetContentView(Resource.Layout.BrowserActivity);
             OverridePendingTransition(Resource.Animation.abc_slide_in_right, Resource.Animation.abc_fade_out);
 
