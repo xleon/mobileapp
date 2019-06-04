@@ -1,4 +1,5 @@
 using System;
+using Toggl.Core.Models;
 
 namespace Toggl.Core.UI.Navigation
 {
@@ -10,6 +11,8 @@ namespace Toggl.Core.UI.Navigation
     {
         public long? WorkspaceId { get; }
 
+        public ReportPeriod? Period { get; }
+
         public DateTimeOffset? StartDate { get; }
 
         public DateTimeOffset? EndDate { get; }
@@ -18,6 +21,12 @@ namespace Toggl.Core.UI.Navigation
             WorkspaceId = workspaceId;
             StartDate = startDate;
             EndDate = endDate;
+        }
+
+        public ShowReportsPresentationChange(long? workspaceId, ReportPeriod period)
+        {
+            WorkspaceId = workspaceId;
+            Period = period;
         }
     }
 

@@ -7,6 +7,7 @@ using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Analytics;
+using Toggl.iOS.Extensions;
 using Toggl.iOS.Intents;
 using Toggl.iOS.ViewControllers;
 using UIKit;
@@ -39,10 +40,11 @@ namespace Toggl.iOS
                     handleDeeplink(new Uri(ApplicationUrls.Reports.Default));
                     return true;
                 case ShowReportPeriodIntent periodIntent:
-                    var tabbarVC = (MainTabBarController)UIApplication.SharedApplication.KeyWindow.RootViewController;
-                    //TODO: Figure out this when working on #4860
-                    //var reportViewModel = (ReportsViewModel)tabbarVC.ViewModel.Tabs.Single(viewModel => viewModel is ReportsViewModel);
-                    //navigationService.Navigate(reportViewModel, periodIntent.Period.ToReportPeriod());
+                    long? parseLong(string val) => long.TryParse(val, out var i) ? i : (long?)null;
+                    long? workspaceId = parseLong(periodIntent.Workspace?.Identifier);
+                    var period = periodIntent.Period.ToReportPeriod();
+                    var change = new ShowReportsPresentationChange(workspaceId, period);
+                    compositePresenter.ChangePresentation(change);
                     return true;
                 case StartTimerIntent startTimerIntent:
                     var timeEntryParams = createStartTimeEntryParameters(startTimerIntent);

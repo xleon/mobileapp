@@ -7,12 +7,14 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
+using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
@@ -179,10 +181,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             await CalendarViewModel.Initialize();
 
-            // TODO: Fix the parameter usage
-            // CalendarViewModel.SelectPeriod(parameter.ReportPeriod);
-            // this.parameter = parameter;
-
             WorkspacesObservable
                 .Subscribe(data => Workspaces = data)
                 .DisposedBy(disposeBag);
@@ -192,14 +190,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             IInteractor<IObservable<IThreadSafeWorkspace>> workspaceInteractor;
 
-            if (parameter?.WorkspaceId is long parameterWorkspaceId)
-            {
-                workspaceInteractor = interactorFactory.GetWorkspaceById(parameterWorkspaceId);
-            }
-            else
-            {
-                workspaceInteractor = interactorFactory.GetDefaultWorkspace();
-            }
+            workspaceInteractor = interactorFactory.GetDefaultWorkspace();
 
             var workspace = await workspaceInteractor
                 .TrackException<InvalidOperationException, IThreadSafeWorkspace>("ReportsViewModel.Initialize")
@@ -472,6 +463,18 @@ namespace Toggl.Core.UI.ViewModels.Reports
             var workspace = await getWorkspaceInteractor.Execute();
 
             loadReport(workspace, startDate, endDate, source);
+        }
+
+        public async Task LoadReport(long? workspaceId, ReportPeriod period)
+        {
+            var getWorkspaceInteractor = workspaceId.HasValue
+                ? interactorFactory.GetWorkspaceById(this.workspaceId)
+                : interactorFactory.GetDefaultWorkspace();
+
+            workspace = await getWorkspaceInteractor.Execute();
+            workspaceId = workspace.Id;
+
+            CalendarViewModel.SelectPeriod(period);
         }
     }
 }

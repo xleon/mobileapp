@@ -60,11 +60,16 @@ namespace Toggl.iOS.Presentation
 
                         var startDate = showReportsPresentationChange.StartDate;
                         var endDate = showReportsPresentationChange.EndDate;
+                        var period = showReportsPresentationChange.Period;
                         var workspaceId = showReportsPresentationChange.WorkspaceId;
 
                         if (startDate.HasValue && endDate.HasValue)
                         {
                             reportsViewModel.LoadReport(workspaceId, startDate.Value, endDate.Value, ReportsSource.Other);
+                        }
+                        else if (period.HasValue)
+                        {
+                            reportsViewModel.LoadReport(workspaceId, period.Value);
                         }
 
                         return true;
