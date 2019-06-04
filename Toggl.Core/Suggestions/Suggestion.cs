@@ -1,4 +1,5 @@
 using System;
+using Toggl.Core.Calendar;
 using System.Linq;
 using Toggl.Core.Helper;
 using Toggl.Core.Models;
@@ -70,7 +71,7 @@ namespace Toggl.Core.Suggestions
             Description = timeEntry.Description;
             WorkspaceId = timeEntry.WorkspaceId;
 
-            if (timeEntry.Project == null) 
+            if (timeEntry.Project == null)
                 return;
 
             HasProject = true;
@@ -84,7 +85,15 @@ namespace Toggl.Core.Suggestions
 
             TaskName = timeEntry.Task.Name;
         }
-        
+
+        internal Suggestion(CalendarItem calendarItem, long workspaceId)
+        {
+            Ensure.Argument.IsNotNullOrWhiteSpaceString(calendarItem.Description, nameof(calendarItem.Description));
+
+            WorkspaceId = workspaceId;
+            Description = calendarItem.Description;
+        }
+
         public bool Equals(Suggestion other)
         {
             if (other is null)

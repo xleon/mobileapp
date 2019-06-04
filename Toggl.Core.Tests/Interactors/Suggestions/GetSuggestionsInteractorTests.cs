@@ -1,6 +1,9 @@
 using System;
 using FluentAssertions;
+using NSubstitute;
+using Toggl.Core.Interactors;
 using Toggl.Core.Interactors.Suggestions;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
 using Xunit;
 
@@ -10,15 +13,25 @@ namespace Toggl.Core.Tests.Interactors.Suggestions
     {
         public sealed class TheConstructor : BaseInteractorTests
         {
+
+            private readonly IInteractor<IObservable<IThreadSafeWorkspace>> defaultWorkspaceInteractor = Substitute.For<IInteractor<IObservable<IThreadSafeWorkspace>>>();
+
             [Theory, LogIfTooSlow]
             [ConstructorData]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useStopWatchProvider, bool useDataSource, bool useTimeService)
+            public void ThrowsIfAnyOfTheArgumentsIsNull(
+                bool useStopWatchProvider,
+                bool useDataSource,
+                bool useTimeService,
+                bool useCalendarService,
+                bool useDefaultWorkspaceInteractor)
             {
                 Action createInstance = () => new GetSuggestionsInteractor(
                     3,
                     useStopWatchProvider ? StopwatchProvider : null,
                     useDataSource ? DataSource : null,
-                    useTimeService ? TimeService : null);
+                    useTimeService ? TimeService : null,
+                    useCalendarService ? CalendarService : null,
+                    useDefaultWorkspaceInteractor ? defaultWorkspaceInteractor : null);
 
                 createInstance.Should().Throw<ArgumentNullException>();
             }
@@ -35,7 +48,9 @@ namespace Toggl.Core.Tests.Interactors.Suggestions
                     count,
                     StopwatchProvider,
                     DataSource,
-                    TimeService);
+                    TimeService,
+                    CalendarService,
+                    defaultWorkspaceInteractor);
 
                 createInstance.Should().Throw<ArgumentException>();
             }
