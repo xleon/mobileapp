@@ -1,5 +1,6 @@
 ﻿using Foundation;
 using System;
+using System.Diagnostics;
 using UIKit;
 using ObjCRuntime;
 using CoreGraphics;
@@ -56,7 +57,9 @@ namespace Toggl.iOS
             if (Suggestion == null) return;
 
             Hidden = false;
+
             DescriptionLabel.Text = Suggestion.Description;
+            prefixWithProviderNameInDebug();
 
             var hasProject = Suggestion.ProjectId != null;
             ProjectFadeView.Hidden = !hasProject;
@@ -116,6 +119,13 @@ namespace Toggl.iOS
                 = ProjectLabel.Hidden
                 = ClientLabel.Hidden
                 = true;
+        }
+
+        [Conditional("DEBUG")]
+        private void prefixWithProviderNameInDebug()
+        {
+            var prefix = Suggestion.ProviderType.ToString().Substring(0, 4);
+            DescriptionLabel.Text = $"{prefix} {Suggestion.Description}";
         }
     }
 }

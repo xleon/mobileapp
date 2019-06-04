@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Support.V7.Widget;
@@ -44,6 +45,7 @@ namespace Toggl.Droid.ViewHolders
         protected override void UpdateView()
         {
             descriptionLabel.Text = Item.Description;
+            prefixWithProviderNameInDebug();
             descriptionLabel.Visibility = (!string.IsNullOrWhiteSpace(Item.Description)).ToVisibility();
 
             projectLabel.Text = Item.ProjectName;
@@ -52,6 +54,13 @@ namespace Toggl.Droid.ViewHolders
 
             clientLabel.Text = Item.ClientName;
             clientLabel.Visibility = Item.HasProject.ToVisibility();
+        }
+
+        [Conditional("DEBUG")]
+        private void prefixWithProviderNameInDebug()
+        {
+            var prefix = Item.ProviderType.ToString().Substring(0, 4);
+            descriptionLabel.Text = $"{prefix} {Item.Description}";
         }
     }
 }

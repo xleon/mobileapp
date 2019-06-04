@@ -38,7 +38,7 @@ namespace Toggl.Core.Suggestions
 
         public TimeSpan? Duration { get; } = null;
 
-        public SuggestionProviderType ProviderName { get; }
+        public SuggestionProviderType ProviderType { get; }
 
         internal Suggestion(IDatabaseTimeEntry timeEntry)
         {
@@ -61,9 +61,9 @@ namespace Toggl.Core.Suggestions
             TaskName = timeEntry.Task.Name;
         }
 
-        internal Suggestion(IDatabaseTimeEntry timeEntry, SuggestionProviderType providerName)
+        internal Suggestion(IDatabaseTimeEntry timeEntry, SuggestionProviderType providerType)
         {
-            ProviderName = providerName;
+            ProviderType = providerType;
 
             TaskId = timeEntry.TaskId;
             ProjectId = timeEntry.ProjectId;
