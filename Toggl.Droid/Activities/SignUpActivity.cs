@@ -20,9 +20,8 @@ namespace Toggl.Droid.Activities
     {
         protected override void OnCreate(Bundle bundle)
         {
-            this.ChangeStatusBarColor(Android.Graphics.Color.White, true);
-
             SetTheme(Resource.Style.AppTheme_WhiteStatusBar);
+            this.ChangeStatusBarColor(Android.Graphics.Color.White, true);
             base.OnCreate(bundle);
             if (ViewModelWasNotCached())
             {
