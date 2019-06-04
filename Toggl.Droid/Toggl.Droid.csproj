@@ -367,6 +367,8 @@
     <Compile Include="Adapters\SelectTagsRecyclerAdapter.cs" />
     <Compile Include="Activities\SelectProjectActivity.cs" />
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
+    <Compile Include="Services\TogglFirebaseIIDService.cs" />
+    <Compile Include="Services\TogglFirebaseMessagingService.cs" />
     <Compile Include="Services\PushNotificationsTokenServiceAndroid.cs" />
     <Compile Include="Startup\AndroidDependencyContainer.cs" />
     <Compile Include="Extensions\FloatingActionButtonExtensions.cs" />
