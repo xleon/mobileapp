@@ -29,11 +29,12 @@ using Toggl.iOS.ViewControllers;
 using Toggl.Shared.Extensions;
 using UIKit;
 using UserNotifications;
+using Firebase.CloudMessaging;
 
 namespace Toggl.iOS
 {
     [Register(nameof(AppDelegate))]
-    public sealed class AppDelegate : MvxApplicationDelegate<Setup, App<OnboardingViewModel>>, IUNUserNotificationCenterDelegate
+    public sealed partial class AppDelegate : MvxApplicationDelegate<Setup, App<OnboardingViewModel>>, IUNUserNotificationCenterDelegate, IMessagingDelegate
     {
         private IAnalyticsService analyticsService;
         private IBackgroundService backgroundService;
@@ -46,6 +47,10 @@ namespace Toggl.iOS
 
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
+            Firebase.Core.App.Configure();
+            UNUserNotificationCenter.Current.Delegate = this;
+            UIApplication.SharedApplication.RegisterForRemoteNotifications();
+            Messaging.SharedInstance.Delegate = this;
             #if USE_APPCENTER
             Microsoft.AppCenter.AppCenter.Start(
                 "{TOGGL_APP_CENTER_ID_IOS}",
@@ -53,15 +58,12 @@ namespace Toggl.iOS
                 typeof(Microsoft.AppCenter.Analytics.Analytics));
             #endif
             #if USE_ANALYTICS
-            Firebase.Core.App.Configure();
             Google.SignIn.SignIn.SharedInstance.ClientID =
                 Firebase.Core.App.DefaultInstance.Options.ClientId;
             Adjust.AppDidLaunch(ADJConfig.ConfigWithAppToken("{TOGGL_ADJUST_APP_TOKEN}", AdjustConfig.EnvironmentProduction));
             #endif
 
             base.FinishedLaunching(application, launchOptions);
-
-            UNUserNotificationCenter.Current.Delegate = this;
 
             #if ENABLE_TEST_CLOUD
             Xamarin.Calabash.Start();
@@ -92,7 +94,7 @@ namespace Toggl.iOS
             return Google.SignIn.SignIn.SharedInstance.HandleUrl(url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
         }
         #endif
-        
+
         public override void ReceiveMemoryWarning(UIApplication application)
         {
             analyticsService.ReceivedLowMemoryWarning.Track(Platform.Daneel);

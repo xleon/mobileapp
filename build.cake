@@ -348,8 +348,10 @@ private TemporaryFileTransformation GetIosEntitlementsConfigurationTransformatio
 {
     const string path = "Toggl.iOS/Entitlements.plist";
     const string groupIdToReplace = "group.com.toggl.daneel.debug.extensions";
+    const string defaultApsEnvironment = "<string>development</string>";
 
     var groupId = groupIdToReplace;
+    var apsEnvironment = defaultApsEnvironment;
 
     if (target == "Build.Release.iOS.AdHoc")
     {
@@ -358,6 +360,7 @@ private TemporaryFileTransformation GetIosEntitlementsConfigurationTransformatio
     else if (target == "Build.Release.iOS.AppStore")
     {
         groupId = "group.com.toggl.daneel.extensions";
+        apsEnvironment = "<string>production</string>";
     }
 
     var filePath = GetFiles(path).Single();
@@ -367,7 +370,7 @@ private TemporaryFileTransformation GetIosEntitlementsConfigurationTransformatio
     {
         Path = path,
         Original = file,
-        Temporary = file.Replace(groupIdToReplace, groupId)
+        Temporary = file.Replace(groupIdToReplace, groupId).Replace(defaultApsEnvironment, apsEnvironment)
     };
 }
 
