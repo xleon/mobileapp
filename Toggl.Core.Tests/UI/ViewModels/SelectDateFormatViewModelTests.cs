@@ -61,7 +61,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                (await ViewModel.ReturnedValue()).Should().Be(defaultResult);
+                (await ViewModel.Result).Should().Be(defaultResult);
             }
         }
 
@@ -76,7 +76,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectDateFormat.Execute(selectableDateFormatViewModel);
                 TestScheduler.Start();
 
-                (await ViewModel.ReturnedValue()).Should().Be(selectedDateFormat);    
+                (await ViewModel.Result).Should().Be(selectedDateFormat);    
             }
         }
     }

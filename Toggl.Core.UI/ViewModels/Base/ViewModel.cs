@@ -9,10 +9,12 @@ namespace Toggl.Core.UI.ViewModels
     public abstract class ViewModel<TInput, TOutput> : IViewModel
     {
         private readonly INavigationService navigationService;
+        private readonly TaskCompletionSource<TOutput> resultCompletionSource =
+            new TaskCompletionSource<TOutput>();
 
-        public IView View { get; set; }
+        public IView View { get; private set; }
 
-        public TaskCompletionSource<TOutput> CloseCompletionSource { get; set; }
+        public Task<TOutput> Result => resultCompletionSource.Task;
 
         protected ViewModel(INavigationService navigationService)
         {
@@ -46,12 +48,12 @@ namespace Toggl.Core.UI.ViewModels
         public async Task Finish(TOutput output)
         {
             await View.Close();
-            CloseCompletionSource.SetResult(output);
+            resultCompletionSource.SetResult(output);
         }
 
         public async Task Cancel()
         {
-            CloseCompletionSource?.SetResult(default(TOutput));
+            resultCompletionSource.SetResult(default(TOutput));
         }
 
         public void AttachView(IView viewToAttach)

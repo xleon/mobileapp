@@ -34,8 +34,7 @@ namespace Toggl.Core.UI.Navigation
 
             analyticsService.CurrentPage.Track(typeof(TViewModel));
 
-            viewModel.CloseCompletionSource = new TaskCompletionSource<TOutput>();
-            return await viewModel.CloseCompletionSource.Task;
+            return await viewModel.Result;
         }
     }
 }

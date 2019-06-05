@@ -71,7 +71,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                (await ViewModel.ReturnedValue()).Should().Be(durationFormat);
+                (await ViewModel.Result).Should().Be(durationFormat);
             }
         }
 
@@ -89,7 +89,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectDurationFormat.Execute(selectedDuration);
                 TestScheduler.Start();
 
-                (await ViewModel.ReturnedValue()).Should().Be(selectedDuration.DurationFormat);
+                (await ViewModel.Result).Should().Be(selectedDuration.DurationFormat);
             }
         }
     }

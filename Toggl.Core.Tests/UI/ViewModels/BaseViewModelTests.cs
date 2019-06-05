@@ -11,7 +11,6 @@ using Toggl.Storage.Settings;
 using Toggl.Networking;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
-using System.Threading.Tasks;
 using System.Reactive;
 
 namespace Toggl.Core.Tests.UI.ViewModels
@@ -61,7 +60,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             ViewModel = CreateViewModel();
             ViewModel.AttachView(View);
-            ViewModel.CloseCompletionSource = new TaskCompletionSource<TOutput>();
 
             AdditionalViewModelSetup();
         }

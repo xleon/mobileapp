@@ -122,7 +122,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.Close.Execute();
 
-                (await ViewModel.ReturnedValue()).Should().Be(expectedId);
+                (await ViewModel.Result).Should().Be(expectedId);
             }
         }
 
@@ -150,7 +150,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.SelectWorkspace.Execute(selectableWorkspace);
 
-                (await ViewModel.ReturnedValue()).Should().Be(expectedId);
+                (await ViewModel.Result).Should().Be(expectedId);
             }
         }
     }

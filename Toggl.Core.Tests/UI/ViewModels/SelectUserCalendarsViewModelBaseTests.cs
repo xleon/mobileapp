@@ -143,7 +143,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
 
-                (await ViewModel.ReturnedValue()).Should().BeSequenceEquivalentTo(initialSelectedIds);
+                (await ViewModel.Result).Should().BeSequenceEquivalentTo(initialSelectedIds);
             }
         }
 
@@ -178,7 +178,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
 
-                (await ViewModel.ReturnedValue()).Should().BeSequenceEquivalentTo(selectedIds);
+                (await ViewModel.Result).Should().BeSequenceEquivalentTo(selectedIds);
             }
         }
 

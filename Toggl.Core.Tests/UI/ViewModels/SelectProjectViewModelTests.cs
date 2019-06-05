@@ -79,7 +79,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.Close.Execute();
 
-                (await ViewModel.ReturnedValue())
+                (await ViewModel.Result)
                     .ProjectId.Should().Be(projectId);
             }
 
@@ -94,7 +94,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.Close.Execute();
 
-                (await ViewModel.ReturnedValue())
+                (await ViewModel.Result)
                     .TaskId.Should().Be(taskId);
             }
         }
@@ -119,7 +119,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.SelectProject.Execute(selectedProject);
 
-                (await ViewModel.ReturnedValue())
+                (await ViewModel.Result)
                     .ProjectId.Should().Be(selectedProject.ProjectId);
             }
 
@@ -132,7 +132,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.SelectProject.Execute(selectedProject);
 
-                (await ViewModel.ReturnedValue())
+                (await ViewModel.Result)
                     .TaskId.Should().Be(null);
             }
 
@@ -146,7 +146,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.SelectProject.Execute(selectedTask);
 
-                (await ViewModel.ReturnedValue())
+                (await ViewModel.Result)
                     .ProjectId.Should().Be(task.ProjectId);
             }
 
@@ -160,7 +160,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.SelectProject.Execute(selectedTask);
 
-                (await ViewModel.ReturnedValue())
+                (await ViewModel.Result)
                     .ProjectId.Should().Be(task.ProjectId);
             }
 
@@ -170,7 +170,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectProject
                     .Execute(ProjectSuggestion.NoProject(0, ""));
 
-                (await ViewModel.ReturnedValue())
+                (await ViewModel.Result)
                     .ProjectId.Should().Be(null);
             }
 
@@ -180,7 +180,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectProject
                     .Execute(ProjectSuggestion.NoProject(0, ""));
 
-                (await ViewModel.ReturnedValue())
+                (await ViewModel.Result)
                     .TaskId.Should().Be(null);
             }
 
@@ -198,7 +198,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectProject
                     .Execute(ProjectSuggestion.NoProject(workspaceId, ""));
 
-                (await ViewModel.ReturnedValue())
+                (await ViewModel.Result)
                     .WorkspaceId.Should().Be(workspaceId);
             }
 
@@ -289,7 +289,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             private async Task ensureReturnsWorkspaceIdOfSuggestion(AutocompleteSuggestion suggestion)
             {
-                (await ViewModel.ReturnedValue())
+                (await ViewModel.Result)
                     .WorkspaceId.Should().Be(suggestion.WorkspaceId);
             }
 
@@ -342,7 +342,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.SelectProject.Execute(createProjectSuggestion);
                     TestScheduler.Start();
 
-                    (await ViewModel.ReturnedValue())
+                    (await ViewModel.Result)
                         .ProjectId.Should().Be(projectId);
                 }
 

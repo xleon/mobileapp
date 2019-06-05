@@ -106,7 +106,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectCountry.Execute(selectableCountry);
 
                 TestScheduler.Start();
-                (await ViewModel.ReturnedValue()).Should().Be(country.Id);
+                (await ViewModel.Result).Should().Be(country.Id);
             }
         }
 

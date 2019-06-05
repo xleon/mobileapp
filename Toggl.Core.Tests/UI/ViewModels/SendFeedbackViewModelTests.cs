@@ -311,7 +311,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Send.Execute();
 
                 TestScheduler.Start();
-                (await ViewModel.ReturnedValue()).Should().BeTrue();
+                (await ViewModel.Result).Should().BeTrue();
             }
 
             [Fact]

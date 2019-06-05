@@ -184,7 +184,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                (await ViewModel.ReturnedValue()).Should().BeNull();
+                (await ViewModel.Result).Should().BeNull();
             }
         }
 
@@ -219,7 +219,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectClient.Execute(client);
                 TestScheduler.Start();
 
-                (await ViewModel.ReturnedValue()).Should().Be(client.Id);
+                (await ViewModel.Result).Should().Be(client.Id);
             }
 
             [Fact, LogIfTooSlow]

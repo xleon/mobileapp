@@ -5,7 +5,7 @@ namespace Toggl.Core.UI.ViewModels
 {
     public interface IViewModel
     {
-        IView View { get; set; }
+        IView View { get; }
 
         void AttachView(IView viewToAttach);
         void DetachView();

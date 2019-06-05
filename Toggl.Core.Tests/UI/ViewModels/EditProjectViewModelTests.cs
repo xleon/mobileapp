@@ -341,7 +341,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                (await ViewModel.ReturnedValue())
+                (await ViewModel.Result)
                     .Should().Be(null);
             }
 
@@ -404,7 +404,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Save.Execute();
                 TestScheduler.Start();
 
-                (await ViewModel.ReturnedValue())
+                (await ViewModel.Result)
                     .Should().Be(projectId);
             }
 

@@ -78,7 +78,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.SelectColor.Execute(colorToSelect);
 
-                (await ViewModel.ReturnedValue()).Should().Be(colorToSelect);
+                (await ViewModel.Result).Should().Be(colorToSelect);
             }
 
             [Fact, LogIfTooSlow]
@@ -209,7 +209,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
                 
-                (await ViewModel.ReturnedValue()).Should().Be(color);
+                (await ViewModel.Result).Should().Be(color);
             }
         }
 
@@ -236,7 +236,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Save.Execute();
                 TestScheduler.Start();
 
-                (await ViewModel.ReturnedValue()).Should().Be(expected);
+                (await ViewModel.Result).Should().Be(expected);
             }
         }
     }

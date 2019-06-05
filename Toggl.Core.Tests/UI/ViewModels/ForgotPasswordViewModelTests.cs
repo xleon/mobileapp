@@ -238,7 +238,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var viewModel = new ForgotPasswordViewModel(
                         timeService, UserAccessManager, AnalyticsService, NavigationService, RxActionFactory);
                     viewModel.AttachView(View);
-                    viewModel.CloseCompletionSource = new TaskCompletionSource<EmailParameter>();
                     viewModel.Email.OnNext(ValidEmail);
                     UserAccessManager
                         .ResetPassword(Arg.Any<Email>())
@@ -248,7 +247,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     TestScheduler.Start();
                     testScheduler.AdvanceBy(TimeSpan.FromSeconds(4).Ticks);
 
-                    var result = await viewModel.ReturnedValue();
+                    var result = await viewModel.Result;
                     result.Email.Should().BeEquivalentTo(ValidEmail);
                 }
             }
@@ -352,17 +351,17 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Property]
             public void ClosesTheViewModelReturningTheEmail(NonEmptyString emailString)
             {
+                var viewModel = CreateViewModel();
+                viewModel.AttachView(View);
                 var email = Email.From(emailString.Get);
-                ViewModel.Email.OnNext(email);
+                viewModel.Email.OnNext(email);
 
-                ViewModel.Close.Execute();
+                viewModel.Close.Execute();
 
                 TestScheduler.Start();
 
-                var result = ViewModel.ReturnedValue().GetAwaiter().GetResult();
+                var result = viewModel.Result.GetAwaiter().GetResult();
                 result.Email.Should().BeEquivalentTo(email);
-
-                ViewModel.CloseCompletionSource = new TaskCompletionSource<EmailParameter>();
             }
         }
     }

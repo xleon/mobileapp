@@ -300,21 +300,20 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 var durationObserver = TestScheduler.CreateObserver<TimeSpan>();
                 var startObserver = TestScheduler.CreateObserver<DateTimeOffset>();
-                ViewModel.Duration.Subscribe(durationObserver);
-                ViewModel.StartTime.Subscribe(startObserver);
+                var viewModel = CreateViewModel();
+                viewModel.AttachView(View);
+                viewModel.Duration.Subscribe(durationObserver);
+                viewModel.StartTime.Subscribe(startObserver);
 
+                viewModel.Initialize(new EditDurationParameters(DurationParameter.WithStartAndDuration(start, stop - start)));
+                viewModel.ChangeDuration.Execute(TimeSpan.FromMinutes(10));
 
-                ViewModel.Initialize(new EditDurationParameters(DurationParameter.WithStartAndDuration(start, stop - start)));
-                ViewModel.ChangeDuration.Execute(TimeSpan.FromMinutes(10));
-
-                ViewModel.Save.Execute();
+                viewModel.Save.Execute();
 
                 TestScheduler.Start();
-                var result = ViewModel.ReturnedValue().GetAwaiter().GetResult();
+                var result = viewModel.Result.GetAwaiter().GetResult();
                 result.Start.Should().Be(startObserver.LastEmittedValue());
                 result.Duration.Should().Be(durationObserver.LastEmittedValue());
-
-                ViewModel.CloseCompletionSource = new TaskCompletionSource<DurationParameter>();
             }
 
             [Property]
@@ -323,19 +322,19 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 if (start > now) return;
                 TimeService.CurrentDateTime.Returns(now);
                 var startObserver = TestScheduler.CreateObserver<DateTimeOffset>();
-                ViewModel.StartTime.Subscribe(startObserver);
+                var viewModel = CreateViewModel();
+                viewModel.AttachView(View);
+                viewModel.StartTime.Subscribe(startObserver);
 
-                ViewModel.Initialize(new EditDurationParameters(DurationParameter.WithStartAndDuration(start, null)));
-                ViewModel.ChangeDuration.Execute(TimeSpan.FromMinutes(10));
+                viewModel.Initialize(new EditDurationParameters(DurationParameter.WithStartAndDuration(start, null)));
+                viewModel.ChangeDuration.Execute(TimeSpan.FromMinutes(10));
 
-                ViewModel.Save.Execute();
+                viewModel.Save.Execute();
 
                 TestScheduler.Start();
-                var result = ViewModel.ReturnedValue().GetAwaiter().GetResult();
+                var result = viewModel.Result.GetAwaiter().GetResult();
                 result.Start.Should().Be(startObserver.LastEmittedValue());
                 result.Duration.Should().BeNull();
-
-                ViewModel.CloseCompletionSource = new TaskCompletionSource<DurationParameter>();
             }
         }
 

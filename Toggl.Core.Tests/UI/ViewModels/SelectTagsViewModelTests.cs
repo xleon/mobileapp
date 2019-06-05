@@ -114,7 +114,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                (await ViewModel.ReturnedValue()).Should().BeSequenceEquivalentTo(tagids);
+                (await ViewModel.Result).Should().BeSequenceEquivalentTo(tagids);
             }
         }
 
@@ -151,7 +151,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
 
-                var ids = await ViewModel.ReturnedValue();
+                var ids = await ViewModel.Result;
                 EnsureExpectedTagsAreReturned(ids, selectedTagIds);
             }
 
@@ -163,7 +163,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.Save.Execute();
 
-                var ids = await ViewModel.ReturnedValue();
+                var ids = await ViewModel.Result;
                 EnsureExpectedTagsAreReturned(ids, expectedIds);
             }
 
@@ -499,7 +499,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                ViewModel.Save.Execute();
                TestScheduler.Start();
 
-                var ids = await ViewModel.ReturnedValue();
+                var ids = await ViewModel.Result;
                 EnsureExpectedTagsAreReturned(ids, new[] { selectableTag.Id });
             }
 
@@ -514,7 +514,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                ViewModel.Save.Execute();
                TestScheduler.Start();
 
-                var ids = await ViewModel.ReturnedValue();
+                var ids = await ViewModel.Result;
                 EnsureExpectedTagsAreReturned(ids, new long[0]);
             }
         }
@@ -530,7 +530,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.Save.Execute();
 
-                var ids = await ViewModel.ReturnedValue();
+                var ids = await ViewModel.Result;
                 EnsureExpectedTagsAreReturned(ids, tagIds);
             }
         }

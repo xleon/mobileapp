@@ -92,7 +92,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.CloseCommand.Execute();
 
-                ViewModel.ReturnedValue().GetAwaiter().GetResult().Should().Be(now);
+                ViewModel.Result.GetAwaiter().GetResult().Should().Be(now);
             }
         }
 
@@ -119,7 +119,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.SaveCommand.Execute();
 
-                ViewModel.ReturnedValue().GetAwaiter().GetResult().Should().Be(dateTimeOffset);
+                ViewModel.Result.GetAwaiter().GetResult().Should().Be(dateTimeOffset);
             }
         }
     }
