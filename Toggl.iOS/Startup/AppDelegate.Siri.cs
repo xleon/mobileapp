@@ -43,8 +43,9 @@ namespace Toggl.iOS
                     long? parseLong(string val) => long.TryParse(val, out var i) ? i : (long?)null;
                     long? workspaceId = parseLong(periodIntent.Workspace?.Identifier);
                     var period = periodIntent.Period.ToReportPeriod();
+                    var viewPresenter = IosDependencyContainer.Instance.ViewPresenter;
                     var change = new ShowReportsPresentationChange(workspaceId, period);
-                    compositePresenter.ChangePresentation(change);
+                    viewPresenter.ChangePresentation(change);
                     return true;
                 case StartTimerIntent startTimerIntent:
                     var timeEntryParams = createStartTimeEntryParameters(startTimerIntent);

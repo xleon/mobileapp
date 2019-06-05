@@ -3,7 +3,6 @@ using Toggl.Droid.Services;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
-using Toggl.Core.Login;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
@@ -17,7 +16,6 @@ using Toggl.Networking;
 using Toggl.Networking.Network;
 using Android.Content;
 using Android.App;
-using Android.Arch.Lifecycle;
 using Toggl.Core.UI.Navigation;
 using Toggl.Droid.Presentation;
 
@@ -26,6 +24,12 @@ namespace Toggl.Droid
     public sealed class AndroidDependencyContainer : UIDependencyContainer
     {
         private const int numberOfSuggestions = 5;
+        private const ApiEnvironment environment =
+#if USE_PRODUCTION_API
+                        ApiEnvironment.Production;
+#else
+                        ApiEnvironment.Staging;
+#endif
 
         private readonly CompositePresenter viewPresenter;
         private readonly Lazy<SettingsStorage> settingsStorage;
@@ -34,12 +38,14 @@ namespace Toggl.Droid
 
         public new static AndroidDependencyContainer Instance { get; private set; }
 
-        public static void EnsureInitialized(ApiEnvironment environment, Platform platform, string version)
+        public static void EnsureInitialized(Context context)
         {
             if (Instance != null)
                 return;
 
-            Instance = new AndroidDependencyContainer(environment, platform, version);
+            var packageInfo = context.PackageManager.GetPackageInfo(context.PackageName, 0);
+
+            Instance = new AndroidDependencyContainer(environment, Platform.Giskard, packageInfo.VersionName);
             UIDependencyContainer.Instance = Instance;
         }
 

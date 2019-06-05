@@ -50,12 +50,14 @@ namespace Toggl.iOS
 
         private async Task showReports(DeeplinkShowReportsParameters reportsParameters)
         {
+            var presenter = IosDependencyContainer.Instance.ViewPresenter;
             var change = new ShowReportsPresentationChange(reportsParameters.WorkspaceId, reportsParameters.StartDate, reportsParameters.EndDate);
-            compositePresenter.ChangePresentation(change);
+            presenter.ChangePresentation(change);
         }
 
         private async Task showCalendar(DeeplinkShowCalendarParameters calendarParameters)
         {
+            var presenter = IosDependencyContainer.Instance.ViewPresenter;
             var interactorFactory = IosDependencyContainer.Instance.InteractorFactory;
 
             if (calendarParameters.EventId != null)
@@ -69,7 +71,7 @@ namespace Toggl.iOS
             }
 
             var change = new ShowCalendarPresentationChange();
-            compositePresenter.ChangePresentation(change);
+            presenter.ChangePresentation(change);
         }
     }
 }

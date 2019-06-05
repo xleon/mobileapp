@@ -14,14 +14,6 @@ namespace Toggl.iOS
     [Register(nameof(AppDelegate))]
     public sealed partial class AppDelegate : UIApplicationDelegate, IUNUserNotificationCenterDelegate
     {
-        private const ApiEnvironment environment =
-        #if USE_PRODUCTION_API
-            ApiEnvironment.Production;
-        #else
-            ApiEnvironment.Staging;
-        #endif
-
-        private CompositePresenter compositePresenter;
         public override UIWindow Window { get; set; }
 
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
@@ -33,7 +25,6 @@ namespace Toggl.iOS
 
             initializeAnalytics();
 
-            var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"].ToString();
 
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
             Window.MakeKeyAndVisible();
@@ -41,14 +32,7 @@ namespace Toggl.iOS
             setupNavigationBar();
             setupTabBar();
 
-            compositePresenter = new CompositePresenter(
-                new RootPresenter(Window, this),
-                new NavigationPresenter(Window, this),
-                new ModalDialogPresenter(Window, this),
-                new ModalCardPresenter(Window, this)
-            );
-
-            IosDependencyContainer.EnsureInitialized(compositePresenter, environment, Platform.Daneel, version);
+            IosDependencyContainer.EnsureInitialized(Window, this);
             var app = new App<OnboardingViewModel, Unit>(IosDependencyContainer.Instance);
             var hasFullAccess = app.NavigateIfUserDoesNotHaveFullAccess();
             if (hasFullAccess)

@@ -4,7 +4,7 @@ using Toggl.Core.UI.ViewModels;
 
 namespace Toggl.Droid.Presentation
 {
-    public class ViewModelCache
+    public sealed class ViewModelCache
     {
         private readonly Dictionary<Type, IViewModel> cache = new Dictionary<Type, IViewModel>();
 

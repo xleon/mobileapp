@@ -15,34 +15,50 @@ using Toggl.Networking;
 using Toggl.Networking.Network;
 using Toggl.Core.UI.Navigation;
 using Toggl.iOS.Services;
+using Foundation;
+using UIKit;
+using Toggl.iOS.Presentation;
 
 namespace Toggl.iOS
 {
     public sealed class IosDependencyContainer : UIDependencyContainer
     {
         private const int numberOfSuggestions = 3;
+        private const ApiEnvironment environment =
+#if USE_PRODUCTION_API
+            ApiEnvironment.Production;
+#else
+            ApiEnvironment.Staging;
+#endif
 
-        private readonly CompositePresenter viewPresenter;
         private readonly Lazy<SettingsStorage> settingsStorage;
 
-        public INavigationService MvxNavigationService { get; internal set; }
+        public CompositePresenter ViewPresenter { get; }
         public IntentDonationService IntentDonationService { get; }
 
         public new static IosDependencyContainer Instance { get; private set; }
 
-        public static void EnsureInitialized(CompositePresenter viewPresenter, ApiEnvironment environment, Platform platform, string version)
+        public static void EnsureInitialized(UIWindow window, AppDelegate appDelegate)
         {
             if (Instance != null)
                 return;
 
-            Instance = new IosDependencyContainer(viewPresenter, environment, platform, version);
+            var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"].ToString();
+            var viewPresenter = new CompositePresenter(
+                new RootPresenter(window, appDelegate),
+                new NavigationPresenter(window, appDelegate),
+                new ModalDialogPresenter(window, appDelegate),
+                new ModalCardPresenter(window, appDelegate)
+            );
+
+            Instance = new IosDependencyContainer(viewPresenter, environment, Platform.Daneel, version);
             UIDependencyContainer.Instance = Instance;
         }
 
         private IosDependencyContainer(CompositePresenter viewPresenter, ApiEnvironment environment, Platform platform, string version)
             : base(environment, new UserAgent(platform.ToString(), version))
         {
-            this.viewPresenter = viewPresenter;
+            ViewPresenter = viewPresenter;
             IntentDonationService = new IntentDonationService(AnalyticsService);
 
             var appVersion = Version.Parse(version);
@@ -104,7 +120,7 @@ namespace Toggl.iOS
             );
 
         protected override INavigationService CreateNavigationService()
-            => new NavigationService(viewPresenter, ViewModelLoader, AnalyticsService);
+            => new NavigationService(ViewPresenter, ViewModelLoader, AnalyticsService);
 
         protected override ILastTimeUsageStorage CreateLastTimeUsageStorage()
             => settingsStorage.Value;
