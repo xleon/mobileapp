@@ -11,6 +11,7 @@ using Toggl.Core.DataSources;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Models;
@@ -58,20 +59,24 @@ namespace Toggl.Core.Tests.Intereactors.Suggestions
 
         public sealed class TheGetSuggestionsMethod : MostUsedTimeEntrySuggestionProviderTest
         {
-            private IEnumerable<IThreadSafeTimeEntry> getTimeEntries(params int[] numberOfRepetitions)
-            {
-                var builder = TimeEntry.Builder.Create(21)
-                    .SetUserId(10)
-                    .SetWorkspaceId(12)
-                    .SetAt(Now)
-                    .SetStart(Now);
+            private IEnumerable<IThreadSafeTimeEntry> getCustomTimeEntries(int count, Func<MockTimeEntry, int, MockTimeEntry> transform)
+                => getRepeatingTimeEntries(count)
+                    .OfType<MockTimeEntry>()
+                    .Select((te, index) => transform(te, index));
 
-                return Enumerable.Range(0, numberOfRepetitions.Length)
-                    .SelectMany(index => Enumerable
-                        .Range(0, numberOfRepetitions[index])
-                        .Select(_ => builder
-                            .SetDescription($"te{index}")
-                            .Build()));
+            private IEnumerable<IThreadSafeTimeEntry> getRepeatingTimeEntries(params int[] numberOfRepetitions)
+            {
+                var workspace = new MockWorkspace(12);
+
+                for (int i = 0; i < numberOfRepetitions.Length; i++)
+                {
+                    var project = new MockProject(i + 1000, workspace) { Active = true };
+
+                    for (int j = 0; j < numberOfRepetitions[i]; j++)
+                    {
+                        yield return new MockTimeEntry(12, workspace, Now, 30, project) { Description = $"te{i}" };
+                    }
+                }
             }
 
             [Fact, LogIfTooSlow]
@@ -92,7 +97,7 @@ namespace Toggl.Core.Tests.Intereactors.Suggestions
             {
                 var provider = new MostUsedTimeEntrySuggestionProvider(TimeService, DataSource, numberOfSuggestions.Get);
 
-                var timeEntries = getTimeEntries(2, 2, 2, 3, 3, 4, 5, 5, 6, 6, 7, 7, 7, 8, 8, 9);
+                var timeEntries = getRepeatingTimeEntries(2, 2, 2, 3, 3, 4, 5, 5, 6, 6, 7, 7, 7, 8, 8, 9);
 
                 DataSource.TimeEntries
                           .GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>())
@@ -106,7 +111,7 @@ namespace Toggl.Core.Tests.Intereactors.Suggestions
             [Fact, LogIfTooSlow]
             public async Task SortsTheSuggestionsByUsage()
             {
-                var timeEntries = getTimeEntries(5, 3, 2, 5, 4, 4, 5, 4, 3).ToArray();
+                var timeEntries = getRepeatingTimeEntries(5, 3, 2, 5, 4, 4, 5, 4, 3).ToArray();
                 var expectedDescriptions = new[] { 0, 3, 6, 4, 5, 7, 1 }.Select(i => $"te{i}");
 
                 DataSource.TimeEntries
@@ -119,26 +124,29 @@ namespace Toggl.Core.Tests.Intereactors.Suggestions
             }
 
             [Fact, LogIfTooSlow]
-            public async Task DoesNotReturnTimeEntriesWithoutDescription()
+            public async Task DoesNotReturnTimeEntriesWithoutDescriptionAndProject()
             {
-                var builder = TimeEntry.Builder.Create(12)
-                                       .SetUserId(9)
-                                       .SetWorkspaceId(2)
-                                       .SetAt(Now)
-                                       .SetStart(Now)
-                                       .SetDescription("");
-                var emptyTimeEntries = Enumerable.Range(20, 0)
-                    .Select(_ => builder.Build());
-                var timeEntries = new List<IThreadSafeTimeEntry>(emptyTimeEntries);
-                timeEntries.AddRange(getTimeEntries(1, 2, 3, 4, 5));
+                var timeEntries = getCustomTimeEntries(10, (te, index) =>
+                {
+                    te.Project = index % 2 == 0 ? te.Project : null;
+                    te.ProjectId = index % 2 == 0 ? te.ProjectId : null;
+                    te.Description = index % 3 == 0 ? te.Description : "";
+                    return te;
+                });
+
+                timeEntries = timeEntries
+                    .Concat(getRepeatingTimeEntries(1, 2, 3, 4, 5))
+                    .ToList();
+
                 DataSource.TimeEntries
                           .GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>())
-                          .Returns(Observable.Return(timeEntries));
+                          .Returns(c => Observable.Return(
+                                timeEntries.Where(c.Arg<Func<IDatabaseTimeEntry, bool>>()).OfType<IThreadSafeTimeEntry>()));
 
                 var suggestions = await Provider.GetSuggestions().ToList();
 
                 suggestions.Should().OnlyContain(
-                    suggestion => !string.IsNullOrEmpty(suggestion.Description)
+                    suggestion => !string.IsNullOrWhiteSpace(suggestion.Description) || suggestion.ProjectId.HasValue
                 );
             }
         }

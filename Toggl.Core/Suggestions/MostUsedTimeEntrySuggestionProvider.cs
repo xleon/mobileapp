@@ -33,27 +33,32 @@ namespace Toggl.Core.Suggestions
 
         public IObservable<Suggestion> GetSuggestions()
             => dataSource.TimeEntries
-                       .GetAll(isSuitableForSuggestion)
-                       .SelectMany(mostUsedTimeEntry)
-                       .Take(maxNumberOfSuggestions);
+                .GetAll(isSuitableForSuggestion)
+                .SelectMany(mostUsedTimeEntry)
+                .Take(maxNumberOfSuggestions);
 
         private bool isSuitableForSuggestion(IDatabaseTimeEntry timeEntry)
-            => string.IsNullOrEmpty(timeEntry.Description) == false
-               && calculateDelta(timeEntry) <= thresholdPeriod
-               && isActive(timeEntry);
+        {
+            var hasDescription = !string.IsNullOrWhiteSpace(timeEntry.Description);
+            var hasProject = timeEntry.ProjectId.HasValue;
+            var isRecent = calculateDelta(timeEntry) <= thresholdPeriod;
+            var isActive = isTimeEntryActive(timeEntry);
+
+            return isRecent && isActive && (hasDescription || hasProject);
+        }
 
         private TimeSpan calculateDelta(IDatabaseTimeEntry timeEntry)
             => timeService.CurrentDateTime - timeEntry.Start;
 
-        private bool isActive(IDatabaseTimeEntry timeEntry)
+        private bool isTimeEntryActive(IDatabaseTimeEntry timeEntry)
             => timeEntry.IsDeleted == false
                && !timeEntry.IsInaccessible
                && (timeEntry.Project?.Active ?? true);
 
         private IEnumerable<Suggestion> mostUsedTimeEntry(IEnumerable<IDatabaseTimeEntry> timeEntries)
             => timeEntries.GroupBy(te => new { te.Description, te.ProjectId, te.TaskId })
-                       .OrderByDescending(g => g.Count())
-                       .Select(grouping => grouping.First())
-                       .Select(timeEntry => new Suggestion(timeEntry));
+                .OrderByDescending(g => g.Count())
+                .Select(grouping => grouping.First())
+                .Select(timeEntry => new Suggestion(timeEntry));
     }
 }
