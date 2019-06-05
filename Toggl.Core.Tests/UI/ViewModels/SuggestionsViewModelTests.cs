@@ -131,7 +131,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .SetProjectId(projectId)
                     .SetWorkspaceId(11)
                     .SetUserId(12)
-                    .Build()
+                    .Build(),
+                SuggestionProviderType.MostUsedTimeEntries
             );
 
             private Recorded<Notification<Suggestion>> createRecorded(int ticks, Suggestion suggestion)
@@ -216,7 +217,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 timeEntry.Duration.Returns((long)TimeSpan.FromMinutes(30).TotalSeconds);
                 timeEntry.Description.Returns("Testing");
                 timeEntry.WorkspaceId.Returns(10);
-                return new Suggestion(timeEntry);
+                return new Suggestion(timeEntry, SuggestionProviderType.MostUsedTimeEntries);
             }
         }
     }

@@ -59,6 +59,6 @@ namespace Toggl.Core.Suggestions
             => timeEntries.GroupBy(te => new { te.Description, te.ProjectId, te.TaskId })
                 .OrderByDescending(g => g.Count())
                 .Select(grouping => grouping.First())
-                .Select(timeEntry => new Suggestion(timeEntry));
+                .Select(timeEntry => new Suggestion(timeEntry, SuggestionProviderType.MostUsedTimeEntries));
     }
 }

@@ -40,27 +40,6 @@ namespace Toggl.Core.Suggestions
 
         public SuggestionProviderType ProviderType { get; }
 
-        internal Suggestion(IDatabaseTimeEntry timeEntry)
-        {
-            TaskId = timeEntry.TaskId;
-            ProjectId = timeEntry.ProjectId;
-            IsBillable = timeEntry.Billable;
-            Description = timeEntry.Description;
-            WorkspaceId = timeEntry.WorkspaceId;
-
-            if (timeEntry.Project == null) return;
-
-            HasProject = true;
-            ProjectName = timeEntry.Project.Name;
-            ProjectColor = timeEntry.Project.Color;
-
-            ClientName = timeEntry.Project.Client?.Name ?? "";
-
-            if (timeEntry.Task == null) return;
-
-            TaskName = timeEntry.Task.Name;
-        }
-
         internal Suggestion(IDatabaseTimeEntry timeEntry, SuggestionProviderType providerType)
         {
             ProviderType = providerType;
@@ -86,12 +65,14 @@ namespace Toggl.Core.Suggestions
             TaskName = timeEntry.Task.Name;
         }
 
-        internal Suggestion(CalendarItem calendarItem, long workspaceId)
+        internal Suggestion(CalendarItem calendarItem, long workspaceId, SuggestionProviderType providerType)
         {
             Ensure.Argument.IsNotNullOrWhiteSpaceString(calendarItem.Description, nameof(calendarItem.Description));
 
             WorkspaceId = workspaceId;
             Description = calendarItem.Description;
+
+            ProviderType = providerType;
         }
 
         public bool Equals(Suggestion other)

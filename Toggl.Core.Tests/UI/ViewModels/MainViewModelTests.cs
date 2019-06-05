@@ -606,7 +606,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 timeEntry.Start.Returns(DateTimeOffset.Now);
                 timeEntry.Duration.Returns((long?)null);
                 timeEntry.Description.Returns("something");
-                var suggestion = new Suggestion(timeEntry);
+                var suggestion = new Suggestion(timeEntry, SuggestionProviderType.MostUsedTimeEntries);
                 InteractorFactory.GetSuggestions(Arg.Any<int>()).Execute().Returns(Observable.Return(new[] { suggestion }));
             }
 
