@@ -15,17 +15,17 @@ namespace Toggl.Droid.Services
         #else
             ApiEnvironment.Staging;
         #endif
-        
+
         public override void OnTokenRefresh()
         {
             var applicationContext = Application.Context;
             var packageInfo = applicationContext.PackageManager.GetPackageInfo(applicationContext.PackageName, 0);
             AndroidDependencyContainer.EnsureInitialized(environment, Platform.Giskard, packageInfo.VersionName);
-            
+
+            var token = FirebaseInstanceId.Instance.Token;
+
             var dependencyContainer = AndroidDependencyContainer.Instance;
-            var refreshedToken = FirebaseInstanceId.Instance.Token;
-            var keyValueStorage = dependencyContainer.KeyValueStorage;
-            keyValueStorage.SetString(PushNotificationsTokenServiceAndroid.PushNotificationStorageKey, refreshedToken);
+            dependencyContainer.InteractorFactory.StoreNewTokenInteractor(token).Execute();
         }
     }
 }

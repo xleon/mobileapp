@@ -24,6 +24,7 @@ namespace Toggl.Core.Interactors.UserAccess
         private readonly IPrivateSharedStorageService privateSharedStorageService;
         private readonly IIntentDonationService intentDonationService;
         private readonly IUserAccessManager userAccessManager;
+        private readonly IInteractorFactory interactorFactory;
         private readonly LogoutSource source;
 
         public LogoutInteractor(
@@ -36,6 +37,7 @@ namespace Toggl.Core.Interactors.UserAccess
             IPrivateSharedStorageService privateSharedStorageService,
             IIntentDonationService intentDonationService,
             IUserAccessManager userAccessManager,
+            IInteractorFactory interactorFactory,
             LogoutSource source)
         {
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
@@ -47,6 +49,7 @@ namespace Toggl.Core.Interactors.UserAccess
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
+            Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsADefinedEnumValue(source, nameof(source));
 
             this.analyticsService = analyticsService;
@@ -58,6 +61,7 @@ namespace Toggl.Core.Interactors.UserAccess
             this.privateSharedStorageService = privateSharedStorageService;
             this.intentDonationService = intentDonationService;
             this.userAccessManager = userAccessManager;
+            this.interactorFactory = interactorFactory;
             this.source = source;
         }
 
@@ -75,6 +79,7 @@ namespace Toggl.Core.Interactors.UserAccess
                         .UnscheduleAllNotifications()
                         .Catch(Observable.Return(Unit.Default)))
                 .Do(userAccessManager.OnUserLoggedOut)
+                .Do(_ => interactorFactory.InvalidateCurrentToken().Execute())
                 .FirstAsync();
     }
 }

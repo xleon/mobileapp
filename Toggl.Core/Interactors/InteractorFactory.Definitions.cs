@@ -34,6 +34,8 @@ namespace Toggl.Core.Interactors
         private readonly Lazy<IApplicationShortcutCreator> lazyShortcutCreator;
         private readonly Lazy<IIntentDonationService> lazyIntentDonationService;
         private readonly Lazy<IPrivateSharedStorageService> lazyPrivateSharedStorageService;
+        private readonly Lazy<IKeyValueStorage> lazyKeyValueStorage;
+        private readonly Lazy<IPushNotificationsTokenService> lazyPushNotificationsTokenService;
         private readonly ReportsMemoryCache reportsMemoryCache = new ReportsMemoryCache();
 
         private ITogglDatabase database => lazyDatabase.Value;
@@ -51,6 +53,8 @@ namespace Toggl.Core.Interactors
         private ILastTimeUsageStorage lastTimeUsageStorage => lazyLastTimeUsageStorage.Value;
         private IIntentDonationService intentDonationService => lazyIntentDonationService.Value;
         private IPrivateSharedStorageService privateSharedStorageService => lazyPrivateSharedStorageService.Value;
+        private IKeyValueStorage keyValueStorage => lazyKeyValueStorage.Value;
+        private IPushNotificationsTokenService pushNotificationsTokenService => lazyPushNotificationsTokenService.Value;
 
         public InteractorFactory(
             ITogglApi api,
@@ -69,7 +73,9 @@ namespace Toggl.Core.Interactors
             Lazy<ILastTimeUsageStorage> lastTimeUsageStorage,
             Lazy<IApplicationShortcutCreator> shortcutCreator,
             Lazy<IIntentDonationService> intentDonationService,
-            Lazy<IPrivateSharedStorageService> privateSharedStorageService)
+            Lazy<IPrivateSharedStorageService> privateSharedStorageService,
+            Lazy<IKeyValueStorage> keyValueStorage,
+            Lazy<IPushNotificationsTokenService> pushNotificationsTokenService)
         {
             Ensure.Argument.IsNotNull(api, nameof(api));
             Ensure.Argument.IsNotNull(database, nameof(database));
@@ -88,6 +94,8 @@ namespace Toggl.Core.Interactors
             Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
             Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
+            Ensure.Argument.IsNotNull(keyValueStorage, nameof(keyValueStorage));
+            Ensure.Argument.IsNotNull(pushNotificationsTokenService, nameof(pushNotificationsTokenService));
 
             this.api = api;
             this.userAccessManager = userAccessManager;
@@ -107,6 +115,8 @@ namespace Toggl.Core.Interactors
             lazyLastTimeUsageStorage = lastTimeUsageStorage;
             lazyIntentDonationService = intentDonationService;
             lazyPrivateSharedStorageService = privateSharedStorageService;
+            lazyKeyValueStorage = keyValueStorage;
+            lazyPushNotificationsTokenService = pushNotificationsTokenService;
         }
     }
 }

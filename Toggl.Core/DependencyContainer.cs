@@ -234,7 +234,9 @@ namespace Toggl.Core
             lastTimeUsageStorage,
             shortcutCreator,
             intentDonationService,
-            privateSharedStorageService
+            privateSharedStorageService,
+            keyValueStorage,
+            pushNotificationsTokenService
         );
 
         private void recreateLazyDependenciesForLogin(ITogglApi api)

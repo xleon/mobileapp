@@ -30,6 +30,7 @@ namespace Toggl.Core.Tests.Interactors.UserAccess
                 PrivateSharedStorageService,
                 IntentDonationService,
                 UserAccessManager,
+                InteractorFactory,
                 LogoutSource.Settings);
         }
 
@@ -143,6 +144,15 @@ namespace Toggl.Core.Tests.Interactors.UserAccess
             await interactor.Execute();
 
             IntentDonationService.Received().ClearAll();
+        }
+
+        [Fact, LogIfTooSlow]
+        public async Task ClearsPushNotificationsToken()
+        {
+            await interactor.Execute();
+
+            PushNotificationsTokenService.Received().InvalidateCurrentToken();
+            KeyValueStorage.Received().Remove(PushNotificationTokenKeys.TokenKey);
         }
     }
 }
