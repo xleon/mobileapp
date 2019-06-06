@@ -53,10 +53,13 @@ namespace Toggl.Droid
             registerTimezoneChangedBroadcastReceiver(dependencyContainer.TimeService);
             registerApplicationLifecycleObserver(dependencyContainer.BackgroundService);
 
-            var app = new App<LoginViewModel, CredentialsParameter>(dependencyContainer);
-            var hasFullAccess = app.NavigateIfUserDoesNotHaveFullAccess();
-            if (!hasFullAccess)
+            var app = new AppStart(dependencyContainer);
+            app.UpdateOnboardingProgress();
+
+            var accessLevel = app.GetAccessLevel();
+            if (accessLevel != AccessLevel.LoggedIn)
             {
+                navigateAccordingToAccessLevel(accessLevel);
                 Finish();
                 return;
             }
@@ -114,5 +117,23 @@ namespace Toggl.Droid
 
         private TogglApplication getTogglApplication()
             => (TogglApplication)Application;
+
+        private void navigateAccordingToAccessLevel(AccessLevel accessLevel)
+        {
+            var navigationService = AndroidDependencyContainer.Instance.NavigationService;
+
+            switch (accessLevel)
+            {
+                case AccessLevel.AccessRestricted:
+                    navigationService.Navigate<OutdatedAppViewModel>(null);
+                    return;
+                case AccessLevel.NotLoggedIn:
+                    navigationService.Navigate<LoginViewModel, CredentialsParameter>(new CredentialsParameter(), null);
+                    return;
+                case AccessLevel.TokenRevoked:
+                    navigationService.Navigate<TokenResetViewModel>(null);
+                    return;
+            }
+        }
     }
 }

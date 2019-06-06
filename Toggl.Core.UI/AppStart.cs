@@ -5,13 +5,11 @@ using Toggl.Core.UI.ViewModels;
 
 namespace Toggl.Core.UI
 {
-    public sealed class App<TFirstViewModelWhenNotLoggedIn, TInput>
-        where TFirstViewModelWhenNotLoggedIn : ViewModel<TInput, Unit>
-        where TInput : new()
+    public sealed class AppStart
     {
         private readonly UIDependencyContainer dependencyContainer;
 
-        public App(UIDependencyContainer dependencyContainer)
+        public AppStart(UIDependencyContainer dependencyContainer)
         {
             this.dependencyContainer = dependencyContainer;
 
@@ -19,42 +17,29 @@ namespace Toggl.Core.UI
             var onboardingStorage = dependencyContainer.OnboardingStorage;
             var backgroundService = dependencyContainer.BackgroundSyncService;
 
-            revokeNewUserIfNeeded();
             backgroundService.SetupBackgroundSync(dependencyContainer.UserAccessManager);
 
             onboardingStorage.SetFirstOpened(timeService.CurrentDateTime);
         }
 
-        public bool NavigateIfUserDoesNotHaveFullAccess()
+        public AccessLevel GetAccessLevel()
         {
-            var navigationService = dependencyContainer.NavigationService;
             var accessRestrictionStorage = dependencyContainer.AccessRestrictionStorage;
 
             if (accessRestrictionStorage.IsApiOutdated() || accessRestrictionStorage.IsClientOutdated())
-            {
-                navigationService.Navigate<OutdatedAppViewModel>(null);
-                return false;
-            }
+                return AccessLevel.AccessRestricted;
 
             if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())
-            {
-                navigationService.Navigate<TFirstViewModelWhenNotLoggedIn, TInput>(new TInput(), null);
-                return false;
-            }
+                return AccessLevel.NotLoggedIn;
 
             var apiToken = dependencyContainer.UserAccessManager.GetSavedApiToken();
             if (accessRestrictionStorage.IsUnauthorized(apiToken))
-            {
-                navigationService.Navigate<TokenResetViewModel>(null);
-                return false;
-            }
+                return AccessLevel.TokenRevoked;
 
-            dependencyContainer.SyncManager.ForceFullSync().Subscribe();
-
-            return true;
+            return AccessLevel.LoggedIn;
         }
 
-        private void revokeNewUserIfNeeded()
+        public void UpdateOnboardingProgress()
         {
             const int newUserThreshold = 60;
             var now = dependencyContainer.TimeService.CurrentDateTime;

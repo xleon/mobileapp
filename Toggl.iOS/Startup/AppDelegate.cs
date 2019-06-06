@@ -33,14 +33,11 @@ namespace Toggl.iOS
             setupTabBar();
 
             IosDependencyContainer.EnsureInitialized(Window, this);
-            var app = new App<OnboardingViewModel, Unit>(IosDependencyContainer.Instance);
-            var hasFullAccess = app.NavigateIfUserDoesNotHaveFullAccess();
-            if (hasFullAccess)
-            {
-                var viewModel = IosDependencyContainer.Instance.ViewModelLoader
-                    .Load<Unit, Unit>(typeof(MainTabBarViewModel), Unit.Default).GetAwaiter().GetResult();
-                Window.RootViewController = ViewControllerLocator.GetViewController(viewModel);
-            }
+            var app = new AppStart(IosDependencyContainer.Instance);
+            app.UpdateOnboardingProgress();
+
+            var accessLevel = app.GetAccessLevel();
+            navigateAccordingToAccessLevel(accessLevel);
 
             UNUserNotificationCenter.Current.Delegate = this;
 
@@ -75,6 +72,29 @@ namespace Toggl.iOS
         public override void ApplicationSignificantTimeChange(UIApplication application)
         {
             IosDependencyContainer.Instance.TimeService.SignificantTimeChanged();
+        }
+
+        private void navigateAccordingToAccessLevel(AccessLevel accessLevel)
+        {
+            var navigationService = IosDependencyContainer.Instance.NavigationService;
+
+            switch (accessLevel)
+            {
+                case AccessLevel.AccessRestricted:
+                    navigationService.Navigate<OutdatedAppViewModel>(null);
+                    return;
+                case AccessLevel.NotLoggedIn:
+                    navigationService.Navigate<OnboardingViewModel>(null);
+                    return;
+                case AccessLevel.TokenRevoked:
+                    navigationService.Navigate<TokenResetViewModel>(null);
+                    return;
+                case AccessLevel.LoggedIn:
+                    var viewModel = IosDependencyContainer.Instance.ViewModelLoader
+                    .Load<Unit, Unit>(typeof(MainTabBarViewModel), Unit.Default).GetAwaiter().GetResult();
+                    Window.RootViewController = ViewControllerLocator.GetViewController(viewModel);
+                    return;
+            }
         }
     }
 }
