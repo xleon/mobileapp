@@ -1,5 +1,6 @@
+using System;
 using System.Reactive;
-using Toggl.Shared;
+using Toggl.Core.Interactors.PushNotifications;
 
 namespace Toggl.Core.Interactors
 {
@@ -10,5 +11,8 @@ namespace Toggl.Core.Interactors
 
         public IInteractor<Unit> InvalidateCurrentToken()
             => new InvalidateCurrentToken(pushNotificationsTokenService, keyValueStorage);
+
+        public IInteractor<IObservable<Unit>> SubscribeToPushNotifications()
+            => new SubscribeToPushNotificationsInteractor(keyValueStorage, api, pushNotificationsTokenService);
     }
 }

@@ -9,11 +9,9 @@ using Toggl.Core.DTOs;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Reports;
-using Toggl.Core.Services;
 using Toggl.Core.Suggestions;
 using Toggl.Shared;
 using Toggl.Shared.Models.Reports;
-using Toggl.Storage.Settings;
 
 namespace Toggl.Core.Interactors
 {
@@ -232,6 +230,8 @@ namespace Toggl.Core.Interactors
         IInteractor<Unit> StoreNewTokenInteractor(string token);
 
         IInteractor<Unit> InvalidateCurrentToken();
+
+        IInteractor<IObservable<Unit>> SubscribeToPushNotifications();
 
         #endregion
     }
