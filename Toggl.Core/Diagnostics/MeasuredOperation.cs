@@ -24,6 +24,7 @@
         MainActivityOnCreate,
         BackgroundSync,
         Sync,
-        Diffing
+        Diffing,
+        PullTimeEntriesSync
     }
 }
