@@ -1,7 +1,7 @@
 using System;
+using System.Reactive.Linq;
 using Firebase.CloudMessaging;
 using Foundation;
-using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.iOS
@@ -25,7 +25,16 @@ namespace Toggl.iOS
 
         public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
         {
-            Console.WriteLine("Got a PN.");
+            var interactorFactory = IosDependencyContainer.Instance.InteractorFactory;
+
+            var syncInteractor = application.ApplicationState == UIApplicationState.Active
+                ? interactorFactory.RunPushNotificationInitiatedSyncInForeground()
+                : interactorFactory.RunPushNotificationInitiatedSyncInBackground();
+
+            interactorFactory.GetCurrentUser().Execute()
+                .SelectMany(_ => syncInteractor.Execute())
+                .Select(mapToNativeOutcomes)
+                .Subscribe(completionHandler);
         }
     }
 }
