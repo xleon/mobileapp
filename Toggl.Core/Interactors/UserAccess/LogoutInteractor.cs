@@ -78,8 +78,8 @@ namespace Toggl.Core.Interactors.UserAccess
                     notificationService
                         .UnscheduleAllNotifications()
                         .Catch(Observable.Return(Unit.Default)))
+                .SelectMany(interactorFactory.InvalidateCurrentToken().Execute())
                 .Do(userAccessManager.OnUserLoggedOut)
-                .Do(_ => interactorFactory.InvalidateCurrentToken().Execute())
                 .FirstAsync();
     }
 }

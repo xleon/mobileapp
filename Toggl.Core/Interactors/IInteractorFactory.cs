@@ -233,7 +233,7 @@ namespace Toggl.Core.Interactors
 
         IInteractor<Unit> StoreNewTokenInteractor(string token);
 
-        IInteractor<Unit> InvalidateCurrentToken();
+        IInteractor<IObservable<Unit>> InvalidateCurrentToken();
 
         IInteractor<IObservable<Unit>> SubscribeToPushNotifications();
 

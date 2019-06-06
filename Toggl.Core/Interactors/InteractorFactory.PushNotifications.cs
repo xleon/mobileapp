@@ -9,8 +9,8 @@ namespace Toggl.Core.Interactors
         public IInteractor<Unit> StoreNewTokenInteractor(string token)
             => new StoreNewTokenInteractor(keyValueStorage, token);
 
-        public IInteractor<Unit> InvalidateCurrentToken()
-            => new InvalidateCurrentToken(pushNotificationsTokenService, keyValueStorage);
+        public IInteractor<IObservable<Unit>> InvalidateCurrentToken()
+            => new InvalidateCurrentTokenInteractor(pushNotificationsTokenService, keyValueStorage, api);
 
         public IInteractor<IObservable<Unit>> SubscribeToPushNotifications()
             => new SubscribeToPushNotificationsInteractor(keyValueStorage, api, pushNotificationsTokenService);
