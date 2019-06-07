@@ -25,14 +25,20 @@ namespace Toggl.iOS
 
         public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
         {
-            var interactorFactory = IosDependencyContainer.Instance.InteractorFactory;
+            var dependencyContainer = IosDependencyContainer.Instance;
+            var interactorFactory = dependencyContainer.InteractorFactory;
+
+            if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())
+            {
+                completionHandler(UIBackgroundFetchResult.NoData);
+                return;
+            }
 
             var syncInteractor = application.ApplicationState == UIApplicationState.Active
                 ? interactorFactory.RunPushNotificationInitiatedSyncInForeground()
                 : interactorFactory.RunPushNotificationInitiatedSyncInBackground();
 
-            interactorFactory.GetCurrentUser().Execute()
-                .SelectMany(_ => syncInteractor.Execute())
+            syncInteractor.Execute()
                 .Select(mapToNativeOutcomes)
                 .Subscribe(completionHandler);
         }
