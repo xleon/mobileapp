@@ -24,9 +24,7 @@ namespace Toggl.Droid.Services
         
         public override void OnTokenRefresh()
         {
-            var applicationContext = Application.Context;
-            var packageInfo = applicationContext.PackageManager.GetPackageInfo(applicationContext.PackageName, 0);
-            AndroidDependencyContainer.EnsureInitialized(environment, Platform.Giskard, packageInfo.VersionName);
+            AndroidDependencyContainer.EnsureInitialized(Application.Context);
 
             var token = FirebaseInstanceId.Instance.Token;
 
