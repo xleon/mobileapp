@@ -3,6 +3,7 @@ using Toggl.Core.Models;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts
 {
@@ -15,7 +16,7 @@ namespace Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts
 
         public override ReportsDateRangeParameter GetDateRange()
         {
-            var yesterday = TimeService.CurrentDateTime.Date.AddDays(-1);
+            var yesterday = TimeService.CurrentDateTime.RoundDownToLocalDate().AddDays(-1);
             return ReportsDateRangeParameter
                 .WithDates(yesterday, yesterday)
                 .WithSource(ReportsSource.ShortcutYesterday);

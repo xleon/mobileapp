@@ -158,6 +158,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .AsDriver(schedulerProvider);
 
             CurrentDateRangeStringObservable = currentDateRangeStringSubject
+                .Select(text => !string.IsNullOrEmpty(text) ? $"{text} ▾" : "")
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
@@ -312,15 +313,48 @@ namespace Toggl.Core.UI.ViewModels.Reports
             if (startDate == default(DateTimeOffset) || endDate == default(DateTimeOffset))
                 return;
 
-            if (startDate == endDate)
+            var currentTime = timeService.CurrentDateTime;
+
+            if (startDate == endDate && startDate == currentTime.RoundDownToLocalDate())
             {
-                currentDateRangeStringSubject.OnNext($"{startDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture)} ▾");
+                currentDateRangeStringSubject.OnNext(Resources.Today);
+            }
+            else if (startDate == endDate && startDate == currentTime.RoundDownToLocalDate().AddDays(-1))
+            {
+                currentDateRangeStringSubject.OnNext(Resources.Yesterday);
                 return;
             }
-
-            currentDateRangeStringSubject.OnNext(isCurrentWeek()
-                ? $"{Resources.ThisWeek} ▾"
-                : $"{startDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture)} - {endDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture)} ▾");
+            else if ((startDate, endDate).IsCurrentWeek(currentTime, beginningOfWeek))
+            {
+                currentDateRangeStringSubject.OnNext(Resources.ThisWeek);
+            }
+            else if ((startDate, endDate).IsLastWeek(currentTime, beginningOfWeek))
+            {
+                currentDateRangeStringSubject.OnNext(Resources.LastWeek);
+            }
+            else if ((startDate, endDate).IsCurrentMonth(currentTime))
+            {
+                currentDateRangeStringSubject.OnNext(Resources.ThisMonth);
+            }
+            else if ((startDate, endDate).IsLastMonth(currentTime))
+            {
+                currentDateRangeStringSubject.OnNext(Resources.LastMonth);
+            }
+            else if ((startDate, endDate).IsCurrentYear(currentTime))
+            {
+                currentDateRangeStringSubject.OnNext(Resources.ThisYear);
+            }
+            else if ((startDate, endDate).IsLastYear(currentTime))
+            {
+                currentDateRangeStringSubject.OnNext(Resources.LastYear);
+            }
+            else
+            {
+                var startDateText = startDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture);
+                var endDateText = endDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture);
+                var dateRangeText = $"{startDateText} - {endDateText}";
+                currentDateRangeStringSubject.OnNext(dateRangeText);
+            }
         }
 
         private void onPreferencesChanged(IThreadSafePreferences preferences)
