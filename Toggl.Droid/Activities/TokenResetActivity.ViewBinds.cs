@@ -1,15 +1,7 @@
-﻿using Android.App;
-using Android.Content.PM;
-using Android.OS;
-using Android.Support.Design.Widget;
-using Android.Support.V7.Widget;
+﻿using Android.Support.Design.Widget;
 using Android.Widget;
-using MvvmCross.Droid.Support.V7.AppCompat;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Droid.Extensions;
-using static Toggl.Shared.Resources;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
+using static Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Activities
 {

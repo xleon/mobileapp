@@ -5,12 +5,13 @@ using Android.Support.V7.App;
 using Activity = Android.App.Activity;
 using System.Linq;
 using Android.Content;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Droid.Views
 {
     public class ListSelectionDialog<T>
     {
-        private readonly List<(string Text, T Item)> options;
+        private readonly List<SelectOption<T>> options;
         private readonly string title;
         private readonly Action<T> onChosen;
         private readonly int initialIndex;
@@ -20,7 +21,7 @@ namespace Toggl.Droid.Views
         public ListSelectionDialog(
             Activity activity,
             string title,
-            IEnumerable<(string Text, T Item)> options,
+            IEnumerable<SelectOption<T>> options,
             int initialIndex,
             Action<T> onChosen)
         {
@@ -36,12 +37,20 @@ namespace Toggl.Droid.Views
             if (activity == null)
                 throw new InvalidOperationException("Dialog has already been dismissed.");
 
-            var texts = options.Select(option => option.Text).ToArray();
+            var texts = options.Select(option => option.ItemName).ToArray();
 
             dialog = new AlertDialog.Builder(activity, Resource.Style.TogglDialog)
                 .SetTitle(title)
                 .SetSingleChoiceItems(texts, initialIndex, onItemChosen)
                 .Show();
+
+            dialog.CancelEvent += onCancelled;
+        }
+
+        private void onCancelled(object sender, EventArgs e)
+        {
+            onChosen(default(T));
+            activity = null;
         }
 
         private void onItemChosen(object sender, DialogClickEventArgs args)

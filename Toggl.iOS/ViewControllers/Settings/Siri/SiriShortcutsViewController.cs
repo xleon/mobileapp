@@ -29,7 +29,7 @@ namespace Toggl.iOS.ViewControllers.Settings
     {
         private ISubject<Unit> refreshSubject = new Subject<Unit>();
 
-        public SiriShortcutsViewController() : base(nameof(SiriShortcutsViewController))
+        public SiriShortcutsViewController(SiriShortcutsViewModel viewModel) : base(viewModel, nameof(SiriShortcutsViewController))
         {
         }
 

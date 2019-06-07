@@ -13,6 +13,7 @@ namespace Toggl.Droid.ViewHolders
             => new SelectWorkspaceViewHolder(itemView);
 
         private TextView workspaceNameTextView;
+        private RadioButton selectWorkspaceFragmentCellRadioButton;
 
         public SelectWorkspaceViewHolder(View itemView)
             : base(itemView)
@@ -27,14 +28,13 @@ namespace Toggl.Droid.ViewHolders
         protected override void InitializeViews()
         {
             workspaceNameTextView = ItemView.FindViewById<TextView>(Resource.Id.SelectWorkspaceFragmentCellTextView);
+            selectWorkspaceFragmentCellRadioButton = ItemView.FindViewById<RadioButton>(Resource.Id.SelectWorkspaceFragmentCellRadioButton);
         }
 
         protected override void UpdateView()
         {
             workspaceNameTextView.Text = Item.WorkspaceName;
-            workspaceNameTextView.SetTypeface(
-                workspaceNameTextView.Typeface,
-                Item.Selected ? TypefaceStyle.Bold : TypefaceStyle.Normal);
+            selectWorkspaceFragmentCellRadioButton.Checked = Item.Selected;
         }
     }
 }

@@ -6,22 +6,17 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using FluentAssertions;
-using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
-using MvvmCross.Binding.Extensions;
 using NSubstitute;
 using Toggl.Core.Analytics;
-using Toggl.Core.DataSources;
-using Toggl.Core.Experiments;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.Hints;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
@@ -34,7 +29,6 @@ using Toggl.Shared.Models;
 using Toggl.Storage;
 using Xunit;
 using static Toggl.Core.Helper.Constants;
-using Notification = System.Reactive.Notification;
 using ThreadingTask = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.UI.ViewModels
@@ -64,7 +58,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     StopwatchProvider,
                     RxActionFactory);
 
-                vm.Prepare();
+                vm.Initialize();
 
                 return vm;
             }
@@ -165,7 +159,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.ViewAppearing();
 
-                await NavigationService.Received().Navigate<NoWorkspaceViewModel, Unit>();
+                await NavigationService.Received().Navigate<NoWorkspaceViewModel, Unit>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -175,7 +169,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.ViewAppearing();
 
-                await NavigationService.DidNotReceive().Navigate<NoWorkspaceViewModel, Unit>();
+                await NavigationService.DidNotReceive().Navigate<NoWorkspaceViewModel, Unit>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -183,14 +177,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 AccessRestrictionStorage.HasNoWorkspace().Returns(true);
                 var task = new TaskCompletionSource<Unit>().Task;
-                NavigationService.Navigate<NoWorkspaceViewModel, Unit>().Returns(task);
+                NavigationService.Navigate<NoWorkspaceViewModel, Unit>(View).Returns(task);
 
                 ViewModel.ViewAppearing();
                 ViewModel.ViewAppearing();
                 ViewModel.ViewAppearing();
                 ViewModel.ViewAppearing();
 
-                await NavigationService.Received(1).Navigate<NoWorkspaceViewModel, Unit>();
+                await NavigationService.Received(1).Navigate<NoWorkspaceViewModel, Unit>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -201,7 +195,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await ViewModel.ViewAppearingAsync();
 
-                await NavigationService.Received().Navigate<SelectDefaultWorkspaceViewModel, Unit>();
+                await NavigationService.Received().Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -211,7 +205,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.ViewAppearing();
 
-                await NavigationService.DidNotReceive().Navigate<SelectDefaultWorkspaceViewModel, Unit>();
+                await NavigationService.DidNotReceive().Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -220,7 +214,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 AccessRestrictionStorage.HasNoWorkspace().Returns(false);
                 AccessRestrictionStorage.HasNoDefaultWorkspace().Returns(true);
                 var task = new TaskCompletionSource<Unit>().Task;
-                NavigationService.Navigate<SelectDefaultWorkspaceViewModel, Unit>().Returns(task);
+                NavigationService.Navigate<SelectDefaultWorkspaceViewModel, Unit>(View).Returns(task);
 
                 ViewModel.ViewAppearing();
                 ViewModel.ViewAppearing();
@@ -229,7 +223,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 //ViewAppearing calls an async method. The delay is here to ensure that the async method completes before the assertion
                 await ThreadingTask.Delay(200);
 
-                await NavigationService.Received(1).Navigate<SelectDefaultWorkspaceViewModel, Unit>();
+                await NavigationService.Received(1).Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
             }
         }
 
@@ -260,7 +254,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
                 await NavigationService.Received()
-                   .Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(Arg.Any<StartTimeEntryParameters>());
+                   .Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(Arg.Any<StartTimeEntryParameters>(), ViewModel.View);
             }
 
             [Theory, LogIfTooSlow]
@@ -279,7 +273,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ? Resources.ManualTimeEntryPlaceholder
                     : Resources.StartTimeEntryPlaceholder;
                 await NavigationService.Received().Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(
-                    Arg.Is<StartTimeEntryParameters>(parameter => parameter.PlaceholderText == expected)
+                    Arg.Is<StartTimeEntryParameters>(parameter => parameter.PlaceholderText == expected),
+                    ViewModel.View
                 );
             }
 
@@ -299,7 +294,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ? TimeSpan.FromMinutes(DefaultTimeEntryDurationForManualModeInMinutes)
                     : (TimeSpan?)null;
                 await NavigationService.Received().Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(
-                    Arg.Is<StartTimeEntryParameters>(parameter => parameter.Duration == expected)
+                    Arg.Is<StartTimeEntryParameters>(parameter => parameter.Duration == expected),
+                    ViewModel.View
                 );
             }
 
@@ -321,7 +317,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ? date.Subtract(TimeSpan.FromMinutes(DefaultTimeEntryDurationForManualModeInMinutes))
                     : date;
                 await NavigationService.Received().Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(
-                    Arg.Is<StartTimeEntryParameters>(parameter => parameter.StartTime == expected)
+                    Arg.Is<StartTimeEntryParameters>(parameter => parameter.StartTime == expected),
+                    ViewModel.View
                 );
             }
 
@@ -401,7 +398,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OpenSettings.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.Received().Navigate<SettingsViewModel>();
+                await NavigationService.Received().Navigate<SettingsViewModel>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -444,7 +441,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OpenReports.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.Received().Navigate<ReportsViewModel>();
+                await NavigationService.Received().Navigate<ReportsViewModel>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -490,7 +487,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OpenSyncFailures.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.Received().Navigate<SyncFailuresViewModel>();
+                await NavigationService.Received().Navigate<SyncFailuresViewModel>(View);
             }
         }
 
@@ -765,74 +762,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public sealed class TheInitializeMethod
         {
-            public sealed class WhenReceivingADescription : MainViewModelTest
-            {
-                [Fact, LogIfTooSlow]
-                public async ThreadingTask CreatesANewTimeEntryWithThePassedDescriptionInTheDefaultWorkspace()
-                {
-                    const string description = "working on something";
-                    var defaultWorkspace = new MockWorkspace { Id = 1 };
-                    InteractorFactory
-                        .GetDefaultWorkspace()
-                        .Execute()
-                        .Returns(Observable.Return(defaultWorkspace));
-                    ViewModel.Init(null, description);
-
-                    await InteractorFactory
-                        .Received()
-                        .CreateTimeEntry(Arg.Is<ITimeEntryPrototype>(
-                                te => te.Description == description
-                                   && te.WorkspaceId == defaultWorkspace.Id), TimeEntryStartOrigin.Timer)
-                        .Execute();
-                }
-            }
-
-            public sealed class WhenNavigationActionIsStop : MainViewModelTest
-            {
-                [Fact, LogIfTooSlow]
-                public async ThreadingTask StopsTheCurrentEntry()
-                {
-                    ViewModel.Init(ApplicationUrls.Main.Action.Stop, null);
-                    await ViewModel.Initialize();
-
-                    await InteractorFactory.Received().StopTimeEntry(TimeService.CurrentDateTime, Arg.Any<TimeEntryStopOrigin>()).Execute();
-                }
-
-                [Fact, LogIfTooSlow]
-                public async ThreadingTask StartsPushSync()
-                {
-                    ViewModel.Init(ApplicationUrls.Main.Action.Stop, null);
-                    await ViewModel.Initialize();
-
-                    SyncManager.Received().PushSync();
-                }
-            }
-
-            public sealed class WhenNavigationActionIsContinue : MainViewModelTest
-            {
-                [Fact, LogIfTooSlow]
-                public async ThreadingTask GetsTheContinueMostRecentTimeEntryInteractor()
-                {
-                    ViewModel.Init(ApplicationUrls.Main.Action.Continue, null);
-
-                    await ViewModel.Initialize();
-
-                    InteractorFactory.Received().ContinueMostRecentTimeEntry();
-                }
-
-                [Fact, LogIfTooSlow]
-                public async ThreadingTask ExecutesTheContinueMostRecentTimeEntryInteractor()
-                {
-                    var interactor = Substitute.For<IInteractor<IObservable<IThreadSafeTimeEntry>>>();
-                    InteractorFactory.ContinueMostRecentTimeEntry().Returns(interactor);
-                    ViewModel.Init(ApplicationUrls.Main.Action.Continue, null);
-
-                    await ViewModel.Initialize();
-
-                    await interactor.Received().Execute();
-                }
-            }
-
             public sealed class WhenShowingTheRatingsView : MainViewModelTest
             {
                 [Fact, LogIfTooSlow]

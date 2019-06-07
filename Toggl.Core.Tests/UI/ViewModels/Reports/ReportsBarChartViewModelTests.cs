@@ -13,6 +13,7 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models.Reports;
@@ -35,7 +36,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             preferencesDataSource.Current.Returns(CurrentPreferences.AsObservable());
             DataSource.Preferences.Returns(preferencesDataSource);
 
-            return new ReportsBarChartViewModel(SchedulerProvider, DataSource.Preferences, ReportsSubject);
+            return new ReportsBarChartViewModel(SchedulerProvider, DataSource.Preferences, ReportsSubject, NavigationService);
         }
     }
 
@@ -46,15 +47,17 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
         public void ThrowsForNullParameters(
             bool useSchedulerProvider,
             bool usePreferencesDataSource,
-            bool useReportsObservable)
+            bool useReportsObservable,
+            bool useNavigationService)
         {
             var schedulerProvider = useSchedulerProvider ? Substitute.For<ISchedulerProvider>() : null;
             var preferencesDataSource = usePreferencesDataSource ? Substitute.For<ISingletonDataSource<IThreadSafePreferences>>() : null;
             var reportsObservable = useReportsObservable ? Substitute.For<IObservable<ITimeEntriesTotals>>() : null;
+            var navigationService = useNavigationService ? Substitute.For<INavigationService>() : null;
 
             Action tryingCreateInstance = () =>
                 // ReSharper disable once ObjectCreationAsStatement
-                new ReportsBarChartViewModel(schedulerProvider, preferencesDataSource, reportsObservable);
+                new ReportsBarChartViewModel(schedulerProvider, preferencesDataSource, reportsObservable, navigationService);
 
             tryingCreateInstance.Should().Throw<ArgumentNullException>();
         }

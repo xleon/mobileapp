@@ -9,12 +9,13 @@ using Toggl.Core.Tests.Generators;
 using Toggl.Shared;
 using Xunit;
 using Toggl.Core.UI.Navigation;
+using Toggl.Core.Tests.TestExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectDateFormatViewModelTests
     {
-        public abstract class SelectDateFormatViewModelTest : BaseViewModelTests<SelectDateFormatViewModel>
+        public abstract class SelectDateFormatViewModelTest : BaseViewModelTests<SelectDateFormatViewModel, DateFormat, DateFormat>
         {
             protected override SelectDateFormatViewModel CreateViewModel()
                 => new SelectDateFormatViewModel(NavigationService, RxActionFactory);
@@ -43,7 +44,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var selectedDateFormat = ViewModel.DateTimeFormats[0];
 
-                ViewModel.Prepare(selectedDateFormat.DateFormat);
+                ViewModel.Initialize(selectedDateFormat.DateFormat);
 
                 selectedDateFormat.Selected.Should().BeTrue();
             }
@@ -55,12 +56,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task ClosesTheViewModelPassingTheDefaultResult()
             {
                 var defaultResult = DateFormat.FromLocalizedDateFormat("YYYY.MM.DD");
-                ViewModel.Prepare(defaultResult);
+                await ViewModel.Initialize(defaultResult);
 
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(ViewModel, defaultResult);
+                (await ViewModel.Result).Should().Be(defaultResult);
             }
         }
 
@@ -75,7 +76,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectDateFormat.Execute(selectableDateFormatViewModel);
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(ViewModel, selectedDateFormat);    
+                (await ViewModel.Result).Should().Be(selectedDateFormat);    
             }
         }
     }

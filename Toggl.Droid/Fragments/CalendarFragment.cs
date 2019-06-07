@@ -4,13 +4,11 @@ using Android.OS;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using MvvmCross;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Droid.Adapters.Calendar;
 using Toggl.Droid.Presentation;
 using Toggl.Droid.Views.Calendar;
 using Toggl.Droid.Extensions.Reactive;
-using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using System.Linq;
 using Toggl.Core.Calendar;
@@ -18,7 +16,7 @@ using System.Reactive;
 
 namespace Toggl.Droid.Fragments
 {
-    public partial class CalendarFragment : ReactiveFragment<CalendarViewModel>, IScrollableToTop
+    public partial class CalendarFragment : ReactiveTabFragment<CalendarViewModel>, IScrollableToTop
     {
         private CalendarLayoutManager calendarLayoutManager;
 

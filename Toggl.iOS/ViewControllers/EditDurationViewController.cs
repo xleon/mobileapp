@@ -4,21 +4,19 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
+using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
-using Toggl.Core;
-using Toggl.iOS.Presentation.Attributes;
-using Toggl.Shared;
 using Math = System.Math;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalCardPresentation]
     public sealed partial class EditDurationViewController
         : KeyboardAwareViewController<EditDurationViewModel>,
           IDismissableViewController,
@@ -32,7 +30,7 @@ namespace Toggl.iOS.ViewControllers
         private CompositeDisposable disposeBag = new CompositeDisposable();
         private CGRect frameBeforeShowingKeyboard;
 
-        public EditDurationViewController() : base(nameof(EditDurationViewController))
+        public EditDurationViewController(EditDurationViewModel viewModel) : base(viewModel, nameof(EditDurationViewController))
         {
         }
 

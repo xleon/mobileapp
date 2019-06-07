@@ -9,8 +9,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public sealed partial class AboutViewController : ReactiveViewController<AboutViewModel>
     {
-        public AboutViewController()
-            : base(nameof(AboutViewController))
+        public AboutViewController(AboutViewModel viewModel)
+            : base(viewModel, nameof(AboutViewController))
         {
         }
 

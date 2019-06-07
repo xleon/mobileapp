@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using MvvmCross.Platforms.Ios.Views;
 using Toggl.Core;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
@@ -10,8 +9,13 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public sealed class LicensesViewController : MvxTableViewController<LicensesViewModel>
+    public sealed class LicensesViewController : ReactiveTableViewController<LicensesViewModel>
     {
+        public LicensesViewController(LicensesViewModel viewModel)
+            : base(viewModel)
+        {
+        }
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();

@@ -8,7 +8,6 @@ using Android.OS;
 using Android.Support.V4.Graphics;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
@@ -18,8 +17,7 @@ using FoundationResources = Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Activities
 {
-    [MvxActivityPresentation]
-    [Activity(Theme = "@style/AppTheme.BlueStatusBar",
+    [Activity(Theme = "@style/Theme.Splash",
               WindowSoftInputMode = SoftInput.AdjustResize,
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
@@ -27,7 +25,13 @@ namespace Toggl.Droid.Activities
     {
         protected override void OnCreate(Bundle bundle)
         {
+            SetTheme(Resource.Style.AppTheme_BlueStatusBar);
             base.OnCreate(bundle);
+            if (ViewModelWasNotCached())
+            {
+                BailOutToSplashScreen();
+                return;
+            }
             SetContentView(Resource.Layout.EditProjectActivity);
             InitializeViews();
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);

@@ -11,6 +11,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -34,7 +35,9 @@ namespace Toggl.Core.UI.ViewModels
             IOnboardingStorage onboardingStorage,
             ISuggestionProviderContainer suggestionProviders,
             ISchedulerProvider schedulerProvider,
-            IRxActionFactory rxActionFactory)
+            IRxActionFactory rxActionFactory,
+            INavigationService navigationService)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
@@ -51,9 +54,9 @@ namespace Toggl.Core.UI.ViewModels
             this.rxActionFactory = rxActionFactory;
         }
 
-        public override async Task Initialize()
+        public override Task Initialize()
         {
-            await base.Initialize();
+            base.Initialize();
 
             StartTimeEntry = rxActionFactory.FromObservable<Suggestion, IThreadSafeTimeEntry>(startTimeEntry);
 
@@ -66,6 +69,8 @@ namespace Toggl.Core.UI.ViewModels
                 .Select(suggestions => suggestions.Length == 0)
                 .StartWith(true)
                 .AsDriver(onErrorJustReturn: true, schedulerProvider: schedulerProvider);
+
+            return base.Initialize();
         }
 
         private IObservable<Suggestion[]> getSuggestions()

@@ -9,36 +9,38 @@ namespace Toggl.Core.UI
 {
     public abstract class UIDependencyContainer : DependencyContainer
     {
-        private readonly Lazy<IDialogService> dialogService;
+        private readonly Lazy<IDeeplinkParser> deeplinkParser;
         private readonly Lazy<IBrowserService> browserService;
-        private readonly Lazy<IPermissionsService> permissionsService;
+        private readonly Lazy<ViewModelLoader> viewModelLoader;
         private readonly Lazy<INavigationService> navigationService;
-        private readonly Lazy<IPasswordManagerService> passwordManagerService;
+        private readonly Lazy<IPermissionsChecker> permissionsService;
 
-        public IDialogService DialogService => dialogService.Value;
+        public IDeeplinkParser DeeplinkParser => deeplinkParser.Value;
         public IBrowserService BrowserService => browserService.Value;
-        public IPermissionsService PermissionsService => permissionsService.Value;
+        public ViewModelLoader ViewModelLoader => viewModelLoader.Value;
         public INavigationService NavigationService => navigationService.Value;
-        public IPasswordManagerService PasswordManagerService => passwordManagerService.Value;
+        public IPermissionsChecker PermissionsChecker => permissionsService.Value;
 
         public static UIDependencyContainer Instance { get; protected set; }
 
         protected UIDependencyContainer(ApiEnvironment apiEnvironment, UserAgent userAgent)
             : base(apiEnvironment, userAgent)
         {
-            dialogService = new Lazy<IDialogService>(CreateDialogService);
+            deeplinkParser = new Lazy<IDeeplinkParser>(createDeeplinkParser);
             browserService = new Lazy<IBrowserService>(CreateBrowserService);
-            permissionsService = new Lazy<IPermissionsService>(CreatePermissionsService);
+            viewModelLoader = new Lazy<ViewModelLoader>(CreateViewModelLoader);
             navigationService = new Lazy<INavigationService>(CreateNavigationService);
-            passwordManagerService = new Lazy<IPasswordManagerService>(CreatePasswordManagerService);
+            permissionsService = new Lazy<IPermissionsChecker>(CreatePermissionsChecker);
         }
 
-        protected abstract IDialogService CreateDialogService();
-        protected abstract IBrowserService CreateBrowserService();
-        protected abstract IPermissionsService CreatePermissionsService();
-        protected abstract INavigationService CreateNavigationService();
-        protected abstract IPasswordManagerService CreatePasswordManagerService();
+        private IDeeplinkParser createDeeplinkParser()
+            => new DeeplinkParser();
 
+        protected abstract IBrowserService CreateBrowserService();
+        protected abstract INavigationService CreateNavigationService();
+        protected abstract IPermissionsChecker CreatePermissionsChecker();
+
+        protected virtual ViewModelLoader CreateViewModelLoader() => new ViewModelLoader(this);
         protected override IErrorHandlingService CreateErrorHandlingService()
             => new ErrorHandlingService(NavigationService, AccessRestrictionStorage);
     }

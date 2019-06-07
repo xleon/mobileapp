@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.ComponentModel;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -10,9 +7,6 @@ using Android.Runtime;
 using Android.Support.Constraints;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.WeakSubscription;
-using Toggl.Core.UI.ViewModels.Reports;
-using Toggl.Core.Reports;
 using Toggl.Droid.Views;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;

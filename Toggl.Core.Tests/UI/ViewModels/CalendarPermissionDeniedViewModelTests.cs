@@ -16,7 +16,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             : BaseViewModelTests<CalendarPermissionDeniedViewModel>
         {
             protected override CalendarPermissionDeniedViewModel CreateViewModel()
-                => new CalendarPermissionDeniedViewModel(NavigationService, PermissionsService, RxActionFactory);
+                => new CalendarPermissionDeniedViewModel(NavigationService, PermissionsChecker, RxActionFactory);
         }
 
         public sealed class TheConstructor : CalendarPermissionDeniedViewModelTest
@@ -25,13 +25,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useNavigationService,
-                bool usePermissionsService,
+                bool usePermissionsChecker,
                 bool useRxActionFactory)
             {
                 Action tryingToConstructWithEmptyParameters =
                     () => new CalendarPermissionDeniedViewModel(
                         useNavigationService ? NavigationService : null,
-                        usePermissionsService ? PermissionsService : null,
+                        usePermissionsChecker ? PermissionsChecker : null,
                         useRxActionFactory ? RxActionFactory : null
                     );
 
@@ -42,11 +42,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheEnableAccessAction : CalendarPermissionDeniedViewModelTest
         {
             [Fact]
-            public async Task OpensAppSettings()
+            public void OpensAppSettings()
             {
                 ViewModel.EnableAccess.Execute();
 
-                PermissionsService.Received().OpenAppSettings();
+                View.Received().OpenAppSettings();
             }
         }
 
@@ -55,23 +55,23 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public async Task ClosesWhenPermissionWasGranted()
             {
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(true));
                 ViewModel.ViewAppeared();
 
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(ViewModel, Unit.Default);
+                await View.Received().Close();
             }
 
             [Fact]
             public async Task DoesNothingWhenPermissionWasNotGranted()
             {
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(false));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(false));
                 ViewModel.ViewAppeared();
 
                 TestScheduler.Start();
 
-                await NavigationService.DidNotReceive().Close(Arg.Any<CalendarPermissionDeniedViewModel>(), Unit.Default);
+                await View.DidNotReceive().Close();
             }
         }
     }

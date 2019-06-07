@@ -12,7 +12,12 @@ namespace Toggl.Droid.Fragments
         {
             var view = inflater.Inflate(Resource.Layout.CalendarPermissionDeniedFragment, container, false);
             InitializeViews(view);
+            return view;
+        }
 
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
             continueButton.Rx().Tap()
                 .Subscribe(ViewModel.Close.Inputs)
                 .DisposedBy(DisposeBag);
@@ -20,8 +25,6 @@ namespace Toggl.Droid.Fragments
             allowAccessButton.Rx().Tap()
                 .Subscribe(ViewModel.EnableAccess.Inputs)
                 .DisposedBy(DisposeBag);
-
-            return view;
         }
     }
 }

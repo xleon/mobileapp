@@ -13,7 +13,6 @@ namespace Toggl.Core.UI.ViewModels
     public class SelectDateTimeViewModel : ViewModel<DateTimePickerParameters, DateTimeOffset>
     {
         private DateTimeOffset defaultResult;
-        private readonly INavigationService navigationService;
 
         public DateTimeOffset MinDate { get; private set; }
         public DateTimeOffset MaxDate { get; private set; }
@@ -25,22 +24,22 @@ namespace Toggl.Core.UI.ViewModels
         public UIAction SaveCommand { get; }
 
         public SelectDateTimeViewModel(IRxActionFactory rxActionFactory, INavigationService navigationService)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
-
-            this.navigationService = navigationService;
 
             SaveCommand = rxActionFactory.FromAsync(save);
             CloseCommand = rxActionFactory.FromAsync(close);
         }
 
-        public override void Prepare(DateTimePickerParameters parameter)
+        public override Task Initialize(DateTimePickerParameters dateTimePicker)
         {
-            Mode = parameter.Mode;
-            MinDate = parameter.MinDate;
-            MaxDate = parameter.MaxDate;
-            CurrentDateTime = new BehaviorRelay<DateTimeOffset>(parameter.CurrentDate, sanitizeBasedOnMode);
+            Mode = dateTimePicker.Mode;
+            MinDate = dateTimePicker.MinDate;
+            MaxDate = dateTimePicker.MaxDate;
+            CurrentDateTime = new BehaviorRelay<DateTimeOffset>(dateTimePicker.CurrentDate, sanitizeBasedOnMode);
+
+            return base.Initialize(dateTimePicker);
         }
 
         private DateTimeOffset sanitizeBasedOnMode(DateTimeOffset dateTime)
@@ -60,7 +59,7 @@ namespace Toggl.Core.UI.ViewModels
                 case DateTimePickerMode.DateTime:
                     result = dateTime;
                     break;
-                
+
                 default:
                     throw new NotSupportedException("Invalid DateTimePicker mode");
             }
@@ -68,8 +67,8 @@ namespace Toggl.Core.UI.ViewModels
             return result.Clamp(MinDate, MaxDate);
         }
 
-        private Task close() => navigationService.Close(this, defaultResult);
+        private Task close() => Finish(defaultResult);
 
-        private Task save() => navigationService.Close(this, CurrentDateTime.Value);
+        private Task save() => Finish(CurrentDateTime.Value);
     }
 }

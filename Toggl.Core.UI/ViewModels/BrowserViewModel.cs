@@ -17,19 +17,19 @@ namespace Toggl.Core.UI.ViewModels
         public UIAction Close { get; }
 
         public BrowserViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            Close = rxActionFactory.FromAsync(close);
-
-            Task close() => navigationService.Close(this);
+            Close = rxActionFactory.FromAsync(Finish);
         }
 
-        public override void Prepare(BrowserParameters parameter)
+        public override Task Initialize(BrowserParameters parameter)
         {
             Url = parameter.Url;
             Title = parameter.Title;
+
+            return base.Initialize(parameter);
         }
     }
 }

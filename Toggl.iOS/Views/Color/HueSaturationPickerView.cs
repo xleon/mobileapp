@@ -2,8 +2,6 @@
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Base;
-using MvvmCross.Core;
 using Toggl.Shared.Extensions;
 using UIKit;
 
@@ -104,8 +102,8 @@ namespace Toggl.iOS.Views
             Hue = (float)(pointX / width);
             Saturation = complement((float)(pointY / height));
 
-            HueChanged.Raise(this);
-            SaturationChanged.Raise(this);
+            HueChanged?.Invoke(this, new EventArgs());
+            SaturationChanged?.Invoke(this, new EventArgs());
 
             SetNeedsDisplay();
         }

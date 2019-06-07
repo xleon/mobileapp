@@ -13,7 +13,6 @@ using Toggl.Core.Interactors;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -26,9 +25,7 @@ namespace Toggl.Core.UI.ViewModels
         : ViewModel<SelectProjectParameter, SelectProjectParameter>
     {
         private readonly ITogglDataSource dataSource;
-        private readonly IDialogService dialogService;
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IStopwatchProvider stopwatchProvider;
 
@@ -63,22 +60,18 @@ namespace Toggl.Core.UI.ViewModels
             IRxActionFactory rxActionFactory,
             IInteractorFactory interactorFactory,
             INavigationService navigationService,
-            IDialogService dialogService,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
             this.dataSource = dataSource;
-            this.dialogService = dialogService;
             this.interactorFactory = interactorFactory;
-            this.navigationService = navigationService;
             this.schedulerProvider = schedulerProvider;
             this.stopwatchProvider = stopwatchProvider;
 
@@ -107,17 +100,14 @@ namespace Toggl.Core.UI.ViewModels
             return true;
         }
 
-        public override void Prepare(SelectProjectParameter parameter)
+        public override async Task Initialize(SelectProjectParameter parameter)
         {
+            await base.Initialize(parameter);
             creationEnabled = parameter.CreationEnabled;
             taskId = parameter.TaskId;
             projectId = parameter.ProjectId;
             workspaceId = parameter.WorkspaceId;
-        }
 
-        public override async Task Initialize()
-        {
-            await base.Initialize();
             navigationFromEditTimeEntryViewModelStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenSelectProjectFromEditView);
             stopwatchProvider.Remove(MeasuredOperation.OpenSelectProjectFromEditView);
 
@@ -189,18 +179,16 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task createProject(string name)
         {
-            var createdProjectId = await navigationService.Navigate<EditProjectViewModel, string, long?>(name);
+            var createdProjectId = await Navigate<EditProjectViewModel, string, long?>(name);
             if (createdProjectId == null) return;
 
             var project = await interactorFactory.GetProjectById(createdProjectId.Value).Execute();
             var parameter = new SelectProjectParameter(project.Id, null, project.WorkspaceId);
-            await navigationService.Close(this, parameter);
+            await Finish(parameter);
         }
 
         private Task close()
-            => navigationService.Close(
-                this,
-                new SelectProjectParameter(projectId, taskId, workspaceId));
+            => Finish(new SelectProjectParameter(projectId, taskId, workspaceId));
 
         private async Task selectProject(AutocompleteSuggestion suggestion)
         {
@@ -216,7 +204,7 @@ namespace Toggl.Core.UI.ViewModels
                 return;
             }
 
-            var shouldSetProject = await dialogService.Confirm(
+            var shouldSetProject = await View.Confirm(
                 Resources.DifferentWorkspaceAlertTitle,
                 Resources.DifferentWorkspaceAlertMessage,
                 Resources.Ok,
@@ -248,9 +236,7 @@ namespace Toggl.Core.UI.ViewModels
                     throw new ArgumentException($"{nameof(suggestion)} must be either of type {nameof(ProjectSuggestion)} or {nameof(TaskSuggestion)}.");
             }
 
-            navigationService.Close(
-                this,
-                new SelectProjectParameter(projectId, taskId, workspaceId));
+            Finish(new SelectProjectParameter(projectId, taskId, workspaceId));
         }
 
         private void toggleTaskSuggestions(ProjectSuggestion projectSuggestion)

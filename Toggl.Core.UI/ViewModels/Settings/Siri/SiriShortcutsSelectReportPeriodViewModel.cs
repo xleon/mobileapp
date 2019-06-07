@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
@@ -21,11 +19,9 @@ using Toggl.Shared.Extensions.Reactive;
 
 namespace Toggl.Core.UI.ViewModels.Settings
 {
-    [MvvmCross.Preserve(AllMembers = true)]
 
     public sealed class SiriShortcutsSelectReportPeriodViewModel : ViewModel
     {
-        private readonly INavigationService navigationService;
         private readonly IInteractorFactory interactorFactory;
 
         public readonly BehaviorRelay<IThreadSafeWorkspace> SelectedWorkspace = new BehaviorRelay<IThreadSafeWorkspace>(null);
@@ -39,20 +35,18 @@ namespace Toggl.Core.UI.ViewModels.Settings
         public SiriShortcutsSelectReportPeriodViewModel(
             ITogglDataSource dataSource,
             IInteractorFactory interactorFactory,
-            INavigationService navigationService,
             IRxActionFactory rxActionFactory,
-            ISchedulerProvider schedulerProvider)
+            ISchedulerProvider schedulerProvider,
+            INavigationService navigationService) : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
-            this.navigationService = navigationService;
             this.interactorFactory = interactorFactory;
 
-            Close = rxActionFactory.FromAsync(close);
+            Close = rxActionFactory.FromAsync(Finish);
             PickWorkspace = rxActionFactory.FromAsync(pickWorkspace);
 
             var reportPeriods = Enum.GetValues(typeof(ReportPeriod))
@@ -78,8 +72,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
             SelectedWorkspace.Accept(defaultWorkspace);
         }
 
-        private Task close() => navigationService.Close(this);
-
         private async Task pickWorkspace()
         {
             var defaultWorkspace = await interactorFactory.GetDefaultWorkspace()
@@ -89,8 +81,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
             var selectWorkspaceParams = new SelectWorkspaceParameters(Resources.SelectWorkspace, SelectedWorkspace.Value?.Id ?? defaultWorkspace.Id);
             var selectedWorkspaceId =
-                await navigationService
-                    .Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(selectWorkspaceParams);
+                await Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(selectWorkspaceParams);
             var workspace = await interactorFactory.GetWorkspaceById(selectedWorkspaceId).Execute();
 
             SelectedWorkspace.Accept(workspace);

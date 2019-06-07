@@ -37,7 +37,7 @@ using FoundationResources = Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Fragments
 {
-    public sealed partial class MainFragment : ReactiveFragment<MainViewModel>, IScrollableToTop
+    public sealed partial class MainFragment : ReactiveTabFragment<MainViewModel>, IScrollableToTop
     {
         private const int snackbarDuration = 5000;
         private NotificationManager notificationManager;

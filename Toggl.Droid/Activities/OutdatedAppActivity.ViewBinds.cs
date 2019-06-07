@@ -7,7 +7,7 @@ namespace Toggl.Droid.Activities
         private Button updateAppButton;
         private Button openWebsiteButton;
 
-        private void initializeViews()
+        protected override void InitializeViews()
         {
             updateAppButton = FindViewById<Button>(Resource.Id.UpdateAppButton);
             openWebsiteButton = FindViewById<Button>(Resource.Id.OpenWebsiteButton);

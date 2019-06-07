@@ -1,34 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Android.Widget;
-using MvvmCross.Droid.Support.V4;
-using MvvmCross.Platforms.Android.Binding.BindingContext;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.ViewHolders;
-using Toggl.Droid.Views;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
-    [MvxDialogFragmentPresentation(AddToBackStack = true)]
-    public sealed partial class SelectColorFragment : MvxDialogFragment<SelectColorViewModel>
+    public sealed partial class SelectColorFragment : ReactiveDialogFragment<SelectColorViewModel>
     {
         private const int customColorEnabledHeight = 425;
         private const int customColorDisabledHeight = 270;
-
-        public CompositeDisposable DisposeBag { get; } = new CompositeDisposable();
 
         public SelectColorFragment() { }
 
@@ -40,8 +31,14 @@ namespace Toggl.Droid.Fragments
             base.OnCreateView(inflater, container, savedInstanceState);
             var view = inflater.Inflate(Resource.Layout.SelectColorFragment, null);
 
-            initializeViews(view);
+            InitializeViews(view);
 
+            return view;
+        }
+
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
             recyclerView.SetLayoutManager(new GridLayoutManager(Context, 5));
 
             selectableColorsAdapter = new SimpleAdapter<SelectableColorViewModel>(
@@ -101,8 +98,6 @@ namespace Toggl.Droid.Fragments
 
             hueSaturationPicker.Visibility = ViewModel.AllowCustomColors.ToVisibility();
             valueSlider.Visibility = ViewModel.AllowCustomColors.ToVisibility();
-
-            return view;
         }
 
         private void updateColors(IEnumerable<SelectableColorViewModel> colors)

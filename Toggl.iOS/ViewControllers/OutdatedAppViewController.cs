@@ -1,4 +1,3 @@
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
@@ -9,11 +8,10 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [MvxRootPresentation]
     public sealed partial class OutdatedAppViewController : ReactiveViewController<OutdatedAppViewModel>
     {
-        public OutdatedAppViewController()
-            : base(nameof(OutdatedAppViewController))
+        public OutdatedAppViewController(OutdatedAppViewModel viewModel)
+            : base(viewModel, nameof(OutdatedAppViewController))
         {
         }
 
