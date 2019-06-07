@@ -26,7 +26,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class SuggestionsViewModelTest : BaseViewModelTests<SuggestionsViewModel>
         {
             protected override SuggestionsViewModel CreateViewModel()
-                => new SuggestionsViewModel(DataSource, InteractorFactory, OnboardingStorage, SuggestionProviderContainer, SchedulerProvider, RxActionFactory);
+                => new SuggestionsViewModel(DataSource, InteractorFactory, OnboardingStorage, SuggestionProviderContainer, SchedulerProvider, RxActionFactory, NavigationService);
 
             protected override void AdditionalViewModelSetup()
             {
@@ -53,7 +53,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useOnboardingStorage,
                 bool useInteractorFactory,
                 bool useSchedulerProvider,
-                bool useRxActionFactory)
+                bool useRxActionFactory,
+                bool useNavigationService)
             {
                 var container = useContainer ? SuggestionProviderContainer : null;
                 var dataSource = useDataSource ? DataSource : null;
@@ -61,10 +62,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
+                var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, container,
-                        schedulerProvider, rxActionFactory);
+                        schedulerProvider, rxActionFactory, navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -256,7 +258,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Returns(Observable.Return(timeEntry));
                 await ViewModel.Initialize();
 
-                var auxObservable = TestScheduler.CreateObserver<Unit>();
+                var auxObservable = TestScheduler.CreateObserver<IThreadSafeTimeEntry>();
                 ViewModel.StartTimeEntry.ExecuteSequentally(suggestion, suggestion)
                     .Subscribe(auxObservable);
 
@@ -271,7 +273,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var suggestion = createSuggestion();
                 await ViewModel.Initialize();
 
-                var auxObservable = TestScheduler.CreateObserver<Unit>();
+                var auxObservable = TestScheduler.CreateObserver<IThreadSafeTimeEntry>();
                 ViewModel.StartTimeEntry.ExecuteSequentally(suggestion, suggestion)
                     .Subscribe(auxObservable);
 

@@ -29,7 +29,7 @@ namespace Toggl.Networking.Network
 
         public static Credentials WithApiToken(string apiToken)
         {
-            Ensure.Argument.IsNotNull(apiToken, nameof(apiToken));
+            Ensure.Argument.IsNotNullOrEmpty(apiToken, nameof(apiToken));
 
             var header = authorizationHeaderWithValue($"{apiToken}:api_token");
 

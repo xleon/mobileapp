@@ -24,6 +24,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Toggl.Core.UI.Transformations;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.UI.ViewModels.Calendar
 {
@@ -32,15 +33,13 @@ namespace Toggl.Core.UI.ViewModels.Calendar
     {
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
-        private readonly IDialogService dialogService;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
         private readonly IBackgroundService backgroundService;
         private readonly IInteractorFactory interactorFactory;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly IPermissionsService permissionsService;
-        private readonly INavigationService navigationService;
+        private readonly IPermissionsChecker permissionsChecker;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly IRxActionFactory rxActionFactory;
 
@@ -84,43 +83,39 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         public CalendarViewModel(
             ITogglDataSource dataSource,
             ITimeService timeService,
-            IDialogService dialogService,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
             IBackgroundService backgroundService,
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
             ISchedulerProvider schedulerProvider,
-            IPermissionsService permissionsService,
+            IPermissionsChecker permissionsChecker,
             INavigationService navigationService,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
-            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
+            Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
-            this.dialogService = dialogService;
             this.userPreferences = userPreferences;
             this.analyticsService = analyticsService;
             this.backgroundService = backgroundService;
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
             this.schedulerProvider = schedulerProvider;
-            this.navigationService = navigationService;
-            this.permissionsService = permissionsService;
+            this.permissionsChecker = permissionsChecker;
             this.stopwatchProvider = stopwatchProvider;
             this.rxActionFactory = rxActionFactory;
 
@@ -163,11 +158,11 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             OnCalendarEventLongPressed = rxActionFactory.FromAsync<CalendarItem>(handleCalendarEventLongPressed);
 
             SettingsAreVisible = onboardingObservable
-                .SelectMany(_ => permissionsService.CalendarPermissionGranted)
+                .SelectMany(_ => permissionsChecker.CalendarPermissionGranted)
                 .DistinctUntilChanged();
 
             HasCalendarsLinked = userPreferences.EnabledCalendars.CombineLatest(
-                    permissionsService.CalendarPermissionGranted,
+                    permissionsChecker.CalendarPermissionGranted,
                     hasCalendarsLinkedSubject.AsObservable(),
                     calendarPermissionsOnViewAppearedSubject,
                     hasCalendarsLinked)
@@ -202,7 +197,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                 .DisposedBy(disposeBag);
         }
 
-        public async override Task Initialize()
+        public override Task Initialize()
         {
             var dayChangedObservable = timeService
                 .MidnightObservable
@@ -235,6 +230,8 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                 .SelectMany(refreshNotifications)
                 .Subscribe()
                 .DisposedBy(disposeBag);
+
+            return base.Initialize();
         }
 
         public override void ViewAppeared()
@@ -245,7 +242,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
         private async Task checkCalendarPermissions()
         {
-            var authorized = await permissionsService.CalendarPermissionGranted;
+            var authorized = await permissionsChecker.CalendarPermissionGranted;
             calendarPermissionsOnViewAppearedSubject.OnNext(authorized);
         }
 
@@ -276,17 +273,17 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
         private async Task linkCalendars(bool isOnboarding)
         {
-            var calendarPermissionGranted = await permissionsService.RequestCalendarAuthorization();
+            var calendarPermissionGranted = await View.RequestCalendarAuthorization();
             hasCalendarsLinkedSubject.OnNext(calendarPermissionGranted);
             if (calendarPermissionGranted)
             {
                 await selectUserCalendars(isOnboarding);
-                var notificationPermissionGranted = await permissionsService.RequestNotificationAuthorization();
+                var notificationPermissionGranted = await View.RequestNotificationAuthorization();
                 userPreferences.SetCalendarNotificationsEnabled(notificationPermissionGranted);
             }
             else
             {
-                await navigationService.Navigate<CalendarPermissionDeniedViewModel, Unit>();
+                await Navigate<CalendarPermissionDeniedViewModel, Unit>();
             }
         }
 
@@ -305,14 +302,13 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
             if (calendarsExist)
             {
-                var calendarIds = await navigationService
-                    .Navigate<SelectUserCalendarsViewModel, bool, string[]>(isOnboarding);
+                var calendarIds = await Navigate<SelectUserCalendarsViewModel, bool, string[]>(isOnboarding);
 
                 interactorFactory.SetEnabledCalendars(calendarIds).Execute();
             }
             else if (!isOnboarding)
             {
-                await dialogService.Alert(Resources.Oops, Resources.NoCalendarsFoundMessage, Resources.Ok);
+                await View.Alert(Resources.Oops, Resources.NoCalendarsFoundMessage, Resources.Ok);
             }
         }
 
@@ -324,7 +320,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                     analyticsService.EditViewOpenedFromCalendar.Track();
                     var stopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.EditTimeEntryFromCalendar);
                     stopwatch.Start();
-                    await navigationService.Navigate<EditTimeEntryViewModel, long[]>(new[] { calendarItem.TimeEntryId.Value });
+                    await Navigate<EditTimeEntryViewModel, long[]>(new[] { calendarItem.TimeEntryId.Value });
                     break;
 
                 case CalendarItemSource.Calendar:
@@ -340,20 +336,20 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                     .WithStartTime(timeService.CurrentDateTime)
                     .WithDuration(null);
 
-            var options = new List<(string, CalendarItem?)>
+            var options = new List<SelectOption<CalendarItem?>>
             {
-                (Resources.CalendarCopyEventToTimeEntry, calendarItem),
-                (Resources.CalendarStartNow, runningStartedNow)
+                new SelectOption<CalendarItem?>(calendarItem, Resources.CalendarCopyEventToTimeEntry),
+                new SelectOption<CalendarItem?>(runningStartedNow, Resources.CalendarStartNow)
             };
 
             if (timeService.CurrentDateTime >= calendarItem.StartTime)
             {
                 var runningStartingAtTheEventStart = calendarItem.WithDuration(null);
-                var option = (Resources.CalendarStartWhenTheEventStarts, runningStartingAtTheEventStart);
+                var option = new SelectOption<CalendarItem?>(runningStartingAtTheEventStart, Resources.CalendarStartWhenTheEventStarts);
                 options.Add(option);
             }
 
-            var selectedOption = await dialogService.Select(Resources.CalendarWhatToDoWithCalendarEvent, options, initialSelectionIndex: 0);
+            var selectedOption = await View.Select(Resources.CalendarWhatToDoWithCalendarEvent, options, initialSelectionIndex: 0);
             if (selectedOption.HasValue)
             {
                 await createTimeEntryFromCalendarItem(selectedOption.Value);
@@ -378,13 +374,13 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             var prototype = duration.AsTimeEntryPrototype(startTime, workspace.Id);
             var timeEntry = await interactorFactory.CreateTimeEntry(prototype, TimeEntryStartOrigin.CalendarTapAndDrag).Execute();
 
-            await navigationService.Navigate<EditTimeEntryViewModel, long[]>(new[] { timeEntry.Id });
+            await Navigate<EditTimeEntryViewModel, long[]>(new[] { timeEntry.Id });
         }
 
         private async Task createTimeEntryAtOffset(DateTimeOffset startTime)
         {
             var startParams = StartTimeEntryParameters.ForManualMode(startTime);
-            await navigationService.Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(startParams);
+            await Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(startParams);
         }
 
         private async Task updateTimeEntry(CalendarItem calendarItem)

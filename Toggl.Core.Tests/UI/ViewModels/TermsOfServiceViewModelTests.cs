@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.UI.ViewModels;
@@ -10,8 +9,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class TermsOfServiceViewModelTests
     {
-        public abstract class TermsOfServiceViewModelTest
-            : BaseViewModelTests<TermsOfServiceViewModel>
+        public abstract class TermsOfServiceViewModelTest : BaseViewModelWithOutputTests<TermsOfServiceViewModel, bool>
         {
             protected override TermsOfServiceViewModel CreateViewModel()
                 => new TermsOfServiceViewModel(BrowserService, RxActionFactory, NavigationService);

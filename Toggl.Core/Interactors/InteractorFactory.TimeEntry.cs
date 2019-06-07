@@ -19,7 +19,6 @@ namespace Toggl.Core.Interactors
                 timeService,
                 dataSource,
                 analyticsService,
-                intentDonationService,
                 prototype,
                 syncManager,
                 prototype.StartTime,
@@ -32,12 +31,22 @@ namespace Toggl.Core.Interactors
                 timeService,
                 dataSource,
                 analyticsService,
-                intentDonationService,
                 prototype,
                 syncManager,
                 timeService.CurrentDateTime,
                 null,
                 (TimeEntryStartOrigin)continueMode);
+
+        public IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueTimeEntryFromMainLog(ITimeEntryPrototype prototype,
+            ContinueTimeEntryMode continueMode, int indexInLog, int dayInLog, int daysInThePast)
+            => new ContinueTimeEntryFromMainLogInteractor(
+                this,
+                analyticsService,
+                prototype,
+                continueMode,
+                indexInLog,
+                dayInLog,
+                daysInThePast);
 
         public IInteractor<IObservable<IThreadSafeTimeEntry>> StartSuggestion(Suggestion suggestion)
             => new CreateTimeEntryInteractor(
@@ -45,7 +54,6 @@ namespace Toggl.Core.Interactors
                 timeService,
                 dataSource,
                 analyticsService,
-                intentDonationService,
                 suggestion,
                 syncManager,
                 timeService.CurrentDateTime,

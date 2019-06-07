@@ -22,7 +22,6 @@ namespace Toggl.Core.Interactors.UserAccess
         private readonly ITogglDatabase database;
         private readonly IUserPreferences userPreferences;
         private readonly IPrivateSharedStorageService privateSharedStorageService;
-        private readonly IIntentDonationService intentDonationService;
         private readonly IUserAccessManager userAccessManager;
         private readonly IInteractorFactory interactorFactory;
         private readonly LogoutSource source;
@@ -35,7 +34,6 @@ namespace Toggl.Core.Interactors.UserAccess
             ITogglDatabase database,
             IUserPreferences userPreferences,
             IPrivateSharedStorageService privateSharedStorageService,
-            IIntentDonationService intentDonationService,
             IUserAccessManager userAccessManager,
             IInteractorFactory interactorFactory,
             LogoutSource source)
@@ -47,7 +45,6 @@ namespace Toggl.Core.Interactors.UserAccess
             Ensure.Argument.IsNotNull(database, nameof(database));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
-            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsADefinedEnumValue(source, nameof(source));
@@ -59,7 +56,6 @@ namespace Toggl.Core.Interactors.UserAccess
             this.database = database;
             this.userPreferences = userPreferences;
             this.privateSharedStorageService = privateSharedStorageService;
-            this.intentDonationService = intentDonationService;
             this.userAccessManager = userAccessManager;
             this.interactorFactory = interactorFactory;
             this.source = source;
@@ -72,7 +68,6 @@ namespace Toggl.Core.Interactors.UserAccess
                 .Do(shortcutCreator.OnLogout)
                 .Do(userPreferences.Reset)
                 .Do(privateSharedStorageService.ClearAll)
-                .Do(intentDonationService.ClearAll)
                 .Do(_ => analyticsService.Logout.Track(source))
                 .SelectMany(_ =>
                     notificationService

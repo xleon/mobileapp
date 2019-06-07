@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -7,9 +8,10 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
+using Toggl.Core.Models;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 using Toggl.Shared;
@@ -33,9 +35,7 @@ namespace Toggl.Core.UI.ViewModels
             Resources.SaturdayInitial
         };
         private readonly ITimeService timeService;
-        private readonly IDialogService dialogService;
         private readonly ITogglDataSource dataSource;
-        private readonly IIntentDonationService intentDonationService;
         private readonly ISubject<Unit> reloadSubject = new Subject<Unit>();
         private readonly ISubject<ReportsDateRangeParameter> selectedDateRangeSubject = new Subject<ReportsDateRangeParameter>();
         private readonly ISubject<ReportsDateRangeParameter> highlightedDateRangeSubject = new BehaviorSubject<ReportsDateRangeParameter>(default(ReportsDateRangeParameter));
@@ -80,21 +80,18 @@ namespace Toggl.Core.UI.ViewModels
 
         public ReportsCalendarViewModel(
             ITimeService timeService,
-            IDialogService dialogService,
             ITogglDataSource dataSource,
-            IIntentDonationService intentDonationService,
-            IRxActionFactory rxActionFactory)
+            IRxActionFactory rxActionFactory,
+            INavigationService navigationService)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(intentDonationService, nameof(intentDonationService));
+            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
+            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
-            this.timeService = timeService;
-            this.dialogService = dialogService;
             this.dataSource = dataSource;
-            this.intentDonationService = intentDonationService;
+            this.timeService = timeService;
 
             SelectDay = rxActionFactory.FromAsync<ReportsCalendarDayViewModel>(calendarDayTapped);
             SelectShortcut = rxActionFactory.FromAction<ReportsCalendarBaseQuickSelectShortcut>(quickSelect);
@@ -118,17 +115,12 @@ namespace Toggl.Core.UI.ViewModels
             monthSubject.OnNext(newPage);
         }
 
-        public override void Prepare()
-        {
-            base.Prepare();
-
-            var now = timeService.CurrentDateTime;
-            initialMonth = new CalendarMonth(now.Year, now.Month).AddMonths(-(MonthsToShow - 1));
-        }
-
         public override async Task Initialize()
         {
             await base.Initialize();
+
+            var now = timeService.CurrentDateTime;
+            initialMonth = new CalendarMonth(now.Year, now.Month).AddMonths(-(MonthsToShow - 1));
 
             beginningOfWeekObservable = dataSource.User.Current
                 .Select(user => user.BeginningOfWeek)
@@ -176,13 +168,11 @@ namespace Toggl.Core.UI.ViewModels
         {
             base.ViewAppeared();
 
-            if (!viewAppearedOnce)
-            {
-                viewAppearedOnce = true;
-                var initialShortcut = QuickSelectShortcuts.Single(shortcut => shortcut.Period == reportPeriod);
-                selectedDateRangeSubject.OnNext(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
-                highlightedDateRangeSubject.OnNext(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
-            }
+            if (viewAppearedOnce)
+                return;
+
+            viewAppearedOnce = true;
+            SelectInitialShortcut();
         }
 
         public void Reload()
@@ -190,9 +180,12 @@ namespace Toggl.Core.UI.ViewModels
             reloadSubject.OnNext(Unit.Default);
         }
 
-        public void OnToggleCalendar() => selectStartOfSelectionIfNeeded();
-
-        public void OnHideCalendar() => selectStartOfSelectionIfNeeded();
+        public void SelectInitialShortcut()
+        {
+            var initialShortcut = QuickSelectShortcuts.Single(shortcut => shortcut.Period == reportPeriod);
+            selectedDateRangeSubject.OnNext(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
+            highlightedDateRangeSubject.OnNext(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
+        }
 
         public void SelectPeriod(ReportPeriod period)
         {
@@ -224,7 +217,7 @@ namespace Toggl.Core.UI.ViewModels
 
                 if (System.Math.Abs((endDate - startDate).Days) > 365)
                 {
-                    await dialogService.Alert(
+                    await View.Alert(
                         Resources.ReportTooLongTitle,
                         Resources.ReportTooLongDescription,
                         Resources.Ok
@@ -255,7 +248,7 @@ namespace Toggl.Core.UI.ViewModels
         private string dayHeaderFor(int index, BeginningOfWeek newBeginningOfWeek)
             => dayHeaders[(index + (int)newBeginningOfWeek + 7) % 7];
 
-        private void selectStartOfSelectionIfNeeded()
+        public void SelectStartOfSelectionIfNeeded()
         {
             if (startOfSelection == null) return;
 
@@ -293,7 +286,6 @@ namespace Toggl.Core.UI.ViewModels
 
         private void quickSelect(ReportsCalendarBaseQuickSelectShortcut quickSelectShortCut)
         {
-            intentDonationService.DonateShowReport(quickSelectShortCut.Period);
             changeDateRange(quickSelectShortCut.GetDateRange());
         }
 

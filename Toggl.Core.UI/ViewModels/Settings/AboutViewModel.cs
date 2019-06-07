@@ -10,7 +10,6 @@ namespace Toggl.Core.UI.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class AboutViewModel : ViewModel
     {
-        private readonly INavigationService navigationService;
         private readonly IRxActionFactory rxActionFactory;
 
         public UIAction OpenPrivacyPolicyView { get; private set; }
@@ -18,11 +17,10 @@ namespace Toggl.Core.UI.ViewModels
         public UIAction OpenLicensesView { get; private set; }
 
         public AboutViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            this.navigationService = navigationService;
             this.rxActionFactory = rxActionFactory;
 
             OpenPrivacyPolicyView = rxActionFactory.FromAsync(openPrivacyPolicyView);
@@ -31,17 +29,14 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task openPrivacyPolicyView()
-            => navigationService
-                .Navigate<BrowserViewModel, BrowserParameters>(
-                    BrowserParameters.WithUrlAndTitle(Resources.PrivacyPolicyUrl, Resources.PrivacyPolicy));
+            => Navigate<BrowserViewModel, BrowserParameters>(
+                BrowserParameters.WithUrlAndTitle(Resources.PrivacyPolicyUrl, Resources.PrivacyPolicy));
 
         private Task openTermsOfServiceView()
-            => navigationService
-                .Navigate<BrowserViewModel, BrowserParameters>(
-                    BrowserParameters.WithUrlAndTitle(Resources.TermsOfServiceUrl, Resources.TermsOfService));
+            => Navigate<BrowserViewModel, BrowserParameters>(
+                BrowserParameters.WithUrlAndTitle(Resources.TermsOfServiceUrl, Resources.TermsOfService));
 
         private Task openLicensesView()
-            => navigationService
-                .Navigate<LicensesViewModel>();
+            => Navigate<LicensesViewModel>();
     }
 }

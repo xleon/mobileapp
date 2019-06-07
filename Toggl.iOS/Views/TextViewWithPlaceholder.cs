@@ -2,7 +2,6 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Foundation;
-using MvvmCross.Base;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using UIKit;
@@ -59,7 +58,7 @@ namespace Toggl.iOS.Views
                 text = value;
                 updateAttributedText(value);
                 textSubject.OnNext(value);
-                TextChanged.Raise(this);
+                TextChanged?.Invoke(this, new EventArgs());
             }
         }
 
@@ -145,7 +144,7 @@ namespace Toggl.iOS.Views
         public void EditingStarted(UITextView textView)
         {
             isFocused = true;
-            if (Text.Length == 0)
+            if (string.IsNullOrEmpty(Text))
             {
                 // this will force the text view to change the color of the text
                 // so if the person starts typing a multistage character, the color
@@ -168,7 +167,7 @@ namespace Toggl.iOS.Views
 
             if (becomeFirstResponder)
             {
-                DidBecomeFirstResponder.Raise(this);
+                DidBecomeFirstResponder?.Invoke(this, new EventArgs());
             }
 
             return becomeFirstResponder;

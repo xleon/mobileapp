@@ -1,14 +1,12 @@
 using System;
 using System.Reactive.Linq;
 using CoreGraphics;
-using MvvmCross;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.iOS.Presentation;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Views.Calendar;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared;
@@ -17,7 +15,6 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [TabPresentation]
     public sealed partial class CalendarViewController : ReactiveViewController<CalendarViewModel>, IScrollableToTop
     {
         private const double minimumOffsetOfCurrentTimeIndicatorFromScreenEdge = 0.2;
@@ -34,8 +31,8 @@ namespace Toggl.iOS.ViewControllers
 
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 50));
 
-        public CalendarViewController()
-            : base(nameof(CalendarViewController))
+        public CalendarViewController(CalendarViewModel viewModel)
+            : base(viewModel, nameof(CalendarViewController))
         {
             timeService = IosDependencyContainer.Instance.TimeService;
         }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.UI.Navigation;
@@ -14,9 +13,8 @@ using Toggl.Storage.Settings;
 namespace Toggl.Core.UI.ViewModels.Settings
 {
     [Preserve(AllMembers = true)]
-    public sealed class UpcomingEventsNotificationSettingsViewModel : ViewModelWithOutput<Unit>
+    public sealed class UpcomingEventsNotificationSettingsViewModel : ViewModel
     {
-        private readonly INavigationService navigationService;
         private readonly IUserPreferences userPreferences;
         private readonly IRxActionFactory rxActionFactory;
 
@@ -29,12 +27,11 @@ namespace Toggl.Core.UI.ViewModels.Settings
             INavigationService navigationService,
             IUserPreferences userPreferences,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            this.navigationService = navigationService;
             this.userPreferences = userPreferences;
             this.rxActionFactory = rxActionFactory;
 
@@ -62,7 +59,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
         }
 
         private Task close()
-            => navigationService.Close(this, Unit.Default);
+            => Finish();
 
         private void onSelectOption(SelectableCalendarNotificationsOptionViewModel selectableOption)
         {
@@ -73,7 +70,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
             if (enabled)
                 userPreferences.SetTimeSpanBeforeCalendarNotifications(selectableOption.Option.Duration());
 
-            navigationService.Close(this, Unit.Default);
+            Finish();
         }
 
         private SelectableCalendarNotificationsOptionViewModel toSelectableOption(CalendarNotificationsOption option)

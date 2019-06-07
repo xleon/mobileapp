@@ -36,5 +36,10 @@ namespace Toggl.Core.Extensions
             => timeEntry.Duration.HasValue
             ? TimeSpan.FromSeconds(timeEntry.Duration.Value)
             : (TimeSpan?)null;
+
+        public static DateTimeOffset? StopTime(this IThreadSafeTimeEntry timeEntry)
+            => timeEntry.Duration.HasValue
+                ? timeEntry.Start + new TimeSpan(timeEntry.Duration.Value)
+                : null as DateTimeOffset?;
     }
 }

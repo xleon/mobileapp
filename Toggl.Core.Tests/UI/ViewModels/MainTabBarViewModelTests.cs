@@ -20,7 +20,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     TimeService,
                     DataSource,
                     SyncManager,
-                    DialogService,
                     RatingService,
                     UserPreferences,
                     AnalyticsService,
@@ -28,11 +27,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     InteractorFactory,
                     OnboardingStorage,
                     SchedulerProvider,
-                    PermissionsService,
+                    PermissionsChecker,
                     NavigationService,
                     RemoteConfigService,
                     SuggestionProviderContainer,
-                    IntentDonationService,
                     AccessRestrictionStorage,
                     StopwatchProvider,
                     RxActionFactory,
@@ -58,7 +56,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     bool useTimeService,
                     bool useDataSource,
                     bool useSyncManager,
-                    bool useDialogService,
                     bool useRatingService,
                     bool useUserPreferences,
                     bool useAnalyticsService,
@@ -66,10 +63,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     bool useInteractorFactory,
                     bool useOnboardingStorage,
                     bool useSchedulerProvider,
-                    bool usePermissionsService,
+                    bool usePermissionsChecker,
                     bool useNavigationService,
                     bool useRemoteConfigService,
-                    bool useIntentDonationService,
                     bool useAccessRestrictionStorage,
                     bool useSuggestionProviderContainer,
                     bool useStopwatchProvider,
@@ -82,7 +78,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var timeService = useTimeService ? TimeService : null;
                 var dataSource = useDataSource ? DataSource : null;
                 var syncManager = useSyncManager ? SyncManager : null;
-                var dialogService = useDialogService ? DialogService : null;
                 var ratingService = useRatingService ? RatingService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
@@ -90,12 +85,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var backgroundService = useBackgroundService ? BackgroundService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
-                var permissionsService = usePermissionsService ? PermissionsService : null;
+                var permissionsService = usePermissionsChecker ? PermissionsChecker : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
                 var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
-                var intentDonationService = useIntentDonationService ? IntentDonationService : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var userAccessManager = useUserAccessManager ? UserAccessManager : null;
@@ -107,7 +101,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         timeService,
                         dataSource,
                         syncManager,
-                        dialogService,
                         ratingService,
                         userPreferences,
                         analyticsService,
@@ -119,7 +112,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         navigationService,
                         remoteConfigService,
                         suggestionProviderContainer,
-                        intentDonationService,
                         accessRestrictionStorage,
                         stopwatchProvider,
                         rxActionFactory,
@@ -138,15 +130,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Theory]
             [InlineData(Platform.Daneel, false)]
             [InlineData(Platform.Giskard, true)]
-            public async Task ShouldContainTheSettingsViewModelBasedOntheRemoteConfigService(Platform platform, bool includesSettings)
+            public void ShouldContainTheSettingsViewModelBasedOntheRemoteConfigService(Platform platform, bool includesSettings)
             {
                 PlatformInfo.Platform.Returns(platform);
 
                 var viewModel = CreateViewModel();
 
                 var expectedTabCount = 3 + (includesSettings ? 1 : 0);
-
-                await viewModel.Initialize();
 
                 viewModel.Tabs.Count().Should().Be(expectedTabCount);
             }

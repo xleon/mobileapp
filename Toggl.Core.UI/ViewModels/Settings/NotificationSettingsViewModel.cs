@@ -16,8 +16,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
     [Preserve(AllMembers = true)]
     public sealed class NotificationSettingsViewModel : ViewModel
     {
-        private readonly INavigationService navigationService;
-        private readonly IPermissionsService permissionsService;
+        private readonly IPermissionsChecker permissionsChecker;
         private readonly IUserPreferences userPreferences;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IRxActionFactory rxActionFactory;
@@ -31,20 +30,19 @@ namespace Toggl.Core.UI.ViewModels.Settings
         public NotificationSettingsViewModel(
             INavigationService navigationService,
             IBackgroundService backgroundService,
-            IPermissionsService permissionsService,
+            IPermissionsChecker permissionsChecker,
             IUserPreferences userPreferences,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
-            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
+            Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            this.navigationService = navigationService;
-            this.permissionsService = permissionsService;
+            this.permissionsChecker = permissionsChecker;
             this.userPreferences = userPreferences;
             this.schedulerProvider = schedulerProvider;
             this.rxActionFactory = rxActionFactory;
@@ -52,7 +50,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
             PermissionGranted = backgroundService.AppResumedFromBackground
                 .SelectUnit()
                 .StartWith(Unit.Default)
-                .SelectMany(_ => permissionsService.NotificationPermissionGranted)
+                .SelectMany(_ => permissionsChecker.NotificationPermissionGranted)
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
@@ -67,12 +65,12 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
         private void requestAccess()
         {
-            permissionsService.OpenAppSettings();
+            View.OpenAppSettings();
         }
 
         private async Task openUpcomingEvents()
         {
-            await navigationService.Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
+            await Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
         }
     }
 }

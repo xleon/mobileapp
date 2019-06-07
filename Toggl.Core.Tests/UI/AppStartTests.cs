@@ -1,28 +1,24 @@
 ﻿using System;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
-using MvvmCross.ViewModels;
 using NSubstitute;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
-using Toggl.Shared;
 using Toggl.Storage.Settings;
 using Toggl.Networking;
 using Xunit;
+using FluentAssertions;
 
 namespace Toggl.Core.Tests.UI
 {
     public sealed class AppStartTests
     {
-        public abstract class AppStartTest : BaseMvvmCrossTests
+        public abstract class AppStartTest : BaseTest
         {
-            protected AppStart<OnboardingViewModel> AppStart { get; }
-            protected IMvxApplication App { get; } = Substitute.For<IMvxApplication>();
+            protected AppStart App { get; }
             protected IUserAccessManager UserAccessManager { get; } = Substitute.For<IUserAccessManager>();
             protected IOnboardingStorage OnboardingStorage { get; } = Substitute.For<IOnboardingStorage>();
             protected IAccessRestrictionStorage AccessRestrictionStorage { get; } =
@@ -46,112 +42,29 @@ namespace Toggl.Core.Tests.UI
                 };
                 UserAccessManager.CheckIfLoggedIn().Returns(true);
 
-                AppStart = new AppStart<OnboardingViewModel>(App, dependencyContainer);
+                App = new AppStart(dependencyContainer);
             }
         }
 
-        public sealed class TheStartMethod : AppStartTest
+        public class TheConstructor : AppStartTest
         {
-            [Fact, LogIfTooSlow]
-            public async Task ShowsTheOutdatedViewIfTheCurrentVersionOfTheAppIsOutdated()
-            {
-                AccessRestrictionStorage.IsClientOutdated().Returns(true);
-
-                AppStart.Start();
-
-                await NavigationService.Received().Navigate<OutdatedAppViewModel>();
-                UserAccessManager.DidNotReceive().CheckIfLoggedIn();
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task ShowsTheOutdatedViewIfTheVersionOfTheCurrentlyUsedApiIsOutdated()
-            {
-                AccessRestrictionStorage.IsApiOutdated().Returns(true);
-
-                AppStart.Start();
-
-                await NavigationService.Received().Navigate<OutdatedAppViewModel>();
-                UserAccessManager.DidNotReceive().CheckIfLoggedIn();
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task ShowsTheReLoginViewIfTheUserRevokedTheApiToken()
-            {
-                AccessRestrictionStorage.IsUnauthorized(Arg.Any<string>()).Returns(true);
-
-                AppStart.Start();
-
-                await NavigationService.Received().Navigate<TokenResetViewModel>();
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task ShowsTheOutdatedViewIfTheTokenWasRevokedAndTheAppIsOutdated()
-            {
-                AccessRestrictionStorage.IsUnauthorized(Arg.Any<string>()).Returns(true);
-                AccessRestrictionStorage.IsClientOutdated().Returns(true);
-
-                AppStart.Start();
-
-                await NavigationService.Received().Navigate<OutdatedAppViewModel>();
-                UserAccessManager.DidNotReceive().CheckIfLoggedIn();
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task ShowsTheOutdatedViewIfTheTokenWasRevokedAndTheApiIsOutdated()
-            {
-                AccessRestrictionStorage.IsUnauthorized(Arg.Any<string>()).Returns(true);
-                AccessRestrictionStorage.IsApiOutdated().Returns(true);
-
-                AppStart.Start();
-
-                await NavigationService.Received().Navigate<OutdatedAppViewModel>();
-                await NavigationService.DidNotReceive().Navigate<TokenResetViewModel>();
-                UserAccessManager.DidNotReceive().CheckIfLoggedIn();
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task DoesNotShowTheUnauthorizedAccessViewIfUsersApiTokenChanged()
-            {
-                var oldApiToken = Guid.NewGuid().ToString();
-                var newApiToken = Guid.NewGuid().ToString();
-                var user = Substitute.For<IThreadSafeUser>();
-                var interactorFactory = Substitute.For<IInteractorFactory>();
-                user.ApiToken.Returns(newApiToken);
-                interactorFactory.GetCurrentUser().Execute().Returns(Observable.Return(user));
-                AccessRestrictionStorage.IsUnauthorized(Arg.Is(oldApiToken)).Returns(true);
-                AccessRestrictionStorage.IsApiOutdated().Returns(false);
-                AccessRestrictionStorage.IsClientOutdated().Returns(false);
-
-                AppStart.Start();
-
-                await NavigationService.Received().Navigate<MainTabBarViewModel>();
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task ShowsTheOnboardingViewModelIfTheUserHasNotLoggedInPreviously()
-            {
-                UserAccessManager.CheckIfLoggedIn().Returns(false);
-
-                AppStart.Start();
-
-                await NavigationService.Received().Navigate<OnboardingViewModel>();
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task CallsNavigateToMainTabBarViewModelIfTheUserHasLoggedInPreviously()
-            {
-                AppStart.Start();
-
-                await NavigationService.Received().Navigate<MainTabBarViewModel>();
-            }
-
             [Fact, LogIfTooSlow]
             public void SetsFirstOpenedTime()
             {
-
                 TimeService.CurrentDateTime.Returns(new DateTimeOffset(2020, 1, 2, 3, 4, 5, TimeSpan.Zero));
+                var dependencyContainer = new TestDependencyContainer
+                {
+                    MockTimeService = TimeService,
+                    MockUserAccessManager = UserAccessManager,
+                    MockNavigationService = NavigationService,
+                    MockOnboardingStorage = OnboardingStorage,
+                    MockAccessRestrictionStorage = AccessRestrictionStorage,
+                    MockSyncManager = Substitute.For<ISyncManager>(),
+                    MockInteractorFactory = Substitute.For<IInteractorFactory>(),
+                    MockBackgroundSyncService = Substitute.For<IBackgroundSyncService>()
+                };
 
-                AppStart.Start();
+                var _ = new AppStart(dependencyContainer);
 
                 OnboardingStorage.Received().SetFirstOpened(TimeService.CurrentDateTime);
             }
@@ -163,11 +76,106 @@ namespace Toggl.Core.Tests.UI
 
                 TimeService.CurrentDateTime.Returns(now);
                 OnboardingStorage.GetLastOpened().Returns(now.AddDays(-60));
+                var dependencyContainer = new TestDependencyContainer
+                {
+                    MockTimeService = TimeService,
+                    MockUserAccessManager = UserAccessManager,
+                    MockNavigationService = NavigationService,
+                    MockOnboardingStorage = OnboardingStorage,
+                    MockAccessRestrictionStorage = AccessRestrictionStorage,
+                    MockSyncManager = Substitute.For<ISyncManager>(),
+                    MockInteractorFactory = Substitute.For<IInteractorFactory>(),
+                    MockBackgroundSyncService = Substitute.For<IBackgroundSyncService>()
+                };
 
-                AppStart.Start();
+                var app = new AppStart(dependencyContainer);
+                app.UpdateOnboardingProgress();
 
                 OnboardingStorage.Received().SetLastOpened(now);
                 OnboardingStorage.Received().SetIsNewUser(false);
+            }
+        }
+
+        public sealed class TheGetAccessLevelMethod : AppStartTest
+        {
+            [Fact, LogIfTooSlow]
+            public void ReturnsAccessRestrictedWhenTheCurrentVersionOfTheAppIsOutdated()
+            {
+                AccessRestrictionStorage.IsClientOutdated().Returns(true);
+
+                var accessLevel = App.GetAccessLevel();
+                accessLevel.Should().Be(AccessLevel.AccessRestricted);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsAccessRestrictedWhenTheVersionOfTheCurrentlyUsedApiIsOutdated()
+            {
+                AccessRestrictionStorage.IsApiOutdated().Returns(true);
+
+                var accessLevel = App.GetAccessLevel();
+                accessLevel.Should().Be(AccessLevel.AccessRestricted);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsTokenRevokedWhenTheUserRevokedTheApiToken()
+            {
+                AccessRestrictionStorage.IsUnauthorized(Arg.Any<string>()).Returns(true);
+
+                var accessLevel = App.GetAccessLevel();
+                accessLevel.Should().Be(AccessLevel.TokenRevoked);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsAccessRestrictedWhenTheTokenWasRevokedAndTheAppIsOutdated()
+            {
+                AccessRestrictionStorage.IsUnauthorized(Arg.Any<string>()).Returns(true);
+                AccessRestrictionStorage.IsClientOutdated().Returns(true);
+
+                var accessLevel = App.GetAccessLevel();
+                accessLevel.Should().Be(AccessLevel.AccessRestricted);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsAccessRestrictedWhenTheTokenWasRevokedAndTheApiIsOutdated()
+            {
+                AccessRestrictionStorage.IsUnauthorized(Arg.Any<string>()).Returns(true);
+                AccessRestrictionStorage.IsApiOutdated().Returns(true);
+
+                var accessLevel = App.GetAccessLevel();
+                accessLevel.Should().Be(AccessLevel.AccessRestricted);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsLoggedInWhenUsersApiTokenChanged()
+            {
+                var oldApiToken = Guid.NewGuid().ToString();
+                var newApiToken = Guid.NewGuid().ToString();
+                var user = Substitute.For<IThreadSafeUser>();
+                var interactorFactory = Substitute.For<IInteractorFactory>();
+                user.ApiToken.Returns(newApiToken);
+                interactorFactory.GetCurrentUser().Execute().Returns(Observable.Return(user));
+                AccessRestrictionStorage.IsUnauthorized(Arg.Is(oldApiToken)).Returns(true);
+                AccessRestrictionStorage.IsApiOutdated().Returns(false);
+                AccessRestrictionStorage.IsClientOutdated().Returns(false);
+
+                var accessLevel = App.GetAccessLevel();
+                accessLevel.Should().Be(AccessLevel.LoggedIn);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsNotLoggedInWhenTheUserHasNotLoggedInPreviously()
+            {
+                UserAccessManager.CheckIfLoggedIn().Returns(false);
+
+                var accessLevel = App.GetAccessLevel();
+                accessLevel.Should().Be(AccessLevel.NotLoggedIn);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsLoggedInWhenTheUserHasLoggedInPreviously()
+            {
+                var accessLevel = App.GetAccessLevel();
+                accessLevel.Should().Be(AccessLevel.LoggedIn);
             }
         }
     }

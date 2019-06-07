@@ -56,18 +56,6 @@ namespace Toggl.Core.UI
         protected override ITogglDatabase CreateDatabase()
             => MockDatabase;
 
-        internal IDialogService MockDialogService { get; set; }
-        protected override IDialogService CreateDialogService()
-            => MockDialogService;
-
-        internal IGoogleService MockGoogleService { get; set; }
-        protected override IGoogleService CreateGoogleService()
-            => MockGoogleService;
-
-        internal IIntentDonationService MockIntentDonationService { get; set; }
-        protected override IIntentDonationService CreateIntentDonationService()
-            => MockIntentDonationService;
-
         internal IKeyValueStorage MockKeyValueStorage { get; set; }
         protected override IKeyValueStorage CreateKeyValueStorage()
             => MockKeyValueStorage;
@@ -92,13 +80,9 @@ namespace Toggl.Core.UI
         protected override IOnboardingStorage CreateOnboardingStorage()
             => MockOnboardingStorage;
 
-        internal IPasswordManagerService MockPasswordManagerService { get; set; }
-        protected override IPasswordManagerService CreatePasswordManagerService()
-            => MockPasswordManagerService;
-
-        internal IPermissionsService MockPermissionsService { get; set; }
-        protected override IPermissionsService CreatePermissionsService()
-            => MockPermissionsService;
+        internal IPermissionsChecker MockPermissionsChecker { get; set; }
+        protected override IPermissionsChecker CreatePermissionsChecker()
+            => MockPermissionsChecker;
 
         internal IPlatformInfo MockPlatformInfo { get; set; }
         protected override IPlatformInfo CreatePlatformInfo()

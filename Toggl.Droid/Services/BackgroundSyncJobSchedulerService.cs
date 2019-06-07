@@ -1,9 +1,6 @@
 ﻿using System;
 using Android.App;
 using Android.App.Job;
-using MvvmCross;
-using MvvmCross.Platforms.Android.Core;
-using Toggl.Core.Analytics;
 
 namespace Toggl.Droid.Services
 {
@@ -22,10 +19,6 @@ namespace Toggl.Droid.Services
             // Calling JobFinished and eturning early here stops the background job from running
             JobFinished(@params, false);
             return true;
-
-            MvxAndroidSetupSingleton
-                .EnsureSingletonAvailable(ApplicationContext)
-                .EnsureInitialized();
 
             var dependencyContainer = AndroidDependencyContainer.Instance;
             if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())

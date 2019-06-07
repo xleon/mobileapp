@@ -1,5 +1,4 @@
 ﻿using System;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
@@ -10,10 +9,10 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers.Settings
 {
-    [MvxChildPresentation]
     public sealed partial class NotificationSettingsViewController : ReactiveViewController<NotificationSettingsViewModel>
     {
-        public NotificationSettingsViewController() : base(nameof(NotificationSettingsViewController))
+        public NotificationSettingsViewController(NotificationSettingsViewModel viewModel)
+            : base(viewModel, nameof(NotificationSettingsViewController))
         {
         }
 

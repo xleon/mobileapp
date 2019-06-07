@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using MvvmCross.ViewModels;
+using System.Collections.ObjectModel;
 using Toggl.Shared;
 
 namespace Toggl.Core.UI.Collections
 {
     [Preserve(AllMembers = true)]
     [Obsolete("We are moving into using CollectionSection and per platform diffing")]
-    public class WorkspaceGroupedCollection<T> : MvxObservableCollection<T>
+    public class WorkspaceGroupedCollection<T> : ObservableCollection<T>
     {
         public long WorkspaceId { get; }
         public string WorkspaceName { get; }
@@ -23,7 +23,11 @@ namespace Toggl.Core.UI.Collections
 
             WorkspaceName = workspaceName;
             WorkspaceId = workspaceId;
-            AddRange(items);
+
+            foreach (var item in items)
+            {
+                Add(item);
+            }
         }
     }
 }

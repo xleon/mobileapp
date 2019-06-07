@@ -2,9 +2,6 @@
 using Android.Graphics;
 using Android.Text.Style;
 using Java.Lang;
-using MvvmCross;
-using MvvmCross.Droid;
-using MvvmCross.Platforms.Android;
 using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.Autocomplete

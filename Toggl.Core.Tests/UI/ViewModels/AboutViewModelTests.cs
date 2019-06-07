@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.ViewModels;
-using Xunit;
-using System.Reactive.Linq;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
+using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -47,7 +47,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.OpenLicensesView.Execute();
 
-                NavigationService.Received().Navigate<LicensesViewModel>();
+                NavigationService.Received().Navigate<LicensesViewModel>(ViewModel.View);
             }
         }
 
@@ -59,7 +59,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OpenTermsOfServiceView.Execute();
 
                 NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
-                    Arg.Is<BrowserParameters>(parameter => parameter.Url == Resources.TermsOfServiceUrl)
+                    Arg.Is<BrowserParameters>(parameter => parameter.Url == Resources.TermsOfServiceUrl),
+                    ViewModel.View
                 );
             }
 
@@ -69,7 +70,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OpenTermsOfServiceView.Execute();
 
                 NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
-                    Arg.Is<BrowserParameters>(parameter => parameter.Title == Resources.TermsOfService)
+                    Arg.Is<BrowserParameters>(parameter => parameter.Title == Resources.TermsOfService),
+                    ViewModel.View
                 );
             }
         }
@@ -82,7 +84,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OpenPrivacyPolicyView.Execute();
 
                 NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
-                    Arg.Is<BrowserParameters>(parameter => parameter.Url == Resources.PrivacyPolicyUrl)
+                    Arg.Is<BrowserParameters>(parameter => parameter.Url == Resources.PrivacyPolicyUrl),
+                    ViewModel.View
                 );
             }
 
@@ -92,7 +95,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OpenPrivacyPolicyView.Execute();
 
                 NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
-                    Arg.Is<BrowserParameters>(parameter => parameter.Title == Resources.PrivacyPolicy)
+                    Arg.Is<BrowserParameters>(parameter => parameter.Title == Resources.PrivacyPolicy),
+                    ViewModel.View
                 );
             }
         }

@@ -14,12 +14,11 @@ using Toggl.Storage.Settings;
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class NoWorkspaceViewModel : ViewModelWithOutput<Unit>
+    public sealed class NoWorkspaceViewModel : ViewModel
     {
         private readonly ISyncManager syncManager;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IRxActionFactory rxActionFactory;
 
@@ -34,17 +33,16 @@ namespace Toggl.Core.UI.ViewModels
             IAccessRestrictionStorage accessRestrictionStorage,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.syncManager = syncManager;
             this.accessRestrictionStorage = accessRestrictionStorage;
-            this.navigationService = navigationService;
             this.interactorFactory = interactorFactory;
             this.rxActionFactory = rxActionFactory;
 
@@ -75,7 +73,7 @@ namespace Toggl.Core.UI.ViewModels
         private void close()
         {
             accessRestrictionStorage.SetNoWorkspaceStateReached(false);
-            navigationService.Close(this, Unit.Default);
+            Finish();
         }
     }
 }

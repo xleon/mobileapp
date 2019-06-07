@@ -2,6 +2,7 @@
 using Toggl.Core.UI.Interfaces;
 using Toggl.Core.UI.Parameters;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels.ReportsCalendar
 {
@@ -23,30 +24,30 @@ namespace Toggl.Core.UI.ViewModels.ReportsCalendar
             Day = day;
             CalendarMonth = month;
             IsInCurrentMonth = isInCurrentMonth;
-            DateTimeOffset = new DateTimeOffset(month.Year, month.Month, Day, 0, 0, 0, TimeSpan.Zero);
-            IsToday = today.Date == DateTimeOffset.Date;
+            DateTimeOffset = new DateTimeOffset(month.Year, month.Month, Day, 0, 0, 0, DateTimeOffset.Now.Offset);
+            IsToday = today.RoundDownToLocalDate() == DateTimeOffset.RoundDownToLocalDate();
         }
 
         public bool IsSelected(ReportsDateRangeParameter selectedRange)
         {
-            return selectedRange != null && selectedRange.StartDate.Date <= DateTimeOffset.Date && selectedRange.EndDate.Date >= DateTimeOffset.Date;
+            return selectedRange != null && selectedRange.StartDate <= DateTimeOffset && selectedRange.EndDate >= DateTimeOffset;
         }
 
         public bool IsStartOfSelectedPeriod(ReportsDateRangeParameter selectedRange)
         {
-            return selectedRange != null && selectedRange.StartDate.Date == DateTimeOffset.Date;
+            return selectedRange != null && selectedRange.StartDate == DateTimeOffset;
         }
 
         public bool IsEndOfSelectedPeriod(ReportsDateRangeParameter selectedRange)
         {
-            return selectedRange != null && selectedRange.EndDate.Date == DateTimeOffset.Date;
+            return selectedRange != null && selectedRange.EndDate == DateTimeOffset;
         }
 
         public bool Equals(ReportsCalendarDayViewModel other)
         {
             if (ReferenceEquals(this, other)) return true;
-            if (ReferenceEquals(this, null)) return false;
             if (ReferenceEquals(other, null)) return false;
+
             return DateTimeOffset.Equals(other.DateTimeOffset)
                    && Day == other.Day
                    && CalendarMonth.Equals(other.CalendarMonth)
@@ -54,6 +55,6 @@ namespace Toggl.Core.UI.ViewModels.ReportsCalendar
                    && IsToday == other.IsToday;
         }
 
-        public long Identifier => DateTimeOffset.Date.GetHashCode();
+        public long Identifier => DateTimeOffset.GetHashCode();
     }
 }

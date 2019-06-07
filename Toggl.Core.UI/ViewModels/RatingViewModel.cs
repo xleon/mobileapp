@@ -24,7 +24,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IRatingService ratingService;
         private readonly IAnalyticsService analyticsService;
         private readonly IOnboardingStorage onboardingStorage;
-        private readonly INavigationService navigationService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IRxActionFactory rxActionFactory;
 
@@ -60,13 +59,13 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(ratingService, nameof(ratingService));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
@@ -75,7 +74,6 @@ namespace Toggl.Core.UI.ViewModels
             this.ratingService = ratingService;
             this.analyticsService = analyticsService;
             this.onboardingStorage = onboardingStorage;
-            this.navigationService = navigationService;
             this.schedulerProvider = schedulerProvider;
             this.rxActionFactory = rxActionFactory;
 
@@ -176,7 +174,7 @@ namespace Toggl.Core.UI.ViewModels
             }
             else
             {
-                var sendFeedbackSucceed = await navigationService.Navigate<SendFeedbackViewModel, bool>();
+                var sendFeedbackSucceed = await Navigate<SendFeedbackViewModel, bool>();
                 isFeedbackSuccessViewShowing.OnNext(sendFeedbackSucceed);
 
                 trackSecondStepOutcome(

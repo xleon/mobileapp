@@ -2,10 +2,10 @@ using System;
 using System.Reactive.Linq;
 using CoreText;
 using Foundation;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
@@ -14,7 +14,6 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [MvxRootPresentation(WrapInNavigationController = true)]
     public partial class TokenResetViewController : KeyboardAwareViewController<TokenResetViewModel>
     {
         private const int forgotPasswordLabelOffset = 27;
@@ -22,8 +21,8 @@ namespace Toggl.iOS.ViewControllers
         private readonly UIBarButtonItem nextButton =
             new UIBarButtonItem { Title = Resources.LoginNextButton, TintColor = UIColor.White };
 
-        public TokenResetViewController()
-            : base(nameof(TokenResetViewController))
+        public TokenResetViewController(TokenResetViewModel viewModel)
+            : base(viewModel, nameof(TokenResetViewController))
         {
         }
 
@@ -55,6 +54,10 @@ namespace Toggl.iOS.ViewControllers
 
             SignOutButton.Rx()
                 .BindAction(ViewModel.SignOut)
+                .DisposedBy(DisposeBag);
+
+            ViewModel.SignOut.Elements
+                .Subscribe(IosDependencyContainer.Instance.IntentDonationService.ClearAll)
                 .DisposedBy(DisposeBag);
 
             ShowPasswordButton.Rx().Tap()

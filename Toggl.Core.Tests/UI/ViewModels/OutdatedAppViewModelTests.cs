@@ -15,7 +15,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class OutdatedAppViewModelTest : BaseViewModelTests<OutdatedAppViewModel>
         {
             protected override OutdatedAppViewModel CreateViewModel()
-                => new OutdatedAppViewModel(BrowserService, RxActionFactory);
+                => new OutdatedAppViewModel(BrowserService, RxActionFactory, NavigationService);
         }
 
         public sealed class TheConstructor : OutdatedAppViewModelTest
@@ -24,14 +24,16 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useBrowserService,
-                bool useRxActionFactory)
+                bool useRxActionFactory,
+                bool useNavigationService)
             {
                 var browserService = useBrowserService ? BrowserService : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
+                var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new OutdatedAppViewModel(
-                        browserService, rxActionFactory);
+                        browserService, rxActionFactory, navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();

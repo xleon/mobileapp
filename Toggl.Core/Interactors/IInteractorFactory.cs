@@ -25,6 +25,8 @@ namespace Toggl.Core.Interactors
 
         IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueTimeEntry(ITimeEntryPrototype prototype, ContinueTimeEntryMode continueMode);
 
+        IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueTimeEntryFromMainLog(ITimeEntryPrototype prototype, ContinueTimeEntryMode continueMode, int indexInLog, int dayInLog, int daysInThePast);
+
         IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueMostRecentTimeEntry();
 
         IInteractor<IObservable<IThreadSafeTimeEntry>> UpdateTimeEntry(EditTimeEntryDto dto);
@@ -88,6 +90,8 @@ namespace Toggl.Core.Interactors
         IInteractor<IObservable<IEnumerable<IThreadSafeWorkspace>>> ObserveAllWorkspaces();
 
         IInteractor<IObservable<Unit>> ObserveWorkspacesChanges();
+
+        IInteractor<IObservable<long>> ObserveDefaultWorkspaceId();
 
         #endregion
 

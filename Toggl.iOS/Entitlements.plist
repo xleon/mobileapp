@@ -10,5 +10,10 @@
 	</array>
 	<key>aps-environment</key>
 	<string>development</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>webcredentials:toggl.com</string>
+		<string>webcredentials:www.toggl.com</string>
+	</array>
 </dict>
 </plist>

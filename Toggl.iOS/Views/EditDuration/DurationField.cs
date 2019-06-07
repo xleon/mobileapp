@@ -2,7 +2,6 @@
 using CoreGraphics;
 using CoreText;
 using Foundation;
-using MvvmCross.Base;
 using ObjCRuntime;
 using Toggl.iOS.Extensions;
 using Toggl.Core;
@@ -94,7 +93,7 @@ namespace Toggl.iOS.Views.EditDuration
 
         public override bool ResignFirstResponder()
         {
-            LostFocus.Raise(this);
+            LostFocus?.Invoke(this, new EventArgs());
 
             return base.ResignFirstResponder();
         }
@@ -135,7 +134,7 @@ namespace Toggl.iOS.Views.EditDuration
                     ? originalDuration
                     : input.ToTimeSpan();
 
-                DurationChanged.Raise(this);
+                DurationChanged?.Invoke(this, new EventArgs());
                 setText(input.ToString());
             }
         }
@@ -176,12 +175,12 @@ namespace Toggl.iOS.Views.EditDuration
 
             public override void EditingStarted(UITextField textField)
             {
-                StartEditing.Raise(this);
+                StartEditing?.Invoke(this, new EventArgs());
             }
 
             public override void EditingEnded(UITextField textField, UITextFieldDidEndEditingReason reason)
             {
-                FinishEditing.Raise(this);
+                FinishEditing?.Invoke(this, new EventArgs());
             }
 
             public override bool ShouldChangeCharacters(UITextField textField, NSRange range, string replacementString)
@@ -190,7 +189,7 @@ namespace Toggl.iOS.Views.EditDuration
 
                 if (isPressingBackspace(range, replacementString))
                 {
-                    BackspacePressed.Raise(this);
+                    BackspacePressed?.Invoke(this, new EventArgs());
                 }
                 else if (int.TryParse(replacementString, out var number) && number >= 0 && number <= 9)
                 {

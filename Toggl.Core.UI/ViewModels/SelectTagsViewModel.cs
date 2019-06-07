@@ -11,22 +11,23 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Parameters;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public sealed class SelectTagsViewModel : ViewModel<(long[] tagIds, long workspaceId), long[]>
+    public sealed class SelectTagsViewModel : ViewModel<SelectTagsParameter, long[]>
     {
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly HashSet<long> selectedTagIds = new HashSet<long>();
 
         private long[] defaultResult;
         private long workspaceId;
+        private bool creationEnabled = true;
         private IStopwatch navigationFromEditTimeEntryStopwatch;
 
         public IObservable<IEnumerable<SelectableTagBaseViewModel>> Tags { get; private set; }
@@ -43,14 +44,13 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
-            this.navigationService = navigationService;
             this.stopwatchProvider = stopwatchProvider;
             this.interactorFactory = interactorFactory;
             this.schedulerProvider = schedulerProvider;
@@ -60,16 +60,12 @@ namespace Toggl.Core.UI.ViewModels
             SelectTag = rxActionFactory.FromAsync<SelectableTagBaseViewModel>(selectTag);
         }
 
-        public override void Prepare((long[] tagIds, long workspaceId) parameter)
+        public override Task Initialize(SelectTagsParameter parameter)
         {
-            workspaceId = parameter.workspaceId;
-            defaultResult = parameter.tagIds;
-            selectedTagIds.AddRange(parameter.tagIds);
-        }
-
-        public override async Task Initialize()
-        {
-            await base.Initialize();
+            workspaceId = parameter.WorkspaceId;
+            defaultResult = parameter.TagIds;
+            selectedTagIds.AddRange(parameter.TagIds);
+            creationEnabled = parameter.CreationEnabled;
 
             navigationFromEditTimeEntryStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenSelectTagsView);
             stopwatchProvider.Remove(MeasuredOperation.OpenSelectTagsView);
@@ -87,7 +83,7 @@ namespace Toggl.Core.UI.ViewModels
                         .Cast<TagSuggestion>()
                         .Where(s => s.WorkspaceId == workspaceId);
 
-                    var suggestCreation = !string.IsNullOrEmpty(queryText)
+                    var suggestCreation = creationEnabled && !string.IsNullOrEmpty(queryText)
                                           && tagSuggestionInWorkspace.None(tag
                                               => tag.Name.IsSameCaseInsensitiveTrimedTextAs(queryText))
                                           && queryText.IsAllowedTagByteSize();
@@ -114,6 +110,8 @@ namespace Toggl.Core.UI.ViewModels
                 .Invert()
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
+
+            return base.Initialize(parameter);
         }
 
         public override void ViewAppeared()
@@ -159,8 +157,8 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task close()
-            => navigationService.Close(this, defaultResult);
+            => Finish(defaultResult);
 
-        private Task save() => navigationService.Close(this, selectedTagIds.ToArray());
+        private Task save() => Finish(selectedTagIds.ToArray());
     }
 }

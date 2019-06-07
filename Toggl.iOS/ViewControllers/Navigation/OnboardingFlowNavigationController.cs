@@ -1,9 +1,8 @@
-﻿using MvvmCross.Platforms.Ios.Views;
-using UIKit;
+﻿using UIKit;
 
 namespace Toggl.iOS.ViewControllers.Navigation
 {
-    public sealed class OnboardingFlowNavigationController : MvxNavigationController
+    public sealed class OnboardingFlowNavigationController : UINavigationController
     {
         public OnboardingFlowNavigationController(UIViewController viewController)
             : base(viewController)

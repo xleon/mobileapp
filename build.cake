@@ -163,7 +163,7 @@ private TemporaryFileTransformation GetIosAnalyticsServicesConfigurationTransfor
 
 private TemporaryFileTransformation GetIosAppDelegateTransformation()
 {
-    const string path = "Toggl.iOS/Startup/AppDelegate.cs";
+    const string path = "Toggl.iOS/Startup/AppDelegate.Analytics.cs";
     var adjustToken = EnvironmentVariable("TOGGL_ADJUST_APP_TOKEN");
     string appCenterId = "";
 
@@ -218,7 +218,7 @@ private TemporaryFileTransformation GetAndroidGoogleServicesTransformation()
 
 private TemporaryFileTransformation GetAndroidGoogleLoginTransformation()
 {
-    const string path = "Toggl.Droid/Services/GoogleServiceAndroid.cs";
+    const string path = "Toggl.Droid/Activities/ReactiveActivity.GoogleTokenProvider.cs";
     var clientId = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID");
 
     var filePath = GetFiles(path).Single();

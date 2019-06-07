@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Reactive.Linq;
 using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
-using MvvmCross.Platforms.Android.Binding.Views;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
@@ -15,8 +12,7 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Activities
 {
-    [MvxActivityPresentation]
-    [Activity(Theme = "@style/AppTheme.WhiteStatusBar",
+    [Activity(Theme = "@style/Theme.Splash",
               ScreenOrientation = ScreenOrientation.Portrait,
               WindowSoftInputMode = SoftInput.AdjustPan | SoftInput.StateHidden,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
@@ -24,9 +20,14 @@ namespace Toggl.Droid.Activities
     {
         protected override void OnCreate(Bundle bundle)
         {
+            SetTheme(Resource.Style.AppTheme_WhiteStatusBar);
             this.ChangeStatusBarColor(Android.Graphics.Color.White, true);
-
             base.OnCreate(bundle);
+            if (ViewModelWasNotCached())
+            {
+                BailOutToSplashScreen();
+                return;
+            }
             SetContentView(Resource.Layout.SignUpActivity);
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
 
@@ -99,11 +100,6 @@ namespace Toggl.Droid.Activities
 
             string signupButtonTitle(bool isLoading)
                 => isLoading ? "" : Resources.GetString(Resource.String.SignUpForFree);
-        }
-
-        protected override void AttachBaseContext(Context @base)
-        {
-            base.AttachBaseContext(MvxContextWrapper.Wrap(@base, this));
         }
     }
 }

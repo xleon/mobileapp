@@ -29,8 +29,8 @@ namespace Toggl.iOS.Services
 
         private readonly ITimeService timeService;
 
-        public NotificationServiceIos(IPermissionsService permissionsService, ITimeService timeService)
-            : base(permissionsService)
+        public NotificationServiceIos(IPermissionsChecker permissionsChecker, ITimeService timeService)
+            : base(permissionsChecker)
         {
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
 

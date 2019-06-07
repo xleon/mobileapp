@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reactive.Linq;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
@@ -14,13 +13,12 @@ using Math = System.Math;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [MvxChildPresentation]
     public partial class SettingsViewController : ReactiveViewController<SettingsViewModel>
     {
         private const int verticalSpacing = 24;
 
-        public SettingsViewController()
-            : base(nameof(SettingsViewController))
+        public SettingsViewController(SettingsViewModel viewModel)
+            : base(viewModel, nameof(SettingsViewController))
         {
         }
 
@@ -109,6 +107,14 @@ namespace Toggl.iOS.ViewControllers
 
             AboutView.Rx()
                 .BindAction(ViewModel.OpenAboutView)
+                .DisposedBy(DisposeBag);
+
+            ShortcutsSettingsView.Rx()
+                .BindAction(ViewModel.OpenSiriShortcuts)
+                .DisposedBy(DisposeBag);
+
+            WorkflowsSettingsView.Rx()
+                .BindAction(ViewModel.OpenSiriWorkflows)
                 .DisposedBy(DisposeBag);
 
             FeedbackView.Rx()
