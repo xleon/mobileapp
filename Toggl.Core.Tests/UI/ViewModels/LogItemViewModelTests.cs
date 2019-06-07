@@ -88,7 +88,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     false,
                     false,
                     false,
-                    false);
+                    false,
+                    0,
+                    0,
+                    0);
 
                 viewModel.RepresentedTimeEntriesIds.Should().BeInAscendingOrder();
             }
@@ -112,7 +115,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     false,
                     false,
                     false,
-                    false);
+                    false,
+                    0,
+                    0,
+                    0);
 
                 viewModel.RepresentedTimeEntriesIds.Should().BeEquivalentTo(ids.Get);
             }
@@ -123,6 +129,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         private static LogItemViewModel toViewModel(IThreadSafeTimeEntry timeEntry)
             => timeEntry.ToViewModel(
-                new GroupId(timeEntry), LogItemVisualizationIntent.SingleItem, DurationFormat.Improved);
+                new GroupId(timeEntry), LogItemVisualizationIntent.SingleItem, DurationFormat.Improved, 0, 0, 0);
     }
 }

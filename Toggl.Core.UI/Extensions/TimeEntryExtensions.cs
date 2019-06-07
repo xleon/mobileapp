@@ -15,7 +15,10 @@ namespace Toggl.Core.UI.Extensions
             this IThreadSafeTimeEntry timeEntry,
             GroupId groupId,
             LogItemVisualizationIntent visualizationIntent,
-            DurationFormat durationFormat)
+            DurationFormat durationFormat,
+            int indexInLog,
+            int dayInLog,
+            int daysInThePast)
             => new LogItemViewModel(
                 groupId,
                 new[] { timeEntry.Id },
@@ -33,6 +36,9 @@ namespace Toggl.Core.UI.Extensions
                 timeEntry.TagIds.Any(),
                 timeEntry.SyncStatus == SyncStatus.SyncNeeded,
                 timeEntry.SyncStatus != SyncStatus.SyncFailed,
-                timeEntry.IsInaccessible);
+                timeEntry.IsInaccessible,
+                indexInLog,
+                dayInLog,
+                daysInThePast);
     }
 }

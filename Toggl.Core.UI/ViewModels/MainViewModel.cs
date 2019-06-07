@@ -23,6 +23,7 @@ using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Core.Services;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
+using Toggl.Core.UI.Helper;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
@@ -92,7 +93,7 @@ namespace Toggl.Core.UI.ViewModels
         public InputAction<bool> StartTimeEntry { get; private set; }
         public InputAction<(long[], EditTimeEntryOrigin)> SelectTimeEntry { get; private set; }
         public InputAction<TimeEntryStopOrigin> StopTimeEntry { get; private set; }
-        public RxAction<(long, ContinueTimeEntryMode), IThreadSafeTimeEntry> ContinueTimeEntry { get; private set; }
+        public RxAction<ContinueTimeEntryInfo, IThreadSafeTimeEntry> ContinueTimeEntry { get; private set; }
 
         public ITimeService TimeService { get; }
 
@@ -230,7 +231,7 @@ namespace Toggl.Core.UI.ViewModels
             OpenSettings = rxActionFactory.FromAsync(openSettings);
             OpenSyncFailures = rxActionFactory.FromAsync(openSyncFailures);
             SelectTimeEntry = rxActionFactory.FromAsync<(long[], EditTimeEntryOrigin)>(timeEntrySelected);
-            ContinueTimeEntry = rxActionFactory.FromObservable<(long, ContinueTimeEntryMode), IThreadSafeTimeEntry>(continueTimeEntry);
+            ContinueTimeEntry = rxActionFactory.FromObservable<ContinueTimeEntryInfo, IThreadSafeTimeEntry>(continueTimeEntry);
             StartTimeEntry = rxActionFactory.FromAsync<bool>(startTimeEntry, IsTimeEntryRunning.Invert());
             StopTimeEntry = rxActionFactory.FromObservable<TimeEntryStopOrigin>(stopTimeEntry, IsTimeEntryRunning);
 
@@ -387,14 +388,17 @@ namespace Toggl.Core.UI.ViewModels
             return navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(parameter);
         }
 
-        private IObservable<IThreadSafeTimeEntry> continueTimeEntry((long, ContinueTimeEntryMode) continueInfo)
+        private IObservable<IThreadSafeTimeEntry> continueTimeEntry(ContinueTimeEntryInfo continueInfo)
         {
-            var (timeEntryId, continueMode) = continueInfo;
-
-            return interactorFactory.GetTimeEntryById(timeEntryId).Execute()
+            return interactorFactory.GetTimeEntryById(continueInfo.Id).Execute()
                 .Select(timeEntry => timeEntry.AsTimeEntryPrototype())
                 .SelectMany(prototype =>
-                    interactorFactory.ContinueTimeEntry(prototype, continueMode).Execute())
+                    interactorFactory.ContinueTimeEntryFromMainLog(
+                        prototype,
+                        continueInfo.ContinueMode,
+                        continueInfo.IndexInLog,
+                        continueInfo.DayInLog,
+                        continueInfo.DaysInThePast).Execute())
                 .Do(_ => onboardingStorage.SetTimeEntryContinued());
         }
 

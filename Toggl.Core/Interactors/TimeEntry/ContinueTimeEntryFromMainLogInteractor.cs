@@ -1,14 +1,14 @@
 using System;
+using System.ComponentModel;
 using System.Reactive.Linq;
 using Toggl.Core.Analytics;
-using Toggl.Core.Extensions;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 
 namespace Toggl.Core.Interactors
 {
-    public sealed class ContinueTimeEntryInteractor : IInteractor<IObservable<IThreadSafeTimeEntry>>
+    public sealed class ContinueTimeEntryFromMainLogInteractor : IInteractor<IObservable<IThreadSafeTimeEntry>>
     {
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
@@ -18,7 +18,7 @@ namespace Toggl.Core.Interactors
         private readonly int dayInLog;
         private readonly int daysInThePast;
 
-        public ContinueTimeEntryInteractor(
+        public ContinueTimeEntryFromMainLogInteractor(
             IInteractorFactory interactorFactory,
             IAnalyticsService analyticsService,
             ITimeEntryPrototype timeEntryPrototype,
@@ -44,7 +44,7 @@ namespace Toggl.Core.Interactors
         public IObservable<IThreadSafeTimeEntry> Execute()
         {
             return interactorFactory
-                .CreateTimeEntry(timeEntryPrototype, (TimeEntryStartOrigin)continueMode)
+                .ContinueTimeEntry(timeEntryPrototype, continueMode)
                 .Execute()
                 .Do(_ => trackContinueEvent());
         }
@@ -68,7 +68,7 @@ namespace Toggl.Core.Interactors
                     return ContinueTimeEntryOrigin.GroupContinueButton;
             }
 
-            return ContinueTimeEntryOrigin.Other;
+            throw new InvalidEnumArgumentException($"Unexpected continue time entry mode {mode}");
         }
     }
 }

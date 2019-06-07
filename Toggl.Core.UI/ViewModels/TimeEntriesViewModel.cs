@@ -85,8 +85,9 @@ namespace Toggl.Core.UI.ViewModels
                 .Select(group)
                 .ReemitWhen(collapsingOrExpanding);
 
-             TimeEntries = Observable.CombineLatest(visibleTimeEntries, dataSource.Preferences.Current, groupsFlatteningStrategy.Flatten)
-                    .AsDriver(schedulerProvider);
+            TimeEntries = Observable.CombineLatest(visibleTimeEntries, dataSource.Preferences.Current, groupsFlatteningStrategy.Flatten)
+                .Select(groups => groups.ToArray())
+                .AsDriver(schedulerProvider);
 
             Empty = TimeEntries
                 .Select(groups => groups.None())

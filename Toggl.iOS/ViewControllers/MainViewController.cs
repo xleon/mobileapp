@@ -337,7 +337,7 @@ namespace Toggl.iOS.ViewControllers
             return (item.RepresentedTimeEntriesIds, origin);
         }
 
-        private (long, ContinueTimeEntryMode) timeEntryContinuation(LogItemViewModel itemViewModel, bool isSwipe)
+        private ContinueTimeEntryInfo timeEntryContinuation(LogItemViewModel itemViewModel, bool isSwipe)
         {
             var continueMode = default(ContinueTimeEntryMode);
 
@@ -354,7 +354,7 @@ namespace Toggl.iOS.ViewControllers
                     : ContinueTimeEntryMode.SingleTimeEntryContinueButton;
             }
 
-            return (itemViewModel.RepresentedTimeEntriesIds.First(), continueMode);
+            return new ContinueTimeEntryInfo(itemViewModel, continueMode);
         }
 
         public override void ViewWillAppear(bool animated)

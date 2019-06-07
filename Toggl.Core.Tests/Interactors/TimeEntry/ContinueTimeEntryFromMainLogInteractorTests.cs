@@ -12,7 +12,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.Interactors.TimeEntry
 {
-    public sealed class ContinueTimeEntryInteractorTests
+    public sealed class ContinueTimeEntryFromMainLogInteractorTests
     {
         protected IInteractorFactory InteractorFactory = Substitute.For<IInteractorFactory>();
 
@@ -65,9 +65,9 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
         protected const int DaysInPast = 0;
 
         [Fact, LogIfTooSlow]
-        public void CallsTheCreateTimeEntryInteractor()
+        public void CallsTheContinueTimeEntryInteractor()
         {
-            var interactor = new ContinueTimeEntryInteractor(
+            var interactor = new ContinueTimeEntryFromMainLogInteractor(
                 InteractorFactory,
                 AnalyticsService,
                 TimeEntryPrototype,
@@ -80,7 +80,7 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
 
             InteractorFactory
                 .Received()
-                .CreateTimeEntry(Arg.Any<ITimeEntryPrototype>(), TimeEntryStartOrigin.TimeEntriesGroupSwipe)
+                .ContinueTimeEntry(Arg.Any<ITimeEntryPrototype>(), ContinueTimeEntryMode.TimeEntriesGroupSwipe)
                 .Execute();
         }
 
@@ -92,11 +92,11 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
         public async Task TracksTheTimeEntryContinuedEvent(ContinueTimeEntryMode continueMode, ContinueTimeEntryOrigin expectedOrigin)
         {
             InteractorFactory
-                .CreateTimeEntry(Arg.Any<ITimeEntryPrototype>(), Arg.Any<TimeEntryStartOrigin>())
+                .ContinueTimeEntry(Arg.Any<ITimeEntryPrototype>(), Arg.Any<ContinueTimeEntryMode>())
                 .Execute()
                 .Returns(Observable.Return(CreatedTimeEntry));
 
-            var interactor = new ContinueTimeEntryInteractor(
+            var interactor = new ContinueTimeEntryFromMainLogInteractor(
                 InteractorFactory,
                 AnalyticsService,
                 TimeEntryPrototype,
