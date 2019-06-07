@@ -28,6 +28,8 @@ namespace Toggl.Droid.Views
         private readonly Paint nonBillablePaint = new Paint();
         private readonly Paint othersPaint = new Paint();
 
+        private readonly Rect bounds = new Rect();
+
         private float maxWidth;
         private float barsRightMargin;
         private float barsLeftMargin;
@@ -37,6 +39,7 @@ namespace Toggl.Droid.Views
         private float textLeftMargin;
         private float textBottomMargin;
         private float bottomLabelMarginTop;
+        private float dateTopPadding;
         private string hourSymbol;
 
         private int barsCount;
@@ -104,6 +107,7 @@ namespace Toggl.Droid.Views
             textBottomMargin = 4.DpToPixels(context);
             bottomLabelMarginTop = 12.DpToPixels(context);
             hourSymbol = context.GetString(Resource.String.HourSymbol);
+            dateTopPadding = 4.DpToPixels(context);
 
             othersPaint.TextSize = textSize;
             billablePaint.Color = billableColor;
@@ -192,6 +196,7 @@ namespace Toggl.Droid.Views
             var left = barsStartingLeft;
 
             othersPaint.TextAlign = Paint.Align.Center;
+            var originalTextSize = othersPaint.TextSize;
 
             for (var barIndex = 0; barIndex < bars.Length; barIndex++)
             {
@@ -206,11 +211,11 @@ namespace Toggl.Droid.Views
                 }
                 else
                 {
-                    var billableBarHeight = (float) (barsHeight * bar.BillablePercent);
+                    var billableBarHeight = (float)(barsHeight * bar.BillablePercent);
                     var billableTop = calculateBillableTop(billableBarHeight, barHasBillablePercentage);
                     canvas.DrawRect(left, billableTop, barRight, barsBottom + barDrawingYTranslationAdjustmentInPixels, billablePaint);
 
-                    var nonBillableBarHeight = (float) (barsHeight * bar.NonBillablePercent);
+                    var nonBillableBarHeight = (float)(barsHeight * bar.NonBillablePercent);
                     var nonBillableTop = calculateNonBillableTop(billableTop, nonBillableBarHeight, barHasNonBillablePercentage);
                     canvas.DrawRect(left, nonBillableTop, barRight, billableTop, nonBillablePaint);
                 }
@@ -218,8 +223,14 @@ namespace Toggl.Droid.Views
                 if (willDrawDayLabels)
                 {
                     var middleOfTheBar = left + (barRight - left) / 2f;
-                    canvas.DrawText(horizontalLabels[barIndex].DayOfWeek, middleOfTheBar, dayLabelsY, othersPaint);
-                    canvas.DrawText(horizontalLabels[barIndex].Date, middleOfTheBar, dayLabelsY + textSize, othersPaint);
+                    var dayOfWeekText = horizontalLabels[barIndex].DayOfWeek;
+                    othersPaint.TextSize = originalTextSize;
+                    canvas.DrawText(dayOfWeekText, middleOfTheBar, dayLabelsY, othersPaint);
+
+                    var dateText = horizontalLabels[barIndex].Date;
+                    setTextSizeFromWidth(dateText, othersPaint,  othersPaint.TextSize, actualBarWidth);
+                    othersPaint.GetTextBounds(dateText, 0, dateText.Length, bounds);
+                    canvas.DrawText(dateText, middleOfTheBar, dayLabelsY + bounds.Height() + dateTopPadding, othersPaint);
                 }
 
                 left += actualBarWidth + spacing;
@@ -245,6 +256,24 @@ namespace Toggl.Droid.Views
             return barHasNonBillablePercentage && !barHasAtLeast1PixelInHeight
                 ? nonBillableTop - minHeightForBarsWithPercentages
                 : nonBillableTop;
+        }
+
+        private void setTextSizeFromWidth(string text, Paint paint, float originalTextSize, float maxWidth)
+        {
+            // 48f is enough for reasonable resolution
+            // (older phones could have issues with memory if this number is much larger)
+            const float sampleTextSize = 48f;
+
+            paint.TextSize = originalTextSize;
+            paint.GetTextBounds(text, 0, text.Length, bounds);
+
+            if (bounds.Width() > maxWidth)
+            {
+                paint.TextSize = sampleTextSize;
+                paint.GetTextBounds(text, 0, text.Length, bounds);
+
+                paint.TextSize = (int)(sampleTextSize * maxWidth / bounds.Width());
+            }
         }
     }
 }

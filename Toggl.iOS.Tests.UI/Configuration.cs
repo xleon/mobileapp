@@ -17,7 +17,7 @@ namespace Toggl.Tests.UI
             resetSimulator(bootedDeviceId);
 
             var app = ConfigureApp.iOS
-                .AppBundle("../../bin/iPhoneSimulator/Debug/Toggl.iOS.app")
+                .InstalledApp("com.toggl.daneel.debug")
                 .StartApp();
 
             bootedDeviceId = app.Device.DeviceIdentifier;

@@ -854,12 +854,6 @@ Use them to add keywords to your time entries.</value>
     <data name="EditingTimeEntryGroup" xml:space="preserve">
     <value>Editing {0} time entries</value>
   </data>
-    <data name="NumberOfTasksPlural" xml:space="preserve">
-    <value>{0} Tasks</value>
-  </data>
-    <data name="NumberOfTasksSingular" xml:space="preserve">
-    <value>{0} Task</value>
-  </data>
     <data name="SelectCalendars" xml:space="preserve">
     <value>Select calendars</value>
   </data>
@@ -937,9 +931,6 @@ Use them to add keywords to your time entries.</value>
   </data>
     <data name="ShowReportsInvocationPhrase" xml:space="preserve">
     <value>Show my time</value>
-  </data>
-    <data name="ContinueTimerInvocationPhrase" xml:space="preserve">
-    <value>Continue tracking</value>
   </data>
   <data name="ContinueTimerInvocationPhrase">
       <value>Continue timer</value>
