@@ -31,8 +31,9 @@
             android:paddingStart="16dp"
             android:lineSpacingExtra="4sp"
             android:gravity="center_vertical"
-            android:layout_width="110dp"
+            android:layout_width="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
             android:layout_height="match_parent" />
         <ImageView
             android:id="@+id/ToolbarProjectButton"

@@ -34,6 +34,8 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<TimeEntryStopOrigin> TimeEntryStopped { get; }
 
+        IAnalyticsEvent<ContinueTimeEntryOrigin, int, int, int> TimeEntryContinued { get; }
+
         IAnalyticsEvent RatingViewWasShown { get; }
 
         IAnalyticsEvent<bool> UserFinishedRatingViewFirstStep { get; }
@@ -163,7 +165,7 @@ namespace Toggl.Core.Analytics
         IAnalyticsEvent<bool> GroupTimeEntriesSettingsChanged { get; }
 
         IAnalyticsEvent<EditTimeEntryOrigin> EditViewOpened { get; }
-        
+
         IAnalyticsEvent<string, string, string, string> DebugScheduleError { get; }
 
         IAnalyticsEvent<Platform> ReceivedLowMemoryWarning { get; }
