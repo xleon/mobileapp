@@ -281,7 +281,7 @@ namespace Toggl.Core.Tests.Login
             }
 
             [Fact, LogIfTooSlow]
-            public void DoesNotEmitWhenUserIsNotLoggedIn()
+            public void DoesNotCauseTheUserLoggedInObservableToEmit()
             {
                 var observer = Substitute.For<IObserver<ITogglApi>>();
                 var observable = Observable.Throw<IDatabaseUser>(new InvalidOperationException());
@@ -292,7 +292,10 @@ namespace Toggl.Core.Tests.Login
 
                 observer.DidNotReceive().OnNext(Arg.Any<ITogglApi>());
             }
+        }
 
+        public sealed class TheLoginWithSavedCredentialsMethod : UserAccessManagerTest
+        {
             [Fact, LogIfTooSlow]
             public void EmitsWhenUserIsLoggedAndDataIsInTheDataBase()
             {
@@ -301,11 +304,11 @@ namespace Toggl.Core.Tests.Login
                 Database.User.Single().Returns(observable);
                 UserAccessManager.UserLoggedIn.Subscribe(observer);
 
-                UserAccessManager.CheckIfLoggedIn();
+                UserAccessManager.LoginWithSavedCredentials();
 
                 observer.Received().OnNext(Arg.Any<ITogglApi>());
             }
-            
+
             [Fact, LogIfTooSlow]
             public void EmitsWhenUserIsLoggedInAndDataIsAlreadyStoredInThePrivateStorage()
             {
@@ -314,9 +317,22 @@ namespace Toggl.Core.Tests.Login
                 PrivateSharedStorageService.HasUserDataStored().Returns(true);
                 PrivateSharedStorageService.GetApiToken().Returns("ApiToken");
 
-                UserAccessManager.CheckIfLoggedIn();
+                UserAccessManager.LoginWithSavedCredentials();
 
                 observer.Received().OnNext(Arg.Any<ITogglApi>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNotCauseTheUserLoggedInObservableToEmit()
+            {
+                var observer = Substitute.For<IObserver<ITogglApi>>();
+                var observable = Observable.Throw<IDatabaseUser>(new InvalidOperationException());
+                Database.User.Single().Returns(observable);
+                UserAccessManager.UserLoggedIn.Subscribe(observer);
+
+                UserAccessManager.LoginWithSavedCredentials();
+
+                observer.DidNotReceive().OnNext(Arg.Any<ITogglApi>());
             }
         }
 

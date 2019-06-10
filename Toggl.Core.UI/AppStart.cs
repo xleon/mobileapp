@@ -12,13 +12,18 @@ namespace Toggl.Core.UI
         public AppStart(UIDependencyContainer dependencyContainer)
         {
             this.dependencyContainer = dependencyContainer;
+        }
 
+        public void SetupBackgroundSync()
+        {
+            var backgroundService = dependencyContainer.BackgroundSyncService;
+            backgroundService.SetupBackgroundSync(dependencyContainer.UserAccessManager);
+        }
+
+        public void SetFirstOpened()
+        {
             var timeService = dependencyContainer.TimeService;
             var onboardingStorage = dependencyContainer.OnboardingStorage;
-            var backgroundService = dependencyContainer.BackgroundSyncService;
-
-            backgroundService.SetupBackgroundSync(dependencyContainer.UserAccessManager);
-
             onboardingStorage.SetFirstOpened(timeService.CurrentDateTime);
         }
 

@@ -49,27 +49,6 @@ namespace Toggl.Core.Tests.UI
         public class TheConstructor : AppStartTest
         {
             [Fact, LogIfTooSlow]
-            public void SetsFirstOpenedTime()
-            {
-                TimeService.CurrentDateTime.Returns(new DateTimeOffset(2020, 1, 2, 3, 4, 5, TimeSpan.Zero));
-                var dependencyContainer = new TestDependencyContainer
-                {
-                    MockTimeService = TimeService,
-                    MockUserAccessManager = UserAccessManager,
-                    MockNavigationService = NavigationService,
-                    MockOnboardingStorage = OnboardingStorage,
-                    MockAccessRestrictionStorage = AccessRestrictionStorage,
-                    MockSyncManager = Substitute.For<ISyncManager>(),
-                    MockInteractorFactory = Substitute.For<IInteractorFactory>(),
-                    MockBackgroundSyncService = Substitute.For<IBackgroundSyncService>()
-                };
-
-                var _ = new AppStart(dependencyContainer);
-
-                OnboardingStorage.Received().SetFirstOpened(TimeService.CurrentDateTime);
-            }
-
-            [Fact, LogIfTooSlow]
             public void MarksTheUserAsNotNewWhenUsingTheAppForTheFirstTimeAfterSixtyDays()
             {
                 var now = DateTimeOffset.Now;
@@ -93,6 +72,31 @@ namespace Toggl.Core.Tests.UI
 
                 OnboardingStorage.Received().SetLastOpened(now);
                 OnboardingStorage.Received().SetIsNewUser(false);
+            }
+        }
+
+        public class TheSetFirstOpenedMethod : AppStartTest
+        {
+            [Fact, LogIfTooSlow]
+            public void SetsFirstOpenedTime()
+            {
+                TimeService.CurrentDateTime.Returns(new DateTimeOffset(2020, 1, 2, 3, 4, 5, TimeSpan.Zero));
+                var dependencyContainer = new TestDependencyContainer
+                {
+                    MockTimeService = TimeService,
+                    MockUserAccessManager = UserAccessManager,
+                    MockNavigationService = NavigationService,
+                    MockOnboardingStorage = OnboardingStorage,
+                    MockAccessRestrictionStorage = AccessRestrictionStorage,
+                    MockSyncManager = Substitute.For<ISyncManager>(),
+                    MockInteractorFactory = Substitute.For<IInteractorFactory>(),
+                    MockBackgroundSyncService = Substitute.For<IBackgroundSyncService>()
+                };
+                var appStart = new AppStart(dependencyContainer);
+
+                appStart.SetFirstOpened();
+
+                OnboardingStorage.Received().SetFirstOpened(TimeService.CurrentDateTime);
             }
         }
 

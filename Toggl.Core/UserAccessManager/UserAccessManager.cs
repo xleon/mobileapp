@@ -10,6 +10,7 @@ using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Networking;
 using Toggl.Networking.Network;
+using Toggl.Storage.Models;
 
 namespace Toggl.Core.Login
 {
@@ -97,17 +98,30 @@ namespace Toggl.Core.Login
         public bool CheckIfLoggedIn()
         {
             if (privateSharedStorageService.Value.HasUserDataStored())
-            {
-                userLoggedInSubject.OnNext(apiFromSharedStorage());
                 return true;
-            }
 
             return
                 database.Value
                 .User.Single()
-                .Do(user => userLoggedInSubject.OnNext(apiFromUser(user)))
+                .Do(storeApiInfoOnPrivateStorage)
                 .SelectValue(true)
                 .Catch(Observable.Return(false))
+                .Wait();
+        }
+
+        public void LoginWithSavedCredentials()
+        {
+            if (privateSharedStorageService.Value.HasUserDataStored())
+            {
+                userLoggedInSubject.OnNext(apiFromSharedStorage());
+                return;
+            }
+
+            database.Value
+                .User.Single()
+                .Do(user => userLoggedInSubject.OnNext(apiFromUser(user)))
+                .Catch((Exception ex) => Observable.Empty<User>())
+                .ToArray()
                 .Wait();
         }
 
@@ -147,12 +161,16 @@ namespace Toggl.Core.Login
 
         private ITogglApi apiFromUser(IUser user)
         {
-            privateSharedStorageService.Value.SaveApiToken(user.ApiToken);
-            privateSharedStorageService.Value.SaveUserId(user.Id);
-
+            storeApiInfoOnPrivateStorage(user);
             var newCredentials = Credentials.WithApiToken(user.ApiToken);
             var api = apiFactory.Value.CreateApiWith(newCredentials);
             return api;
+        }
+
+        private void storeApiInfoOnPrivateStorage(IUser user)
+        {
+            privateSharedStorageService.Value.SaveApiToken(user.ApiToken);
+            privateSharedStorageService.Value.SaveUserId(user.Id);
         }
 
         private IObservable<Unit> loginWithGoogle(string googleToken)
@@ -176,7 +194,6 @@ namespace Toggl.Core.Login
                 .User
                 .SignUp(email, password, termsAccepted, countryId, timezone);
         }
-
 
         private IObservable<Unit> signUpWithGoogle(string googleToken, bool termsAccepted, int countryId, string timezone)
         {
