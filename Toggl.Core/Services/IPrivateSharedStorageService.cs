@@ -11,5 +11,9 @@ namespace Toggl.Core.Services
         void SaveDefaultWorkspaceId(long workspaceId);
 
         void ClearAll();
+
+        bool HasUserDataStored();
+
+        string GetApiToken();
     }
 }

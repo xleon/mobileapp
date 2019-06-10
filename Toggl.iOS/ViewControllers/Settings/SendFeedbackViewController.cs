@@ -6,7 +6,6 @@ using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -14,12 +13,11 @@ using static Toggl.Shared.Extensions.CommonFunctions;
 
 namespace Toggl.iOS.ViewControllers.Settings
 {
-    [ModalCardPresentation]
     public sealed partial class SendFeedbackViewController : KeyboardAwareViewController<SendFeedbackViewModel>, IDismissableViewController
     {
 
-        public SendFeedbackViewController()
-            : base(nameof(SendFeedbackViewController))
+        public SendFeedbackViewController(SendFeedbackViewModel viewModel)
+            : base(viewModel, nameof(SendFeedbackViewController))
         {
         }
 

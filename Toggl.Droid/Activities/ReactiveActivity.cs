@@ -1,68 +1,59 @@
 ﻿using System;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
+using Android.App;
 using Android.Content;
-using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
-using MvvmCross.Binding.BindingContext;
-using MvvmCross.Droid.Support.V7.AppCompat.EventSource;
-using MvvmCross.Platforms.Android.Binding.BindingContext;
-using MvvmCross.Platforms.Android.Views;
-using MvvmCross.ViewModels;
-using MvvmCross.Views;
-using static Toggl.Droid.Services.PermissionsServiceAndroid;
+using Android.Support.V7.App;
+using Android.Util;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Droid.Activities
 {
-    public abstract class ReactiveActivity<TViewModel> : MvxEventSourceAppCompatActivity, IMvxAndroidView, IPermissionAskingActivity
-        where TViewModel : class, IMvxViewModel
+    public abstract partial class ReactiveActivity<TViewModel> : AppCompatActivity, IView
+        where TViewModel : class, IViewModel
     {
         public CompositeDisposable DisposeBag { get; private set; } = new CompositeDisposable();
 
         protected abstract void InitializeViews();
 
-        public object DataContext
-        {
-            get => BindingContext.DataContext;
-            set => BindingContext.DataContext = value;
-        }
-
-        public TViewModel ViewModel
-        {
-            get => DataContext as TViewModel;
-            set => DataContext = value;
-        }
-
-        IMvxViewModel IMvxView.ViewModel
-        {
-            get => ViewModel;
-            set => ViewModel = value as TViewModel;
-        }
-
-        public IMvxBindingContext BindingContext { get; set; }
-
-        public Action<int, string[], Permission[]> OnPermissionChangedCallback { get; set; }
+        public TViewModel ViewModel { get; private set; }
 
         protected ReactiveActivity()
         {
-            BindingContext = new MvxAndroidBindingContext(this, this);
-            this.AddEventListeners();
         }
 
-        protected ReactiveActivity(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
+        protected ReactiveActivity(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
+        }
+
+        public bool ViewModelWasNotCached()
+            => ViewModel == null;
+
+        public void BailOutToSplashScreen()
+        {
+            StartActivity(new Intent(this, typeof(SplashScreen)).AddFlags(ActivityFlags.TaskOnHome));
+            Finish();
         }
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            ViewModel?.ViewCreated();
+            ViewModel = AndroidDependencyContainer.Instance
+                .ViewModelCache
+                .Get<TViewModel>();
+
+            ViewModel?.AttachView(this);
         }
 
         protected override void OnDestroy()
         {
+            ViewModel?.DetachView();
             base.OnDestroy();
-            ViewModel?.ViewDestroy();
+            ViewModel?.ViewDestroyed();
         }
 
         protected override void OnStart()
@@ -89,9 +80,11 @@ namespace Toggl.Droid.Activities
             ViewModel?.ViewDisappeared();
         }
 
-        public void MvxInternalStartActivityForResult(Intent intent, int requestCode)
+        public override void OnBackPressed()
         {
-            StartActivityForResult(intent, requestCode);
+            ViewModel?.Cancel();
+
+            base.OnBackPressed();
         }
 
         protected override void Dispose(bool disposing)
@@ -102,12 +95,27 @@ namespace Toggl.Droid.Activities
             DisposeBag?.Dispose();
         }
 
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            base.OnActivityResult(requestCode, resultCode, data);
 
-            OnPermissionChangedCallback?.Invoke(requestCode, permissions, grantResults);
-            OnPermissionChangedCallback = null;
+            switch (requestCode)
+            {
+                case googleSignInResult:
+                    onGoogleSignInResult(data);
+                    break;
+            }
+        }
+
+        public Task Close()
+        {
+            AndroidDependencyContainer.Instance
+                .ViewModelCache
+                .Clear<TViewModel>();
+            
+            Finish();
+            
+            return Task.CompletedTask;
         }
     }
 }

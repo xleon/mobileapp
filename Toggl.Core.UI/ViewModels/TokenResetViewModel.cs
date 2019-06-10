@@ -9,12 +9,12 @@ using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
 using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Services;
+using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
+using Toggl.Networking.Exceptions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
-using Toggl.Networking.Exceptions;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -22,9 +22,7 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class TokenResetViewModel : ViewModel
     {
         private readonly ITogglDataSource dataSource;
-        private readonly IDialogService dialogService;
         private readonly IUserAccessManager userAccessManager;
-        private readonly INavigationService navigationService;
         private readonly IInteractorFactory interactorFactory;
 
         private bool needsSync;
@@ -41,29 +39,24 @@ namespace Toggl.Core.UI.ViewModels
         public TokenResetViewModel(
             IUserAccessManager userAccessManager,
             ITogglDataSource dataSource,
-            IDialogService dialogService,
             INavigationService navigationService,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory,
-            IInteractorFactory interactorFactory
-        )
+            IInteractorFactory interactorFactory)
+        : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
+            Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
+            Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
-            Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
 
             this.dataSource = dataSource;
             this.userAccessManager = userAccessManager;
-            this.dialogService = dialogService;
-            this.navigationService = navigationService;
             this.interactorFactory = interactorFactory;
 
             Done = rxActionFactory.FromObservable(done);
@@ -102,7 +95,7 @@ namespace Toggl.Core.UI.ViewModels
             }
 
             await interactorFactory.Logout(LogoutSource.TokenReset).Execute();
-            await navigationService.Navigate<LoginViewModel>();
+            await Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty);
         }
 
         private IObservable<Unit> done() =>
@@ -116,7 +109,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private void onLogin()
         {
-            navigationService.Navigate<MainTabBarViewModel>();
+            Navigate<MainTabBarViewModel>();
         }
 
         private string transformException(Exception ex)
@@ -127,7 +120,7 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private IObservable<bool> askToLogOut()
-            => dialogService.Confirm(
+            => View.Confirm(
                 Resources.AreYouSure,
                 Resources.SettingsUnsyncedMessage,
                 Resources.SettingsDialogButtonSignOut,

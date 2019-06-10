@@ -21,7 +21,6 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class SelectTagsViewModel : ViewModel<SelectTagsParameter, long[]>
     {
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly HashSet<long> selectedTagIds = new HashSet<long>();
@@ -45,14 +44,13 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
-            this.navigationService = navigationService;
             this.stopwatchProvider = stopwatchProvider;
             this.interactorFactory = interactorFactory;
             this.schedulerProvider = schedulerProvider;
@@ -62,17 +60,12 @@ namespace Toggl.Core.UI.ViewModels
             SelectTag = rxActionFactory.FromAsync<SelectableTagBaseViewModel>(selectTag);
         }
 
-        public override void Prepare(SelectTagsParameter parameter)
+        public override Task Initialize(SelectTagsParameter parameter)
         {
             workspaceId = parameter.WorkspaceId;
             defaultResult = parameter.TagIds;
             selectedTagIds.AddRange(parameter.TagIds);
             creationEnabled = parameter.CreationEnabled;
-        }
-
-        public override async Task Initialize()
-        {
-            await base.Initialize();
 
             navigationFromEditTimeEntryStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenSelectTagsView);
             stopwatchProvider.Remove(MeasuredOperation.OpenSelectTagsView);
@@ -117,6 +110,8 @@ namespace Toggl.Core.UI.ViewModels
                 .Invert()
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
+
+            return base.Initialize(parameter);
         }
 
         public override void ViewAppeared()
@@ -162,8 +157,8 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task close()
-            => navigationService.Close(this, defaultResult);
+            => Finish(defaultResult);
 
-        private Task save() => navigationService.Close(this, selectedTagIds.ToArray());
+        private Task save() => Finish(selectedTagIds.ToArray());
     }
 }

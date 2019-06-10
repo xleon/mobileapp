@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Reactive.Disposables;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Droid.Support.V4;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
@@ -14,11 +11,8 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
-    [MvxDialogFragmentPresentation(AddToBackStack = true)]
-    public sealed partial class SelectDateFormatFragment : MvxDialogFragment<SelectDateFormatViewModel>
+    public sealed partial class SelectDateFormatFragment : ReactiveDialogFragment<SelectDateFormatViewModel>
     {
-        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
-
         public SelectDateFormatFragment() { }
 
         public SelectDateFormatFragment(IntPtr javaReference, JniHandleOwnership transfer)
@@ -29,8 +23,14 @@ namespace Toggl.Droid.Fragments
             base.OnCreateView(inflater, container, savedInstanceState);
             var view = inflater.Inflate(Resource.Layout.SelectDateFormatFragment, null);
 
-            initializeViews(view);
+            InitializeViews(view);
 
+            return view;
+        }
+
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
             recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
 
             var selectDateRecyclerAdapter = new SelectDateFormatRecyclerAdapter();
@@ -40,9 +40,7 @@ namespace Toggl.Droid.Fragments
 
             selectDateRecyclerAdapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectDateFormat.Inputs)
-                .DisposedBy(disposeBag);
-
-            return view;
+                .DisposedBy(DisposeBag);
         }
 
         public override void OnResume()
@@ -61,7 +59,7 @@ namespace Toggl.Droid.Fragments
         {
             base.Dispose(disposing);
             if (!disposing) return;
-            disposeBag.Dispose();
+            DisposeBag.Dispose();
         }
     }
 }

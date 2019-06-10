@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models.Reports;
@@ -31,7 +32,9 @@ namespace Toggl.Core.UI.ViewModels.Reports
         public ReportsBarChartViewModel(
             ISchedulerProvider schedulerProvider,
             ISingletonDataSource<IThreadSafePreferences> preferencesDataSource,
-            IObservable<ITimeEntriesTotals> reports)
+            IObservable<ITimeEntriesTotals> reports,
+            INavigationService navigationService)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(preferencesDataSource, nameof(preferencesDataSource));
@@ -54,11 +57,9 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .AsDriver(onErrorJustReturn: null, schedulerProvider: schedulerProvider);
         }
 
-        public override void ViewDestroy(bool viewFinishing = true)
+        public override void ViewDestroyed()
         {
-            base.ViewDestroy(viewFinishing);
-
-            if (!viewFinishing) return;
+            base.ViewDestroyed();
 
             reportsDisposable.Dispose();
         }

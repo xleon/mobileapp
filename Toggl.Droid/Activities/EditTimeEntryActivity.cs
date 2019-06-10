@@ -4,7 +4,6 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
@@ -23,8 +22,7 @@ using static Toggl.Droid.Resource.String;
 
 namespace Toggl.Droid.Activities
 {
-    [MvxActivityPresentation]
-    [Activity(Theme = "@style/AppTheme.BlueStatusBar",
+    [Activity(Theme = "@style/Theme.Splash",
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class EditTimeEntryActivity : ReactiveActivity<EditTimeEntryViewModel>
@@ -33,13 +31,38 @@ namespace Toggl.Droid.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
+            SetTheme(Resource.Style.AppTheme_BlueStatusBar);
             base.OnCreate(bundle);
+            if (ViewModelWasNotCached())
+            {
+                BailOutToSplashScreen();
+                return;
+            }
             SetContentView(Resource.Layout.EditTimeEntryActivity);
+            restoreTimeEntryIds(bundle);
+            
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
 
             InitializeViews();
             setupViews();
             setupBindings();
+        }
+
+        private void restoreTimeEntryIds(Bundle bundle)
+        {
+            if (bundle == null) return;
+            if (!bundle.ContainsKey(nameof(ViewModel.TimeEntryIds))) return;
+            
+            var viewModelTimeEntryIds = bundle.GetLongArray(nameof(ViewModel.TimeEntryIds));
+            if (viewModelTimeEntryIds == null) return;
+            
+            ViewModel.TimeEntryIds = viewModelTimeEntryIds;
+        }
+
+        protected override void OnSaveInstanceState(Bundle outState)
+        {
+            outState?.PutLongArray(nameof(ViewModel.TimeEntryIds), ViewModel.TimeEntryIds);
+            base.OnSaveInstanceState(outState);
         }
 
         protected override void OnResume()

@@ -4,8 +4,6 @@ using System.Reactive.Linq;
 using Foundation;
 using Intents;
 using IntentsUI;
-using Toggl.Core;
-using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
@@ -14,8 +12,6 @@ using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Intents;
-using Toggl.iOS.Models;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Views.Settings;
 using Toggl.iOS.ViewSources.Generic.TableView;
 using Toggl.Shared;
@@ -29,8 +25,8 @@ namespace Toggl.iOS.ViewControllers.Settings
     {
         private const int rowHeight = 48;
 
-        public SiriShortcutsSelectReportPeriodViewController()
-            : base(nameof(SiriShortcutsSelectReportPeriodViewController))
+        public SiriShortcutsSelectReportPeriodViewController(SiriShortcutsSelectReportPeriodViewModel viewModel)
+            : base(viewModel, nameof(SiriShortcutsSelectReportPeriodViewController))
         {
         }
 
@@ -116,7 +112,7 @@ namespace Toggl.iOS.ViewControllers.Settings
 
             var interaction = new INInteraction(intent, null);
             interaction.DonateInteraction(null);
-            
+
             var vc = new INUIAddVoiceShortcutViewController(new INShortcut(intent));
             vc.ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
             vc.Delegate = this;

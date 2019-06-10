@@ -20,6 +20,7 @@
     <EnableProguard>true</EnableProguard>
     <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -207,25 +208,7 @@
     <Reference Include="Xamarin.Firebase.Perf">
       <HintPath>Xamarin.Firebase.Perf.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross">
-      <HintPath>..\packages\MvvmCross.6.1.2\lib\monoandroid81\MvvmCross.dll</HintPath>
-    </Reference>
     <Reference Include="Java.Interop" />
-    <Reference Include="MvvmCross.Droid.Support.V7.RecyclerView">
-      <HintPath>..\packages\MvvmCross.Droid.Support.V7.RecyclerView.6.1.2\lib\monoandroid81\MvvmCross.Droid.Support.V7.RecyclerView.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Droid.Support.Fragment">
-      <HintPath>..\packages\MvvmCross.Droid.Support.Fragment.6.1.2\lib\monoandroid81\MvvmCross.Droid.Support.Fragment.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Droid.Support.Core.UI">
-      <HintPath>..\packages\MvvmCross.Droid.Support.Core.UI.6.1.2\lib\monoandroid81\MvvmCross.Droid.Support.Core.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Droid.Support.Design">
-      <HintPath>..\packages\MvvmCross.Droid.Support.Design.6.1.2\lib\monoandroid81\MvvmCross.Droid.Support.Design.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Droid.Support.V7.AppCompat">
-      <HintPath>..\packages\MvvmCross.Droid.Support.V7.AppCompat.6.1.2\lib\monoandroid81\MvvmCross.Droid.Support.V7.AppCompat.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.Firebase.Config">
       <HintPath>..\packages\Xamarin.Firebase.Config.60.1142.1\lib\MonoAndroid80\Xamarin.Firebase.Config.dll</HintPath>
     </Reference>
@@ -348,7 +331,9 @@
     <Compile Include="Activities\EditDurationActivity.ViewBinds.cs">
       <DependentUpon>EditDurationActivity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Activities\EditTimeEntryActivity.Onboarding.cs" />
+    <Compile Include="Activities\EditTimeEntryActivity.Onboarding.cs">
+      <DependentUpon>EditTimeEntryActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Activities\ForgotPasswordActivity.cs" />
     <Compile Include="Activities\ForgotPasswordActivity.ViewBinds.cs">
       <DependentUpon>ForgotPasswordActivity.cs</DependentUpon>
@@ -362,7 +347,6 @@
     <Compile Include="Activities\SelectCountryActivity.ViewBinds.cs">
       <DependentUpon>SelectCountryActivity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Activities\SelectProjectActivity.ViewBinds.cs" />
     <Compile Include="Activities\SelectTagsActivity.cs" />
     <Compile Include="Activities\SelectTagsActivity.ViewBinds.cs">
       <DependentUpon>SelectTagsActivity.cs</DependentUpon>
@@ -382,7 +366,16 @@
     <Compile Include="Adapters\SelectDurationFormatRecyclerAdapter.cs" />
     <Compile Include="Adapters\SelectTagsRecyclerAdapter.cs" />
     <Compile Include="Activities\SelectProjectActivity.cs" />
+    <Compile Include="Activities\SelectProjectActivity.ViewBinds.cs">
+      <DependentUpon>SelectProjectActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
+    <Compile Include="Extensions\PermissionRequesterComponentExtensions.cs" />
+    <Compile Include="Helper\IPermissionRequesterComponent.cs" />
+    <Compile Include="Presentation\ActivityPresenter.cs" />
+    <Compile Include="Presentation\AndroidPresenter.cs" />
+    <Compile Include="Presentation\DialogFragmentPresenter.cs" />
+    <Compile Include="Presentation\ViewModelCache.cs" />
     <Compile Include="Startup\AndroidDependencyContainer.cs" />
     <Compile Include="Extensions\FloatingActionButtonExtensions.cs" />
     <Compile Include="Presentation\IScrollableToTop.cs" />
@@ -420,14 +413,13 @@
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
-    <Compile Include="Services\PermissionsServiceAndroid.cs" />
+    <Compile Include="Services\PermissionsCheckerAndroid.cs" />
     <Compile Include="Services\CalendarServiceAndroid.cs" />
     <Compile Include="Startup\AndroidSchedulerProvider.cs" />
-    <Compile Include="Startup\QueryableMvxLifecycleMonitorCurrentTopActivity.cs" />
-    <Compile Include="Startup\Setup.cs" />
     <Compile Include="Startup\SplashScreen.cs" />
-    <Compile Include="Services\GoogleServiceAndroid.cs" />
-    <Compile Include="Services\DialogServiceAndroid.cs" />
+    <Compile Include="Startup\SplashScreen.DeepLink.cs">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\BrowserServiceAndroid.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="Activities\LoginActivity.ViewBinds.cs">
@@ -492,7 +484,6 @@
     <Compile Include="Adapters\MainRecyclerAdapter.cs" />
     <Compile Include="Extensions\LayoutParamsExtensions.cs" />
     <Compile Include="Extensions\NumberExtensions.cs" />
-    <Compile Include="Presentation\TogglPresenter.cs" />
     <Compile Include="Activities\StartTimeEntryActivity.cs" />
     <Compile Include="Extensions\VisibilityExtensions.cs" />
     <Compile Include="Activities\BrowserActivity.cs" />
@@ -550,6 +541,15 @@
       <DependentUpon>TermsOfServiceFragment.cs</DependentUpon>
     </Compile>
     <Compile Include="Activities\ReactiveActivity.cs" />
+    <Compile Include="Activities\ReactiveActivity.DialogProvider.cs">
+      <DependentUpon>ReactiveActivity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Activities\ReactiveActivity.GoogleTokenProvider.cs">
+      <DependentUpon>ReactiveActivity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Activities\ReactiveActivity.PermissionsHandler.cs">
+      <DependentUpon>ReactiveActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Adapters\BaseRecyclerAdapter.cs" />
     <Compile Include="ViewHolders\BaseRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\WorkspaceSelectionViewHolder.cs" />
@@ -574,7 +574,7 @@
       <DependentUpon>SignUpActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="Startup\HandlerScheduler.cs" />
-    <Compile Include="Services\NoopPrivateSharedStorageServiceAndroid.cs" />
+    <Compile Include="Services\PrivateSharedStorageServiceAndroid.cs" />
     <Compile Include="Views\ListSelectionDialog.cs" />
     <Compile Include="Extensions\Reactive\ViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\TextViewExtensions.cs" />
@@ -619,7 +619,13 @@
     <Compile Include="Fragments\SettingsFragment.ViewBinds.cs">
       <DependentUpon>SettingsFragment.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fragments\ReactiveFragment.cs" />
+    <Compile Include="Fragments\ReactiveTabFragment.cs" />
+    <Compile Include="Fragments\ReactiveTabFragment.DialogProvider.cs">
+      <DependentUpon>ReactiveTabFragment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fragments\ReactiveTabFragment.PermissionHandler.cs">
+      <DependentUpon>ReactiveTabFragment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fragments\ReportsFragment.cs" />
     <Compile Include="Fragments\ReportsFragment.ViewBinds.cs">
       <DependentUpon>ReportsFragment.cs</DependentUpon>
@@ -670,6 +676,7 @@
     <None Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\color\BlueTextColor.xml" />
     <AndroidResource Include="Resources\drawable\Dot.xml" />
+    <AndroidResource Include="Resources\drawable\Splash.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
@@ -705,11 +712,6 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\reports_total_chart.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\reports_total_chart.png" />
     <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml" />
-    <AndroidResource Include="Resources\drawable-hdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\drawable-hdpi\padlock.png" />
     <AndroidResource Include="Resources\drawable-mdpi\padlock.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\padlock.png" />
@@ -739,7 +741,6 @@
     <AndroidResource Include="Resources\layout\LoginActivity.axml" />
     <AndroidResource Include="Resources\values\Styles.xml" />
     <AndroidResource Include="Resources\values-v23\Styles.xml" />
-    <AndroidResource Include="Resources\layout\SplashScreen.axml" />
     <AndroidResource Include="Resources\drawable-hdpi\arrow_back.png" />
     <AndroidResource Include="Resources\drawable-hdpi\billable.png" />
     <AndroidResource Include="Resources\drawable-hdpi\check_light.png" />
@@ -1140,6 +1141,9 @@
     <AndroidResource Include="Resources\layout\CalendarFragment.axml" />
     <AndroidResource Include="Resources\drawable\CalendarEntryBackground.xml" />
     <AndroidResource Include="Resources\layout\CalendarEntryCell.axml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ic_launcher.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />

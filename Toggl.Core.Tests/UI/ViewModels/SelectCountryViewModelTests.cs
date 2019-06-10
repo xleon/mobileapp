@@ -8,6 +8,7 @@ using FsCheck;
 using NSubstitute;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Shared.Models;
 using Xunit;
 
@@ -15,7 +16,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectCountryViewModelTests
     {
-        public abstract class SelectCountryViewModelTest : BaseViewModelTests<SelectCountryViewModel>
+        public abstract class SelectCountryViewModelTest : BaseViewModelTests<SelectCountryViewModel, long?, long?>
         {
             protected override SelectCountryViewModel CreateViewModel()
                 => new SelectCountryViewModel(NavigationService, RxActionFactory);
@@ -55,9 +56,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task AddsAllCountriesToTheListOfSuggestions()
             {
-                ViewModel.Prepare(10);
-
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(10);
 
                 var countries = await ViewModel.Countries.FirstAsync();
                 countries.Count().Should().Equals(250);
@@ -69,10 +68,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData(200)]
             public async Task SetsTheAppropriateCountryAsTheCurrentlySelectedOne(int id)
             {
-                ViewModel.Prepare(id);
-
-                await ViewModel.Initialize();
-
+                await ViewModel.Initialize(id);
+                
                 var countries = await ViewModel.Countries.FirstAsync();
                 countries.Single(c => c.Selected).Country.Id.Should().Be(id);
             }
@@ -80,10 +77,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task DoesNotSetTheSelectedCountryIfPreparingWithNull()
             {
-                ViewModel.Prepare(null);
-
-                await ViewModel.Initialize();
-
+                await ViewModel.Initialize(null);
+                
                 var countries = await ViewModel.Countries.FirstAsync();
                 countries.All(suggestion => !suggestion.Selected);
             }
@@ -93,7 +88,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         {
             public TheSelectCountryCommand()
             {
-                ViewModel.Prepare(10);
+                ViewModel.Initialize(10);
             }
 
             [Fact, LogIfTooSlow]
@@ -104,15 +99,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 country.Name.Returns("Greece");
                 country.CountryCode.Returns("GR");
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(null);
 
                 var selectableCountry = new SelectableCountryViewModel(country, true);
 
                 ViewModel.SelectCountry.Execute(selectableCountry);
 
                 TestScheduler.Start();
-                await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), country.Id);
+                (await ViewModel.Result).Should().Be(country.Id);
             }
         }
 
@@ -121,8 +115,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task FiltersTheSuggestionsWhenItChanges()
             {
-                ViewModel.Prepare(10);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(10);
 
                 ViewModel.FilterText.OnNext("Greece");
 

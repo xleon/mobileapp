@@ -26,5 +26,11 @@ namespace Toggl.iOS.Services
         {
             SharedStorage.instance.DeleteEverything();
         }
+
+        public bool HasUserDataStored()
+            => !string.IsNullOrEmpty(SharedStorage.instance.GetApiToken());
+        
+        public string GetApiToken()
+            => SharedStorage.instance.GetApiToken();
     }
 }

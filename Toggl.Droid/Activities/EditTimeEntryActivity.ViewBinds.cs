@@ -1,10 +1,9 @@
 ﻿using Android.Views;
 using Android.Widget;
-using MvvmCross.Droid.Support.V7.AppCompat;
-using Toggl.Core.UI.ViewModels;
 using Android.Support.Constraints;
-using static Toggl.Droid.Resource.Id;
 using Android.Support.V7.Widget;
+using Toggl.Core.UI.ViewModels;
+using static Toggl.Droid.Resource.Id;
 
 namespace Toggl.Droid.Activities
 {

@@ -1,8 +1,5 @@
 ﻿using System;
 using Foundation;
-using MvvmCross.Binding.BindingContext;
-using MvvmCross.IoC;
-using MvvmCross.ViewModels;
 using Newtonsoft.Json.Converters;
 using Toggl.iOS.Views;
 
@@ -13,23 +10,6 @@ namespace Toggl.iOS
     [Preserve(AllMembers = true)]
     public sealed class LinkerPleaseInclude
     {
-        public void Include(MvxTaskBasedBindingContext c)
-        {
-            c.Dispose();
-            var c2 = new MvxTaskBasedBindingContext();
-            c2.Dispose();
-        }
-
-        public void Include(MvxPropertyInjector injector)
-        {
-            injector = new MvxPropertyInjector();
-        }
-
-        public void Include(MvxViewModelViewTypeFinder typeFinder)
-        {
-            typeFinder = new MvxViewModelViewTypeFinder(null, null);
-        }
-
         public void Include(ConsoleColor color)
         {
             Console.Write("");

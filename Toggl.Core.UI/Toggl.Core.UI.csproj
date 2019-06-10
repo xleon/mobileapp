@@ -9,9 +9,11 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\bin\Debug\</OutputPath>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>..\bin\Release\</OutputPath>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core\Toggl.Core.csproj" />
@@ -20,9 +22,17 @@
     <ProjectReference Include="..\Toggl.Networking\Toggl.Networking.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MvvmCross" Version="6.1.2" />
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+    <Compile Update="Parameters\DeeplinkParameters.TimeEntry.cs">
+      <DependentUpon>DeeplinkParameters.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Parameters\DeeplinkParameters.Reports.cs">
+      <DependentUpon>DeeplinkParameters.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Parameters\DeeplinkParameters.Calendar.cs">
+      <DependentUpon>DeeplinkParameters.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

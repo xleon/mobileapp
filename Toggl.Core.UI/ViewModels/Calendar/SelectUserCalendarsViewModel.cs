@@ -13,8 +13,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             IUserPreferences userPreferences,
             IInteractorFactory interactorFactory,
             INavigationService navigationService,
-            IRxActionFactory rxActionFactory
-            )
+            IRxActionFactory rxActionFactory)
             : base(userPreferences, interactorFactory, navigationService, rxActionFactory)
         {
         }

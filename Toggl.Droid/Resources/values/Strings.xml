@@ -155,4 +155,5 @@ understand and agree to Toggl\'s</string>
     <string name="CalendarEvents">Calendar events</string>
     <string name="TimeEntries">Time entries</string>
     <string name="TotalEvents">%s events</string>
+    <string name="Workspace">Workspace</string>
 </resources>

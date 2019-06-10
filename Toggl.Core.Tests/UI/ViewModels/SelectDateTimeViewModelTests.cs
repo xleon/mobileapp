@@ -7,12 +7,13 @@ using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Xunit;
+using Toggl.Core.Tests.TestExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
     public class SelectDateTimeViewModelTests
     {
-        public class SelectDateTimeDialogViewModelTest : BaseViewModelTests<SelectDateTimeViewModel>
+        public class SelectDateTimeDialogViewModelTest : BaseViewModelTests<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>
         {
             protected override SelectDateTimeViewModel CreateViewModel()
                 => new SelectDateTimeViewModel(RxActionFactory, NavigationService);
@@ -48,7 +49,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     DateTimeOffset.MaxValue.AddHours(-1) >= now) return;
 
                 var parameter = GenerateParameterForTime(now);
-                ViewModel.Prepare(parameter);
+                ViewModel.Initialize(parameter);
 
                 ViewModel.CurrentDateTime.Accept(parameter.MaxDate.AddMinutes(3));
 
@@ -62,7 +63,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     DateTimeOffset.MaxValue.AddHours(-1) >= now) return;
 
                 var parameter = GenerateParameterForTime(now);
-                ViewModel.Prepare(parameter);
+                ViewModel.Initialize(parameter);
 
                 ViewModel.CurrentDateTime.Accept(parameter.MinDate.AddMinutes(-3));
 
@@ -77,7 +78,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.CloseCommand.Execute();
 
-                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<DateTimeOffset>());
+                await View.Received().Close();
             }
 
             [Property]
@@ -87,11 +88,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     DateTimeOffset.MaxValue.AddHours(-1) >= now) return;
 
                 var parameter = GenerateParameterForTime(now);
-                ViewModel.Prepare(parameter);
+                ViewModel.Initialize(parameter);
 
                 ViewModel.CloseCommand.Execute();
 
-                NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Is(now)).Wait();
+                ViewModel.Result.GetAwaiter().GetResult().Should().Be(now);
             }
         }
 
@@ -101,8 +102,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task ClosesTheViewModel()
             {
                 ViewModel.CloseCommand.Execute();
-
-                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<DateTimeOffset>());
+                
+                await View.Received().Close();
             }
 
             [Property]
@@ -113,14 +114,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 var parameter = GenerateParameterForTime(dateTimeOffset);
                 parameter.CurrentDate = now;
-                ViewModel.Prepare(parameter);
+                ViewModel.Initialize(parameter);
                 ViewModel.CurrentDateTime.Accept(dateTimeOffset);
 
                 ViewModel.SaveCommand.Execute();
-                
-                NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Is<DateTimeOffset>(p => p == dateTimeOffset))
-                    .Wait();
+
+                ViewModel.Result.GetAwaiter().GetResult().Should().Be(dateTimeOffset);
             }
         }
     }

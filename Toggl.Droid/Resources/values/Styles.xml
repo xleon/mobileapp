@@ -2,11 +2,10 @@
 <resources>
     <style name="Theme.Splash" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@color/lightGray</item>
+        <item name="android:windowBackground">@drawable/Splash</item>
     </style>
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:actionBarSize">56dp</item>
-        <item name="android:windowDisablePreview">true</item>
         <item name="android:colorAccent">#328FFF</item>
         <item name="colorControlActivated">#328FFF</item>
         <item name="android:statusBarColor">#2C2C2C</item>

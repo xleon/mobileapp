@@ -32,7 +32,7 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
             private const string baseURL = "https://toggl-mobile.firebaseapp.com/adhoc/";
         #endif
 
-        public SiriWorkflowsViewController() : base(nameof(SiriWorkflowsViewController))
+        public SiriWorkflowsViewController(SiriWorkflowsViewModel viewModel) : base(viewModel, nameof(SiriWorkflowsViewController))
         {
         }
 

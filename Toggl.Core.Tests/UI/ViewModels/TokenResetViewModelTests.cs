@@ -7,6 +7,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Tests.Generators;
@@ -15,6 +16,7 @@ using Toggl.Shared.Extensions;
 using Xunit;
 using static Toggl.Shared.Extensions.EmailExtensions;
 using static Toggl.Shared.Extensions.PasswordExtensions;
+using Toggl.Core.UI.Parameters;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -39,7 +41,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 => new TokenResetViewModel(
                     UserAccessManager,
                     DataSource,
-                    DialogService,
                     NavigationService,
                     UserPreferences,
                     AnalyticsService,
@@ -55,7 +56,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useUserAccessManager,
                 bool userNavigationService,
                 bool useDataSource,
-                bool useDialogService,
                 bool useUserPreferences,
                 bool useAnalyticsService,
                 bool useSchedulerProvider,
@@ -66,7 +66,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var userAccessManager = useUserAccessManager ? UserAccessManager : null;
                 var navigationService = userNavigationService ? NavigationService : null;
                 var dataSource = useDataSource ? DataSource : null;
-                var dialogService = useDialogService ? DialogService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
@@ -77,7 +76,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     () => new TokenResetViewModel(
                         userAccessManager,
                         dataSource,
-                        dialogService,
                         navigationService,
                         userPreferences,
                         analyticsService,
@@ -179,7 +177,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Done.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.Received().Navigate<MainTabBarViewModel>();
+                await NavigationService.Received().Navigate<MainTabBarViewModel>(View);
             }
 
             [Fact, LogIfTooSlow]
@@ -223,7 +221,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Done.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.DidNotReceive().Navigate<MainViewModel>();
+                await NavigationService.DidNotReceive().Navigate<MainViewModel>(View);
             }
         }
 
@@ -231,7 +229,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         {
             private async Task setup(bool hasUnsyncedData = false, bool userConfirmsSignout = true)
             {
-                DialogService.Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
+                View.Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
                              .Returns(Observable.Return(userConfirmsSignout));
                 DataSource.HasUnsyncedData().Returns(Observable.Return(hasUnsyncedData));
 
@@ -257,7 +255,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SignOut.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.Received().Navigate<LoginViewModel>();
+                await NavigationService.Received()
+                    .Navigate<LoginViewModel, CredentialsParameter>(Arg.Any<CredentialsParameter>(), ViewModel.View);
             }
 
             [Fact, LogIfTooSlow]
@@ -268,7 +267,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SignOut.Execute();
 
                 TestScheduler.Start();
-                await DialogService.Received().Confirm(
+                await View.Received().Confirm(
                     Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
             }
 

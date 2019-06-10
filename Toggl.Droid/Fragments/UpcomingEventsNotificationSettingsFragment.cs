@@ -22,15 +22,19 @@ namespace Toggl.Droid.Fragments
 
             var view = wrappedInflater.Inflate(Resource.Layout.UpcomingEventsNotificationSettingsFragment, container, false);
             InitializeViews(view);
+            
+            return view;
+        }
 
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
             setupRecyclerView();
 
             adapter
                 .ItemTapObservable
                 .Subscribe(ViewModel.SelectOption.Inputs)
                 .DisposedBy(DisposeBag);
-
-            return view;
         }
 
         public override void OnResume()

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reactive.Linq;
 using AdjustBindingsiOS;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
@@ -18,7 +17,6 @@ using static Toggl.iOS.Extensions.ViewExtensions;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [MvxRootPresentation(WrapInNavigationController = true)]
     public sealed partial class SignupViewController : ReactiveViewController<SignupViewModel>
     {
         private const int iPhoneSeScreenHeight = 568;
@@ -35,7 +33,7 @@ namespace Toggl.iOS.ViewControllers
         private const int tabletFormOffset = 246;
         private const int tabletLandscapeKeyboardOffset = 80;
 
-        public SignupViewController() : base(nameof(SignupViewController))
+        public SignupViewController(SignupViewModel viewModel) : base(viewModel, nameof(SignupViewController))
         {
         }
 

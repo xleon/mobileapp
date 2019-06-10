@@ -1,8 +1,8 @@
 using System.Reactive.Concurrency;
-using MvvmCross.Navigation;
 using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
@@ -10,7 +10,6 @@ using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Toggl.Networking;
 using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
-using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.Tests.Sync.Helpers
 {

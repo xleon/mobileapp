@@ -1,11 +1,7 @@
-﻿
-using System;
+﻿using System;
 using Android.App;
 using Android.Content;
 using Android.Support.V4.App;
-using MvvmCross;
-using MvvmCross.Platforms.Android.Core;
-using Toggl.Core.Interactors;
 
 namespace Toggl.Droid.Services
 {
@@ -27,9 +23,6 @@ namespace Toggl.Droid.Services
 
         protected override void OnHandleWork(Intent intent)
         {
-            var setup = MvxAndroidSetupSingleton.EnsureSingletonAvailable(ApplicationContext);
-            setup.EnsureInitialized();
-
             var dependencyContainer = AndroidDependencyContainer.Instance;
 
             if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())

@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using MvvmCross.ViewModels;
 using NSubstitute;
 using System;
 using System.Linq;
@@ -7,28 +6,28 @@ using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
-using Toggl.Core.UI;
-using Toggl.Core.UI.Services;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
+using Toggl.Core.UI;
+using Toggl.Core.UI.Services;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Xunit;
-using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.Tests.UI
 {
-    public class ViewModelLocatorTests : BaseMvvmCrossTests
+    public class ViewModelLocatorTests : BaseTest
     {
-        [Fact(Skip = "Fixing this while MvvmCross is still there is too complex"), LogIfTooSlow]
+        [Fact, LogIfTooSlow]
         public void IsAbleToCreateEveryViewModel()
         {
-            var locator = new TogglViewModelLocator(new TestDependencyContainer
+            var loader = new ViewModelLoader(new TestDependencyContainer
             {
                 MockUserAccessManager = Substitute.For<IUserAccessManager>(),
                 MockAccessRestrictionStorage = Substitute.For<IAccessRestrictionStorage>(),
@@ -37,16 +36,13 @@ namespace Toggl.Core.Tests.UI
                 MockBrowserService = Substitute.For<IBrowserService>(),
                 MockCalendarService = Substitute.For<ICalendarService>(),
                 MockDatabase = Substitute.For<ITogglDatabase>(),
-                MockDialogService = Substitute.For<IDialogService>(),
-                MockGoogleService = Substitute.For<IGoogleService>(),
                 MockKeyValueStorage = Substitute.For<IKeyValueStorage>(),
                 MockLastTimeUsageStorage = Substitute.For<ILastTimeUsageStorage>(),
                 MockLicenseProvider = Substitute.For<ILicenseProvider>(),
                 MockNavigationService = Substitute.For<INavigationService>(),
                 MockNotificationService = Substitute.For<INotificationService>(),
                 MockOnboardingStorage = Substitute.For<IOnboardingStorage>(),
-                MockPasswordManagerService = Substitute.For<IPasswordManagerService>(),
-                MockPermissionsService = Substitute.For<IPermissionsService>(),
+                MockPermissionsChecker = Substitute.For<IPermissionsChecker>(),
                 MockPlatformInfo = Substitute.For<IPlatformInfo>(),
                 MockPrivateSharedStorageService = Substitute.For<IPrivateSharedStorageService>(),
                 MockRatingService = Substitute.For<IRatingService>(),
@@ -64,15 +60,38 @@ namespace Toggl.Core.Tests.UI
                 .GetTypes()
                 .Where(isViewModel);
 
+            var loadMethod = typeof(ViewModelLoader)
+                .GetMethod(nameof(ViewModelLoader.Load));
+
             foreach (var viewModelType in viewModelTypes)
             {
-                Action tryingToFindAViewModel = () => locator.Load(viewModelType, null, null);
+                var typeArguments = getGenericArguments(viewModelType);
+                var genericLoadMethod = loadMethod.MakeGenericMethod(typeArguments);
+
+                var arguments = new object[]
+                {
+                    viewModelType,
+                    getDefaultValue(typeArguments.First())
+                };
+
+                Action tryingToFindAViewModel = () => genericLoadMethod.Invoke(loader, arguments);
                 tryingToFindAViewModel.Should().NotThrow();
             }
 
             bool isViewModel(Type type)
-                => type.ImplementsOrDerivesFrom<IMvxViewModel>();
-        }
+                => type.IsAbstract == false &&
+                   type.Name != nameof(IViewModel) &&
+                   type.ImplementsOrDerivesFrom<IViewModel>();
 
+            Type[] getGenericArguments(Type type)
+                => type.BaseType.GetGenericArguments().Count() == 2
+                ? type.BaseType.GetGenericArguments()
+                : getGenericArguments(type.BaseType);
+
+            object getDefaultValue(Type type)
+                => type.IsValueType
+                ? Activator.CreateInstance(type)
+                : null;
+        }
     }
 }

@@ -1,20 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
-using System.Reactive.Linq;
 using FluentAssertions;
-using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Transformations;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Core.Tests.TestExtensions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
@@ -291,7 +286,10 @@ namespace Toggl.Core.Tests.UI.Transformations
             yield return timeEntry.ToViewModel(
                 new GroupId(timeEntry),
                 LogItemVisualizationIntent.SingleItem,
-                durationFormat);
+                durationFormat,
+                0,
+                0,
+                0);
         }
 
         private static IEnumerable<LogItemViewModel> collapsed(IThreadSafeTimeEntry[] group, DurationFormat durationFormat)
@@ -330,13 +328,19 @@ namespace Toggl.Core.Tests.UI.Transformations
                 hasTags: sample.Tags.Any(),
                 needsSync: group.Any(timeEntry => timeEntry.SyncStatus == SyncStatus.SyncNeeded),
                 canSync: group.All(timeEntry => timeEntry.SyncStatus != SyncStatus.SyncFailed),
-                isInaccessible: sample.IsInaccessible);
+                isInaccessible: sample.IsInaccessible,
+                indexInLog: 0,
+                dayInLog: 0,
+                daysInThePast: 0);
         }
 
         private static LogItemViewModel groupItem(IThreadSafeTimeEntry timeEntry, DurationFormat durationFormat)
             => timeEntry.ToViewModel(
                 new GroupId(timeEntry),
                 LogItemVisualizationIntent.GroupItem,
-                durationFormat);
+                durationFormat,
+                0,
+                0,
+                0);
     }
 }

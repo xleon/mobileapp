@@ -1,6 +1,5 @@
 using System;
 using System.Reactive.Linq;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
@@ -13,7 +12,6 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [MvxChildPresentation]
     public sealed partial class ForgotPasswordViewController
         : KeyboardAwareViewController<ForgotPasswordViewModel>
     {
@@ -22,7 +20,8 @@ namespace Toggl.iOS.ViewControllers
 
         private bool viewInitialized;
 
-        public ForgotPasswordViewController() : base(nameof(ForgotPasswordViewController))
+        public ForgotPasswordViewController(ForgotPasswordViewModel viewModel)
+            : base(viewModel, nameof(ForgotPasswordViewController))
         {
         }
 

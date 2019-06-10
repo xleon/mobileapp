@@ -8,7 +8,6 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
-using MvvmCross.ViewModels;
 using NSubstitute;
 using Toggl.Core.Interactors;
 using Toggl.Core.UI.Services;
@@ -17,15 +16,16 @@ using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Shared.Extensions;
 using Xunit;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SendFeedbackViewModelTests
     {
-        public abstract class SendFeedbackViewModelTest : BaseViewModelTests<SendFeedbackViewModel>
+        public abstract class SendFeedbackViewModelTest : BaseViewModelWithOutputTests<SendFeedbackViewModel, bool>
         {
             protected override SendFeedbackViewModel CreateViewModel()
-                => new SendFeedbackViewModel(NavigationService, InteractorFactory, DialogService, SchedulerProvider, RxActionFactory);
+                => new SendFeedbackViewModel(NavigationService, InteractorFactory, SchedulerProvider, RxActionFactory);
         }
 
         public sealed class TheConstructor : SendFeedbackViewModelTest
@@ -35,19 +35,17 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useNavigationService,
                 bool useInteractorFactory,
-                bool useDialogService,
                 bool useSchedulerProvider,
                 bool useRxActionFactory
             )
             {
                 var navigationService = useNavigationService ? NavigationService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
-                var dialogService = useDialogService ? DialogService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
 
                 Action tryingToConstructWithEmptyParameters = ()
-                    => new SendFeedbackViewModel(navigationService, interactorFactory, dialogService, schedulerProvider, rxActionFactory);
+                    => new SendFeedbackViewModel(navigationService, interactorFactory, schedulerProvider, rxActionFactory);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -241,7 +239,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.Received().Close(ViewModel, false);
+                await View.Received().Close();
             }
 
             [Property]
@@ -252,31 +250,31 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
 
                 TestScheduler.Start();
-                DialogService.Received().ConfirmDestructiveAction(Arg.Any<ActionType>());
+                View.Received().ConfirmDestructiveAction(Arg.Any<ActionType>());
             }
 
             [Property]
             public void ClosesTheDialogWithoutSendingFeedbackWhenUserConfirmsDestructiveAction(NonEmptyString feedbackText)
             {
-                DialogService.ConfirmDestructiveAction(Arg.Any<ActionType>()).Returns(Observable.Return(true));
+                View.ConfirmDestructiveAction(Arg.Any<ActionType>()).Returns(Observable.Return(true));
                 ViewModel.FeedbackText.OnNext(feedbackText.Get);
 
                 ViewModel.Close.Execute();
 
                 TestScheduler.Start();
-                NavigationService.Received().Close(ViewModel, false);
+                View.Received().Close().Wait();
             }
 
             [Property]
             public void DoesNotCloseTheDialogWhenUserCancelsDestructiveAction(NonEmptyString feedbackText)
             {
-                DialogService.ConfirmDestructiveAction(Arg.Any<ActionType>()).Returns(Observable.Return(false));
+                View.ConfirmDestructiveAction(Arg.Any<ActionType>()).Returns(Observable.Return(false));
                 ViewModel.FeedbackText.OnNext(feedbackText.Get);
 
                 ViewModel.Close.Execute();
 
                 TestScheduler.Start();
-                NavigationService.DidNotReceive().Close(Arg.Any<IMvxViewModelResult<bool>>(), Arg.Any<bool>());
+                View.DidNotReceive().Close().Wait();
             }
         }
 
@@ -313,7 +311,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Send.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.Received().Close(ViewModel, true);
+                (await ViewModel.Result).Should().BeTrue();
             }
 
             [Fact]

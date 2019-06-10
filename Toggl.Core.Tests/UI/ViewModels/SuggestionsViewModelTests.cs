@@ -31,7 +31,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class SuggestionsViewModelTest : BaseViewModelTests<SuggestionsViewModel>
         {
             protected override SuggestionsViewModel CreateViewModel()
-                => new SuggestionsViewModel(DataSource, InteractorFactory, OnboardingStorage, SchedulerProvider, RxActionFactory, AnalyticsService, TimeService, PermissionsService);
+                => new SuggestionsViewModel(DataSource, InteractorFactory, OnboardingStorage, SchedulerProvider, RxActionFactory, AnalyticsService, TimeService, PermissionsChecker, NavigationService);
 
             protected override void AdditionalViewModelSetup()
             {
@@ -54,7 +54,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useRxActionFactory,
                 bool useAnalyticsService,
                 bool useTimeService,
-                bool usePermissionsService)
+                bool usePermissionsChecker,
+                bool useNavigationService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
@@ -63,10 +64,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var timeService = useTimeService ? TimeService : null;
-                var permissionsService = usePermissionsService ? PermissionsService : null;
+                var permissionsChecker = usePermissionsChecker ? PermissionsChecker : null;
+                var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsService);
+                    () => new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -150,7 +152,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task TracksSuggestionPresentedEventWhenCalendarUnauthorized()
             {
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(false));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(false));
                 var suggestions = prepareSuggestionsForSuggestionsPresentedEvent();
                 var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
 
@@ -166,7 +168,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task TracksSuggestionPresentedEventWhenCalendarYieldsNoSuggestions()
             {
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(true));
                 var suggestions = prepareSuggestionsForSuggestionsPresentedEvent(hasCalendarSuggestions: false);
                 var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
 
@@ -182,7 +184,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task TracksSuggestionPresentedEventWhenCalendarYieldsSuggestions()
             {
-                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(true));
                 var suggestions = prepareSuggestionsForSuggestionsPresentedEvent();
                 var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
 

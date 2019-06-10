@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using Toggl.Core.Analytics;
 using System.Linq;
 using Toggl.Core.UI.Services;
+using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -30,7 +31,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IRxActionFactory rxActionFactory;
         private readonly IAnalyticsService analyticsService;
         private readonly ITimeService timeService;
-        private readonly IPermissionsService permissionsService;
+        private readonly IPermissionsChecker permissionsChecker;
 
         public IObservable<IImmutableList<Suggestion>> Suggestions { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
@@ -44,7 +45,9 @@ namespace Toggl.Core.UI.ViewModels
             IRxActionFactory rxActionFactory,
             IAnalyticsService analyticsService,
             ITimeService timeService,
-            IPermissionsService permissionsService)
+            IPermissionsChecker permissionsChecker,
+            INavigationService navigationService)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
@@ -53,7 +56,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
+            Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
 
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
@@ -62,19 +65,19 @@ namespace Toggl.Core.UI.ViewModels
             this.rxActionFactory = rxActionFactory;
             this.analyticsService = analyticsService;
             this.timeService = timeService;
-            this.permissionsService = permissionsService;
+            this.permissionsChecker = permissionsChecker;
         }
 
-        public override async Task Initialize()
+        public override Task Initialize()
         {
-            await base.Initialize();
+            base.Initialize();
 
             StartTimeEntry = rxActionFactory.FromObservable<Suggestion, IThreadSafeTimeEntry>(startTimeEntry);
 
             Suggestions = interactorFactory.ObserveWorkspaceOrTimeEntriesChanges().Execute()
                 .StartWith(Unit.Default)
                 .SelectMany(_ => getSuggestions())
-                .WithLatestFrom(permissionsService.CalendarPermissionGranted, (suggestions, isCalendarAuthorized) => (suggestions, isCalendarAuthorized))
+                .WithLatestFrom(permissionsChecker.CalendarPermissionGranted, (suggestions, isCalendarAuthorized) => (suggestions, isCalendarAuthorized))
                 .Do(item => trackPresentedSuggestions(item.suggestions, item.isCalendarAuthorized))
                 .Select(item => item.suggestions)
                 .AsDriver(onErrorJustReturn: ImmutableList.Create<Suggestion>(), schedulerProvider: schedulerProvider);
@@ -83,6 +86,8 @@ namespace Toggl.Core.UI.ViewModels
                 .Select(suggestions => suggestions.None())
                 .StartWith(true)
                 .AsDriver(onErrorJustReturn: true, schedulerProvider: schedulerProvider);
+
+            return base.Initialize();
         }
 
         private IObservable<IImmutableList<Suggestion>> getSuggestions()

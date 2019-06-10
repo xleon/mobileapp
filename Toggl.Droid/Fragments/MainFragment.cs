@@ -21,6 +21,7 @@ using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.Sync;
+using Toggl.Core.UI.Helper;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
@@ -37,7 +38,7 @@ using FoundationResources = Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Fragments
 {
-    public sealed partial class MainFragment : ReactiveFragment<MainViewModel>, IScrollableToTop
+    public sealed partial class MainFragment : ReactiveTabFragment<MainViewModel>, IScrollableToTop
     {
         private const int snackbarDuration = 5000;
         private NotificationManager notificationManager;
@@ -155,7 +156,7 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             mainRecyclerAdapter.ContinueTimeEntry
-                .Select(vm => (vm.LogItem.RepresentedTimeEntriesIds.First(), vm.ContinueMode))
+                .Select(vm => new ContinueTimeEntryInfo(vm.LogItem, vm.ContinueMode))
                 .Subscribe(ViewModel.ContinueTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 

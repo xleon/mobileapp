@@ -14,10 +14,14 @@ namespace Toggl.Core.Login
 
         bool CheckIfLoggedIn();
 
-        IObservable<Unit> LoginWithGoogle();
+        string GetSavedApiToken();
+
+        void LoginWithSavedCredentials();
+
+        IObservable<Unit> LoginWithGoogle(string googleToken);
         IObservable<Unit> Login(Email email, Password password);
 
-        IObservable<Unit> SignUpWithGoogle(bool termsAccepted, int countryId, string timezone);
+        IObservable<Unit> SignUpWithGoogle(string googleToken, bool termsAccepted, int countryId, string timezone);
         IObservable<Unit> SignUp(Email email, Password password, bool termsAccepted, int countryId, string timezone);
 
         IObservable<Unit> RefreshToken(Password password);
