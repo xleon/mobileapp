@@ -1,6 +1,7 @@
 using System;
 using Android.App;
 using Android.Runtime;
+using Toggl.Core.UI;
 using Toggl.Droid.BroadcastReceivers;
 
 namespace Toggl.Droid
@@ -22,8 +23,17 @@ namespace Toggl.Droid
             base.OnCreate();
             Firebase.FirebaseApp.InitializeApp(this);
 
-            var applicationContext = Context;
             AndroidDependencyContainer.EnsureInitialized(Context);
+            var app = new AppStart(AndroidDependencyContainer.Instance);
+            var accessLevel = app.GetAccessLevel();
+            app.SetupBackgroundSync();
+            app.SetFirstOpened();
+            if (accessLevel == AccessLevel.TokenRevoked || accessLevel == AccessLevel.LoggedIn)
+            {
+                AndroidDependencyContainer.Instance
+                    .UserAccessManager
+                    .LoginWithSavedCredentials();
+            }
 #if USE_APPCENTER
             Microsoft.AppCenter.AppCenter.Start(
                 "{TOGGL_APP_CENTER_ID_DROID}",

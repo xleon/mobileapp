@@ -16,6 +16,8 @@ namespace Toggl.Core.Login
 
         string GetSavedApiToken();
 
+        void LoginWithSavedCredentials();
+
         IObservable<Unit> LoginWithGoogle(string googleToken);
         IObservable<Unit> Login(Email email, Password password);
 

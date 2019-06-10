@@ -35,8 +35,11 @@ namespace Toggl.iOS
             IosDependencyContainer.EnsureInitialized(Window, this);
             var app = new AppStart(IosDependencyContainer.Instance);
             app.UpdateOnboardingProgress();
+            app.SetFirstOpened();
+            app.SetupBackgroundSync();
 
             var accessLevel = app.GetAccessLevel();
+            loginWithCredentialsIfNecessary(accessLevel);
             navigateAccordingToAccessLevel(accessLevel);
 
             UNUserNotificationCenter.Current.Delegate = this;
@@ -46,6 +49,16 @@ namespace Toggl.iOS
             #endif
 
             return true;
+        }
+
+        private void loginWithCredentialsIfNecessary(AccessLevel accessLevel)
+        {
+            if (accessLevel == AccessLevel.LoggedIn || accessLevel == AccessLevel.TokenRevoked)
+            {
+                IosDependencyContainer.Instance
+                    .UserAccessManager
+                    .LoginWithSavedCredentials();
+            }
         }
 
         public override bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
